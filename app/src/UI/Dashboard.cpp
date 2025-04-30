@@ -223,8 +223,14 @@ bool UI::Dashboard::showAreaUnderPlots() const
  */
 bool UI::Dashboard::pointsWidgetVisible() const
 {
+#ifdef USE_QT_COMMERCIAL
+  return m_widgetGroups.contains(SerialStudio::DashboardMultiPlot)
+         || m_widgetDatasets.contains(SerialStudio::DashboardPlot)
+         || m_widgetDatasets.contains(SerialStudio::DashboardPlot3D);
+#else
   return m_widgetGroups.contains(SerialStudio::DashboardMultiPlot)
          || m_widgetDatasets.contains(SerialStudio::DashboardPlot);
+#endif
 }
 
 /**
@@ -578,6 +584,18 @@ const MultiLineSeries &UI::Dashboard::multiplotData(const int index) const
 {
   return m_multipltValues[index];
 }
+
+#ifdef USE_QT_COMMERCIAL
+/**
+ * @brief Provides the values for 3D plot visuals on the dashboard.
+ * @return A reference to a QVector containing ThreeDimensionalSeries data.
+ */
+const ThreeDimensionalSeries &
+UI::Dashboard::threeDimensionalData(const int index) const
+{
+  return m_3dPlotData[index];
+}
+#endif
 
 /**
  * @brief Sets the number of data points for the dashboard plots.

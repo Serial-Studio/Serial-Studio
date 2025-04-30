@@ -49,6 +49,7 @@ Licensing::LemonSqueezy::LemonSqueezy()
   , m_seatUsage(-1)
   , m_activated(false)
   , m_silentValidation(true)
+  , m_gracePeriod(0)
 {
   // Configure data encryption
   m_simpleCrypt.setKey(MachineID::instance().machineSpecificKey());
@@ -299,8 +300,10 @@ void Licensing::LemonSqueezy::validate()
   // Send the activation request
   auto *reply = m_manager.post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-    readValidationResponse(reply->readAll());
+    readValidationResponse(reply->readAll(), false);
     reply->deleteLater();
+
+    writeSettings();
   });
 }
 
@@ -342,6 +345,8 @@ void Licensing::LemonSqueezy::deactivate()
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
     readDeactivationResponse(reply->readAll());
     reply->deleteLater();
+
+    writeSettings();
   });
 }
 
@@ -386,6 +391,7 @@ void Licensing::LemonSqueezy::readSettings()
   m_settings.beginGroup("licensing");
   auto license = m_settings.value("license", "").toString();
   auto data = m_settings.value("data", "").toString();
+  auto dt = m_settings.value("lastCheck", "").toString();
   m_settings.endGroup();
 
   // Data is empty abort
@@ -396,8 +402,19 @@ void Licensing::LemonSqueezy::readSettings()
   m_license = m_simpleCrypt.decryptToString(license);
   auto decryptedData = m_simpleCrypt.decryptToByteArray(data);
 
+  // Check if we can use application offline
+  m_gracePeriod = 0;
+  if (!dt.isEmpty())
+  {
+    auto dateTime = m_simpleCrypt.decryptToString(dt);
+    auto currentDt = QDateTime::currentDateTime();
+    auto lastCheck = QDateTime::fromString(dateTime, Qt::RFC2822Date);
+    if (lastCheck.isValid() && lastCheck < currentDt)
+      m_gracePeriod = qMax(0, 30 - lastCheck.daysTo(currentDt));
+  }
+
   // Parse data & validate it
-  readValidationResponse(decryptedData);
+  readValidationResponse(decryptedData, true);
   Q_EMIT licenseChanged();
 }
 
@@ -427,6 +444,7 @@ void Licensing::LemonSqueezy::writeSettings()
     m_settings.beginGroup("licensing");
     m_settings.setValue("data", "");
     m_settings.setValue("license", "");
+    m_settings.setValue("lastCheck", "");
     m_settings.endGroup();
   }
 }
@@ -464,6 +482,8 @@ void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense)
   Q_EMIT busyChanged();
   Q_EMIT activatedChanged();
   Q_EMIT licenseDataChanged();
+
+  writeSettings();
 }
 
 //------------------------------------------------------------------------------
@@ -483,13 +503,26 @@ void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense)
  *
  * @param data Raw JSON payload returned by Lemon Squeezy API.
  */
-void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data)
+void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
+                                                     const bool cachedResponse)
 {
   // Data is empty, log & abort
   if (data.isEmpty())
   {
-    qWarning() << "[LemonSqueezy] Empty activation response";
-    clearLicenseCache();
+    qWarning() << "Activation server unreachable. License validation failed.";
+
+    if (m_gracePeriod <= 0)
+    {
+      qWarning() << "Grace period expired. Clearing cached license.";
+      clearLicenseCache();
+    }
+
+    else
+    {
+      qWarning() << "You have" << m_gracePeriod
+                 << "day(s) remaining in your grace period.";
+    }
+
     return;
   }
 
@@ -536,7 +569,6 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data)
         tr("There was an issue validating your license."), error.toString(),
         QMessageBox::Critical);
     clearLicenseCache(true);
-    writeSettings();
     return;
   }
 
@@ -550,7 +582,6 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data)
            "official Serial Studio store."),
         QMessageBox::Critical);
     clearLicenseCache(true);
-    writeSettings();
     return;
   }
 
@@ -563,7 +594,6 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data)
         tr("Please deactivate it there first or contact support for help."),
         QMessageBox::Critical);
     clearLicenseCache(true);
-    writeSettings();
     return;
   }
 
@@ -580,7 +610,6 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data)
         QMessageBox::Warning);
 
     clearLicenseCache(true);
-    writeSettings();
     return;
   }
 
@@ -617,7 +646,6 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data)
   m_customerName = customerName;
   m_customerEmail = customerEmail;
   m_activationDate = activationDate;
-  writeSettings();
 
   // Set application name
   auto list = variantName.split("-");
@@ -630,6 +658,15 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data)
   m_busy = false;
   Q_EMIT busyChanged();
   Q_EMIT licenseDataChanged();
+
+  // Update validation date time if response is from server
+  if (!cachedResponse)
+  {
+    auto dt = QDateTime::currentDateTime().toString(Qt::RFC2822Date);
+    m_settings.beginGroup("licensing");
+    m_settings.setValue("lastCheck", m_simpleCrypt.encryptToString(dt));
+    m_settings.endGroup();
+  }
 
   // Display activation successfull message
   if (!m_silentValidation)
@@ -703,7 +740,6 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray &data)
         tr("There was an issue activating your license."), error.toString(),
         QMessageBox::Critical);
     clearLicenseCache(true);
-    writeSettings();
     return;
   }
 
@@ -717,7 +753,6 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray &data)
            "official Serial Studio store."),
         QMessageBox::Critical);
     clearLicenseCache(true);
-    writeSettings();
     return;
   }
 
@@ -730,7 +765,6 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray &data)
         tr("Please deactivate it there first or contact support for help."),
         QMessageBox::Critical);
     clearLicenseCache(true);
-    writeSettings();
     return;
   }
 
@@ -747,7 +781,6 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray &data)
         QMessageBox::Warning);
 
     clearLicenseCache(true);
-    writeSettings();
     return;
   }
 
@@ -859,7 +892,6 @@ void Licensing::LemonSqueezy::readDeactivationResponse(const QByteArray &data)
 
   // De-activate the product
   clearLicenseCache(true);
-  writeSettings();
   Q_EMIT activatedChanged();
   Misc::Utilities::showMessageBox(
       tr("Your license has been deactivated."),

@@ -66,6 +66,66 @@
             ],
             "title": "Values",
             "widget": "multiplot"
+        },
+        {
+            "datasets": [
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "X",
+                    "units": "",
+                    "value": "",
+                    "widget": "x",
+                    "xAxis": -1
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "Y",
+                    "units": "",
+                    "value": "",
+                    "widget": "y",
+                    "xAxis": -1
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "Z",
+                    "units": "",
+                    "value": "",
+                    "widget": "z",
+                    "xAxis": -1
+                }
+            ],
+            "title": "3D Plot",
+            "widget": "plot3d"
         }
     ],
     "mapTilerApiKey": "",

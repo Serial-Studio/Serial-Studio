@@ -72,6 +72,7 @@
 
 #ifdef USE_QT_COMMERCIAL
 #  include "MQTT/Client.h"
+#  include "UI/Widgets/Plot3D.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
@@ -227,6 +228,10 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<Widgets::Gyroscope>("SerialStudio", 1, 0, "GyroscopeModel");
   qmlRegisterType<Widgets::Accelerometer>("SerialStudio", 1, 0,
                                           "AccelerometerModel");
+
+#ifdef USE_QT_COMMERCIAL
+  qmlRegisterType<Widgets::Plot3D>("SerialStudio", 1, 0, "Plot3DModel");
+#endif
 
   // Register JSON custom items
   qmlRegisterType<JSON::FrameParser>("SerialStudio", 1, 0, "FrameParser");

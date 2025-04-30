@@ -746,7 +746,7 @@ QByteArray CSV::Player::getFrame(const int row)
 const QString &CSV::Player::getCellValue(const int row, const int column,
                                          bool &error)
 {
-  static auto defaultValue = QStringLiteral("");
+  static auto defaultValue = QLatin1String("");
 
   if (m_csvData.count() > row)
   {

@@ -36,6 +36,10 @@
 
 #include "Misc/ThemeManager.h"
 
+#ifdef USE_QT_COMMERCIAL
+#  include "UI/Widgets/Plot3D.h"
+#endif
+
 /**
  * Constructor function
  */
@@ -226,6 +230,14 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
         m_qmlPath
             = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/LEDPanel.qml";
         break;
+#ifdef USE_QT_COMMERCIAL
+      case SerialStudio::DashboardPlot3D:
+        m_dbWidget = new Widgets::Plot3D(relativeIndex(), this);
+        m_qmlPath
+            = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Plot3D.qml";
+        break;
+#endif
+
       default:
         break;
     }

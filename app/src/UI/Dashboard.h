@@ -150,6 +150,11 @@ public:
   [[nodiscard]] const LineSeries &plotData(const int index) const;
   [[nodiscard]] const MultiLineSeries &multiplotData(const int index) const;
 
+#ifdef USE_QT_COMMERCIAL
+  [[nodiscard]] const ThreeDimensionalSeries &
+  threeDimensionalData(const int index) const;
+#endif
+
 public slots:
   void setPoints(const int points);
   void activateAction(const int index);
@@ -187,6 +192,10 @@ private:
   QVector<PlotDataY> m_fftValues;
   QVector<LineSeries> m_pltValues;
   QVector<MultiLineSeries> m_multipltValues;
+
+#ifdef USE_QT_COMMERCIAL
+  QVector<ThreeDimensionalSeries> m_3dPlotData;
+#endif
 
   QVector<JSON::Action> m_actions;
   QMap<int, JSON::Dataset> m_datasets;

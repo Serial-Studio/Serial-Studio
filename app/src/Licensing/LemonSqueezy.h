@@ -145,9 +145,10 @@ private slots:
   void clearLicenseCache(const bool clearLicense = false);
 
 private:
-  void readValidationResponse(const QByteArray &data);
   void readActivationResponse(const QByteArray &data);
   void readDeactivationResponse(const QByteArray &data);
+  void readValidationResponse(const QByteArray &data,
+                              const bool cachedResponse);
 
 private:
   bool m_busy;
@@ -163,6 +164,8 @@ private:
   QString m_customerEmail;
   bool m_silentValidation;
   QDateTime m_activationDate;
+
+  int m_gracePeriod;
 
   QSettings m_settings;
   SimpleCrypt m_simpleCrypt;

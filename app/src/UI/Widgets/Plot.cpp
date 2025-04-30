@@ -322,6 +322,7 @@ bool Widgets::Plot::computeMinMaxValues(qreal &min, qreal &max,
   else
   {
     ok &= !qFuzzyCompare(dataset.min(), dataset.max());
+    qDebug() << ok << dataset.min() << dataset.max();
     if (ok)
     {
       min = qMin(dataset.min(), dataset.max());

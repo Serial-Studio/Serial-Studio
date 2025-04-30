@@ -166,6 +166,8 @@
         <file>icons/panes/clear.svg</file>
         <file>icons/panes/console.svg</file>
         <file>icons/panes/dashboard.svg</file>
+        <file>icons/panes/pause.svg</file>
+        <file>icons/panes/resume.svg</file>
         <file>icons/panes/scale.svg</file>
         <file>icons/panes/setup.svg</file>
         <file>icons/panes/structure.svg</file>
@@ -192,6 +194,7 @@
         <file>icons/project-editor/toolbar/add-group.svg</file>
         <file>icons/project-editor/toolbar/add-gyroscope.svg</file>
         <file>icons/project-editor/toolbar/add-multiplot.svg</file>
+        <file>icons/project-editor/toolbar/add-plot3d.svg</file>
         <file>icons/project-editor/toolbar/new.svg</file>
         <file>icons/project-editor/toolbar/open.svg</file>
         <file>icons/project-editor/toolbar/save-as.svg</file>
@@ -313,7 +316,7 @@
         <file>themes/resistance.json</file>
         <file>themes/yaru-dark.json</file>
         <file>themes/yaru-light.json</file>
-        <file>icons/panes/pause.svg</file>
-        <file>icons/panes/resume.svg</file>
+        <file>icons/dashboard/plot3d.svg</file>
+        <file>icons/project-editor/treeview/plot3d.svg</file>
     </qresource>
 </RCC>

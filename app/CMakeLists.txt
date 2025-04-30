@@ -78,11 +78,13 @@ if(USE_QT_COMMERCIAL)
   set(QT_MODULES
     ${QT_MODULES}
     Mqtt
+    Quick3D
     SerialBus
   )
 set(QT_LIBS
   ${QT_LIBS}
   Qt6::Mqtt
+  Qt6::Quick3D
   Qt6::SerialBus
 )
 endif()
@@ -209,6 +211,7 @@ if(USE_QT_COMMERCIAL)
     src/MQTT/Client.h
     src/IO/Drivers/CANBus.h
     src/IO/Drivers/Modbus.h
+    src/UI/Widgets/Plot3D.h
     src/Licensing/MachineID.h
     src/Licensing/SimpleCrypt.h
     src/Licensing/LemonSqueezy.h
@@ -218,6 +221,7 @@ if(USE_QT_COMMERCIAL)
     src/MQTT/Client.cpp
     src/IO/Drivers/CANBus.cpp
     src/IO/Drivers/Modbus.cpp
+    src/UI/Widgets/Plot3D.cpp
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp
     src/Licensing/LemonSqueezy.cpp
@@ -288,6 +292,7 @@ set(QML_SRC
 if(USE_QT_COMMERCIAL)
   set(QML_SRC
     ${QML_SRC}
+    qml/Widgets/Dashboard/Plot3D.qml
     qml/Dialogs/MQTTConfiguration.qml
     qml/Dialogs/LicenseManagement.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml

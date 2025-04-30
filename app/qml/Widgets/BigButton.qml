@@ -159,7 +159,8 @@ Item {
     source: _layout
     anchors.fill: _layout
     saturation: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
-    brightness: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
+    brightness: _mouseArea.containsMouse && root.enabled ?
+                  (_mouseArea.containsPress ? -0.07 : 0.07) : 0
 
     Behavior on saturation {NumberAnimation{}}
     Behavior on brightness {NumberAnimation{}}

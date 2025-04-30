@@ -30,22 +30,22 @@
 /**
  * @typedef PlotDataX
  * @brief Represents the unique X-axis data points for a plot.
- *
- * The X-axis data points are stored as a set of unique `qreal` values.
- * This ensures that each X value is distinct, which is essential for correct
- * rendering of the plot. The set is inherently ordered in ascending order.
  */
 typedef QVector<qreal> PlotDataX;
 
 /**
  * @typedef PlotDataY
  * @brief Represents the Y-axis data points for a single curve.
- *
- * The Y-axis data points are stored as a vector of `qreal` values.
- * Unlike X-axis data, Y values can have duplicates and are directly
- * mapped to the corresponding X values during plotting.
  */
 typedef QVector<qreal> PlotDataY;
+
+#ifdef USE_QT_COMMERCIAL
+/**
+ * @typedef PlotDataZ
+ * @brief Represents the Z-axis data points for a single curve.
+ */
+typedef QVector<qreal> PlotDataZ;
+#endif
 
 /**
  * @typedef MultiPlotDataY
@@ -82,6 +82,18 @@ typedef struct
   PlotDataX *x;
   QList<PlotDataY> y;
 } MultiLineSeries;
+
+#ifdef USE_QT_COMMERCIAL
+/**
+ * @typedef ThreeDimensionalSeries
+ */
+typedef struct
+{
+  PlotDataX *x;
+  PlotDataY *y;
+  PlotDataZ *z;
+} ThreeDimensionalSeries;
+#endif
 
 /**
  * @class SerialStudio
@@ -238,6 +250,9 @@ public:
     GPS,
     MultiPlot,
     NoGroupWidget,
+#ifdef USE_QT_COMMERCIAL
+    Plot3D,
+#endif
   };
   Q_ENUM(GroupWidget)
 
@@ -270,7 +285,10 @@ public:
     DashboardBar,
     DashboardGauge,
     DashboardCompass,
-    DashboardNoWidget
+    DashboardNoWidget,
+#ifdef USE_QT_COMMERCIAL
+    DashboardPlot3D,
+#endif
   };
   Q_ENUM(DashboardWidget)
 

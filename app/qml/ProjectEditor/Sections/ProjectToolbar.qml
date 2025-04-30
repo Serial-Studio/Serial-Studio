@@ -121,6 +121,13 @@ Rectangle {
     }
 
     //
+    // Horizontal spacer
+    //
+    Item {
+      implicitWidth: 1
+    }
+
+    //
     // New project
     //
     Widgets.BigButton {
@@ -223,6 +230,19 @@ Rectangle {
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-multiplot.svg"
       onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"), SerialStudio.MultiPlot)
+    }
+
+    //
+    // Add 3D Plot
+    //
+    Loader {
+      Layout.alignment: Qt.AlignVCenter
+      active: Cpp_QtCommercial_Available
+      sourceComponent: Widgets.BigButton {
+        text: qsTr("3D Plot")
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-plot3d.svg"
+        onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("3D Plot"), SerialStudio.Plot3D)
+      }
     }
 
     //

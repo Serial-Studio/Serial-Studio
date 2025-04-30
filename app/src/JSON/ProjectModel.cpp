@@ -1584,7 +1584,7 @@ void JSON::ProjectModel::addGroup(const QString &title,
   // Check if any existing group has the same title
   int count = 1;
   QString newTitle = title;
-  for (const auto &group : m_groups)
+  for (const auto &group : std::as_const(m_groups))
   {
     if (group.m_title == newTitle)
     {
@@ -1597,7 +1597,7 @@ void JSON::ProjectModel::addGroup(const QString &title,
   while (count > 1)
   {
     bool titleExists = false;
-    for (const auto &group : m_groups)
+    for (const auto &group : std::as_const(m_groups))
     {
       if (group.m_title == newTitle)
       {
@@ -1829,6 +1829,46 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
     grp.m_datasets.append(alt);
   }
 
+  // 3D plot widget
+#ifdef USE_QT_COMMERCIAL
+  else if (widget == SerialStudio::Plot3D)
+  {
+    // Set widget type
+    grp.m_widget = "plot3d";
+
+    // Create datasets
+    JSON::Dataset x, y, z;
+
+    // Set dataset IDs
+    x.m_datasetId = 0;
+    y.m_datasetId = 1;
+    z.m_datasetId = 2;
+
+    // Register parent group for the datasets
+    x.m_groupId = groupId;
+    y.m_groupId = groupId;
+    z.m_groupId = groupId;
+
+    // Set dataset indexes
+    x.m_index = nextDatasetIndex();
+    y.m_index = nextDatasetIndex() + 1;
+    z.m_index = nextDatasetIndex() + 2;
+
+    // Set dataset properties
+    x.m_widget = "x";
+    y.m_widget = "y";
+    z.m_widget = "z";
+    x.m_title = tr("X");
+    y.m_title = tr("Y");
+    z.m_title = tr("Z");
+
+    // Add datasets to group
+    grp.m_datasets.append(x);
+    grp.m_datasets.append(y);
+    grp.m_datasets.append(z);
+  }
+#endif
+
   // Replace previous group with new group
   m_groups.replace(group, grp);
 
@@ -1994,6 +2034,10 @@ void JSON::ProjectModel::buildTreeModel()
       icon = "qrc:/rcc/icons/project-editor/treeview/multiplot.svg";
     else if (group.widget() == "datagrid")
       icon = "qrc:/rcc/icons/project-editor/treeview/datagrid.svg";
+#ifdef USE_QT_COMMERCIAL
+    else if (group.widget() == "plot3d")
+      icon = "qrc:/rcc/icons/project-editor/treeview/plot3d.svg";
+#endif
     else
       icon = "qrc:/rcc/icons/project-editor/treeview/group.svg";
 
@@ -2725,18 +2769,21 @@ void JSON::ProjectModel::generateComboBoxModels()
   m_groupWidgets.insert(QStringLiteral("gyro"), tr("Gyroscope"));
   m_groupWidgets.insert(QStringLiteral("multiplot"), tr("Multiple Plot"));
   m_groupWidgets.insert(QStringLiteral("accelerometer"), tr("Accelerometer"));
-  m_groupWidgets.insert(QStringLiteral(""), tr("None"));
+#ifdef USE_QT_COMMERCIAL
+  m_groupWidgets.insert(QStringLiteral("plot3d"), tr("3D Plot"));
+#endif
+  m_groupWidgets.insert(QLatin1String(""), tr("None"));
 
   // Initialize dataset-level widgets
   m_datasetWidgets.clear();
-  m_datasetWidgets.insert(QStringLiteral(""), tr("None"));
+  m_datasetWidgets.insert(QLatin1String(""), tr("None"));
   m_datasetWidgets.insert(QStringLiteral("bar"), tr("Bar"));
   m_datasetWidgets.insert(QStringLiteral("gauge"), tr("Gauge"));
   m_datasetWidgets.insert(QStringLiteral("compass"), tr("Compass"));
 
   // Initialize EOL options
   m_eolSequences.clear();
-  m_eolSequences.insert(QStringLiteral(""), tr("None"));
+  m_eolSequences.insert(QLatin1String(""), tr("None"));
   m_eolSequences.insert(QStringLiteral("\n"), tr("New Line (\\n)"));
   m_eolSequences.insert(QStringLiteral("\r"), tr("Carriage Return (\\r)"));
   m_eolSequences.insert(QStringLiteral("\r\n"), tr("CRLF (\\r\\n)"));
@@ -2873,6 +2920,10 @@ void JSON::ProjectModel::onGroupItemChanged(QStandardItem *item)
       widget = SerialStudio::GPS;
     else if (widgetStr == "datagrid")
       widget = SerialStudio::DataGrid;
+#ifdef USE_QT_COMMERCIAL
+    else if (widgetStr == "plot3d")
+      widget = SerialStudio::Plot3D;
+#endif
     else
       widget = SerialStudio::NoGroupWidget;
 
