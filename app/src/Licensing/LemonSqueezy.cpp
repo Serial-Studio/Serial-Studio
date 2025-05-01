@@ -22,6 +22,7 @@
 #include <QNetworkReply>
 #include <QDesktopServices>
 
+#include "AppInfo.h"
 #include "Misc/Utilities.h"
 #include "Licensing/MachineID.h"
 #include "Licensing/LemonSqueezy.h"
@@ -48,6 +49,7 @@ Licensing::LemonSqueezy::LemonSqueezy()
   , m_seatLimit(-1)
   , m_seatUsage(-1)
   , m_activated(false)
+  , m_appName(APP_NAME)
   , m_silentValidation(true)
   , m_gracePeriod(0)
 {
@@ -461,7 +463,6 @@ void Licensing::LemonSqueezy::writeSettings()
 void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense)
 {
   m_busy = false;
-  m_appName = "";
   m_seatLimit = -1;
   m_seatUsage = -1;
   m_instanceId = "";
@@ -470,8 +471,10 @@ void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense)
   m_customerName = "";
   m_activated = false;
   m_customerEmail = "";
+  m_appName = APP_NAME;
   m_activationDate = QDateTime();
   m_licensingData = QJsonObject();
+  qApp->setApplicationDisplayName(appName());
 
   if (clearLicense)
   {
@@ -523,6 +526,8 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
                  << "day(s) remaining in your grace period.";
     }
 
+    m_busy = false;
+    Q_EMIT busyChanged();
     return;
   }
 
@@ -650,9 +655,12 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
   // Set application name
   auto list = variantName.split("-");
   if (list.count() >= 1)
-    m_appName = tr("Serial Studio %1").arg(list.first().simplified());
+    m_appName = tr("%1 %2").arg(APP_NAME, list.first().simplified());
   else
-    m_appName = tr("Serial Studio Pro");
+    m_appName = tr("%1 Pro").arg(APP_NAME);
+
+  // Update QtApp display name
+  qApp->setApplicationDisplayName(appName());
 
   // Update user interface
   m_busy = false;

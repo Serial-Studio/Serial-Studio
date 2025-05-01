@@ -260,12 +260,13 @@ Window {
           icon.width: 18
           icon.height: 18
           highlighted: true
+          horizontalPadding: 8
           Keys.onEnterPressed: clicked()
           Keys.onReturnPressed: clicked()
           Layout.alignment: Qt.AlignVCenter
+          text: qsTr("Get Serial Studio Pro")
           Component.onCompleted: forceActiveFocus()
           icon.source: "qrc:/rcc/icons/buttons/buy.svg"
-          text: " " + qsTr("Get Serial Studio Pro") + " "
           icon.color: Cpp_ThemeManager.colors["button_text"]
           onClicked: {
             root.close()

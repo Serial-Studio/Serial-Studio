@@ -289,7 +289,8 @@ Widgets.Pane {
           // Number of plot points slider
           //
           Label {
-            text: qsTr("Points:") + " "
+            rightPadding: 8
+            text: qsTr("Points:")
             visible: Cpp_UI_Dashboard.pointsWidgetVisible
           } Slider {
             id: plotPoints
@@ -330,7 +331,8 @@ Widgets.Pane {
           // Number of decimal places
           //
           Label {
-            text: qsTr("Decimal places:") + " "
+            rightPadding: 8
+            text: qsTr("Decimal places:")
             visible: Cpp_UI_Dashboard.precisionWidgetVisible
           } Slider {
             id: decimalPlaces
@@ -350,7 +352,8 @@ Widgets.Pane {
           // Show Legends
           //
           Label {
-            text: qsTr("Show Legends:") + " "
+            rightPadding: 8
+            text: qsTr("Show Legends:")
             visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
           } CheckBox {
             id: legends
@@ -371,7 +374,8 @@ Widgets.Pane {
           // Show crosshairs
           //
           Label {
-            text: qsTr("Show Crosshairs:") + " "
+            rightPadding: 8
+            text: qsTr("Show Crosshairs:")
             visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
                      (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1 ||
                       Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
@@ -401,7 +405,8 @@ Widgets.Pane {
           // Show Area Under Plot
           //
           Label {
-            text: qsTr("Show Area Under Plots:") + " "
+            rightPadding: 8
+            text: qsTr("Show Area Under Plots:")
             visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
                      (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
                       Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1)

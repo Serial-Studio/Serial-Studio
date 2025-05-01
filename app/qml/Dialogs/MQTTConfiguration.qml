@@ -243,7 +243,8 @@ Window {
               Button {
                 icon.width: 18
                 icon.height: 18
-                text: qsTr("Buy License") + "  "
+                horizontalPadding: 8
+                text: qsTr("Buy License")
                 onClicked: Cpp_Licensing_LemonSqueezy.buy()
                 icon.source: "qrc:/rcc/icons/buttons/buy.svg"
                 icon.color: Cpp_ThemeManager.colors["button_text"]
@@ -252,7 +253,8 @@ Window {
               Button {
                 icon.width: 18
                 icon.height: 18
-                text: qsTr("Activate") + "  "
+                horizontalPadding: 8
+                text: qsTr("Activate")
                 onClicked: app.showLicenseDialog()
                 icon.source: "qrc:/rcc/icons/buttons/activate.svg"
                 icon.color: Cpp_ThemeManager.colors["button_text"]

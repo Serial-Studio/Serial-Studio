@@ -354,8 +354,8 @@ Rectangle {
       //
       TextMetrics {
         id: metrics
-        font: Cpp_Misc_CommonFonts.boldUiFont
         text: " " + qsTr("Disconnect") + " "
+        font: Cpp_Misc_CommonFonts.boldUiFont
       }
     }
 

@@ -173,7 +173,7 @@ Item {
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         text: qsTr("Using the plugin system, other applications \& scripts can " +
                    "interact with %1 by establishing a TCP connection on port " +
-                   "7777.").arg(app.appName)
+                   "7777.").arg(Application.displayName)
       }
 
       Item {

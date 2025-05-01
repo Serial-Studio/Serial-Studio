@@ -202,12 +202,10 @@ Window {
 
               Label {
                 Layout.fillWidth: true
+                text: qsTr("Please wait...")
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Qt.AlignHCenter
                 font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
-                text: Cpp_Licensing_LemonSqueezy.isActivated ?
-                        qsTr("Deactivating Serial Studio Pro...") :
-                        qsTr("Activating Serial Studio Pro...")
               }
 
               Item {
@@ -434,8 +432,9 @@ Window {
           Button {
             icon.width: 18
             icon.height: 18
+            horizontalPadding: 8
+            text: qsTr("Customer Portal")
             Layout.alignment: Qt.AlignVCenter
-            text: qsTr("Customer Portal") + " "
             icon.color: Cpp_ThemeManager.colors["button_text"]
             icon.source: "qrc:/rcc/icons/buttons/lemonsqueezy.svg"
             onClicked: Cpp_Licensing_LemonSqueezy.openCustomerPortal()
@@ -448,7 +447,8 @@ Window {
           Button {
             icon.width: 18
             icon.height: 18
-            text: qsTr("Buy License") + "  "
+            horizontalPadding: 8
+            text: qsTr("Buy License")
             onClicked: Cpp_Licensing_LemonSqueezy.buy()
             icon.source: "qrc:/rcc/icons/buttons/buy.svg"
             icon.color: Cpp_ThemeManager.colors["button_text"]
@@ -457,8 +457,9 @@ Window {
           Button {
             icon.width: 18
             icon.height: 18
+            horizontalPadding: 8
+            text: qsTr("Activate")
             opacity: enabled ? 1 : 0.5
-            text: qsTr("Activate") + "  "
             visible: !Cpp_Licensing_LemonSqueezy.isActivated
             onClicked: Cpp_Licensing_LemonSqueezy.activate()
             icon.source: "qrc:/rcc/icons/buttons/activate.svg"
@@ -469,6 +470,7 @@ Window {
           Button {
             icon.width: 18
             icon.height: 18
+            horizontalPadding: 8
             text: qsTr("Deactivate")
             opacity: enabled ? 1 : 0.5
             enabled: !Cpp_Licensing_LemonSqueezy.busy

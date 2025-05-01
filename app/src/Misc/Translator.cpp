@@ -19,6 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include <QApplication>
 #include "Misc/Translator.h"
 
 #ifdef USE_QT_COMMERCIAL
@@ -137,7 +138,7 @@ QString Misc::Translator::welcomeConsoleText() const
     if (path.contains("pro"))
     {
       text = QString::fromUtf8(file.readAll())
-                 .arg(Licensing::LemonSqueezy::instance().appName());
+                 .arg(qApp->applicationDisplayName());
     }
     else
       text = QString::fromUtf8(file.readAll());

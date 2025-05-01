@@ -164,12 +164,12 @@ Window {
 
         ColumnLayout {
           spacing: 0
-          id: logoLayout
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
 
           Label {
-            text: app.appName
+            rightPadding: 16
+            text: Application.displayName
             font: Cpp_Misc_CommonFonts.customUiFont(2, true)
           }
 
