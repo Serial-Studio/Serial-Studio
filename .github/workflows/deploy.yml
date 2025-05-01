@@ -47,7 +47,7 @@ jobs:
       uses: actions/checkout@v4
       
     - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v4.2.01
+      uses: jurplel/install-qt-action@v4.2.1
       with:
         cache: true
         target: desktop
@@ -162,7 +162,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v4.2.01
+      uses: jurplel/install-qt-action@v4.2.1
       with:
         cache: true
         arch: clang_64
@@ -253,7 +253,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v4.2.01
+      uses: jurplel/install-qt-action@v4.2.1
       with:
         cache: true
         target: desktop
