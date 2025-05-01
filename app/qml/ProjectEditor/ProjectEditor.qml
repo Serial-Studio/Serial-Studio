@@ -40,7 +40,7 @@ Widgets.SmartWindow {
   category: "ProjectEditor"
   minimumWidth: layout.implicitWidth + 32
   minimumHeight: layout.implicitHeight + 32
-  title: qsTr("%1 - Project Editor").arg(Cpp_JSON_ProjectModel.title + (Cpp_JSON_ProjectModel.modified ? " (" + qsTr("modified") + ")" : ""))
+  title: Cpp_JSON_ProjectModel.title + (Cpp_JSON_ProjectModel.modified ? " (" + qsTr("modified") + ")" : "")
 
   //
   // Ask user to save changes when closing the dialog
