@@ -316,7 +316,7 @@ Window {
                 } Label {
                   Layout.fillWidth: true
                   wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                  text: Cpp_AppName + " " + Cpp_Licensing_LemonSqueezy.variantName
+                  text: qsTr("Serial Studio %1").arg(Cpp_Licensing_LemonSqueezy.variantName)
                 }
 
                 Image {
