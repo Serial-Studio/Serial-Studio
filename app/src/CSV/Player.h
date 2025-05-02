@@ -107,7 +107,7 @@ private:
 
   QByteArray getFrame(const int row);
 
-  const QString &getCellValue(const int row, const int column, bool &error);
+  const QString getCellValue(const int row, const int column, bool &error);
 
 protected:
   bool eventFilter(QObject *obj, QEvent *event) override;

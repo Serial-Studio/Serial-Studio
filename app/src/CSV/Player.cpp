@@ -744,8 +744,8 @@ QByteArray CSV::Player::getFrame(const int row)
  * error occurs or the cell does not exist, the value of @a error shall be set
  * to @c true.
  */
-const QString &CSV::Player::getCellValue(const int row, const int column,
-                                         bool &error)
+const QString CSV::Player::getCellValue(const int row, const int column,
+                                        bool &error)
 {
   static auto defaultValue = QLatin1String("");
 

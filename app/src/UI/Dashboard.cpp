@@ -1075,7 +1075,20 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
 
     for (const auto &dataset : group.datasets())
     {
-      m_datasets.insert(dataset.index(), dataset);
+      if (!m_datasets.contains(dataset.index()))
+        m_datasets.insert(dataset.index(), dataset);
+      else
+      {
+        auto prevDataset = m_datasets.value(dataset.index());
+        double newMin = qMin(prevDataset.min(), dataset.min());
+        double newMax = qMax(prevDataset.max(), dataset.max());
+
+        auto d = dataset;
+        d.setMin(newMin);
+        d.setMax(newMax);
+        m_datasets.insert(dataset.index(), d);
+      }
+
       auto keys = SerialStudio::getDashboardWidgets(dataset);
       for (const auto &key : std::as_const(keys))
       {

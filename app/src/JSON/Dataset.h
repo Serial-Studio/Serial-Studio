@@ -99,6 +99,8 @@ public:
   [[nodiscard]] QJsonObject serialize() const;
   [[nodiscard]] bool read(const QJsonObject &object);
 
+  void setMin(double min) { m_min = min; }
+  void setMax(double max) { m_max = max; }
   void setTitle(const QString &title) { m_title = title; }
 
 private:

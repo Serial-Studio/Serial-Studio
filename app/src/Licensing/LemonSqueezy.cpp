@@ -567,7 +567,7 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
   auto customerEmail = meta.value("customer_email").toString();
 
   // Non-null error
-  if (!error.isNull())
+  if (!error.isNull() && !error.toString().simplified().isEmpty())
   {
     qWarning() << "[LemonSqueezy] Validation error:" << error.toString();
     Misc::Utilities::showMessageBox(

@@ -133,7 +133,7 @@ void JSON::FrameBuilder::loadJsonMap()
 void JSON::FrameBuilder::setupExternalConnections()
 {
   connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
-          &JSON::FrameBuilder::readData, Qt::QueuedConnection);
+          &JSON::FrameBuilder::readData);
 }
 
 /**
@@ -340,13 +340,15 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
       fields = QString::fromUtf8(data.simplified()).split(',');
 
     // Replace data in frame
-    for (auto g = m_frame.m_groups.begin(); g != m_frame.m_groups.end(); ++g)
+    for (int g = 0; g < m_frame.groupCount(); ++g)
     {
-      for (auto d = g->m_datasets.begin(); d != g->m_datasets.end(); ++d)
+      auto &group = m_frame.m_groups[g];
+      for (int d = 0; d < group.datasetCount(); ++d)
       {
-        const auto index = d->index();
-        if (index <= fields.count())
-          d->m_value = fields.at(index - 1);
+        auto &dataset = group.m_datasets[d];
+        const auto index = dataset.index();
+        if (index <= fields.count() && index > 0)
+          dataset.m_value = fields.at(index - 1);
       }
     }
 
