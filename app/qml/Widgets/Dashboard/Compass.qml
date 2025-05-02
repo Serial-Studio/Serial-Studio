@@ -62,6 +62,7 @@ Item {
       Layout.fillWidth: true
       Layout.fillHeight: true
       Layout.alignment: Qt.AlignVCenter
+      Layout.maximumWidth: root.width - range.width - 64
 
       //
       // Compass background
@@ -105,6 +106,7 @@ Item {
     // Range/scale + current value display
     //
     VisualRange {
+      id: range
       units: "°"
       alarm: false
       minValue: 0

@@ -58,6 +58,7 @@ Item {
       Layout.fillHeight: true
       Layout.topMargin: trackWidth / 2
       Layout.alignment: Qt.AlignVCenter
+      Layout.maximumWidth: root.width - range.width - 64
 
       //
       // Colors
@@ -131,6 +132,7 @@ Item {
     // Range/scale + current value display
     //
     VisualRange {
+      id: range
       value: model.value
       units: model.units
       maxValue: model.maxValue
@@ -141,6 +143,7 @@ Item {
 
       Layout.fillHeight: true
       Layout.minimumWidth: implicitWidth
+      Layout.maximumWidth: implicitWidth
     }
 
     //

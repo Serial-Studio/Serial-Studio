@@ -116,7 +116,7 @@ Widgets.Pane {
     property alias showCrosshairs: crosshairs.checked
     property alias axisOptions: axisVisibility.currentIndex
     property alias showAreaUnderPlot: areaUnderPlot.checked
-    property alias widgetAspectRatio: root.aspectRatio
+    property alias widgetAspectRatio: aspectComboBox.currentIndex
   }
 
   //

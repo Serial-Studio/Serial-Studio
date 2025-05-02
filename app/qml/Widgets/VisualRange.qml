@@ -30,7 +30,16 @@ ColumnLayout {
   implicitWidth: labelBg.width
 
   //
-  // Custom properties
+  // Custom Properties
+  //
+  // value: current numeric value to display
+  // minValue: minimum range value (shown at bottom if rangeVisible)
+  // maxValue: maximum range value (shown at top if rangeVisible)
+  // units: optional unit string to append to displayed values
+  // alarm: flag to indicate alarm state (changes color theme)
+  // textValue: optional text override for value display
+  // rangeVisible: controls visibility of min/max labels and connectors
+  // maximumWidth: maximum width allowed for labels
   //
   property real value: 0
   property real minValue: 0
@@ -42,17 +51,50 @@ ColumnLayout {
   property real maximumWidth: root.width
 
   //
-  // Helper function to calculate padding
+  // Calculates the maximum string length (including digits,
+  // decimal point, and minus sign) required to display
+  // the minValue or maxValue, based on configured precision.
+  // This is used to determine how much horizontal space
+  // to reserve for the value display.
   //
-  function getPaddedText(value) {
-    const valueText = value.toFixed(Cpp_UI_Dashboard.precision)
-    const maxText = root.maxValue.toFixed(Cpp_UI_Dashboard.precision)
-    const leftSpaces = " ".repeat(Math.max(0, maxText.length - valueText.length))
-    return leftSpaces + valueText
+  function maxTextLength() {
+    const precision = Cpp_UI_Dashboard.precision
+    const minStr = root.minValue.toFixed(precision)
+    const maxStr = root.maxValue.toFixed(precision)
+    let maxLen = Math.max(minStr.length, maxStr.length)
+    if (root.minValue >= 0 && root.maxValue >= 0 && root.value < 0) {
+      maxLen += 1
+    }
+    return maxLen
   }
 
   //
-  // Max value
+  // Pads the numeric value with left spaces to match the maximum
+  // reference length calculated by maxTextLength(). This ensures
+  // consistent visual width regardless of sign or digit count.
+  //
+  function getPaddedText(value) {
+    const precision = Cpp_UI_Dashboard.precision
+    const referenceLen = maxTextLength()
+    let valueText = value.toFixed(precision)
+    const padding = " ".repeat(Math.max(0, referenceLen - valueText.length))
+    return padding + valueText
+  }
+
+  //
+  // Measures the pixel width of text strings based on the font
+  // used by valueLabel. This allows dynamic calculation of
+  // label width to prevent layout shifts.
+  //
+  FontMetrics {
+    id: fontMetrics
+    font: valueLabel.font
+  }
+
+  //
+  // Displays the maximum value at the top of the widget.
+  // Uses monospaced font for alignment and allows eliding
+  // if the text overflows the maximum width.
   //
   Label {
     opacity: 0.8
@@ -67,14 +109,12 @@ ColumnLayout {
   }
 
   //
-  // Spacer
+  // Spacer (4 px)
   //
-  Item {
-    implicitHeight: 4
-  }
+  Item { implicitHeight: 4 }
 
   //
-  // Connector line
+  // Top Connector Line
   //
   Rectangle {
     implicitWidth: 2
@@ -83,30 +123,39 @@ ColumnLayout {
     Layout.alignment: Qt.AlignHCenter
     color: root.alarm ? Cpp_ThemeManager.colors["alarm"] :
                         Cpp_ThemeManager.colors["widget_border"]
-
-    Behavior on color {ColorAnimation{}}
+    Behavior on color { ColorAnimation{} }
   }
 
   //
-  // Spacer
+  // Spacer (8 px)
   //
-  Item {
-    implicitHeight: 8
-  }
+  Item { implicitHeight: 8 }
 
   //
-  // Value display
+  // Displays the current value in the center of the widget.
+  // Uses a custom monospaced font that scales slightly when
+  // rangeVisible is enabled. Calculates its width dynamically
+  // based on the maximum padded text and reserves extra space
+  // (+32 px) to account for background padding and margins.
   //
   Label {
+    id: valueLabel
     elide: Qt.ElideRight
     Layout.alignment: Qt.AlignHCenter
-    Layout.maximumWidth: root.maximumWidth
     horizontalAlignment: Text.AlignHCenter
-    color: Cpp_ThemeManager.colors["widget_text"]
-    text: root.textValue !== "" ? root.textValue :
-                                  root.getPaddedText(root.value) + " " + root.units
     font: root.rangeVisible ? Cpp_Misc_CommonFonts.customMonoFont(1.16) :
                               Cpp_Misc_CommonFonts.customMonoFont(1)
+    color: Cpp_ThemeManager.colors["widget_text"]
+
+    // Calculate max text width
+    readonly property string paddedMaxText: root.getPaddedText(root.maxValue) + " " + root.units
+    readonly property int labelWidth: fontMetrics.boundingRect(paddedMaxText).width + 32
+
+    Layout.minimumWidth: labelWidth
+    Layout.maximumWidth: labelWidth
+
+    text: root.textValue !== "" ? root.textValue :
+                                  root.getPaddedText(root.value) + " " + root.units
 
     background: Rectangle {
       z: 0
@@ -118,20 +167,17 @@ ColumnLayout {
       color: Cpp_ThemeManager.colors["widget_base"]
       border.color: root.alarm ? Cpp_ThemeManager.colors["alarm"] :
                                  Cpp_ThemeManager.colors["widget_border"]
-
-      Behavior on border.color {ColorAnimation{}}
+      Behavior on border.color { ColorAnimation{} }
     }
   }
 
   //
-  // Spacer
+  // Spacer (8 px)
   //
-  Item {
-    implicitHeight: 8
-  }
+  Item { implicitHeight: 8 }
 
   //
-  // Connector line
+  // Bottom Connector Line
   //
   Rectangle {
     implicitWidth: 2
@@ -140,19 +186,19 @@ ColumnLayout {
     Layout.alignment: Qt.AlignHCenter
     color: root.alarm ? Cpp_ThemeManager.colors["alarm"] :
                         Cpp_ThemeManager.colors["widget_border"]
-
-    Behavior on color {ColorAnimation{}}
+    Behavior on color { ColorAnimation{} }
   }
 
   //
-  // Spacer
+  // Spacer (4 px)
   //
-  Item {
-    implicitHeight: 4
-  }
+  Item { implicitHeight: 4 }
 
   //
-  // Minimum value
+  // Displays the minimum value at the bottom of the widget.
+  // Uses monospaced font for consistent alignment with the
+  // max value label. Allows text eliding if the text exceeds
+  // the maximum width.
   //
   Label {
     opacity: 0.8
