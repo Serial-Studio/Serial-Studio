@@ -294,7 +294,7 @@ QString JSON::ProjectModel::jsonProjectsPath() const
   static QString path = QString("%1/%2/JSON Projects/")
                             .arg(QStandardPaths::writableLocation(
                                      QStandardPaths::DocumentsLocation),
-                                 qApp->applicationDisplayName());
+                                 APP_NAME);
 
   // Generate file path if required
   QDir dir(path);

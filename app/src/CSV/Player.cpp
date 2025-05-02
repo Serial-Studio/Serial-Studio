@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QStandardPaths>
 
+#include "AppInfo.h"
 #include "IO/Manager.h"
 #include "UI/Dashboard.h"
 #include "Misc/Utilities.h"
@@ -121,7 +122,7 @@ QString CSV::Player::csvFilesPath() const
   const auto path = QStringLiteral("%1/%2/CSV/")
                         .arg(QStandardPaths::writableLocation(
                                  QStandardPaths::DocumentsLocation),
-                             qApp->applicationDisplayName());
+                             APP_NAME);
 
   // Generate file path if required
   QDir dir(path);

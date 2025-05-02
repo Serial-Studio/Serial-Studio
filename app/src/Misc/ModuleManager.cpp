@@ -334,14 +334,13 @@ void Misc::ModuleManager::initializeQmlInterface()
   // Register app info with QML
   c->setContextProperty("Cpp_BuildDate", buildDate);
   c->setContextProperty("Cpp_BuildTime", buildTime);
+  c->setContextProperty("Cpp_AppName", APP_NAME);
+  c->setContextProperty("Cpp_AppVersion", APP_VERSION);
   c->setContextProperty("Cpp_AppUpdaterUrl", APP_UPDATER_URL);
+  c->setContextProperty("Cpp_AppOrganization", APP_DEVELOPER);
   c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
   c->setContextProperty("Cpp_PrimaryScreen", qApp->primaryScreen());
-  c->setContextProperty("Cpp_AppName", qApp->applicationDisplayName());
-  c->setContextProperty("Cpp_AppVersion", qApp->applicationVersion());
-  c->setContextProperty("Cpp_AppOrganization", qApp->organizationName());
-  c->setContextProperty("Cpp_AppOrganizationDomain",
-                        qApp->organizationDomain());
+  c->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
 
   // Load main.qml
   m_engine.load(

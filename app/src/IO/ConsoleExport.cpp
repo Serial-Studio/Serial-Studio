@@ -28,6 +28,7 @@
 #include <QStandardPaths>
 #include <QDesktopServices>
 
+#include "AppInfo.h"
 #include "IO/Console.h"
 #include "IO/Manager.h"
 #include "Misc/Utilities.h"
@@ -43,7 +44,7 @@ IO::ConsoleExport::ConsoleExport()
   m_filePath = QStringLiteral("%1/%2/Console")
                    .arg(QStandardPaths::writableLocation(
                             QStandardPaths::DocumentsLocation),
-                        qApp->applicationDisplayName());
+                        APP_NAME);
 }
 
 /**

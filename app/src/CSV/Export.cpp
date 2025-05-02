@@ -28,6 +28,7 @@
 #include <QStandardPaths>
 #include <QDesktopServices>
 
+#include "AppInfo.h"
 #include "IO/Manager.h"
 #include "CSV/Player.h"
 #include "Misc/Utilities.h"
@@ -48,7 +49,7 @@ CSV::Export::Export()
   m_csvPath = QStringLiteral("%1/%2/CSV")
                   .arg(QStandardPaths::writableLocation(
                            QStandardPaths::DocumentsLocation),
-                       qApp->applicationDisplayName());
+                       APP_NAME);
 }
 
 /**
