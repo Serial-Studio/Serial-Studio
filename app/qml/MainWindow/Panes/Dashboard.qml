@@ -89,5 +89,6 @@ RowLayout {
     Layout.fillWidth: true
     Layout.fillHeight: true
     Layout.minimumWidth: 240
+    aspectRatio: viewOptions.aspectRatio
   }
 }

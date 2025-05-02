@@ -100,7 +100,7 @@ ColumnLayout {
   }
 
   Item {
-    implicitHeight: 8
+    implicitHeight: 4
     visible: !hideAll.checked && count > 0
   }
 }

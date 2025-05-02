@@ -32,6 +32,11 @@ Widgets.Pane {
   icon: "qrc:/rcc/icons/panes/dashboard.svg"
 
   //
+  // Expose layout options
+  //
+  property real aspectRatio: 1
+
+  //
   // Compute the widget cell sizes & layout that wastes less screen area
   //
   AdaptiveGridLayout {
@@ -40,11 +45,11 @@ Widgets.Pane {
     minColumns: 1
     maxColumns: 10
     minCellWidth: 264
-    cellHeightFactor: 2/3
     rowSpacing: grid.rowSpacing
+    containerWidth: flickable.width
     containerHeight: flickable.height
     columnSpacing: grid.columnSpacing
-    containerWidth: flickable.width - 8
+    cellHeightFactor: 1 / root.aspectRatio
     cellCount: Cpp_UI_Dashboard.totalWidgetCount
 
     onLayoutChanged: {
@@ -146,6 +151,8 @@ Widgets.Pane {
 
       ScrollBar.vertical: ScrollBar {
         id: scroll
+        policy: grid.height > root.height ? ScrollBar.AlwaysOn :
+                                            ScrollBar.AsNeeded
       }
 
       //

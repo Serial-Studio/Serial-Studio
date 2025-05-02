@@ -37,6 +37,11 @@ Widgets.Pane {
   icon: "qrc:/rcc/icons/panes/structure.svg"
 
   //
+  // Expose widget aspect ratio
+  //
+  property real aspectRatio: aspectComboBox.model[0].value
+
+  //
   // Generate the list of allowed point values for the slider
   // These are the values we want the user to be able to pick:
   //  - From 10 to 100 → steps of 10
@@ -111,6 +116,7 @@ Widgets.Pane {
     property alias showCrosshairs: crosshairs.checked
     property alias axisOptions: axisVisibility.currentIndex
     property alias showAreaUnderPlot: areaUnderPlot.checked
+    property alias widgetAspectRatio: root.aspectRatio
   }
 
   //
@@ -166,7 +172,7 @@ Widgets.Pane {
         id: layout
         spacing: 4
         anchors.leftMargin: 8
-        anchors.rightMargin: 24
+        anchors.rightMargin: 8
         anchors.left: parent.left
         anchors.right: parent.right
 
@@ -207,234 +213,267 @@ Widgets.Pane {
         }
 
         //
+        // Rectangle with view options
+        //
+        Rectangle {
+          radius: 2
+          border.width: 1
+          Layout.fillWidth: true
+          implicitHeight: viewOptionsLayout.implicitHeight + 16
+          color: Cpp_ThemeManager.colors["groupbox_background"]
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+          visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible ||
+                   Cpp_UI_Dashboard.pointsWidgetVisible ||
+                   Cpp_UI_Dashboard.totalWidgetCount > 1
+
+          ColumnLayout {
+            spacing: 4
+            anchors.margins: 8
+            anchors.fill: parent
+            id: viewOptionsLayout
+
+            //
+            // Widget aspect ratio
+            //
+            ComboBox {
+              id: aspectComboBox
+
+              model: [
+                  { label: qsTr("4:3 (Standard)"),      value: 4 / 3 },
+                  { label: qsTr("1:1 (Square)"),        value: 1 / 1 },
+                  { label: qsTr("16:9 (Widescreen)"),   value: 16 / 9 },
+                  { label: qsTr("3:4 (Portrait)"),      value: 3 / 4 },
+                  { label: qsTr("9:16 (Vertical)"),     value: 9 / 16 }
+              ]
+
+              textRole: "label"
+              Layout.fillWidth: true
+              displayText: qsTr("Aspect: %1").arg(currentText)
+              onCurrentIndexChanged: root.aspectRatio = model[currentIndex].value
+            }
+
+
+            //
+            // Axis visibility
+            //
+            ComboBox {
+              id: axisVisibility
+              Layout.fillWidth: true
+              displayText: qsTr("Axes: %1").arg(currentText)
+              visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible
+
+              model: [
+                qsTr("Both"),
+                qsTr("X only"),
+                qsTr("Y only"),
+                qsTr("None")
+              ]
+
+              currentIndex: {
+                switch (Cpp_UI_Dashboard.axisVisibility) {
+                case SerialStudio.AxisXY:
+                  return 0;
+                case SerialStudio.AxisX:
+                  return 1;
+                case SerialStudio.AxisY:
+                  return 2;
+                case SerialStudio.NoAxesVisible:
+                  return 3;
+                }
+              }
+
+              onCurrentIndexChanged: {
+                switch (currentIndex) {
+                case 0:
+                  Cpp_UI_Dashboard.axisVisibility = SerialStudio.AxisXY
+                  break
+                case 1:
+                  Cpp_UI_Dashboard.axisVisibility = SerialStudio.AxisX
+                  break
+                case 2:
+                  Cpp_UI_Dashboard.axisVisibility = SerialStudio.AxisY
+                  break
+                case 3:
+                  Cpp_UI_Dashboard.axisVisibility = SerialStudio.NoAxesVisible
+                  break
+                }
+              }
+            }
+
+            //
+            // Spacer
+            //
+            Item {
+              implicitHeight: 2
+              visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible ||
+                       Cpp_UI_Dashboard.pointsWidgetVisible ||
+                       Cpp_UI_Dashboard.totalWidgetCount > 1
+            }
+
+            //
+            // Visualization controls
+            //
+            GridLayout {
+              columns: 3
+              rowSpacing: 4
+              columnSpacing: 4
+              visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible ||
+                       Cpp_UI_Dashboard.pointsWidgetVisible ||
+                       Cpp_UI_Dashboard.totalWidgetCount > 1
+
+              //
+              // Number of plot points slider
+              //
+              Label {
+                rightPadding: 8
+                text: qsTr("Points:")
+                visible: Cpp_UI_Dashboard.pointsWidgetVisible
+              } Slider {
+                id: plotPoints
+                from: 0
+                to: 100
+                stepSize: 0.1
+                implicitHeight: 18
+                Layout.fillWidth: true
+                visible: Cpp_UI_Dashboard.pointsWidgetVisible
+
+                value: {
+                  var val = Cpp_UI_Dashboard.points;
+                  var minv = Math.log(10);
+                  var maxv = Math.log(10000);
+                  var scale = 100 / (maxv - minv);
+                  return (Math.log(val) - minv) * scale;
+                }
+
+                onMoved: {
+                  var snapped = snapToAllowedValue(value);
+                  value = snapped.position;
+
+                  if (Cpp_UI_Dashboard.points !== snapped.value)
+                    Cpp_UI_Dashboard.points = snapped.value;
+                }
+
+                onValueChanged: {
+                  var snapped = snapToAllowedValue(value);
+                  if (Cpp_UI_Dashboard.points !== snapped.value)
+                    Cpp_UI_Dashboard.points = snapped.value;
+                }
+              } Label {
+                text: snapToAllowedValue(plotPoints.value).value
+                visible: Cpp_UI_Dashboard.pointsWidgetVisible
+              }
+
+              //
+              // Number of decimal places
+              //
+              Label {
+                rightPadding: 8
+                text: qsTr("Decimal places:")
+                visible: Cpp_UI_Dashboard.precisionWidgetVisible
+              } Slider {
+                id: decimalPlaces
+                to: 6
+                from: 0
+                value: 2
+                implicitHeight: 18
+                Layout.fillWidth: true
+                visible: Cpp_UI_Dashboard.precisionWidgetVisible
+                onValueChanged: Cpp_UI_Dashboard.precision = value
+              } Label {
+                text: Cpp_UI_Dashboard.precision
+                visible: Cpp_UI_Dashboard.precisionWidgetVisible
+              }
+
+              //
+              // Show Legends
+              //
+              Label {
+                rightPadding: 8
+                text: qsTr("Show Legends:")
+                visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
+              } CheckBox {
+                id: legends
+                implicitHeight: 18
+                Layout.leftMargin: -8
+                Layout.alignment: Qt.AlignLeft
+                checked: Cpp_UI_Dashboard.showLegends
+                visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
+                onCheckedChanged: {
+                  if (checked !== Cpp_UI_Dashboard.showLegends)
+                    Cpp_UI_Dashboard.showLegends = checked
+                }
+              } Item {
+                visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
+              }
+
+              //
+              // Show crosshairs
+              //
+              Label {
+                rightPadding: 8
+                text: qsTr("Show Crosshairs:")
+                visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
+                         (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1 ||
+                          Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
+                          Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1)
+              } CheckBox {
+                id: crosshairs
+                implicitHeight: 18
+                Layout.leftMargin: -8
+                Layout.alignment: Qt.AlignLeft
+                checked: Cpp_UI_Dashboard.showCrosshairs
+                visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
+                         (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1 ||
+                          Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
+                          Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1)
+                onCheckedChanged: {
+                  if (checked !== Cpp_UI_Dashboard.showCrosshairs)
+                    Cpp_UI_Dashboard.showCrosshairs = checked
+                }
+              } Item {
+                visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
+                         (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1 ||
+                          Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
+                          Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1)
+              }
+
+              //
+              // Show Area Under Plot
+              //
+              Label {
+                rightPadding: 8
+                text: qsTr("Show Area Under Plots:")
+                visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
+                         (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
+                          Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1)
+              } CheckBox {
+                id: areaUnderPlot
+                implicitHeight: 18
+                Layout.leftMargin: -8
+                Layout.alignment: Qt.AlignLeft
+                checked: Cpp_UI_Dashboard.showAreaUnderPlots
+                visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
+                         (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
+                          Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1)
+                onCheckedChanged: {
+                  if (checked !== Cpp_UI_Dashboard.showAreaUnderPlots)
+                    Cpp_UI_Dashboard.showAreaUnderPlots = checked
+                }
+              } Item {
+                visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
+                         (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
+                          Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1)
+              }
+            }
+          }
+        }
+
+        //
         // Spacer
         //
         Item {
           implicitHeight: 4
-          visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible ||
-                   Cpp_UI_Dashboard.pointsWidgetVisible ||
-                   Cpp_UI_Dashboard.totalWidgetCount > 1
-        }
-
-        //
-        // Axis visibility
-        //
-        ComboBox {
-          id: axisVisibility
-          Layout.fillWidth: true
-          visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible
-
-          model: [
-            qsTr("Show both X and Y axes"),
-            qsTr("Show only X axis"),
-            qsTr("Show only Y axis"),
-            qsTr("Hide all axes")
-          ]
-
-          currentIndex: {
-            switch (Cpp_UI_Dashboard.axisVisibility) {
-            case SerialStudio.AxisXY:
-              return 0;
-            case SerialStudio.AxisX:
-              return 1;
-            case SerialStudio.AxisY:
-              return 2;
-            case SerialStudio.NoAxesVisible:
-              return 3;
-            }
-          }
-
-          onCurrentIndexChanged: {
-            switch (currentIndex) {
-            case 0:
-              Cpp_UI_Dashboard.axisVisibility = SerialStudio.AxisXY
-              break
-            case 1:
-              Cpp_UI_Dashboard.axisVisibility = SerialStudio.AxisX
-              break
-            case 2:
-              Cpp_UI_Dashboard.axisVisibility = SerialStudio.AxisY
-              break
-            case 3:
-              Cpp_UI_Dashboard.axisVisibility = SerialStudio.NoAxesVisible
-              break
-            }
-          }
-        }
-
-        //
-        // Spacer
-        //
-        Item {
-          implicitHeight: 2
-          visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible ||
-                   Cpp_UI_Dashboard.pointsWidgetVisible ||
-                   Cpp_UI_Dashboard.totalWidgetCount > 1
-        }
-
-
-
-        //
-        // Visualization controls
-        //
-        GridLayout {
-          columns: 3
-          rowSpacing: 4
-          columnSpacing: 4
-          visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible ||
-                   Cpp_UI_Dashboard.pointsWidgetVisible ||
-                   Cpp_UI_Dashboard.totalWidgetCount > 1
-
-          //
-          // Number of plot points slider
-          //
-          Label {
-            rightPadding: 8
-            text: qsTr("Points:")
-            visible: Cpp_UI_Dashboard.pointsWidgetVisible
-          } Slider {
-            id: plotPoints
-            from: 0
-            to: 100
-            stepSize: 0.1
-            implicitHeight: 18
-            Layout.fillWidth: true
-            visible: Cpp_UI_Dashboard.pointsWidgetVisible
-
-            value: {
-              var val = Cpp_UI_Dashboard.points;
-              var minv = Math.log(10);
-              var maxv = Math.log(10000);
-              var scale = 100 / (maxv - minv);
-              return (Math.log(val) - minv) * scale;
-            }
-
-            onMoved: {
-              var snapped = snapToAllowedValue(value);
-              value = snapped.position;
-
-              if (Cpp_UI_Dashboard.points !== snapped.value)
-                Cpp_UI_Dashboard.points = snapped.value;
-            }
-
-            onValueChanged: {
-              var snapped = snapToAllowedValue(value);
-              if (Cpp_UI_Dashboard.points !== snapped.value)
-                Cpp_UI_Dashboard.points = snapped.value;
-            }
-          } Label {
-            text: snapToAllowedValue(plotPoints.value).value
-            visible: Cpp_UI_Dashboard.pointsWidgetVisible
-          }
-
-          //
-          // Number of decimal places
-          //
-          Label {
-            rightPadding: 8
-            text: qsTr("Decimal places:")
-            visible: Cpp_UI_Dashboard.precisionWidgetVisible
-          } Slider {
-            id: decimalPlaces
-            to: 6
-            from: 0
-            value: 2
-            implicitHeight: 18
-            Layout.fillWidth: true
-            visible: Cpp_UI_Dashboard.precisionWidgetVisible
-            onValueChanged: Cpp_UI_Dashboard.precision = value
-          } Label {
-            text: Cpp_UI_Dashboard.precision
-            visible: Cpp_UI_Dashboard.precisionWidgetVisible
-          }
-
-          //
-          // Show Legends
-          //
-          Label {
-            rightPadding: 8
-            text: qsTr("Show Legends:")
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
-          } CheckBox {
-            id: legends
-            implicitHeight: 18
-            Layout.leftMargin: -8
-            Layout.alignment: Qt.AlignLeft
-            checked: Cpp_UI_Dashboard.showLegends
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
-            onCheckedChanged: {
-              if (checked !== Cpp_UI_Dashboard.showLegends)
-                Cpp_UI_Dashboard.showLegends = checked
-            }
-          } Item {
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
-          }
-
-          //
-          // Show crosshairs
-          //
-          Label {
-            rightPadding: 8
-            text: qsTr("Show Crosshairs:")
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
-                     (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1 ||
-                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
-                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1)
-          } CheckBox {
-            id: crosshairs
-            implicitHeight: 18
-            Layout.leftMargin: -8
-            Layout.alignment: Qt.AlignLeft
-            checked: Cpp_UI_Dashboard.showCrosshairs
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
-                     (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1 ||
-                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
-                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1)
-            onCheckedChanged: {
-              if (checked !== Cpp_UI_Dashboard.showCrosshairs)
-                Cpp_UI_Dashboard.showCrosshairs = checked
-            }
-          } Item {
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
-                     (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1 ||
-                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
-                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1)
-          }
-
-          //
-          // Show Area Under Plot
-          //
-          Label {
-            rightPadding: 8
-            text: qsTr("Show Area Under Plots:")
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
-                     (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
-                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1)
-          } CheckBox {
-            id: areaUnderPlot
-            implicitHeight: 18
-            Layout.leftMargin: -8
-            Layout.alignment: Qt.AlignLeft
-            checked: Cpp_UI_Dashboard.showAreaUnderPlots
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
-                     (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
-                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1)
-            onCheckedChanged: {
-              if (checked !== Cpp_UI_Dashboard.showAreaUnderPlots)
-                Cpp_UI_Dashboard.showAreaUnderPlots = checked
-            }
-          } Item {
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
-                     (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
-                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1)
-          }
-        }
-
-        //
-        // Spacer
-        //
-        Item {
-          implicitHeight: 8
           visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible ||
                    Cpp_UI_Dashboard.pointsWidgetVisible ||
                    Cpp_UI_Dashboard.totalWidgetCount > 1
