@@ -391,16 +391,16 @@ elseif(APPLE)
     MACOSX_BUNDLE_INFO_PLIST ${INFO_MACOSX}
   )
 elseif(UNIX)
-  install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION /usr/bin)
+  install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION bin)
 
   install(
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.svg
-    DESTINATION /usr/share/pixmaps
+    DESTINATION share/pixmaps
   )
 
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.desktop
-  DESTINATION /usr/share/applications
+  DESTINATION share/applications
 )
 endif()
 
