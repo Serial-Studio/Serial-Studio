@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.serial_studio.Serial_Studio</id>
+  <name>Serial Studio</name>
+  <project_license>GPLv3 and Commercial License</project_license>
+  <developer id="io.github.serial-studio">
+  <name>Serial Studio</name>
+  </developer>
+  <summary>The universal dashboard for embedded systems</summary>
+  <metadata_license>CC-BY-SA-4.0</metadata_license>
+  <launchable type="desktop-id">io.github.serial_studio.Serial_Studio.desktop</launchable>
+  <url type="homepage">https://serial-studio.github.io/</url>
+  <url type="bugtracker">https://github.com/Serial-Studio/Serial-Studio/issues</url>
+  <url type="help">https://github.com/Serial-Studio/Serial-Studio/wiki</url>
+  <url type="donation">https://github.com/sponsors/alex-spataru</url>
+  <description>
+    <p>Serial Studio is a multi-platform, versatile data visualization tool designed for embedded engineers, students, hackers, and teachers. It allows users to visualize, analyze, and represent data from their projects and devices without needing custom, project-specific visualization software. Serial Studio offers a flexible solution that adapts to a wide range of use cases, making it ideal for both educational and professional environments.</p>
+    <p>Features</p>
+    <ul>
+      <li>Cross-platform: Compatible with Windows, macOS, and Linux.</li>
+      <li>CSV Export: Easily saves received data in CSV files for further analysis or processing.</li>
+      <li>Support for multiple data sources: Handles a wide variety of sources, including serial ports, MQTT, Bluetooth Low Energy (BLE), and network sockets (TCP/UDP).</li>
+      <li>Customizable visualization: Allows users to define and display data using various widgets, configurable via the project editor to meet specific needs.</li>
+      <li>Customizable frame analysis: Provides the option to modify a JavaScript function to interpret incoming data frames, enabling the preprocessing of raw sensor data and handling of complex binary formats.</li>
+      <li>MQTT publishing and receiving: Sends and receives data over the internet, enabling real-time data visualization from anywhere in the world.</li>
+    </ul>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://serial-studio.github.io/assets/img/laptop-mockup.png</image>
+    </screenshot>
+  </screenshots>
+  <categories>
+    <category>Electronics</category>
+    <category>Engineering</category>
+    <category>Science</category>
+  </categories>
+  <releases>
+    <release version="3.0.6" date="2024-11-27">
+      <url>https://github.com/Serial-Studio/Serial-Studio/releases/latest</url>
+    </release>
+  </releases>
+  <content_rating type="oars-1.1"/>
+</component>
