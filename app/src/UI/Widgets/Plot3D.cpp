@@ -142,9 +142,14 @@ void Widgets::Plot3D::paint(QPainter *painter)
   // Anaglyph processing
   if (anaglyphEnabled())
   {
+    // Initialize scene pixmap
+    QPixmap composed(m_backgroundPixmap.size());
+    composed.setDevicePixelRatio(qApp->devicePixelRatio());
+    composed.fill(Qt::transparent);
+
     // Compose the full scene into one pixmap
-    QPixmap composed = m_backgroundPixmap;
     QPainter scenePainter(&composed);
+    scenePainter.drawPixmap(0, 0, m_backgroundPixmap);
     scenePainter.drawPixmap(0, 0, m_gridPixmap);
     scenePainter.drawPixmap(0, 0, m_plotPixmap);
     scenePainter.drawPixmap(0, 0, m_cameraIndicatorPixmap);
@@ -152,15 +157,18 @@ void Widgets::Plot3D::paint(QPainter *painter)
 
     // Obtain two images from the scene
     QImage left = composed.toImage();
-    QImage right = composed.toImage();
+    QImage right = left;
+
+    // Convert right image to pixmap for shift magic
+    QPixmap rightPixmap = QPixmap::fromImage(right);
 
     // Shift the right eye image horizontally
     QImage shiftedRight(right.size(), QImage::Format_RGB32);
     shiftedRight.setDevicePixelRatio(qApp->devicePixelRatio());
     shiftedRight.fill(Qt::transparent);
     QPainter shiftPainter(&shiftedRight);
-    shiftPainter.drawImage(0, 0, right);
-    shiftPainter.drawImage(eyeSeparation(), 0, right);
+    shiftPainter.drawPixmap(0, 0, rightPixmap);
+    shiftPainter.drawPixmap(eyeSeparation(), 0, rightPixmap);
     shiftPainter.end();
 
     // Build the anaglyph manually
@@ -170,20 +178,20 @@ void Widgets::Plot3D::paint(QPainter *painter)
     {
       for (int x = 0; x < left.width(); ++x)
       {
-        // Get pixel colors from the left and right image
-        QColor lColor = left.pixelColor(x, y);
-        QColor rColor = shiftedRight.pixelColor(x, y);
+        // Obtain pixels from both left and right image
+        const auto lRgb = left.pixel(x, y);
+        const auto rRgb = shiftedRight.pixel(x, y);
 
-        // Combine red from left, green/blue from right
-        int outR = lColor.red();
-        int outG = rColor.green();
-        int outB = rColor.blue();
-        finalImage.setPixelColor(x, y, QColor(outR, outG, outB));
+        // Preserve red from left and cyan (green + blue) from right
+        const auto outR = qRed(lRgb);
+        const auto outG = qGreen(rRgb);
+        const auto outB = qBlue(rRgb);
+        finalImage.setPixel(x, y, qRgb(outR, outG, outB));
       }
     }
 
     // Draw the final image
-    painter->drawImage(0, 0, finalImage);
+    painter->drawPixmap(0, 0, QPixmap::fromImage(finalImage));
   }
 
   // Standard processing
@@ -1042,6 +1050,7 @@ void Widgets::Plot3D::wheelEvent(QWheelEvent *event)
 {
   if (event->angleDelta().y() != 0)
   {
+    event->accept();
     if (event->angleDelta().y() > 0)
       m_zoom *= 1.1;
     else
@@ -1083,6 +1092,8 @@ void Widgets::Plot3D::mouseMoveEvent(QMouseEvent *event)
     m_cameraOffsetY -= delta.y() * 0.01;
   }
 
+  event->accept();
+
   Q_EMIT cameraChanged();
   markDirty();
   update();
@@ -1094,11 +1105,11 @@ void Widgets::Plot3D::mouseMoveEvent(QMouseEvent *event)
  */
 void Widgets::Plot3D::mousePressEvent(QMouseEvent *event)
 {
-  event->accept();
   m_lastMousePos = event->pos();
 
   grabMouse();
   setCursor(Qt::ClosedHandCursor);
+  event->accept();
 }
 
 /**
@@ -1108,5 +1119,7 @@ void Widgets::Plot3D::mousePressEvent(QMouseEvent *event)
 void Widgets::Plot3D::mouseReleaseEvent(QMouseEvent *event)
 {
   unsetCursor();
+  ungrabMouse();
+  ungrabTouchPoints();
   event->accept();
 }
