@@ -35,8 +35,8 @@ Item {
   //
   // Widget data inputs
   //
+  property GPSModel model
   property color color: Cpp_ThemeManager.colors["highlight"]
-  property GPSModel model: GPSModel {}
 
   //
   // Custom properties to control the map from other QML files

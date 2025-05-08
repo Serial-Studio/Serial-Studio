@@ -35,9 +35,8 @@ Item {
   //
   // Widget data inputs
   //
+  property AccelerometerModel model
   property color color: Cpp_ThemeManager.colors["highlight"]
-  property AccelerometerModel model: AccelerometerModel {}
-
   readonly property int trackWidth: root.height >= 120 ? 4 : 2
 
   //

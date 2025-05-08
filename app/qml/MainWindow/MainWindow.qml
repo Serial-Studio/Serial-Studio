@@ -90,7 +90,11 @@ Widgets.SmartWindow {
   Timer {
     id: dbTimer
     interval: 500
-    onTriggered: toolbar.dashboardClicked()
+    onTriggered: {
+      toolbar.dashboardClicked()
+      if (Cpp_UI_Dashboard.totalWidgetCount <= 1)
+        dashboard.hideStructureTree()
+    }
   }
 
   //

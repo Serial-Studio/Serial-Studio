@@ -33,7 +33,7 @@ Item {
   //
   // Widget data inputs
   //
-  property var model: BarModel {}
+  property BarModel model
   property color color: Cpp_ThemeManager.colors["highlight"]
 
   //

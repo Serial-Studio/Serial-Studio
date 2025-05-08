@@ -334,7 +334,7 @@ void CSV::Export::registerFrame(const JSON::Frame &frame)
            && MQTT::Client::instance().isSubscriber()))
     return;
 #else
-  if (!IO::Manager::instance().connected())
+  if (!IO::Manager::instance().isConnected())
     return;
 #endif
 

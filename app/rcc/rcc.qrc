@@ -142,6 +142,17 @@
         <file>icons/code-editor/redo.svg</file>
         <file>icons/code-editor/reload.svg</file>
         <file>icons/code-editor/undo.svg</file>
+        <file>icons/dashboard/buttons/anaglyph.svg</file>
+        <file>icons/dashboard/buttons/center.svg</file>
+        <file>icons/dashboard/buttons/front_view.svg</file>
+        <file>icons/dashboard/buttons/interpolate-off.svg</file>
+        <file>icons/dashboard/buttons/interpolate-on.svg</file>
+        <file>icons/dashboard/buttons/left_view.svg</file>
+        <file>icons/dashboard/buttons/orbit.svg</file>
+        <file>icons/dashboard/buttons/orthogonal_view.svg</file>
+        <file>icons/dashboard/buttons/pan.svg</file>
+        <file>icons/dashboard/buttons/save-as.svg</file>
+        <file>icons/dashboard/buttons/top_view.svg</file>
         <file>icons/dashboard/accelerometer.svg</file>
         <file>icons/dashboard/bar.svg</file>
         <file>icons/dashboard/compass.svg</file>
@@ -155,6 +166,7 @@
         <file>icons/dashboard/led.svg</file>
         <file>icons/dashboard/multiplot.svg</file>
         <file>icons/dashboard/plot.svg</file>
+        <file>icons/dashboard/plot3d.svg</file>
         <file>icons/dashboard/show-all.svg</file>
         <file>icons/dashboard/view.svg</file>
         <file>icons/licensing/devices.svg</file>
@@ -212,6 +224,7 @@
         <file>icons/project-editor/treeview/gyroscope.svg</file>
         <file>icons/project-editor/treeview/indicator.svg</file>
         <file>icons/project-editor/treeview/multiplot.svg</file>
+        <file>icons/project-editor/treeview/plot3d.svg</file>
         <file>icons/project-editor/treeview/project-setup.svg</file>
         <file>icons/project-editor/treeview/project-title.svg</file>
         <file>icons/project-editor/treeview/separator.svg</file>
@@ -316,7 +329,5 @@
         <file>themes/resistance.json</file>
         <file>themes/yaru-dark.json</file>
         <file>themes/yaru-light.json</file>
-        <file>icons/dashboard/plot3d.svg</file>
-        <file>icons/project-editor/treeview/plot3d.svg</file>
     </qresource>
 </RCC>

@@ -122,6 +122,7 @@ DropArea {
     Timer {
       id: rectTimer
       interval: 200
+      repeat: false
       onTriggered: dropRectangle.opacity = 0
     }
 

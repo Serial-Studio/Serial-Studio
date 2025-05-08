@@ -230,7 +230,7 @@ void Misc::ModuleManager::registerQmlTypes()
                                           "AccelerometerModel");
 
 #ifdef USE_QT_COMMERCIAL
-  qmlRegisterType<Widgets::Plot3D>("SerialStudio", 1, 0, "Plot3DModel");
+  qmlRegisterType<Widgets::Plot3D>("SerialStudio", 1, 0, "Plot3DWidget");
 #endif
 
   // Register JSON custom items

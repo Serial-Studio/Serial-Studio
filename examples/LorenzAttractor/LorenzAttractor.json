@@ -14,7 +14,7 @@
                     "fft": false,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": true,
+                    "graph": false,
                     "index": 1,
                     "led": false,
                     "ledHigh": 1,
@@ -24,7 +24,7 @@
                     "title": "X",
                     "units": "",
                     "value": "--.--",
-                    "widget": "",
+                    "widget": "x",
                     "xAxis": 2
                 },
                 {
@@ -32,7 +32,7 @@
                     "fft": false,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": true,
+                    "graph": false,
                     "index": 2,
                     "led": false,
                     "ledHigh": 1,
@@ -42,7 +42,7 @@
                     "title": "Y",
                     "units": "",
                     "value": "--.--",
-                    "widget": "",
+                    "widget": "y",
                     "xAxis": 3
                 },
                 {
@@ -50,7 +50,7 @@
                     "fft": false,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": true,
+                    "graph": false,
                     "index": 3,
                     "led": false,
                     "ledHigh": 1,
@@ -60,12 +60,12 @@
                     "title": "Z",
                     "units": "",
                     "value": "--.--",
-                    "widget": "",
+                    "widget": "z",
                     "xAxis": 1
                 }
             ],
-            "title": "Values",
-            "widget": "multiplot"
+            "title": "Lorenz Attractor",
+            "widget": "plot3d"
         }
     ],
     "mapTilerApiKey": "",

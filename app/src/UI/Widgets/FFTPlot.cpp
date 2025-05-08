@@ -63,10 +63,6 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
     m_maxY = 0;
     m_minY = -100;
     m_maxX = m_samplingRate / 2;
-
-    // Update widget
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-            &FFTPlot::updateData);
   }
 }
 
@@ -132,6 +128,7 @@ void Widgets::FFTPlot::draw(QLineSeries *series)
 {
   if (series)
   {
+    updateData();
     series->replace(m_data);
     Q_EMIT series->update();
   }

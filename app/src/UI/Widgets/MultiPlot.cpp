@@ -59,9 +59,7 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
     for (auto i = 0; i < group.datasetCount(); ++i)
       m_data[i].resize(UI::Dashboard::instance().points());
 
-    // Connect to the dashboard signals to update the plot data and range
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-            &MultiPlot::updateData);
+    // Connect to the dashboard signals
     connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this,
             &MultiPlot::updateRange);
 
@@ -176,7 +174,10 @@ void Widgets::MultiPlot::draw(QLineSeries *series, const int index)
   if (series && index >= 0 && index < count())
   {
     if (index == 0)
+    {
+      updateData();
       calculateAutoScaleRange();
+    }
 
     series->replace(m_data[index]);
     Q_EMIT series->update();

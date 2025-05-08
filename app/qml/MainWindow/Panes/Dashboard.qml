@@ -37,13 +37,27 @@ RowLayout {
   readonly property bool structureVisible: structureMargin > -1 * structureWidth
 
   //
+  // Shows the structure tree
+  //
+  function showStructureTree() {
+    structureMargin = 0
+  }
+
+  //
+  // Hides the structure tree
+  //
+  function hideStructureTree() {
+    structureMargin = -1 * root.structureWidth
+  }
+
+  //
   // Hides/shows the structure tree
   //
   function toggleStructureTree() {
     if (structureMargin < 0)
-      structureMargin = 0
+      showStructureTree()
     else
-      structureMargin = -1 * root.structureWidth
+      hideStructureTree()
   }
 
   //

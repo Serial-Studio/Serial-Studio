@@ -151,8 +151,7 @@ public:
   [[nodiscard]] const MultiLineSeries &multiplotData(const int index) const;
 
 #ifdef USE_QT_COMMERCIAL
-  [[nodiscard]] const ThreeDimensionalSeries &
-  threeDimensionalData(const int index) const;
+  [[nodiscard]] const PlotData3D &plotData3D(const int index) const;
 #endif
 
 public slots:
@@ -194,7 +193,7 @@ private:
   QVector<MultiLineSeries> m_multipltValues;
 
 #ifdef USE_QT_COMMERCIAL
-  QVector<ThreeDimensionalSeries> m_3dPlotData;
+  QVector<PlotData3D> m_plotData3D;
 #endif
 
   QVector<JSON::Action> m_actions;

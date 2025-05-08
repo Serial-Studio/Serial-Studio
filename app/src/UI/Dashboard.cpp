@@ -226,7 +226,7 @@ bool UI::Dashboard::pointsWidgetVisible() const
 #ifdef USE_QT_COMMERCIAL
   return m_widgetGroups.contains(SerialStudio::DashboardMultiPlot)
          || m_widgetDatasets.contains(SerialStudio::DashboardPlot)
-         || m_widgetDatasets.contains(SerialStudio::DashboardPlot3D);
+         || m_widgetGroups.contains(SerialStudio::DashboardPlot3D);
 #else
   return m_widgetGroups.contains(SerialStudio::DashboardMultiPlot)
          || m_widgetDatasets.contains(SerialStudio::DashboardPlot);
@@ -590,10 +590,9 @@ const MultiLineSeries &UI::Dashboard::multiplotData(const int index) const
  * @brief Provides the values for 3D plot visuals on the dashboard.
  * @return A reference to a QVector containing ThreeDimensionalSeries data.
  */
-const ThreeDimensionalSeries &
-UI::Dashboard::threeDimensionalData(const int index) const
+const PlotData3D &UI::Dashboard::plotData3D(const int index) const
 {
-  return m_3dPlotData[index];
+  return m_plotData3D[index];
 }
 #endif
 
@@ -803,6 +802,21 @@ void UI::Dashboard::updatePlots()
   if (m_multipltValues.count() != widgetCount(SerialStudio::DashboardMultiPlot))
     configureMultiLineSeries();
 
+  // Check if we need to re-initialize 3D plot data
+#ifdef USE_QT_COMMERCIAL
+  if (m_plotData3D.count() != widgetCount(SerialStudio::DashboardPlot3D))
+  {
+    m_plotData3D.clear();
+    m_plotData3D.squeeze();
+    m_plotData3D.resize(widgetCount(SerialStudio::DashboardPlot3D));
+    for (int i = 0; i < m_plotData3D.count(); ++i)
+    {
+      m_plotData3D[i].clear();
+      m_plotData3D[i].squeeze();
+    }
+  }
+#endif
+
   // Append latest values to FFT plots data
   for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i)
   {
@@ -851,6 +865,34 @@ void UI::Dashboard::updatePlots()
       SIMD::shift<qreal>(data, count, dataset.value().toDouble());
     }
   }
+
+// Append latest values to 3D plots
+#ifdef USE_QT_COMMERCIAL
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot3D); ++i)
+  {
+    // Get pointer to vector with 3D points for current widget
+    auto &plotData = m_plotData3D[i];
+
+    // Initialize new point
+    QVector3D point;
+    const auto &group = getGroupWidget(SerialStudio::DashboardPlot3D, i);
+    for (int j = 0; j < group.datasetCount(); ++j)
+    {
+      const auto &dataset = group.datasets()[j];
+      if (dataset.widget().toLower() == "x")
+        point.setX(dataset.value().toDouble());
+      else if (dataset.widget().toLower() == "y")
+        point.setY(dataset.value().toDouble());
+      else if (dataset.widget().toLower() == "z")
+        point.setZ(dataset.value().toDouble());
+    }
+
+    // Add point to data
+    plotData.append(point);
+    if (plotData.count() > points())
+      plotData.remove(0, plotData.count() - points());
+  }
+#endif
 }
 
 /**

@@ -311,14 +311,19 @@ void UI::AdaptiveGridLayout::computeLayout()
   // Update column count
   m_columns = bestColumns;
 
-  // Update cell width
+  // Update cell size for multi-cell grids
   if (m_columns > 1)
+  {
     m_cellWidth = bestCellWidth;
-  else
-    m_cellWidth = m_containerWidth;
+    m_cellHeight = qCeil(m_cellWidth * m_cellHeightFactor);
+  }
 
-  // Update cell height
-  m_cellHeight = qCeil(m_cellWidth * m_cellHeightFactor);
+  // Extend cell to parent in single-cell setups
+  else
+  {
+    m_cellWidth = m_containerWidth;
+    m_cellHeight = m_containerHeight;
+  }
 
   // Update user interface
   Q_EMIT layoutChanged();

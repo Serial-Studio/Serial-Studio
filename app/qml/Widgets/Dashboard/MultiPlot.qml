@@ -33,24 +33,27 @@ Item {
   //
   // Widget data inputs
   //
+  property MultiPlotModel model
   property color color: Cpp_ThemeManager.colors["highlight"]
-  property MultiPlotModel model: MultiPlotModel{}
 
   //
-  // Update curves at 24 Hz
+  // Update widget at 24 Hz
   //
-  Timer {
-    repeat: true
-    interval: 1000 / 24
-    running: root.visible
-    onTriggered: {
-      const count = plot.graph.seriesList.length
-      for (let i = 0; i < count; ++i)
-        root.model.draw(plot.graph.seriesList[i], i)
+  Connections {
+    target: Cpp_Misc_TimerEvents
+
+    function onTimeout24Hz() {
+      if (root.visible) {
+        const count = plot.graph.seriesList.length
+        for (let i = 0; i < count; ++i)
+          root.model.draw(plot.graph.seriesList[i], i)
+      }
     }
   }
 
-
+  //
+  // Plot + Legends
+  //
   RowLayout {
     spacing: 4
     anchors.margins: 8

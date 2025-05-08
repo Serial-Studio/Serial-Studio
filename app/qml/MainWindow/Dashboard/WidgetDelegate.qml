@@ -68,6 +68,11 @@ Widgets.Pane {
       color: Cpp_ThemeManager.colors["widget_window"]
     }
 
+    MouseArea {
+      anchors.fill: parent
+      preventStealing: true
+    }
+
     Loader {
       id: loader
       asynchronous: true
@@ -196,7 +201,7 @@ Widgets.Pane {
         //
         DashboardWidget {
           id: windowWidget
-          anchors.margins: 4
+          anchors.margins: 0
           anchors.fill: parent
           visible: window.visible
           widgetIndex: root.widgetIndex

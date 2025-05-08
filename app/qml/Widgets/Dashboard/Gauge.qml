@@ -34,7 +34,7 @@ Item {
   //
   // Widget data inputs
   //
-  property GaugeModel model: GaugeModel{}
+  property GaugeModel model
   property color color: Cpp_ThemeManager.colors["highlight"]
 
   //

@@ -330,7 +330,7 @@ Item {
 
                  // Calculate new zoom factor
                  const zoomFactor = 1.15
-                 const delta = wheel.angleDelta.y / 120
+                 const delta = -wheel.angleDelta.y / 120
                  const factor = Math.pow(zoomFactor, -delta)
 
                  // Calculate new zoom values for both axes

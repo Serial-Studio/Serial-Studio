@@ -70,6 +70,7 @@
     "widget_button_text": "#1e293b",
     "widget_highlighted_text": "#ffffff",
     "widget_placeholder_text": "#94a3b8",
+    "alarm": "#dc2626",
 
     "polar_background": "#3b82f6",
     "polar_foreground": "#3b82f6",
@@ -83,7 +84,11 @@
     "table_separator": "#cbd3dc",
     "table_border_header": "#c0c9d2",
     "table_separator_header": "#cbd3dc",
-    "alarm": "#dc2626",
+
+    "plot3d_x_axis": "#f73752",
+    "plot3d_y_axis": "#70a41c",
+    "plot3d_z_axis": "#2f84e3",
+    "plot3d_axis_text": "#ffffff",
 
     "widget_colors": [
       "#dc2626",

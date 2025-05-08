@@ -100,10 +100,11 @@ Rectangle {
       Layout.fillWidth: true
       Layout.fillHeight: true
       active: Cpp_QtCommercial_Available
-      sourceComponent: Component {
-        Drivers.Modbus {
-          Component.onCompleted: root.buses.push(this)
-        }
+      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml"
+
+      onLoaded: {
+        if (item)
+          root.buses.push(item)
       }
     }
 
@@ -112,10 +113,11 @@ Rectangle {
       Layout.fillWidth: true
       Layout.fillHeight: true
       active: Cpp_QtCommercial_Available
-      sourceComponent: Component {
-        Drivers.CANBus {
-          Component.onCompleted: root.buses.push(this)
-        }
+      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml"
+
+      onLoaded: {
+        if (item)
+          root.buses.push(item)
       }
     }
   }

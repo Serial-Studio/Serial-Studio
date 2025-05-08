@@ -59,8 +59,6 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
     if (!yDataset.units().isEmpty())
       m_yLabel += " (" + yDataset.units() + ")";
 
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-            &Plot::updateData);
     connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this,
             &Plot::updateRange);
 
@@ -149,6 +147,7 @@ void Widgets::Plot::draw(QLineSeries *series)
 {
   if (series)
   {
+    updateData();
     series->replace(m_data);
     calculateAutoScaleRange();
     Q_EMIT series->update();

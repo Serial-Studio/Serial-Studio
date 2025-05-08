@@ -32,8 +32,8 @@ Item {
   //
   // Widget data inputs
   //
+  property DataGridModel model
   property color color: "transparent"
-  property DataGridModel model: DataGridModel {}
 
   //
   // Responsive design stuff

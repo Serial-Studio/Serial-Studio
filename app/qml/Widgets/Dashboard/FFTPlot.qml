@@ -31,21 +31,22 @@ Item {
   //
   // Widget data inputs
   //
+  property FFTPlotModel model
   property color color: Cpp_ThemeManager.colors["highlight"]
-  property FFTPlotModel model: FFTPlotModel{}
 
   //
   // Update curve at 24 Hz
   //
-  Timer {
-    repeat: true
-    interval: 1000 / 24
-    running: root.visible
-    onTriggered: {
-      root.model.draw(upperSeries)
-      lowerSeries.clear()
-      lowerSeries.append(root.model.minX, root.model.minY)
-      lowerSeries.append(root.model.maxX, root.model.minY)
+  Connections {
+    target: Cpp_Misc_TimerEvents
+
+    function onTimeout24Hz() {
+      if (root.visible) {
+        root.model.draw(upperSeries)
+        lowerSeries.clear()
+        lowerSeries.append(root.model.minX, root.model.minY)
+        lowerSeries.append(root.model.maxX, root.model.minY)
+      }
     }
   }
 

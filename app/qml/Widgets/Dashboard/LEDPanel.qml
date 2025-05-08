@@ -32,8 +32,8 @@ Item {
   //
   // Widget data inputs
   //
+  property LEDPanelModel model
   property color color: "transparent"
-  property LEDPanelModel model: LEDPanelModel {}
 
   //
   // Create scrollable grid view with LED states

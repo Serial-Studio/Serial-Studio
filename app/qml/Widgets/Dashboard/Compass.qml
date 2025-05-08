@@ -34,7 +34,7 @@ Item {
   //
   // Widget data inputs
   //
-  property CompassModel model: CompassModel{}
+  property CompassModel model
   property color color: Cpp_ThemeManager.colors["highlight"]
 
   //

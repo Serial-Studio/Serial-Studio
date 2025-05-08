@@ -2430,7 +2430,6 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   const bool showWidget = currentDatasetIsEditable();
   const bool showFFTOptions = dataset.fft();
   const bool showLedOptions = dataset.led();
-  const bool showPlotOptions = dataset.graph();
   const bool showMinMax = dataset.graph() || dataset.widget() == "gauge"
                           || dataset.widget() == "bar"
                           || m_selectedGroup.widget() == "multiplot";
@@ -2557,7 +2556,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
 
 // Add X-axis selector
 #ifdef USE_QT_COMMERCIAL
-  if (showPlotOptions)
+  if (dataset.graph())
   {
     // Ensure X-axis ID is reset to "Samples" when an invalid index is set
     int xAxisIdx = 0;

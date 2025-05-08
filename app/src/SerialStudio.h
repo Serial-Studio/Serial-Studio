@@ -41,10 +41,10 @@ typedef QVector<qreal> PlotDataY;
 
 #ifdef USE_QT_COMMERCIAL
 /**
- * @typedef PlotDataZ
- * @brief Represents the Z-axis data points for a single curve.
+ * @typedef PlotData3D
+ * @brief Represents a list of 3D points.
  */
-typedef QVector<qreal> PlotDataZ;
+typedef QVector<QVector3D> PlotData3D;
 #endif
 
 /**
@@ -82,18 +82,6 @@ typedef struct
   PlotDataX *x;
   QList<PlotDataY> y;
 } MultiLineSeries;
-
-#ifdef USE_QT_COMMERCIAL
-/**
- * @typedef ThreeDimensionalSeries
- */
-typedef struct
-{
-  PlotDataX *x;
-  PlotDataY *y;
-  PlotDataZ *z;
-} ThreeDimensionalSeries;
-#endif
 
 /**
  * @class SerialStudio

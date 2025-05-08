@@ -21,87 +21,179 @@
 
 #pragma once
 
-#include <QtQuick>
-#include <QVector>
-#include <QLineSeries>
+#include <QPainter>
+#include <QVector3D>
+#include <QMatrix4x4>
+#include <QQuickPaintedItem>
+
+#include "SerialStudio.h"
 
 namespace Widgets
 {
 /**
- * @brief A widget that displays multiple plots on a single chart.
+ * @class Plot3D
+ * @brief A 3D plotting widget with optional anaglyph (stereo) rendering.
+ *
+ * Renders a 3D plot with grid, data, and camera indicator.
+ * Supports zoom, camera rotation, and anaglyph mode for red/cyan 3D effect.
+ *
+ * Exposed properties:
+ * - zoom
+ * - anaglyphEnabled
+ * - cameraAngleX, cameraAngleY, cameraAngleZ
  */
-class Plot3D : public QQuickItem
+class Plot3D : public QQuickPaintedItem
 {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(qreal count READ count CONSTANT)
-  Q_PROPERTY(QString xLabel READ xLabel CONSTANT)
-  Q_PROPERTY(QString yLabel READ yLabel CONSTANT)
-  Q_PROPERTY(QString zLabel READ zLabel CONSTANT)
-  Q_PROPERTY(qreal minX READ minX NOTIFY rangeChanged)
-  Q_PROPERTY(qreal maxX READ maxX NOTIFY rangeChanged)
-  Q_PROPERTY(qreal minY READ minY NOTIFY rangeChanged)
-  Q_PROPERTY(qreal maxY READ maxY NOTIFY rangeChanged)
-  Q_PROPERTY(qreal minZ READ minZ NOTIFY rangeChanged)
-  Q_PROPERTY(qreal maxZ READ maxZ NOTIFY rangeChanged)
-  Q_PROPERTY(QStringList colors READ colors NOTIFY themeChanged)
-  Q_PROPERTY(qreal xTickInterval READ xTickInterval NOTIFY rangeChanged)
-  Q_PROPERTY(qreal yTickInterval READ yTickInterval NOTIFY rangeChanged)
-  Q_PROPERTY(qreal zTickInterval READ zTickInterval NOTIFY rangeChanged)
+  Q_PROPERTY(bool anaglyphEnabled
+             READ anaglyphEnabled
+             WRITE setAnaglyphEnabled
+             NOTIFY anaglyphEnabledChanged)
+  Q_PROPERTY(bool orbitNavigation
+             READ orbitNavigation
+             WRITE setOrbitNavigation
+             NOTIFY orbitNavigationChanged)
+  Q_PROPERTY(bool interpolationEnabled
+             READ interpolationEnabled
+             WRITE setInterpolationEnabled
+             NOTIFY interpolationEnabledChanged)
+  Q_PROPERTY(qreal zoom
+             READ zoom
+             WRITE setZoom
+             NOTIFY cameraChanged)
+  Q_PROPERTY(qreal cameraAngleX
+             READ cameraAngleX
+             WRITE setCameraAngleX
+             NOTIFY cameraChanged)
+  Q_PROPERTY(qreal cameraAngleY
+             READ cameraAngleY
+             WRITE setCameraAngleY
+             NOTIFY cameraChanged)
+  Q_PROPERTY(qreal cameraAngleZ
+             READ cameraAngleZ
+             WRITE setCameraAngleZ
+             NOTIFY cameraChanged)
+  Q_PROPERTY(qreal cameraOffsetX
+             READ cameraOffsetX
+             WRITE setCameraOffsetX
+             NOTIFY cameraChanged)
+  Q_PROPERTY(qreal cameraOffsetY
+             READ cameraOffsetY
+             WRITE setCameraOffsetY
+             NOTIFY cameraChanged)
+  Q_PROPERTY(qreal cameraOffsetZ
+             READ cameraOffsetZ
+             WRITE setCameraOffsetZ
+             NOTIFY cameraChanged)
+  Q_PROPERTY(float eyeSeparation
+             READ eyeSeparation
+             WRITE setEyeSeparation
+             NOTIFY eyeSeparationChanged)
+  // clang-format on
 
 signals:
   void rangeChanged();
-  void themeChanged();
+  void cameraChanged();
+  void eyeSeparationChanged();
+  void anaglyphEnabledChanged();
+  void orbitNavigationChanged();
+  void interpolationEnabledChanged();
 
 public:
   explicit Plot3D(const int index = -1, QQuickItem *parent = nullptr);
-  ~Plot3D()
-  {
-    for (auto &curve : m_data)
-    {
-      curve.clear();
-      curve.squeeze();
-    }
+  void paint(QPainter *painter) override;
 
-    m_data.clear();
-    m_data.squeeze();
-  }
+  [[nodiscard]] qreal zoom() const;
+  [[nodiscard]] qreal cameraAngleX() const;
+  [[nodiscard]] qreal cameraAngleY() const;
+  [[nodiscard]] qreal cameraAngleZ() const;
+  [[nodiscard]] qreal cameraOffsetX() const;
+  [[nodiscard]] qreal cameraOffsetY() const;
+  [[nodiscard]] qreal cameraOffsetZ() const;
 
-  [[nodiscard]] int count() const;
-  [[nodiscard]] qreal minX() const;
-  [[nodiscard]] qreal maxX() const;
-  [[nodiscard]] qreal minY() const;
-  [[nodiscard]] qreal maxY() const;
-  [[nodiscard]] qreal minZ() const;
-  [[nodiscard]] qreal maxZ() const;
-  [[nodiscard]] qreal xTickInterval() const;
-  [[nodiscard]] qreal yTickInterval() const;
-  [[nodiscard]] qreal zTickInterval() const;
-  [[nodiscard]] const QString &xLabel() const;
-  [[nodiscard]] const QString &yLabel() const;
-  [[nodiscard]] const QString &zLabel() const;
-  [[nodiscard]] const QStringList &colors() const;
+  [[nodiscard]] bool dirty() const;
+  [[nodiscard]] float eyeSeparation() const;
+
+  [[nodiscard]] bool anaglyphEnabled() const;
+  [[nodiscard]] bool orbitNavigation() const;
+  [[nodiscard]] bool interpolationEnabled() const;
 
 public slots:
-  void draw(QLineSeries *series, const int index);
+  void setZoom(const qreal z);
+  void setCameraAngleX(const qreal angle);
+  void setCameraAngleY(const qreal angle);
+  void setCameraAngleZ(const qreal angle);
+  void setCameraOffsetX(const qreal offset);
+  void setCameraOffsetY(const qreal offset);
+  void setCameraOffsetZ(const qreal offset);
+  void setAnaglyphEnabled(const bool enabled);
+  void setOrbitNavigation(const bool enabled);
+  void setEyeSeparation(const float separation);
+  void setInterpolationEnabled(const bool enabled);
 
 private slots:
   void updateData();
-  void updateRange();
   void onThemeChanged();
-  void calculateAutoScaleRange();
+
+private:
+  void markDirty();
+
+  void drawData();
+  void drawGrid();
+  void drawBackground();
+  void drawCameraIndicator();
+  void renderAnaglyph(QPixmap &buffer, QImage &left, QImage &right);
+
+private:
+  float eyeShift();
+  QPixmap renderGrid(const QMatrix4x4 &matrix);
+  QPixmap renderCameraIndicator(const QMatrix4x4 &matrix);
+  QPixmap renderData(const QMatrix4x4 &matrix, const PlotData3D &data);
+
+protected:
+  void wheelEvent(QWheelEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
   int m_index;
-  qreal m_minX;
-  qreal m_maxX;
-  qreal m_minY;
-  qreal m_maxY;
-  qreal m_minZ;
-  qreal m_maxZ;
-  QString m_xLabel;
-  QString m_yLabel;
-  QString m_zLabel;
-  QStringList m_colors;
-  QVector<QVector<QPointF>> m_data;
+  qreal m_zoom;
+  qreal m_cameraAngleX;
+  qreal m_cameraAngleY;
+  qreal m_cameraAngleZ;
+  qreal m_cameraOffsetX;
+  qreal m_cameraOffsetY;
+  qreal m_cameraOffsetZ;
+
+  float m_eyeSeparation;
+
+  bool m_anaglyph;
+  bool m_interpolate;
+  bool m_orbitNavigation;
+
+  bool m_dirtyData;
+  bool m_dirtyGrid;
+  bool m_dirtyBackground;
+  bool m_dirtyCameraIndicator;
+
+  QColor m_xAxisColor;
+  QColor m_yAxisColor;
+  QColor m_zAxisColor;
+  QColor m_axisTextColor;
+  QColor m_lineHeadColor;
+  QColor m_lineTailColor;
+  QColor m_gridMinorColor;
+  QColor m_gridMajorColor;
+  QColor m_innerBackgroundColor;
+  QColor m_outerBackgroundColor;
+
+  QPixmap m_plotPixmap;
+  QPixmap m_gridPixmap;
+  QPixmap m_backgroundPixmap;
+  QPixmap m_cameraIndicatorPixmap;
+
+  QPointF m_lastMousePos;
 };
 } // namespace Widgets
