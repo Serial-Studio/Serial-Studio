@@ -44,7 +44,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   , m_cameraOffsetX(0)
   , m_cameraOffsetY(0)
   , m_cameraOffsetZ(-10)
-  , m_eyeSeparation(3)
+  , m_eyeSeparation(0.069)
   , m_anaglyph(false)
   , m_interpolate(true)
   , m_orbitNavigation(true)
@@ -142,45 +142,47 @@ void Widgets::Plot3D::paint(QPainter *painter)
   // Anaglyph processing
   if (anaglyphEnabled())
   {
-    // Initialize scene pixmap
-    QPixmap composed(m_backgroundPixmap.size());
-    composed.setDevicePixelRatio(qApp->devicePixelRatio());
-    composed.fill(Qt::transparent);
+    // Initialize left eye pixmap
+    QPixmap left(m_backgroundPixmap[0].size());
+    left.setDevicePixelRatio(qApp->devicePixelRatio());
+    left.fill(Qt::transparent);
 
-    // Compose the full scene into one pixmap
-    QPainter scenePainter(&composed);
-    scenePainter.drawPixmap(0, 0, m_backgroundPixmap);
-    scenePainter.drawPixmap(0, 0, m_gridPixmap);
-    scenePainter.drawPixmap(0, 0, m_plotPixmap);
-    scenePainter.drawPixmap(0, 0, m_cameraIndicatorPixmap);
-    scenePainter.end();
+    // Initialize right eye pixmap
+    QPixmap right(m_backgroundPixmap[1].size());
+    right.setDevicePixelRatio(qApp->devicePixelRatio());
+    right.fill(Qt::transparent);
+
+    // Compose the left eye scene
+    QPainter leftScene(&left);
+    leftScene.drawPixmap(0, 0, m_backgroundPixmap[0]);
+    leftScene.drawPixmap(0, 0, m_gridPixmap[0]);
+    leftScene.drawPixmap(0, 0, m_plotPixmap[0]);
+    leftScene.drawPixmap(0, 0, m_cameraIndicatorPixmap[0]);
+    leftScene.end();
+
+    // Compose the right eye scene
+    float manualShift = qMin(m_eyeSeparation / 0.1, 1.0) * 10;
+    QPainter rightScene(&right);
+    rightScene.drawPixmap(0, 0, m_backgroundPixmap[1]);
+    rightScene.drawPixmap(manualShift, 0, m_gridPixmap[1]);
+    rightScene.drawPixmap(manualShift, 0, m_plotPixmap[1]);
+    rightScene.drawPixmap(manualShift, 0, m_cameraIndicatorPixmap[1]);
+    rightScene.end();
 
     // Obtain two images from the scene
-    QImage left = composed.toImage();
-    QImage right = left;
-
-    // Convert right image to pixmap for shift magic
-    QPixmap rightPixmap = QPixmap::fromImage(right);
-
-    // Shift the right eye image horizontally
-    QImage shiftedRight(right.size(), QImage::Format_RGB32);
-    shiftedRight.setDevicePixelRatio(qApp->devicePixelRatio());
-    shiftedRight.fill(Qt::transparent);
-    QPainter shiftPainter(&shiftedRight);
-    shiftPainter.drawPixmap(0, 0, rightPixmap);
-    shiftPainter.drawPixmap(eyeSeparation(), 0, rightPixmap);
-    shiftPainter.end();
+    QImage leftImg = left.toImage();
+    QImage rightImg = right.toImage();
 
     // Build the anaglyph manually
-    QImage finalImage(left.size(), QImage::Format_RGB32);
+    QImage finalImage(leftImg.size(), QImage::Format_RGB32);
     finalImage.setDevicePixelRatio(qApp->devicePixelRatio());
-    for (int y = 0; y < left.height(); ++y)
+    for (int y = 0; y < leftImg.height(); ++y)
     {
-      for (int x = 0; x < left.width(); ++x)
+      for (int x = 0; x < leftImg.width(); ++x)
       {
         // Obtain pixels from both left and right image
-        const auto lRgb = left.pixel(x, y);
-        const auto rRgb = shiftedRight.pixel(x, y);
+        const auto lRgb = leftImg.pixel(x, y);
+        const auto rRgb = rightImg.pixel(x, y);
 
         // Preserve red from left and cyan (green + blue) from right
         const auto outR = qRed(lRgb);
@@ -197,10 +199,10 @@ void Widgets::Plot3D::paint(QPainter *painter)
   // Standard processing
   else
   {
-    painter->drawPixmap(0, 0, m_backgroundPixmap);
-    painter->drawPixmap(0, 0, m_gridPixmap);
-    painter->drawPixmap(0, 0, m_plotPixmap);
-    painter->drawPixmap(0, 0, m_cameraIndicatorPixmap);
+    painter->drawPixmap(0, 0, m_backgroundPixmap[0]);
+    painter->drawPixmap(0, 0, m_gridPixmap[0]);
+    painter->drawPixmap(0, 0, m_plotPixmap[0]);
+    painter->drawPixmap(0, 0, m_cameraIndicatorPixmap[0]);
   }
 }
 
@@ -291,7 +293,7 @@ bool Widgets::Plot3D::dirty() const
  *
  * @return The eye separation distance as a float.
  */
-int Widgets::Plot3D::eyeSeparation() const
+float Widgets::Plot3D::eyeSeparation() const
 {
   return m_eyeSeparation;
 }
@@ -498,7 +500,7 @@ void Widgets::Plot3D::setOrbitNavigation(const bool enabled)
  *
  * @param separation The new eye separation distance.
  */
-void Widgets::Plot3D::setEyeSeparation(const int separation)
+void Widgets::Plot3D::setEyeSeparation(const float separation)
 {
   m_eyeSeparation = separation;
   markDirty();
@@ -623,7 +625,7 @@ void Widgets::Plot3D::drawData()
   if (data.isEmpty())
     return;
 
-  // Initialize view matrix
+  // Initialize camera matrix
   QMatrix4x4 matrix;
   matrix.perspective(45, float(width()) / height(), 0.1, 100);
   matrix.translate(m_cameraOffsetX, m_cameraOffsetY, m_cameraOffsetZ);
@@ -631,9 +633,30 @@ void Widgets::Plot3D::drawData()
   matrix.rotate(m_cameraAngleY, 0, 1, 0);
   matrix.rotate(m_cameraAngleZ, 0, 0, 1);
   matrix.scale(m_zoom);
-  m_plotPixmap = renderData(matrix, data);
 
-  // Mark dirty foreground flag as false to avoid needless rendering
+  // Render 3D pixmaps
+  if (anaglyphEnabled())
+  {
+    // Tweak left eye camera
+    auto lMatrix = matrix;
+    lMatrix.translate(-eyeShift(), 0, 0);
+    lMatrix.rotate(convergenceAngle(), 0, 1, 0);
+
+    // Tweak right eye camera
+    auto rMatrix = matrix;
+    rMatrix.translate(eyeShift(), 0, 0);
+    rMatrix.rotate(-convergenceAngle(), 0, 1, 0);
+
+    // Render pixmaps
+    m_plotPixmap[0] = renderData(lMatrix, data);
+    m_plotPixmap[1] = renderData(rMatrix, data);
+  }
+
+  // Render single pixmap
+  else
+    m_plotPixmap[0] = renderData(matrix, data);
+
+  // Mark dirty flag as false to avoid needless rendering
   m_dirtyData = false;
 }
 
@@ -645,6 +668,7 @@ void Widgets::Plot3D::drawData()
  */
 void Widgets::Plot3D::drawGrid()
 {
+  // Initialize camera matrix
   QMatrix4x4 matrix;
   matrix.perspective(45, float(width()) / height(), 0.1, 100);
   matrix.translate(m_cameraOffsetX, m_cameraOffsetY, m_cameraOffsetZ);
@@ -652,31 +676,82 @@ void Widgets::Plot3D::drawGrid()
   matrix.rotate(m_cameraAngleY, 0, 1, 0);
   matrix.rotate(m_cameraAngleZ, 0, 0, 1);
   matrix.scale(m_zoom);
-  m_gridPixmap = renderGrid(matrix);
+
+  // Render 3D pixmaps
+  if (anaglyphEnabled())
+  {
+    // Tweak left eye camera
+    auto lMatrix = matrix;
+    lMatrix.translate(-eyeShift(), 0, 0);
+    lMatrix.rotate(convergenceAngle(), 0, 1, 0);
+
+    // Tweak right eye camera
+    auto rMatrix = matrix;
+    rMatrix.translate(eyeShift(), 0, 0);
+    rMatrix.rotate(-convergenceAngle(), 0, 1, 0);
+
+    // Render pixmaps
+    m_gridPixmap[0] = renderGrid(lMatrix);
+    m_gridPixmap[1] = renderGrid(rMatrix);
+  }
+
+  // Render 2D pixmap
+  else
+    m_gridPixmap[0] = renderGrid(matrix);
+
+  // Mark dirty flag as false to avoid needless rendering
   m_dirtyGrid = false;
 }
 
+/**
+ * @brief Renders the 3D plot background with optional anaglyph effect.
+ *
+ * This function draws the radial gradient background behind the 3D plot.
+ * If anaglyph mode is enabled, it renders two slightly shifted backgrounds
+ * to match the stereo effect of the scene. The shift is intentionally small
+ * to maintain a cohesive look while avoiding visible artifacts, even though
+ * backgrounds are usually static in depth.
+ *
+ * The result is stored in m_backgroundPixmap[0] (left eye) and
+ * m_backgroundPixmap[1] (right eye) for anaglyph mode, or only in
+ * m_backgroundPixmap[0] for normal rendering.
+ *
+ * Marks m_dirtyBackground as false to prevent unnecessary re-rendering.
+ */
 void Widgets::Plot3D::drawBackground()
 {
-  // Create the pixmap and initialize it to the widget's size
-  // clang-format off
-  m_backgroundPixmap = QPixmap(static_cast<int>(width() * qApp->devicePixelRatio()),
-                               static_cast<int>(height() * qApp->devicePixelRatio()));
-  m_backgroundPixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-  m_backgroundPixmap.fill(Qt::transparent);
-  // clang-format on
+  // Prepare common pixmap size
+  const int pixWidth = static_cast<int>(width() * qApp->devicePixelRatio());
+  const int pixHeight = static_cast<int>(height() * qApp->devicePixelRatio());
 
-  // Create gradient object
-  QPointF center(width() * 0.5, height() * 0.5);
-  qreal radius = qMax(width(), height()) * 0.25;
-  QRadialGradient gradient(center, radius);
-  gradient.setColorAt(0.0, m_innerBackgroundColor);
-  gradient.setColorAt(1.0, m_outerBackgroundColor);
+  // Lambda to create and paint background with optional horizontal shift
+  auto renderBackground = [&](QPixmap &pixmap, float shiftX) {
+    pixmap = QPixmap(pixWidth, pixHeight);
+    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+    pixmap.fill(Qt::transparent);
 
-  // Render the background
-  QPainter painter(&m_backgroundPixmap);
-  painter.setRenderHint(QPainter::Antialiasing, true);
-  painter.fillRect(boundingRect(), gradient);
+    QPointF center((width() * 0.5f) + shiftX, height() * 0.5f);
+    qreal radius = qMax(width(), height()) * 0.25;
+    QRadialGradient gradient(center, radius);
+    gradient.setColorAt(0.0, m_innerBackgroundColor);
+    gradient.setColorAt(1.0, m_outerBackgroundColor);
+
+    QPainter painter(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.fillRect(boundingRect(), gradient);
+  };
+
+  // Render 3D pixmaps
+  if (anaglyphEnabled())
+  {
+    constexpr float shiftAmount = 2.0f;
+    renderBackground(m_backgroundPixmap[0], -shiftAmount);
+    renderBackground(m_backgroundPixmap[1], shiftAmount);
+  }
+
+  // Single background with no shift
+  else
+    renderBackground(m_backgroundPixmap[0], 0.0f);
 
   // Mark dirty flag as false to avoid needless rendering
   m_dirtyBackground = false;
@@ -692,12 +767,79 @@ void Widgets::Plot3D::drawBackground()
  */
 void Widgets::Plot3D::drawCameraIndicator()
 {
+  // Initialize camera matrix
   QMatrix4x4 matrix;
   matrix.rotate(m_cameraAngleX, 1, 0, 0);
   matrix.rotate(m_cameraAngleY, 0, 1, 0);
   matrix.rotate(m_cameraAngleZ, 0, 0, 1);
-  m_cameraIndicatorPixmap = renderCameraIndicator(matrix);
+
+  // Render 3D pixmaps
+  if (anaglyphEnabled())
+  {
+    // Tweak left eye camera
+    auto lMatrix = matrix;
+    lMatrix.translate(-eyeShift() * m_zoom, 0, 0);
+
+    // Tweak right eye camera
+    auto rMatrix = matrix;
+    rMatrix.translate(eyeShift() * m_zoom, 0, 0);
+
+    // Render pixmaps
+    m_cameraIndicatorPixmap[0] = renderCameraIndicator(lMatrix);
+    m_cameraIndicatorPixmap[1] = renderCameraIndicator(rMatrix);
+  }
+
+  // Render 2D pixmap
+  else
+    m_cameraIndicatorPixmap[0] = renderCameraIndicator(matrix);
+
+  // Mark dirty flag as false to avoid needless rendering
   m_dirtyCameraIndicator = false;
+}
+
+//------------------------------------------------------------------------------
+// Stereoscopic rendering eye position calculations
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Calculates the horizontal eye shift (parallax offset)
+ *        for stereoscopic rendering.
+ *
+ * This value determines how far the left and right camera views are shifted
+ * horizontally to simulate eye separation in the 3D scene.
+ *
+ * The offset is inversely proportional to zoom: as you zoom in, the shift
+ * reduces to maintain a realistic parallax effect without over-exaggeration.
+ *
+ * @return The eye shift in scene units.
+ */
+float Widgets::Plot3D::eyeShift() const
+{
+  const float z = qMax(0.01f, m_zoom);
+  return m_eyeSeparation / (2.0f * z);
+}
+
+/**
+ * @brief Calculates the convergence angle for stereoscopic rendering.
+ *
+ * This angle rotates the left and right camera views inward so their frustums
+ * converge at the focal plane (typically around the world center).
+ *
+ * It helps maintain depth realism and avoid divergence when looking at
+ * near/far objects.
+ *
+ * The calculation is based on eye separation and zoom: at lower zoom, the
+ * angle is small;  at higher zoom, the angle increases to keep the stereo
+ * effect balanced.
+ *
+ * @return The convergence angle in degrees.
+ */
+float Widgets::Plot3D::convergenceAngle() const
+{
+  constexpr float gridStep = 10.0f;
+  const float focalDistance = gridStep / qMax(0.01f, m_zoom);
+  const float rads = std::atan(m_eyeSeparation * 0.5f / focalDistance);
+  return rads * 180.0f / float(M_PI);
 }
 
 //------------------------------------------------------------------------------
@@ -1077,23 +1219,30 @@ void Widgets::Plot3D::wheelEvent(QWheelEvent *event)
  */
 void Widgets::Plot3D::mouseMoveEvent(QMouseEvent *event)
 {
+  // Calculate delta & update last postion
   QPointF delta = event->pos() - m_lastMousePos;
   m_lastMousePos = event->pos();
 
+  // Orbit mode
   if (m_orbitNavigation)
   {
+    m_cameraOffsetX = m_orbitOffsetX;
+    m_cameraOffsetY = m_orbitOffsetY;
     m_cameraAngleZ += delta.x() * 0.5;
     m_cameraAngleX += delta.y() * 0.5;
   }
 
+  // Pan mode
   else
   {
     m_cameraOffsetX += delta.x() * 0.01;
     m_cameraOffsetY -= delta.y() * 0.01;
   }
 
+  // Accept event
   event->accept();
 
+  // Re-render everything
   Q_EMIT cameraChanged();
   markDirty();
   update();
@@ -1106,6 +1255,22 @@ void Widgets::Plot3D::mouseMoveEvent(QMouseEvent *event)
 void Widgets::Plot3D::mousePressEvent(QMouseEvent *event)
 {
   m_lastMousePos = event->pos();
+
+  if (m_orbitNavigation)
+  {
+    float offsetFactor = 0.25;
+    float biasX = ((m_lastMousePos.x() / width()) - 0.5f) * 2.0f;
+    float biasY = (0.5f - (m_lastMousePos.y() / height())) * 2.0f;
+
+    m_orbitOffsetX = m_cameraOffsetX - biasX * offsetFactor;
+    m_orbitOffsetY = m_cameraOffsetY - biasY * offsetFactor;
+  }
+
+  else
+  {
+    m_orbitOffsetX = m_cameraOffsetX;
+    m_orbitOffsetY = m_cameraOffsetY;
+  }
 
   grabMouse();
   setCursor(Qt::ClosedHandCursor);
@@ -1122,4 +1287,7 @@ void Widgets::Plot3D::mouseReleaseEvent(QMouseEvent *event)
   ungrabMouse();
   ungrabTouchPoints();
   event->accept();
+
+  m_orbitOffsetX = m_cameraOffsetX;
+  m_orbitOffsetY = m_cameraOffsetY;
 }

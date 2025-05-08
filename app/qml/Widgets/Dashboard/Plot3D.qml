@@ -252,18 +252,19 @@ Item {
       }
 
       Slider {
-        to: 6
-        from: 0
+        to: 100
+        from: 30
         stepSize: 1
         Layout.fillWidth: true
         Layout.maximumWidth: 128
-        value: model.eyeSeparation
         visible: model.anaglyphEnabled
         enabled: model.anaglyphEnabled
+        value: model.eyeSeparation * 1e3
         onValueChanged: {
           if (model) {
-            if (model.eyeSeparation !== value)
-              model.eyeSeparation = value
+            var separation = value / 1e3
+            if (model.eyeSeparation !== separation)
+              model.eyeSeparation = separation
           }
         }
       }

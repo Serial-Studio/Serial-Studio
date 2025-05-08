@@ -86,7 +86,7 @@ class Plot3D : public QQuickPaintedItem
              READ cameraOffsetZ
              WRITE setCameraOffsetZ
              NOTIFY cameraChanged)
-  Q_PROPERTY(int eyeSeparation
+  Q_PROPERTY(float eyeSeparation
              READ eyeSeparation
              WRITE setEyeSeparation
              NOTIFY eyeSeparationChanged)
@@ -114,7 +114,7 @@ public:
 
   [[nodiscard]] bool dirty() const;
 
-  [[nodiscard]] int eyeSeparation() const;
+  [[nodiscard]] float eyeSeparation() const;
   [[nodiscard]] bool anaglyphEnabled() const;
 
   [[nodiscard]] bool orbitNavigation() const;
@@ -130,7 +130,7 @@ public slots:
   void setCameraOffsetZ(const qreal offset);
   void setAnaglyphEnabled(const bool enabled);
   void setOrbitNavigation(const bool enabled);
-  void setEyeSeparation(const int separation);
+  void setEyeSeparation(const float separation);
   void setInterpolationEnabled(const bool enabled);
 
 private slots:
@@ -146,6 +146,9 @@ private:
   void drawCameraIndicator();
 
 private:
+  float eyeShift() const;
+  float convergenceAngle() const;
+
   QPixmap renderGrid(const QMatrix4x4 &matrix);
   QPixmap renderCameraIndicator(const QMatrix4x4 &matrix);
   QPixmap renderData(const QMatrix4x4 &matrix, const PlotData3D &data);
@@ -166,7 +169,7 @@ private:
   qreal m_cameraOffsetY;
   qreal m_cameraOffsetZ;
 
-  int m_eyeSeparation;
+  float m_eyeSeparation;
 
   bool m_anaglyph;
   bool m_interpolate;
@@ -188,11 +191,13 @@ private:
   QColor m_innerBackgroundColor;
   QColor m_outerBackgroundColor;
 
-  QPixmap m_plotPixmap;
-  QPixmap m_gridPixmap;
-  QPixmap m_backgroundPixmap;
-  QPixmap m_cameraIndicatorPixmap;
+  QPixmap m_plotPixmap[2];
+  QPixmap m_gridPixmap[2];
+  QPixmap m_backgroundPixmap[2];
+  QPixmap m_cameraIndicatorPixmap[2];
 
+  qreal m_orbitOffsetX;
+  qreal m_orbitOffsetY;
   QPointF m_lastMousePos;
 };
 } // namespace Widgets
