@@ -251,6 +251,19 @@ Item {
         icon.source: "qrc:/rcc/icons/dashboard/buttons/anaglyph.svg"
       }
 
+      ToolButton {
+        width: 24
+        height: 24
+        icon.width: 18
+        icon.height: 18
+        icon.color: "transparent"
+        visible: model.anaglyphEnabled
+        enabled: model.anaglyphEnabled
+        checked: model.invertEyePositions
+        icon.source: "qrc:/rcc/icons/dashboard/buttons/invert.svg"
+        onClicked: model.invertEyePositions = !model.invertEyePositions
+      }
+
       Slider {
         to: 100
         from: 30

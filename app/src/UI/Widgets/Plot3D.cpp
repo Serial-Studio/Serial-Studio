@@ -48,6 +48,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   , m_anaglyph(false)
   , m_interpolate(true)
   , m_orbitNavigation(true)
+  , m_invertEyePositions(false)
   , m_dirtyData(true)
   , m_dirtyGrid(true)
   , m_dirtyCameraIndicator(true)
@@ -152,21 +153,25 @@ void Widgets::Plot3D::paint(QPainter *painter)
     right.setDevicePixelRatio(qApp->devicePixelRatio());
     right.fill(Qt::transparent);
 
+    // Calculate additional image shift factor
+    const float manualShift = qMin(m_eyeSeparation / 0.1, 1.0) * 10;
+    const float lShift = m_invertEyePositions ? manualShift : 0;
+    const float rShift = m_invertEyePositions ? 0 : manualShift;
+
     // Compose the left eye scene
     QPainter leftScene(&left);
     leftScene.drawPixmap(0, 0, m_backgroundPixmap[0]);
-    leftScene.drawPixmap(0, 0, m_gridPixmap[0]);
-    leftScene.drawPixmap(0, 0, m_plotPixmap[0]);
+    leftScene.drawPixmap(lShift, 0, m_gridPixmap[0]);
+    leftScene.drawPixmap(lShift, 0, m_plotPixmap[0]);
     leftScene.drawPixmap(0, 0, m_cameraIndicatorPixmap[0]);
     leftScene.end();
 
     // Compose the right eye scene
-    float manualShift = qMin(m_eyeSeparation / 0.1, 1.0) * 10;
     QPainter rightScene(&right);
     rightScene.drawPixmap(0, 0, m_backgroundPixmap[1]);
-    rightScene.drawPixmap(manualShift, 0, m_gridPixmap[1]);
-    rightScene.drawPixmap(manualShift, 0, m_plotPixmap[1]);
-    rightScene.drawPixmap(manualShift, 0, m_cameraIndicatorPixmap[1]);
+    rightScene.drawPixmap(rShift, 0, m_gridPixmap[1]);
+    rightScene.drawPixmap(rShift, 0, m_plotPixmap[1]);
+    rightScene.drawPixmap(0, 0, m_cameraIndicatorPixmap[1]);
     rightScene.end();
 
     // Obtain two images from the scene
@@ -306,6 +311,20 @@ float Widgets::Plot3D::eyeSeparation() const
 bool Widgets::Plot3D::anaglyphEnabled() const
 {
   return m_anaglyph;
+}
+
+/**
+ * @brief Checks whether eye positions are inverted for stereo rendering.
+ *
+ * In stereo/anaglyph mode, this flag determines if the left and right
+ * eye positions should be swapped. It's useful for cases where the
+ * stereo effect appears reversed (e.g., objects look "inside out").
+ *
+ * @return True if eye positions are inverted; otherwise false.
+ */
+bool Widgets::Plot3D::invertEyePositions() const
+{
+  return m_invertEyePositions;
 }
 
 /**
@@ -506,6 +525,26 @@ void Widgets::Plot3D::setEyeSeparation(const float separation)
   markDirty();
 
   Q_EMIT eyeSeparationChanged();
+}
+
+/**
+ * @brief Sets whether to invert the eye positions for stereo rendering.
+ *
+ * This controls if the left and right eye positions are swapped when rendering
+ * in stereo/anaglyph mode. Use this if the depth effect appears incorrect or
+ * reversed. Triggers a re-render if the value changes.
+ *
+ * @param enabled True to invert eye positions; false to use standard positions.
+ */
+void Widgets::Plot3D::setInvertEyePositions(const bool enabled)
+{
+  if (m_invertEyePositions != enabled)
+  {
+    m_invertEyePositions = enabled;
+    markDirty();
+
+    Q_EMIT invertEyePositionsChanged();
+  }
 }
 
 /**
@@ -779,10 +818,12 @@ void Widgets::Plot3D::drawCameraIndicator()
     // Tweak left eye camera
     auto lMatrix = matrix;
     lMatrix.translate(-eyeShift() * m_zoom, 0, 0);
+    lMatrix.rotate(-convergenceAngle(), 0, 1, 0);
 
     // Tweak right eye camera
     auto rMatrix = matrix;
     rMatrix.translate(eyeShift() * m_zoom, 0, 0);
+    rMatrix.rotate(-convergenceAngle(), 0, 1, 0);
 
     // Render pixmaps
     m_cameraIndicatorPixmap[0] = renderCameraIndicator(lMatrix);
@@ -816,7 +857,7 @@ void Widgets::Plot3D::drawCameraIndicator()
 float Widgets::Plot3D::eyeShift() const
 {
   const float z = qMax(0.01f, m_zoom);
-  return m_eyeSeparation / (2.0f * z);
+  return m_eyeSeparation / (2.0f * z) * (m_invertEyePositions ? -1 : 1);
 }
 
 /**
@@ -838,8 +879,8 @@ float Widgets::Plot3D::convergenceAngle() const
 {
   constexpr float gridStep = 10.0f;
   const float focalDistance = gridStep / qMax(0.01f, m_zoom);
-  const float rads = std::atan(m_eyeSeparation * 0.5f / focalDistance);
-  return rads * 180.0f / float(M_PI);
+  float rads = std::atan(m_eyeSeparation * 0.5f / focalDistance);
+  return rads * 180.0f / float(M_PI) * (m_invertEyePositions ? -1 : 1);
 }
 
 //------------------------------------------------------------------------------

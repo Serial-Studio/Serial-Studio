@@ -90,6 +90,10 @@ class Plot3D : public QQuickPaintedItem
              READ eyeSeparation
              WRITE setEyeSeparation
              NOTIFY eyeSeparationChanged)
+  Q_PROPERTY(bool invertEyePositions
+             READ invertEyePositions
+             WRITE setInvertEyePositions
+             NOTIFY invertEyePositionsChanged)
   // clang-format on
 
 signals:
@@ -98,6 +102,7 @@ signals:
   void eyeSeparationChanged();
   void anaglyphEnabledChanged();
   void orbitNavigationChanged();
+  void invertEyePositionsChanged();
   void interpolationEnabledChanged();
 
 public:
@@ -116,6 +121,7 @@ public:
 
   [[nodiscard]] float eyeSeparation() const;
   [[nodiscard]] bool anaglyphEnabled() const;
+  [[nodiscard]] bool invertEyePositions() const;
 
   [[nodiscard]] bool orbitNavigation() const;
   [[nodiscard]] bool interpolationEnabled() const;
@@ -131,6 +137,7 @@ public slots:
   void setAnaglyphEnabled(const bool enabled);
   void setOrbitNavigation(const bool enabled);
   void setEyeSeparation(const float separation);
+  void setInvertEyePositions(const bool enabled);
   void setInterpolationEnabled(const bool enabled);
 
 private slots:
@@ -174,6 +181,7 @@ private:
   bool m_anaglyph;
   bool m_interpolate;
   bool m_orbitNavigation;
+  bool m_invertEyePositions;
 
   bool m_dirtyData;
   bool m_dirtyGrid;

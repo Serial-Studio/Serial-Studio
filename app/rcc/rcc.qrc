@@ -329,5 +329,6 @@
         <file>themes/resistance.json</file>
         <file>themes/yaru-dark.json</file>
         <file>themes/yaru-light.json</file>
+        <file>icons/dashboard/buttons/invert.svg</file>
     </qresource>
 </RCC>
