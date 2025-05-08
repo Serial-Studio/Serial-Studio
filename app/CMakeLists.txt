@@ -398,6 +398,11 @@ elseif(UNIX)
     DESTINATION share/pixmaps
   )
 
+  install(
+    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/io.github.serial_studio.Serial_Studio.metainfo.xml
+    DESTINATION share/metainfo
+  )
+
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.desktop
   DESTINATION share/applications
