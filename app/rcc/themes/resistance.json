@@ -85,10 +85,14 @@
     "table_border_header": "#e06f6f",
     "table_separator_header": "#e06f6f",
 
-    "plot3d_x_axis": "#f73752",
-    "plot3d_y_axis": "#70a41c",
-    "plot3d_z_axis": "#2f84e3",
-    "plot3d_axis_text": "#ffffff",
+    "plot3d_x_axis": "#ff6161",
+    "plot3d_y_axis": "#608060",
+    "plot3d_z_axis": "#f8d49e",
+    "plot3d_axis_text": "#f0ece3",
+    "plot3d_grid_major": "#575554",
+    "plot3d_grid_minor": "#393838",
+    "plot3d_background_inner": "#2d2a29",
+    "plot3d_background_outer": "#1c1b1a",
 
     "widget_colors": [
       "#e06f6f",

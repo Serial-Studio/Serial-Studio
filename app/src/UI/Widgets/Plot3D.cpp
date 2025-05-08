@@ -44,7 +44,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   , m_cameraOffsetX(0)
   , m_cameraOffsetY(0)
   , m_cameraOffsetZ(-10)
-  , m_eyeSeparation(0.06)
+  , m_eyeSeparation(3)
   , m_anaglyph(false)
   , m_interpolate(true)
   , m_orbitNavigation(true)
@@ -102,17 +102,21 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
 //------------------------------------------------------------------------------
 
 /**
- * @brief Paints the Plot3D widget by compositing background, foreground, and
- *        camera indicator layers.
+ * @brief Renders the complete 3D plot scene, including optional anaglyph.
  *
- * This function checks if each layer (background, foreground, camera indicator)
- * is marked as dirty, re-renders them as necessary, and then draws them onto
- * the widget using the provided QPainter.
+ * This method composites all plot layers—background, grid, plot data,
+ * and camera indicator—into the provided QPainter target. It handles
+ * dirty flags to re-render components as needed.
  *
- * It also fills the background with the specified background color before
- * compositing the pixmaps.
+ * If anaglyph mode is enabled, it:
+ * - Composes the full scene into a single image.
+ * - Generates left and right eye views (right view shifted horizontally).
+ * - Manually blends the two views into a red-cyan anaglyph using per-pixel
+ *   channel mixing (red from left, green+blue from right).
  *
- * @param painter Pointer to the QPainter used for rendering the widget.
+ * If anaglyph is disabled, it simply draws the pre-rendered layers as-is.
+ *
+ * @param painter The QPainter to render the scene onto.
  */
 void Widgets::Plot3D::paint(QPainter *painter)
 {
@@ -135,11 +139,59 @@ void Widgets::Plot3D::paint(QPainter *painter)
   if (m_dirtyBackground)
     drawBackground();
 
-  // Add pre-rendered images to painter
-  painter->drawPixmap(0, 0, m_backgroundPixmap);
-  painter->drawPixmap(0, 0, m_gridPixmap);
-  painter->drawPixmap(0, 0, m_plotPixmap);
-  painter->drawPixmap(0, 0, m_cameraIndicatorPixmap);
+  // Anaglyph processing
+  if (anaglyphEnabled())
+  {
+    // Compose the full scene into one pixmap
+    QPixmap composed = m_backgroundPixmap;
+    QPainter scenePainter(&composed);
+    scenePainter.drawPixmap(0, 0, m_gridPixmap);
+    scenePainter.drawPixmap(0, 0, m_plotPixmap);
+    scenePainter.drawPixmap(0, 0, m_cameraIndicatorPixmap);
+    scenePainter.end();
+
+    // Obtain two images from the scene
+    QImage left = composed.toImage();
+    QImage right = composed.toImage();
+
+    // Shift the right eye image horizontally
+    QImage shiftedRight(right.size(), QImage::Format_RGB32);
+    shiftedRight.fill(Qt::transparent);
+    QPainter shiftPainter(&shiftedRight);
+    shiftPainter.drawImage(0, 0, right);
+    shiftPainter.drawImage(eyeSeparation(), 0, right);
+    shiftPainter.end();
+
+    // Build the anaglyph manually
+    QImage finalImage(left.size(), QImage::Format_RGB32);
+    for (int y = 0; y < left.height(); ++y)
+    {
+      for (int x = 0; x < left.width(); ++x)
+      {
+        // Get pixel colors from the left and right image
+        QColor lColor = left.pixelColor(x, y);
+        QColor rColor = shiftedRight.pixelColor(x, y);
+
+        // Combine red from left, green/blue from right
+        int outR = lColor.red();
+        int outG = rColor.green();
+        int outB = rColor.blue();
+        finalImage.setPixelColor(x, y, QColor(outR, outG, outB));
+      }
+    }
+
+    // Draw the final image
+    painter->drawImage(0, 0, finalImage);
+  }
+
+  // Standard processing
+  else
+  {
+    painter->drawPixmap(0, 0, m_backgroundPixmap);
+    painter->drawPixmap(0, 0, m_gridPixmap);
+    painter->drawPixmap(0, 0, m_plotPixmap);
+    painter->drawPixmap(0, 0, m_cameraIndicatorPixmap);
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -229,7 +281,7 @@ bool Widgets::Plot3D::dirty() const
  *
  * @return The eye separation distance as a float.
  */
-float Widgets::Plot3D::eyeSeparation() const
+int Widgets::Plot3D::eyeSeparation() const
 {
   return m_eyeSeparation;
 }
@@ -436,7 +488,7 @@ void Widgets::Plot3D::setOrbitNavigation(const bool enabled)
  *
  * @param separation The new eye separation distance.
  */
-void Widgets::Plot3D::setEyeSeparation(const float separation)
+void Widgets::Plot3D::setEyeSeparation(const int separation)
 {
   m_eyeSeparation = separation;
   markDirty();
@@ -548,13 +600,9 @@ void Widgets::Plot3D::markDirty()
 }
 
 /**
- * @brief Renders the 3D plot foreground with optional anaglypheffect.
+ * @brief Renders the 3D plot foreground.
  *
  * This function draws the main 3D data points or objects in the plot.
- * When anaglyph mode is enabled, it generates two slightly shifted views
- * (for left and right eye), colorizes them as red and cyan while preserving
- * transparency, blends them, and stores the result in m_plotPixmap.
- * Without anaglyph, it renders a single foreground view.
  *
  * Marks m_dirtyData as false to avoid unnecessary re-rendering.
  */
@@ -573,47 +621,20 @@ void Widgets::Plot3D::drawData()
   matrix.rotate(m_cameraAngleY, 0, 1, 0);
   matrix.rotate(m_cameraAngleZ, 0, 0, 1);
   matrix.scale(m_zoom);
-
-  // Anaglypgh pre-processing
-  if (anaglyphEnabled())
-  {
-    // Render left image view
-    QMatrix4x4 leftMatrix = matrix;
-    leftMatrix.translate(-eyeShift(), 0, 0);
-    QImage leftImage = renderData(leftMatrix, data).toImage();
-
-    // Render right image view
-    QMatrix4x4 rightMatrix = matrix;
-    rightMatrix.translate(eyeShift(), 0, 0);
-    QImage rightImage = renderData(rightMatrix, data).toImage();
-
-    // Render the anaglyph using left and right views
-    renderAnaglyph(m_plotPixmap, leftImage, rightImage);
-  }
-
-  // Render image only once
-  else
-    m_plotPixmap = renderData(matrix, data);
+  m_plotPixmap = renderData(matrix, data);
 
   // Mark dirty foreground flag as false to avoid needless rendering
   m_dirtyData = false;
 }
 
 /**
- * @brief Renders the 3D plot background with optional anaglyph effect.
+ * @brief Renders the 3D plot background.
  *
  * This function draws the infinite grid and background axes behind the 3D plot.
- * If anaglyph mode is enabled, it renders two shifted views, colorizes them as
- * red and cyan while preserving transparency, blends them, and stores the
- * result in m_gridPixmap.
- *
- * Without anaglyph, it renders a single background view.
- *
  * Marks m_dirtyGrid as false to prevent unnecessary re-rendering.
  */
 void Widgets::Plot3D::drawGrid()
 {
-  // Initialize view matrix
   QMatrix4x4 matrix;
   matrix.perspective(45, float(width()) / height(), 0.1, 100);
   matrix.translate(m_cameraOffsetX, m_cameraOffsetY, m_cameraOffsetZ);
@@ -621,29 +642,7 @@ void Widgets::Plot3D::drawGrid()
   matrix.rotate(m_cameraAngleY, 0, 1, 0);
   matrix.rotate(m_cameraAngleZ, 0, 0, 1);
   matrix.scale(m_zoom);
-
-  // Anaglypgh pre-processing
-  if (anaglyphEnabled())
-  {
-    // Render left image view
-    QMatrix4x4 leftMatrix = matrix;
-    leftMatrix.translate(-eyeShift(), 0, 0);
-    QImage leftImage = renderGrid(leftMatrix).toImage();
-
-    // Render right image view
-    QMatrix4x4 rightMatrix = matrix;
-    rightMatrix.translate(eyeShift(), 0, 0);
-    QImage rightImage = renderGrid(rightMatrix).toImage();
-
-    // Render the anaglyph using left and right views
-    renderAnaglyph(m_gridPixmap, leftImage, rightImage);
-  }
-
-  // Render image only once
-  else
-    m_gridPixmap = renderGrid(matrix);
-
-  // Mark dirty flag as false to avoid needless rendering
+  m_gridPixmap = renderGrid(matrix);
   m_dirtyGrid = false;
 }
 
@@ -657,7 +656,7 @@ void Widgets::Plot3D::drawBackground()
 
   // Create gradient object
   QPointF center(width() * 0.5, height() * 0.5);
-  qreal radius = qMax(width(), height()) * 0.5;
+  qreal radius = qMax(width(), height()) * 0.25;
   QRadialGradient gradient(center, radius);
   gradient.setColorAt(0.0, m_innerBackgroundColor);
   gradient.setColorAt(1.0, m_outerBackgroundColor);
@@ -672,140 +671,26 @@ void Widgets::Plot3D::drawBackground()
 }
 
 /**
- * @brief Renders the 3D camera indicator with optional anaglyph (red/cyan)
- *        effect.
+ * @brief Renders the 3D camera indicator.
  *
  * This function draws a small 3D axis indicator that shows the camera’s
  * orientation.
- *
- * If anaglyph mode is enabled, it renders two shifted views, colorizes them in
- * red and cyan respectively, blends them with transparency preserved, and
- * composes the final pixmap.
- *
- * If anaglyph is disabled, it renders a single view.
- * The resulting image is stored in m_cameraIndicatorPixmap.
  *
  * Marks m_dirtyCameraIndicator as false to avoid unnecessary re-rendering.
  */
 void Widgets::Plot3D::drawCameraIndicator()
 {
-  // Initialize base view matrix
   QMatrix4x4 matrix;
   matrix.rotate(m_cameraAngleX, 1, 0, 0);
   matrix.rotate(m_cameraAngleY, 0, 1, 0);
   matrix.rotate(m_cameraAngleZ, 0, 0, 1);
-
-  // Anaglypgh pre-processing
-  if (anaglyphEnabled())
-  {
-    QMatrix4x4 leftMatrix = matrix;
-    leftMatrix.translate(-eyeShift() * m_zoom, 0, 0);
-    QImage leftImage = renderCameraIndicator(leftMatrix).toImage();
-
-    QMatrix4x4 rightMatrix = matrix;
-    rightMatrix.translate(eyeShift() * m_zoom, 0, 0);
-    QImage rightImage = renderCameraIndicator(rightMatrix).toImage();
-
-    renderAnaglyph(m_cameraIndicatorPixmap, leftImage, rightImage);
-  }
-
-  // Render image only once
-  else
-    m_cameraIndicatorPixmap = renderCameraIndicator(matrix);
-
-  // Mark dirty indicator flag as false to avoid needless rendering
+  m_cameraIndicatorPixmap = renderCameraIndicator(matrix);
   m_dirtyCameraIndicator = false;
-}
-
-//------------------------------------------------------------------------------
-// Anaglyph rendering
-//------------------------------------------------------------------------------
-
-/**
- * @brief Renders an anaglyph image by blending left and right views.
- *
- * This function combines two QImages—typically representing the left and right
- * eye views of a 3D scene—into a single red/cyan anaglyph. It takes the red
- * channel from the left image and the green and blue channels from the right
- * image, preserving transparency where both are fully transparent.
- *
- * Alpha is blended using a weighted scheme that prioritizes the more
- * transparent of the two pixels to maintain smooth edges and prevent hard
- * artifacts.
- *
- * @param buffer The output QPixmap to store the resulting anaglyph.
- * @param left The left eye view as a QImage (provides the red channel).
- * @param right The right eye view as a QImage (provides green and blue
- * channels).
- */
-void Widgets::Plot3D::renderAnaglyph(QPixmap &buffer, QImage &left,
-                                     QImage &right)
-{
-  QImage finalImage(left.size(), QImage::Format_ARGB32);
-
-  for (int y = 0; y < left.height(); ++y)
-  {
-    for (int x = 0; x < left.width(); ++x)
-    {
-      QColor lColor(left.pixelColor(x, y));
-      QColor rColor(right.pixelColor(x, y));
-
-      // Skip fully transparent pixels
-      if (lColor.alpha() == 0 && rColor.alpha() == 0)
-      {
-        finalImage.setPixelColor(x, y, Qt::transparent);
-        continue;
-      }
-
-      // Grab left and right RGB channels
-      float Lr = lColor.redF();
-      float Rg = rColor.greenF();
-      float Rb = rColor.blueF();
-
-      // Combine red from left, green+blue from right
-      float outR = Lr;
-      float outG = Rg;
-      float outB = Rb;
-
-      // Clamp (safe)
-      outR = qBound(0.0f, outR, 1.0f);
-      outG = qBound(0.0f, outG, 1.0f);
-      outB = qBound(0.0f, outB, 1.0f);
-
-      // Weighted alpha favoring the more transparent pixel
-      float aL = lColor.alphaF();
-      float aR = rColor.alphaF();
-      float alpha = (qMin(aL, aR) * 0.75f) + (qMax(aL, aR) * 0.25f);
-
-      QColor finalColor;
-      finalColor.setRedF(outR);
-      finalColor.setBlueF(outB);
-      finalColor.setGreenF(outG);
-      finalColor.setAlphaF(alpha);
-      finalImage.setPixelColor(x, y, finalColor);
-    }
-  }
-
-  buffer = QPixmap::fromImage(finalImage);
 }
 
 //------------------------------------------------------------------------------
 // Low-level scene rendering code
 //------------------------------------------------------------------------------
-
-/**
- * @brief Calculates the stereo eyeShift offset based on the current zoom.
- *
- * This offset determines how much to horizontally shift the left and right
- * eye views for anaglyph rendering. It’s inversely proportional to zoom: the
- * more you zoom in, the smaller the eyeShift to maintain a realistic 3D effect.
- *
- * @return The eyeShift offset in scene units.
- */
-float Widgets::Plot3D::eyeShift()
-{
-  return m_eyeSeparation / (2.0 * qMax(0.01, m_zoom));
-}
 
 /**
  * @brief Renders the background grid and axes of the 3D plot.

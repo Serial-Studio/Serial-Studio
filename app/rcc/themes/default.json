@@ -91,8 +91,8 @@
     "plot3d_axis_text": "#ffffff",
     "plot3d_grid_major": "#A0A7B0",
     "plot3d_grid_minor": "#5f6670",
-    "plot3d_background_inner": "#4d5765",
-    "plot3d_background_outer": "#343d49",
+    "plot3d_background_inner": "#eff0f1",
+    "plot3d_background_outer": "#eff0f1",
 
     "widget_colors": [
       "#007aff",

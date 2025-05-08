@@ -86,7 +86,7 @@ class Plot3D : public QQuickPaintedItem
              READ cameraOffsetZ
              WRITE setCameraOffsetZ
              NOTIFY cameraChanged)
-  Q_PROPERTY(float eyeSeparation
+  Q_PROPERTY(int eyeSeparation
              READ eyeSeparation
              WRITE setEyeSeparation
              NOTIFY eyeSeparationChanged)
@@ -113,9 +113,10 @@ public:
   [[nodiscard]] qreal cameraOffsetZ() const;
 
   [[nodiscard]] bool dirty() const;
-  [[nodiscard]] float eyeSeparation() const;
 
+  [[nodiscard]] int eyeSeparation() const;
   [[nodiscard]] bool anaglyphEnabled() const;
+
   [[nodiscard]] bool orbitNavigation() const;
   [[nodiscard]] bool interpolationEnabled() const;
 
@@ -129,7 +130,7 @@ public slots:
   void setCameraOffsetZ(const qreal offset);
   void setAnaglyphEnabled(const bool enabled);
   void setOrbitNavigation(const bool enabled);
-  void setEyeSeparation(const float separation);
+  void setEyeSeparation(const int separation);
   void setInterpolationEnabled(const bool enabled);
 
 private slots:
@@ -143,10 +144,8 @@ private:
   void drawGrid();
   void drawBackground();
   void drawCameraIndicator();
-  void renderAnaglyph(QPixmap &buffer, QImage &left, QImage &right);
 
 private:
-  float eyeShift();
   QPixmap renderGrid(const QMatrix4x4 &matrix);
   QPixmap renderCameraIndicator(const QMatrix4x4 &matrix);
   QPixmap renderData(const QMatrix4x4 &matrix, const PlotData3D &data);
@@ -167,7 +166,7 @@ private:
   qreal m_cameraOffsetY;
   qreal m_cameraOffsetZ;
 
-  float m_eyeSeparation;
+  int m_eyeSeparation;
 
   bool m_anaglyph;
   bool m_interpolate;

@@ -46,6 +46,71 @@ Item {
     model.anchors.topMargin = toolbar.height + toolbar.y
   }
 
+  NumberAnimation {
+    id: zoomAnimation
+    target: model
+    property: "zoom"
+    duration: 400
+  }
+
+  NumberAnimation {
+    id: angleXAnimation
+    target: model
+    property: "cameraAngleX"
+    duration: 400
+  }
+
+  NumberAnimation {
+    id: angleYAnimation
+    target: model
+    property: "cameraAngleY"
+    duration: 400
+  }
+
+  NumberAnimation {
+    id: angleZAnimation
+    target: model
+    property: "cameraAngleZ"
+    duration: 400
+  }
+
+  NumberAnimation {
+    id: offsetXAnimation
+    target: model
+    property: "cameraOffsetX"
+    duration: 400
+  }
+
+  NumberAnimation {
+    id: offsetYAnimation
+    target: model
+    property: "cameraOffsetY"
+    duration: 400
+  }
+
+  //
+  // Moves the model to the given position & setup, with animations
+  //
+  function animateToView(zoom, angleX, angleY, angleZ, offsetX, offsetY) {
+    zoomAnimation.to = zoom
+    zoomAnimation.start()
+
+    angleXAnimation.to = angleX
+    angleXAnimation.start()
+
+    angleYAnimation.to = angleY
+    angleYAnimation.start()
+
+    angleZAnimation.to = angleZ
+    angleZAnimation.start()
+
+    offsetXAnimation.to = offsetX
+    offsetXAnimation.start()
+
+    offsetYAnimation.to = offsetY
+    offsetYAnimation.start()
+  }
+
   //
   // Add toolbar
   //
@@ -135,13 +200,8 @@ Item {
         icon.width: 18
         icon.height: 18
         icon.color: "transparent"
+        onClicked: animateToView(0.05, -60, 0, -135, 0, 0)
         icon.source: "qrc:/rcc/icons/dashboard/buttons/orthogonal_view.svg"
-        onClicked: {
-          model.zoom = 0.05
-          model.cameraAngleY = 0
-          model.cameraAngleX = -60
-          model.cameraAngleZ = -135
-        }
       }
 
       ToolButton {
@@ -150,13 +210,8 @@ Item {
         icon.width: 18
         icon.height: 18
         icon.color: "transparent"
+        onClicked: animateToView(0.05, 0, 0, 0, 0, 0)
         icon.source: "qrc:/rcc/icons/dashboard/buttons/top_view.svg"
-        onClicked: {
-          model.zoom = 0.05
-          model.cameraAngleY = 0
-          model.cameraAngleX = 0
-          model.cameraAngleZ = 0
-        }
       }
 
       ToolButton {
@@ -165,13 +220,8 @@ Item {
         icon.width: 18
         icon.height: 18
         icon.color: "transparent"
+        onClicked: animateToView(0.05, -90, 0, -90, 0, 0)
         icon.source: "qrc:/rcc/icons/dashboard/buttons/left_view.svg"
-        onClicked: {
-          model.zoom = 0.05
-          model.cameraAngleY = 0
-          model.cameraAngleX = -90
-          model.cameraAngleZ = -90
-        }
       }
 
       ToolButton {
@@ -180,13 +230,8 @@ Item {
         icon.width: 18
         icon.height: 18
         icon.color: "transparent"
+        onClicked: animateToView(0.05, -90, 0, -180, 0, 0)
         icon.source: "qrc:/rcc/icons/dashboard/buttons/front_view.svg"
-        onClicked: {
-          model.zoom = 0.05
-          model.cameraAngleY = 0
-          model.cameraAngleX = -90
-          model.cameraAngleZ = -180
-        }
       }
 
       Rectangle {
@@ -207,33 +252,19 @@ Item {
       }
 
       Slider {
-        to: 800
-        from: 300
-        stepSize: 10
+        to: 6
+        from: 0
+        stepSize: 1
         Layout.fillWidth: true
         Layout.maximumWidth: 128
+        value: model.eyeSeparation
         visible: model.anaglyphEnabled
         enabled: model.anaglyphEnabled
-        value: model.eyeSeparation * 10e3
         onValueChanged: {
           if (model) {
-            let separation = value / 10e3
-            if (model.eyeSeparation !== separation)
-              model.eyeSeparation = separation
+            if (model.eyeSeparation !== value)
+              model.eyeSeparation = value
           }
-        }
-      }
-
-      CheckBox {
-        id: invertEye
-        text: qsTr("Invert")
-        checked: model.invertEyes
-        visible: model.anaglyphEnabled
-        enabled: model.anaglyphEnabled
-
-        onCheckedChanged: {
-          if (checked !== model.invertEyes)
-            model.invertEyes = checked
         }
       }
 
