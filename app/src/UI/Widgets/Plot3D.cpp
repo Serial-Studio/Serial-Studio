@@ -156,6 +156,7 @@ void Widgets::Plot3D::paint(QPainter *painter)
 
     // Shift the right eye image horizontally
     QImage shiftedRight(right.size(), QImage::Format_RGB32);
+    shiftedRight.setDevicePixelRatio(qApp->devicePixelRatio());
     shiftedRight.fill(Qt::transparent);
     QPainter shiftPainter(&shiftedRight);
     shiftPainter.drawImage(0, 0, right);
@@ -164,6 +165,7 @@ void Widgets::Plot3D::paint(QPainter *painter)
 
     // Build the anaglyph manually
     QImage finalImage(left.size(), QImage::Format_RGB32);
+    finalImage.setDevicePixelRatio(qApp->devicePixelRatio());
     for (int y = 0; y < left.height(); ++y)
     {
       for (int x = 0; x < left.width(); ++x)
@@ -650,7 +652,9 @@ void Widgets::Plot3D::drawBackground()
 {
   // Create the pixmap and initialize it to the widget's size
   // clang-format off
-  m_backgroundPixmap = QPixmap(static_cast<int>(width()), static_cast<int>(height()));
+  m_backgroundPixmap = QPixmap(static_cast<int>(width() * qApp->devicePixelRatio()),
+                               static_cast<int>(height() * qApp->devicePixelRatio()));
+  m_backgroundPixmap.setDevicePixelRatio(qApp->devicePixelRatio());
   m_backgroundPixmap.fill(Qt::transparent);
   // clang-format on
 
@@ -709,8 +713,9 @@ QPixmap Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
 {
   // Create the pixmap and initialize it to the widget's size
   // clang-format off
-  QPixmap pixmap = QPixmap(static_cast<int>(width()),
-                           static_cast<int>(height()));
+  QPixmap pixmap = QPixmap(static_cast<int>(width() * qApp->devicePixelRatio()),
+                           static_cast<int>(height() * qApp->devicePixelRatio()));
+  pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
   pixmap.fill(Qt::transparent);
   // clang-format on
 
@@ -881,8 +886,9 @@ QPixmap Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
 
   // Create the pixmap and initialize it to the widget's size
   // clang-format off
-  QPixmap pixmap = QPixmap(static_cast<int>(width()),
-                           static_cast<int>(height()));
+  QPixmap pixmap = QPixmap(static_cast<int>(width() * qApp->devicePixelRatio()),
+                           static_cast<int>(height() * qApp->devicePixelRatio()));
+  pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
   pixmap.fill(Qt::transparent);
   // clang-format on
 
@@ -968,8 +974,9 @@ QPixmap Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
 {
   // Create the pixmap and initialize it to the widget's size
   // clang-format off
-  QPixmap pixmap = QPixmap(static_cast<int>(width()),
-                           static_cast<int>(height()));
+  QPixmap pixmap = QPixmap(static_cast<int>(width() * qApp->devicePixelRatio()),
+                           static_cast<int>(height() * qApp->devicePixelRatio()));
+  pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
   pixmap.fill(Qt::transparent);
   // clang-format on
 

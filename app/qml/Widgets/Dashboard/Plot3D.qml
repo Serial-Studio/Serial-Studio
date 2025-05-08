@@ -273,4 +273,14 @@ Item {
       }
     }
   }
+
+  //
+  // Mouse area
+  //
+  MouseArea {
+    anchors.fill: parent
+    preventStealing: true
+    propagateComposedEvents: true
+    anchors.topMargin: toolbar.height
+  }
 }

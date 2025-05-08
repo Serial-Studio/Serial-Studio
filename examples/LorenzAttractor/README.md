@@ -8,6 +8,8 @@ The Lorenz system, introduced by Edward Lorenz in 1963, is a set of three couple
 
 ![Lorenz Attractor in Serial Studio](doc/screenshot.png)
 
+**Note:** This project makes use of features that are only available under a paid license. Please visit [serial-studio.com](https://serial-studio.com/) for more information.
+
 ## **Lorenz System Basics**
 
 The system is governed by the following equations:

@@ -88,7 +88,7 @@
     "plot3d_x_axis": "#e95420",
     "plot3d_y_axis": "#4caf50",
     "plot3d_z_axis": "#0088cc",
-    "plot3d_axis_text": "#eeeeec",
+    "plot3d_axis_text": "#ffffff",
     "plot3d_grid_major": "#6a6a6a",
     "plot3d_grid_minor": "#4a4a4a",
     "plot3d_background_inner": "#333333",
