@@ -38,9 +38,9 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   : QQuickPaintedItem(parent)
   , m_index(index)
   , m_zoom(0.05)
-  , m_cameraAngleX(-60)
+  , m_cameraAngleX(300)
   , m_cameraAngleY(0)
-  , m_cameraAngleZ(-135)
+  , m_cameraAngleZ(225)
   , m_cameraOffsetX(0)
   , m_cameraOffsetY(0)
   , m_cameraOffsetZ(-10)
@@ -1271,6 +1271,14 @@ void Widgets::Plot3D::mouseMoveEvent(QMouseEvent *event)
     m_cameraOffsetY = m_orbitOffsetY;
     m_cameraAngleZ += delta.x() * 0.5;
     m_cameraAngleX += delta.y() * 0.5;
+
+    m_cameraAngleZ = fmod(m_cameraAngleZ, 360.0);
+    if (m_cameraAngleZ < 0)
+      m_cameraAngleZ += 360.0;
+
+    m_cameraAngleX = fmod(m_cameraAngleX, 360.0);
+    if (m_cameraAngleX < 0)
+      m_cameraAngleX += 360.0;
   }
 
   // Pan mode

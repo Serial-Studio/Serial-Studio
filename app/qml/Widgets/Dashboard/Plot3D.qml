@@ -200,7 +200,7 @@ Item {
         icon.width: 18
         icon.height: 18
         icon.color: "transparent"
-        onClicked: animateToView(0.05, -60, 0, -135, 0, 0)
+        onClicked: animateToView(0.05, 300, 0, 225, 0, 0)
         icon.source: "qrc:/rcc/icons/dashboard/buttons/orthogonal_view.svg"
       }
 
@@ -210,7 +210,7 @@ Item {
         icon.width: 18
         icon.height: 18
         icon.color: "transparent"
-        onClicked: animateToView(0.05, 0, 0, 0, 0, 0)
+        onClicked: animateToView(0.05, 360, 0, 360, 0, 0)
         icon.source: "qrc:/rcc/icons/dashboard/buttons/top_view.svg"
       }
 
@@ -220,7 +220,7 @@ Item {
         icon.width: 18
         icon.height: 18
         icon.color: "transparent"
-        onClicked: animateToView(0.05, -90, 0, -90, 0, 0)
+        onClicked: animateToView(0.05, 270, 0, 270, 0, 0)
         icon.source: "qrc:/rcc/icons/dashboard/buttons/left_view.svg"
       }
 
@@ -230,7 +230,7 @@ Item {
         icon.width: 18
         icon.height: 18
         icon.color: "transparent"
-        onClicked: animateToView(0.05, -90, 0, -180, 0, 0)
+        onClicked: animateToView(0.05, 270, 0, 180, 0, 0)
         icon.source: "qrc:/rcc/icons/dashboard/buttons/front_view.svg"
       }
 
