@@ -33,7 +33,7 @@ Item {
   //
   // Widget data inputs
   //
-  property MultiPlotModel model
+  property MultiPlotModel model: MultiPlotModel{}
   property color color: Cpp_ThemeManager.colors["highlight"]
 
   //

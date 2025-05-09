@@ -238,9 +238,7 @@ public:
     GPS,
     MultiPlot,
     NoGroupWidget,
-#ifdef USE_QT_COMMERCIAL
     Plot3D,
-#endif
   };
   Q_ENUM(GroupWidget)
 
@@ -274,9 +272,7 @@ public:
     DashboardGauge,
     DashboardCompass,
     DashboardNoWidget,
-#ifdef USE_QT_COMMERCIAL
     DashboardPlot3D,
-#endif
   };
   Q_ENUM(DashboardWidget)
 
@@ -299,6 +295,12 @@ public:
   };
   Q_ENUM(DatasetOption)
   // clang-format on
+
+  //
+  // Commercial-related functions
+  //
+  [[nodiscard]] static bool activated();
+  [[nodiscard]] static bool commercialCfg(const QVector<JSON::Group> &groups);
 
   //
   // Dashboard logic

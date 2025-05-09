@@ -33,47 +33,94 @@ Widgets.Pane {
   title: Cpp_JSON_ProjectModel.selectedText
   Component.onCompleted: Cpp_JSON_ProjectModel.buildProjectModel()
 
-  TableDelegate {
-    id: delegate
-    anchors.fill: parent
-    anchors.topMargin: -16
-    anchors.leftMargin: -10
-    anchors.rightMargin: -10
-    anchors.bottomMargin: -9
-    modelPointer: Cpp_JSON_ProjectModel.projectModel
+  //
+  // User interface elements
+  //
+  Page {
+    palette.mid: Cpp_ThemeManager.colors["mid"]
+    palette.dark: Cpp_ThemeManager.colors["dark"]
+    palette.text: Cpp_ThemeManager.colors["text"]
+    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.link: Cpp_ThemeManager.colors["link"]
+    palette.light: Cpp_ThemeManager.colors["light"]
+    palette.window: Cpp_ThemeManager.colors["window"]
+    palette.shadow: Cpp_ThemeManager.colors["shadow"]
+    palette.accent: Cpp_ThemeManager.colors["accent"]
+    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.midlight: Cpp_ThemeManager.colors["midlight"]
+    palette.highlight: Cpp_ThemeManager.colors["highlight"]
+    palette.windowText: Cpp_ThemeManager.colors["window_text"]
+    palette.brightText: Cpp_ThemeManager.colors["bright_text"]
+    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.toolTipBase: Cpp_ThemeManager.colors["tooltip_base"]
+    palette.toolTipText: Cpp_ThemeManager.colors["tooltip_text"]
+    palette.linkVisited: Cpp_ThemeManager.colors["link_visited"]
+    palette.alternateBase: Cpp_ThemeManager.colors["alternate_base"]
+    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
-    footerItem: ColumnLayout {
+    anchors {
+      fill: parent
+      topMargin: -16
+      leftMargin: -9
+      rightMargin: -9
+      bottomMargin: -10
+    }
+
+    ColumnLayout {
       spacing: 0
+      anchors.fill: parent
 
-      Image {
-        sourceSize: Qt.size(128, 128)
-        Layout.alignment: Qt.AlignHCenter
-        source: "qrc:/rcc/images/soldering-iron.svg"
+      Widgets.ProNotice {
+        Layout.margins: -1
+        Layout.bottomMargin: 0
+        Layout.fillWidth: true
+        closeButtonEnabled: false
+        titleText: qsTr("Pro features detected in this project.")
+        activationFlag: Cpp_JSON_ProjectModel.containsCommercialFeatures
+        subtitleText: qsTr("Fallback widgets will be used. Buy a license to unlock full functionality.")
       }
 
-      Item {
-        implicitHeight: 16
-      }
+      TableDelegate {
+        id: delegate
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        modelPointer: Cpp_JSON_ProjectModel.projectModel
 
-      Label {
-        Layout.alignment: Qt.AlignHCenter
-        text: qsTr("Start Building Now!")
-        horizontalAlignment: Label.AlignHCenter
-        font: Cpp_Misc_CommonFonts.customUiFont(2, true)
-      }
+        footerItem: ColumnLayout {
+          spacing: 0
 
-      Item {
-        implicitHeight: 8
-      }
+          Image {
+            sourceSize: Qt.size(96, 96)
+            Layout.alignment: Qt.AlignHCenter
+            source: "qrc:/rcc/images/tip.svg"
+          }
 
-      Label {
-        opacity: 0.8
-        Layout.alignment: Qt.AlignHCenter
-        horizontalAlignment: Label.AlignHCenter
-        Layout.maximumWidth: delegate.width * 0.9
-        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-        font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
-        text: qsTr("Get started by adding a group with the toolbar buttons above.")
+          Item {
+            implicitHeight: 16
+          }
+
+          Label {
+            Layout.alignment: Qt.AlignHCenter
+            text: qsTr("First, set up frame detection and data decoding.")
+            horizontalAlignment: Label.AlignHCenter
+            font: Cpp_Misc_CommonFonts.customUiFont(1.6, true)
+          }
+
+          Item {
+            implicitHeight: 8
+          }
+
+          Label {
+            opacity: 0.8
+            Layout.alignment: Qt.AlignHCenter
+            horizontalAlignment: Label.AlignHCenter
+            Layout.maximumWidth: delegate.width * 0.9
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            font: Cpp_Misc_CommonFonts.customUiFont(1.4, false)
+            text: qsTr("Frames are parsed into arrays, and datasets link each element to a widget.")
+          }
+        }
       }
     }
   }

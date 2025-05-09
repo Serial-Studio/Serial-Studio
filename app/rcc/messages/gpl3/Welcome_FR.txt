@@ -20,7 +20,6 @@ Vous aimez ce projet ? Pensez à le soutenir en achetant la version Pro :
 
 La version Pro inclut des fonctionnalités géniales comme :
 ✓ Support de MQTT
-✓ Décodage CAN et Modbus
 ✓ Graphiques XY et visualisation 3D
 ✓ Licence binaire adaptée aux entreprises (sans obligations GPL)
 ✓ Et plus d’outils pour booster votre flux de travail embarqué

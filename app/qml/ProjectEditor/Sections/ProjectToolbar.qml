@@ -235,14 +235,10 @@ Rectangle {
     //
     // Add 3D Plot
     //
-    Loader {
-      Layout.alignment: Qt.AlignVCenter
-      active: Cpp_QtCommercial_Available
-      sourceComponent: Widgets.BigButton {
-        text: qsTr("3D Plot")
-        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-plot3d.svg"
-        onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("3D Plot"), SerialStudio.Plot3D)
-      }
+    Widgets.BigButton {
+      text: qsTr("3D Plot")
+      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-plot3d.svg"
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("3D Plot"), SerialStudio.Plot3D)
     }
 
     //

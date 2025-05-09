@@ -41,7 +41,7 @@ Item {
     target: Cpp_Misc_TimerEvents
 
     function onTimeout24Hz() {
-      if (root.visible) {
+      if (root.visible && root.model) {
         root.model.draw(upperSeries)
         lowerSeries.clear()
         lowerSeries.append(root.model.minX, root.model.minY)

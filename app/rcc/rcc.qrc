@@ -112,6 +112,7 @@
         <file>icons/buttons/apply.svg</file>
         <file>icons/buttons/attach.svg</file>
         <file>icons/buttons/buy.svg</file>
+        <file>icons/buttons/cancel.svg</file>
         <file>icons/buttons/center.svg</file>
         <file>icons/buttons/clear.svg</file>
         <file>icons/buttons/close.svg</file>
@@ -133,6 +134,7 @@
         <file>icons/buttons/refresh.svg</file>
         <file>icons/buttons/save.svg</file>
         <file>icons/buttons/visible.svg</file>
+        <file>icons/buttons/website.svg</file>
         <file>icons/code-editor/apply.svg</file>
         <file>icons/code-editor/copy.svg</file>
         <file>icons/code-editor/cut.svg</file>
@@ -147,6 +149,7 @@
         <file>icons/dashboard/buttons/front_view.svg</file>
         <file>icons/dashboard/buttons/interpolate-off.svg</file>
         <file>icons/dashboard/buttons/interpolate-on.svg</file>
+        <file>icons/dashboard/buttons/invert.svg</file>
         <file>icons/dashboard/buttons/left_view.svg</file>
         <file>icons/dashboard/buttons/orbit.svg</file>
         <file>icons/dashboard/buttons/orthogonal_view.svg</file>
@@ -329,6 +332,5 @@
         <file>themes/resistance.json</file>
         <file>themes/yaru-dark.json</file>
         <file>themes/yaru-light.json</file>
-        <file>icons/dashboard/buttons/invert.svg</file>
     </qresource>
 </RCC>

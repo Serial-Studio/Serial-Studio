@@ -20,6 +20,7 @@
  */
 
 #include "JSON/Frame.h"
+#include "SerialStudio.h"
 
 /**
  * @brief Reads a value from a QJsonObject based on a key, returning a default
@@ -46,6 +47,14 @@ static QVariant SAFE_READ(const QJsonObject &object, const QString &key,
 }
 
 /**
+ * Constructor function
+ */
+JSON::Frame::Frame()
+  : m_containsCommercialFeatures(false)
+{
+}
+
+/**
  * Destructor function, free memory used by the @c Group objects before
  * destroying an instance of this class.
  */
@@ -66,6 +75,7 @@ void JSON::Frame::clear()
   m_title = "";
   m_frameEnd = "";
   m_frameStart = "";
+  m_containsCommercialFeatures = false;
 
   m_groups.clear();
   m_actions.clear();
@@ -145,6 +155,9 @@ bool JSON::Frame::read(const QJsonObject &object)
         m_actions.append(action);
     }
 
+    // Check if any of the groups contains commercial widgets
+    m_containsCommercialFeatures = SerialStudio::commercialCfg(m_groups);
+
     // Return status
     return groupCount() > 0;
   }
@@ -160,6 +173,15 @@ bool JSON::Frame::read(const QJsonObject &object)
 int JSON::Frame::groupCount() const
 {
   return m_groups.count();
+}
+
+/**
+ * Returns @c true if the frame contains features that should only be enabled
+ * for commercial users with a valid license, such as the 3D plot widget.
+ */
+bool JSON::Frame::containsCommercialFeatures() const
+{
+  return m_containsCommercialFeatures;
 }
 
 /**

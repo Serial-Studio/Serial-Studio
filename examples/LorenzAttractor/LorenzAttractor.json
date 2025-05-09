@@ -19,12 +19,12 @@
                     "led": false,
                     "ledHigh": 1,
                     "log": false,
-                    "max": 20,
-                    "min": -20,
+                    "max": 0,
+                    "min": 0,
                     "title": "X",
                     "units": "",
                     "value": "--.--",
-                    "widget": "x",
+                    "widget": "",
                     "xAxis": 2
                 },
                 {
@@ -37,12 +37,12 @@
                     "led": false,
                     "ledHigh": 1,
                     "log": false,
-                    "max": 30,
-                    "min": -30,
+                    "max": 0,
+                    "min": 0,
                     "title": "Y",
                     "units": "",
                     "value": "--.--",
-                    "widget": "y",
+                    "widget": "",
                     "xAxis": 3
                 },
                 {
@@ -55,17 +55,17 @@
                     "led": false,
                     "ledHigh": 1,
                     "log": false,
-                    "max": 50,
+                    "max": 0,
                     "min": 0,
                     "title": "Z",
                     "units": "",
                     "value": "--.--",
-                    "widget": "z",
+                    "widget": "",
                     "xAxis": 1
                 }
             ],
             "title": "Lorenz Attractor",
-            "widget": "plot3d"
+            "widget": "multiplot"
         }
     ],
     "mapTilerApiKey": "",

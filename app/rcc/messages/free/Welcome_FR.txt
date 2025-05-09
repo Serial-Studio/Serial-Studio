@@ -21,7 +21,6 @@ d’outils pour commencer.
 
 La version Pro inclut des fonctionnalités supplémentaires telles que :
 ✓ Support MQTT
-✓ Décodage CAN et Modbus
 ✓ Graphiques XY et visualisation 3D
 ✓ Licence binaire adaptée à un usage commercial (sans obligations GPL)
 ✓ Et plus d’outils pour booster votre workflow embarqué

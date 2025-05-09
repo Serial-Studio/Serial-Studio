@@ -272,57 +272,68 @@ void UI::AdaptiveGridLayout::setCellHeightFactor(const qreal cellHeightFactor)
  */
 void UI::AdaptiveGridLayout::computeLayout()
 {
-  // Initialize layout counters
-  int bestAreaDiff = INT_MAX, bestColumns = 1, bestCellWidth = m_minCellWidth;
-
-  // Calculate setup that obtains the least wasted space
-  const int containerArea = m_containerWidth * m_containerHeight;
-  for (int c = m_minColumns; c <= m_maxColumns; ++c)
-  {
-    // Compute cell width, height & area
-    const int cW = (m_containerWidth / c);
-    const int cH = qCeil(cW * m_cellHeightFactor);
-    const int cA = cW * cH + (m_columnSpacing * m_rowSpacing);
-
-    // Obtain difference between container area & area ocuppied by cells
-    const int diff = qAbs(containerArea - cA * m_cellCount);
-
-    // Early stop if cell width is smaller than minimum cell width
-    if (cW <= m_minCellWidth && bestCellWidth != INT_MAX)
-      break;
-
-    // Stop at first iteration if required
-    else if (cW <= m_minCellWidth)
-    {
-      bestColumns = 1;
-      bestCellWidth = m_containerWidth;
-      break;
-    }
-
-    // Store the setup that wastes least space
-    else if (diff <= bestAreaDiff)
-    {
-      bestColumns = c;
-      bestAreaDiff = diff;
-      bestCellWidth = cW - m_columnSpacing;
-    }
-  }
-
-  // Update column count
-  m_columns = bestColumns;
-
-  // Update cell size for multi-cell grids
-  if (m_columns > 1)
-  {
-    m_cellWidth = bestCellWidth;
-    m_cellHeight = qCeil(m_cellWidth * m_cellHeightFactor);
-  }
-
   // Extend cell to parent in single-cell setups
-  else
+  if (m_cellCount == 1)
   {
     m_cellWidth = m_containerWidth;
     m_cellHeight = m_containerHeight;
+  }
+
+  // Multiple elements
+  else
+  {
+    // Initialize layout counters
+    int bestAreaDiff = INT_MAX, bestColumns = 1, bestCellWidth = m_minCellWidth;
+
+    // Calculate setup that obtains the least wasted space
+    const int containerArea = m_containerWidth * m_containerHeight;
+    for (int c = m_minColumns; c <= m_maxColumns; ++c)
+    {
+      // Compute cell width, height & area
+      const int cW = (m_containerWidth / c);
+      const int cH = qCeil(cW * m_cellHeightFactor);
+      const int cA = cW * cH + (m_columnSpacing * m_rowSpacing);
+
+      // Obtain difference between container area & area ocuppied by cells
+      const int diff = qAbs(containerArea - cA * m_cellCount);
+
+      // Early stop if cell width is smaller than minimum cell width
+      if (cW <= m_minCellWidth && bestCellWidth != INT_MAX)
+        break;
+
+      // Stop at first iteration if required
+      else if (cW <= m_minCellWidth)
+      {
+        bestColumns = 1;
+        bestCellWidth = m_containerWidth;
+        break;
+      }
+
+      // Store the setup that wastes least space
+      else if (diff <= bestAreaDiff)
+      {
+        bestColumns = c;
+        bestAreaDiff = diff;
+        bestCellWidth = cW - m_columnSpacing;
+      }
+    }
+
+    // Update column count
+    m_columns = bestColumns;
+
+    // Update cell size for multi-cell grids
+    if (m_columns > 1)
+    {
+      m_cellWidth = bestCellWidth;
+      m_cellHeight = qCeil(m_cellWidth * m_cellHeightFactor);
+    }
+
+    // Update cell size for single-column setups
+    else
+    {
+      m_cellWidth = m_containerWidth;
+      m_cellHeight = qCeil(m_cellWidth * m_cellHeightFactor);
+    }
   }
 
   // Update user interface

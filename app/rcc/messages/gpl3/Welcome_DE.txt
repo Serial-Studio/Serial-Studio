@@ -20,7 +20,6 @@ Dir gefällt das Projekt? Unterstütze es durch den Kauf der Pro-Version:
 
 Pro enthält coole Extras wie:
 ✓ MQTT-Unterstützung
-✓ CAN- und Modbus-Dekodierung
 ✓ XY-Diagramme und 3D-Visualisierung
 ✓ Unternehmensfreundliche Binärlizenz (ohne GPL-Verpflichtungen)
 ✓ Und weitere Tools für deinen Embedded-Workflow

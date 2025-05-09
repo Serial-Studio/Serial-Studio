@@ -57,6 +57,7 @@ class FrameBuilder;
 class Frame
 {
 public:
+  Frame();
   ~Frame();
 
   void clear();
@@ -66,6 +67,7 @@ public:
   [[nodiscard]] bool read(const QJsonObject &object);
 
   [[nodiscard]] int groupCount() const;
+  [[nodiscard]] bool containsCommercialFeatures() const;
 
   [[nodiscard]] const QString &title() const;
   [[nodiscard]] const QString &frameEnd() const;
@@ -81,6 +83,8 @@ private:
 
   QVector<Group> m_groups;
   QVector<Action> m_actions;
+
+  bool m_containsCommercialFeatures;
 
   friend class JSON::FrameBuilder;
 };

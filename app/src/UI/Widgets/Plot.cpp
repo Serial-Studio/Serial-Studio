@@ -43,7 +43,7 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
     m_minY = qMin(yDataset.min(), yDataset.max());
     m_maxY = qMax(yDataset.min(), yDataset.max());
 
-    const auto xAxisId = yDataset.xAxisId();
+    const auto xAxisId = SerialStudio::activated() ? yDataset.xAxisId() : 0;
     if (UI::Dashboard::instance().datasets().contains(xAxisId))
     {
       const auto &xDataset = UI::Dashboard::instance().datasets()[xAxisId];
@@ -244,19 +244,20 @@ void Widgets::Plot::calculateAutoScaleRange()
   bool yChanged = false;
 
   // Obtain scale range for Y-axis
-  // clang-format off
-  const auto &yDataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
-  yChanged = computeMinMaxValues(m_minY, m_maxY, yDataset, true, [](const QPointF &p) { return p.y(); });
-  // clang-format on
+  const auto &dy = GET_DATASET(SerialStudio::DashboardPlot, m_index);
+  yChanged = computeMinMaxValues(m_minY, m_maxY, dy, true,
+                                 [](const QPointF &p) { return p.y(); });
 
   // Obtain range scale for X-axis
-  // clang-format off
-  if (UI::Dashboard::instance().datasets().contains(yDataset.xAxisId()))
+  if (SerialStudio::activated())
   {
-    const auto &xDataset = UI::Dashboard::instance().datasets()[yDataset.xAxisId()];
-    xChanged = computeMinMaxValues(m_minX, m_maxX, xDataset, false, [](const QPointF &p) { return p.x(); });
+    if (UI::Dashboard::instance().datasets().contains(dy.xAxisId()))
+    {
+      const auto &dx = UI::Dashboard::instance().datasets()[dy.xAxisId()];
+      xChanged = computeMinMaxValues(m_minX, m_maxX, dx, false,
+                                     [](const QPointF &p) { return p.x(); });
+    }
   }
-  // clang-format on
 
   // X-axis data source set to samples, use [0, points] as range
   else

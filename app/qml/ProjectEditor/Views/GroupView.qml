@@ -66,211 +66,224 @@ Widgets.Pane {
       bottomMargin: -10
     }
 
-    //
-    // Group actions panel
-    //
-    Rectangle {
-      z: 2
-      id: header
-      height: layout.implicitHeight + 12
-      color: Cpp_ThemeManager.colors["groupbox_background"]
-      anchors {
-        top: parent.top
-        left: parent.left
-        right: parent.right
+    ColumnLayout {
+      spacing: 0
+      anchors.fill: parent
+
+      //
+      // Pro notice
+      //
+      Widgets.ProNotice {
+        Layout.margins: -1
+        Layout.bottomMargin: 0
+        Layout.fillWidth: true
+        closeButtonEnabled: false
+        titleText: qsTr("Pro features detected in this project.")
+        activationFlag: Cpp_JSON_ProjectModel.containsCommercialFeatures
+        subtitleText: qsTr("Fallback widgets will be used. Buy a license to unlock full functionality.")
       }
 
       //
-      // Buttons
-      //
-      RowLayout {
-        id: layout
-        spacing: 4
-
-        anchors {
-          margins: 8
-          left: parent.left
-          right: parent.right
-          verticalCenter: parent.verticalCenter
-        }
-
-        //
-        // Add generic dataset
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          toolbarButton: false
-          text: qsTr("Dataset")
-          Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric)
-          icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
-        }
-
-        //
-        // Add plot
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          text: qsTr("Plot")
-          toolbarButton: false
-          Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot)
-          icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
-        }
-
-        //
-        // Add FFT plot
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          toolbarButton: false
-          text: qsTr("FFT Plot")
-          Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT)
-          icon.source: "qrc:/rcc/icons/project-editor/actions/add-fft.svg"
-        }
-
-        //
-        // Add bar
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          toolbarButton: false
-          text: qsTr("Bar/Level")
-          Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar)
-          icon.source: "qrc:/rcc/icons/project-editor/actions/add-bar.svg"
-        }
-
-        //
-        // Add gauge
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          text: qsTr("Gauge")
-          toolbarButton: false
-          Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge)
-          icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
-        }
-
-        //
-        // Add compass
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          toolbarButton: false
-          text: qsTr("Compass")
-          Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass)
-          icon.source: "qrc:/rcc/icons/project-editor/actions/add-compass.svg"
-        }
-
-        //
-        // Add LED
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          text: qsTr("LED")
-          toolbarButton: false
-          Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED)
-          icon.source: "qrc:/rcc/icons/project-editor/actions/add-led.svg"
-        }
-
-        //
-        // Spacer
-        //
-        Item {
-          Layout.fillWidth: true
-        }
-
-        //
-        // Duplicate group
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          toolbarButton: false
-          text: qsTr("Duplicate")
-          Layout.alignment: Qt.AlignVCenter
-          onClicked: Cpp_JSON_ProjectModel.duplicateCurrentGroup()
-          icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
-        }
-
-        //
-        // Delete group
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          toolbarButton: false
-          text: qsTr("Delete")
-          Layout.alignment: Qt.AlignVCenter
-          onClicked: Cpp_JSON_ProjectModel.deleteCurrentGroup()
-          icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
-        }
-      }
-
-      //
-      // Bottom border
+      // Group actions panel
       //
       Rectangle {
-        height: 1
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        color: Cpp_ThemeManager.colors["groupbox_border"]
+        z: 2
+        id: header
+        Layout.fillWidth: true
+        height: layout.implicitHeight + 12
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+
+        //
+        // Buttons
+        //
+        RowLayout {
+          id: layout
+          spacing: 4
+
+          anchors {
+            margins: 8
+            left: parent.left
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+          }
+
+          //
+          // Add generic dataset
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Dataset")
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric)
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
+          }
+
+          //
+          // Add plot
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            text: qsTr("Plot")
+            toolbarButton: false
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot)
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
+          }
+
+          //
+          // Add FFT plot
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("FFT Plot")
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT)
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-fft.svg"
+          }
+
+          //
+          // Add bar
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Bar/Level")
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar)
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-bar.svg"
+          }
+
+          //
+          // Add gauge
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            text: qsTr("Gauge")
+            toolbarButton: false
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge)
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
+          }
+
+          //
+          // Add compass
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Compass")
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass)
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-compass.svg"
+          }
+
+          //
+          // Add LED
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            text: qsTr("LED")
+            toolbarButton: false
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED)
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-led.svg"
+          }
+
+          //
+          // Spacer
+          //
+          Item {
+            Layout.fillWidth: true
+          }
+
+          //
+          // Duplicate group
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Duplicate")
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: Cpp_JSON_ProjectModel.duplicateCurrentGroup()
+            icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
+          }
+
+          //
+          // Delete group
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Delete")
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: Cpp_JSON_ProjectModel.deleteCurrentGroup()
+            icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
+          }
+        }
+
+        //
+        // Bottom border
+        //
+        Rectangle {
+          height: 1
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
       }
-    }
 
-    //
-    // Group model editor
-    //
-    TableDelegate {
-      id: delegate
-      anchors.fill: parent
-      anchors.topMargin: header.height
-      modelPointer: Cpp_JSON_ProjectModel.groupModel
+      //
+      // Group model editor
+      //
+      TableDelegate {
+        id: delegate
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        modelPointer: Cpp_JSON_ProjectModel.groupModel
 
-      footerItem: ColumnLayout {
-        spacing: 0
+        footerItem: ColumnLayout {
+          spacing: 0
 
-        Image {
-          sourceSize: Qt.size(128, 128)
-          Layout.alignment: Qt.AlignHCenter
-          source: "qrc:/rcc/images/tree.svg"
-        }
+          Image {
+            sourceSize: Qt.size(96, 96)
+            Layout.alignment: Qt.AlignHCenter
+            source: "qrc:/rcc/images/tip.svg"
+          }
 
-        Item {
-          implicitHeight: 16
-        }
+          Item {
+            implicitHeight: 16
+          }
 
-        Label {
-          Layout.alignment: Qt.AlignHCenter
-          text: qsTr("Let's Add Some Datasets")
-          horizontalAlignment: Label.AlignHCenter
-          font: Cpp_Misc_CommonFonts.customUiFont(2, true)
-        }
+          Label {
+            Layout.alignment: Qt.AlignHCenter
+            horizontalAlignment: Label.AlignHCenter
+            font: Cpp_Misc_CommonFonts.customUiFont(1.6, true)
+            text: qsTr("Groups hold multiple datasets and organize your data.")
+          }
 
-        Item {
-          implicitHeight: 8
-        }
+          Item {
+            implicitHeight: 8
+          }
 
-        Label {
-          opacity: 0.8
-          Layout.alignment: Qt.AlignHCenter
-          horizontalAlignment: Label.AlignHCenter
-          Layout.maximumWidth: delegate.width * 0.9
-          wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-          font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
-          text: qsTr("Datasets describe individual readings (e.g. X, Y, Z in an accelerometer).\n" +
-                     "Use the toolbar buttons above to add a dataset to this group.")
+          Label {
+            opacity: 0.8
+            Layout.alignment: Qt.AlignHCenter
+            horizontalAlignment: Label.AlignHCenter
+            Layout.maximumWidth: delegate.width * 0.9
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            font: Cpp_Misc_CommonFonts.customUiFont(1.4, false)
+            text: qsTr("Use the sub-toolbar to quickly add plots, FFTs, and other dataset types to this group.")
+          }
         }
       }
     }

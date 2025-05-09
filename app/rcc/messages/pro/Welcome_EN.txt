@@ -16,7 +16,6 @@ use in commercial and proprietary environments.
 
 Your Pro features include:
 ✓ MQTT integration
-✓ CAN and Modbus decoding
 ✓ XY and 3D visualization
 ✓ Priority support
 ✓ Business-friendly license

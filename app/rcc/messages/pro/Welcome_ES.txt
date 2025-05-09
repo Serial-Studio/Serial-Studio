@@ -16,7 +16,6 @@ uso en entornos comerciales y propietarios.
 
 Tus funciones Pro incluyen:
 ✓ Integración con MQTT
-✓ Decodificación de CAN y Modbus
 ✓ Visualización XY y 3D
 ✓ Soporte prioritario
 ✓ Licencia amigable para empresas

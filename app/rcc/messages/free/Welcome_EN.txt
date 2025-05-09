@@ -19,7 +19,6 @@ New to Serial Studio? Click the “Help” toolbar button to get started.
 
 Pro includes awesome extras like:
 ✓ MQTT support
-✓ CAN and Modbus decoding
 ✓ XY plotting and 3D visualization
 ✓ Business-friendly binary license (no GPL obligations)
 ✓ Plus more tools to take your embedded workflow further

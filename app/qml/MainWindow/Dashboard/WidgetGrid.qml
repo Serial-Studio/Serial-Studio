@@ -52,10 +52,17 @@ Widgets.Pane {
     cellHeightFactor: 1 / root.aspectRatio
     cellCount: Cpp_UI_Dashboard.totalWidgetCount
 
-    onLayoutChanged: {
-      const contentX = flickable.contentX
-      flickable.contentX = -1
-      flickable.contentX = contentX
+    onLayoutChanged: contentTimer.start()
+
+    Timer {
+      id: contentTimer
+      interval: 200
+      onTriggered: {
+        const contentX = flickable.contentX
+        flickable.contentX = -1
+        flickable.contentX = contentX
+        flickable.updateVisibleWidgets()
+      }
     }
   }
 
@@ -80,6 +87,24 @@ Widgets.Pane {
     }
 
     //
+    // Commercial features notification
+    //
+    Widgets.ProNotice {
+      id: commercialNotification
+
+      activationFlag: Cpp_UI_Dashboard.containsCommercialFeatures
+      titleText: qsTr("Pro features detected in this project.")
+      subtitleText: qsTr("Fallback widgets are active. Purchase a license for full functionality.")
+
+      anchors {
+        margins: -1
+        top: parent.top
+        left: parent.left
+        right: parent.right
+      }
+    }
+
+    //
     // Actions
     //
     Rectangle {
@@ -90,7 +115,8 @@ Widgets.Pane {
       visible: Cpp_UI_Dashboard.actionCount > 0 && !Cpp_CSV_Player.isOpen
 
       anchors {
-        top: parent.top
+        top: commercialNotification.visible ? commercialNotification.bottom :
+                                              parent.top
         left: parent.left
         right: parent.right
       }
@@ -146,7 +172,7 @@ Widgets.Pane {
         fill: parent
         margins: 4
         rightMargin: 2
-        topMargin: header.height + 4
+        topMargin: header.y + header.height + 4
       }
 
       ScrollBar.vertical: ScrollBar {

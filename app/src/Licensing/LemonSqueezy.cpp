@@ -573,7 +573,7 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
     Misc::Utilities::showMessageBox(
         tr("There was an issue validating your license."), error.toString(),
         QMessageBox::Critical);
-    clearLicenseCache(true);
+    clearLicenseCache();
     return;
   }
 
@@ -586,7 +586,7 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
         tr("Please double-check that you purchased your license from the "
            "official Serial Studio store."),
         QMessageBox::Critical);
-    clearLicenseCache(true);
+    clearLicenseCache();
     return;
   }
 
@@ -598,7 +598,7 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
         tr("This license key was activated on a different device."),
         tr("Please deactivate it there first or contact support for help."),
         QMessageBox::Critical);
-    clearLicenseCache(true);
+    clearLicenseCache();
     return;
   }
 
@@ -614,7 +614,7 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
             .arg(licenseStatus),
         QMessageBox::Warning);
 
-    clearLicenseCache(true);
+    clearLicenseCache();
     return;
   }
 

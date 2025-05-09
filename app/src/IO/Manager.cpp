@@ -252,8 +252,11 @@ QStringList IO::Manager::availableBuses() const
   list.append(tr("Network Socket"));
   list.append(tr("Bluetooth LE"));
 #ifdef USE_QT_COMMERCIAL
-  list.append(tr("Modbus"));
-  list.append(tr("CAN Bus"));
+  // Comment these ports for v3.0.7 release...I will add support for these
+  // IO modules later, right now I need testing data to not drown in issues
+  // and get the FlatHub publishing done ASAP.
+  // list.append(tr("Modbus"));
+  // list.append(tr("CAN Bus"));
 #endif
   return list;
 }

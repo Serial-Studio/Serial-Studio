@@ -22,7 +22,65 @@
 #include "SerialStudio.h"
 #include "Misc/ThemeManager.h"
 
+#ifdef USE_QT_COMMERCIAL
+#  include "Licensing/LemonSqueezy.h"
+#endif
+
 #include <QJsonArray>
+
+//------------------------------------------------------------------------------
+// Commercial feature detection, appreciate your respect for this project
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Checks if Serial Studio is activated with a commercial license.
+ *
+ * This function determines whether the application is running with a valid
+ * commercial license. If the application is built with the commercial flag,
+ * it queries the licensing system; otherwise, it always returns false.
+ *
+ * @return true if the app is activated with a valid license, false otherwise.
+ */
+bool SerialStudio::activated()
+{
+#ifdef USE_QT_COMMERCIAL
+  return Licensing::LemonSqueezy::instance().isActivated();
+#else
+  return false;
+#endif
+}
+
+/**
+ * @brief Checks if a project configuration requires commercial features.
+ *
+ * This function inspects the provided list of JSON groups and determines
+ * if any of them use features that are exclusive to the commercial license.
+ *
+ * @param groups A vector of JSON::Group objects to analyze.
+ * @return true if any commercial-only features are detected; false otherwise.
+ */
+bool SerialStudio::commercialCfg(const QVector<JSON::Group> &groups)
+{
+  for (const auto &group : std::as_const(groups))
+  {
+    if (group.widget() == QStringLiteral("plot3d"))
+    {
+      return true;
+      break;
+    }
+
+    for (const auto &dataset : std::as_const((group.datasets())))
+    {
+      if (dataset.xAxisId() > 0)
+      {
+        return true;
+        break;
+      }
+    }
+  }
+
+  return false;
+}
 
 //------------------------------------------------------------------------------
 // Dashboard widget logic
@@ -43,9 +101,7 @@ bool SerialStudio::isGroupWidget(const DashboardWidget widget)
     case DashboardGyroscope:
     case DashboardGPS:
     case DashboardLED:
-#ifdef USE_QT_COMMERCIAL
     case DashboardPlot3D:
-#endif
       return true;
       break;
     default:
@@ -118,11 +174,9 @@ QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w)
     case DashboardCompass:
       return "qrc:/rcc/icons/dashboard/compass.svg";
       break;
-#ifdef USE_QT_COMMERCIAL
     case DashboardPlot3D:
       return "qrc:/rcc/icons/dashboard/plot3d.svg";
       break;
-#endif
     case DashboardNoWidget:
       return "";
       break;
@@ -174,11 +228,9 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
     case DashboardCompass:
       return tr("Compasses");
       break;
-#ifdef USE_QT_COMMERCIAL
     case DashboardPlot3D:
       return tr("3D Plots");
       break;
-#endif
     case DashboardNoWidget:
       return "";
       break;
@@ -215,10 +267,8 @@ SerialStudio::getDashboardWidget(const JSON::Group &group)
   else if (widget == "multiplot")
     return DashboardMultiPlot;
 
-#ifdef USE_QT_COMMERCIAL
   else if (widget == "plot3d")
     return DashboardPlot3D;
-#endif
 
   return DashboardNoWidget;
 }
@@ -284,11 +334,9 @@ QString SerialStudio::groupWidgetId(const GroupWidget widget)
     case MultiPlot:
       return "multiplot";
       break;
-#ifdef USE_QT_COMMERCIAL
     case Plot3D:
       return "plot3d";
       break;
-#endif
     case NoGroupWidget:
       return "";
       break;
@@ -321,10 +369,8 @@ SerialStudio::GroupWidget SerialStudio::groupWidgetFromId(const QString &id)
   else if (id == "multiplot")
     return MultiPlot;
 
-#ifdef USE_QT_COMMERCIAL
   else if (id == "plot3d")
     return Plot3D;
-#endif
 
   return NoGroupWidget;
 }

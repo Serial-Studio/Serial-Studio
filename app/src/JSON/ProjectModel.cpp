@@ -537,6 +537,15 @@ bool JSON::ProjectModel::currentDatasetIsEditable() const
 }
 
 /**
+ * Returns @c true if the project contains features that should only be enabled
+ * for commercial users with a valid license, such as the 3D plot widget.
+ */
+bool JSON::ProjectModel::containsCommercialFeatures() const
+{
+  return SerialStudio::commercialCfg(m_groups);
+}
+
+/**
  * @brief Retrieves the number of groups in the project.
  *
  * This function returns the total count of groups currently present in the
@@ -1830,7 +1839,6 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
   }
 
   // 3D plot widget
-#ifdef USE_QT_COMMERCIAL
   else if (widget == SerialStudio::Plot3D)
   {
     // Set widget type
@@ -1867,7 +1875,6 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
     grp.m_datasets.append(y);
     grp.m_datasets.append(z);
   }
-#endif
 
   // Replace previous group with new group
   m_groups.replace(group, grp);
@@ -1975,7 +1982,7 @@ void JSON::ProjectModel::buildTreeModel()
   root->setData(root->text(), TreeViewText);
 
   // Add "root" project items
-  auto *frameParsingCode = new QStandardItem(tr("Frame Parser Function"));
+  auto *frameParsingCode = new QStandardItem(tr("Frame Parser Code"));
 
   // Set display roles for root project items
   frameParsingCode->setData(frameParsingCode->text(), TreeViewText);
@@ -2034,10 +2041,8 @@ void JSON::ProjectModel::buildTreeModel()
       icon = "qrc:/rcc/icons/project-editor/treeview/multiplot.svg";
     else if (group.widget() == "datagrid")
       icon = "qrc:/rcc/icons/project-editor/treeview/datagrid.svg";
-#ifdef USE_QT_COMMERCIAL
     else if (group.widget() == "plot3d")
       icon = "qrc:/rcc/icons/project-editor/treeview/plot3d.svg";
-#endif
     else
       icon = "qrc:/rcc/icons/project-editor/treeview/group.svg";
 
@@ -2554,13 +2559,12 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   led->setData(tr("Quick status monitoring"), ParameterDescription);
   m_datasetModel->appendRow(led);
 
-// Add X-axis selector
-#ifdef USE_QT_COMMERCIAL
+  // Add X-axis selector
   if (dataset.graph())
   {
     // Ensure X-axis ID is reset to "Samples" when an invalid index is set
     int xAxisIdx = 0;
-    for (const auto &group : m_groups)
+    for (const auto &group : std::as_const(m_groups))
     {
       for (const auto &dataset : group.datasets())
       {
@@ -2587,7 +2591,6 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     xAxis->setData(tr("Data series for the X-Axis"), ParameterDescription);
     m_datasetModel->appendRow(xAxis);
   }
-#endif
 
   // Add minimum/maximum values
   if (showMinMax)
@@ -2768,9 +2771,7 @@ void JSON::ProjectModel::generateComboBoxModels()
   m_groupWidgets.insert(QStringLiteral("gyro"), tr("Gyroscope"));
   m_groupWidgets.insert(QStringLiteral("multiplot"), tr("Multiple Plot"));
   m_groupWidgets.insert(QStringLiteral("accelerometer"), tr("Accelerometer"));
-#ifdef USE_QT_COMMERCIAL
   m_groupWidgets.insert(QStringLiteral("plot3d"), tr("3D Plot"));
-#endif
   m_groupWidgets.insert(QLatin1String(""), tr("None"));
 
   // Initialize dataset-level widgets
@@ -2919,10 +2920,8 @@ void JSON::ProjectModel::onGroupItemChanged(QStandardItem *item)
       widget = SerialStudio::GPS;
     else if (widgetStr == "datagrid")
       widget = SerialStudio::DataGrid;
-#ifdef USE_QT_COMMERCIAL
     else if (widgetStr == "plot3d")
       widget = SerialStudio::Plot3D;
-#endif
     else
       widget = SerialStudio::NoGroupWidget;
 

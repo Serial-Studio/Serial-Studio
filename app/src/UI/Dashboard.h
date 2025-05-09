@@ -74,6 +74,7 @@ class Dashboard : public QObject
   Q_PROPERTY(QStringList availableWidgetTitles READ availableWidgetTitles NOTIFY widgetCountChanged)
   Q_PROPERTY(bool showCrosshairs READ showCrosshairs WRITE setShowCrosshairs NOTIFY showCrosshairsChanged)
   Q_PROPERTY(QList<SerialStudio::DashboardWidget> availableWidgets READ availableWidgets NOTIFY widgetCountChanged)
+  Q_PROPERTY(bool containsCommercialFeatures READ containsCommercialFeatures NOTIFY containsCommercialFeaturesChanged)
   Q_PROPERTY(bool showAreaUnderPlots READ showAreaUnderPlots WRITE setShowAreaUnderPlots NOTIFY showAreaUnderPlotsChanged)
   Q_PROPERTY(SerialStudio::AxisVisibility axisVisibility READ axisVisibility WRITE setAxisVisibility NOTIFY axisVisibilityChanged)
   // clang-format on
@@ -90,6 +91,7 @@ signals:
   void axisVisibilityChanged();
   void widgetVisibilityChanged();
   void showAreaUnderPlotsChanged();
+  void containsCommercialFeaturesChanged();
 
 private:
   explicit Dashboard();
@@ -111,6 +113,7 @@ public:
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool precisionWidgetVisible() const;
   [[nodiscard]] bool axisOptionsWidgetVisible() const;
+  [[nodiscard]] bool containsCommercialFeatures() const;
   [[nodiscard]] SerialStudio::AxisVisibility axisVisibility() const;
 
   [[nodiscard]] int points() const;

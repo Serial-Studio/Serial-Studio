@@ -21,7 +21,6 @@ Symbolleiste, um zu starten.
 
 Die Pro-Version bietet zusätzliche Funktionen wie:
 ✓ MQTT-Unterstützung
-✓ CAN- und Modbus-Dekodierung
 ✓ XY-Diagramme und 3D-Visualisierung
 ✓ Unternehmensfreundliche Binärlizenz (ohne GPL-Verpflichtungen)
 ✓ Und weitere Tools für optimierte Embedded-Workflows

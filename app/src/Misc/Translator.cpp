@@ -20,11 +20,9 @@
  */
 
 #include <QApplication>
-#include "Misc/Translator.h"
 
-#ifdef USE_QT_COMMERCIAL
-#  include "Licensing/LemonSqueezy.h"
-#endif
+#include "SerialStudio.h"
+#include "Misc/Translator.h"
 
 /**
  * Constructor function
@@ -124,7 +122,7 @@ QString Misc::Translator::welcomeConsoleText() const
   QString text = QObject::tr("Failed to load welcome text :(");
 #ifdef USE_QT_COMMERCIAL
   QString path = ":/rcc/messages/free/Welcome_" + lang + ".txt";
-  if (Licensing::LemonSqueezy::instance().isActivated())
+  if (SerialStudio::activated())
     path = ":/rcc/messages/pro/Welcome_" + lang + ".txt";
 #else
   QString path = ":/rcc/messages/gpl3/Welcome_" + lang + ".txt";
@@ -134,17 +132,14 @@ QString Misc::Translator::welcomeConsoleText() const
   QFile file(path);
   if (file.open(QFile::ReadOnly))
   {
-#ifdef USE_QT_COMMERCIAL
     if (path.contains("pro"))
     {
       text = QString::fromUtf8(file.readAll())
                  .arg(qApp->applicationDisplayName());
     }
+
     else
       text = QString::fromUtf8(file.readAll());
-#else
-    text = QString::fromUtf8(file.readAll());
-#endif
 
     file.close();
   }

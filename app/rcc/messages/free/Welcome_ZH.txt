@@ -19,7 +19,6 @@ Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
 
 Pro 版本包含强大的额外功能：
 ✓ 支持 MQTT
-✓ CAN 和 Modbus 解码
 ✓ XY 图表和 3D 可视化
 ✓ 适用于商业用途的二进制许可证（无 GPL 义务）
 ✓ 以及更多优化嵌入式工作流程的工具

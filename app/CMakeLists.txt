@@ -278,6 +278,7 @@ set(QML_SRC
   qml/Widgets/Dashboard/Plot.qml
   qml/Widgets/Dashboard/Terminal.qml
   qml/Widgets/BigButton.qml
+  qml/Widgets/ProNotice.qml
   qml/Widgets/CircularSlider.qml
   qml/Widgets/JSONDropArea.qml
   qml/Widgets/Pane.qml

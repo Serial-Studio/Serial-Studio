@@ -16,7 +16,6 @@ in kommerziellen und proprietären Umgebungen freigegeben.
 
 Ihre Pro-Funktionen umfassen:
 ✓ MQTT-Integration
-✓ CAN- und Modbus-Dekodierung
 ✓ XY- und 3D-Visualisierung
 ✓ Priorisierter Support
 ✓ Geschäftstaugliche Lizenz

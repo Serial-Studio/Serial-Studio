@@ -75,8 +75,7 @@ MQTT::Client::Client()
   // Disconnect from MQTT server when Serial Studio is deactivated
   connect(&Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged, this, [=] {
-            if (isConnected()
-                && !Licensing::LemonSqueezy::instance().isActivated())
+            if (isConnected() && !SerialStudio::activated())
               closeConnection();
           });
 
@@ -408,7 +407,7 @@ void MQTT::Client::openConnection()
     return;
 
   // Stop if Serial Studio is not activated
-  if (!Licensing::LemonSqueezy::instance().isActivated())
+  if (!SerialStudio::activated())
   {
     Misc::Utilities::showMessageBox(
         tr("MQTT Feature Requires a Commercial License"),
@@ -717,7 +716,7 @@ void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
  */
 void MQTT::Client::publishMessage(const QByteArray &data)
 {
-  if (!Licensing::LemonSqueezy::instance().isActivated())
+  if (!SerialStudio::activated())
     return;
 
   if (isConnected() && isPublisher() && m_topicName.isValid()
@@ -923,7 +922,7 @@ void MQTT::Client::onMessageReceived(const QByteArray &message,
                                      const QMqttTopicName &topic)
 {
   // Stop if Serial Studio is not activated
-  if (!Licensing::LemonSqueezy::instance().isActivated())
+  if (!SerialStudio::activated())
     return;
 
   // Only process if data is not empty

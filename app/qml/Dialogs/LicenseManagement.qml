@@ -239,7 +239,7 @@ Window {
               Label {
                 Layout.fillWidth: true
                 wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                text: qsTr("Paste your license key below to unlock Pro features like MQTT, CAN, Modbus, 3D plotting, and more.")
+                text: qsTr("Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.")
               }
 
               Item {

@@ -67,192 +67,206 @@ Widgets.Pane {
       bottomMargin: -10
     }
 
-    //
-    // Dataset actions panel
-    //
-    Rectangle {
-      z: 2
-      id: header
-      height: layout.implicitHeight + 12
-      color: Cpp_ThemeManager.colors["groupbox_background"]
-      anchors {
-        top: parent.top
-        left: parent.left
-        right: parent.right
+    ColumnLayout {
+      spacing: 0
+      anchors.fill: parent
+
+      //
+      // Pro notice
+      //
+      Widgets.ProNotice {
+        Layout.margins: -1
+        Layout.bottomMargin: 0
+        Layout.fillWidth: true
+        closeButtonEnabled: false
+        titleText: qsTr("Pro features detected in this project.")
+        activationFlag: Cpp_JSON_ProjectModel.containsCommercialFeatures
+        subtitleText: qsTr("Fallback widgets will be used. Buy a license to unlock full functionality.")
       }
 
       //
-      // Buttons
-      //
-      RowLayout {
-        id: layout
-        spacing: 4
-
-        anchors {
-          margins: 8
-          left: parent.left
-          right: parent.right
-          verticalCenter: parent.verticalCenter
-        }
-
-        //
-        // Add plot
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          text: qsTr("Plot")
-          toolbarButton: false
-          Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/rcc/icons/project-editor/actions/plot.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetPlot
-          onClicked: {
-            const option = SerialStudio.DatasetPlot
-            const value = Cpp_JSON_ProjectModel.datasetOptions & option
-            Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-          }
-        }
-
-        //
-        // Add FFT plot
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          toolbarButton: false
-          text: qsTr("FFT Plot")
-          Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/rcc/icons/project-editor/actions/fft.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetFFT
-          onClicked: {
-            const option = SerialStudio.DatasetFFT
-            const value = Cpp_JSON_ProjectModel.datasetOptions & option
-            Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-          }
-        }
-
-        //
-        // Add bar
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          toolbarButton: false
-          text: qsTr("Bar/Level")
-          Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
-          icon.source: "qrc:/rcc/icons/project-editor/actions/bar.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetBar
-          onClicked: {
-            const option = SerialStudio.DatasetBar
-            const value = Cpp_JSON_ProjectModel.datasetOptions & option
-            Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-          }
-        }
-
-        //
-        // Add gauge
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          text: qsTr("Gauge")
-          toolbarButton: false
-          Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
-          icon.source: "qrc:/rcc/icons/project-editor/actions/gauge.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetGauge
-          onClicked: {
-            const option = SerialStudio.DatasetGauge
-            const value = Cpp_JSON_ProjectModel.datasetOptions & option
-            Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-          }
-        }
-
-        //
-        // Add compass
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          toolbarButton: false
-          text: qsTr("Compass")
-          Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
-          icon.source: "qrc:/rcc/icons/project-editor/actions/compass.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetCompass
-          onClicked: {
-            const option = SerialStudio.DatasetCompass
-            const value = Cpp_JSON_ProjectModel.datasetOptions & option
-            Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-          }
-        }
-
-        //
-        // Add LED
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          text: qsTr("LED")
-          toolbarButton: false
-          Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetLED
-          onClicked: {
-            const option = SerialStudio.DatasetLED
-            const value = Cpp_JSON_ProjectModel.datasetOptions & option
-            Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-          }
-        }
-
-        //
-        // Spacer
-        //
-        Item {
-          Layout.fillWidth: true
-        }
-
-        //
-        // Duplicate dataset
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          toolbarButton: false
-          text: qsTr("Duplicate")
-          Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
-          onClicked: Cpp_JSON_ProjectModel.duplicateCurrentDataset()
-          icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
-        }
-
-        //
-        // Delete dataset
-        //
-        Widgets.BigButton {
-          iconSize: 24
-          text: qsTr("Delete")
-          toolbarButton: false
-          Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
-          onClicked: Cpp_JSON_ProjectModel.deleteCurrentDataset()
-          icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
-        }
-      }
-
-      //
-      // Bottom border
+      // Dataset actions panel
       //
       Rectangle {
-        height: 1
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        color: Cpp_ThemeManager.colors["groupbox_border"]
-      }
-    }
+        z: 2
+        id: header
+        Layout.fillWidth: true
+        height: layout.implicitHeight + 12
+        color: Cpp_ThemeManager.colors["groupbox_background"]
 
-    //
-    // Dataset model editor
-    //
-    TableDelegate {
-      anchors.fill: parent
-      anchors.topMargin: header.height
-      modelPointer: Cpp_JSON_ProjectModel.datasetModel
+        //
+        // Buttons
+        //
+        RowLayout {
+          id: layout
+          spacing: 4
+
+          anchors {
+            margins: 8
+            left: parent.left
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+          }
+
+          //
+          // Add plot
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            text: qsTr("Plot")
+            toolbarButton: false
+            Layout.alignment: Qt.AlignVCenter
+            icon.source: "qrc:/rcc/icons/project-editor/actions/plot.svg"
+            checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetPlot
+            onClicked: {
+              const option = SerialStudio.DatasetPlot
+              const value = Cpp_JSON_ProjectModel.datasetOptions & option
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            }
+          }
+
+          //
+          // Add FFT plot
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("FFT Plot")
+            Layout.alignment: Qt.AlignVCenter
+            icon.source: "qrc:/rcc/icons/project-editor/actions/fft.svg"
+            checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetFFT
+            onClicked: {
+              const option = SerialStudio.DatasetFFT
+              const value = Cpp_JSON_ProjectModel.datasetOptions & option
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            }
+          }
+
+          //
+          // Add bar
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Bar/Level")
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
+            icon.source: "qrc:/rcc/icons/project-editor/actions/bar.svg"
+            checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetBar
+            onClicked: {
+              const option = SerialStudio.DatasetBar
+              const value = Cpp_JSON_ProjectModel.datasetOptions & option
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            }
+          }
+
+          //
+          // Add gauge
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            text: qsTr("Gauge")
+            toolbarButton: false
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
+            icon.source: "qrc:/rcc/icons/project-editor/actions/gauge.svg"
+            checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetGauge
+            onClicked: {
+              const option = SerialStudio.DatasetGauge
+              const value = Cpp_JSON_ProjectModel.datasetOptions & option
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            }
+          }
+
+          //
+          // Add compass
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Compass")
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
+            icon.source: "qrc:/rcc/icons/project-editor/actions/compass.svg"
+            checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetCompass
+            onClicked: {
+              const option = SerialStudio.DatasetCompass
+              const value = Cpp_JSON_ProjectModel.datasetOptions & option
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            }
+          }
+
+          //
+          // Add LED
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            text: qsTr("LED")
+            toolbarButton: false
+            Layout.alignment: Qt.AlignVCenter
+            icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
+            checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetLED
+            onClicked: {
+              const option = SerialStudio.DatasetLED
+              const value = Cpp_JSON_ProjectModel.datasetOptions & option
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            }
+          }
+
+          //
+          // Spacer
+          //
+          Item {
+            Layout.fillWidth: true
+          }
+
+          //
+          // Duplicate dataset
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Duplicate")
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
+            onClicked: Cpp_JSON_ProjectModel.duplicateCurrentDataset()
+            icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
+          }
+
+          //
+          // Delete dataset
+          //
+          Widgets.BigButton {
+            iconSize: 24
+            text: qsTr("Delete")
+            toolbarButton: false
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
+            onClicked: Cpp_JSON_ProjectModel.deleteCurrentDataset()
+            icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
+          }
+        }
+
+        //
+        // Bottom border
+        //
+        Rectangle {
+          height: 1
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+      }
+
+      //
+      // Dataset model editor
+      //
+      TableDelegate {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        modelPointer: Cpp_JSON_ProjectModel.datasetModel
+      }
     }
   }
 }

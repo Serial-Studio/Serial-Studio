@@ -20,7 +20,6 @@ herramientas para comenzar.
 
 La versión Pro incluye funciones adicionales como:
 ✓ Soporte para MQTT
-✓ Decodificación de CAN y Modbus
 ✓ Gráficas XY y visualización 3D
 ✓ Licencia binaria apta para uso comercial (sin obligaciones de GPL)
 ✓ Y más herramientas para mejorar tu flujo de trabajo embebido

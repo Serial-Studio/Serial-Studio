@@ -114,6 +114,9 @@ class ProjectModel : public QObject
   Q_PROPERTY(int datasetCount
              READ datasetCount
              NOTIFY modifiedChanged)
+  Q_PROPERTY(bool containsCommercialFeatures
+             READ containsCommercialFeatures
+             NOTIFY modifiedChanged)
   Q_PROPERTY(quint8 datasetOptions
              READ datasetOptions
              NOTIFY datasetOptionsChanged)
@@ -237,6 +240,7 @@ public:
 
   [[nodiscard]] bool currentGroupIsEditable() const;
   [[nodiscard]] bool currentDatasetIsEditable() const;
+  [[nodiscard]] bool containsCommercialFeatures() const;
 
   [[nodiscard]] int groupCount() const;
   [[nodiscard]] int datasetCount() const;

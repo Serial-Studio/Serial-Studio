@@ -263,6 +263,15 @@ bool UI::Dashboard::axisOptionsWidgetVisible() const
 }
 
 /**
+ * Returns @c true if the frame contains features that should only be enabled
+ * for commercial users with a valid license, such as the 3D plot widget.
+ */
+bool UI::Dashboard::containsCommercialFeatures() const
+{
+  return m_currentFrame.containsCommercialFeatures();
+}
+
+/**
  * @brief Retrieves the current visibility setting for the dashboard's axes.
  * @return Current AxisVisibility setting.
  */
@@ -716,6 +725,7 @@ void UI::Dashboard::resetData(const bool notify)
     Q_EMIT actionCountChanged();
     Q_EMIT widgetCountChanged();
     Q_EMIT widgetVisibilityChanged();
+    Q_EMIT containsCommercialFeaturesChanged();
   }
 }
 
@@ -842,7 +852,7 @@ void UI::Dashboard::updatePlots()
     }
 
     // Shift X-axis points
-    const auto xAxisId = yDataset.xAxisId();
+    auto xAxisId = SerialStudio::activated() ? yDataset.xAxisId() : 0;
     if (m_datasets.contains(xAxisId) && !xAxesMoved.contains(xAxisId))
     {
       xAxesMoved.insert(xAxisId);
@@ -965,12 +975,15 @@ void UI::Dashboard::configureLineSeries()
         m_yAxisData.insert(d->index(), yAxis);
 
         // Register X-axis
-        int xSource = d->xAxisId();
-        if (!m_xAxisData.contains(xSource))
+        if (SerialStudio::activated())
         {
-          PlotDataX xAxis;
-          if (m_datasets.contains(xSource))
-            m_xAxisData.insert(xSource, xAxis);
+          int xSource = d->xAxisId();
+          if (!m_xAxisData.contains(xSource))
+          {
+            PlotDataX xAxis;
+            if (m_datasets.contains(xSource))
+              m_xAxisData.insert(xSource, xAxis);
+          }
         }
       }
     }
@@ -983,7 +996,7 @@ void UI::Dashboard::configureLineSeries()
     const auto &yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
 
     // Add X-axis data & generate a line series with X/Y data
-    if (m_datasets.contains(yDataset.xAxisId()))
+    if (m_datasets.contains(yDataset.xAxisId()) && SerialStudio::activated())
     {
       const auto &xDataset = m_datasets[yDataset.xAxisId()];
       m_xAxisData[xDataset.index()].resize(points() + 1);
@@ -1080,6 +1093,14 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   if (!frame.isValid() || !streamAvailable())
     return;
 
+  // Check if we can use commercial features
+  bool usedCommercialFeatures = m_currentFrame.containsCommercialFeatures();
+#ifdef USE_QT_COMMERCIAL
+  const bool proVersion = SerialStudio::activated();
+#else
+  const bool proVersion = false;
+#endif
+
   // Get previous counts & title
   const auto previousTitle = title();
   const auto previousActionCount = actionCount();
@@ -1092,6 +1113,10 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   // Copy frame data & set update required flag to true
   m_currentFrame = frame;
   m_updateRequired = true;
+
+  // Update UI if frame commercial features changed
+  if (usedCommercialFeatures != m_currentFrame.containsCommercialFeatures())
+    Q_EMIT containsCommercialFeaturesChanged();
 
   // Reset widget structures
   m_widgetGroups.clear();
@@ -1107,18 +1132,40 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   JSON::Group ledPanel;
   for (const auto &group : frame.groups())
   {
+    // Register group widget (if any)
     const auto key = SerialStudio::getDashboardWidget(group);
     if (key != SerialStudio::DashboardNoWidget)
       m_widgetGroups[key].append(group);
 
-    if (key == SerialStudio::DashboardAccelerometer
-        || key == SerialStudio::DashboardGyroscope)
+    // 3D plot detected, fallback to multiplot if not activated
+    if (key == SerialStudio::DashboardPlot3D && !proVersion)
+    {
+      m_widgetGroups.remove(key);
+      auto copy = group;
+      copy.m_title = tr("%1 (Fallback)").arg(group.title());
+      m_widgetGroups[SerialStudio::DashboardMultiPlot].append(copy);
+    }
+
+    // Add extra groups for accelerometers
+    if (key == SerialStudio::DashboardAccelerometer)
+    {
+      m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
+      if (proVersion)
+        m_widgetGroups[SerialStudio::DashboardPlot3D].append(group);
+    }
+
+    // Add a multiplot for gyroscopes
+    if (key == SerialStudio::DashboardGyroscope)
       m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
 
-    for (const auto &dataset : group.datasets())
+    // Parse datasets from group
+    for (auto &dataset : group.datasets())
     {
+      // Register a new dataset
       if (!m_datasets.contains(dataset.index()))
         m_datasets.insert(dataset.index(), dataset);
+
+      // Dataset already registered, update min/max values
       else
       {
         auto prevDataset = m_datasets.value(dataset.index());
@@ -1131,6 +1178,7 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
         m_datasets.insert(dataset.index(), d);
       }
 
+      // Register dataset widgets
       auto keys = SerialStudio::getDashboardWidgets(dataset);
       for (const auto &key : std::as_const(keys))
       {

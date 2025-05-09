@@ -21,10 +21,6 @@
 
 #include "JSON/Dataset.h"
 
-#ifdef USE_QT_COMMERCIAL
-#  include "Licensing/LemonSqueezy.h"
-#endif
-
 /**
  * @brief Reads a value from a QJsonObject based on a key, returning a default
  *        value if the key does not exist.
@@ -276,6 +272,7 @@ bool JSON::Dataset::read(const QJsonObject &object)
     m_fft = SAFE_READ(object, "fft", false).toBool();
     m_led = SAFE_READ(object, "led", false).toBool();
     m_log = SAFE_READ(object, "log", false).toBool();
+    m_xAxisId = SAFE_READ(object, "xAxis", 0).toInt();
     m_alarm = SAFE_READ(object, "alarm", 0).toDouble();
     m_graph = SAFE_READ(object, "graph", false).toBool();
     m_ledHigh = SAFE_READ(object, "ledHigh", 0).toDouble();
@@ -287,12 +284,6 @@ bool JSON::Dataset::read(const QJsonObject &object)
     m_fftSamplingRate = SAFE_READ(object, "fftSamplingRate", 100).toInt();
     if (m_value.isEmpty())
       m_value = QStringLiteral("--.--");
-
-    m_xAxisId = 0;
-#ifdef USE_QT_COMMERCIAL
-    if (Licensing::LemonSqueezy::instance().isActivated())
-      m_xAxisId = SAFE_READ(object, "xAxis", 0).toInt();
-#endif
 
     return true;
   }
