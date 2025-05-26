@@ -24,8 +24,6 @@ import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import Qt5Compat.GraphicalEffects
-
 Item {
   id: root
 
