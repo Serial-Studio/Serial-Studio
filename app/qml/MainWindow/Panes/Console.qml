@@ -86,11 +86,8 @@ Widgets.Pane {
 
     Dashboard.Terminal {
       id: terminal
+      minimal: false
       anchors.fill: parent
-      anchors.topMargin: 16
-      anchors.leftMargin: 9
-      anchors.rightMargin: 9
-      anchors.bottomMargin: 9
     }
   }
 }

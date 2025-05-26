@@ -72,20 +72,21 @@ typedef enum
 // clang-format off
 typedef enum
 {
-  kDatasetView_Title,            /**< Represents the dataset title item. */
-  kDatasetView_Index,            /**< Represents the dataset frame index item. */
-  kDatasetView_Units,            /**< Represents the dataset units item. */
-  kDatasetView_Widget,           /**< Represents the dataset widget item. */
-  kDatasetView_FFT,              /**< Represents the FFT plot checkbox item. */
-  kDatasetView_LED,              /**< Represents the LED panel checkbox item. */
-  kDatasetView_LED_High,         /**< Represents the LED high (on) value item. */
-  kDatasetView_Plot,             /**< Represents the dataset plot mode item. */
-  kDatasetView_Min,              /**< Represents the dataset minimum value item. */
-  kDatasetView_Max,              /**< Represents the dataset maximum value item. */
-  kDatasetView_Alarm,            /**< Represents the dataset alarm value item. */
-  kDatasetView_FFT_Samples,      /**< Represents the FFT window size item. */
-  kDatasetView_FFT_SamplingRate, /**< Represents the FFT sampling rate item. */
-  kDatasetView_xAxis             /**< Represents the plot X axis item. */
+  kDatasetView_Title,            /**< Dataset title item. */
+  kDatasetView_Index,            /**< Dataset frame index item. */
+  kDatasetView_Units,            /**< Dataset units item. */
+  kDatasetView_Widget,           /**< Dataset widget item. */
+  kDatasetView_FFT,              /**< FFT plot checkbox item. */
+  kDatasetView_LED,              /**< LED panel checkbox item. */
+  kDatasetView_LED_High,         /**< LED high (on) value item. */
+  kDatasetView_Plot,             /**< Dataset plot mode item. */
+  kDatasetView_Min,              /**< Dataset minimum value item. */
+  kDatasetView_Max,              /**< Dataset maximum value item. */
+  kDatasetView_Alarm,            /**< Dataset alarm value item. */
+  kDatasetView_FFT_Samples,      /**< FFT window size item. */
+  kDatasetView_FFT_SamplingRate, /**< FFT sampling rate item. */
+  kDatasetView_xAxis,            /**< Plot X axis item. */
+  kDatasetView_Overview          /**< Display in Overview workspace. */
 } DatasetItem;
 // clang-format on
 
@@ -814,7 +815,7 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
 
   // Create group array
   QJsonArray groupArray;
-  for (const auto &group : m_groups)
+  for (const auto &group : std::as_const(m_groups))
     groupArray.append(group.serialize());
 
   // Add groups array to JSON
@@ -822,7 +823,7 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
 
   // Create actions array
   QJsonArray actionsArray;
-  for (const auto &action : m_actions)
+  for (const auto &action : std::as_const(m_actions))
     actionsArray.append(action.serialize());
 
   // Insert actions array to JSON
@@ -831,6 +832,9 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
   // Write JSON data to file
   file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
   file.close();
+
+  // Ask user to switch to project mode
+  enableProjectMode();
 
   // Load JSON file to Serial Studio
   openJsonFile(file.fileName());
@@ -1095,6 +1099,30 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   Q_EMIT gpsApiKeysChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
+}
+
+/**
+ * @brief Ensures Serial Studio is in Project File Mode.
+ *
+ * Prompts the user to switch to Project File Mode if the current operation
+ * mode is different.
+ */
+void JSON::ProjectModel::enableProjectMode()
+{
+  const auto opMode = JSON::FrameBuilder::instance().operationMode();
+  if (opMode != SerialStudio::ProjectFile)
+  {
+    auto answ = Misc::Utilities::showMessageBox(
+        tr("Switch Serial Studio to Project Mode?"),
+        tr("This operation mode is required to load and display dashboards "
+           "from project files."),
+        QMessageBox::Question, qApp->applicationDisplayName(),
+        QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+    if (answ == QMessageBox::Yes)
+      JSON::FrameBuilder::instance().setOperationMode(
+          SerialStudio::ProjectFile);
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -2123,6 +2151,8 @@ void JSON::ProjectModel::buildProjectModel()
   title->setData(kProjectView_Title, ParameterType);
   title->setData(tr("Untitled Project"), PlaceholderValue);
   title->setData(tr("Project name/description"), ParameterDescription);
+  title->setData("qrc:/rcc/icons/project-editor/model/title.svg",
+                 ParameterIcon);
   m_projectModel->appendRow(title);
 
   // Add decoding
@@ -2135,6 +2165,8 @@ void JSON::ProjectModel::buildProjectModel()
   decoding->setData(kProjectView_FrameDecoder, ParameterType);
   decoding->setData(tr("Input data format for frame parser"),
                     ParameterDescription);
+  decoding->setData("qrc:/rcc/icons/project-editor/model/data-conversion.svg",
+                    ParameterIcon);
   m_projectModel->appendRow(decoding);
 
   // Add frame detection method
@@ -2148,6 +2180,8 @@ void JSON::ProjectModel::buildProjectModel()
   frameDetection->setData(kProjectView_FrameDetection, ParameterType);
   frameDetection->setData(tr("Strategy used for identifying frame data"),
                           ParameterDescription);
+  frameDetection->setData(
+      "qrc:/rcc/icons/project-editor/model/frame-detection.svg", ParameterIcon);
   m_projectModel->appendRow(frameDetection);
 
   // Add frame start sequence
@@ -2163,6 +2197,9 @@ void JSON::ProjectModel::buildProjectModel()
     frameStart->setData(QStringLiteral("/*"), PlaceholderValue);
     frameStart->setData(tr("String marking the start of a frame"),
                         ParameterDescription);
+    frameStart->setData(
+        "qrc:/rcc/icons/project-editor/model/start-delimiter.svg",
+        ParameterIcon);
     m_projectModel->appendRow(frameStart);
   }
 
@@ -2179,6 +2216,8 @@ void JSON::ProjectModel::buildProjectModel()
     frameEnd->setData(QStringLiteral("*/"), PlaceholderValue);
     frameEnd->setData(tr("String marking the end of a frame"),
                       ParameterDescription);
+    frameEnd->setData("qrc:/rcc/icons/project-editor/model/end-delimiter.svg",
+                      ParameterIcon);
     m_projectModel->appendRow(frameEnd);
   }
 
@@ -2192,6 +2231,8 @@ void JSON::ProjectModel::buildProjectModel()
   thunderforest->setData(tr("None"), PlaceholderValue);
   thunderforest->setData(tr("Required for Thunderforest maps"),
                          ParameterDescription);
+  thunderforest->setData("qrc:/rcc/icons/project-editor/model/api-key.svg",
+                         ParameterIcon);
   m_projectModel->appendRow(thunderforest);
 
   // Add MapTiler API Key
@@ -2203,6 +2244,8 @@ void JSON::ProjectModel::buildProjectModel()
   mapTiler->setData(kProjectView_MapTilerApiKey, ParameterType);
   mapTiler->setData(tr("None"), PlaceholderValue);
   mapTiler->setData(tr("Required for satellite maps"), ParameterDescription);
+  mapTiler->setData("qrc:/rcc/icons/project-editor/model/api-key.svg",
+                    ParameterIcon);
   m_projectModel->appendRow(mapTiler);
 
   // Handle edits
@@ -2249,6 +2292,8 @@ void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
   title->setData(kGroupView_Title, ParameterType);
   title->setData(tr("Untitled Group"), PlaceholderValue);
   title->setData(tr("Name or description of the group"), ParameterDescription);
+  title->setData("qrc:/rcc/icons/project-editor/model/title.svg",
+                 ParameterIcon);
   m_groupModel->appendRow(title);
 
   // Get appropiate widget index for current group
@@ -2277,6 +2322,8 @@ void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
   widget->setData(tr("Widget"), ParameterName);
   widget->setData(kGroupView_Widget, ParameterType);
   widget->setData(tr("Group display widget (optional)"), ParameterDescription);
+  widget->setData("qrc:/rcc/icons/project-editor/model/widget.svg",
+                  ParameterIcon);
   m_groupModel->appendRow(widget);
 
   // Handle edits
@@ -2309,6 +2356,8 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   title->setData(kActionView_Title, ParameterType);
   title->setData(tr("Untitled Action"), PlaceholderValue);
   title->setData(tr("Name or description of the action"), ParameterDescription);
+  title->setData("qrc:/rcc/icons/project-editor/model/title.svg",
+                 ParameterIcon);
   m_actionModel->appendRow(title);
 
   // Add action icon
@@ -2320,6 +2369,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   icon->setData(kActionView_Icon, ParameterType);
   icon->setData(tr("Default Icon"), PlaceholderValue);
   icon->setData(tr("Icon to display in the dashboard"), ParameterDescription);
+  icon->setData("qrc:/rcc/icons/project-editor/model/icon.svg", ParameterIcon);
   m_actionModel->appendRow(icon);
 
   // Add binary selector checkbox
@@ -2332,6 +2382,8 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   binaryData->setData(0, PlaceholderValue);
   binaryData->setData(tr("Send binary data when the action is triggered."),
                       ParameterDescription);
+  binaryData->setData("qrc:/rcc/icons/project-editor/model/binary-data.svg",
+                      ParameterIcon);
   m_actionModel->appendRow(binaryData);
 
   // Add binary action data
@@ -2346,6 +2398,8 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
     data->setData(tr("Command"), PlaceholderValue);
     data->setData(tr("Data to transmit when the action is triggered."),
                   ParameterDescription);
+    data->setData("qrc:/rcc/icons/project-editor/model/tx-data.svg",
+                  ParameterIcon);
     m_actionModel->appendRow(data);
   }
 
@@ -2361,6 +2415,8 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
     data->setData(tr("Command"), PlaceholderValue);
     data->setData(tr("Data to transmit when the action is triggered."),
                   ParameterDescription);
+    data->setData("qrc:/rcc/icons/project-editor/model/tx-data.svg",
+                  ParameterIcon);
     m_actionModel->appendRow(data);
 
     // Get appropiate end of line index for current action
@@ -2389,6 +2445,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
     eol->setData(tr("EOL Sequence"), ParameterName);
     eol->setData(kActionView_EOL, ParameterType);
     eol->setData(tr("End-of-line (EOL) sequence to use"), ParameterDescription);
+    eol->setData("qrc:/rcc/icons/project-editor/model/eol.svg", ParameterIcon);
     m_actionModel->appendRow(eol);
   }
 
@@ -2452,6 +2509,8 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   title->setData(tr("Untitled Dataset"), PlaceholderValue);
   title->setData(tr("Name or description of the dataset"),
                  ParameterDescription);
+  title->setData("qrc:/rcc/icons/project-editor/model/title.svg",
+                 ParameterIcon);
   m_datasetModel->appendRow(title);
 
   // Add dataset index
@@ -2463,6 +2522,8 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   index->setData(kDatasetView_Index, ParameterType);
   index->setData(nextDatasetIndex(), PlaceholderValue);
   index->setData(tr("Position in the frame"), ParameterDescription);
+  index->setData("qrc:/rcc/icons/project-editor/model/index.svg",
+                 ParameterIcon);
   m_datasetModel->appendRow(index);
 
   // Add units
@@ -2474,7 +2535,26 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   units->setData(kDatasetView_Units, ParameterType);
   units->setData(tr("Volts, Amps, etc."), PlaceholderValue);
   units->setData(tr("Unit of measurement (optional)"), ParameterDescription);
+  units->setData("qrc:/rcc/icons/project-editor/model/units.svg",
+                 ParameterIcon);
   m_datasetModel->appendRow(units);
+
+  // Add show in overview method
+  bool hasWidget = showFFTOptions | showMinMax;
+  if (hasWidget)
+  {
+    auto overview = new QStandardItem();
+    overview->setEditable(true);
+    overview->setData(CheckBox, WidgetType);
+    overview->setData(tr("Overview"), ParameterName);
+    overview->setData(dataset.displayInOverview(), EditableValue);
+    overview->setData(kDatasetView_Overview, ParameterType);
+    overview->setData(tr("Include widget in overview dashboard"),
+                      ParameterDescription);
+    overview->setData("qrc:/rcc/icons/project-editor/model/overview.svg",
+                      ParameterIcon);
+    m_datasetModel->appendRow(overview);
+  }
 
   // Add widget combobox item
   if (showWidget)
@@ -2505,6 +2585,8 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     widget->setData(tr("Widget"), ParameterName);
     widget->setData(kDatasetView_Widget, ParameterType);
     widget->setData(tr("Display widget (optional)"), ParameterDescription);
+    widget->setData("qrc:/rcc/icons/project-editor/model/widget.svg",
+                    ParameterIcon);
     m_datasetModel->appendRow(widget);
   }
 
@@ -2535,6 +2617,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   plot->setData(tr("Oscilloscope Plot"), ParameterName);
   plot->setData(kDatasetView_Plot, ParameterType);
   plot->setData(tr("Plot data in real-time"), ParameterDescription);
+  plot->setData("qrc:/rcc/icons/project-editor/model/plot.svg", ParameterIcon);
   m_datasetModel->appendRow(plot);
 
   // Add FFT checkbox
@@ -2546,6 +2629,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   fft->setData(kDatasetView_FFT, ParameterType);
   fft->setData(0, PlaceholderValue);
   fft->setData(tr("Plot frequency-domain data"), ParameterDescription);
+  fft->setData("qrc:/rcc/icons/project-editor/model/fft.svg", ParameterIcon);
   m_datasetModel->appendRow(fft);
 
   // Add LED panel checkbox
@@ -2557,6 +2641,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   led->setData(kDatasetView_LED, ParameterType);
   led->setData(0, PlaceholderValue);
   led->setData(tr("Quick status monitoring"), ParameterDescription);
+  led->setData("qrc:/rcc/icons/project-editor/model/led.svg", ParameterIcon);
   m_datasetModel->appendRow(led);
 
   // Add X-axis selector
@@ -2589,6 +2674,8 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     xAxis->setData(kDatasetView_xAxis, ParameterType);
     xAxis->setData(tr("X-Axis Source"), ParameterName);
     xAxis->setData(tr("Data series for the X-Axis"), ParameterDescription);
+    xAxis->setData("qrc:/rcc/icons/project-editor/model/x-axis.svg",
+                   ParameterIcon);
     m_datasetModel->appendRow(xAxis);
   }
 
@@ -2605,6 +2692,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     min->setData(0, PlaceholderValue);
     min->setData(tr("Required for range widgets, optional for plots"),
                  ParameterDescription);
+    min->setData("qrc:/rcc/icons/project-editor/model/min.svg", ParameterIcon);
     m_datasetModel->appendRow(min);
 
     // Add maximum value
@@ -2617,6 +2705,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     max->setData(0, PlaceholderValue);
     max->setData(tr("Required for range widgets, optional for plots"),
                  ParameterDescription);
+    max->setData("qrc:/rcc/icons/project-editor/model/max.svg", ParameterIcon);
     m_datasetModel->appendRow(max);
   }
 
@@ -2632,6 +2721,8 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     alarm->setData(0, PlaceholderValue);
     alarm->setData(tr("Triggers alarm in bar widgets and LED panels"),
                    ParameterDescription);
+    alarm->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
+                   ParameterIcon);
     m_datasetModel->appendRow(alarm);
   }
 
@@ -2653,6 +2744,8 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     fftWindow->setData(tr("FFT Window Size"), ParameterName);
     fftWindow->setData(kDatasetView_FFT_Samples, ParameterType);
     fftWindow->setData(tr("Samples for FFT calculation"), ParameterDescription);
+    fftWindow->setData("qrc:/rcc/icons/project-editor/model/fft-samples.svg",
+                       ParameterIcon);
     m_datasetModel->appendRow(fftWindow);
 
     // Add FFT sampling rate
@@ -2665,6 +2758,9 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     fftSamplingRate->setData(kDatasetView_FFT_SamplingRate, ParameterType);
     fftSamplingRate->setData(tr("Sampling rate (Hz) for FFT calculation"),
                              ParameterDescription);
+    fftSamplingRate->setData(
+        "qrc:/rcc/icons/project-editor/model/fft-sampling-rate.svg",
+        ParameterIcon);
     m_datasetModel->appendRow(fftSamplingRate);
   }
 
@@ -2679,6 +2775,8 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     ledHigh->setData(kDatasetView_LED_High, ParameterType);
     ledHigh->setData(0, PlaceholderValue);
     ledHigh->setData(tr("Threshold for LED on"), ParameterDescription);
+    ledHigh->setData("qrc:/rcc/icons/project-editor/model/led-high.svg",
+                     ParameterIcon);
     m_datasetModel->appendRow(ledHigh);
   }
 
@@ -3141,6 +3239,9 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
       break;
     case kDatasetView_LED_High:
       m_selectedDataset.m_ledHigh = value.toDouble();
+      break;
+    case kDatasetView_Overview:
+      m_selectedDataset.m_displayInOverview = value.toBool();
       break;
     case kDatasetView_Plot:
       m_selectedDataset.m_graph = plotOptions.at(value.toInt()).first;

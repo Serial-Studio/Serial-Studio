@@ -142,7 +142,7 @@ bool JSON::Frame::read(const QJsonObject &object)
     // Generate groups & datasets from data frame
     for (auto i = 0; i < groups.count(); ++i)
     {
-      Group group;
+      Group group(i);
       if (group.read(groups.at(i).toObject()))
         m_groups.append(group);
     }

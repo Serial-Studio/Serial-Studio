@@ -53,6 +53,7 @@ Widgets.SmartWindow {
   onVisibleChanged: {
     if (visible) {
       Cpp_NativeWindow.addWindow(root)
+      Cpp_JSON_ProjectModel.enableProjectMode()
       Cpp_JSON_ProjectModel.openJsonFile(Cpp_JSON_FrameBuilder.jsonMapFilepath)
     }
 

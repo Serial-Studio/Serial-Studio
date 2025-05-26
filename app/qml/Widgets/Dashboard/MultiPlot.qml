@@ -33,8 +33,33 @@ Item {
   //
   // Widget data inputs
   //
-  property MultiPlotModel model: MultiPlotModel{}
-  property color color: Cpp_ThemeManager.colors["highlight"]
+  required property color color
+  required property MultiPlotModel model
+  required property MiniWindow windowRoot
+
+  //
+  // Window flags
+  //
+  property bool hasToolbar: true
+
+  //
+  // Custom properties
+  //
+  property bool running: true
+  property bool interpolate: true
+  property bool showLegends: true
+
+  //
+  // Enable/disable features depending on window size
+  //
+  onWidthChanged: updateWidgetOptions()
+  onHeightChanged: updateWidgetOptions()
+  function updateWidgetOptions() {
+    root.showLegends = (root.width >= 256)
+    plot.yLabelVisible = (root.width >= 196)
+    plot.xLabelVisible = (root.height >= (196 * 2/3))
+    root.hasToolbar = (root.width >= toolbar.implicitWidth)
+  }
 
   //
   // Update widget at 24 Hz
@@ -43,7 +68,7 @@ Item {
     target: Cpp_Misc_TimerEvents
 
     function onTimeout24Hz() {
-      if (root.visible) {
+      if (root.visible && root.running) {
         const count = plot.graph.seriesList.length
         for (let i = 0; i < count; ++i)
           root.model.draw(plot.graph.seriesList[i], i)
@@ -52,18 +77,147 @@ Item {
   }
 
   //
+  // Add toolbar
+  //
+  RowLayout {
+    id: toolbar
+
+    spacing: 4
+    visible: root.hasToolbar
+    height: root.hasToolbar ? 48 : 0
+
+    anchors {
+      leftMargin: 8
+      top: parent.top
+      left: parent.left
+      right: parent.right
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: root.interpolate
+      onClicked: root.interpolate = !root.interpolate
+      icon.source: root.interpolate?
+                     "qrc:/rcc/icons/dashboard-buttons/interpolate-on.svg" :
+                     "qrc:/rcc/icons/dashboard-buttons/interpolate-off.svg"
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: root.showLegends
+      onClicked: root.showLegends = !root.showLegends
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/labels.svg"
+    }
+
+    Rectangle {
+      implicitWidth: 1
+      implicitHeight: 24
+      color: Cpp_ThemeManager.colors["widget_border"]
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: plot.xLabelVisible
+      onClicked: plot.xLabelVisible = !plot.xLabelVisible
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/x.svg"
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: plot.yLabelVisible
+      onClicked: plot.yLabelVisible = !plot.yLabelVisible
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/y.svg"
+    }
+
+    Rectangle {
+      implicitWidth: 1
+      implicitHeight: 24
+      color: Cpp_ThemeManager.colors["widget_border"]
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: plot.showCrosshairs
+      onClicked: plot.showCrosshairs = !plot.showCrosshairs
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/crosshair.svg"
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      checked: !root.running
+      icon.color: "transparent"
+      onClicked: root.running = !root.running
+      icon.source: root.running?
+                     "qrc:/rcc/icons/dashboard-buttons/pause.svg" :
+                     "qrc:/rcc/icons/dashboard-buttons/resume.svg"
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      opacity: enabled ? 1 : 0.5
+      enabled: plot.xAxis.zoom !== 1 || plot.yAxis.zoom !== 1
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/return.svg"
+      onClicked: {
+        plot.xAxis.pan = 0
+        plot.yAxis.pan = 0
+        plot.xAxis.zoom = 1
+        plot.yAxis.zoom = 1
+      }
+    }
+
+    Item {
+      Layout.fillWidth: true
+    }
+  }
+
+  //
   // Plot + Legends
   //
   RowLayout {
     spacing: 4
-    anchors.margins: 8
-    anchors.fill: parent
+
+    anchors {
+      margins: 8
+      left: parent.left
+      right: parent.right
+      top: toolbar.bottom
+      bottom: parent.bottom
+    }
 
     //
     // Plot widget
     //
     PlotWidget {
       id: plot
+      opacity: windowRoot.focused ? 1 : 0.8
+
       xMin: root.model.minX
       xMax: root.model.maxX
       yMin: root.model.minY
@@ -75,7 +229,6 @@ Item {
       curveColors: root.model.colors
       xAxis.tickInterval: root.model.xTickInterval
       yAxis.tickInterval: root.model.yTickInterval
-      showCrosshairs: Cpp_UI_Dashboard.showCrosshairs
 
       //
       // Register curves
@@ -92,8 +245,9 @@ Item {
     // Legends widget
     //
     Item {
+      opacity: plot.opacity
       Layout.fillHeight: true
-      visible: Cpp_UI_Dashboard.showLegends
+      visible: root.showLegends
       implicitWidth: _legends.implicitWidth + 8
 
       Rectangle {

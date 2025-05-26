@@ -26,14 +26,17 @@ import QtQuick.Controls
 
 import SerialStudio
 
+import "../"
+
 Item {
   id: root
 
   //
   // Widget data inputs
   //
-  property LEDPanelModel model
-  property color color: "transparent"
+  required property color color
+  required property LEDPanelModel model
+  required property MiniWindow windowRoot
 
   //
   // Create scrollable grid view with LED states

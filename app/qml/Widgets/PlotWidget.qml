@@ -41,23 +41,16 @@ Item {
   property alias yMax: _axisY.max
   property alias yLabel: _yLabel.text
   property alias xLabel: _xLabel.text
+  property bool mouseAreaEnabled: true
+  property alias plotArea: _graph.plotArea
   property alias curveColors: _theme.seriesColors
 
   //
-  // Enable or disable showing crosshairs
+  // Custom properties
   //
+  property bool xLabelVisible: true
+  property bool yLabelVisible: true
   property bool showCrosshairs: false
-
-  //
-  // Automatically focus the mouse area
-  //
-  Component.onCompleted: _overlayMouse.forceActiveFocus()
-
-  //
-  // Set axis visibility based on user options and/or widget size
-  //
-  readonly property bool yLabelVisible: root.height >= 120 && (Cpp_UI_Dashboard.axisVisibility & SerialStudio.AxisY)
-  readonly property bool xLabelVisible: root.height >= 120 && (Cpp_UI_Dashboard.axisVisibility & SerialStudio.AxisX)
 
   //
   // Updates the X and Y value labels to reflect the world coordinates under
@@ -310,6 +303,14 @@ Item {
         _lastY = _overlayMouse.mouseY
       }
 
+      onPressed: (mouse) => {
+        // Abort if not mouse is not in plot
+        if (!containsMouse || !root.mouseAreaEnabled) {
+          mouse.accepted = false
+          return
+        }
+      }
+
       //
       // Handle mouse wheel zoom interaction:
       // - Compute mouse position relative to plot area
@@ -321,8 +322,10 @@ Item {
       //
       onWheel: (wheel) => {
                  // Abort if not mouse is not in plot
-                 if (!containsMouse)
-                 return
+                 if (!containsMouse || !root.mouseAreaEnabled) {
+                   wheel.accepted = false
+                   return
+                 }
 
                  // Obtain X/Y position relative to graph
                  const localX = mouseX - _graph.plotArea.x
@@ -358,8 +361,10 @@ Item {
       //
       onPositionChanged: (mouse) => {
                            // Abort if not mouse is not in plot
-                           if (!containsMouse)
-                           return
+                           if (!containsMouse) {
+                             mouse.accepted = false
+                             return
+                           }
 
                            // Obtain graph size
                            const graphW = _graph.plotArea.width

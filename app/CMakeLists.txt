@@ -115,9 +115,10 @@ set(SOURCES
   src/Misc/Translator.cpp
   src/Misc/ModuleManager.cpp
   src/Misc/TimerEvents.cpp
-  src/UI/AdaptiveGridLayout.cpp
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
+  src/UI/Taskbar.cpp
+  src/UI/WindowManager.cpp
   src/UI/Widgets/LEDPanel.cpp
   src/UI/Widgets/Gauge.cpp
   src/UI/Widgets/Plot.cpp
@@ -161,9 +162,10 @@ set(HEADERS
   src/Misc/ThemeManager.h
   src/Misc/TimerEvents.h
   src/Misc/Translator.h
-  src/UI/AdaptiveGridLayout.h
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h
+  src/UI/Taskbar.h
+  src/UI/WindowManager.h
   src/UI/Widgets/GPS.h
   src/UI/Widgets/MultiPlot.h
   src/UI/Widgets/Gauge.h
@@ -241,16 +243,15 @@ set(QML_SRC
   qml/Dialogs/ExternalConsole.qml
   qml/Dialogs/IconPicker.qml
   qml/Dialogs/FileTransmission.qml
-  qml/MainWindow/Dashboard/ViewOptions.qml
-  qml/MainWindow/Dashboard/ViewOptionsDelegate.qml
-  qml/MainWindow/Dashboard/WidgetDelegate.qml
-  qml/MainWindow/Dashboard/WidgetGrid.qml
-  qml/MainWindow/Dashboard/WidgetModel.qml
+  qml/Dialogs/Settings.qml
+  qml/MainWindow/Panes/Dashboard/Canvas.qml
+  qml/MainWindow/Panes/Dashboard/Taskbar.qml
+  qml/MainWindow/Panes/Dashboard/StartMenu.qml
+  qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml
   qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml
   qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml
   qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml
   qml/MainWindow/Panes/SetupPanes/Hardware.qml
-  qml/MainWindow/Panes/SetupPanes/Settings.qml
   qml/MainWindow/Panes/Console.qml
   qml/MainWindow/Panes/Dashboard.qml
   qml/MainWindow/Panes/Setup.qml
@@ -277,14 +278,18 @@ set(QML_SRC
   qml/Widgets/Dashboard/MultiPlot.qml
   qml/Widgets/Dashboard/Plot.qml
   qml/Widgets/Dashboard/Terminal.qml
-  qml/Widgets/BigButton.qml
   qml/Widgets/ProNotice.qml
   qml/Widgets/CircularSlider.qml
   qml/Widgets/JSONDropArea.qml
   qml/Widgets/Pane.qml
+  qml/Widgets/TaskbarButton.qml
+  qml/Widgets/ToolbarButton.qml
+  qml/Widgets/MiniWindow.qml
   qml/Widgets/PlotWidget.qml
   qml/Widgets/SmartWindow.qml
   qml/Widgets/VisualRange.qml
+  qml/Widgets/MenuButton.qml
+  qml/Widgets/SubMenuCombo.qml
   qml/DialogLoader.qml
   qml/main.qml
 )

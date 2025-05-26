@@ -83,7 +83,7 @@ Item {
       //
       Label {
         opacity: enabled ? 1 : 0.5
-        text: qsTr("Socket type") + ":"
+        text: qsTr("Socket Type") + ":"
         enabled: !Cpp_IO_Manager.isConnected
       } ComboBox {
         id: _typeCombo
@@ -104,7 +104,7 @@ Item {
       Label {
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
-        text: qsTr("Remote address") + ":"
+        text: qsTr("Remote Address") + ":"
       } TextField {
         id: _address
         Layout.fillWidth: true
@@ -159,7 +159,7 @@ Item {
       //
       Label {
         opacity: enabled ? 1 : 0.5
-        text: qsTr("Local port") + ":"
+        text: qsTr("Local Port") + ":"
         enabled: !Cpp_IO_Manager.isConnected
         visible: Cpp_IO_Network.socketTypeIndex === 1
       } TextField {
@@ -190,7 +190,7 @@ Item {
       //
       Label {
         opacity: enabled ? 1 : 0.5
-        text: qsTr("Remote port") + ":"
+        text: qsTr("Remote Port") + ":"
         enabled: !Cpp_IO_Manager.isConnected
         visible: Cpp_IO_Network.socketTypeIndex === 1 && !_udpMulticast.checked
       } TextField {

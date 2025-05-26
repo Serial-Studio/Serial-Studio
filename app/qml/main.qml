@@ -63,6 +63,10 @@ Item {
     id: mainWindow
     onClosing: (close) => app.handleClose(close)
 
+    Dialogs.Settings {
+      id: settingsDialog
+    }
+
     Dialogs.IconPicker {
       id: actionIconPicker
     }
@@ -121,6 +125,7 @@ Item {
   //
   function showAboutDialog()       { aboutDialog.activate() }
   function showExternalConsole()   { externalConsole.activate() }
+  function showSettingsDialog()    { settingsDialog.showNormal() }
   function showProjectEditor()     { projectEditor.displayWindow() }
   function showAcknowledgements()  { acknowledgementsDialog.activate() }
   function showFileTransmission()  { fileTransmissionDialog.activate() }

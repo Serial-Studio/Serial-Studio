@@ -60,9 +60,8 @@ inline QString QSS(const QString &style, const Colors &...colors)
   (colorNames << ... << colors.name());
   QString result = style;
   for (int i = 0; i < colorNames.size(); ++i)
-  {
     result = result.arg(colorNames[i]);
-  }
+
   return result;
 }
 
@@ -95,18 +94,18 @@ class ThemeManager : public QObject
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int theme
-             READ theme
-             WRITE setTheme
-             NOTIFY themeChanged)
+                 READ theme
+                     WRITE setTheme
+                         NOTIFY themeChanged)
   Q_PROPERTY(const QString& themeName
-             READ themeName
-             NOTIFY themeChanged)
+                 READ themeName
+                     NOTIFY themeChanged)
   Q_PROPERTY(const QJsonObject& colors
-             READ colors
-             NOTIFY themeChanged)
+                 READ colors
+                     NOTIFY themeChanged)
   Q_PROPERTY(QStringList availableThemes
-             READ availableThemes
-             CONSTANT)
+                 READ availableThemes
+                     CONSTANT)
   // clang-format on
 
 signals:
@@ -132,11 +131,15 @@ public:
 public slots:
   void setTheme(int index);
 
+private slots:
+  void loadSystemTheme();
+
+protected:
+  bool eventFilter(QObject *watched, QEvent *event) override;
+
 private:
   int m_theme;
   QString m_themeName;
-
-  QSettings m_settings;
   QJsonObject m_colors;
   QJsonObject m_themeData;
 

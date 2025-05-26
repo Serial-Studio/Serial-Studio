@@ -26,11 +26,20 @@ import QtQuick.Controls
 
 import SerialStudio
 
+import "../" as Widgets
+
 Item {
   id: root
   implicitWidth: layout.implicitWidth + 32
   implicitHeight: layout.implicitHeight + 32
   property alias vt100emulation: terminal.vt100emulation
+
+  //
+  // Widget data inputs (unused)
+  //
+  property var color
+  property var model
+  property Widgets.MiniWindow windowRoot
 
   //
   // Super important to for shortcuts
@@ -43,8 +52,11 @@ Item {
   //
   // Custom properties
   //
+  property bool minimal: true
   property int minimumRows: 24
   property int minimumColumns: 80
+  property int minimumHeight: terminal.charHeight * root.minimumRows
+  property int minimumWidth: terminal.charWidth * root.minimumColumns
 
   //
   // Save settings
@@ -107,9 +119,6 @@ Item {
   } Shortcut {
     onActivated: root.copy()
     sequences: [StandardKey.Copy]
-  } Shortcut {
-    onActivated: Cpp_IO_Console.save()
-    sequences: [StandardKey.Save, StandardKey.SaveAs]
   }
 
   //
@@ -173,8 +182,8 @@ Item {
   ColumnLayout {
     id: layout
     spacing: 4
+    anchors.margins: 8
     anchors.fill: parent
-    anchors.topMargin: -6
 
     //
     // Console display
@@ -184,8 +193,8 @@ Item {
       vt100emulation: true
       Layout.fillWidth: true
       Layout.fillHeight: true
-      Layout.minimumHeight: terminal.charHeight * root.minimumRows
-      Layout.minimumWidth: terminal.charWidth * root.minimumColumns
+      Layout.minimumHeight: root.minimal ? 0 : terminal.charHeight * root.minimumRows
+      Layout.minimumWidth: root.minimal ? 0 : terminal.charWidth * root.minimumColumns
 
       Rectangle {
         border.width: 1
@@ -215,6 +224,7 @@ Item {
     //
     RowLayout {
       Layout.fillWidth: true
+      visible: root.width > implicitWidth
 
       Button {
         icon.width: 18
@@ -362,6 +372,7 @@ Item {
     //
     RowLayout {
       Layout.fillWidth: true
+      visible: root.width > implicitWidth
 
       CheckBox {
         id: timestampCheck

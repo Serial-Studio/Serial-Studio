@@ -53,6 +53,7 @@ JSON::Dataset::Dataset(const int groupId, const int datasetId)
   , m_led(false)
   , m_log(false)
   , m_graph(false)
+  , m_displayInOverview(false)
   , m_title("")
   , m_value("")
   , m_units("")
@@ -140,6 +141,16 @@ double JSON::Dataset::alarm() const
 double JSON::Dataset::ledHigh() const
 {
   return m_ledHigh;
+}
+
+/**
+ * Returns whether the dataset widget should appear in the dashboard's
+ * overview workspace. When false, it's shown only in its group-specific
+ * workspace, keeping the overview focused on key widgets and datasets.
+ */
+bool JSON::Dataset::displayInOverview() const
+{
+  return m_displayInOverview;
 }
 
 /**
@@ -254,6 +265,7 @@ QJsonObject JSON::Dataset::serialize() const
   object.insert(QStringLiteral("units"), m_units.simplified());
   object.insert(QStringLiteral("widget"), m_widget.simplified());
   object.insert(QStringLiteral("fftSamplingRate"), m_fftSamplingRate);
+  object.insert(QStringLiteral("overviewDisplay"), m_displayInOverview);
   return object;
 }
 
@@ -282,6 +294,7 @@ bool JSON::Dataset::read(const QJsonObject &object)
     m_units = SAFE_READ(object, "units", "").toString().simplified();
     m_widget = SAFE_READ(object, "widget", "").toString().simplified();
     m_fftSamplingRate = SAFE_READ(object, "fftSamplingRate", 100).toInt();
+    m_displayInOverview = SAFE_READ(object, "overviewDisplay", false).toBool();
     if (m_value.isEmpty())
       m_value = QStringLiteral("--.--");
 

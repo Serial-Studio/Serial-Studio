@@ -209,6 +209,7 @@ public:
     ParameterType = 0x12,
     PlaceholderValue = 0x13,
     ParameterDescription = 0x14,
+    ParameterIcon = 0x15,
 
     WidgetType = 0x20,
     ComboBoxData = 0x21,
@@ -265,12 +266,16 @@ public slots:
   void openJsonFile();
   void openJsonFile(const QString &path);
 
+  void enableProjectMode();
+
   void deleteCurrentGroup();
   void deleteCurrentAction();
   void deleteCurrentDataset();
+
   void duplicateCurrentGroup();
   void duplicateCurrentAction();
   void duplicateCurrentDataset();
+
   void addDataset(const SerialStudio::DatasetOption options);
   void changeDatasetOption(const SerialStudio::DatasetOption option,
                            const bool checked);
@@ -384,20 +389,24 @@ public:
   QHash<int, QByteArray> roleNames() const override
   {
     QHash<int, QByteArray> names;
+
+    // clang-format off
 #define BAL(x) QByteArrayLiteral(x)
+    names.insert(ProjectModel::WidgetType, BAL("widgetType"));
     names.insert(ProjectModel::TreeViewIcon, BAL("treeViewIcon"));
     names.insert(ProjectModel::TreeViewText, BAL("treeViewText"));
-    names.insert(ProjectModel::TreeViewExpanded, BAL("treeViewExpanded"));
-    names.insert(ProjectModel::TreeViewFrameIndex, BAL("treeViewFrameIndex"));
+    names.insert(ProjectModel::ComboBoxData, BAL("comboBoxData"));
+    names.insert(ProjectModel::ParameterIcon, BAL("parameterIcon"));
     names.insert(ProjectModel::ParameterName, BAL("parameterName"));
     names.insert(ProjectModel::EditableValue, BAL("editableValue"));
     names.insert(ProjectModel::ParameterType, BAL("parameterType"));
     names.insert(ProjectModel::PlaceholderValue, BAL("placeholderValue"));
-    names.insert(ProjectModel::ParameterDescription,
-                 BAL("parameterDescription"));
-    names.insert(ProjectModel::WidgetType, BAL("widgetType"));
-    names.insert(ProjectModel::ComboBoxData, BAL("comboBoxData"));
+    names.insert(ProjectModel::TreeViewExpanded, BAL("treeViewExpanded"));
+    names.insert(ProjectModel::TreeViewFrameIndex, BAL("treeViewFrameIndex"));
+    names.insert(ProjectModel::ParameterDescription, BAL("parameterDescription"));
 #undef BAL
+    // clang-format on
+
     return names;
   }
 };

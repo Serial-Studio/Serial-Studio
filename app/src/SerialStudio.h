@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <QtQml>
 #include <QObject>
 #include <QVector>
 
@@ -210,24 +211,6 @@ public:
   Q_ENUM(BusType)
 
   /**
-   * @enum AxisVisibility
-   * @brief Specifies the visibility options for axes in a plot or
-   * visualization.
-   *
-   * The `AxisVisibility` enum defines bitwise flags to control the visibility
-   * of the X and Y axes in a plot or visualization. These flags allow
-   * fine-grained control over which axes are displayed.
-   */
-  enum AxisVisibility
-  {
-    AxisXY = 0b11,        /**< Both X and Y axes are visible. */
-    AxisX = 0b01,         /**< Only the X axis is visible. */
-    AxisY = 0b10,         /**< Only the Y axis is visible. */
-    NoAxesVisible = 0b00, /**< Neither axis is visible. */
-  };
-  Q_ENUM(AxisVisibility)
-
-  /**
    * @brief Enum representing the different widget types available for groups.
    */
   enum GroupWidget
@@ -257,14 +240,18 @@ public:
   /**
    * @brief Enum representing the different widget types available for the
    *        dashboard.
+   *
+   * @warning Window order in dashboard depends on this!
    */
   enum DashboardWidget
   {
+    DashboardTerminal,
     DashboardDataGrid,
     DashboardMultiPlot,
     DashboardAccelerometer,
     DashboardGyroscope,
     DashboardGPS,
+    DashboardPlot3D,
     DashboardFFT,
     DashboardLED,
     DashboardPlot,
@@ -272,7 +259,6 @@ public:
     DashboardGauge,
     DashboardCompass,
     DashboardNoWidget,
-    DashboardPlot3D,
   };
   Q_ENUM(DashboardWidget)
 
@@ -296,6 +282,31 @@ public:
   Q_ENUM(DatasetOption)
   // clang-format on
 
+  /**
+   * @typedef WidgetMap
+   * @brief Defines the data structure used to map dashboard widgets/windows.
+   *
+   * This map uses the window number (UI order) as the key, and its value is a
+   * QPair containing:
+   * - The widget type (SerialStudio::DashboardWidget)
+   * - The index of the widget relative to its type (0-based)
+   *
+   * For example, if there are two FFT plot widgets:
+   * - Both will have unique keys (window numbers)
+   * - Their values will have the same widget type (DashboardFFT) and indices 0
+   *   and 1 to indicate their order among FFT widgets.
+   *
+   * This structure is primarily used to manage and categorize widgets across
+   * the dashboard for UI rendering, tracking, and model building.
+   *
+   * Example type signature:
+   * QMap<int, QPair<SerialStudio::DashboardWidget, int>>
+   * - int: Window number (unique per widget)
+   * - DashboardWidget: Enum/type for widget kind (e.g., FFT, Line Chart)
+   * - int: Widget index relative to its type
+   */
+  typedef QMap<int, QPair<SerialStudio::DashboardWidget, int>> WidgetMap;
+
   //
   // Commercial-related functions
   //
@@ -308,10 +319,10 @@ public:
   // clang-format off
   [[nodiscard]] static bool isGroupWidget(const DashboardWidget widget);
   [[nodiscard]] static bool isDatasetWidget(const DashboardWidget widget);
-  [[nodiscard]] static QString dashboardWidgetIcon(const DashboardWidget w);
   [[nodiscard]] static QString dashboardWidgetTitle(const DashboardWidget w);
   [[nodiscard]] static DashboardWidget getDashboardWidget(const JSON::Group& group);
   [[nodiscard]] static QList<DashboardWidget> getDashboardWidgets(const JSON::Dataset& dataset);
+  Q_INVOKABLE static QString dashboardWidgetIcon(const DashboardWidget w, const bool large = false);
   // clang-format on
 
   //

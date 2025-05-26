@@ -21,6 +21,7 @@
 
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Effects
 import QtQuick.Controls
 
 import SerialStudio
@@ -40,9 +41,10 @@ ColumnLayout {
   // Set width & height for column cells
   //
   property real rowHeight: 30
-  property real valueWidth: Math.min(root.width * 0.3, 256)
-  property real parameterWidth: Math.min(root.width * 0.3, 256)
-  property real descriptionWidth: root.width - parameterWidth - valueWidth - 14
+  property real iconWidth: 30
+  property real valueWidth: Math.min((root.width - iconWidth) * 0.3, 512)
+  property real parameterWidth: Math.min((root.width - iconWidth) * 0.3, 256)
+  property real descriptionWidth: (root.width - iconWidth) - parameterWidth - valueWidth - 26
 
   //
   // Table header
@@ -52,7 +54,17 @@ ColumnLayout {
     Layout.fillWidth: true
     visible: view.rows > 0
     implicitHeight: root.rowHeight
-    color: Cpp_ThemeManager.colors["table_bg_header"]
+    gradient: Gradient {
+      GradientStop {
+        position: 0
+        color: Cpp_ThemeManager.colors["table_bg_header_top"]
+      }
+
+      GradientStop {
+        position: 1
+        color: Cpp_ThemeManager.colors["table_bg_header_bottom"]
+      }
+    }
 
     Rectangle {
       height: 1
@@ -67,8 +79,46 @@ ColumnLayout {
     RowLayout {
       spacing: 0
       anchors.fill: parent
-      anchors.leftMargin: 8
-      anchors.rightMargin: 8
+
+      Item {
+        implicitWidth: root.iconWidth
+        implicitHeight: root.iconWidth
+
+        Canvas {
+          opacity: 0.8
+          anchors.centerIn: parent
+          width: parent.width / 2
+          height: parent.height / 2
+
+          onPaint: {
+            const size = root.iconWidth / 2
+
+            var ctx = getContext("2d");
+            ctx.clearRect(0, 0, size, size);
+
+            ctx.beginPath();
+            ctx.moveTo(size, size);
+            ctx.lineTo(0, size);
+            ctx.lineTo(size, 0);
+            ctx.closePath();
+
+            ctx.fillStyle = Cpp_ThemeManager.colors["table_separator"];
+            ctx.fill();
+          }
+
+          Component.onCompleted: requestPaint()
+        }
+      }
+
+      Rectangle {
+        implicitWidth: 1
+        Layout.fillHeight: true
+        color: Cpp_ThemeManager.colors["table_separator"]
+      }
+
+      Item {
+        implicitWidth: 8
+      }
 
       Label {
         text: qsTr("Parameter")
@@ -83,7 +133,7 @@ ColumnLayout {
       Rectangle {
         width: 1
         Layout.fillHeight: true
-        color: Cpp_ThemeManager.colors["table_separator_header"]
+        color: Cpp_ThemeManager.colors["table_separator"]
       }
 
       Item {
@@ -103,7 +153,7 @@ ColumnLayout {
       Rectangle {
         width: 1
         Layout.fillHeight: true
-        color: Cpp_ThemeManager.colors["table_separator_header"]
+        color: Cpp_ThemeManager.colors["table_separator"]
       }
 
       Item {
@@ -153,8 +203,7 @@ ColumnLayout {
       Rectangle {
         id: background
         anchors.fill: parent
-        color: row % 2 ? Cpp_ThemeManager.colors["table_bg_a"] :
-                         Cpp_ThemeManager.colors["table_bg_b"]
+        color: Cpp_ThemeManager.colors["table_cell_bg"]
 
         Rectangle {
           height: 1
@@ -173,8 +222,69 @@ ColumnLayout {
       RowLayout {
         spacing: 0
         anchors.fill: parent
-        anchors.leftMargin: 8
-        anchors.rightMargin: 8
+
+        //
+        // Parameter icon
+        //
+        Item {
+          implicitHeight: root.rowHeight
+          Layout.alignment: Qt.AlignVCenter
+          Layout.minimumWidth: root.iconWidth
+          Layout.maximumWidth: root.iconWidth
+
+          Rectangle {
+            anchors.fill: parent
+            gradient: Gradient {
+              GradientStop {
+                position: 0
+                color: Cpp_ThemeManager.colors["table_bg_header_top"]
+              }
+
+              GradientStop {
+                position: 1
+                color: Cpp_ThemeManager.colors["table_bg_header_bottom"]
+              }
+            }
+
+            Rectangle {
+              implicitHeight: 1
+              color: Cpp_ThemeManager.colors["table_separator"]
+
+              anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+              }
+            }
+          }
+
+          Image {
+            id: parameterIcon
+            sourceSize.width: 18
+            sourceSize.height: 18
+            visible: root.enabled
+            anchors.centerIn: parent
+            source: model.parameterIcon
+          }
+
+          MultiEffect {
+            saturation: -1.0
+            source: parameterIcon
+            visible: !root.enabled
+            anchors.fill: parameterIcon
+          }
+        }
+
+        //
+        // Separator + Spacer
+        //
+        Rectangle {
+          implicitWidth: 1
+          Layout.fillHeight: true
+          color: Cpp_ThemeManager.colors["table_separator"]
+        } Item {
+          implicitWidth: 8
+        }
 
         //
         // Parameter name

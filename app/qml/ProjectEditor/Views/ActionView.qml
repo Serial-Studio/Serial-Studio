@@ -98,7 +98,7 @@ Widgets.Pane {
         //
         // Change icon
         //
-        Widgets.BigButton {
+        Widgets.ToolbarButton {
           iconSize: 24
           toolbarButton: false
           text: qsTr("Change Icon")
@@ -120,7 +120,7 @@ Widgets.Pane {
         //
         // Duplicate action
         //
-        Widgets.BigButton {
+        Widgets.ToolbarButton {
           iconSize: 24
           toolbarButton: false
           text: qsTr("Duplicate")
@@ -132,7 +132,7 @@ Widgets.Pane {
         //
         // Delete action
         //
-        Widgets.BigButton {
+        Widgets.ToolbarButton {
           iconSize: 24
           text: qsTr("Delete")
           toolbarButton: false

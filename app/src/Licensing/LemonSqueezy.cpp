@@ -566,6 +566,10 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
   auto customerName = meta.value("customer_name").toString();
   auto customerEmail = meta.value("customer_email").toString();
 
+  // Empty JSON
+  if (json.isEmpty())
+    return;
+
   // Non-null error
   if (!error.isNull() && !error.toString().simplified().isEmpty())
   {
@@ -576,6 +580,15 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
     clearLicenseCache();
     return;
   }
+
+  // Validate that minimum things exist
+  bool ok = true;
+  ok &= json.contains("meta");
+  ok &= json.contains("instance");
+  ok &= meta.contains("store_id");
+  ok &= meta.contains("product_id");
+  if (!ok)
+    return;
 
   // Validate that store ID and product ID match
   if (storeId != STORE_ID || productId != PRDCT_ID)

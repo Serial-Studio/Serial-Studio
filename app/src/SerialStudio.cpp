@@ -102,6 +102,7 @@ bool SerialStudio::isGroupWidget(const DashboardWidget widget)
     case DashboardGPS:
     case DashboardLED:
     case DashboardPlot3D:
+    case DashboardTerminal:
       return true;
       break;
     default:
@@ -137,51 +138,58 @@ bool SerialStudio::isDatasetWidget(const DashboardWidget widget)
  * @param w The `DashboardWidget` for which to retrieve the icon.
  * @return A QString representing the path to the widget's icon.
  */
-QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w)
+QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w,
+                                          const bool large)
 {
+  const QString iconPath = large ? "qrc:/rcc/icons/dashboard-large/"
+                                 : "qrc:/rcc/icons/dashboard-small/";
+
   switch (w)
   {
     case DashboardDataGrid:
-      return "qrc:/rcc/icons/dashboard/datagrid.svg";
+      return iconPath + "datagrid.svg";
       break;
     case DashboardMultiPlot:
-      return "qrc:/rcc/icons/dashboard/multiplot.svg";
+      return iconPath + "multiplot.svg";
       break;
     case DashboardAccelerometer:
-      return "qrc:/rcc/icons/dashboard/accelerometer.svg";
+      return iconPath + "accelerometer.svg";
       break;
     case DashboardGyroscope:
-      return "qrc:/rcc/icons/dashboard/gyroscope.svg";
+      return iconPath + "gyroscope.svg";
       break;
     case DashboardGPS:
-      return "qrc:/rcc/icons/dashboard/gps.svg";
+      return iconPath + "gps.svg";
       break;
     case DashboardFFT:
-      return "qrc:/rcc/icons/dashboard/fft.svg";
+      return iconPath + "fft.svg";
       break;
     case DashboardLED:
-      return "qrc:/rcc/icons/dashboard/led.svg";
+      return iconPath + "led.svg";
       break;
     case DashboardPlot:
-      return "qrc:/rcc/icons/dashboard/plot.svg";
+      return iconPath + "plot.svg";
       break;
     case DashboardBar:
-      return "qrc:/rcc/icons/dashboard/bar.svg";
+      return iconPath + "bar.svg";
       break;
     case DashboardGauge:
-      return "qrc:/rcc/icons/dashboard/gauge.svg";
+      return iconPath + "gauge.svg";
       break;
     case DashboardCompass:
-      return "qrc:/rcc/icons/dashboard/compass.svg";
+      return iconPath + "compass.svg";
+      break;
+    case DashboardTerminal:
+      return iconPath + "terminal.svg";
       break;
     case DashboardPlot3D:
-      return "qrc:/rcc/icons/dashboard/plot3d.svg";
+      return iconPath + "plot3d.svg";
       break;
     case DashboardNoWidget:
-      return "";
+      return iconPath + "group.svg";
       break;
     default:
-      return "";
+      return iconPath + "group.svg";
       break;
   }
 }
@@ -224,6 +232,9 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
       break;
     case DashboardGauge:
       return tr("Gauges");
+      break;
+    case DashboardTerminal:
+      return tr("Terminal");
       break;
     case DashboardCompass:
       return tr("Compasses");
@@ -269,6 +280,9 @@ SerialStudio::getDashboardWidget(const JSON::Group &group)
 
   else if (widget == "plot3d")
     return DashboardPlot3D;
+
+  else if (widget == "terminal")
+    return DashboardTerminal;
 
   return DashboardNoWidget;
 }

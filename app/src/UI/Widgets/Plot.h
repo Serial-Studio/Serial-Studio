@@ -22,8 +22,8 @@
 #pragma once
 
 #include <QVector>
+#include <QXYSeries>
 #include <QQuickItem>
-#include <QLineSeries>
 
 #include "JSON/Dataset.h"
 
@@ -65,7 +65,7 @@ public:
   [[nodiscard]] const QString &xLabel() const;
 
 public slots:
-  void draw(QLineSeries *series);
+  void draw(QXYSeries *series);
 
 private slots:
   void updateData();

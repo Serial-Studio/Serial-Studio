@@ -168,6 +168,14 @@ protected:
 
 private:
   int m_index;
+
+  qreal m_minX;
+  qreal m_maxX;
+  qreal m_minY;
+  qreal m_maxY;
+  qreal m_minZ;
+  qreal m_maxZ;
+
   qreal m_zoom;
   qreal m_cameraAngleX;
   qreal m_cameraAngleY;

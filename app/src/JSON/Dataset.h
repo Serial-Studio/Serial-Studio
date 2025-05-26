@@ -82,6 +82,7 @@ public:
   [[nodiscard]] double max() const;
   [[nodiscard]] double alarm() const;
   [[nodiscard]] double ledHigh() const;
+  [[nodiscard]] bool displayInOverview() const;
 
   [[nodiscard]] int xAxisId() const;
   [[nodiscard]] int fftSamples() const;
@@ -108,6 +109,7 @@ private:
   bool m_led;
   bool m_log;
   bool m_graph;
+  bool m_displayInOverview;
 
   QString m_title;
   QString m_value;

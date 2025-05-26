@@ -111,6 +111,8 @@
         <file>icons/buttons/activate.svg</file>
         <file>icons/buttons/apply.svg</file>
         <file>icons/buttons/attach.svg</file>
+        <file>icons/buttons/auto-layout.svg</file>
+        <file>icons/buttons/backward.svg</file>
         <file>icons/buttons/buy.svg</file>
         <file>icons/buttons/cancel.svg</file>
         <file>icons/buttons/center.svg</file>
@@ -120,6 +122,7 @@
         <file>icons/buttons/deactivate.svg</file>
         <file>icons/buttons/disconnected.svg</file>
         <file>icons/buttons/expand.svg</file>
+        <file>icons/buttons/forward.svg</file>
         <file>icons/buttons/info.svg</file>
         <file>icons/buttons/invisible.svg</file>
         <file>icons/buttons/lemonsqueezy.svg</file>
@@ -144,48 +147,69 @@
         <file>icons/code-editor/redo.svg</file>
         <file>icons/code-editor/reload.svg</file>
         <file>icons/code-editor/undo.svg</file>
-        <file>icons/dashboard/buttons/anaglyph.svg</file>
-        <file>icons/dashboard/buttons/center.svg</file>
-        <file>icons/dashboard/buttons/front_view.svg</file>
-        <file>icons/dashboard/buttons/interpolate-off.svg</file>
-        <file>icons/dashboard/buttons/interpolate-on.svg</file>
-        <file>icons/dashboard/buttons/invert.svg</file>
-        <file>icons/dashboard/buttons/left_view.svg</file>
-        <file>icons/dashboard/buttons/orbit.svg</file>
-        <file>icons/dashboard/buttons/orthogonal_view.svg</file>
-        <file>icons/dashboard/buttons/pan.svg</file>
-        <file>icons/dashboard/buttons/save-as.svg</file>
-        <file>icons/dashboard/buttons/top_view.svg</file>
-        <file>icons/dashboard/accelerometer.svg</file>
-        <file>icons/dashboard/bar.svg</file>
-        <file>icons/dashboard/compass.svg</file>
-        <file>icons/dashboard/datagrid.svg</file>
-        <file>icons/dashboard/fft.svg</file>
-        <file>icons/dashboard/gauge.svg</file>
-        <file>icons/dashboard/gps.svg</file>
-        <file>icons/dashboard/group.svg</file>
-        <file>icons/dashboard/gyroscope.svg</file>
-        <file>icons/dashboard/hide-all.svg</file>
-        <file>icons/dashboard/led.svg</file>
-        <file>icons/dashboard/multiplot.svg</file>
-        <file>icons/dashboard/plot.svg</file>
-        <file>icons/dashboard/plot3d.svg</file>
-        <file>icons/dashboard/show-all.svg</file>
-        <file>icons/dashboard/view.svg</file>
+        <file>icons/dashboard-buttons/abscissa.svg</file>
+        <file>icons/dashboard-buttons/anaglyph.svg</file>
+        <file>icons/dashboard-buttons/area.svg</file>
+        <file>icons/dashboard-buttons/center.svg</file>
+        <file>icons/dashboard-buttons/crosshair.svg</file>
+        <file>icons/dashboard-buttons/front_view.svg</file>
+        <file>icons/dashboard-buttons/interpolate-off.svg</file>
+        <file>icons/dashboard-buttons/interpolate-on.svg</file>
+        <file>icons/dashboard-buttons/invert.svg</file>
+        <file>icons/dashboard-buttons/labels.svg</file>
+        <file>icons/dashboard-buttons/left_view.svg</file>
+        <file>icons/dashboard-buttons/orbit.svg</file>
+        <file>icons/dashboard-buttons/orthogonal_view.svg</file>
+        <file>icons/dashboard-buttons/pan.svg</file>
+        <file>icons/dashboard-buttons/pause.svg</file>
+        <file>icons/dashboard-buttons/resume.svg</file>
+        <file>icons/dashboard-buttons/return.svg</file>
+        <file>icons/dashboard-buttons/save-as.svg</file>
+        <file>icons/dashboard-buttons/top_view.svg</file>
+        <file>icons/dashboard-buttons/x.svg</file>
+        <file>icons/dashboard-buttons/y.svg</file>
+        <file>icons/dashboard-large/accelerometer.svg</file>
+        <file>icons/dashboard-large/bar.svg</file>
+        <file>icons/dashboard-large/compass.svg</file>
+        <file>icons/dashboard-large/datagrid.svg</file>
+        <file>icons/dashboard-large/fft.svg</file>
+        <file>icons/dashboard-large/gauge.svg</file>
+        <file>icons/dashboard-large/gps.svg</file>
+        <file>icons/dashboard-large/group.svg</file>
+        <file>icons/dashboard-large/gyroscope.svg</file>
+        <file>icons/dashboard-large/led.svg</file>
+        <file>icons/dashboard-large/multiplot.svg</file>
+        <file>icons/dashboard-large/plot.svg</file>
+        <file>icons/dashboard-large/plot3d.svg</file>
+        <file>icons/dashboard-large/terminal.svg</file>
+        <file>icons/dashboard-small/accelerometer.svg</file>
+        <file>icons/dashboard-small/bar.svg</file>
+        <file>icons/dashboard-small/compass.svg</file>
+        <file>icons/dashboard-small/datagrid.svg</file>
+        <file>icons/dashboard-small/fft.svg</file>
+        <file>icons/dashboard-small/gauge.svg</file>
+        <file>icons/dashboard-small/gps.svg</file>
+        <file>icons/dashboard-small/group.svg</file>
+        <file>icons/dashboard-small/gyroscope.svg</file>
+        <file>icons/dashboard-small/led.svg</file>
+        <file>icons/dashboard-small/multiplot.svg</file>
+        <file>icons/dashboard-small/plot.svg</file>
+        <file>icons/dashboard-small/plot3d.svg</file>
+        <file>icons/dashboard-small/terminal.svg</file>
         <file>icons/licensing/devices.svg</file>
         <file>icons/licensing/email.svg</file>
         <file>icons/licensing/key.svg</file>
         <file>icons/licensing/plan.svg</file>
         <file>icons/licensing/user.svg</file>
         <file>icons/licensing/uuid.svg</file>
-        <file>icons/panes/clear.svg</file>
+        <file>icons/miniwindow/close.svg</file>
+        <file>icons/miniwindow/maximize.svg</file>
+        <file>icons/miniwindow/minimize.svg</file>
+        <file>icons/miniwindow/restore.svg</file>
         <file>icons/panes/console.svg</file>
         <file>icons/panes/dashboard.svg</file>
-        <file>icons/panes/pause.svg</file>
-        <file>icons/panes/resume.svg</file>
-        <file>icons/panes/scale.svg</file>
+        <file>icons/panes/overview.svg</file>
         <file>icons/panes/setup.svg</file>
-        <file>icons/panes/structure.svg</file>
         <file>icons/project-editor/actions/add-bar.svg</file>
         <file>icons/project-editor/actions/add-compass.svg</file>
         <file>icons/project-editor/actions/add-dataset.svg</file>
@@ -202,6 +226,26 @@
         <file>icons/project-editor/actions/gauge.svg</file>
         <file>icons/project-editor/actions/led.svg</file>
         <file>icons/project-editor/actions/plot.svg</file>
+        <file>icons/project-editor/model/alarm.svg</file>
+        <file>icons/project-editor/model/api-key.svg</file>
+        <file>icons/project-editor/model/data-conversion.svg</file>
+        <file>icons/project-editor/model/end-delimiter.svg</file>
+        <file>icons/project-editor/model/fft-samples.svg</file>
+        <file>icons/project-editor/model/fft-sampling-rate.svg</file>
+        <file>icons/project-editor/model/fft.svg</file>
+        <file>icons/project-editor/model/frame-detection.svg</file>
+        <file>icons/project-editor/model/index.svg</file>
+        <file>icons/project-editor/model/led-high.svg</file>
+        <file>icons/project-editor/model/led.svg</file>
+        <file>icons/project-editor/model/max.svg</file>
+        <file>icons/project-editor/model/min.svg</file>
+        <file>icons/project-editor/model/overview.svg</file>
+        <file>icons/project-editor/model/plot.svg</file>
+        <file>icons/project-editor/model/start-delimiter.svg</file>
+        <file>icons/project-editor/model/title.svg</file>
+        <file>icons/project-editor/model/units.svg</file>
+        <file>icons/project-editor/model/widget.svg</file>
+        <file>icons/project-editor/model/x-axis.svg</file>
         <file>icons/project-editor/toolbar/add-accelerometer.svg</file>
         <file>icons/project-editor/toolbar/add-action.svg</file>
         <file>icons/project-editor/toolbar/add-datagrid.svg</file>
@@ -237,11 +281,24 @@
         <file>icons/project-editor/windows/project-setup.svg</file>
         <file>icons/project-editor/windows/project-structure.svg</file>
         <file>icons/project-editor/open.svg</file>
+        <file>icons/start/actions.svg</file>
+        <file>icons/start/adjust.svg</file>
+        <file>icons/start/auto-layout.svg</file>
+        <file>icons/start/clear.svg</file>
+        <file>icons/start/console-log.svg</file>
+        <file>icons/start/console.svg</file>
+        <file>icons/start/csv-log.svg</file>
+        <file>icons/start/disconnect.svg</file>
+        <file>icons/start/external-window.svg</file>
+        <file>icons/start/full-screen.svg</file>
+        <file>icons/start/groups.svg</file>
+        <file>icons/start/help.svg</file>
+        <file>icons/start/normal-screen.svg</file>
+        <file>icons/start/pause.svg</file>
+        <file>icons/start/resume.svg</file>
         <file>icons/toolbar/about.svg</file>
         <file>icons/toolbar/connect.svg</file>
-        <file>icons/toolbar/console.svg</file>
         <file>icons/toolbar/csv.svg</file>
-        <file>icons/toolbar/dashboard.svg</file>
         <file>icons/toolbar/device-setup.svg</file>
         <file>icons/toolbar/disconnect.svg</file>
         <file>icons/toolbar/examples.svg</file>
@@ -250,8 +307,10 @@
         <file>icons/toolbar/mqtt-subscriber.svg</file>
         <file>icons/toolbar/mqtt.svg</file>
         <file>icons/toolbar/project-setup.svg</file>
-        <file>icons/toolbar/structure.svg</file>
+        <file>icons/toolbar/settings.svg</file>
         <file>images/action.svg</file>
+        <file>images/banner.png</file>
+        <file>images/banner@2x.png</file>
         <file>images/buy-qr.svg</file>
         <file>images/code.svg</file>
         <file>images/crosshair.svg</file>
@@ -296,41 +355,13 @@
         <file>messages/pro/Welcome_ZH.txt</file>
         <file>messages/Acknowledgements.txt</file>
         <file>scripts/frame-parser.js</file>
-        <file>styles/breeze-dark.xml</file>
-        <file>styles/breeze-light.xml</file>
-        <file>styles/deep-blue.xml</file>
-        <file>styles/deep-green.xml</file>
-        <file>styles/deep-purple.xml</file>
-        <file>styles/deep-red.xml</file>
-        <file>styles/default.xml</file>
-        <file>styles/dominion.xml</file>
-        <file>styles/macos-dark.xml</file>
-        <file>styles/macos-light.xml</file>
-        <file>styles/orbbyt-dark.xml</file>
-        <file>styles/orbbyt-light.xml</file>
-        <file>styles/outdoor-day.xml</file>
-        <file>styles/outdoor-night.xml</file>
-        <file>styles/pulse.xml</file>
-        <file>styles/resistance.xml</file>
-        <file>styles/yaru-dark.xml</file>
-        <file>styles/yaru-light.xml</file>
-        <file>themes/breeze-dark.json</file>
-        <file>themes/breeze-light.json</file>
-        <file>themes/deep-blue.json</file>
-        <file>themes/deep-green.json</file>
-        <file>themes/deep-purple.json</file>
-        <file>themes/deep-red.json</file>
-        <file>themes/default.json</file>
-        <file>themes/dominion.json</file>
-        <file>themes/macos-dark.json</file>
-        <file>themes/macos-light.json</file>
-        <file>themes/orbbyt-dark.json</file>
-        <file>themes/orbbyt-light.json</file>
-        <file>themes/outdoor-day.json</file>
-        <file>themes/outdoor-night.json</file>
-        <file>themes/pulse.json</file>
-        <file>themes/resistance.json</file>
-        <file>themes/yaru-dark.json</file>
-        <file>themes/yaru-light.json</file>
+        <file>themes/code-editor/dark.xml</file>
+        <file>themes/code-editor/hybrid.json</file>
+        <file>themes/code-editor/light.xml</file>
+        <file>themes/dark.json</file>
+        <file>themes/hybrid.json</file>
+        <file>themes/light.json</file>
+        <file>logo/start@1x.png</file>
+        <file>logo/start@2x.png</file>
     </qresource>
 </RCC>

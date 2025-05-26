@@ -86,6 +86,7 @@ private:
 
   bool m_containsCommercialFeatures;
 
+  friend class UI::Dashboard;
   friend class JSON::FrameBuilder;
 };
 } // namespace JSON

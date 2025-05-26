@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12pt" height="12pt" viewBox="0 0 12 12" version="1.1">
+<g id="surface10368">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(96.078432%,76.078433%,46.27451%);fill-opacity:1;" d="M 4.5 6.75 L 5.25 6.75 L 5.25 11.25 L 4.5 11.25 Z M 6.75 6.75 L 7.5 6.75 L 7.5 11.25 L 6.75 11.25 Z M 6.75 6.75 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(96.862745%,56.078434%,56.078434%);fill-opacity:1;" d="M 3.375 6.375 L 3.375 3 C 3.375 1.550781 4.550781 0.375 6 0.375 C 7.449219 0.375 8.625 1.550781 8.625 3 L 8.625 6.375 Z M 3.375 6.375 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(67.058825%,20.392157%,20.392157%);fill-opacity:1;" d="M 6 0.75 C 7.242188 0.75 8.25 1.757812 8.25 3 L 8.25 6 L 3.75 6 L 3.75 3 C 3.75 1.757812 4.757812 0.75 6 0.75 M 6 0 C 4.351562 0 3 1.351562 3 3 L 3 6.75 L 9 6.75 L 9 3 C 9 1.351562 7.648438 0 6 0 Z M 6 0 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(96.862745%,56.078434%,56.078434%);fill-opacity:1;" d="M 2.25 6 L 9.75 6 L 9.75 6.75 L 2.25 6.75 Z M 2.25 6 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(67.058825%,20.392157%,20.392157%);fill-opacity:1;" d="M 9.75 6 L 2.25 6 L 2.25 6.75 L 9.75 6.75 Z M 9.75 6 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(96.862745%,32.156864%,32.156864%);fill-opacity:1;" d="M 4.5 5.25 L 5.25 5.25 L 5.25 6.75 L 4.5 6.75 Z M 6.75 5.25 L 7.5 5.25 L 7.5 6.75 L 6.75 6.75 Z M 6.75 5.25 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(96.862745%,32.156864%,32.156864%);fill-opacity:1;" d="M 5.25 6 L 4.5 6 L 4.5 4.792969 C 4.507812 4.316406 4.828125 3.617188 5.679688 3.617188 L 5.679688 4.367188 C 5.320312 4.367188 5.257812 4.640625 5.25 4.804688 Z M 7.5 6 L 6.75 6 L 6.75 4.792969 C 6.742188 4.640625 6.679688 4.367188 6.320312 4.367188 L 6.320312 3.617188 C 7.171875 3.617188 7.492188 4.316406 7.5 4.789062 Z M 7.5 6 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;" d="M 6 3 C 5.585938 3 5.25 3.335938 5.25 3.75 C 5.25 4.164062 5.585938 4.5 6 4.5 C 6.414062 4.5 6.75 4.164062 6.75 3.75 C 6.75 3.335938 6.414062 3 6 3 Z M 6 3 "/>
+</g>
+</svg>

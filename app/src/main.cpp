@@ -79,6 +79,9 @@ int main(int argc, char **argv)
   QApplication::setApplicationDisplayName(APP_NAME);
   QApplication::setOrganizationDomain(APP_SUPPORT_URL);
 
+  // Disable native menubar
+  QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
+
   // Windows specific initialization code
 #ifdef Q_OS_WIN
   attachToConsole();

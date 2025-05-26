@@ -26,14 +26,17 @@ import QtQuick.Controls
 
 import SerialStudio
 
+import "../"
+
 Item {
   id: root
 
   //
   // Widget data inputs
   //
-  property DataGridModel model
-  property color color: "transparent"
+  required property color color
+  required property DataGridModel model
+  required property MiniWindow windowRoot
 
   //
   // Responsive design stuff
@@ -49,6 +52,8 @@ Item {
     anchors.topMargin: 8
     anchors.leftMargin: 8
     anchors.bottomMargin: 8
+    interactive: windowRoot.focused
+    opacity: windowRoot.focused ? 1 : 0.8
     contentHeight: Math.max(grid.implicitHeight, height)
 
     ScrollBar.vertical: ScrollBar {
@@ -77,7 +82,7 @@ Item {
           RowLayout {
             id: layout
             spacing: 0
-            anchors.margins: 4
+            anchors.margins: 8
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
@@ -85,48 +90,42 @@ Item {
             Label {
               elide: Qt.ElideRight
               Layout.fillWidth: true
-              text: root.model.titles[index] + ":"
-              Layout.alignment: Qt.AlignVCenter
-              font: Cpp_Misc_CommonFonts.monoFont
-              horizontalAlignment: Label.AlignRight
-              visible: text !== "" && root.unitsVisible
-              color: root.model.alarms[index] ? Cpp_ThemeManager.colors["alarm"] :
-                                                root.model.colors[index]
-
-              Behavior on color {ColorAnimation{}}
-            }
-
-            Item {
-              Layout.fillWidth: true
-              Layout.minimumWidth: 4
-            }
-
-            Label {
-              elide: Qt.ElideRight
-              Layout.fillWidth: true
-              text: root.model.values[index]
-              Layout.alignment: Qt.AlignVCenter
-              font: Cpp_Misc_CommonFonts.monoFont
-              Layout.maximumWidth: layout.width - 8
-              horizontalAlignment: Label.AlignHCenter
-              color: root.unitsVisible ? Cpp_ThemeManager.colors["widget_text"] :
-                                         root.model.colors[index]
-            }
-
-            Item {
-              Layout.fillWidth: true
-              Layout.minimumWidth: 4
-            }
-
-            Label {
-              elide: Qt.ElideRight
-              Layout.fillWidth: true
-              text: root.model.units[index]
-              color: root.model.colors[index]
               Layout.alignment: Qt.AlignVCenter
               font: Cpp_Misc_CommonFonts.monoFont
               horizontalAlignment: Label.AlignLeft
               visible: text !== "" && root.unitsVisible
+              color: root.model.alarms[index] ? Cpp_ThemeManager.colors["alarm"] :
+                                                root.model.colors[index]
+
+              text: {
+                const title = root.model.titles[index]
+                const units = root.model.units[index]
+
+                let str = title
+                if (units.length > 0)
+                  str += " (" + units + ")"
+
+                return str + ":"
+              }
+
+              Behavior on color {ColorAnimation{}}
+            }
+
+
+            Item {
+              Layout.fillWidth: true
+              implicitWidth: 4
+            }
+
+            Label {
+              elide: Qt.ElideRight
+              text: root.model.values[index]
+              Layout.alignment: Qt.AlignVCenter
+              font: Cpp_Misc_CommonFonts.monoFont
+              Layout.maximumWidth: layout.width - 8
+              horizontalAlignment: Label.AlignRight
+              color: root.unitsVisible ? Cpp_ThemeManager.colors["widget_text"] :
+                                         root.model.colors[index]
             }
           }
         }

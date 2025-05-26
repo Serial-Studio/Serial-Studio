@@ -29,14 +29,22 @@ import QtQuick.Controls
 
 import SerialStudio
 
+import "../"
+
 Item {
   id: root
 
   //
   // Widget data inputs
   //
-  property GPSModel model
-  property color color: Cpp_ThemeManager.colors["highlight"]
+  required property color color
+  required property GPSModel model
+  required property MiniWindow windowRoot
+
+  //
+  // Window flags
+  //
+  readonly property bool hasToolbar: true
 
   //
   // Custom properties to control the map from other QML files
@@ -221,6 +229,7 @@ Item {
         PinchHandler {
           id: pinch
           target: null
+          enabled: windowRoot.focused
           grabPermissions: PointerHandler.TakeOverForbidden
           onActiveChanged: if (active) {
                              map.startCentroid = map.toCoordinate(pinch.centroid.position, false)
@@ -241,6 +250,7 @@ Item {
         //
         WheelHandler {
           id: wheel
+          enabled: windowRoot.focused
           // workaround for QTBUG-87646 / QTBUG-112394 / QTBUG-112432:
           // Magic Mouse pretends to be a trackpad but doesn't work with PinchHandler
           // and we don't yet distinguish mice and trackpads on Wayland either
@@ -257,6 +267,7 @@ Item {
         DragHandler {
           id: drag
           target: null
+          enabled: windowRoot.focused
           onTranslationChanged: (delta) => map.pan(-delta.x, -delta.y)
         }
 

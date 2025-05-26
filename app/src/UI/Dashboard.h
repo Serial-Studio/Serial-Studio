@@ -61,22 +61,14 @@ class Dashboard : public QObject
   Q_PROPERTY(QString title READ title NOTIFY widgetCountChanged)
   Q_PROPERTY(bool available READ available NOTIFY widgetCountChanged)
   Q_PROPERTY(int actionCount READ actionCount NOTIFY actionCountChanged)
+  Q_PROPERTY(QVariantList actions READ actions NOTIFY actionCountChanged)
   Q_PROPERTY(int points READ points WRITE setPoints NOTIFY pointsChanged)
-  Q_PROPERTY(QStringList actionIcons READ actionIcons NOTIFY actionCountChanged)
-  Q_PROPERTY(QStringList actionTitles READ actionTitles NOTIFY actionCountChanged)
   Q_PROPERTY(int totalWidgetCount READ totalWidgetCount NOTIFY widgetCountChanged)
   Q_PROPERTY(int precision READ precision WRITE setPrecision NOTIFY precisionChanged)
   Q_PROPERTY(bool pointsWidgetVisible READ pointsWidgetVisible NOTIFY widgetCountChanged)
-  Q_PROPERTY(bool showLegends READ showLegends WRITE setShowLegends NOTIFY showLegendsChanged)
   Q_PROPERTY(bool precisionWidgetVisible READ precisionWidgetVisible NOTIFY widgetCountChanged)
-  Q_PROPERTY(bool axisOptionsWidgetVisible READ axisOptionsWidgetVisible NOTIFY widgetCountChanged)
-  Q_PROPERTY(QStringList availableWidgetIcons READ availableWidgetIcons NOTIFY widgetCountChanged)
-  Q_PROPERTY(QStringList availableWidgetTitles READ availableWidgetTitles NOTIFY widgetCountChanged)
-  Q_PROPERTY(bool showCrosshairs READ showCrosshairs WRITE setShowCrosshairs NOTIFY showCrosshairsChanged)
-  Q_PROPERTY(QList<SerialStudio::DashboardWidget> availableWidgets READ availableWidgets NOTIFY widgetCountChanged)
+  Q_PROPERTY(bool terminalEnabled READ terminalEnabled WRITE setTerminalEnabled NOTIFY terminalEnabledChanged)
   Q_PROPERTY(bool containsCommercialFeatures READ containsCommercialFeatures NOTIFY containsCommercialFeaturesChanged)
-  Q_PROPERTY(bool showAreaUnderPlots READ showAreaUnderPlots WRITE setShowAreaUnderPlots NOTIFY showAreaUnderPlotsChanged)
-  Q_PROPERTY(SerialStudio::AxisVisibility axisVisibility READ axisVisibility WRITE setAxisVisibility NOTIFY axisVisibilityChanged)
   // clang-format on
 
 signals:
@@ -84,13 +76,9 @@ signals:
   void dataReset();
   void pointsChanged();
   void precisionChanged();
-  void showLegendsChanged();
   void actionCountChanged();
   void widgetCountChanged();
-  void showCrosshairsChanged();
-  void axisVisibilityChanged();
-  void widgetVisibilityChanged();
-  void showAreaUnderPlotsChanged();
+  void terminalEnabledChanged();
   void containsCommercialFeaturesChanged();
 
 private:
@@ -106,15 +94,11 @@ public:
                              const qreal multiplier = 0.2);
 
   [[nodiscard]] bool available() const;
-  [[nodiscard]] bool showLegends() const;
-  [[nodiscard]] bool showCrosshairs() const;
   [[nodiscard]] bool streamAvailable() const;
-  [[nodiscard]] bool showAreaUnderPlots() const;
+  [[nodiscard]] bool terminalEnabled() const;
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool precisionWidgetVisible() const;
-  [[nodiscard]] bool axisOptionsWidgetVisible() const;
   [[nodiscard]] bool containsCommercialFeatures() const;
-  [[nodiscard]] SerialStudio::AxisVisibility axisVisibility() const;
 
   [[nodiscard]] int points() const;
   [[nodiscard]] int precision() const;
@@ -125,21 +109,10 @@ public:
   Q_INVOKABLE int relativeIndex(const int widgetIndex);
   Q_INVOKABLE SerialStudio::DashboardWidget widgetType(const int widgetIndex);
   Q_INVOKABLE int widgetCount(const SerialStudio::DashboardWidget widget) const;
-  Q_INVOKABLE QStringList
-  widgetTitles(const SerialStudio::DashboardWidget widget);
-  Q_INVOKABLE QStringList
-  widgetColors(const SerialStudio::DashboardWidget widget);
-  Q_INVOKABLE bool widgetVisible(const SerialStudio::DashboardWidget widget,
-                                 const int index) const;
-
-  [[nodiscard]] const QStringList availableWidgetIcons() const;
-  [[nodiscard]] const QStringList availableWidgetTitles() const;
-  [[nodiscard]] const QList<SerialStudio::DashboardWidget>
-  availableWidgets() const;
 
   [[nodiscard]] const QString &title() const;
-  [[nodiscard]] QStringList actionIcons() const;
-  [[nodiscard]] QStringList actionTitles() const;
+  [[nodiscard]] QVariantList actions() const;
+  [[nodiscard]] const SerialStudio::WidgetMap &widgetMap() const;
 
   // clang-format off
   [[nodiscard]] const QMap<int, JSON::Dataset> &datasets() const;
@@ -148,7 +121,6 @@ public:
   // clang-format on
 
   [[nodiscard]] const JSON::Frame &currentFrame();
-
   [[nodiscard]] const PlotDataY &fftData(const int index) const;
   [[nodiscard]] const LineSeries &plotData(const int index) const;
   [[nodiscard]] const MultiLineSeries &multiplotData(const int index) const;
@@ -161,13 +133,8 @@ public slots:
   void setPoints(const int points);
   void activateAction(const int index);
   void setPrecision(const int precision);
-  void setShowLegends(const bool enabled);
   void resetData(const bool notify = true);
-  void setShowCrosshairs(const bool enabled);
-  void setShowAreaUnderPlots(const bool enabled);
-  void setAxisVisibility(const SerialStudio::AxisVisibility option);
-  void setWidgetVisible(const SerialStudio::DashboardWidget widget,
-                        const int index, const bool visible);
+  void setTerminalEnabled(const bool enabled);
 
 private slots:
   void updatePlots();
@@ -180,11 +147,8 @@ private:
   int m_points;
   int m_precision;
   int m_widgetCount;
-  bool m_showLegends;
   bool m_updateRequired;
-  bool m_showCrosshairs;
-  bool m_showAreaUnderPlots;
-  SerialStudio::AxisVisibility m_axisVisibility;
+  bool m_terminalEnabled;
 
   PlotDataX m_pltXAxis;
   PlotDataX m_multipltXAxis;
@@ -201,9 +165,7 @@ private:
 
   QVector<JSON::Action> m_actions;
   QMap<int, JSON::Dataset> m_datasets;
-  QList<SerialStudio::DashboardWidget> m_availableWidgets;
-  QMap<int, QPair<SerialStudio::DashboardWidget, int>> m_widgetMap;
-  QMap<SerialStudio::DashboardWidget, QVector<bool>> m_widgetVisibility;
+  SerialStudio::WidgetMap m_widgetMap;
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Group>> m_widgetGroups;
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Dataset>> m_widgetDatasets;
 

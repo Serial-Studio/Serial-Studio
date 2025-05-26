@@ -57,9 +57,6 @@ class DashboardWidget : public QQuickItem
   Q_PROPERTY(QColor widgetColor
              READ widgetColor
              NOTIFY widgetColorChanged)
-  Q_PROPERTY(QString widgetIcon
-             READ widgetIcon
-             NOTIFY widgetIndexChanged)
   Q_PROPERTY(QString widgetTitle
              READ widgetTitle
              NOTIFY widgetIndexChanged)
@@ -68,6 +65,9 @@ class DashboardWidget : public QQuickItem
              NOTIFY widgetIndexChanged)
   Q_PROPERTY(QQuickItem* widgetModel
              READ widgetModel
+             NOTIFY widgetIndexChanged)
+  Q_PROPERTY(SerialStudio::DashboardWidget widgetType
+             READ widgetType
              NOTIFY widgetIndexChanged)
   // clang-format on
 
@@ -82,7 +82,6 @@ public:
   [[nodiscard]] int widgetIndex() const;
   [[nodiscard]] int relativeIndex() const;
   [[nodiscard]] QColor widgetColor() const;
-  [[nodiscard]] QString widgetIcon() const;
   [[nodiscard]] QString widgetTitle() const;
   [[nodiscard]] SerialStudio::DashboardWidget widgetType() const;
 

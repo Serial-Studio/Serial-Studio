@@ -40,6 +40,7 @@ Item {
   property alias font: _label.font
   property alias text: _label.text
   property bool toolbarButton: true
+  property alias background: _background
 
   //
   // State properties
@@ -65,6 +66,8 @@ Item {
   // Checked background (toolbar)
   //
   Rectangle {
+    id: _background
+
     radius: 3
     border.width: 1
     anchors.fill: parent

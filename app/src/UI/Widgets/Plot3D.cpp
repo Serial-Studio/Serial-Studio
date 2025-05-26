@@ -36,6 +36,12 @@
  */
 Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   : QQuickPaintedItem(parent)
+  , m_minX(INT_MAX)
+  , m_maxX(INT_MIN)
+  , m_minY(INT_MAX)
+  , m_maxY(INT_MIN)
+  , m_minZ(INT_MAX)
+  , m_maxZ(INT_MIN)
   , m_index(index)
   , m_zoom(0.05)
   , m_cameraAngleX(300)
@@ -123,6 +129,7 @@ void Widgets::Plot3D::paint(QPainter *painter)
 {
   // Configure render hints
   painter->setRenderHint(QPainter::Antialiasing);
+  painter->setBackground(m_outerBackgroundColor);
 
   // Re-draw background (if required)
   if (m_dirtyGrid)
@@ -622,8 +629,8 @@ void Widgets::Plot3D::onThemeChanged()
   m_axisTextColor = Misc::ThemeManager::instance().getColor("plot3d_axis_text");
   m_gridMinorColor = Misc::ThemeManager::instance().getColor("plot3d_grid_minor");
   m_gridMajorColor = Misc::ThemeManager::instance().getColor("plot3d_grid_major");
-  m_innerBackgroundColor = Misc::ThemeManager::instance().getColor("plot3d_background_inner");
-  m_outerBackgroundColor = Misc::ThemeManager::instance().getColor("plot3d_background_outer");
+  m_innerBackgroundColor = Misc::ThemeManager::instance().getColor("widget_base");
+  m_outerBackgroundColor = Misc::ThemeManager::instance().getColor("widget_window");
   // clang-format on
 
   // Mark all widget as dirty to force re-rendering
@@ -1082,6 +1089,10 @@ QPixmap Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
   pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
   pixmap.fill(Qt::transparent);
   // clang-format on
+
+  // Skip rendering if widget is too small
+  if (width() < 240 || height() < 240)
+    return pixmap;
 
   // Initialize paint device
   QPainter painter(&pixmap);

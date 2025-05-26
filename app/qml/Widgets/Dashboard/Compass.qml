@@ -34,8 +34,9 @@ Item {
   //
   // Widget data inputs
   //
-  property CompassModel model
-  property color color: Cpp_ThemeManager.colors["highlight"]
+  required property color color
+  required property CompassModel model
+  required property MiniWindow windowRoot
 
   //
   // Widget layout

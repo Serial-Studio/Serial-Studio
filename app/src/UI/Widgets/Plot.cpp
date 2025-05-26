@@ -143,7 +143,7 @@ const QString &Widgets::Plot::xLabel() const
  * @brief Draws the data on the given QLineSeries.
  * @param series The QLineSeries to draw the data on.
  */
-void Widgets::Plot::draw(QLineSeries *series)
+void Widgets::Plot::draw(QXYSeries *series)
 {
   if (series)
   {

@@ -26,7 +26,6 @@
 #include "IO/Console.h"
 #include "CSV/Player.h"
 #include "Misc/TimerEvents.h"
-#include "Misc/ThemeManager.h"
 #include "JSON/FrameBuilder.h"
 
 #ifdef USE_QT_COMMERCIAL
@@ -43,14 +42,11 @@
  *        processing.
  */
 UI::Dashboard::Dashboard()
-  : m_points(100)
+  : m_points(10e3)
   , m_precision(2)
   , m_widgetCount(0)
-  , m_showLegends(true)
   , m_updateRequired(false)
-  , m_showCrosshairs(true)
-  , m_showAreaUnderPlots(true)
-  , m_axisVisibility(SerialStudio::AxisXY)
+  , m_terminalEnabled(false)
 {
   // clang-format off
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(true); }, Qt::QueuedConnection);
@@ -170,24 +166,6 @@ bool UI::Dashboard::available() const
 }
 
 /**
- * @brief Returns @c true whenever the user has enabled the option to show
- *        legends in multiplot widgets.
- */
-bool UI::Dashboard::showLegends() const
-{
-  return m_showLegends;
-}
-
-/**
- * @brief Returns @c true whenever the user has enabled the option to show
- *        a crosshair when the mouse is over a plot-based widget.
- */
-bool UI::Dashboard::showCrosshairs() const
-{
-  return m_showCrosshairs;
-}
-
-/**
  * @brief Checks if the dashboard is currently available, determined by the
  *        data stream sources.
  *
@@ -207,12 +185,12 @@ bool UI::Dashboard::streamAvailable() const
 }
 
 /**
- * @brief Returns @c true whenever the user has enabled the option to show
- *        an area under plot widgets.
+ * @brief Returns @c true if a terminal widget should be displayed within
+ *        the dashboard.
  */
-bool UI::Dashboard::showAreaUnderPlots() const
+bool UI::Dashboard::terminalEnabled() const
 {
-  return m_showAreaUnderPlots;
+  return m_terminalEnabled;
 }
 
 /**
@@ -250,34 +228,12 @@ bool UI::Dashboard::precisionWidgetVisible() const
 }
 
 /**
- * @brief Determines if axis options should be visible based on the presence of
- *        specific widget groups or datasets that support axis visibility.
- *
- * @return True if axis options widget visibility is enabled; false otherwise.
- */
-bool UI::Dashboard::axisOptionsWidgetVisible() const
-{
-  return m_widgetGroups.contains(SerialStudio::DashboardMultiPlot)
-         || m_widgetDatasets.contains(SerialStudio::DashboardPlot)
-         || m_widgetDatasets.contains(SerialStudio::DashboardFFT);
-}
-
-/**
  * Returns @c true if the frame contains features that should only be enabled
  * for commercial users with a valid license, such as the 3D plot widget.
  */
 bool UI::Dashboard::containsCommercialFeatures() const
 {
   return m_currentFrame.containsCommercialFeatures();
-}
-
-/**
- * @brief Retrieves the current visibility setting for the dashboard's axes.
- * @return Current AxisVisibility setting.
- */
-SerialStudio::AxisVisibility UI::Dashboard::axisVisibility() const
-{
-  return m_axisVisibility;
 }
 
 /**
@@ -375,105 +331,6 @@ int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
 }
 
 /**
- * @brief Retrieves the titles of widgets of a specific type.
- * @param widget The type of widget whose titles are requested.
- * @return A list of titles associated with the specified widget type.
- */
-QStringList
-UI::Dashboard::widgetTitles(const SerialStudio::DashboardWidget widget)
-{
-  QStringList titles;
-
-  if (SerialStudio::isGroupWidget(widget))
-    for (const auto &group : m_widgetGroups[widget])
-      titles.append(group.title());
-
-  else if (SerialStudio::isDatasetWidget(widget))
-    for (const auto &dataset : m_widgetDatasets[widget])
-      titles.append(dataset.title());
-
-  return titles;
-}
-
-/**
- * @brief Retrieves the colors associated with a specific widget type.
- * @param widget The type of widget whose colors are requested.
- * @return A list of color values for the specified widget type.
- */
-QStringList
-UI::Dashboard::widgetColors(const SerialStudio::DashboardWidget widget)
-{
-  QStringList list;
-
-  if (SerialStudio::isDatasetWidget(widget)
-      && m_widgetDatasets.contains(widget))
-  {
-    for (const auto &dataset : m_widgetDatasets[widget])
-      list.append(SerialStudio::getDatasetColor(dataset.index()));
-  }
-
-  if (list.isEmpty())
-  {
-    const auto colors = Misc::ThemeManager::instance().colors();
-    list.append(colors["switch_highlight"].toString());
-  }
-
-  return list;
-}
-
-/**
- * @brief Checks if a specific widget instance is currently visible.
- * @param widget The type of the widget to check.
- * @param index The index of the widget instance within its type.
- * @return True if the widget instance is visible; false otherwise.
- */
-bool UI::Dashboard::widgetVisible(const SerialStudio::DashboardWidget widget,
-                                  const int index) const
-{
-  if (index >= 0 && index < m_widgetVisibility[widget].count())
-    return m_widgetVisibility[widget].at(index);
-
-  return false;
-}
-
-/**
- * @brief Retrieves the icons for all available widgets on the dashboard.
- * @return A list of icon representations for each available widget.
- */
-const QStringList UI::Dashboard::availableWidgetIcons() const
-{
-  QStringList list;
-  for (auto widget : availableWidgets())
-    list.append(SerialStudio::dashboardWidgetIcon(widget));
-
-  return list;
-}
-
-/**
- * @brief Retrieves the titles of all available widgets on the dashboard.
- * @return A list of titles for each available widget.
- */
-const QStringList UI::Dashboard::availableWidgetTitles() const
-{
-  QStringList list;
-  for (auto widget : availableWidgets())
-    list.append(SerialStudio::dashboardWidgetTitle(widget));
-
-  return list;
-}
-
-/**
- * @brief Provides a list of available widget types on the dashboard.
- * @return A list of SerialStudio::DashboardWidget items representing each
- * available widget type.
- */
-const QList<SerialStudio::DashboardWidget>
-UI::Dashboard::availableWidgets() const
-{
-  return m_availableWidgets;
-}
-
-/**
  * @brief Retrieves the title of the current frame in the dashboard.
  * @return A reference to a QString containing the current frame title.
  */
@@ -486,26 +343,46 @@ const QString &UI::Dashboard::title() const
  * @brief Retrieves the icons for each action available on the dashboard.
  * @return A list of icons corresponding to each action.
  */
-QStringList UI::Dashboard::actionIcons() const
+QVariantList UI::Dashboard::actions() const
 {
-  QStringList icons;
-  for (const auto &action : m_actions)
-    icons.append(QString("qrc:/rcc/actions/%1.svg").arg(action.icon()));
+  QVariantList actions;
+  for (int i = 0; i < m_actions.count(); ++i)
+  {
+    const auto &action = m_actions[i];
 
-  return icons;
+    QVariantMap m;
+    m["id"] = i;
+    m["text"] = action.title();
+    m["icon"] = QStringLiteral("qrc:/rcc/actions/%1.svg").arg(action.icon());
+    actions.append(m);
+  }
+
+  return actions;
 }
 
 /**
- * @brief Retrieves the titles of each action available on the dashboard.
- * @return A list of titles corresponding to each action.
+ * @brief Retrieves a map containing information about all widgets/windows
+ *        in the dashboard. The map key is the window index (UI order), and
+ *        the value is a pair consisting of the widget type and the widget’s
+ *        index relative to its type.
+ *
+ * For example, if there are two FFT plot widgets:
+ * - The map will contain two entries with unique window indices.
+ * - Each value will have the widget type (DashboardFFT) and an index
+ *   indicating its order among FFT widgets (0 for the first, 1 for the second).
+ *
+ * This structure is used to track and categorize widgets for both rendering
+ * and logical grouping (e.g., building a tree model of the dashboard layout).
+ *
+ * @return Reference to the widget map (QMap<int, QPair<DashboardWidget, int>>)
+ *         where:
+ *         - int: Window number in the UI
+ *         - DashboardWidget: Enum/type identifying the widget type
+ *         - int: Index relative to its widget type
  */
-QStringList UI::Dashboard::actionTitles() const
+const SerialStudio::WidgetMap &UI::Dashboard::widgetMap() const
 {
-  QStringList titles;
-  for (const auto &action : m_actions)
-    titles.append(action.title());
-
-  return titles;
+  return m_widgetMap;
 }
 
 /**
@@ -667,21 +544,6 @@ void UI::Dashboard::setPrecision(const int precision)
 }
 
 /**
- * @brief Instructs multiplot widgets to display (or hide) the legend labels
- *        for each one of the curves that it contains.
- *
- * @param enabled The new enabled setting.
- */
-void UI::Dashboard::setShowLegends(const bool enabled)
-{
-  if (m_showLegends != enabled)
-  {
-    m_showLegends = enabled;
-    Q_EMIT showLegendsChanged();
-  }
-}
-
-/**
  * @brief Resets all data in the dashboard, including plot values,
  *        widget structures, and actions. Emits relevant signals to notify the
  *        UI about the reset state.
@@ -709,8 +571,6 @@ void UI::Dashboard::resetData(const bool notify)
   m_widgetMap.clear();
   m_widgetGroups.clear();
   m_widgetDatasets.clear();
-  m_widgetVisibility.clear();
-  m_availableWidgets.clear();
 
   // Reset frame data
   m_currentFrame = JSON::Frame();
@@ -724,66 +584,23 @@ void UI::Dashboard::resetData(const bool notify)
     Q_EMIT dataReset();
     Q_EMIT actionCountChanged();
     Q_EMIT widgetCountChanged();
-    Q_EMIT widgetVisibilityChanged();
     Q_EMIT containsCommercialFeaturesChanged();
   }
 }
 
 /**
- * @brief Instructs plot widgets to display (or hide) the mouse crosshairs.
- * @param enabled The new enabled setting.
+ * @brief Enables/disables adding a terminal widget.
  */
-void UI::Dashboard::setShowCrosshairs(const bool enabled)
+void UI::Dashboard::setTerminalEnabled(const bool enabled)
 {
-  m_showCrosshairs = enabled;
-  Q_EMIT showCrosshairsChanged();
-}
-
-/**
- * @brief Instructs plot widgets to display (or hide) the area under the line.
- * @param enabled The new enabled setting.
- */
-void UI::Dashboard::setShowAreaUnderPlots(const bool enabled)
-{
-  m_showAreaUnderPlots = enabled;
-  Q_EMIT showAreaUnderPlotsChanged();
-}
-
-/**
- * @brief Sets the visibility option for the dashboard's axes and emits the
- *        @c axisVisibilityChanged signal if the option changes.
- *
- * @param option The new axis visibility setting.
- */
-void UI::Dashboard::setAxisVisibility(const SerialStudio::AxisVisibility option)
-{
-  if (m_axisVisibility != option)
+  if (m_terminalEnabled != enabled)
   {
-    m_axisVisibility = option;
-    Q_EMIT axisVisibilityChanged();
-  }
-}
+    m_updateRequired = true;
+    m_terminalEnabled = enabled;
 
-/**
- * @brief Sets the visibility of a specific widget at a given index.
- *        Emits the @c widgetVisibilityChanged signal if the visibility changes.
- *
- * @param widget The type of widget to modify.
- * @param index The index of the widget instance.
- * @param visible True to make the widget visible; false to hide it.
- * @throws An assertion failure if the index is out of bounds.
- */
-void UI::Dashboard::setWidgetVisible(const SerialStudio::DashboardWidget widget,
-                                     const int index, const bool visible)
-{
-  if (index >= 0 && m_widgetVisibility[widget].count() > index)
-  {
-    const auto currentValue = m_widgetVisibility[widget][index];
-    if (currentValue != visible)
-    {
-      m_widgetVisibility[widget][index] = visible;
-      Q_EMIT widgetVisibilityChanged();
-    }
+    Q_EMIT updated();
+    Q_EMIT widgetCountChanged();
+    Q_EMIT terminalEnabledChanged();
   }
 }
 
@@ -1114,6 +931,16 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   m_currentFrame = frame;
   m_updateRequired = true;
 
+  // Add terminal group
+  if (terminalEnabled())
+  {
+    JSON::Group terminal;
+    terminal.m_groupId = frame.groupCount();
+    terminal.m_title = tr("Console");
+    terminal.m_widget = "terminal";
+    m_currentFrame.m_groups.prepend(terminal);
+  }
+
   // Update UI if frame commercial features changed
   if (usedCommercialFeatures != m_currentFrame.containsCommercialFeatures())
     Q_EMIT containsCommercialFeaturesChanged();
@@ -1130,7 +957,7 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   // Update widget data structures
   m_datasets.clear();
   JSON::Group ledPanel;
-  for (const auto &group : frame.groups())
+  for (const auto &group : m_currentFrame.groups())
   {
     // Register group widget (if any)
     const auto key = SerialStudio::getDashboardWidget(group);
@@ -1144,6 +971,16 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
       auto copy = group;
       copy.m_title = tr("%1 (Fallback)").arg(group.title());
       m_widgetGroups[SerialStudio::DashboardMultiPlot].append(copy);
+
+      for (auto i = 0; i < m_currentFrame.groupCount(); ++i)
+      {
+        if (m_currentFrame.groups()[i].groupId() == group.groupId())
+        {
+          m_currentFrame.m_groups[i].m_widget = "multiplot";
+          m_currentFrame.m_groups[i].m_title = copy.m_title;
+          break;
+        }
+      }
     }
 
     // Add extra groups for accelerometers
@@ -1209,13 +1046,9 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   // Check if we need to regenerate the dashboard
   if (previousCounts != currentCounts || previousTitle != currentTitle)
   {
-    // Clear visibility flags & widget indexes
-    m_widgetMap.clear();
-    m_widgetVisibility.clear();
-
-    // Initialize widget count parameter
+    // Clear widget indexes
     m_widgetCount = 0;
-    m_availableWidgets.clear();
+    m_widgetMap.clear();
 
     // Register group widgets
     for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i)
@@ -1223,16 +1056,6 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
       // Get number of widgets for current widget type
       const auto key = i.key();
       const auto count = widgetCount(key);
-
-      // Make all widgets visible
-      QVector<bool> visibilityFlags;
-      visibilityFlags.resize(count, true);
-      m_widgetVisibility[key] = visibilityFlags;
-
-      // Register available widget types in the same order as the widgets
-      // that are drawn on the dashboard grid
-      if (!m_availableWidgets.contains(key))
-        m_availableWidgets.append(key);
 
       // Map "global" widget index to index relative to widget type/key
       for (int j = 0; j < count; ++j)
@@ -1249,16 +1072,6 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
       const auto key = i.key();
       const auto count = widgetCount(key);
 
-      // Make all widgets visible
-      QVector<bool> visibilityFlags;
-      visibilityFlags.resize(count, true);
-      m_widgetVisibility[key] = visibilityFlags;
-
-      // Register available widget types in the same order as the widgets
-      // that are drawn on the dashboard grid
-      if (!m_availableWidgets.contains(key))
-        m_availableWidgets.append(key);
-
       // Map "global" widget index to index relative to widget type/key
       for (int j = 0; j < count; ++j)
       {
@@ -1270,11 +1083,11 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
     // Clear plot data setup
     m_fftValues.clear();
     m_pltValues.clear();
+    m_plotData3D.clear();
     m_multipltValues.clear();
 
     // Update user interface
     Q_EMIT widgetCountChanged();
-    Q_EMIT widgetVisibilityChanged();
   }
 
   // Update plot data

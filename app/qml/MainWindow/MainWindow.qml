@@ -43,6 +43,17 @@ Widgets.SmartWindow {
   property string documentTitle: ""
   property bool firstValidFrame: false
   property bool automaticUpdates: false
+  property alias toolbarVisible: toolbar.toolbarEnabled
+
+  //
+  // Show window full screen when toolbar is hidden
+  //
+  onToolbarVisibleChanged: {
+    if (toolbarVisible)
+      root.showNormal()
+    else
+      root.showFullScreen()
+  }
 
   //
   // Save settings
@@ -62,9 +73,9 @@ Widgets.SmartWindow {
   //
   // Toolbar functions aliases
   //
-  function showSetup()     { toolbar.setupClicked()     }
-  function showConsole()   { toolbar.consoleClicked()   }
-  function showDashboard() { dbTimer.start() }
+  function showSetup()     { toolbar.setupClicked() }
+  function showConsole()   { stack.pop()            }
+  function showDashboard() { dbTimer.start()        }
 
   //
   // Obtain document title
@@ -91,9 +102,15 @@ Widgets.SmartWindow {
     id: dbTimer
     interval: 500
     onTriggered: {
-      toolbar.dashboardClicked()
-      if (Cpp_UI_Dashboard.totalWidgetCount <= 1)
-        dashboard.hideStructureTree()
+      if (Cpp_UI_Dashboard.available) {
+        if (stack.currentItem != dashboard) {
+          stack.push(dashboard)
+          dashboard.loadLayout()
+        }
+      }
+
+      else
+        root.showConsole()
     }
   }
 
@@ -144,6 +161,7 @@ Widgets.SmartWindow {
       else {
         setup.show()
         root.showConsole()
+        root.toolbarVisible = true
         root.firstValidFrame = false
       }
     }
@@ -183,11 +201,28 @@ Widgets.SmartWindow {
   //
   // Handle platform-specific window initialization code
   //
-  onVisibleChanged: {
+  onVisibilityChanged: {
     if (visible)
       Cpp_NativeWindow.addWindow(root)
     else
       Cpp_NativeWindow.removeWindow(root)
+  }
+
+  //
+  // Shortcuts
+  //
+  Shortcut {
+    sequences: [StandardKey.Preferences]
+    onActivated: app.showSettingsDialog()
+  } Shortcut {
+    sequences: [StandardKey.Quit]
+    onActivated: root.close()
+  } Shortcut {
+    sequences: [StandardKey.Close]
+    onActivated: root.close()
+  } Shortcut {
+    sequences: [StandardKey.Open]
+    onActivated: Cpp_CSV_Player.openFile()
   }
 
   //
@@ -229,31 +264,8 @@ Widgets.SmartWindow {
         z: 2
         id: toolbar
         Layout.fillWidth: true
-
         setupChecked: root.setupVisible
-        consoleChecked: root.consoleVisible
-        dashboardChecked: root.dashboardVisible
-        onStructureClicked: dashboard.toggleStructureTree()
         onSetupClicked: setup.visible ? setup.hide() : setup.show()
-        structureChecked: dashboard.structureVisible && Cpp_UI_Dashboard.available
-
-        onDashboardClicked: {
-          if (Cpp_UI_Dashboard.available) {
-            consoleChecked = 0
-            dashboardChecked = 1
-            if (stack.currentItem != dashboard)
-              stack.push(dashboard)
-          }
-
-          else
-            root.showConsole()
-        }
-
-        onConsoleClicked: {
-          consoleChecked = 1
-          dashboardChecked = 0
-          stack.pop()
-        }
       }
 
       //
@@ -269,7 +281,6 @@ Widgets.SmartWindow {
         //
         StackView {
           id: stack
-          clip: true
           initialItem: terminal
           Layout.fillWidth: true
           Layout.fillHeight: true

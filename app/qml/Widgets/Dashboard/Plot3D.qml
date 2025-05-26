@@ -29,59 +29,82 @@ import "../"
 
 Item {
   id: root
-  clip: true
 
   //
   // Widget data inputs
   //
-  property Plot3DWidget model
-  property color color: "transparent"
+  required property color color
+  required property Plot3DWidget model
+  required property MiniWindow windowRoot
 
   //
-  // Configure widget to fill the parent once it's set
+  // Window flags
   //
-  onModelChanged: {
-    model.z = 0
-    model.anchors.fill = parent
-    model.anchors.topMargin = toolbar.height + toolbar.y
+  readonly property bool hasToolbar: root.width >= toolbar.implicitWidth
+
+  //
+  // Disable navigation
+  //
+  Connections {
+    target: windowRoot
+
+    function onFocusedChanged() {
+      if (model) {
+        model.enabled = windowRoot.focused
+      }
+    }
   }
 
+  onModelChanged: {
+    if (model) {
+      model.visible = true
+      model.parent = container
+      model.anchors.fill = container
+    }
+  }
+
+  //
+  // Zoom in/out shortcuts
+  //
+  Shortcut {
+    enabled: windowRoot.focused
+    onActivated: model.zoom += 0.1
+    sequences: [StandardKey.ZoomIn]
+  } Shortcut {
+    enabled: windowRoot.focused
+    onActivated: model.zoom -= 0.1
+    sequences: [StandardKey.ZoomOut]
+  }
+
+  //
+  // Animations
+  //
   NumberAnimation {
     id: zoomAnimation
     target: model
     property: "zoom"
     duration: 400
-  }
-
-  NumberAnimation {
+  } NumberAnimation {
     id: angleXAnimation
     target: model
     property: "cameraAngleX"
     duration: 400
-  }
-
-  NumberAnimation {
+  } NumberAnimation {
     id: angleYAnimation
     target: model
     property: "cameraAngleY"
     duration: 400
-  }
-
-  NumberAnimation {
+  } NumberAnimation {
     id: angleZAnimation
     target: model
     property: "cameraAngleZ"
     duration: 400
-  }
-
-  NumberAnimation {
+  } NumberAnimation {
     id: offsetXAnimation
     target: model
     property: "cameraOffsetX"
     duration: 400
-  }
-
-  NumberAnimation {
+  } NumberAnimation {
     id: offsetYAnimation
     target: model
     property: "cameraOffsetY"
@@ -114,177 +137,172 @@ Item {
   //
   // Add toolbar
   //
-  Rectangle {
-    z: 1000
+  RowLayout {
     id: toolbar
-    height: 48
-    color: Cpp_ThemeManager.colors["widget_window"]
+
+    spacing: 4
+    visible: root.hasToolbar
+    height: root.hasToolbar ? 48 : 0
 
     anchors {
-      topMargin: -1
-      leftMargin: -1
-      rightMargin: -1
+      leftMargin: 8
       top: parent.top
       left: parent.left
       right: parent.right
     }
 
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: model.interpolationEnabled
+      onClicked: model.interpolationEnabled = !model.interpolationEnabled
+      icon.source: model.interpolationEnabled ?
+                     "qrc:/rcc/icons/dashboard-buttons/interpolate-on.svg" :
+                     "qrc:/rcc/icons/dashboard-buttons/interpolate-off.svg"
+    }
+
     Rectangle {
-      height: 1
+      implicitWidth: 1
+      implicitHeight: 24
       color: Cpp_ThemeManager.colors["widget_border"]
-      anchors {
-        margins: 0
-        left: parent.left
-        right: parent.right
-        bottom: parent.bottom
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: model.orbitNavigation
+      onClicked: model.orbitNavigation = true
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/orbit.svg"
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: !model.orbitNavigation
+      onClicked: model.orbitNavigation = false
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/pan.svg"
+    }
+
+    Rectangle {
+      implicitWidth: 1
+      implicitHeight: 24
+      color: Cpp_ThemeManager.colors["widget_border"]
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      onClicked: animateToView(0.05, 300, 0, 225, 0, 0)
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/orthogonal_view.svg"
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      onClicked: animateToView(0.05, 360, 0, 360, 0, 0)
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/top_view.svg"
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      onClicked: animateToView(0.05, 270, 0, 270, 0, 0)
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/left_view.svg"
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      onClicked: animateToView(0.05, 270, 0, 180, 0, 0)
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/front_view.svg"
+    }
+
+    Rectangle {
+      implicitWidth: 1
+      implicitHeight: 24
+      color: Cpp_ThemeManager.colors["widget_border"]
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: model.anaglyphEnabled
+      onClicked: model.anaglyphEnabled = !model.anaglyphEnabled
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/anaglyph.svg"
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      enabled: model.anaglyphEnabled
+      checked: model.invertEyePositions
+      opacity: model.anaglyphEnabled ? 1 : 0
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/invert.svg"
+      onClicked: model.invertEyePositions = !model.invertEyePositions
+    }
+
+    Slider {
+      to: 100
+      from: 30
+      stepSize: 1
+      Layout.fillWidth: true
+      Layout.maximumWidth: 128
+      enabled: model.anaglyphEnabled
+      value: model.eyeSeparation * 1e3
+      opacity: model.anaglyphEnabled ? 1 : 0
+      onValueChanged: {
+        if (model) {
+          var separation = value / 1e3
+          if (model.eyeSeparation !== separation)
+            model.eyeSeparation = separation
+        }
       }
     }
 
-    RowLayout {
-      spacing: 4
-      anchors.margins: 8
-      anchors.left: parent.left
-      anchors.right: parent.right
-      anchors.verticalCenter: parent.verticalCenter
+    Item {
+      Layout.fillWidth: true
+    }
+  }
 
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
-        checked: model.interpolationEnabled
-        onClicked: model.interpolationEnabled = !model.interpolationEnabled
-        icon.source: model.interpolationEnabled ?
-                       "qrc:/rcc/icons/dashboard/buttons/interpolate-on.svg" :
-                       "qrc:/rcc/icons/dashboard/buttons/interpolate-off.svg"
-      }
+  //
+  // Widget view
+  //
+  Item {
+    clip: true
+    anchors.fill: parent
+    anchors.topMargin: root.hasToolbar ? 48 : 0
 
-      Rectangle {
-        implicitWidth: 1
-        implicitHeight: 24
-        color: Cpp_ThemeManager.colors["widget_border"]
-      }
-
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
-        checked: model.orbitNavigation
-        onClicked: model.orbitNavigation = true
-        icon.source: "qrc:/rcc/icons/dashboard/buttons/orbit.svg"
-      }
-
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
-        checked: !model.orbitNavigation
-        onClicked: model.orbitNavigation = false
-        icon.source: "qrc:/rcc/icons/dashboard/buttons/pan.svg"
-      }
-
-      Rectangle {
-        implicitWidth: 1
-        implicitHeight: 24
-        color: Cpp_ThemeManager.colors["widget_border"]
-      }
-
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
-        onClicked: animateToView(0.05, 300, 0, 225, 0, 0)
-        icon.source: "qrc:/rcc/icons/dashboard/buttons/orthogonal_view.svg"
-      }
-
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
-        onClicked: animateToView(0.05, 360, 0, 360, 0, 0)
-        icon.source: "qrc:/rcc/icons/dashboard/buttons/top_view.svg"
-      }
-
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
-        onClicked: animateToView(0.05, 270, 0, 270, 0, 0)
-        icon.source: "qrc:/rcc/icons/dashboard/buttons/left_view.svg"
-      }
-
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
-        onClicked: animateToView(0.05, 270, 0, 180, 0, 0)
-        icon.source: "qrc:/rcc/icons/dashboard/buttons/front_view.svg"
-      }
-
-      Rectangle {
-        implicitWidth: 1
-        implicitHeight: 24
-        color: Cpp_ThemeManager.colors["widget_border"]
-      }
-
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
-        checked: model.anaglyphEnabled
-        onClicked: model.anaglyphEnabled = !model.anaglyphEnabled
-        icon.source: "qrc:/rcc/icons/dashboard/buttons/anaglyph.svg"
-      }
-
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
-        visible: model.anaglyphEnabled
-        enabled: model.anaglyphEnabled
-        checked: model.invertEyePositions
-        icon.source: "qrc:/rcc/icons/dashboard/buttons/invert.svg"
-        onClicked: model.invertEyePositions = !model.invertEyePositions
-      }
-
-      Slider {
-        to: 100
-        from: 30
-        stepSize: 1
-        Layout.fillWidth: true
-        Layout.maximumWidth: 128
-        visible: model.anaglyphEnabled
-        enabled: model.anaglyphEnabled
-        value: model.eyeSeparation * 1e3
-        onValueChanged: {
-          if (model) {
-            var separation = value / 1e3
-            if (model.eyeSeparation !== separation)
-              model.eyeSeparation = separation
-          }
-        }
-      }
-
-      Item {
-        Layout.fillWidth: true
-      }
+    Item {
+      id: container
+      anchors.margins: -1
+      anchors.fill: parent
     }
   }
 }

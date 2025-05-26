@@ -41,7 +41,7 @@ find_package(
 #-------------------------------------------------------------------------------
 
 option(DEBUG_SANITIZER "Enable sanitizers for debug builds" OFF)
-option(PRODUCTION_OPTIMIZATION "Enable production optimization flags" ON)
+option(PRODUCTION_OPTIMIZATION "Enable production optimization flags" OFF)
 
 #-------------------------------------------------------------------------------
 # Project information
@@ -126,8 +126,8 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-unsafe-math-optimizations # Use safe math only
       )
    add_link_options(
-      -Wl,--gc-sections              # Remove unused sections during linking
-      -fuse-linker-plugin            # Enable LTO during linking
+      -Wl,--gc-sections                 # Remove unused sections during linking
+      -fuse-linker-plugin               # Enable LTO during linking
    )
 
    # MSVC-specific settings
@@ -146,11 +146,11 @@ if(PRODUCTION_OPTIMIZATION)
          /fp:strict                     # Standard-compliant floating point math
       )
    add_link_options(
-      /OPT:REF                       # Remove unreferenced functions/data
-      /OPT:ICF                       # Remove identical COMDATs
-      /LTCG                          # Enable LTO during linkingn
-      /NODEFAULTLIB:msvcrt.lib       # Exclude dynamic runtime
-      /IGNORE:4286                   # Ignore Qt libucrt warning
+      /OPT:REF                          # Remove unreferenced functions/data
+      /OPT:ICF                          # Remove identical COMDATs
+      /LTCG                             # Enable LTO during linkingn
+      /NODEFAULTLIB:msvcrt.lib          # Exclude dynamic runtime
+      /IGNORE:4286                      # Ignore Qt libucrt warning
    )
 
    # macOS-specific settings
@@ -165,8 +165,8 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-unsafe-math-optimizations # Use safe math only
       )
    add_link_options(
-      -Wl,-dead_strip                # Remove unused code and data during linking
-      -flto=full                     # Link-time optimization
+      -Wl,-dead_strip                   # Remove unused code and data during linking
+      -flto=full                        # Link-time optimization
    )
 
    # Intel LLVM-based C++ Compiler
@@ -183,8 +183,8 @@ if(PRODUCTION_OPTIMIZATION)
          -fp-model=precise              # Standard-compliant floating point math
       )
    add_link_options(
-      -Wl,--gc-sections              # Remove unused sections during linking
-      -flto=full                     # Link-time optimization
+      -Wl,--gc-sections                 # Remove unused sections during linking
+      -flto=full                        # Link-time optimization
    )
 
    # Generic UNIX/Linux settings
@@ -200,8 +200,8 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-unsafe-math-optimizations # Use safe math only
       )
    add_link_options(
-      -Wl,--gc-sections              # Remove unused sections during linking
-      -flto                          # Link-time optimization
+      -Wl,--gc-sections                 # Remove unused sections during linking
+      -flto                             # Link-time optimization
    )
    endif()
 endif()

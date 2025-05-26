@@ -43,7 +43,6 @@ Rectangle {
   //
   StackLayout {
     id: layout
-    clip: true
     anchors.margins: 8
     anchors.fill: parent
     currentIndex: Cpp_IO_Manager.busType

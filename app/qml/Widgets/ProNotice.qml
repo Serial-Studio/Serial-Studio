@@ -114,6 +114,7 @@ Rectangle {
           icon.height: 18
           horizontalPadding: 8
           text: qsTr("Visit Website")
+          visible: !Cpp_QtCommercial_Available
           icon.source: "qrc:/rcc/icons/buttons/website.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
           onClicked: Qt.openUrlExternally("https://serial-studio.com/")
@@ -133,10 +134,6 @@ Rectangle {
             else
               Qt.openUrlExternally("https://store.serial-studio.com")
           }
-        }
-
-        Item {
-          implicitWidth: 4
         }
 
         Button {

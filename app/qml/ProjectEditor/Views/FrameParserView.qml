@@ -163,7 +163,7 @@ Widgets.Pane {
         Layout.fillWidth: true
         Layout.maximumHeight: Layout.minimumHeight
         Layout.minimumHeight: layout.implicitHeight + 12
-        color: Cpp_ThemeManager.colors["groupbox_background"]
+        color: Cpp_ThemeManager.colors["window_toolbar_background"]
 
         //
         // Buttons
@@ -182,7 +182,7 @@ Widgets.Pane {
           //
           // Load default document
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Reset")
             toolbarButton: false
@@ -194,7 +194,7 @@ Widgets.Pane {
           //
           // Import code file
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Import")
             toolbarButton: false
@@ -206,7 +206,7 @@ Widgets.Pane {
           //
           // Save changes
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
             text: qsTr("Validate \& Save")
@@ -230,7 +230,7 @@ Widgets.Pane {
           //
           // Undo
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Undo")
             toolbarButton: false
@@ -243,7 +243,7 @@ Widgets.Pane {
           //
           // Redo
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Redo")
             toolbarButton: false
@@ -267,7 +267,7 @@ Widgets.Pane {
           //
           // Cut
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Cut")
             toolbarButton: false
@@ -279,7 +279,7 @@ Widgets.Pane {
           //
           // Copy
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Copy")
             toolbarButton: false
@@ -291,7 +291,7 @@ Widgets.Pane {
           //
           // Paste
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Paste")
             toolbarButton: false
@@ -314,7 +314,7 @@ Widgets.Pane {
           //
           // Help
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Help")
             toolbarButton: false

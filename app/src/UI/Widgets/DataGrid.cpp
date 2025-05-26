@@ -142,13 +142,16 @@ void Widgets::DataGrid::updateData()
       const auto alarmValue = dataset.alarm();
       auto value = dataset.value();
 
+      // Check if dataset is a number
+      bool isNumber;
+      const double n = value.toDouble(&isNumber);
+
       // Process dataset numerical value
       bool alarm = false;
-      if (regex.match(value).hasMatch())
+      if (isNumber)
       {
-        const double v = value.toDouble();
-        value = QString::number(v, 'f', UI::Dashboard::instance().precision());
-        alarm = (alarmValue != 0 && v >= alarmValue);
+        value = QString::number(n, 'f', UI::Dashboard::instance().precision());
+        alarm = (alarmValue != 0 && n >= alarmValue);
       }
 
       // Update the alarm state

@@ -19,13 +19,35 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+/*
+ * Orbbyt Dashboard - https://dashboard.orbbyt.com
+ * Written by Alex Spataru <https://aspatru.com>
+ *
+ * Copyright (C) 2025 Orbbyt <https://orbbyt.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "ThemeManager.h"
 
 #include <QDir>
 #include <QPalette>
 #include <QStyleHints>
-#include <QApplication>
 #include <QJsonDocument>
+#include <QGuiApplication>
 
 /**
  * @brief Constructs the ThemeManager object and initializes theme loading.
@@ -39,27 +61,15 @@
 Misc::ThemeManager::ThemeManager()
   : m_theme(0)
 {
+  // Prepend "System" theme as option 0
+  m_themeName = QStringLiteral("System");
+  m_availableThemes.append(QStringLiteral("System"));
+
   // Set theme files
   // clang-format off
   const QStringList themes = {
-    QStringLiteral("default"),
-    QStringLiteral("orbbyt-light"),
-    QStringLiteral("orbbyt-dark"),
-    QStringLiteral("outdoor-day"),
-    QStringLiteral("outdoor-night"),
-    QStringLiteral("breeze-light"),
-    QStringLiteral("breeze-dark"),
-    QStringLiteral("macos-light"),
-    QStringLiteral("macos-dark"),
-    QStringLiteral("yaru-light"),
-    QStringLiteral("yaru-dark"),
-    QStringLiteral("deep-purple"),
-    QStringLiteral("deep-blue"),
-    QStringLiteral("deep-red"),
-    QStringLiteral("deep-green"),
-    QStringLiteral("pulse"),
-    QStringLiteral("resistance"),
-    QStringLiteral("dominion"),
+      QStringLiteral("light"),
+      QStringLiteral("dark"),
   };
   // clang-format on
 
@@ -78,10 +88,10 @@ Misc::ThemeManager::ThemeManager()
     }
   }
 
-  // Set application theme
-  setTheme(m_settings.value("Theme", 0).toInt());
+  // Auto-detect system theme
+  loadSystemTheme();
 
-  // Automatically react to theme changes
+  // Install event filter only once
   qApp->installEventFilter(this);
 }
 
@@ -150,7 +160,7 @@ QColor Misc::ThemeManager::getColor(const QString &name) const
   if (colors().contains(name))
     return QColor(colors()[name].toString());
 
-  return QColor("#f0f");
+  return QColor(qRgb(0xff, 0x00, 0xff));
 }
 
 /**
@@ -164,20 +174,26 @@ QColor Misc::ThemeManager::getColor(const QString &name) const
 void Misc::ThemeManager::setTheme(const int index)
 {
   // Validate index
-  auto filteredIndex = index;
+  int filteredIndex = index;
   if (index < 0 || index >= availableThemes().count())
     filteredIndex = 0;
 
   // Update the theme name
   m_theme = filteredIndex;
-  m_settings.setValue("Theme", filteredIndex);
   m_themeName = availableThemes().at(filteredIndex);
 
-  // Obtain the data for the theme name
+  // Load theme (dark/light) automagically
+  if (m_themeName == QStringLiteral("System"))
+  {
+    loadSystemTheme();
+    return;
+  }
+
+  // Load actual theme data
   m_themeData = m_themes.value(m_themeName);
   m_colors = m_themeData.value("colors").toObject();
 
-  // Tell OS if we prefer dark mode or light mode
+  // Hint Qt about the effective color scheme
   const auto bg = getColor(QStringLiteral("base"));
   const auto fg = getColor(QStringLiteral("text"));
   if (fg.lightness() > bg.lightness())
@@ -185,31 +201,78 @@ void Misc::ThemeManager::setTheme(const int index)
   else
     qApp->styleHints()->setColorScheme(Qt::ColorScheme::Light);
 
-  // Set application palette
-  QPalette palette;
-  palette.setColor(QPalette::Mid, getColor("mid"));
-  palette.setColor(QPalette::Dark, getColor("dark"));
-  palette.setColor(QPalette::Text, getColor("text"));
-  palette.setColor(QPalette::Base, getColor("base"));
-  palette.setColor(QPalette::Link, getColor("link"));
-  palette.setColor(QPalette::Light, getColor("light"));
-  palette.setColor(QPalette::Window, getColor("window"));
-  palette.setColor(QPalette::Shadow, getColor("shadow"));
-  palette.setColor(QPalette::Accent, getColor("accent"));
-  palette.setColor(QPalette::Button, getColor("button"));
-  palette.setColor(QPalette::Midlight, getColor("midlight"));
-  palette.setColor(QPalette::Highlight, getColor("highlight"));
-  palette.setColor(QPalette::WindowText, getColor("window_text"));
-  palette.setColor(QPalette::BrightText, getColor("bright_text"));
-  palette.setColor(QPalette::ButtonText, getColor("button_text"));
-  palette.setColor(QPalette::ToolTipBase, getColor("tooltip_base"));
-  palette.setColor(QPalette::ToolTipText, getColor("tooltip_text"));
-  palette.setColor(QPalette::LinkVisited, getColor("link_visited"));
-  palette.setColor(QPalette::AlternateBase, getColor("alternate_base"));
-  palette.setColor(QPalette::PlaceholderText, getColor("placeholder_text"));
-  palette.setColor(QPalette::HighlightedText, getColor("highlighted_text"));
-  qApp->setPalette(palette);
-
   // Update UI
   Q_EMIT themeChanged();
+}
+
+/**
+ * @brief Applies the system-resolved theme (Light or Dark) without changing
+ * the selected theme index.
+ *
+ * This method inspects the system's current color palette and dynamically
+ * resolves whether the Light or Dark theme should be applied visually.
+ *
+ * It updates the internal theme data and color scheme used throughout the
+ * application UI, without changing the user-selected theme index
+ * (which remains as "System").
+ *
+ * This ensures that when "System" is selected, the app visually tracks the
+ * system's theme preference while preserving user settings and theme list
+ * integrity.
+ *
+ * @note This function is automatically invoked during startup or when the
+ *       system palette changes, but only when the selected theme is "System".
+ */
+void Misc::ThemeManager::loadSystemTheme()
+{
+  // Get system color scheme
+  qApp->styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
+  const auto scheme = qApp->styleHints()->colorScheme();
+
+  // Get theme name to load
+  QString resolved;
+  if (scheme == Qt::ColorScheme::Dark)
+    resolved = QStringLiteral("Dark");
+  else if (scheme == Qt::ColorScheme::Light)
+    resolved = QStringLiteral("Light");
+  else
+    resolved = QStringLiteral("Light");
+
+  // Load theme data
+  const auto themeData = m_themes.value(resolved);
+
+  // Set theme data
+  m_theme = 0;
+  m_themeData = themeData;
+  m_themeName = QStringLiteral("System");
+  m_colors = themeData.value("colors").toObject();
+
+  // Update user interface
+  Q_EMIT themeChanged();
+}
+
+/**
+ * @brief Event filter to intercept application-wide events.
+ *
+ * This method is an overridden event filter that specifically listens for the
+ * @c QEvent::ApplicationPaletteChange event.
+ *
+ * When this event is detected, it triggers a theme update to match the new
+ * system palette.
+ *
+ * @param watched The object where the event originated.
+ * @param event The event that is being filtered.
+ * @return true if the event was handled and should not be processed further
+ */
+
+bool Misc::ThemeManager::eventFilter(QObject *watched, QEvent *event)
+{
+  if (event->type() == QEvent::ApplicationPaletteChange
+      && m_themeName == QStringLiteral("System"))
+  {
+    loadSystemTheme();
+    return true;
+  }
+
+  return QObject::eventFilter(watched, event);
 }

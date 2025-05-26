@@ -37,16 +37,14 @@ Rectangle {
   signal setupClicked()
   signal consoleClicked()
   signal dashboardClicked()
-  signal structureClicked()
   signal projectEditorClicked()
+
+  property bool toolbarEnabled: true
 
   //
   // Aliases to button check status
   //
   property alias setupChecked: setupBt.checked
-  property alias consoleChecked: consoleBt.checked
-  property alias dashboardChecked: dashboardBt.checked
-  property alias structureChecked: structureBt.checked
 
   //
   // Calculate offset based on platform
@@ -62,8 +60,8 @@ Rectangle {
   //
   // Set toolbar height
   //
-  Layout.minimumHeight: titlebarHeight + 64 + 16
-  Layout.maximumHeight: titlebarHeight + 64 + 16
+  Layout.minimumHeight: titlebarHeight + (toolbarEnabled ? 64 + 16 : 0)
+  Layout.maximumHeight: titlebarHeight + (toolbarEnabled ? 64 + 16 : 0)
 
   //
   // Titlebar text
@@ -127,6 +125,8 @@ Rectangle {
   RowLayout {
     id: layout
     spacing: 4
+    visible: root.toolbarEnabled
+    enabled: root.toolbarEnabled
 
     anchors {
       margins: 2
@@ -146,18 +146,17 @@ Rectangle {
     //
     // Project Editor
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Project Editor")
       Layout.alignment: Qt.AlignVCenter
       onClicked: app.showProjectEditor()
       icon.source: "qrc:/rcc/icons/toolbar/project-setup.svg"
-      enabled: Cpp_JSON_FrameBuilder.operationMode == SerialStudio.ProjectFile
     }
 
     //
     // CSV Player
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("CSV Player")
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_CSV_Player.openFile()
@@ -173,66 +172,29 @@ Rectangle {
       Layout.fillHeight: true
       Layout.maximumHeight: 64
       Layout.alignment: Qt.AlignVCenter
+      visible: Cpp_QtCommercial_Available
       color: Cpp_ThemeManager.colors["toolbar_separator"]
     }
 
     //
     // Setup
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       id: setupBt
-      text: qsTr("Setup")
+      text: qsTr("Devices")
       onClicked: root.setupClicked()
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/toolbar/device-setup.svg"
     }
 
     //
-    // Console
+    // Settings
     //
-    Widgets.BigButton {
-      id: consoleBt
-      opacity: 1
-      text: qsTr("Console")
-      enabled: dashboardBt.enabled
-      onClicked: root.consoleClicked()
+    Widgets.ToolbarButton {
+      text: qsTr("Preferences")
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/toolbar/console.svg"
-    }
-
-    //
-    // Separator
-    //
-    Rectangle {
-      implicitWidth: 1
-      Layout.fillHeight: true
-      Layout.maximumHeight: 64
-      Layout.alignment: Qt.AlignVCenter
-      color: Cpp_ThemeManager.colors["toolbar_separator"]
-    }
-
-    //
-    // Dashboard Structure
-    //
-    Widgets.BigButton {
-      id: structureBt
-      text: qsTr("Widgets")
-      enabled: dashboardBt.checked
-      Layout.alignment: Qt.AlignVCenter
-      onClicked: root.structureClicked()
-      icon.source: "qrc:/rcc/icons/toolbar/structure.svg"
-    }
-
-    //
-    // Dashboard
-    //
-    Widgets.BigButton {
-      id: dashboardBt
-      text: qsTr("Dashboard")
-      onClicked: root.dashboardClicked()
-      Layout.alignment: Qt.AlignVCenter
-      enabled: Cpp_UI_Dashboard.available
-      icon.source: "qrc:/rcc/icons/toolbar/dashboard.svg"
+      onClicked: app.showSettingsDialog()
+      icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
     }
 
     //
@@ -253,7 +215,7 @@ Rectangle {
     Loader {
       active: Cpp_QtCommercial_Available
       sourceComponent: Component {
-        Widgets.BigButton {
+        Widgets.ToolbarButton {
           text: qsTr("MQTT")
           onClicked: app.showMqttConfiguration()
           icon.source: Cpp_MQTT_Client.isConnected ?
@@ -279,7 +241,7 @@ Rectangle {
     //
     // Examples
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Examples")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/toolbar/examples.svg"
@@ -289,7 +251,7 @@ Rectangle {
     //
     // Help
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Help")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/toolbar/help.svg"
@@ -299,7 +261,7 @@ Rectangle {
     //
     // About
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("About")
       onClicked: app.showAboutDialog()
       Layout.alignment: Qt.AlignVCenter
@@ -317,7 +279,7 @@ Rectangle {
     //
     // Connect/Disconnect button
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       id: _connectButton
       Layout.alignment: Qt.AlignVCenter
       implicitWidth: metrics.width + 16

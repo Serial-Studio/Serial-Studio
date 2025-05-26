@@ -1,0 +1,185 @@
+/*
+ * Serial Studio - https://serial-studio.github.io/
+ *
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+#pragma once
+
+#include <QObject>
+#include <QQuickItem>
+#include <QVariantList>
+#include <QStandardItemModel>
+
+#include "UI/WindowManager.h"
+
+namespace UI
+{
+/**
+ * @brief QStandardItemModel used to represent dashboard widgets in a
+ *        hierarchical UI.
+ *
+ * This model is used in two distinct contexts:
+ * - `fullModel`: Holds the complete structure of all groups and widgets
+ * - `taskbarButtons`: Holds the filtered subset currently visible in the
+ * taskbar (based on active group)
+ *
+ * The model supports dynamic grouping and filtering based on:
+ * - Group ID (user-defined dataset grouping)
+ * - Widget type (FFT, Plot, etc.)
+ *
+ * Each item in the model exposes a consistent set of roles to QML, such as
+ * `widgetName`, `widgetType`, `groupName`, and `windowState`.
+ *
+ * Custom enum `WindowState` defines whether a widget is shown, minimized, or
+ * closed.
+ */
+class TaskbarModel : public QStandardItemModel
+{
+  Q_OBJECT
+
+public:
+  enum Roles
+  {
+    WindowIdRole = Qt::UserRole + 1,
+    WidgetTypeRole,
+    WidgetNameRole,
+    WidgetIconRole,
+    GroupIdRole,
+    GroupNameRole,
+    IsGroupRole,
+    WindowStateRole,
+    OverviewRole,
+  };
+
+  enum WindowState
+  {
+    WindowNormal = 0,
+    WindowMinimized = 1,
+    WindowClosed = 2
+  };
+  Q_ENUM(WindowState)
+
+  explicit TaskbarModel(QObject *parent = nullptr);
+  QHash<int, QByteArray> roleNames() const override;
+};
+
+/**
+ * @brief Controller that manages dashboard window state and taskbar UI models.
+ *
+ * The Taskbar class owns and maintains two synchronized models:
+ * - `fullModel`: A complete hierarchical representation of all windows.
+ * - `taskbarButtons`: A filtered view of widgets shown in the taskbar based on
+ *                     the current group selected in a tab bar.
+ *
+ * It also manages runtime window state transitions such as:
+ * - Showing, minimizing, or closing individual windows
+ * - Registering QML window instances with internal IDs
+ * - Tracking the currently active window and group
+ *
+ * QML can bind to:
+ * - `taskbarButtons` for displaying current visible widgets
+ * - `fullModel` for metadata access or diagnostics
+ * - `groupTitles` to populate tabs or navigation
+ *
+ * Responsibilities:
+ * - React to dashboard updates (`rebuildModel()`)
+ * - Maintain per-window state using `WindowStateRole`
+ * - Provide a clear interface to manipulate visibility from QML
+ *
+ * Usage:
+ * - Exposed as a singleton via context property
+ * - Interacts closely with UI::Dashboard and QML taskbar UI
+ */
+class Taskbar : public QQuickItem
+{
+  // clang-format off
+  Q_OBJECT
+  Q_PROPERTY(TaskbarModel* fullModel
+             READ fullModel
+             NOTIFY fullModelChanged)
+  Q_PROPERTY(TaskbarModel* taskbarButtons
+             READ taskbarButtons
+             NOTIFY taskbarButtonsChanged)
+  Q_PROPERTY(int activeGroupId
+             READ activeGroupId
+             WRITE setActiveGroupId
+             NOTIFY activeGroupIdChanged)
+  Q_PROPERTY(QQuickItem* activeWindow
+             READ activeWindow
+             WRITE setActiveWindow
+             NOTIFY activeWindowChanged)
+  Q_PROPERTY(QVariantList groupModel
+             READ groupModel
+             NOTIFY fullModelChanged)
+  Q_PROPERTY(UI::WindowManager* windowManager
+             READ windowManager
+             WRITE setWindowManager
+             NOTIFY windowManagerChanged)
+  // clang-format on
+
+signals:
+  void fullModelChanged();
+  void activeWindowChanged();
+  void windowStatesChanged();
+  void activeGroupIdChanged();
+  void windowManagerChanged();
+  void taskbarButtonsChanged();
+  void registeredWindowsChanged();
+
+public:
+  Taskbar(QQuickItem *parent = nullptr);
+
+  [[nodiscard]] int activeGroupId() const;
+  [[nodiscard]] QVariantList groupModel() const;
+  [[nodiscard]] QQuickItem *activeWindow() const;
+
+  [[nodiscard]] TaskbarModel *fullModel() const;
+  [[nodiscard]] TaskbarModel *taskbarButtons() const;
+  [[nodiscard]] WindowManager *windowManager() const;
+
+  Q_INVOKABLE QQuickItem *windowData(const int id) const;
+  Q_INVOKABLE TaskbarModel::WindowState windowState(QQuickItem *window) const;
+
+public slots:
+  void setActiveGroupId(int groupId);
+  void showWindow(QQuickItem *window);
+  void closeWindow(QQuickItem *window);
+  void minimizeWindow(QQuickItem *window);
+  void setActiveWindow(QQuickItem *window);
+  void unregisterWindow(QQuickItem *window);
+  void setWindowManager(UI::WindowManager *manager);
+  void registerWindow(const int id, QQuickItem *window);
+  void setWindowState(const int id, const TaskbarModel::WindowState state);
+
+private:
+  void rebuildModel();
+  QStandardItem *findItemByWindowId(int windowId,
+                                    QStandardItem *parentItem = nullptr) const;
+
+  int m_activeGroupId = -1;
+
+  QQuickItem *m_activeWindow;
+  UI::WindowManager *m_windowManager;
+  QMap<QQuickItem *, int> m_windowIDs;
+
+  TaskbarModel *m_fullModel;
+  TaskbarModel *m_taskbarButtons;
+};
+
+} // namespace UI

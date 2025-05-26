@@ -30,11 +30,7 @@ Controls.GroupBox {
   topPadding: label.height + 16
 
   property string icon: ""
-  property string buttonIcon: ""
-  property bool hardBorder: false
   property bool headerVisible: true
-
-  signal actionButtonClicked()
 
   label: Controls.ToolBar {
     z: 2000
@@ -44,64 +40,44 @@ Controls.GroupBox {
 
     background: Rectangle {
       border.width: 1
-      border.color: root.hardBorder ?
-                      Cpp_ThemeManager.colors["pane_hard_caption_border"] :
-                      Cpp_ThemeManager.colors["groupbox_hard_border"]
+      border.color: Cpp_ThemeManager.colors["pane_caption_border"]
 
       Rectangle {
         gradient: Gradient {
           GradientStop {
             position: 0
-            color: root.hardBorder ?
-                     Cpp_ThemeManager.colors["pane_hard_caption_bg_top"] :
-                     Cpp_ThemeManager.colors["pane_caption_bg_top"]
+            color: Cpp_ThemeManager.colors["pane_caption_bg_top"]
           }
 
           GradientStop {
             position: 1
-            color: root.hardBorder ?
-                     Cpp_ThemeManager.colors["pane_hard_caption_bg_bottom"] :
-                     Cpp_ThemeManager.colors["pane_caption_bg_bottom"]
+            color: Cpp_ThemeManager.colors["pane_caption_bg_bottom"]
           }
         }
 
         anchors {
           fill: parent
           topMargin: 1
+          leftMargin: 0
+          rightMargin: 0
           bottomMargin: 1
-          leftMargin: root.hardBorder ? 1 : 0
-          rightMargin: root.hardBorder ? 1 : 0
         }
       }
 
       Rectangle {
         height: 1
-        visible: !root.hardBorder
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        color: root.hardBorder ?
-                 Cpp_ThemeManager.colors["pane_hard_caption_border"] :
-                 Cpp_ThemeManager.colors["pane_caption_border"]
+        color: Cpp_ThemeManager.colors["pane_caption_border"]
       }
 
       Rectangle {
         height: 1
-        visible: !root.hardBorder
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        color: root.hardBorder ?
-                 Cpp_ThemeManager.colors["pane_hard_caption_border"] :
-                 Cpp_ThemeManager.colors["pane_caption_border"]
-      }
-    }
-
-    MouseArea {
-      anchors.fill: parent
-      onDoubleClicked: {
-        if (root.buttonIcon !== "")
-          root.actionButtonClicked()
+        color: Cpp_ThemeManager.colors["pane_caption_border"]
       }
     }
 
@@ -119,49 +95,23 @@ Controls.GroupBox {
       }
 
       Controls.Label {
-        id: _title
         text: root.title
         elide: Qt.ElideRight
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignVCenter
         horizontalAlignment: Qt.AlignLeft
         font: Cpp_Misc_CommonFonts.boldUiFont
-        color: root.hardBorder ?
-                 Cpp_ThemeManager.colors["pane_hard_caption_foreground"] :
-                 Cpp_ThemeManager.colors["pane_caption_foreground"]
-      }
-
-      Controls.ToolButton {
-        flat: true
-        icon.width: 18
-        icon.height: 18
-        background: Item {}
-        icon.color: _title.color
-        visible: icon.source !== ""
-        enabled: icon.source !== ""
-        icon.source: root.buttonIcon
-        onClicked: root.actionButtonClicked()
-        opacity: mouseArea.containsMouse ? 1 : 0.5
-
-        MouseArea {
-          id: mouseArea
-          hoverEnabled: true
-          anchors.fill: parent
-          onClicked: root.actionButtonClicked()
-        }
+        color: Cpp_ThemeManager.colors["pane_caption_foreground"]
       }
     }
   }
 
   background: Rectangle {
-    border.width: root.hardBorder ? 1 : 0
-    border.color: Cpp_ThemeManager.colors["groupbox_hard_border"]
-    color: root.hardBorder ? Cpp_ThemeManager.colors["groupbox_background"] :
-                             Cpp_ThemeManager.colors["pane_background"]
+    color: Cpp_ThemeManager.colors["pane_background"]
 
     anchors {
       fill: parent
-      topMargin: root.hardBorder ? label.height - 1 : label.height
+      topMargin: label.height
     }
   }
 }

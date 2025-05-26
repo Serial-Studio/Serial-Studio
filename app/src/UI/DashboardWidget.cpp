@@ -102,14 +102,6 @@ QColor UI::DashboardWidget::widgetColor() const
 }
 
 /**
- * Returns the path of the SVG icon to use with this widget
- */
-QString UI::DashboardWidget::widgetIcon() const
-{
-  return SerialStudio::dashboardWidgetIcon(m_widgetType);
-}
-
-/**
  * Returns the appropiate window title for the given widget
  */
 QString UI::DashboardWidget::widgetTitle() const
@@ -220,6 +212,11 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
         m_dbWidget = new Widgets::Accelerometer(relativeIndex(), this);
         m_qmlPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/"
                     "Accelerometer.qml";
+        break;
+      case SerialStudio::DashboardTerminal:
+        m_dbWidget = nullptr;
+        m_qmlPath = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/"
+                    "Terminal.qml";
         break;
       case SerialStudio::DashboardGPS:
         m_dbWidget = new Widgets::GPS(relativeIndex(), this);

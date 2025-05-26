@@ -35,8 +35,13 @@ Item {
   //
   // Widget data inputs
   //
-  property AccelerometerModel model
-  property color color: Cpp_ThemeManager.colors["highlight"]
+  required property color color
+  required property MiniWindow windowRoot
+  required property AccelerometerModel model
+
+  //
+  // Custom properties
+  //
   readonly property int trackWidth: root.height >= 120 ? 4 : 2
 
   //

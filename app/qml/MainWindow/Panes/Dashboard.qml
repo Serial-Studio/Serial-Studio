@@ -23,86 +23,159 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Dashboard" as DashboardItems
+import SerialStudio.UI as SS_UI
 
-RowLayout {
+import "Dashboard" as DbItems
+import "../../Widgets" as Widgets
+
+Widgets.Pane {
   id: root
-  spacing: 0
+  title: qsTr("Dashboard")
+  headerVisible: mainWindow.toolbarVisible
+  icon: "qrc:/rcc/icons/panes/dashboard.svg"
+
+  //
+  // Autolayout
+  //
+  function loadLayout() {
+    canvas.windowManager.loadLayout()
+  }
+
+  //
+  // Taskbar helper
+  //
+  property SS_UI.TaskBar taskBar: SS_UI.TaskBar {}
 
   //
   // Custom properties
   //
-  property int structureMargin: 0
-  readonly property int structureWidth: 280
-  readonly property bool structureVisible: structureMargin > -1 * structureWidth
+  property bool isExternalWindow: false
 
   //
-  // Shows the structure tree
-  //
-  function showStructureTree() {
-    structureMargin = 0
-  }
-
-  //
-  // Hides the structure tree
-  //
-  function hideStructureTree() {
-    structureMargin = -1 * root.structureWidth
-  }
-
-  //
-  // Hides/shows the structure tree
-  //
-  function toggleStructureTree() {
-    if (structureMargin < 0)
-      showStructureTree()
-    else
-      hideStructureTree()
-  }
-
-  //
-  // Animations
-  //
-  Behavior on structureMargin {NumberAnimation{}}
-
-  //
-  // View options window
-  //
-  DashboardItems.ViewOptions {
-    id: viewOptions
-    Layout.fillHeight: true
-    Layout.minimumWidth: 280
-    visible: root.structureVisible
-    Layout.leftMargin: root.structureMargin
-  }
-
-  //
-  // Panel border rectangle
+  // Default background
   //
   Rectangle {
-    z: 2
-    implicitWidth: 1
-    Layout.fillHeight: true
-    visible: root.structureVisible
-    color: Cpp_ThemeManager.colors["setup_border"]
+    anchors.fill: parent
+    anchors.topMargin: -16
+    anchors.leftMargin: -9
+    anchors.rightMargin: -9
+    anchors.bottomMargin: -9
+    color: Cpp_ThemeManager.colors["dashboard_background"]
 
-    Rectangle {
-      width: 1
-      height: 32
-      anchors.top: parent.top
-      anchors.left: parent.left
-      color: Cpp_ThemeManager.colors["pane_caption_border"]
+    /*Image {
+      opacity: 0.5
+      anchors.centerIn: parent
+      source: "qrc:/rcc/images/banner.png"
+    }*/
+  }
+
+  //
+  // User-selected background image
+  //
+  Image {
+    visible: source !== ""
+    anchors.fill: parent
+    anchors.topMargin: -16
+    anchors.leftMargin: -9
+    anchors.rightMargin: -9
+    anchors.bottomMargin: -9
+    source: canvas.backgroundImage
+    fillMode: Image.PreserveAspectCrop
+  }
+
+  //
+  // Desktop layout
+  //
+  ColumnLayout {
+    spacing: -1
+    anchors.fill: parent
+    anchors.topMargin: -16
+    anchors.leftMargin: -9
+    anchors.rightMargin: -9
+    anchors.bottomMargin: -9
+
+    //
+    // Widget windows
+    //
+    DbItems.Canvas {
+      id: canvas
+      taskBar: root.taskBar
+      Layout.topMargin: -1
+      Layout.leftMargin: -1
+      Layout.rightMargin: -1
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      Layout.minimumWidth: 480
+    }
+
+    //
+    // Task bar
+    //
+    DbItems.Taskbar {
+      id: _taskBar
+      taskBar: root.taskBar
+      Layout.fillWidth: true
+      onStartClicked: {
+        if (startMenu.visible)
+          startMenu.close()
+        else
+          startMenu.open()
+      }
     }
   }
 
   //
-  // Widget grid
+  // Start menu
   //
-  DashboardItems.WidgetGrid {
-    id: widgetGrid
-    Layout.fillWidth: true
-    Layout.fillHeight: true
-    Layout.minimumWidth: 240
-    aspectRatio: viewOptions.aspectRatio
+  DbItems.StartMenu {
+    id: startMenu
+    x: -9
+    taskBar: root.taskBar
+    isExternalWindow: root.isExternalWindow
+    y: root.height - height - _taskBar.height - root.topPadding + 2
+    onExternalWindowClicked: {
+      var dialog = Qt.createQmlObject('
+        import QtQuick
+        import QtQuick.Controls
+
+        Window {
+          id: externalWindow
+
+          visible: true
+          minimumWidth: 640
+          minimumHeight: 480
+          title: qsTr("Dashboard")
+
+          Connections {
+            target: Cpp_IO_Manager
+            function onConnectedChanged() {
+                if (!Cpp_IO_Manager.isConnected)
+                    externalWindow.close()
+            }
+          }
+
+          Loader {
+            id: loader
+            anchors.fill: parent
+            source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/Dashboard.qml"
+
+            onLoaded: {
+              if (item) {
+                item.headerVisible = false
+                item.isExternalWindow = true
+              }
+
+              else
+                console.error("Dashboard.qml loaded, but item is null.")
+            }
+
+            onStatusChanged: {
+              if (status === Loader.Error)
+                console.error("Failed to load Dashboard.qml:", loader.errorString())
+            }
+          }
+        }
+        ', root, "ExternalDashboardWindow")
+    }
   }
 }

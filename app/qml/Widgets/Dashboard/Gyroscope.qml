@@ -26,14 +26,17 @@ import QtQuick.Controls
 
 import SerialStudio
 
+import "../"
+
 Item {
   id: root
 
   //
   // Widget data inputs
   //
-  property color color
-  property GyroscopeModel model: GyroscopeModel {}
+  required property color color
+  required property GyroscopeModel model
+  required property MiniWindow windowRoot
 
   //
   // Custom properties

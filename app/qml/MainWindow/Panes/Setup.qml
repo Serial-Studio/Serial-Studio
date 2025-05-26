@@ -30,7 +30,7 @@ import "../../Widgets" as Widgets
 
 Widgets.Pane {
   id: root
-  title: qsTr("Setup")
+  title: qsTr("Device Setup")
   icon: "qrc:/rcc/icons/panes/setup.svg"
   implicitHeight: layout.implicitHeight + 32
 
@@ -66,10 +66,7 @@ Widgets.Pane {
   //
   Settings {
     category: "SetupPanel"
-
-    property alias language: settings.language
     property alias csvExport: csvLogging.checked
-    property alias tcpPlugins: settings.tcpPlugins
     property alias consoleExport: consoleLogging.checked
     property alias selectedDriver: driverCombo.currentIndex
   }
@@ -119,32 +116,6 @@ Widgets.Pane {
         leftMargin: 9
         rightMargin: 9
         bottomMargin: 9
-      }
-
-      //
-      // Driver selection
-      //
-      Label {
-        text: qsTr("Device Setup") + ":"
-        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
-        color: Cpp_ThemeManager.colors["pane_section_label"]
-        Component.onCompleted: font.capitalization = Font.AllUppercase
-      } ComboBox {
-        id: driverCombo
-        Layout.fillWidth: true
-        model: Cpp_IO_Manager.availableBuses
-        displayText: qsTr("I/O Interface: %1").arg(currentText)
-        onCurrentIndexChanged: {
-          if (Cpp_IO_Manager.busType !== currentIndex)
-            Cpp_IO_Manager.busType = currentIndex
-        }
-      }
-
-      //
-      // Spacer
-      //
-      Item {
-        implicitHeight: 4
       }
 
       //
@@ -265,50 +236,31 @@ Widgets.Pane {
       }
 
       //
-      // Tab bar
+      // Driver selection
       //
-      TabBar {
-        id: tab
-        implicitHeight: 24
+      Label {
+        text: qsTr("Device Setup") + ":"
+        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
+        color: Cpp_ThemeManager.colors["pane_section_label"]
+        Component.onCompleted: font.capitalization = Font.AllUppercase
+      } ComboBox {
+        id: driverCombo
         Layout.fillWidth: true
-        Layout.maximumWidth: root.maxItemWidth
-
-        TabButton {
-          text: qsTr("Device")
-          height: tab.height + 3
-          width: implicitWidth + 2 * 8
-        }
-
-        TabButton {
-          text: qsTr("Settings")
-          height: tab.height + 3
-          width: implicitWidth + 2 * 8
+        model: Cpp_IO_Manager.availableBuses
+        displayText: qsTr("I/O Interface: %1").arg(currentText)
+        onCurrentIndexChanged: {
+          if (Cpp_IO_Manager.busType !== currentIndex)
+            Cpp_IO_Manager.busType = currentIndex
         }
       }
 
       //
-      // Tab bar contents
+      // Hardware setup
       //
-      StackLayout {
-        id: stack
-        clip: true
+      SetupPanes.Hardware {
+        id: hardware
         Layout.fillWidth: true
         Layout.fillHeight: true
-        currentIndex: tab.currentIndex
-        Layout.topMargin: -parent.spacing - 1
-        implicitHeight: Math.max(hardware.implicitHeight, settings.implicitHeight)
-
-        SetupPanes.Hardware {
-          id: hardware
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-        }
-
-        SetupPanes.Settings {
-          id: settings
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-        }
       }
     }
   }

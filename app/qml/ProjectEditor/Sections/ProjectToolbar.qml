@@ -130,7 +130,7 @@ Rectangle {
     //
     // New project
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("New")
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_JSON_ProjectModel.newJsonFile()
@@ -140,7 +140,7 @@ Rectangle {
     //
     // Open
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Open")
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_JSON_ProjectModel.openJsonFile()
@@ -161,7 +161,7 @@ Rectangle {
     //
     // Save
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Save")
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_JSON_ProjectModel.saveJsonFile(false)
@@ -172,7 +172,7 @@ Rectangle {
     //
     // Save As
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Save As")
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_JSON_ProjectModel.saveJsonFile(true)
@@ -194,7 +194,7 @@ Rectangle {
     //
     // Add action
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Action")
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_JSON_ProjectModel.addAction()
@@ -215,7 +215,7 @@ Rectangle {
     //
     // Add data grid
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Data Grid")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-datagrid.svg"
@@ -225,7 +225,7 @@ Rectangle {
     //
     // Add multiplot
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Multiple Plots")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-multiplot.svg"
@@ -235,7 +235,7 @@ Rectangle {
     //
     // Add 3D Plot
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("3D Plot")
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-plot3d.svg"
       onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("3D Plot"), SerialStudio.Plot3D)
@@ -244,7 +244,7 @@ Rectangle {
     //
     // Add accelerometer
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Accelerometer")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-accelerometer.svg"
@@ -254,7 +254,7 @@ Rectangle {
     //
     // Add gyroscope
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Gyroscope")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gyroscope.svg"
@@ -264,7 +264,7 @@ Rectangle {
     //
     // Add map
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Map")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gps.svg"
@@ -274,7 +274,7 @@ Rectangle {
     //
     // Add group
     //
-    Widgets.BigButton {
+    Widgets.ToolbarButton {
       text: qsTr("Container")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"

@@ -133,7 +133,7 @@ void JSON::FrameBuilder::loadJsonMap()
 void JSON::FrameBuilder::setupExternalConnections()
 {
   connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
-          &JSON::FrameBuilder::readData);
+          &JSON::FrameBuilder::readData, Qt::QueuedConnection);
 }
 
 /**
@@ -368,6 +368,7 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     for (const auto &field : std::as_const(fields))
     {
       JSON::Dataset dataset;
+      dataset.m_groupId = 0;
       dataset.m_index = channel;
       dataset.m_title = tr("Channel %1").arg(channel);
       dataset.m_value = QString::fromUtf8(field);
@@ -382,12 +383,10 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     frame.m_title = tr("Quick Plot");
 
     // Create a datagrid group from the dataset array
-    JSON::Group datagrid;
+    JSON::Group datagrid(0);
     datagrid.m_datasets = datasets;
-    datagrid.m_title = tr("Data Grid");
+    datagrid.m_title = tr("Quick Plot Data");
     datagrid.m_widget = QStringLiteral("datagrid");
-    for (int i = 0; i < datagrid.m_datasets.count(); ++i)
-      datagrid.m_datasets[i].m_graph = true;
 
     // Append datagrid to frame
     frame.m_groups.append(datagrid);
@@ -395,12 +394,30 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     // Create a multiplot group when multiple datasets are found
     if (datasets.count() > 1)
     {
-      JSON::Group plots;
-      plots.m_datasets = datasets;
-      plots.m_title = tr("Multiple Plots");
-      plots.m_widget = QStringLiteral("multiplot");
-      frame.m_groups.append(plots);
+      JSON::Group multiplot(1);
+      multiplot.m_datasets = datasets;
+      multiplot.m_title = tr("Multiple Plots");
+      multiplot.m_widget = QStringLiteral("multiplot");
+      for (int i = 0; i < multiplot.m_datasets.count(); ++i)
+        multiplot.m_datasets[i].m_groupId = 1;
+
+      frame.m_groups.append(multiplot);
     }
+
+    // Create a container group with plots
+    JSON::Group plots(2);
+    plots.m_datasets = datasets;
+    plots.m_widget = QLatin1String("");
+    plots.m_title = tr("Individual Plots");
+    for (int i = 0; i < plots.m_datasets.count(); ++i)
+    {
+      plots.m_datasets[i].m_groupId = 2;
+      plots.m_datasets[i].m_graph = true;
+      plots.m_datasets[i].m_displayInOverview = (plots.m_datasets.count() == 1);
+    }
+
+    // Register container group
+    frame.m_groups.append(plots);
 
     Q_EMIT frameChanged(frame);
   }

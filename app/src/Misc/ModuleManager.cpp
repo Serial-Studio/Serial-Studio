@@ -53,9 +53,10 @@
 
 #include "Plugins/Server.h"
 
+#include "UI/Taskbar.h"
 #include "UI/Dashboard.h"
+#include "UI/WindowManager.h"
 #include "UI/DashboardWidget.h"
-#include "UI/AdaptiveGridLayout.h"
 
 #include "UI/Widgets/Bar.h"
 #include "UI/Widgets/GPS.h"
@@ -240,12 +241,16 @@ void Misc::ModuleManager::registerQmlTypes()
   // Register generic dashboard widget
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
 
-  // Register custom QML helper elements
-  qmlRegisterType<UI::AdaptiveGridLayout>("SerialStudio", 1, 0,
-                                          "AdaptiveGridLayout");
+  // Register window manager & taskbar helpers
+  qmlRegisterType<UI::Taskbar>("SerialStudio.UI", 1, 0, "TaskBar");
+  qmlRegisterType<UI::WindowManager>("SerialStudio.UI", 1, 0, "WindowManager");
 
   // Regsiter common Serial Studio enums & values
-  qmlRegisterType<SerialStudio>("SerialStudio", 1, 0, "SerialStudio");
+  qmlRegisterSingletonType<SerialStudio>(
+      "SerialStudio", 1, 0, "SerialStudio",
+      [](QQmlEngine *, QJSEngine *) -> QObject * {
+        return new SerialStudio();
+      });
 }
 
 /**
@@ -343,8 +348,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
 
   // Load main.qml
-  m_engine.load(
-      QUrl(QStringLiteral("qrc:/serial-studio.com/gui/qml/main.qml")));
+  const auto url = QStringLiteral("qrc:/serial-studio.com/gui/qml/main.qml");
+  m_engine.load(QUrl(url));
 
   // Setup singleton module interconnections
   ioSerial->setupExternalConnections();

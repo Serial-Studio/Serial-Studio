@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30pt" height="30pt" viewBox="0 0 30 30" version="1.1">
+<g id="surface4363">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(88.235295%,92.156863%,94.901961%);fill-opacity:1;" d="M 3 28.125 C 1.964844 28.125 1.125 27.285156 1.125 26.25 L 1.125 3 C 1.125 1.964844 1.964844 1.125 3 1.125 L 26.25 1.125 C 27.285156 1.125 28.125 1.964844 28.125 3 L 28.125 26.25 C 28.125 27.285156 27.285156 28.125 26.25 28.125 Z M 3 28.125 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(47.058824%,54.509807%,61.176473%);fill-opacity:1;" d="M 26.25 1.5 C 27.078125 1.5 27.75 2.171875 27.75 3 L 27.75 26.25 C 27.75 27.078125 27.078125 27.75 26.25 27.75 L 3 27.75 C 2.171875 27.75 1.5 27.078125 1.5 26.25 L 1.5 3 C 1.5 2.171875 2.171875 1.5 3 1.5 L 26.25 1.5 M 26.25 0.75 L 3 0.75 C 1.757812 0.75 0.75 1.757812 0.75 3 L 0.75 26.25 C 0.75 27.492188 1.757812 28.5 3 28.5 L 26.25 28.5 C 27.492188 28.5 28.5 27.492188 28.5 26.25 L 28.5 3 C 28.5 1.757812 27.492188 0.75 26.25 0.75 Z M 26.25 0.75 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(71.372551%,78.823531%,83.92157%);fill-opacity:1;" d="M 14.25 1.5 L 15 1.5 L 15 27.75 L 14.25 27.75 Z M 14.25 1.5 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(71.372551%,78.823531%,83.92157%);fill-opacity:1;" d="M 1.5 14.25 L 27.75 14.25 L 27.75 15 L 1.5 15 Z M 1.5 14.25 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(78.039217%,26.274511%,26.274511%);stroke-opacity:1;stroke-miterlimit:10;" d="M 2 34.5 C 11.802083 34.5 11.098958 4.5 19.5 4.5 C 27.901042 4.5 27.338542 34.5 37 34.5 " transform="matrix(0.75,0,0,0.75,0,0)"/>
+</g>
+</svg>

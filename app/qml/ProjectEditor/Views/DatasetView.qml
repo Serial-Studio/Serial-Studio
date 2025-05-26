@@ -92,7 +92,7 @@ Widgets.Pane {
         id: header
         Layout.fillWidth: true
         height: layout.implicitHeight + 12
-        color: Cpp_ThemeManager.colors["groupbox_background"]
+        color: Cpp_ThemeManager.colors["window_toolbar_background"]
 
         //
         // Buttons
@@ -111,7 +111,7 @@ Widgets.Pane {
           //
           // Add plot
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Plot")
             toolbarButton: false
@@ -128,7 +128,7 @@ Widgets.Pane {
           //
           // Add FFT plot
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
             text: qsTr("FFT Plot")
@@ -145,7 +145,7 @@ Widgets.Pane {
           //
           // Add bar
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
             text: qsTr("Bar/Level")
@@ -163,7 +163,7 @@ Widgets.Pane {
           //
           // Add gauge
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Gauge")
             toolbarButton: false
@@ -181,7 +181,7 @@ Widgets.Pane {
           //
           // Add compass
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
             text: qsTr("Compass")
@@ -199,7 +199,7 @@ Widgets.Pane {
           //
           // Add LED
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("LED")
             toolbarButton: false
@@ -223,7 +223,7 @@ Widgets.Pane {
           //
           // Duplicate dataset
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
             text: qsTr("Duplicate")
@@ -236,7 +236,7 @@ Widgets.Pane {
           //
           // Delete dataset
           //
-          Widgets.BigButton {
+          Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Delete")
             toolbarButton: false
