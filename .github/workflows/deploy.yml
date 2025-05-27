@@ -100,7 +100,7 @@ jobs:
         QT_ARCH: x64
         QT_USERNAME: ${{secrets.QT_USERNAME}}
         QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-Linux
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
 
       run: |
         # Run the install script
@@ -219,7 +219,7 @@ jobs:
         QT_ARCH: x64
         QT_USERNAME: ${{secrets.QT_USERNAME}}
         QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-macOS
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
       run: |
         # Run the install script
         chmod +x ./scripts/install-qt.sh
@@ -337,7 +337,7 @@ jobs:
         QT_ARCH: x64
         QT_USERNAME: ${{secrets.QT_USERNAME}}
         QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}\Qt-${{env.QT_VERSION_WINDOWS}}-Windows-x64
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
       run: |
         # Run the installer
         ./scripts/install-qt.ps1
