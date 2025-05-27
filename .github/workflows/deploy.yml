@@ -346,9 +346,9 @@ jobs:
         echo "QT_INSTALL_NEEDED=$env:QT_INSTALL_NEEDED" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
         # Add to PATH
-        $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\bin"
-        $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\libexec"
-        $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\lib\cmake"
+        $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\bin"
+        $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\libexec"
+        $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\lib\cmake"
 
         # Write to GithHub path too
         Write-Output "$QT_BIN_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
@@ -362,7 +362,7 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-v1
+        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-v2
       
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
