@@ -73,10 +73,12 @@ jobs:
           libfuse2 \
           fakeroot
       
-    - name: '⚙️ Cache Qt'
-      uses: actions/cache@v3
+    - name: '⚙️ Restore Qt Cache'
+      uses: actions/cache/restore@v3
       with:
-        path: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-Linux
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+          ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64-v1
 
     - name: '⚙️ Install Qt'
@@ -89,15 +91,6 @@ jobs:
         QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-Linux
 
       run: |
-        # Restore Qt Cache
-        echo "Attempting to restore Qt cache..."
-        echo "::group::Restore Cache"
-        restore_key="qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64-v1"
-        cache_dir="${QT_OUTPUT_DIR}"
-        mkdir -p "${cache_dir}"
-        echo "Restoring from key: $restore_key"
-        echo "::endgroup::"
-
         # Run the install script
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
@@ -110,7 +103,16 @@ jobs:
         # Write to GithHub path too
         echo "$QT_BIN_PATH" >> $GITHUB_PATH
         echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+
+    - name: '⚙️ Save Qt Cache'
+      if: success()
+      uses: actions/cache/save@v3
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+          ${{env.USERPROFILE}}/.qt-license
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64-v1
         
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
@@ -190,10 +192,12 @@ jobs:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
 
-    - name: '⚙️ Cache Qt'
-      uses: actions/cache@v3
+    - name: '⚙️ Restore Qt Cache'
+      uses: actions/cache/restore@v3
       with:
-        path: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-macOS
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
+          ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64-v1
 
     - name: '⚙️ Install Qt'
@@ -205,15 +209,6 @@ jobs:
         QT_PASSWORD: ${{secrets.QT_PASSWORD}}
         QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-macOS
       run: |
-        # Restore Qt Cache
-        echo "Attempting to restore Qt cache..."
-        echo "::group::Restore Cache"
-        restore_key="qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64-v1"
-        cache_dir="${QT_OUTPUT_DIR}"
-        mkdir -p "${cache_dir}"
-        echo "Restoring from key: $restore_key"
-        echo "::endgroup::"
-
         # Run the install script
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
@@ -226,7 +221,16 @@ jobs:
         # Write to GithHub path too
         echo "$QT_BIN_PATH" >> $GITHUB_PATH
         echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+
+    - name: '⚙️ Save Qt Cache'
+      if: success()
+      uses: actions/cache/save@v3
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
+          ${{env.USERPROFILE}}/.qt-license
+        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64-v1
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
@@ -306,10 +310,12 @@ jobs:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
 
-    - name: '⚙️ Cache Qt'
-      uses: actions/cache@v3
+    - name: '⚙️ Restore Qt Cache'
+      uses: actions/cache/restore@v3
       with:
-        path: ${{github.workspace}}\Qt-${{env.QT_VERSION_WINDOWS}}-Windows-x64
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
+          ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-v1
 
     - name: '⚙️ Install Qt'
@@ -321,17 +327,6 @@ jobs:
         QT_PASSWORD: ${{secrets.QT_PASSWORD}}
         QT_OUTPUT_DIR: ${{github.workspace}}\Qt-${{env.QT_VERSION_WINDOWS}}-Windows-x64
       run: |
-        # Restore Qt Cache
-        Write-Host "Attempting to restore Qt cache..."
-        $restore_key = "qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-v1"
-        $cache_dir = "$env:QT_OUTPUT_DIR"
-        if (-not (Test-Path $cache_dir)) {
-            New-Item -ItemType Directory -Force -Path $cache_dir | Out-Null
-        }
-        Write-Host "::group::Restore Cache"
-        Write-Host "Restoring from key: $restore_key"
-        Write-Host "::endgroup::"
-
         # Run the installer
         ./scripts/install-qt.ps1
 
@@ -344,6 +339,15 @@ jobs:
         Write-Output "$QT_BIN_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         Write-Output "$QT_LIBEXEC_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         Write-Output "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $env:GITHUB_ENV
+
+    - name: '⚙️ Save Qt Cache'
+      if: success()
+      uses: actions/cache/save@v3
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
+          ${{env.USERPROFILE}}/.qt-license
+        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-v1
       
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
