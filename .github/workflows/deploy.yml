@@ -1,3 +1,24 @@
+#
+# Serial Studio - https://github.com/alex-spataru/serial-studio
+#
+# Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
 #-------------------------------------------------------------------------------
 # Workflow configuration
 #-------------------------------------------------------------------------------
@@ -31,13 +52,15 @@ env:
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"
     
 #-------------------------------------------------------------------------------
-# Workflow jobs (GNU/Linux, macOS & Windows)
+# Begin workflow jobs definition
 #-------------------------------------------------------------------------------
 
 jobs:
-  #
-  # Linux build
-  #
+
+#-------------------------------------------------------------------------------
+# GNU/Linux build (amd64)
+#-------------------------------------------------------------------------------
+
   build-linux-x86_64:
     runs-on: ubuntu-22.04
     name: '🐧 Linux (x86_64)'
@@ -195,9 +218,10 @@ jobs:
     #    name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
     #    path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
 
-  #
-  # macOS build
-  #
+#-------------------------------------------------------------------------------
+# macOS build (arm64 + amd64)
+#-------------------------------------------------------------------------------
+
   build-mac-universal:
     runs-on: macos-latest
     name: '🍎 macOS (Universal)'
@@ -313,9 +337,10 @@ jobs:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
 
-  #
-  # Windows build
-  #
+#-------------------------------------------------------------------------------
+# Windows build (MSVC 2022 amd64)
+#-------------------------------------------------------------------------------
+
   build-windows-x86_64:
     runs-on: windows-latest
     name: '🧊 Windows (x86_64)'      
@@ -330,7 +355,7 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-v2
+        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022
 
     - name: '⚙️ Install Qt'
       shell: pwsh
@@ -362,7 +387,7 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-v2
+        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022
       
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
@@ -404,7 +429,10 @@ jobs:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
 
-  # Upload continuous build
+#-------------------------------------------------------------------------------
+# Create continous release
+#-------------------------------------------------------------------------------
+
   upload:
     name: '🗂 Create release and upload artifacts'
     needs:
@@ -453,6 +481,7 @@ jobs:
           allowUpdates: true
           replacesArtifacts: true
           name: 'Continuous Build'
+          bodyFile: release-body.md
           artifacts: |
             artifacts/*.deb,
             artifacts/*.rpm,
@@ -460,4 +489,3 @@ jobs:
             artifacts/*.dmg,
             artifacts/*.exe,
             artifacts/*.msi
-          bodyFile: release-body.md
