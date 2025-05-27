@@ -95,10 +95,6 @@ void NativeWindow::onThemeChanged()
  */
 void NativeWindow::onActiveChanged()
 {
-  // Abort if Windows version is not Windows 11
-  if (!QSysInfo::productVersion().contains("11"))
-    return;
-
   // Get caller window
   auto *window = static_cast<QWindow *>(sender());
   if (!window || !m_windows.contains(window))
@@ -114,12 +110,31 @@ void NativeWindow::onActiveChanged()
     color = colors.value("toolbar_top").toString();
   }
 
+  // Detect Windows version
+  const QString version = QSysInfo::productVersion();
+  const bool isWin11 = version.contains("11");
+  const bool isWin10 = version.contains("10");
+
   // Convert hex string to native Windows color
-  const auto c = QColor(color);
+  const QColor c(color);
   const COLORREF colorref = c.red() | (c.green() << 8) | (c.blue() << 16);
 
-  // Change color of the caption
-  const DWORD attribute = 35; // DWMWINDOWATTRIBUTE::DWMWA_CAPTION_COLOR
-  DwmSetWindowAttribute((HWND)window->winId(), attribute, &colorref,
-                        sizeof(colorref));
+  // Obtain native window handle
+  HWND hwnd = reinterpret_cast<HWND>(window->winId());
+
+  // On Windows 11, set exact caption color using DWMWA_CAPTION_COLOR
+  if (isWin11)
+  {
+    const DWORD attribute = 35;
+    DwmSetWindowAttribute(hwnd, attribute, &colorref, sizeof(colorref));
+  }
+
+  // On Windows 10, set light or dark mode using DWMWA_USE_IMMERSIVE_DARK_MODE
+  else if (isWin10)
+  {
+    const DWORD darkModeAttr = 20;
+    BOOL useDarkMode = (c.lightness() < 128) ? TRUE : FALSE;
+    DwmSetWindowAttribute(hwnd, darkModeAttr, &useDarkMode,
+                          sizeof(useDarkMode));
+  }
 }
