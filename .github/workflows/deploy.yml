@@ -118,7 +118,7 @@ jobs:
         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
-      if: success()
+      if: false
       uses: actions/cache/save@v3
       with:
         path: |
@@ -236,7 +236,7 @@ jobs:
         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
-      if: success()
+      if: false
       uses: actions/cache/save@v3
       with:
         path: |
@@ -353,7 +353,7 @@ jobs:
         Write-Output "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $env:GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
-      if: success()
+      if: false
       uses: actions/cache/save@v3
       with:
         path: |
@@ -370,7 +370,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -G "MinGW Makefiles" -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -GNinja -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
 
     - name: '🚧 Build application'
       run: |
