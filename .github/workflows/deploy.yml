@@ -49,7 +49,6 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-          # Qt Installer Runtime Dependencies
           libxcb-shape0 \
           libxcb-xfixes0 \
           libxcb-randr0 \
@@ -61,8 +60,6 @@ jobs:
           libxkbcommon-x11-0 \
           libxcb-xinerama0 \
           libegl1 \
-          
-          # Qt Build & Dev Dependencies
           libcups2-dev \
           libgl1-mesa-dev \
           libzstd-dev \
@@ -72,8 +69,6 @@ jobs:
           libxcb-image0-dev \
           libxcb-util0-dev \
           libxcb-cursor-dev \
-
-          # Packaging & Runtime Utilities
           rpm \
           libfuse2 \
           fakeroot
