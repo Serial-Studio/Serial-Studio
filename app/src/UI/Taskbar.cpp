@@ -609,7 +609,6 @@ void UI::Taskbar::rebuildModel()
 
   // Loop through the frame to preserve the user-defined data structure
   QSet<int> groupIds;
-  bool containsTerminal = false;
   const auto &widgetMap = db->widgetMap();
   for (const JSON::Group &group : frame.groups())
   {

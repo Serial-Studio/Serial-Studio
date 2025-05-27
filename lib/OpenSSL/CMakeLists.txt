@@ -37,6 +37,18 @@ function(target_link_openssl TARGET BASE_DIR)
         ${BASE_DIR}/dll/Windows/msvc/libssl_static.lib
         ${BASE_DIR}/dll/Windows/msvc/libcrypto_static.lib
       )
+    elseif(MINGW)
+      target_link_libraries(${TARGET} PRIVATE
+        ws2_32
+        gdi32
+        advapi32
+        crypt32
+        user32
+        ${BASE_DIR}/dll/Windows/mingw/libssl.a
+        ${BASE_DIR}/dll/Windows/mingw/libcrypto.a
+      )
+    else()
+      message(FATAL_ERROR "Unsupported Windows compiler — only MSVC and MinGW are handled.")
     endif()
 
   elseif(APPLE)

@@ -41,7 +41,7 @@ find_package(
 #-------------------------------------------------------------------------------
 
 option(DEBUG_SANITIZER "Enable sanitizers for debug builds" OFF)
-option(PRODUCTION_OPTIMIZATION "Enable production optimization flags" OFF)
+option(PRODUCTION_OPTIMIZATION "Enable production optimization flags" ON)
 
 #-------------------------------------------------------------------------------
 # Project information
@@ -124,12 +124,10 @@ if(PRODUCTION_OPTIMIZATION)
          -ftree-vectorize               # Enable loop vectorization
          -fno-fast-math                 # Standard-compliant floating point math
          -fno-unsafe-math-optimizations # Use safe math only
-         -flto                          # Enable link-time optimization
       )
    add_link_options(
       -Wl,--gc-sections                 # Remove unused sections during linking
       -fuse-linker-plugin               # Enable LTO during linking
-      -flto                             # Enable link-time optimization
    )
 
    # MSVC-specific settings
