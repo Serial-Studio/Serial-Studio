@@ -29,7 +29,6 @@ env:
   PUBLISHER: "Alex Spataru"
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"
-  QT_MODULES: qt3d qtgraphs qtquick3d qtlocation qtdatavis3d qtserialport qtshadertools qtpositioning qtconnectivity qtmqtt qtserialbus
     
 #-------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -46,18 +45,42 @@ jobs:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
       
-    - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v4.2.1
+    - name: '⚙️ Cache Qt'
+      uses: actions/cache@v3
       with:
-        cache: true
-        target: desktop
-        arch: linux_gcc_64
-        use-official: true
-        modules: ${{env.QT_MODULES}}
-        pw: ${{secrets.QT_PASSWORD}}
-        email: ${{secrets.QT_USERNAME}}
-        version: ${{env.QT_VERSION_LINUX}}
-        aqtsource: 'git+https://github.com/miurahr/aqtinstall'
+        path: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-Linux
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64-v1
+
+    - name: '⚙️ Install Qt'
+      shell: bash
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_ARCH: x64
+        QT_USERNAME: ${{secrets.QT_USERNAME}}
+        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-Linux
+
+      run: |
+        # Restore Qt Cache
+        echo "Attempting to restore Qt cache..."
+        echo "::group::Restore Cache"
+        restore_key="qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64-v1"
+        cache_dir="${QT_OUTPUT_DIR}"
+        mkdir -p "${cache_dir}"
+        echo "Restoring from key: $restore_key"
+        echo "::endgroup::"
+
+        # Run the install script
+        chmod +x ./scripts/install-qt.sh
+        ./scripts/install-qt.sh
+
+        # Add to PATH
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
+        echo "Adding Qt to PATH: $QT_BIN_PATH"
+        echo "$QT_BIN_PATH" >> $GITHUB_PATH
+        echo "Assing Qt LibExec to PATH: $QT_LIBEXEC_PATH"
+        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
 
     - name: '⚙️ Install dependencies'
       run: |
@@ -106,8 +129,6 @@ jobs:
         chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
         
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
-        export QMAKE=/home/runner/work/${{env.EXECUTABLE}}/Qt/${{env.QT_VERSION_LINUX}}/gcc_64/bin/qmake
-        export PATH=/home/runner/work/${{env.EXECUTABLE}}/Qt/${{env.QT_VERSION_LINUX}}/gcc_64/libexec:$PATH
         
         ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
         
@@ -161,18 +182,41 @@ jobs:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
 
-    - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v4.2.1
+    - name: '⚙️ Cache Qt'
+      uses: actions/cache@v3
       with:
-        cache: true
-        arch: clang_64
-        target: desktop
-        use-official: true
-        modules: ${{env.QT_MODULES}}
-        pw: ${{secrets.QT_PASSWORD}}
-        email: ${{secrets.QT_USERNAME}}
-        version: ${{env.QT_VERSION_MACOS}}
-        aqtsource: 'git+https://github.com/miurahr/aqtinstall'
+        path: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-macOS
+        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64-v1
+
+    - name: '⚙️ Install Qt'
+      shell: bash
+      env:
+        QT_VERSION: ${{env.QT_VERSION_MACOS}}
+        QT_ARCH: x64
+        QT_USERNAME: ${{secrets.QT_USERNAME}}
+        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-macOS
+      run: |
+        # Restore Qt Cache
+        echo "Attempting to restore Qt cache..."
+        echo "::group::Restore Cache"
+        restore_key="qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64-v1"
+        cache_dir="${QT_OUTPUT_DIR}"
+        mkdir -p "${cache_dir}"
+        echo "Restoring from key: $restore_key"
+        echo "::endgroup::"
+
+        # Run the install script
+        chmod +x ./scripts/install-qt.sh
+        ./scripts/install-qt.sh
+
+        # Add Qt to PATH
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/clang_64/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/clang_64/libexec"
+        echo "Adding Qt to PATH: $QT_BIN_PATH"
+        echo "$QT_BIN_PATH" >> $GITHUB_PATH
+        echo "Adding Qt LibExec to PATH: $QT_LIBEXEC_PATH"
+        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
@@ -252,17 +296,42 @@ jobs:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
 
-    - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v4.2.1
+    - name: '⚙️ Cache Qt'
+      uses: actions/cache@v3
       with:
-        cache: true
-        target: desktop
-        use-official: true
-        modules: ${{env.QT_MODULES}}
-        pw: ${{secrets.QT_PASSWORD}}
-        email: ${{secrets.QT_USERNAME}}
-        version: ${{env.QT_VERSION_WINDOWS}}
-        aqtsource: 'git+https://github.com/miurahr/aqtinstall'
+        path: ${{github.workspace}}\Qt-${{env.QT_VERSION_WINDOWS}}-Windows-x64
+        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-v1
+
+    - name: '⚙️ Install Qt'
+      shell: pwsh
+      env:
+        QT_VERSION: ${{env.QT_VERSION_WINDOWS}}
+        QT_ARCH: x64
+        QT_USERNAME: ${{secrets.QT_USERNAME}}
+        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+        QT_OUTPUT_DIR: ${{github.workspace}}\Qt-${{env.QT_VERSION_WINDOWS}}-Windows-x64
+      run: |
+        # Restore Qt Cache
+        Write-Host "Attempting to restore Qt cache..."
+        $restore_key = "qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-v1"
+        $cache_dir = "$env:QT_OUTPUT_DIR"
+        if (-not (Test-Path $cache_dir)) {
+            New-Item -ItemType Directory -Force -Path $cache_dir | Out-Null
+        }
+        Write-Host "::group::Restore Cache"
+        Write-Host "Restoring from key: $restore_key"
+        Write-Host "::endgroup::"
+
+        # Run the installer
+        ./scripts/install-qt.ps1
+
+        # Add Qt to PATH
+        $qtBinPath = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2019_64\bin"
+        $qtLibexecPath = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2019_64\libexec"
+        Write-Host "Adding Qt to PATH: $qtBinPath"
+        Write-Output "$qtBinPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        Write-Host "Adding Qt LibExec to PATH: $qtLibexecPath"
+        Write-Output "$qtLibexecPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
