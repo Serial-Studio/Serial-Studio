@@ -34,8 +34,8 @@ function(target_link_openssl TARGET BASE_DIR)
         advapi32
         crypt32
         user32
-        ${BASE_DIR}/dll/Windows/msvc/libssl_static.lib
-        ${BASE_DIR}/dll/Windows/msvc/libcrypto_static.lib
+        ${BASE_DIR}/dll/Windows/msvc/libssl.lib
+        ${BASE_DIR}/dll/Windows/msvc/libcrypto.lib
       )
     elseif(MINGW)
       target_link_libraries(${TARGET} PRIVATE

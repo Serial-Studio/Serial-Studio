@@ -6,6 +6,8 @@ OpenSSL is descended from the SSLeay library developed by Eric A. Young and Tim 
 
 The official Home Page of the OpenSSL Project is [www.openssl.org](www.openssl.org).
 
+This repo uses prebuilt binaries from [https://github.com/alex-spataru/OpenSSL-Builder](https://github.com/alex-spataru/OpenSSL-Builder), which automates fetching, building, and packaging OpenSSL via CI. 
+
 ## Overview
 
 The OpenSSL toolkit includes:
