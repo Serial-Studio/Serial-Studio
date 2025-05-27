@@ -276,9 +276,8 @@ static char **adjustArgumentsForFreeType(int &argc, char **argv)
 
   // Allocate new argv array
   char **newArgv = static_cast<char **>(malloc(sizeof(char *) * (argc + 2)));
-
   if (!newArgv)
-    return argv; // Fallback if malloc fails
+    return argv;
 
   // Copy original argv content
   for (int i = 0; i < argc; ++i)
