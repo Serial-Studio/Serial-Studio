@@ -49,23 +49,34 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-        libcups2-dev \
-        libgl1-mesa-dev \
-        libxkbcommon-x11-0 \
-        libxcb-icccm4 \
-        libxcb-image0 \
-        libxcb-keysyms1 \
-        libxcb-render-util0 \
-        libxcb-xinerama0 \
-        libzstd-dev \
-        libxcb-image0-dev \
-        libxcb-util0-dev \
-        libxcb-cursor-dev \
-        libssl-dev \
-        libudev-dev \
-        rpm \
-        libfuse2 \
-        fakeroot
+          # Qt Installer Runtime Dependencies
+          libxcb-shape0 \
+          libxcb-xfixes0 \
+          libxcb-randr0 \
+          libxcb-render-util0 \
+          libxcb-image0 \
+          libxcb-keysyms1 \
+          libxcb-xtest0 \
+          libxcb-cursor0 \
+          libxkbcommon-x11-0 \
+          libxcb-xinerama0 \
+          libegl1 \
+          
+          # Qt Build & Dev Dependencies
+          libcups2-dev \
+          libgl1-mesa-dev \
+          libzstd-dev \
+          libssl-dev \
+          libudev-dev \
+          libxcb-icccm4 \
+          libxcb-image0-dev \
+          libxcb-util0-dev \
+          libxcb-cursor-dev \
+
+          # Packaging & Runtime Utilities
+          rpm \
+          libfuse2 \
+          fakeroot
       
     - name: '⚙️ Cache Qt'
       uses: actions/cache@v3
@@ -99,10 +110,12 @@ jobs:
         # Add to PATH
         export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
         export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
-        echo "Adding Qt to PATH: $QT_BIN_PATH"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
+
+        # Write to GithHub path too
         echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "Assing Qt LibExec to PATH: $QT_LIBEXEC_PATH"
         echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+        echo "$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
         
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
@@ -210,13 +223,15 @@ jobs:
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
 
-        # Add Qt to PATH
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/clang_64/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/clang_64/libexec"
-        echo "Adding Qt to PATH: $QT_BIN_PATH"
+        # Add to PATH
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/libexec"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/lib/cmake"
+
+        # Write to GithHub path too
         echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "Adding Qt LibExec to PATH: $QT_LIBEXEC_PATH"
         echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+        echo "$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
@@ -325,13 +340,15 @@ jobs:
         # Run the installer
         ./scripts/install-qt.ps1
 
-        # Add Qt to PATH
-        $qtBinPath = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2019_64\bin"
-        $qtLibexecPath = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2019_64\libexec"
-        Write-Host "Adding Qt to PATH: $qtBinPath"
-        Write-Output "$qtBinPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        Write-Host "Adding Qt LibExec to PATH: $qtLibexecPath"
-        Write-Output "$qtLibexecPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        # Add to PATH
+        $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2019_64\bin"
+        $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2019_64\libexec"
+        $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2019_64\lib\cmake"
+
+        # Write to GithHub path too
+        Write-Output "$QT_BIN_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        Write-Output "$QT_LIBEXEC_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        Write-Output "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $env:GITHUB_ENV
       
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
