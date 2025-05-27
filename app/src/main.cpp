@@ -150,7 +150,7 @@ int main(int argc, char **argv)
   for (int i = 0; i < argc; ++i)
     free(argv[i]);
 
-  delete[] argv;
+  free(argv);
 #endif
 
   // Exit application
@@ -274,18 +274,20 @@ static char **adjustArgumentsForFreeType(int &argc, char **argv)
   const char *platformArgument = "-platform";
   const char *platformOption = "windows:fontengine=freetype";
 
-  // Dynamically allocate a new array of char* pointers
-  char **newArgv = new char *[argc + 2];
+  // Allocate new argv array
+  char **newArgv = static_cast<char **>(malloc(sizeof(char *) * (argc + 2)));
 
-  // Copy original argv into newArgv
+  if (!newArgv)
+    return argv; // Fallback if malloc fails
+
+  // Copy original argv content
   for (int i = 0; i < argc; ++i)
-    newArgv[i] = _strdup(argv[i]);
+    newArgv[i] = strdup(argv[i]);
 
-  // Add new arguments to the end
-  newArgv[argc] = const_cast<char *>(platformArgument);
-  newArgv[argc + 1] = const_cast<char *>(platformOption);
+  // Append FreeType platform arguments
+  newArgv[argc] = strdup(platformArgument);
+  newArgv[argc + 1] = strdup(platformOption);
 
-  // Update argc and return the new array
   argc += 2;
   return newArgv;
 }
