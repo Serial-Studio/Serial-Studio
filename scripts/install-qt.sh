@@ -32,6 +32,12 @@ QT_USERNAME="${QT_USERNAME:?Must provide QT_USERNAME}"
 QT_PASSWORD="${QT_PASSWORD:?Must provide QT_PASSWORD}"
 
 #------------------------------------------------------------------------------
+# Workflow cache saving, assume install needed
+#------------------------------------------------------------------------------
+
+export QT_INSTALL_NEEDED=true
+
+#------------------------------------------------------------------------------
 # Operating system detection
 #------------------------------------------------------------------------------
 
@@ -79,6 +85,7 @@ esac
 
 if [ -d "$QT_OUTPUT_DIR/$QT_VERSION" ]; then
   echo "Qt $QT_VERSION already installed at $QT_OUTPUT_DIR — skipping."
+  export QT_INSTALL_NEEDED=false
   exit 0
 fi
 

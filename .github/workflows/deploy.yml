@@ -106,6 +106,7 @@ jobs:
         # Run the install script
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
+        echo "QT_INSTALL_NEEDED=$QT_INSTALL_NEEDED" >> $GITHUB_ENV
 
         # Add to PATH
         export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
@@ -118,7 +119,7 @@ jobs:
         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
-      if: false
+      if: env.QT_INSTALL_NEEDED == 'true'
       uses: actions/cache/save@v3
       with:
         path: |
@@ -224,6 +225,7 @@ jobs:
         # Run the install script
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
+        echo "QT_INSTALL_NEEDED=$QT_INSTALL_NEEDED" >> $GITHUB_ENV
 
         # Add to PATH
         export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/bin"
@@ -236,7 +238,7 @@ jobs:
         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
-      if: false
+      if: env.QT_INSTALL_NEEDED == 'true'
       uses: actions/cache/save@v3
       with:
         path: |
@@ -341,6 +343,7 @@ jobs:
       run: |
         # Run the installer
         ./scripts/install-qt.ps1
+        echo "QT_INSTALL_NEEDED=$env:QT_INSTALL_NEEDED" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
         # Add to PATH
         $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\bin"
@@ -353,7 +356,7 @@ jobs:
         Write-Output "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $env:GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
-      if: false
+      if: env.QT_INSTALL_NEEDED == 'true'
       uses: actions/cache/save@v3
       with:
         path: |
