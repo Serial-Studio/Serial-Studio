@@ -124,10 +124,12 @@ if(PRODUCTION_OPTIMIZATION)
          -ftree-vectorize               # Enable loop vectorization
          -fno-fast-math                 # Standard-compliant floating point math
          -fno-unsafe-math-optimizations # Use safe math only
+         -flto                          # Enable link-time optimization
       )
    add_link_options(
       -Wl,--gc-sections                 # Remove unused sections during linking
       -fuse-linker-plugin               # Enable LTO during linking
+      -flto                             # Enable link-time optimization
    )
 
    # MSVC-specific settings
@@ -163,6 +165,7 @@ if(PRODUCTION_OPTIMIZATION)
          -fslp-vectorize                # Enable SLP vectorization
          -fno-fast-math                 # Standard-compliant floating point math
          -fno-unsafe-math-optimizations # Use safe math only
+         -flto                          # Enable link-time optimization
       )
    add_link_options(
       -Wl,-dead_strip                   # Remove unused code and data during linking
@@ -198,6 +201,7 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-fast-math                 # Standard-compliant floating point math
          -msse2                         # Enable SSE2 targeting
          -fno-unsafe-math-optimizations # Use safe math only
+         -flto                          # Enable link-time optimization
       )
    add_link_options(
       -Wl,--gc-sections                 # Remove unused sections during linking

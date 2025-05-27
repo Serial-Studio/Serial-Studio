@@ -49,21 +49,7 @@ if (-not $QT_OUTPUT_DIR) {
     $QT_OUTPUT_DIR = "Qt-$QT_VERSION-$OS_TAG-$QT_ARCH"
 }
 
-$qtModules = @(
-  "qt.qt6.690.win64_msvc2022_64",
-  "qt.qt6.690.win64_msvc2022_64.qt3d",
-  "qt.qt6.690.win64_msvc2022_64.qtcharts",
-  "qt.qt6.690.win64_msvc2022_64.qtdatavis3d",
-  "qt.qt6.690.win64_msvc2022_64.qtlocation",
-  "qt.qt6.690.win64_msvc2022_64.qtquick3d",
-  "qt.qt6.690.win64_msvc2022_64.qtconnectivity",
-  "qt.qt6.690.win64_msvc2022_64.qtmqtt",
-  "qt.qt6.690.win64_msvc2022_64.qtserialbus",
-  "qt.qt6.690.win64_msvc2022_64.qtserialport",
-  "qt.qt6.690.win64_msvc2022_64.qtshadertools",
-  "qt.qt6.690.win64_msvc2022_64.qtpositioning",
-  "qt.qt6.690.win64_msvc2022_64.qtgraphs"
-)
+$ALIAS_PACKAGE = "qt$QT_VERSION-full-dev"
 
 #------------------------------------------------------------------------------
 # Installer setup
@@ -101,13 +87,13 @@ if (-not (Test-Path $INSTALLER_PATH)) {
 
 Write-Host "Installing Qt via CLI: $ALIAS_PACKAGE"
 Start-Process -FilePath $INSTALLER_PATH `
-  -ArgumentList @(
-    "--root", "`"$QT_OUTPUT_DIR`"",
-    "--email", "`"$QT_USERNAME`"",
-    "--pw", "`"$QT_PASSWORD`"",
-    "--accept-licenses",
-    "--default-answer",
-    "--confirm-command",
-    "install"
-  ) + $qtModules `
-  -Wait -NoNewWindow
+    -ArgumentList @(
+        "--root", "`"$QT_OUTPUT_DIR`"",
+        "--email", "`"$QT_USERNAME`"",
+        "--pw", "`"$QT_PASSWORD`"",
+        "--accept-licenses",
+        "--default-answer",
+        "--confirm-command",
+        "install", "$ALIAS_PACKAGE"
+    ) `
+    -Wait -NoNewWindow

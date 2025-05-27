@@ -23,28 +23,35 @@
 cmake_minimum_required(VERSION 3.20)
 
 function(target_link_openssl TARGET BASE_DIR)
- if(WIN32)
-  target_include_directories(${TARGET} PRIVATE ${BASE_DIR}/include)
-  target_link_libraries(${TARGET} PRIVATE
-   ws2_32
-   gdi32
-   advapi32
-   crypt32
-   user32
-   ${BASE_DIR}/dll/Windows/libssl.lib
-   ${BASE_DIR}/dll/Windows/libcrypto.lib
-  )
-elseif(APPLE)
- target_include_directories(${TARGET} PRIVATE ${BASE_DIR}/include)
- target_link_libraries(${TARGET} PRIVATE
-  ${BASE_DIR}/dll/macOS/libssl.a
-  ${BASE_DIR}/dll/macOS/libcrypto.a
- )
-elseif(UNIX)
- find_package(PkgConfig REQUIRED)
- pkg_check_modules(OPENSSL REQUIRED openssl)
- target_link_libraries(${TARGET} PRIVATE ${OPENSSL_LIBRARIES})
- target_include_directories(${TARGET} PRIVATE ${OPENSSL_INCLUDE_DIRS})
- target_compile_options(${TARGET} PRIVATE ${OPENSSL_CFLAGS_OTHER})
-endif()
+  if(WIN32)
+    target_include_directories(${TARGET} PRIVATE ${BASE_DIR}/include)
+    target_compile_definitions(${TARGET} PRIVATE OPENSSL_USE_STATIC_LIBS)
+
+    if(MSVC)
+      target_link_libraries(${TARGET} PRIVATE
+        ws2_32
+        gdi32
+        advapi32
+        crypt32
+        user32
+        ${BASE_DIR}/dll/Windows/msvc/libssl_static.lib
+        ${BASE_DIR}/dll/Windows/msvc/libcrypto_static.lib
+      )
+    endif()
+
+  elseif(APPLE)
+    target_include_directories(${TARGET} PRIVATE ${BASE_DIR}/include)
+    target_compile_definitions(${TARGET} PRIVATE OPENSSL_USE_STATIC_LIBS)
+    target_link_libraries(${TARGET} PRIVATE
+      ${BASE_DIR}/dll/macOS/libssl.a
+      ${BASE_DIR}/dll/macOS/libcrypto.a
+    )
+
+  elseif(UNIX)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(OPENSSL REQUIRED openssl)
+    target_link_libraries(${TARGET} PRIVATE ${OPENSSL_LIBRARIES})
+    target_include_directories(${TARGET} PRIVATE ${OPENSSL_INCLUDE_DIRS})
+    target_compile_options(${TARGET} PRIVATE ${OPENSSL_CFLAGS_OTHER})
+  endif()
 endfunction()

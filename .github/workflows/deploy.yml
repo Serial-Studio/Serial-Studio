@@ -49,30 +49,42 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-          libxcb-shape0 \
-          libxcb-xfixes0 \
-          libxcb-randr0 \
-          libxcb-render-util0 \
-          libxcb-image0 \
-          libxcb-keysyms1 \
-          libxcb-xtest0 \
-          libxcb-cursor0 \
-          libxkbcommon-x11-0 \
-          libxcb-xinerama0 \
-          libegl1 \
+          build-essential \
+          fakeroot \
           libcups2-dev \
+          libegl1 \
+          libfuse2 \
           libgl1-mesa-dev \
-          libzstd-dev \
+          libgstreamer-gl1.0-0 \
+          libpulse-dev \
           libssl-dev \
           libudev-dev \
-          libxcb-icccm4 \
-          libxcb-image0-dev \
-          libxcb-util0-dev \
-          libxcb-cursor-dev \
+          libzstd-dev \
           rpm \
-          libfuse2 \
-          fakeroot
-      
+          libxcb1 \
+          libxcb-cursor0 \
+          libxcb-cursor-dev \
+          libxcb-glx0 \
+          libxcb-icccm4 \
+          libxcb-image0 \
+          libxcb-image0-dev \
+          libxcb-keysyms1 \
+          libxcb-randr0 \
+          libxcb-render0 \
+          libxcb-render-util0 \
+          libxcb-shape0 \
+          libxcb-shm0 \
+          libxcb-sync1 \
+          libxcb-util0-dev \
+          libxcb-util1 \
+          libxcb-xfixes0 \
+          libxcb-xinerama0 \
+          libxcb-xkb-dev \
+          libxcb-xtest0 \
+          libxkbcommon-dev \
+          libxkbcommon-x11-0 \
+          libxkbcommon-x11-dev
+
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3
       with:
@@ -331,9 +343,9 @@ jobs:
         ./scripts/install-qt.ps1
 
         # Add to PATH
-        $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2019_64\bin"
-        $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2019_64\libexec"
-        $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2019_64\lib\cmake"
+        $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\bin"
+        $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\libexec"
+        $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\lib\cmake"
 
         # Write to GithHub path too
         Write-Output "$QT_BIN_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
@@ -353,17 +365,12 @@ jobs:
       uses: lukka/get-cmake@latest
       with:
         useLocalCache: true
-
-    - name: '🛠 Setup MSVC Development Environment'
-      uses: TheMrMilchmann/setup-msvc-dev@v3
-      with:
-        arch: x64
         
     - name: '🚧 Configure with CMake'
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -G "MinGW Makefiles" -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
 
     - name: '🚧 Build application'
       run: |
