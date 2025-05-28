@@ -374,12 +374,6 @@ void Widgets::Plot3D::setZoom(const qreal z)
     m_zoom = zBound;
     markDirty();
 
-    const int segments = 20;
-    const float gridStep = 10;
-    const float worldSize = gridStep / zoom();
-    const float aspect = width() / float(height());
-    qDebug() << worldSize;
-
     Q_EMIT cameraChanged();
   }
 }
