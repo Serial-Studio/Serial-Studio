@@ -114,11 +114,11 @@ bool JSON::Group::read(const QJsonObject &object)
 
       for (auto i = 0; i < array.count(); ++i)
       {
-        const auto object = array.at(i).toObject();
-        if (!object.isEmpty())
+        const auto iobj = array.at(i).toObject();
+        if (!iobj.isEmpty())
         {
           Dataset dataset(m_groupId, i);
-          if (dataset.read(object))
+          if (dataset.read(iobj))
             m_datasets.append(dataset);
         }
       }

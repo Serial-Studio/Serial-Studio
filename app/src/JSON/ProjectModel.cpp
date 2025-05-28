@@ -2085,8 +2085,8 @@ void JSON::ProjectModel::buildTreeModel()
       // Create dataset item
       const auto dataset = group.datasets()[dIndex];
       auto *datasetItem = new QStandardItem(dataset.title());
-      const auto icon = "qrc:/rcc/icons/project-editor/treeview/dataset.svg";
-      datasetItem->setData(icon, TreeViewIcon);
+      const auto dIcon = "qrc:/rcc/icons/project-editor/treeview/dataset.svg";
+      datasetItem->setData(dIcon, TreeViewIcon);
       datasetItem->setData(dataset.title(), TreeViewText);
       datasetItem->setData(dataset.index(), TreeViewFrameIndex);
 
@@ -2651,12 +2651,12 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     int xAxisIdx = 0;
     for (const auto &group : std::as_const(m_groups))
     {
-      for (const auto &dataset : group.datasets())
+      for (const auto &d : group.datasets())
       {
-        const auto index = dataset.index();
-        if (index == m_selectedDataset.xAxisId())
+        const auto idx = d.index();
+        if (idx == m_selectedDataset.xAxisId())
         {
-          xAxisIdx = index;
+          xAxisIdx = idx;
           break;
         }
       }

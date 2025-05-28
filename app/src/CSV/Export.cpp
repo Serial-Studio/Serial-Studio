@@ -191,14 +191,14 @@ void CSV::Export::writeValues()
     }
 
     // Write data according to the sorted field order
-    for (int i = 0; i < indexHeaderPairs.count(); ++i)
+    for (int j = 0; j < indexHeaderPairs.count(); ++j)
     {
       // Print value for current pair
-      const auto fieldIndex = indexHeaderPairs[i].first;
+      const auto fieldIndex = indexHeaderPairs[j].first;
       m_textStream << fieldValues.value(fieldIndex, QLatin1String(""));
 
       // Add comma or newline based on the position in the row
-      if (i < indexHeaderPairs.count() - 1)
+      if (j < indexHeaderPairs.count() - 1)
         m_textStream << QStringLiteral(",");
       else
         m_textStream << QStringLiteral("\n");

@@ -235,6 +235,13 @@ Item {
     xAxis.tickInterval: root.model.xTickInterval
     yAxis.tickInterval: root.model.yTickInterval
 
+    Connections {
+      target: root.windowRoot
+      function onFocusedChanged() {
+        plot.mouseAreaEnabled = root.windowRoot.focused
+      }
+    }
+
     Component.onCompleted: {
       graph.addSeries(areaSeries)
       graph.addSeries(upperSeries)

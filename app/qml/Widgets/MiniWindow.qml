@@ -118,7 +118,7 @@ Item {
   //
   // Disable the window when opacity falls below 1
   //
-  enabled: opacity === 1
+  enabled: root.state === "normal" || root.state === "maximized"
 
   //
   // Window states
@@ -252,14 +252,6 @@ Item {
     shadowEnabled: true
     shadowOpacity: root.focused ? 0.07 : 0.035
     shadowColor: Cpp_ThemeManager.colors["shadow"]
-
-    Behavior on blur {
-      NumberAnimation { duration: 120; easing.type: Easing.InOutQuad }
-    } Behavior on blurMax {
-      NumberAnimation { duration: 120; easing.type: Easing.InOutQuad }
-    } Behavior on shadowColor {
-      ColorAnimation { duration: 120; easing.type: Easing.InOutQuad }
-    }
   }
 
   //

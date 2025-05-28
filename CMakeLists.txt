@@ -114,44 +114,59 @@ endif()
 #-------------------------------------------------------------------------------
 
 if(PRODUCTION_OPTIMIZATION)
-   # MinGW-specific settings
-   if(WIN32 AND MINGW)
+   # GCC/MinGW-specific settings
+   if(WIN32 AND MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
       add_compile_options(
          -O2                            # Optimize for speed
          -Wall                          # Enable most warning messages
          -Wextra                        # Enable additional warning messages
          -fuse-linker-plugin            # Use LTO plugin
          -ftree-vectorize               # Enable loop vectorization
+         -msse2                         # Enable SSE2 targeting
          -fno-fast-math                 # Standard-compliant floating point math
          -fno-unsafe-math-optimizations # Use safe math only
       )
-   add_link_options(
-      -Wl,--gc-sections                 # Remove unused sections during linking
-      -fuse-linker-plugin               # Enable LTO during linking
-   )
+      add_link_options(
+         -Wl,--gc-sections              # Remove unused sections during linking
+         -fuse-linker-plugin            # Enable LTO during linking
+      )
+
+   # LLVM/MinGW-specific settings
+   elseif(WIN32 AND MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+      add_compile_options(
+         -O2                            # Optimize for speed
+         -Wall                          # Enable most warning messages
+         -Wextra                        # Enable additional warning messages
+         -fvectorize                    # Enable loop vectorization
+         -fslp-vectorize                # Enable SLP vectorization
+         -msse2                         # Enable SSE2 targeting
+         -fno-fast-math                 # Standard-compliant floating point math
+         -fno-unsafe-math-optimizations # Use safe math only
+         -flto                          # Enable link-time optimization
+      )
+      add_link_options(
+         -Wl,-dead_strip                # Remove unused code and data during linking
+         -flto=full                     # Link-time optimization
+      )
 
    # MSVC-specific settings
    elseif(WIN32 AND MSVC)
       add_compile_options(
-         /openmp:experimental           # Add support for OpenMP
-         /permissive-                   # Enable strict ISO compliance
-         /Zc:__cplusplus                # Correct __cplusplus value
-         /Zc:preprocessor               # Enable standards-conforming preprocessor
-         /MP                            # Multi-processor compilation
-         /vmg                           # Use general pointer-to-member representation
+         /permissive-                   # Stricter ISO C++
+         /Zc:__cplusplus                # Accurate __cplusplus
+         /Zc:preprocessor               # Standards-based macro expansion
+         /openmp:experimental           # OpenMP support
+         /MP                            # Parallel compilation
          /O2                            # Optimize for speed
-         /W3                            # Warning level 3 messages
-         /GL                            # Enable whole program optimization
-         /MT                            # Link compiler runtime statically
-         /fp:strict                     # Standard-compliant floating point math
+         /W4                            # Enable most (useful) warning messages
+         /GL                            # Whole program optimization
+         /fp:fast                       # Fast FP (swap to :strict if needed)
       )
-   add_link_options(
-      /OPT:REF                          # Remove unreferenced functions/data
-      /OPT:ICF                          # Remove identical COMDATs
-      /LTCG                             # Enable LTO during linkingn
-      /NODEFAULTLIB:msvcrt.lib          # Exclude dynamic runtime
-      /IGNORE:4286                      # Ignore Qt libucrt warning
-   )
+      add_link_options(
+         /OPT:REF                       # Remove unused stuff
+         /OPT:ICF                       # Merge identical code/data
+         /LTCG                          # Link-time optimization
+      )
 
    # macOS-specific settings
    elseif(APPLE)
@@ -165,10 +180,10 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-unsafe-math-optimizations # Use safe math only
          -flto                          # Enable link-time optimization
       )
-   add_link_options(
-      -Wl,-dead_strip                   # Remove unused code and data during linking
-      -flto=full                        # Link-time optimization
-   )
+      add_link_options(
+         -Wl,-dead_strip                # Remove unused code and data during linking
+         -flto=full                     # Link-time optimization
+      )
 
    # Intel LLVM-based C++ Compiler
    elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
@@ -183,10 +198,10 @@ if(PRODUCTION_OPTIMIZATION)
          -msse2                         # Enable SSE2 targeting
          -fp-model=precise              # Standard-compliant floating point math
       )
-   add_link_options(
-      -Wl,--gc-sections                 # Remove unused sections during linking
-      -flto=full                        # Link-time optimization
-   )
+      add_link_options(
+         -Wl,--gc-sections              # Remove unused sections during linking
+         -flto=full                     # Link-time optimization
+      )
 
    # Generic UNIX/Linux settings
    elseif(UNIX)
@@ -201,10 +216,11 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-unsafe-math-optimizations # Use safe math only
          -flto                          # Enable link-time optimization
       )
-   add_link_options(
-      -Wl,--gc-sections                 # Remove unused sections during linking
-      -flto                             # Link-time optimization
-   )
+      add_link_options(
+         -Wl,--gc-sections              # Remove unused sections during linking
+         -flto                          # Link-time optimization
+      )
+
    endif()
 endif()
 

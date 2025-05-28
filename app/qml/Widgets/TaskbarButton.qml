@@ -161,10 +161,6 @@ Item {
     opacity: baseVisibility * hoverStateOpacity
     saturation: root.enabled && _mouseArea.containsMouse ? 0.07 : 0
     brightness: root.enabled && _mouseArea.containsMouse ? (_mouseArea.containsPress ? -0.07 : 0.07) : 0
-
-    Behavior on opacity { NumberAnimation{} }
-    Behavior on saturation { NumberAnimation{} }
-    Behavior on brightness { NumberAnimation{} }
   }
 
   //
@@ -198,10 +194,6 @@ Item {
         opacity: root.open ? (root.minimized ? 0.5 : 1) : 0.3
         saturation: !root.open ? -1 : (_mouseArea.containsMouse && root.enabled ? 0.07 : 0)
         brightness: _mouseArea.containsMouse && root.enabled ? (_mouseArea.containsPress ? -0.07 : 0.07) : 0
-
-        Behavior on opacity { NumberAnimation{} }
-        Behavior on saturation { NumberAnimation{} }
-        Behavior on brightness { NumberAnimation{} }
       }
     }
 

@@ -281,11 +281,11 @@ static char **adjustArgumentsForFreeType(int &argc, char **argv)
 
   // Copy original argv content
   for (int i = 0; i < argc; ++i)
-    newArgv[i] = strdup(argv[i]);
+    newArgv[i] = _strdup(argv[i]);
 
   // Append FreeType platform arguments
-  newArgv[argc] = strdup(platformArgument);
-  newArgv[argc + 1] = strdup(platformOption);
+  newArgv[argc] = _strdup(platformArgument);
+  newArgv[argc + 1] = _strdup(platformOption);
 
   argc += 2;
   return newArgv;

@@ -540,14 +540,14 @@ void IO::Manager::setBusType(const SerialStudio::BusType &driver)
   // Try to open a BLE connection
   else if (busType() == SerialStudio::BusType::BluetoothLE)
   {
-    auto *driver = &Drivers::BluetoothLE::instance();
-    connect(driver, &IO::Drivers::BluetoothLE::deviceConnectedChanged, this,
+    auto *bleDriver = &Drivers::BluetoothLE::instance();
+    connect(bleDriver, &IO::Drivers::BluetoothLE::deviceConnectedChanged, this,
             &IO::Manager::connectedChanged);
 
-    if (driver->operatingSystemSupported())
+    if (bleDriver->operatingSystemSupported())
     {
-      setDriver(static_cast<HAL_Driver *>(driver));
-      driver->startDiscovery();
+      setDriver(static_cast<HAL_Driver *>(bleDriver));
+      bleDriver->startDiscovery();
     }
   }
 

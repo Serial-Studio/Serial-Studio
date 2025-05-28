@@ -348,7 +348,7 @@ void Widgets::Terminal::paint(QPainter *painter)
 
     // Set scrollbar position
     int x = width() - scrollbarWidth - m_borderX;
-    int y = (m_scrollOffsetY / static_cast<float>(lineCount() - linesPerPage()))
+    y = (m_scrollOffsetY / static_cast<float>(lineCount() - linesPerPage()))
                 * (availableHeight - scrollbarHeight)
             - m_borderY;
     y = qMax(m_borderY, y);

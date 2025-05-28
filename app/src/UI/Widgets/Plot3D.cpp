@@ -160,24 +160,19 @@ void Widgets::Plot3D::paint(QPainter *painter)
     right.setDevicePixelRatio(qApp->devicePixelRatio());
     right.fill(Qt::transparent);
 
-    // Calculate additional image shift factor
-    const float manualShift = qMin(m_eyeSeparation / 0.1, 1.0) * 10;
-    const float lShift = m_invertEyePositions ? manualShift : 0;
-    const float rShift = m_invertEyePositions ? 0 : manualShift;
-
     // Compose the left eye scene
     QPainter leftScene(&left);
     leftScene.drawPixmap(0, 0, m_backgroundPixmap[0]);
-    leftScene.drawPixmap(lShift, 0, m_gridPixmap[0]);
-    leftScene.drawPixmap(lShift, 0, m_plotPixmap[0]);
+    leftScene.drawPixmap(0, 0, m_gridPixmap[0]);
+    leftScene.drawPixmap(0, 0, m_plotPixmap[0]);
     leftScene.drawPixmap(0, 0, m_cameraIndicatorPixmap[0]);
     leftScene.end();
 
     // Compose the right eye scene
     QPainter rightScene(&right);
     rightScene.drawPixmap(0, 0, m_backgroundPixmap[1]);
-    rightScene.drawPixmap(rShift, 0, m_gridPixmap[1]);
-    rightScene.drawPixmap(rShift, 0, m_plotPixmap[1]);
+    rightScene.drawPixmap(0, 0, m_gridPixmap[1]);
+    rightScene.drawPixmap(0, 0, m_plotPixmap[1]);
     rightScene.drawPixmap(0, 0, m_cameraIndicatorPixmap[1]);
     rightScene.end();
 
@@ -373,10 +368,17 @@ bool Widgets::Plot3D::interpolationEnabled() const
  */
 void Widgets::Plot3D::setZoom(const qreal z)
 {
-  if (m_zoom != z)
+  auto zBound = qBound(0.01f, z, 2.0);
+  if (m_zoom != zBound)
   {
-    m_zoom = z;
+    m_zoom = zBound;
     markDirty();
+
+    const int segments = 20;
+    const float gridStep = 10;
+    const float worldSize = gridStep / zoom();
+    const float aspect = width() / float(height());
+    qDebug() << worldSize;
 
     Q_EMIT cameraChanged();
   }
@@ -683,19 +685,9 @@ void Widgets::Plot3D::drawData()
   // Render 3D pixmaps
   if (anaglyphEnabled())
   {
-    // Tweak left eye camera
-    auto lMatrix = matrix;
-    lMatrix.translate(-eyeShift(), 0, 0);
-    lMatrix.rotate(convergenceAngle(), 0, 1, 0);
-
-    // Tweak right eye camera
-    auto rMatrix = matrix;
-    rMatrix.translate(eyeShift(), 0, 0);
-    rMatrix.rotate(-convergenceAngle(), 0, 1, 0);
-
-    // Render pixmaps
-    m_plotPixmap[0] = renderData(lMatrix, data);
-    m_plotPixmap[1] = renderData(rMatrix, data);
+    auto eyes = eyeTransformations(matrix);
+    m_plotPixmap[0] = renderData(eyes.first, data);
+    m_plotPixmap[1] = renderData(eyes.second, data);
   }
 
   // Render single pixmap
@@ -726,19 +718,9 @@ void Widgets::Plot3D::drawGrid()
   // Render 3D pixmaps
   if (anaglyphEnabled())
   {
-    // Tweak left eye camera
-    auto lMatrix = matrix;
-    lMatrix.translate(-eyeShift(), 0, 0);
-    lMatrix.rotate(convergenceAngle(), 0, 1, 0);
-
-    // Tweak right eye camera
-    auto rMatrix = matrix;
-    rMatrix.translate(eyeShift(), 0, 0);
-    rMatrix.rotate(-convergenceAngle(), 0, 1, 0);
-
-    // Render pixmaps
-    m_gridPixmap[0] = renderGrid(lMatrix);
-    m_gridPixmap[1] = renderGrid(rMatrix);
+    auto eyes = eyeTransformations(matrix);
+    m_gridPixmap[0] = renderGrid(eyes.first);
+    m_gridPixmap[1] = renderGrid(eyes.second);
   }
 
   // Render 2D pixmap
@@ -822,19 +804,9 @@ void Widgets::Plot3D::drawCameraIndicator()
   // Render 3D pixmaps
   if (anaglyphEnabled())
   {
-    // Tweak left eye camera
-    auto lMatrix = matrix;
-    lMatrix.translate(-eyeShift() * m_zoom, 0, 0);
-    lMatrix.rotate(-convergenceAngle(), 0, 1, 0);
-
-    // Tweak right eye camera
-    auto rMatrix = matrix;
-    rMatrix.translate(eyeShift() * m_zoom, 0, 0);
-    rMatrix.rotate(-convergenceAngle(), 0, 1, 0);
-
-    // Render pixmaps
-    m_cameraIndicatorPixmap[0] = renderCameraIndicator(lMatrix);
-    m_cameraIndicatorPixmap[1] = renderCameraIndicator(rMatrix);
+    auto eyes = eyeTransformations(matrix, true);
+    m_cameraIndicatorPixmap[0] = renderCameraIndicator(eyes.first);
+    m_cameraIndicatorPixmap[1] = renderCameraIndicator(eyes.second);
   }
 
   // Render 2D pixmap
@@ -843,51 +815,6 @@ void Widgets::Plot3D::drawCameraIndicator()
 
   // Mark dirty flag as false to avoid needless rendering
   m_dirtyCameraIndicator = false;
-}
-
-//------------------------------------------------------------------------------
-// Stereoscopic rendering eye position calculations
-//------------------------------------------------------------------------------
-
-/**
- * @brief Calculates the horizontal eye shift (parallax offset)
- *        for stereoscopic rendering.
- *
- * This value determines how far the left and right camera views are shifted
- * horizontally to simulate eye separation in the 3D scene.
- *
- * The offset is inversely proportional to zoom: as you zoom in, the shift
- * reduces to maintain a realistic parallax effect without over-exaggeration.
- *
- * @return The eye shift in scene units.
- */
-float Widgets::Plot3D::eyeShift() const
-{
-  const float z = qMax(0.01f, m_zoom);
-  return m_eyeSeparation / (2.0f * z) * (m_invertEyePositions ? -1 : 1);
-}
-
-/**
- * @brief Calculates the convergence angle for stereoscopic rendering.
- *
- * This angle rotates the left and right camera views inward so their frustums
- * converge at the focal plane (typically around the world center).
- *
- * It helps maintain depth realism and avoid divergence when looking at
- * near/far objects.
- *
- * The calculation is based on eye separation and zoom: at lower zoom, the
- * angle is small;  at higher zoom, the angle increases to keep the stereo
- * effect balanced.
- *
- * @return The convergence angle in degrees.
- */
-float Widgets::Plot3D::convergenceAngle() const
-{
-  constexpr float gridStep = 10.0f;
-  const float focalDistance = gridStep / qMax(0.01f, m_zoom);
-  float rads = std::atan(m_eyeSeparation * 0.5f / focalDistance);
-  return rads * 180.0f / float(M_PI) * (m_invertEyePositions ? -1 : 1);
 }
 
 //------------------------------------------------------------------------------
@@ -924,8 +851,8 @@ QPixmap Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
   // Grid configuration
   const int segments = 20;
   const float gridStep = 10;
+  const float worldSize = gridStep / zoom();
   const float aspect = width() / float(height());
-  const float worldSize = gridStep / qMax(0.01, m_zoom);
 
   // Calculate grid size
   const float gridWidth = qMin(worldSize, worldSize * aspect);
@@ -1233,6 +1160,58 @@ QPixmap Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
 }
 
 //------------------------------------------------------------------------------
+// Stereoscopic rendering eye position calculations
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Calculates the left and right eye transformation matrices for 3D
+ *        anaglyph rendering.
+ *
+ * This function computes stereo camera transformations by applying an eye
+ * shift and angular rotation to a base view matrix, creating two different
+ * perspectives—one for each eye—used in anaglyph (or other stereo) 3D
+ * rendering.
+ *
+ * The eye separation is scaled based on zoom level to simulate a realistic
+ * parallax effect.
+ *
+ * Each eye's view matrix is translated along the X-axis and rotated around
+ * the Y-axis to simulate the natural divergence of human vision.
+ *
+ * @param matrix The original view matrix to transform for stereo rendering.
+ * @return A QPair with the left-eye and right-eye matrices, in that order.
+ */
+QPair<QMatrix4x4,QMatrix4x4>
+Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix, bool staticView) {
+  // Calculate zoom factor
+  float z = m_zoom;
+  if (staticView)
+    z = 1;
+
+  // Get eye shift
+  float shift = m_eyeSeparation / (2.0f * z) * (m_invertEyePositions ? -1 : 1);
+
+  // Get eye angle
+  constexpr float gridStep = 10.0f;
+  const float focalDistance = gridStep / z;
+  const float rads = std::atan(m_eyeSeparation * 0.5f / focalDistance);
+  float angle = rads * 180.0f / float(M_PI) * (m_invertEyePositions ? -1 : 1);
+
+  // Tweak left eye camera
+  auto lMatrix = matrix;
+  lMatrix.translate(-shift, 0, 0);
+  lMatrix.rotate(angle, 0, 1, 0);
+
+  // Tweak right eye camera
+  auto rMatrix = matrix;
+  rMatrix.translate(shift, 0, 0);
+  rMatrix.rotate(-angle, 0, 1, 0);
+
+  // Return results
+  return qMakePair(lMatrix, rMatrix);
+}
+
+//------------------------------------------------------------------------------
 // Event handling
 //------------------------------------------------------------------------------
 
@@ -1246,15 +1225,9 @@ void Widgets::Plot3D::wheelEvent(QWheelEvent *event)
   {
     event->accept();
     if (event->angleDelta().y() > 0)
-      m_zoom *= 1.1;
+      setZoom(zoom() * 1.1);
     else
-      m_zoom /= 1.1;
-
-    m_zoom = qBound(0.01, m_zoom, 100.0);
-
-    Q_EMIT cameraChanged();
-    markDirty();
-    update();
+      setZoom(zoom() / 1.1);
   }
 }
 
@@ -1303,9 +1276,8 @@ void Widgets::Plot3D::mouseMoveEvent(QMouseEvent *event)
   event->accept();
 
   // Re-render everything
-  Q_EMIT cameraChanged();
   markDirty();
-  update();
+  Q_EMIT cameraChanged();
 }
 
 /**

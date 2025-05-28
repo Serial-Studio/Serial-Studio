@@ -41,7 +41,6 @@ Item {
   property alias yMax: _axisY.max
   property alias yLabel: _yLabel.text
   property alias xLabel: _xLabel.text
-  property bool mouseAreaEnabled: true
   property alias plotArea: _graph.plotArea
   property alias curveColors: _theme.seriesColors
 
@@ -51,6 +50,7 @@ Item {
   property bool xLabelVisible: true
   property bool yLabelVisible: true
   property bool showCrosshairs: false
+  property bool mouseAreaEnabled: true
 
   //
   // Updates the X and Y value labels to reflect the world coordinates under
@@ -282,10 +282,10 @@ Item {
     MouseArea {
       id: _overlayMouse
 
-      hoverEnabled: true
       anchors.fill: parent
-      preventStealing: true
       acceptedButtons: Qt.LeftButton
+      enabled: root.mouseAreaEnabled
+      hoverEnabled: root.mouseAreaEnabled
       cursorShape: dragging ? Qt.ClosedHandCursor : Qt.CrossCursor
 
       //
@@ -301,14 +301,6 @@ Item {
       onContainsPressChanged: {
         _lastX = _overlayMouse.mouseX
         _lastY = _overlayMouse.mouseY
-      }
-
-      onPressed: (mouse) => {
-        // Abort if not mouse is not in plot
-        if (!containsMouse || !root.mouseAreaEnabled) {
-          mouse.accepted = false
-          return
-        }
       }
 
       //

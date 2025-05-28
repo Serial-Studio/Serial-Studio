@@ -49,9 +49,8 @@ Item {
     target: windowRoot
 
     function onFocusedChanged() {
-      if (model) {
+      if (model)
         model.enabled = windowRoot.focused
-      }
     }
   }
 

@@ -1017,13 +1017,13 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
 
       // Register dataset widgets
       auto keys = SerialStudio::getDashboardWidgets(dataset);
-      for (const auto &key : std::as_const(keys))
+      for (const auto &widgetKeys : std::as_const(keys))
       {
-        if (key == SerialStudio::DashboardLED)
+        if (widgetKeys == SerialStudio::DashboardLED)
           ledPanel.m_datasets.append(dataset);
 
-        else if (key != SerialStudio::DashboardNoWidget)
-          m_widgetDatasets[key].append(dataset);
+        else if (widgetKeys != SerialStudio::DashboardNoWidget)
+          m_widgetDatasets[widgetKeys].append(dataset);
       }
     }
   }
