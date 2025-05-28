@@ -157,8 +157,8 @@ private:
   QPixmap renderCameraIndicator(const QMatrix4x4 &matrix);
   QPixmap renderData(const QMatrix4x4 &matrix, const PlotData3D &data);
 
-  QPair<QMatrix4x4,QMatrix4x4> eyeTransformations(const QMatrix4x4 &matrix,
-                                                  bool staticView = false);
+  QPair<QMatrix4x4, QMatrix4x4> eyeTransformations(const QMatrix4x4 &matrix,
+                                                   bool staticView = false);
 
 protected:
   void wheelEvent(QWheelEvent *event) override;

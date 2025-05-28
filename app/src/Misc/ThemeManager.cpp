@@ -61,13 +61,10 @@
 Misc::ThemeManager::ThemeManager()
   : m_theme(0)
 {
-  // Prepend "System" theme as option 0
-  m_themeName = QStringLiteral("System");
-  m_availableThemes.append(QStringLiteral("System"));
-
   // Set theme files
   // clang-format off
   const QStringList themes = {
+      QStringLiteral("default"),
       QStringLiteral("light"),
       QStringLiteral("dark"),
   };
@@ -88,8 +85,11 @@ Misc::ThemeManager::ThemeManager()
     }
   }
 
-  // Auto-detect system theme
-  loadSystemTheme();
+  // Append "System" theme as last option
+  m_availableThemes.append(QStringLiteral("System"));
+
+  // Set application theme
+  setTheme(m_settings.value("ApplicationTheme", 0).toInt());
 
   // Install event filter only once
   qApp->installEventFilter(this);
@@ -181,6 +181,7 @@ void Misc::ThemeManager::setTheme(const int index)
   // Update the theme name
   m_theme = filteredIndex;
   m_themeName = availableThemes().at(filteredIndex);
+  m_settings.setValue("ApplicationTheme", filteredIndex);
 
   // Load theme (dark/light) automagically
   if (m_themeName == QStringLiteral("System"))
@@ -242,9 +243,9 @@ void Misc::ThemeManager::loadSystemTheme()
   const auto themeData = m_themes.value(resolved);
 
   // Set theme data
-  m_theme = 0;
   m_themeData = themeData;
   m_themeName = QStringLiteral("System");
+  m_theme = availableThemes().indexOf(m_themeName);
   m_colors = themeData.value("colors").toObject();
 
   // Update user interface

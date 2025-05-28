@@ -140,6 +140,7 @@ protected:
 private:
   int m_theme;
   QString m_themeName;
+  QSettings m_settings;
   QJsonObject m_colors;
   QJsonObject m_themeData;
 

@@ -49,9 +49,9 @@ Window {
     category: "Preferences"
     property alias plugins: _tcpPlugins.checked
     property alias dashboardPoints: _points.value
-    property alias theme: _themeCombo.currentIndex
     property alias language: _langCombo.currentIndex
     property alias dashboardPrecision: _decimalDigits.value
+    property alias softwareRendering: _softwareRender.checked
   }
 
   //
@@ -185,6 +185,18 @@ Window {
                 mainWindow.automaticUpdates = checked
             }
           }
+
+          //
+          // Software rendering
+          //
+          Label {
+            text: qsTr("Software Rendering") + ":"
+          } Switch {
+            id: _softwareRender
+            Layout.leftMargin: -8
+            Layout.alignment: Qt.AlignLeft
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+          }
         }
       }
 
@@ -274,6 +286,39 @@ Window {
                 Cpp_UI_Dashboard.terminalEnabled = checked
             }
           }
+        }
+      }
+
+      //
+      // Spacer
+      //
+      Item {
+        implicitHeight: 4
+      }
+
+      //
+      // Workspace settings
+      //
+      Label {
+        text: qsTr("Workspace")
+        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
+        color: Cpp_ThemeManager.colors["pane_section_label"]
+        Component.onCompleted: font.capitalization = Font.AllUppercase
+      } GroupBox {
+        Layout.fillWidth: true
+
+        background: Rectangle {
+          radius: 2
+          border.width: 1
+          color: Cpp_ThemeManager.colors["groupbox_background"]
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        GridLayout {
+          columns: 2
+          rowSpacing: 4
+          columnSpacing: 8
+          anchors.fill: parent
         }
       }
 

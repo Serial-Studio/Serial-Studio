@@ -71,8 +71,8 @@
     "window_caption_active_text": "#1F2937",
     "window_caption_inactive_top": "#F2F3F4",
     "window_caption_inactive_text": "#6B7280",
-    "window_caption_active_bottom": "#E5E7EB",
-    "window_caption_inactive_bottom": "#E5E7EB",
+    "window_caption_active_bottom": "#F3F4F6",
+    "window_caption_inactive_bottom": "#F3F4F6",
 
     "taskbar_top": "#F9FAFB",
     "taskbar_text": "#1F2937",
@@ -99,7 +99,6 @@
     "table_cell_bg": "#FFFFFF",
     "table_fg_header": "#1F2937",
     "table_separator": "#C1C5CB",
-    "table_bg_header": "#F3F4F6",
     "table_border_header": "#C1C5CB",
     "table_bg_header_top": "#F9FAFB",
     "table_bg_header_bottom": "#E5E7EB",

@@ -93,27 +93,23 @@ Item {
       name: "closed"
       when: !root.open
       PropertyChanges { target: _label; opacity: 0.3 }
-      PropertyChanges { target: _background; border.color: "transparent" }
     },
     State {
       name: "minimized"
       when: root.open && root.minimized
       PropertyChanges { target: _label; opacity: 0.5 }
-      PropertyChanges { target: _background; border.color: "transparent" }
     },
     State {
       name: "focused"
       when: root.open && !root.minimized && root.focused
       PropertyChanges { target: _label; font: Cpp_Misc_CommonFonts.boldUiFont }
       PropertyChanges { target: _label; color: Cpp_ThemeManager.colors["taskbar_indicator_active"] }
-      PropertyChanges { target: _background; border.color: Cpp_ThemeManager.colors["taskbar_checked_button_border"] }
     },
     State {
       name: "idle"
       when: root.open && !root.minimized && !root.focused
       PropertyChanges { target: _label; font: Cpp_Misc_CommonFonts.uiFont }
       PropertyChanges { target: _label; color: Cpp_ThemeManager.colors["taskbar_text"] }
-      PropertyChanges { target: _background; border.color: "transparent" }
     }
   ]
 
@@ -132,8 +128,8 @@ Item {
   Rectangle {
     id: _background
     visible: false
-    border.width: 1
     anchors.fill: parent
+    border.width: root.focused || _mouseArea.containsMouse ? 1 : 0
     border.color: Cpp_ThemeManager.colors["taskbar_checked_button_border"]
 
     gradient: Gradient {
@@ -159,7 +155,6 @@ Item {
     property real hoverStateOpacity: root.focused ? root.focusedOpacity : (_mouseArea.containsMouse ? root.hoverOpacity : 0)
 
     opacity: baseVisibility * hoverStateOpacity
-    saturation: root.enabled && _mouseArea.containsMouse ? 0.07 : 0
     brightness: root.enabled && _mouseArea.containsMouse ? (_mouseArea.containsPress ? -0.07 : 0.07) : 0
   }
 

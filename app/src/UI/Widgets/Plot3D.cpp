@@ -1161,47 +1161,56 @@ QPixmap Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
  * @brief Calculates the left and right eye transformation matrices for 3D
  *        anaglyph rendering.
  *
- * This function computes stereo camera transformations by applying an eye
- * shift and angular rotation to a base view matrix, creating two different
- * perspectives—one for each eye—used in anaglyph (or other stereo) 3D
- * rendering.
+ * Simulates realistic human stereoscopic vision by combining:
+ * - Horizontal eye separation (scaled by zoom) to generate parallax.
+ * - Z-axis rotation (toe-in) to simulate convergence on a focal point.
+ * - Micro-jittered rotation axes to reflect natural human eye asymmetry.
  *
- * The eye separation is scaled based on zoom level to simulate a realistic
- * parallax effect.
- *
- * Each eye's view matrix is translated along the X-axis and rotated around
- * the Y-axis to simulate the natural divergence of human vision.
+ * This improves stereo depth perception and avoids the unnatural feel of
+ * mathematically perfect symmetry.
  *
  * @param matrix The original view matrix to transform for stereo rendering.
- * @return A QPair with the left-eye and right-eye matrices, in that order.
+ * @param staticView If true, disables zoom scaling for eye separation.
+ * @return A QPair with the left and right eye matrices.
  */
-QPair<QMatrix4x4,QMatrix4x4>
-Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix, bool staticView) {
-  // Calculate zoom factor
-  float z = m_zoom;
-  if (staticView)
-    z = 1;
+QPair<QMatrix4x4, QMatrix4x4>
+Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix, bool staticView)
+{
+  float z = staticView ? 1.0f : m_zoom;
 
-  // Get eye shift
+  // Eye separation calculation
   float shift = m_eyeSeparation / (2.0f * z) * (m_invertEyePositions ? -1 : 1);
 
-  // Get eye angle
+  // Eye convergence angle based on focal distance
   constexpr float gridStep = 10.0f;
-  const float focalDistance = gridStep / z;
-  const float rads = std::atan(m_eyeSeparation * 0.5f / focalDistance);
+  float focalDistance = gridStep / z;
+  float rads = std::atan(m_eyeSeparation * 0.5f / focalDistance);
   float angle = rads * 180.0f / float(M_PI) * (m_invertEyePositions ? -1 : 1);
 
-  // Tweak left eye camera
+  // Add small axis jitter to simulate imperfect ocular alignment
+  float jitter = 0.1f;
+  auto randFloat = [](float min, float max) -> float {
+    return min + (float(arc4random()) / float(UINT32_MAX)) * (max - min);
+  };
+
+  // Left eye rotation
+  QVector3D lAxis = QVector3D(jitter * randFloat(-1.0f, 1.0f),
+                              jitter * randFloat(-1.0f, 1.0f), 1.0f);
+
+  // Right eye rotation
+  QVector3D rAxis = QVector3D(jitter * randFloat(-1.0f, 1.0f),
+                              jitter * randFloat(-1.0f, 1.0f), 1.0f);
+
+  // Left eye transform
   auto lMatrix = matrix;
-  lMatrix.translate(-shift, 0, 0);
-  lMatrix.rotate(angle, 0, 1, 0);
+  lMatrix.translate(-shift, 0.0f, 0.0f);
+  lMatrix.rotate(angle, lAxis.x(), lAxis.y(), lAxis.z());
 
-  // Tweak right eye camera
+  // Right eye transform
   auto rMatrix = matrix;
-  rMatrix.translate(shift, 0, 0);
-  rMatrix.rotate(-angle, 0, 1, 0);
+  rMatrix.translate(shift, 0.0f, 0.0f);
+  rMatrix.rotate(-angle, rAxis.x(), rAxis.y(), rAxis.z());
 
-  // Return results
   return qMakePair(lMatrix, rMatrix);
 }
 

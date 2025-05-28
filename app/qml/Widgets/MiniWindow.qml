@@ -48,7 +48,15 @@ Item {
   //
   property bool hasToolbar: false
   property alias radius: _bg.radius
+
+  //
+  // Colors
+  //
   property color backgroundColor: Cpp_ThemeManager.colors["widget_base"]
+  property color captionTopColor: root.focused ? Cpp_ThemeManager.colors["window_caption_active_top"] :
+                                                 Cpp_ThemeManager.colors["window_caption_inactive_top"]
+  property color captionBottomColor: root.focused ? Cpp_ThemeManager.colors["window_caption_active_bottom"] :
+                                                    Cpp_ThemeManager.colors["window_caption_inactive_bottom"]
 
   //
   // Window state properties
@@ -267,11 +275,9 @@ Item {
     // Window caption background
     //
     Rectangle {
-      border.width: 1
       radius: root.radius
       visible: root.headerVisible
       height: visible ? root.captionHeight : 0
-      border.color: Cpp_ThemeManager.colors["window_border"]
 
       anchors {
         top: parent.top
@@ -279,17 +285,59 @@ Item {
         right: parent.right
       }
 
+      Rectangle {
+        width: 1
+        color: Cpp_ThemeManager.colors["window_border"]
+
+        anchors {
+          top: parent.top
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Rectangle {
+        width: 1
+        color: Cpp_ThemeManager.colors["window_border"]
+
+        anchors {
+          top: parent.top
+          right: parent.right
+          bottom: parent.bottom
+        }
+      }
+
+      Rectangle {
+        height: 1
+        color: Cpp_ThemeManager.colors["window_border"]
+
+        anchors {
+          top: parent.top
+          left: parent.left
+          right: parent.right
+        }
+      }
+
+      Rectangle {
+        color: Cpp_ThemeManager.colors["window_border"]
+        height: root.hasToolbar && root.captionBottomColor === _toolbar.color ? 0 : 1
+
+        anchors {
+          left: parent.left
+          right: parent.right
+          bottom: parent.bottom
+        }
+      }
+
       gradient: Gradient {
         GradientStop {
           position: 0
-          color: root.focused ? Cpp_ThemeManager.colors["window_caption_active_top"] :
-                                Cpp_ThemeManager.colors["window_caption_inactive_top"]
+          color: root.captionTopColor
         }
 
         GradientStop {
           position: 1
-          color: root.focused ? Cpp_ThemeManager.colors["window_caption_active_bottom"] :
-                                Cpp_ThemeManager.colors["window_caption_inactive_bottom"]
+          color: root.captionBottomColor
         }
       }
     }
@@ -419,6 +467,7 @@ Item {
     // Toolbar background
     //
     Rectangle {
+      id: _toolbar
       visible: root.hasToolbar
       height: visible ? 48 : 0
       color: Cpp_ThemeManager.colors["window_toolbar_background"]
