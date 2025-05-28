@@ -74,11 +74,11 @@
     "window_caption_active_bottom": "#eff0f1",
     "window_caption_inactive_bottom": "#eff0f1",
 
-    "taskbar_top": "#383E44",
+    "taskbar_top": "#606569",
     "taskbar_text": "#ffffff",
     "taskbar_bottom": "#31373E",
     "taskbar_border": "#bebebe",
-    "taskbar_separator": "#c2c2c2",
+    "taskbar_separator": "#606569",
     "tasbkar_highlight": "#3daee9",
     "taskbar_indicator_active": "#ffffff",
     "taskbar_indicator_inactive": "#ffffff",
@@ -87,7 +87,7 @@
     "taskbar_checked_button_bottom": "#4A5056",
 
     "start_menu_text": "#232629",
-    "start_menu_border": "#bebebe",
+    "start_menu_border": "#606569",
     "start_menu_highlight": "#3daee9",
     "start_menu_background": "#f9f9f9",
     "start_menu_gradient_top": "#1A83CA",

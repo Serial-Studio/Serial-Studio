@@ -93,7 +93,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   {
     connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz,
             this, [=] {
-              if (isVisible() && dirty())
+              if (isVisible() && (dirty() || anaglyphEnabled()))
                 update();
             });
   }
@@ -1176,41 +1176,45 @@ QPixmap Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
 QPair<QMatrix4x4, QMatrix4x4>
 Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix, bool staticView)
 {
-  float z = staticView ? 1.0f : m_zoom;
+  // Get zoom factor
+  const float z = staticView ? 1.0f : m_zoom;
 
-  // Eye separation calculation
+  // Calculate horizontal eye separation
   float shift = m_eyeSeparation / (2.0f * z) * (m_invertEyePositions ? -1 : 1);
 
-  // Eye convergence angle based on focal distance
+  // Calculate convergence angle
   constexpr float gridStep = 10.0f;
   float focalDistance = gridStep / z;
   float rads = std::atan(m_eyeSeparation * 0.5f / focalDistance);
   float angle = rads * 180.0f / float(M_PI) * (m_invertEyePositions ? -1 : 1);
 
-  // Add small axis jitter to simulate imperfect ocular alignment
-  float jitter = 0.1f;
-  auto randFloat = [](float min, float max) -> float {
-    return min + (float(arc4random()) / float(UINT32_MAX)) * (max - min);
-  };
+  // Calculate time point (based on target frame rate)
+  static int frame = 0;
+  frame = (frame + 1) % 9600;
+  float t = frame / 24.0f;
 
-  // Left eye rotation
-  QVector3D lAxis = QVector3D(jitter * randFloat(-1.0f, 1.0f),
-                              jitter * randFloat(-1.0f, 1.0f), 1.0f);
+  // Set jitter amplitude
+  float jitterAmp = 0.1f;
 
-  // Right eye rotation
-  QVector3D rAxis = QVector3D(jitter * randFloat(-1.0f, 1.0f),
-                              jitter * randFloat(-1.0f, 1.0f), 1.0f);
+  // Calculate left axis rotations with jitter
+  QVector3D lAxis(jitterAmp * std::sin(t), jitterAmp * std::sin(1.7f * t),
+                  1.0f);
 
-  // Left eye transform
-  auto lMatrix = matrix;
+  // Calculate right axis rotations with jitter
+  QVector3D rAxis(jitterAmp * std::sin(t + 3.14f),
+                  jitterAmp * std::sin(1.7f * t + 3.14f), 1.0f);
+
+  // Generate left eye camera
+  QMatrix4x4 lMatrix = matrix;
   lMatrix.translate(-shift, 0.0f, 0.0f);
-  lMatrix.rotate(angle, lAxis.x(), lAxis.y(), lAxis.z());
+  lMatrix.rotate(angle, lAxis);
 
-  // Right eye transform
-  auto rMatrix = matrix;
+  // Generate right eye camera
+  QMatrix4x4 rMatrix = matrix;
   rMatrix.translate(shift, 0.0f, 0.0f);
-  rMatrix.rotate(-angle, rAxis.x(), rAxis.y(), rAxis.z());
+  rMatrix.rotate(-angle, rAxis);
 
+  // Return both cameras
   return qMakePair(lMatrix, rMatrix);
 }
 
