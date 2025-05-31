@@ -225,6 +225,7 @@ private:
   qreal m_orbitOffsetX;
   qreal m_orbitOffsetY;
   QPointF m_lastMousePos;
+  qreal m_minimumWorldScale;
 
   QVector3D m_minPoint;
   QVector3D m_maxPoint;

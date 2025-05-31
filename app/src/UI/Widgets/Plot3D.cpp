@@ -153,6 +153,27 @@ void Widgets::Plot3D::paint(QPainter *painter)
   if (m_dirtyBackground)
     drawBackground();
 
+  // Generate list of pixmaps
+  QList<QPixmap *> pixmaps;
+  pixmaps.append(m_backgroundPixmap);
+
+  // User is below axis/plane...draw plot first then grid
+  if (m_cameraAngleX <= 270 && m_cameraAngleX > 90.0)
+  {
+    pixmaps.append(m_plotPixmap);
+    pixmaps.append(m_gridPixmap);
+  }
+
+  // User is above axis/plane...draw grid first then plot
+  else
+  {
+    pixmaps.append(m_gridPixmap);
+    pixmaps.append(m_plotPixmap);
+  }
+
+  // Add camera indicator
+  pixmaps.append(m_cameraIndicatorPixmap);
+
   // Anaglyph processing
   if (anaglyphEnabled())
   {
@@ -168,19 +189,13 @@ void Widgets::Plot3D::paint(QPainter *painter)
 
     // Compose the left eye scene
     QPainter leftScene(&left);
-    leftScene.drawPixmap(0, 0, m_backgroundPixmap[0]);
-    leftScene.drawPixmap(0, 0, m_gridPixmap[0]);
-    leftScene.drawPixmap(0, 0, m_plotPixmap[0]);
-    leftScene.drawPixmap(0, 0, m_cameraIndicatorPixmap[0]);
-    leftScene.end();
+    for (auto p : pixmaps)
+      leftScene.drawPixmap(0, 0, p[0]);
 
     // Compose the right eye scene
     QPainter rightScene(&right);
-    rightScene.drawPixmap(0, 0, m_backgroundPixmap[1]);
-    rightScene.drawPixmap(0, 0, m_gridPixmap[1]);
-    rightScene.drawPixmap(0, 0, m_plotPixmap[1]);
-    rightScene.drawPixmap(0, 0, m_cameraIndicatorPixmap[1]);
-    rightScene.end();
+    for (auto p : pixmaps)
+      rightScene.drawPixmap(0, 0, p[1]);
 
     // Obtain two images from the scene
     QImage leftImg = left.toImage();
@@ -212,10 +227,8 @@ void Widgets::Plot3D::paint(QPainter *painter)
   // Standard processing
   else
   {
-    painter->drawPixmap(0, 0, m_backgroundPixmap[0]);
-    painter->drawPixmap(0, 0, m_gridPixmap[0]);
-    painter->drawPixmap(0, 0, m_plotPixmap[0]);
-    painter->drawPixmap(0, 0, m_cameraIndicatorPixmap[0]);
+    for (auto p : pixmaps)
+      painter->drawPixmap(0, 0, p[0]);
   }
 }
 
@@ -304,19 +317,23 @@ qreal Widgets::Plot3D::idealWorldScale() const
 
   const int minIndex = base - 20;
   const int maxIndex = base + 20;
+
+  qreal scale = 1e-9;
   for (int i = minIndex; i <= maxIndex; ++i)
   {
-    const qreal scale = std::pow(0.95, i);
+    scale = std::pow(0.95, i);
     const qreal step = gridStep(scale);
     const qreal totalVisibleWorld = 10.0 * step;
 
     if (totalVisibleWorld >= targetWorldSize)
-      return qBound(1e-9, scale, 1e9);
+    {
+      scale = qBound(1e-9, scale, 1e9);
+      break;
+    }
   }
 
-  return 1e-9;
+  return scale;
 }
-
 /**
  * @brief Checks if any part of the plot needs to be redrawn.
  *
@@ -939,6 +956,7 @@ Widgets::Plot3D::screenProjection(const QVector<QVector3D> &points,
 
   for (const QVector3D &p : points)
   {
+    // Project the point
     QVector4D v = matrix * QVector4D(p, 1.0f);
 
     // Avoid invalid perspective divide
