@@ -43,7 +43,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   , m_maxY(INT_MIN)
   , m_minZ(INT_MAX)
   , m_maxZ(INT_MIN)
-  , m_zoom(0.05)
+  , m_worldScale(0.05)
   , m_cameraAngleX(300)
   , m_cameraAngleY(0)
   , m_cameraAngleZ(225)
@@ -93,7 +93,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   {
     connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz,
             this, [=] {
-              if (isVisible() && (dirty() || anaglyphEnabled()))
+              if (isVisible() && dirty())
                 update();
             });
   }
@@ -102,6 +102,12 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
           this, &Widgets::Plot3D::onThemeChanged);
+
+  // Set zoom automatically
+  connect(this, &Widgets::Plot3D::rangeChanged, this, [=] {
+    if (m_worldScale < idealWorldScale())
+      setWorldScale(idealWorldScale());
+  });
 }
 
 //------------------------------------------------------------------------------
@@ -218,12 +224,12 @@ void Widgets::Plot3D::paint(QPainter *painter)
 //------------------------------------------------------------------------------
 
 /**
- * @brief Returns the current zoom level of the 3D plot.
- * @return The zoom factor, where 1.0 is the default scale.
+ * @brief Returns the current worldScale level of the 3D plot.
+ * @return The worldScale factor, where 1.0 is the default scale.
  */
-qreal Widgets::Plot3D::zoom() const
+qreal Widgets::Plot3D::worldScale() const
 {
-  return m_zoom;
+  return m_worldScale;
 }
 
 /**
@@ -278,6 +284,27 @@ qreal Widgets::Plot3D::cameraOffsetY() const
 qreal Widgets::Plot3D::cameraOffsetZ() const
 {
   return m_cameraOffsetZ;
+}
+
+/**
+ * @brief Returns the ideal zoom level for the plot.
+ */
+qreal Widgets::Plot3D::idealWorldScale() const
+{
+  const auto dx = m_maxPoint.x() - m_minPoint.x();
+  const auto dy = m_maxPoint.y() - m_minPoint.y();
+  const auto dz = m_maxPoint.z() - m_minPoint.z();
+
+  const qreal radius = qMax(1.0, 0.5 * qSqrt(dx * dx + dy * dy + dz * dz));
+
+  const qreal side = qMin(width(), height());
+  const qreal viewport = radius * 3.0;
+  const qreal scale = viewport / side;
+
+  qDebug() << scale;
+  return 0.05;
+
+  return qMin(1.0, qMax(0.05, scale));
 }
 
 /**
@@ -366,12 +393,12 @@ bool Widgets::Plot3D::interpolationEnabled() const
  *
  * Emits the cameraChanged() signal if the value is updated.
  */
-void Widgets::Plot3D::setZoom(const qreal z)
+void Widgets::Plot3D::setWorldScale(const qreal z)
 {
-  auto zBound = qBound(0.01f, z, 2.0);
-  if (m_zoom != zBound)
+  auto limited = qBound(idealWorldScale(), z, 2.0);
+  if (m_worldScale != limited)
   {
-    m_zoom = zBound;
+    m_worldScale = limited;
     markDirty();
 
     Q_EMIT cameraChanged();
@@ -619,6 +646,7 @@ void Widgets::Plot3D::onThemeChanged()
 
   // Obtain colors for XY plane & axes
   // clang-format off
+  m_textColor = Misc::ThemeManager::instance().getColor("widget_text");
   m_xAxisColor = Misc::ThemeManager::instance().getColor("plot3d_x_axis");
   m_yAxisColor = Misc::ThemeManager::instance().getColor("plot3d_y_axis");
   m_zAxisColor = Misc::ThemeManager::instance().getColor("plot3d_z_axis");
@@ -667,6 +695,26 @@ void Widgets::Plot3D::drawData()
   if (data.isEmpty())
     return;
 
+  // Get min/max values
+  QVector3D min, max;
+  for (const auto &p : data)
+  {
+    min.setX(qMin(min.x(), p.x()));
+    min.setY(qMin(min.y(), p.y()));
+    min.setZ(qMin(min.z(), p.z()));
+    max.setX(qMax(max.x(), p.x()));
+    max.setY(qMax(max.y(), p.y()));
+    max.setZ(qMax(max.z(), p.z()));
+  }
+
+  // Min/max values changed
+  if (m_minPoint != min || m_maxPoint != max)
+  {
+    m_minPoint = min;
+    m_maxPoint = max;
+    Q_EMIT rangeChanged();
+  }
+
   // Initialize camera matrix
   QMatrix4x4 matrix;
   matrix.perspective(45, float(width()) / height(), 0.1, 100);
@@ -674,19 +722,23 @@ void Widgets::Plot3D::drawData()
   matrix.rotate(m_cameraAngleX, 1, 0, 0);
   matrix.rotate(m_cameraAngleY, 0, 1, 0);
   matrix.rotate(m_cameraAngleZ, 0, 0, 1);
-  matrix.scale(m_zoom);
 
   // Render 3D pixmaps
   if (anaglyphEnabled())
   {
     auto eyes = eyeTransformations(matrix);
+    eyes.first.scale(m_worldScale);
+    eyes.second.scale(m_worldScale);
     m_plotPixmap[0] = renderData(eyes.first, data);
     m_plotPixmap[1] = renderData(eyes.second, data);
   }
 
   // Render single pixmap
   else
+  {
+    matrix.scale(m_worldScale);
     m_plotPixmap[0] = renderData(matrix, data);
+  }
 
   // Mark dirty flag as false to avoid needless rendering
   m_dirtyData = false;
@@ -707,19 +759,23 @@ void Widgets::Plot3D::drawGrid()
   matrix.rotate(m_cameraAngleX, 1, 0, 0);
   matrix.rotate(m_cameraAngleY, 0, 1, 0);
   matrix.rotate(m_cameraAngleZ, 0, 0, 1);
-  matrix.scale(m_zoom);
 
   // Render 3D pixmaps
   if (anaglyphEnabled())
   {
     auto eyes = eyeTransformations(matrix);
+    eyes.first.scale(m_worldScale);
+    eyes.second.scale(m_worldScale);
     m_gridPixmap[0] = renderGrid(eyes.first);
     m_gridPixmap[1] = renderGrid(eyes.second);
   }
 
   // Render 2D pixmap
   else
+  {
+    matrix.scale(m_worldScale);
     m_gridPixmap[0] = renderGrid(matrix);
+  }
 
   // Mark dirty flag as false to avoid needless rendering
   m_dirtyGrid = false;
@@ -798,7 +854,7 @@ void Widgets::Plot3D::drawCameraIndicator()
   // Render 3D pixmaps
   if (anaglyphEnabled())
   {
-    auto eyes = eyeTransformations(matrix, true);
+    auto eyes = eyeTransformations(matrix);
     m_cameraIndicatorPixmap[0] = renderCameraIndicator(eyes.first);
     m_cameraIndicatorPixmap[1] = renderCameraIndicator(eyes.second);
   }
@@ -812,21 +868,177 @@ void Widgets::Plot3D::drawCameraIndicator()
 }
 
 //------------------------------------------------------------------------------
-// Low-level scene rendering code
+// Low-level 3D->2D projection code
 //------------------------------------------------------------------------------
 
 /**
- * @brief Renders the background grid and axes of the 3D plot.
+ * @brief Computes a clean grid step based on current world scale.
  *
- * This function creates a QPixmap the size of the widget, draws a fading grid
- * and the X, Y, Z axes using the provided transformation matrix, and returns
- * the resulting pixmap. The grid is drawn with dashed lines, and the axes are
- * drawn with solid lines. The intensity of the lines fades toward the edges
- * to create depth perception. The function supports zoom scaling and aspect
- * ratio adjustments.
+ * This function returns a visually consistent grid step in world units by
+ * snapping the scale-adjusted unit size to a clean, human-readable value—
+ * specifically 1, 2, or 5 multiplied by a power of 10.
  *
- * @param matrix The transformation matrix used to project the 3D scene into 2D.
- * @return QPixmap containing the rendered background grid and axes.
+ * The result is based on the inverse of the world scale (i.e., how many world
+ * units are visible on screen), and is not tied to screen pixels. This ensures
+ * that grid lines stay readable and logically spaced across all zoom levels,
+ * without relying on fixed screen-space distances.
+ *
+ * @return Grid step size in world units (e.g., 1, 2, 5, 10, 20, 50, etc.).
+ */
+int Widgets::Plot3D::gridStep() const
+{
+  const float rawStep = 1.0f / m_worldScale;
+
+  float exponent = std::floor(std::log10(rawStep));
+  float base = qMax(1.0, std::pow(10.0f, exponent));
+
+  if (rawStep >= base * 5)
+    return base * 5;
+  else if (rawStep >= base * 2)
+    return base * 2;
+  else
+    return base;
+}
+
+/**
+ * @brief Projects 3D world-space points into 2D screen-space coordinates.
+ *
+ * Applies the given model-view-projection (MVP) matrix to each 3D point,
+ * performs perspective divide, and maps normalized device coordinates (NDC)
+ * from [-1, 1] range to actual screen pixels.
+ *
+ * This function assumes a standard right-handed coordinate system with
+ * Y-up and a perspective or orthographic projection already applied.
+ *
+ * @param points List of 3D points in world space.
+ * @param matrix The combined MVP matrix.
+ * @return Vector of 2D QPointF in screen coordinates.
+ */
+QVector<QPointF>
+Widgets::Plot3D::screenProjection(const QVector<QVector3D> &points,
+                                  const QMatrix4x4 &matrix)
+{
+  QVector<QPointF> projected;
+  projected.reserve(points.size());
+
+  const float halfW = width() * 0.5f;
+  const float halfH = height() * 0.5f;
+
+  for (const QVector3D &p : points)
+  {
+    QVector4D v = matrix * QVector4D(p, 1.0f);
+
+    // Avoid invalid perspective divide
+    if (qFuzzyIsNull(v.w()))
+      continue;
+
+    // Normalized Device Coordinates [-1, 1]
+    const float ndcX = v.x() / v.w();
+    const float ndcY = v.y() / v.w();
+
+    // Convert NDC to screen-space
+    const float screenX = halfW + ndcX * halfW;
+    const float screenY = halfH - ndcY * halfH;
+    projected.append(QPointF(screenX, screenY));
+  }
+
+  return projected;
+}
+
+/**
+ * @brief Projects and renders a 3D line as a faded 2D segment on screen.
+ *
+ * This function subdivides a 3D line into smaller segments, projects them
+ * onto screen space using the provided view-projection matrix, and renders
+ * them with distance-based fading. Segments that fall outside the central
+ * view region or screen bounds are discarded to avoid clutter and improve
+ * performance.
+ *
+ * @param painter The QPainter used to render the 2D line segments.
+ * @param matrix The 4x4 view-projection matrix for 3D to 2D projection.
+ * @param p1 The starting point of the 3D line.
+ * @param p2 The ending point of the 3D line.
+ * @param color The base color of the line before fading is applied.
+ * @param lineWidth The width of the rendered line in pixels.
+ * @param style The pen style used for the rendered segments.
+ */
+void Widgets::Plot3D::drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
+                                 const QVector3D &p1, const QVector3D &p2,
+                                 QColor color, float lineWidth,
+                                 Qt::PenStyle style)
+{
+  // Define number of segments per line
+  constexpr int segmentCount = 40;
+
+  // Calculate drawable area and center
+  const float w = width();
+  const float h = height();
+  const float halfW = w * 0.5f;
+  const float halfH = h * 0.5f;
+  const QPointF center(halfW, halfH);
+  const float maxDist = 0.5f * std::hypot(w, h);
+
+  // Define screen region beyond which we skip segments
+  const float screenRatio = 0.4f;
+  const float xLimit = w * screenRatio;
+  const float yLimit = h * screenRatio;
+
+  // Subdivide and render the line with fading
+  for (int i = 0; i < segmentCount; ++i)
+  {
+    // Interpolate points along the 3D line
+    float t1 = float(i) / segmentCount;
+    float t2 = float(i + 1) / segmentCount;
+    QVector3D a = (1.0f - t1) * p1 + t1 * p2;
+    QVector3D b = (1.0f - t2) * p1 + t2 * p2;
+
+    // Project to screen space
+    const auto projected = screenProjection({a, b}, matrix);
+    if (projected.size() != 2)
+      continue;
+
+    // Obtain start & end points
+    const QPointF &pA = projected[0];
+    const QPointF &pB = projected[1];
+
+    // Discard segments far from center horizontally or vertically
+    const bool exceedPAx = std::abs(pA.x() - halfW) > xLimit;
+    const bool exceedPBx = std::abs(pB.x() - halfW) > xLimit;
+    const bool exceedPAy = std::abs(pA.y() - halfH) > yLimit;
+    const bool exceedPBy = std::abs(pA.y() - halfH) > yLimit;
+    if (exceedPAx || exceedPBx || exceedPAy || exceedPBy)
+      continue;
+
+    // Compute fade factor based on distance from center
+    QPointF mid = 0.5f * (pA + pB);
+    float dist = QLineF(mid, center).length();
+    float alpha = 1.0f - std::clamp(dist / maxDist, 0.0f, 1.0f);
+
+    // Apply fade and draw the segment
+    QColor faded = color;
+    faded.setAlphaF(color.alphaF() * alpha);
+
+    // Draw line segment
+    painter.setPen(QPen(faded, lineWidth, style));
+    painter.drawLine(pA, pB);
+  }
+}
+
+//------------------------------------------------------------------------------
+// Scene rendering code
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Renders the infinite grid overlay as a 2D pixmap.
+ *
+ * This method generates a QPixmap representing a perspective-projected
+ * grid based on the current camera transformation. Grid lines and axes
+ * are rendered with distance-based fading and clipping to preserve clarity
+ * at varying zoom levels. A label indicating the current grid step is
+ * drawn in the lower-left corner.
+ *
+ * @param matrix The camera view-projection matrix used for 3D to 2D projection.
+ * @return A QPixmap containing the rendered grid overlay.
  */
 QPixmap Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
 {
@@ -842,138 +1054,58 @@ QPixmap Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
   QPainter painter(&pixmap);
   painter.setRenderHint(QPainter::Antialiasing, true);
 
-  // Grid configuration
-  const int segments = 20;
-  const float gridStep = 10;
-  const float worldSize = gridStep / zoom();
-  const float aspect = width() / float(height());
+  // Obtain grid interval
+  const int numSteps = 10;
+  const int step = gridStep();
+  const int l = numSteps * step;
 
-  // Calculate grid size
-  const float gridWidth = qMin(worldSize, worldSize * aspect);
-  const float gridHeight = qMin(worldSize, worldSize * aspect);
-
-  // Calculate minimum and maximum values for XY plane
-  const float maxX = gridWidth;
-  const float minX = -gridWidth;
-  const float maxY = gridHeight;
-  const float minY = -gridHeight;
-
-  // Calculate XY plane start/end points
-  const float endX = std::ceil(maxX / gridStep) * gridStep;
-  const float endY = std::ceil(maxY / gridStep) * gridStep;
-  const float startX = std::floor(minX / gridStep) * gridStep;
-  const float startY = std::floor(minY / gridStep) * gridStep;
-
-  // Lambda function to draw a faded line
-  auto drawFadedLine = [&](QVector3D p1, QVector3D p2, QColor color,
-                           float lineWidth, Qt::PenStyle style) {
-    // Transform 3D points into 4D homogeneous coordinates using the matrix
-    QVector4D tp1 = matrix * QVector4D(p1, 1.0f);
-    QVector4D tp2 = matrix * QVector4D(p2, 1.0f);
-
-    // Project transformed points to 2D screen space
-    QPointF sp1(width() / 2 + tp1.x() / tp1.w() * width() / 2,
-                height() / 2 - tp1.y() / tp1.w() * height() / 2);
-    QPointF sp2(width() / 2 + tp2.x() / tp2.w() * width() / 2,
-                height() / 2 - tp2.y() / tp2.w() * height() / 2);
-
-    // Determine the world space distance scale and fade thresholds
-    auto distance = qMin(gridWidth, gridHeight);
-    float fadeStart = 0.25f * distance;
-    float fadeEnd = 0.5f * distance;
-
-    // Calculate distances of points from origin
-    float dist1 = p1.length();
-    float dist2 = p2.length();
-    float maxDist = std::max(dist1, dist2);
-
-    // Compute normalized fade factor between fadeStart and fadeEnd
-    float fade = 0.0f;
-    if (maxDist >= fadeStart)
-    {
-      fade = (maxDist - fadeStart) / (fadeEnd - fadeStart);
-      fade = std::clamp(fade, 0.0f, 1.0f);
-    }
-
-    // Apply fade to color alpha
-    color.setAlphaF(1.0f - fade);
-
-    // Set pen with computed color and draw the line
-    painter.setPen(QPen(color, lineWidth, style));
-    painter.drawLine(sp1, sp2);
-  };
-
-  // Calculate how many steps we need
-  const int numXSteps = static_cast<int>((endX - startX) / gridStep);
-  const int numYSteps = static_cast<int>((endY - startY) / gridStep);
-
-  // Draw horizontal grid lines (Y-direction)
-  for (int i = 0; i <= numYSteps; ++i)
+  // Construct grid lines
+  QVector<QPair<QVector3D, QVector3D>> gridLines;
+  for (int i = -numSteps; i <= numSteps; ++i)
   {
-    const float y = startY + i * gridStep;
-    for (int seg = 0; seg < segments; ++seg)
-    {
-      const float s1 = -1.0f + 2.0f * seg / segments;
-      const float s2 = -1.0f + 2.0f * (seg + 1) / segments;
-      const float x1 = s1 * gridWidth;
-      const float x2 = s2 * gridWidth;
-      drawFadedLine(QVector3D(x1, y, 0), QVector3D(x2, y, 0), m_gridMinorColor,
-                    0.5, Qt::DashLine);
-    }
+    if (i == 0)
+      continue;
+
+    float y = i * step;
+    float x = i * step;
+    const auto x1 = QVector3D(x, l, 0);
+    const auto x2 = QVector3D(x, -l, 0);
+    const auto y1 = QVector3D(l, y, 0);
+    const auto y2 = QVector3D(-l, y, 0);
+
+    gridLines.append({x1, x2});
+    gridLines.append({y1, y2});
   }
 
-  // Draw vertical grid lines (X-direction)
-  for (int i = 0; i <= numXSteps; ++i)
+  // Construct axis lines
+  QPair<QVector3D, QVector3D> xAxis = {QVector3D(-l, 0, 0), QVector3D(l, 0, 0)};
+  QPair<QVector3D, QVector3D> yAxis = {QVector3D(0, -l, 0), QVector3D(0, l, 0)};
+  QPair<QVector3D, QVector3D> zAxis = {QVector3D(0, 0, -l), QVector3D(0, 0, l)};
+
+  // Render horizontal & vertical lines
+  auto color = m_gridMinorColor;
+  color.setAlpha(100);
+  for (const auto &line : gridLines)
   {
-    const float x = startX + i * gridStep;
-    for (int seg = 0; seg < segments; ++seg)
-    {
-      const float s1 = -1.0f + 2.0f * seg / segments;
-      const float s2 = -1.0f + 2.0f * (seg + 1) / segments;
-      const float y1 = s1 * gridHeight;
-      const float y2 = s2 * gridHeight;
-      drawFadedLine(QVector3D(x, y1, 0), QVector3D(x, y2, 0), m_gridMinorColor,
-                    0.5, Qt::DashLine);
-    }
+    drawLine3D(painter, matrix, line.first, line.second, color, 1,
+               Qt::DashLine);
   }
 
-  // Draw the axes
-  QVector<QColor> axisColors = {m_xAxisColor, m_yAxisColor};
-  for (int i = 0; i < axisColors.count(); ++i)
-  {
-    for (int seg = 0; seg < segments; ++seg)
-    {
-      const float s1 = -1.0f + 2.0f * seg / segments;
-      const float s2 = -1.0f + 2.0f * (seg + 1) / segments;
-      QVector3D p1, p2;
+  // Render axis lines
+  drawLine3D(painter, matrix, xAxis.first, xAxis.second, m_xAxisColor, 1.5,
+             Qt::SolidLine);
+  drawLine3D(painter, matrix, yAxis.first, yAxis.second, m_yAxisColor, 1.5,
+             Qt::SolidLine);
+  // drawLine3D(painter, matrix, zAxis.first, zAxis.second, m_zAxisColor, 1.5,
+  //            Qt::SolidLine);
 
-      // Draw x axis segment
-      if (i == 0)
-      {
-        p1 = QVector3D(s1 * gridWidth, 0, 0);
-        p2 = QVector3D(s2 * gridWidth, 0, 0);
-      }
+  // Render label with grid step
+  const QString stepLabel = tr("Grid Interval: %1 unit(s)").arg(step);
+  painter.setPen(m_textColor);
+  painter.setFont(Misc::CommonFonts::instance().monoFont());
+  painter.drawText(QPoint(8, height() - 8), stepLabel);
 
-      // Draw y axis segment
-      if (i == 1)
-      {
-        p1 = QVector3D(0, s1 * gridHeight, 0);
-        p2 = QVector3D(0, s2 * gridHeight, 0);
-      }
-
-      // Draw z axis segment
-      if (i == 2)
-      {
-        p1 = QVector3D(0, 0, s1 * gridHeight);
-        p2 = QVector3D(0, 0, s2 * gridHeight);
-      }
-
-      // Draw the axis segment line
-      drawFadedLine(p1, p2, axisColors[i], 1.5, Qt::SolidLine);
-    }
-  }
-
-  // Return the obtained pixmap
+  // Return the result
   return pixmap;
 }
 
@@ -1108,19 +1240,7 @@ QPixmap Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
   painter.setRenderHint(QPainter::Antialiasing, true);
 
   // Project 3D points to 2D screen space
-  QVector<QPointF> points;
-  const float halfWidth = width() * 0.5;
-  const float halfHeight = height() * 0.5;
-  for (const QVector3D &p : data)
-  {
-    QVector3D rearranged(p.x(), p.y(), p.z());
-    QVector4D transformed = matrix * QVector4D(rearranged, 1);
-
-    float x = halfWidth + (transformed.x() / transformed.w()) * halfWidth;
-    float y = halfHeight - (transformed.y() / transformed.w()) * halfHeight;
-
-    points.append(QPointF(x, y));
-  }
+  QVector<QPointF> points = screenProjection(data, matrix);
 
   // Interpolate points by generated a gradient line
   if (m_interpolate)
@@ -1174,45 +1294,23 @@ QPixmap Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
  * @return A QPair with the left and right eye matrices.
  */
 QPair<QMatrix4x4, QMatrix4x4>
-Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix, bool staticView)
+Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix)
 {
-  // Get zoom factor
-  const float z = staticView ? 1.0f : m_zoom;
-
   // Calculate horizontal eye separation
-  float shift = m_eyeSeparation / (2.0f * z) * (m_invertEyePositions ? -1 : 1);
+  float shift = m_eyeSeparation / (2.0f) * (m_invertEyePositions ? -1 : 1);
 
   // Calculate convergence angle
-  constexpr float gridStep = 10.0f;
-  float focalDistance = gridStep / z;
-  float rads = std::atan(m_eyeSeparation * 0.5f / focalDistance);
-  float angle = rads * 180.0f / float(M_PI) * (m_invertEyePositions ? -1 : 1);
-
-  // Calculate time point (based on target frame rate)
-  static int frame = 0;
-  frame = (frame + 1) % 9600;
-  float t = frame / 24.0f;
-
-  // Set jitter amplitude
-  float jitterAmp = 0.1f;
-
-  // Calculate left axis rotations with jitter
-  QVector3D lAxis(jitterAmp * std::sin(t), jitterAmp * std::sin(1.7f * t),
-                  1.0f);
-
-  // Calculate right axis rotations with jitter
-  QVector3D rAxis(jitterAmp * std::sin(t + 3.14f),
-                  jitterAmp * std::sin(1.7f * t + 3.14f), 1.0f);
+  float angle = std::atan(m_eyeSeparation / 1000.0f) * 180.0f / float(M_PI);
 
   // Generate left eye camera
   QMatrix4x4 lMatrix = matrix;
   lMatrix.translate(-shift, 0.0f, 0.0f);
-  lMatrix.rotate(angle, lAxis);
+  lMatrix.rotate(angle, 0, 0, 1);
 
   // Generate right eye camera
   QMatrix4x4 rMatrix = matrix;
   rMatrix.translate(shift, 0.0f, 0.0f);
-  rMatrix.rotate(-angle, rAxis);
+  rMatrix.rotate(-angle, 0, 0, 1);
 
   // Return both cameras
   return qMakePair(lMatrix, rMatrix);
@@ -1223,7 +1321,7 @@ Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix, bool staticView)
 //------------------------------------------------------------------------------
 
 /**
- * @brief Handles mouse wheel events to zoom in or out of the 3D plot.
+ * @brief Handles mouse wheel events to worldScale in or out of the 3D plot.
  * @param event The wheel event containing scroll delta.
  */
 void Widgets::Plot3D::wheelEvent(QWheelEvent *event)
@@ -1232,9 +1330,9 @@ void Widgets::Plot3D::wheelEvent(QWheelEvent *event)
   {
     event->accept();
     if (event->angleDelta().y() > 0)
-      setZoom(zoom() * 1.1);
+      setWorldScale(worldScale() * 1.1);
     else
-      setZoom(zoom() / 1.1);
+      setWorldScale(worldScale() / 1.1);
   }
 }
 

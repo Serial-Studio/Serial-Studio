@@ -67,11 +67,11 @@ Item {
   //
   Shortcut {
     enabled: windowRoot.focused
-    onActivated: model.zoom += 0.1
+    onActivated: model.worldScale += 0.1
     sequences: [StandardKey.ZoomIn]
   } Shortcut {
     enabled: windowRoot.focused
-    onActivated: model.zoom -= 0.1
+    onActivated: model.worldScale -= 0.1
     sequences: [StandardKey.ZoomOut]
   }
 
@@ -81,7 +81,7 @@ Item {
   NumberAnimation {
     id: zoomAnimation
     target: model
-    property: "zoom"
+    property: "worldScale"
     duration: 400
   } NumberAnimation {
     id: angleXAnimation
@@ -113,8 +113,8 @@ Item {
   //
   // Moves the model to the given position & setup, with animations
   //
-  function animateToView(zoom, angleX, angleY, angleZ, offsetX, offsetY) {
-    zoomAnimation.to = zoom
+  function animateToView(angleX, angleY, angleZ, offsetX, offsetY) {
+    zoomAnimation.to = model.idealWorldScale
     zoomAnimation.start()
 
     angleXAnimation.to = angleX
@@ -203,7 +203,7 @@ Item {
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
-      onClicked: animateToView(0.05, 300, 0, 225, 0, 0)
+      onClicked: animateToView(300, 0, 225, 0, 0)
       icon.source: "qrc:/rcc/icons/dashboard-buttons/orthogonal_view.svg"
     }
 
@@ -213,7 +213,7 @@ Item {
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
-      onClicked: animateToView(0.05, 360, 0, 360, 0, 0)
+      onClicked: animateToView(360, 0, 360, 0, 0)
       icon.source: "qrc:/rcc/icons/dashboard-buttons/top_view.svg"
     }
 
@@ -223,7 +223,7 @@ Item {
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
-      onClicked: animateToView(0.05, 270, 0, 270, 0, 0)
+      onClicked: animateToView(270, 0, 270, 0, 0)
       icon.source: "qrc:/rcc/icons/dashboard-buttons/left_view.svg"
     }
 
@@ -233,7 +233,7 @@ Item {
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
-      onClicked: animateToView(0.05, 270, 0, 180, 0, 0)
+      onClicked: animateToView(270, 0, 180, 0, 0)
       icon.source: "qrc:/rcc/icons/dashboard-buttons/front_view.svg"
     }
 

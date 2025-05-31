@@ -58,9 +58,9 @@ class Plot3D : public QQuickPaintedItem
              READ interpolationEnabled
              WRITE setInterpolationEnabled
              NOTIFY interpolationEnabledChanged)
-  Q_PROPERTY(qreal zoom
-             READ zoom
-             WRITE setZoom
+  Q_PROPERTY(qreal worldScale
+             READ worldScale
+             WRITE setWorldScale
              NOTIFY cameraChanged)
   Q_PROPERTY(qreal cameraAngleX
              READ cameraAngleX
@@ -86,6 +86,9 @@ class Plot3D : public QQuickPaintedItem
              READ cameraOffsetZ
              WRITE setCameraOffsetZ
              NOTIFY cameraChanged)
+  Q_PROPERTY(qreal idealWorldScale
+             READ idealWorldScale
+             NOTIFY rangeChanged)
   Q_PROPERTY(float eyeSeparation
              READ eyeSeparation
              WRITE setEyeSeparation
@@ -109,13 +112,14 @@ public:
   explicit Plot3D(const int index = -1, QQuickItem *parent = nullptr);
   void paint(QPainter *painter) override;
 
-  [[nodiscard]] qreal zoom() const;
+  [[nodiscard]] qreal worldScale() const;
   [[nodiscard]] qreal cameraAngleX() const;
   [[nodiscard]] qreal cameraAngleY() const;
   [[nodiscard]] qreal cameraAngleZ() const;
   [[nodiscard]] qreal cameraOffsetX() const;
   [[nodiscard]] qreal cameraOffsetY() const;
   [[nodiscard]] qreal cameraOffsetZ() const;
+  [[nodiscard]] qreal idealWorldScale() const;
 
   [[nodiscard]] bool dirty() const;
 
@@ -127,7 +131,7 @@ public:
   [[nodiscard]] bool interpolationEnabled() const;
 
 public slots:
-  void setZoom(const qreal z);
+  void setWorldScale(const qreal z);
   void setCameraAngleX(const qreal angle);
   void setCameraAngleY(const qreal angle);
   void setCameraAngleZ(const qreal angle);
@@ -153,12 +157,17 @@ private:
   void drawCameraIndicator();
 
 private:
+  int gridStep() const;
+  QVector<QPointF> screenProjection(const QVector<QVector3D> &points,
+                                    const QMatrix4x4 &matrix);
+  void drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
+                  const QVector3D &p1, const QVector3D &p2, QColor color,
+                  float lineWidth, Qt::PenStyle style);
+
   QPixmap renderGrid(const QMatrix4x4 &matrix);
   QPixmap renderCameraIndicator(const QMatrix4x4 &matrix);
   QPixmap renderData(const QMatrix4x4 &matrix, const PlotData3D &data);
-
-  QPair<QMatrix4x4, QMatrix4x4> eyeTransformations(const QMatrix4x4 &matrix,
-                                                   bool staticView = false);
+  QPair<QMatrix4x4, QMatrix4x4> eyeTransformations(const QMatrix4x4 &matrix);
 
 protected:
   void wheelEvent(QWheelEvent *event) override;
@@ -176,7 +185,7 @@ private:
   qreal m_minZ;
   qreal m_maxZ;
 
-  qreal m_zoom;
+  qreal m_worldScale;
   qreal m_cameraAngleX;
   qreal m_cameraAngleY;
   qreal m_cameraAngleZ;
@@ -196,6 +205,7 @@ private:
   bool m_dirtyBackground;
   bool m_dirtyCameraIndicator;
 
+  QColor m_textColor;
   QColor m_xAxisColor;
   QColor m_yAxisColor;
   QColor m_zAxisColor;
@@ -215,5 +225,8 @@ private:
   qreal m_orbitOffsetX;
   qreal m_orbitOffsetY;
   QPointF m_lastMousePos;
+
+  QVector3D m_minPoint;
+  QVector3D m_maxPoint;
 };
 } // namespace Widgets
