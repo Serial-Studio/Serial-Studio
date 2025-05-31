@@ -78,15 +78,13 @@ if(USE_QT_COMMERCIAL)
   set(QT_MODULES
     ${QT_MODULES}
     Mqtt
-    Quick3D
     SerialBus
   )
-set(QT_LIBS
-  ${QT_LIBS}
-  Qt6::Mqtt
-  Qt6::Quick3D
-  Qt6::SerialBus
-)
+  set(QT_LIBS
+    ${QT_LIBS}
+    Qt6::Mqtt
+    Qt6::SerialBus
+  )
 endif()
 
 # Find the Qt package and its modules

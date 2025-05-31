@@ -291,20 +291,23 @@ qreal Widgets::Plot3D::cameraOffsetZ() const
  */
 qreal Widgets::Plot3D::idealWorldScale() const
 {
-  const auto dx = m_maxPoint.x() - m_minPoint.x();
-  const auto dy = m_maxPoint.y() - m_minPoint.y();
-  const auto dz = m_maxPoint.z() - m_minPoint.z();
+  const qreal dx = m_maxPoint.x() - m_minPoint.x();
+  const qreal dy = m_maxPoint.y() - m_minPoint.y();
+  const qreal dz = m_maxPoint.z() - m_minPoint.z();
 
-  const qreal radius = qMax(1.0, 0.5 * qSqrt(dx * dx + dy * dy + dz * dz));
+  const qreal distance = qMax(1.0, std::sqrt(dx * dx + dy * dy + dz * dz));
+  const qreal targetWorldSize = distance * 2.0;
 
-  const qreal side = qMin(width(), height());
-  const qreal viewport = radius * 3.0;
-  const qreal scale = viewport / side;
+  for (qreal scale = 1.0; scale >= 0.01; scale *= 0.95)
+  {
+    const int step = gridStep(scale);
+    const qreal totalVisibleWorld = 10.0 * step;
 
-  qDebug() << scale;
+    if (totalVisibleWorld >= targetWorldSize)
+      return qBound(0.05, scale, 1.0);
+  }
+
   return 0.05;
-
-  return qMin(1.0, qMax(0.05, scale));
 }
 
 /**
@@ -699,12 +702,12 @@ void Widgets::Plot3D::drawData()
   QVector3D min, max;
   for (const auto &p : data)
   {
-    min.setX(qMin(min.x(), p.x()));
-    min.setY(qMin(min.y(), p.y()));
-    min.setZ(qMin(min.z(), p.z()));
-    max.setX(qMax(max.x(), p.x()));
-    max.setY(qMax(max.y(), p.y()));
-    max.setZ(qMax(max.z(), p.z()));
+    min.setX(qMin(m_minPoint.x(), p.x()));
+    min.setY(qMin(m_minPoint.y(), p.y()));
+    min.setZ(qMin(m_minPoint.z(), p.z()));
+    max.setX(qMax(m_maxPoint.x(), p.x()));
+    max.setY(qMax(m_maxPoint.y(), p.y()));
+    max.setZ(qMax(m_maxPoint.z(), p.z()));
   }
 
   // Min/max values changed
@@ -885,9 +888,13 @@ void Widgets::Plot3D::drawCameraIndicator()
  *
  * @return Grid step size in world units (e.g., 1, 2, 5, 10, 20, 50, etc.).
  */
-int Widgets::Plot3D::gridStep() const
+int Widgets::Plot3D::gridStep(const qreal scale) const
 {
-  const float rawStep = 1.0f / m_worldScale;
+  auto s = scale;
+  if (s == -1)
+    s = m_worldScale;
+
+  const float rawStep = 1.0f / s;
 
   float exponent = std::floor(std::log10(rawStep));
   float base = qMax(1.0, std::pow(10.0f, exponent));
