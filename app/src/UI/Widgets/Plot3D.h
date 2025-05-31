@@ -157,7 +157,7 @@ private:
   void drawCameraIndicator();
 
 private:
-  int gridStep(const qreal scale = -1) const;
+  qreal gridStep(const qreal scale = -1) const;
   QVector<QPointF> screenProjection(const QVector<QVector3D> &points,
                                     const QMatrix4x4 &matrix);
   void drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,

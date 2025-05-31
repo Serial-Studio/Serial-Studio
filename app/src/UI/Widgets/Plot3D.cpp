@@ -295,19 +295,26 @@ qreal Widgets::Plot3D::idealWorldScale() const
   const qreal dy = m_maxPoint.y() - m_minPoint.y();
   const qreal dz = m_maxPoint.z() - m_minPoint.z();
 
-  const qreal distance = qMax(1.0, std::sqrt(dx * dx + dy * dy + dz * dz));
+  const qreal distance = qMax(1e-9, std::sqrt(dx * dx + dy * dy + dz * dz));
   const qreal targetWorldSize = distance * 2.0;
+  const qreal targetStep = targetWorldSize / 10.0;
 
-  for (qreal scale = 1.0; scale >= 0.01; scale *= 0.95)
+  const qreal estimatedScale = 1.0 / targetStep;
+  const int base = static_cast<int>(std::log(estimatedScale) / std::log(0.95));
+
+  const int minIndex = base - 20;
+  const int maxIndex = base + 20;
+  for (int i = minIndex; i <= maxIndex; ++i)
   {
-    const int step = gridStep(scale);
+    const qreal scale = std::pow(0.95, i);
+    const qreal step = gridStep(scale);
     const qreal totalVisibleWorld = 10.0 * step;
 
     if (totalVisibleWorld >= targetWorldSize)
-      return qBound(0.05, scale, 1.0);
+      return qBound(1e-9, scale, 1e9);
   }
 
-  return 0.05;
+  return 1e-9;
 }
 
 /**
@@ -398,7 +405,7 @@ bool Widgets::Plot3D::interpolationEnabled() const
  */
 void Widgets::Plot3D::setWorldScale(const qreal z)
 {
-  auto limited = qBound(idealWorldScale(), z, 2.0);
+  auto limited = qBound(idealWorldScale(), z, 10e9);
   if (m_worldScale != limited)
   {
     m_worldScale = limited;
@@ -888,16 +895,15 @@ void Widgets::Plot3D::drawCameraIndicator()
  *
  * @return Grid step size in world units (e.g., 1, 2, 5, 10, 20, 50, etc.).
  */
-int Widgets::Plot3D::gridStep(const qreal scale) const
+qreal Widgets::Plot3D::gridStep(const qreal scale) const
 {
   auto s = scale;
   if (s == -1)
     s = m_worldScale;
 
   const float rawStep = 1.0f / s;
-
-  float exponent = std::floor(std::log10(rawStep));
-  float base = qMax(1.0, std::pow(10.0f, exponent));
+  const float exponent = std::floor(std::log10(rawStep));
+  const float base = std::pow(10.0f, exponent);
 
   if (rawStep >= base * 5)
     return base * 5;
@@ -1062,9 +1068,9 @@ QPixmap Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
   painter.setRenderHint(QPainter::Antialiasing, true);
 
   // Obtain grid interval
-  const int numSteps = 10;
-  const int step = gridStep();
-  const int l = numSteps * step;
+  const qreal numSteps = 10;
+  const qreal step = gridStep();
+  const qreal l = numSteps * step;
 
   // Construct grid lines
   QVector<QPair<QVector3D, QVector3D>> gridLines;
