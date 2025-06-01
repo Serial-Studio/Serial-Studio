@@ -367,5 +367,7 @@
         <file>themes/dark.json</file>
         <file>themes/default.json</file>
         <file>themes/light.json</file>
+        <file>logo/small-icon@1x.png</file>
+        <file>logo/small-icon@2x.png</file>
     </qresource>
 </RCC>

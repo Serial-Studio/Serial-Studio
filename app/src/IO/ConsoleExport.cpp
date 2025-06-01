@@ -33,12 +33,16 @@
 #include "Misc/TimerEvents.h"
 #include "Misc/WorkspaceManager.h"
 
+#ifdef USE_QT_COMMERCIAL
+#  include "Licensing/LemonSqueezy.h"
+#endif
+
 /**
  * Constructor function, configures the path in which Serial Studio shall
  * automatically write generated console log files.
  */
 IO::ConsoleExport::ConsoleExport()
-  : m_exportEnabled(true)
+  : m_exportEnabled(false)
 {
 }
 
@@ -64,7 +68,11 @@ IO::ConsoleExport &IO::ConsoleExport::instance()
  */
 bool IO::ConsoleExport::isOpen() const
 {
+#ifdef USE_QT_COMMERCIAL
   return m_file.isOpen();
+#else
+  return false;
+#endif
 }
 
 /**
@@ -72,7 +80,11 @@ bool IO::ConsoleExport::isOpen() const
  */
 bool IO::ConsoleExport::exportEnabled() const
 {
+#ifdef USE_QT_COMMERCIAL
   return m_exportEnabled;
+#else
+  return false;
+#endif
 }
 
 /**
@@ -80,6 +92,7 @@ bool IO::ConsoleExport::exportEnabled() const
  */
 void IO::ConsoleExport::closeFile()
 {
+#ifdef USE_QT_COMMERCIAL
   if (isOpen())
   {
     if (m_buffer.size() > 0)
@@ -90,6 +103,7 @@ void IO::ConsoleExport::closeFile()
 
     Q_EMIT openChanged();
   }
+#endif
 }
 
 /**
@@ -98,12 +112,14 @@ void IO::ConsoleExport::closeFile()
  */
 void IO::ConsoleExport::setupExternalConnections()
 {
+#ifdef USE_QT_COMMERCIAL
   connect(&IO::Console::instance(), &IO::Console::displayString, this,
           &IO::ConsoleExport::registerData);
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &IO::ConsoleExport::closeFile);
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
           &IO::ConsoleExport::writeData);
+#endif
 }
 
 /**
@@ -111,14 +127,27 @@ void IO::ConsoleExport::setupExternalConnections()
  */
 void IO::ConsoleExport::setExportEnabled(const bool enabled)
 {
-  m_exportEnabled = enabled;
-  Q_EMIT enabledChanged();
-
-  if (!exportEnabled() && isOpen())
+#ifdef USE_QT_COMMERCIAL
+  if (Licensing::LemonSqueezy::instance().isActivated())
   {
-    m_buffer.clear();
-    closeFile();
+    m_exportEnabled = enabled;
+    Q_EMIT enabledChanged();
+
+    if (!exportEnabled() && isOpen())
+    {
+      m_buffer.clear();
+      closeFile();
+    }
+
+    return;
   }
+#endif
+
+  closeFile();
+  m_exportEnabled = false;
+  Misc::Utilities::showMessageBox(tr("Console export is a Pro feature."),
+                                  tr("This feature requires a license. Please "
+                                     "purchase one to enable console export."));
 }
 
 /**
@@ -127,6 +156,7 @@ void IO::ConsoleExport::setExportEnabled(const bool enabled)
  */
 void IO::ConsoleExport::writeData()
 {
+#ifdef USE_QT_COMMERCIAL
   // Device not connected, abort
   if (!IO::Manager::instance().isConnected())
     return;
@@ -150,6 +180,7 @@ void IO::ConsoleExport::writeData()
       m_buffer.clear();
     }
   }
+#endif
 }
 
 /**
@@ -157,41 +188,47 @@ void IO::ConsoleExport::writeData()
  */
 void IO::ConsoleExport::createFile()
 {
-  // Close current file (if any)
-  if (isOpen())
-    closeFile();
-
-  // Get filename
-  const auto dateTime = QDateTime::currentDateTime();
-  const auto fileName
-      = dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss"))
-        + QStringLiteral(".txt");
-
-  // Get console export path
-  QDir dir(Misc::WorkspaceManager::instance().path("Console"));
-
-  // Open file
-  m_file.setFileName(dir.filePath(fileName));
-  if (!m_file.open(QIODeviceBase::WriteOnly | QIODevice::Text))
+#ifdef USE_QT_COMMERCIAL
+  // Only enable this feature is program is activated
+  if (Licensing::LemonSqueezy::instance().isActivated())
   {
-    Misc::Utilities::showMessageBox(tr("Console Output File Error"),
-                                    tr("Cannot open file for writing!"),
-                                    QMessageBox::Critical);
-    closeFile();
-    return;
+    // Close current file (if any)
+    if (isOpen())
+      closeFile();
+
+    // Get filename
+    const auto dateTime = QDateTime::currentDateTime();
+    const auto fileName
+        = dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss"))
+          + QStringLiteral(".txt");
+
+    // Get console export path
+    QDir dir(Misc::WorkspaceManager::instance().path("Console"));
+
+    // Open file
+    m_file.setFileName(dir.filePath(fileName));
+    if (!m_file.open(QIODeviceBase::WriteOnly | QIODevice::Text))
+    {
+      Misc::Utilities::showMessageBox(tr("Console Output File Error"),
+                                      tr("Cannot open file for writing!"),
+                                      QMessageBox::Critical);
+      closeFile();
+      return;
+    }
+
+    // Configure text stream
+    m_textStream.setDevice(&m_file);
+    m_textStream.setGenerateByteOrderMark(true);
+#  if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    m_textStream.setCodec("UTF-8");
+#  else
+    m_textStream.setEncoding(QStringConverter::Utf8);
+#  endif
+
+    // Emit signals
+    Q_EMIT openChanged();
   }
-
-  // Configure text stream
-  m_textStream.setDevice(&m_file);
-  m_textStream.setGenerateByteOrderMark(true);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-  m_textStream.setCodec("UTF-8");
-#else
-  m_textStream.setEncoding(QStringConverter::Utf8);
 #endif
-
-  // Emit signals
-  Q_EMIT openChanged();
 }
 
 /**
@@ -199,6 +236,8 @@ void IO::ConsoleExport::createFile()
  */
 void IO::ConsoleExport::registerData(const QString &data)
 {
+#ifdef USE_QT_COMMERCIAL
   if (!data.isEmpty() && exportEnabled())
     m_buffer.append(data);
+#endif
 }

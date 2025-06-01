@@ -223,8 +223,10 @@ Widgets.Pane {
         checked: Cpp_IO_ConsoleExport.exportEnabled
 
         onCheckedChanged:  {
-          if (Cpp_IO_ConsoleExport.exportEnabled !== checked)
+          if (Cpp_IO_ConsoleExport.exportEnabled !== checked) {
             Cpp_IO_ConsoleExport.exportEnabled = checked
+            checked = Cpp_IO_ConsoleExport.exportEnabled
+          }
         }
       }
 
