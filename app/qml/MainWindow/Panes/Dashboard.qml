@@ -30,9 +30,9 @@ import "../../Widgets" as Widgets
 
 Widgets.Pane {
   id: root
-  title: qsTr("Dashboard")
+  icon: taskBar.currentIcon
+  title: taskBar.currentText
   headerVisible: mainWindow.toolbarVisible
-  icon: "qrc:/rcc/icons/panes/dashboard.svg"
 
   //
   // Autolayout
@@ -61,12 +61,6 @@ Widgets.Pane {
     anchors.rightMargin: -9
     anchors.bottomMargin: -9
     color: Cpp_ThemeManager.colors["dashboard_background"]
-
-    /*Image {
-      opacity: 0.5
-      anchors.centerIn: parent
-      source: "qrc:/rcc/images/banner.png"
-    }*/
   }
 
   //

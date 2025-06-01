@@ -71,7 +71,6 @@ public:
   [[nodiscard]] const QString &backgroundImage() const;
 
   Q_INVOKABLE int zOrder(QQuickItem *item) const;
-  Q_INVOKABLE QRect geometry(QQuickItem *item) const;
 
   enum class ResizeEdge
   {
@@ -99,7 +98,6 @@ public slots:
   void setBackgroundImage(const QString &path);
   void setAutoLayoutEnabled(const bool enabled);
   void registerWindow(const int id, QQuickItem *item);
-  void updateGeometry(QQuickItem *item, const QRect &rect);
 
 private:
   QRect extractGeometry(QQuickItem *item) const;
@@ -119,7 +117,6 @@ private:
 
   QMap<int, QQuickItem *> m_windows;
   QMap<QQuickItem *, int> m_windowZ;
-  QMap<QQuickItem *, QRect> m_windowGeometry;
 
   ResizeEdge m_resizeEdge;
   QRect m_initialGeometry;

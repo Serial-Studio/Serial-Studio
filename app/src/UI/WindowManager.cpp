@@ -96,19 +96,6 @@ int UI::WindowManager::zOrder(QQuickItem *item) const
 }
 
 /**
- * @brief Retrieves the stored geometry of a given window.
- * @param item Pointer to the QQuickItem.
- * @return QRectF with the position and size of the window, empty if not found.
- */
-QRect UI::WindowManager::geometry(QQuickItem *item) const
-{
-  if (m_windowGeometry.contains(item))
-    return m_windowGeometry.value(item);
-
-  return QRect(0, 0, 0, 0);
-}
-
-/**
  * @brief Clears all tracked windows, z-order, and geometry.
  *        Resets the z-order counter.
  */
@@ -117,7 +104,6 @@ void UI::WindowManager::clear()
   m_zCounter = 1;
   m_windowZ.clear();
   m_windows.clear();
-  m_windowGeometry.clear();
 
   Q_EMIT zCounterChanged();
 }
@@ -194,7 +180,6 @@ void UI::WindowManager::autoLayout()
       win->setY(windowArea.y());
       win->setWidth(windowArea.width());
       win->setHeight(windowArea.height());
-      m_windowGeometry[win] = windowArea;
       Q_EMIT geometryChanged(win);
       return;
     }
@@ -304,7 +289,6 @@ void UI::WindowManager::cascadeLayout()
     win->setY(y);
     win->setWidth(minWidth);
     win->setHeight(minHeight);
-    m_windowGeometry[win] = QRect(x, y, minWidth, minHeight);
     Q_EMIT geometryChanged(win);
 
     // Update position counters
@@ -378,7 +362,6 @@ void UI::WindowManager::registerWindow(const int id, QQuickItem *item)
   // Register the window with the manager
   m_windows[id] = item;
   m_windowZ[item] = ++m_zCounter;
-  m_windowGeometry[item] = extractGeometry(item);
 
   // Ensure window Z is in sync
   item->setZ(m_windowZ[item]);
@@ -399,7 +382,14 @@ void UI::WindowManager::registerWindow(const int id, QQuickItem *item)
 void UI::WindowManager::unregisterWindow(QQuickItem *item)
 {
   m_windowZ.remove(item);
-  m_windowGeometry.remove(item);
+  for (auto it = m_windows.begin(); it != m_windows.end(); ++it)
+  {
+    if (it.value() == item)
+    {
+      m_windows.remove(it.key());
+      break;
+    }
+  }
 }
 
 /**
@@ -441,20 +431,6 @@ void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)
 
     loadLayout();
   }
-}
-
-/**
- * @brief Updates the stored geometry for a window.
- * @param item Pointer to the QQuickItem.
- * @param rect New QRectF representing the window’s position and size.
- */
-void UI::WindowManager::updateGeometry(QQuickItem *item, const QRect &rect)
-{
-  if (!item)
-    return;
-
-  m_windowGeometry[item] = rect;
-  Q_EMIT geometryChanged(item);
 }
 
 /**
@@ -696,7 +672,6 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
       m_resizeWindow->setY(geometry.y());
       m_resizeWindow->setWidth(geometry.width());
       m_resizeWindow->setHeight(geometry.height());
-      m_windowGeometry.insert(m_resizeWindow, geometry);
       event->accept();
     }
 

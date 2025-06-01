@@ -120,6 +120,12 @@ class Taskbar : public QQuickItem
              READ activeGroupId
              WRITE setActiveGroupId
              NOTIFY activeGroupIdChanged)
+  Q_PROPERTY(QString currentText
+             READ currentText
+             NOTIFY activeGroupIdChanged)
+  Q_PROPERTY(QString currentIcon
+             READ currentIcon
+             NOTIFY activeGroupIdChanged)
   Q_PROPERTY(QQuickItem* activeWindow
              READ activeWindow
              WRITE setActiveWindow
@@ -146,6 +152,8 @@ public:
   Taskbar(QQuickItem *parent = nullptr);
 
   [[nodiscard]] int activeGroupId() const;
+  [[nodiscard]] QString currentText() const;
+  [[nodiscard]] QString currentIcon() const;
   [[nodiscard]] QVariantList groupModel() const;
   [[nodiscard]] QQuickItem *activeWindow() const;
 

@@ -129,6 +129,59 @@ int UI::Taskbar::activeGroupId() const
 }
 
 /**
+ * @brief Returns the display text of the currently active group in the taskbar.
+ *
+ * Iterates through the taskbar's group model and looks for a group whose ID
+ * matches the currently active group (`m_activeGroupId`). If a match is found,
+ * its "text" field is returned. If no match is found, a default label
+ * ("Dashboard") is returned instead.
+ *
+ * @return The display text of the active group, or "Dashboard" if none is
+ * active.
+ */
+QString UI::Taskbar::currentText() const
+{
+  auto model = groupModel();
+  for (const auto &group : std::as_const(model))
+  {
+    auto map = group.toMap();
+    if (map["id"].toInt() == m_activeGroupId)
+    {
+      return map["text"].toString();
+      break;
+    }
+  }
+
+  return tr("Dashboard");
+}
+
+/**
+ * @brief Returns the icon path of the currently active group in the taskbar.
+ *
+ * Searches the group model for a group matching the current active group ID.
+ * If found, returns the associated "icon" field. If no match is found, a
+ * default dashboard icon path is returned.
+ *
+ * @return The icon path for the active group, or the dashboard icon path by
+ * default.
+ */
+QString UI::Taskbar::currentIcon() const
+{
+  auto model = groupModel();
+  for (const auto &group : std::as_const(model))
+  {
+    auto map = group.toMap();
+    if (map["id"].toInt() == m_activeGroupId)
+    {
+      return map["icon"].toString();
+      break;
+    }
+  }
+
+  return QStringLiteral("qrc:/rcc/icons/panes/dashboard.svg");
+}
+
+/**
  * @brief Returns a flat list of group titles for use in QML tab bars or menus.
  *
  * The returned QVariantList contains entries for all known groups,
