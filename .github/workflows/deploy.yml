@@ -58,7 +58,7 @@ env:
 jobs:
 
 #-------------------------------------------------------------------------------
-# GNU/Linux build (amd64)
+# GNU/Linux build (x86_64)
 #-------------------------------------------------------------------------------
 
   build-linux-x86_64:
@@ -219,7 +219,133 @@ jobs:
     #    path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
 
 #-------------------------------------------------------------------------------
-# macOS build (arm64 + amd64)
+# GNU/Linux build (aarch64)
+#-------------------------------------------------------------------------------
+
+  build-linux-aarch64:
+    runs-on: ubuntu-22.04
+    name: '🐧 Linux (aarch64)'
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v4
+
+    - name: '⚙️ Install dependencies'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          fakeroot \
+          libcups2-dev \
+          libegl1 \
+          libfuse2 \
+          libgl1-mesa-dev \
+          libgstreamer-gl1.0-0 \
+          libpulse-dev \
+          libssl-dev \
+          libudev-dev \
+          libzstd-dev \
+          rpm \
+          libxcb1 \
+          libxcb-cursor0 \
+          libxcb-cursor-dev \
+          libxcb-glx0 \
+          libxcb-icccm4 \
+          libxcb-image0 \
+          libxcb-image0-dev \
+          libxcb-keysyms1 \
+          libxcb-randr0 \
+          libxcb-render0 \
+          libxcb-render-util0 \
+          libxcb-shape0 \
+          libxcb-shm0 \
+          libxcb-sync1 \
+          libxcb-util0-dev \
+          libxcb-util1 \
+          libxcb-xfixes0 \
+          libxcb-xinerama0 \
+          libxcb-xkb-dev \
+          libxcb-xtest0 \
+          libxkbcommon-dev \
+          libxkbcommon-x11-0 \
+          libxkbcommon-x11-dev
+
+    - name: '⚙️ Restore Qt Cache'
+      uses: actions/cache/restore@v3
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64-v1
+
+    - name: '⚙️ Install Qt'
+      shell: bash
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_ARCH: arm64
+        QT_USERNAME: ${{secrets.QT_USERNAME}}
+        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
+      run: |
+        chmod +x ./scripts/install-qt.sh
+        ./scripts/install-qt.sh
+        echo "QT_INSTALL_NEEDED=$QT_INSTALL_NEEDED" >> $GITHUB_ENV
+
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
+
+        echo "$QT_BIN_PATH" >> $GITHUB_PATH
+        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+
+    - name: '⚙️ Save Qt Cache'
+      if: env.QT_INSTALL_NEEDED == 'true'
+      uses: actions/cache/save@v3
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64-v1
+
+    - name: '⚙️ Install CMake'
+      uses: lukka/get-cmake@latest
+      with:
+        useLocalCache: true
+
+    - name: '🚧 Configure with CMake'
+      run: |
+        mkdir build
+        cd build
+        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+
+    - name: '🚧 Build application'
+      run: |
+        cd build
+        cmake --build . --config Release -j 16
+
+    - name: '📦 Create AppImage'
+      run: |
+        cd "build/app"
+        wget https://github.com/dantti/linuxdeploy/releases/download/continuous/linuxdeploy-aarch64.AppImage
+        wget https://github.com/dantti/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-aarch64.AppImage
+        chmod +x linuxdeploy-aarch64.AppImage
+        chmod +x linuxdeploy-plugin-qt-aarch64.AppImage
+
+        export QML_SOURCES_PATHS="${{env.QML_DIR}}"
+
+        ./linuxdeploy-aarch64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
+
+        rm linuxdeploy-aarch64.AppImage
+        rm linuxdeploy-plugin-qt-aarch64.AppImage
+
+        mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-aarch64.AppImage
+
+    - name: '📤 Upload artifact: AppImage'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-aarch64.AppImage
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-aarch64.AppImage
+
+#-------------------------------------------------------------------------------
+# macOS build (aarch64 and x86_64)
 #-------------------------------------------------------------------------------
 
   build-mac-universal:
@@ -338,7 +464,7 @@ jobs:
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
 
 #-------------------------------------------------------------------------------
-# Windows build (MSVC 2022 amd64)
+# Windows build (MSVC 2022 x86_64)
 #-------------------------------------------------------------------------------
 
   build-windows-x86_64:
@@ -439,6 +565,7 @@ jobs:
       - build-mac-universal
       - build-windows-x86_64
       - build-linux-x86_64
+      - build-linux-aarch64
   
     runs-on: ubuntu-latest
     env:
