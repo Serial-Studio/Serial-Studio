@@ -289,9 +289,9 @@ jobs:
         ./scripts/install-qt.sh
         echo "QT_INSTALL_NEEDED=$QT_INSTALL_NEEDED" >> $GITHUB_ENV
 
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/libexec"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/lib/cmake"
 
         echo "$QT_BIN_PATH" >> $GITHUB_PATH
         echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
@@ -314,7 +314,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -DPRODUCTION_OPTIMIZATION=OFF -DCMAKE_BUILD_TYPE=Release
 
     - name: '🚧 Build application'
       run: |
@@ -336,13 +336,13 @@ jobs:
         rm linuxdeploy-aarch64.AppImage
         rm linuxdeploy-plugin-qt-aarch64.AppImage
 
-        mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-aarch64.AppImage
+        mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
 
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-aarch64.AppImage
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-aarch64.AppImage
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
 
 #-------------------------------------------------------------------------------
 # macOS build (aarch64 and x86_64)
