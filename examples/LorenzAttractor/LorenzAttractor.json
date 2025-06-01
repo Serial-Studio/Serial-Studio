@@ -25,7 +25,7 @@
                     "title": "X",
                     "units": "",
                     "value": "--.--",
-                    "widget": "x",
+                    "widget": "",
                     "xAxis": 2
                 },
                 {
@@ -44,7 +44,7 @@
                     "title": "Y",
                     "units": "",
                     "value": "--.--",
-                    "widget": "y",
+                    "widget": "",
                     "xAxis": 3
                 },
                 {
@@ -53,6 +53,69 @@
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 50,
+                    "min": 0,
+                    "overviewDisplay": false,
+                    "title": "Z",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "",
+                    "xAxis": 1
+                }
+            ],
+            "title": "2D Visualization",
+            "widget": "multiplot"
+        },
+        {
+            "datasets": [
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 20,
+                    "min": -20,
+                    "overviewDisplay": false,
+                    "title": "X",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "x",
+                    "xAxis": 2
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 30,
+                    "min": -30,
+                    "overviewDisplay": false,
+                    "title": "Y",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "y",
+                    "xAxis": 3
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
                     "index": 3,
                     "led": false,
                     "ledHigh": 1,
