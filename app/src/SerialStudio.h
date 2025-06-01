@@ -337,4 +337,12 @@ public:
   // Utility functions
   //
   [[nodiscard]] static QString getDatasetColor(const int index);
+
+  //
+  // String processing
+  //
+  [[nodiscard]] static QString hexToString(const QString &hex);
+  [[nodiscard]] static QString stringToHex(const QString &str);
+  [[nodiscard]] static QString resolveEscapeSequences(const QString &str);
+  [[nodiscard]] static QString escapeControlCharacters(const QString &str);
 };

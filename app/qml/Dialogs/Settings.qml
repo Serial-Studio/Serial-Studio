@@ -123,7 +123,7 @@ Window {
           // Language selector
           //
           Label {
-            text: qsTr("Language") + ":"
+            text: qsTr("Language")
           } ComboBox {
             id: _langCombo
             Layout.fillWidth: true
@@ -141,7 +141,7 @@ Window {
           // Theme selector
           //
           Label {
-            text: qsTr("Theme") + ":"
+            text: qsTr("Theme")
           } ComboBox {
             id: _themeCombo
             Layout.fillWidth: true
@@ -157,7 +157,7 @@ Window {
           // Plugins enabled
           //
           Label {
-            text: qsTr("Plugin System") + ": "
+            text: qsTr("Plugin System")
           } Switch {
             id: _tcpPlugins
             Layout.rightMargin: -8
@@ -174,7 +174,7 @@ Window {
           // Auto-updater
           //
           Label {
-            text: qsTr("Automatic Updates") + ":"
+            text: qsTr("Automatic Updates")
           } Switch {
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
@@ -190,7 +190,7 @@ Window {
           // Software rendering
           //
           Label {
-            text: qsTr("Software Rendering") + ":"
+            text: qsTr("Software Rendering")
           } Switch {
             id: _softwareRender
             Layout.rightMargin: -8
@@ -235,7 +235,7 @@ Window {
           // Points
           //
           Label {
-            text: qsTr("Plotting Points") + ":"
+            text: qsTr("Plotting Points")
           } SpinBox {
             id: _points
 
@@ -254,7 +254,7 @@ Window {
           // Decimal digits
           //
           Label {
-            text: qsTr("Decimal Digits") + ":"
+            text: qsTr("Decimal Digits")
           } SpinBox {
             id: _decimalDigits
 
@@ -273,7 +273,7 @@ Window {
           // Console
           //
           Label {
-            text: qsTr("Console Widget") + ":"
+            text: qsTr("Console Widget")
           } Switch {
             id: _consoleWidget
             Layout.rightMargin: -8

@@ -136,8 +136,27 @@ bool JSON::Frame::read(const QJsonObject &object)
   {
     // Update title
     m_title = title;
-    m_frameEnd = SAFE_READ(object, "frameEnd", "").toString();
-    m_frameStart = SAFE_READ(object, "frameStart", "").toString();
+
+    // Obtain frame delimiters
+    auto fEndStr = SAFE_READ(object, "frameEnd", "").toString();
+    auto fStartStr = SAFE_READ(object, "frameStart", "").toString();
+    auto isHex = SAFE_READ(object, "hexadecimalDelimiters", false).toBool();
+
+    // Convert hex + escape strings (e.g. "0A 0D", or "\\n0D") to raw bytes
+    if (isHex)
+    {
+      QString resolvedEnd = SerialStudio::resolveEscapeSequences(fEndStr);
+      QString resolvedStart = SerialStudio::resolveEscapeSequences(fStartStr);
+      m_frameEnd = QByteArray::fromHex(resolvedEnd.remove(' ').toUtf8());
+      m_frameStart = QByteArray::fromHex(resolvedStart.remove(' ').toUtf8());
+    }
+
+    // Resolve escape sequences (e.g. "\\n") and encode to UTF-8 bytes
+    else
+    {
+      m_frameEnd = SerialStudio::resolveEscapeSequences(fEndStr).toUtf8();
+      m_frameStart = SerialStudio::resolveEscapeSequences(fStartStr).toUtf8();
+    }
 
     // Generate groups & datasets from data frame
     for (auto i = 0; i < groups.count(); ++i)
@@ -195,7 +214,7 @@ const QString &JSON::Frame::title() const
 /**
  * Returns the frame end sequence.
  */
-const QString &JSON::Frame::frameEnd() const
+const QByteArray &JSON::Frame::frameEnd() const
 {
   return m_frameEnd;
 }
@@ -203,7 +222,7 @@ const QString &JSON::Frame::frameEnd() const
 /**
  * Returns the frame start sequence.
  */
-const QString &JSON::Frame::frameStart() const
+const QByteArray &JSON::Frame::frameStart() const
 {
   return m_frameStart;
 }

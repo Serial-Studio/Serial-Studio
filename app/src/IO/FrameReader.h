@@ -68,8 +68,8 @@ public slots:
   void reset();
   void setupExternalConnections();
   void processData(const QByteArray &data);
-  void setStartSequence(const QString &start);
-  void setFinishSequence(const QString &finish);
+  void setStartSequence(const QByteArray &start);
+  void setFinishSequence(const QByteArray &finish);
   void setOperationMode(const SerialStudio::OperationMode mode);
   void setFrameDetectionMode(const SerialStudio::FrameDetection mode);
 

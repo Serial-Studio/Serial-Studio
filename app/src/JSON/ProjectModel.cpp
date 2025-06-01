@@ -57,13 +57,14 @@ typedef enum
 // clang-format off
 typedef enum
 {
-  kProjectView_Title,               /**< Represents the project title item. */
-  kProjectView_FrameStartSequence,  /**< Represents the frame start sequence. */
-  kProjectView_FrameEndSequence,    /**< Represents the frame end sequence. */
-  kProjectView_FrameDecoder,        /**< Represents the frame decoder item. */
-  kProjectView_FrameDetection,      /**< Represents the frame detection item. */
-  kProjectView_ThunderforestApiKey, /**< Represents the Thunderforest API key. */
-  kProjectView_MapTilerApiKey       /**< Represents the MapTiler API key. */
+  kProjectView_Title,               /**< Represents the project title item */
+  kProjectView_FrameStartSequence,  /**< Represents the frame start sequence */
+  kProjectView_FrameEndSequence,    /**< Represents the frame end sequence */
+  kProjectView_FrameDecoder,        /**< Represents the frame decoder item */
+  kProjectView_HexadecimalSequence, /**< Represents the frame sequence format */
+  kProjectView_FrameDetection,      /**< Represents the frame detection item */
+  kProjectView_ThunderforestApiKey, /**< Represents the Thunderforest API key */
+  kProjectView_MapTilerApiKey       /**< Represents the MapTiler API key */
 } ProjectItem;
 // clang-format on
 
@@ -142,6 +143,7 @@ JSON::ProjectModel::ProjectModel()
   , m_frameParserCode("")
   , m_frameEndSequence("")
   , m_frameStartSequence("")
+  , m_hexadecimalDelimiters(false)
   , m_currentView(ProjectView)
   , m_frameDecoder(SerialStudio::PlainText)
   , m_frameDetection(SerialStudio::EndDelimiterOnly)
@@ -802,6 +804,7 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
   json.insert("frameStart", m_frameStartSequence);
   json.insert("mapTilerApiKey", m_mapTilerApiKey);
   json.insert("thunderforestApiKey", m_thunderforestApiKey);
+  json.insert("hexadecimalDelimiters", m_hexadecimalDelimiters);
 
   // Create group array
   QJsonArray groupArray;
@@ -904,6 +907,7 @@ void JSON::ProjectModel::newJsonFile()
   m_mapTilerApiKey = "";
   m_thunderforestApiKey = "";
   m_frameStartSequence = "$";
+  m_hexadecimalDelimiters = false;
   m_title = tr("Untitled Project");
   m_frameParserCode = JSON::FrameParser::defaultCode();
 
@@ -1004,6 +1008,7 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   m_frameStartSequence = json.value("frameStart").toString();
   m_mapTilerApiKey = json.value("mapTilerApiKey").toString();
   m_thunderforestApiKey = json.value("thunderforestApiKey").toString();
+  m_hexadecimalDelimiters = json.value("hexadecimalDelimiters").toBool();
   m_frameDecoder
       = static_cast<SerialStudio::DecoderMethod>(json.value("decoder").toInt());
   m_frameDetection = static_cast<SerialStudio::FrameDetection>(
@@ -2174,13 +2179,16 @@ void JSON::ProjectModel::buildProjectModel()
       "qrc:/rcc/icons/project-editor/model/frame-detection.svg", ParameterIcon);
   m_projectModel->appendRow(frameDetection);
 
+  // Get frame type data
+  auto delimWidget = m_hexadecimalDelimiters ? HexTextField : TextField;
+
   // Add frame start sequence
   if (m_frameDetection == SerialStudio::StartAndEndDelimiter
       || m_frameDetection == SerialStudio::StartDelimiterOnly)
   {
     auto frameStart = new QStandardItem();
     frameStart->setEditable(true);
-    frameStart->setData(TextField, WidgetType);
+    frameStart->setData(delimWidget, WidgetType);
     frameStart->setData(m_frameStartSequence, EditableValue);
     frameStart->setData(tr("Frame Start Delimeter"), ParameterName);
     frameStart->setData(kProjectView_FrameStartSequence, ParameterType);
@@ -2199,7 +2207,7 @@ void JSON::ProjectModel::buildProjectModel()
   {
     auto frameEnd = new QStandardItem();
     frameEnd->setEditable(true);
-    frameEnd->setData(TextField, WidgetType);
+    frameEnd->setData(delimWidget, WidgetType);
     frameEnd->setData(m_frameEndSequence, EditableValue);
     frameEnd->setData(tr("Frame End Delimeter"), ParameterName);
     frameEnd->setData(kProjectView_FrameEndSequence, ParameterType);
@@ -2209,6 +2217,22 @@ void JSON::ProjectModel::buildProjectModel()
     frameEnd->setData("qrc:/rcc/icons/project-editor/model/end-delimiter.svg",
                       ParameterIcon);
     m_projectModel->appendRow(frameEnd);
+  }
+
+  // Add hexadecimal frame sequence
+  if (m_frameDetection != SerialStudio::NoDelimiters)
+  {
+    auto sequence = new QStandardItem();
+    sequence->setEditable(true);
+    sequence->setData(CheckBox, WidgetType);
+    sequence->setData(m_hexadecimalDelimiters, EditableValue);
+    sequence->setData(tr("Hexadecimal Delimeters"), ParameterName);
+    sequence->setData(kProjectView_HexadecimalSequence, ParameterType);
+    sequence->setData(tr("Use hexadecimal delimiters for data frames"),
+                      ParameterDescription);
+    sequence->setData("qrc:/rcc/icons/project-editor/model/binary-data.svg",
+                      ParameterIcon);
+    m_projectModel->appendRow(sequence);
   }
 
   // Add Thunderforest API Key
@@ -3146,6 +3170,24 @@ void JSON::ProjectModel::onProjectItemChanged(QStandardItem *item)
     case kProjectView_FrameDecoder:
       m_frameDecoder = static_cast<SerialStudio::DecoderMethod>(value.toInt());
       break;
+    case kProjectView_HexadecimalSequence: {
+      bool changed = m_hexadecimalDelimiters != value.toBool();
+      m_hexadecimalDelimiters = value.toBool();
+      if (changed && m_hexadecimalDelimiters)
+      {
+        m_frameEndSequence = SerialStudio::stringToHex(m_frameEndSequence);
+        m_frameStartSequence = SerialStudio::stringToHex(m_frameEndSequence);
+      }
+
+      else if (changed)
+      {
+        m_frameEndSequence = SerialStudio::hexToString(m_frameEndSequence);
+        m_frameStartSequence = SerialStudio::hexToString(m_frameEndSequence);
+      }
+
+      buildProjectModel();
+    }
+    break;
     case kProjectView_FrameDetection:
       m_frameDetection = m_frameDetectionMethodsValues.at(value.toInt());
       Q_EMIT frameDetectionChanged();

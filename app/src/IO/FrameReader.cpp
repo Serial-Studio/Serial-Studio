@@ -172,14 +172,13 @@ void IO::FrameReader::processData(const QByteArray &data)
  * Updates the sequence that marks the beginning of a frame. Resets the
  * FrameReader state if the start sequence changes.
  *
- * @param start The new start sequence as a QString.
+ * @param start The new start sequence as a QByteArray.
  */
-void IO::FrameReader::setStartSequence(const QString &start)
+void IO::FrameReader::setStartSequence(const QByteArray &start)
 {
-  const auto data = start.toUtf8();
-  if (m_startSequence != data)
+  if (m_startSequence != start)
   {
-    m_startSequence = data;
+    m_startSequence = start;
     reset();
   }
 }
@@ -190,14 +189,13 @@ void IO::FrameReader::setStartSequence(const QString &start)
  * Updates the sequence that marks the end of a frame. Resets the FrameReader
  * state if the finish sequence changes.
  *
- * @param finish The new finish sequence as a QString.
+ * @param finish The new finish sequence as a QByteArray.
  */
-void IO::FrameReader::setFinishSequence(const QString &finish)
+void IO::FrameReader::setFinishSequence(const QByteArray &finish)
 {
-  const auto data = finish.toUtf8();
-  if (m_finishSequence != data)
+  if (m_finishSequence != finish)
   {
-    m_finishSequence = data;
+    m_finishSequence = finish;
     reset();
   }
 }

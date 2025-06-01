@@ -70,16 +70,16 @@ public:
   [[nodiscard]] bool containsCommercialFeatures() const;
 
   [[nodiscard]] const QString &title() const;
-  [[nodiscard]] const QString &frameEnd() const;
-  [[nodiscard]] const QString &frameStart() const;
+  [[nodiscard]] const QByteArray &frameEnd() const;
+  [[nodiscard]] const QByteArray &frameStart() const;
 
   [[nodiscard]] const QVector<Group> &groups() const;
   [[nodiscard]] const QVector<Action> &actions() const;
 
 private:
   QString m_title;
-  QString m_frameEnd;
-  QString m_frameStart;
+  QByteArray m_frameEnd;
+  QByteArray m_frameStart;
 
   QVector<Group> m_groups;
   QVector<Action> m_actions;

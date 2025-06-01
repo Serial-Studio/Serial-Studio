@@ -26,33 +26,9 @@
 
 #include "Misc/Translator.h"
 
-#include <QApplication>
+#include "SerialStudio.h"
 
-/**
- * @brief Converts C-style escape sequences in a string to their actual values.
- *
- * This function processes a string to replace escape sequences (e.g., "\\n")
- * with their corresponding character values ("\n"). It is useful for handling
- * user input in a format compatible with C escape sequences.
- *
- * @param str The input string containing escape sequences.
- * @return A string with escape sequences replaced by their actual values.
- *
- * @note Currently supports basic escape sequences. Numbers are not yet
- *       supported (TODO).
- */
-static QString ADD_ESCAPE_SEQUENCES(const QString &str)
-{
-  auto escapedStr = str;
-  escapedStr = escapedStr.replace(QStringLiteral("\\a"), QStringLiteral("\a"));
-  escapedStr = escapedStr.replace(QStringLiteral("\\b"), QStringLiteral("\b"));
-  escapedStr = escapedStr.replace(QStringLiteral("\\f"), QStringLiteral("\f"));
-  escapedStr = escapedStr.replace(QStringLiteral("\\n"), QStringLiteral("\n"));
-  escapedStr = escapedStr.replace(QStringLiteral("\\r"), QStringLiteral("\r"));
-  escapedStr = escapedStr.replace(QStringLiteral("\\t"), QStringLiteral("\t"));
-  escapedStr = escapedStr.replace(QStringLiteral("\\v"), QStringLiteral("\v"));
-  return escapedStr;
-}
+#include <QApplication>
 
 /**
  * @brief Constructs the `Manager` instance.
@@ -67,8 +43,8 @@ IO::Manager::Manager()
   : m_paused(false)
   , m_writeEnabled(true)
   , m_driver(nullptr)
-  , m_startSequence(QStringLiteral("/*"))
-  , m_finishSequence(QStringLiteral("*/"))
+  , m_startSequence(QByteArray("/*"))
+  , m_finishSequence(QByteArray("*/"))
 {
   // Listen for keyboard events for pausing/unpausing streaming
   qApp->installEventFilter(this);
@@ -220,7 +196,7 @@ SerialStudio::BusType IO::Manager::busType() const
  *
  * @return A reference to the start sequence string.
  */
-const QString &IO::Manager::startSequence() const
+const QByteArray &IO::Manager::startSequence() const
 {
   return m_startSequence;
 }
@@ -232,7 +208,7 @@ const QString &IO::Manager::startSequence() const
  *
  * @return A reference to the finish sequence string.
  */
-const QString &IO::Manager::finishSequence() const
+const QByteArray &IO::Manager::finishSequence() const
 {
   return m_finishSequence;
 }
@@ -465,13 +441,13 @@ void IO::Manager::processPayload(const QByteArray &payload)
  * sequence is empty, a default value is used. Updates the frame reader
  * asynchronously and emits a signal to notify about the change.
  *
- * @param sequence The new start sequence as a QString.
+ * @param sequence The new start sequence as a QByteArray.
  */
-void IO::Manager::setStartSequence(const QString &sequence)
+void IO::Manager::setStartSequence(const QByteArray &sequence)
 {
-  m_startSequence = ADD_ESCAPE_SEQUENCES(sequence);
+  m_startSequence = sequence;
   if (m_startSequence.isEmpty())
-    m_startSequence = QStringLiteral("/*");
+    m_startSequence = QString("/*").toUtf8();
 
   if (m_workerThread.isRunning())
     QMetaObject::invokeMethod(
@@ -489,13 +465,13 @@ void IO::Manager::setStartSequence(const QString &sequence)
  * is empty, a default value is used. Updates the frame reader asynchronously
  * and emits a signal to notify about the change.
  *
- * @param sequence The new finish sequence as a QString.
+ * @param sequence The new finish sequence as a QByteArray.
  */
-void IO::Manager::setFinishSequence(const QString &sequence)
+void IO::Manager::setFinishSequence(const QByteArray &sequence)
 {
-  m_finishSequence = ADD_ESCAPE_SEQUENCES(sequence);
+  m_finishSequence = sequence;
   if (m_finishSequence.isEmpty())
-    m_finishSequence = QStringLiteral("*/");
+    m_finishSequence = QString("*/").toUtf8();
 
   if (m_workerThread.isRunning())
     QMetaObject::invokeMethod(

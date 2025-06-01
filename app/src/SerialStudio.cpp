@@ -459,3 +459,73 @@ QString SerialStudio::getDatasetColor(const int index)
                          : colors.at(idx % colors.count()).toString();
   return color;
 }
+
+/**
+ * @brief Converts a hex-encoded string into a UTF-8 decoded string with visible
+ *        escape sequences.
+ *
+ * @param hex Hexadecimal string (e.g. "48 65 6C 6C 6F 0A").
+ * @return Decoded QString with control characters escaped (e.g. "Hello\\n").
+ */
+QString SerialStudio::hexToString(const QString &hex)
+{
+  QString raw = QString::fromUtf8(
+      QByteArray::fromHex(QString(hex).remove(' ').toUtf8()));
+  return escapeControlCharacters(raw);
+}
+
+/**
+ * @brief Converts a string containing escape sequences into a space-separated
+ *        hexadecimal string.
+ *
+ * @param str Input QString with escape sequences (e.g. "Hello\\n").
+ * @return Hex representation of the UTF-8 encoded string (e.g. "48 65 6C 6C 6F
+ * 0A").
+ */
+QString SerialStudio::stringToHex(const QString &str)
+{
+  QString resolved = resolveEscapeSequences(str);
+  return QString::fromLatin1(resolved.toUtf8().toHex(' '));
+}
+
+/**
+ * @brief Resolves C-style escape sequences in a string into their corresponding
+ *        control characters.
+ *
+ * @param str Input QString (e.g. "Hello\\n").
+ * @return QString with escape sequences converted to real control characters
+ * (e.g. "Hello\n").
+ */
+QString SerialStudio::resolveEscapeSequences(const QString &str)
+{
+  QString escapedStr = str;
+  escapedStr.replace(QStringLiteral("\\\\"), QStringLiteral("\\"));
+  escapedStr.replace(QStringLiteral("\\a"), QStringLiteral("\a"));
+  escapedStr.replace(QStringLiteral("\\b"), QStringLiteral("\b"));
+  escapedStr.replace(QStringLiteral("\\f"), QStringLiteral("\f"));
+  escapedStr.replace(QStringLiteral("\\n"), QStringLiteral("\n"));
+  escapedStr.replace(QStringLiteral("\\r"), QStringLiteral("\r"));
+  escapedStr.replace(QStringLiteral("\\t"), QStringLiteral("\t"));
+  escapedStr.replace(QStringLiteral("\\v"), QStringLiteral("\v"));
+  return escapedStr;
+}
+
+/**
+ * @brief Escapes control characters in a string using C-style escape sequences.
+ *
+ * @param str Input QString with raw control characters (e.g. "Hello\n").
+ * @return QString with escape sequences (e.g. "Hello\\n").
+ */
+QString SerialStudio::escapeControlCharacters(const QString &str)
+{
+  QString result = str;
+  result.replace(QStringLiteral("\\"), QStringLiteral("\\\\"));
+  result.replace(QStringLiteral("\a"), QStringLiteral("\\a"));
+  result.replace(QStringLiteral("\b"), QStringLiteral("\\b"));
+  result.replace(QStringLiteral("\f"), QStringLiteral("\\f"));
+  result.replace(QStringLiteral("\n"), QStringLiteral("\\n"));
+  result.replace(QStringLiteral("\r"), QStringLiteral("\\r"));
+  result.replace(QStringLiteral("\t"), QStringLiteral("\\t"));
+  result.replace(QStringLiteral("\v"), QStringLiteral("\\v"));
+  return result;
+}

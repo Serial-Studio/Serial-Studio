@@ -3,9 +3,9 @@
     ],
     "decoder": 1,
     "frameDetection": 1,
-    "frameEnd": ";",
+    "frameEnd": "DE C0",
     "frameParser": "/**\n * This function parses a binary data frame (represented as a hexadecimal string),\n * and converts it into an array of decimal values ranging from 0 to 5 volts.\n *\n * @param[in]  frame  The latest received frame as a hexadecimal string.\n * @return     Array of integers containing the parsed frame elements.\n */\nfunction parse(frame) {\n    let dataArray = [];\n    for (let i = 0; i < frame.length; i += 2) {\n        let hexByte = frame.substring(i, i + 2);\n        let decimalValue = parseInt(hexByte, 16);\n        dataArray.push(decimalValue * 5.0 / 255);\n    }\n\n    return dataArray;\n}",
-    "frameStart": "$",
+    "frameStart": "C0 DE",
     "groups": [
         {
             "datasets": [
@@ -21,10 +21,12 @@
                     "log": false,
                     "max": 5,
                     "min": 0,
+                    "overviewDisplay": false,
                     "title": "ADC 0",
                     "units": "Volts",
                     "value": "--.--",
-                    "widget": ""
+                    "widget": "",
+                    "xAxis": 0
                 },
                 {
                     "alarm": 0,
@@ -38,10 +40,12 @@
                     "log": false,
                     "max": 5,
                     "min": 0,
+                    "overviewDisplay": false,
                     "title": "ADC 1",
                     "units": "Volts",
                     "value": "--.--",
-                    "widget": ""
+                    "widget": "",
+                    "xAxis": 0
                 },
                 {
                     "alarm": 0,
@@ -55,10 +59,12 @@
                     "log": false,
                     "max": 5,
                     "min": 0,
+                    "overviewDisplay": false,
                     "title": "ADC 2",
                     "units": "Volts",
                     "value": "--.--",
-                    "widget": ""
+                    "widget": "",
+                    "xAxis": 0
                 },
                 {
                     "alarm": 0,
@@ -72,10 +78,12 @@
                     "log": false,
                     "max": 5,
                     "min": 0,
+                    "overviewDisplay": false,
                     "title": "ADC 3",
                     "units": "Volts",
                     "value": "--.--",
-                    "widget": ""
+                    "widget": "",
+                    "xAxis": 0
                 },
                 {
                     "alarm": 0,
@@ -89,10 +97,12 @@
                     "log": false,
                     "max": 5,
                     "min": 0,
+                    "overviewDisplay": false,
                     "title": "ADC 4",
                     "units": "Volts",
                     "value": "--.--",
-                    "widget": ""
+                    "widget": "",
+                    "xAxis": 0
                 },
                 {
                     "alarm": 0,
@@ -106,16 +116,19 @@
                     "log": false,
                     "max": 5,
                     "min": 0,
+                    "overviewDisplay": false,
                     "title": "ADC 5",
                     "units": "Volts",
                     "value": "--.--",
-                    "widget": ""
+                    "widget": "",
+                    "xAxis": 0
                 }
             ],
             "title": "ADC Readings",
             "widget": "multiplot"
         }
     ],
+    "hexadecimalDelimiters": true,
     "mapTilerApiKey": "",
     "thunderforestApiKey": "",
     "title": "Hexadecimal ADC"

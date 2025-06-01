@@ -320,6 +320,8 @@ private:
   QString m_frameEndSequence;
   QString m_frameStartSequence;
 
+  bool m_hexadecimalDelimiters;
+
   QString m_mapTilerApiKey;
   QString m_thunderforestApiKey;
 

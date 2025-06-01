@@ -46,14 +46,16 @@ void setup() {
 void loop() {
   // Read the analog values from pins A0 to A5
   // Show each one of them over a range of values
-  Serial.write("$");
+  Serial.write(0xC0);
+  Serial.write(0xDE);
   Serial.write(map(analogRead(A0), 0, 1023, 0, 255));
   Serial.write(map(analogRead(A1), 0, 1023, 0, 255));
   Serial.write(map(analogRead(A2), 0, 1023, 0, 255));
   Serial.write(map(analogRead(A3), 0, 1023, 0, 255));
   Serial.write(map(analogRead(A4), 0, 1023, 0, 255));
   Serial.write(map(analogRead(A5), 0, 1023, 0, 255));
-  Serial.write(";");
+  Serial.write(0xDE);
+  Serial.write(0xC0);
 
   // Small delay to manage the sampling rate
   delay(1);
