@@ -433,6 +433,12 @@ void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)
     m_autoLayoutEnabled = enabled;
     Q_EMIT autoLayoutEnabledChanged();
 
+    for (auto *win : std::as_const(m_windows))
+    {
+      if (win->state() == "maximized")
+        QMetaObject::invokeMethod(win, "restoreClicked", Qt::DirectConnection);
+    }
+
     loadLayout();
   }
 }
@@ -801,9 +807,12 @@ void UI::WindowManager::mousePressEvent(QMouseEvent *event)
       m_dragWindow = m_focusedWindow;
       m_initialGeometry = extractGeometry(m_focusedWindow);
       event->accept();
-      return;
     }
   }
+
+  // No caption click, let window process mouse event
+  if (!captionClick)
+    QQuickItem::mousePressEvent(event);
 }
 
 /**
