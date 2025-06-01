@@ -110,6 +110,11 @@ Popup {
         spacing: 0
         anchors.fill: parent
 
+        Component.onCompleted: {
+          if (implicitWidth > root.width - 16)
+            root.width = implicitWidth + 32
+        }
+
         Item {
           implicitWidth: 6
         }

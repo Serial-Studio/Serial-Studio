@@ -1,5 +1,19 @@
 {
     "actions": [
+        {
+            "binary": false,
+            "eol": "\n",
+            "icon": "Resistor",
+            "title": "Enable Pull-Up Resistor",
+            "txData": "enable-pull-up"
+        },
+        {
+            "binary": false,
+            "eol": "\n",
+            "icon": "Gears",
+            "title": "Disable Pull-Up Resistor",
+            "txData": "disable-pull-up"
+        }
     ],
     "decoder": 1,
     "frameDetection": 1,

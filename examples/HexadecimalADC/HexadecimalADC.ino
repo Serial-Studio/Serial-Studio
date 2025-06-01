@@ -31,6 +31,24 @@ void setup() {
     ;
 
   // Configure the ADC pins (A0 to A5) as input pins
+  initAdcPort();
+}
+
+//-----------------------------------------------------------------------------
+// Serial Studio actions
+//-----------------------------------------------------------------------------
+
+void setPullUp() {
+  pinMode(A0, INPUT_PULLUP);
+  pinMode(A1, INPUT_PULLUP);
+  pinMode(A2, INPUT_PULLUP);
+  pinMode(A3, INPUT_PULLUP);
+  pinMode(A4, INPUT_PULLUP);
+  pinMode(A5, INPUT_PULLUP);
+}
+
+// Function to set all pins back to INPUT mode
+void initAdcPort() {
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
   pinMode(A2, INPUT);
@@ -44,6 +62,16 @@ void setup() {
 //-----------------------------------------------------------------------------
 
 void loop() {
+  // Check if there is any serial input available
+  if (Serial.available() > 0) {
+    String command = Serial.readStringUntil('\n');
+    command.trim();
+    if (command == "enable-pull-up")
+      setPullUp();
+    else if (command == "disable-pull-up")
+      initAdcPort();
+  }
+
   // Read the analog values from pins A0 to A5
   // Show each one of them over a range of values
   Serial.write(0xC0);
