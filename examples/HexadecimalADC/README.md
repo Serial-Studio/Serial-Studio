@@ -28,7 +28,7 @@ This Arduino sketch reads analog values from six floating pins (A0 to A5), scale
 
 - **Analog Reading**: Data is read from analog pins A0 to A5.
 - **Data Conversion**: The 10-bit ADC values are mapped to 8-bit (0-255) and sent over the serial port.
-- **Serial Output**: Data is framed by a start (`$`) and end (`;`) delimiter, and transmitted in binary format for visualization.
+- **Serial Output**: Data is framed by a start (`0xC0 0xDE`) and end (`0xDE 0xC0`) delimiter, and transmitted in binary format for visualization.
 
 The serial output can be analyzed in **Serial Studio** using the **FFT tool** to observe the frequency spectrum of the noise or any connected signals.
 
