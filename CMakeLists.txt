@@ -97,6 +97,8 @@ else()
    message(STATUS "USE_QT_COMMERCIAL not enabled — skipping related definitions")
 endif()
 
+message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
+
 #-------------------------------------------------------------------------------
 # Set UNIX friendly name for app & fix OpenSUSE builds
 #-------------------------------------------------------------------------------
@@ -128,7 +130,7 @@ if(PRODUCTION_OPTIMIZATION)
       )
       add_link_options(
          -Wl,--gc-sections              # Remove unused sections during linking
-         -fuse-linker-plugin            # Enable LTO during linking
+         -fuse-linker-plugin            # Link-time optimization
       )
 
    # LLVM/MinGW-specific settings
@@ -145,7 +147,7 @@ if(PRODUCTION_OPTIMIZATION)
          -flto                          # Enable link-time optimization
       )
       add_link_options(
-         -Wl,-dead_strip                # Remove unused code and data during linking
+         -Wl,-dead_strip                # Remove unused sections during linking
          -flto=full                     # Link-time optimization
       )
 
@@ -163,7 +165,7 @@ if(PRODUCTION_OPTIMIZATION)
          /fp:fast                       # Fast FP (swap to :strict if needed)
       )
       add_link_options(
-         /OPT:REF                       # Remove unused stuff
+         /OPT:REF                       # Remove unused sections during linking
          /OPT:ICF                       # Merge identical code/data
          /LTCG                          # Link-time optimization
       )
@@ -181,7 +183,7 @@ if(PRODUCTION_OPTIMIZATION)
          -flto                          # Enable link-time optimization
       )
       add_link_options(
-         -Wl,-dead_strip                # Remove unused code and data during linking
+         -Wl,-dead_strip                # Remove unused sections during linking
          -flto=full                     # Link-time optimization
       )
 
@@ -203,7 +205,24 @@ if(PRODUCTION_OPTIMIZATION)
          -flto=full                     # Link-time optimization
       )
 
-   # Generic UNIX/Linux settings
+   # UNIX/Linux settings for arm64
+   elseif(UNIX AND CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+      add_compile_options(
+         -O2                            # Optimize for speed
+         -Wall                          # Enable most warning messages
+         -Wextra                        # Enable additional warning messages
+         -fopenmp                       # Add support for OpenMP
+         -ftree-vectorize               # Enable loop vectorization
+         -fno-fast-math                 # Standard-compliant floating point math
+         -fno-unsafe-math-optimizations # Use safe math only
+         -flto                          # Enable link-time optimization
+      )
+      add_link_options(
+         -Wl,--gc-sections              # Remove unused sections during linking
+         -flto                          # Link-time optimization
+      )
+
+   # UNIX/Linux settings for x86_64
    elseif(UNIX)
       add_compile_options(
          -O2                            # Optimize for speed
@@ -230,16 +249,16 @@ endif()
 
 if(DEBUG_SANITIZER)
    add_compile_options(
-      -fsanitize=address              # Enable AddressSanitizer
-      -fsanitize=undefined            # Enable UndefinedBehaviorSanitizer
-      -fsanitize=leak                 # Enable LeakSanitizer
-      -g                              # Generate debug symbols
-      -fno-omit-frame-pointer         # Preserve frame pointers
+      -fsanitize=address                # Enable AddressSanitizer
+      -fsanitize=undefined              # Enable UndefinedBehaviorSanitizer
+      -fsanitize=leak                   # Enable LeakSanitizer
+      -g                                # Generate debug symbols
+      -fno-omit-frame-pointer           # Preserve frame pointers
    )
    add_link_options(
-      -fsanitize=address              # Link AddressSanitizer
-      -fsanitize=undefined            # Link UndefinedBehaviorSanitizer
-      -fsanitize=leak                 # Link LeakSanitizer
+      -fsanitize=address                # Link AddressSanitizer
+      -fsanitize=undefined              # Link UndefinedBehaviorSanitizer
+      -fsanitize=leak                   # Link LeakSanitizer
    )
 endif()
 

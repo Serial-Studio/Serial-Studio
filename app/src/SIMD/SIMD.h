@@ -21,6 +21,8 @@
 
 #pragma once
 
+#define SIMDE_ENABLE_NATIVE_ALIASES
+
 #include <cstddef>
 #include <algorithm>
 

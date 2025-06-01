@@ -314,7 +314,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DPRODUCTION_OPTIMIZATION=OFF -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
 
     - name: '🚧 Build application'
       run: |
