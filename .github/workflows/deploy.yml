@@ -223,7 +223,7 @@ jobs:
 #-------------------------------------------------------------------------------
 
   build-linux-aarch64:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04-arm
     name: '🐧 Linux (aarch64)'
     steps:
     - name: '🧰 Checkout'
