@@ -44,6 +44,16 @@
 IO::ConsoleExport::ConsoleExport()
   : m_exportEnabled(false)
 {
+#ifdef USE_QT_COMMERCIAL
+  connect(&Licensing::LemonSqueezy::instance(),
+          &Licensing::LemonSqueezy::activatedChanged, this, [=] {
+            if (exportEnabled()
+                && !Licensing::LemonSqueezy::instance().isActivated())
+              setExportEnabled(false);
+          });
+#endif
+
+  setExportEnabled(m_settings.value("ConsoleExport", false).toBool());
 }
 
 /**
@@ -139,15 +149,22 @@ void IO::ConsoleExport::setExportEnabled(const bool enabled)
       closeFile();
     }
 
+    m_settings.setValue("ConsoleExport", m_exportEnabled);
     return;
   }
 #endif
 
   closeFile();
+  m_buffer.clear();
   m_exportEnabled = false;
-  Misc::Utilities::showMessageBox(tr("Console export is a Pro feature."),
-                                  tr("This feature requires a license. Please "
-                                     "purchase one to enable console export."));
+  m_settings.setValue("ConsoleExport", false);
+  Q_EMIT enabledChanged();
+
+  if (enabled)
+    Misc::Utilities::showMessageBox(
+        tr("Console Export is a Pro feature."),
+        tr("This feature requires a license. Please "
+           "purchase one to enable console export."));
 }
 
 /**

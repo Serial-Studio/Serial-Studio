@@ -67,7 +67,6 @@ Widgets.Pane {
   Settings {
     category: "SetupPanel"
     property alias csvExport: csvLogging.checked
-    property alias consoleExport: consoleLogging.checked
     property alias selectedDriver: driverCombo.currentIndex
   }
 
@@ -214,7 +213,6 @@ Widgets.Pane {
       // Console data export
       //
       CheckBox {
-        id: consoleLogging
         Layout.leftMargin: -6
         Layout.maximumHeight: 18
         Layout.alignment: Qt.AlignLeft
@@ -223,10 +221,8 @@ Widgets.Pane {
         checked: Cpp_IO_ConsoleExport.exportEnabled
 
         onCheckedChanged:  {
-          if (Cpp_IO_ConsoleExport.exportEnabled !== checked) {
+          if (Cpp_IO_ConsoleExport.exportEnabled !== checked)
             Cpp_IO_ConsoleExport.exportEnabled = checked
-            checked = Cpp_IO_ConsoleExport.exportEnabled
-          }
         }
       }
 

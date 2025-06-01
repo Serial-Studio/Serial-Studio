@@ -154,10 +154,73 @@ Window {
           }
 
           //
+          // Workspace
+          //
+          Label {
+            text: qsTr("Workspace Folder")
+            color: Cpp_ThemeManager.colors["text"]
+          } RowLayout {
+            spacing: 2
+
+            TextField {
+              readOnly: true
+              Layout.fillWidth: true
+              Layout.minimumWidth: 256
+              Layout.alignment: Qt.AlignVCenter
+              text: Cpp_Misc_WorkspaceManager.shortPath
+            }
+
+            Button {
+              icon.width: 18
+              icon.height: 18
+              Layout.fillWidth: false
+              Layout.maximumWidth: 24
+              Layout.maximumHeight: 24
+              Layout.alignment: Qt.AlignVCenter
+              icon.source: "qrc:/rcc/icons/buttons/open.svg"
+              onClicked: Cpp_Misc_WorkspaceManager.selectPath()
+              icon.color: Cpp_ThemeManager.colors["button_text"]
+            }
+          }
+        }
+      }
+
+      //
+      // Spacer
+      //
+      Item {
+        implicitHeight: 4
+      }
+
+      //
+      // Miscellaneous settings
+      //
+      Label {
+        text: qsTr("Miscellaneous")
+        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
+        color: Cpp_ThemeManager.colors["pane_section_label"]
+        Component.onCompleted: font.capitalization = Font.AllUppercase
+      } GroupBox {
+        Layout.fillWidth: true
+
+        background: Rectangle {
+          radius: 2
+          border.width: 1
+          color: Cpp_ThemeManager.colors["groupbox_background"]
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        GridLayout {
+          columns: 2
+          rowSpacing: 4
+          columnSpacing: 8
+          anchors.fill: parent
+
+          //
           // Plugins enabled
           //
           Label {
-            text: qsTr("Plugin System")
+            text: qsTr("Enable TCP Plugins (Port 7777)")
           } Switch {
             id: _tcpPlugins
             Layout.rightMargin: -8
@@ -171,10 +234,22 @@ Window {
           }
 
           //
+          // Software rendering
+          //
+          Label {
+            text: qsTr("Force Software Rendering")
+          } Switch {
+            id: _softwareRender
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+          }
+
+          //
           // Auto-updater
           //
           Label {
-            text: qsTr("Automatic Updates")
+            text: qsTr("Automatically Check for Updates")
           } Switch {
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
@@ -184,18 +259,6 @@ Window {
               if (checked !== mainWindow.automaticUpdates)
                 mainWindow.automaticUpdates = checked
             }
-          }
-
-          //
-          // Software rendering
-          //
-          Label {
-            text: qsTr("Software Rendering")
-          } Switch {
-            id: _softwareRender
-            Layout.rightMargin: -8
-            Layout.alignment: Qt.AlignRight
-            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
           }
         }
       }
@@ -208,7 +271,7 @@ Window {
       }
 
       //
-      // General settings
+      // Dashboard settings
       //
       Label {
         text: qsTr("Dashboard")
@@ -235,12 +298,12 @@ Window {
           // Points
           //
           Label {
-            text: qsTr("Plotting Points")
+            text: qsTr("Point Count")
           } SpinBox {
             id: _points
 
-            from: 0
-            to: 10000
+            from: 2
+            to: 20000
             editable: true
             Layout.fillWidth: true
             value: Cpp_UI_Dashboard.points
@@ -254,7 +317,7 @@ Window {
           // Decimal digits
           //
           Label {
-            text: qsTr("Decimal Digits")
+            text: qsTr("Decimal Precision")
           } SpinBox {
             id: _decimalDigits
 
@@ -273,7 +336,7 @@ Window {
           // Console
           //
           Label {
-            text: qsTr("Console Widget")
+            text: qsTr("Enable Console Widget")
           } Switch {
             id: _consoleWidget
             Layout.rightMargin: -8
@@ -293,59 +356,6 @@ Window {
       //
       Item {
         implicitHeight: 4
-      }
-
-      //
-      // Workspace settings
-      //
-      Label {
-        text: qsTr("Workspace")
-        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
-        color: Cpp_ThemeManager.colors["pane_section_label"]
-        Component.onCompleted: font.capitalization = Font.AllUppercase
-      } GroupBox {
-        Layout.fillWidth: true
-
-        background: Rectangle {
-          radius: 2
-          border.width: 1
-          color: Cpp_ThemeManager.colors["groupbox_background"]
-          border.color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        GridLayout {
-          columns: 2
-          rowSpacing: 4
-          columnSpacing: 8
-          anchors.fill: parent
-
-          Label {
-            text: qsTr("Folder")
-            color: Cpp_ThemeManager.colors["text"]
-          } RowLayout {
-            spacing: 2
-
-            TextField {
-              readOnly: true
-              Layout.fillWidth: true
-              Layout.minimumWidth: 256
-              Layout.alignment: Qt.AlignVCenter
-              text: Cpp_Misc_WorkspaceManager.shortPath
-            }
-
-            Button {
-              icon.width: 18
-              icon.height: 18
-              Layout.fillWidth: false
-              Layout.maximumWidth: 24
-              Layout.maximumHeight: 24
-              Layout.alignment: Qt.AlignVCenter
-              icon.source: "qrc:/rcc/icons/buttons/open.svg"
-              onClicked: Cpp_Misc_WorkspaceManager.selectPath()
-              icon.color: Cpp_ThemeManager.colors["button_text"]
-            }
-          }
-        }
       }
 
       //

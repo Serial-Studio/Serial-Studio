@@ -737,54 +737,64 @@ void UI::WindowManager::mousePressEvent(QMouseEvent *event)
   if (m_taskbar)
     m_taskbar->setActiveWindow(m_focusedWindow);
 
-  // Only execute geometry changes when it makes sense
-  if (m_focusedWindow->state() != "normal" || autoLayoutEnabled())
-  {
-    QQuickItem::mousePressEvent(event);
-    return;
-  }
-
-  // Detect active resize edge & start resizing
-  m_resizeEdge = detectResizeEdge(m_focusedWindow);
-  if (m_resizeEdge != ResizeEdge::None)
-  {
-    grabMouse();
-    switch (m_resizeEdge)
-    {
-      case ResizeEdge::Left:
-      case ResizeEdge::Right:
-        setCursor(Qt::SizeHorCursor);
-        break;
-      case ResizeEdge::Top:
-      case ResizeEdge::Bottom:
-        setCursor(Qt::SizeVerCursor);
-        break;
-      case ResizeEdge::TopRight:
-      case ResizeEdge::BottomLeft:
-        setCursor(Qt::SizeBDiagCursor);
-        break;
-      case ResizeEdge::TopLeft:
-      case ResizeEdge::BottomRight:
-        setCursor(Qt::SizeFDiagCursor);
-        break;
-      default:
-        unsetCursor();
-        break;
-    }
-
-    m_resizeWindow = m_focusedWindow;
-    m_initialGeometry = extractGeometry(m_focusedWindow);
-    event->accept();
-    return;
-  }
-
   // Check if we're clicking the title bar (top area)
+  bool captionClick = false;
   const int captionH = m_focusedWindow->property("captionHeight").toInt();
   const int buttonsW = m_focusedWindow->property("windowControlsWidth").toInt();
   const auto mouseClick = m_focusedWindow->mapFromItem(this, m_initialMousePos);
   if (mouseClick.y() <= captionH)
   {
+    // User clicked on caption
     if (mouseClick.x() <= m_focusedWindow->width() - buttonsW)
+      captionClick = true;
+
+    // User clicked on caption buttons, let QML process events
+    else
+    {
+      QQuickItem::mousePressEvent(event);
+      return;
+    }
+  }
+
+  // Only allow resizing & moving window when it makes sense
+  if (m_focusedWindow->state() == "normal" && !autoLayoutEnabled())
+  {
+    // Detect active resize edge & start resizing
+    m_resizeEdge = detectResizeEdge(m_focusedWindow);
+    if (m_resizeEdge != ResizeEdge::None)
+    {
+      grabMouse();
+      switch (m_resizeEdge)
+      {
+        case ResizeEdge::Left:
+        case ResizeEdge::Right:
+          setCursor(Qt::SizeHorCursor);
+          break;
+        case ResizeEdge::Top:
+        case ResizeEdge::Bottom:
+          setCursor(Qt::SizeVerCursor);
+          break;
+        case ResizeEdge::TopRight:
+        case ResizeEdge::BottomLeft:
+          setCursor(Qt::SizeBDiagCursor);
+          break;
+        case ResizeEdge::TopLeft:
+        case ResizeEdge::BottomRight:
+          setCursor(Qt::SizeFDiagCursor);
+          break;
+        default:
+          unsetCursor();
+          break;
+      }
+
+      m_resizeWindow = m_focusedWindow;
+      m_initialGeometry = extractGeometry(m_focusedWindow);
+      event->accept();
+      return;
+    }
+
+    // Check if we're clicking the title bar (top area)
+    if (captionClick)
     {
       grabMouse();
       setCursor(Qt::ClosedHandCursor);
@@ -794,9 +804,6 @@ void UI::WindowManager::mousePressEvent(QMouseEvent *event)
       return;
     }
   }
-
-  // Pass the event through
-  QQuickItem::mousePressEvent(event);
 }
 
 /**
@@ -822,4 +829,63 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent *event)
 
   // Pass the event through
   QQuickItem::mouseReleaseEvent(event);
+}
+
+/**
+ * @brief Handles double-click events on window title bars to toggle
+ *        maximize/restore.
+ *
+ * This method detects a double-click in the caption (title bar) area of a
+ * window, excluding the region reserved for window control buttons. If a valid
+ * window is detected under the cursor, and the double-click occurs within the
+ * allowed area, it toggles the window state between "maximized" and "normal" by
+ * invoking the appropriate QML signal (`maximizeClicked` or `restoreClicked`)
+ * on the target window.
+ *
+ * If the double-click occurs outside any interactive window area, the event is
+ * passed to the base class for default processing.
+ *
+ * @param event Pointer to the QMouseEvent containing double-click information.
+ */
+void UI::WindowManager::mouseDoubleClickEvent(QMouseEvent *event)
+{
+  // Check if there is a window there
+  m_focusedWindow = getWindow(event->pos().x(), event->pos().y());
+  if (!m_focusedWindow)
+  {
+    QQuickItem::mouseDoubleClickEvent(event);
+    return;
+  }
+
+  // Check if double-click was in the title bar area (not on window buttons)
+  const int captionH = m_focusedWindow->property("captionHeight").toInt();
+  const int buttonsW = m_focusedWindow->property("windowControlsWidth").toInt();
+  const auto localPos = m_focusedWindow->mapFromItem(this, event->pos());
+  if (localPos.y() <= captionH
+      && localPos.x() <= m_focusedWindow->width() - buttonsW)
+  {
+    // Obtain current state
+    const QString state = m_focusedWindow->property("state").toString();
+
+    // Restore the window
+    if (state == "maximized")
+    {
+      QMetaObject::invokeMethod(m_focusedWindow, "restoreClicked",
+                                Qt::DirectConnection);
+    }
+
+    // Maximize the window
+    else if (state == "normal")
+    {
+      QMetaObject::invokeMethod(m_focusedWindow, "maximizeClicked",
+                                Qt::DirectConnection);
+    }
+
+    // Block further processing of the event
+    event->accept();
+    return;
+  }
+
+  // Pass the event through
+  QQuickItem::mouseDoubleClickEvent(event);
 }

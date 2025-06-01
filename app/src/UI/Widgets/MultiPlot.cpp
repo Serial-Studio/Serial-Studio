@@ -166,10 +166,10 @@ const QStringList &Widgets::MultiPlot::labels() const
 
 /**
  * @brief Draws the data on the given QLineSeries.
- * @param series The QLineSeries to draw the data on.
+ * @param series The QXYSeries to draw the data on.
  * @param index The index of the dataset to draw.
  */
-void Widgets::MultiPlot::draw(QLineSeries *series, const int index)
+void Widgets::MultiPlot::draw(QXYSeries *series, const int index)
 {
   if (series && index >= 0 && index < count())
   {
@@ -320,7 +320,7 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     m_maxY = std::numeric_limits<qreal>::lowest();
 
     // Loop through each dataset and find the min and max values
-    for (const auto &dataset : m_data)
+    for (const auto &dataset : std::as_const(m_data))
     {
       m_minY = qMin(m_minY, SIMD::findMin(dataset, [](const QPointF &p) {
                       return p.y();

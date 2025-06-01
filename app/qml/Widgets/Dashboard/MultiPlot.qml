@@ -70,8 +70,14 @@ Item {
     function onTimeout24Hz() {
       if (root.visible && root.running) {
         const count = plot.graph.seriesList.length
-        for (let i = 0; i < count; ++i)
-          root.model.draw(plot.graph.seriesList[i], i)
+        for (let i = 0; i < count; ++i) {
+          let ptr = plot.graph.seriesList[i]
+
+          if (ptr.visible)
+            root.model.draw(ptr, ptr.objectName)
+          else
+            ptr.clear()
+        }
       }
     }
   }
@@ -216,8 +222,6 @@ Item {
     //
     PlotWidget {
       id: plot
-      opacity: windowRoot.focused ? 1 : 0.8
-
       xMin: root.model.minX
       xMax: root.model.maxX
       yMin: root.model.minY
@@ -227,16 +231,37 @@ Item {
       Layout.fillHeight: true
       yLabel: root.model.yLabel
       curveColors: root.model.colors
+      mouseAreaEnabled: windowRoot.focused
       xAxis.tickInterval: root.model.xTickInterval
       yAxis.tickInterval: root.model.yTickInterval
 
       //
-      // Register curves
+      // Register line series
       //
       Instantiator {
         model: root.model.count
         delegate: LineSeries {
+          objectName: index
+          visible: root.interpolate
           Component.onCompleted: plot.graph.addSeries(this)
+        }
+      }
+
+      //
+      // Register scatter series
+      //
+      Instantiator {
+        model: root.model.count
+        delegate: ScatterSeries {
+          objectName: index
+          visible: !root.interpolate
+          Component.onCompleted: plot.graph.addSeries(this)
+          pointDelegate: Rectangle {
+            width: 2
+            height: 2
+            radius: 1
+            color: root.model.colors[index]
+          }
         }
       }
     }

@@ -206,6 +206,7 @@ Item {
     curveColors: [root.color]
     yLabel: qsTr("Magnitude (dB)")
     xLabel: qsTr("Frequency (Hz)")
+    mouseAreaEnabled: windowRoot.focused
     xAxis.tickInterval: root.model.xTickInterval
     yAxis.tickInterval: root.model.yTickInterval
 

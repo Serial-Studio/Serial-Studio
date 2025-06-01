@@ -23,6 +23,7 @@
 
 #include <QFile>
 #include <QObject>
+#include <QSettings>
 #include <QTextStream>
 
 namespace IO
@@ -73,6 +74,7 @@ private:
   QFile m_file;
   QString m_buffer;
   bool m_exportEnabled;
+  QSettings m_settings;
   QTextStream m_textStream;
 };
 } // namespace IO

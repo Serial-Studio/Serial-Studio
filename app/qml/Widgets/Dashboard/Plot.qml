@@ -232,6 +232,7 @@ Item {
     curveColors: [root.color]
     yLabel: root.model.yLabel
     xLabel: root.model.xLabel
+    mouseAreaEnabled: windowRoot.focused
     xAxis.tickInterval: root.model.xTickInterval
     yAxis.tickInterval: root.model.yTickInterval
 

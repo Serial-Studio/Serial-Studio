@@ -23,7 +23,7 @@
 
 #include <QtQuick>
 #include <QVector>
-#include <QLineSeries>
+#include <QXYSeries>
 
 namespace Widgets
 {
@@ -74,7 +74,7 @@ public:
   [[nodiscard]] const QStringList &labels() const;
 
 public slots:
-  void draw(QLineSeries *series, const int index);
+  void draw(QXYSeries *series, const int index);
 
 private slots:
   void updateData();

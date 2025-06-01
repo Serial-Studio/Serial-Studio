@@ -235,6 +235,8 @@ Item {
     //
     // Block pan and zoom, we do it manually
     //
+    zoomAreaEnabled: false
+    enabled: root.mouseAreaEnabled
     panStyle: GraphsView.PanStyle.None
     zoomStyle: GraphsView.ZoomStyle.None
 
@@ -283,9 +285,14 @@ Item {
       id: _overlayMouse
 
       anchors.fill: parent
+      preventStealing: true
+      propagateComposedEvents: true
       acceptedButtons: Qt.LeftButton
+
+      visible: root.mouseAreaEnabled
       enabled: root.mouseAreaEnabled
       hoverEnabled: root.mouseAreaEnabled
+
       cursorShape: dragging ? Qt.ClosedHandCursor : Qt.CrossCursor
 
       //
