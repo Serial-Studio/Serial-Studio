@@ -189,12 +189,12 @@ void Widgets::Plot3D::paint(QPainter *painter)
 
     // Compose the left eye scene
     QPainter leftScene(&left);
-    for (auto p : pixmaps)
+    for (const auto *p : pixmaps)
       leftScene.drawPixmap(0, 0, p[0]);
 
     // Compose the right eye scene
     QPainter rightScene(&right);
-    for (auto p : pixmaps)
+    for (const auto *p : pixmaps)
       rightScene.drawPixmap(0, 0, p[1]);
 
     // Obtain two images from the scene
@@ -227,7 +227,7 @@ void Widgets::Plot3D::paint(QPainter *painter)
   // Standard processing
   else
   {
-    for (auto p : pixmaps)
+    for (const auto *p : pixmaps)
       painter->drawPixmap(0, 0, p[0]);
   }
 }

@@ -228,12 +228,15 @@
         <file>icons/project-editor/actions/plot.svg</file>
         <file>icons/project-editor/model/alarm.svg</file>
         <file>icons/project-editor/model/api-key.svg</file>
+        <file>icons/project-editor/model/binary-data.svg</file>
         <file>icons/project-editor/model/data-conversion.svg</file>
         <file>icons/project-editor/model/end-delimiter.svg</file>
+        <file>icons/project-editor/model/eol.svg</file>
         <file>icons/project-editor/model/fft-samples.svg</file>
         <file>icons/project-editor/model/fft-sampling-rate.svg</file>
         <file>icons/project-editor/model/fft.svg</file>
         <file>icons/project-editor/model/frame-detection.svg</file>
+        <file>icons/project-editor/model/icon.svg</file>
         <file>icons/project-editor/model/index.svg</file>
         <file>icons/project-editor/model/led-high.svg</file>
         <file>icons/project-editor/model/led.svg</file>
@@ -243,6 +246,7 @@
         <file>icons/project-editor/model/plot.svg</file>
         <file>icons/project-editor/model/start-delimiter.svg</file>
         <file>icons/project-editor/model/title.svg</file>
+        <file>icons/project-editor/model/tx-data.svg</file>
         <file>icons/project-editor/model/units.svg</file>
         <file>icons/project-editor/model/widget.svg</file>
         <file>icons/project-editor/model/x-axis.svg</file>
@@ -335,6 +339,8 @@
         <file>logo/icon-pro@2x.png</file>
         <file>logo/icon@1x.png</file>
         <file>logo/icon@2x.png</file>
+        <file>logo/start@1x.png</file>
+        <file>logo/start@2x.png</file>
         <file>messages/free/Welcome_DE.txt</file>
         <file>messages/free/Welcome_EN.txt</file>
         <file>messages/free/Welcome_ES.txt</file>
@@ -361,7 +367,5 @@
         <file>themes/dark.json</file>
         <file>themes/default.json</file>
         <file>themes/light.json</file>
-        <file>logo/start@1x.png</file>
-        <file>logo/start@2x.png</file>
     </qresource>
 </RCC>

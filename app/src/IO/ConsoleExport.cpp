@@ -25,14 +25,13 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QApplication>
-#include <QStandardPaths>
 #include <QDesktopServices>
 
-#include "AppInfo.h"
 #include "IO/Console.h"
 #include "IO/Manager.h"
 #include "Misc/Utilities.h"
 #include "Misc/TimerEvents.h"
+#include "Misc/WorkspaceManager.h"
 
 /**
  * Constructor function, configures the path in which Serial Studio shall
@@ -41,10 +40,6 @@
 IO::ConsoleExport::ConsoleExport()
   : m_exportEnabled(true)
 {
-  m_filePath = QStringLiteral("%1/%2/Console")
-                   .arg(QStandardPaths::writableLocation(
-                            QStandardPaths::DocumentsLocation),
-                        APP_NAME);
 }
 
 /**
@@ -172,10 +167,8 @@ void IO::ConsoleExport::createFile()
       = dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss"))
         + QStringLiteral(".txt");
 
-  // Generate file path if required
-  QDir dir(m_filePath);
-  if (!dir.exists())
-    dir.mkpath(QStringLiteral("."));
+  // Get console export path
+  QDir dir(Misc::WorkspaceManager::instance().path("Console"));
 
   // Open file
   m_file.setFileName(dir.filePath(fileName));

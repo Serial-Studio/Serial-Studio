@@ -113,6 +113,7 @@ set(SOURCES
   src/Misc/Translator.cpp
   src/Misc/ModuleManager.cpp
   src/Misc/TimerEvents.cpp
+  src/Misc/WorkspaceManager.cpp
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
   src/UI/Taskbar.cpp
@@ -160,6 +161,8 @@ set(HEADERS
   src/Misc/ThemeManager.h
   src/Misc/TimerEvents.h
   src/Misc/Translator.h
+  src/Misc/OsmTemplateServer.h
+  src/Misc/WorkspaceManager.h
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h
   src/UI/Taskbar.h
@@ -178,7 +181,6 @@ set(HEADERS
   src/UI/Widgets/Terminal.h
   src/Plugins/Server.h
   src/Platform/NativeWindow.h
-  src/Misc/OsmTemplateServer.h
   src/IO/Console.h
   src/IO/Drivers/UART.h
   src/IO/Drivers/Network.h

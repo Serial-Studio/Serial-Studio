@@ -50,6 +50,7 @@
 #include "Misc/TimerEvents.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/ModuleManager.h"
+#include "Misc/WorkspaceManager.h"
 
 #include "Plugins/Server.h"
 
@@ -283,6 +284,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto miscThemeManager = &Misc::ThemeManager::instance();
   auto ioBluetoothLE = &IO::Drivers::BluetoothLE::instance();
   auto ioFileTransmission = &IO::FileTransmission::instance();
+  auto miscWorkspaceManager = &Misc::WorkspaceManager::instance();
 
   // Initialize commercial modules
 #ifdef USE_QT_COMMERCIAL
@@ -328,6 +330,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);
   c->setContextProperty("Cpp_IO_ConsoleExport", ioConsoleExport);
   c->setContextProperty("Cpp_IO_FileTransmission", ioFileTransmission);
+  c->setContextProperty("Cpp_Misc_WorkspaceManager", miscWorkspaceManager);
   c->setContextProperty("Cpp_QtCommercial_Available", qtCommercialAvailable);
 
   // Register commercial C++ modules with QML

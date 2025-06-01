@@ -25,15 +25,14 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QApplication>
-#include <QStandardPaths>
 #include <QDesktopServices>
 
-#include "AppInfo.h"
 #include "IO/Manager.h"
 #include "CSV/Player.h"
 #include "Misc/Utilities.h"
 #include "Misc/TimerEvents.h"
 #include "JSON/FrameBuilder.h"
+#include "Misc/WorkspaceManager.h"
 
 #ifdef USE_QT_COMMERCIAL
 #  include "MQTT/Client.h"
@@ -46,10 +45,6 @@
 CSV::Export::Export()
   : m_exportEnabled(true)
 {
-  m_csvPath = QStringLiteral("%1/%2/CSV")
-                  .arg(QStandardPaths::writableLocation(
-                           QStandardPaths::DocumentsLocation),
-                       APP_NAME);
 }
 
 /**
@@ -238,7 +233,8 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
                         + QStringLiteral(".csv");
 
   // Get path
-  const QString path = QStringLiteral("%1/%2/").arg(m_csvPath, data.title());
+  const QString path = QStringLiteral("%1/%2/").arg(
+      Misc::WorkspaceManager::instance().path("CSV"), data.title());
 
   // Generate file path if required
   QDir dir(path);

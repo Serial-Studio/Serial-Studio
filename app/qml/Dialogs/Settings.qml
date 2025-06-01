@@ -160,8 +160,8 @@ Window {
             text: qsTr("Plugin System") + ": "
           } Switch {
             id: _tcpPlugins
-            Layout.leftMargin: -8
-            Layout.alignment: Qt.AlignLeft
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
             checked: Cpp_Plugins_Bridge.enabled
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
             onCheckedChanged: {
@@ -176,8 +176,8 @@ Window {
           Label {
             text: qsTr("Automatic Updates") + ":"
           } Switch {
-            Layout.leftMargin: -8
-            Layout.alignment: Qt.AlignLeft
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
             checked: mainWindow.automaticUpdates
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
             onCheckedChanged: {
@@ -193,8 +193,8 @@ Window {
             text: qsTr("Software Rendering") + ":"
           } Switch {
             id: _softwareRender
-            Layout.leftMargin: -8
-            Layout.alignment: Qt.AlignLeft
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
           }
         }
@@ -276,9 +276,8 @@ Window {
             text: qsTr("Console Widget") + ":"
           } Switch {
             id: _consoleWidget
-
-            Layout.leftMargin: -8
-            Layout.alignment: Qt.AlignLeft
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
             checked: Cpp_UI_Dashboard.terminalEnabled
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
             onCheckedChanged: {
@@ -319,6 +318,33 @@ Window {
           rowSpacing: 4
           columnSpacing: 8
           anchors.fill: parent
+
+          Label {
+            text: qsTr("Folder")
+            color: Cpp_ThemeManager.colors["text"]
+          } RowLayout {
+            spacing: 2
+
+            TextField {
+              readOnly: true
+              Layout.fillWidth: true
+              Layout.minimumWidth: 256
+              Layout.alignment: Qt.AlignVCenter
+              text: Cpp_Misc_WorkspaceManager.shortPath
+            }
+
+            Button {
+              icon.width: 18
+              icon.height: 18
+              Layout.fillWidth: false
+              Layout.maximumWidth: 24
+              Layout.maximumHeight: 24
+              Layout.alignment: Qt.AlignVCenter
+              icon.source: "qrc:/rcc/icons/buttons/open.svg"
+              onClicked: Cpp_Misc_WorkspaceManager.selectPath()
+              icon.color: Cpp_ThemeManager.colors["button_text"]
+            }
+          }
         }
       }
 

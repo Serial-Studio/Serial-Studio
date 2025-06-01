@@ -72,7 +72,6 @@ private slots:
 private:
   QFile m_file;
   QString m_buffer;
-  QString m_filePath;
   bool m_exportEnabled;
   QTextStream m_textStream;
 };

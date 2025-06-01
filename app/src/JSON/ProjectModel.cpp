@@ -30,6 +30,7 @@
 #include "AppInfo.h"
 #include "Misc/Utilities.h"
 #include "Misc/Translator.h"
+#include "Misc/WorkspaceManager.h"
 
 #include "JSON/FrameParser.h"
 #include "JSON/ProjectModel.h"
@@ -291,18 +292,7 @@ QString JSON::ProjectModel::jsonFileName() const
  */
 QString JSON::ProjectModel::jsonProjectsPath() const
 {
-  // Get file name and path
-  static QString path = QString("%1/%2/JSON Projects/")
-                            .arg(QStandardPaths::writableLocation(
-                                     QStandardPaths::DocumentsLocation),
-                                 APP_NAME);
-
-  // Generate file path if required
-  QDir dir(path);
-  if (!dir.exists())
-    dir.mkpath(".");
-
-  return path;
+  return Misc::WorkspaceManager::instance().path("JSON Projects");
 }
 
 /**

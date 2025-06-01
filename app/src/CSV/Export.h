@@ -96,7 +96,6 @@ private:
 
 private:
   QFile m_csvFile;
-  QString m_csvPath;
   bool m_exportEnabled;
   QTextStream m_textStream;
   QVector<TimestampFrame> m_frames;

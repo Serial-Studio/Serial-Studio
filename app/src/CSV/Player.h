@@ -80,7 +80,6 @@ public:
   [[nodiscard]] int framePosition() const;
 
   [[nodiscard]] QString filename() const;
-  [[nodiscard]] QString csvFilesPath() const;
   [[nodiscard]] const QString &timestamp() const;
 
 public slots:

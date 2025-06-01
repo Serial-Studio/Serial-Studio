@@ -26,12 +26,11 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QApplication>
-#include <QStandardPaths>
 
-#include "AppInfo.h"
 #include "IO/Manager.h"
 #include "UI/Dashboard.h"
 #include "Misc/Utilities.h"
+#include "Misc/WorkspaceManager.h"
 
 /**
  * Constructor function
@@ -114,25 +113,6 @@ QString CSV::Player::filename() const
 }
 
 /**
- * Returns the default path for CSV files
- */
-QString CSV::Player::csvFilesPath() const
-{
-  // Get file name and path
-  const auto path = QStringLiteral("%1/%2/CSV/")
-                        .arg(QStandardPaths::writableLocation(
-                                 QStandardPaths::DocumentsLocation),
-                             APP_NAME);
-
-  // Generate file path if required
-  QDir dir(path);
-  if (!dir.exists())
-    dir.mkpath(".");
-
-  return path;
-}
-
-/**
  * Returns the timestamp of the current data frame / row.
  */
 const QString &CSV::Player::timestamp() const
@@ -181,7 +161,8 @@ void CSV::Player::openFile()
 {
   // Get file name
   auto file = QFileDialog::getOpenFileName(
-      nullptr, tr("Select CSV file"), csvFilesPath(),
+      nullptr, tr("Select CSV file"),
+      Misc::WorkspaceManager::instance().path("CSV"),
       tr("CSV files") + QStringLiteral(" (*.csv)"));
 
   // Open CSV file
