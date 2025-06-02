@@ -82,8 +82,6 @@ Item {
         rotation: root.model.value
         source: "qrc:/rcc/instruments/compass_needle.svg"
         sourceSize: Qt.size(control.widgetSize, control.widgetSize)
-
-        Behavior on rotation {NumberAnimation{}}
       }
 
       //

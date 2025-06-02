@@ -534,6 +534,10 @@ QQuickItem *UI::WindowManager::getWindow(const int x, const int y) const
     if (!window || !window->isVisible())
       continue;
 
+    const auto state = window->state();
+    if (state != "normal" && state != "maximized")
+      continue;
+
     QRectF bounds(window->x(), window->y(), window->width(), window->height());
     if (bounds.contains(point))
       return window;

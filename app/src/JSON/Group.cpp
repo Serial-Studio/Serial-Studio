@@ -178,5 +178,6 @@ const QVector<JSON::Dataset> &JSON::Group::datasets() const
  */
 const JSON::Dataset &JSON::Group::getDataset(const int index) const
 {
+  Q_ASSERT(index >= 0 && m_datasets.count() > index);
   return m_datasets.at(index);
 }

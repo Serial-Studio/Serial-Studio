@@ -68,7 +68,7 @@ void Widgets::Accelerometer::updateData()
     return;
 
   // Get the dashboard instance and check if the index is valid
-  if (VALIDATE_WIDGET(SerialStudio::DashboardAccelerometer, m_index))
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardAccelerometer, m_index))
     return;
 
   // Get the accelerometer data and validate the dataset count

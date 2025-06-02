@@ -910,6 +910,9 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   if (!frame.isValid() || !streamAvailable())
     return;
 
+  // Lock access to frame data
+  QWriteLocker locker(&m_dataLock);
+
   // Check if we can use commercial features
   bool usedCommercialFeatures = m_currentFrame.containsCommercialFeatures();
 #ifdef USE_QT_COMMERCIAL
