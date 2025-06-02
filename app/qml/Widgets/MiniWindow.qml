@@ -260,6 +260,10 @@ Item {
     shadowEnabled: true
     shadowOpacity: root.focused ? 0.07 : 0.035
     shadowColor: Cpp_ThemeManager.colors["shadow"]
+
+    // Only enabled when using RHI
+    enabled: !Cpp_Misc_ModuleManager.softwareRendering
+    visible: !Cpp_Misc_ModuleManager.softwareRendering
   }
 
   //

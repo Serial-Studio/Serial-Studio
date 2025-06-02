@@ -71,7 +71,7 @@ Misc::ThemeManager::ThemeManager()
   // clang-format on
 
   // Load theme files
-  foreach (auto theme, themes)
+  for (const auto &theme : std::as_const(themes))
   {
     QFile file(QStringLiteral(":/rcc/themes/%1.json").arg(theme));
     if (file.open(QFile::ReadOnly))

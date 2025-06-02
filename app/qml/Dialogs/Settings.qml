@@ -49,9 +49,7 @@ Window {
     category: "Preferences"
     property alias plugins: _tcpPlugins.checked
     property alias dashboardPoints: _points.value
-    property alias language: _langCombo.currentIndex
     property alias dashboardPrecision: _decimalDigits.value
-    property alias softwareRendering: _softwareRender.checked
   }
 
   //
@@ -125,7 +123,6 @@ Window {
           Label {
             text: qsTr("Language")
           } ComboBox {
-            id: _langCombo
             Layout.fillWidth: true
             opacity: enabled ? 1 : 0.5
             enabled: !Cpp_IO_Manager.isConnected
@@ -239,10 +236,14 @@ Window {
           Label {
             text: qsTr("Force Software Rendering")
           } Switch {
-            id: _softwareRender
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
+            checked: Cpp_Misc_ModuleManager.softwareRendering
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (Cpp_Misc_ModuleManager.softwareRendering !== checked)
+                Cpp_Misc_ModuleManager.softwareRendering = checked
+            }
           }
 
           //

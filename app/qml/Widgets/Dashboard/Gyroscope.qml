@@ -333,6 +333,8 @@ Item {
     blurEnabled: true
     source: rollDial
     anchors.fill: rollDial
+    enabled: !Cpp_Misc_ModuleManager.softwareRendering
+    visible: !Cpp_Misc_ModuleManager.softwareRendering
   }
 
   //
@@ -346,6 +348,8 @@ Item {
     blurEnabled: true
     source: rollPointer
     anchors.fill: rollPointer
+    enabled: !Cpp_Misc_ModuleManager.softwareRendering
+    visible: !Cpp_Misc_ModuleManager.softwareRendering
   }
 
   //
@@ -359,8 +363,9 @@ Item {
     blurEnabled: true
     source: crosshair
     anchors.fill: crosshair
+    enabled: !Cpp_Misc_ModuleManager.softwareRendering
+    visible: !Cpp_Misc_ModuleManager.softwareRendering
   }
-
 
   //
   // Roll dial

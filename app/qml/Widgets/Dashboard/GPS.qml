@@ -220,6 +220,8 @@ Item {
             brightness: modelData[1]
             source: positionIndicator
             anchors.fill: positionIndicator
+            enabled: !Cpp_Misc_ModuleManager.softwareRendering
+            visible: !Cpp_Misc_ModuleManager.softwareRendering
           }
         }
 

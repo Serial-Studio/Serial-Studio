@@ -332,8 +332,8 @@ endif()
 # Add resources
 #-------------------------------------------------------------------------------
 
-qt_add_resources(RES_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
-qt_add_resources(QM_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
+qt_add_resources(RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
+qt_add_resources(TRANSLATIONS ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
 
 #-------------------------------------------------------------------------------
 # Create executable
@@ -343,9 +343,8 @@ qt_add_executable(
   ${PROJECT_EXECUTABLE}
   ${SOURCES}
   ${HEADERS}
-  ${QML_RCC}
-  ${RES_RCC}
-  ${QM_RCC}
+  ${RCC}
+  ${TRANSLATIONS}
   ${QT_RCC_TRANSLATIONS}
   ${APP_RCC_TRANSLATIONS}
   MANUAL_FINALIZATION

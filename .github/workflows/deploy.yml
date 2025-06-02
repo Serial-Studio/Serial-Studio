@@ -127,21 +127,9 @@ jobs:
         QT_USERNAME: ${{secrets.QT_USERNAME}}
         QT_PASSWORD: ${{secrets.QT_PASSWORD}}
         QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-
       run: |
-        # Run the install script
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
-
-        # Add to PATH
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
-
-        # Write to GithHub path too
-        echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
       if: env.INSTALL_QT == 'true'
@@ -151,6 +139,20 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64-v1
+
+    - name: '⚙️ Add Qt to PATH'
+      shell: bash
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+      run: |
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
+
+        echo "$QT_BIN_PATH" >> $GITHUB_PATH
+        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
@@ -292,14 +294,6 @@ jobs:
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
 
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/lib/cmake"
-
-        echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
-
     - name: '⚙️ Save Qt Cache'
       uses: actions/cache/save@v3
       if: env.INSTALL_QT == 'true'
@@ -307,6 +301,20 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64-v1
+
+    - name: '⚙️ Add Qt to PATH'
+      shell: bash
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
+      run: |
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/libexec"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/lib/cmake"
+
+        echo "$QT_BIN_PATH" >> $GITHUB_PATH
+        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
@@ -377,19 +385,8 @@ jobs:
         QT_PASSWORD: ${{secrets.QT_PASSWORD}}
         QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
       run: |
-        # Run the install script
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
-
-        # Add to PATH
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/lib/cmake"
-
-        # Write to GithHub path too
-        echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
       if: env.INSTALL_QT == 'true'
@@ -399,6 +396,20 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64-v1
+
+    - name: '⚙️ Add Qt to PATH'
+      shell: bash
+      env:
+        QT_VERSION: ${{env.QT_VERSION_MACOS}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
+      run: |
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/libexec"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/lib/cmake"
+
+        echo "$QT_BIN_PATH" >> $GITHUB_PATH
+        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
@@ -498,18 +509,7 @@ jobs:
         QT_PASSWORD: ${{secrets.QT_PASSWORD}}
         QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
       run: |
-        # Run the installer
         ./scripts/install-qt.ps1
-
-        # Add to PATH
-        $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\bin"
-        $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\libexec"
-        $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\lib\cmake"
-
-        # Write to GithHub path too
-        Write-Output "$QT_BIN_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        Write-Output "$QT_LIBEXEC_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        Write-Output "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $env:GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
       if: env.INSTALL_QT == 'true'
@@ -519,6 +519,20 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022
+
+    - name: '⚙️ Add Qt to PATH'
+      shell: pwsh
+      env:
+        QT_VERSION: ${{env.QT_VERSION_WINDOWS}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
+      run: |
+        $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\bin"
+        $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\libexec"
+        $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\lib\cmake"
+
+        Write-Output "$QT_BIN_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        Write-Output "$QT_LIBEXEC_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        Write-Output "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $env:GITHUB_ENV
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest

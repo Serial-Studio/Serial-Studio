@@ -87,6 +87,8 @@ Item {
         MultiEffect {
           source: bg
           anchors.fill: bg
+          enabled: !Cpp_Misc_ModuleManager.softwareRendering
+          visible: !Cpp_Misc_ModuleManager.softwareRendering
 
           blur: 1
           blurMax: 64
@@ -194,6 +196,8 @@ Item {
       MultiEffect {
         source: indicator
         anchors.fill: indicator
+        enabled: !Cpp_Misc_ModuleManager.softwareRendering
+        visible: !Cpp_Misc_ModuleManager.softwareRendering
 
         blur: 1
         blurMax: 128
@@ -208,6 +212,8 @@ Item {
       MultiEffect {
         source: indicator
         anchors.fill: indicator
+        enabled: !Cpp_Misc_ModuleManager.softwareRendering
+        visible: !Cpp_Misc_ModuleManager.softwareRendering
 
         blur: 0.3
         blurMax: 64

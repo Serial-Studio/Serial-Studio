@@ -129,6 +129,10 @@ int main(int argc, char **argv)
     }
   }
 
+  // Ensure resources are loaded
+  Q_INIT_RESOURCE(rcc);
+  Q_INIT_RESOURCE(translations);
+
   // Create module manager
   Misc::ModuleManager moduleManager;
   moduleManager.configureUpdater();

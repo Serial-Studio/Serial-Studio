@@ -29,6 +29,7 @@
 #include <QAbstractButton>
 #include <QDesktopServices>
 
+#include <QSettings>
 #include <QSpacerItem>
 #include <QGridLayout>
 
@@ -49,18 +50,17 @@ Misc::Utilities &Misc::Utilities::instance()
  */
 void Misc::Utilities::rebootApplication()
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  // Flush events and persistent settings
+  qApp->processEvents();
+  QSettings().sync();
+
+  // Relaunch executable
+  QString exe = QCoreApplication::applicationFilePath();
+  QStringList args = QCoreApplication::arguments();
+  QProcess::startDetached(exe, args);
+
+  // Quit application
   qApp->exit();
-  QProcess::startDetached(qApp->arguments().first(), qApp->arguments());
-#else
-#  ifdef Q_OS_MAC
-  auto bundle = qApp->applicationDirPath() + "/../../";
-  QProcess::startDetached("open", {"-n", "-a", bundle});
-#  else
-  QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
-#  endif
-  qApp->exit();
-#endif
 }
 
 /**
