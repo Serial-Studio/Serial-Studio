@@ -40,7 +40,7 @@ on:
 
 env:
   VERSION: "3.0.6"
-  INSTALL_QT: true
+  INSTALL_QT: false
   QT_VERSION_LINUX: 6.9.1
   QT_VERSION_MACOS: 6.9.1
   QT_VERSION_WINDOWS: 6.9.1
@@ -63,7 +63,6 @@ jobs:
 #-------------------------------------------------------------------------------
 
   build-linux-x86_64:
-    if: false
     runs-on: ubuntu-22.04
     name: '🐧 Linux (x86_64)'
     steps:
@@ -229,7 +228,6 @@ jobs:
 
   build-linux-aarch64:
     runs-on: ubuntu-24.04-arm
-    if: false
     name: '🐧 Linux (aarch64)'
     steps:
     - name: '🧰 Checkout'
@@ -363,7 +361,6 @@ jobs:
 
   build-mac-universal:
     runs-on: macos-latest
-    if: false
     name: '🍎 macOS (Universal)'
     steps:
     - name: '🧰 Checkout'
@@ -582,7 +579,6 @@ jobs:
 #-------------------------------------------------------------------------------
 
   upload:
-    if: false
     name: '🗂 Create release and upload artifacts'
     needs:
       - build-mac-universal
