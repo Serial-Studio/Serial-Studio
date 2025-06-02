@@ -51,7 +51,7 @@ env:
   PUBLISHER: "Alex Spataru"
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"
-    
+
 #-------------------------------------------------------------------------------
 # Begin workflow jobs definition
 #-------------------------------------------------------------------------------
@@ -68,7 +68,7 @@ jobs:
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
-      
+
     - name: '⚙️ Install dependencies'
       run: |
         sudo apt-get update
@@ -151,7 +151,7 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64-v1
-        
+
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
       with:
@@ -175,14 +175,14 @@ jobs:
         wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
         chmod +x linuxdeploy-x86_64.AppImage
         chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
-        
+
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
-        
+
         ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
-        
+
         rm linuxdeploy-x86_64.AppImage
         rm linuxdeploy-plugin-qt-x86_64.AppImage
-        
+
         mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
 
     - name: '📦 Create Native Packages'
@@ -192,16 +192,16 @@ jobs:
         export LDNP_DESCRIPTION="${{env.DESCRIPTION}}"
         wget https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages/releases/download/continuous/linuxdeploy-plugin-native_packages-x86_64.AppImage
         chmod +x linuxdeploy-plugin-native_packages-x86_64.AppImage
-        
+
         fakeroot ./linuxdeploy-plugin-native_packages-x86_64.AppImage --appdir AppDir --build deb
         #fakeroot ./linuxdeploy-plugin-native_packages-x86_64.AppImage --appdir AppDir --build rpm
-        
+
         rm -rf AppDir
         rm linuxdeploy-plugin-native_packages-x86_64.AppImage
-        
+
         mv *.deb ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
         #mv *.rpm ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
-          
+
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v4
       with:
@@ -277,7 +277,6 @@ jobs:
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
-          ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64-v1
 
     - name: '⚙️ Install Qt'
@@ -307,7 +306,6 @@ jobs:
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
-          ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64-v1
 
     - name: '⚙️ Install CMake'
@@ -442,7 +440,7 @@ jobs:
 
     - name: '✍🏻 Sign Application'
       run: codesign --force --deep --options runtime --sign "${{secrets.APPLE_APPID_TEAM_ID}}" "${{env.APPLICATION}}.app"
-        
+
     - name: '💽 Create nice DMG'
       run: |
         npm install --global create-dmg
@@ -475,7 +473,7 @@ jobs:
 
   build-windows-x86_64:
     runs-on: windows-latest
-    name: '🧊 Windows (x86_64)'      
+    name: '🧊 Windows (x86_64)'
     steps:
     - run: git config --global core.autocrlf input
     - name: '🧰 Checkout'
@@ -521,17 +519,17 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022
-      
+
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
       with:
         useLocalCache: true
-        
+
     - name: '🛠 Setup MSVC Development Environment'
       uses: TheMrMilchmann/setup-msvc-dev@v3
       with:
         arch: x64
-        
+
     - name: '🚧 Configure with CMake'
       run: |
         mkdir build
@@ -542,20 +540,20 @@ jobs:
       run: |
         cd build
         cmake --build . --config Release -j 16
-        
+
     - name: '⚙️ Add msbuild to PATH'
       uses: microsoft/setup-msbuild@v2
-      
+
     - name: '⚙️ Install WiX'
       run: dotnet tool install --global wix
-        
+
     - name: '📦 Package application'
       run: |
         cd build
         cpack --verbose
         mv *.msi ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
         mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi ../
-        
+
     - name: '📤 Upload artifact: MSI installer'
       uses: actions/upload-artifact@v4
       with:
@@ -573,18 +571,18 @@ jobs:
       - build-windows-x86_64
       - build-linux-x86_64
       - build-linux-aarch64
-  
+
     runs-on: ubuntu-latest
     env:
       RELEASE_TAG: continuous
-  
+
     steps:
       - name: '📥 Download artifacts'
         uses: actions/download-artifact@v4
         with:
           path: ./artifacts
           merge-multiple: true
-  
+
       - name: '🗑️ Delete previous release and tag if exists'
         run: |
           if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" &>/dev/null; then
@@ -595,18 +593,18 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+
       - name: '🔐 Generate SHA256 checksums with sizes'
         run: |
           echo "| File | SHA256 Checksum |" > release-body.md
           echo "|------|-----------------|" >> release-body.md
-      
+
           find ./artifacts -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "*.dmg" -o -name "*.exe" -o -name "*.msi" \) | sort | while read -r file; do
             hash=$(sha256sum "$file" | awk '{print $1}')
             filename=$(basename "$file")
             echo "| \`$filename\` | \`$hash\` |"
           done >> release-body.md
-  
+
       - name: '🚀 Create Release'
         uses: ncipollo/release-action@v1
         with:
