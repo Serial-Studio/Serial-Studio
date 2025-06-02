@@ -229,6 +229,7 @@ jobs:
 
   build-linux-aarch64:
     runs-on: ubuntu-24.04-arm
+    if: false
     name: '🐧 Linux (aarch64)'
     steps:
     - name: '🧰 Checkout'
@@ -486,7 +487,6 @@ jobs:
 
   build-windows-x86_64:
     runs-on: windows-latest
-    if: false
     name: '🧊 Windows (x86_64)'
     steps:
     - run: git config --global core.autocrlf input
