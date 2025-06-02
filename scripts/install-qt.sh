@@ -83,7 +83,7 @@ esac
 # Skip install if already present
 #------------------------------------------------------------------------------
 
-if [ -d "$QT_OUTPUT_DIR/$QT_VERSION" ]; then
+if [ -d "$QT_OUTPUT_DIR" ]; then
   echo "Qt $QT_VERSION already installed at $QT_OUTPUT_DIR — skipping."
   export QT_INSTALL_NEEDED=false
   exit 0

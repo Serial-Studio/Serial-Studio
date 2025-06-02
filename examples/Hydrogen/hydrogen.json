@@ -1,0 +1,103 @@
+{
+    "actions": [
+    ],
+    "decoder": 0,
+    "frameDetection": 0,
+    "frameEnd": "\\n",
+    "frameParser": "/**\n * Splits a data frame into an array of elements using a comma separator.\n *\n * Use this function to break a string (like \"value1,value2,value3\") into\n * individual pieces, which can then be displayed or processed in your project.\n *\n * @param[in]  frame   A string containing the data frame.\n *                     Example: \"value1,value2,value3\"\n *\n * @return     An array of strings with the split elements.\n *             Example: [\"value1\", \"value2\", \"value3\"]\n *\n * @note You can declare global variables outside this function if needed\n *       for storing settings or keeping state between calls.\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
+    "frameStart": "$",
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 5,
+                    "min": -5,
+                    "overviewDisplay": false,
+                    "title": "X",
+                    "units": "a₀",
+                    "value": "--.--",
+                    "widget": "x",
+                    "xAxis": -1
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "overviewDisplay": false,
+                    "title": "Y",
+                    "units": "a₀",
+                    "value": "--.--",
+                    "widget": "y",
+                    "xAxis": -1
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "overviewDisplay": false,
+                    "title": "Z",
+                    "units": "a₀",
+                    "value": "--.--",
+                    "widget": "z",
+                    "xAxis": -1
+                }
+            ],
+            "title": "Electron Probability Cloud",
+            "widget": "plot3d"
+        },
+        {
+            "datasets": [
+                {
+                    "alarm": 0,
+                    "fft": true,
+                    "fftSamples": 8192,
+                    "fftSamplingRate": 1000,
+                    "graph": true,
+                    "index": 4,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0.4,
+                    "min": -0.1,
+                    "overviewDisplay": true,
+                    "title": "ψ²",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "",
+                    "xAxis": 1
+                }
+            ],
+            "title": "Probability Density",
+            "widget": ""
+        }
+    ],
+    "hexadecimalDelimiters": false,
+    "mapTilerApiKey": "",
+    "thunderforestApiKey": "",
+    "title": "Hydrogen Atom: 1s Orbital + Quantum Noise"
+}
