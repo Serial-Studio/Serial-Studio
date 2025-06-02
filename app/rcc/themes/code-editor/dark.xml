@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<style-scheme version="1.0" name="Outdoor Night">
+<style-scheme version="1.0" name="Serial Studio Dark">
   <!-- General Colors -->
   <style name="Text" foreground="#b0b3b8" background="#181a1b"/>
   <style name="Selection" background="#4b6cb7" foreground="#ffffff"/>

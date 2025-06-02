@@ -126,6 +126,9 @@ void QCodeEditor::updateStyle()
     currentPalette.setColor(
         QPalette::Highlight,
         m_syntaxStyle->getFormat("Selection").background().color());
+    currentPalette.setColor(
+        QPalette::HighlightedText,
+        m_syntaxStyle->getFormat("Selection").foreground().color());
 
     setPalette(currentPalette);
   }

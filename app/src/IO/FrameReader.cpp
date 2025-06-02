@@ -38,6 +38,7 @@
 IO::FrameReader::FrameReader(QObject *parent)
   : QObject(parent)
   , m_enableCrc(false)
+  , m_readScheduled(false)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
   , m_dataBuffer(1024 * 1024)
@@ -161,9 +162,16 @@ void IO::FrameReader::processData(const QByteArray &data)
     Q_EMIT frameReady(m_dataBuffer.read(data.size()));
 
   // Schedule a frame extraction as soon as possible without blocking the thread
-  else
-    QMetaObject::invokeMethod(this, &FrameReader::readFrames,
-                              Qt::QueuedConnection);
+  else if (!m_readScheduled.exchange(true))
+  {
+    QMetaObject::invokeMethod(
+        this,
+        [this] {
+          readFrames();
+          m_readScheduled = false;
+        },
+        Qt::QueuedConnection);
+  }
 }
 
 /**
@@ -297,7 +305,7 @@ void IO::FrameReader::readEndDelimetedFrames()
     // Find the earliest finish sequence in the buffer (QuickPlot mode)
     if (m_operationMode == SerialStudio::QuickPlot)
     {
-      for (const QByteArray &d : m_quickPlotEndSequences)
+      for (const QByteArray &d : std::as_const(m_quickPlotEndSequences))
       {
         int index = m_dataBuffer.findPatternKMP(d);
         if (index != -1 && (endIndex == -1 || index < endIndex))

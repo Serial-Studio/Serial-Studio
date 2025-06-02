@@ -362,12 +362,12 @@
         <file>messages/Acknowledgements.txt</file>
         <file>scripts/frame-parser.js</file>
         <file>themes/code-editor/dark.xml</file>
-        <file>themes/code-editor/hybrid.json</file>
         <file>themes/code-editor/light.xml</file>
         <file>themes/dark.json</file>
         <file>themes/default.json</file>
         <file>themes/light.json</file>
         <file>logo/small-icon@1x.png</file>
         <file>logo/small-icon@2x.png</file>
+        <file>themes/code-editor/default.xml</file>
     </qresource>
 </RCC>

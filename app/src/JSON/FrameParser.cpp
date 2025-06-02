@@ -113,6 +113,10 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
   connect(this, &QQuickPaintedItem::heightChanged, this,
           &JSON::FrameParser::resizeWidget);
 
+  // Collect JS garbage at 1 Hz
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz,
+          &m_engine, &QJSEngine::collectGarbage);
+
   // Configure render loop
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
           &JSON::FrameParser::renderWidget);

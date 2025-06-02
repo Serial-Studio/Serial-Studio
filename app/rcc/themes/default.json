@@ -1,6 +1,6 @@
 {
   "title": "Default",
-  "code-editor-theme": "light",
+  "code-editor-theme": "default",
   "colors": {
     "groupbox_border": "#c2c2c2",
     "groupbox_background": "#eff0f1",

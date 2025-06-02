@@ -23,10 +23,7 @@
 #include "IO/Drivers/UART.h"
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/BluetoothLE.h"
-
 #include "Misc/Translator.h"
-
-#include "SerialStudio.h"
 
 #include <QApplication>
 
@@ -46,9 +43,6 @@ IO::Manager::Manager()
   , m_startSequence(QByteArray("/*"))
   , m_finishSequence(QByteArray("*/"))
 {
-  // Listen for keyboard events for pausing/unpausing streaming
-  qApp->installEventFilter(this);
-
   // Move the frame parser worker to its dedicated thread
   m_frameReader.moveToThread(&m_workerThread);
 
@@ -560,35 +554,4 @@ void IO::Manager::setDriver(HAL_Driver *driver)
     Q_EMIT driverChanged();
     Q_EMIT configurationChanged();
   }
-}
-
-/**
- * @brief Intercepts key press events to toggle the paused state when
- *        Ctrl+P is pressed.
- *
- * If the manager is connected and the user presses Ctrl+P, the data streaming
- * paused state is toggled (just like flipping a HOLD switch).
- *
- * All other events are passed on to the default QObject filter.
- *
- * @param obj   The object the event is dispatched to.
- * @param event The event being filtered.
- * @return true if the event was handled (Ctrl+P detected and acted upon);
- *              false otherwise.
- */
-bool IO::Manager::eventFilter(QObject *obj, QEvent *event)
-{
-  if (isConnected() && event->type() == QEvent::KeyPress)
-  {
-    const auto *e = static_cast<QKeyEvent *>(event);
-    if ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_P)
-    {
-      setPaused(!paused());
-      return true;
-    }
-
-    return false;
-  }
-
-  return QObject::eventFilter(obj, event);
 }

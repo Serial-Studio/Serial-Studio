@@ -1331,17 +1331,19 @@ Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix)
   float shift = m_eyeSeparation / (2.0f) * (m_invertEyePositions ? -1 : 1);
 
   // Calculate convergence angle
-  float angle = std::atan(m_eyeSeparation / 1000.0f) * 180.0f / float(M_PI);
+  const float distance = 10.0f;
+  const float angleRad = std::atan(shift / distance);
+  const float angleDeg = angleRad * 180.0f / float(M_PI);
 
   // Generate left eye camera
   QMatrix4x4 lMatrix = matrix;
   lMatrix.translate(-shift, 0.0f, 0.0f);
-  lMatrix.rotate(angle, 0, 0, 1);
+  lMatrix.rotate(angleDeg, 0, 0, 1);
 
   // Generate right eye camera
   QMatrix4x4 rMatrix = matrix;
   rMatrix.translate(shift, 0.0f, 0.0f);
-  rMatrix.rotate(-angle, 0, 0, 1);
+  rMatrix.rotate(-angleDeg, 0, 0, 1);
 
   // Return both cameras
   return qMakePair(lMatrix, rMatrix);
