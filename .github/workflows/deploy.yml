@@ -63,6 +63,7 @@ jobs:
 #-------------------------------------------------------------------------------
 
   build-linux-x86_64:
+    if: false
     runs-on: ubuntu-22.04
     name: '🐧 Linux (x86_64)'
     steps:
@@ -227,7 +228,6 @@ jobs:
 #-------------------------------------------------------------------------------
 
   build-linux-aarch64:
-    if: false
     runs-on: ubuntu-24.04-arm
     name: '🐧 Linux (aarch64)'
     steps:
