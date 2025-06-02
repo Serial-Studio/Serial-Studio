@@ -63,6 +63,7 @@ jobs:
 #-------------------------------------------------------------------------------
 
   build-linux-x86_64:
+    if: false
     runs-on: ubuntu-22.04
     name: '🐧 Linux (x86_64)'
     steps:
@@ -227,6 +228,7 @@ jobs:
 #-------------------------------------------------------------------------------
 
   build-linux-aarch64:
+    if: false
     runs-on: ubuntu-24.04-arm
     name: '🐧 Linux (aarch64)'
     steps:
@@ -484,7 +486,7 @@ jobs:
 
   build-windows-x86_64:
     runs-on: windows-latest
-    if: {false}
+    if: false
     name: '🧊 Windows (x86_64)'
     steps:
     - run: git config --global core.autocrlf input
@@ -584,8 +586,8 @@ jobs:
     needs:
       - build-mac-universal
       #- build-windows-x86_64
-      - build-linux-x86_64
-      - build-linux-aarch64
+      #- build-linux-x86_64
+      #- build-linux-aarch64
 
     runs-on: ubuntu-latest
     env:
