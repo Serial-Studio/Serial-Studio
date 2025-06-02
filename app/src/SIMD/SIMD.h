@@ -21,7 +21,9 @@
 
 #pragma once
 
-#define SIMDE_ENABLE_NATIVE_ALIASES
+#if !defined(__SSE2__)
+#  define SIMDE_ENABLE_NATIVE_ALIASES
+#endif
 
 #include <cstddef>
 #include <algorithm>
