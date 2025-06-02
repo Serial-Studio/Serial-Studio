@@ -158,8 +158,8 @@ private:
 
 private:
   qreal gridStep(const qreal scale = -1) const;
-  QVector<QPointF> screenProjection(const QVector<QVector3D> &points,
-                                    const QMatrix4x4 &matrix);
+  std::vector<QPointF> screenProjection(const PlotData3D &points,
+                                        const QMatrix4x4 &matrix);
   void drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
                   const QVector3D &p1, const QVector3D &p2, QColor color,
                   float lineWidth, Qt::PenStyle style);

@@ -719,7 +719,7 @@ void Widgets::Plot3D::drawData()
 {
   // Obtain data from dashboard
   const auto &data = UI::Dashboard::instance().plotData3D(m_index);
-  if (data.isEmpty())
+  if (data.size() <= 0)
     return;
 
   // Get min/max values
@@ -944,11 +944,10 @@ qreal Widgets::Plot3D::gridStep(const qreal scale) const
  * @param matrix The combined MVP matrix.
  * @return Vector of 2D QPointF in screen coordinates.
  */
-QVector<QPointF>
-Widgets::Plot3D::screenProjection(const QVector<QVector3D> &points,
-                                  const QMatrix4x4 &matrix)
+std::vector<QPointF> Widgets::Plot3D::screenProjection(const PlotData3D &points,
+                                                       const QMatrix4x4 &matrix)
 {
-  QVector<QPointF> projected;
+  std::vector<QPointF> projected;
   projected.reserve(points.size());
 
   const float halfW = width() * 0.5f;
@@ -970,7 +969,7 @@ Widgets::Plot3D::screenProjection(const QVector<QVector3D> &points,
     // Convert NDC to screen-space
     const float screenX = halfW + ndcX * halfW;
     const float screenY = halfH - ndcY * halfH;
-    projected.append(QPointF(screenX, screenY));
+    projected.push_back(QPointF(screenX, screenY));
   }
 
   return projected;
@@ -1271,17 +1270,18 @@ QPixmap Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
   painter.setRenderHint(QPainter::Antialiasing, true);
 
   // Project 3D points to 2D screen space
-  QVector<QPointF> points = screenProjection(data, matrix);
+  auto points = screenProjection(data, matrix);
 
   // Interpolate points by generated a gradient line
   if (m_interpolate)
   {
     const auto &endColor = m_lineTailColor;
     const auto &startColor = m_lineHeadColor;
-    for (int i = 1; i < points.size(); ++i)
+    const auto numPoints = static_cast<qsizetype>(points.size());
+    for (qsizetype i = 1; i < numPoints; ++i)
     {
       QColor c;
-      qreal tVal = qreal(i) / points.size();
+      qreal tVal = qreal(i) / numPoints;
       c.setRedF(startColor.redF() * (1 - tVal) + endColor.redF() * tVal);
       c.setGreenF(startColor.greenF() * (1 - tVal) + endColor.greenF() * tVal);
       c.setBlueF(startColor.blueF() * (1 - tVal) + endColor.blueF() * tVal);

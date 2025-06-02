@@ -170,14 +170,15 @@ void Widgets::Plot::updateData()
     const auto Y = plotData.y;
 
     // Resize series array if required
-    if (m_data.count() != X->count())
-      m_data.resize(X->count());
+    if (m_data.size() != static_cast<qsizetype>(X->size()))
+      m_data.resize(X->size());
 
     // Convert data to a list of points
-    int i = 0;
+    qsizetype i = 0;
+    const auto ySize = static_cast<qsizetype>(Y->size());
     for (auto x = X->begin(); x != X->end(); ++x)
     {
-      if (Y->count() > i)
+      if (ySize > i)
       {
         m_data[i] = QPointF(*x, Y->at(i));
         ++i;

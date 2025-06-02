@@ -639,7 +639,7 @@ void UI::Dashboard::updatePlots()
     for (int i = 0; i < m_plotData3D.count(); ++i)
     {
       m_plotData3D[i].clear();
-      m_plotData3D[i].squeeze();
+      m_plotData3D[i].shrink_to_fit();
     }
   }
 #endif
@@ -649,7 +649,7 @@ void UI::Dashboard::updatePlots()
   {
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
     auto *data = m_fftValues[i].data();
-    auto count = m_fftValues[i].count();
+    auto count = m_fftValues[i].size();
     SIMD::shift<qreal>(data, count, dataset.value().toDouble());
   }
 
@@ -664,7 +664,7 @@ void UI::Dashboard::updatePlots()
     {
       yAxesMoved.insert(yDataset.index());
       auto *yData = m_yAxisData[yDataset.index()].data();
-      auto yCount = m_yAxisData[yDataset.index()].count();
+      auto yCount = m_yAxisData[yDataset.index()].size();
       SIMD::shift<qreal>(yData, yCount, yDataset.value().toDouble());
     }
 
@@ -675,7 +675,7 @@ void UI::Dashboard::updatePlots()
       xAxesMoved.insert(xAxisId);
       const auto &xDataset = m_datasets[xAxisId];
       auto *xData = m_xAxisData[xAxisId].data();
-      auto xCount = m_xAxisData[xAxisId].count();
+      auto xCount = m_xAxisData[xAxisId].size();
       SIMD::shift<qreal>(xData, xCount, xDataset.value().toDouble());
     }
   }
@@ -688,7 +688,7 @@ void UI::Dashboard::updatePlots()
     {
       const auto &dataset = group.datasets()[j];
       auto *data = m_multipltValues[i].y[j].data();
-      auto count = m_multipltValues[i].y[j].count();
+      auto count = m_multipltValues[i].y[j].size();
       SIMD::shift<qreal>(data, count, dataset.value().toDouble());
     }
   }
@@ -715,9 +715,9 @@ void UI::Dashboard::updatePlots()
     }
 
     // Add point to data
-    plotData.append(point);
-    if (plotData.count() > points())
-      plotData.remove(0, plotData.count() - points());
+    plotData.push_back(point);
+    if (static_cast<int>(plotData.size()) > points())
+      plotData.erase(plotData.begin(), plotData.end() - points());
   }
 #endif
 }
@@ -772,9 +772,9 @@ void UI::Dashboard::configureLineSeries()
 
   // Reset default X-axis data
   m_pltXAxis.clear();
-  m_pltXAxis.squeeze();
+  m_pltXAxis.shrink_to_fit();
   m_pltXAxis.resize(points() + 1);
-  SIMD::fill_range<qreal>(m_pltXAxis.data(), m_pltXAxis.count(), 0);
+  SIMD::fill_range<qreal>(m_pltXAxis.data(), m_pltXAxis.size(), 0);
 
   // Construct X/Y axis data arrays
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
@@ -859,9 +859,9 @@ void UI::Dashboard::configureMultiLineSeries()
 
   // Reset default X-axis data
   m_multipltXAxis.clear();
-  m_multipltXAxis.squeeze();
+  m_multipltXAxis.shrink_to_fit();
   m_multipltXAxis.resize(points() + 1);
-  SIMD::fill_range<qreal>(m_multipltXAxis.data(), m_multipltXAxis.count(), 0);
+  SIMD::fill_range<qreal>(m_multipltXAxis.data(), m_multipltXAxis.size(), 0);
 
   // Construct multi-plot values structure
   for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i)
@@ -872,9 +872,9 @@ void UI::Dashboard::configureMultiLineSeries()
     series.x = &m_multipltXAxis;
     for (int j = 0; j < group.datasetCount(); ++j)
     {
-      series.y.append(PlotDataY());
-      series.y.last().resize(points() + 1);
-      SIMD::fill<qreal>(series.y.last().data(), points() + 1, 0);
+      series.y.push_back(PlotDataY());
+      series.y.back().resize(points() + 1);
+      SIMD::fill<qreal>(series.y.back().data(), points() + 1, 0);
     }
 
     m_multipltValues.append(series);

@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include <QtQml>
 #include <QObject>
 #include <QVector>
 
@@ -32,20 +31,20 @@
  * @typedef PlotDataX
  * @brief Represents the unique X-axis data points for a plot.
  */
-typedef QVector<qreal> PlotDataX;
+typedef std::vector<qreal> PlotDataX;
 
 /**
  * @typedef PlotDataY
  * @brief Represents the Y-axis data points for a single curve.
  */
-typedef QVector<qreal> PlotDataY;
+typedef std::vector<qreal> PlotDataY;
 
 #ifdef USE_QT_COMMERCIAL
 /**
  * @typedef PlotData3D
  * @brief Represents a list of 3D points.
  */
-typedef QVector<QVector3D> PlotData3D;
+typedef std::vector<QVector3D> PlotData3D;
 #endif
 
 /**
@@ -56,7 +55,7 @@ typedef QVector<QVector3D> PlotData3D;
  * the Y-axis data for one curve in a multiplot widget. This allows
  * managing multiple curves independently.
  */
-typedef QVector<PlotDataY> MultiPlotDataY;
+typedef std::vector<PlotDataY> MultiPlotDataY;
 
 /**
  * @typedef LineSeries
@@ -81,7 +80,7 @@ typedef struct
 typedef struct
 {
   PlotDataX *x;
-  QList<PlotDataY> y;
+  std::vector<PlotDataY> y;
 } MultiLineSeries;
 
 /**

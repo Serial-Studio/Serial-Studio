@@ -40,12 +40,6 @@ if (-not $QT_USERNAME -or -not $QT_PASSWORD) {
 }
 
 #------------------------------------------------------------------------------
-# Workflow cache saving, assume install needed
-#------------------------------------------------------------------------------
-
-$env:QT_INSTALL_NEEDED = "true"
-
-#------------------------------------------------------------------------------
 # Build output directory and alias package name
 #------------------------------------------------------------------------------
 
@@ -75,7 +69,6 @@ if (-not (Test-Path $CACHE_DIR)) {
 
 if (Test-Path "$QT_OUTPUT_DIR\$QT_VERSION") {
     Write-Host "Qt $QT_VERSION already installed at $QT_OUTPUT_DIR — skipping."
-    $env:QT_INSTALL_NEEDED = "false"
     exit 0
 }
 

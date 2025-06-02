@@ -40,6 +40,7 @@ on:
 
 env:
   VERSION: "3.0.6"
+  INSTALL_QT: true
   QT_VERSION_LINUX: 6.9.0
   QT_VERSION_MACOS: 6.9.0
   QT_VERSION_WINDOWS: 6.9.0
@@ -110,6 +111,7 @@ jobs:
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3
+      if: env.INSTALL_QT == 'false'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
@@ -118,6 +120,7 @@ jobs:
 
     - name: '⚙️ Install Qt'
       shell: bash
+      if: env.INSTALL_QT == 'true'
       env:
         QT_VERSION: ${{env.QT_VERSION_LINUX}}
         QT_ARCH: x64
@@ -129,7 +132,6 @@ jobs:
         # Run the install script
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
-        echo "QT_INSTALL_NEEDED=$QT_INSTALL_NEEDED" >> $GITHUB_ENV
 
         # Add to PATH
         export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
@@ -142,7 +144,7 @@ jobs:
         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
-      if: env.QT_INSTALL_NEEDED == 'true'
+      if: env.INSTALL_QT == 'true'
       uses: actions/cache/save@v3
       with:
         path: |
@@ -271,6 +273,7 @@ jobs:
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3
+      if: env.INSTALL_QT == 'false'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
@@ -278,6 +281,7 @@ jobs:
 
     - name: '⚙️ Install Qt'
       shell: bash
+      if: env.INSTALL_QT == 'true'
       env:
         QT_VERSION: ${{env.QT_VERSION_LINUX}}
         QT_ARCH: arm64
@@ -287,7 +291,6 @@ jobs:
       run: |
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
-        echo "QT_INSTALL_NEEDED=$QT_INSTALL_NEEDED" >> $GITHUB_ENV
 
         export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/bin"
         export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/libexec"
@@ -298,8 +301,8 @@ jobs:
         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
-      if: env.QT_INSTALL_NEEDED == 'true'
       uses: actions/cache/save@v3
+      if: env.INSTALL_QT == 'true'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
@@ -357,6 +360,7 @@ jobs:
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3
+      if: env.INSTALL_QT == 'false'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
@@ -365,6 +369,7 @@ jobs:
 
     - name: '⚙️ Install Qt'
       shell: bash
+      if: env.INSTALL_QT == 'true'
       env:
         QT_VERSION: ${{env.QT_VERSION_MACOS}}
         QT_ARCH: x64
@@ -375,7 +380,6 @@ jobs:
         # Run the install script
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
-        echo "QT_INSTALL_NEEDED=$QT_INSTALL_NEEDED" >> $GITHUB_ENV
 
         # Add to PATH
         export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/bin"
@@ -388,7 +392,7 @@ jobs:
         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
-      if: env.QT_INSTALL_NEEDED == 'true'
+      if: env.INSTALL_QT == 'true'
       uses: actions/cache/save@v3
       with:
         path: |
@@ -477,6 +481,7 @@ jobs:
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3
+      if: env.INSTALL_QT == 'false'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
@@ -485,6 +490,7 @@ jobs:
 
     - name: '⚙️ Install Qt'
       shell: pwsh
+      if: env.INSTALL_QT == 'true'
       env:
         QT_VERSION: ${{env.QT_VERSION_WINDOWS}}
         QT_ARCH: x64
@@ -494,7 +500,6 @@ jobs:
       run: |
         # Run the installer
         ./scripts/install-qt.ps1
-        echo "QT_INSTALL_NEEDED=$env:QT_INSTALL_NEEDED" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
         # Add to PATH
         $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\bin"
@@ -507,7 +512,7 @@ jobs:
         Write-Output "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $env:GITHUB_ENV
 
     - name: '⚙️ Save Qt Cache'
-      if: env.QT_INSTALL_NEEDED == 'true'
+      if: env.INSTALL_QT == 'true'
       uses: actions/cache/save@v3
       with:
         path: |
