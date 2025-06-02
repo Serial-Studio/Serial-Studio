@@ -25,6 +25,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
+import QtCore as QtCore
 
 import "../"
 
@@ -48,6 +49,15 @@ Item {
   //
   property bool running: true
   property bool showAreaUnderPlot: true
+
+  //
+  // Save settings
+  //
+  QtCore.Settings {
+    id: settings
+    category: "FFTPlot"
+    property alias displayArea: root.showAreaUnderPlot
+  }
 
   //
   // Enable/disable features depending on window size

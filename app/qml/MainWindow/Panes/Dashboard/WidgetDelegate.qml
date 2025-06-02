@@ -142,8 +142,12 @@ Widgets.MiniWindow {
     Component.onCompleted: {
       const component = Qt.createComponent(widget.widgetQmlPath)
       if (component.status === Component.Ready) {
-        if (widgetInstance)
+        if (widgetInstance) {
+          if (widgetInstance.settings)
+            widgetInstance.settings.sync()
+
           widgetInstance.destroy()
+        }
 
         widgetInstance = component.createObject(loader, {
                                                   model: widget.widgetModel,

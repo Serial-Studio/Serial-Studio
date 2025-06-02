@@ -54,6 +54,9 @@ Item {
     }
   }
 
+  //
+  // Configure module widget on load
+  //
   onModelChanged: {
     if (model) {
       model.visible = true
@@ -151,6 +154,8 @@ Item {
     }
 
     ToolButton {
+      id: _interpolate
+
       width: 24
       height: 24
       icon.width: 18
@@ -255,6 +260,8 @@ Item {
     }
 
     ToolButton {
+      id: _anaglyph
+
       width: 24
       height: 24
       icon.width: 18
@@ -268,6 +275,8 @@ Item {
     }
 
     Slider {
+      id: _eyeSeparation
+
       to: 100
       from: 30
       stepSize: 1

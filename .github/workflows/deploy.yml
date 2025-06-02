@@ -116,7 +116,7 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64-v1
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64-v2
 
     - name: '⚙️ Install Qt'
       shell: bash
@@ -138,7 +138,7 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64-v1
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64-v2
 
     - name: '⚙️ Add Qt to PATH'
       shell: bash
@@ -279,7 +279,7 @@ jobs:
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
-        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64-v1
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64-v2
 
     - name: '⚙️ Install Qt'
       shell: bash
@@ -300,7 +300,7 @@ jobs:
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
-        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64-v1
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64-v2
 
     - name: '⚙️ Add Qt to PATH'
       shell: bash
@@ -373,7 +373,7 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64-v1
+        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64-v2
 
     - name: '⚙️ Install Qt'
       shell: bash
@@ -395,7 +395,7 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64-v1
+        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64-v2
 
     - name: '⚙️ Add Qt to PATH'
       shell: bash
@@ -484,6 +484,7 @@ jobs:
 
   build-windows-x86_64:
     runs-on: windows-latest
+    if: {false}
     name: '🧊 Windows (x86_64)'
     steps:
     - run: git config --global core.autocrlf input
@@ -497,7 +498,7 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022
+        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022_64-v2
 
     - name: '⚙️ Install Qt'
       shell: pwsh
@@ -518,7 +519,7 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022
+        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022_64-v2
 
     - name: '⚙️ Add Qt to PATH'
       shell: pwsh
@@ -582,7 +583,7 @@ jobs:
     name: '🗂 Create release and upload artifacts'
     needs:
       - build-mac-universal
-      - build-windows-x86_64
+      #- build-windows-x86_64
       - build-linux-x86_64
       - build-linux-aarch64
 

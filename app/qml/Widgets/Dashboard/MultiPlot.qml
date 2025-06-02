@@ -21,9 +21,11 @@
 
 import QtQuick
 import QtGraphs
-import SerialStudio
 import QtQuick.Layouts
 import QtQuick.Controls
+
+import SerialStudio
+import QtCore as QtCore
 
 import "../"
 
@@ -48,6 +50,15 @@ Item {
   property bool running: true
   property bool interpolate: true
   property bool showLegends: true
+
+  //
+  // Save settings
+  //
+  QtCore.Settings {
+    id: settings
+    category: "MultiPlot"
+    property alias interpolateEnabled: root.interpolate
+  }
 
   //
   // Enable/disable features depending on window size

@@ -25,6 +25,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
+import QtCore as QtCore
 
 import "../"
 
@@ -50,6 +51,16 @@ Item {
   property bool running: true
   property bool interpolate: true
   property bool showAreaUnderPlot: false
+
+  //
+  // Save settings
+  //
+  QtCore.Settings {
+    id: settings
+    category: "Plot"
+    property alias displayArea: root.showAreaUnderPlot
+    property alias interpolateEnabled: root.interpolate
+  }
 
   //
   // Enable/disable features depending on window size

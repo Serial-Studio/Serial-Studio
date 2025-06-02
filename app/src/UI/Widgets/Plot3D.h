@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QPainter>
+#include <QSettings>
 #include <QVector3D>
 #include <QMatrix4x4>
 #include <QQuickPaintedItem>
@@ -229,5 +230,7 @@ private:
 
   QVector3D m_minPoint;
   QVector3D m_maxPoint;
+
+  QSettings m_settings;
 };
 } // namespace Widgets
