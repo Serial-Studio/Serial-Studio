@@ -19,16 +19,16 @@ P(r) \propto r^2 \cdot e^{-2r / a_0}
 $$
 
 Where:  
-- \( r \): Radial distance from the nucleus  
-- \( a_0 \): Bohr radius (normalized to 1.0)
+- $$r$$: Radial distance from the nucleus.
+- $$a_0$$: Bohr radius (normalized to 1.0).
 
-Electron positions are computed in spherical coordinates, then converted to Cartesian \( (x, y, z) \).
+Electron positions are computed in spherical coordinates, then converted to Cartesian $$(x, y, z)$$.
 
 ## **Project Features**
 
-- Real-time 3D visualization of the electron cloud
-- Plot of probability density along the X-axis
-- 1 kHz data stream for smooth visual updates
+- Real-time 3D visualization of the electron cloud.
+- Plot of probability density along the X-axis.
+- 1 kHz data stream for smooth visual updates.
 
 ## **Data Format**
 
@@ -37,9 +37,9 @@ Each UDP frame contains five comma-separated values:
 `x, y, z, psi2, r`
 
 Where:  
-- `x, y, z`: Electron position in Cartesian coordinates (in units of \( a_0 \))  
-- `psi2`: Probability density \( \psi^2(r) = |\psi(r)|^2 \)  
-- `r`: Radial distance from the nucleus (in units of \( a_0 \))
+- `x, y, z`: Electron position in Cartesian coordinates (in units of $$a_0$$).
+- `psi2`: Probability density $$\psi^2(r) = |\psi(r)|^2$$.
+- `r`: Radial distance from the nucleus (in units of $$a_0$$).
 
 **Example:**  
 `-0.283291,0.453772,0.125448,0.038142,0.621987`
@@ -51,23 +51,23 @@ Where:
    `python3 hydrogen.py`
 
 2. In Serial Studio:
-   - Open the `hydrogen.json` project file
-   - Set the input source to UDP, port `9000`
-   - Click **Connect**
+   - Open the `hydrogen.json` project file.
+   - Set the input source to UDP, port `9000`.
+   - Click **Connect**.
 
 ## **Serial Studio Visualizations**
 
-- **3D Plot**: Displays the real-time electron cloud in space
-- **XY Plot**: Plots \( \psi^2 \) vs. \( x \), showing spatial density
+- **3D Plot**: Displays the real-time electron cloud in space.
+- **XY Plot**: Plots $$psi^2$$ vs. $$x$$, showing spatial density.
 
 ## **Files Included**
 
-- `hydrogen.py` – Python script for simulation and UDP streaming  
-- `hydrogen.json` – Serial Studio project file  
-- `README.md` – Project documentation  
-- `doc/screenshot.png` – Screenshot of the visualization
+- `hydrogen.py`: Python script for simulation and UDP streaming.
+- `hydrogen.json`: Serial Studio project file.
+- `README.md`: Project documentation.  
+- `doc/screenshot.png`: Screenshot of the visualization.
 
 ## **Notes**
 
-- This simulation does not numerically solve the Schrödinger equation; it samples from the known analytical 1s solution
-- All spatial values are in normalized Bohr units (\( a_0 = 1 \))
+- This simulation does not numerically solve the Schrödinger equation; it samples from the known analytical 1s solution.
+- All spatial values are in normalized Bohr units $$a_0 = 1$$.
