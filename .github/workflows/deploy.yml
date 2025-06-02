@@ -277,6 +277,7 @@ jobs:
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
+          ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64-v1
 
     - name: '⚙️ Install Qt'
@@ -306,6 +307,7 @@ jobs:
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
+          ${{env.USERPROFILE}}/.qt-license
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64-v1
 
     - name: '⚙️ Install CMake'
