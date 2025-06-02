@@ -42,7 +42,7 @@
  *        processing.
  */
 UI::Dashboard::Dashboard()
-  : m_points(10e3)
+  : m_points(100)
   , m_precision(2)
   , m_widgetCount(0)
   , m_updateRequired(false)
