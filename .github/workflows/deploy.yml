@@ -41,9 +41,9 @@ on:
 env:
   VERSION: "3.0.6"
   INSTALL_QT: true
-  QT_VERSION_LINUX: 6.9.0
-  QT_VERSION_MACOS: 6.9.0
-  QT_VERSION_WINDOWS: 6.9.0
+  QT_VERSION_LINUX: 6.9.1
+  QT_VERSION_MACOS: 6.9.1
+  QT_VERSION_WINDOWS: 6.9.1
   EXECUTABLE: "Serial-Studio"
   APPLICATION: "Serial Studio"
   UNIXNAME: "serial-studio"
@@ -582,12 +582,13 @@ jobs:
 #-------------------------------------------------------------------------------
 
   upload:
+    if: false
     name: '🗂 Create release and upload artifacts'
     needs:
       - build-mac-universal
-      #- build-windows-x86_64
-      #- build-linux-x86_64
-      #- build-linux-aarch64
+      - build-windows-x86_64
+      - build-linux-x86_64
+      - build-linux-aarch64
 
     runs-on: ubuntu-latest
     env:
