@@ -93,6 +93,42 @@ bool JSON::Frame::isValid() const
 }
 
 /**
+ * @brief Compares the structural equivalence of two JSON::Frame objects.
+ *
+ * This method checks whether the current frame and the given frame have the
+ * same number of groups, and whether each corresponding group has the same
+ * group ID and the same number of datasets in the same order, with matching
+ * dataset indices.
+ *
+ * @param other The frame to compare against.
+ * @return true if both frames have identical structural layout; false
+ * otherwise.
+ */
+bool JSON::Frame::equalsStructure(const JSON::Frame &other) const
+{
+  if (groupCount() != other.groupCount())
+    return false;
+
+  for (int i = 0; i < groupCount(); ++i)
+  {
+    const auto &g1 = groups()[i];
+    const auto &g2 = other.groups()[i];
+
+    if (g1.groupId() != g2.groupId()
+        || g1.datasets().size() != g2.datasets().size())
+      return false;
+
+    for (int j = 0; j < g1.datasets().size(); ++j)
+    {
+      if (g1.datasets()[j].index() != g2.datasets()[j].index())
+        return false;
+    }
+  }
+
+  return true;
+}
+
+/**
  * @brief Serializes the frame information and its data into a JSON object.
  *
  * @return A QJsonObject containing the group's properties and an array of
@@ -191,7 +227,7 @@ bool JSON::Frame::read(const QJsonObject &object)
  */
 int JSON::Frame::groupCount() const
 {
-  return m_groups.count();
+  return static_cast<int>(m_groups.size());
 }
 
 /**

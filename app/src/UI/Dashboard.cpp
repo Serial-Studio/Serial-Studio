@@ -33,7 +33,7 @@
 #endif
 
 //------------------------------------------------------------------------------
-// UI::Dashboard implementation
+// Constructor & singleton access
 //------------------------------------------------------------------------------
 
 /**
@@ -92,6 +92,10 @@ UI::Dashboard &UI::Dashboard::instance()
   static Dashboard instance;
   return instance;
 }
+
+//------------------------------------------------------------------------------
+// Utility functions for widgets
+//------------------------------------------------------------------------------
 
 /**
  * @brief Calculates a suitable interval for dividing a range into "nice" steps.
@@ -153,6 +157,10 @@ qreal UI::Dashboard::smartInterval(const qreal min, const qreal max,
   // Return obtained step size
   return step;
 }
+
+//------------------------------------------------------------------------------
+// Dashboard features getters
+//------------------------------------------------------------------------------
 
 /**
  * @brief Checks if the dashboard is currently available, determined by the
@@ -236,6 +244,10 @@ bool UI::Dashboard::containsCommercialFeatures() const
   return m_currentFrame.containsCommercialFeatures();
 }
 
+//------------------------------------------------------------------------------
+// Dashboard getters
+//------------------------------------------------------------------------------
+
 /**
  * @brief Gets the current point/sample count setting for the dashboard plots.
  * @return Current point count.
@@ -271,6 +283,10 @@ int UI::Dashboard::totalWidgetCount() const
 {
   return m_widgetCount;
 }
+
+//------------------------------------------------------------------------------
+// QML-callable status functions
+//------------------------------------------------------------------------------
 
 /**
  * @brief Checks if the current frame is valid for processing.
@@ -330,6 +346,10 @@ int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
   return 0;
 }
 
+//------------------------------------------------------------------------------
+// Model access functions
+//------------------------------------------------------------------------------
+
 /**
  * @brief Retrieves the title of the current frame in the dashboard.
  * @return A reference to a QString containing the current frame title.
@@ -385,6 +405,10 @@ const SerialStudio::WidgetMap &UI::Dashboard::widgetMap() const
   return m_widgetMap;
 }
 
+//------------------------------------------------------------------------------
+// Dataset & group access functions
+//------------------------------------------------------------------------------
+
 /**
  * @brief Provides access to the map of dataset objects.
  *
@@ -435,6 +459,10 @@ UI::Dashboard::getDatasetWidget(const SerialStudio::DashboardWidget widget,
   return m_widgetDatasets[widget].at(index);
 }
 
+//------------------------------------------------------------------------------
+// Frame access
+//------------------------------------------------------------------------------
+
 /**
  * @brief Retrieves the current JSON frame for the dashboard.
  * @return A reference to the current JSON::Frame.
@@ -443,6 +471,10 @@ const JSON::Frame &UI::Dashboard::currentFrame()
 {
   return m_currentFrame;
 }
+
+//------------------------------------------------------------------------------
+// Plot data access
+//------------------------------------------------------------------------------
 
 /**
  * @brief Provides the FFT plot values currently displayed on the dashboard.
@@ -481,6 +513,10 @@ const PlotData3D &UI::Dashboard::plotData3D(const int index) const
   return m_plotData3D[index];
 }
 #endif
+
+//------------------------------------------------------------------------------
+// Setter functions
+//------------------------------------------------------------------------------
 
 /**
  * @brief Sets the number of data points for the dashboard plots.
@@ -564,6 +600,10 @@ void UI::Dashboard::resetData(const bool notify)
   m_xAxisData.clear();
   m_yAxisData.clear();
 
+  // Clear m_dataset <-> widget hash maps
+  m_groupDatasetIndex.clear();
+  m_widgetDatasetIndex.clear();
+
   // Clear widget & action structures
   m_widgetCount = 0;
   m_actions.clear();
@@ -603,6 +643,254 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
     Q_EMIT terminalEnabledChanged();
   }
 }
+
+//------------------------------------------------------------------------------
+// Frame processing & dashboard model generation
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Processes an incoming data frame and updates the dashboard
+ *        accordingly.
+ *
+ * Validates the frame, checks for commercial feature flags, and compares the
+ * frame structure with the current configuration. If the structure has changed,
+ * the dashboard is reconfigured. Finally, updates dataset values and plots.
+ *
+ * @param frame The new JSON data frame to process.
+ */
+void UI::Dashboard::processFrame(const JSON::Frame &frame)
+{
+  // Validate frame
+  if (!frame.isValid() || !streamAvailable())
+    return;
+
+  // Lock access to frame data
+  QWriteLocker locker(&m_dataLock);
+
+  // Update UI if frame commercial features changed
+  const bool hadProFeatures = m_currentFrame.containsCommercialFeatures();
+  if (hadProFeatures != frame.containsCommercialFeatures())
+    Q_EMIT containsCommercialFeaturesChanged();
+
+  // Regenerate dashboard model if frame structure changed
+  if (!frame.equalsStructure(m_currentFrame))
+    reconfigureDashboard(frame);
+
+  // Update dashboard data
+  updateDashboardData(frame);
+}
+
+/**
+ * @brief Updates dataset values and plot data based on the given frame.
+ *
+ * Iterates through groups and datasets in the frame, updating internal
+ * data structures with the latest values.
+ *
+ * @param frame The JSON frame containing new dataset values.
+ */
+void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
+{
+  // Iterate over all datasets in the incoming frame
+  for (const auto &group : frame.groups())
+  {
+    for (const auto &dataset : group.datasets())
+    {
+      // Iterate over all datasets in the incoming frame
+      const auto id = dataset.index();
+      if (!m_datasets.contains(id))
+        continue;
+
+      // Only update if the value has changed
+      if (m_datasets[id].value() != dataset.value())
+      {
+        // Update dataset map
+        m_updateRequired = true;
+        m_datasets[id] = dataset;
+
+        // Update all dataset widget references pointing to this dataset
+        if (m_widgetDatasetIndex.contains(id))
+        {
+          const auto &widgetList = m_widgetDatasetIndex[id];
+          for (JSON::Dataset *ptr : widgetList)
+            *ptr = dataset;
+        }
+
+        // Update all group-level dataset references pointing to this dataset
+        if (m_groupDatasetIndex.contains(id))
+        {
+          const auto &groupList = m_groupDatasetIndex[id];
+          for (JSON::Dataset *ptr : groupList)
+            *ptr = dataset;
+        }
+      }
+    }
+  }
+
+  // Update plot memory structures
+  updatePlots();
+}
+
+/**
+ * @brief Reconfigures the dashboard layout and widgets based on the new frame.
+ *
+ * Clears existing dashboard and plot data, detects appropriate widget mappings
+ * for each group and dataset, handles commercial-only widgets (with fallback),
+ * and regenerates widget model mappings. Emits signals if the widget or action
+ * counts have changed.
+ *
+ * @param frame The JSON frame with the new structure to configure.
+ * @param pro Indicates whether commercial (pro) features are enabled.
+ */
+void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
+{
+  // Check if we can use pro features
+  const bool pro = SerialStudio::activated();
+
+  // Reset dashboard data
+  resetData(false);
+
+  // Save frame structure
+  m_currentFrame = frame;
+
+  // Add console widget if needed
+  if (terminalEnabled())
+  {
+    JSON::Group terminal;
+    terminal.m_groupId = frame.groupCount();
+    terminal.m_title = tr("Console");
+    terminal.m_widget = "terminal";
+    m_currentFrame.m_groups.prepend(terminal);
+  }
+
+  // Parse frame groups
+  for (const auto &group : m_currentFrame.groups())
+  {
+    // Append group widgets
+    const auto key = SerialStudio::getDashboardWidget(group);
+    if (key != SerialStudio::DashboardNoWidget)
+      m_widgetGroups[key].append(group);
+
+    // Append fallback 3D plot widget
+    if (key == SerialStudio::DashboardPlot3D && !pro)
+    {
+      m_widgetGroups.remove(key);
+      auto copy = group;
+      copy.m_title = tr("%1 (Fallback)").arg(group.title());
+      m_widgetGroups[SerialStudio::DashboardMultiPlot].append(copy);
+      for (int i = 0; i < m_currentFrame.groupCount(); ++i)
+      {
+        if (m_currentFrame.groups()[i].groupId() == group.groupId())
+        {
+          m_currentFrame.m_groups[i].m_widget = "multiplot";
+          m_currentFrame.m_groups[i].m_title = copy.m_title;
+          break;
+        }
+      }
+    }
+
+    // Append multiplot & 3D plot to accelerometer widget
+    if (key == SerialStudio::DashboardAccelerometer)
+    {
+      m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
+      if (pro)
+        m_widgetGroups[SerialStudio::DashboardPlot3D].append(group);
+    }
+
+    // Append multiplot to gyro widget
+    if (key == SerialStudio::DashboardGyroscope)
+      m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
+
+    // Parse group datasets
+    JSON::Group ledPanel;
+    for (const auto &dataset : group.datasets())
+    {
+      // Register a new dataset
+      if (!m_datasets.contains(dataset.index()))
+        m_datasets.insert(dataset.index(), dataset);
+
+      // Dataset already registered, update min/max values
+      else
+      {
+        auto prev = m_datasets.value(dataset.index());
+        double newMin = qMin(prev.min(), dataset.min());
+        double newMax = qMax(prev.max(), dataset.max());
+
+        auto d = dataset;
+        d.setMin(newMin);
+        d.setMax(newMax);
+        m_datasets.insert(dataset.index(), d);
+      }
+
+      // Register dataset widgets
+      auto keys = SerialStudio::getDashboardWidgets(dataset);
+      for (const auto &widgetKeys : std::as_const(keys))
+      {
+        if (widgetKeys == SerialStudio::DashboardLED)
+          ledPanel.m_datasets.append(dataset);
+
+        else if (widgetKeys != SerialStudio::DashboardNoWidget)
+          m_widgetDatasets[widgetKeys].append(dataset);
+      }
+    }
+
+    // Add group-level LED panel
+    if (ledPanel.datasetCount() > 0)
+    {
+      ledPanel.m_groupId = group.groupId();
+      ledPanel.m_title = tr("LED Panel (%1)").arg(group.title());
+      ledPanel.m_widget = "led-panel";
+      m_widgetGroups[SerialStudio::DashboardLED].append(ledPanel);
+    }
+  }
+
+  // Generate group model map
+  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i)
+  {
+    const auto key = i.key();
+    const auto count = widgetCount(key);
+    for (int j = 0; j < count; ++j)
+      m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
+  }
+
+  // Generate dataset model map
+  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
+  {
+    const auto key = i.key();
+    const auto count = widgetCount(key);
+    for (int j = 0; j < count; ++j)
+      m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
+  }
+
+  // Build dataset hash table
+  m_widgetDatasetIndex.clear();
+  for (auto &list : m_widgetDatasets)
+  {
+    for (auto &dataset : list)
+      m_widgetDatasetIndex[dataset.index()].append(&dataset);
+  }
+
+  // Build group hash table
+  m_groupDatasetIndex.clear();
+  for (auto &groupList : m_widgetGroups)
+  {
+    for (auto &group : groupList)
+    {
+      for (auto &dataset : group.m_datasets)
+        m_groupDatasetIndex[dataset.index()].append(&dataset);
+    }
+  }
+
+  // Update actions
+  m_actions = frame.actions();
+  Q_EMIT actionCountChanged();
+
+  // Trigger dashboard model re-generation in other modules
+  Q_EMIT widgetCountChanged();
+}
+
+//------------------------------------------------------------------------------
+// Plot data processing
+//------------------------------------------------------------------------------
 
 /**
  * @brief Updates the plot data for all dashboard widgets.
@@ -879,220 +1167,4 @@ void UI::Dashboard::configureMultiLineSeries()
 
     m_multipltValues.append(series);
   }
-}
-
-/**
- * @brief Processes and updates the dashboard data based on a new frame.
- *
- * This function validates and processes the given `frame`, updating the
- * dashboard’s internal data structures, widgets, and visibility settings.
- *
- * It clears and reconfigures widget groups, datasets, and actions to reflect
- * the new frame's data. The function also emits necessary signals to notify
- * changes and triggers the update of plot data.
- *
- * The function:
- * - Validates the frame and updates widget data structures.
- * - Clears and reinitializes widget groups and datasets.
- * - Updates the list of actions.
- * - Checks for differences in widget counts or titles to determine if a
- *   dashboard regeneration is required.
- * - Configures widget visibility and mappings based on the new frame data.
- * - Emits signals to update the UI with the new widget count and visibility.
- * - Calls `updatePlots()` to ensure plotting data aligns with the new frame.
- * - Notifies the application about the updated frame.
- *
- * @param frame The new JSON::Frame to process for the dashboard.
- */
-void UI::Dashboard::processFrame(const JSON::Frame &frame)
-{
-  // Validate frame
-  if (!frame.isValid() || !streamAvailable())
-    return;
-
-  // Lock access to frame data
-  QWriteLocker locker(&m_dataLock);
-
-  // Check if we can use commercial features
-  bool usedCommercialFeatures = m_currentFrame.containsCommercialFeatures();
-#ifdef USE_QT_COMMERCIAL
-  const bool proVersion = SerialStudio::activated();
-#else
-  const bool proVersion = false;
-#endif
-
-  // Get previous counts & title
-  const auto previousTitle = title();
-  const auto previousActionCount = actionCount();
-  QMap<SerialStudio::DashboardWidget, int> previousCounts;
-  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i)
-    previousCounts[i.key()] = widgetCount(i.key());
-  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
-    previousCounts[i.key()] = widgetCount(i.key());
-
-  // Copy frame data & set update required flag to true
-  m_currentFrame = frame;
-  m_updateRequired = true;
-
-  // Add terminal group
-  if (terminalEnabled())
-  {
-    JSON::Group terminal;
-    terminal.m_groupId = frame.groupCount();
-    terminal.m_title = tr("Console");
-    terminal.m_widget = "terminal";
-    m_currentFrame.m_groups.prepend(terminal);
-  }
-
-  // Update UI if frame commercial features changed
-  if (usedCommercialFeatures != m_currentFrame.containsCommercialFeatures())
-    Q_EMIT containsCommercialFeaturesChanged();
-
-  // Reset widget structures
-  m_widgetGroups.clear();
-  m_widgetDatasets.clear();
-
-  // Update actions
-  m_actions = m_currentFrame.actions();
-  if (actionCount() != previousActionCount)
-    Q_EMIT actionCountChanged();
-
-  // Update widget data structures
-  m_datasets.clear();
-  JSON::Group ledPanel;
-  for (const auto &group : m_currentFrame.groups())
-  {
-    // Register group widget (if any)
-    const auto key = SerialStudio::getDashboardWidget(group);
-    if (key != SerialStudio::DashboardNoWidget)
-      m_widgetGroups[key].append(group);
-
-    // 3D plot detected, fallback to multiplot if not activated
-    if (key == SerialStudio::DashboardPlot3D && !proVersion)
-    {
-      m_widgetGroups.remove(key);
-      auto copy = group;
-      copy.m_title = tr("%1 (Fallback)").arg(group.title());
-      m_widgetGroups[SerialStudio::DashboardMultiPlot].append(copy);
-
-      for (auto i = 0; i < m_currentFrame.groupCount(); ++i)
-      {
-        if (m_currentFrame.groups()[i].groupId() == group.groupId())
-        {
-          m_currentFrame.m_groups[i].m_widget = "multiplot";
-          m_currentFrame.m_groups[i].m_title = copy.m_title;
-          break;
-        }
-      }
-    }
-
-    // Add extra groups for accelerometers
-    if (key == SerialStudio::DashboardAccelerometer)
-    {
-      m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
-      if (proVersion)
-        m_widgetGroups[SerialStudio::DashboardPlot3D].append(group);
-    }
-
-    // Add a multiplot for gyroscopes
-    if (key == SerialStudio::DashboardGyroscope)
-      m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
-
-    // Parse datasets from group
-    for (auto &dataset : group.datasets())
-    {
-      // Register a new dataset
-      if (!m_datasets.contains(dataset.index()))
-        m_datasets.insert(dataset.index(), dataset);
-
-      // Dataset already registered, update min/max values
-      else
-      {
-        auto prevDataset = m_datasets.value(dataset.index());
-        double newMin = qMin(prevDataset.min(), dataset.min());
-        double newMax = qMax(prevDataset.max(), dataset.max());
-
-        auto d = dataset;
-        d.setMin(newMin);
-        d.setMax(newMax);
-        m_datasets.insert(dataset.index(), d);
-      }
-
-      // Register dataset widgets
-      auto keys = SerialStudio::getDashboardWidgets(dataset);
-      for (const auto &widgetKeys : std::as_const(keys))
-      {
-        if (widgetKeys == SerialStudio::DashboardLED)
-          ledPanel.m_datasets.append(dataset);
-
-        else if (widgetKeys != SerialStudio::DashboardNoWidget)
-          m_widgetDatasets[widgetKeys].append(dataset);
-      }
-    }
-  }
-
-  // Add LED panel to group widgets (if required)
-  if (ledPanel.datasetCount() > 0)
-  {
-    ledPanel.m_title = tr("Status Panel");
-    m_widgetGroups[SerialStudio::DashboardLED].append(ledPanel);
-  }
-
-  // Get current counts & title
-  const auto currentTitle = title();
-  QMap<SerialStudio::DashboardWidget, int> currentCounts;
-  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i)
-    currentCounts[i.key()] = widgetCount(i.key());
-  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
-    currentCounts[i.key()] = widgetCount(i.key());
-
-  // Check if we need to regenerate the dashboard
-  if (previousCounts != currentCounts || previousTitle != currentTitle)
-  {
-    // Clear widget indexes
-    m_widgetCount = 0;
-    m_widgetMap.clear();
-
-    // Register group widgets
-    for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i)
-    {
-      // Get number of widgets for current widget type
-      const auto key = i.key();
-      const auto count = widgetCount(key);
-
-      // Map "global" widget index to index relative to widget type/key
-      for (int j = 0; j < count; ++j)
-      {
-        m_widgetMap.insert(m_widgetCount, qMakePair(key, j));
-        ++m_widgetCount;
-      }
-    }
-
-    // Register dataset widgets
-    for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
-    {
-      // Get number of widgets for current widget type
-      const auto key = i.key();
-      const auto count = widgetCount(key);
-
-      // Map "global" widget index to index relative to widget type/key
-      for (int j = 0; j < count; ++j)
-      {
-        m_widgetMap.insert(m_widgetCount, qMakePair(key, j));
-        ++m_widgetCount;
-      }
-    }
-
-    // Clear plot data setup
-    m_fftValues.clear();
-    m_pltValues.clear();
-    m_plotData3D.clear();
-    m_multipltValues.clear();
-
-    // Update user interface
-    Q_EMIT widgetCountChanged();
-  }
-
-  // Update plot data
-  updatePlots();
 }

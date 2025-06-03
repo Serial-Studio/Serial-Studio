@@ -198,12 +198,15 @@ QVariantList UI::Taskbar::groupModel() const
   // Initialize the model
   QVariantList model;
 
-  // Append "all data" button
-  QVariantMap main;
-  main["id"] = -1;
-  main["text"] = tr("Overview");
-  main["icon"] = QStringLiteral("qrc:/rcc/icons/panes/overview.svg");
-  model.append(main);
+  // Create overview group
+  if (m_fullModel->rowCount() > 1)
+  {
+    QVariantMap main;
+    main["id"] = -1;
+    main["text"] = tr("Overview");
+    main["icon"] = QStringLiteral("qrc:/rcc/icons/panes/overview.svg");
+    model.append(main);
+  }
 
   // Append frame groups
   for (int i = 0; i < m_fullModel->rowCount(); ++i)
@@ -797,10 +800,21 @@ void UI::Taskbar::rebuildModel()
   }
 
   // Reset taskbar
-  setActiveGroupId(-1);
   Q_EMIT fullModelChanged();
   Q_EMIT windowStatesChanged();
   Q_EMIT registeredWindowsChanged();
+
+  // Select the first group
+  auto model = groupModel();
+  if (!model.isEmpty() && model.first().canConvert<QVariantMap>())
+  {
+    QVariantMap firstItem = model.first().toMap();
+    if (firstItem.contains("id"))
+    {
+      int firstId = firstItem["id"].toInt();
+      setActiveGroupId(firstId);
+    }
+  }
 }
 
 //------------------------------------------------------------------------------

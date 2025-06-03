@@ -102,6 +102,7 @@ public:
 
   void setMin(double min) { m_min = min; }
   void setMax(double max) { m_max = max; }
+  void setValue(const QString &value) { m_value = value; }
   void setTitle(const QString &title) { m_title = title; }
 
 private:

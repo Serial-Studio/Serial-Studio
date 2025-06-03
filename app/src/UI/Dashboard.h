@@ -138,11 +138,16 @@ public slots:
   void setTerminalEnabled(const bool enabled);
 
 private slots:
+  void processFrame(const JSON::Frame &frame);
+
+private:
+  void updateDashboardData(const JSON::Frame &frame);
+  void reconfigureDashboard(const JSON::Frame &frame);
+
   void updatePlots();
   void configureFftSeries();
   void configureLineSeries();
   void configureMultiLineSeries();
-  void processFrame(const JSON::Frame &frame);
 
 private:
   int m_points;
@@ -167,6 +172,8 @@ private:
   QVector<JSON::Action> m_actions;
   QMap<int, JSON::Dataset> m_datasets;
   SerialStudio::WidgetMap m_widgetMap;
+  QHash<int, QList<JSON::Dataset *>> m_groupDatasetIndex;
+  QHash<int, QList<JSON::Dataset *>> m_widgetDatasetIndex;
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Group>> m_widgetGroups;
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Dataset>> m_widgetDatasets;
 

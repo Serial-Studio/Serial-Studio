@@ -2554,7 +2554,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   m_datasetModel->appendRow(units);
 
   // Add show in overview method
-  bool hasWidget = showFFTOptions | showMinMax;
+  bool hasWidget = showFFTOptions || showMinMax || !dataset.widget().isEmpty();
   if (hasWidget)
   {
     auto overview = new QStandardItem();

@@ -62,6 +62,7 @@ public:
 
   void clear();
   [[nodiscard]] bool isValid() const;
+  [[nodiscard]] bool equalsStructure(const JSON::Frame &other) const;
 
   [[nodiscard]] QJsonObject serialize() const;
   [[nodiscard]] bool read(const QJsonObject &object);

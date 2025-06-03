@@ -522,11 +522,18 @@ void IO::Drivers::UART::setDtrEnabled(const bool enabled)
  */
 void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
 {
+  // Validate that the port index selected by the user is valid
   if (portIndex < portList().count())
     m_portIndex = portIndex;
   else
     m_portIndex = 0;
 
+  // Save settings
+  const auto &name = portList().at(m_portIndex);
+  if (!name.isEmpty() && m_portIndex > 0)
+    m_settings.setValue("IO_Serial_SelectedDevice", name);
+
+  // Update user interface
   Q_EMIT portIndexChanged();
 }
 
@@ -809,6 +816,19 @@ void IO::Drivers::UART::refreshSerialDevices()
     // Update serial port index after the port list has been updated
     if (indexChanged)
       Q_EMIT portIndexChanged();
+  }
+
+  // Select last device
+  static bool autoselected = false;
+  if (!autoselected)
+  {
+    const auto ports = portList();
+    auto lastPort = m_settings.value("IO_Serial_SelectedDevice", "").toString();
+    if (!lastPort.isEmpty() && ports.contains(lastPort))
+    {
+      autoselected = true;
+      setPortIndex(ports.indexOf(lastPort));
+    }
   }
 }
 
