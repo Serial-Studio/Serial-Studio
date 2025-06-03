@@ -199,7 +199,7 @@ QVariantList UI::Taskbar::groupModel() const
   QVariantList model;
 
   // Create overview group
-  if (m_fullModel->rowCount() > 1)
+  if (UI::Dashboard::instance().rawFrame().groupCount() > 1)
   {
     QVariantMap main;
     main["id"] = -1;
@@ -653,7 +653,7 @@ void UI::Taskbar::rebuildModel()
   auto *db = &UI::Dashboard::instance();
 
   // Obtain and validate latest frame
-  const auto &frame = db->currentFrame();
+  const auto &frame = db->processedFrame();
   if (!frame.isValid())
   {
     setActiveGroupId(-1);
@@ -663,7 +663,7 @@ void UI::Taskbar::rebuildModel()
     return;
   }
 
-  // Loop through the frame to preserve the user-defined data structure
+  // Loop through the groups in the dashboard
   QSet<int> groupIds;
   const auto &widgetMap = db->widgetMap();
   for (const JSON::Group &group : frame.groups())

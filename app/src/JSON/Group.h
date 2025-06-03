@@ -25,8 +25,9 @@
 
 namespace UI
 {
+class Taskbar;
 class Dashboard;
-}
+} // namespace UI
 
 namespace JSON
 {
@@ -78,6 +79,7 @@ private:
   QString m_widget;
   QVector<JSON::Dataset> m_datasets;
 
+  friend class UI::Taskbar;
   friend class UI::Dashboard;
   friend class JSON::ProjectModel;
   friend class JSON::FrameBuilder;

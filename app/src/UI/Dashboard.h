@@ -121,7 +121,8 @@ public:
   [[nodiscard]] const JSON::Dataset &getDatasetWidget(const SerialStudio::DashboardWidget widget, const int index) const;
   // clang-format on
 
-  [[nodiscard]] const JSON::Frame &currentFrame();
+  [[nodiscard]] const JSON::Frame &rawFrame();
+  [[nodiscard]] const JSON::Frame &processedFrame();
   [[nodiscard]] const PlotDataY &fftData(const int index) const;
   [[nodiscard]] const LineSeries &plotData(const int index) const;
   [[nodiscard]] const MultiLineSeries &multiplotData(const int index) const;
@@ -177,8 +178,8 @@ private:
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Group>> m_widgetGroups;
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Dataset>> m_widgetDatasets;
 
-  JSON::Frame m_currentFrame;
-
+  JSON::Frame m_rawFrame;
+  JSON::Frame m_lastFrame;
   mutable QReadWriteLock m_dataLock;
 };
 } // namespace UI

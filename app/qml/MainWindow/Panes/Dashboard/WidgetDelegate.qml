@@ -57,20 +57,15 @@ Widgets.MiniWindow {
   onMaximizeClicked: taskBar.activeWindow = root
 
   //
-  // Auto-layout hacks
+  // Auto-layout hacks to avoid issues with animations
   //
-  onStateChanged: {
-    Qt.callLater(() => {
-                   Qt.createQmlObject(`
-                                      import QtQuick 2.0
-                                      Timer {
-                                      interval: 250
-                                      running: true
-                                      repeat: false
-                                      onTriggered: windowManager.triggerLayoutUpdate()
-                                      }
-                                      `, root)
-                 })
+  onStateChanged: _timer.start()
+  Timer {
+    id: _timer
+    running: false
+    interval: 250
+    repeat: false
+    onTriggered: windowManager.triggerLayoutUpdate()
   }
 
   //

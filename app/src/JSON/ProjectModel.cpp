@@ -2555,7 +2555,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
 
   // Add show in overview method
   bool hasWidget = showFFTOptions || showMinMax || !dataset.widget().isEmpty();
-  if (hasWidget)
+  if (hasWidget && m_groups.count() > 1)
   {
     auto overview = new QStandardItem();
     overview->setEditable(true);

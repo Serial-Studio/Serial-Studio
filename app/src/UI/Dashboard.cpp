@@ -241,7 +241,7 @@ bool UI::Dashboard::precisionWidgetVisible() const
  */
 bool UI::Dashboard::containsCommercialFeatures() const
 {
-  return m_currentFrame.containsCommercialFeatures();
+  return m_lastFrame.containsCommercialFeatures();
 }
 
 //------------------------------------------------------------------------------
@@ -294,7 +294,7 @@ int UI::Dashboard::totalWidgetCount() const
  */
 bool UI::Dashboard::frameValid() const
 {
-  return m_currentFrame.isValid();
+  return m_lastFrame.isValid();
 }
 
 /**
@@ -356,7 +356,7 @@ int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
  */
 const QString &UI::Dashboard::title() const
 {
-  return m_currentFrame.title();
+  return m_lastFrame.title();
 }
 
 /**
@@ -464,12 +464,24 @@ UI::Dashboard::getDatasetWidget(const SerialStudio::DashboardWidget widget,
 //------------------------------------------------------------------------------
 
 /**
- * @brief Retrieves the current JSON frame for the dashboard.
+ * @brief Retrieves the last unmodified JSON frame for the dashboard.
  * @return A reference to the current JSON::Frame.
  */
-const JSON::Frame &UI::Dashboard::currentFrame()
+const JSON::Frame &UI::Dashboard::rawFrame()
 {
-  return m_currentFrame;
+  return m_rawFrame;
+}
+
+/**
+ * @brief Retrieves the processed JSON frame for the dashboard. Processing
+ *        can add several group-level widgets, such as terminals, multiplots,
+ *        etc...
+ *
+ * @return A reference to the current JSON::Frame.
+ */
+const JSON::Frame &UI::Dashboard::processedFrame()
+{
+  return m_lastFrame;
 }
 
 //------------------------------------------------------------------------------
@@ -613,7 +625,8 @@ void UI::Dashboard::resetData(const bool notify)
   m_widgetDatasets.clear();
 
   // Reset frame data
-  m_currentFrame = JSON::Frame();
+  m_rawFrame = JSON::Frame();
+  m_lastFrame = JSON::Frame();
 
   // Notify user interface
   if (notify)
@@ -635,13 +648,11 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
 {
   if (m_terminalEnabled != enabled)
   {
-    m_updateRequired = true;
     m_terminalEnabled = enabled;
-
-    Q_EMIT updated();
-    Q_EMIT widgetCountChanged();
-    Q_EMIT terminalEnabledChanged();
+    resetData(false);
   }
+
+  Q_EMIT terminalEnabledChanged();
 }
 
 //------------------------------------------------------------------------------
@@ -668,12 +679,12 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   QWriteLocker locker(&m_dataLock);
 
   // Update UI if frame commercial features changed
-  const bool hadProFeatures = m_currentFrame.containsCommercialFeatures();
+  const bool hadProFeatures = m_rawFrame.containsCommercialFeatures();
   if (hadProFeatures != frame.containsCommercialFeatures())
     Q_EMIT containsCommercialFeaturesChanged();
 
   // Regenerate dashboard model if frame structure changed
-  if (!frame.equalsStructure(m_currentFrame))
+  if (!frame.equalsStructure(m_rawFrame))
     reconfigureDashboard(frame);
 
   // Update dashboard data
@@ -750,20 +761,21 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
   resetData(false);
 
   // Save frame structure
-  m_currentFrame = frame;
+  m_rawFrame = frame;
+  m_lastFrame = frame;
 
-  // Add console widget if needed
-  if (terminalEnabled())
+  // Add terminal group
+  if (m_terminalEnabled)
   {
     JSON::Group terminal;
-    terminal.m_groupId = frame.groupCount();
-    terminal.m_title = tr("Console");
+    terminal.m_groupId = m_lastFrame.groupCount();
     terminal.m_widget = "terminal";
-    m_currentFrame.m_groups.prepend(terminal);
+    terminal.m_title = tr("Console");
+    m_lastFrame.m_groups.append(terminal);
   }
 
   // Parse frame groups
-  for (const auto &group : m_currentFrame.groups())
+  for (const auto &group : m_lastFrame.groups())
   {
     // Append group widgets
     const auto key = SerialStudio::getDashboardWidget(group);
@@ -777,12 +789,12 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
       auto copy = group;
       copy.m_title = tr("%1 (Fallback)").arg(group.title());
       m_widgetGroups[SerialStudio::DashboardMultiPlot].append(copy);
-      for (int i = 0; i < m_currentFrame.groupCount(); ++i)
+      for (int i = 0; i < m_lastFrame.groupCount(); ++i)
       {
-        if (m_currentFrame.groups()[i].groupId() == group.groupId())
+        if (m_lastFrame.groups()[i].groupId() == group.groupId())
         {
-          m_currentFrame.m_groups[i].m_widget = "multiplot";
-          m_currentFrame.m_groups[i].m_title = copy.m_title;
+          m_lastFrame.m_groups[i].m_widget = "multiplot";
+          m_lastFrame.m_groups[i].m_title = copy.m_title;
           break;
         }
       }
@@ -884,7 +896,7 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
   m_actions = frame.actions();
   Q_EMIT actionCountChanged();
 
-  // Trigger dashboard model re-generation in other modules
+  // Update user interface
   Q_EMIT widgetCountChanged();
 }
 
