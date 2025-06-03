@@ -184,25 +184,6 @@ Item {
     }
 
     //
-    // Clock text
-    //
-    Label {
-      font: Cpp_Misc_CommonFonts.monoFont
-      Layout.alignment: Qt.AlignVCenter
-      text: Qt.formatTime(new Date(), "hh:mm:ss AP")
-      color: Cpp_ThemeManager.colors["taskbar_text"]
-
-      Timer {
-        repeat: true
-        running: true
-        interval: 1000
-        onTriggered: parent.text = Qt.formatTime(new Date(), "hh:mm:ss AP")
-      }
-    } Item {
-      implicitWidth: 6
-    }
-
-    //
     // Auto-layout button
     //
     Button {
@@ -213,10 +194,10 @@ Item {
       Layout.preferredHeight: 24
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/buttons/auto-layout.svg"
+      onClicked: taskBar.windowManager.autoLayoutEnabled = !taskBar.windowManager.autoLayoutEnabled
       icon.color: taskBar.windowManager.autoLayoutEnabled ?
                     Cpp_ThemeManager.colors["tasbkar_highlight"] :
                     Cpp_ThemeManager.colors["taskbar_text"]
-      onClicked: taskBar.windowManager.autoLayoutEnabled = !taskBar.windowManager.autoLayoutEnabled
     } Item {
       implicitWidth: 4
     }

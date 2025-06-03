@@ -28,6 +28,7 @@
 #include <QJsonValue>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QReadWriteLock>
 
 #include "SerialStudio.h"
 
@@ -100,7 +101,9 @@ private:
   QFile m_jsonMap;
   JSON::Frame m_frame;
   QSettings m_settings;
-  SerialStudio::OperationMode m_opMode;
   JSON::FrameParser *m_frameParser;
+  SerialStudio::OperationMode m_opMode;
+
+  mutable QReadWriteLock m_dataLock;
 };
 } // namespace JSON

@@ -120,11 +120,9 @@ class Taskbar : public QQuickItem
              READ activeGroupId
              WRITE setActiveGroupId
              NOTIFY activeGroupIdChanged)
-  Q_PROPERTY(QString currentText
-             READ currentText
-             NOTIFY activeGroupIdChanged)
-  Q_PROPERTY(QString currentIcon
-             READ currentIcon
+  Q_PROPERTY(int activeGroupIndex
+             READ activeGroupIndex
+             WRITE setActiveGroupIndex
              NOTIFY activeGroupIdChanged)
   Q_PROPERTY(QQuickItem* activeWindow
              READ activeWindow
@@ -152,8 +150,7 @@ public:
   Taskbar(QQuickItem *parent = nullptr);
 
   [[nodiscard]] int activeGroupId() const;
-  [[nodiscard]] QString currentText() const;
-  [[nodiscard]] QString currentIcon() const;
+  [[nodiscard]] int activeGroupIndex() const;
   [[nodiscard]] QVariantList groupModel() const;
   [[nodiscard]] QQuickItem *activeWindow() const;
 
@@ -166,6 +163,7 @@ public:
 
 public slots:
   void setActiveGroupId(int groupId);
+  void setActiveGroupIndex(int index);
   void showWindow(QQuickItem *window);
   void closeWindow(QQuickItem *window);
   void minimizeWindow(QQuickItem *window);

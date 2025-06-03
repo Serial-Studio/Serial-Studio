@@ -129,56 +129,33 @@ int UI::Taskbar::activeGroupId() const
 }
 
 /**
- * @brief Returns the display text of the currently active group in the taskbar.
+ * @brief Returns the index of the currently active group.
  *
- * Iterates through the taskbar's group model and looks for a group whose ID
- * matches the currently active group (`m_activeGroupId`). If a match is found,
- * its "text" field is returned. If no match is found, a default label
- * ("Dashboard") is returned instead.
+ * Iterates through the list returned by groupModel() and finds the index
+ * of the group whose "id" matches the current active group ID
+ * (m_activeGroupId). If no match is found, the method returns the total number
+ * of groups, which may indicate an invalid or unassigned state.
  *
- * @return The display text of the active group, or "Dashboard" if none is
- * active.
+ * @return Index of the active group within the group model.
  */
-QString UI::Taskbar::currentText() const
+int UI::Taskbar::activeGroupIndex() const
 {
-  auto model = groupModel();
-  for (const auto &group : std::as_const(model))
+  int index = 0;
+  const auto model = groupModel();
+  for (auto it = model.begin(); it != model.end(); ++it)
   {
-    auto map = group.toMap();
-    if (map["id"].toInt() == m_activeGroupId)
+    auto map = it->toMap();
+    if (map.contains("id"))
     {
-      return map["text"].toString();
-      break;
+      auto id = map.value("id").toInt();
+      if (id == m_activeGroupId)
+        break;
+
+      ++index;
     }
   }
 
-  return tr("Dashboard");
-}
-
-/**
- * @brief Returns the icon path of the currently active group in the taskbar.
- *
- * Searches the group model for a group matching the current active group ID.
- * If found, returns the associated "icon" field. If no match is found, a
- * default dashboard icon path is returned.
- *
- * @return The icon path for the active group, or the dashboard icon path by
- * default.
- */
-QString UI::Taskbar::currentIcon() const
-{
-  auto model = groupModel();
-  for (const auto &group : std::as_const(model))
-  {
-    auto map = group.toMap();
-    if (map["id"].toInt() == m_activeGroupId)
-    {
-      return map["icon"].toString();
-      break;
-    }
-  }
-
-  return QStringLiteral("qrc:/rcc/icons/panes/dashboard.svg");
+  return index;
 }
 
 /**
@@ -391,7 +368,8 @@ void UI::Taskbar::setActiveGroupId(int groupId)
       if (type == SerialStudio::DashboardTerminal)
       {
         auto g = groupItem->clone();
-        g->setData(TaskbarModel::WindowNormal, TaskbarModel::WindowStateRole);
+        setWindowState(g->data(TaskbarModel::WindowIdRole).toInt(),
+                       TaskbarModel::WindowNormal);
         m_taskbarButtons->appendRow(g);
         break;
       }
@@ -422,7 +400,8 @@ void UI::Taskbar::setActiveGroupId(int groupId)
     auto group = groupItem->clone();
     if (type != SerialStudio::DashboardNoWidget)
     {
-      group->setData(TaskbarModel::WindowNormal, TaskbarModel::WindowStateRole);
+      setWindowState(group->data(TaskbarModel::WindowIdRole).toInt(),
+                     TaskbarModel::WindowNormal);
       m_taskbarButtons->appendRow(group);
     }
 
@@ -438,8 +417,8 @@ void UI::Taskbar::setActiveGroupId(int groupId)
 
         if (groupId > -1)
         {
-          child->setData(TaskbarModel::WindowNormal,
-                         TaskbarModel::WindowStateRole);
+          setWindowState(child->data(TaskbarModel::WindowIdRole).toInt(),
+                         TaskbarModel::WindowNormal);
           m_taskbarButtons->appendRow(child);
         }
 
@@ -447,19 +426,53 @@ void UI::Taskbar::setActiveGroupId(int groupId)
         {
           child->setData(QStringLiteral("%1 (%2)").arg(name, groupName),
                          TaskbarModel::WidgetNameRole);
-          child->setData(TaskbarModel::WindowNormal,
-                         TaskbarModel::WindowStateRole);
+          setWindowState(child->data(TaskbarModel::WindowIdRole).toInt(),
+                         TaskbarModel::WindowNormal);
           m_taskbarButtons->appendRow(child);
         }
       }
     }
   }
 
+  // Focus the last window
+  if (m_taskbarButtons->rowCount() > 0)
+  {
+    auto lastGroup = m_taskbarButtons->item(m_taskbarButtons->rowCount() - 1);
+    auto windowId = lastGroup->data(TaskbarModel::WindowIdRole).toInt();
+    for (auto it = m_windowIDs.begin(); it != m_windowIDs.end(); ++it)
+    {
+      if (it.value() == windowId)
+      {
+        setActiveWindow(it.key());
+        break;
+      }
+    }
+  }
+
   // Update user interface
-  Q_EMIT activeWindowChanged();
   Q_EMIT activeGroupIdChanged();
   Q_EMIT windowStatesChanged();
   Q_EMIT taskbarButtonsChanged();
+}
+
+/**
+ * @brief Sets the active group based on its index in the group model.
+ *
+ * Retrieves the group at the specified index from the group model and updates
+ * the active group ID accordingly. If the index is out of bounds or invalid,
+ * the method does nothing.
+ *
+ * @param index The position of the group within the groupModel() list.
+ */
+void UI::Taskbar::setActiveGroupIndex(int index)
+{
+  auto model = groupModel();
+  if (model.count() > index && index >= 0)
+  {
+    auto item = model[index];
+    auto id = item.toMap().value("id", -1).toInt();
+    setActiveGroupId(id);
+  }
 }
 
 //------------------------------------------------------------------------------

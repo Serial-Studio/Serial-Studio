@@ -25,6 +25,7 @@
 #include <QThread>
 #include <QObject>
 #include <QByteArray>
+#include <QReadWriteLock>
 
 #include "SerialStudio.h"
 #include "IO/CircularBuffer.h"
@@ -96,5 +97,7 @@ private:
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
   QList<QByteArray> m_quickPlotEndSequences;
+
+  mutable QReadWriteLock m_dataLock;
 };
 } // namespace IO

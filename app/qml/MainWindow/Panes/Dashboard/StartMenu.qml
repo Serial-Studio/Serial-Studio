@@ -307,8 +307,10 @@ Popup {
       checked: Cpp_UI_Dashboard.terminalEnabled
       icon.source: "qrc:/rcc/icons/start/console.svg"
       onCheckedChanged: {
-        if (checked !== Cpp_UI_Dashboard.terminalEnabled)
+        if (checked !== Cpp_UI_Dashboard.terminalEnabled) {
+          root.close()
           Cpp_UI_Dashboard.terminalEnabled = checked
+        }
       }
     }
 
@@ -316,8 +318,11 @@ Popup {
       expandable: false
       Layout.fillWidth: true
       text: qsTr("Preferences")
-      onClicked: app.showSettingsDialog()
       icon.source: "qrc:/rcc/icons/start/adjust.svg"
+      onClicked: {
+        root.close()
+        app.showSettingsDialog()
+      }
     }
 
     Widgets.MenuButton {

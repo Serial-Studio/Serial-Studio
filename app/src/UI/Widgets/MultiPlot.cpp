@@ -195,16 +195,21 @@ void Widgets::MultiPlot::updateData()
   if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
   {
     const auto &data = UI::Dashboard::instance().multiplotData(m_index);
-    const auto plotCount = static_cast<qsizetype>(data.y.size());
+    const auto &X = *data.x;
+
+    const qsizetype xSize = X.size();
+    const qsizetype plotCount = data.y.size();
     for (qsizetype i = 0; i < plotCount; ++i)
     {
       const auto &series = data.y[i];
-      const auto seriesSize = static_cast<qsizetype>(series.size());
+      const qsizetype seriesSize = series.size();
+
       if (m_data[i].size() != seriesSize)
         m_data[i].resize(seriesSize);
 
-      for (qsizetype j = 0; j < seriesSize; ++j)
-        m_data[i][j] = QPointF(data.x->at(j), series[j]);
+      const qsizetype count = std::min(xSize, seriesSize);
+      for (qsizetype j = 0; j < count; ++j)
+        m_data[i][j] = QPointF(X[j], series[j]);
     }
   }
 }

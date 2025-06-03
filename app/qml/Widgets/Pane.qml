@@ -25,12 +25,13 @@ import QtQuick.Controls as Controls
 
 Controls.GroupBox {
   id: root
-  clip: true
   bottomPadding: 8
   topPadding: label.height + 16
 
   property string icon: ""
   property bool headerVisible: true
+
+  property Component actionComponent
 
   label: Controls.ToolBar {
     z: 2000
@@ -102,6 +103,12 @@ Controls.GroupBox {
         horizontalAlignment: Qt.AlignLeft
         font: Cpp_Misc_CommonFonts.boldUiFont
         color: Cpp_ThemeManager.colors["pane_caption_foreground"]
+      }
+
+      Loader {
+        Layout.alignment: Qt.AlignVCenter
+        sourceComponent: root.actionComponent
+        visible: root.actionComponent !== null
       }
     }
   }

@@ -241,7 +241,7 @@ bool UI::Dashboard::precisionWidgetVisible() const
  */
 bool UI::Dashboard::containsCommercialFeatures() const
 {
-  return m_lastFrame.containsCommercialFeatures();
+  return m_rawFrame.containsCommercialFeatures();
 }
 
 //------------------------------------------------------------------------------
@@ -680,14 +680,14 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   // Lock access to frame data
   QWriteLocker locker(&m_dataLock);
 
-  // Update UI if frame commercial features changed
-  const bool hadProFeatures = m_rawFrame.containsCommercialFeatures();
-  if (hadProFeatures != frame.containsCommercialFeatures())
-    Q_EMIT containsCommercialFeaturesChanged();
-
   // Regenerate dashboard model if frame structure changed
   if (!frame.equalsStructure(m_rawFrame))
+  {
+    const bool hadProFeatures = m_rawFrame.containsCommercialFeatures();
     reconfigureDashboard(frame);
+    if (hadProFeatures != frame.containsCommercialFeatures())
+      Q_EMIT containsCommercialFeaturesChanged();
+  }
 
   // Update dashboard data
   updateDashboardData(frame);

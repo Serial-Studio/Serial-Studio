@@ -145,23 +145,25 @@ void IO::CircularBuffer<T, StorageType>::append(const T &data)
 {
   std::lock_guard<std::mutex> lock(m_mutex);
 
-  qsizetype dataSize = data.size();
+  const qsizetype dataSize = data.size();
   if (dataSize > m_capacity)
     throw std::overflow_error("Data size exceeds buffer capacity");
 
-  if (freeSpace() < dataSize)
+  const qsizetype space = freeSpace();
+  if (space < dataSize)
   {
-    qsizetype overwrite = dataSize - freeSpace();
+    const qsizetype overwrite = dataSize - space;
     m_head = (m_head + overwrite) % m_capacity;
     m_size -= overwrite;
   }
 
-  for (qsizetype i = 0; i < dataSize; ++i)
-  {
-    m_buffer[m_tail] = data[i];
-    m_tail = (m_tail + 1) % m_capacity;
-  }
+  const qsizetype firstChunk = std::min(dataSize, m_capacity - m_tail);
+  std::memcpy(&m_buffer[m_tail], data.data(), firstChunk);
 
+  if (dataSize > firstChunk)
+    std::memcpy(&m_buffer[0], data.data() + firstChunk, dataSize - firstChunk);
+
+  m_tail = (m_tail + dataSize) % m_capacity;
   m_size += dataSize;
 }
 

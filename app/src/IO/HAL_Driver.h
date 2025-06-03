@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QIODevice>
+#include <QReadWriteLock>
 
 namespace IO
 {
@@ -62,9 +63,11 @@ public:
 protected:
   void processData(const QByteArray &data)
   {
-    QByteArray dataCopy(data);
-    QMetaObject::invokeMethod(
-        this, [=] { Q_EMIT dataReceived(dataCopy); }, Qt::QueuedConnection);
+    QWriteLocker locker(&m_dataLock);
+    Q_EMIT dataReceived(data);
   }
+
+private:
+  mutable QReadWriteLock m_dataLock;
 };
 } // namespace IO

@@ -107,6 +107,8 @@ const QByteArray &IO::FrameReader::finishSequence() const
  */
 void IO::FrameReader::reset()
 {
+  QWriteLocker locker(&m_dataLock);
+
   m_enableCrc = false;
   m_dataBuffer.clear();
 }
@@ -151,6 +153,9 @@ void IO::FrameReader::processData(const QByteArray &data)
   // Stop if not connected
   if (!IO::Manager::instance().isConnected())
     return;
+
+  // Lock access to frame data
+  QWriteLocker locker(&m_dataLock);
 
   // Add data to circular buffer
   m_dataBuffer.append(data);

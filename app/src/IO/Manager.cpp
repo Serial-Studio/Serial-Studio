@@ -417,14 +417,8 @@ void IO::Manager::processPayload(const QByteArray &payload)
 {
   if (!payload.isEmpty())
   {
-    QByteArray copy = payload;
-    QMetaObject::invokeMethod(
-        this,
-        [=] {
-          Q_EMIT dataReceived(copy);
-          Q_EMIT frameReceived(copy);
-        },
-        Qt::QueuedConnection);
+    Q_EMIT dataReceived(payload);
+    Q_EMIT frameReceived(payload);
   }
 }
 

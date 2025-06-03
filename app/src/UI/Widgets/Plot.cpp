@@ -166,27 +166,17 @@ void Widgets::Plot::updateData()
   {
     // Get plotting data
     const auto &plotData = UI::Dashboard::instance().plotData(m_index);
-    const auto X = plotData.x;
-    const auto Y = plotData.y;
+    const auto &X = *plotData.x;
+    const auto &Y = *plotData.y;
 
-    // Resize series array if required
-    if (m_data.size() != static_cast<qsizetype>(X->size()))
-      m_data.resize(X->size());
+    // Resize series array if needed
+    const qsizetype count = std::min(X.size(), Y.size());
+    if (m_data.size() != count)
+      m_data.resize(count);
 
-    // Convert data to a list of points
-    qsizetype i = 0;
-    const auto ySize = static_cast<qsizetype>(Y->size());
-    for (auto x = X->begin(); x != X->end(); ++x)
-    {
-      if (ySize > i)
-      {
-        m_data[i] = QPointF(*x, Y->at(i));
-        ++i;
-      }
-
-      else
-        break;
-    }
+    // Convert data to list of QPointF
+    for (qsizetype i = 0; i < count; ++i)
+      m_data[i] = QPointF(X[i], Y[i]);
   }
 }
 

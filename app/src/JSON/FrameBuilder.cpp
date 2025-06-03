@@ -37,8 +37,8 @@
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
 JSON::FrameBuilder::FrameBuilder()
-  : m_opMode(SerialStudio::ProjectFile)
-  , m_frameParser(nullptr)
+  : m_frameParser(nullptr)
+  , m_opMode(SerialStudio::ProjectFile)
 {
   // Read JSON map location
   auto path = m_settings.value("json_map_location", "").toString();
@@ -295,6 +295,9 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
   if (data.isEmpty())
     return;
 
+  // Lock access to frame data
+  QWriteLocker locker(&m_dataLock);
+
   // Serial device sends JSON (auto mode)
   if (operationMode() == SerialStudio::DeviceSendsJSON)
   {
@@ -404,21 +407,7 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
       frame.m_groups.append(multiplot);
     }
 
-    // Create a container group with plots
-    JSON::Group plots(2);
-    plots.m_datasets = datasets;
-    plots.m_widget = QLatin1String("");
-    plots.m_title = tr("Individual Plots");
-    for (int i = 0; i < plots.m_datasets.count(); ++i)
-    {
-      plots.m_datasets[i].m_groupId = 2;
-      plots.m_datasets[i].m_graph = true;
-      plots.m_datasets[i].m_displayInOverview = (plots.m_datasets.count() == 1);
-    }
-
-    // Register container group
-    frame.m_groups.append(plots);
-
+    // Update user interface
     Q_EMIT frameChanged(frame);
   }
 }

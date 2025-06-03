@@ -84,9 +84,11 @@ Item {
         if (root.interpolate) {
           root.model.draw(upperSeries)
 
-          lowerSeries.clear()
-          lowerSeries.append(root.model.minX, root.model.minY)
-          lowerSeries.append(root.model.maxX, root.model.minY)
+          if (lowerSeries.visible) {
+            lowerSeries.clear()
+            lowerSeries.append(root.model.minX, root.model.minY)
+            lowerSeries.append(root.model.maxX, root.model.minY)
+          }
         }
 
         else

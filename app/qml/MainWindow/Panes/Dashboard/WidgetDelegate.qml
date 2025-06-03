@@ -45,7 +45,7 @@ Widgets.MiniWindow {
   //
   // Set minimum size
   //
-  readonly property int minimumWidth: 320
+  readonly property int minimumWidth: 356
   readonly property int minimumHeight: 320
 
   //
