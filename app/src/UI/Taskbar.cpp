@@ -198,13 +198,34 @@ QVariantList UI::Taskbar::groupModel() const
   // Initialize the model
   QVariantList model;
 
+  // Count number of group widgets
+  int groupCount = 0;
+  int widgetGroups = 0;
+  for (const auto &group : UI::Dashboard::instance().rawFrame().groups())
+  {
+    ++groupCount;
+    auto widget = SerialStudio::getDashboardWidget(group);
+    if (widget != SerialStudio::DashboardNoWidget)
+      ++widgetGroups;
+  }
+
   // Create overview group
-  if (UI::Dashboard::instance().rawFrame().groupCount() > 1)
+  if (widgetGroups > 0)
   {
     QVariantMap main;
     main["id"] = -1;
     main["text"] = tr("Overview");
     main["icon"] = QStringLiteral("qrc:/rcc/icons/panes/overview.svg");
+    model.append(main);
+  }
+
+  // Create all data group
+  if (groupCount > 1)
+  {
+    QVariantMap main;
+    main["id"] = -2;
+    main["text"] = tr("All Data");
+    main["icon"] = QStringLiteral("qrc:/rcc/icons/panes/dashboard.svg");
     model.append(main);
   }
 
@@ -422,7 +443,7 @@ void UI::Taskbar::setActiveGroupId(int groupId)
           m_taskbarButtons->appendRow(child);
         }
 
-        else if (overview)
+        else if (overview || groupId == -2)
         {
           child->setData(QStringLiteral("%1 (%2)").arg(name, groupName),
                          TaskbarModel::WidgetNameRole);
