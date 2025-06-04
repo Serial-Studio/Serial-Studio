@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QObject>
+#include <QSettings>
 #include <QQuickItem>
 
 namespace UI
@@ -91,6 +92,7 @@ public slots:
   void autoLayout();
   void cascadeLayout();
   void triggerLayoutUpdate();
+  void clearBackgroundImage();
   void selectBackgroundImage();
   void bringToFront(QQuickItem *item);
   void setTaskbar(QQuickItem *taskbar);
@@ -126,5 +128,7 @@ private:
   QQuickItem *m_dragWindow;
   QQuickItem *m_resizeWindow;
   QQuickItem *m_focusedWindow;
+
+  QSettings m_settings;
 };
 } // namespace UI

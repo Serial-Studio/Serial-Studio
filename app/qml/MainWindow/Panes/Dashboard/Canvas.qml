@@ -57,6 +57,17 @@ Item {
     }
 
     MenuItem {
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Clear Wallpaper")
+      onTriggered: _wm.clearBackgroundImage()
+      enabled: _wm.backgroundImage.length > 0
+    }
+
+    MenuSeparator {
+
+    }
+
+    MenuItem {
       text: qsTr("Tile Windows")
       onTriggered: _wm.autoLayout()
     }

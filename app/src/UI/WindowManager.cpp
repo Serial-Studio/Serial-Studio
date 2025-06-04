@@ -45,6 +45,8 @@ UI::WindowManager::WindowManager(QQuickItem *parent)
   setFiltersChildMouseEvents(true);
   setAcceptedMouseButtons(Qt::AllButtons);
 
+  m_backgroundImage = m_settings.value("WindowManager_Wallpaper").toString();
+
   connect(this, &UI::WindowManager::widthChanged, this,
           &UI::WindowManager::triggerLayoutUpdate);
   connect(this, &UI::WindowManager::heightChanged, this,
@@ -298,6 +300,14 @@ void UI::WindowManager::cascadeLayout()
 }
 
 /**
+ * @brief Removes the background image and clears the settings.
+ */
+void UI::WindowManager::clearBackgroundImage()
+{
+  setBackgroundImage("");
+}
+
+/**
  * @brief Opens a file dialog to allow the user to select a background image.
  */
 void UI::WindowManager::selectBackgroundImage()
@@ -398,9 +408,10 @@ void UI::WindowManager::unregisterWindow(QQuickItem *item)
  */
 void UI::WindowManager::setBackgroundImage(const QString &path)
 {
-  if (!path.isEmpty())
+  if (m_backgroundImage != path)
   {
     m_backgroundImage = path;
+    m_settings.setValue("WindowManager_Wallpaper", path);
     Q_EMIT backgroundImageChanged();
   }
 }
