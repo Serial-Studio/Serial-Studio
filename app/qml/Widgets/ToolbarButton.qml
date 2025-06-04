@@ -40,6 +40,7 @@ Item {
   property alias font: _label.font
   property alias text: _label.text
   property bool toolbarButton: true
+  property bool horizontalLayout: false
   property alias background: _background
 
   //
@@ -53,14 +54,18 @@ Item {
   //
   Layout.minimumWidth: implicitWidth
   Layout.maximumWidth: implicitWidth
-  implicitHeight: iconSize + _label.implicitHeight + 20
-  implicitWidth: Math.max(Math.ceil(metrics.width + 16), icon.width / 32 * 72)
+  implicitHeight: horizontalLayout ?
+                    Math.max(root.iconSize, _label.implicitHeight)  :
+                    root.iconSize + _label.implicitHeight + 20
+  implicitWidth: horizontalLayout ?
+                   root.iconSize + Math.ceil(metrics.width + 16) :
+                   Math.max(Math.ceil(metrics.width + 16), icon.width / 32 * 72)
 
   //
   // Animations
   //
   opacity: enabled ? 1 : 0.5
-  Behavior on opacity {NumberAnimation{}}
+  Behavior on opacity { NumberAnimation {} }
 
   //
   // Checked background (toolbar)
@@ -76,7 +81,7 @@ Item {
     border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
     opacity: (root.checked || _mouseArea.pressed) ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"] : 0.0
 
-    Behavior on opacity {NumberAnimation{}}
+    Behavior on opacity { NumberAnimation {} }
   }
 
   //
@@ -88,26 +93,30 @@ Item {
     visible: !root.toolbarButton
     opacity: (root.checked || _mouseArea.pressed) ? 1 : 0
 
-    Behavior on opacity {NumberAnimation{}}
+    Behavior on opacity { NumberAnimation {} }
   }
 
   //
-  // Button display
+  // Button layout (Grid-based dynamic layout)
   //
-  ColumnLayout {
+  GridLayout {
     id: _layout
-
-    spacing: 0
     anchors.fill: parent
+    flow: GridLayout.LeftToRight
+    rows: horizontalLayout ? 1 : 2
+    columns: horizontalLayout ? 2 : 1
+    rowSpacing: horizontalLayout ? 0 : 4
+    columnSpacing: horizontalLayout ? 4 : 0
+    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
     Item {
-      Layout.fillHeight: true
-    }
-
-    Item {
+      id: _iconContainer
+      Layout.row: 0
+      Layout.column: 0
       implicitWidth: root.iconSize
       implicitHeight: root.iconSize
-      Layout.alignment: Qt.AlignHCenter
+      Layout.alignment: horizontalLayout ? Qt.AlignLeft | Qt.AlignVCenter :
+                                           Qt.AlignCenter
 
       Image {
         id: _icon
@@ -128,22 +137,15 @@ Item {
       }
     }
 
-    Item {
-      Layout.fillHeight: true
-    }
-
     Label {
       id: _label
       elide: Qt.ElideRight
-      Layout.maximumWidth: root.width
-      Layout.alignment: Qt.AlignHCenter
-      horizontalAlignment: Qt.AlignHCenter
+      Layout.row: horizontalLayout ? 0 : 1
+      Layout.column: horizontalLayout ? 1 : 0
+      Layout.alignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignCenter
+      horizontalAlignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignHCenter
       color: root.toolbarButton ? Cpp_ThemeManager.colors["toolbar_text"] :
                                   Cpp_ThemeManager.colors["button_text"]
-    }
-
-    Item {
-      Layout.fillHeight: true
     }
   }
 

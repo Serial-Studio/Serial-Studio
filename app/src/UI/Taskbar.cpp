@@ -175,7 +175,7 @@ QVariantList UI::Taskbar::groupModel() const
   // Initialize the model
   QVariantList model;
 
-  // Count number of group widgets
+  // Count number of widgets for overview section
   int groupCount = 0;
   int widgetGroups = 0;
   for (const auto &group : UI::Dashboard::instance().rawFrame().groups())
@@ -184,6 +184,12 @@ QVariantList UI::Taskbar::groupModel() const
     auto widget = SerialStudio::getDashboardWidget(group);
     if (widget != SerialStudio::DashboardNoWidget)
       ++widgetGroups;
+
+    for (const auto &dataset : group.datasets())
+    {
+      if (dataset.displayInOverview())
+        ++widgetGroups;
+    }
   }
 
   // Create overview group

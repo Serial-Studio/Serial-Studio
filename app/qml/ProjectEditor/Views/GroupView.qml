@@ -245,44 +245,56 @@ Widgets.Pane {
       //
       // Group model editor
       //
-      TableDelegate {
-        id: delegate
+      ScrollView {
+        id: view
+        contentWidth: width
         Layout.fillWidth: true
         Layout.fillHeight: true
-        modelPointer: Cpp_JSON_ProjectModel.groupModel
+        contentHeight: delegate.implicitHeight
 
-        footerItem: ColumnLayout {
-          spacing: 0
+        ScrollBar.vertical: ScrollBar {
+          policy: delegate.implicitHeight > view.height ? ScrollBar.AlwaysOn :
+                                                          ScrollBar.AsNeeded
+        }
 
-          Image {
-            sourceSize: Qt.size(96, 96)
-            Layout.alignment: Qt.AlignHCenter
-            source: "qrc:/rcc/images/tip.svg"
-          }
+        TableDelegate {
+          id: delegate
+          width: parent.width
+          modelPointer: Cpp_JSON_ProjectModel.groupModel
 
-          Item {
-            implicitHeight: 16
-          }
+          footerItem: ColumnLayout {
+            spacing: 0
 
-          Label {
-            Layout.alignment: Qt.AlignHCenter
-            horizontalAlignment: Label.AlignHCenter
-            font: Cpp_Misc_CommonFonts.customUiFont(1.6, true)
-            text: qsTr("Groups hold multiple datasets and organize your data.")
-          }
+            Image {
+              sourceSize: Qt.size(96, 96)
+              Layout.alignment: Qt.AlignHCenter
+              source: "qrc:/rcc/images/tip.svg"
+            }
 
-          Item {
-            implicitHeight: 8
-          }
+            Item {
+              implicitHeight: 16
+            }
 
-          Label {
-            opacity: 0.8
-            Layout.alignment: Qt.AlignHCenter
-            horizontalAlignment: Label.AlignHCenter
-            Layout.maximumWidth: delegate.width * 0.9
-            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-            font: Cpp_Misc_CommonFonts.customUiFont(1.4, false)
-            text: qsTr("Use the sub-toolbar to quickly add plots, FFTs, and other dataset types to this group.")
+            Label {
+              Layout.alignment: Qt.AlignHCenter
+              horizontalAlignment: Label.AlignHCenter
+              font: Cpp_Misc_CommonFonts.customUiFont(1.6, true)
+              text: qsTr("Groups hold multiple datasets and organize your data.")
+            }
+
+            Item {
+              implicitHeight: 8
+            }
+
+            Label {
+              opacity: 0.8
+              Layout.alignment: Qt.AlignHCenter
+              horizontalAlignment: Label.AlignHCenter
+              Layout.maximumWidth: delegate.width * 0.9
+              wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+              font: Cpp_Misc_CommonFonts.customUiFont(1.4, false)
+              text: qsTr("Use the sub-toolbar to quickly add plots, FFTs, and other dataset types to this group.")
+            }
           }
         }
       }

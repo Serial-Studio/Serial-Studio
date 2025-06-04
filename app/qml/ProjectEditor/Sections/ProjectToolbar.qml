@@ -128,7 +128,7 @@ Rectangle {
     }
 
     //
-    // New project
+    // New button
     //
     Widgets.ToolbarButton {
       text: qsTr("New")
@@ -138,46 +138,43 @@ Rectangle {
     }
 
     //
-    // Open
+    // Other file operations
     //
-    Widgets.ToolbarButton {
-      text: qsTr("Open")
+    GridLayout {
+      rows: 3
+      columns: 1
+      rowSpacing: 4
+      columnSpacing: 4
       Layout.alignment: Qt.AlignVCenter
-      onClicked: Cpp_JSON_ProjectModel.openJsonFile()
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/open.svg"
-    }
 
-    //
-    // Separator
-    //
-    Rectangle {
-      width: 1
-      Layout.fillHeight: true
-      Layout.maximumHeight: 64
-      Layout.alignment: Qt.AlignVCenter
-      color: Cpp_ThemeManager.colors["toolbar_separator"]
-    }
+      Widgets.ToolbarButton {
+        iconSize: 16
+        text: qsTr("Open")
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        onClicked: Cpp_JSON_ProjectModel.openJsonFile()
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/open.svg"
+      }
 
-    //
-    // Save
-    //
-    Widgets.ToolbarButton {
-      text: qsTr("Save")
-      Layout.alignment: Qt.AlignVCenter
-      onClicked: Cpp_JSON_ProjectModel.saveJsonFile(false)
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/save.svg"
-      enabled: Cpp_JSON_ProjectModel.modified && Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
-    }
+      Widgets.ToolbarButton {
+        iconSize: 16
+        text: qsTr("Save")
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        onClicked: Cpp_JSON_ProjectModel.saveJsonFile(false)
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/save.svg"
+        enabled: Cpp_JSON_ProjectModel.modified && Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
+      }
 
-    //
-    // Save As
-    //
-    Widgets.ToolbarButton {
-      text: qsTr("Save As")
-      Layout.alignment: Qt.AlignVCenter
-      onClicked: Cpp_JSON_ProjectModel.saveJsonFile(true)
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/save-as.svg"
-      enabled: Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
+      Widgets.ToolbarButton {
+        iconSize: 16
+        text: qsTr("Save As")
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        onClicked: Cpp_JSON_ProjectModel.saveJsonFile(true)
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/save-as.svg"
+        enabled: Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
+      }
     }
 
     //
@@ -213,73 +210,128 @@ Rectangle {
     }
 
     //
-    // Add data grid
+    // Add dataset
     //
     Widgets.ToolbarButton {
-      text: qsTr("Data Grid")
+      text: qsTr("Dataset")
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-datagrid.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"), SerialStudio.DataGrid)
+      onClicked: Cpp_JSON_ProjectModel.addDataset()
+      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-dataset.svg"
     }
 
     //
-    // Add multiplot
+    // Add Plot
     //
     Widgets.ToolbarButton {
-      text: qsTr("Multiple Plots")
+      text: qsTr("Plot")
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-multiplot.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"), SerialStudio.MultiPlot)
+      onClicked: Cpp_JSON_ProjectModel.addPlot()
+      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-plot.svg"
     }
 
-    //
-    // Add 3D Plot
-    //
-    Widgets.ToolbarButton {
-      text: qsTr("3D Plot")
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-plot3d.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("3D Plot"), SerialStudio.Plot3D)
-    }
 
     //
-    // Add accelerometer
+    // Add container
     //
     Widgets.ToolbarButton {
-      text: qsTr("Accelerometer")
-      Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-accelerometer.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Accelerometer"), SerialStudio.Accelerometer)
-    }
-
-    //
-    // Add gyroscope
-    //
-    Widgets.ToolbarButton {
-      text: qsTr("Gyroscope")
-      Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gyroscope.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), SerialStudio.Gyroscope)
-    }
-
-    //
-    // Add map
-    //
-    Widgets.ToolbarButton {
-      text: qsTr("Map")
-      Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gps.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("GPS Map"), SerialStudio.GPS)
-    }
-
-    //
-    // Add group
-    //
-    Widgets.ToolbarButton {
-      text: qsTr("Container")
+      text: qsTr("Group")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"
       onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Dataset Container"), SerialStudio.NoGroupWidget)
     }
+
+    //
+    // Groups
+    //
+    GridLayout {
+      rows: 3
+      columns: 2
+      rowSpacing: 4
+      columnSpacing: 4
+      Layout.alignment: Qt.AlignVCenter
+
+      Widgets.ToolbarButton {
+        text: qsTr("Table")
+
+        iconSize: 16
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-datagrid.svg"
+        onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"), SerialStudio.DataGrid)
+      }
+
+      Widgets.ToolbarButton {
+        text: qsTr("Multi-Plot")
+
+        iconSize: 16
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-multiplot.svg"
+        onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"), SerialStudio.MultiPlot)
+      }
+
+      Widgets.ToolbarButton {
+        text: qsTr("3D Plot")
+
+        iconSize: 16
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-plot3d.svg"
+        onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("3D Plot"), SerialStudio.Plot3D)
+      }
+
+      Widgets.ToolbarButton {
+        text: qsTr("Accelerometer")
+
+        iconSize: 16
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-accelerometer.svg"
+        onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Accelerometer"), SerialStudio.Accelerometer)
+      }
+
+      Widgets.ToolbarButton {
+        text: qsTr("Gyroscope")
+
+        iconSize: 16
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gyroscope.svg"
+        onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), SerialStudio.Gyroscope)
+      }
+
+      Widgets.ToolbarButton {
+        text: qsTr("GPS Map")
+
+        iconSize: 16
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gps.svg"
+        onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("GPS Map"), SerialStudio.GPS)
+      }
+    }
+
+    //
+    // Separator
+    //
+    Rectangle {
+      width: 1
+      Layout.fillHeight: true
+      Layout.maximumHeight: 64
+      Layout.alignment: Qt.AlignVCenter
+      color: Cpp_ThemeManager.colors["toolbar_separator"]
+    }
+
+    //
+    // Help
+    //
+    Widgets.ToolbarButton {
+      text: qsTr("Help")
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/rcc/icons/project-editor/toolbar/help.svg"
+      onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki/Project-Editor")
+    }
+
 
     //
     // Horizontal spacer

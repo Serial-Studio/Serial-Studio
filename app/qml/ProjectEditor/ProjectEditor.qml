@@ -133,7 +133,7 @@ Widgets.SmartWindow {
         Layout.topMargin: -1
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.minimumHeight: 540
+        Layout.minimumHeight: 480
 
         //
         // Project structure

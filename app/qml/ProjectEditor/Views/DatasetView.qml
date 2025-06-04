@@ -262,10 +262,23 @@ Widgets.Pane {
       //
       // Dataset model editor
       //
-      TableDelegate {
+      ScrollView {
+        id: view
+        contentWidth: width
         Layout.fillWidth: true
         Layout.fillHeight: true
-        modelPointer: Cpp_JSON_ProjectModel.datasetModel
+        contentHeight: delegate.implicitHeight
+
+        ScrollBar.vertical: ScrollBar {
+          policy: delegate.implicitHeight > view.height ? ScrollBar.AlwaysOn :
+                                                          ScrollBar.AsNeeded
+        }
+
+        TableDelegate {
+          id: delegate
+          width: parent.width
+          modelPointer: Cpp_JSON_ProjectModel.datasetModel
+        }
       }
     }
   }

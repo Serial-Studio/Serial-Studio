@@ -136,6 +136,7 @@ public slots:
 private slots:
   void toggleCursor();
   void onThemeChanged();
+  void loadWelcomeGuide();
   void onScrollbackChanged();
   void append(const QString &data);
   void appendString(const QString &string);

@@ -68,7 +68,7 @@ Widgets.Pane {
     }
 
     //
-    // Dataset actions panel
+    // Actions panel
     //
     Rectangle {
       z: 2
@@ -155,46 +155,58 @@ Widgets.Pane {
     }
 
     //
-    // Dataset model editor
+    // Action model editor
     //
-    TableDelegate {
-      id: delegate
+    ScrollView {
+      id: view
       anchors.fill: parent
+      contentWidth: width
       anchors.topMargin: header.height
-      modelPointer: Cpp_JSON_ProjectModel.actionModel
+      contentHeight: delegate.implicitHeight
 
-      footerItem: ColumnLayout {
-        spacing: 0
+      ScrollBar.vertical: ScrollBar {
+        policy: delegate.implicitHeight > view.height ? ScrollBar.AlwaysOn :
+                                                        ScrollBar.AsNeeded
+      }
 
-        Image {
-          sourceSize: Qt.size(128, 128)
-          Layout.alignment: Qt.AlignHCenter
-          source: "qrc:/rcc/images/action.svg"
-        }
+      TableDelegate {
+        id: delegate
+        width: parent.width
+        modelPointer: Cpp_JSON_ProjectModel.actionModel
 
-        Item {
-          implicitHeight: 16
-        }
+        footerItem: ColumnLayout {
+          spacing: 0
 
-        Label {
-          Layout.alignment: Qt.AlignHCenter
-          text: qsTr("Send commands with a button click")
-          horizontalAlignment: Label.AlignHCenter
-          font: Cpp_Misc_CommonFonts.customUiFont(2, true)
-        }
+          Image {
+            sourceSize: Qt.size(128, 128)
+            Layout.alignment: Qt.AlignHCenter
+            source: "qrc:/rcc/images/action.svg"
+          }
 
-        Item {
-          implicitHeight: 8
-        }
+          Item {
+            implicitHeight: 16
+          }
 
-        Label {
-          opacity: 0.8
-          Layout.alignment: Qt.AlignHCenter
-          horizontalAlignment: Label.AlignHCenter
-          Layout.maximumWidth: delegate.width * 0.9
-          wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-          font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
-          text: qsTr("Actions let you send custom commands to the connected device with a single button press.")
+          Label {
+            Layout.alignment: Qt.AlignHCenter
+            text: qsTr("Send commands with a button click")
+            horizontalAlignment: Label.AlignHCenter
+            font: Cpp_Misc_CommonFonts.customUiFont(2, true)
+          }
+
+          Item {
+            implicitHeight: 8
+          }
+
+          Label {
+            opacity: 0.8
+            Layout.alignment: Qt.AlignHCenter
+            horizontalAlignment: Label.AlignHCenter
+            Layout.maximumWidth: delegate.width * 0.9
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
+            text: qsTr("Actions let you send custom commands to the connected device with a single button press.")
+          }
         }
       }
     }

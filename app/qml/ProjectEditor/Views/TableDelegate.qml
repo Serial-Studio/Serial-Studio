@@ -179,9 +179,9 @@ ColumnLayout {
     id: view
     clip: true
     reuseItems: false
+    interactive: false
     Layout.fillWidth: true
     model: root.modelPointer
-    boundsBehavior: TableView.StopAtBounds
     Layout.minimumHeight: root.rowHeight * rows
     Layout.maximumHeight: root.rowHeight * rows
 

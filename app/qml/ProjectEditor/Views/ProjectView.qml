@@ -81,44 +81,56 @@ Widgets.Pane {
         subtitleText: qsTr("Fallback widgets will be used. Buy a license to unlock full functionality.")
       }
 
-      TableDelegate {
-        id: delegate
+      ScrollView {
+        id: view
+        contentWidth: width
         Layout.fillWidth: true
         Layout.fillHeight: true
-        modelPointer: Cpp_JSON_ProjectModel.projectModel
+        contentHeight: delegate.implicitHeight
 
-        footerItem: ColumnLayout {
-          spacing: 0
+        ScrollBar.vertical: ScrollBar {
+          policy: delegate.implicitHeight > view.height ? ScrollBar.AlwaysOn :
+                                                          ScrollBar.AsNeeded
+        }
 
-          Image {
-            sourceSize: Qt.size(96, 96)
-            Layout.alignment: Qt.AlignHCenter
-            source: "qrc:/rcc/images/tip.svg"
-          }
+        TableDelegate {
+          id: delegate
+          width: parent.width
+          modelPointer: Cpp_JSON_ProjectModel.projectModel
 
-          Item {
-            implicitHeight: 16
-          }
+          footerItem: ColumnLayout {
+            spacing: 0
 
-          Label {
-            Layout.alignment: Qt.AlignHCenter
-            text: qsTr("First, set up frame detection and data decoding.")
-            horizontalAlignment: Label.AlignHCenter
-            font: Cpp_Misc_CommonFonts.customUiFont(1.6, true)
-          }
+            Image {
+              sourceSize: Qt.size(96, 96)
+              Layout.alignment: Qt.AlignHCenter
+              source: "qrc:/rcc/images/tip.svg"
+            }
 
-          Item {
-            implicitHeight: 8
-          }
+            Item {
+              implicitHeight: 16
+            }
 
-          Label {
-            opacity: 0.8
-            Layout.alignment: Qt.AlignHCenter
-            horizontalAlignment: Label.AlignHCenter
-            Layout.maximumWidth: delegate.width * 0.9
-            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-            font: Cpp_Misc_CommonFonts.customUiFont(1.4, false)
-            text: qsTr("Frames are parsed into arrays, and datasets link each element to a widget.")
+            Label {
+              Layout.alignment: Qt.AlignHCenter
+              text: qsTr("First, set up frame detection and data decoding.")
+              horizontalAlignment: Label.AlignHCenter
+              font: Cpp_Misc_CommonFonts.customUiFont(1.6, true)
+            }
+
+            Item {
+              implicitHeight: 8
+            }
+
+            Label {
+              opacity: 0.8
+              Layout.alignment: Qt.AlignHCenter
+              horizontalAlignment: Label.AlignHCenter
+              Layout.maximumWidth: delegate.width * 0.9
+              wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+              font: Cpp_Misc_CommonFonts.customUiFont(1.4, false)
+              text: qsTr("Frames are parsed into arrays, and datasets link each element to a widget.")
+            }
           }
         }
       }

@@ -145,7 +145,7 @@ QString Misc::Translator::welcomeConsoleText() const
   }
 
   // Return obtained data
-  return text;
+  return text + "\n";
 }
 
 /**

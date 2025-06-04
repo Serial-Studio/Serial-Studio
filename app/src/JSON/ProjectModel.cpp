@@ -1367,6 +1367,114 @@ void JSON::ProjectModel::duplicateCurrentDataset()
 }
 
 /**
+ * @brief Adds a new plot to the project model.
+ *
+ * This method ensures that the dataset is added under a valid group.
+ * If no groups exist, a default group is created automatically.
+ *
+ * @see addGroup()
+ * @see addDataset(Dataset::Type)
+ */
+void JSON::ProjectModel::addPlot()
+{
+  ensureValidGroup();
+  addDataset(SerialStudio::DatasetPlot);
+}
+
+/**
+ * @brief Adds a new dataset to the project model.
+ *
+ * This method ensures that the dataset is added under a valid group.
+ * If no groups exist, a default group is created automatically.
+ *
+ * @see addGroup()
+ * @see addDataset(Dataset::Type)
+ */
+void JSON::ProjectModel::addDataset()
+{
+  ensureValidGroup();
+  addDataset(SerialStudio::DatasetGeneric);
+}
+
+/**
+ * @brief Ensures a valid group is selected for dataset insertion.
+ *
+ * If no groups exist, a default group is created. If a compatible group
+ * (MultiPlot, DataGrid, or NoGroupWidget) is already selected in the tree,
+ * it is used. If a dataset is selected, its parent group is resolved and
+ * validated. Otherwise, the first compatible group in the project is selected.
+ *
+ * Updates m_selectedGroup with the resolved group.
+ *
+ * @see addGroup()
+ */
+void JSON::ProjectModel::ensureValidGroup()
+{
+  // Add a group if needed
+  if (m_groups.isEmpty())
+    addGroup(tr("Group"), SerialStudio::NoGroupWidget);
+
+  // Lambda to check if a group is compatible
+  const auto isValidGroup = [](const QString &widgetId) -> bool {
+    switch (SerialStudio::groupWidgetFromId(widgetId))
+    {
+      case SerialStudio::MultiPlot:
+      case SerialStudio::DataGrid:
+      case SerialStudio::NoGroupWidget:
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  // Check if a valid group is currently selected
+  bool hasGroupSelected = false;
+  if (m_selectionModel && m_selectionModel->currentIndex().isValid())
+  {
+    auto index = m_selectionModel->currentIndex();
+    auto *item = m_treeModel->itemFromIndex(index);
+    if (!item && index.parent().isValid())
+      item = m_treeModel->itemFromIndex(index.parent());
+
+    if (item && m_groupItems.contains(item))
+    {
+      if (isValidGroup(m_groupItems.value(item).widget()))
+        hasGroupSelected = true;
+    }
+
+    else if (item && m_datasetItems.contains(item))
+    {
+      auto groupId = m_selectedDataset.m_groupId;
+      for (const auto &group : std::as_const(m_groups))
+      {
+        if (group.groupId() == groupId)
+        {
+          if (isValidGroup(group.widget()))
+          {
+            m_selectedGroup = group;
+            hasGroupSelected = true;
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  // Select the first compatible group if none is selected
+  if (!hasGroupSelected)
+  {
+    for (const auto &group : std::as_const(m_groups))
+    {
+      if (isValidGroup(group.widget()))
+      {
+        m_selectedGroup = group;
+        break;
+      }
+    }
+  }
+}
+
+/**
  * @brief Adds a new dataset to the currently selected group.
  *
  * This function creates a new dataset based on the provided option, assigns
@@ -1548,7 +1656,7 @@ void JSON::ProjectModel::addAction()
   // Check if any existing group has the same title
   int count = 1;
   QString title = tr("New Action");
-  for (const auto &action : m_actions)
+  for (const auto &action : std::as_const(m_actions))
   {
     if (action.m_title == title)
     {
@@ -1561,7 +1669,7 @@ void JSON::ProjectModel::addAction()
   while (count > 1)
   {
     bool titleExists = false;
-    for (const auto &action : m_actions)
+    for (const auto &action : std::as_const(m_actions))
     {
       if (action.m_title == title)
       {

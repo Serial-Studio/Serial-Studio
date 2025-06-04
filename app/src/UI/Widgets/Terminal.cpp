@@ -32,6 +32,10 @@
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/Terminal.h"
 
+#ifdef USE_QT_COMMERCIAL
+#  include "Licensing/LemonSqueezy.h"
+#endif
+
 /**
  * @brief Constructs a Terminal object with the given parent item.
  *
@@ -89,6 +93,9 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   setAntialiasing(true);
   setOpaquePainting(true);
 
+  // Load the welcome guide
+  loadWelcomeGuide();
+
   // Set font
   setFont(Misc::CommonFonts::instance().monoFont());
 
@@ -107,6 +114,8 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] {
     if (IO::Manager::instance().isConnected())
       clear();
+    else if (m_data.isEmpty())
+      loadWelcomeGuide();
   });
 
   // Redraw widget as soon as it is visible
@@ -115,9 +124,19 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
       update();
   });
 
+  // Update welcome guide when Serial Studio changes its activation status
+#ifdef USE_QT_COMMERCIAL
+  connect(&Licensing::LemonSqueezy::instance(),
+          &Licensing::LemonSqueezy::activatedChanged, this,
+          &Widgets::Terminal::loadWelcomeGuide);
+#endif
+
   // Change character widths when changing language
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, [=] { setFont(Misc::CommonFonts::instance().monoFont()); });
+          this, [=] {
+            loadWelcomeGuide();
+            setFont(Misc::CommonFonts::instance().monoFont());
+          });
 
   // Blink the cursor
   m_cursorTimer.start(200);
@@ -809,6 +828,18 @@ void Widgets::Terminal::onThemeChanged()
   setFillColor(m_palette.color(QPalette::Base));
   update();
   // clang-format on
+}
+
+/**
+ * @brief Displays the localized welcome guide in the terminal widget, without
+ *        modifying the terminal output.
+ */
+void Widgets::Terminal::loadWelcomeGuide()
+{
+  clear();
+  setAutoscroll(false);
+  append(Misc::Translator::instance().welcomeConsoleText());
+  setAutoscroll(true);
 }
 
 /**

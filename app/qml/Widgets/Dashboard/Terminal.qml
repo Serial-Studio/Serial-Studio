@@ -71,16 +71,6 @@ Item {
   }
 
   //
-  // Load welcome guide
-  //
-  function showWelcomeGuide() {
-    clear()
-    terminal.autoscroll = false
-    Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText + "\n")
-    terminal.autoscroll = true
-  }
-
-  //
   // Function to send through serial port data
   //
   function sendData() {
@@ -119,32 +109,6 @@ Item {
   } Shortcut {
     onActivated: root.copy()
     sequences: [StandardKey.Copy]
-  }
-
-  //
-  // Re-load welcome text when the language is changed
-  //
-  Component.onCompleted: root.showWelcomeGuide()
-  Connections {
-    target: Cpp_Misc_Translator
-    function onLanguageChanged() {
-      root.showWelcomeGuide()
-    }
-  }
-
-  //
-  // Re-load welcome text when Pro version is activated/deactivated
-  //
-  Loader {
-    active: Cpp_QtCommercial_Available
-    sourceComponent: Component {
-      Connections {
-        target: Cpp_Licensing_LemonSqueezy
-        function onActivatedChanged() {
-          root.showWelcomeGuide()
-        }
-      }
-    }
   }
 
   //
