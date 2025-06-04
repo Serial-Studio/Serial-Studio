@@ -187,7 +187,7 @@ QVariantList UI::Taskbar::groupModel() const
   }
 
   // Create overview group
-  if (widgetGroups > 0)
+  if (widgetGroups > 1)
   {
     QVariantMap main;
     main["id"] = -1;
