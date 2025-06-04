@@ -85,8 +85,6 @@ Item {
   onMinimizeClicked: {
     prevX = x
     prevY = y
-    //prevWidth = width
-    //prevHeight = height
     root.state = "minimized"
   }
 
@@ -135,11 +133,13 @@ Item {
     State {
       name: "minimized"
       PropertyChanges {
+        x: prevX
+        y: prevY
         scale: 0.0
-        target: root
         opacity: 0.0
-        x: parent ? -parent.x : 0
-        y: parent ? parent.y + parent.height : 0
+        target: root
+        width: prevWidth
+        height: prevHeight
       }
     },
 
@@ -148,10 +148,10 @@ Item {
       PropertyChanges {
         x: 0
         y: 0
+        radius: 0
         scale: 1.0
         opacity: 1.0
         target: root
-        radius: 0
         width: parent ? parent.width : prevWidth
         height: parent ? parent.height : prevHeight
       }
