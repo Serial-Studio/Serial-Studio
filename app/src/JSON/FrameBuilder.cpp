@@ -390,6 +390,8 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     datagrid.m_datasets = datasets;
     datagrid.m_title = tr("Quick Plot Data");
     datagrid.m_widget = QStringLiteral("datagrid");
+    for (int i = 0; i < datagrid.m_datasets.count(); ++i)
+        datagrid.m_datasets[i].m_graph = true;
 
     // Append datagrid to frame
     frame.m_groups.append(datagrid);
