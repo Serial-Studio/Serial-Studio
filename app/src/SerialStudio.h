@@ -291,7 +291,7 @@ public:
    * or Qt::QueuedConnection based on the application's threading and
    * performance constraints.
    */
-  static constexpr auto PerfCriticalConnection = Qt::QueuedConnection;
+  static constexpr auto PerfCriticalConnection = Qt::AutoConnection;
 
   /**
    * @typedef WidgetMap
