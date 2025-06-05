@@ -39,13 +39,14 @@ Plugins::Server::Server()
 
   // Send processed data at 1 Hz
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
-          this, &Plugins::Server::registerFrame, Qt::QueuedConnection);
+          this, &Plugins::Server::registerFrame,
+          SerialStudio::PerfCriticalConnection);
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
           &Plugins::Server::sendProcessedData);
 
   // Send I/O "raw" data directly
   connect(&IO::Manager::instance(), &IO::Manager::dataReceived, this,
-          &Plugins::Server::sendRawData, Qt::QueuedConnection);
+          &Plugins::Server::sendRawData, SerialStudio::PerfCriticalConnection);
 
   // Configure TCP server
   connect(&m_server, &QTcpServer::newConnection, this,

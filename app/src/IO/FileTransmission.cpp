@@ -253,23 +253,20 @@ void IO::FileTransmission::sendLine()
   // Send next line to device
   if (m_stream && !m_stream->atEnd())
   {
-    QMetaObject::invokeMethod(
-        this,
-        [=] {
-          if (m_stream)
-          {
-            auto line = m_stream->readLine();
-            if (!line.isEmpty())
-            {
-              if (!line.endsWith("\n"))
-                line.append("\n");
+    QMetaObject::invokeMethod(this, [=] {
+      if (m_stream)
+      {
+        auto line = m_stream->readLine();
+        if (!line.isEmpty())
+        {
+          if (!line.endsWith("\n"))
+            line.append("\n");
 
-              IO::Manager::instance().writeData(line.toUtf8());
-              emit transmissionProgressChanged();
-            }
-          }
-        },
-        Qt::QueuedConnection);
+          IO::Manager::instance().writeData(line.toUtf8());
+          emit transmissionProgressChanged();
+        }
+      }
+    });
   }
 
   // Reached end of file, stop transmission

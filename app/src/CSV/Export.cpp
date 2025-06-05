@@ -89,7 +89,7 @@ void CSV::Export::setupExternalConnections()
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &Export::closeFile);
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
-          this, &Export::registerFrame, Qt::QueuedConnection);
+          this, &Export::registerFrame, SerialStudio::PerfCriticalConnection);
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
           &Export::writeValues);
   connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this, [=] {

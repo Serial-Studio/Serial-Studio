@@ -282,6 +282,18 @@ public:
   // clang-format on
 
   /**
+   * @brief Defines the connection type for performance-critical signal-slot
+   *        connections.
+   *
+   * Use this for signals where low latency and predictable execution are
+   * required, such as high-frequency or real-time update signals. Adjust this
+   * value globally to switch between Qt::AutoConnection, Qt::DirectConnection,
+   * or Qt::QueuedConnection based on the application's threading and
+   * performance constraints.
+   */
+  static constexpr auto PerfCriticalConnection = Qt::QueuedConnection;
+
+  /**
    * @typedef WidgetMap
    * @brief Defines the data structure used to map dashboard widgets/windows.
    *

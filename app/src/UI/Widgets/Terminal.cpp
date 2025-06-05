@@ -106,9 +106,10 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
 
   // Receive data from the IO::Console handler
   connect(&IO::Console::instance(), &IO::Console::displayString, this,
-          &Widgets::Terminal::append, Qt::QueuedConnection);
+          &Widgets::Terminal::append, SerialStudio::PerfCriticalConnection);
   connect(&IO::Console::instance(), &IO::Console::scrollbackChanged, this,
-          &Widgets::Terminal::onScrollbackChanged, Qt::QueuedConnection);
+          &Widgets::Terminal::onScrollbackChanged,
+          SerialStudio::PerfCriticalConnection);
 
   // Clear the screen when device is connected/disconnected
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] {

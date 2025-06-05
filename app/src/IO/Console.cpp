@@ -320,9 +320,9 @@ void IO::Console::setupExternalConnections()
   // Read received data automatically
   auto dm = &Manager::instance();
   connect(dm, &Manager::dataSent, this, &IO::Console::onDataSent,
-          Qt::QueuedConnection);
+          SerialStudio::PerfCriticalConnection);
   connect(dm, &Manager::dataReceived, this, &IO::Console::onDataReceived,
-          Qt::QueuedConnection);
+          SerialStudio::PerfCriticalConnection);
 
   // Update lists when language changes
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
@@ -513,7 +513,7 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
   // Update UI
   QMetaObject::invokeMethod(
       this, [=] { Q_EMIT displayString(processedString); },
-      Qt::QueuedConnection);
+      SerialStudio::PerfCriticalConnection);
 }
 
 /**

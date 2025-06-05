@@ -49,25 +49,23 @@ UI::Dashboard::Dashboard()
   , m_terminalEnabled(false)
 {
   // clang-format off
-  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(true); }, Qt::QueuedConnection);
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] { resetData(true); }, Qt::QueuedConnection);
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=] { resetData(); }, Qt::QueuedConnection);
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged, this, &UI::Dashboard::processFrame, Qt::QueuedConnection);
+  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(true); });
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] { resetData(true); });
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=] { resetData(); });
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged, this, &UI::Dashboard::processFrame, SerialStudio::PerfCriticalConnection);
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
 #ifdef USE_QT_COMMERCIAL
   connect(
-      &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this,
-      [=] {
+      &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this, [=] {
         const bool subscribed = MQTT::Client::instance().isSubscriber();
         const bool wasSubscribed = !MQTT::Client::instance().isConnected()
                                    && MQTT::Client::instance().isSubscriber();
 
         if (subscribed || wasSubscribed)
           resetData(true);
-      },
-      Qt::QueuedConnection);
+      });
 #endif
 
   // Update the dashboard widgets at 24 Hz
@@ -80,7 +78,7 @@ UI::Dashboard::Dashboard()
           Q_EMIT updated();
         }
       },
-      Qt::QueuedConnection);
+      SerialStudio::PerfCriticalConnection);
 }
 
 /**
