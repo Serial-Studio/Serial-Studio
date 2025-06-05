@@ -27,8 +27,11 @@
 
 namespace JSON
 {
+class Group;
+class Frame;
+class FrameBuilder;
 class ProjectModel;
-}
+} // namespace JSON
 
 namespace JSON
 {
@@ -66,12 +69,12 @@ namespace JSON
  * @note All of the dataset fields are optional, except the "value"
  *       field and the "title" field.
  */
-class Group;
-class FrameBuilder;
 class Dataset
 {
 public:
   Dataset(const int groupId = -1, const int datasetId = -1);
+
+  [[nodiscard]] quint32 uniqueId() const;
 
   [[nodiscard]] bool fft() const;
   [[nodiscard]] bool led() const;
@@ -102,10 +105,13 @@ public:
 
   void setMin(double min) { m_min = min; }
   void setMax(double max) { m_max = max; }
+  void setUniqueId(const quint32 id) { m_uniqueId = id; }
   void setValue(const QString &value) { m_value = value; }
   void setTitle(const QString &title) { m_title = title; }
 
 private:
+  quint32 m_uniqueId;
+
   bool m_fft;
   bool m_led;
   bool m_log;
@@ -130,6 +136,8 @@ private:
   int m_xAxisId;
   int m_datasetId;
 
+  friend class JSON::Group;
+  friend class JSON::Frame;
   friend class JSON::ProjectModel;
   friend class JSON::FrameBuilder;
 };

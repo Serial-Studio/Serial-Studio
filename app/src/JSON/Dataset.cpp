@@ -49,7 +49,8 @@ static QVariant SAFE_READ(const QJsonObject &object, const QString &key,
  * @brief Constructor function, initializes default values
  */
 JSON::Dataset::Dataset(const int groupId, const int datasetId)
-  : m_fft(false)
+  : m_uniqueId(0)
+  , m_fft(false)
   , m_led(false)
   , m_log(false)
   , m_graph(false)
@@ -69,6 +70,22 @@ JSON::Dataset::Dataset(const int groupId, const int datasetId)
   , m_xAxisId(-1)
   , m_datasetId(datasetId)
 {
+}
+
+/**
+ * @brief Returns a globally unique identifier for this dataset within a frame.
+ *
+ * Unlike index(), which refers to the dataset's position in the input data
+ * array, this identifier is assigned after the frame is fully constructed and
+ * is guaranteed to be unique across all groups and datasets in the frame. It is
+ * used internally by the dashboard system for efficient dataset mapping and
+ * updates.
+ *
+ * @return Globally unique dataset ID within the frame.
+ */
+quint32 JSON::Dataset::uniqueId() const
+{
+  return m_uniqueId;
 }
 
 /**

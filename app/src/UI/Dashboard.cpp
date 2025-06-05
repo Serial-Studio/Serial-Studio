@@ -614,10 +614,6 @@ void UI::Dashboard::resetData(const bool notify)
   m_xAxisData.clear();
   m_yAxisData.clear();
 
-  // Clear m_dataset <-> widget hash maps
-  m_groupDatasetIndex.clear();
-  m_widgetDatasetIndex.clear();
-
   // Clear widget & action structures
   m_widgetCount = 0;
   m_actions.clear();
@@ -625,6 +621,7 @@ void UI::Dashboard::resetData(const bool notify)
   m_widgetMap.clear();
   m_widgetGroups.clear();
   m_widgetDatasets.clear();
+  m_datasetReferences.clear();
 
   // Reset frame data
   m_rawFrame = JSON::Frame();
@@ -691,6 +688,9 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
 
   // Update dashboard data
   updateDashboardData(frame);
+
+  // Set dashboard update flag
+  m_updateRequired = true;
 }
 
 /**
@@ -708,34 +708,20 @@ void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
   {
     for (const auto &dataset : group.datasets())
     {
-      // Iterate over all datasets in the incoming frame
-      const auto id = dataset.index();
-      if (!m_datasets.contains(id))
-        continue;
+      // Get the dataset UID
+      auto uid = dataset.uniqueId();
 
-      // Only update if the value has changed
-      if (m_datasets[id].value() != dataset.value())
+      // UID not registered -> frame structure changed
+      if (!m_datasetReferences.contains(uid))
       {
-        // Update dataset map
-        m_updateRequired = true;
-        m_datasets[id] = dataset;
-
-        // Update all dataset widget references pointing to this dataset
-        if (m_widgetDatasetIndex.contains(id))
-        {
-          const auto &widgetList = m_widgetDatasetIndex[id];
-          for (JSON::Dataset *ptr : widgetList)
-            *ptr = dataset;
-        }
-
-        // Update all group-level dataset references pointing to this dataset
-        if (m_groupDatasetIndex.contains(id))
-        {
-          const auto &groupList = m_groupDatasetIndex[id];
-          for (JSON::Dataset *ptr : groupList)
-            *ptr = dataset;
-        }
+        resetData(false);
+        processFrame(frame);
+        return;
       }
+
+      // Update internal references to the **exact** same dataset
+      for (auto *ptr : std::as_const(m_datasetReferences[uid]))
+        ptr->setValue(dataset.value());
     }
   }
 
@@ -875,23 +861,34 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
       m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
   }
 
-  // Build dataset hash table
-  m_widgetDatasetIndex.clear();
-  for (auto &list : m_widgetDatasets)
-  {
-    for (auto &dataset : list)
-      m_widgetDatasetIndex[dataset.index()].append(&dataset);
-  }
-
-  // Build group hash table
-  m_groupDatasetIndex.clear();
+  // Traverse all group-level datasets
   for (auto &groupList : m_widgetGroups)
   {
     for (auto &group : groupList)
     {
       for (auto &dataset : group.m_datasets)
-        m_groupDatasetIndex[dataset.index()].append(&dataset);
+      {
+        const quint32 uid = dataset.uniqueId();
+        m_datasetReferences[uid].append(&dataset);
+      }
     }
+  }
+
+  // Traverse all widget-level datasets
+  for (auto &datasetList : m_widgetDatasets)
+  {
+    for (auto &dataset : datasetList)
+    {
+      const quint32 uid = dataset.uniqueId();
+      m_datasetReferences[uid].append(&dataset);
+    }
+  }
+
+  // Transverse all plot datasets
+  for (auto &dataset : m_datasets)
+  {
+    const quint32 uid = dataset.uniqueId();
+    m_datasetReferences[uid].append(&dataset);
   }
 
   // Update actions

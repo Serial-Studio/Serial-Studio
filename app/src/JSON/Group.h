@@ -31,8 +31,10 @@ class Dashboard;
 
 namespace JSON
 {
+class Frame;
 class ProjectModel;
-}
+class FrameBuilder;
+} // namespace JSON
 
 namespace JSON
 {
@@ -81,6 +83,8 @@ private:
 
   friend class UI::Taskbar;
   friend class UI::Dashboard;
+
+  friend class JSON::Frame;
   friend class JSON::ProjectModel;
   friend class JSON::FrameBuilder;
 };

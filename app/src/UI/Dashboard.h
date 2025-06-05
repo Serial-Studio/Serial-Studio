@@ -173,8 +173,7 @@ private:
   QVector<JSON::Action> m_actions;
   QMap<int, JSON::Dataset> m_datasets;
   SerialStudio::WidgetMap m_widgetMap;
-  QHash<int, QList<JSON::Dataset *>> m_groupDatasetIndex;
-  QHash<int, QList<JSON::Dataset *>> m_widgetDatasetIndex;
+  QMap<quint32, QVector<JSON::Dataset *>> m_datasetReferences;
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Group>> m_widgetGroups;
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Dataset>> m_widgetDatasets;
 

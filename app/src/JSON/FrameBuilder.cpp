@@ -411,6 +411,7 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     }
 
     // Update user interface
+    frame.buildUniqueIds();
     Q_EMIT frameChanged(frame);
   }
 }

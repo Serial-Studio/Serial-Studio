@@ -61,6 +61,8 @@ public:
   ~Frame();
 
   void clear();
+  void buildUniqueIds();
+
   [[nodiscard]] bool isValid() const;
   [[nodiscard]] bool equalsStructure(const JSON::Frame &other) const;
 

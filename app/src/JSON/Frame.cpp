@@ -93,6 +93,29 @@ bool JSON::Frame::isValid() const
 }
 
 /**
+ * @brief Assigns globally unique identifiers to all datasets in the frame.
+ *
+ * This method iterates over all groups and their corresponding datasets,
+ * assigning each dataset a unique ID starting from 1. These IDs are used
+ * internally by the dashboard for unambiguous dataset tracking across groups,
+ * especially when multiple datasets share the same logical index or title.
+ *
+ * Call this function after the frame structure has been fully initialized.
+ */
+void JSON::Frame::buildUniqueIds()
+{
+  quint32 id = 1;
+  for (int i = 0; i < m_groups.count(); ++i)
+  {
+    for (int j = 0; j < m_groups[i].datasetCount(); ++j)
+    {
+      m_groups[i].m_datasets[j].setUniqueId(id);
+      ++id;
+    }
+  }
+}
+
+/**
  * @brief Compares the structural equivalence of two JSON::Frame objects.
  *
  * This method checks whether the current frame and the given frame have the
@@ -212,6 +235,9 @@ bool JSON::Frame::read(const QJsonObject &object)
 
     // Check if any of the groups contains commercial widgets
     m_containsCommercialFeatures = SerialStudio::commercialCfg(m_groups);
+
+    // Build unique dataset IDs
+    buildUniqueIds();
 
     // Return status
     return groupCount() > 0;
