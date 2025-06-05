@@ -122,8 +122,10 @@ public slots:
   void connectDevice();
   void toggleConnection();
   void disconnectDevice();
+  void resetFrameReader();
   void setupExternalConnections();
   void setPaused(const bool paused);
+  void setDriver(IO::HAL_Driver *driver);
   void setWriteEnabled(const bool enabled);
   void processPayload(const QByteArray &payload);
   void setStartSequence(const QByteArray &sequence);
@@ -131,7 +133,8 @@ public slots:
   void setBusType(const SerialStudio::BusType &driver);
 
 private slots:
-  void setDriver(IO::HAL_Driver *driver);
+  void killFrameReader();
+  void startFrameReader();
 
 private:
   bool m_paused;
@@ -139,8 +142,8 @@ private:
   SerialStudio::BusType m_busType;
 
   HAL_Driver *m_driver;
-  QThread m_workerThread;
-  FrameReader m_frameReader;
+  QThread *m_workerThread;
+  QPointer<FrameReader> m_frameReader;
 
   QByteArray m_startSequence;
   QByteArray m_finishSequence;

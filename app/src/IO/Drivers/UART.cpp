@@ -48,8 +48,8 @@ IO::Drivers::UART::UART()
   readSettings();
 
   // Init serial port configuration variables
+  close();
   setBaudRate(9600);
-  disconnectDevice();
   setDataBits(dataBitsList().indexOf(QStringLiteral("8")));
   setStopBits(stopBitsList().indexOf(QStringLiteral("1")));
   setParity(parityList().indexOf(tr("None")));
@@ -71,9 +71,13 @@ IO::Drivers::UART::UART()
 IO::Drivers::UART::~UART()
 {
   writeSettings();
-
   if (port())
-    disconnectDevice();
+  {
+    if (port()->isOpen())
+      port()->close();
+
+    port()->deleteLater();
+  }
 }
 
 /**
@@ -94,12 +98,31 @@ IO::Drivers::UART &IO::Drivers::UART::instance()
  */
 void IO::Drivers::UART::close()
 {
-  if (isOpen())
+  // Check if serial port pointer is valid
+  if (port() != nullptr)
   {
+    // Disconnect signals/slots
+    disconnect(port(), &QSerialPort::errorOccurred, this,
+               &IO::Drivers::UART::handleError);
+    disconnect(port(), &QIODevice::readyRead, this,
+               &IO::Drivers::UART::onReadyRead);
+
+    // Send DTR off signal
+    if (dtrEnabled())
+      port()->setDataTerminalReady(false);
+
+    // Close & delete serial port handler
     port()->close();
     port()->deleteLater();
-    m_port = nullptr;
   }
+
+  // Reset pointer & device status
+  m_port = nullptr;
+  m_usingCustomSerialPort = false;
+
+  // Update user interface
+  Q_EMIT portChanged();
+  Q_EMIT availablePortsChanged();
 }
 
 /**
@@ -179,7 +202,7 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
   if (portId >= 1 && portId < ports.count())
   {
     // Update port index variable & disconnect from current serial port
-    disconnectDevice();
+    close();
     m_portIndex = portId;
     m_lastSerialDeviceIndex = m_portIndex;
     Q_EMIT portIndexChanged();
@@ -231,7 +254,7 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
   }
 
   // Disconnect serial port
-  disconnectDevice();
+  close();
   return false;
 }
 
@@ -436,31 +459,6 @@ QSerialPort::FlowControl IO::Drivers::UART::flowControl() const
 }
 
 /**
- * Disconnects from the current serial device and clears temp. data
- */
-void IO::Drivers::UART::disconnectDevice()
-{
-  // Check if serial port pointer is valid
-  if (port() != nullptr)
-  {
-    // Disconnect signals/slots
-    disconnect(port());
-
-    // Close & delete serial port handler
-    port()->close();
-    port()->deleteLater();
-  }
-
-  // Reset pointer & device status
-  m_port = nullptr;
-  m_usingCustomSerialPort = false;
-
-  // Update user interface
-  Q_EMIT portChanged();
-  Q_EMIT availablePortsChanged();
-}
-
-/**
  * Configures the signal/slot connections with the rest of the modules of the
  * application.
  */
@@ -481,7 +479,7 @@ void IO::Drivers::UART::setupExternalConnections()
 void IO::Drivers::UART::setBaudRate(const qint32 rate)
 {
   // Asserts
-  Q_ASSERT(rate > 10);
+  Q_ASSERT(rate > 0);
 
   // Update baud rate
   m_baudRate = rate;
@@ -854,6 +852,13 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
       if (error == QSerialPort::UnsupportedOperationError
           || error == QSerialPort::ResourceError)
         return;
+    }
+
+    // Fail silently on resource errors if auto-reconnect is enabled
+    if (m_autoReconnect && error == QSerialPort::ResourceError)
+    {
+      Manager::instance().disconnectDevice();
+      return;
     }
 
     // Display error

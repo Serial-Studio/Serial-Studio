@@ -74,7 +74,7 @@
             "datasets": [
                 {
                     "alarm": 0,
-                    "fft": true,
+                    "fft": false,
                     "fftSamples": 8192,
                     "fftSamplingRate": 1000,
                     "graph": true,
@@ -99,5 +99,5 @@
     "hexadecimalDelimiters": false,
     "mapTilerApiKey": "",
     "thunderforestApiKey": "",
-    "title": "Hydrogen Atom: 1s Orbital + Quantum Noise"
+    "title": "Hydrogen Atom: 1s Orbital"
 }

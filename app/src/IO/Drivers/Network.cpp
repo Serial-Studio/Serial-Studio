@@ -90,12 +90,6 @@ IO::Drivers::Network &IO::Drivers::Network::instance()
  */
 void IO::Drivers::Network::close()
 {
-  // Abort network connections
-  m_tcpSocket.abort();
-  m_udpSocket.abort();
-  m_tcpSocket.disconnectFromHost();
-  m_udpSocket.disconnectFromHost();
-
   // Disconnect signals/slots
   if (socketType() == QAbstractSocket::TcpSocket)
     disconnect(&m_tcpSocket, &QTcpSocket::readyRead, this,
@@ -103,6 +97,14 @@ void IO::Drivers::Network::close()
   else if (socketType() == QAbstractSocket::UdpSocket)
     disconnect(&m_udpSocket, &QUdpSocket::readyRead, this,
                &IO::Drivers::Network::onReadyRead);
+
+  // Abort network connections
+  m_tcpSocket.abort();
+  m_udpSocket.abort();
+  m_tcpSocket.close();
+  m_udpSocket.close();
+  m_tcpSocket.disconnectFromHost();
+  m_udpSocket.disconnectFromHost();
 }
 
 /**

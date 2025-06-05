@@ -38,7 +38,6 @@
 IO::FrameReader::FrameReader(QObject *parent)
   : QObject(parent)
   , m_enableCrc(false)
-  , m_readScheduled(false)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
   , m_dataBuffer(1024 * 1024)
@@ -125,16 +124,21 @@ void IO::FrameReader::setupExternalConnections()
   setOperationMode(JSON::FrameBuilder::instance().operationMode());
   setFrameDetectionMode(JSON::ProjectModel::instance().frameDetection());
 
-  connect(&JSON::FrameBuilder::instance(),
-          &JSON::FrameBuilder::operationModeChanged, this, [=] {
-            setOperationMode(JSON::FrameBuilder::instance().operationMode());
-          });
+  connect(
+      &JSON::FrameBuilder::instance(),
+      &JSON::FrameBuilder::operationModeChanged, this,
+      [this] {
+        setOperationMode(JSON::FrameBuilder::instance().operationMode());
+      },
+      Qt::QueuedConnection);
 
-  connect(&JSON::ProjectModel::instance(),
-          &JSON::ProjectModel::frameDetectionChanged, this, [=] {
-            setFrameDetectionMode(
-                JSON::ProjectModel::instance().frameDetection());
-          });
+  connect(
+      &JSON::ProjectModel::instance(),
+      &JSON::ProjectModel::frameDetectionChanged, this,
+      [this] {
+        setFrameDetectionMode(JSON::ProjectModel::instance().frameDetection());
+      },
+      Qt::QueuedConnection);
 }
 
 /**
@@ -166,17 +170,9 @@ void IO::FrameReader::processData(const QByteArray &data)
       && m_frameDetectionMode == SerialStudio::NoDelimiters)
     Q_EMIT frameReady(m_dataBuffer.read(data.size()));
 
-  // Schedule a frame extraction as soon as possible without blocking the thread
-  else if (!m_readScheduled.exchange(true))
-  {
-    QMetaObject::invokeMethod(
-        this,
-        [this] {
-          readFrames();
-          m_readScheduled = false;
-        },
-        Qt::QueuedConnection);
-  }
+  // Read frame data
+  else
+    readFrames();
 }
 
 /**
@@ -189,10 +185,12 @@ void IO::FrameReader::processData(const QByteArray &data)
  */
 void IO::FrameReader::setStartSequence(const QByteArray &start)
 {
+  QWriteLocker locker(&m_dataLock);
   if (m_startSequence != start)
   {
     m_startSequence = start;
-    reset();
+    m_enableCrc = false;
+    m_dataBuffer.clear();
   }
 }
 
@@ -206,10 +204,12 @@ void IO::FrameReader::setStartSequence(const QByteArray &start)
  */
 void IO::FrameReader::setFinishSequence(const QByteArray &finish)
 {
+  QWriteLocker locker(&m_dataLock);
   if (m_finishSequence != finish)
   {
     m_finishSequence = finish;
-    reset();
+    m_enableCrc = false;
+    m_dataBuffer.clear();
   }
 }
 
@@ -223,10 +223,12 @@ void IO::FrameReader::setFinishSequence(const QByteArray &finish)
  */
 void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 {
+  QWriteLocker locker(&m_dataLock);
   if (m_operationMode != mode)
   {
     m_operationMode = mode;
-    reset();
+    m_enableCrc = false;
+    m_dataBuffer.clear();
   }
 }
 
@@ -243,10 +245,12 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 void IO::FrameReader::setFrameDetectionMode(
     const SerialStudio::FrameDetection mode)
 {
+  QWriteLocker locker(&m_dataLock);
   if (m_frameDetectionMode != mode)
   {
     m_frameDetectionMode = mode;
-    reset();
+    m_enableCrc = false;
+    m_dataBuffer.clear();
   }
 }
 

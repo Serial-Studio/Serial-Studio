@@ -187,6 +187,7 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
         {
           IO::Manager::instance().setFinishSequence(m_frame.frameEnd());
           IO::Manager::instance().setStartSequence(m_frame.frameStart());
+          IO::Manager::instance().resetFrameReader();
         }
       }
 

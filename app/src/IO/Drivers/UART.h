@@ -158,7 +158,6 @@ public:
   [[nodiscard]] QSerialPort::FlowControl flowControl() const;
 
 public slots:
-  void disconnectDevice();
   void setupExternalConnections();
   void setBaudRate(const qint32 rate);
   void setDtrEnabled(const bool enabled);

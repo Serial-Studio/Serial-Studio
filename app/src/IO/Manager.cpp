@@ -27,12 +27,15 @@
 
 #include <QApplication>
 
+//------------------------------------------------------------------------------
+// Constructor & singleton access functions
+//------------------------------------------------------------------------------
+
 /**
  * @brief Constructs the `Manager` instance.
  *
- * Initializes the I/O manager with default settings, sets up the `FrameReader`
- * in a separate thread, and connects relevant signals for data and
- * configuration management.
+ * Initializes the I/O manager with default settings and connects relevant
+ * signals for data and configuration management.
  *
  * By default, the manager is configured for serial communication.
  */
@@ -40,33 +43,18 @@ IO::Manager::Manager()
   : m_paused(false)
   , m_writeEnabled(true)
   , m_driver(nullptr)
+  , m_workerThread(nullptr)
+  , m_frameReader(nullptr)
   , m_startSequence(QByteArray("/*"))
   , m_finishSequence(QByteArray("*/"))
 {
-  // Move the frame parser worker to its dedicated thread
-  m_frameReader.moveToThread(&m_workerThread);
-
-  // Automatically enable/disable the connect button when bus type changes
+  setBusType(SerialStudio::BusType::UART);
   connect(this, &IO::Manager::busTypeChanged, this,
           &IO::Manager::configurationChanged);
-
-  // Automatically check/unckeck connected button when configuration changes
   connect(this, &IO::Manager::configurationChanged, this,
           &IO::Manager::connectedChanged);
-
-  // Avoid crashing the app when quitting
-  connect(qApp, &QApplication::aboutToQuit, this, [=] {
-    disconnect(&m_frameReader);
-    m_workerThread.quit();
-    if (!m_workerThread.wait(100))
-      m_workerThread.terminate();
-  });
-
-  // Start the worker thread
-  m_workerThread.start(QThread::HighestPriority);
-
-  // Set default data interface to serial port
-  setBusType(SerialStudio::BusType::UART);
+  connect(qApp, &QApplication::aboutToQuit, this, &IO::Manager::killFrameReader,
+          Qt::DirectConnection);
 }
 
 /**
@@ -82,6 +70,10 @@ IO::Manager &IO::Manager::instance()
   static Manager instance;
   return instance;
 }
+
+//------------------------------------------------------------------------------
+// Member & status access functions
+//------------------------------------------------------------------------------
 
 /**
  * @brief Indicates whether data streaming is currently paused while the data
@@ -207,6 +199,10 @@ const QByteArray &IO::Manager::finishSequence() const
   return m_finishSequence;
 }
 
+//------------------------------------------------------------------------------
+// Bus/Driver UI list helper
+//------------------------------------------------------------------------------
+
 /**
  * @brief Retrieves a list of available bus types.
  *
@@ -230,6 +226,10 @@ QStringList IO::Manager::availableBuses() const
 #endif
   return list;
 }
+
+//------------------------------------------------------------------------------
+// IO <-> Driver data writting
+//------------------------------------------------------------------------------
 
 /**
  * @brief Writes data to the isConnected device.
@@ -260,6 +260,10 @@ qint64 IO::Manager::writeData(const QByteArray &data)
   return -1;
 }
 
+//------------------------------------------------------------------------------
+// Device connection setters
+//------------------------------------------------------------------------------
+
 /**
  * @brief Toggles the connection state of the Manager.
  *
@@ -284,7 +288,7 @@ void IO::Manager::toggleConnection()
 void IO::Manager::connectDevice()
 {
   // Configure current device
-  if (driver() && m_workerThread.isRunning())
+  if (driver())
   {
     // Set open flag
     QIODevice::OpenMode mode = QIODevice::ReadOnly;
@@ -295,34 +299,15 @@ void IO::Manager::connectDevice()
     if (driver()->open(mode))
     {
       setPaused(false);
-      QMetaObject::invokeMethod(&m_frameReader, &FrameReader::reset,
-                                Qt::BlockingQueuedConnection);
-
-      connect(driver(), &IO::HAL_Driver::dataReceived, &m_frameReader,
-              &FrameReader::processData, Qt::QueuedConnection);
-      connect(
-          &m_frameReader, &IO::FrameReader::frameReady, this,
-          [this](const QByteArray &frame) {
-            if (!paused())
-              Q_EMIT frameReceived(frame);
-          },
-          Qt::QueuedConnection);
-      connect(
-          &m_frameReader, &IO::FrameReader::dataReceived, this,
-          [this](const QByteArray &data) {
-            if (!paused())
-              Q_EMIT dataReceived(data);
-          },
-          Qt::QueuedConnection);
+      startFrameReader();
     }
 
     // Error opening the device
     else
       disconnectDevice();
 
-    // Enqueue a UI update request
-    QMetaObject::invokeMethod(
-        this, [=] { Q_EMIT connectedChanged(); }, Qt::QueuedConnection);
+    // Notify UI
+    Q_EMIT connectedChanged();
   }
 }
 
@@ -341,45 +326,41 @@ void IO::Manager::disconnectDevice()
     driver()->close();
     setPaused(false);
 
-    // Disconnect frame reader
-    if (m_workerThread.isRunning())
-    {
-      QMetaObject::invokeMethod(&m_frameReader, &FrameReader::reset,
-                                Qt::BlockingQueuedConnection);
+    // Stop frame parsing thread
+    killFrameReader();
 
-      disconnect(&m_frameReader);
-      disconnect(driver(), &IO::HAL_Driver::dataReceived, &m_frameReader,
-                 &FrameReader::processData);
-    }
-
-    // Enqueue a UI update request
-    QMetaObject::invokeMethod(
-        this,
-        [=] {
-          Q_EMIT driverChanged();
-          Q_EMIT connectedChanged();
-        },
-        Qt::QueuedConnection);
+    // Notify UI
+    Q_EMIT driverChanged();
+    Q_EMIT connectedChanged();
   }
 }
 
+void IO::Manager::resetFrameReader()
+{
+  if (isConnected())
+  {
+    killFrameReader();
+    startFrameReader();
+  }
+}
+
+//------------------------------------------------------------------------------
+// External module interface setup
+//------------------------------------------------------------------------------
+
 /**
  * @brief Sets up external connections for the Manager.
- *
- * Connects external components, such as the translator for bus list updates and
- * the frame reader for parameter synchronization.
+ * Connects external components, such as the translator for bus list updates.
  */
 void IO::Manager::setupExternalConnections()
 {
-  // Update the bus list when the language is changed
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
           this, &IO::Manager::busListChanged);
-
-  // Update the frame reader parameters automatically
-  QMetaObject::invokeMethod(&m_frameReader,
-                            &FrameReader::setupExternalConnections,
-                            Qt::QueuedConnection);
 }
+
+//------------------------------------------------------------------------------
+// Member/status modification slots
+//------------------------------------------------------------------------------
 
 /**
  * @brief Enables or disables real time data streaming to other modules of
@@ -437,11 +418,16 @@ void IO::Manager::setStartSequence(const QByteArray &sequence)
   if (m_startSequence.isEmpty())
     m_startSequence = QString("/*").toUtf8();
 
-  if (m_workerThread.isRunning())
+  if (m_frameReader)
+  {
     QMetaObject::invokeMethod(
-        &m_frameReader,
-        [=] { m_frameReader.setStartSequence(m_startSequence); },
+        m_frameReader,
+        [reader = m_frameReader, sequence = m_startSequence] {
+          if (reader)
+            reader->setStartSequence(sequence);
+        },
         Qt::QueuedConnection);
+  }
 
   Q_EMIT startSequenceChanged();
 }
@@ -461,13 +447,49 @@ void IO::Manager::setFinishSequence(const QByteArray &sequence)
   if (m_finishSequence.isEmpty())
     m_finishSequence = QString("*/").toUtf8();
 
-  if (m_workerThread.isRunning())
+  if (m_frameReader)
+  {
     QMetaObject::invokeMethod(
-        &m_frameReader,
-        [=] { m_frameReader.setFinishSequence(m_finishSequence); },
+        m_frameReader,
+        [reader = m_frameReader, sequence = m_startSequence] {
+          if (reader)
+            reader->setFinishSequence(sequence);
+        },
         Qt::QueuedConnection);
+  }
 
   Q_EMIT finishSequenceChanged();
+}
+
+//------------------------------------------------------------------------------
+// Driver configuration functions
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Sets the hardware abstraction layer (HAL) driver.
+ *
+ * Updates the current driver and establishes the necessary signal-slot
+ * connections for configuration changes. Disconnects the previous driver,
+ * if any, and emits signals to notify about driver and configuration updates.
+ *
+ * @param driver A pointer to the new `HAL_Driver` instance, or nullptr if no
+ *               driver is to be set.
+ */
+void IO::Manager::setDriver(HAL_Driver *driver)
+{
+  if (m_driver != driver)
+  {
+    if (driver)
+      connect(driver, &IO::HAL_Driver::configurationChanged, this,
+              &IO::Manager::configurationChanged);
+
+    if (m_driver)
+      disconnect(m_driver);
+
+    m_driver = driver;
+    Q_EMIT driverChanged();
+    Q_EMIT configurationChanged();
+  }
 }
 
 /**
@@ -523,29 +545,101 @@ void IO::Manager::setBusType(const SerialStudio::BusType &driver)
   Q_EMIT busTypeChanged();
 }
 
+//------------------------------------------------------------------------------
+// Threaded frame reading/extraction setup
+//------------------------------------------------------------------------------
+
 /**
- * @brief Sets the hardware abstraction layer (HAL) driver.
+ * @brief Stops and cleans up the frame reader and its worker thread.
  *
- * Updates the current driver and establishes the necessary signal-slot
- * connections for configuration changes. Disconnects the previous driver,
- * if any, and emits signals to notify about driver and configuration updates.
+ * Safely disconnects all signals, schedules the FrameReader for deletion in its
+ * own thread, shuts down the thread, and releases associated resources.
  *
- * @param driver A pointer to the new `HAL_Driver` instance, or nullptr if no
- *               driver is to be set.
+ * This method is safe to call multiple times and is also triggered
+ * automatically during shutdown.
  */
-void IO::Manager::setDriver(HAL_Driver *driver)
+void IO::Manager::killFrameReader()
 {
-  if (m_driver != driver)
+  // Disconnect all signals from the frame reader & delete it
+  if (m_frameReader)
   {
-    if (driver)
-      connect(driver, &IO::HAL_Driver::configurationChanged, this,
-              &IO::Manager::configurationChanged);
+    m_frameReader->disconnect();
+    QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
+                        &IO::FrameReader::processData);
 
-    if (m_driver)
-      disconnect(m_driver);
-
-    m_driver = driver;
-    Q_EMIT driverChanged();
-    Q_EMIT configurationChanged();
+    m_frameReader->deleteLater();
+    m_frameReader.clear();
   }
+
+  // Quit the thread event loop and wait for it to exit
+  if (m_workerThread)
+  {
+
+    m_workerThread->quit();
+    m_workerThread->wait(100);
+
+    delete m_workerThread;
+    m_workerThread = nullptr;
+  }
+}
+
+/**
+ * @brief Starts the frame reader in a dedicated worker thread.
+ *
+ * Initializes a new FrameReader instance, configures it, moves it to a separate
+ * thread, and connects it to the driver and IO::Manager. This ensures
+ * non-blocking frame processing.
+ *
+ * If a previous frame reader is running, it will be cleanly shut down before
+ * starting a new one.
+ *
+ * @note The FrameReader is connected to the driver via queued signals to ensure
+ * thread safety.
+ */
+void IO::Manager::startFrameReader()
+{
+  // Ensure driver is set and driver is open
+  Q_ASSERT(driver() != nullptr && driver()->isOpen());
+
+  // Stop the frame reader thread if needed
+  killFrameReader();
+
+  // Create new thread and frame reader instance
+  m_frameReader = new FrameReader();
+  m_workerThread = new QThread(this);
+
+  // Move to the worker thread
+  m_frameReader->moveToThread(m_workerThread);
+
+  // Configure initial state for the frame reader
+  QMetaObject::invokeMethod(
+      m_frameReader,
+      [reader = m_frameReader, startSeq = m_startSequence,
+       finishSeq = m_finishSequence, drv = driver()] {
+        if (reader && drv)
+        {
+          reader->setStartSequence(startSeq);
+          reader->setFinishSequence(finishSeq);
+          reader->setupExternalConnections();
+
+          QObject::connect(drv, &IO::HAL_Driver::dataReceived, reader,
+                           &IO::FrameReader::processData, Qt::QueuedConnection);
+        }
+      },
+      Qt::QueuedConnection);
+
+  // Connect frame reader events to IO::Manager
+  connect(m_frameReader, &IO::FrameReader::frameReady, this,
+          [this](const QByteArray &frame) {
+            if (!paused())
+              Q_EMIT frameReceived(frame);
+          });
+  connect(m_frameReader, &IO::FrameReader::dataReceived, this,
+          [this](const QByteArray &data) {
+            if (!paused())
+              Q_EMIT dataReceived(data);
+          });
+
+  // Start the worker thread
+  m_workerThread->start();
 }

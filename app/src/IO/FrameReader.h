@@ -87,7 +87,6 @@ private:
 
 private:
   bool m_enableCrc;
-  std::atomic_bool m_readScheduled;
 
   SerialStudio::OperationMode m_operationMode;
   SerialStudio::FrameDetection m_frameDetectionMode;
