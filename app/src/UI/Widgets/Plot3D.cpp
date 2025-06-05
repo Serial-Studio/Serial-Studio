@@ -757,16 +757,26 @@ void Widgets::Plot3D::drawData()
   QMatrix4x4 matrix;
   matrix.perspective(45, float(width()) / height(), 0.1, 100);
   matrix.translate(m_cameraOffsetX, m_cameraOffsetY, m_cameraOffsetZ);
-  matrix.rotate(m_cameraAngleX, 1, 0, 0);
-  matrix.rotate(m_cameraAngleY, 0, 1, 0);
-  matrix.rotate(m_cameraAngleZ, 0, 0, 1);
 
   // Render 3D pixmaps
   if (anaglyphEnabled())
   {
+    // Slightly rotate & shift view for each eye
     auto eyes = eyeTransformations(matrix);
+
+    // Apply world transformations for left eye
+    eyes.first.rotate(m_cameraAngleX, 1, 0, 0);
+    eyes.first.rotate(m_cameraAngleY, 0, 1, 0);
+    eyes.first.rotate(m_cameraAngleZ, 0, 0, 1);
     eyes.first.scale(m_worldScale);
+
+    // Apply world transformations for second eye
+    eyes.second.rotate(m_cameraAngleX, 1, 0, 0);
+    eyes.second.rotate(m_cameraAngleY, 0, 1, 0);
+    eyes.second.rotate(m_cameraAngleZ, 0, 0, 1);
     eyes.second.scale(m_worldScale);
+
+    // Render data
     m_plotPixmap[0] = renderData(eyes.first, data);
     m_plotPixmap[1] = renderData(eyes.second, data);
   }
@@ -774,7 +784,13 @@ void Widgets::Plot3D::drawData()
   // Render single pixmap
   else
   {
+    // Apply world transformations
+    matrix.rotate(m_cameraAngleX, 1, 0, 0);
+    matrix.rotate(m_cameraAngleY, 0, 1, 0);
+    matrix.rotate(m_cameraAngleZ, 0, 0, 1);
     matrix.scale(m_worldScale);
+
+    // Render data
     m_plotPixmap[0] = renderData(matrix, data);
   }
 
@@ -794,16 +810,26 @@ void Widgets::Plot3D::drawGrid()
   QMatrix4x4 matrix;
   matrix.perspective(45, float(width()) / height(), 0.1, 100);
   matrix.translate(m_cameraOffsetX, m_cameraOffsetY, m_cameraOffsetZ);
-  matrix.rotate(m_cameraAngleX, 1, 0, 0);
-  matrix.rotate(m_cameraAngleY, 0, 1, 0);
-  matrix.rotate(m_cameraAngleZ, 0, 0, 1);
 
   // Render 3D pixmaps
   if (anaglyphEnabled())
   {
+    // Slightly rotate & shift view for each eye
     auto eyes = eyeTransformations(matrix);
+
+    // Apply world transformations for left eye
+    eyes.first.rotate(m_cameraAngleX, 1, 0, 0);
+    eyes.first.rotate(m_cameraAngleY, 0, 1, 0);
+    eyes.first.rotate(m_cameraAngleZ, 0, 0, 1);
     eyes.first.scale(m_worldScale);
+
+    // Apply world transformations for second eye
+    eyes.second.rotate(m_cameraAngleX, 1, 0, 0);
+    eyes.second.rotate(m_cameraAngleY, 0, 1, 0);
+    eyes.second.rotate(m_cameraAngleZ, 0, 0, 1);
     eyes.second.scale(m_worldScale);
+
+    // Render grid
     m_gridPixmap[0] = renderGrid(eyes.first);
     m_gridPixmap[1] = renderGrid(eyes.second);
   }
@@ -811,7 +837,13 @@ void Widgets::Plot3D::drawGrid()
   // Render 2D pixmap
   else
   {
+    // Apply world transformations
+    matrix.rotate(m_cameraAngleX, 1, 0, 0);
+    matrix.rotate(m_cameraAngleY, 0, 1, 0);
+    matrix.rotate(m_cameraAngleZ, 0, 0, 1);
     matrix.scale(m_worldScale);
+
+    // Render grid
     m_gridPixmap[0] = renderGrid(matrix);
   }
 
@@ -823,10 +855,6 @@ void Widgets::Plot3D::drawGrid()
  * @brief Renders the 3D plot background with optional anaglyph effect.
  *
  * This function draws the radial gradient background behind the 3D plot.
- * If anaglyph mode is enabled, it renders two slightly shifted backgrounds
- * to match the stereo effect of the scene. The shift is intentionally small
- * to maintain a cohesive look while avoiding visible artifacts, even though
- * backgrounds are usually static in depth.
  *
  * The result is stored in m_backgroundPixmap[0] (left eye) and
  * m_backgroundPixmap[1] (right eye) for anaglyph mode, or only in
@@ -840,34 +868,27 @@ void Widgets::Plot3D::drawBackground()
   const int pixWidth = static_cast<int>(width() * qApp->devicePixelRatio());
   const int pixHeight = static_cast<int>(height() * qApp->devicePixelRatio());
 
-  // Lambda to create and paint background with optional horizontal shift
-  auto renderBackground = [&](QPixmap &pixmap, float shiftX) {
-    pixmap = QPixmap(pixWidth, pixHeight);
-    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-    pixmap.fill(Qt::transparent);
+  // Create a transparent pixmap at high DPI resolution
+  QPixmap pixmap(pixWidth, pixHeight);
+  pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+  pixmap.fill(Qt::transparent);
 
-    QPointF center((width() * 0.5f) + shiftX, height() * 0.5f);
-    qreal radius = qMax(width(), height()) * 0.25;
-    QRadialGradient gradient(center, radius);
-    gradient.setColorAt(0.0, m_innerBackgroundColor);
-    gradient.setColorAt(1.0, m_outerBackgroundColor);
+  // Set up a radial gradient centered in the widget
+  QPointF center(width() * 0.5f, height() * 0.5f);
+  qreal radius = qMax(width(), height()) * 0.25;
+  QRadialGradient gradient(center, radius);
+  gradient.setColorAt(0.0, m_innerBackgroundColor);
+  gradient.setColorAt(1.0, m_outerBackgroundColor);
 
-    QPainter painter(&pixmap);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.fillRect(boundingRect(), gradient);
-  };
+  // Paint the gradient onto the pixmap with antialiasing enabled
+  QPainter painter(&pixmap);
+  painter.setRenderHint(QPainter::Antialiasing, true);
+  painter.fillRect(boundingRect(), gradient);
 
-  // Render 3D pixmaps
+  // Assign background pixmaps
+  m_backgroundPixmap[0] = pixmap;
   if (anaglyphEnabled())
-  {
-    constexpr float shiftAmount = 2.0f;
-    renderBackground(m_backgroundPixmap[0], -shiftAmount);
-    renderBackground(m_backgroundPixmap[1], shiftAmount);
-  }
-
-  // Single background with no shift
-  else
-    renderBackground(m_backgroundPixmap[0], 0.0f);
+    m_backgroundPixmap[1] = pixmap;
 
   // Mark dirty flag as false to avoid needless rendering
   m_dirtyBackground = false;
@@ -885,21 +906,36 @@ void Widgets::Plot3D::drawCameraIndicator()
 {
   // Initialize camera matrix
   QMatrix4x4 matrix;
-  matrix.rotate(m_cameraAngleX, 1, 0, 0);
-  matrix.rotate(m_cameraAngleY, 0, 1, 0);
-  matrix.rotate(m_cameraAngleZ, 0, 0, 1);
 
   // Render 3D pixmaps
   if (anaglyphEnabled())
   {
+    // Slightly rotate & shift view for each eye
     auto eyes = eyeTransformations(matrix);
+
+    // Apply rotation transformations for left eye
+    eyes.first.rotate(m_cameraAngleX, 1, 0, 0);
+    eyes.first.rotate(m_cameraAngleY, 0, 1, 0);
+    eyes.first.rotate(m_cameraAngleZ, 0, 0, 1);
+
+    // Apply rotation transformations for second eye
+    eyes.second.rotate(m_cameraAngleX, 1, 0, 0);
+    eyes.second.rotate(m_cameraAngleY, 0, 1, 0);
+    eyes.second.rotate(m_cameraAngleZ, 0, 0, 1);
+
+    // Render camera indicator
     m_cameraIndicatorPixmap[0] = renderCameraIndicator(eyes.first);
     m_cameraIndicatorPixmap[1] = renderCameraIndicator(eyes.second);
   }
 
   // Render 2D pixmap
   else
+  {
+    matrix.rotate(m_cameraAngleX, 1, 0, 0);
+    matrix.rotate(m_cameraAngleY, 0, 1, 0);
+    matrix.rotate(m_cameraAngleZ, 0, 0, 1);
     m_cameraIndicatorPixmap[0] = renderCameraIndicator(matrix);
+  }
 
   // Mark dirty flag as false to avoid needless rendering
   m_dirtyCameraIndicator = false;
@@ -1348,12 +1384,12 @@ Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix)
 
   // Generate left eye camera
   QMatrix4x4 lMatrix = matrix;
-  lMatrix.translate(-shift, 0.0f, 0.0f);
+  lMatrix.translate(shift, 0.0f, 0.0f);
   lMatrix.rotate(angleDeg, 0, 0, 1);
 
   // Generate right eye camera
   QMatrix4x4 rMatrix = matrix;
-  rMatrix.translate(shift, 0.0f, 0.0f);
+  rMatrix.translate(-shift, 0.0f, 0.0f);
   rMatrix.rotate(-angleDeg, 0, 0, 1);
 
   // Return both cameras

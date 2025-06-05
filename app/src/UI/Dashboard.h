@@ -151,34 +151,40 @@ private:
   void configureMultiLineSeries();
 
 private:
-  int m_points;
-  int m_precision;
-  int m_widgetCount;
-  bool m_updateRequired;
-  bool m_terminalEnabled;
+  int m_points;           // Number of plot points to retain
+  int m_precision;        // Decimal display precision
+  int m_widgetCount;      // Total number of active widgets
+  bool m_updateRequired;  // Flag to trigger plot/UI update
+  bool m_terminalEnabled; // Whether terminal group is enabled
 
-  PlotDataX m_pltXAxis;
-  PlotDataX m_multipltXAxis;
-  QMap<int, PlotDataX> m_xAxisData;
-  QMap<int, PlotDataY> m_yAxisData;
+  PlotDataX m_pltXAxis;      // Default X-axis data for line plots
+  PlotDataX m_multipltXAxis; // Default X-axis data for multi-line plots
 
-  QVector<PlotDataY> m_fftValues;
-  QVector<LineSeries> m_pltValues;
-  QVector<MultiLineSeries> m_multipltValues;
+  QMap<int, PlotDataX> m_xAxisData; // X-axis data per dataset index
+  QMap<int, PlotDataY> m_yAxisData; // Y-axis data per dataset index
 
+  QVector<PlotDataY> m_fftValues;            // FFT data per dataset
+  QVector<LineSeries> m_pltValues;           // Line plot data
+  QVector<MultiLineSeries> m_multipltValues; // Multi-line plot data
 #ifdef USE_QT_COMMERCIAL
-  QVector<PlotData3D> m_plotData3D;
+  QVector<PlotData3D> m_plotData3D; // 3D plot data (commercial only)
 #endif
 
-  QVector<JSON::Action> m_actions;
-  QMap<int, JSON::Dataset> m_datasets;
-  SerialStudio::WidgetMap m_widgetMap;
+  QVector<JSON::Action> m_actions;     // User-defined dashboard actions
+  SerialStudio::WidgetMap m_widgetMap; // Maps window ID index to widget type
+  QMap<int, JSON::Dataset> m_datasets; // Raw input datasets (by dataset index)
+
+  // Maps unique dataset ID to all dataset refs for value updates
   QMap<quint32, QVector<JSON::Dataset *>> m_datasetReferences;
+
+  // Groups by widgets type
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Group>> m_widgetGroups;
+
+  // Datasets by widget type
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Dataset>> m_widgetDatasets;
 
-  JSON::Frame m_rawFrame;
-  JSON::Frame m_lastFrame;
-  mutable QReadWriteLock m_dataLock;
+  JSON::Frame m_rawFrame;            // Unmodified incoming frame
+  JSON::Frame m_lastFrame;           // Processed frame used in UI
+  mutable QReadWriteLock m_dataLock; // Thread-safe data access
 };
 } // namespace UI
