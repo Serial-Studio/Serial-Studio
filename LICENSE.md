@@ -33,7 +33,7 @@ Package manager builds (e.g., from Ubuntu, Arch AUR, etc.) are permitted only if
 - Using non-GPL-compliant Qt builds (e.g., closed-source or proprietary modules).
 - Reusing the name “Serial Studio”, logos, or trademarks — these are **not** covered by the GPL.
 
-**Note:** GPL-licensed builds **exclude** paid features such as MQTT, CANBus, and 3D visualization.
+**Note:** GPL-licensed builds **exclude** paid features such as MQTT, XY Plotting, and 3D visualization.
 
 ## 2. Commercial License Agreement
 
@@ -51,7 +51,6 @@ Full Commercial License: [https://github.com/Serial-Studio/Serial-Studio/blob/ma
 ### Commercial License Benefits (with valid license):
 - Pro features:
   - MQTT integration
-  - CANBus / Modbus decoding
   - XY plotting and 3D visualization
 - Use in commercial or enterprise environments
 - Priority support (email, GitHub, optional video support)
