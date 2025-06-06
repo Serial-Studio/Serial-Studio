@@ -597,14 +597,18 @@ void UI::Dashboard::resetData(const bool notify)
   // Clear plotting data
   m_fftValues.clear();
   m_pltValues.clear();
-  m_plotData3D.clear();
   m_multipltValues.clear();
 
   // Free memory associated with the containers of the plotting data
   m_fftValues.squeeze();
   m_pltValues.squeeze();
-  m_plotData3D.squeeze();
   m_multipltValues.squeeze();
+
+  // Clear data for 3D plots
+#ifdef USE_QT_COMMERCIAL
+  m_plotData3D.clear();
+  m_plotData3D.squeeze();
+#endif
 
   // Clear X/Y axis arrays
   m_xAxisData.clear();

@@ -163,11 +163,7 @@ Widgets.Pane {
       contentWidth: width
       anchors.topMargin: header.height
       contentHeight: delegate.implicitHeight
-
-      ScrollBar.vertical: ScrollBar {
-        policy: delegate.implicitHeight > view.height ? ScrollBar.AlwaysOn :
-                                                        ScrollBar.AsNeeded
-      }
+      ScrollBar.vertical.policy: delegate.implicitHeight > view.height ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
 
       TableDelegate {
         id: delegate

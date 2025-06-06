@@ -76,7 +76,7 @@ Item {
     radius: 3
     border.width: 1
     anchors.fill: parent
-    visible: root.toolbarButton
+    visible: root.toolbarButton && !root.horizontalLayout
     color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
     border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
     opacity: (root.checked || _mouseArea.pressed) ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"] : 0.0

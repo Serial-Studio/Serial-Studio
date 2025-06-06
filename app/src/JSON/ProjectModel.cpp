@@ -1367,36 +1367,6 @@ void JSON::ProjectModel::duplicateCurrentDataset()
 }
 
 /**
- * @brief Adds a new plot to the project model.
- *
- * This method ensures that the dataset is added under a valid group.
- * If no groups exist, a default group is created automatically.
- *
- * @see addGroup()
- * @see addDataset(Dataset::Type)
- */
-void JSON::ProjectModel::addPlot()
-{
-  ensureValidGroup();
-  addDataset(SerialStudio::DatasetPlot);
-}
-
-/**
- * @brief Adds a new dataset to the project model.
- *
- * This method ensures that the dataset is added under a valid group.
- * If no groups exist, a default group is created automatically.
- *
- * @see addGroup()
- * @see addDataset(Dataset::Type)
- */
-void JSON::ProjectModel::addDataset()
-{
-  ensureValidGroup();
-  addDataset(SerialStudio::DatasetGeneric);
-}
-
-/**
  * @brief Ensures a valid group is selected for dataset insertion.
  *
  * If no groups exist, a default group is created. If a compatible group
@@ -1488,6 +1458,7 @@ void JSON::ProjectModel::ensureValidGroup()
 void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
 {
   // Initialize a new dataset
+  ensureValidGroup();
   const auto groupId = m_selectedGroup.groupId();
   JSON::Dataset dataset(groupId);
 
@@ -1507,7 +1478,7 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
       dataset.m_fft = true;
       break;
     case SerialStudio::DatasetBar:
-      title = tr("New Bar Widget");
+      title = tr("New Level Indicator");
       dataset.m_widget = QStringLiteral("bar");
       break;
     case SerialStudio::DatasetGauge:
@@ -1529,7 +1500,7 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
   // Check if any existing dataset has the same title
   int count = 1;
   QString newTitle = title;
-  for (const auto &d : m_groups[groupId].m_datasets)
+  for (const auto &d : std::as_const(m_groups[groupId].m_datasets))
   {
     if (d.m_title == newTitle)
     {
@@ -1542,7 +1513,7 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
   while (count > 1)
   {
     bool titleExists = false;
-    for (const auto &d : m_groups[groupId].m_datasets)
+    for (const auto &d : std::as_const(m_groups[groupId].m_datasets))
     {
       if (d.m_title == newTitle)
       {
@@ -2160,22 +2131,9 @@ void JSON::ProjectModel::buildTreeModel()
     const auto group = m_groups[gIndex];
     auto *groupItem = new QStandardItem(group.title());
 
-    // Decide which icon to use for the group
-    QString icon;
-    if (group.widget() == "map")
-      icon = "qrc:/rcc/icons/project-editor/treeview/gps.svg";
-    else if (group.widget() == "accelerometer")
-      icon = "qrc:/rcc/icons/project-editor/treeview/accelerometer.svg";
-    else if (group.widget() == "gyro")
-      icon = "qrc:/rcc/icons/project-editor/treeview/gyroscope.svg";
-    else if (group.widget() == "multiplot")
-      icon = "qrc:/rcc/icons/project-editor/treeview/multiplot.svg";
-    else if (group.widget() == "datagrid")
-      icon = "qrc:/rcc/icons/project-editor/treeview/datagrid.svg";
-    else if (group.widget() == "plot3d")
-      icon = "qrc:/rcc/icons/project-editor/treeview/plot3d.svg";
-    else
-      icon = "qrc:/rcc/icons/project-editor/treeview/group.svg";
+    // Get which icon to use for the group
+    auto widget = SerialStudio::getDashboardWidget(group);
+    auto icon = SerialStudio::dashboardWidgetIcon(widget, false);
 
     // Set metadata for the group item
     groupItem->setData(icon, TreeViewIcon);
@@ -2188,7 +2146,14 @@ void JSON::ProjectModel::buildTreeModel()
       // Create dataset item
       const auto dataset = group.datasets()[dIndex];
       auto *datasetItem = new QStandardItem(dataset.title());
-      const auto dIcon = "qrc:/rcc/icons/project-editor/treeview/dataset.svg";
+
+      // Get which icon to use for the DATASET
+      auto widgets = SerialStudio::getDashboardWidgets(dataset);
+      QString dIcon = "qrc:/rcc/icons/project-editor/treeview/dataset.svg";
+      if (widgets.count() > 0)
+        dIcon = SerialStudio::dashboardWidgetIcon(widgets.first(), false);
+
+      // Set metadata for the dataset item
       datasetItem->setData(dIcon, TreeViewIcon);
       datasetItem->setData(dataset.title(), TreeViewText);
       datasetItem->setData(dataset.index(), TreeViewFrameIndex);

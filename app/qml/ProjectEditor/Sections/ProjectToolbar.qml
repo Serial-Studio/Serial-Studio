@@ -210,28 +210,99 @@ Rectangle {
     }
 
     //
-    // Add dataset
+    // Add Dataset
     //
     Widgets.ToolbarButton {
       text: qsTr("Dataset")
       Layout.alignment: Qt.AlignVCenter
-      onClicked: Cpp_JSON_ProjectModel.addDataset()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-dataset.svg"
+      onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric)
     }
 
     //
-    // Add Plot
+    // Other dataset types
     //
-    Widgets.ToolbarButton {
-      text: qsTr("Plot")
+    GridLayout {
+      rows: 3
+      columns: 2
+      rowSpacing: 4
+      columnSpacing: 4
       Layout.alignment: Qt.AlignVCenter
-      onClicked: Cpp_JSON_ProjectModel.addPlot()
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-plot.svg"
+
+      Widgets.ToolbarButton {
+        text: qsTr("Plot")
+
+        iconSize: 16
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-plot.svg"
+        onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot)
+      }
+
+      Widgets.ToolbarButton {
+        text: qsTr("FFT Plot")
+
+        iconSize: 16
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-fft.svg"
+        onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT)
+      }
+
+      Widgets.ToolbarButton {
+        text: qsTr("Gauge")
+
+        iconSize: 16
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gauge.svg"
+        onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge)
+      }
+
+      Widgets.ToolbarButton {
+        text: qsTr("Level Indicator")
+
+        iconSize: 16
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-bar.svg"
+        onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar)
+      }
+
+      Widgets.ToolbarButton {
+        text: qsTr("Compass")
+
+        iconSize: 16
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-compass.svg"
+        onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass)
+      }
+
+      Widgets.ToolbarButton {
+        text: qsTr("LED Indicator")
+
+        iconSize: 16
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-led.svg"
+        onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED)
+      }
     }
 
+    //
+    // Separator
+    //
+    Rectangle {
+      width: 1
+      Layout.fillHeight: true
+      Layout.maximumHeight: 64
+      Layout.alignment: Qt.AlignVCenter
+      color: Cpp_ThemeManager.colors["toolbar_separator"]
+    }
 
     //
-    // Add container
+    // Add Group
     //
     Widgets.ToolbarButton {
       text: qsTr("Group")
@@ -241,7 +312,7 @@ Rectangle {
     }
 
     //
-    // Groups
+    // Other group types
     //
     GridLayout {
       rows: 3

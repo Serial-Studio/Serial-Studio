@@ -27,13 +27,13 @@
 #include <QApplication>
 #include <QDesktopServices>
 
-#include "IO/Console.h"
-#include "IO/Manager.h"
 #include "Misc/Utilities.h"
-#include "Misc/TimerEvents.h"
-#include "Misc/WorkspaceManager.h"
 
 #ifdef USE_QT_COMMERCIAL
+#  include "IO/Console.h"
+#  include "IO/Manager.h"
+#  include "Misc/TimerEvents.h"
+#  include "Misc/WorkspaceManager.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
@@ -256,5 +256,7 @@ void IO::ConsoleExport::registerData(const QString &data)
 #ifdef USE_QT_COMMERCIAL
   if (!data.isEmpty() && exportEnabled())
     m_buffer.append(data);
+#else
+  (void)data;
 #endif
 }

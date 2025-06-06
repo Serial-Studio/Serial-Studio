@@ -252,10 +252,16 @@
         <file>icons/project-editor/model/x-axis.svg</file>
         <file>icons/project-editor/toolbar/add-accelerometer.svg</file>
         <file>icons/project-editor/toolbar/add-action.svg</file>
+        <file>icons/project-editor/toolbar/add-bar.svg</file>
+        <file>icons/project-editor/toolbar/add-compass.svg</file>
         <file>icons/project-editor/toolbar/add-datagrid.svg</file>
         <file>icons/project-editor/toolbar/add-dataset.svg</file>
+        <file>icons/project-editor/toolbar/add-fft.svg</file>
+        <file>icons/project-editor/toolbar/add-gauge.svg</file>
         <file>icons/project-editor/toolbar/add-gps.svg</file>
+        <file>icons/project-editor/toolbar/add-group.svg</file>
         <file>icons/project-editor/toolbar/add-gyroscope.svg</file>
+        <file>icons/project-editor/toolbar/add-led.svg</file>
         <file>icons/project-editor/toolbar/add-multiplot.svg</file>
         <file>icons/project-editor/toolbar/add-plot.svg</file>
         <file>icons/project-editor/toolbar/add-plot3d.svg</file>
@@ -371,6 +377,5 @@
         <file>themes/dark.json</file>
         <file>themes/default.json</file>
         <file>themes/light.json</file>
-        <file>icons/project-editor/toolbar/add-group.svg</file>
     </qresource>
 </RCC>

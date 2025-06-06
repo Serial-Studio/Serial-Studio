@@ -276,10 +276,7 @@ public slots:
   void duplicateCurrentAction();
   void duplicateCurrentDataset();
 
-  void addPlot();
-  void addDataset();
   void ensureValidGroup();
-
   void addDataset(const SerialStudio::DatasetOption options);
   void changeDatasetOption(const SerialStudio::DatasetOption option,
                            const bool checked);
