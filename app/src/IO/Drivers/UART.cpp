@@ -817,16 +817,12 @@ void IO::Drivers::UART::refreshSerialDevices()
   }
 
   // Select last device
-  static bool autoselected = false;
-  if (!autoselected)
+  if (m_portIndex == 0)
   {
     const auto ports = portList();
     auto lastPort = m_settings.value("IO_Serial_SelectedDevice", "").toString();
     if (!lastPort.isEmpty() && ports.contains(lastPort))
-    {
-      autoselected = true;
       setPortIndex(ports.indexOf(lastPort));
-    }
   }
 }
 
@@ -896,7 +892,7 @@ void IO::Drivers::UART::readSettings()
   list = m_settings.value("SerialBaudRates", stdBaudRates).toStringList();
 
   // Add any missing standard baud rate to saved user settings
-  for (const QString &rate : stdBaudRates)
+  for (const QString &rate : std::as_const(stdBaudRates))
   {
     if (!list.contains(rate))
       list.append(rate);

@@ -39,8 +39,7 @@ Plugins::Server::Server()
 
   // Send processed data at 1 Hz
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
-          this, &Plugins::Server::registerFrame,
-          SerialStudio::PerfCriticalConnection);
+          this, &Plugins::Server::registerFrame);
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
           &Plugins::Server::sendProcessedData);
 

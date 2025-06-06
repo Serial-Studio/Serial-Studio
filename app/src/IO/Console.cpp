@@ -319,10 +319,8 @@ void IO::Console::setupExternalConnections()
 {
   // Read received data automatically
   auto dm = &Manager::instance();
-  connect(dm, &Manager::dataSent, this, &IO::Console::onDataSent,
-          SerialStudio::PerfCriticalConnection);
-  connect(dm, &Manager::dataReceived, this, &IO::Console::onDataReceived,
-          SerialStudio::PerfCriticalConnection);
+  connect(dm, &Manager::dataSent, this, &IO::Console::onDataSent);
+  connect(dm, &Manager::dataReceived, this, &IO::Console::onDataReceived);
 
   // Update lists when language changes
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
@@ -511,9 +509,7 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
   m_textBuffer.append(processedString.toUtf8());
 
   // Update UI
-  QMetaObject::invokeMethod(
-      this, [=] { Q_EMIT displayString(processedString); },
-      SerialStudio::PerfCriticalConnection);
+  Q_EMIT displayString(processedString);
 }
 
 /**

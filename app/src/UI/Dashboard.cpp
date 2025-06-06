@@ -69,16 +69,14 @@ UI::Dashboard::Dashboard()
 #endif
 
   // Update the dashboard widgets at 24 Hz
-  connect(
-      &Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
-      [=] {
-        if (m_updateRequired)
-        {
-          m_updateRequired = false;
-          Q_EMIT updated();
-        }
-      },
-      SerialStudio::PerfCriticalConnection);
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
+          [=] {
+            if (m_updateRequired)
+            {
+              m_updateRequired = false;
+              Q_EMIT updated();
+            }
+          });
 }
 
 /**

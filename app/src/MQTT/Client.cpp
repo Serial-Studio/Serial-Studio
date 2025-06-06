@@ -937,8 +937,6 @@ void MQTT::Client::onMessageReceived(const QByteArray &message,
       return;
 
     // Let IO manager process incoming data
-    QMetaObject::invokeMethod(
-        this, [=] { IO::Manager::instance().processPayload(message); },
-        SerialStudio::PerfCriticalConnection);
+    IO::Manager::instance().processPayload(message);
   }
 }

@@ -108,8 +108,7 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   connect(&IO::Console::instance(), &IO::Console::displayString, this,
           &Widgets::Terminal::append);
   connect(&IO::Console::instance(), &IO::Console::scrollbackChanged, this,
-          &Widgets::Terminal::onScrollbackChanged,
-          SerialStudio::PerfCriticalConnection);
+          &Widgets::Terminal::onScrollbackChanged);
 
   // Clear the screen when device is connected/disconnected
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] {
