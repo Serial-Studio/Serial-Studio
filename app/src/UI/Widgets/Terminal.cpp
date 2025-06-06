@@ -106,7 +106,7 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
 
   // Receive data from the IO::Console handler
   connect(&IO::Console::instance(), &IO::Console::displayString, this,
-          &Widgets::Terminal::append, SerialStudio::PerfCriticalConnection);
+          &Widgets::Terminal::append);
   connect(&IO::Console::instance(), &IO::Console::scrollbackChanged, this,
           &Widgets::Terminal::onScrollbackChanged,
           SerialStudio::PerfCriticalConnection);
