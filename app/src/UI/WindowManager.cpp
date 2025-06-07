@@ -516,8 +516,7 @@ int UI::WindowManager::getIdForWindow(QQuickItem *item) const
  * @brief Calculates the target index for reordering a dragged window.
  *
  * Uses the current mouse position to determine which window is hovered,
- * then returns the appropriate insertion index based on proximity to the
- * window's midpoint (insert before or after).
+ * then returns the appropriate insertion index.
  *
  * If no window is hovered, returns m_windowOrder.size() to indicate the end.
  *
@@ -537,13 +536,7 @@ int UI::WindowManager::determineNewIndexFromMousePos(const QPoint &pos) const
   if (hoveredId < 0)
     return m_windowOrder.size();
 
-  QPointF local = hoveredWindow->mapFromItem(this, pos);
-  bool insertAfter = (width() > height())
-                         ? local.x() > hoveredWindow->width() / 2.0
-                         : local.y() > hoveredWindow->height() / 2.0;
-
-  int baseIndex = m_windowOrder.indexOf(hoveredId);
-  return insertAfter ? baseIndex + 1 : baseIndex;
+  return m_windowOrder.indexOf(hoveredId);
 }
 
 /**
