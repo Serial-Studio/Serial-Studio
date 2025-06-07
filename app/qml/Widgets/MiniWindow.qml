@@ -41,6 +41,7 @@ Item {
   // Properties used by the C++ window manager to detect where to drag window
   //
   readonly property int captionHeight: root.headerVisible ? 28 : 0
+  readonly property int externControlWidth: externalWinBt.width
   readonly property int windowControlsWidth: minBtMa.width + maxBtMa.width + closeBtMa.width
 
   //
@@ -70,6 +71,7 @@ Item {
   signal restoreClicked()
   signal minimizeClicked()
   signal maximizeClicked()
+  signal externalWindowClicked()
 
   //
   // Internal properties for saving/restoring window geometry
@@ -361,14 +363,12 @@ Item {
       }
 
       //
-      // Caption icon, label & buttons
+      // Window caption
       //
       RowLayout {
-        spacing: 0
+        anchors.centerIn: parent
         height: root.captionHeight
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: root.captionHeight / 4
+        spacing: root.captionHeight / 8
 
         Image {
           source: root.icon
@@ -376,24 +376,46 @@ Item {
           sourceSize: Qt.size(root.captionHeight / 2, root.captionHeight / 2)
         }
 
-        Item {
-          implicitWidth: root.captionHeight / 8
-        }
-
         Controls.Label {
           id: _title
           text: root.title
           elide: Qt.ElideRight
-          Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
           horizontalAlignment: Qt.AlignLeft
           font: Cpp_Misc_CommonFonts.boldUiFont
           color: root.focused ? Cpp_ThemeManager.colors["window_caption_active_text"] :
                                 Cpp_ThemeManager.colors["window_caption_inactive_text"]
         }
+      }
+
+      //
+      // Window controls
+      //
+      RowLayout {
+        spacing: 0
+        height: root.captionHeight
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        Controls.ToolButton {
+          flat: true
+          background: Item {}
+          icon.color: _title.color
+          Layout.alignment: Qt.AlignVCenter
+          icon.width: root.captionHeight / 2
+          icon.height: root.captionHeight / 2
+          onClicked: root.externalWindowClicked()
+          icon.source: "qrc:/rcc/icons/miniwindow/external.svg"
+
+          MouseArea {
+            id: externalWinBt
+            anchors.fill: parent
+            onClicked: root.externalWindowClicked()
+          }
+        }
 
         Item {
-          implicitWidth: root.captionHeight / 8
+          Layout.fillWidth: true
         }
 
         Controls.ToolButton {

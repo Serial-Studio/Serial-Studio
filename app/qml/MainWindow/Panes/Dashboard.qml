@@ -27,6 +27,7 @@ import SerialStudio.UI as SS_UI
 
 import "Dashboard" as DbItems
 import "../../Widgets" as Widgets
+import "../../Dialogs" as Dialogs
 
 Widgets.Pane {
   id: root
@@ -152,11 +153,6 @@ Widgets.Pane {
   property SS_UI.TaskBar taskBar: SS_UI.TaskBar {}
 
   //
-  // Custom properties
-  //
-  property bool isExternalWindow: false
-
-  //
   // Default background
   //
   Rectangle {
@@ -230,51 +226,6 @@ Widgets.Pane {
     id: startMenu
     x: -9
     taskBar: root.taskBar
-    isExternalWindow: root.isExternalWindow
     y: root.height - height - _taskBar.height - root.topPadding + 2
-    onExternalWindowClicked: {
-      var dialog = Qt.createQmlObject('
-        import QtQuick
-        import QtQuick.Controls
-
-        Window {
-          id: externalWindow
-
-          visible: true
-          minimumWidth: 640
-          minimumHeight: 480
-          title: qsTr("Dashboard")
-
-          Connections {
-            target: Cpp_IO_Manager
-            function onConnectedChanged() {
-                if (!Cpp_IO_Manager.isConnected)
-                    externalWindow.close()
-            }
-          }
-
-          Loader {
-            id: loader
-            anchors.fill: parent
-            source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/Dashboard.qml"
-
-            onLoaded: {
-              if (item) {
-                item.headerVisible = false
-                item.isExternalWindow = true
-              }
-
-              else
-                console.error("Dashboard.qml loaded, but item is null.")
-            }
-
-            onStatusChanged: {
-              if (status === Loader.Error)
-                console.error("Failed to load Dashboard.qml:", loader.errorString())
-            }
-          }
-        }
-        ', root, "ExternalDashboardWindow")
-    }
   }
 }

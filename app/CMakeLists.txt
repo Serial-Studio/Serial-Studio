@@ -240,7 +240,6 @@ set(QML_SRC
   qml/Dialogs/Acknowledgements.qml
   qml/Dialogs/CsvPlayer.qml
   qml/Dialogs/Donate.qml
-  qml/Dialogs/ExternalConsole.qml
   qml/Dialogs/IconPicker.qml
   qml/Dialogs/FileTransmission.qml
   qml/Dialogs/Settings.qml

@@ -736,12 +736,14 @@ void UI::WindowManager::mousePressEvent(QMouseEvent *event)
   // Check if we're clicking the title bar (top area)
   bool captionClick = false;
   const int captionH = m_focusedWindow->property("captionHeight").toInt();
+  const int externcW = m_focusedWindow->property("externControlWidth").toInt();
   const int buttonsW = m_focusedWindow->property("windowControlsWidth").toInt();
   const auto mouseClick = m_focusedWindow->mapFromItem(this, m_initialMousePos);
   if (mouseClick.y() <= captionH)
   {
     // User clicked on caption
-    if (mouseClick.x() <= m_focusedWindow->width() - buttonsW)
+    if (mouseClick.x() <= m_focusedWindow->width() - buttonsW
+        && mouseClick.x() > externcW)
       captionClick = true;
 
     // User clicked on caption buttons, let QML process events
@@ -858,10 +860,12 @@ void UI::WindowManager::mouseDoubleClickEvent(QMouseEvent *event)
 
   // Check if double-click was in the title bar area (not on window buttons)
   const int captionH = m_focusedWindow->property("captionHeight").toInt();
+  const int externcW = m_focusedWindow->property("externControlWidth").toInt();
   const int buttonsW = m_focusedWindow->property("windowControlsWidth").toInt();
   const auto localPos = m_focusedWindow->mapFromItem(this, event->pos());
   if (localPos.y() <= captionH
-      && localPos.x() <= m_focusedWindow->width() - buttonsW)
+      && localPos.x() <= m_focusedWindow->width() - buttonsW
+      && localPos.x() > externcW)
   {
     // Obtain current state
     const QString state = m_focusedWindow->property("state").toString();

@@ -377,5 +377,6 @@
         <file>themes/dark.json</file>
         <file>themes/default.json</file>
         <file>themes/light.json</file>
+        <file>icons/miniwindow/external.svg</file>
     </qresource>
 </RCC>

@@ -46,7 +46,6 @@ Popup {
   //
   // Custom properties
   //
-  property bool isExternalWindow: false
   readonly property real gradientWidth: _versionLabel.implicitHeight + 16
   readonly property real gradientHeight: _versionLabel.implicitWidth + 32
 

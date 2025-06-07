@@ -55,6 +55,7 @@ Widgets.MiniWindow {
   onRestoreClicked: taskBar.activeWindow = root
   onMinimizeClicked: taskBar.minimizeWindow(root)
   onMaximizeClicked: taskBar.activeWindow = root
+  onExternalWindowClicked: externalWindowLoader.active = true
 
   //
   // Auto-layout hacks to avoid issues with animations
@@ -66,6 +67,67 @@ Widgets.MiniWindow {
     interval: 250
     repeat: false
     onTriggered: windowManager.triggerLayoutUpdate()
+  }
+
+  //
+  // QML loader component
+  //
+  Component {
+    id: widgetLoader
+
+    Item {
+      id: loader
+
+      anchors.fill: parent
+      property var windowRoot: null
+      property var widgetInstance: null
+      property var dashboardWidget: null
+
+      Component.onCompleted: {
+        const component = Qt.createComponent(dashboardWidget.widgetQmlPath)
+        if (component.status === Component.Ready) {
+          if (widgetInstance) {
+            if (widgetInstance.settings)
+              widgetInstance.settings.sync()
+            widgetInstance.destroy()
+          }
+
+          widgetInstance = component.createObject(loader, {
+                                                    model: dashboardWidget.widgetModel,
+                                                    windowRoot: loader.windowRoot,
+                                                    color: dashboardWidget.widgetColor
+                                                  })
+
+          if (!widgetInstance) {
+            console.error("Failed to create widget from", dashboardWidget.widgetQmlPath)
+            return
+          }
+
+          if (widgetInstance.hasToolbar !== undefined) {
+            windowRoot.hasToolbar = widgetInstance.hasToolbar
+            if (widgetInstance.hasToolbarChanged !== undefined) {
+              widgetInstance.hasToolbarChanged.connect(function () {
+                windowRoot.hasToolbar = widgetInstance.hasToolbar
+              })
+            }
+          }
+
+          widgetInstance.anchors.fill = loader
+        }
+
+        else if (component.status === Component.Error)
+          console.error("Component load error:", component.errorString())
+      }
+
+      Connections {
+        target: Cpp_ThemeManager
+
+        function onThemeChanged() {
+          if (widgetInstance !== null)
+            widgetInstance.color = dashboardWidget.widgetColor
+        }
+      }
+    }
   }
 
   //
@@ -120,63 +182,87 @@ Widgets.MiniWindow {
   }
 
   //
-  // Render a widget inside the pane
+  // Bridge C/C++ information to QML
   //
   DashboardWidget {
     id: widget
     widgetIndex: root.widgetIndex
-  } Item {
-    id: loader
-    clip: true
-    anchors.margins: 1
+  }
+
+  //
+  // Embedded contents
+  //
+  Item {
+    id: container
     anchors.fill: parent
     anchors.topMargin: root.captionHeight
 
-    property var widgetInstance: null
-
     Component.onCompleted: {
-      const component = Qt.createComponent(widget.widgetQmlPath)
-      if (component.status === Component.Ready) {
-        if (widgetInstance) {
-          if (widgetInstance.settings)
-            widgetInstance.settings.sync()
+      widgetLoader.createObject(container, {
+                                  dashboardWidget: widget,
+                                  windowRoot: root,
+                                }
+                                )
+    }
+  }
 
-          widgetInstance.destroy()
-        }
+  //
+  // External window
+  //
+  Loader {
+    id: externalWindowLoader
 
-        widgetInstance = component.createObject(loader, {
-                                                  model: widget.widgetModel,
-                                                  windowRoot: root,
-                                                  color: widget.widgetColor
-                                                })
+    active: false
+    asynchronous: true
 
-        if (!widgetInstance) {
-          console.error("Failed to create widget from", widget.widgetQmlPath)
-          return
-        }
+    sourceComponent: Component {
+      Window {
+        id: window
 
-        if (widgetInstance.hasToolbar !== undefined) {
-          root.hasToolbar = widgetInstance.hasToolbar
-          if (widgetInstance.hasToolbarChanged !== undefined) {
-            widgetInstance.hasToolbarChanged.connect(function () {
-              root.hasToolbar = widgetInstance.hasToolbar
-            })
+        width: 640
+        height: 480
+        visible: true
+        flags: Qt.Window
+        title: widget.widgetTitle
+        minimumWidth: root.minimumWidth
+        minimumHeight: root.minimumHeight
+        onClosing: externalWindowLoader.active = false
+
+        Page {
+          anchors.fill: parent
+          palette.mid: Cpp_ThemeManager.colors["mid"]
+          palette.dark: Cpp_ThemeManager.colors["dark"]
+          palette.text: Cpp_ThemeManager.colors["text"]
+          palette.base: Cpp_ThemeManager.colors["base"]
+          palette.link: Cpp_ThemeManager.colors["link"]
+          palette.light: Cpp_ThemeManager.colors["light"]
+          palette.window: Cpp_ThemeManager.colors["window"]
+          palette.shadow: Cpp_ThemeManager.colors["shadow"]
+          palette.accent: Cpp_ThemeManager.colors["accent"]
+          palette.button: Cpp_ThemeManager.colors["button"]
+          palette.midlight: Cpp_ThemeManager.colors["midlight"]
+          palette.highlight: Cpp_ThemeManager.colors["highlight"]
+          palette.windowText: Cpp_ThemeManager.colors["window_text"]
+          palette.brightText: Cpp_ThemeManager.colors["bright_text"]
+          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+          palette.toolTipBase: Cpp_ThemeManager.colors["tooltip_base"]
+          palette.toolTipText: Cpp_ThemeManager.colors["tooltip_text"]
+          palette.linkVisited: Cpp_ThemeManager.colors["link_visited"]
+          palette.alternateBase: Cpp_ThemeManager.colors["alternate_base"]
+          palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+          palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
+
+          Item {
+            anchors.fill: parent
+            Component.onCompleted: {
+              window.showNormal()
+              widgetLoader.createObject(this, {
+                                          dashboardWidget: widget,
+                                          windowRoot: root
+                                        })
+            }
           }
         }
-
-        widgetInstance.anchors.fill = loader
-      }
-
-      else if (component.status === Component.Error)
-        console.error("Component load error:", component.errorString())
-    }
-
-    Connections {
-      target: Cpp_ThemeManager
-
-      function onThemeChanged() {
-        if (loader.widgetInstance !== null)
-          loader.widgetInstance.color = widget.widgetColor
       }
     }
   }

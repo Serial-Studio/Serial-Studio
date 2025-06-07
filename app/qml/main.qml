@@ -113,18 +113,9 @@ Item {
   }
 
   //
-  // External console
-  //
-  DialogLoader {
-    id: externalConsole
-    source: "qrc:/serial-studio.com/gui/qml/Dialogs/ExternalConsole.qml"
-  }
-
-  //
   // Dialog display functions (FOSS)
   //
   function showAboutDialog()       { aboutDialog.activate() }
-  function showExternalConsole()   { externalConsole.activate() }
   function showSettingsDialog()    { settingsDialog.showNormal() }
   function showProjectEditor()     { projectEditor.displayWindow() }
   function showAcknowledgements()  { acknowledgementsDialog.activate() }
