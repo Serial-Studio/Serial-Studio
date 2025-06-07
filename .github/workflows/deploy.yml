@@ -462,17 +462,27 @@ jobs:
         mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg"
 
     - name: '📋 Notarize'
-      uses: wpilibsuite/xcode-notarize@v3
-      with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
-        appstore-connect-username: ${{secrets.APPLE_NOTARIZATION_USERNAME}}
-        appstore-connect-teamid: ${{secrets.APPLE_NOTARIZATION_TEAMID}}
-        appstore-connect-password: ${{secrets.APPLE_NOTARIZATION_PASSWORD}}
+      shell: bash
+      env:
+        PRODUCT_PATH: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
+        APPLE_ID: ${{secrets.APPLE_NOTARIZATION_USERNAME}}
+        APP_PASSWORD: ${{secrets.APPLE_NOTARIZATION_PASSWORD}}
+        TEAM_ID: ${{secrets.APPLE_NOTARIZATION_TEAMID}}
+      run: |
+        echo "Submitting $PRODUCT_PATH for notarization..."
+        xcrun notarytool submit "$PRODUCT_PATH" \
+          --apple-id "$APPLE_ID" \
+          --password "$APP_PASSWORD" \
+          --team-id "$TEAM_ID" \
+          --wait \
+          --output-format json
 
     - name: '📌 Staple'
-      uses: BoundfoxStudios/action-xcode-staple@v1
-      with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
+      shell: bash
+      run: |
+        PRODUCT="${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg"
+        echo "Stapling $PRODUCT..."
+        xcrun stapler staple "$PRODUCT"
 
     - name: '📤 Upload artifact: DMG'
       uses: actions/upload-artifact@v4
