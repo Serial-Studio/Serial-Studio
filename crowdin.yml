@@ -3,29 +3,17 @@ preserve_hierarchy: true
 
 files:
   - source: 'app/translations/ts/en_US.ts'
-    translation: 'app/translations/ts/%two_letters_code%_%country_code%.ts'
+    translation: 'app/translations/ts/%locale%.ts'
     languages_mapping:
-      two_letters_code:
-        de: de
-        es: es
-        fr: fr
-        it: it
-        ja: ja
-        ko: ko
-        pl: pl
-        pt: pt
-        ru: ru
-        tr: tr
-        zh: zh
-      country_code:
-        DE: de
-        MX: es
-        FR: fr
-        IT: it
-        JP: ja
-        KR: ko
-        PL: pl
-        BR: pt
-        RU: ru
-        TR: tr
-        CN: zh
+      locale:
+        de: de_DE
+        es-MX: es_MX
+        fr: fr_FR
+        it: it_IT
+        ja: ja_JP
+        ko: ko_KR
+        pl: pl_PL
+        pt-BR: pt_BR
+        ru: ru_RU
+        tr: tr_TR
+        zh-CN: zh_CN

@@ -22,6 +22,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y qt6-tools-dev qt6-tools-dev-tools
+          
+      - name: Update .ts files (Qt 6)
+        working-directory: app/translations
+        run: python3 translation_manager.py --lupdate
 
       - name: Sync translations with Crowdin
         uses: crowdin/github-action@v2
@@ -37,10 +41,8 @@ jobs:
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
-      - name: Update .ts files (Qt 6)
-        run: python3 translation_manager.py --lupdate
-
       - name: Compile .qm files (Qt 6)
+        working-directory: app/translations
         run: python3 translation_manager.py --lrelease
 
       - name: Create pull request
