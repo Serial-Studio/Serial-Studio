@@ -102,6 +102,9 @@ public slots:
   void registerWindow(const int id, QQuickItem *item);
 
 private:
+  int getIdForWindow(QQuickItem *item) const;
+  int determineNewIndexFromMousePos(const QPoint &pos) const;
+
   QRect extractGeometry(QQuickItem *item) const;
   ResizeEdge detectResizeEdge(QQuickItem *target) const;
   QQuickItem *getWindow(const int x, const int y) const;
@@ -117,6 +120,7 @@ private:
   bool m_autoLayoutEnabled;
   QString m_backgroundImage;
 
+  QVector<int> m_windowOrder;
   QMap<int, QQuickItem *> m_windows;
   QMap<QQuickItem *, int> m_windowZ;
 

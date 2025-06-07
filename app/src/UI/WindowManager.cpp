@@ -106,6 +106,7 @@ void UI::WindowManager::clear()
   m_zCounter = 1;
   m_windowZ.clear();
   m_windows.clear();
+  m_windowOrder.clear();
 
   Q_EMIT zCounterChanged();
 }
@@ -148,8 +149,9 @@ void UI::WindowManager::autoLayout()
 
   // Collect all currently visible and valid QQuickItems (windows)
   QList<QQuickItem *> visibleWindows;
-  for (auto *win : std::as_const(m_windows))
+  for (int id : std::as_const(m_windowOrder))
   {
+    auto *win = m_windows.value(id);
     if (win && win->state() != "closed" && win->state() != "minimized")
       visibleWindows.append(win);
   }
@@ -371,6 +373,7 @@ void UI::WindowManager::registerWindow(const int id, QQuickItem *item)
 
   // Register the window with the manager
   m_windows[id] = item;
+  m_windowOrder.append(id);
   m_windowZ[item] = ++m_zCounter;
 
   // Ensure window Z is in sync
@@ -392,6 +395,7 @@ void UI::WindowManager::registerWindow(const int id, QQuickItem *item)
 void UI::WindowManager::unregisterWindow(QQuickItem *item)
 {
   m_windowZ.remove(item);
+  m_windowOrder.removeAll(getIdForWindow(item));
   for (auto it = m_windows.begin(); it != m_windows.end(); ++it)
   {
     if (it.value() == item)
@@ -454,6 +458,57 @@ void UI::WindowManager::triggerLayoutUpdate()
 {
   if (autoLayoutEnabled())
     autoLayout();
+}
+
+/**
+ * @brief Retrieves the ID associated with a registered window item.
+ *
+ * Performs a reverse lookup in the window map to find the integer ID
+ * assigned to the given QQuickItem.
+ *
+ * @param item Pointer to the window item.
+ * @return The window ID if found, or -1 if not registered.
+ */
+int UI::WindowManager::getIdForWindow(QQuickItem *item) const
+{
+  for (auto it = m_windows.constBegin(); it != m_windows.constEnd(); ++it)
+  {
+    if (it.value() == item)
+      return it.key();
+  }
+
+  return -1;
+}
+
+/**
+ * @brief Calculates the target index for reordering a dragged window.
+ *
+ * Uses the current mouse position to determine which window is hovered,
+ * then returns the appropriate insertion index based on proximity to the
+ * window's midpoint (insert before or after).
+ *
+ * If no window is hovered, returns m_windowOrder.size() to indicate the end.
+ *
+ * @param pos Mouse position relative to the WindowManager.
+ * @return Target index for reordering.
+ */
+int UI::WindowManager::determineNewIndexFromMousePos(const QPoint &pos) const
+{
+  QQuickItem *hoveredWindow = getWindow(pos.x(), pos.y());
+  if (!hoveredWindow)
+    return m_windowOrder.size();
+
+  int hoveredId = getIdForWindow(hoveredWindow);
+  if (hoveredId < 0)
+    return m_windowOrder.size();
+
+  QPointF local = hoveredWindow->mapFromItem(this, pos);
+  bool insertAfter = (width() > height())
+                         ? local.x() > hoveredWindow->width() / 2.0
+                         : local.y() > hoveredWindow->height() / 2.0;
+
+  int baseIndex = m_windowOrder.indexOf(hoveredId);
+  return insertAfter ? baseIndex + 1 : baseIndex;
 }
 
 /**
@@ -542,7 +597,7 @@ QQuickItem *UI::WindowManager::getWindow(const int x, const int y) const
 
   for (QQuickItem *window : std::as_const(windows))
   {
-    if (!window || !window->isVisible())
+    if (!window || !window->isVisible() || window == m_dragWindow)
       continue;
 
     const auto state = window->state();
@@ -581,7 +636,7 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
   }
 
   // Only execute geometry changes when it makes sense
-  if (m_focusedWindow->state() != "normal" || autoLayoutEnabled())
+  if (m_focusedWindow->state() != "normal")
   {
     QQuickItem::mouseMoveEvent(event);
     return;
@@ -601,6 +656,23 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
 
     m_dragWindow->setX(newX);
     m_dragWindow->setY(newY);
+
+    if (autoLayoutEnabled())
+    {
+      const int targetIndex = determineNewIndexFromMousePos(currentPos);
+      if (targetIndex >= 0 && targetIndex < m_windowOrder.size())
+      {
+        int targetId = m_windowOrder[targetIndex];
+        QQuickItem *targetWindow = m_windows.value(targetId);
+        if (targetWindow && targetWindow != m_dragWindow)
+        {
+          m_dragWindow->setWidth(
+              qMin(m_dragWindow->width(), targetWindow->width()));
+          m_dragWindow->setHeight(
+              qMin(m_dragWindow->height(), targetWindow->height()));
+        }
+      }
+    }
 
     event->accept();
     return;
@@ -755,11 +827,11 @@ void UI::WindowManager::mousePressEvent(QMouseEvent *event)
   }
 
   // Only allow resizing & moving window when it makes sense
-  if (m_focusedWindow->state() == "normal" && !autoLayoutEnabled())
+  if (m_focusedWindow->state() == "normal")
   {
     // Detect active resize edge & start resizing
     m_resizeEdge = detectResizeEdge(m_focusedWindow);
-    if (m_resizeEdge != ResizeEdge::None)
+    if (m_resizeEdge != ResizeEdge::None && !autoLayoutEnabled())
     {
       grabMouse();
       switch (m_resizeEdge)
@@ -817,6 +889,37 @@ void UI::WindowManager::mousePressEvent(QMouseEvent *event)
  */
 void UI::WindowManager::mouseReleaseEvent(QMouseEvent *event)
 {
+  // Finalize reordering after drag in auto-layout mode
+  const int dragDistance = (event->pos() - m_initialMousePos).manhattanLength();
+  if (autoLayoutEnabled())
+  {
+    if (m_dragWindow && dragDistance >= 20)
+    {
+      const int draggedId = getIdForWindow(m_dragWindow);
+      if (draggedId >= 0)
+      {
+        const int currentIndex = m_windowOrder.indexOf(draggedId);
+        const int newIndex = determineNewIndexFromMousePos(event->pos());
+
+        if (newIndex >= 0 && newIndex != currentIndex)
+        {
+          int normIndex = newIndex;
+          if (newIndex > currentIndex)
+            normIndex = newIndex - 1;
+
+          normIndex = qBound(0, normIndex, m_windowOrder.size() - 1);
+
+          if (currentIndex >= 0 && normIndex >= 0 && currentIndex != normIndex
+              && currentIndex < m_windowOrder.size()
+              && normIndex < m_windowOrder.size())
+            std::swap(m_windowOrder[currentIndex], m_windowOrder[normIndex]);
+        }
+      }
+    }
+
+    loadLayout();
+  }
+
   // Reset mouse cursor
   ungrabMouse();
   unsetCursor();

@@ -69,7 +69,7 @@ Item {
     root.showLegends = (root.width >= 256)
     plot.yLabelVisible = (root.width >= 196)
     plot.xLabelVisible = (root.height >= (196 * 2/3))
-    root.hasToolbar = (root.width >= toolbar.implicitWidth)
+    root.hasToolbar = (root.width >= toolbar.implicitWidth) && (root.height >= 220)
   }
 
   //
