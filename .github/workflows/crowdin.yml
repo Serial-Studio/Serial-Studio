@@ -2,7 +2,8 @@ name: Crowdin Sync
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
+    
   workflow_dispatch:
 
 jobs:
@@ -23,17 +24,18 @@ jobs:
           create_pull_request: false
           config: 'crowdin.yml'
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           branch: l10n/crowdin-translations
           title: 'chore(i18n): update Crowdin translations'
           body: |
             This PR updates .ts translation files from Crowdin
             and recompiles the .qm files using Qt 6 tools.
           commit-message: 'chore(i18n): update translations and .qm files'
-          base: main
+          base: master
