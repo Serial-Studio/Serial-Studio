@@ -176,7 +176,7 @@ void UI::WindowManager::loadLayout()
 void UI::WindowManager::autoLayout()
 {
   // Set function constants
-  const int margin = 8;
+  const int margin = 4;
   const int spacing = 4;
 
   // Collect all currently visible and valid QQuickItems (windows)
