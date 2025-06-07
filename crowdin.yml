@@ -18,14 +18,14 @@ files:
         tr: tr
         zh: zh
       country_code:
-        de: DE
-        es: MX
-        fr: FR
-        it: IT
-        ja: JP
-        ko: KR
-        pl: PL
-        pt: BR
-        ru: RU
-        tr: TR
-        zh: CN
+        DE: de
+        MX: es
+        FR: fr
+        IT: it
+        JP: ja
+        KR: ko
+        PL: pl
+        BR: pt
+        RU: ru
+        TR: tr
+        CN: zh

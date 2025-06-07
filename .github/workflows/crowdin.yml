@@ -13,21 +13,43 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Qt 6 tools (lupdate, lrelease)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt6-tools-dev qt6-tools-dev-tools
+
       - name: Sync translations with Crowdin
-        uses: crowdin/github-action@v2.7.1
+        uses: crowdin/github-action@v2
         with:
           upload_sources: true
           upload_translations: false
           download_translations: true
-          localization_branch_name: l10n_crowdin_translations
-          create_pull_request: true
-          pull_request_title: 'New Crowdin Translations'
-          pull_request_body: >
-            New Crowdin translations by
-            [Crowdin GitHub Action](https://github.com/crowdin/github-action)
-          pull_request_base_branch_name: 'main'
+          localization_branch_name: l10n/crowdin-translations
+          create_pull_request: false
           config: 'crowdin.yml'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+
+      - name: Update .ts files (Qt 6)
+        run: python3 translation_manager.py --lupdate
+
+      - name: Compile .qm files (Qt 6)
+        run: python3 translation_manager.py --lrelease
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: l10n/crowdin-translations
+          title: 'chore(i18n): update Crowdin translations'
+          body: |
+            This PR updates .ts translation files from Crowdin
+            and recompiles the .qm files using Qt 6 tools.
+          commit-message: 'chore(i18n): update translations and .qm files'
+          base: main
