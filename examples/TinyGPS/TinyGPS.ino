@@ -24,13 +24,14 @@
 //
 
 #include <TinyGPS.h>
+#include <SoftwareSerial.h>
 
 // Initialize a TinyGPS parser instance
 TinyGPS gps;
 
 // Set up the serial port for GPS communication (using Serial1 for TX/RX pins)
-HardwareSerial &gpsSerial = Serial1;
-// SoftwareSerial gpsSerial(2, 3); // For Arduino UNO/Nano
+//HardwareSerial &gpsSerial = Serial1;
+SoftwareSerial gpsSerial(2, 3); // For Arduino UNO/Nano
 
 // Variables to store GPS position data
 float latitude = 0.0;
