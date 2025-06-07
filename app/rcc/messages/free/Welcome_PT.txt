@@ -1,0 +1,25 @@
+▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
+
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Todos os direitos reservados.
+
+Esta versão do Serial Studio é gratuita apenas para uso pessoal e de
+avaliação. O uso comercial não é permitido sem uma licença Pro válida.
+
+→ Precisa de uma licença comercial? https://store.serial-studio.com/
+
+Você pode compilar o Serial Studio por conta própria sob os termos da licença
+GNU GPLv3, usando uma instalação open source do Qt.
+
+→ Código-fonte: https://github.com/serial-studio/serial-studio
+
+Novo no Serial Studio? Clique no botão “Ajuda” na barra de ferramentas para
+começar.
+
+A versão Pro inclui recursos extras incríveis como:
+✓ Suporte a MQTT
+✓ Gráficos XY e visualização em 3D
+✓ Licença binária adequada para uso comercial (sem obrigações GPL)
+✓ E mais ferramentas para melhorar seu fluxo de trabalho embarcado

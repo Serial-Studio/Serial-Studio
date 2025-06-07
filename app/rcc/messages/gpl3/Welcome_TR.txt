@@ -1,0 +1,27 @@
+▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
+
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+
+Bu yazılım, GNU Genel Kamu Lisansı v3.0 (GPLv3) kapsamında lisanslanmıştır.
+GPL koşullarına bağlı kalmak kaydıyla, bu yazılımı özgürce kullanabilir,
+değiştirebilir ve yeniden dağıtabilirsiniz. Türev çalışmaların da açık kaynak
+olarak kalması gerekmektedir.
+
+→ Tam lisans: https://www.gnu.org/licenses/gpl-3.0.html
+→ Kaynak kodu: https://github.com/serial-studio/serial-studio
+
+Serial Studio'yu ilk kez mi kullanıyorsunuz? Başlamak için araç çubuğundaki
+"Yardım" düğmesine tıklayın.
+
+Projeyi beğendiniz mi? Pro sürümünü satın alarak desteklemeyi düşünebilirsiniz:
+→ https://store.serial-studio.com/
+
+Pro sürüm aşağıdaki gibi harika ekstralar sunar:
+✓ MQTT desteği
+✓ XY grafikleri ve 3B görselleştirme
+✓ Ticari kullanıma uygun ikili lisans (GPL yükümlülüğü yok)
+✓ Gömülü iş akışınızı geliştirmek için daha fazla araç
+
+→ Daha fazla bilgi: https://serial-studio.com/

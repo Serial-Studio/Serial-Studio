@@ -1,0 +1,25 @@
+▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
+
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Tüm hakları saklıdır.
+
+Bu Serial Studio sürümü yalnızca kişisel kullanım ve değerlendirme içindir.
+Geçerli bir Pro lisansı olmadan ticari kullanımına izin verilmez.
+
+→ Ticari lisansa mı ihtiyacınız var? https://store.serial-studio.com/
+
+Qt’nin açık kaynaklı sürümünü kullanarak, Serial Studio'yu GNU GPLv3 şartlarına
+göre kendiniz derleyebilirsiniz.
+
+→ Kaynak kodu: https://github.com/serial-studio/serial-studio
+
+Serial Studio’yu ilk kez mi kullanıyorsunuz? Başlamak için araç çubuğundaki
+“Yardım” düğmesine tıklayın.
+
+Pro sürüm şu harika ek özellikleri içerir:
+✓ MQTT desteği
+✓ XY grafikleri ve 3B görselleştirme
+✓ Ticari kullanıma uygun ikili lisans (GPL yükümlülüğü yok)
+✓ Gömülü sistem iş akışınızı geliştirecek daha fazla araç

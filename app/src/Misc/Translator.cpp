@@ -79,6 +79,24 @@ Misc::Translator::Language Misc::Translator::systemLanguage() const
     case QLocale::French:
       lang = French;
       break;
+    case QLocale::Japanese:
+      lang = Japanese;
+      break;
+    case QLocale::Korean:
+      lang = Korean;
+      break;
+    case QLocale::Portuguese:
+      lang = Portuguese;
+      break;
+    case QLocale::Italian:
+      lang = Italian;
+      break;
+    case QLocale::Polish:
+      lang = Polish;
+      break;
+    case QLocale::Turkish:
+      lang = Turkish;
+      break;
     default:
       lang = English;
       break;
@@ -112,6 +130,24 @@ QString Misc::Translator::welcomeConsoleText() const
       break;
     case French:
       lang = QStringLiteral("FR");
+      break;
+    case Japanese:
+      lang = QStringLiteral("JA");
+      break;
+    case Korean:
+      lang = QStringLiteral("KO");
+      break;
+    case Portuguese:
+      lang = QStringLiteral("PT");
+      break;
+    case Italian:
+      lang = QStringLiteral("IT");
+      break;
+    case Polish:
+      lang = QStringLiteral("PL");
+      break;
+    case Turkish:
+      lang = QStringLiteral("TR");
       break;
     default:
       lang = QStringLiteral("EN");
@@ -178,6 +214,12 @@ QStringList &Misc::Translator::availableLanguages()
     list.append(QStringLiteral("Deutsch"));
     list.append(QStringLiteral("Русский"));
     list.append(QStringLiteral("Français"));
+    list.append(QStringLiteral("日本語"));
+    list.append(QStringLiteral("한국어"));
+    list.append(QStringLiteral("Português"));
+    list.append(QStringLiteral("Italiano"));
+    list.append(QStringLiteral("Polski"));
+    list.append(QStringLiteral("Türkçe"));
   }
 
   return list;
@@ -219,6 +261,30 @@ void Misc::Translator::setLanguage(const Language language)
     case French:
       langName = QStringLiteral("fr_FR");
       locale = QLocale(QLocale::French);
+      break;
+    case Japanese:
+      langName = QStringLiteral("ja_JP");
+      locale = QLocale(QLocale::Japanese);
+      break;
+    case Korean:
+      langName = QStringLiteral("ko_KR");
+      locale = QLocale(QLocale::Korean);
+      break;
+    case Portuguese:
+      langName = QStringLiteral("pt_BR");
+      locale = QLocale(QLocale::Portuguese);
+      break;
+    case Italian:
+      langName = QStringLiteral("it_IT");
+      locale = QLocale(QLocale::Italian);
+      break;
+    case Polish:
+      langName = QStringLiteral("pl_PL");
+      locale = QLocale(QLocale::Polish);
+      break;
+    case Turkish:
+      langName = QStringLiteral("tr_TR");
+      locale = QLocale(QLocale::Turkish);
       break;
     default:
       langName = QStringLiteral("en_US");

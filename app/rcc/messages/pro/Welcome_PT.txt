@@ -1,0 +1,24 @@
+▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
+
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Todos os direitos reservados.
+
+Obrigado por usar o %1 e por apoiar o software open source!
+
+Esta versão está licenciada sob um contrato comercial e aprovada para uso em
+ambientes comerciais e proprietários.
+
+→ Suporte: alex@serial-studio.com
+→ Agende uma chamada: https://calendly.com/serial-studio
+→ Portal do cliente: https://store.serial-studio.com/billing
+
+Os recursos do Pro incluem:
+✓ Integração com MQTT
+✓ Visualização XY e 3D
+✓ Suporte prioritário
+✓ Licença adequada para uso comercial
+✓ Atualizações contínuas
+
+→ Saiba mais: https://serial-studio.com/

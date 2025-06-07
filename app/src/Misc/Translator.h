@@ -72,12 +72,18 @@ public:
 
   enum Language
   {
-    English = 0,
-    Spanish = 1,
-    Chinese = 2,
-    German = 3,
-    Russian = 4,
-    French = 5
+    English,
+    Spanish,
+    Chinese,
+    German,
+    Russian,
+    French,
+    Japanese,
+    Korean,
+    Portuguese,
+    Italian,
+    Polish,
+    Turkish
   };
   Q_ENUM(Language);
 

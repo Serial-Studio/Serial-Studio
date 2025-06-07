@@ -203,6 +203,7 @@
         <file>icons/licensing/user.svg</file>
         <file>icons/licensing/uuid.svg</file>
         <file>icons/miniwindow/close.svg</file>
+        <file>icons/miniwindow/external.svg</file>
         <file>icons/miniwindow/maximize.svg</file>
         <file>icons/miniwindow/minimize.svg</file>
         <file>icons/miniwindow/restore.svg</file>
@@ -355,19 +356,37 @@
         <file>messages/free/Welcome_EN.txt</file>
         <file>messages/free/Welcome_ES.txt</file>
         <file>messages/free/Welcome_FR.txt</file>
+        <file>messages/free/Welcome_IT.txt</file>
+        <file>messages/free/Welcome_JA.txt</file>
+        <file>messages/free/Welcome_KO.txt</file>
+        <file>messages/free/Welcome_PL.txt</file>
+        <file>messages/free/Welcome_PT.txt</file>
         <file>messages/free/Welcome_RU.txt</file>
+        <file>messages/free/Welcome_TR.txt</file>
         <file>messages/free/Welcome_ZH.txt</file>
         <file>messages/gpl3/Welcome_DE.txt</file>
         <file>messages/gpl3/Welcome_EN.txt</file>
         <file>messages/gpl3/Welcome_ES.txt</file>
         <file>messages/gpl3/Welcome_FR.txt</file>
+        <file>messages/gpl3/Welcome_IT.txt</file>
+        <file>messages/gpl3/Welcome_JA.txt</file>
+        <file>messages/gpl3/Welcome_KO.txt</file>
+        <file>messages/gpl3/Welcome_PL.txt</file>
+        <file>messages/gpl3/Welcome_PT.txt</file>
         <file>messages/gpl3/Welcome_RU.txt</file>
+        <file>messages/gpl3/Welcome_TR.txt</file>
         <file>messages/gpl3/Welcome_ZH.txt</file>
         <file>messages/pro/Welcome_DE.txt</file>
         <file>messages/pro/Welcome_EN.txt</file>
         <file>messages/pro/Welcome_ES.txt</file>
         <file>messages/pro/Welcome_FR.txt</file>
+        <file>messages/pro/Welcome_IT.txt</file>
+        <file>messages/pro/Welcome_JA.txt</file>
+        <file>messages/pro/Welcome_KO.txt</file>
+        <file>messages/pro/Welcome_PL.txt</file>
+        <file>messages/pro/Welcome_PT.txt</file>
         <file>messages/pro/Welcome_RU.txt</file>
+        <file>messages/pro/Welcome_TR.txt</file>
         <file>messages/pro/Welcome_ZH.txt</file>
         <file>messages/Acknowledgements.txt</file>
         <file>scripts/frame-parser.js</file>
@@ -377,6 +396,5 @@
         <file>themes/dark.json</file>
         <file>themes/default.json</file>
         <file>themes/light.json</file>
-        <file>icons/miniwindow/external.svg</file>
     </qresource>
 </RCC>

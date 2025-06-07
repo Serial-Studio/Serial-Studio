@@ -1,0 +1,25 @@
+▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
+
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Tüm hakları saklıdır.
+
+%1 kullandığınız ve açık kaynak projeleri desteklediğiniz
+için teşekkür ederiz!
+
+Bu sürüm, ticari bir anlaşma kapsamında lisanslanmıştır ve ticari ile
+özel kullanım ortamlarında kullanılmak üzere onaylanmıştır.
+
+→ Destek: alex@serial-studio.com
+→ Görüşme planla: https://calendly.com/serial-studio
+→ Müşteri portalı: https://store.serial-studio.com/billing
+
+Pro sürüm özellikleri şunları içerir:
+✓ MQTT entegrasyonu
+✓ XY ve 3B görselleştirme
+✓ Öncelikli destek
+✓ İşletme dostu lisans
+✓ Sürekli güncellemeler
+
+→ Daha fazla bilgi: https://serial-studio.com/
