@@ -685,7 +685,7 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
     qreal h = m_dragWindow->height();
 
     // Restore window size if needed
-    if (w >= width() - 20 || h >= height() - 20)
+    if ((w >= width() - 20 || h >= height() - 20) && !autoLayoutEnabled())
     {
       w = m_dragWindow->implicitWidth();
       h = m_dragWindow->implicitHeight();
