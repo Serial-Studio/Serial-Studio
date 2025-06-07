@@ -34,8 +34,10 @@ UI::WindowManager::WindowManager(QQuickItem *parent)
   : QQuickItem(parent)
   , m_zCounter(1)
   , m_autoLayoutEnabled(true)
+  , m_snapIndicatorVisible(false)
   , m_taskbar(nullptr)
   , m_dragWindow(nullptr)
+  , m_targetWindow(nullptr)
   , m_resizeWindow(nullptr)
   , m_focusedWindow(nullptr)
 {
@@ -85,6 +87,34 @@ const QString &UI::WindowManager::backgroundImage() const
 }
 
 /**
+ * @brief Indicates whether the snap indicator is currently visible.
+ *
+ * The snap indicator is shown while a window is being dragged and overlaps
+ * another window in auto-layout mode, giving visual feedback about the
+ * potential reorder target.
+ *
+ * @return True if the snap indicator is visible, false otherwise.
+ */
+bool UI::WindowManager::snapIndicatorVisible() const
+{
+  return m_snapIndicatorVisible;
+}
+
+/**
+ * @brief Returns the geometry of the current snap indicator.
+ *
+ * This represents the visual bounds of the target window under the dragged
+ * window, used to show where the window will snap if released.
+ *
+ * @return A const reference to the QRect representing the snap indicator's
+ * geometry.
+ */
+const QRect &UI::WindowManager::snapIndicator() const
+{
+  return m_snapIndicator;
+}
+
+/**
  * @brief Retrieves the z-order for a given window item.
  * @param item Pointer to the QQuickItem representing the window.
  * @return Z-order value, or -1 if not registered.
@@ -107,8 +137,10 @@ void UI::WindowManager::clear()
   m_windowZ.clear();
   m_windows.clear();
   m_windowOrder.clear();
+  m_snapIndicatorVisible = false;
 
   Q_EMIT zCounterChanged();
+  Q_EMIT snapIndicatorChanged();
 }
 
 /**
@@ -662,18 +694,37 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
 
     if (autoLayoutEnabled())
     {
-      const int targetIndex = determineNewIndexFromMousePos(currentPos);
-      if (targetIndex >= 0 && targetIndex < m_windowOrder.size())
+      int targetIndex = determineNewIndexFromMousePos(currentPos);
+      int dragDistance = (event->pos() - m_initialMousePos).manhattanLength();
+      if (targetIndex >= 0 && targetIndex < m_windowOrder.size()
+          && dragDistance >= 20)
       {
         int targetId = m_windowOrder[targetIndex];
-        QQuickItem *targetWindow = m_windows.value(targetId);
-        if (targetWindow && targetWindow != m_dragWindow)
+        m_targetWindow = m_windows.value(targetId);
+        if (m_targetWindow && m_targetWindow != m_dragWindow)
         {
-          m_dragWindow->setWidth(
-              qMin(m_dragWindow->width(), targetWindow->width()));
-          m_dragWindow->setHeight(
-              qMin(m_dragWindow->height(), targetWindow->height()));
+          const auto w = qMin(m_dragWindow->width(), m_targetWindow->width());
+          const auto h = qMin(m_dragWindow->height(), m_targetWindow->height());
+
+          if (m_dragWindow->width() != w || m_dragWindow->height() != h)
+          {
+            m_dragWindow->setWidth(w);
+            m_dragWindow->setHeight(h);
+          }
+
+          m_snapIndicator = extractGeometry(m_targetWindow);
+          m_snapIndicatorVisible = true;
+          Q_EMIT snapIndicatorChanged();
+
+          event->accept();
+          return;
         }
+      }
+
+      if (m_snapIndicatorVisible)
+      {
+        m_snapIndicatorVisible = false;
+        Q_EMIT snapIndicatorChanged();
       }
     }
 
@@ -788,10 +839,18 @@ void UI::WindowManager::mousePressEvent(QMouseEvent *event)
 {
   // Reset window tracking parameters
   m_dragWindow = nullptr;
+  m_targetWindow = nullptr;
   m_resizeWindow = nullptr;
   m_focusedWindow = nullptr;
   m_resizeEdge = ResizeEdge::None;
   m_initialMousePos = event->pos();
+
+  // Hide snapping rectangle
+  if (m_snapIndicatorVisible)
+  {
+    m_snapIndicatorVisible = false;
+    Q_EMIT snapIndicatorChanged();
+  }
 
   // Find the topmost window under the mouse
   m_focusedWindow = getWindow(m_initialMousePos.x(), m_initialMousePos.y());
@@ -893,30 +952,18 @@ void UI::WindowManager::mousePressEvent(QMouseEvent *event)
 void UI::WindowManager::mouseReleaseEvent(QMouseEvent *event)
 {
   // Finalize reordering after drag in auto-layout mode
-  const int dragDistance = (event->pos() - m_initialMousePos).manhattanLength();
   if (autoLayoutEnabled())
   {
-    if (m_dragWindow && dragDistance >= 20)
+    if (m_dragWindow && m_targetWindow && m_snapIndicatorVisible)
     {
       const int draggedId = getIdForWindow(m_dragWindow);
-      if (draggedId >= 0)
+      const int targetId = getIdForWindow(m_targetWindow);
+      if (draggedId >= 0 && targetId >= 0)
       {
+        const int newIndex = m_windowOrder.indexOf(targetId);
         const int currentIndex = m_windowOrder.indexOf(draggedId);
-        const int newIndex = determineNewIndexFromMousePos(event->pos());
-
         if (newIndex >= 0 && newIndex != currentIndex)
-        {
-          int normIndex = newIndex;
-          if (newIndex > currentIndex)
-            normIndex = newIndex - 1;
-
-          normIndex = qBound(0, normIndex, m_windowOrder.size() - 1);
-
-          if (currentIndex >= 0 && normIndex >= 0 && currentIndex != normIndex
-              && currentIndex < m_windowOrder.size()
-              && normIndex < m_windowOrder.size())
-            std::swap(m_windowOrder[currentIndex], m_windowOrder[normIndex]);
-        }
+          std::swap(m_windowOrder[currentIndex], m_windowOrder[newIndex]);
       }
     }
 
@@ -927,8 +974,16 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent *event)
   ungrabMouse();
   unsetCursor();
 
+  // Reset snap indicator
+  if (m_snapIndicatorVisible)
+  {
+    m_snapIndicatorVisible = false;
+    Q_EMIT snapIndicatorChanged();
+  }
+
   // Reset window tracking parameters
   m_dragWindow = nullptr;
+  m_targetWindow = nullptr;
   m_resizeWindow = nullptr;
   m_focusedWindow = nullptr;
   m_resizeEdge = ResizeEdge::None;

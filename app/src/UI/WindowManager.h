@@ -54,10 +54,17 @@ class WindowManager : public QQuickItem
              READ autoLayoutEnabled
              WRITE setAutoLayoutEnabled
              NOTIFY autoLayoutEnabledChanged)
+  Q_PROPERTY(QRect snapIndicator
+             READ snapIndicator
+             NOTIFY snapIndicatorChanged)
+  Q_PROPERTY(bool snapIndicatorVisible
+             READ snapIndicatorVisible
+             NOTIFY snapIndicatorChanged)
   // clang-format on
 
 signals:
   void zCounterChanged();
+  void snapIndicatorChanged();
   void backgroundImageChanged();
   void autoLayoutEnabledChanged();
   void rightClicked(int x, int y);
@@ -70,6 +77,9 @@ public:
   [[nodiscard]] int zCounter() const;
   [[nodiscard]] bool autoLayoutEnabled() const;
   [[nodiscard]] const QString &backgroundImage() const;
+
+  [[nodiscard]] bool snapIndicatorVisible() const;
+  [[nodiscard]] const QRect &snapIndicator() const;
 
   Q_INVOKABLE int zOrder(QQuickItem *item) const;
 
@@ -125,11 +135,16 @@ private:
   QMap<QQuickItem *, int> m_windowZ;
 
   ResizeEdge m_resizeEdge;
+
+  QRect m_snapIndicator;
+  bool m_snapIndicatorVisible;
+
   QRect m_initialGeometry;
   QPoint m_initialMousePos;
 
   Taskbar *m_taskbar;
   QQuickItem *m_dragWindow;
+  QQuickItem *m_targetWindow;
   QQuickItem *m_resizeWindow;
   QQuickItem *m_focusedWindow;
 

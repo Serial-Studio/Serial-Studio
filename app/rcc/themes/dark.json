@@ -95,6 +95,9 @@
     "start_menu_gradient_bottom": "#282a2d",
     "start_menu_highlighted_text": "#FFFFFF",
 
+    "snap_indicator_border": "#1A83CA",
+    "snap_indicator_background": "#401A83CA",
+
     "table_text": "#b0b3b8",
     "table_cell_bg": "#181a1b",
     "table_fg_header": "#b0b3b8",

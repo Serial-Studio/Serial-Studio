@@ -144,5 +144,20 @@ Item {
         }
       }
     }
+
+    //
+    // Snap indicator
+    //
+    Rectangle {
+      border.width: 1
+      z: _wm.zCounter
+      x: _wm.snapIndicator.x
+      y: _wm.snapIndicator.y
+      width: _wm.snapIndicator.width
+      height: _wm.snapIndicator.height
+      visible: _wm.snapIndicatorVisible
+      color: Cpp_ThemeManager.colors["snap_indicator_background"]
+      border.color: Cpp_ThemeManager.colors["snap_indicator_border"]
+    }
   }
 }
