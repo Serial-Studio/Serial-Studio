@@ -33,7 +33,6 @@ Widgets.MiniWindow {
   implicitWidth: minimumWidth
   implicitHeight: minimumHeight
   focused: taskBar.activeWindow === root
-  icon: SerialStudio.dashboardWidgetIcon(widget.widgetType)
 
   //
   // Input properties
@@ -81,7 +80,16 @@ Widgets.MiniWindow {
       anchors.fill: parent
       property var windowRoot: null
       property var widgetInstance: null
-      property var dashboardWidget: null
+
+      DashboardWidget {
+        id: dashboardWidget
+        widgetIndex: root.widgetIndex
+        Component.onCompleted: {
+          windowRoot.title = widgetTitle
+          if (windowRoot.icon !== undefined)
+            windowRoot.icon = SerialStudio.dashboardWidgetIcon(widgetType)
+        }
+      }
 
       Component.onCompleted: {
         const component = Qt.createComponent(dashboardWidget.widgetQmlPath)
@@ -182,28 +190,13 @@ Widgets.MiniWindow {
   }
 
   //
-  // Bridge C/C++ information to QML
-  //
-  DashboardWidget {
-    id: widget
-    widgetIndex: root.widgetIndex
-  }
-
-  //
   // Embedded contents
   //
   Item {
     id: container
     anchors.fill: parent
     anchors.topMargin: root.captionHeight
-
-    Component.onCompleted: {
-      widgetLoader.createObject(container, {
-                                  dashboardWidget: widget,
-                                  windowRoot: root,
-                                }
-                                )
-    }
+    Component.onCompleted: widgetLoader.createObject(container, {windowRoot: root})
   }
 
   //
@@ -223,10 +216,12 @@ Widgets.MiniWindow {
         height: 480
         visible: true
         flags: Qt.Window
-        title: widget.widgetTitle
         minimumWidth: root.minimumWidth
         minimumHeight: root.minimumHeight
         onClosing: externalWindowLoader.active = false
+
+        property bool hasToolbar: false
+        readonly property bool focused: true
 
         Page {
           anchors.fill: parent
@@ -252,14 +247,26 @@ Widgets.MiniWindow {
           palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
           palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
+          Rectangle {
+            height: 48
+            border.width: 1
+            visible: window.hasToolbar
+            border.color: Cpp_ThemeManager.colors["window_border"]
+            color: Cpp_ThemeManager.colors["window_toolbar_background"]
+
+            anchors {
+              margins: -1
+              top: parent.top
+              left: parent.left
+              right: parent.right
+            }
+          }
+
           Item {
             anchors.fill: parent
             Component.onCompleted: {
               window.showNormal()
-              widgetLoader.createObject(this, {
-                                          dashboardWidget: widget,
-                                          windowRoot: root
-                                        })
+              widgetLoader.createObject(this, {windowRoot: window})
             }
           }
         }

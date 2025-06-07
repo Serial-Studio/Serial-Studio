@@ -363,28 +363,28 @@ Item {
       }
 
       //
-      // Window caption
+      // Expand button
       //
-      RowLayout {
-        anchors.centerIn: parent
-        height: root.captionHeight
-        spacing: root.captionHeight / 8
+      Controls.ToolButton {
+        id: expandBt
+        flat: true
+        icon.width: 18
+        icon.height: 18
+        background: Item {}
+        icon.color: _title.color
+        Layout.alignment: Qt.AlignVCenter
+        onClicked: root.externalWindowClicked()
+        icon.source: "qrc:/rcc/icons/miniwindow/external.svg"
 
-        Image {
-          source: root.icon
-          Layout.alignment: Qt.AlignVCenter
-          sourceSize: Qt.size(root.captionHeight / 2, root.captionHeight / 2)
+        anchors {
+          left: parent.left
+          verticalCenter: parent.verticalCenter
         }
 
-        Controls.Label {
-          id: _title
-          text: root.title
-          elide: Qt.ElideRight
-          Layout.alignment: Qt.AlignVCenter
-          horizontalAlignment: Qt.AlignLeft
-          font: Cpp_Misc_CommonFonts.boldUiFont
-          color: root.focused ? Cpp_ThemeManager.colors["window_caption_active_text"] :
-                                Cpp_ThemeManager.colors["window_caption_inactive_text"]
+        MouseArea {
+          id: externalWinBt
+          anchors.fill: parent
+          onClicked: root.externalWindowClicked()
         }
       }
 
@@ -394,28 +394,19 @@ Item {
       RowLayout {
         spacing: 0
         height: root.captionHeight
-        anchors.left: parent.left
         anchors.right: parent.right
+        anchors.left: expandBt.right
 
-        Controls.ToolButton {
-          flat: true
-          background: Item {}
-          icon.color: _title.color
-          Layout.alignment: Qt.AlignVCenter
-          icon.width: root.captionHeight / 2
-          icon.height: root.captionHeight / 2
-          onClicked: root.externalWindowClicked()
-          icon.source: "qrc:/rcc/icons/miniwindow/external.svg"
-
-          MouseArea {
-            id: externalWinBt
-            anchors.fill: parent
-            onClicked: root.externalWindowClicked()
-          }
-        }
-
-        Item {
+        Controls.Label {
+          id: _title
+          text: root.title
+          elide: Qt.ElideRight
           Layout.fillWidth: true
+          Layout.alignment: Qt.AlignVCenter
+          horizontalAlignment: Qt.AlignLeft
+          font: Cpp_Misc_CommonFonts.boldUiFont
+          color: root.focused ? Cpp_ThemeManager.colors["window_caption_active_text"] :
+                                Cpp_ThemeManager.colors["window_caption_inactive_text"]
         }
 
         Controls.ToolButton {

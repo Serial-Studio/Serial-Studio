@@ -36,7 +36,7 @@ Item {
   //
   required property color color
   required property LEDPanelModel model
-  required property MiniWindow windowRoot
+  required property var windowRoot
 
   //
   // Create scrollable grid view with LED states

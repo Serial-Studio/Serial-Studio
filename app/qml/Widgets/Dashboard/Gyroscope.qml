@@ -36,7 +36,7 @@ Item {
   //
   required property color color
   required property GyroscopeModel model
-  required property MiniWindow windowRoot
+  required property var windowRoot
 
   //
   // Custom properties

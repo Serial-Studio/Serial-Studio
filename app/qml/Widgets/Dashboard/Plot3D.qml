@@ -35,7 +35,7 @@ Item {
   //
   required property color color
   required property Plot3DWidget model
-  required property MiniWindow windowRoot
+  required property var windowRoot
 
   //
   // Window flags
@@ -303,14 +303,9 @@ Item {
   // Widget view
   //
   Item {
-    clip: true
+    id: container
     anchors.fill: parent
+    anchors.margins: 1
     anchors.topMargin: root.hasToolbar ? 48 : 0
-
-    Item {
-      id: container
-      anchors.margins: -1
-      anchors.fill: parent
-    }
   }
 }

@@ -36,7 +36,7 @@ Item {
   //
   required property color color
   required property GaugeModel model
-  required property MiniWindow windowRoot
+  required property var windowRoot
 
   //
   // Widget layout

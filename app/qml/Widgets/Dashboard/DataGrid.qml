@@ -36,7 +36,7 @@ Item {
   //
   required property color color
   required property DataGridModel model
-  required property MiniWindow windowRoot
+  required property var windowRoot
 
   //
   // Responsive design stuff

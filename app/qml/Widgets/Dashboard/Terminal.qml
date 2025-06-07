@@ -26,8 +26,6 @@ import QtQuick.Controls
 
 import SerialStudio
 
-import "../" as Widgets
-
 Item {
   id: root
   implicitWidth: layout.implicitWidth + 32
@@ -39,7 +37,7 @@ Item {
   //
   property var color
   property var model
-  property Widgets.MiniWindow windowRoot
+  property var windowRoot
 
   //
   // Super important to for shortcuts

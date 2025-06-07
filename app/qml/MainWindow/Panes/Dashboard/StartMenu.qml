@@ -254,17 +254,6 @@ Popup {
       onClicked: mainWindow.toolbarVisible = !mainWindow.toolbarVisible
     }
 
-    Widgets.MenuButton {
-      expandable: false
-      Layout.fillWidth: true
-      text: qsTr("External Window")
-      icon.source: "qrc:/rcc/icons/start/external-window.svg"
-      onClicked: {
-        root.close()
-        root.externalWindowClicked()
-      }
-    }
-
     Rectangle {
       opacity: 0.5
       implicitHeight: 1

@@ -37,8 +37,8 @@ Item {
   // Widget data inputs
   //
   required property color color
+  required property var windowRoot
   required property PlotModel model
-  required property MiniWindow windowRoot
 
   //
   // Window flags

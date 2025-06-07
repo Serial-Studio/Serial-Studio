@@ -36,7 +36,7 @@ Item {
   // Widget data inputs
   //
   required property color color
-  required property MiniWindow windowRoot
+  required property var windowRoot
   required property AccelerometerModel model
 
   //

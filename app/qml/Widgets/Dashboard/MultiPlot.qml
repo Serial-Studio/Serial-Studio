@@ -37,7 +37,7 @@ Item {
   //
   required property color color
   required property MultiPlotModel model
-  required property MiniWindow windowRoot
+  required property var windowRoot
 
   //
   // Window flags
