@@ -152,7 +152,7 @@ void UI::WindowManager::autoLayout()
   for (int id : std::as_const(m_windowOrder))
   {
     auto *win = m_windows.value(id);
-    if (win && win->state() != "closed" && win->state() != "minimized")
+    if (win && win->state() == "normal")
       visibleWindows.append(win);
   }
 
@@ -242,7 +242,7 @@ void UI::WindowManager::cascadeLayout()
   QList<QQuickItem *> visibleWindows;
   for (auto *win : std::as_const(m_windows))
   {
-    if (win && win->state() != "closed" && win->state() != "minimized")
+    if (win && win->state() == "normal")
       visibleWindows.append(win);
   }
 
@@ -496,6 +496,9 @@ int UI::WindowManager::determineNewIndexFromMousePos(const QPoint &pos) const
 {
   QQuickItem *hoveredWindow = getWindow(pos.x(), pos.y());
   if (!hoveredWindow)
+    return m_windowOrder.size();
+
+  if (hoveredWindow->state() != "normal")
     return m_windowOrder.size();
 
   int hoveredId = getIdForWindow(hoveredWindow);
