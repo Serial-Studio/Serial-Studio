@@ -149,7 +149,7 @@ Window {
 
         implicitWidth: Cpp_Licensing_LemonSqueezy.isActivated ?
                          licenseControls.implicitWidth + 32 :
-                         supportLabel.implicitWidth + 32
+                         Math.min(560, activationControls.implicitWidth + 32)
 
         implicitHeight: Cpp_Licensing_LemonSqueezy.isActivated ?
                           licenseControls.implicitHeight + 32 :
@@ -272,6 +272,38 @@ Window {
                     if (Cpp_Licensing_LemonSqueezy.license !== text)
                       Cpp_Licensing_LemonSqueezy.license = text
                   }
+
+                  MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.RightButton
+                    onPressed: (mouse) => {
+                      if (mouse.button === Qt.RightButton) {
+                        _keyContextMenu.popup()
+                      }
+                    }
+
+                    Menu {
+                      id: _keyContextMenu
+
+                      MenuItem {
+                        text: qsTr("Copy")
+                        onTriggered: _key.copy()
+                        enabled: _key.selectedText.length > 0
+                      }
+
+                      MenuItem {
+                        text: qsTr("Paste")
+                        enabled: _key.canPaste
+                        onTriggered: _key.paste()
+                      }
+
+                      MenuItem {
+                        text: qsTr("Select All")
+                        enabled: _key.length > 0
+                        onTriggered: _key.selectAll()
+                      }
+                    }
+                  }
                 }
 
                 Button {
@@ -370,10 +402,37 @@ Window {
                     text: qsTr("Device ID") + ":"
                     font: Cpp_Misc_CommonFonts.boldUiFont
                   } TextField {
+                    id: _uid
                     readOnly: true
                     Layout.fillWidth: true
                     onTextChanged: cursorPosition = 0
                     text: Cpp_Licensing_LemonSqueezy.instanceName
+
+                    MouseArea {
+                      anchors.fill: parent
+                      acceptedButtons: Qt.RightButton
+                      onPressed: (mouse) => {
+                        if (mouse.button === Qt.RightButton) {
+                          _uidContextMenu.popup()
+                        }
+                      }
+
+                      Menu {
+                        id: _uidContextMenu
+
+                        MenuItem {
+                          text: qsTr("Copy")
+                          onTriggered: _uid.copy()
+                          enabled: _uid.selectedText.length > 0
+                        }
+
+                        MenuItem {
+                          text: qsTr("Select All")
+                          enabled: _uid.length > 0
+                          onTriggered: _uid.selectAll()
+                        }
+                      }
+                    }
                   }
 
                   Image {
@@ -386,34 +445,43 @@ Window {
                     font: Cpp_Misc_CommonFonts.boldUiFont
                     visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
                   } TextField {
+                    id: _lic
                     readOnly: true
                     Layout.fillWidth: true
                     onTextChanged: cursorPosition = 0
                     text: Cpp_Licensing_LemonSqueezy.license
                     visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
+
+                    MouseArea {
+                      anchors.fill: parent
+                      acceptedButtons: Qt.RightButton
+                      onPressed: (mouse) => {
+                        if (mouse.button === Qt.RightButton) {
+                          _licContextMenu.popup()
+                        }
+                      }
+
+                      Menu {
+                        id: _licContextMenu
+
+                        MenuItem {
+                          text: qsTr("Copy")
+                          onTriggered: _key.copy()
+                          enabled: _lic.selectedText.length > 0
+                        }
+
+                        MenuItem {
+                          text: qsTr("Select All")
+                          enabled: _lic.length > 0
+                          onTriggered: _lic.selectAll()
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           }
-        }
-
-        //
-        // Spacer
-        //
-        Item {
-          implicitHeight: 8
-        }
-
-        //
-        // Support label
-        //
-        Label {
-          opacity: 0.7
-          id: supportLabel
-          Layout.fillWidth: true
-          wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-          text: qsTr("For any issues with payment or activation, contact support via alex@serial-studio.com")
         }
 
         //

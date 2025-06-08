@@ -383,6 +383,12 @@ Window {
           icon.color: Cpp_ThemeManager.colors["button_text"]
           onClicked: {
             Cpp_ThemeManager.theme = 0
+            Cpp_UI_Dashboard.points = 100
+            Cpp_UI_Dashboard.precision = 2
+            Cpp_Plugins_Bridge.enabled = false
+            mainWindow.automaticUpdates  = true
+            Cpp_UI_Dashboard.terminalEnabled = false
+            Cpp_Misc_ModuleManager.softwareRendering = false
           }
         }
 
