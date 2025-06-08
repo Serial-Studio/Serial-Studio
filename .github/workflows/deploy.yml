@@ -587,7 +587,7 @@ jobs:
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
 
 #-------------------------------------------------------------------------------
-# Create continous release
+# Create release
 #-------------------------------------------------------------------------------
 
   upload:
@@ -600,7 +600,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      RELEASE_TAG: continuous
+      RELEASE_TAG: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') && github.ref_name || 'continuous' }}
 
     steps:
       - name: '📥 Download artifacts'
@@ -628,8 +628,8 @@ jobs:
           find ./artifacts -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "*.dmg" -o -name "*.exe" -o -name "*.msi" \) | sort | while read -r file; do
             hash=$(sha256sum "$file" | awk '{print $1}')
             filename=$(basename "$file")
-            echo "| \`$filename\` | \`$hash\` |"
-          done >> release-body.md
+            echo "| \`$filename\` | \`$hash\` |" >> release-body.md
+          done
 
       - name: '🚀 Create Release'
         uses: ncipollo/release-action@v1
@@ -641,9 +641,9 @@ jobs:
           name: 'Continuous Build'
           bodyFile: release-body.md
           artifacts: |
-            artifacts/*.deb,
-            artifacts/*.rpm,
-            artifacts/*.AppImage,
-            artifacts/*.dmg,
-            artifacts/*.exe,
+            artifacts/*.deb
+            artifacts/*.rpm
+            artifacts/*.AppImage
+            artifacts/*.dmg
+            artifacts/*.exe
             artifacts/*.msi
