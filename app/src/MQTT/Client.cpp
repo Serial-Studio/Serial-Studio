@@ -80,7 +80,7 @@ MQTT::Client::Client()
           });
 
   // Publish incoming data frames
-  connect(&IO::Manager::instance(), &IO::Manager::dataReceived, this,
+  connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
           &MQTT::Client::publishMessage);
 
   // Set default parameters

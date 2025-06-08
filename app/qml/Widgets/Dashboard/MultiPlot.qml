@@ -66,7 +66,7 @@ Item {
   onWidthChanged: updateWidgetOptions()
   onHeightChanged: updateWidgetOptions()
   function updateWidgetOptions() {
-    root.showLegends = (root.width >= 256)
+    root.showLegends = (root.width >= 320)
     plot.yLabelVisible = (root.width >= 196)
     plot.xLabelVisible = (root.height >= (196 * 2/3))
     root.hasToolbar = (root.width >= toolbar.implicitWidth) && (root.height >= 220)

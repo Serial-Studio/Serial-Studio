@@ -103,6 +103,7 @@ Widgets.Pane {
           toolbarButton: false
           text: qsTr("Change Icon")
           Layout.alignment: Qt.AlignVCenter
+          ToolTip.text: qsTr("Change the icon used for this action")
           icon.source: "qrc:/rcc/actions/" + Cpp_JSON_ProjectModel.actionIcon + ".svg"
           onClicked: {
             actionIconPicker.selectedIcon = Cpp_JSON_ProjectModel.actionIcon
@@ -125,6 +126,7 @@ Widgets.Pane {
           toolbarButton: false
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
+          ToolTip.text: qsTr("Duplicate this action with all its settings")
           onClicked: Cpp_JSON_ProjectModel.duplicateCurrentAction()
           icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
         }
@@ -138,6 +140,7 @@ Widgets.Pane {
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.deleteCurrentAction()
+          ToolTip.text: qsTr("Delete this action from the project")
           icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
         }
       }

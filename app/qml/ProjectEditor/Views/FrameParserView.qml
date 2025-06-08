@@ -189,6 +189,7 @@ Widgets.Pane {
             onClicked: frameParser.reload()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/reload.svg"
+            ToolTip.text: qsTr("Reset to the default parsing script")
           }
 
           //
@@ -201,6 +202,7 @@ Widgets.Pane {
             onClicked: frameParser.import()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/import.svg"
+            ToolTip.text: qsTr("Import a JavaScript file for data parsing")
           }
 
           //
@@ -214,6 +216,7 @@ Widgets.Pane {
             enabled: frameParser.isModified
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/apply.svg"
+            ToolTip.text: qsTr("Validate syntax and apply parsing changes")
           }
 
           //
@@ -238,6 +241,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: frameParser.undoAvailable
             icon.source: "qrc:/rcc/icons/code-editor/undo.svg"
+            ToolTip.text: qsTr("Undo the last code edit")
           }
 
           //
@@ -251,6 +255,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: frameParser.redoAvailable
             icon.source: "qrc:/rcc/icons/code-editor/redo.svg"
+            ToolTip.text: qsTr("Redo the previously undone edit")
           }
 
           //
@@ -274,6 +279,7 @@ Widgets.Pane {
             onClicked: frameParser.cut()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/cut.svg"
+            ToolTip.text: qsTr("Cut selected code to clipboard")
           }
 
           //
@@ -286,6 +292,7 @@ Widgets.Pane {
             onClicked: frameParser.copy()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/copy.svg"
+            ToolTip.text: qsTr("Copy selected code to clipboard")
           }
 
           //
@@ -298,6 +305,7 @@ Widgets.Pane {
             onClicked: frameParser.paste()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/paste.svg"
+            ToolTip.text: qsTr("Paste code from clipboard")
           }
 
           //
@@ -321,6 +329,7 @@ Widgets.Pane {
             onClicked: frameParser.help()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/help.svg"
+            ToolTip.text: qsTr("Open help documentation for JavaScript data parsing")
           }
 
           //

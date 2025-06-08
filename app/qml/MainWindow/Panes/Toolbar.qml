@@ -151,6 +151,7 @@ Rectangle {
       Layout.alignment: Qt.AlignVCenter
       onClicked: app.showProjectEditor()
       icon.source: "qrc:/rcc/icons/toolbar/project-setup.svg"
+      ToolTip.text: qsTr("Open the Project Editor to create or modify your JSON layout")
     }
 
     //
@@ -162,6 +163,7 @@ Rectangle {
       onClicked: Cpp_CSV_Player.openFile()
       icon.source: "qrc:/rcc/icons/toolbar/csv.svg"
       enabled: !Cpp_CSV_Player.isOpen && !Cpp_IO_Manager.isConnected
+      ToolTip.text: qsTr("Play a CSV file as if it were live sensor data")
     }
 
     //
@@ -185,6 +187,7 @@ Rectangle {
       onClicked: root.setupClicked()
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/toolbar/device-setup.svg"
+      ToolTip.text: qsTr("Configure device connection via Serial, BLE, or network socket")
     }
 
     //
@@ -195,6 +198,7 @@ Rectangle {
       Layout.alignment: Qt.AlignVCenter
       onClicked: app.showSettingsDialog()
       icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
+      ToolTip.text: qsTr("Open application settings and preferences")
     }
 
     //
@@ -223,6 +227,7 @@ Rectangle {
                             "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
                             "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
                          "qrc:/rcc/icons/toolbar/mqtt.svg"
+          ToolTip.text: qsTr("Configure MQTT connection (publish or subscribe)")
         }
       }
     }
@@ -245,6 +250,7 @@ Rectangle {
       text: qsTr("Examples")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/toolbar/examples.svg"
+      ToolTip.text: qsTr("Browse example projects on GitHub")
       onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/tree/master/examples")
     }
 
@@ -255,6 +261,7 @@ Rectangle {
       text: qsTr("Help")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/toolbar/help.svg"
+      ToolTip.text: qsTr("Open the online documentation for help and guidance")
       onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
     }
 
@@ -266,6 +273,7 @@ Rectangle {
       onClicked: app.showAboutDialog()
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/toolbar/about.svg"
+      ToolTip.text: qsTr("Show application info and license details")
     }
 
     //
@@ -290,6 +298,7 @@ Rectangle {
       text: checked ? qsTr("Disconnect") : qsTr("Connect")
       icon.source: checked ? "qrc:/rcc/icons/toolbar/connect.svg" :
                              "qrc:/rcc/icons/toolbar/disconnect.svg"
+      ToolTip.text: qsTr("Connect or disconnect from device or MQTT broker")
 
       //
       // Get MQTT status

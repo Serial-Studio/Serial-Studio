@@ -118,6 +118,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/project-editor/actions/plot.svg"
             checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetPlot
+            ToolTip.text: qsTr("Toggle 2D plot visualization for this dataset")
             onClicked: {
               const option = SerialStudio.DatasetPlot
               const value = Cpp_JSON_ProjectModel.datasetOptions & option
@@ -135,6 +136,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/project-editor/actions/fft.svg"
             checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetFFT
+            ToolTip.text: qsTr("Toggle FFT plot to visualize frequency content")
             onClicked: {
               const option = SerialStudio.DatasetFFT
               const value = Cpp_JSON_ProjectModel.datasetOptions & option
@@ -152,6 +154,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
             icon.source: "qrc:/rcc/icons/project-editor/actions/bar.svg"
+            ToolTip.text: qsTr("Toggle bar/level indicator for this dataset")
             checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetBar
             onClicked: {
               const option = SerialStudio.DatasetBar
@@ -170,6 +173,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
             icon.source: "qrc:/rcc/icons/project-editor/actions/gauge.svg"
+            ToolTip.text: qsTr("Toggle gauge widget for analog-style display")
             checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetGauge
             onClicked: {
               const option = SerialStudio.DatasetGauge
@@ -188,6 +192,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
             icon.source: "qrc:/rcc/icons/project-editor/actions/compass.svg"
+            ToolTip.text: qsTr("Toggle compass widget for directional data")
             checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetCompass
             onClicked: {
               const option = SerialStudio.DatasetCompass
@@ -205,6 +210,7 @@ Widgets.Pane {
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
+            ToolTip.text: qsTr("Toggle LED indicator for binary or thresholded values")
             checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetLED
             onClicked: {
               const option = SerialStudio.DatasetLED
@@ -230,6 +236,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
             onClicked: Cpp_JSON_ProjectModel.duplicateCurrentDataset()
+            ToolTip.text: qsTr("Duplicate this dataset with the same configuration")
             icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
           }
 
@@ -243,6 +250,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
             onClicked: Cpp_JSON_ProjectModel.deleteCurrentDataset()
+            ToolTip.text: qsTr("Delete this dataset from the group")
             icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
           }
         }

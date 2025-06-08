@@ -28,6 +28,11 @@ Item {
   id: root
 
   //
+  // Constants
+  //
+  readonly property int maxButtonWidth: 128
+
+  //
   // Signals
   //
   signal clicked()
@@ -53,13 +58,22 @@ Item {
   // Layout preferences
   //
   Layout.minimumWidth: implicitWidth
-  Layout.maximumWidth: implicitWidth
+  Layout.maximumWidth: maxButtonWidth
   implicitHeight: horizontalLayout ?
-                    Math.max(root.iconSize, _label.implicitHeight)  :
+                    Math.max(root.iconSize, _label.implicitHeight) :
                     root.iconSize + _label.implicitHeight + 20
-  implicitWidth: horizontalLayout ?
-                   Math.min(128, root.iconSize + Math.ceil(metrics.width + 16)) :
-                   Math.max(Math.ceil(metrics.width + 16), icon.width / 32 * 72)
+  implicitWidth: Math.min(
+                   maxButtonWidth,
+                   horizontalLayout
+                   ? root.iconSize + Math.ceil(metrics.width + 16)
+                   : Math.max(Math.ceil(metrics.width + 16), icon.width / 32 * 72)
+                   )
+
+  //
+  // Tooltip
+  //
+  ToolTip.delay: 500
+  ToolTip.visible: _mouseArea.containsMouse && ToolTip.text !== ""
 
   //
   // Animations
@@ -79,7 +93,9 @@ Item {
     visible: root.toolbarButton && !root.horizontalLayout
     color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
     border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
-    opacity: (root.checked || _mouseArea.pressed) ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"] : 0.0
+    opacity: (root.checked || _mouseArea.pressed)
+             ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"]
+             : 0.0
 
     Behavior on opacity { NumberAnimation {} }
   }
@@ -92,12 +108,11 @@ Item {
     anchors.fill: parent
     visible: !root.toolbarButton
     opacity: (root.checked || _mouseArea.pressed) ? 1 : 0
-
     Behavior on opacity { NumberAnimation {} }
   }
 
   //
-  // Button layout (Grid-based dynamic layout)
+  // Button layout
   //
   GridLayout {
     id: _layout
@@ -115,8 +130,7 @@ Item {
       Layout.column: 0
       implicitWidth: root.iconSize
       implicitHeight: root.iconSize
-      Layout.alignment: horizontalLayout ? Qt.AlignLeft | Qt.AlignVCenter :
-                                           Qt.AlignCenter
+      Layout.alignment: horizontalLayout ? Qt.AlignLeft | Qt.AlignVCenter : Qt.AlignCenter
 
       Image {
         id: _icon
@@ -143,15 +157,17 @@ Item {
       Layout.fillWidth: horizontalLayout
       Layout.row: horizontalLayout ? 0 : 1
       Layout.column: horizontalLayout ? 1 : 0
+      Layout.maximumWidth: root.maxButtonWidth - (horizontalLayout ? root.iconSize + 4 : 0)
       Layout.alignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignCenter
       horizontalAlignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignHCenter
-      color: root.toolbarButton ? Cpp_ThemeManager.colors["toolbar_text"] :
-                                  Cpp_ThemeManager.colors["button_text"]
+      color: root.toolbarButton
+             ? Cpp_ThemeManager.colors["toolbar_text"]
+             : Cpp_ThemeManager.colors["button_text"]
     }
   }
 
   //
-  // Button width calculation
+  // Width calculation for layout
   //
   TextMetrics {
     id: metrics
@@ -160,7 +176,7 @@ Item {
   }
 
   //
-  // Mouse Area
+  // Mouse interaction
   //
   MouseArea {
     id: _mouseArea
