@@ -57,7 +57,9 @@ LANGUAGE_MAP = {
     "pt_BR": "Brazilian Portuguese",
     "ru_RU": "Russian",
     "tr_TR": "Turkish",
-    "zh_CN": "Simplified Chinese"
+    "zh_CN": "Simplified Chinese",
+    "uk_UA": "Ukrainian",
+    "cs_CZ": "Czech"
 }
 
 #------------------------------------------------------------------------------

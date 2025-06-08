@@ -1,0 +1,24 @@
+▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
+
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Všechna práva vyhrazena.
+
+Děkujeme, že používáte %1 a podporujete open source!
+
+Tato verze je licencována na základě komerční dohody a je schválena pro
+použití v komerčním a proprietárním prostředí.
+
+→ Podpora: alex@serial-studio.com
+→ Naplánovat hovor: https://calendly.com/serial-studio
+→ Klientský portál: https://store.serial-studio.com/billing
+
+Vaše funkce Pro verze:
+✓ Integrace s MQTT
+✓ XY a 3D vizualizace
+✓ Přednostní podpora
+✓ Licence vhodná pro firmy
+✓ Pravidelné aktualizace
+
+→ Více informací: https://serial-studio.com/

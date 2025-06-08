@@ -1,0 +1,24 @@
+▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
+
+Autorská práva (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Všechna práva vyhrazena.
+
+Tato verze Serial Studio je zdarma pouze pro osobní a zkušební použití.
+Komerční použití není povoleno bez platné Pro licence.
+
+→ Potřebujete komerční licenci? https://store.serial-studio.com/
+
+Můžete si Serial Studio sestavit sami podle podmínek GNU GPLv3
+s využitím open-source verze Qt.
+
+→ Zdrojový kód: https://github.com/serial-studio/serial-studio
+
+Poprvé v Serial Studio? Klikněte na tlačítko „Nápověda“ na panelu nástrojů.
+
+Pro verze obsahuje skvělé funkce navíc:
+✓ Podpora MQTT
+✓ XY grafy a 3D vizualizace
+✓ Binární licence vhodná pro firmy (bez GPL povinností)
+✓ Další nástroje pro efektivní vývoj embedded systémů

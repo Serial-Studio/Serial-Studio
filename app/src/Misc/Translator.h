@@ -83,7 +83,9 @@ public:
     Portuguese,
     Italian,
     Polish,
-    Turkish
+    Turkish,
+    Ukrainian,
+    Czech
   };
   Q_ENUM(Language);
 

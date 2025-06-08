@@ -97,6 +97,12 @@ Misc::Translator::Language Misc::Translator::systemLanguage() const
     case QLocale::Turkish:
       lang = Turkish;
       break;
+    case QLocale::Ukrainian:
+      lang = Ukrainian;
+      break;
+    case QLocale::Czech:
+      lang = Czech;
+      break;
     default:
       lang = English;
       break;
@@ -148,6 +154,12 @@ QString Misc::Translator::welcomeConsoleText() const
       break;
     case Turkish:
       lang = QStringLiteral("TR");
+      break;
+    case Ukrainian:
+      lang = QStringLiteral("UK");
+      break;
+    case Czech:
+      lang = QStringLiteral("CZ");
       break;
     default:
       lang = QStringLiteral("EN");
@@ -220,6 +232,8 @@ QStringList &Misc::Translator::availableLanguages()
     list.append(QStringLiteral("Italiano"));
     list.append(QStringLiteral("Polski"));
     list.append(QStringLiteral("Türkçe"));
+    list.append(QStringLiteral("Українська"));
+    list.append(QStringLiteral("Čeština"));
   }
 
   return list;
@@ -285,6 +299,14 @@ void Misc::Translator::setLanguage(const Language language)
     case Turkish:
       langName = QStringLiteral("tr_TR");
       locale = QLocale(QLocale::Turkish);
+      break;
+    case Ukrainian:
+      langName = QStringLiteral("uk_UA");
+      locale = QLocale(QLocale::Ukrainian);
+      break;
+    case Czech:
+      langName = QStringLiteral("cs_CZ");
+      locale = QLocale(QLocale::Czech);
       break;
     default:
       langName = QStringLiteral("en_US");

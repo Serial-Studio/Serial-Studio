@@ -12,5 +12,7 @@
         <file>qm/ru_RU.qm</file>
         <file>qm/tr_TR.qm</file>
         <file>qm/zh_CN.qm</file>
+        <file>qm/cs_CZ.qm</file>
+        <file>qm/uk_UA.qm</file>
     </qresource>
 </RCC>

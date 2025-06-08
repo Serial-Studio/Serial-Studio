@@ -396,5 +396,11 @@
         <file>themes/dark.json</file>
         <file>themes/default.json</file>
         <file>themes/light.json</file>
+        <file>messages/free/Welcome_CZ.txt</file>
+        <file>messages/free/Welcome_UK.txt</file>
+        <file>messages/gpl3/Welcome_CZ.txt</file>
+        <file>messages/gpl3/Welcome_UK.txt</file>
+        <file>messages/pro/Welcome_CZ.txt</file>
+        <file>messages/pro/Welcome_UK.txt</file>
     </qresource>
 </RCC>
