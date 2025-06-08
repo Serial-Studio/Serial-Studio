@@ -21,46 +21,35 @@
 
 #pragma once
 
-#include <QtQuick>
+#include "JSON/Dataset.h"
+#include "UI/DeclarativeWidgets/StaticTable.h"
 
 namespace Widgets
 {
-class DataGrid : public QQuickItem
+class DataGrid : public StaticTable
 {
   Q_OBJECT
-  Q_PROPERTY(int count READ count CONSTANT)
-  Q_PROPERTY(QStringList units READ units CONSTANT)
-  Q_PROPERTY(QStringList titles READ titles CONSTANT)
-  Q_PROPERTY(QStringList values READ values NOTIFY updated)
-  Q_PROPERTY(QList<bool> alarms READ alarms NOTIFY updated)
-  Q_PROPERTY(QStringList colors READ colors NOTIFY themeChanged)
+  Q_PROPERTY(bool paused READ paused WRITE setPaused NOTIFY pausedChanged)
 
 signals:
-  void updated();
-  void themeChanged();
+  void pausedChanged();
 
 public:
   explicit DataGrid(const int index = -1, QQuickItem *parent = nullptr);
 
-  [[nodiscard]] int count() const;
-  [[nodiscard]] const QList<bool> &alarms() const;
+  [[nodiscard]] bool paused() const;
 
-  [[nodiscard]] const QStringList &units() const;
-  [[nodiscard]] const QStringList &colors() const;
-  [[nodiscard]] const QStringList &titles() const;
-  [[nodiscard]] const QStringList &values() const;
+public slots:
+  void setPaused(const bool paused);
 
 private slots:
   void updateData();
-  void onThemeChanged();
+
+private:
+  QStringList getRow(const JSON::Dataset &dataset);
 
 private:
   int m_index;
-  QList<bool> m_alarms;
-
-  QStringList m_units;
-  QStringList m_titles;
-  QStringList m_values;
-  QStringList m_colors;
+  bool m_paused;
 };
 } // namespace Widgets

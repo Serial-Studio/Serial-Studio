@@ -130,6 +130,8 @@ set(SOURCES
   src/UI/Widgets/Gyroscope.cpp
   src/UI/Widgets/GPS.cpp
   src/UI/Widgets/MultiPlot.cpp
+  src/UI/DeclarativeWidgets/DeclarativeWidget.cpp
+  src/UI/DeclarativeWidgets/StaticTable.cpp
   src/Plugins/Server.cpp
   src/IO/Drivers/Network.cpp
   src/IO/Drivers/UART.cpp
@@ -179,6 +181,8 @@ set(HEADERS
   src/UI/Widgets/LEDPanel.h
   src/UI/Widgets/Compass.h
   src/UI/Widgets/Terminal.h
+  src/UI/DeclarativeWidgets/DeclarativeWidget.h
+  src/UI/DeclarativeWidgets/StaticTable.h
   src/Plugins/Server.h
   src/Platform/NativeWindow.h
   src/IO/Console.h

@@ -20,187 +20,135 @@
  */
 
 #include "UI/Dashboard.h"
-#include "Misc/ThemeManager.h"
+#include "Misc/CommonFonts.h"
 #include "UI/Widgets/DataGrid.h"
 
 /**
- * @brief Constructs a DataGrid widget.
- * @param index The index of the data grid in the Dashboard.
- * @param parent The parent QQuickItem (optional).
+ * @brief Constructs a DataGrid widget and initializes it with dashboard data.
+ *
+ * Sets up the static table with dataset titles and initial values,
+ * applies default fonts, and connects to the dashboard update signal.
+ *
+ * @param index Index of the data grid group in the dashboard model.
+ * @param parent Optional parent QQuickItem.
  */
 Widgets::DataGrid::DataGrid(const int index, QQuickItem *parent)
-  : QQuickItem(parent)
+  : StaticTable(parent)
   , m_index(index)
 {
-  if (VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index))
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index))
+    return;
+
+  const auto &group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
+
+  QList<QStringList> rows;
+  rows.append({tr("Title"), tr("Value")});
+
+  for (const auto &dataset : group.datasets())
+    rows.append(getRow(dataset));
+
+  setData(rows);
+  setFont(Misc::CommonFonts::instance().monoFont());
+  setHeaderFont(Misc::CommonFonts::instance().boldUiFont());
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+          &Widgets::DataGrid::updateData);
+}
+
+/**
+ * @brief Returns whether the DataGrid is paused.
+ *
+ * When paused, incoming updates are ignored.
+ *
+ * @return True if updates are paused, false otherwise.
+ */
+bool Widgets::DataGrid::paused() const
+{
+  return m_paused;
+}
+
+/**
+ * @brief Sets the paused state of the DataGrid.
+ *
+ * If unpaused, triggers an immediate update.
+ * Emits pausedChanged() if the state changes.
+ *
+ * @param paused New paused state.
+ */
+void Widgets::DataGrid::setPaused(const bool paused)
+{
+  if (m_paused != paused)
   {
-    const auto &group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
+    m_paused = paused;
 
-    m_units.resize(group.datasetCount());
-    m_titles.resize(group.datasetCount());
-    m_values.resize(group.datasetCount());
-    m_alarms.resize(group.datasetCount());
+    if (!m_paused)
+      updateData();
 
-    for (int i = 0; i < group.datasetCount(); ++i)
-    {
-      auto dataset = group.getDataset(i);
-
-      m_values[i] = "";
-      m_alarms[i] = false;
-      m_titles[i] = dataset.title();
-      m_units[i] = dataset.units().isEmpty()
-                       ? ""
-                       : QString("[%1]").arg(dataset.units());
-    }
-
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-            &DataGrid::updateData);
-
-    onThemeChanged();
-    connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-            this, &Widgets::DataGrid::onThemeChanged);
+    Q_EMIT pausedChanged();
   }
 }
 
 /**
- * @brief Returns the number of datasets in the panel.
- * @return An integer number with the number/count of datasets in the panel.
- */
-int Widgets::DataGrid::count() const
-{
-  return m_titles.count();
-}
-
-/**
- * @brief Returns the alarm states of the datasets in the panel.
- * @return A vector of booleans representing the alarm states of the datasets.
- */
-const QList<bool> &Widgets::DataGrid::alarms() const
-{
-  return m_alarms;
-}
-
-/**
- * @brief Returns the units of the datasets in the data grid.
- * @return A vector of strings representing the units of the datasets.
- */
-const QStringList &Widgets::DataGrid::units() const
-{
-  return m_units;
-}
-
-/**
- * @brief Returns the colors of the datasets in the data grid.
- * @return A vector of strings representing the colors of the datasets.
- */
-const QStringList &Widgets::DataGrid::colors() const
-{
-  return m_colors;
-}
-
-/**
- * @brief Returns the titles of the datasets in the data grid.
- * @return A vector of strings representing the titles of the datasets.
- */
-const QStringList &Widgets::DataGrid::titles() const
-{
-  return m_titles;
-}
-
-/**
- * @brief Returns the values of the datasets in the data grid.
- * @return A vector of strings representing the values of the datasets.
- */
-const QStringList &Widgets::DataGrid::values() const
-{
-  return m_values;
-}
-
-/**
- * @brief Updates the data grid data from the Dashboard.
+ * @brief Updates the displayed values in the DataGrid.
  *
- * This method retrieves the latest data for this data grid from the Dashboard
- * and updates the displayed values accordingly.
+ * Reads the latest dataset values from the dashboard and updates the table
+ * if there are any changes. Units are appended to values when applicable.
+ * Skips execution if paused or if the widget index is invalid.
  */
 void Widgets::DataGrid::updateData()
 {
-  if (!isEnabled())
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index))
     return;
 
-  if (VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index))
+  if (paused())
+    return;
+
+  const auto &group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
+
+  bool changed = false;
+  auto currentData = data();
+
+  for (int i = 0; i < group.datasetCount(); ++i)
   {
-    // Regular expression to check if the value is a number
-    static const QRegularExpression regex("^[+-]?(\\d*\\.)?\\d+$");
+    const auto &dataset = group.getDataset(i);
 
-    // Get the datagrid group and update the value readings
-    bool changed = false;
-    const auto &group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
-    for (int i = 0; i < group.datasetCount(); ++i)
+    QString value = dataset.value();
+    bool isNumber;
+    const double n = value.toDouble(&isNumber);
+
+    if (isNumber)
+      value = QString::number(n, 'f', UI::Dashboard::instance().precision());
+
+    if (!dataset.units().isEmpty())
+      value += " " + dataset.units();
+
+    if (currentData[i + 1][1] != value)
     {
-      // Get the dataset and its values
-      const auto &dataset = group.getDataset(i);
-      const auto alarmValue = dataset.alarm();
-      auto value = dataset.value();
-
-      // Check if dataset is a number
-      bool isNumber;
-      const double n = value.toDouble(&isNumber);
-
-      // Process dataset numerical value
-      bool alarm = false;
-      if (isNumber)
-      {
-        value = QString::number(n, 'f', UI::Dashboard::instance().precision());
-        alarm = (alarmValue != 0 && n >= alarmValue);
-      }
-
-      // Update the alarm state
-      if (m_alarms[i] != alarm)
-      {
-        changed = true;
-        m_alarms[i] = alarm;
-      }
-
-      // Update value text
-      if (m_values[i] != value)
-      {
-        changed = true;
-        m_values[i] = value;
-      }
+      currentData[i + 1][1] = value;
+      changed = true;
     }
-
-    // Redraw the widget
-    if (changed)
-      Q_EMIT updated();
   }
+
+  if (changed)
+    setData(currentData);
 }
 
 /**
- * @brief Updates the colors for each dataset in the widget based on the
- *        colorscheme defined by the application's currently loaded theme.
+ * @brief Generates a table row from a dataset.
+ *
+ * Constructs a QStringList containing the dataset's title and value.
+ * Units are appended to the value if present.
+ *
+ * @param dataset The dataset from which to generate the row.
+ * @return A QStringList with two entries: title and value.
  */
-void Widgets::DataGrid::onThemeChanged()
+QStringList Widgets::DataGrid::getRow(const JSON::Dataset &dataset)
 {
-  // clang-format off
-  const auto colors = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
-  // clang-format on
+  const QString title = dataset.title();
+  const QString units = dataset.units();
+  QString value = dataset.value();
 
-  if (VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index))
-  {
-    const auto &group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
+  if (!units.isEmpty())
+    value += " " + units;
 
-    m_colors.clear();
-    m_colors.resize(group.datasetCount());
-    for (int i = 0; i < group.datasetCount(); ++i)
-    {
-      const auto &dataset = group.getDataset(i);
-      const auto index = dataset.index() - 1;
-      const auto color = colors.count() > index
-                             ? colors.at(index).toString()
-                             : colors.at(index % colors.count()).toString();
-      m_colors[i] = color;
-    }
-
-    Q_EMIT themeChanged();
-  }
+  return {title, value};
 }

@@ -20,7 +20,6 @@
  */
 
 import QtQuick
-import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Controls
 
@@ -35,101 +34,91 @@ Item {
   // Widget data inputs
   //
   required property color color
-  required property DataGridModel model
   required property var windowRoot
+  required property DataGridWidget model
 
   //
-  // Responsive design stuff
+  // Window flags
   //
-  readonly property bool unitsVisible: root.height >= 120
+  readonly property bool hasToolbar: root.height >= 220
 
   //
-  // Create scrollable grid view with LED states
+  // Custom properties
   //
-  Flickable {
-    contentWidth: width
-    anchors.fill: parent
-    anchors.topMargin: 8
-    anchors.leftMargin: 8
-    anchors.bottomMargin: 8
-    interactive: windowRoot.focused
-    opacity: windowRoot.focused ? 1 : 0.8
-    contentHeight: Math.max(grid.implicitHeight, height)
+  property bool running: true
+  onRunningChanged: {
+    if (model)
+      model.paused = !root.running
+  }
 
-    ScrollBar.vertical: ScrollBar {
-      id: scroll
+  //
+  // Place widget in container when its initialized
+  //
+  onModelChanged: {
+    if (model) {
+      model.parent = innerContainer
+      model.anchors.fill = innerContainer
+      model.anchors.margins = -1
+      model.anchors.rightMargin = -2
+      model.visible = true
+    }
+  }
+
+  //
+  // Add toolbar
+  //
+  RowLayout {
+    id: toolbar
+
+    spacing: 4
+    visible: root.hasToolbar
+    height: root.hasToolbar ? 48 : 0
+
+    anchors {
+      leftMargin: 8
+      top: parent.top
+      left: parent.left
+      right: parent.right
     }
 
-    GridLayout {
-      id: grid
-      columns: 2
-      rowSpacing: 4
-      columnSpacing: 4
-      width: parent.width - 8
-      anchors.centerIn: parent
-      anchors.horizontalCenterOffset: -4
+    ToolButton {
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      checked: !root.running
+      icon.color: "transparent"
+      text: root.running ? qsTr("Pause") : qsTr("Resume")
+      onClicked: root.running = !root.running
+      icon.source: root.running?
+                     "qrc:/rcc/icons/dashboard-buttons/pause.svg" :
+                     "qrc:/rcc/icons/dashboard-buttons/resume.svg"
+    }
 
-      Repeater {
-        model: root.model.count
-        delegate: Rectangle {
-          border.width: 1
-          Layout.fillWidth: true
-          Layout.minimumHeight: 32
-          Layout.maximumHeight: 32
-          color: Cpp_ThemeManager.colors["widget_base"]
-          border.color: Cpp_ThemeManager.colors["widget_border"]
+    Item {
+      Layout.fillWidth: true
+    }
+  }
 
-          RowLayout {
-            id: layout
-            spacing: 0
-            anchors.margins: 8
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
+  //
+  // Widget view
+  //
+  ScrollView {
+    id: container
+    clip: true
+    contentHeight: innerContainer.height
+    ScrollBar.vertical.policy: innerContainer.height > container.height ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
 
-            Label {
-              elide: Qt.ElideRight
-              Layout.fillWidth: true
-              Layout.alignment: Qt.AlignVCenter
-              font: Cpp_Misc_CommonFonts.monoFont
-              horizontalAlignment: Label.AlignLeft
-              visible: text !== "" && root.unitsVisible
-              color: root.model.alarms[index] ? Cpp_ThemeManager.colors["alarm"] :
-                                                root.model.colors[index]
+    anchors {
+      left: parent.left
+      right: parent.right
+      top: toolbar.bottom
+      bottom: parent.bottom
+    }
 
-              text: {
-                const title = root.model.titles[index]
-                const units = root.model.units[index]
-
-                let str = title
-                if (units.length > 0)
-                  str += " (" + units + ")"
-
-                return str + ":"
-              }
-
-              Behavior on color {ColorAnimation{}}
-            }
-
-
-            Item {
-              Layout.fillWidth: true
-              implicitWidth: 4
-            }
-
-            Label {
-              elide: Qt.ElideRight
-              text: root.model.values[index]
-              Layout.alignment: Qt.AlignVCenter
-              font: Cpp_Misc_CommonFonts.monoFont
-              Layout.maximumWidth: layout.width - 8
-              horizontalAlignment: Label.AlignRight
-              color: root.unitsVisible ? Cpp_ThemeManager.colors["widget_text"] :
-                                         root.model.colors[index]
-            }
-          }
-        }
-      }
+    Item {
+      id: innerContainer
+      width: container.width
+      height: model ? model.contentHeight : 0
     }
   }
 }

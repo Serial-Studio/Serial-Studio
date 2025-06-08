@@ -243,7 +243,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<Widgets::Gauge>("SerialStudio", 1, 0, "GaugeModel");
   qmlRegisterType<Widgets::Compass>("SerialStudio", 1, 0, "CompassModel");
   qmlRegisterType<Widgets::FFTPlot>("SerialStudio", 1, 0, "FFTPlotModel");
-  qmlRegisterType<Widgets::DataGrid>("SerialStudio", 1, 0, "DataGridModel");
+  qmlRegisterType<Widgets::DataGrid>("SerialStudio", 1, 0, "DataGridWidget");
   qmlRegisterType<Widgets::LEDPanel>("SerialStudio", 1, 0, "LEDPanelModel");
   qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "TerminalWidget");
   qmlRegisterType<Widgets::MultiPlot>("SerialStudio", 1, 0, "MultiPlotModel");

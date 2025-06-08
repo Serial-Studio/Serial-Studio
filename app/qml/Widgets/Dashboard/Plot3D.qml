@@ -34,8 +34,8 @@ Item {
   // Widget data inputs
   //
   required property color color
-  required property Plot3DWidget model
   required property var windowRoot
+  required property Plot3DWidget model
 
   //
   // Window flags
@@ -305,7 +305,6 @@ Item {
   Item {
     id: container
     anchors.fill: parent
-    anchors.margins: 1
     anchors.topMargin: root.hasToolbar ? 48 : 0
   }
 }
