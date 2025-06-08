@@ -16,16 +16,7 @@
   <description>
     <p><strong>Serial Studio</strong> is an open source, cross-platform telemetry dashboard and real-time data visualization tool. It supports data input from serial ports, Bluetooth Low Energy (BLE), MQTT, and TCP/UDP sockets—ideal for embedded devices, external tools, or network services.</p>
     <p>It runs on Windows, macOS, and Linux, and is built for telemetry monitoring, sensor analysis, and real-time debugging in educational, hobbyist, and professional environments.</p>
-
-    <h2>Features</h2>
-    <h4>Operation Modes</h4>
-    <ul>
-      <li><strong>Project File Mode (recommended):</strong> Define dashboard layout and data mapping using local JSON files created with the integrated Project Editor.</li>
-      <li><strong>Quick Plot Mode:</strong> Instantly visualize comma-separated values—no config required.</li>
-      <li><strong>Device-defined Mode:</strong> Dashboards are dynamically created from incoming JSON data.</li>
-    </ul>
-
-    <h4>Core Capabilities</h4>
+    <strong>Features</strong>
     <ul>
       <li><strong>Cross-platform:</strong> Native support for Windows, macOS, and Linux.</li>
       <li><strong>CSV export:</strong> Save incoming data for offline analysis or post-processing.</li>
@@ -34,8 +25,7 @@
       <li><strong>Advanced decoding:</strong> Use JavaScript to handle raw or binary data streams.</li>
       <li><strong>MQTT integration:</strong> Send/receive data over the internet for remote access and visualization.</li>
     </ul>
-
-    <h2>Documentation</h2>
+    <strong>Documentation</strong>
     <p>See the <a href="https://github.com/Serial-Studio/Serial-Studio/wiki">Wiki</a> for full guides and examples:</p>
     <ul>
       <li><strong>Installation:</strong> Setup instructions for all platforms.</li>
@@ -55,8 +45,8 @@
     <category>Science</category>
   </categories>
   <releases>
-    <release version="3.0.6" date="2024-11-27">
-      <url>https://github.com/Serial-Studio/Serial-Studio/releases/latest</url>
+    <release version="3.1.0" date="2025-06-08">
+      <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.0</url>
     </release>
   </releases>
   <content_rating type="oars-1.1"/>
