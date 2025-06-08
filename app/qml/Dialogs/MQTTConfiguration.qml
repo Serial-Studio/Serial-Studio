@@ -260,6 +260,10 @@ Window {
             anchors.fill: parent
             color: Cpp_ThemeManager.colors["groupbox_background"]
             border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+            DragHandler {
+              target: null
+            }
           }
 
           GridLayout {
@@ -355,6 +359,10 @@ Window {
             anchors.fill: parent
             color: Cpp_ThemeManager.colors["groupbox_background"]
             border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+            DragHandler {
+              target: null
+            }
           }
 
           GridLayout {
@@ -430,6 +438,10 @@ Window {
             anchors.fill: parent
             color: Cpp_ThemeManager.colors["groupbox_background"]
             border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+            DragHandler {
+              target: null
+            }
           }
 
           GridLayout {
@@ -547,6 +559,10 @@ Window {
             anchors.fill: parent
             color: Cpp_ThemeManager.colors["groupbox_background"]
             border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+            DragHandler {
+              target: null
+            }
           }
 
           GridLayout {

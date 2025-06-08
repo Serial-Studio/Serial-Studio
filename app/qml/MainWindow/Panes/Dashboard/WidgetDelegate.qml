@@ -216,7 +216,7 @@ Widgets.MiniWindow {
         width: 640
         height: 480
         visible: true
-        flags: Qt.Window
+        transientParent: null
         minimumWidth: root.minimumWidth
         minimumHeight: root.minimumHeight
         onClosing: externalWindowLoader.active = false

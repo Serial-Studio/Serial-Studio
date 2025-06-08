@@ -155,6 +155,10 @@ Window {
                           licenseControls.implicitHeight + 32 :
                           activationControls.implicitHeight + 32
 
+        DragHandler {
+          target: null
+        }
+
         RowLayout {
           spacing: 12
           anchors.margins: 16

@@ -72,7 +72,7 @@ Item {
   //
   // Tooltip
   //
-  ToolTip.delay: 500
+  ToolTip.delay: 700
   ToolTip.visible: _mouseArea.containsMouse && ToolTip.text !== ""
 
   //
