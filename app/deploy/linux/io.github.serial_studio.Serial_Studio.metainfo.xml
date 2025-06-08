@@ -9,25 +9,44 @@
   <summary>The universal dashboard for embedded systems</summary>
   <metadata_license>CC-BY-SA-4.0</metadata_license>
   <launchable type="desktop-id">io.github.serial_studio.Serial_Studio.desktop</launchable>
-  <url type="homepage">https://serial-studio.github.io/</url>
+  <url type="homepage">https://serial-studio.com/</url>
   <url type="bugtracker">https://github.com/Serial-Studio/Serial-Studio/issues</url>
   <url type="help">https://github.com/Serial-Studio/Serial-Studio/wiki</url>
   <url type="donation">https://github.com/sponsors/alex-spataru</url>
   <description>
-    <p>Serial Studio is a multi-platform, versatile data visualization tool designed for embedded engineers, students, hackers, and teachers. It allows users to visualize, analyze, and represent data from their projects and devices without needing custom, project-specific visualization software. Serial Studio offers a flexible solution that adapts to a wide range of use cases, making it ideal for both educational and professional environments.</p>
-    <p>Features</p>
+    <p><strong>Serial Studio</strong> is an open source, cross-platform telemetry dashboard and real-time data visualization tool. It supports data input from serial ports, Bluetooth Low Energy (BLE), MQTT, and TCP/UDP sockets—ideal for embedded devices, external tools, or network services.</p>
+    <p>It runs on Windows, macOS, and Linux, and is built for telemetry monitoring, sensor analysis, and real-time debugging in educational, hobbyist, and professional environments.</p>
+
+    <h2>Features</h2>
+    <h4>Operation Modes</h4>
     <ul>
-      <li>Cross-platform: Compatible with Windows, macOS, and Linux.</li>
-      <li>CSV Export: Easily saves received data in CSV files for further analysis or processing.</li>
-      <li>Support for multiple data sources: Handles a wide variety of sources, including serial ports, MQTT, Bluetooth Low Energy (BLE), and network sockets (TCP/UDP).</li>
-      <li>Customizable visualization: Allows users to define and display data using various widgets, configurable via the project editor to meet specific needs.</li>
-      <li>Customizable frame analysis: Provides the option to modify a JavaScript function to interpret incoming data frames, enabling the preprocessing of raw sensor data and handling of complex binary formats.</li>
-      <li>MQTT publishing and receiving: Sends and receives data over the internet, enabling real-time data visualization from anywhere in the world.</li>
+      <li><strong>Project File Mode (recommended):</strong> Define dashboard layout and data mapping using local JSON files created with the integrated Project Editor.</li>
+      <li><strong>Quick Plot Mode:</strong> Instantly visualize comma-separated values—no config required.</li>
+      <li><strong>Device-defined Mode:</strong> Dashboards are dynamically created from incoming JSON data.</li>
+    </ul>
+
+    <h4>Core Capabilities</h4>
+    <ul>
+      <li><strong>Cross-platform:</strong> Native support for Windows, macOS, and Linux.</li>
+      <li><strong>CSV export:</strong> Save incoming data for offline analysis or post-processing.</li>
+      <li><strong>Multiple inputs:</strong> Connect via serial, BLE, MQTT, or TCP/UDP sockets.</li>
+      <li><strong>Custom dashboards:</strong> Design interfaces with visual widgets using the Project Editor.</li>
+      <li><strong>Advanced decoding:</strong> Use JavaScript to handle raw or binary data streams.</li>
+      <li><strong>MQTT integration:</strong> Send/receive data over the internet for remote access and visualization.</li>
+    </ul>
+
+    <h2>Documentation</h2>
+    <p>See the <a href="https://github.com/Serial-Studio/Serial-Studio/wiki">Wiki</a> for full guides and examples:</p>
+    <ul>
+      <li><strong>Installation:</strong> Setup instructions for all platforms.</li>
+      <li><strong>Quick Start:</strong> Connect a device and view data in minutes.</li>
+      <li><strong>Advanced Usage:</strong> Learn about data flow, parsing, and layout customization.</li>
+      <li><strong>Examples:</strong> Sample code and ready-made projects.</li>
     </ul>
   </description>
   <screenshots>
     <screenshot type="default">
-      <image>https://serial-studio.github.io/assets/img/laptop-mockup.png</image>
+      <image>https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/doc/screenshot.png</image>
     </screenshot>
   </screenshots>
   <categories>

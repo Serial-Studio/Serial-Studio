@@ -402,7 +402,7 @@ elseif(UNIX)
   install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION bin)
 
   install(
-    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.svg
+    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.png
     DESTINATION share/pixmaps
   )
 

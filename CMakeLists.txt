@@ -41,7 +41,7 @@ find_package(
 #-------------------------------------------------------------------------------
 
 option(DEBUG_SANITIZER "Enable sanitizers for debug builds" OFF)
-option(PRODUCTION_OPTIMIZATION "Enable production optimization flags" ON)
+option(PRODUCTION_OPTIMIZATION "Enable production optimization flags" OFF)
 
 #-------------------------------------------------------------------------------
 # Project information
