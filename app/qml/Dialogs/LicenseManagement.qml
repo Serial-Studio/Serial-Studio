@@ -148,7 +148,7 @@ Window {
         border.color: Cpp_ThemeManager.colors["groupbox_border"]
 
         implicitWidth: Cpp_Licensing_LemonSqueezy.isActivated ?
-                         licenseControls.implicitWidth + 32 :
+                         Math.max(560, licenseControls.implicitWidth + 32) :
                          Math.min(560, activationControls.implicitWidth + 32)
 
         implicitHeight: Cpp_Licensing_LemonSqueezy.isActivated ?

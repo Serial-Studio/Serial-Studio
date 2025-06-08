@@ -58,7 +58,7 @@ Item {
                     Math.max(root.iconSize, _label.implicitHeight)  :
                     root.iconSize + _label.implicitHeight + 20
   implicitWidth: horizontalLayout ?
-                   root.iconSize + Math.ceil(metrics.width + 16) :
+                   Math.min(128, root.iconSize + Math.ceil(metrics.width + 16)) :
                    Math.max(Math.ceil(metrics.width + 16), icon.width / 32 * 72)
 
   //
@@ -140,6 +140,7 @@ Item {
     Label {
       id: _label
       elide: Qt.ElideRight
+      Layout.fillWidth: horizontalLayout
       Layout.row: horizontalLayout ? 0 : 1
       Layout.column: horizontalLayout ? 1 : 0
       Layout.alignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignCenter
