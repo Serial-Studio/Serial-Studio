@@ -1,192 +1,165 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="pl_PL" sourcelanguage="en_US">
 <context>
     <name>About</name>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="38"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="38"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>O programie</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="182"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="182"/>
         <source>Version %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Wersja %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="192"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="192"/>
         <source>Copyright © %1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright © %1 %2</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="197"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="197"/>
         <source>All Rights Reserved</source>
-        <translation type="unfinished"></translation>
+        <translation>Wszelkie prawa zastrzeżone</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="213"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="213"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 jest wolnym oprogramowaniem: możesz je rozprowadzać i/lub modyfikować na warunkach Powszechnej Licencji Publicznej GNU, opublikowanej przez Free Software Foundation; w wersji 3 tej Licencji lub (według twojego wyboru) w dowolnej późniejszej wersji.
+
+%1 jest rozpowszechniany z nadzieją, że będzie użyteczny, ale BEZ JAKIEJKOLWIEK GWARANCJI; nawet bez domniemanej gwarancji PRZYDATNOŚCI HANDLOWEJ lub PRZYDATNOŚCI DO OKREŚLONEGO CELU. Szczegóły znajdują się w Powszechnej Licencji Publicznej GNU.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="232"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="232"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta konfiguracja jest licencjonowana do użytku komercyjnego i zastrzeżonego. Może być używana w aplikacjach zamkniętego źródła i komercyjnych, zgodnie z warunkami licencji komercyjnej.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="246"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="246"/>
         <source>This configuration is for personal use only. Commercial use is prohibited unless a valid commercial license is activated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta konfiguracja jest przeznaczona wyłącznie do użytku osobistego. Użycie komercyjne jest zabronione, chyba że zostanie aktywowana ważna licencja komercyjna.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="259"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="259"/>
-        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation type="unfinished"></translation>
+        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <translation>To oprogramowanie jest dostarczane „tak jak jest” bez jakiejkolwiek gwarancji, wyraźnej lub domniemanej, w tym, ale nie wyłącznie, gwarancji przydatności handlowej lub przydatności do określonego celu. W żadnym wypadku autor nie ponosi odpowiedzialności za jakiekolwiek szkody wynikające z użycia tego oprogramowania.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="279"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="279"/>
         <source>Manage License</source>
-        <translation type="unfinished"></translation>
+        <translation>Zarządzaj licencją</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="288"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="288"/>
         <source>Donate</source>
-        <translation type="unfinished"></translation>
+        <translation>Przekaż darowiznę</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="299"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="299"/>
         <source>Check for Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprawdź aktualizacje</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="308"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="308"/>
         <source>License Agreement</source>
-        <translation type="unfinished"></translation>
+        <translation>Umowa licencyjna</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="317"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="317"/>
         <source>Report Bug</source>
-        <translation type="unfinished"></translation>
+        <translation>Zgłoś błąd</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="326"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="326"/>
         <source>Acknowledgements</source>
-        <translation type="unfinished"></translation>
+        <translation>Podziękowania</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="335"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="335"/>
         <source>Website</source>
-        <translation type="unfinished"></translation>
+        <translation>Strona internetowa</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="350"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="350"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Zamknij</translation>
     </message>
 </context>
 <context>
     <name>Acknowledgements</name>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="35"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="35"/>
         <source>Acknowledgements</source>
-        <translation type="unfinished"></translation>
+        <translation>Podziękowania</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="172"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="172"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Zamknij</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="186"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="186"/>
         <source>About Qt...</source>
-        <translation type="unfinished"></translation>
+        <translation>O Qt...</translation>
     </message>
 </context>
 <context>
     <name>ActionView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="104"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <source>Change Icon</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmień ikonę</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="126"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="126"/>
         <source>Duplicate</source>
-        <translation type="unfinished"></translation>
+        <translation>Duplikuj</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="137"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="137"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuń</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="188"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="188"/>
         <source>Send commands with a button click</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyślij polecenia kliknięciem przycisku</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="204"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="204"/>
         <source>Actions let you send custom commands to the connected device with a single button press.</source>
-        <translation type="unfinished"></translation>
+        <translation>Działania pozwalają na wysyłanie niestandardowych poleceń do podłączonego urządzenia za pomocą jednego naciśnięcia przycisku.</translation>
     </message>
 </context>
 <context>
     <name>BluetoothLE</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
         <source>Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Urządzenie</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
         <source>Service</source>
-        <translation type="unfinished"></translation>
+        <translation>Usługa</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
         <source>Characteristic</source>
-        <translation type="unfinished"></translation>
+        <translation>Charakterystyka</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="172"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="172"/>
         <source>Scanning....</source>
-        <translation type="unfinished"></translation>
+        <translation>Skanowanie....</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="195"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="195"/>
-        <source>Sorry, this system is not supported yet. We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
-        <translation type="unfinished"></translation>
+        <source>Sorry, this system is not supported yet. We'll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
+        <translation>Przepraszamy, ten system nie jest jeszcze obsługiwany. Zaktualizujemy Serial Studio, aby działał z tym systemem operacyjnym, gdy tylko Qt oficjalnie go wesprze.</translation>
     </message>
 </context>
 <context>
@@ -194,12 +167,12 @@
     <message>
         <location filename="../../src/CSV/Export.cpp" line="248"/>
         <source>CSV File Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd pliku CSV</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Export.cpp" line="249"/>
         <source>Cannot open CSV file for writing!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można otworzyć pliku CSV do zapisu!</translation>
     </message>
 </context>
 <context>
@@ -207,705 +180,630 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="164"/>
         <source>Select CSV file</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz plik CSV</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="166"/>
         <source>CSV files</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki CSV</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="278"/>
         <source>Device Connection Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Połączenie z urządzeniem aktywne</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="279"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation>Aby użyć tej funkcji, musisz rozłączyć się z urządzeniem. Czy chcesz kontynuować?</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="343"/>
         <source>Insufficient Data in CSV File</source>
-        <translation type="unfinished"></translation>
+        <translation>Niewystarczające dane w pliku CSV</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="344"/>
         <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Plik CSV musi zawierać co najmniej dwie ramki (wiersze danych), aby kontynuować. Proszę sprawdzić plik i spróbować ponownie.</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="355"/>
         <source>Cannot read CSV file</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można odczytać pliku CSV</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="356"/>
         <source>Please check file permissions &amp; location</source>
-        <translation type="unfinished"></translation>
+        <translation>Proszę sprawdzić uprawnienia i lokalizację pliku</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="513"/>
         <source>Invalid CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy CSV</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="514"/>
         <source>The CSV file does not contain any data or headers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Plik CSV nie zawiera żadnych danych ani nagłówków.</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="525"/>
         <source>Select a date/time column</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz kolumnę z datą/czasem</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="525"/>
         <location filename="../../src/CSV/Player.cpp" line="535"/>
         <source>Set interval manually</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustaw interwał ręcznie</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="527"/>
         <source>CSV Date/Time Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybór daty/czasu CSV</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="528"/>
         <source>Choose how to handle the date/time data:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz sposób obsługi danych daty/czasu:</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="538"/>
         <source>Set Interval</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustaw interwał</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="539"/>
         <source>Please enter the interval between rows in milliseconds:</source>
-        <translation type="unfinished"></translation>
+        <translation>Proszę wprowadzić interwał między wierszami w milisekundach:</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="553"/>
         <source>Select Date/Time Column</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz kolumnę z datą/czasem</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="554"/>
         <source>Please select the column that contains the date/time data:</source>
-        <translation type="unfinished"></translation>
+        <translation>Proszę wybrać kolumnę zawierającą dane daty/czasu:</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="563"/>
         <source>Invalid Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy wybór</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="564"/>
         <source>The selected column is not valid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybrana kolumna jest nieprawidłowa.</translation>
     </message>
 </context>
 <context>
     <name>Canvas</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="55"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Canvas.qml" line="55"/>
         <source>Set Wallpaper...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustaw tapetę...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="61"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Canvas.qml" line="61"/>
         <source>Clear Wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuń tapetę</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="71"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Canvas.qml" line="71"/>
         <source>Tile Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Układaj okna</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="84"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Canvas.qml" line="84"/>
         <source>Pro features detected in this project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykryto funkcje Pro w tym projekcie.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="85"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Canvas.qml" line="85"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktywne są widżety awaryjne. Kup licencję, aby uzyskać pełną funkcjonalność.</translation>
     </message>
 </context>
 <context>
     <name>Console</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Console.qml" line="31"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Console.qml" line="31"/>
         <source>Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Konsola</translation>
     </message>
 </context>
 <context>
     <name>CsvPlayer</name>
     <message>
         <location filename="../../qml/Dialogs/CsvPlayer.qml" line="35"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/CsvPlayer.qml" line="35"/>
         <source>CSV Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Odtwarzacz CSV</translation>
     </message>
 </context>
 <context>
     <name>Dashboard</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="34"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard.qml" line="34"/>
         <source>Dashboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulpit nawigacyjny</translation>
     </message>
 </context>
 <context>
     <name>DatasetView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
         <source>Pro features detected in this project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykryto funkcje Pro w tym projekcie.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zostaną użyte zastępcze widżety. Kup licencję, aby odblokować pełną funkcjonalność.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
         <source>Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="134"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="134"/>
         <source>FFT Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres FFT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="151"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="151"/>
         <source>Bar/Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Słupki/Poziom</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="168"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="168"/>
         <source>Gauge</source>
-        <translation type="unfinished"></translation>
+        <translation>Wskaźnik</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="187"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="187"/>
         <source>Compass</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="204"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="204"/>
         <source>LED</source>
-        <translation type="unfinished"></translation>
+        <translation>LED</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="229"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="229"/>
         <source>Duplicate</source>
-        <translation type="unfinished"></translation>
+        <translation>Duplikuj</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="241"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="241"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuń</translation>
     </message>
 </context>
 <context>
     <name>Donate</name>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="36"/>
         <source>Support Serial Studio</source>
-        <translation type="unfinished"></translation>
+        <translation>Wspieraj Serial Studio</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="195"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="195"/>
         <source>Support the development of %1!</source>
-        <translation type="unfinished"></translation>
+        <translation>Wesprzyj rozwój %1!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="206"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="206"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
-        <translation type="unfinished"></translation>
+        <translation>Serial Studio to darmowe i otwarte oprogramowanie wspierane przez wolontariuszy. Rozważ przekazanie darowizny lub uzyskanie licencji Pro, aby wesprzeć wysiłki rozwojowe :)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="219"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="219"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
-        <translation type="unfinished"></translation>
+        <translation>Możesz również wesprzeć ten projekt, udostępniając go, zgłaszając błędy i proponując nowe funkcje!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="235"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="235"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Zamknij</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="249"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="249"/>
         <source>Donate</source>
-        <translation type="unfinished"></translation>
+        <translation>Przekaż darowiznę</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="267"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="267"/>
         <source>Get Serial Studio Pro</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzyskaj Serial Studio Pro</translation>
     </message>
 </context>
 <context>
     <name>Downloader</name>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Zatrzymaj</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="344"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Downloading updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Pobieranie aktualizacji</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="111"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="426"/>
         <source>Time remaining</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozostały czas</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="111"/>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>nieznany</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="189"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="190"/>
         <source>Cannot find downloaded update!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można znaleźć pobranej aktualizacji!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="209"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Zamknij</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="210"/>
         <source>Download complete!</source>
-        <translation type="unfinished"></translation>
+        <translation>Pobieranie zakończone!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="211"/>
         <source>The installer will open separately</source>
-        <translation type="unfinished"></translation>
+        <translation>Instalator otworzy się osobno</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="219"/>
-        <source>Click &quot;OK&quot; to begin installing the update</source>
-        <translation type="unfinished"></translation>
+        <source>Click "OK" to begin installing the update</source>
+        <translation>Kliknij „OK”, aby rozpocząć instalację aktualizacji</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="221"/>
         <source>In order to install the update, you may need to quit the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aby zainstalować aktualizację, może być konieczne zamknięcie aplikacji.</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="225"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application</source>
-        <translation type="unfinished"></translation>
+        <translation>Aby zainstalować aktualizację, może być konieczne zamknięcie aplikacji. Jest to obowiązkowa aktualizacja, wyjście teraz spowoduje zamknięcie aplikacji</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="245"/>
-        <source>Click the &quot;Open&quot; button to apply the update</source>
-        <translation type="unfinished"></translation>
+        <source>Click the "Open" button to apply the update</source>
+        <translation>Kliknij przycisk „Otwórz”, aby zastosować aktualizację</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <source>Updater</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualizator</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="264"/>
         <source>Are you sure you want to cancel the download?</source>
-        <translation type="unfinished"></translation>
+        <translation>Czy na pewno chcesz anulować pobieranie?</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="267"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
-        <translation type="unfinished"></translation>
+        <translation>Czy na pewno chcesz anulować pobieranie? Jest to obowiązkowa aktualizacja, wyjście teraz zamknie aplikację</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="327"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="336"/>
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 bajtów</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="330"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="339"/>
         <source>%1 KB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 KB</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="333"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="342"/>
         <source>%1 MB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MB</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="345"/>
         <source>of</source>
-        <translation type="unfinished"></translation>
+        <translation>z</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="370"/>
         <source>Downloading Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Pobieranie aktualizacji</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
         <source>Time Remaining</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozostały czas</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieznany</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="400"/>
         <source>about %1 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>około %1 godzin</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="402"/>
         <source>about one hour</source>
-        <translation type="unfinished"></translation>
+        <translation>około jednej godziny</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="411"/>
         <source>%1 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 minut</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="413"/>
         <source>1 minute</source>
-        <translation type="unfinished"></translation>
+        <translation>1 minuta</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="421"/>
         <source>%1 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 sekund</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="423"/>
         <source>1 second</source>
-        <translation type="unfinished"></translation>
+        <translation>1 sekunda</translation>
     </message>
     <message>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <source>Time remaining: 0 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Pozostały czas: 0 minut</translation>
     </message>
     <message>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Otwórz</translation>
     </message>
 </context>
 <context>
     <name>FFTPlot</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="217"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="217"/>
         <source>Magnitude (dB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Wielkość (dB)</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="218"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="218"/>
         <source>Frequency (Hz)</source>
-        <translation type="unfinished"></translation>
+        <translation>Częstotliwość (Hz)</translation>
     </message>
 </context>
 <context>
     <name>FileTransmission</name>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="36"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
         <source>File Transmission</source>
-        <translation type="unfinished"></translation>
+        <translation>Przesyłanie pliku</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="137"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="137"/>
         <source>File Selection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybór pliku:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="155"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="155"/>
         <source>Select File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz plik...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="172"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="172"/>
         <source>Transmission Interval:</source>
-        <translation type="unfinished"></translation>
+        <translation>Interwał transmisji:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
         <source>msecs</source>
-        <translation type="unfinished"></translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="225"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="225"/>
         <source>Progress: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Postęp: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="241"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="241"/>
         <source>Pause Transmission</source>
-        <translation type="unfinished"></translation>
+        <translation>Wstrzymaj transmisję</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="242"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="242"/>
         <source>Resume Transmission</source>
-        <translation type="unfinished"></translation>
+        <translation>Wznów transmisję</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="243"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="243"/>
         <source>Stop Transmission</source>
-        <translation type="unfinished"></translation>
+        <translation>Zatrzymaj transmisję</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="244"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="244"/>
         <source>Begin Transmission</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozpocznij transmisję</translation>
     </message>
 </context>
 <context>
     <name>FrameParserView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="32"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="32"/>
         <source>modified</source>
-        <translation type="unfinished"></translation>
+        <translation>zmodyfikowano</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="82"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="235"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="82"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="235"/>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Cofnij</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="89"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="248"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="89"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="248"/>
         <source>Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Ponów</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="98"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="272"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="98"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="272"/>
         <source>Cut</source>
-        <translation type="unfinished"></translation>
+        <translation>Wytnij</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="103"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="284"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="103"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="284"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiuj</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="108"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="296"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="108"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="296"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Wklej</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="115"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="115"/>
         <source>Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaznacz wszystko</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="187"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="187"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="199"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="199"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importuj</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="212"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="212"/>
         <source>Validate &amp; Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Zatwierdź i zapisz</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="319"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="319"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomoc</translation>
     </message>
 </context>
 <context>
     <name>GPS</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="113"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="113"/>
         <source>Map Type: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ mapy: %1</translation>
     </message>
 </context>
 <context>
     <name>GroupView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="81"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykryto funkcje Pro w tym projekcie.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="83"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zostaną użyte widżety zastępcze. Kup licencję, aby odblokować pełną funkcjonalność.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="116"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="116"/>
         <source>Dataset</source>
-        <translation type="unfinished"></translation>
+        <translation>Zbiór danych</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="128"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="128"/>
         <source>Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="142"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="142"/>
         <source>FFT Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres FFT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="155"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="155"/>
         <source>Bar/Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Słupki/Poziom</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="167"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="167"/>
         <source>Gauge</source>
-        <translation type="unfinished"></translation>
+        <translation>Wskaźnik</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="181"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="181"/>
         <source>Compass</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="193"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="193"/>
         <source>LED</source>
-        <translation type="unfinished"></translation>
+        <translation>LED</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="214"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="214"/>
         <source>Duplicate</source>
-        <translation type="unfinished"></translation>
+        <translation>Duplikuj</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="226"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="226"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuń</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="278"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="278"/>
         <source>Groups hold multiple datasets and organize your data.</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupy zawierają wiele zestawów danych i organizują Twoje dane.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="292"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="292"/>
         <source>Use the sub-toolbar to quickly add plots, FFTs, and other dataset types to this group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Użyj pod-paska narzędzi, aby szybko dodać wykresy, FFT i inne typy zestawów danych do tej grupy.</translation>
     </message>
 </context>
 <context>
     <name>Gyroscope</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="279"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="279"/>
         <source>Roll: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Przechylenie: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="297"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="297"/>
         <source>Yaw: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Odchylenie: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="315"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="315"/>
         <source>Pitch: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Pochylenie: %1</translation>
     </message>
 </context>
 <context>
@@ -913,42 +811,42 @@
     <message>
         <location filename="../../src/IO/Console.cpp" line="149"/>
         <source>ASCII</source>
-        <translation type="unfinished"></translation>
+        <translation>ASCII</translation>
     </message>
     <message>
         <location filename="../../src/IO/Console.cpp" line="150"/>
         <source>HEX</source>
-        <translation type="unfinished"></translation>
+        <translation>HEX</translation>
     </message>
     <message>
         <location filename="../../src/IO/Console.cpp" line="161"/>
         <source>No Line Ending</source>
-        <translation type="unfinished"></translation>
+        <translation>Bez zakończenia linii</translation>
     </message>
     <message>
         <location filename="../../src/IO/Console.cpp" line="162"/>
         <source>New Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowa linia</translation>
     </message>
     <message>
         <location filename="../../src/IO/Console.cpp" line="163"/>
         <source>Carriage Return</source>
-        <translation type="unfinished"></translation>
+        <translation>Powrót karetki</translation>
     </message>
     <message>
         <location filename="../../src/IO/Console.cpp" line="164"/>
         <source>CR + NL</source>
-        <translation type="unfinished"></translation>
+        <translation>CR + NL</translation>
     </message>
     <message>
         <location filename="../../src/IO/Console.cpp" line="175"/>
         <source>Plain Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwykły tekst</translation>
     </message>
     <message>
         <location filename="../../src/IO/Console.cpp" line="176"/>
         <source>Hexadecimal</source>
-        <translation type="unfinished"></translation>
+        <translation>Szesnastkowy</translation>
     </message>
 </context>
 <context>
@@ -956,22 +854,22 @@
     <message>
         <location filename="../../src/IO/ConsoleExport.cpp" line="165"/>
         <source>Console Export is a Pro feature.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksport konsoli jest funkcją Pro.</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConsoleExport.cpp" line="166"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta funkcja wymaga licencji. Proszę zakupić licencję, aby włączyć eksport konsoli.</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConsoleExport.cpp" line="229"/>
         <source>Console Output File Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd pliku wyjściowego konsoli</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConsoleExport.cpp" line="230"/>
         <source>Cannot open file for writing!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można otworzyć pliku do zapisu!</translation>
     </message>
 </context>
 <context>
@@ -979,82 +877,82 @@
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="46"/>
         <source>BLE I/O Module Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd modułu I/O BLE</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="279"/>
         <source>Select Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz urządzenie</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="290"/>
         <source>Select Service</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz usługę</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="302"/>
         <source>Select Characteristic</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz cechę</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="430"/>
         <source>Error while configuring BLE service</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd podczas konfigurowania usługi BLE</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="569"/>
         <source>Operation error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd operacji</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="572"/>
         <source>Characteristic write error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd zapisu cechy</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="575"/>
         <source>Descriptor write error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd zapisu deskryptora</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="578"/>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieznany błąd</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="581"/>
         <source>Characteristic read error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd odczytu cechy</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="584"/>
         <source>Descriptor read error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd odczytu deskryptora</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="601"/>
         <source>Bluetooth adapter is off!</source>
-        <translation type="unfinished"></translation>
+        <translation>Adapter Bluetooth jest wyłączony!</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="604"/>
         <source>Invalid Bluetooth adapter!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy adapter Bluetooth!</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="607"/>
         <source>Unsuported platform or operating system</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieobsługiwana platforma lub system operacyjny</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="610"/>
         <source>Unsupported discovery method</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieobsługiwana metoda wykrywania</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="613"/>
         <source>General I/O error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogólny błąd I/O</translation>
     </message>
 </context>
 <context>
@@ -1062,7 +960,7 @@
     <message>
         <location filename="../../src/IO/Drivers/Network.cpp" line="527"/>
         <source>Network socket error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd gniazda sieciowego</translation>
     </message>
 </context>
 <context>
@@ -1073,128 +971,128 @@
         <location filename="../../src/IO/Drivers/UART.cpp" line="368"/>
         <location filename="../../src/IO/Drivers/UART.cpp" line="410"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="251"/>
         <source>Failed to connect to serial port device</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się połączyć z urządzeniem portu szeregowego</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="349"/>
         <location filename="../../src/IO/Drivers/UART.cpp" line="756"/>
         <source>Select Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz port</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="369"/>
         <source>Even</source>
-        <translation type="unfinished"></translation>
+        <translation>Parzystość</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="370"/>
         <source>Odd</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieparzystość</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="371"/>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Spacja</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="372"/>
         <source>Mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaznacz</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="411"/>
         <source>RTS/CTS</source>
-        <translation type="unfinished"></translation>
+        <translation>RTS/CTS</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="412"/>
         <source>XON/XOFF</source>
-        <translation type="unfinished"></translation>
+        <translation>XON/XOFF</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="564"/>
-        <source>&quot;%1&quot; is not a valid path</source>
-        <translation type="unfinished"></translation>
+        <source>"%1" is not a valid path</source>
+        <translation>"%1" nie jest prawidłową ścieżką</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="565"/>
         <source>Please type another path to register a custom serial device</source>
-        <translation type="unfinished"></translation>
+        <translation>Proszę wpisać inną ścieżkę, aby zarejestrować niestandardowe urządzenie szeregowe</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="620"/>
         <source>Baud rate registered successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Prędkość transmisji została pomyślnie zarejestrowana</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="621"/>
-        <source>Rate &quot;%1&quot; has been added to baud rate list</source>
-        <translation type="unfinished"></translation>
+        <source>Rate "%1" has been added to baud rate list</source>
+        <translation>Prędkość "%1" została dodana do listy prędkości transmisji</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="861"/>
         <source>Critical serial port error</source>
-        <translation type="unfinished"></translation>
+        <translation>Krytyczny błąd portu szeregowego</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="966"/>
         <source>No error occurred.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie wystąpił żaden błąd.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="967"/>
         <source>The specified device could not be found. Please check the connection and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można znaleźć określonego urządzenia. Proszę sprawdzić połączenie i spróbować ponownie.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="968"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Odmowa dostępu. Upewnij się, że aplikacja ma niezbędne prawa dostępu do urządzenia.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="969"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się otworzyć urządzenia. Może być już używane lub niedostępne.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="970"/>
         <source>An error occurred while writing data to the device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wystąpił błąd podczas zapisywania danych na urządzeniu.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="971"/>
         <source>An error occurred while reading data from the device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wystąpił błąd podczas odczytywania danych z urządzenia.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="972"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wystąpił krytyczny błąd zasobu. Urządzenie mogło zostać odłączone lub jest niedostępne.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="973"/>
         <source>The requested operation is not supported on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Żądana operacja nie jest obsługiwana na tym urządzeniu.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="974"/>
         <source>An unknown error occurred. Please check the device and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wystąpił nieznany błąd. Sprawdź urządzenie i spróbuj ponownie.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="975"/>
         <source>The operation timed out. The device may not be responding.</source>
-        <translation type="unfinished"></translation>
+        <translation>Przekroczono limit czasu operacji. Urządzenie może nie odpowiadać.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="976"/>
         <source>The device is not open. Please open the device before attempting this operation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Urządzenie nie jest otwarte. Otwórz urządzenie przed próbą wykonania tej operacji.</translation>
     </message>
 </context>
 <context>
@@ -1202,12 +1100,12 @@
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="85"/>
         <source>No file selected...</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie wybrano pliku...</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="121"/>
         <source>Select file to transmit</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz plik do przesłania</translation>
     </message>
 </context>
 <context>
@@ -1215,38 +1113,35 @@
     <message>
         <location filename="../../src/IO/Manager.cpp" line="217"/>
         <source>UART/COM</source>
-        <translation type="unfinished"></translation>
+        <translation>UART/COM</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="218"/>
         <source>Network Socket</source>
-        <translation type="unfinished"></translation>
+        <translation>Gniazdo sieciowe</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="219"/>
         <source>Bluetooth LE</source>
-        <translation type="unfinished"></translation>
+        <translation>Bluetooth LE</translation>
     </message>
 </context>
 <context>
     <name>IconPicker</name>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="45"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="45"/>
         <source>Select Icon</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz ikonę</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="161"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="161"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="170"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="170"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Anuluj</translation>
     </message>
 </context>
 <context>
@@ -1254,52 +1149,52 @@
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="121"/>
         <source>Select JSON map file</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz plik mapy JSON</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="123"/>
         <source>JSON files</source>
-        <translation type="unfinished"></translation>
+        <translation>Pliki JSON</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="170"/>
         <source>JSON parse error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd parsowania JSON</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="200"/>
         <source>Invalid JSON project format</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy format projektu JSON</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="213"/>
         <source>Cannot read JSON file</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można odczytać pliku JSON</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="214"/>
         <source>Please check file permissions &amp; location</source>
-        <translation type="unfinished"></translation>
+        <translation>Proszę sprawdzić uprawnienia i lokalizację pliku</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="377"/>
         <source>Channel %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kanał %1</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="387"/>
         <source>Quick Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Szybki wykres</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="392"/>
         <source>Quick Plot Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Szybkie dane wykresu</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="405"/>
         <source>Multiple Plots</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiele wykresów</translation>
     </message>
 </context>
 <context>
@@ -1307,57 +1202,57 @@
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="230"/>
         <source>Frame parser code updated successfully!</source>
-        <translation type="unfinished"></translation>
+        <translation>Kod parsera ramki został pomyślnie zaktualizowany!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="231"/>
         <source>No errors have been detected in the code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie wykryto błędów w kodzie.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="270"/>
         <location filename="../../src/JSON/FrameParser.cpp" line="290"/>
         <location filename="../../src/JSON/FrameParser.cpp" line="314"/>
         <source>Frame parser error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd parsera ramki!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="271"/>
-        <source>The &apos;parse&apos; function is not declared or is not callable!</source>
-        <translation type="unfinished"></translation>
+        <source>The 'parse' function is not declared or is not callable!</source>
+        <translation>Funkcja 'parse' nie jest zadeklarowana lub nie jest wywoływalna!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="291"/>
         <location filename="../../src/JSON/FrameParser.cpp" line="315"/>
-        <source>No valid &apos;parse&apos; function declaration found in the script!</source>
-        <translation type="unfinished"></translation>
+        <source>No valid 'parse' function declaration found in the script!</source>
+        <translation>Nie znaleziono prawidłowej deklaracji funkcji 'parse' w skrypcie!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="300"/>
         <source>Legacy frame parser function detected</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykryto funkcję parsera ramek w wersji starszej</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="301"/>
-        <source>The &apos;parse&apos; function has two arguments (&apos;%1&apos;, &apos;%2&apos;), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
-        <translation type="unfinished"></translation>
+        <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
+        <translation>Funkcja 'parse' ma dwa argumenty ('%1', '%2'), co wskazuje na użycie starego formatu. Proszę zaktualizować ją do nowego formatu, który przyjmuje tylko dane ramki jako argument.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="408"/>
         <location filename="../../src/JSON/FrameParser.cpp" line="429"/>
         <source>The document has been modified!</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokument został zmodyfikowany!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="409"/>
         <location filename="../../src/JSON/FrameParser.cpp" line="430"/>
         <source>Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Czy na pewno chcesz kontynuować?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="438"/>
         <source>Select Javascript file to import</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz plik Javascript do importu</translation>
     </message>
 </context>
 <context>
@@ -1365,206 +1260,206 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="284"/>
         <source>New Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowy projekt</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="357"/>
         <source>Samples</source>
-        <translation type="unfinished"></translation>
+        <translation>Próbki</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="726"/>
         <source>Do you want to save your changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Czy chcesz zapisać zmiany?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="727"/>
         <source>You have unsaved modifications in this project!</source>
-        <translation type="unfinished"></translation>
+        <translation>Masz niezapisane zmiany w tym projekcie!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="762"/>
         <source>Project error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd projektu</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="763"/>
         <source>Project title cannot be empty!</source>
-        <translation type="unfinished"></translation>
+        <translation>Tytuł projektu nie może być pusty!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="780"/>
         <source>Save JSON project</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapisz projekt JSON</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="792"/>
         <source>File open error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd otwierania pliku</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="911"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2220"/>
         <source>Untitled Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt bez tytułu</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="955"/>
         <source>Select JSON file</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz plik JSON</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1078"/>
         <source>Legacy frame parser function updated</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaktualizowano funkcję parsera ramek w wersji starszej</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1079"/>
-        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
-        <translation type="unfinished"></translation>
+        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
+        <translation>Twój projekt używał starszej funkcji parsera ramek z argumentem 'separator'. Został automatycznie zmigrowany do nowego formatu.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1111"/>
         <source>Switch Serial Studio to Project Mode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Przełączyć Serial Studio na tryb projektu?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1112"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten tryb operacji jest wymagany do załadowania i wyświetlenia pulpitów z plików projektów.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1140"/>
-        <source>Do you want to delete group &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <source>Do you want to delete group "%1"?</source>
+        <translation>Czy chcesz usunąć grupę "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1141"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1182"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1221"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta akcja nie może być cofnięta. Czy chcesz kontynuować?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1181"/>
-        <source>Do you want to delete action &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <source>Do you want to delete action "%1"?</source>
+        <translation>Czy chcesz usunąć akcję "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1219"/>
-        <source>Do you want to delete dataset &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <source>Do you want to delete dataset "%1"?</source>
+        <translation>Czy chcesz usunąć zestaw danych "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1270"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1309"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1345"/>
         <source>%1 (Copy)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (Kopia)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1385"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupa</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1470"/>
         <source>New Dataset</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowy zestaw danych</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1473"/>
         <source>New Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowy wykres</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1477"/>
         <source>New FFT Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowy wykres FFT</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1481"/>
         <source>New Level Indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowy wskaźnik poziomu</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1485"/>
         <source>New Gauge</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowy wskaźnik</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1489"/>
         <source>New Compass</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowy kompas</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1493"/>
         <source>New LED Indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowy wskaźnik LED</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1629"/>
         <source>New Action</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowa akcja</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1786"/>
         <source>Are you sure you want to change the group-level widget?</source>
-        <translation type="unfinished"></translation>
+        <translation>Czy na pewno chcesz zmienić widżet na poziomie grupy?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1787"/>
         <source>Existing datasets for this group will be deleted</source>
-        <translation type="unfinished"></translation>
+        <translation>Istniejące zestawy danych dla tej grupy zostaną usunięte</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1844"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1845"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1846"/>
         <source>Accelerometer %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Akcelerometr %1</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1890"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1891"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1892"/>
         <source>Gyro %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Żyroskop %1</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1933"/>
         <source>Latitude</source>
-        <translation type="unfinished"></translation>
+        <translation>Szerokość geograficzna</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1934"/>
         <source>Longitude</source>
-        <translation type="unfinished"></translation>
+        <translation>Długość geograficzna</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1935"/>
         <source>Altitude</source>
-        <translation type="unfinished"></translation>
+        <translation>Wysokość</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1971"/>
         <source>X</source>
-        <translation type="unfinished"></translation>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1972"/>
         <source>Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Y</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1973"/>
         <source>Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Z</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2087"/>
         <source>Frame Parser Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Kod parsera ramki</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2218"/>
@@ -1572,67 +1467,67 @@
         <location filename="../../src/JSON/ProjectModel.cpp" line="2442"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2594"/>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Tytuł</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2221"/>
         <source>Project name/description</source>
-        <translation type="unfinished"></translation>
+        <translation>Nazwa/opis projektu</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2232"/>
         <source>Data Conversion Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Metoda konwersji danych</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2234"/>
         <source>Input data format for frame parser</source>
-        <translation type="unfinished"></translation>
+        <translation>Format danych wejściowych dla parsera ramki</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2247"/>
         <source>Frame Detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykrywanie Ramki</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2249"/>
         <source>Strategy used for identifying frame data</source>
-        <translation type="unfinished"></translation>
+        <translation>Strategia używana do identyfikacji danych ramki</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2266"/>
         <source>Frame Start Delimeter</source>
-        <translation type="unfinished"></translation>
+        <translation>Początek Ramki</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2269"/>
         <source>String marking the start of a frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciąg znaków oznaczający początek ramki</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2285"/>
         <source>Frame End Delimeter</source>
-        <translation type="unfinished"></translation>
+        <translation>Koniec Ramki</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2288"/>
         <source>String marking the end of a frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciąg znaków oznaczający koniec ramki</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2302"/>
         <source>Hexadecimal Delimeters</source>
-        <translation type="unfinished"></translation>
+        <translation>Szesnastkowe Delimitery</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2304"/>
         <source>Use hexadecimal delimiters for data frames</source>
-        <translation type="unfinished"></translation>
+        <translation>Użyj szesnastkowych delimiterów dla ramek danych</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2316"/>
         <source>Thunderforest API Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Klucz API Thunderforest</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2318"/>
@@ -1641,509 +1536,489 @@
         <location filename="../../src/JSON/ProjectModel.cpp" line="2964"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2971"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2319"/>
         <source>Required for Thunderforest maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Wymagane dla map Thunderforest</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2330"/>
         <source>MapTiler API Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Klucz API MapTiler</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2333"/>
         <source>Required for satellite maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Wymagane dla map satelitarnych</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2380"/>
         <source>Untitled Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupa bez tytułu</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2381"/>
         <source>Name or description of the group</source>
-        <translation type="unfinished"></translation>
+        <translation>Nazwa lub opis grupy</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2409"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2672"/>
         <source>Widget</source>
-        <translation type="unfinished"></translation>
+        <translation>Widżet</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2411"/>
         <source>Group display widget (optional)</source>
-        <translation type="unfinished"></translation>
+        <translation>Widżet wyświetlania grupy (opcjonalnie)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2444"/>
         <source>Untitled Action</source>
-        <translation type="unfinished"></translation>
+        <translation>Akcja bez tytułu</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2445"/>
         <source>Name or description of the action</source>
-        <translation type="unfinished"></translation>
+        <translation>Nazwa lub opis akcji</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2455"/>
         <source>Icon</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikona</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2457"/>
         <source>Default Icon</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikona domyślna</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2458"/>
         <source>Icon to display in the dashboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikona do wyświetlenia na pulpicie</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2467"/>
         <source>Binary Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Dane binarne</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2470"/>
         <source>Send binary data when the action is triggered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyślij dane binarne po wyzwoleniu akcji.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2483"/>
         <source>TX Data (Hex)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dane TX (Hex)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2485"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2502"/>
         <source>Command</source>
-        <translation type="unfinished"></translation>
+        <translation>Polecenie</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2486"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2503"/>
         <source>Data to transmit when the action is triggered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dane do przesłania po wyzwoleniu akcji.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2500"/>
         <source>TX Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Dane TX</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2532"/>
         <source>EOL Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekwencja EOL</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2534"/>
         <source>End-of-line (EOL) sequence to use</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekwencja końca linii (EOL) do użycia</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2596"/>
         <source>Untitled Dataset</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieozwany Zestaw Danych</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2597"/>
         <source>Name or description of the dataset</source>
-        <translation type="unfinished"></translation>
+        <translation>Nazwa lub opis zestawu danych</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2608"/>
         <source>Frame Index</source>
-        <translation type="unfinished"></translation>
+        <translation>Indeks Ramki</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2611"/>
         <source>Position in the frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozycja w ramce</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2621"/>
         <source>Measurement Unit</source>
-        <translation type="unfinished"></translation>
+        <translation>Jednostka Pomiaru</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2623"/>
         <source>Volts, Amps, etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wolty, Ampery, itp.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2624"/>
         <source>Unit of measurement (optional)</source>
-        <translation type="unfinished"></translation>
+        <translation>Jednostka miary (opcjonalnie)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2636"/>
         <source>Overview</source>
-        <translation type="unfinished"></translation>
+        <translation>Przegląd</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2639"/>
         <source>Include widget in overview dashboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Uwzględnij widżet w pulpicie przeglądu</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2674"/>
         <source>Display widget (optional)</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyświetl widżet (opcjonalnie)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2704"/>
         <source>Oscilloscope Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres oscyloskopu</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2706"/>
         <source>Plot data in real-time</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres danych w czasie rzeczywistym</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2715"/>
         <source>FFT Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres FFT</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2718"/>
         <source>Plot frequency-domain data</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres danych w dziedzinie częstotliwości</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2727"/>
         <source>Show in LED Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż na panelu LED</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2730"/>
         <source>Quick status monitoring</source>
-        <translation type="unfinished"></translation>
+        <translation>Szybkie monitorowanie statusu</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2762"/>
         <source>X-Axis Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Źródło osi X</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2763"/>
         <source>Data series for the X-Axis</source>
-        <translation type="unfinished"></translation>
+        <translation>Seria danych dla osi X</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2777"/>
         <source>Minimum Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimalna wartość</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2780"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2793"/>
         <source>Required for range widgets, optional for plots</source>
-        <translation type="unfinished"></translation>
+        <translation>Wymagane dla widżetów zakresu, opcjonalne dla wykresów</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2790"/>
         <source>Maximum Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wartość maksymalna</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2806"/>
         <source>Alarm Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wartość alarmowa</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2809"/>
         <source>Triggers alarm in bar widgets and LED panels</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyzwala alarm w widżetach słupkowych i panelach LED</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2831"/>
         <source>FFT Window Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozmiar okna FFT</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2833"/>
         <source>Samples for FFT calculation</source>
-        <translation type="unfinished"></translation>
+        <translation>Próbki do obliczeń FFT</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2844"/>
         <source>FFT Sampling Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Częstotliwość próbkowania FFT</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2846"/>
         <source>Sampling rate (Hz) for FFT calculation</source>
-        <translation type="unfinished"></translation>
+        <translation>Częstotliwość próbkowania (Hz) do obliczeń FFT</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2861"/>
         <source>LED High (On) Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wartość wysoka LED (Włączona)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2864"/>
         <source>Threshold for LED on</source>
-        <translation type="unfinished"></translation>
+        <translation>Próg dla włączenia LED</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2936"/>
         <source>Plain Text (UTF8)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwykły tekst (UTF8)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2937"/>
         <source>Hexadecimal</source>
-        <translation type="unfinished"></translation>
+        <translation>Szesnastkowy</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2938"/>
         <source>Base64</source>
-        <translation type="unfinished"></translation>
+        <translation>Base64</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2943"/>
         <source>End Delimiter Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Tylko końcowy ogranicznik</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2944"/>
         <source>Start Delimiter Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Tylko początkowy ogranicznik</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2945"/>
         <source>Start + End Delimiter</source>
-        <translation type="unfinished"></translation>
+        <translation>Początkowy + końcowy ogranicznik</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2946"/>
         <source>No Delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>Bez ograniczników</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2954"/>
         <source>Data Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Siatka danych</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2955"/>
         <source>GPS Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapa GPS</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2956"/>
         <source>Gyroscope</source>
-        <translation type="unfinished"></translation>
+        <translation>Żyroskop</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2957"/>
         <source>Multiple Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres wielokrotny</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2958"/>
         <source>Accelerometer</source>
-        <translation type="unfinished"></translation>
+        <translation>Akcelerometr</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2959"/>
         <source>3D Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres 3D</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
         <source>Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Słupkowy</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2966"/>
         <source>Gauge</source>
-        <translation type="unfinished"></translation>
+        <translation>Wskaźnik</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2967"/>
         <source>Compass</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompas</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2972"/>
         <source>New Line (\n)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowa linia (\n)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2973"/>
         <source>Carriage Return (\r)</source>
-        <translation type="unfinished"></translation>
+        <translation>Powrót karetki (\r)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2974"/>
         <source>CRLF (\r\n)</source>
-        <translation type="unfinished"></translation>
+        <translation>CRLF (\r\n)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2978"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2979"/>
         <source>Linear Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres liniowy</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3020"/>
         <source>Save changes to frame parser code?</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapisać zmiany w kodzie parsera ramek?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3021"/>
-        <source>Select &apos;Save&apos; to keep your changes, &apos;Discard&apos; to lose them permanently, or &apos;Cancel&apos; to return.</source>
-        <translation type="unfinished"></translation>
+        <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
+        <translation>Wybierz 'Zapisz', aby zachować zmiany, 'Odrzuć', aby trwale je utracić, lub 'Anuluj', aby wrócić.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3023"/>
         <source>Save Changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapisz zmiany</translation>
     </message>
 </context>
 <context>
     <name>JSONDropArea</name>
     <message>
         <location filename="../../qml/Widgets/JSONDropArea.qml" line="116"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/JSONDropArea.qml" line="116"/>
         <source>Drop JSON and CSV files here</source>
-        <translation type="unfinished"></translation>
+        <translation>Upuść tutaj pliki JSON i CSV</translation>
     </message>
 </context>
 <context>
     <name>LicenseManagement</name>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="36"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="36"/>
         <source>Licensing</source>
-        <translation type="unfinished"></translation>
+        <translation>Licencjonowanie</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="205"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="205"/>
         <source>Please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Proszę czekać...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="232"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="232"/>
         <source>Activate Serial Studio Pro</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktywuj Serial Studio Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="242"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="242"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wklej poniżej swój klucz licencyjny, aby odblokować funkcje Pro, takie jak MQTT, wykresy 3D i inne.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="253"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="253"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
-        <translation type="unfinished"></translation>
+        <translation>Twoja licencja obejmuje 5 aktywacji urządzeń.
+Plany obejmują opcje miesięczne, roczne i dożywotnie.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="270"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="270"/>
         <source>Paste your license key here…</source>
-        <translation type="unfinished"></translation>
+        <translation>Wklej tutaj swój klucz licencyjny…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="314"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="314"/>
         <source>Product</source>
-        <translation type="unfinished"></translation>
+        <translation>Produkt</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="319"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="319"/>
         <source>Serial Studio %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Serial Studio %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="327"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="327"/>
         <source>Licensee</source>
-        <translation type="unfinished"></translation>
+        <translation>Licencjobiorca</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="340"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="340"/>
         <source>Licensee E-Mail</source>
-        <translation type="unfinished"></translation>
+        <translation>E-mail licencjobiorcy</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="353"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="353"/>
         <source>Device Usage</source>
-        <translation type="unfinished"></translation>
+        <translation>Użytkowanie urządzenia</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="359"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="359"/>
         <source>%1 devices in use (Unlimited plan)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 urządzeń w użyciu (Plan bez limitu)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="360"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="360"/>
         <source>%1 of %2 devices used</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 z %2 urządzeń używanych</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="370"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="370"/>
         <source>Device ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID urządzenia</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="385"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="385"/>
         <source>License Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Klucz licencyjny</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="416"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="416"/>
         <source>For any issues with payment or activation, contact support via alex@serial-studio.com</source>
-        <translation type="unfinished"></translation>
+        <translation>W przypadku problemów z płatnością lub aktywacją, skontaktuj się z pomocą techniczną pod adresem alex@serial-studio.com</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="436"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="436"/>
         <source>Customer Portal</source>
-        <translation type="unfinished"></translation>
+        <translation>Portal Klienta</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="451"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="451"/>
         <source>Buy License</source>
-        <translation type="unfinished"></translation>
+        <translation>Kup Licencję</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="461"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="461"/>
         <source>Activate</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktywuj</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="474"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="474"/>
         <source>Deactivate</source>
-        <translation type="unfinished"></translation>
+        <translation>Dezaktywuj</translation>
     </message>
 </context>
 <context>
@@ -2151,125 +2026,127 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="578"/>
         <source>There was an issue validating your license.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wystąpił problem z weryfikacją twojej licencji.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="598"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="772"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="895"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
-        <translation type="unfinished"></translation>
+        <translation>Podany klucz licencyjny nie należy do Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="896"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
-        <translation type="unfinished"></translation>
+        <translation>Proszę upewnić się, że zakupiłeś licencję w oficjalnym sklepie Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="611"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="785"/>
         <source>This license key was activated on a different device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten klucz licencyjny został aktywowany na innym urządzeniu.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="786"/>
         <source>Please deactivate it there first or contact support for help.</source>
-        <translation type="unfinished"></translation>
+        <translation>Proszę najpierw go tam dezaktywować lub skontaktować się z pomocą techniczną.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="625"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="799"/>
         <source>This license is not currently active.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta licencja nie jest obecnie aktywna.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="800"/>
         <source>It may have expired or been deactivated (status: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Mogło wygasnąć lub zostać dezaktywowane (status: %1).</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="638"/>
         <source>Something went wrong on the server.</source>
-        <translation type="unfinished"></translation>
+        <translation>Coś poszło nie tak na serwerze.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="639"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="813"/>
         <source>No activation ID was returned.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie zwrócono identyfikatora aktywacji.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="650"/>
         <source>Could not validate your license at this time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można zweryfikować licencji w tym momencie.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="651"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="825"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="909"/>
         <source>Please try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Proszę spróbować ponownie później.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="671"/>
         <source>%1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="673"/>
         <source>%1 Pro</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Pro</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="698"/>
         <source>Your license has been successfully activated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Twoja licencja została pomyślnie aktywowana.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="699"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dziękujemy za wsparcie Serial Studio!
+Teraz masz dostęp do wszystkich funkcji premium.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
         <source>There was an issue activating your license.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wystąpił problem z aktywacją licencji.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="812"/>
         <source>Something went wrong on the server...</source>
-        <translation type="unfinished"></translation>
+        <translation>Coś poszło nie tak na serwerze...</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="824"/>
         <source>Could not activate your license at this time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można aktywować licencji w tej chwili.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="884"/>
         <source>There was an issue deactivating your license.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wystąpił problem z dezaktywacją licencji.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="908"/>
         <source>Could not deactivate your license at this time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można dezaktywować licencji w tej chwili.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="918"/>
         <source>Your license has been deactivated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Twoja licencja została dezaktywowana.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="919"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
-        <translation type="unfinished"></translation>
+        <translation>Dostęp do funkcji Pro został usunięty.
+Dziękujemy ponownie za wsparcie Serial Studio!</translation>
     </message>
 </context>
 <context>
@@ -2277,539 +2154,508 @@ Thank you again for supporting Serial Studio!</source>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="40"/>
         <source>MQTT 3.1</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT 3.1</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="41"/>
         <source>MQTT 3.1.1</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT 3.1.1</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="42"/>
         <source>MQTT 5.0</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT 5.0</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="45"/>
         <source>TLS 1.2</source>
-        <translation type="unfinished"></translation>
+        <translation>TLS 1.2</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="46"/>
         <source>TLS 1.3</source>
-        <translation type="unfinished"></translation>
+        <translation>TLS 1.3</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="47"/>
         <source>TLS 1.3 or Later</source>
-        <translation type="unfinished"></translation>
+        <translation>TLS 1.3 lub nowszy</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="48"/>
         <source>DTLS 1.2 or Later</source>
-        <translation type="unfinished"></translation>
+        <translation>DTLS 1.2 lub nowszy</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="49"/>
         <source>Any Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Dowolny protokół</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="50"/>
         <source>Secure Protocols Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Tylko bezpieczne protokoły</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="53"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="54"/>
         <source>Query Peer</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapytaj partnera</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="55"/>
         <source>Verify Peer</source>
-        <translation type="unfinished"></translation>
+        <translation>Zweryfikuj partnera</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="56"/>
         <source>Auto Verify Peer</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatyczna weryfikacja partnera</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="332"/>
         <source>Use System Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Użyj bazy danych systemu</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="333"/>
         <source>Load From Folder...</source>
-        <translation type="unfinished"></translation>
+        <translation>Wczytaj z folderu...</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="347"/>
         <source>MQTT Subscriber</source>
-        <translation type="unfinished"></translation>
+        <translation>Subskrybent MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="348"/>
         <source>MQTT Publisher</source>
-        <translation type="unfinished"></translation>
+        <translation>Wydawca MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="413"/>
         <source>MQTT Feature Requires a Commercial License</source>
-        <translation type="unfinished"></translation>
+        <translation>Funkcja MQTT wymaga licencji komercyjnej</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="414"/>
         <source>Connecting to MQTT brokers is only available with a valid Serial Studio commercial license.
 
 To unlock this feature, please activate your license or visit the store.</source>
-        <translation type="unfinished"></translation>
+        <translation>Łączenie z brokerami MQTT jest dostępne tylko z ważną licencją komercyjną Serial Studio.
+
+Aby odblokować tę funkcję, aktywuj swoją licencję lub odwiedź sklep.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="428"/>
         <source>Missing MQTT Topic</source>
-        <translation type="unfinished"></translation>
+        <translation>Brakujący temat MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="429"/>
         <source>You must specify a topic before connecting as a publisher.</source>
-        <translation type="unfinished"></translation>
+        <translation>Musisz określić temat przed połączeniem jako wydawca.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="430"/>
         <location filename="../../src/MQTT/Client.cpp" line="454"/>
         <source>Configuration Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd konfiguracji</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="438"/>
         <source>MQTT Topic Not Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Temat MQTT nie ustawiony</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="439"/>
-        <source>You won&apos;t receive any messages until a topic is configured.</source>
-        <translation type="unfinished"></translation>
+        <source>You won't receive any messages until a topic is configured.</source>
+        <translation>Nie będziesz otrzymywać żadnych wiadomości, dopóki temat nie zostanie skonfigurowany.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="440"/>
         <source>Configuration Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Ostrzeżenie konfiguracyjne</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="452"/>
         <source>Invalid MQTT Topic</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy temat MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="453"/>
-        <source>The topic &quot;%1&quot; is not valid.</source>
-        <translation type="unfinished"></translation>
+        <source>The topic "%1" is not valid.</source>
+        <translation>Temat "%1" jest nieprawidłowy.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="647"/>
         <source>Select PEM Certificates Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz katalog certyfikatów PEM</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="750"/>
         <source>Subscription Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd subskrypcji</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="751"/>
-        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <source>Failed to subscribe to topic "%1".</source>
+        <translation>Nie udało się zasubskrybować tematu "%1".</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="770"/>
         <source>Invalid MQTT Protocol Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowa wersja protokołu MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="771"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Broker MQTT odrzucił połączenie z powodu nieobsługiwanej wersji protokołu. Upewnij się, że zarówno klient, jak i broker obsługują tę samą wersję protokołu.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="777"/>
         <source>Client ID Rejected</source>
-        <translation type="unfinished"></translation>
+        <translation>Odrzucony identyfikator klienta</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="778"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
-        <translation type="unfinished"></translation>
+        <translation>Broker odrzucił identyfikator klienta. Może być źle sformułowany, zbyt długi lub już w użyciu. Spróbuj użyć innego identyfikatora klienta.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="784"/>
         <source>MQTT Server Unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>Serwer MQTT niedostępny</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="785"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Połączenie sieciowe zostało nawiązane, ale broker jest obecnie niedostępny. Sprawdź status brokera i spróbuj ponownie później.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="791"/>
         <location filename="../../src/MQTT/Client.cpp" line="861"/>
         <source>Authentication Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd uwierzytelniania</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="792"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Podana nazwa użytkownika lub hasło jest niepoprawna lub źle sformułowana. Sprawdź swoje dane uwierzytelniające i spróbuj ponownie.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="797"/>
         <source>Authorization Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd autoryzacji</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="798"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
-        <translation type="unfinished"></translation>
+        <translation>Broker MQTT odrzucił połączenie z powodu niewystarczających uprawnień. Upewnij się, że Twoje konto ma niezbędne prawa dostępu.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="804"/>
         <source>Network or Transport Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd sieci lub transportu</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="805"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wystąpił problem z warstwą sieciową lub transportową, powodując nieoczekiwane zerwanie połączenia. Sprawdź swoje połączenie sieciowe i ustawienia brokera.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="811"/>
         <source>MQTT Protocol Violation</source>
-        <translation type="unfinished"></translation>
+        <translation>Naruszenie protokołu MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klient wykrył naruszenie protokołu MQTT i zamknął połączenie. Sprawdź zgodność swojej implementacji MQTT.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="818"/>
         <source>Unknown Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieznany błąd</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="819"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wystąpił nieoczekiwany błąd. Sprawdź logi, aby uzyskać więcej informacji, lub uruchom ponownie aplikację.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="824"/>
         <source>MQTT 5 Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd MQTT 5</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="825"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wystąpił błąd na poziomie protokołu MQTT 5. Sprawdź logi brokera lub kody przyczyn, aby uzyskać więcej informacji.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="847"/>
         <source>MQTT Authentication Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Uwierzytelnianie MQTT nie powiodło się</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="848"/>
         <source>Authentication failed: %.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uwierzytelnianie nie powiodło się: %.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="862"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wymagane jest rozszerzone uwierzytelnianie, ale MQTT 5.0 nie jest włączone.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="871"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieznany</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="875"/>
         <source>MQTT Authentication Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Wymagane uwierzytelnianie MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="876"/>
-        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
+        <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Broker MQTT wymaga uwierzytelniania za pomocą metody: "%1".
+
+Proszę podać niezbędne dane uwierzytelniające.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="884"/>
         <source>Enter MQTT Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Wprowadź nazwę użytkownika MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="885"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nazwa użytkownika:</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="891"/>
         <source>Enter MQTT Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Wprowadź hasło MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="892"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hasło:</translation>
     </message>
 </context>
 <context>
     <name>MQTTConfiguration</name>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="38"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="38"/>
         <source>MQTT Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfiguracja MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="195"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="195"/>
         <source>MQTT is a Pro Feature</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT to funkcja Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="196"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="196"/>
         <source>Activate your license or visit the store to unlock MQTT support.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktywuj swoją licencję lub odwiedź sklep, aby odblokować obsługę MQTT.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="208"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="208"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogólne</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="214"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="214"/>
         <source>Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Uwierzytelnianie</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="220"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="220"/>
         <source>MQTT Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opcje MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="226"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="226"/>
         <source>SSL Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Właściwości SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="277"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="277"/>
         <source>Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="289"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="289"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="314"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="314"/>
         <source>Keep Alive (s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Podtrzymanie aktywności (s)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="327"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="327"/>
         <source>Clean Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Czysta sesja</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="372"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="372"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Nazwa użytkownika</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="377"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="377"/>
         <source>MQTT Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Nazwa użytkownika MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="384"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="384"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Hasło</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="394"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="394"/>
         <source>MQTT Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Hasło MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="447"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="447"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Wersja</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="459"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="459"/>
         <source>Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Tryb</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="471"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="471"/>
         <source>Topic</source>
-        <translation type="unfinished"></translation>
+        <translation>Temat</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="476"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="476"/>
         <source>e.g. sensors/temperature or home/+/status</source>
-        <translation type="unfinished"></translation>
+        <translation>np. czujniki/temperatura lub dom/+/status</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="483"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="483"/>
         <source>Will Retain</source>
-        <translation type="unfinished"></translation>
+        <translation>Zachowaj Will</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="494"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="494"/>
         <source>Will QoS</source>
-        <translation type="unfinished"></translation>
+        <translation>Jakość Usługi Will</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="506"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="506"/>
         <source>Will Topic</source>
-        <translation type="unfinished"></translation>
+        <translation>Temat Will</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="511"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="511"/>
         <source>e.g. device/alerts/offline</source>
-        <translation type="unfinished"></translation>
+        <translation>np. urządzenie/alerty/offline</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="518"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="518"/>
         <source>Will Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiadomość Will</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="523"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="523"/>
         <source>e.g. Device unexpectedly disconnected</source>
-        <translation type="unfinished"></translation>
+        <translation>np. Urządzenie niespodziewanie rozłączone</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="564"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="564"/>
         <source>Enable SSL</source>
-        <translation type="unfinished"></translation>
+        <translation>Włącz SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="575"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="575"/>
         <source>SSL Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokoł SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="591"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="591"/>
         <source>Verify Depth</source>
-        <translation type="unfinished"></translation>
+        <translation>Głębokość weryfikacji</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="609"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="609"/>
         <source>Verify Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Tryb weryfikacji</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="641"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="641"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Zamknij</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="660"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="660"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozłącz</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="660"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="660"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Połącz</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="85"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="85"/>
         <source>Device Defined Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt zdefiniowany przez urządzenie</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="88"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="88"/>
         <source>Quick Plot Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Tryb szybkiego wykresu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="94"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="94"/>
         <source>Empty Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Pusty projekt</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="146"/>
         <source>Code sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Przykład kodu</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="148"/>
         <source>Completer</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzupełniacz</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="150"/>
         <source>Highlighter</source>
-        <translation type="unfinished"></translation>
+        <translation>Podświetlacz</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="152"/>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Styl</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="214"/>
         <source> spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>spacje</translation>
     </message>
 </context>
 <context>
@@ -2817,12 +2663,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Misc/ModuleManager.cpp" line="423"/>
         <source>To apply this change, %1 needs to restart.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aby zastosować tę zmianę, %1 musi zostać ponownie uruchomiony.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ModuleManager.cpp" line="424"/>
         <source>Would you like to restart now?</source>
-        <translation type="unfinished"></translation>
+        <translation>Czy chcesz teraz uruchomić ponownie?</translation>
     </message>
 </context>
 <context>
@@ -2830,102 +2676,102 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="88"/>
         <source>Check for updates automatically?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprawdzać aktualizacje automatycznie?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="89"/>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
-        <translation type="unfinished"></translation>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
+        <translation>Czy %1 powinien automatycznie sprawdzać aktualizacje? Zawsze możesz sprawdzić aktualizacje ręcznie w oknie dialogowym "O programie"</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="154"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="156"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapisz</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="158"/>
         <source>Save all</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapisz wszystko</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="160"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwórz</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="162"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="164"/>
         <source>Yes to all</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak dla wszystkich</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="166"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="168"/>
         <source>No to all</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie dla wszystkich</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="170"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Przerwij</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="172"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Ponów próbę</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="174"/>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignoruj</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="176"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Zamknij</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="178"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Anuluj</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="180"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Odrzuć</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="182"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomoc</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="184"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Zastosuj</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="186"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="188"/>
         <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Przywróć domyślne</translation>
     </message>
 </context>
 <context>
@@ -2933,61 +2779,53 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Misc/WorkspaceManager.cpp" line="117"/>
         <source>Select Workspace Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz lokalizację przestrzeni roboczej</translation>
     </message>
 </context>
 <context>
     <name>MultiPlot</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="240"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="240"/>
         <source>Samples</source>
-        <translation type="unfinished"></translation>
+        <translation>Próbki</translation>
     </message>
 </context>
 <context>
     <name>Network</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="86"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="86"/>
         <source>Socket Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ gniazda</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="107"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="107"/>
         <source>Remote Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Zdalny adres</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="128"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="128"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="162"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="162"/>
         <source>Local Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port lokalny</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="168"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="168"/>
         <source>Type 0 for automatic port</source>
-        <translation type="unfinished"></translation>
+        <translation>Wpisz 0 dla automatycznego portu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="193"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="193"/>
         <source>Remote Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port zdalny</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="223"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="223"/>
         <source>Multicast</source>
-        <translation type="unfinished"></translation>
+        <translation>Multicast</translation>
     </message>
 </context>
 <context>
@@ -2995,246 +2833,209 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="57"/>
         <source>Unable to start plugin TCP server</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można uruchomić serwera wtyczki TCP</translation>
     </message>
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="167"/>
         <source>Plugin server</source>
-        <translation type="unfinished"></translation>
+        <translation>Serwer wtyczki</translation>
     </message>
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="168"/>
         <source>Invalid pending connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowe oczekujące połączenie</translation>
     </message>
 </context>
 <context>
     <name>ProNotice</name>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="116"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="116"/>
         <source>Visit Website</source>
-        <translation type="unfinished"></translation>
+        <translation>Odwiedź stronę</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="127"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="127"/>
         <source>Buy License</source>
-        <translation type="unfinished"></translation>
+        <translation>Kup licencję</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="143"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="143"/>
         <source>Activate</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktywuj</translation>
     </message>
 </context>
 <context>
     <name>ProjectEditor</name>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="43"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="43"/>
         <source>modified</source>
-        <translation type="unfinished"></translation>
+        <translation>zmodyfikowany</translation>
     </message>
 </context>
 <context>
     <name>ProjectStructure</name>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <source>Project Structure</source>
-        <translation type="unfinished"></translation>
+        <translation>Struktura projektu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="241"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="241"/>
         <source>IDX %1</source>
-        <translation type="unfinished"></translation>
+        <translation>IDX %1</translation>
     </message>
 </context>
 <context>
     <name>ProjectToolbar</name>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="134"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="134"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowy</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="152"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="152"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwórz</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="161"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="161"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapisz</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="171"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="171"/>
         <source>Save As</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapisz jako</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>Akcja</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="216"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="216"/>
         <source>Dataset</source>
-        <translation type="unfinished"></translation>
+        <translation>Zbiór danych</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="233"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="233"/>
         <source>Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="243"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="243"/>
         <source>FFT Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres FFT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="253"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="253"/>
         <source>Gauge</source>
-        <translation type="unfinished"></translation>
+        <translation>Wskaźnik</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="263"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="263"/>
         <source>Level Indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Wskaźnik poziomu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="273"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="273"/>
         <source>Compass</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="283"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="283"/>
         <source>LED Indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Wskaźnik LED</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="308"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="308"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="311"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="311"/>
         <source>Dataset Container</source>
-        <translation type="unfinished"></translation>
+        <translation>Pojemnik na zestaw danych</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="325"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="325"/>
         <source>Table</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabela</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="331"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="331"/>
         <source>Data Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Siatka danych</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="335"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="335"/>
         <source>Multi-Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres wielokrotny</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="341"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="341"/>
         <source>Multiple Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres wielokrotny</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="345"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="351"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="345"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="351"/>
         <source>3D Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykres 3D</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="355"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="355"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
         <source>Accelerometer</source>
-        <translation type="unfinished"></translation>
+        <translation>Akcelerometr</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="371"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="371"/>
         <source>Gyroscope</source>
-        <translation type="unfinished"></translation>
+        <translation>Żyroskop</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="375"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="375"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
         <source>GPS Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapa GPS</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="400"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="400"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomoc</translation>
     </message>
 </context>
 <context>
     <name>ProjectView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
         <source>Pro features detected in this project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykryto funkcje Pro w tym projekcie.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zostaną użyte widżety zastępcze. Kup licencję, aby odblokować pełną funkcjonalność.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="112"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="112"/>
         <source>First, set up frame detection and data decoding.</source>
-        <translation type="unfinished"></translation>
+        <translation>Najpierw skonfiguruj wykrywanie ramek i dekodowanie danych.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="128"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="128"/>
         <source>Frames are parsed into arrays, and datasets link each element to a widget.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ramki są przetwarzane na tablice, a zestawy danych łączą każdy element z widżetem.</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/Misc/Translator.cpp" line="122"/>
+        <location filename="../../src/Misc/Translator.cpp" line="158"/>
         <source>Failed to load welcome text :(</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się załadować tekstu powitalnego :(</translation>
     </message>
 </context>
 <context>
@@ -3242,166 +3043,150 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="207"/>
         <source>Data Grids</source>
-        <translation type="unfinished"></translation>
+        <translation>Siatki danych</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="210"/>
         <source>Multiple Data Plots</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiele wykresów danych</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="213"/>
         <source>Accelerometers</source>
-        <translation type="unfinished"></translation>
+        <translation>Akcelerometry</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="216"/>
         <source>Gyroscopes</source>
-        <translation type="unfinished"></translation>
+        <translation>Żyroskopy</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="219"/>
         <source>GPS</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="222"/>
         <source>FFT Plots</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykresy FFT</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="225"/>
         <source>LED Panels</source>
-        <translation type="unfinished"></translation>
+        <translation>Panele LED</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="228"/>
         <source>Data Plots</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykresy danych</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="231"/>
         <source>Bars</source>
-        <translation type="unfinished"></translation>
+        <translation>Słupki</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="234"/>
         <source>Gauges</source>
-        <translation type="unfinished"></translation>
+        <translation>Wskaźniki</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="237"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminal</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="240"/>
         <source>Compasses</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompas</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="243"/>
         <source>3D Plots</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykresy 3D</translation>
     </message>
 </context>
 <context>
     <name>Settings</name>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="36"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="36"/>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Preferencje</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="100"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="100"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogólne</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="124"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="124"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Język</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="141"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="141"/>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Motyw</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="157"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="157"/>
         <source>Workspace Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Folder roboczy</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="196"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="196"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Różne</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="220"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="220"/>
         <source>Enable TCP Plugins (Port 7777)</source>
-        <translation type="unfinished"></translation>
+        <translation>Włącz wtyczki TCP (Port 7777)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="237"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="237"/>
         <source>Force Software Rendering</source>
-        <translation type="unfinished"></translation>
+        <translation>Wymuś renderowanie programowe</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="253"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="253"/>
         <source>Automatically Check for Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatycznie sprawdzaj aktualizacje</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="278"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="278"/>
         <source>Dashboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Panel sterowania</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="302"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="302"/>
         <source>Point Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Liczba punktów</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="321"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="321"/>
         <source>Decimal Precision</source>
-        <translation type="unfinished"></translation>
+        <translation>Precyzja dziesiętna</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="340"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="340"/>
         <source>Enable Console Widget</source>
-        <translation type="unfinished"></translation>
+        <translation>Włącz widżet konsoli</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="379"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="379"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Zresetuj</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="398"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="398"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Zamknij</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="408"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="408"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Zastosuj</translation>
     </message>
 </context>
 <context>
@@ -3409,375 +3194,315 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="33"/>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="240"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="33"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="240"/>
         <source>Device Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfiguracja urządzenia</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="124"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="124"/>
         <source>Frame Parsing</source>
-        <translation type="unfinished"></translation>
+        <translation>Analiza ramki</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="132"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="132"/>
         <source>No Parsing (Device Sends JSON Data)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bez analizy (urządzenie wysyła dane w formacie JSON)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="143"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="143"/>
         <source>Quick Plot (Comma Separated Values)</source>
-        <translation type="unfinished"></translation>
+        <translation>Szybki wykres (wartości rozdzielone przecinkami)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="154"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="154"/>
         <source>Parse via JSON Project File</source>
-        <translation type="unfinished"></translation>
+        <translation>Analizuj za pomocą pliku projektu JSON</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="173"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="173"/>
         <source>Change Project File (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmień plik projektu (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="174"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="174"/>
         <source>Select Project File</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz plik projektu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="188"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="188"/>
         <source>Data Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksport danych</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="201"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="201"/>
         <source>Create CSV File</source>
-        <translation type="unfinished"></translation>
+        <translation>Utwórz plik CSV</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="219"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="219"/>
         <source>Export Console Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksportuj dane konsoli</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="248"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="248"/>
         <source>I/O Interface: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Interfejs I/O: %1</translation>
     </message>
 </context>
 <context>
     <name>StartMenu</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="147"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="147"/>
         <source>Workspaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Przestrzenie robocze</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
         <source>No Groups Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak dostępnych grup</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="188"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="188"/>
         <source>Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Działania</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <source>No Actions Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak dostępnych działań</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <source>Auto Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatyczne rozmieszczenie</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <source>Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Pełny ekran</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
         <source>CSV Logging</source>
-        <translation type="unfinished"></translation>
+        <translation>Rejestrowanie CSV</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
         <source>Console Logging</source>
-        <translation type="unfinished"></translation>
+        <translation>Rejestrowanie konsoli</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="293"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="293"/>
         <source>Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Konsola</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="308"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="308"/>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Preferencje</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="318"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="318"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomoc</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="342"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="342"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Wznów</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="343"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="343"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pauza</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="352"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="352"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozłącz</translation>
     </message>
 </context>
 <context>
     <name>SubMenuCombo</name>
     <message>
         <location filename="../../qml/Widgets/SubMenuCombo.qml" line="79"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/SubMenuCombo.qml" line="79"/>
         <source>No Data Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak dostępnych danych</translation>
     </message>
 </context>
 <context>
     <name>TableDelegate</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="124"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="124"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parametr</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="144"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="144"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wartość</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="164"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="164"/>
         <source>Parameter Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Opis parametru</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="527"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="527"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="527"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="527"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak</translation>
     </message>
 </context>
 <context>
     <name>Taskbar</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="87"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="87"/>
         <source>Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu</translation>
     </message>
 </context>
 <context>
     <name>Terminal</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="121"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="121"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiuj</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="128"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="128"/>
         <source>Select all</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaznacz wszystko</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="135"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="135"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyczyść</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="212"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="212"/>
         <source>Send Data to Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyślij dane do urządzenia</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="341"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="341"/>
         <source>Show Timestamp</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż znacznik czasu</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="352"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="352"/>
         <source>Echo</source>
-        <translation type="unfinished"></translation>
+        <translation>Echo</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="363"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="363"/>
         <source>Emulate VT-100</source>
-        <translation type="unfinished"></translation>
+        <translation>Emuluj VT-100</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="385"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="385"/>
         <source>Display: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyświetl: %1</translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="150"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="150"/>
         <source>Project Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Edytor Projektu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="160"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="160"/>
         <source>CSV Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Odtwarzacz CSV</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="184"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="184"/>
         <source>Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Urządzenia</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="194"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="194"/>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Preferencje</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="219"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="219"/>
         <source>MQTT</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="245"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="245"/>
         <source>Examples</source>
-        <translation type="unfinished"></translation>
+        <translation>Przykłady</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="255"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="255"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomoc</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="265"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Informacje</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="290"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="319"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="290"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="319"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozłącz</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="290"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="290"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Połącz</translation>
     </message>
 </context>
 <context>
     <name>UART</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="79"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="79"/>
         <source>COM Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port COM</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="107"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="107"/>
         <source>Baud Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Szybkość transmisji (Baud Rate)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="145"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="145"/>
         <source>Data Bits</source>
-        <translation type="unfinished"></translation>
+        <translation>Bity danych</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="161"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="161"/>
         <source>Parity</source>
-        <translation type="unfinished"></translation>
+        <translation>Parzystość</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="177"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="177"/>
         <source>Stop Bits</source>
-        <translation type="unfinished"></translation>
+        <translation>Bity stopu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="193"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="193"/>
         <source>Flow Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrola przepływu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="220"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="220"/>
         <source>Auto Reconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatyczne ponowne łączenie</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="237"/>
-        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="237"/>
         <source>Send DTR Signal</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyślij sygnał DTR</translation>
     </message>
 </context>
 <context>
@@ -3785,17 +3510,17 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="761"/>
         <source>Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Konsola</translation>
     </message>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="778"/>
         <source>%1 (Fallback)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (Zapasowy)</translation>
     </message>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="840"/>
         <source>LED Panel (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Panel LED (%1)</translation>
     </message>
 </context>
 <context>
@@ -3803,7 +3528,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/UI/DashboardWidget.cpp" line="124"/>
         <source>Invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy</translation>
     </message>
 </context>
 <context>
@@ -3811,12 +3536,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/UI/Taskbar.cpp" line="200"/>
         <source>Overview</source>
-        <translation type="unfinished"></translation>
+        <translation>Przegląd</translation>
     </message>
     <message>
         <location filename="../../src/UI/Taskbar.cpp" line="210"/>
         <source>All Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Wszystkie dane</translation>
     </message>
 </context>
 <context>
@@ -3824,12 +3549,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="350"/>
         <source>Select Background Image</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz obraz tła</translation>
     </message>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="352"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrazy (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
 </context>
 <context>
@@ -3837,27 +3562,27 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="438"/>
         <source>Would you like to download the update now?</source>
-        <translation type="unfinished"></translation>
+        <translation>Czy chcesz teraz pobrać aktualizację?</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="441"/>
         <source>Would you like to download the update now? This is a mandatory update, exiting now will close the application</source>
-        <translation type="unfinished"></translation>
+        <translation>Czy chcesz teraz pobrać aktualizację? To jest obowiązkowa aktualizacja, wyjście teraz spowoduje zamknięcie aplikacji</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="447"/>
         <source>Version %1 of %2 has been released!</source>
-        <translation type="unfinished"></translation>
+        <translation>Wersja %1 z %2 została wydana!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="485"/>
         <source>No updates are available for the moment</source>
-        <translation type="unfinished"></translation>
+        <translation>Obecnie brak dostępnych aktualizacji</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="487"/>
         <source>Congratulations! You are running the latest version of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Gratulacje! Korzystasz z najnowszej wersji %1</translation>
     </message>
 </context>
 <context>
@@ -3865,42 +3590,42 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="91"/>
         <source>N</source>
-        <translation type="unfinished"></translation>
+        <translation>P</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="93"/>
         <source>NE</source>
-        <translation type="unfinished"></translation>
+        <translation>PN</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="95"/>
         <source>E</source>
-        <translation type="unfinished"></translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="97"/>
         <source>SE</source>
-        <translation type="unfinished"></translation>
+        <translation>PD</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="99"/>
         <source>S</source>
-        <translation type="unfinished"></translation>
+        <translation>Z</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="101"/>
         <source>SW</source>
-        <translation type="unfinished"></translation>
+        <translation>PZ</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="103"/>
         <source>W</source>
-        <translation type="unfinished"></translation>
+        <translation>Z</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="105"/>
         <source>NW</source>
-        <translation type="unfinished"></translation>
+        <translation>PNZ</translation>
     </message>
 </context>
 <context>
@@ -3908,7 +3633,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/UI/Widgets/Plot.cpp" line="56"/>
         <source>Samples</source>
-        <translation type="unfinished"></translation>
+        <translation>Próbki</translation>
     </message>
 </context>
 <context>
@@ -3916,7 +3641,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1180"/>
         <source>Grid Interval: %1 unit(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Odstęp siatki: %1 jednostka(i)</translation>
     </message>
 </context>
 </TS>
