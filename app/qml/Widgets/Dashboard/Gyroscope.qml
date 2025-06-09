@@ -30,6 +30,7 @@ import "../"
 
 Item {
   id: root
+  clip: true
 
   //
   // Widget data inputs
