@@ -1,2 +1,4 @@
 github: [alex-spataru]
-custom: ["https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE"]
+custom:
+  - "https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE"
+  - "https://store.serial-studio.com/buy/ba46c099-0d51-4d98-9154-6be5c35bc1ec"
