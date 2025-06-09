@@ -15,10 +15,10 @@
             "txData": "disable-pull-up"
         }
     ],
-    "decoder": 1,
+    "decoder": 3,
     "frameDetection": 1,
     "frameEnd": "DE C0",
-    "frameParser": "/**\n * This function parses a binary data frame (represented as a hexadecimal string),\n * and converts it into an array of decimal values ranging from 0 to 5 volts.\n *\n * @param[in]  frame  The latest received frame as a hexadecimal string.\n * @return     Array of integers containing the parsed frame elements.\n */\nfunction parse(frame) {\n    let dataArray = [];\n    for (let i = 0; i < frame.length; i += 2) {\n        let hexByte = frame.substring(i, i + 2);\n        let decimalValue = parseInt(hexByte, 16);\n        dataArray.push(decimalValue * 5.0 / 255);\n    }\n\n    return dataArray;\n}",
+    "frameParser": "/**\n * This function parses a binary data frame (passed as a byte array) and converts\n * each byte into a decimal value scaled from 0 to 5 volts.\n *\n * @param[in]  frame  A JS array of byte values (0–255), passed from C++.\n * @return     Array of floats representing the scaled voltage values.\n */\nfunction parse(frame) {\n    let dataArray = [];\n\n    for (let i = 0; i < frame.length; ++i) {\n        let byte = frame[i];\n        dataArray.push(byte * 5.0 / 255);\n    }\n\n    return dataArray;\n}",
     "frameStart": "C0 DE",
     "groups": [
         {

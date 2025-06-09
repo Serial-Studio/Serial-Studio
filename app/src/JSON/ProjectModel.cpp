@@ -2936,6 +2936,7 @@ void JSON::ProjectModel::generateComboBoxModels()
   m_decoderOptions.append(tr("Plain Text (UTF8)"));
   m_decoderOptions.append(tr("Hexadecimal"));
   m_decoderOptions.append(tr("Base64"));
+  m_decoderOptions.append(tr("Binary (Direct)"));
 
   // Initialize frame detection methods
   m_frameDetectionMethods.clear();

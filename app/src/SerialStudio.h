@@ -141,7 +141,8 @@ public:
   {
     PlainText,   /**< Standard decoding, interprets data as plain text. */
     Hexadecimal, /**< Decodes data assuming a hexadecimal-encoded format. */
-    Base64       /**< Decodes data assuming a Base64-encoded format. */
+    Base64,      /**< Decodes data assuming a Base64-encoded format. */
+    Binary,      /**< Decodes raw data directly. */
     /* IMPORTANT: When adding other modes, please don't modify the order of the
      *            enums to ensure backward compatiblity with previous project
      *            files!! */

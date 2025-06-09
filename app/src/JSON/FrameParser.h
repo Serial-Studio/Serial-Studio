@@ -50,7 +50,9 @@ public:
 
   [[nodiscard]] QString text() const;
   [[nodiscard]] bool isModified() const;
+
   [[nodiscard]] QStringList parse(const QString &frame);
+  [[nodiscard]] QStringList parse(const QByteArray &frame);
 
   [[nodiscard]] bool undoAvailable() const;
   [[nodiscard]] bool redoAvailable() const;

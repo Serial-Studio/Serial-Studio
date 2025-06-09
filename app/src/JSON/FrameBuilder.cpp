@@ -317,26 +317,24 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     QStringList fields;
     if (!csvPlaying)
     {
-      // Convert binary frame data to a string
-      QString frameData;
       switch (JSON::ProjectModel::instance().decoderMethod())
       {
         case SerialStudio::PlainText:
-          frameData = QString::fromUtf8(data);
+          fields = m_frameParser->parse(QString::fromUtf8(data));
           break;
         case SerialStudio::Hexadecimal:
-          frameData = QString::fromUtf8(data.toHex());
+          fields = m_frameParser->parse(QString::fromUtf8(data.toHex()));
           break;
         case SerialStudio::Base64:
-          frameData = QString::fromUtf8(data.toBase64());
+          fields = m_frameParser->parse(QString::fromUtf8(data.toBase64()));
+          break;
+        case SerialStudio::Binary:
+          fields = m_frameParser->parse(data);
           break;
         default:
-          frameData = QString::fromUtf8(data);
+          fields = m_frameParser->parse(QString::fromUtf8(data));
           break;
       }
-
-      // Get fields from frame parser function
-      fields = m_frameParser->parse(frameData);
     }
 
     // CSV data, no need to perform conversions or use frame parser
