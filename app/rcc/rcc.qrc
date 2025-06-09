@@ -402,5 +402,6 @@
         <file>messages/gpl3/Welcome_UK.txt</file>
         <file>messages/pro/Welcome_CZ.txt</file>
         <file>messages/pro/Welcome_UK.txt</file>
+        <file>icons/toolbar/deepwiki.svg</file>
     </qresource>
 </RCC>

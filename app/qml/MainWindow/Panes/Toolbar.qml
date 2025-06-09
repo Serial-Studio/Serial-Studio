@@ -266,6 +266,17 @@ Rectangle {
     }
 
     //
+    // DeepWiki
+    //
+    Widgets.ToolbarButton {
+      text: qsTr("AI Help")
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/rcc/icons/toolbar/deepwiki.svg"
+      ToolTip.text: qsTr("View detailed documentation and ask questions on DeepWiki")
+      onClicked: Qt.openUrlExternally("https://deepwiki.com/Serial-Studio/Serial-Studio")
+    }
+
+    //
     // About
     //
     Widgets.ToolbarButton {
