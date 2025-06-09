@@ -470,7 +470,7 @@ Window {
 
                         MenuItem {
                           text: qsTr("Copy")
-                          onTriggered: _key.copy()
+                          onTriggered: _lic.copy()
                           enabled: _lic.selectedText.length > 0
                         }
 
