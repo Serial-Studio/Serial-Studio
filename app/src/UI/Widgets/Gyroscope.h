@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <QtQuick>
+#include <QQuickItem>
 
 namespace Widgets
 {
@@ -30,13 +30,26 @@ namespace Widgets
  */
 class Gyroscope : public QQuickItem
 {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(qreal yaw READ yaw NOTIFY updated)
-  Q_PROPERTY(qreal roll READ roll NOTIFY updated)
-  Q_PROPERTY(qreal pitch READ pitch NOTIFY updated)
+  Q_PROPERTY(qreal yaw
+             READ yaw
+             NOTIFY updated)
+  Q_PROPERTY(qreal roll
+             READ roll
+             NOTIFY updated)
+  Q_PROPERTY(qreal pitch
+             READ pitch
+             NOTIFY updated)
+  Q_PROPERTY(bool integrateValues
+             READ integrateValues
+             WRITE setIntegrateValues
+             NOTIFY integrateValuesChanged)
+  // clang-format on
 
 signals:
   void updated();
+  void integrateValuesChanged();
 
 public:
   explicit Gyroscope(const int index = -1, QQuickItem *parent = nullptr);
@@ -44,16 +57,21 @@ public:
   [[nodiscard]] qreal yaw() const;
   [[nodiscard]] qreal roll() const;
   [[nodiscard]] qreal pitch() const;
+  [[nodiscard]] bool integrateValues() const;
 
 private slots:
   void updateData();
+  void setIntegrateValues(const bool enabled);
 
 private:
   int m_index;
+
   qreal m_yaw;
   qreal m_roll;
   qreal m_pitch;
   QElapsedTimer m_timer;
+
+  bool m_integrateValues;
 };
 
 } // namespace Widgets

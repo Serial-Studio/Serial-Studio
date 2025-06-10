@@ -21,9 +21,9 @@
 
 #pragma once
 
-#include <QtQuick>
 #include <QVector>
 #include <QXYSeries>
+#include <QQuickItem>
 
 namespace Widgets
 {

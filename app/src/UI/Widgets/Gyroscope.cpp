@@ -24,8 +24,12 @@
 
 /**
  * @brief Constructs a Gyroscope widget.
- * @param index The index of the gyroscope in the Dashboard.
- * @param parent The parent QQuickItem (optional).
+ *
+ * Initializes the gyroscope with the given index and optional parent.
+ * If the widget is valid, starts the timer and connects the update signal.
+ *
+ * @param index Index of the gyroscope in the Dashboard.
+ * @param parent Optional parent QQuickItem.
  */
 Widgets::Gyroscope::Gyroscope(const int index, QQuickItem *parent)
   : QQuickItem(parent)
@@ -33,6 +37,7 @@ Widgets::Gyroscope::Gyroscope(const int index, QQuickItem *parent)
   , m_yaw(0)
   , m_roll(0)
   , m_pitch(0)
+  , m_integrateValues(true)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index))
   {
@@ -43,8 +48,9 @@ Widgets::Gyroscope::Gyroscope(const int index, QQuickItem *parent)
 }
 
 /**
- * @brief Returns the yaw value of the gyroscope.
- * @return The yaw value in degrees.
+ * @brief Gets the current yaw angle.
+ *
+ * @return Yaw angle in degrees, normalized to [-180, 180].
  */
 qreal Widgets::Gyroscope::yaw() const
 {
@@ -52,8 +58,9 @@ qreal Widgets::Gyroscope::yaw() const
 }
 
 /**
- * @brief Returns the roll value of the gyroscope.
- * @return The roll value in degrees.
+ * @brief Gets the current roll angle.
+ *
+ * @return Roll angle in degrees, normalized to [-180, 180].
  */
 qreal Widgets::Gyroscope::roll() const
 {
@@ -61,8 +68,9 @@ qreal Widgets::Gyroscope::roll() const
 }
 
 /**
- * @brief Returns the pitch value of the gyroscope.
- * @return The pitch value in degrees.
+ * @brief Gets the current pitch angle.
+ *
+ * @return Pitch angle in degrees, normalized to [-180, 180].
  */
 qreal Widgets::Gyroscope::pitch() const
 {
@@ -70,80 +78,132 @@ qreal Widgets::Gyroscope::pitch() const
 }
 
 /**
- * @brief Updates the gyroscope data from the Dashboard.
+ * @brief Indicates whether values are being integrated over time.
  *
- * This method retrieves the latest data for this gyroscope from the
- * Dashboard and updates the pitch, roll, and yaw values accordingly
- * by integrating the data over time.
+ * @return True if integration is enabled, false if values are used as-is.
+ */
+bool Widgets::Gyroscope::integrateValues() const
+{
+  return m_integrateValues;
+}
+
+/**
+ * @brief Updates gyroscope orientation values.
+ *
+ * Pulls new data from the Dashboard and updates yaw, pitch, and roll
+ * based on either direct values or time-integrated deltas.
+ * Emits `updated()` if orientation changes.
  */
 void Widgets::Gyroscope::updateData()
 {
+  // Exit early if widget is disabled
   if (!isEnabled())
     return;
 
-  if (VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index))
+  // Exit widget if its invalid
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index))
+    return;
+
+  // Obtain group data from dashboard & validate widget count
+  const auto &gyro = GET_GROUP(SerialStudio::DashboardGyroscope, m_index);
+  if (gyro.datasetCount() != 3)
+    return;
+
+  // Store previous orientation values
+  const qreal previousYaw = m_yaw;
+  const qreal previousRoll = m_roll;
+  const qreal previousPitch = m_pitch;
+
+  // Calculate delta time for integration
+  qreal deltaT = 0.0;
+  if (m_integrateValues)
   {
-    // Get the gyroscope data and validate the dataset count
-    const auto &gyro = GET_GROUP(SerialStudio::DashboardGyroscope, m_index);
-    if (gyro.datasetCount() != 3)
-      return;
-
-    // Backup previous readings
-    const qreal previousYaw = m_yaw;
-    const qreal previousRoll = m_roll;
-    const qreal previousPitch = m_pitch;
-
-    // Obtain delta-T for integration
-    const qreal deltaT = qMax(1, m_timer.elapsed()) / 1000.0;
+    deltaT = qMax(1, m_timer.elapsed()) / 1000.0;
     m_timer.restart();
+  }
 
-    // Update the pitch, roll, and yaw values by integration
-    for (int i = 0; i < 3; ++i)
+  // Axis detection helpers
+  auto isYaw = [](const QString &w) {
+    return w == QStringLiteral("z") || w == QStringLiteral("yaw");
+  };
+  auto isRoll = [](const QString &w) {
+    return w == QStringLiteral("y") || w == QStringLiteral("roll");
+  };
+  auto isPitch = [](const QString &w) {
+    return w == QStringLiteral("x") || w == QStringLiteral("pitch");
+  };
+
+  // Normalize angle helper [-180, 180]
+  auto normalizeAngle = [](qreal angle) -> qreal {
+    angle = std::fmod(angle + 180.0, 360.0);
+    if (angle < 0)
+      angle += 360.0;
+    return angle - 180.0;
+  };
+
+  // Update angles
+  for (int i = 0; i < 3; ++i)
+  {
+    // Obtain dataset values & widget type
+    const auto &dataset = gyro.getDataset(i);
+    const auto &widget = dataset.widget();
+    const auto angle = dataset.value().toDouble();
+
+    // Continously integrate the values
+    if (m_integrateValues)
     {
-      // Obtain dataset
-      const auto &dataset = gyro.getDataset(i);
-
-      // clang-format off
-      const qreal angle = dataset.value().toDouble();
-      const bool isYaw = (dataset.widget() == QStringLiteral("z")) ||
-                         (dataset.widget() == QStringLiteral("yaw"));
-      const bool isRoll = (dataset.widget() == QStringLiteral("y")) ||
-                          (dataset.widget() == QStringLiteral("roll"));
-      const bool isPitch = (dataset.widget() == QStringLiteral("x")) ||
-                           (dataset.widget() == QStringLiteral("pitch"));
-      // clang-format on
-
-      // Update orientation angles
-      if (isYaw)
+      if (isYaw(widget))
         m_yaw += angle * deltaT;
-      else if (isRoll)
+      else if (isRoll(widget))
         m_roll += angle * deltaT;
-      else if (isPitch)
+      else if (isPitch(widget))
         m_pitch += angle * deltaT;
     }
 
-    // Normalize yaw angle from -180 to 180
-    m_yaw = std::fmod(m_yaw + 180.0, 360.0);
-    if (m_yaw < 0)
-      m_yaw += 360.0;
-    m_yaw -= 180.0;
+    // Update the values directly
+    else
+    {
+      if (isYaw(widget))
+        m_yaw = angle;
+      else if (isRoll(widget))
+        m_roll = angle;
+      else if (isPitch(widget))
+        m_pitch = angle;
+    }
+  }
 
-    // Normalize roll angle from -180 to 180
-    m_roll = std::fmod(m_roll + 180.0, 360.0);
-    if (m_roll < 0)
-      m_roll += 360.0;
-    m_roll -= 180.0;
+  // Normalize all angles between -180 and 180
+  m_yaw = normalizeAngle(m_yaw);
+  m_roll = normalizeAngle(m_roll);
+  m_pitch = normalizeAngle(m_pitch);
 
-    // Normalize pitch angle from -180 to 180
-    m_pitch = std::fmod(m_pitch + 180.0, 360.0);
-    if (m_pitch < 0)
-      m_pitch += 360.0;
-    m_pitch -= 180.0;
+  // Emit signal if orientation changed
+  const bool yawChanged = !qFuzzyCompare(m_yaw, previousYaw);
+  const bool rollChanged = !qFuzzyCompare(m_roll, previousRoll);
+  const bool pitchChanged = !qFuzzyCompare(m_pitch, previousPitch);
+  if (yawChanged || rollChanged || pitchChanged)
+    Q_EMIT updated();
+}
 
-    // Request a repaint of the widget
-    if (!qFuzzyCompare(m_yaw, previousYaw)
-        || !qFuzzyCompare(m_roll, previousRoll)
-        || !qFuzzyCompare(m_pitch, previousPitch))
-      Q_EMIT updated();
+/**
+ * @brief Enables or disables value integration.
+ *
+ * Resets orientation state when toggled. Emits `updated()` and
+ * `integrateValuesChanged()` signals.
+ *
+ * @param enabled True to enable integration, false for direct values.
+ */
+void Widgets::Gyroscope::setIntegrateValues(const bool enabled)
+{
+  if (m_integrateValues != enabled)
+  {
+    m_yaw = 0;
+    m_roll = 0;
+    m_pitch = 0;
+    m_timer.restart();
+    m_integrateValues = enabled;
+
+    Q_EMIT updated();
+    Q_EMIT integrateValuesChanged();
   }
 }

@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <QtQuick>
+#include <QQuickItem>
 
 namespace Widgets
 {

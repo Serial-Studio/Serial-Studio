@@ -403,5 +403,6 @@
         <file>messages/pro/Welcome_CZ.txt</file>
         <file>messages/pro/Welcome_UK.txt</file>
         <file>icons/toolbar/deepwiki.svg</file>
+        <file>icons/dashboard-buttons/integral.svg</file>
     </qresource>
 </RCC>

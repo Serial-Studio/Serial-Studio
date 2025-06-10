@@ -23,7 +23,7 @@
 
 #include <QList>
 #include <QTimer>
-#include <QtQuick>
+#include <QQuickItem>
 
 namespace Widgets
 {

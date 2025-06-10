@@ -21,8 +21,8 @@
 
 #pragma once
 
-#include <QtQuick>
 #include <QVector>
+#include <QQuickItem>
 #include <QLineSeries>
 #include <qfouriertransformer.h>
 
