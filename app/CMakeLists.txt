@@ -407,7 +407,7 @@ elseif(UNIX)
   )
 
   install(
-    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/io.github.serial_studio.Serial_Studio.metainfo.xml
+    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.metainfo.xml
     DESTINATION share/metainfo
   )
 

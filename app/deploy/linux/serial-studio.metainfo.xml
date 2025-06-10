@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>io.github.serial_studio.Serial_Studio</id>
+  <id>com.serial-studio.Serial-Studio</id>
   <name>Serial Studio</name>
   <project_license>GPLv3 and Commercial License</project_license>
-  <developer id="io.github.serial-studio">
+  <developer id="com.serial-studio">
   <name>Serial Studio</name>
   </developer>
   <summary>The universal dashboard for embedded systems</summary>
   <metadata_license>CC-BY-SA-4.0</metadata_license>
-  <launchable type="desktop-id">io.github.serial_studio.Serial_Studio.desktop</launchable>
+  <launchable type="desktop-id">com.serial-studio.Serial-Studio.desktop</launchable>
   <url type="homepage">https://serial-studio.com/</url>
   <url type="bugtracker">https://github.com/Serial-Studio/Serial-Studio/issues</url>
   <url type="help">https://github.com/Serial-Studio/Serial-Studio/wiki</url>
