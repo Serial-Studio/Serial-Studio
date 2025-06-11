@@ -45,8 +45,8 @@
     <category>Science</category>
   </categories>
   <releases>
-    <release version="3.1.1" date="2025-06-08">
-      <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.1</url>
+    <release version="3.1.2" date="2025-06-11">
+      <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.2</url>
     </release>
   </releases>
   <content_rating type="oars-1.1"/>
