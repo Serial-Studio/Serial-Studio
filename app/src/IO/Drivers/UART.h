@@ -26,8 +26,6 @@
 #include <QSettings>
 #include <QByteArray>
 #include <QtSerialPort>
-#include <QTextCursor>
-#include <QQuickTextDocument>
 
 #include "IO/HAL_Driver.h"
 
@@ -83,7 +81,7 @@ class UART : public HAL_Driver
              NOTIFY languageChanged)
   Q_PROPERTY(QStringList baudRateList
              READ baudRateList
-             NOTIFY baudRateListChanged)
+             NOTIFY baudRateChanged)
   Q_PROPERTY(QStringList dataBitsList
              READ dataBitsList
              NOTIFY languageChanged)
@@ -144,7 +142,7 @@ public:
   [[nodiscard]] quint8 flowControlIndex() const;
 
   [[nodiscard]] QStringList portList() const;
-  [[nodiscard]] const QStringList &baudRateList() const;
+  [[nodiscard]] QStringList baudRateList() const;
 
   [[nodiscard]] QStringList parityList() const;
   [[nodiscard]] QStringList dataBitsList() const;
@@ -164,7 +162,6 @@ public slots:
   void setParity(const quint8 parityIndex);
   void setPortIndex(const quint8 portIndex);
   void registerDevice(const QString &device);
-  void appendBaudRate(const QString &baudRate);
   void setDataBits(const quint8 dataBitsIndex);
   void setStopBits(const quint8 stopBitsIndex);
   void setAutoReconnect(const bool autoreconnect);
@@ -172,8 +169,6 @@ public slots:
 
 private slots:
   void onReadyRead();
-  void readSettings();
-  void writeSettings();
   void populateErrors();
   void refreshSerialDevices();
   void handleError(QSerialPort::SerialPortError error);
@@ -191,7 +186,6 @@ private:
   int m_lastSerialDeviceIndex;
 
   qint32 m_baudRate;
-  QSettings m_settings;
   QSerialPort::Parity m_parity;
   QSerialPort::DataBits m_dataBits;
   QSerialPort::StopBits m_stopBits;
@@ -203,11 +197,11 @@ private:
   quint8 m_stopBitsIndex;
   quint8 m_flowControlIndex;
 
+  QSettings m_settings;
   QStringList m_deviceNames;
   QStringList m_customDevices;
   QStringList m_deviceLocations;
 
-  QStringList m_baudRateList;
   QMap<QSerialPort::SerialPortError, QString> m_errorDescriptions;
 };
 } // namespace Drivers
