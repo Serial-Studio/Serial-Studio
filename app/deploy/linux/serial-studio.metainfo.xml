@@ -2,7 +2,7 @@
 <component type="desktop-application">
   <id>com.serial_studio.Serial-Studio</id>
   <name>Serial Studio</name>
-  <project_license>GPLv3 and Commercial License</project_license>
+  <project_license>GPL-3.0-or-later</project_license>
   <developer id="com.serial-studio">
   <name>Serial Studio</name>
   </developer>
@@ -14,24 +14,16 @@
   <url type="help">https://github.com/Serial-Studio/Serial-Studio/wiki</url>
   <url type="donation">https://github.com/sponsors/alex-spataru</url>
   <description>
-    <p><strong>Serial Studio</strong> is an open source, cross-platform telemetry dashboard and real-time data visualization tool. It supports data input from serial ports, Bluetooth Low Energy (BLE), MQTT, and TCP/UDP sockets—ideal for embedded devices, external tools, or network services.</p>
+    <p>Serial Studio is an open source, cross-platform telemetry dashboard and real-time data visualization tool. It supports data input from serial ports, Bluetooth Low Energy (BLE), MQTT, and TCP/UDP sockets—ideal for embedded devices, external tools, or network services.</p>
     <p>It runs on Windows, macOS, and Linux, and is built for telemetry monitoring, sensor analysis, and real-time debugging in educational, hobbyist, and professional environments.</p>
-    <strong>Features</strong>
+    Features:
     <ul>
-      <li><strong>Cross-platform:</strong> Native support for Windows, macOS, and Linux.</li>
-      <li><strong>CSV export:</strong> Save incoming data for offline analysis or post-processing.</li>
-      <li><strong>Multiple inputs:</strong> Connect via serial, BLE, MQTT, or TCP/UDP sockets.</li>
-      <li><strong>Custom dashboards:</strong> Design interfaces with visual widgets using the Project Editor.</li>
-      <li><strong>Advanced decoding:</strong> Use JavaScript to handle raw or binary data streams.</li>
-      <li><strong>MQTT integration:</strong> Send/receive data over the internet for remote access and visualization.</li>
-    </ul>
-    <strong>Documentation</strong>
-    <p>See the <a href="https://github.com/Serial-Studio/Serial-Studio/wiki">Wiki</a> for full guides and examples:</p>
-    <ul>
-      <li><strong>Installation:</strong> Setup instructions for all platforms.</li>
-      <li><strong>Quick Start:</strong> Connect a device and view data in minutes.</li>
-      <li><strong>Advanced Usage:</strong> Learn about data flow, parsing, and layout customization.</li>
-      <li><strong>Examples:</strong> Sample code and ready-made projects.</li>
+      <li>Cross-platform: Native support for Windows, macOS, and Linux.</li>
+      <li>CSV export: Save incoming data for offline analysis or post-processing.</li>
+      <li>Multiple inputs: Connect via serial, BLE, MQTT, or TCP/UDP sockets.</li>
+      <li>Custom dashboards: Design interfaces with visual widgets using the Project Editor.</li>
+      <li>Advanced decoding: Use JavaScript to handle raw or binary data streams.</li>
+      <li>MQTT integration: Send/receive data over the internet for remote access and visualization.</li>
     </ul>
   </description>
   <screenshots>
