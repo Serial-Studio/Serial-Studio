@@ -72,10 +72,17 @@ class Console : public QObject
   Q_PROPERTY(QStringList displayModes
              READ displayModes
              NOTIFY languageChanged)
+  Q_PROPERTY(QStringList checksumMethods
+             READ checksumMethods
+             NOTIFY languageChanged)
   Q_PROPERTY(int scrollback
              READ scrollback
              WRITE setScrollback
              NOTIFY scrollbackChanged)
+  Q_PROPERTY(int checksumMethod
+             READ checksumMethod
+             WRITE setChecksumMethod
+             NOTIFY checksumMethodChanged)
   // clang-format on
 
 signals:
@@ -88,6 +95,7 @@ signals:
   void historyItemChanged();
   void textDocumentChanged();
   void showTimestampChanged();
+  void checksumMethodChanged();
   void displayString(const QString &text);
 
 private:
@@ -127,6 +135,8 @@ public:
   [[nodiscard]] bool showTimestamp() const;
 
   [[nodiscard]] int scrollback() const;
+  [[nodiscard]] int checksumMethod() const;
+
   [[nodiscard]] DataMode dataMode() const;
   [[nodiscard]] LineEnding lineEnding() const;
   [[nodiscard]] DisplayMode displayMode() const;
@@ -135,6 +145,7 @@ public:
   [[nodiscard]] QStringList dataModes() const;
   [[nodiscard]] QStringList lineEndings() const;
   [[nodiscard]] QStringList displayModes() const;
+  [[nodiscard]] QStringList checksumMethods() const;
 
   Q_INVOKABLE bool validateUserHex(const QString &text);
   Q_INVOKABLE QString formatUserHex(const QString &text);
@@ -149,6 +160,7 @@ public slots:
   void send(const QString &data);
   void setEcho(const bool enabled);
   void setScrollback(const int lines);
+  void setChecksumMethod(const int method);
   void setShowTimestamp(const bool enabled);
   void setDataMode(const IO::Console::DataMode &mode);
   void setLineEnding(const IO::Console::LineEnding &mode);
@@ -172,6 +184,7 @@ private:
 
   int m_scrollback;
   int m_historyItem;
+  int m_checksumMethod;
 
   bool m_echo;
   bool m_showTimestamp;

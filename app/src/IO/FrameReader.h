@@ -59,16 +59,9 @@ signals:
 public:
   explicit FrameReader(QObject *parent = nullptr);
 
-  [[nodiscard]] SerialStudio::OperationMode operationMode() const;
-  [[nodiscard]] SerialStudio::FrameDetection frameDetectionMode() const;
-
-  [[nodiscard]] const QByteArray &startSequence() const;
-  [[nodiscard]] const QByteArray &finishSequence() const;
-
 public slots:
-  void reset();
-  void setupExternalConnections();
   void processData(const QByteArray &data);
+  void setChecksum(const QString &checksum);
   void setStartSequence(const QByteArray &start);
   void setFinishSequence(const QByteArray &finish);
   void setOperationMode(const SerialStudio::OperationMode mode);
@@ -86,13 +79,12 @@ private:
                                    qsizetype *bytes);
 
 private:
-  bool m_enableCrc;
-
   SerialStudio::OperationMode m_operationMode;
   SerialStudio::FrameDetection m_frameDetectionMode;
 
   CircularBuffer<QByteArray, char> m_dataBuffer;
 
+  QString m_checksum;
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
   QList<QByteArray> m_quickPlotEndSequences;

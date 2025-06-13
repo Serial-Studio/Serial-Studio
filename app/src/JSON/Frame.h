@@ -73,6 +73,7 @@ public:
   [[nodiscard]] bool containsCommercialFeatures() const;
 
   [[nodiscard]] const QString &title() const;
+  [[nodiscard]] const QString &checksum() const;
   [[nodiscard]] const QByteArray &frameEnd() const;
   [[nodiscard]] const QByteArray &frameStart() const;
 
@@ -81,6 +82,7 @@ public:
 
 private:
   QString m_title;
+  QString m_checksum;
   QByteArray m_frameEnd;
   QByteArray m_frameStart;
 

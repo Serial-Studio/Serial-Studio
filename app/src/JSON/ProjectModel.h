@@ -324,6 +324,7 @@ private:
   bool m_hexadecimalDelimiters;
 
   QString m_mapTilerApiKey;
+  QString m_checksumAlgorithm;
   QString m_thunderforestApiKey;
 
   CurrentView m_currentView;
@@ -351,6 +352,7 @@ private:
 
   QStringList m_fftSamples;
   QStringList m_decoderOptions;
+  QStringList m_checksumMethods;
   QStringList m_frameDetectionMethods;
   QList<SerialStudio::FrameDetection> m_frameDetectionMethodsValues;
 

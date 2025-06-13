@@ -24,6 +24,7 @@
 
 #include "IO/Manager.h"
 #include "IO/Console.h"
+#include "IO/Checksum.h"
 #include "Misc/Translator.h"
 
 /**
@@ -35,6 +36,7 @@ IO::Console::Console()
   , m_displayMode(DisplayMode::DisplayPlainText)
   , m_scrollback(1000)
   , m_historyItem(0)
+  , m_checksumMethod(0)
   , m_echo(true)
   , m_showTimestamp(false)
   , m_isStartingLine(true)
@@ -81,6 +83,19 @@ bool IO::Console::showTimestamp() const
 int IO::Console::scrollback() const
 {
   return m_scrollback;
+}
+
+/**
+ * @brief Returns the index of the currently selected checksum method.
+ *
+ * The index corresponds to the position in the list returned by
+ * checksumMethods(), where 0 typically represents "None".
+ *
+ * @return The index of the active checksum method.
+ */
+int IO::Console::checksumMethod() const
+{
+  return m_checksumMethod;
 }
 
 /**
@@ -174,6 +189,29 @@ QStringList IO::Console::displayModes() const
   QStringList list;
   list.append(tr("Plain Text"));
   list.append(tr("Hexadecimal"));
+  return list;
+}
+
+/**
+ * @brief Returns a list of supported checksum methods including "None".
+ *
+ * This list is typically used for populating UI elements such as dropdowns
+ * or configuration panels. It includes a "None" option followed by all
+ * supported checksum algorithms defined in the IO namespace.
+ *
+ * @return A QStringList of available checksum method names.
+ */
+QStringList IO::Console::checksumMethods() const
+{
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list = IO::availableChecksums();
+    const int index = list.indexOf(QLatin1String(""));
+    if (index >= 0)
+      list[index] = tr("No Checksum");
+  }
+
   return list;
 }
 
@@ -368,6 +406,12 @@ void IO::Console::send(const QString &data)
       break;
   }
 
+  // Add checksum
+  const auto checksumName = IO::availableChecksums().at(m_checksumMethod);
+  auto checksum = IO::checksum(checksumName, bin);
+  if (!checksum.isEmpty())
+    bin.append(checksum);
+
   // Write data to device
   if (!bin.isEmpty())
     Manager::instance().writeData(bin);
@@ -406,6 +450,24 @@ void IO::Console::setScrollback(const int lines)
   {
     m_scrollback = lines;
     Q_EMIT scrollbackChanged();
+  }
+}
+
+/**
+ * @brief Sets the currently selected checksum method by index.
+ *
+ * Updates the internal checksum method if the provided index differs
+ * from the current one, and emits the checksumMethodChanged() signal.
+ *
+ * @param method The new checksum method index (from checksumMethods()).
+ */
+void IO::Console::setChecksumMethod(const int method)
+{
+  if (checksumMethod() != method && method >= 0
+      && method < availableChecksums().count())
+  {
+    m_checksumMethod = method;
+    Q_EMIT checksumMethodChanged();
   }
 }
 

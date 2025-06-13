@@ -404,5 +404,6 @@
         <file>messages/pro/Welcome_UK.txt</file>
         <file>icons/toolbar/deepwiki.svg</file>
         <file>icons/dashboard-buttons/integral.svg</file>
+        <file>icons/project-editor/model/checksum.svg</file>
     </qresource>
 </RCC>

@@ -28,6 +28,7 @@
 #include <QJsonDocument>
 
 #include "AppInfo.h"
+#include "IO/Checksum.h"
 #include "Misc/Utilities.h"
 #include "Misc/Translator.h"
 #include "Misc/WorkspaceManager.h"
@@ -64,7 +65,8 @@ typedef enum
   kProjectView_HexadecimalSequence, /**< Represents the frame sequence format */
   kProjectView_FrameDetection,      /**< Represents the frame detection item */
   kProjectView_ThunderforestApiKey, /**< Represents the Thunderforest API key */
-  kProjectView_MapTilerApiKey       /**< Represents the MapTiler API key */
+  kProjectView_MapTilerApiKey,      /**< Represents the MapTiler API key */
+  kProjectView_ChecksumFunction     /**< Represents the frame checksum item */
 } ProjectItem;
 // clang-format on
 
@@ -800,6 +802,7 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
   json.insert("decoder", m_frameDecoder);
   json.insert("frameEnd", m_frameEndSequence);
   json.insert("frameParser", m_frameParserCode);
+  json.insert("checksum", m_checksumAlgorithm);
   json.insert("frameDetection", m_frameDetection);
   json.insert("frameStart", m_frameStartSequence);
   json.insert("mapTilerApiKey", m_mapTilerApiKey);
@@ -905,6 +908,7 @@ void JSON::ProjectModel::newJsonFile()
   m_frameDetection = SerialStudio::EndDelimiterOnly;
   m_frameEndSequence = "\\n";
   m_mapTilerApiKey = "";
+  m_checksumAlgorithm = "";
   m_thunderforestApiKey = "";
   m_frameStartSequence = "$";
   m_hexadecimalDelimiters = false;
@@ -1004,6 +1008,7 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   auto json = document.object();
   m_title = json.value("title").toString();
   m_frameEndSequence = json.value("frameEnd").toString();
+  m_checksumAlgorithm = json.value("checksum").toString();
   m_frameParserCode = json.value("frameParser").toString();
   m_frameStartSequence = json.value("frameStart").toString();
   m_mapTilerApiKey = json.value("mapTilerApiKey").toString();
@@ -2308,6 +2313,21 @@ void JSON::ProjectModel::buildProjectModel()
     m_projectModel->appendRow(sequence);
   }
 
+  // Add checksum
+  auto checksum = new QStandardItem();
+  auto checksumAlgo = IO::availableChecksums().indexOf(m_checksumAlgorithm);
+  checksum->setEditable(true);
+  checksum->setData(ComboBox, WidgetType);
+  checksum->setData(checksumAlgo, EditableValue);
+  checksum->setData(m_checksumMethods, ComboBoxData);
+  checksum->setData(tr("Checksum Algorithm"), ParameterName);
+  checksum->setData(kProjectView_ChecksumFunction, ParameterType);
+  checksum->setData(tr("Checksum algorithm used for frame validation"),
+                    ParameterDescription);
+  checksum->setData("qrc:/rcc/icons/project-editor/model/checksum.svg",
+                    ParameterIcon);
+  m_projectModel->appendRow(checksum);
+
   // Add Thunderforest API Key
   auto thunderforest = new QStandardItem();
   thunderforest->setEditable(true);
@@ -2938,6 +2958,13 @@ void JSON::ProjectModel::generateComboBoxModels()
   m_decoderOptions.append(tr("Base64"));
   m_decoderOptions.append(tr("Binary (Direct)"));
 
+  // Initialize checksum options
+  m_checksumMethods.clear();
+  m_checksumMethods = IO::availableChecksums();
+  const int index = m_checksumMethods.indexOf(QLatin1String(""));
+  if (index >= 0)
+    m_checksumMethods[index] = tr("No Checksum");
+
   // Initialize frame detection methods
   m_frameDetectionMethods.clear();
   m_frameDetectionMethodsValues.clear();
@@ -3243,6 +3270,9 @@ void JSON::ProjectModel::onProjectItemChanged(QStandardItem *item)
       break;
     case kProjectView_FrameDecoder:
       m_frameDecoder = static_cast<SerialStudio::DecoderMethod>(value.toInt());
+      break;
+    case kProjectView_ChecksumFunction:
+      m_checksumAlgorithm = IO::availableChecksums()[value.toInt()];
       break;
     case kProjectView_HexadecimalSequence: {
       bool changed = m_hexadecimalDelimiters != value.toBool();

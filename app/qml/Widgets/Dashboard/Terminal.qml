@@ -327,6 +327,20 @@ Item {
             Cpp_IO_Console.lineEnding = currentIndex
         }
       }
+
+      ComboBox {
+        id: checkumCombo
+        Layout.minimumWidth: 128
+        opacity: enabled ? 1 : 0.5
+        enabled: Cpp_IO_Manager.readWrite
+        Layout.alignment: Qt.AlignVCenter
+        model: Cpp_IO_Console.checksumMethods
+        currentIndex: Cpp_IO_Console.checksumMethod
+        onCurrentIndexChanged: {
+          if (currentIndex !== Cpp_IO_Console.checksumMethod)
+            Cpp_IO_Console.checksumMethod = currentIndex
+        }
+      }
     }
 
     //

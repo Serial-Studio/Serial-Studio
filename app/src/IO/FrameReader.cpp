@@ -37,108 +37,17 @@
  */
 IO::FrameReader::FrameReader(QObject *parent)
   : QObject(parent)
-  , m_enableCrc(false)
-  , m_operationMode(SerialStudio::QuickPlot)
-  , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
   , m_dataBuffer(1024 * 1024)
 {
   m_quickPlotEndSequences.append(QByteArray("\n"));
   m_quickPlotEndSequences.append(QByteArray("\r"));
   m_quickPlotEndSequences.append(QByteArray("\r\n"));
-}
 
-/**
- * @brief Retrieves the current operation mode of the FrameReader.
- *
- * The operation mode determines how the FrameReader processes incoming data.
- *
- * @return The current operation mode as a SerialStudio::OperationMode enum.
- */
-SerialStudio::OperationMode IO::FrameReader::operationMode() const
-{
-  return m_operationMode;
-}
-
-/**
- * @brief Retrieves the current frame detection mode of the FrameReader.
- *
- * The frame detection mode specifies how the FrameReader identifies frame
- * boundaries.
- *
- * @return The current frame detection mode as a SerialStudio::FrameDetection
- * enum.
- */
-SerialStudio::FrameDetection IO::FrameReader::frameDetectionMode() const
-{
-  return m_frameDetectionMode;
-}
-
-/**
- * @brief Retrieves the start sequence used for frame detection.
- *
- * This sequence marks the beginning of a data frame.
- *
- * @return A reference to the QByteArray containing the start sequence.
- */
-const QByteArray &IO::FrameReader::startSequence() const
-{
-  return m_startSequence;
-}
-
-/**
- * @brief Retrieves the finish sequence used for frame detection.
- *
- * This sequence marks the end of a data frame.
- *
- * @return A reference to the QByteArray containing the finish sequence.
- */
-const QByteArray &IO::FrameReader::finishSequence() const
-{
-  return m_finishSequence;
-}
-
-/**
- * @brief Resets the FrameReader's state.
- *
- * Clears the internal data buffer, resets CRC settings, and reserves space for
- * the buffer. This is useful when reinitializing or repurposing the FrameReader
- * in a multithreaded environment.
- */
-void IO::FrameReader::reset()
-{
-  QWriteLocker locker(&m_dataLock);
-
-  m_enableCrc = false;
-  m_dataBuffer.clear();
-}
-
-/**
- * @brief Sets up external connections for FrameReader.
- *
- * Connects the FrameReader's settings to external components, including
- * operation mode and frame detection mode, using signal-slot mechanisms.
- * Ensures synchronization of settings when executed in a different thread.
- */
-void IO::FrameReader::setupExternalConnections()
-{
+  setChecksum(IO::Manager::instance().checksumAlgorithm());
+  setStartSequence(IO::Manager::instance().startSequence());
+  setFinishSequence(IO::Manager::instance().finishSequence());
   setOperationMode(JSON::FrameBuilder::instance().operationMode());
   setFrameDetectionMode(JSON::ProjectModel::instance().frameDetection());
-
-  connect(
-      &JSON::FrameBuilder::instance(),
-      &JSON::FrameBuilder::operationModeChanged, this,
-      [this] {
-        setOperationMode(JSON::FrameBuilder::instance().operationMode());
-      },
-      Qt::QueuedConnection);
-
-  connect(
-      &JSON::ProjectModel::instance(),
-      &JSON::ProjectModel::frameDetectionChanged, this,
-      [this] {
-        setFrameDetectionMode(JSON::ProjectModel::instance().frameDetection());
-      },
-      Qt::QueuedConnection);
 }
 
 /**
@@ -154,10 +63,6 @@ void IO::FrameReader::setupExternalConnections()
  */
 void IO::FrameReader::processData(const QByteArray &data)
 {
-  // Stop if not connected
-  if (!IO::Manager::instance().isConnected())
-    return;
-
   // Lock access to frame data
   QWriteLocker locker(&m_dataLock);
 
@@ -176,6 +81,24 @@ void IO::FrameReader::processData(const QByteArray &data)
 }
 
 /**
+ * @brief Sets the checksum algorithm used for validating incoming frames.
+ *
+ * If the algorithm changes, the internal buffer is cleared to prevent
+ * inconsistencies during frame parsing.
+ *
+ * @param checksum The name of the new checksum algorithm.
+ */
+void IO::FrameReader::setChecksum(const QString &checksum)
+{
+  QWriteLocker locker(&m_dataLock);
+  if (m_checksum != checksum)
+  {
+    m_checksum = checksum;
+    m_dataBuffer.clear();
+  }
+}
+
+/**
  * @brief Sets the start sequence used for frame detection.
  *
  * Updates the sequence that marks the beginning of a frame. Resets the
@@ -189,7 +112,6 @@ void IO::FrameReader::setStartSequence(const QByteArray &start)
   if (m_startSequence != start)
   {
     m_startSequence = start;
-    m_enableCrc = false;
     m_dataBuffer.clear();
   }
 }
@@ -208,7 +130,6 @@ void IO::FrameReader::setFinishSequence(const QByteArray &finish)
   if (m_finishSequence != finish)
   {
     m_finishSequence = finish;
-    m_enableCrc = false;
     m_dataBuffer.clear();
   }
 }
@@ -227,7 +148,6 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
   if (m_operationMode != mode)
   {
     m_operationMode = mode;
-    m_enableCrc = false;
     m_dataBuffer.clear();
   }
 }
@@ -249,7 +169,6 @@ void IO::FrameReader::setFrameDetectionMode(
   if (m_frameDetectionMode != mode)
   {
     m_frameDetectionMode = mode;
-    m_enableCrc = false;
     m_dataBuffer.clear();
   }
 }
@@ -259,13 +178,6 @@ void IO::FrameReader::setFrameDetectionMode(
  */
 void IO::FrameReader::readFrames()
 {
-  // Stop parsing data when a device is disconnected
-  if (!IO::Manager::instance().isConnected() && m_dataBuffer.size() > 0)
-  {
-    reset();
-    return;
-  }
-
   // JSON mode, read until default frame start & end sequences are found
   if (m_operationMode == SerialStudio::DeviceSendsJSON)
     readStartEndDelimetedFrames();
@@ -499,104 +411,73 @@ void IO::FrameReader::readStartEndDelimetedFrames()
 }
 
 /**
- * @brief Performs integrity checks on a frame.
+ * @brief Validates the integrity of a frame using the configured checksum
+ * algorithm.
  *
- * Verifies the validity of a frame using CRC checks (CRC-8, CRC-16, or CRC-32)
- * if the appropriate headers are detected in the circular buffer. Updates the
- * number of bytes to be removed from the buffer and returns the validation
- * status.
+ * This function computes the checksum of the given frame using the currently
+ * selected algorithm (as defined by @c m_checksum) and compares it against the
+ * checksum bytes that follow the frame's delimiter in the input buffer.
  *
- * @param frame The frame data to validate.
- * @param bytes A pointer to the number of bytes to remove from the buffer.
- * @return The validation status as a `ValidationStatus` enum:
- *         - `FrameOk`: Frame is valid.
- *         - `ChecksumError`: CRC mismatch.
- *         - `ChecksumIncomplete`: Not enough data for validation.
+ * If no checksum algorithm is configured (i.e., @c m_checksum is empty), the
+ * frame is considered valid by default.
+ *
+ * @param frame The payload data to validate (excluding checksum bytes).
+ * @param delimiter The delimiter that marks the end of the frame.
+ * @param bytes Pointer to the number of bytes to discard from the input buffer
+ *              after processing (frame + delimiter + checksum).
+ *
+ * @return ValidationStatus enum indicating:
+ *         - FrameOk: The checksum is valid or not required.
+ *         - ChecksumError: The computed checksum does not match the received
+ * one.
+ *         - ChecksumIncomplete: Not enough data available to perform
+ * validation.
  */
 IO::ValidationStatus
 IO::FrameReader::integrityChecks(const QByteArray &frame,
-                                 const QByteArray &delimeter, qsizetype *bytes)
+                                 const QByteArray &delimiter, qsizetype *bytes)
 {
-  // Get finish sequence as byte array
-  auto crc8Header = delimeter + "crc8:";
-  auto crc16Header = delimeter + "crc16:";
-  auto crc32Header = delimeter + "crc32:";
+  const QByteArray buffer = m_dataBuffer.peek(m_dataBuffer.size());
 
-  // Temporary buffer to peek at the required length of data
-  QByteArray cursor = m_dataBuffer.peek(m_dataBuffer.size());
-
-  // Check CRC-8
-  if (cursor.contains(crc8Header))
+  // Get expected checksum from function map
+  const auto &map = IO::checksumFunctionMap();
+  const auto it = map.find(m_checksum);
+  if (it == map.end())
   {
-    m_enableCrc = true;
-    qsizetype offset = cursor.indexOf(crc8Header) + crc8Header.length() - 1;
-
-    // Check if we have enough data in the buffer
-    if (cursor.size() >= offset + 1)
-    {
-      *bytes += crc8Header.length() + 1;
-      quint8 crc = static_cast<quint8>(cursor.at(offset + 1));
-
-      if (crc8(frame.data(), frame.length()) == crc)
-        return ValidationStatus::FrameOk;
-      else
-        return ValidationStatus::ChecksumError;
-    }
-  }
-
-  // Check CRC-16
-  else if (cursor.contains(crc16Header))
-  {
-    m_enableCrc = true;
-    qsizetype offset = cursor.indexOf(crc16Header) + crc16Header.length() - 1;
-
-    // Check if we have enough data in the buffer
-    if (cursor.size() >= offset + 2)
-    {
-      *bytes += crc16Header.length() + 2;
-
-      quint8 a = static_cast<quint8>(cursor.at(offset + 1));
-      quint8 b = static_cast<quint8>(cursor.at(offset + 2));
-      quint16 crc = (a << 8) | b;
-
-      if (crc16(frame.data(), frame.length()) == crc)
-        return ValidationStatus::FrameOk;
-      else
-        return ValidationStatus::ChecksumError;
-    }
-  }
-
-  // Check CRC-32
-  else if (cursor.contains(crc32Header))
-  {
-    m_enableCrc = true;
-    qsizetype offset = cursor.indexOf(crc32Header) + crc32Header.length() - 1;
-
-    // Check if we have enough data in the buffer
-    if (cursor.size() >= offset + 4)
-    {
-      *bytes += crc32Header.length() + 4;
-
-      quint8 a = static_cast<quint8>(cursor.at(offset + 1));
-      quint8 b = static_cast<quint8>(cursor.at(offset + 2));
-      quint8 c = static_cast<quint8>(cursor.at(offset + 3));
-      quint8 d = static_cast<quint8>(cursor.at(offset + 4));
-      quint32 crc = (a << 24) | (b << 16) | (c << 8) | d;
-
-      if (crc32(frame.data(), frame.length()) == crc)
-        return ValidationStatus::FrameOk;
-      else
-        return ValidationStatus::ChecksumError;
-    }
-  }
-
-  // Buffer does not contain CRC code
-  else if (!m_enableCrc)
-  {
-    *bytes += delimeter.length();
+    *bytes += delimiter.length();
     return ValidationStatus::FrameOk;
   }
 
-  // Checksum data incomplete
-  return ValidationStatus::ChecksumIncomplete;
+  // Compute expected checksum size
+  const QByteArray actual = it.value()(frame.constData(), frame.size());
+  const int checksumSize = actual.size();
+
+  // If no checksum is expected, treat frame as valid
+  if (checksumSize == 0)
+  {
+    *bytes += delimiter.size();
+    return ValidationStatus::FrameOk;
+  }
+
+  // Ensure enough data is available for the checksum bytes
+  const qsizetype offset = delimiter.size();
+  if (buffer.size() < offset + checksumSize)
+    return ValidationStatus::ChecksumIncomplete;
+
+  // Extract received checksum directly after delimiter
+  *bytes += delimiter.size() + checksumSize;
+  const QByteArray expected = buffer.mid(offset, checksumSize);
+
+  // Return validation result
+  if (actual == expected)
+    return ValidationStatus::FrameOk;
+
+  // Log invalid frames
+  else
+  {
+    qWarning() << "Invalid checksum, expected" << expected.toHex() << "got"
+               << actual.toHex();
+
+    return ValidationStatus::ChecksumError;
+  }
 }

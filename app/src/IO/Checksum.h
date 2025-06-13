@@ -21,11 +21,14 @@
 
 #pragma once
 
-#include <cstdint>
+#include <QMap>
+#include <QStringList>
 
 namespace IO
 {
-[[nodiscard]] uint8_t crc8(const char *data, const int length);
-[[nodiscard]] uint16_t crc16(const char *data, const int length);
-[[nodiscard]] uint32_t crc32(const char *data, const int length);
+using ChecksumFunc = std::function<QByteArray(const char *, int)>;
+
+[[nodiscard]] const QStringList &availableChecksums();
+[[nodiscard]] const QMap<QString, ChecksumFunc> &checksumFunctionMap();
+[[nodiscard]] QByteArray checksum(const QString &name, const QByteArray &data);
 } // namespace IO
