@@ -1,14 +1,22 @@
-# ADC Noise Analysis + FFT Visualization with Serial Studio
+# Command-Based ADC Sampling with Timers, Actions & CRC Integrity
 
 ## Overview
 
-This project demonstrates how to read and transmit analog-to-digital converter (ADC) values from six unconnected analog pins (A0 to A5) on an Arduino and analyze signal noise using **Fast Fourier Transform (FFT)** in **Serial Studio**.
+This project showcases how to integrate **binary data parsing**, **custom serial actions**, **timed execution**, and **checksum validation** in a Serial Studio workflow using Arduino. It provides a complete example of how to build a robust, command-driven interface for sensor data acquisition, suitable for real-time plotting and FFT analysis.
 
-The Arduino reads raw ADC values from floating analog pins, scales them to 8-bit (0–255), adds a CRC-16-CCITT checksum, and transmits the binary data over the serial port. Serial Studio parses the data, verifies the checksum, and visualizes it in real time using the FFT tool.
+The Arduino collects analog readings from six input channels (A0 to A5), processes the values, wraps them in a binary protocol frame with a **CRC-16-CCITT** checksum, and only sends data when explicitly commanded using a custom `"poll-data"` action. Serial Studio triggers this action either manually or via timer modes like auto-start or toggle-on-trigger.
+
+## Key Features
+
+- **Binary Data Parsing**: Efficient, low-overhead serial communication
+- **CRC-16 Checksums**: Ensures data integrity on each frame
+- **Action System**: Serial Studio dashboard buttons that send predefined commands
+- **Timer Modes**: AutoStart, Toggle, and Triggered transmission
+- **FFT Visualization**: Analyze analog noise or sensor signals in the frequency domain
 
 ### Compatibility
 
-Works with any Arduino board that has analog input pins. No external components are required. Floating analog pins (A0–A5) will naturally generate noise that can be analyzed in the frequency domain.
+Works with any Arduino board featuring analog input pins. No external components required—floating analog pins generate natural noise, ideal for FFT demonstrations.
 
 ![Serial Studio FFT](doc/screenshot.png)
 
@@ -16,50 +24,46 @@ Works with any Arduino board that has analog input pins. No external components 
 
 ### Connections
 
-No external wiring is needed. Leave analog pins A0 to A5 unconnected to observe ambient noise.
-
-### Optional
-
-You can connect analog sensors or signal generators to the pins for more controlled signal analysis.
+- Leave A0–A5 unconnected to capture environmental noise.
+- Alternatively, attach sensors or function generators for signal injection.
 
 ## Step-by-Step Guide
 
 ### 1. Arduino Sketch ([`HexadecimalADC.ino`](HexadecimalADC.ino))
 
-This sketch reads analog values from pins A0–A5, maps the 10-bit readings to 8-bit values, appends a CRC-16-CCITT checksum, and transmits a binary data frame over serial.
+This sketch configures the ADC, listens for serial commands like `"poll-data"`, reads analog values, computes a CRC, and sends data over serial **only when asked**.
 
-Each frame layout:
+**Frame Format:**
 - Start delimiter: `0xC0 0xDE`
-- Sensor values: 6 bytes (scaled to 0–255)
-- End delimiter: `0xDE 0xC0`
-- CRC-16-CCITT: 2 bytes (big-endian)
+- Sensor data: 6 bytes (mapped 10-bit → 8-bit)
+- CRC-16-CCITT (2 bytes, big-endian)
 
-**Baud Rate:** 115200
+**Baud Rate:** `115200`
+
+**Trigger via Serial Studio Actions**:
+- `poll-data`: Read and transmit 1 data frame
+- `enable-pull-up`: Enable pull-ups on A0–A5
+- `disable-pull-up`: Set A0–A5 to normal input mode
 
 ### 2. Serial Studio Configuration
 
 #### Frame Format
 - **Mode**: `Binary (direct)`
-- **Frame Delimiters**: 
-  - Start: `0xC0 0xDE`
-  - End: `0xDE 0xC0`
+- **Start Sequence**: `0xC0 0xDE`
 - **Checksum**: `CRC-16-CCITT`
 
-#### Loading the Project
-1. Download and install Serial Studio from the [official website](https://serial-studio.com/).
-2. Launch the app and load `HexadecimalADC.json` using the **Project Editor**.
+#### Actions
 
-#### JavaScript Parser Function
+You can define custom actions in your `.json` project to send:
+- `"poll-data"` on button press or toggle
+- `"poll-data"` automatically using timer
+- Other configuration commands on connect
 
-In `Binary (direct)` mode, the frame is passed as a raw byte array. The parser below converts each value into a voltage (0–5V):
+#### JavaScript Frame Parser
 
 ```javascript
 /**
- * This function parses a binary data frame (passed as a byte array) and converts
- * each byte into a decimal value scaled from 0 to 5 volts.
- *
- * @param[in]  frame  A JS array of byte values (0–255), passed from C++.
- * @return     Array of floats representing the scaled voltage values.
+ * Convert each byte (0–255) into a voltage between 0 and 5V.
  */
 function parse(frame) {
     let dataArray = [];
@@ -73,17 +77,19 @@ function parse(frame) {
 }
 ```
 
-[More about custom frame parsers here](https://github.com/Serial-Studio/Serial-Studio/wiki/Project-Editor#frame-parser-function-view).
+For help on the parser function, see the [Serial Studio documentation](https://github.com/Serial-Studio/Serial-Studio/wiki/Project-Editor#frame-parser-function-view).
 
-### 3. Analyzing Noise with FFT
+### 3. Visualize with FFT
 
-1. Open Serial Studio and select the correct serial port.
-2. Set the baud rate to **115200**.
-3. Observe the voltage signals from the floating analog pins.
-4. Use the **FFT widget** to visualize the frequency characteristics of the noise.
+1. Start Serial Studio.
+2. Select the serial port.
+3. Set baud to **115200**.
+4. Click your `"poll-data"` action.
+5. Use the **FFT widget** to inspect signal frequency.
 
-### Troubleshooting Tips
+## Troubleshooting
 
-- **No data shown**: Verify baud rate and correct serial port.
-- **Flat FFT spectrum**: Try touching the pins or adding a sensor to inject a signal.
-- **Validation errors**: Ensure `CRC-16-CCITT` is selected and frame format matches what the Arduino sends.
+- **No output**: Ensure `poll-data` is being sent.
+- **Noisy values**: Normal for floating pins; connect sensors for better control.
+- **Invalid frames**: Check CRC settings and delimiters.
+- **Slow updates**: Increase timer rate or switch to manual polling.
