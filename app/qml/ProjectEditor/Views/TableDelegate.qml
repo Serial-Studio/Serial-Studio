@@ -40,11 +40,9 @@ ColumnLayout {
   //
   // Set width & height for column cells
   //
-  property real rowHeight: 30
-  property real iconWidth: 30
-  property real valueWidth: Math.min((root.width - iconWidth) * 0.3, 512)
-  property real parameterWidth: Math.min((root.width - iconWidth) * 0.3, 256)
-  property real descriptionWidth: (root.width - iconWidth) - parameterWidth - valueWidth - 26
+  readonly property real rowHeight: 30
+  readonly property real iconWidth: 30
+  readonly property real parameterWidth: Math.min(root.width * 0.3, 256)
 
   //
   // Table header
@@ -142,31 +140,10 @@ ColumnLayout {
 
       Label {
         text: qsTr("Value")
-        Layout.alignment: Qt.AlignVCenter
-        Layout.minimumWidth: root.valueWidth
-        Layout.maximumWidth: root.valueWidth
-        horizontalAlignment: Label.AlignLeft
-        font: Cpp_Misc_CommonFonts.boldUiFont
-        color: Cpp_ThemeManager.colors["table_fg_header"]
-      }
-
-      Rectangle {
-        width: 1
-        Layout.fillHeight: true
-        color: Cpp_ThemeManager.colors["table_separator"]
-      }
-
-      Item {
-        width: 8
-      }
-
-      Label {
-        text: qsTr("Parameter Description")
+        Layout.fillWidth: true
         Layout.alignment: Qt.AlignVCenter
         horizontalAlignment: Label.AlignLeft
         font: Cpp_Misc_CommonFonts.boldUiFont
-        Layout.minimumWidth: root.descriptionWidth
-        Layout.maximumWidth: root.descriptionWidth
         color: Cpp_ThemeManager.colors["table_fg_header"]
       }
     }
@@ -295,6 +272,16 @@ ColumnLayout {
           Layout.minimumWidth: root.parameterWidth
           Layout.maximumWidth: root.parameterWidth
           color: Cpp_ThemeManager.colors["table_text"]
+
+          ToolTip.delay: 700
+          ToolTip.text: model.parameterDescription
+          ToolTip.visible: _paramMouseArea.containsMouse && ToolTip.text !== ""
+
+          MouseArea {
+            id: _paramMouseArea
+            hoverEnabled: true
+            anchors.fill: parent
+          }
         }
 
         //
@@ -312,9 +299,8 @@ ColumnLayout {
         // Text field value editor
         //
         Loader {
+          Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          Layout.minimumWidth: root.valueWidth
-          Layout.maximumWidth: root.valueWidth
           active: model.widgetType === ProjectModel.TextField
           visible: model.widgetType === ProjectModel.TextField
 
@@ -340,9 +326,8 @@ ColumnLayout {
         // Icon picker
         //
         Loader {
+          Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          Layout.minimumWidth: root.valueWidth
-          Layout.maximumWidth: root.valueWidth
           active: model.widgetType === ProjectModel.IconPicker
           visible: model.widgetType === ProjectModel.IconPicker
 
@@ -400,9 +385,8 @@ ColumnLayout {
         // Int number field value editor
         //
         Loader {
+          Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          Layout.minimumWidth: root.valueWidth
-          Layout.maximumWidth: root.valueWidth
           active: model.widgetType === ProjectModel.IntField
           visible: model.widgetType === ProjectModel.IntField
 
@@ -437,9 +421,8 @@ ColumnLayout {
         // Double number field value editor
         //
         Loader {
+          Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          Layout.minimumWidth: root.valueWidth
-          Layout.maximumWidth: root.valueWidth
           active: model.widgetType === ProjectModel.FloatField
           visible: model.widgetType === ProjectModel.FloatField
 
@@ -481,9 +464,8 @@ ColumnLayout {
         // ComboBox value editor
         //
         Loader {
+          Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          Layout.minimumWidth: root.valueWidth
-          Layout.maximumWidth: root.valueWidth
           active: model.widgetType === ProjectModel.ComboBox
           visible: model.widgetType === ProjectModel.ComboBox
 
@@ -512,9 +494,8 @@ ColumnLayout {
         // CheckBox value editor
         //
         Loader {
+          Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          Layout.minimumWidth: root.valueWidth
-          Layout.maximumWidth: root.valueWidth
           active: model.widgetType === ProjectModel.CheckBox
           visible: model.widgetType === ProjectModel.CheckBox
 
@@ -541,9 +522,8 @@ ColumnLayout {
         // HexTextEdit editor
         //
         Loader {
+          Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          Layout.minimumWidth: root.valueWidth
-          Layout.maximumWidth: root.valueWidth
           active: model.widgetType === ProjectModel.HexTextField
           visible: model.widgetType === ProjectModel.HexTextField
 
@@ -611,26 +591,10 @@ ColumnLayout {
         }
 
         //
-        // Separator + Spacer
+        // Separator
         //
-        Rectangle {
-          width: 1
-          Layout.fillHeight: true
-          color: Cpp_ThemeManager.colors["table_separator"]
-        } Item {
-          width: 8
-        }
-
-        //
-        // Parameter description/hint
-        //
-        Label {
-          opacity: 0.8
-          text: model.parameterDescription
-          Layout.alignment: Qt.AlignVCenter
-          Layout.minimumWidth: root.descriptionWidth
-          Layout.maximumWidth: root.descriptionWidth
-          color: Cpp_ThemeManager.colors["table_text"]
+        Item {
+          implicitWidth: 8
         }
       }
     }
