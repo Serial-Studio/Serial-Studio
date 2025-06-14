@@ -13,18 +13,18 @@
   <url type="bugtracker">https://github.com/Serial-Studio/Serial-Studio/issues</url>
   <url type="help">https://github.com/Serial-Studio/Serial-Studio/wiki</url>
   <url type="donation">https://github.com/sponsors/alex-spataru</url>
+  <url type="contribute">https://github.com/Serial-Studio/Serial-Studio/wiki/Support-Serial-Studio</url>
   <description>
     <p>Serial Studio is an open source, cross-platform telemetry dashboard and real-time data visualization tool. It supports data input from serial ports, Bluetooth Low Energy (BLE), MQTT, and TCP/UDP sockets—ideal for embedded devices, external tools, or network services.</p>
     <p>It runs on Windows, macOS, and Linux, and is built for telemetry monitoring, sensor analysis, and real-time debugging in educational, hobbyist, and professional environments.</p>
-    Features:
     <ul>
       <li>Cross-platform: Native support for Windows, macOS, and Linux.</li>
       <li>CSV export: Save incoming data for offline analysis or post-processing.</li>
       <li>Multiple inputs: Connect via serial, BLE, MQTT, or TCP/UDP sockets.</li>
       <li>Custom dashboards: Design interfaces with visual widgets using the Project Editor.</li>
       <li>Advanced decoding: Use JavaScript to handle raw or binary data streams.</li>
-      <li>MQTT integration: Send/receive data over the internet for remote access and visualization.</li>
     </ul>
+    <p>This is the GPL-3.0 edition of Serial Studio. Additional features, such as MQTT or XY plots, are available in the Pro version. Visit the official website for more information on upgrading.</p>
   </description>
   <screenshots>
     <screenshot type="default">
@@ -37,8 +37,8 @@
     <category>Science</category>
   </categories>
   <releases>
-    <release version="3.1.2" date="2025-06-11">
-      <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.2</url>
+    <release version="3.1.3" date="2025-06-14">
+      <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.3</url>
     </release>
   </releases>
   <content_rating type="oars-1.1"/>
