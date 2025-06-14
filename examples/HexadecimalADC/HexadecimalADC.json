@@ -15,6 +15,7 @@
             "txData": "disable-pull-up"
         }
     ],
+    "checksum": "CRC-16-CCITT",
     "decoder": 3,
     "frameDetection": 1,
     "frameEnd": "DE C0",

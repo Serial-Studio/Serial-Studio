@@ -2,12 +2,13 @@
 
 ## Overview
 
-This project demonstrates how to read and transmit analog-to-digital converter (ADC) values from six unconnected analog pins (A0 to A5) on an Arduino and analyze the noise in the signal using **Fast Fourier Transform (FFT)** for frequency domain visualization in **Serial Studio**.
+This project demonstrates how to read and transmit analog-to-digital converter (ADC) values from six unconnected analog pins (A0 to A5) on an Arduino and analyze signal noise using **Fast Fourier Transform (FFT)** in **Serial Studio**.
 
-The Arduino reads the raw ADC values from the unconnected pins (floating values), scales them to 8-bit (0-255) binary, and transmits them over the serial port. The data is parsed and visualized in Serial Studio, where the **FFT** feature is used to observe the frequency characteristics of the noise.
+The Arduino reads raw ADC values from floating analog pins, scales them to 8-bit (0–255), adds a CRC-16-CCITT checksum, and transmits the binary data over the serial port. Serial Studio parses the data, verifies the checksum, and visualizes it in real time using the FFT tool.
 
 ### Compatibility
-This project works with any Arduino board that has analog input pins. Although no external sensors are required, the analog pins **A0 to A5** will generate fluctuating noise due to their unconnected state, which can be analyzed using the FFT.
+
+Works with any Arduino board that has analog input pins. No external components are required. Floating analog pins (A0–A5) will naturally generate noise that can be analyzed in the frequency domain.
 
 ![Serial Studio FFT](doc/screenshot.png)
 
@@ -15,74 +16,74 @@ This project works with any Arduino board that has analog input pins. Although n
 
 ### Connections
 
-No external hardware is required for this project, as the analog pins (A0 to A5) are left **unconnected** to measure floating ADC values.
+No external wiring is needed. Leave analog pins A0 to A5 unconnected to observe ambient noise.
 
 ### Optional
-If you'd like to connect external components to generate specific signals (e.g., noise, sine waves, etc.), you can connect these to the analog pins for more controlled analysis.
+
+You can connect analog sensors or signal generators to the pins for more controlled signal analysis.
 
 ## Step-by-Step Guide
 
 ### 1. Arduino Sketch ([`HexadecimalADC.ino`](HexadecimalADC.ino))
 
-This Arduino sketch reads analog values from six floating pins (A0 to A5), scales the 10-bit readings (0-1023) to 8-bit (0-255), and transmits the binary data over the serial port in frames. The data is processed by Serial Studio for FFT visualization.
+This sketch reads analog values from pins A0–A5, maps the 10-bit readings to 8-bit values, appends a CRC-16-CCITT checksum, and transmits a binary data frame over serial.
 
-- **Analog Reading**: Data is read from analog pins A0 to A5.
-- **Data Conversion**: The 10-bit ADC values are mapped to 8-bit (0-255) and sent over the serial port.
-- **Serial Output**: Data is framed by a start (`0xC0 0xDE`) and end (`0xDE 0xC0`) delimiter, and transmitted in binary format for visualization.
+Each frame layout:
+- Start delimiter: `0xC0 0xDE`
+- Sensor values: 6 bytes (scaled to 0–255)
+- End delimiter: `0xDE 0xC0`
+- CRC-16-CCITT: 2 bytes (big-endian)
 
-The serial output can be analyzed in **Serial Studio** using the **FFT tool** to observe the frequency spectrum of the noise or any connected signals.
-
-The program runs at a baud rate of **115200**, ensuring smooth and high-speed data transmission.
+**Baud Rate:** 115200
 
 ### 2. Serial Studio Configuration
 
-To visualize the data, Serial Studio needs to be properly configured to parse the incoming hexadecimal data:
+#### Frame Format
+- **Mode**: `Binary (direct)`
+- **Frame Delimiters**: 
+  - Start: `0xC0 0xDE`
+  - End: `0xDE 0xC0`
+- **Checksum**: `CRC-16-CCITT`
 
-1. **Download and Install Serial Studio**:
-Visit [Serial Studio's official website](https://serial-studio.github.io/) to download and install the software.
+#### Loading the Project
+1. Download and install Serial Studio from the [official website](https://serial-studio.com/).
+2. Launch the app and load `HexadecimalADC.json` using the **Project Editor**.
 
-2. **Open Serial Studio and Import `HexadecimalADC.json`**:
-Launch Serial Studio and load the `HexadecimalADC.json` file included in this project using the **Project Editor**. This file contains all necessary configurations for interpreting the data transmitted by the Arduino.
+#### JavaScript Parser Function
 
-#### About the JavaScript Parser Function
-
-Since the data is transmitted in hexadecimal format, a custom JavaScript parser function is required to convert the incoming frame data into an array of decimal values that can be plotted or analyzed in Serial Studio.
-
-Here’s the custom JavaScript parser function used by this project:
+In `Binary (direct)` mode, the frame is passed as a raw byte array. The parser below converts each value into a voltage (0–5V):
 
 ```javascript
 /**
- * This function parses a binary data frame (represented as a hexadecimal string),
- * and converts it into an array of decimal values (0-255).
+ * This function parses a binary data frame (passed as a byte array) and converts
+ * each byte into a decimal value scaled from 0 to 5 volts.
  *
- * @param[in]  frame  The latest received frame as a hexadecimal string.
- * @return     Array of integers containing the parsed frame elements.
+ * @param[in]  frame  A JS array of byte values (0–255), passed from C++.
+ * @return     Array of floats representing the scaled voltage values.
  */
 function parse(frame) {
     let dataArray = [];
-    for (let i = 0; i < frame.length; i += 2) {
-        let hexByte = frame.substring(i, i + 2);
-        let decimalValue = parseInt(hexByte, 16);
-        dataArray.push(decimalValue);
+
+    for (let i = 0; i < frame.length; ++i) {
+        let byte = frame[i];
+        dataArray.push(byte * 5.0 / 255);
     }
 
     return dataArray;
 }
 ```
 
-This function reads the binary data sent from the Arduino, converts each 2-character hexadecimal byte into a decimal value (0-255), and returns an array of values that are displayed on the Serial Studio dashboard or used for FFT analysis.
-
-You can read more about the frame parsing function [here](https://github.com/Serial-Studio/Serial-Studio/wiki/Project-Editor#frame-parser-function-view).
+[More about custom frame parsers here](https://github.com/Serial-Studio/Serial-Studio/wiki/Project-Editor#frame-parser-function-view).
 
 ### 3. Analyzing Noise with FFT
 
-Once you have configured Serial Studio and uploaded the Arduino sketch, follow these steps to analyze the noise data using FFT:
-
-- **Connect to the Arduino**: Ensure that Serial Studio is connected to the correct serial port and that the baud rate is set to **115200**.
-- **Visualize the Data**: The analog values from the unconnected ADC pins will be plotted in real time, showing random floating values due to the noise.
+1. Open Serial Studio and select the correct serial port.
+2. Set the baud rate to **115200**.
+3. Observe the voltage signals from the floating analog pins.
+4. Use the **FFT widget** to visualize the frequency characteristics of the noise.
 
 ### Troubleshooting Tips
 
-- **No Data in FFT Plot**: Verify that the Arduino is properly connected, and the serial port and baud rate match the configuration in Serial Studio.
-- **Flat FFT Spectrum**: Unconnected ADC pins usually generate low-amplitude noise. If the FFT spectrum appears flat, try adjusting the sample rate or adding external components (such as signal generators) to visualize more pronounced frequency components.
-- **Inconsistent Data**: If the data appears inconsistent, ensure that the **Hexadecimal Conversion** method in the Project Editor is selected, and the JavaScript parser is functioning correctly in Serial Studio.
+- **No data shown**: Verify baud rate and correct serial port.
+- **Flat FFT spectrum**: Try touching the pins or adding a sensor to inject a signal.
+- **Validation errors**: Ensure `CRC-16-CCITT` is selected and frame format matches what the Arduino sends.

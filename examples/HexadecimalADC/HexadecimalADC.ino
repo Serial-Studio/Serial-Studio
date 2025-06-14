@@ -1,21 +1,27 @@
 //
-// ADC Data Transmission Program
+// ADC Data Transmission with CRC-16-CCITT Checksum
 //
 // Author: Alex Spataru
 //
-// This program reads data from six analog input pins (A0 to A5) on an Arduino.
-// It scales the raw analog readings (0-1023) to 8-bit values (0-255) and
-// transmits them as binary data over the serial port.
+// This Arduino program reads analog input from six channels (A0 to A5),
+// scales the values from 10-bit (0–1023) to 8-bit (0–255), and transmits
+// the data as a binary frame over the serial port.
 //
-// Required Components:
-// - 6 analog sensors connected to the Arduino's analog pins (A0 to A5)
+// Each frame includes:
+// - Start delimiter: 0xC0 0xDE
+// - 6 sensor values (1 byte each)
+// - End delimiter: 0xDE 0xC0
+// - CRC-16-CCITT checksum (2 bytes, big-endian)
+//
+// This ensures data integrity and allows Serial Studio to automatically
+// validate frames without requiring labeled checksums.
+//
+// Requirements:
+// - Arduino with 6 analog sensors on A0–A5
+// - Serial connection at 115200 baud
 //
 // Connections:
-// - Connect the signal outputs of the sensors to the analog pins A0 to A5 on
-//   the Arduino.
-//
-// Baud Rate:
-// - Serial Monitor: 115200 baud
+// - Sensor signal outputs to analog pins A0 through A5
 //
 
 //-----------------------------------------------------------------------------
@@ -58,33 +64,65 @@ void initAdcPort() {
 }
 
 //-----------------------------------------------------------------------------
+// CRC-16-CCITT (poly 0x1021, init 0x0000)
+//-----------------------------------------------------------------------------
+
+uint16_t crc16_ccitt(const uint8_t* data, int length) {
+  uint16_t crc = 0x0000;
+  for (int i = 0; i < length; ++i) {
+    crc ^= static_cast<uint16_t>(data[i]) << 8;
+    for (int j = 0; j < 8; ++j) {
+      if (crc & 0x8000)
+        crc = (crc << 1) ^ 0x1021;
+      else
+        crc <<= 1;
+    }
+  }
+
+  return crc;
+}
+
+//-----------------------------------------------------------------------------
 // Main loop function
 //-----------------------------------------------------------------------------
 
 void loop() {
-  // Check if there is any serial input available
+  // Handle serial control commands
   if (Serial.available() > 0) {
     String command = Serial.readStringUntil('\n');
     command.trim();
-    if (command == "enable-pull-up")
-      setPullUp();
-    else if (command == "disable-pull-up")
-      initAdcPort();
+    if (command == "enable-pull-up") setPullUp();
+    else if (command == "disable-pull-up") initAdcPort();
   }
 
-  // Read the analog values from pins A0 to A5
-  // Show each one of them over a range of values
+  // Define payload data
+  uint8_t payload[6];
+  payload[0] = map(analogRead(A0), 0, 1023, 0, 255);
+  payload[1] = map(analogRead(A1), 0, 1023, 0, 255);
+  payload[2] = map(analogRead(A2), 0, 1023, 0, 255);
+  payload[3] = map(analogRead(A3), 0, 1023, 0, 255);
+  payload[4] = map(analogRead(A4), 0, 1023, 0, 255);
+  payload[5] = map(analogRead(A5), 0, 1023, 0, 255);
+
+  // Compute checksum
+  uint16_t crc = crc16_ccitt(payload, sizeof(payload));
+
+  // Send start sequence over serial
   Serial.write(0xC0);
   Serial.write(0xDE);
-  Serial.write(map(analogRead(A0), 0, 1023, 0, 255));
-  Serial.write(map(analogRead(A1), 0, 1023, 0, 255));
-  Serial.write(map(analogRead(A2), 0, 1023, 0, 255));
-  Serial.write(map(analogRead(A3), 0, 1023, 0, 255));
-  Serial.write(map(analogRead(A4), 0, 1023, 0, 255));
-  Serial.write(map(analogRead(A5), 0, 1023, 0, 255));
+
+  // Send payload over serial
+  for (int i = 0; i < sizeof(payload); ++i)
+    Serial.write(payload[i]);
+
+  // Send end sequence over serial
   Serial.write(0xDE);
   Serial.write(0xC0);
 
-  // Small delay to manage the sampling rate
+  // Send checksum over serial
+  Serial.write(static_cast<uint8_t>(crc >> 8));
+  Serial.write(static_cast<uint8_t>(crc & 0xFF));
+
+  // Wait a bit
   delay(1);
 }

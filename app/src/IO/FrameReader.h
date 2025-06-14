@@ -74,11 +74,10 @@ private:
   void readEndDelimetedFrames();
   void readStartDelimitedFrames();
   void readStartEndDelimetedFrames();
-  ValidationStatus integrityChecks(const QByteArray &frame,
-                                   const QByteArray &delimeter,
-                                   qsizetype *bytes);
+  ValidationStatus checksum(const QByteArray &frame, qsizetype crcPosition);
 
 private:
+  qsizetype m_checksumLength;
   SerialStudio::OperationMode m_operationMode;
   SerialStudio::FrameDetection m_frameDetectionMode;
 

@@ -63,6 +63,7 @@ Item {
     property alias echo: echoCheck.checked
     property alias hex: hexCheckbox.checked
     property alias timestamp: timestampCheck.checked
+    property alias checksum: checkumCombo.currentIndex
     property alias vt100Enabled: terminal.vt100emulation
     property alias lineEnding: lineEndingCombo.currentIndex
     property alias displayMode: displayModeCombo.currentIndex

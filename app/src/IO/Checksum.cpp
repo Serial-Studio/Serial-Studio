@@ -24,6 +24,75 @@
 #include <cstdint>
 
 //------------------------------------------------------------------------------
+// Endian-correct memory utilities for checksum formatting
+//------------------------------------------------------------------------------
+//
+// These helpers write multibyte checksum values (e.g., CRCs, Adler, Fletcher)
+// into output buffers with a defined byte order, regardless of the host CPU's
+// native endianness.
+//
+// This ensures consistent output for binary formats, protocol compliance,
+// and cross-platform validation. For example:
+// - CRC-16-MODBUS requires little-endian output
+// - Network and file formats typically expect big-endian
+//
+// Use `big_endian_memcpy()` and `little_endian_memcpy()` instead of raw
+// memcpy() to ensure deterministic, spec-compliant results.
+//
+
+/**
+ * @brief Copies data in big-endian format to a frame buffer.
+ *
+ * This function ensures that data is stored in big-endian byte order,
+ * regardless of the host machine's native endianness. On little-endian
+ * systems, it reverses the byte order before copying.
+ *
+ * @param frame A pointer to the destination buffer.
+ * @param data A pointer to the source data to copy.
+ * @param size The number of bytes to copy.
+ *
+ * @pre `frame` and `data` must not be null.
+ * @pre `size` must be greater than 0.
+ */
+static void big_endian_memcpy(uint8_t *frame, const void *data, size_t size)
+{
+  const uint8_t *raw_data = static_cast<const uint8_t *>(data);
+
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  for (size_t i = 0; i < size; ++i)
+    frame[i] = raw_data[size - 1 - i];
+#else
+  memcpy(frame, raw_data, size);
+#endif
+}
+
+/**
+ * @brief Copies data in little-endian format to a frame buffer.
+ *
+ * This function ensures that data is stored in little-endian byte order,
+ * regardless of the host machine's native endianness. On big-endian
+ * systems, it reverses the byte order before copying.
+ *
+ * @param frame A pointer to the destination buffer.
+ * @param data A pointer to the source data to copy.
+ * @param size The number of bytes to copy.
+ *
+ * @pre `frame` and `data` must not be null.
+ * @pre `size` must be greater than 0.
+ */
+static void little_endian_memcpy(uint8_t *frame, const void *data, size_t size)
+{
+  const uint8_t *raw_data = static_cast<const uint8_t *>(data);
+
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  for (size_t i = 0; i < size; ++i)
+    frame[i] = raw_data[size - 1 - i];
+#else
+  memcpy(frame, raw_data, size);
+#endif
+}
+
+//------------------------------------------------------------------------------
 // Checksum implementations
 //------------------------------------------------------------------------------
 
@@ -263,11 +332,13 @@ static uint16_t crc16_ccitt(const char *data, const int length)
  */
 const QStringList &IO::availableChecksums()
 {
-  static const QStringList list = [] {
-    auto keys = checksumFunctionMap().keys();
-    keys.sort(Qt::CaseInsensitive);
-    return keys;
-  }();
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    const auto &map = checksumFunctionMap();
+    for (auto it = map.begin(); it != map.end(); ++it)
+      list.append(it.key());
+  }
 
   return list;
 }
@@ -284,12 +355,14 @@ const QStringList &IO::availableChecksums()
  * This map is initialized once and reused for all checksum dispatch operations.
  *
  * @return A reference to the static QMap of checksum algorithm names to
- * functions.
+ *         functions.
  */
 const QMap<QString, IO::ChecksumFunc> &IO::checksumFunctionMap()
 {
-  static const QMap<QString, ChecksumFunc> map = {
+  static const QMap<QString, IO::ChecksumFunc> map = {
       {QLatin1String(""), [](const char *, int) { return QByteArray(); }},
+
+      // 8-bit checksums
       {QStringLiteral("XOR-8"),
        [](const char *d, int l) {
          uint8_t v = xor8(d, l);
@@ -305,35 +378,51 @@ const QMap<QString, IO::ChecksumFunc> &IO::checksumFunctionMap()
          uint8_t v = crc8(d, l);
          return QByteArray(reinterpret_cast<const char *>(&v), sizeof(v));
        }},
+
+      // 16-bit checksums
       {QStringLiteral("CRC-16"),
        [](const char *d, int l) {
+         uint8_t out[2];
          uint16_t v = crc16(d, l);
-         return QByteArray(reinterpret_cast<const char *>(&v), sizeof(v));
+         big_endian_memcpy(out, &v, sizeof(v));
+         return QByteArray(reinterpret_cast<char *>(out), sizeof(out));
        }},
       {QStringLiteral("CRC-16-MODBUS"),
        [](const char *d, int l) {
+         uint8_t out[2];
          uint16_t v = crc16_modbus(d, l);
-         return QByteArray(reinterpret_cast<const char *>(&v), sizeof(v));
+         little_endian_memcpy(out, &v, sizeof(v));
+         return QByteArray(reinterpret_cast<char *>(out), sizeof(out));
        }},
       {QStringLiteral("CRC-16-CCITT"),
        [](const char *d, int l) {
+         uint8_t out[2];
          uint16_t v = crc16_ccitt(d, l);
-         return QByteArray(reinterpret_cast<const char *>(&v), sizeof(v));
-       }},
-      {QStringLiteral("CRC-32"),
-       [](const char *d, int l) {
-         uint32_t v = crc32(d, l);
-         return QByteArray(reinterpret_cast<const char *>(&v), sizeof(v));
-       }},
-      {QStringLiteral("Adler-32"),
-       [](const char *d, int l) {
-         uint32_t v = adler32(d, l);
-         return QByteArray(reinterpret_cast<const char *>(&v), sizeof(v));
+         big_endian_memcpy(out, &v, sizeof(v));
+         return QByteArray(reinterpret_cast<char *>(out), sizeof(out));
        }},
       {QStringLiteral("Fletcher-16"),
        [](const char *d, int l) {
+         uint8_t out[2];
          uint16_t v = fletcher16(d, l);
-         return QByteArray(reinterpret_cast<const char *>(&v), sizeof(v));
+         big_endian_memcpy(out, &v, sizeof(v));
+         return QByteArray(reinterpret_cast<char *>(out), sizeof(out));
+       }},
+
+      // 32-bit checksums
+      {QStringLiteral("CRC-32"),
+       [](const char *d, int l) {
+         uint8_t out[4];
+         uint32_t v = crc32(d, l);
+         big_endian_memcpy(out, &v, sizeof(v));
+         return QByteArray(reinterpret_cast<char *>(out), sizeof(out));
+       }},
+      {QStringLiteral("Adler-32"),
+       [](const char *d, int l) {
+         uint8_t out[4];
+         uint32_t v = adler32(d, l);
+         big_endian_memcpy(out, &v, sizeof(v));
+         return QByteArray(reinterpret_cast<char *>(out), sizeof(out));
        }},
   };
 
