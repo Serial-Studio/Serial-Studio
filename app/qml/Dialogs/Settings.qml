@@ -50,6 +50,7 @@ Window {
     property alias plugins: _tcpPlugins.checked
     property alias dashboardPoints: _points.value
     property alias dashboardPrecision: _decimalDigits.value
+    property alias dashboardActionPanel: _actionsPanel.checked
   }
 
   //
@@ -330,6 +331,23 @@ Window {
             onValueChanged: {
               if (value !== Cpp_UI_Dashboard.precision)
                 Cpp_UI_Dashboard.precision = value
+            }
+          }
+
+          //
+          // Console
+          //
+          Label {
+            text: qsTr("Show Actions Panel")
+          } Switch {
+            id: _actionsPanel
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_UI_Dashboard.showActionPanel
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_UI_Dashboard.showActionPanel)
+                Cpp_UI_Dashboard.showActionPanel = checked
             }
           }
 

@@ -21,11 +21,10 @@
 
 #pragma once
 
-#include <QtCore>
-
 #include <mutex>
 #include <vector>
 #include <cstring>
+#include <QByteArray>
 
 namespace IO
 {

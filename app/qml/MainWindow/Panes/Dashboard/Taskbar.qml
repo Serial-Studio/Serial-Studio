@@ -119,13 +119,14 @@ Item {
 
         ListView {
           id: buttonsView
+
           clip: true
           spacing: 2
+          interactive: true
           Layout.fillWidth: true
           Layout.fillHeight: true
           model: taskBar.taskbarButtons
           orientation: ListView.Horizontal
-          interactive: true
           boundsBehavior: Flickable.StopAtBounds
 
           delegate: Widgets.TaskbarButton {

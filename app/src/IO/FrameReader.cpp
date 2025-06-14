@@ -169,6 +169,12 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
   if (m_operationMode != mode)
   {
     m_operationMode = mode;
+    if (m_operationMode != SerialStudio::ProjectFile)
+    {
+      m_checksumLength = 0;
+      m_checksum = QLatin1String("");
+    }
+
     m_dataBuffer.clear();
   }
 }

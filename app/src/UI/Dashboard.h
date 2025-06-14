@@ -68,6 +68,7 @@ class Dashboard : public QObject
   Q_PROPERTY(int precision READ precision WRITE setPrecision NOTIFY precisionChanged)
   Q_PROPERTY(bool pointsWidgetVisible READ pointsWidgetVisible NOTIFY widgetCountChanged)
   Q_PROPERTY(bool precisionWidgetVisible READ precisionWidgetVisible NOTIFY widgetCountChanged)
+  Q_PROPERTY(bool showActionPanel READ showActionPanel WRITE setShowActionPanel NOTIFY showActionPanelChanged)
   Q_PROPERTY(bool terminalEnabled READ terminalEnabled WRITE setTerminalEnabled NOTIFY terminalEnabledChanged)
   Q_PROPERTY(bool containsCommercialFeatures READ containsCommercialFeatures NOTIFY containsCommercialFeaturesChanged)
   // clang-format on
@@ -79,6 +80,7 @@ signals:
   void precisionChanged();
   void actionCountChanged();
   void widgetCountChanged();
+  void showActionPanelChanged();
   void terminalEnabledChanged();
   void containsCommercialFeaturesChanged();
 
@@ -95,6 +97,7 @@ public:
                              const qreal multiplier = 0.2);
 
   [[nodiscard]] bool available() const;
+  [[nodiscard]] bool showActionPanel() const;
   [[nodiscard]] bool streamAvailable() const;
   [[nodiscard]] bool terminalEnabled() const;
   [[nodiscard]] bool pointsWidgetVisible() const;
@@ -136,6 +139,7 @@ public slots:
   void activateAction(const int index);
   void setPrecision(const int precision);
   void resetData(const bool notify = true);
+  void setShowActionPanel(const bool enabled);
   void setTerminalEnabled(const bool enabled);
 
 private slots:
@@ -155,6 +159,7 @@ private:
   int m_precision;        // Decimal display precision
   int m_widgetCount;      // Total number of active widgets
   bool m_updateRequired;  // Flag to trigger plot/UI update
+  bool m_showActionPanel; // Whenever the UI shall display an action panel
   bool m_terminalEnabled; // Whether terminal group is enabled
 
   PlotDataX m_pltXAxis;      // Default X-axis data for line plots

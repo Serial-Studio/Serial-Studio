@@ -30,7 +30,7 @@ Item {
   //
   // Constants
   //
-  readonly property int maxButtonWidth: 128
+  property int maxButtonWidth: 128
 
   //
   // Signals
@@ -45,6 +45,7 @@ Item {
   property alias font: _label.font
   property alias text: _label.text
   property bool toolbarButton: true
+  property bool checkBgVisible: true
   property bool horizontalLayout: false
   property alias background: _background
 
@@ -106,7 +107,7 @@ Item {
   ToolButton {
     checked: true
     anchors.fill: parent
-    visible: !root.toolbarButton
+    visible: !root.toolbarButton && root.checkBgVisible
     opacity: (root.checked || _mouseArea.pressed) ? 1 : 0
     Behavior on opacity { NumberAnimation {} }
   }

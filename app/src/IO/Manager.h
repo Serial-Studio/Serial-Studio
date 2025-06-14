@@ -23,6 +23,7 @@
 
 #include <QThread>
 #include <QObject>
+#include <QPointer>
 #include <QKeyEvent>
 
 #include "SerialStudio.h"

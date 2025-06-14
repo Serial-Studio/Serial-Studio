@@ -124,5 +124,5 @@ void loop() {
   Serial.write(static_cast<uint8_t>(crc & 0xFF));
 
   // Wait a bit
-  //delay(0);
+  delay(1);
 }

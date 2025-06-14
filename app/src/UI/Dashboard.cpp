@@ -46,6 +46,7 @@ UI::Dashboard::Dashboard()
   , m_precision(2)
   , m_widgetCount(0)
   , m_updateRequired(false)
+  , m_showActionPanel(false)
   , m_terminalEnabled(false)
 {
   // clang-format off
@@ -167,6 +168,15 @@ qreal UI::Dashboard::smartInterval(const qreal min, const qreal max,
 bool UI::Dashboard::available() const
 {
   return totalWidgetCount() > 0 && streamAvailable();
+}
+
+/**
+ * @brief Returns @c true if a rectangle with a list of actions should be
+ *        displayed alongside the dashboard.
+ */
+bool UI::Dashboard::showActionPanel() const
+{
+  return m_showActionPanel;
 }
 
 /**
@@ -637,6 +647,18 @@ void UI::Dashboard::resetData(const bool notify)
     Q_EMIT actionCountChanged();
     Q_EMIT widgetCountChanged();
     Q_EMIT containsCommercialFeaturesChanged();
+  }
+}
+
+/**
+ * @brief Enables/disables the action panel.
+ */
+void UI::Dashboard::setShowActionPanel(const bool enabled)
+{
+  if (m_showActionPanel != enabled)
+  {
+    m_showActionPanel = enabled;
+    Q_EMIT showActionPanelChanged();
   }
 }
 
