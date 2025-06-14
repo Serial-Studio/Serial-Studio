@@ -276,7 +276,7 @@ jobs:
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3
-      if: env.INSTALL_QT == 'false'
+      #if: env.INSTALL_QT == 'false'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
@@ -284,7 +284,7 @@ jobs:
 
     - name: '⚙️ Install Qt'
       shell: bash
-      if: env.INSTALL_QT == 'true'
+      #if: env.INSTALL_QT == 'true'
       env:
         QT_VERSION: ${{env.QT_VERSION_LINUX}}
         QT_ARCH: arm64
@@ -297,7 +297,7 @@ jobs:
 
     - name: '⚙️ Save Qt Cache'
       uses: actions/cache/save@v3
-      if: env.INSTALL_QT == 'true'
+      #if: env.INSTALL_QT == 'true'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
