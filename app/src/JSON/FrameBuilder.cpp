@@ -97,6 +97,20 @@ QString JSON::FrameBuilder::jsonMapFilename() const
 }
 
 /**
+ * @brief Returns the currently loaded JSON frame.
+ *
+ * The frame contains the structure of all groups, datasets, and actions
+ * parsed from the active JSON project file. It represents the complete
+ * configuration used to build the dashboard and manage data parsing.
+ *
+ * @return A constant reference to the current JSON::Frame.
+ */
+const JSON::Frame &JSON::FrameBuilder::frame() const
+{
+  return m_frame;
+}
+
+/**
  * Returns a pointer to the currently loaded frame parser editor.
  */
 JSON::FrameParser *JSON::FrameBuilder::frameParser() const
@@ -132,6 +146,8 @@ void JSON::FrameBuilder::loadJsonMap()
  */
 void JSON::FrameBuilder::setupExternalConnections()
 {
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
+          &JSON::FrameBuilder::onConnectedChanged);
   connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
           &JSON::FrameBuilder::readData);
 }
@@ -277,6 +293,49 @@ void JSON::FrameBuilder::setOperationMode(
 void JSON::FrameBuilder::setJsonPathSetting(const QString &path)
 {
   m_settings.setValue(QStringLiteral("json_map_location"), path);
+}
+
+/**
+ * @brief Handles device connection events and triggers auto-execute actions.
+ *
+ * This slot is called when the connection state of the serial device changes.
+ * If the device has just connected and the application is in project mode
+ * (SerialStudio::ProjectFile), this method scans all defined actions in the
+ * loaded JSON frame and immediately transmits those marked with the
+ * `autoExecuteOnConnect` flag.
+ *
+ * This is useful for scenarios where a device must receive a command
+ * (e.g. "start streaming") before it begins sending data frames.
+ *
+ * Binary and text-based actions are handled accordingly based on the
+ * `binaryData()` flag, and the data is sent via IO::Manager.
+ */
+void JSON::FrameBuilder::onConnectedChanged()
+{
+  // Validate that the device is connected
+  if (!IO::Manager::instance().isConnected())
+    return;
+
+  // Validate that we are in project mode
+  if (m_opMode != SerialStudio::ProjectFile)
+    return;
+
+  // Auto-execute actions if required
+  const auto actions = m_frame.actions();
+  for (const auto &action : actions)
+  {
+    if (action.autoExecuteOnConnect())
+    {
+      QByteArray bin;
+
+      if (action.binaryData())
+        bin = SerialStudio::hexToBytes(action.txData());
+      else
+        bin = QString(action.txData() + action.eolSequence()).toUtf8();
+
+      IO::Manager::instance().writeData(bin);
+    }
+  }
 }
 
 /**

@@ -61,9 +61,9 @@ class Dashboard : public QObject
   Q_OBJECT
   Q_PROPERTY(QString title READ title NOTIFY widgetCountChanged)
   Q_PROPERTY(bool available READ available NOTIFY widgetCountChanged)
-  Q_PROPERTY(int actionCount READ actionCount NOTIFY actionCountChanged)
-  Q_PROPERTY(QVariantList actions READ actions NOTIFY actionCountChanged)
+  Q_PROPERTY(int actionCount READ actionCount NOTIFY widgetCountChanged)
   Q_PROPERTY(int points READ points WRITE setPoints NOTIFY pointsChanged)
+  Q_PROPERTY(QVariantList actions READ actions NOTIFY actionStatusChanged)
   Q_PROPERTY(int totalWidgetCount READ totalWidgetCount NOTIFY widgetCountChanged)
   Q_PROPERTY(int precision READ precision WRITE setPrecision NOTIFY precisionChanged)
   Q_PROPERTY(bool pointsWidgetVisible READ pointsWidgetVisible NOTIFY widgetCountChanged)
@@ -78,8 +78,8 @@ signals:
   void dataReset();
   void pointsChanged();
   void precisionChanged();
-  void actionCountChanged();
   void widgetCountChanged();
+  void actionStatusChanged();
   void showActionPanelChanged();
   void terminalEnabledChanged();
   void containsCommercialFeaturesChanged();
@@ -136,11 +136,11 @@ public:
 
 public slots:
   void setPoints(const int points);
-  void activateAction(const int index);
   void setPrecision(const int precision);
   void resetData(const bool notify = true);
   void setShowActionPanel(const bool enabled);
   void setTerminalEnabled(const bool enabled);
+  void activateAction(const int index, const bool guiTrigger = false);
 
 private slots:
   void processFrame(const JSON::Frame &frame);
@@ -150,9 +150,11 @@ private:
   void reconfigureDashboard(const JSON::Frame &frame);
 
   void updatePlots();
+
   void configureFftSeries();
   void configureLineSeries();
   void configureMultiLineSeries();
+  void configureActions(const JSON::Frame &frame);
 
 private:
   int m_points;           // Number of plot points to retain
@@ -175,6 +177,7 @@ private:
   QVector<PlotData3D> m_plotData3D; // 3D plot data (commercial only)
 #endif
 
+  QMap<int, QTimer *> m_timers;        // Timers for dashboard actions
   QVector<JSON::Action> m_actions;     // User-defined dashboard actions
   SerialStudio::WidgetMap m_widgetMap; // Maps window ID index to widget type
   QMap<int, JSON::Dataset> m_datasets; // Raw input datasets (by dataset index)

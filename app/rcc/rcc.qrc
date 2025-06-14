@@ -153,6 +153,7 @@
         <file>icons/dashboard-buttons/center.svg</file>
         <file>icons/dashboard-buttons/crosshair.svg</file>
         <file>icons/dashboard-buttons/front_view.svg</file>
+        <file>icons/dashboard-buttons/integral.svg</file>
         <file>icons/dashboard-buttons/interpolate-off.svg</file>
         <file>icons/dashboard-buttons/interpolate-on.svg</file>
         <file>icons/dashboard-buttons/invert.svg</file>
@@ -229,7 +230,9 @@
         <file>icons/project-editor/actions/plot.svg</file>
         <file>icons/project-editor/model/alarm.svg</file>
         <file>icons/project-editor/model/api-key.svg</file>
+        <file>icons/project-editor/model/auto-execute.svg</file>
         <file>icons/project-editor/model/binary-data.svg</file>
+        <file>icons/project-editor/model/checksum.svg</file>
         <file>icons/project-editor/model/data-conversion.svg</file>
         <file>icons/project-editor/model/end-delimiter.svg</file>
         <file>icons/project-editor/model/eol.svg</file>
@@ -239,6 +242,7 @@
         <file>icons/project-editor/model/frame-detection.svg</file>
         <file>icons/project-editor/model/icon.svg</file>
         <file>icons/project-editor/model/index.svg</file>
+        <file>icons/project-editor/model/interval.svg</file>
         <file>icons/project-editor/model/led-high.svg</file>
         <file>icons/project-editor/model/led.svg</file>
         <file>icons/project-editor/model/max.svg</file>
@@ -246,6 +250,7 @@
         <file>icons/project-editor/model/overview.svg</file>
         <file>icons/project-editor/model/plot.svg</file>
         <file>icons/project-editor/model/start-delimiter.svg</file>
+        <file>icons/project-editor/model/timer.svg</file>
         <file>icons/project-editor/model/title.svg</file>
         <file>icons/project-editor/model/tx-data.svg</file>
         <file>icons/project-editor/model/units.svg</file>
@@ -312,6 +317,7 @@
         <file>icons/toolbar/about.svg</file>
         <file>icons/toolbar/connect.svg</file>
         <file>icons/toolbar/csv.svg</file>
+        <file>icons/toolbar/deepwiki.svg</file>
         <file>icons/toolbar/device-setup.svg</file>
         <file>icons/toolbar/disconnect.svg</file>
         <file>icons/toolbar/examples.svg</file>
@@ -352,6 +358,7 @@
         <file>logo/small-icon@2x.png</file>
         <file>logo/start@1x.png</file>
         <file>logo/start@2x.png</file>
+        <file>messages/free/Welcome_CZ.txt</file>
         <file>messages/free/Welcome_DE.txt</file>
         <file>messages/free/Welcome_EN.txt</file>
         <file>messages/free/Welcome_ES.txt</file>
@@ -363,7 +370,9 @@
         <file>messages/free/Welcome_PT.txt</file>
         <file>messages/free/Welcome_RU.txt</file>
         <file>messages/free/Welcome_TR.txt</file>
+        <file>messages/free/Welcome_UK.txt</file>
         <file>messages/free/Welcome_ZH.txt</file>
+        <file>messages/gpl3/Welcome_CZ.txt</file>
         <file>messages/gpl3/Welcome_DE.txt</file>
         <file>messages/gpl3/Welcome_EN.txt</file>
         <file>messages/gpl3/Welcome_ES.txt</file>
@@ -375,7 +384,9 @@
         <file>messages/gpl3/Welcome_PT.txt</file>
         <file>messages/gpl3/Welcome_RU.txt</file>
         <file>messages/gpl3/Welcome_TR.txt</file>
+        <file>messages/gpl3/Welcome_UK.txt</file>
         <file>messages/gpl3/Welcome_ZH.txt</file>
+        <file>messages/pro/Welcome_CZ.txt</file>
         <file>messages/pro/Welcome_DE.txt</file>
         <file>messages/pro/Welcome_EN.txt</file>
         <file>messages/pro/Welcome_ES.txt</file>
@@ -387,6 +398,7 @@
         <file>messages/pro/Welcome_PT.txt</file>
         <file>messages/pro/Welcome_RU.txt</file>
         <file>messages/pro/Welcome_TR.txt</file>
+        <file>messages/pro/Welcome_UK.txt</file>
         <file>messages/pro/Welcome_ZH.txt</file>
         <file>messages/Acknowledgements.txt</file>
         <file>scripts/frame-parser.js</file>
@@ -396,14 +408,6 @@
         <file>themes/dark.json</file>
         <file>themes/default.json</file>
         <file>themes/light.json</file>
-        <file>messages/free/Welcome_CZ.txt</file>
-        <file>messages/free/Welcome_UK.txt</file>
-        <file>messages/gpl3/Welcome_CZ.txt</file>
-        <file>messages/gpl3/Welcome_UK.txt</file>
-        <file>messages/pro/Welcome_CZ.txt</file>
-        <file>messages/pro/Welcome_UK.txt</file>
-        <file>icons/toolbar/deepwiki.svg</file>
-        <file>icons/dashboard-buttons/integral.svg</file>
-        <file>icons/project-editor/model/checksum.svg</file>
+        <file>rcc.qrc</file>
     </qresource>
 </RCC>

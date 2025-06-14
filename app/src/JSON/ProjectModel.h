@@ -351,6 +351,7 @@ private:
   CustomModel *m_datasetModel;
 
   QStringList m_fftSamples;
+  QStringList m_timerModes;
   QStringList m_decoderOptions;
   QStringList m_checksumMethods;
   QStringList m_frameDetectionMethods;

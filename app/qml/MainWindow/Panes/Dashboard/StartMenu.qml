@@ -195,7 +195,7 @@ Popup {
         if (_actions.popup === null) {
           _actions.popup = _subMenuComponent.createObject(root)
           popup.valueSelected.connect((value) => {
-                                        Cpp_UI_Dashboard.activateAction(value)
+                                        Cpp_UI_Dashboard.activateAction(value, true)
                                         root.close()
                                       })
         }

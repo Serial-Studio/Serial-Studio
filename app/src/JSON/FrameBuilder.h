@@ -81,6 +81,7 @@ public:
 
   [[nodiscard]] QString jsonMapFilepath() const;
   [[nodiscard]] QString jsonMapFilename() const;
+  [[nodiscard]] const JSON::Frame &frame() const;
   [[nodiscard]] JSON::FrameParser *frameParser() const;
   [[nodiscard]] SerialStudio::OperationMode operationMode() const;
 
@@ -95,6 +96,7 @@ public slots:
   void setJsonPathSetting(const QString &path);
 
 private slots:
+  void onConnectedChanged();
   void readData(const QByteArray &data);
 
 private:

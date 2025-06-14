@@ -210,6 +210,7 @@ Widgets.Pane {
 
         spacing: 2
         interactive: true
+        implicitHeight: 32
         model: Cpp_UI_Dashboard.actions
         orientation: ListView.Horizontal
 
@@ -221,22 +222,18 @@ Widgets.Pane {
         }
 
         delegate: Widgets.ToolbarButton {
-          required property var index
           required property var model
 
-          Component.onCompleted: {
-            if (index === 0)
-              _actions.implicitHeight = implicitHeight
-          }
-
           iconSize: 24
+          implicitHeight: 32
           maxButtonWidth: 256
           text: model["text"]
           toolbarButton: false
-          checkBgVisible: false
           horizontalLayout: true
+          checked: model["checked"]
           icon.source: model["icon"]
-          onClicked: Cpp_UI_Dashboard.activateAction(model["id"])
+          enabled: !Cpp_IO_Manager.paused
+          onClicked: Cpp_UI_Dashboard.activateAction(model["id"], true)
         }
       }
     }

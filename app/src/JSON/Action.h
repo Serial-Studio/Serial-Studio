@@ -39,13 +39,20 @@ namespace JSON
  *
  * The JSON::Action class allows users to create an action with an ID, and
  * manage associated metadata such as an icon, title, transmission data
- * (txData), and an end-of-line (eol) sequence. It also provides functionality
- * to serialize and deserialize the action to and from a QJsonObject, making it
- * suitable for JSON-based communication or storage.
+ * (txData), and an end-of-line (eol) sequence. It also supports flags for
+ * auto-execution on device connection and timer-based behavior.
  */
 class Action
 {
 public:
+  enum class TimerMode
+  {
+    Off,            ///< No timer
+    AutoStart,      ///< Starts timer automatically (e.g. on connection)
+    StartOnTrigger, ///< Starts timer when the action is triggered
+    ToggleOnTrigger ///< Toggles timer state with each trigger
+  };
+
   Action(const int actionId = -1);
 
   [[nodiscard]] int actionId() const;
@@ -55,6 +62,10 @@ public:
   [[nodiscard]] const QString &title() const;
   [[nodiscard]] const QString &txData() const;
   [[nodiscard]] const QString &eolSequence() const;
+
+  [[nodiscard]] TimerMode timerMode() const;
+  [[nodiscard]] int timerIntervalMs() const;
+  [[nodiscard]] bool autoExecuteOnConnect() const;
 
   [[nodiscard]] QJsonObject serialize() const;
   [[nodiscard]] bool read(const QJsonObject &object);
@@ -67,6 +78,10 @@ private:
   QString m_title;
   QString m_txData;
   QString m_eolSequence;
+
+  int m_timerIntervalMs;
+  TimerMode m_timerMode;
+  bool m_autoExecuteOnConnect;
 
   friend class JSON::ProjectModel;
 };

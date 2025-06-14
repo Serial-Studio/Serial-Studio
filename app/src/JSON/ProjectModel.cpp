@@ -100,11 +100,14 @@ typedef enum
 // clang-format off
 typedef enum
 {
-  kActionView_Title,   /**< Represents the action title item. */
-  kActionView_Icon,    /**< Represents the icon item. */
-  kActionView_EOL,     /**< Represents the EOL (end of line) item. */
-  kActionView_Data,    /**< Represents the TX data item. */
-  kActionView_Binary,  /**< Represents the binary data transmision status */
+  kActionView_Title,        /**< The action title item. */
+  kActionView_Icon,         /**< The icon item. */
+  kActionView_EOL,          /**< The EOL (end of line) item. */
+  kActionView_Data,         /**< The TX data item. */
+  kActionView_Binary,       /**< The binary data transmission status. */
+  kActionView_AutoExecute,  /**< Whether the action executes on connect. */
+  kActionView_TimerMode,    /**< The timer behavior mode. */
+  kActionView_TimerInterval /**< The timer interval in milliseconds. */
 } ActionItem;
 // clang-format on
 
@@ -2556,6 +2559,53 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
     m_actionModel->appendRow(eol);
   }
 
+  // Auto-execute on connect
+  auto autoExecute = new QStandardItem();
+  autoExecute->setEditable(true);
+  autoExecute->setData(CheckBox, WidgetType);
+  autoExecute->setData(action.autoExecuteOnConnect(), EditableValue);
+  autoExecute->setData(tr("Auto Execute on Connect"), ParameterName);
+  autoExecute->setData(kActionView_AutoExecute, ParameterType);
+  autoExecute->setData(0, PlaceholderValue);
+  autoExecute->setData(
+      tr("Trigger this action automatically when a device connects."),
+      ParameterDescription);
+  autoExecute->setData("qrc:/rcc/icons/project-editor/model/auto-execute.svg",
+                       ParameterIcon);
+  m_actionModel->appendRow(autoExecute);
+
+  // Timer mode
+  auto timerMode = new QStandardItem();
+  timerMode->setEditable(true);
+  timerMode->setData(ComboBox, WidgetType);
+  timerMode->setData(m_timerModes, ComboBoxData);
+  timerMode->setData(static_cast<int>(action.timerMode()), EditableValue);
+  timerMode->setData(tr("Timer Mode"), ParameterName);
+  timerMode->setData(kActionView_TimerMode, ParameterType);
+  timerMode->setData(tr("How and when the timer should activate."),
+                     ParameterDescription);
+  timerMode->setData("qrc:/rcc/icons/project-editor/model/timer.svg",
+                     ParameterIcon);
+  m_actionModel->appendRow(timerMode);
+
+  // Timer interval
+  if (action.timerMode() != JSON::Action::TimerMode::Off)
+  {
+    auto timerInterval = new QStandardItem();
+    timerInterval->setEditable(true);
+    timerInterval->setData(IntField, WidgetType);
+    timerInterval->setData(action.timerIntervalMs(), EditableValue);
+    timerInterval->setData(tr("Timer Interval (ms)"), ParameterName);
+    timerInterval->setData(kActionView_TimerInterval, ParameterType);
+    timerInterval->setData(tr("Timer Interval (ms)"), PlaceholderValue);
+    timerInterval->setData(
+        tr("Interval in milliseconds between each timer-triggered action."),
+        ParameterDescription);
+    timerInterval->setData("qrc:/rcc/icons/project-editor/model/interval.svg",
+                           ParameterIcon);
+    m_actionModel->appendRow(timerInterval);
+  }
+
   // Handle edits
   connect(m_actionModel, &CustomModel::itemChanged, this,
           &JSON::ProjectModel::onActionItemChanged);
@@ -2951,6 +3001,13 @@ void JSON::ProjectModel::generateComboBoxModels()
   m_fftSamples.append("8192");
   m_fftSamples.append("16384");
 
+  // Initialize timer modes
+  m_timerModes.clear();
+  m_timerModes.append(tr("Off"));
+  m_timerModes.append(tr("Auto Start"));
+  m_timerModes.append(tr("Start on Trigger"));
+  m_timerModes.append(tr("Toggle on Trigger"));
+
   // Initialize decoder options
   m_decoderOptions.clear();
   m_decoderOptions.append(tr("Plain Text (UTF8)"));
@@ -3218,6 +3275,17 @@ void JSON::ProjectModel::onActionItemChanged(QStandardItem *item)
     case kActionView_Binary:
       m_selectedAction.m_binaryData = value.toBool();
       buildActionModel(m_selectedAction);
+      break;
+    case kActionView_AutoExecute:
+      m_selectedAction.m_autoExecuteOnConnect = value.toBool();
+      break;
+    case kActionView_TimerMode:
+      m_selectedAction.m_timerMode
+          = static_cast<JSON::Action::TimerMode>(value.toInt());
+      buildActionModel(m_selectedAction);
+      break;
+    case kActionView_TimerInterval:
+      m_selectedAction.m_timerIntervalMs = value.toInt();
       break;
     default:
       break;

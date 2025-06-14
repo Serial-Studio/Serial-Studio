@@ -22,6 +22,7 @@
 #include <QFile>
 #include <QDateTime>
 
+#include "SerialStudio.h"
 #include "IO/Manager.h"
 #include "IO/Console.h"
 #include "IO/Checksum.h"
@@ -265,49 +266,6 @@ QString IO::Console::formatUserHex(const QString &text)
 }
 
 /**
- * Converts the given @a data in HEX format into real binary data.
- */
-QByteArray IO::Console::hexToBytes(const QString &data)
-{
-  // Remove spaces from the input data
-  QString withoutSpaces = data;
-  withoutSpaces.replace(QStringLiteral(" "), "");
-
-  // Check if the length of the string is even
-  if (withoutSpaces.length() % 2 != 0)
-  {
-    qWarning() << data << "is not a valid hexadecimal array";
-    return QByteArray();
-  }
-
-  // Iterate over the string in steps of 2
-  bool ok;
-  QByteArray array;
-  for (int i = 0; i < withoutSpaces.length(); i += 2)
-  {
-    // Get two characters (a hex pair)
-    auto chr1 = withoutSpaces.at(i);
-    auto chr2 = withoutSpaces.at(i + 1);
-
-    // Convert the hex pair into a byte
-    QString byteStr = QStringLiteral("%1%2").arg(chr1, chr2);
-    int byte = byteStr.toInt(&ok, 16);
-
-    // If the conversion fails, return an empty array
-    if (!ok)
-    {
-      qWarning() << data << "is not a valid hexadecimal array";
-      return QByteArray();
-    }
-
-    // Append the byte to the result array
-    array.append(static_cast<char>(byte));
-  }
-
-  return array;
-}
-
-/**
  * Deletes all the text displayed by the current QML text document
  */
 void IO::Console::clear()
@@ -385,7 +343,7 @@ void IO::Console::send(const QString &data)
   // Convert data to byte array
   QByteArray bin;
   if (dataMode() == DataMode::DataHexadecimal)
-    bin = hexToBytes(data);
+    bin = SerialStudio::hexToBytes(data);
   else
     bin = data.toUtf8();
 

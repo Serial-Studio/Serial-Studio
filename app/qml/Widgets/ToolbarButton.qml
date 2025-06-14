@@ -123,6 +123,7 @@ Item {
     columns: horizontalLayout ? 2 : 1
     rowSpacing: horizontalLayout ? 0 : 4
     columnSpacing: horizontalLayout ? 4 : 0
+    anchors.leftMargin: horizontalLayout ? 8 : 0
     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
     Item {

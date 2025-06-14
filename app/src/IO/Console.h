@@ -150,8 +150,6 @@ public:
   Q_INVOKABLE bool validateUserHex(const QString &text);
   Q_INVOKABLE QString formatUserHex(const QString &text);
 
-  static QByteArray hexToBytes(const QString &data);
-
 public slots:
   void clear();
   void historyUp();

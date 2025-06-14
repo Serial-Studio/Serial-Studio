@@ -343,6 +343,7 @@ public:
   //
   [[nodiscard]] static QString hexToString(const QString &hex);
   [[nodiscard]] static QString stringToHex(const QString &str);
+  [[nodiscard]] static QByteArray hexToBytes(const QString &data);
   [[nodiscard]] static QString resolveEscapeSequences(const QString &str);
   [[nodiscard]] static QString escapeControlCharacters(const QString &str);
 };

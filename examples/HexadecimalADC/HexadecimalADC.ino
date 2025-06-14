@@ -1,23 +1,27 @@
 //
-// ADC Data Transmission with CRC-16-CCITT Checksum
+// ADC Data Transmission with CRC-16-CCITT Checksum (Command-Driven)
 //
 // Author: Alex Spataru
 //
 // This Arduino program reads analog input from six channels (A0 to A5),
 // scales the values from 10-bit (0–1023) to 8-bit (0–255), and transmits
-// the data as a binary frame over the serial port.
+// the data as a binary frame over the serial port when explicitly commanded.
 //
-// Each frame includes:
+// The device remains idle until a "poll-data" command is received via serial.
+// Upon receiving this command, it captures the current sensor values and
+// transmits a single frame. The host (e.g. Serial Studio) is responsible
+// for managing the polling rate.
+//
+// Each transmitted frame includes:
 // - Start delimiter: 0xC0 0xDE
 // - 6 sensor values (1 byte each)
-// - End delimiter: 0xDE 0xC0
 // - CRC-16-CCITT checksum (2 bytes, big-endian)
 //
-// This ensures data integrity and allows Serial Studio to automatically
-// validate frames without requiring labeled checksums.
+// This format ensures data integrity and is compatible with Serial Studio’s
+// automatic frame validation and decoding.
 //
 // Requirements:
-// - Arduino with 6 analog sensors on A0–A5
+// - Arduino with 6 analog sensors connected to A0–A5
 // - Serial connection at 115200 baud
 //
 // Connections:
@@ -53,7 +57,6 @@ void setPullUp() {
   pinMode(A5, INPUT_PULLUP);
 }
 
-// Function to set all pins back to INPUT mode
 void initAdcPort() {
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
@@ -61,6 +64,32 @@ void initAdcPort() {
   pinMode(A3, INPUT);
   pinMode(A4, INPUT);
   pinMode(A5, INPUT);
+}
+
+void sendDataFrame() {
+  // Define payload data
+  uint8_t payload[6];
+  payload[0] = map(analogRead(A0), 0, 1023, 0, 255);
+  payload[1] = map(analogRead(A1), 0, 1023, 0, 255);
+  payload[2] = map(analogRead(A2), 0, 1023, 0, 255);
+  payload[3] = map(analogRead(A3), 0, 1023, 0, 255);
+  payload[4] = map(analogRead(A4), 0, 1023, 0, 255);
+  payload[5] = map(analogRead(A5), 0, 1023, 0, 255);
+
+  // Compute checksum
+  uint16_t crc = crc16_ccitt(payload, sizeof(payload));
+
+  // Send start sequence over serial
+  Serial.write(0xC0);
+  Serial.write(0xDE);
+
+  // Send payload over serial
+  for (int i = 0; i < sizeof(payload); ++i)
+    Serial.write(payload[i]);
+
+  // Send checksum over serial
+  Serial.write(static_cast<uint8_t>(crc >> 8));
+  Serial.write(static_cast<uint8_t>(crc & 0xFF));
 }
 
 //-----------------------------------------------------------------------------
@@ -87,42 +116,23 @@ uint16_t crc16_ccitt(const uint8_t* data, int length) {
 //-----------------------------------------------------------------------------
 
 void loop() {
-  // Handle serial control commands
-  if (Serial.available() > 0) {
-    String command = Serial.readStringUntil('\n');
-    command.trim();
-    if (command == "enable-pull-up") setPullUp();
-    else if (command == "disable-pull-up") initAdcPort();
-  }
+  // No serial data available, stop.
+  if (Serial.available() <= 0)
+    return;
 
-  // Define payload data
-  uint8_t payload[6];
-  payload[0] = map(analogRead(A0), 0, 1023, 0, 255);
-  payload[1] = map(analogRead(A1), 0, 1023, 0, 255);
-  payload[2] = map(analogRead(A2), 0, 1023, 0, 255);
-  payload[3] = map(analogRead(A3), 0, 1023, 0, 255);
-  payload[4] = map(analogRead(A4), 0, 1023, 0, 255);
-  payload[5] = map(analogRead(A5), 0, 1023, 0, 255);
+  // Read serial command
+  String command = Serial.readStringUntil('\n');
+  command.trim();
 
-  // Compute checksum
-  uint16_t crc = crc16_ccitt(payload, sizeof(payload));
+  // Enable pull up resistor
+  if (command == "enable-pull-up")
+    setPullUp();
 
-  // Send start sequence over serial
-  Serial.write(0xC0);
-  Serial.write(0xDE);
+  // Disable pull up resistor
+  else if (command == "disable-pull-up")
+    initAdcPort();
 
-  // Send payload over serial
-  for (int i = 0; i < sizeof(payload); ++i)
-    Serial.write(payload[i]);
-
-  // Send end sequence over serial
-  Serial.write(0xDE);
-  Serial.write(0xC0);
-
-  // Send checksum over serial
-  Serial.write(static_cast<uint8_t>(crc >> 8));
-  Serial.write(static_cast<uint8_t>(crc & 0xFF));
-
-  // Wait a bit
-  delay(1);
+  // Send data
+  else if (command == "poll-data")
+    sendDataFrame();
 }

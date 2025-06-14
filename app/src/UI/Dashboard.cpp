@@ -78,6 +78,10 @@ UI::Dashboard::Dashboard()
               Q_EMIT updated();
             }
           });
+
+  // Update action items when frame format changes
+  connect(this, &UI::Dashboard::widgetCountChanged, this,
+          &UI::Dashboard::actionStatusChanged);
 }
 
 /**
@@ -366,8 +370,21 @@ const QString &UI::Dashboard::title() const
 }
 
 /**
- * @brief Retrieves the icons for each action available on the dashboard.
- * @return A list of icons corresponding to each action.
+ * @brief Returns a list of available dashboard actions with their metadata.
+ *
+ * Each action is represented as a QVariantMap containing the following keys:
+ * - `"id"`: The index of the action (used for identification).
+ * - `"text"`: The display title of the action.
+ * - `"icon"`: A path to the icon resource associated with the action.
+ * - `"checked"`: A boolean indicating the toggle state of the action.
+ *                This is only true if the action uses
+ * TimerMode::ToggleOnTrigger and its corresponding timer is currently active.
+ *
+ * This method is used to populate the user interface with actionable items,
+ * such as buttons. The "checked" state allows UI components to reflect
+ * whether an action with toggle behavior is currently running.
+ *
+ * @return A QVariantList of QVariantMaps describing each action.
  */
 QVariantList UI::Dashboard::actions() const
 {
@@ -378,8 +395,15 @@ QVariantList UI::Dashboard::actions() const
 
     QVariantMap m;
     m["id"] = i;
+    m["checked"] = false;
     m["text"] = action.title();
     m["icon"] = QStringLiteral("qrc:/rcc/actions/%1.svg").arg(action.icon());
+    if (action.timerMode() == JSON::Action::TimerMode::ToggleOnTrigger)
+    {
+      if (m_timers.contains(i) && m_timers[i] && m_timers[i]->isActive())
+        m["checked"] = true;
+    }
+
     actions.append(m);
   }
 
@@ -562,27 +586,6 @@ void UI::Dashboard::setPoints(const int points)
 }
 
 /**
- * @brief Activates an action by sending its associated data via the IO Manager.
- * @param index The index of the action to activate.
- * @throws An assertion failure if the index is out of bounds.
- */
-void UI::Dashboard::activateAction(const int index)
-{
-  if (index >= 0 && index < m_actions.count())
-  {
-    const auto &action = m_actions[index];
-
-    QByteArray bin;
-    if (action.binaryData())
-      bin = IO::Console::hexToBytes(action.txData());
-    else
-      bin = QString(action.txData() + action.eolSequence()).toUtf8();
-
-    IO::Manager::instance().writeData(bin);
-  }
-}
-
-/**
  * @brief Sets the precision level for the dashboard, if changed, and emits
  *        the @c precisionChanged signal to update the UI.
  *
@@ -626,8 +629,6 @@ void UI::Dashboard::resetData(const bool notify)
 
   // Clear widget & action structures
   m_widgetCount = 0;
-  m_actions.clear();
-  m_actions.squeeze();
   m_widgetMap.clear();
   m_widgetGroups.clear();
   m_widgetDatasets.clear();
@@ -637,6 +638,9 @@ void UI::Dashboard::resetData(const bool notify)
   m_rawFrame = JSON::Frame();
   m_lastFrame = JSON::Frame();
 
+  // Configure actions
+  configureActions(JSON::FrameBuilder::instance().frame());
+
   // Notify user interface
   if (notify)
   {
@@ -644,7 +648,6 @@ void UI::Dashboard::resetData(const bool notify)
 
     Q_EMIT updated();
     Q_EMIT dataReset();
-    Q_EMIT actionCountChanged();
     Q_EMIT widgetCountChanged();
     Q_EMIT containsCommercialFeaturesChanged();
   }
@@ -674,6 +677,93 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
   }
 
   Q_EMIT terminalEnabledChanged();
+}
+
+//------------------------------------------------------------------------------
+// Action activation, more complex that it seems...
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Activates a dashboard action by transmitting its associated data and
+ * handling timer logic.
+ *
+ * This function is responsible for executing an action defined in the current
+ * dashboard configuration. It sends the action's payload over the serial
+ * interface and manages timer behavior based on the action's configured
+ * TimerMode.
+ *
+ * @param index The index of the action to activate. Must be within bounds of
+ *              the current action list.
+ * @param guiTrigger Indicates whether the action was triggered by user
+ *                   interaction (e.g. from the GUI). This affects behavior for
+ *                   actions using TimerMode::ToggleOnTrigger—toggling only
+ *                   occurs if the trigger originated from the GUI.
+ *
+ * Behavior:
+ * - If the action is configured with TimerMode::StartOnTrigger, the timer will
+ *   start on first activation.
+ * - If the action is configured with TimerMode::ToggleOnTrigger, the timer
+ *   toggles on GUI-triggered calls.
+ * - All actions result in data being transmitted via IO::Manager, using either
+ *   binary or text formatting.
+ *
+ * Emits:
+ * - actionStatusChanged() signal to notify the UI that the action state may
+ *   have changed (e.g. toggle state).
+ */
+void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
+{
+  // Validate index
+  if (index < 0 || index >= m_actions.count())
+    return;
+
+  // Obtain action data
+  const auto &action = m_actions[index];
+
+  // Handle timer behavior
+  if (m_timers.contains(index))
+  {
+    auto *timer = m_timers[index];
+    if (!timer)
+      qWarning() << "Invalid timer pointer for action" << action.title();
+
+    else
+    {
+      if (action.timerMode() == JSON::Action::TimerMode::StartOnTrigger)
+      {
+        if (!timer->isActive())
+          timer->start();
+      }
+
+      else if (action.timerMode() == JSON::Action::TimerMode::ToggleOnTrigger)
+      {
+        if (guiTrigger)
+        {
+          if (timer->isActive())
+            timer->stop();
+          else
+            timer->start();
+        }
+      }
+    }
+  }
+
+  // Send data payload
+  if (!IO::Manager::instance().paused())
+  {
+    // Build data payload
+    QByteArray bin;
+    if (action.binaryData())
+      bin = SerialStudio::hexToBytes(action.txData());
+    else
+      bin = QString(action.txData() + action.eolSequence()).toUtf8();
+
+    // Transmit via IO Manager
+    IO::Manager::instance().writeData(bin);
+  }
+
+  // Update action model
+  Q_EMIT actionStatusChanged();
 }
 
 //------------------------------------------------------------------------------
@@ -914,8 +1004,7 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
   }
 
   // Update actions
-  m_actions = frame.actions();
-  Q_EMIT actionCountChanged();
+  configureActions(frame);
 
   // Update user interface
   Q_EMIT widgetCountChanged();
@@ -1199,5 +1288,90 @@ void UI::Dashboard::configureMultiLineSeries()
     }
 
     m_multipltValues.append(series);
+  }
+}
+
+/**
+ * @brief Configures dashboard actions and associated timers from the
+ *        given JSON frame.
+ *
+ * This method clears existing actions and timers, then loads a new set of
+ * actions from the provided JSON frame. For each action, it sets up an optional
+ * timer based on its configured TimerMode and interval.
+ *
+ * Timers are connected to trigger the corresponding action via
+ * `activateAction()`, and are automatically started if the action is configured
+ * with either:
+ * - TimerMode::AutoStart
+ * - autoExecuteOnConnect() flag
+ *
+ * @param frame The JSON frame containing the user-defined actions to configure.
+ *
+ * @note This method has no effect if:
+ * - The frame is invalid (`!frame.isValid()`).
+ * - There is no active device connection
+ *
+ * @warning If a timer-based action has an interval of 0 milliseconds, a warning
+ *          is logged and the timer is not created.
+ */
+void UI::Dashboard::configureActions(const JSON::Frame &frame)
+{
+  // Stop if frame is not valid
+  if (!frame.isValid())
+    return;
+
+  // Stop if we don't have a device connected (CSV player does not count)
+  if (!IO::Manager::instance().isConnected())
+    return;
+
+  // Delete actions
+  m_actions.clear();
+  m_actions.squeeze();
+
+  // Stop and delete all timers
+  for (auto it = m_timers.begin(); it != m_timers.end(); ++it)
+  {
+    if (it.value())
+    {
+      disconnect(it.value());
+      it.value()->stop();
+      it.value()->deleteLater();
+    }
+  }
+
+  // Clear timer map
+  m_timers.clear();
+
+  // Update actions
+  m_actions = frame.actions();
+
+  // Configure timers
+  for (int i = 0; i < m_actions.count(); ++i)
+  {
+    const auto &action = m_actions[i];
+    if (action.timerMode() != JSON::Action::TimerMode::Off)
+    {
+      auto interval = action.timerIntervalMs();
+      if (interval > 0)
+      {
+        auto *timer = new QTimer(this);
+        timer->setInterval(interval);
+        timer->setTimerType(Qt::PreciseTimer);
+        connect(timer, &QTimer::timeout, this,
+                [this, i]() { activateAction(i, false); });
+
+        if (action.timerMode() == JSON::Action::TimerMode::AutoStart
+            || action.autoExecuteOnConnect())
+          timer->start();
+
+        m_timers.insert(i, timer);
+      }
+
+      else
+      {
+        qWarning() << "Interval for action" << action.title()
+                   << "must be greater than 0!";
+      }
+    }
   }
 }

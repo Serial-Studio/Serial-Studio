@@ -44,6 +44,7 @@ Popup {
   property string valueRole: "id"
   property string iconRole: "icon"
   property string textRole: "text"
+  property string checkedRole: "checked"
   property bool showCheckable: false
   property alias placeholderText: _placeholder.text
   property alias currentIndex: _listView.currentIndex
@@ -147,7 +148,8 @@ Popup {
           icon.height: 16
           background: Item{}
           icon.source: "qrc:/rcc/icons/buttons/apply.svg"
-          visible: root.showCheckable &&  root.currentValue === modelData[root.valueRole]
+          visible: modelData[root.checkedRole] !== undefined ? modelData[root.checkedRole] :
+                                                               root.showCheckable &&  root.currentValue === modelData[root.valueRole]
           icon.color: _mouseArea.containsMouse ? Cpp_ThemeManager.colors["start_menu_highlighted_text"] :
                                                  Cpp_ThemeManager.colors["start_menu_text"]
         }

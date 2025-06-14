@@ -489,6 +489,49 @@ QString SerialStudio::stringToHex(const QString &str)
 }
 
 /**
+ * Converts the given @a data in HEX format into real binary data.
+ */
+QByteArray SerialStudio::hexToBytes(const QString &data)
+{
+  // Remove spaces from the input data
+  QString withoutSpaces = data;
+  withoutSpaces.replace(QStringLiteral(" "), "");
+
+  // Check if the length of the string is even
+  if (withoutSpaces.length() % 2 != 0)
+  {
+    qWarning() << data << "is not a valid hexadecimal array";
+    return QByteArray();
+  }
+
+  // Iterate over the string in steps of 2
+  bool ok;
+  QByteArray array;
+  for (int i = 0; i < withoutSpaces.length(); i += 2)
+  {
+    // Get two characters (a hex pair)
+    auto chr1 = withoutSpaces.at(i);
+    auto chr2 = withoutSpaces.at(i + 1);
+
+    // Convert the hex pair into a byte
+    QString byteStr = QStringLiteral("%1%2").arg(chr1, chr2);
+    int byte = byteStr.toInt(&ok, 16);
+
+    // If the conversion fails, return an empty array
+    if (!ok)
+    {
+      qWarning() << data << "is not a valid hexadecimal array";
+      return QByteArray();
+    }
+
+    // Append the byte to the result array
+    array.append(static_cast<char>(byte));
+  }
+
+  return array;
+}
+
+/**
  * @brief Resolves C-style escape sequences in a string into their corresponding
  *        control characters.
  *

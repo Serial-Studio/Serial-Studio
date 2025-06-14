@@ -1,24 +1,40 @@
 {
     "actions": [
         {
+            "autoExecuteOnConnect": true,
+            "binary": false,
+            "eol": "\n",
+            "icon": "Play Property",
+            "timerIntervalMs": 5,
+            "timerMode": 3,
+            "title": "Data Polling",
+            "txData": "poll-data"
+        },
+        {
+            "autoExecuteOnConnect": false,
             "binary": false,
             "eol": "\n",
             "icon": "Resistor",
+            "timerIntervalMs": 100,
+            "timerMode": 0,
             "title": "Enable Pull-Up Resistor",
             "txData": "enable-pull-up"
         },
         {
+            "autoExecuteOnConnect": false,
             "binary": false,
             "eol": "\n",
-            "icon": "Gears",
+            "icon": "Services",
+            "timerIntervalMs": 100,
+            "timerMode": 0,
             "title": "Disable Pull-Up Resistor",
             "txData": "disable-pull-up"
         }
     ],
     "checksum": "CRC-16-CCITT",
     "decoder": 3,
-    "frameDetection": 1,
-    "frameEnd": "DE C0",
+    "frameDetection": 3,
+    "frameEnd": "ef bf bd ef bf bd",
     "frameParser": "/**\n * This function parses a binary data frame (passed as a byte array) and converts\n * each byte into a decimal value scaled from 0 to 5 volts.\n *\n * @param[in]  frame  A JS array of byte values (0–255), passed from C++.\n * @return     Array of floats representing the scaled voltage values.\n */\nfunction parse(frame) {\n    let dataArray = [];\n\n    for (let i = 0; i < frame.length; ++i) {\n        let byte = frame[i];\n        dataArray.push(byte * 5.0 / 255);\n    }\n\n    return dataArray;\n}",
     "frameStart": "C0 DE",
     "groups": [
@@ -27,8 +43,8 @@
                 {
                     "alarm": 0,
                     "fft": true,
-                    "fftSamples": 2048,
-                    "fftSamplingRate": 500,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 200,
                     "graph": false,
                     "index": 1,
                     "led": false,
@@ -46,8 +62,8 @@
                 {
                     "alarm": 0,
                     "fft": true,
-                    "fftSamples": 2048,
-                    "fftSamplingRate": 500,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 200,
                     "graph": false,
                     "index": 2,
                     "led": false,
@@ -65,8 +81,8 @@
                 {
                     "alarm": 0,
                     "fft": true,
-                    "fftSamples": 2048,
-                    "fftSamplingRate": 500,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 200,
                     "graph": false,
                     "index": 3,
                     "led": false,
@@ -84,8 +100,8 @@
                 {
                     "alarm": 0,
                     "fft": true,
-                    "fftSamples": 2048,
-                    "fftSamplingRate": 500,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 200,
                     "graph": false,
                     "index": 4,
                     "led": false,
@@ -103,8 +119,8 @@
                 {
                     "alarm": 0,
                     "fft": true,
-                    "fftSamples": 2048,
-                    "fftSamplingRate": 500,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 200,
                     "graph": false,
                     "index": 5,
                     "led": false,
@@ -122,8 +138,8 @@
                 {
                     "alarm": 0,
                     "fft": true,
-                    "fftSamples": 2048,
-                    "fftSamplingRate": 500,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 200,
                     "graph": false,
                     "index": 6,
                     "led": false,
