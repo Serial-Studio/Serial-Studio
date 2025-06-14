@@ -1,24 +1,24 @@
 {
    "updates":{
       "windows":{
-         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.2",
-         "latest-version":"3.1.2",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.1.2/Serial-Studio-3.1.2-Windows-x86_64.msi",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.2",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.3",
+         "latest-version":"3.1.3",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.1.3/Serial-Studio-3.1.3-Windows-x86_64.msi",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.3",
          "mandatory":false
       },
       "osx":{
-         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.2",
-         "latest-version":"3.1.2",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.1.2/Serial-Studio-3.1.2-macOS-Universal.dmg",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.2",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.3",
+         "latest-version":"3.1.3",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.1.3/Serial-Studio-3.1.3-macOS-Universal.dmg",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.3",
          "mandatory":false
       },
       "linux":{
-         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.2",
-         "latest-version":"3.1.2",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.1.2/Serial-Studio-3.1.2-Linux-x86_64.AppImage",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.2",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.3",
+         "latest-version":"3.1.3",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.1.3/Serial-Studio-3.1.3-Linux-x86_64.AppImage",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.3",
          "mandatory":false
       }
    }
