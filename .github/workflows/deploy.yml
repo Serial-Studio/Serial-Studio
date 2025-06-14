@@ -52,6 +52,7 @@ env:
   INSTALL_QT_WINDOWS: false
   INSTALL_QT_LINUX_INTEL: false
   INSTALL_QT_LINUX_ARM64: false
+  QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"
 
 #-------------------------------------------------------------------------------
