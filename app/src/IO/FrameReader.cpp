@@ -42,7 +42,7 @@
 IO::FrameReader::FrameReader(QObject *parent)
   : QObject(parent)
   , m_checksumLength(0)
-  , m_dataBuffer(1024 * 1024)
+  , m_dataBuffer(1024 * 1024 * 10)
 {
   m_quickPlotEndSequences.append(QByteArray("\n"));
   m_quickPlotEndSequences.append(QByteArray("\r"));

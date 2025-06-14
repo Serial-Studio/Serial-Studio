@@ -27,7 +27,7 @@
                 {
                     "alarm": 0,
                     "fft": true,
-                    "fftSamples": 256,
+                    "fftSamples": 2048,
                     "fftSamplingRate": 1000,
                     "graph": false,
                     "index": 1,
@@ -46,7 +46,7 @@
                 {
                     "alarm": 0,
                     "fft": true,
-                    "fftSamples": 256,
+                    "fftSamples": 2048,
                     "fftSamplingRate": 1000,
                     "graph": false,
                     "index": 2,
@@ -65,7 +65,7 @@
                 {
                     "alarm": 0,
                     "fft": true,
-                    "fftSamples": 256,
+                    "fftSamples": 2048,
                     "fftSamplingRate": 1000,
                     "graph": false,
                     "index": 3,
@@ -84,7 +84,7 @@
                 {
                     "alarm": 0,
                     "fft": true,
-                    "fftSamples": 256,
+                    "fftSamples": 2048,
                     "fftSamplingRate": 1000,
                     "graph": false,
                     "index": 4,
@@ -103,7 +103,7 @@
                 {
                     "alarm": 0,
                     "fft": true,
-                    "fftSamples": 256,
+                    "fftSamples": 2048,
                     "fftSamplingRate": 1000,
                     "graph": false,
                     "index": 5,
@@ -122,7 +122,7 @@
                 {
                     "alarm": 0,
                     "fft": true,
-                    "fftSamples": 256,
+                    "fftSamples": 2048,
                     "fftSamplingRate": 1000,
                     "graph": false,
                     "index": 6,

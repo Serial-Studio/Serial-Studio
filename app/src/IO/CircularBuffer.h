@@ -134,37 +134,49 @@ void IO::CircularBuffer<T, StorageType>::clear()
 /**
  * @brief Appends data to the circular buffer.
  *
- * Adds the given data to the buffer. If the data exceeds the free space, old
- * data is overwritten.
+ * Adds the given data to the buffer. If the data exceeds available space,
+ * the oldest data is overwritten. If the data exceeds total capacity, only
+ * the last `capacity` bytes are stored.
  *
  * @param data The QByteArray containing data to append.
- * @throws std::overflow_error if the data size exceeds the buffer capacity.
  */
 template<typename T, typename StorageType>
 void IO::CircularBuffer<T, StorageType>::append(const T &data)
 {
+  // Lock the mutex
   std::lock_guard<std::mutex> lock(m_mutex);
 
+  // Obtain the length of the input data & a pointer to it
   const qsizetype dataSize = data.size();
-  if (dataSize > m_capacity)
-    throw std::overflow_error("Data size exceeds buffer capacity");
+  const uint8_t *src = reinterpret_cast<const uint8_t *>(data.data());
 
-  const qsizetype space = freeSpace();
-  if (space < dataSize)
+  // If input is too large, keep only the last bytes that fit
+  qsizetype copySize = dataSize;
+  if (copySize > m_capacity)
   {
-    const qsizetype overwrite = dataSize - space;
+    src += (copySize - m_capacity);
+    copySize = m_capacity;
+  }
+
+  // If not enough free space, advance head to overwrite old data
+  if (copySize > freeSpace())
+  {
+    const qsizetype overwrite = copySize - freeSpace();
     m_head = (m_head + overwrite) % m_capacity;
     m_size -= overwrite;
   }
 
-  const qsizetype firstChunk = std::min(dataSize, m_capacity - m_tail);
-  std::memcpy(&m_buffer[m_tail], data.data(), firstChunk);
+  // Copy first chunk (may wrap around)
+  const qsizetype firstChunk = std::min(copySize, m_capacity - m_tail);
+  std::memcpy(&m_buffer[m_tail], src, firstChunk);
 
-  if (dataSize > firstChunk)
-    std::memcpy(&m_buffer[0], data.data() + firstChunk, dataSize - firstChunk);
+  // Copy second chunk if wrapped
+  if (copySize > firstChunk)
+    std::memcpy(&m_buffer[0], src + firstChunk, copySize - firstChunk);
 
-  m_tail = (m_tail + dataSize) % m_capacity;
-  m_size += dataSize;
+  // Advance tail and update size
+  m_tail = (m_tail + copySize) % m_capacity;
+  m_size = std::min(m_size + copySize, m_capacity);
 }
 
 /**
