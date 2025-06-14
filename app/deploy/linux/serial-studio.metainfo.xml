@@ -2,7 +2,7 @@
 <component type="desktop-application">
   <id>com.serial_studio.Serial-Studio</id>
   <name>Serial Studio</name>
-  <project_license>GPL-3.0-or-later</project_license>
+  <project_license>LicenseRef-proprietary</project_license>
   <developer id="com.serial-studio">
   <name>Serial Studio</name>
   </developer>
@@ -23,8 +23,8 @@
       <li>Multiple inputs: Connect via serial, BLE, MQTT, or TCP/UDP sockets.</li>
       <li>Custom dashboards: Design interfaces with visual widgets using the Project Editor.</li>
       <li>Advanced decoding: Use JavaScript to handle raw or binary data streams.</li>
+      <li>MQTT integration: Send/receive data over the internet for remote access and visualization.</li>
     </ul>
-    <p>This is the GPL-3.0 edition of Serial Studio. Additional features, such as MQTT or XY plots, are available in the Pro version. Visit the official website for more information on upgrading.</p>
   </description>
   <screenshots>
     <screenshot type="default">
