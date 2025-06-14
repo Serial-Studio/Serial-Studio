@@ -46,7 +46,7 @@ UI::Dashboard::Dashboard()
   , m_precision(2)
   , m_widgetCount(0)
   , m_updateRequired(false)
-  , m_showActionPanel(false)
+  , m_showActionPanel(true)
   , m_terminalEnabled(false)
 {
   // clang-format off
