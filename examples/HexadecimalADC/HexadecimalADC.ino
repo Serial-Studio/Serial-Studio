@@ -87,6 +87,10 @@ void sendDataFrame() {
   for (int i = 0; i < sizeof(payload); ++i)
     Serial.write(payload[i]);
 
+  // Send end sequence over serial
+  //Serial.write(0xDE);
+  //Serial.write(0xC0);
+
   // Send checksum over serial
   Serial.write(static_cast<uint8_t>(crc >> 8));
   Serial.write(static_cast<uint8_t>(crc & 0xFF));

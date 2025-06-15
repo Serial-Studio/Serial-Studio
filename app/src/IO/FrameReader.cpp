@@ -338,53 +338,72 @@ void IO::FrameReader::readStartDelimitedFrames()
 {
   while (true)
   {
-    // Find first start sequence
+    // Find the first start delimiter in the buffer
     int startIndex = m_dataBuffer.findPatternKMP(m_startSequence);
     if (startIndex == -1)
       break;
 
-    // Find next start sequence to define frame boundary
+    // Try to find the next start delimiter after this one
     int nextStartIndex = m_dataBuffer.findPatternKMP(
         m_startSequence, startIndex + m_startSequence.size());
-    if (nextStartIndex == -1 || nextStartIndex <= startIndex)
-      break;
 
-    // Calculate frame bounds
+    // Calculate start and end positions of the current frame
+    qsizetype frameEndPos;
     qsizetype frameStart = startIndex + m_startSequence.size();
-    qsizetype frameLength = nextStartIndex - frameStart;
+
+    // No second start delimiter found...maybe the last frame in the stream
+    if (nextStartIndex == -1)
+    {
+      frameEndPos = m_dataBuffer.size();
+      if ((frameEndPos - frameStart) < m_checksumLength)
+        break;
+    }
+
+    // Valid second start delimiter found, makes life easier for us
+    else
+      frameEndPos = nextStartIndex;
+
+    // Compute the frame length and validate it's sane
+    qsizetype frameLength = frameEndPos - frameStart;
     if (frameLength <= 0)
     {
-      (void)m_dataBuffer.read(nextStartIndex);
+      (void)m_dataBuffer.read(frameEndPos);
       continue;
     }
 
-    // Extract frame data
-    const auto frameEndPos = nextStartIndex;
-    const auto crcPosition = nextStartIndex - m_checksumLength;
+    // Compute the position of the checksum, and sanity check it
+    const auto crcPosition = frameEndPos - m_checksumLength;
+    if (crcPosition < frameStart)
+    {
+      (void)m_dataBuffer.read(frameEndPos);
+      continue;
+    }
+
+    // Build the frame byte array
     const auto frame = m_dataBuffer.peek(frameEndPos)
                            .mid(frameStart, frameLength - m_checksumLength);
 
-    // Validate checksum
+    // Validate the frame
     if (!frame.isEmpty())
     {
-      // Validate checksum
-      auto result = checksum(frame, crcPosition);
+      // Execute checksum algorithm
+      const auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk)
       {
         Q_EMIT frameReady(frame);
         (void)m_dataBuffer.read(frameEndPos);
       }
 
-      // Incomplete data to calculate checksum
+      // Not enough bytes yet to compute checksum, wait for more
       else if (result == ValidationStatus::ChecksumIncomplete)
         break;
 
-      // Incorrect checksum
+      // Invalid checksum...discard and move on
       else
         (void)m_dataBuffer.read(frameEndPos);
     }
 
-    // Invalid frame
+    // Empty frame or invalid data, discard...
     else
       (void)m_dataBuffer.read(frameEndPos);
   }

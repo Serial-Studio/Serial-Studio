@@ -54,7 +54,7 @@ set(PROJECT_CONTACT             "serial-studio.github.io")
 set(PROJECT_DESCRIPTION_SUMMARY "Flexible data visualization software for embedded devices and projects")
 set(PROJECT_VERSION_MAJOR       "3")
 set(PROJECT_VERSION_MINOR       "1")
-set(PROJECT_VERSION_PATCH       "3")
+set(PROJECT_VERSION_PATCH       "4")
 set(PROJECT_VERSION             "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 set(PROJECT_APPCAST             "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/updates.json")
 
@@ -77,7 +77,7 @@ add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 # Automatically enable or disable commercial Qt modules
 #-------------------------------------------------------------------------------
 
-option(BUILD_GPL3 "Force GPLv3-only build (disables commercial features regardless of Qt modules found)" ON)
+option(BUILD_GPL3 "Force GPLv3-only build (disables commercial features regardless of Qt modules found)" OFF)
 
 if(BUILD_GPL3)
    set(USE_QT_COMMERCIAL OFF CACHE BOOL "Commercial features disabled due to GPLv3 build mode" FORCE)
