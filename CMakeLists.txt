@@ -77,24 +77,32 @@ add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 # Automatically enable or disable commercial Qt modules
 #-------------------------------------------------------------------------------
 
-if(NOT DEFINED USE_QT_COMMERCIAL)
-   find_package(Qt6 COMPONENTS Mqtt SerialBus OPTIONAL_COMPONENTS)
-   if(TARGET Qt6::Mqtt AND TARGET Qt6::SerialBus)
-      set(USE_QT_COMMERCIAL ON CACHE BOOL "Enable features that require Qt Commercial" FORCE)
-      message(STATUS "Qt6::Mqtt and Qt6::SerialBus found — enabling USE_QT_COMMERCIAL")
-   else()
-      set(USE_QT_COMMERCIAL OFF CACHE BOOL "Enable features that require Qt Commercial" FORCE)
-      message(WARNING "Qt6::Mqtt and/or Qt6::SerialBus NOT found — disabling USE_QT_COMMERCIAL")
-   endif()
+option(BUILD_GPL3 "Force GPLv3-only build (disables commercial features regardless of Qt modules found)" ON)
+
+if(BUILD_GPL3)
+   set(USE_QT_COMMERCIAL OFF CACHE BOOL "Commercial features disabled due to GPLv3 build mode" FORCE)
+   message(STATUS "BUILD_GPL3 is ON — forcing USE_QT_COMMERCIAL=OFF for GPL compliance")
 else()
-   message(STATUS "USE_QT_COMMERCIAL explicitly set to '${USE_QT_COMMERCIAL}'...skipping auto-detection")
+   if(NOT DEFINED USE_QT_COMMERCIAL)
+      find_package(Qt6 COMPONENTS Mqtt SerialBus OPTIONAL_COMPONENTS)
+
+      if(TARGET Qt6::Mqtt AND TARGET Qt6::SerialBus)
+         set(USE_QT_COMMERCIAL ON CACHE BOOL "Enable features that require Qt Commercial" FORCE)
+         message(STATUS "Qt6::Mqtt and Qt6::SerialBus found — enabling USE_QT_COMMERCIAL")
+      else()
+         set(USE_QT_COMMERCIAL OFF CACHE BOOL "Enable features that require Qt Commercial" FORCE)
+         message(WARNING "Qt6::Mqtt and/or Qt6::SerialBus NOT found — disabling USE_QT_COMMERCIAL")
+      endif()
+   else()
+      message(STATUS "USE_QT_COMMERCIAL explicitly set to '${USE_QT_COMMERCIAL}' — skipping auto-detection")
+   endif()
 endif()
 
 if(USE_QT_COMMERCIAL)
    add_compile_definitions(USE_QT_COMMERCIAL)
    message(STATUS "Defining USE_QT_COMMERCIAL for compiler")
 else()
-   message(STATUS "USE_QT_COMMERCIAL not enabled — skipping related definitions")
+   message(STATUS "USE_QT_COMMERCIAL is OFF — commercial features excluded")
 endif()
 
 message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
@@ -130,129 +138,129 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-fast-math                 # Disable unsafe floating point optimizations
          -fno-unsafe-math-optimizations # Prevent invalid math assumptions
       )
-      add_link_options(
-         -Wl,--gc-sections              # Remove unused code/data at link time
-         -fuse-linker-plugin            # Required for LTO with GCC
-      )
+   add_link_options(
+      -Wl,--gc-sections              # Remove unused code/data at link time
+      -fuse-linker-plugin            # Required for LTO with GCC
+   )
 
-   # Clang (MinGW) on Windows
-   elseif(WIN32 AND MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-      add_compile_options(
-         -O2                            # Optimize for speed
-         -Wall                          # Enable most warnings
-         -Wextra                        # Extra warnings
-         -fvectorize                    # Enable loop vectorization
-         -fslp-vectorize                # Enable straight-line vectorization
-         -funroll-loops                 # Unroll loops for performance
-         -fomit-frame-pointer           # Free a register, speed up stack ops
-         -msse2                         # Target SSE2 (safe, compatible baseline)
-         -fno-fast-math                 # Avoid unsafe FP optimizations
-         -fno-unsafe-math-optimizations # Accurate and safe math semantics
-         -flto                          # Enable link-time optimization
-      )
-      add_link_options(
-         -Wl,-dead_strip                # Strip unused symbols from final binary
-         -flto=full                     # Full LTO (more aggressive)
-      )
+# Clang (MinGW) on Windows
+elseif(WIN32 AND MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+   add_compile_options(
+      -O2                            # Optimize for speed
+      -Wall                          # Enable most warnings
+      -Wextra                        # Extra warnings
+      -fvectorize                    # Enable loop vectorization
+      -fslp-vectorize                # Enable straight-line vectorization
+      -funroll-loops                 # Unroll loops for performance
+      -fomit-frame-pointer           # Free a register, speed up stack ops
+      -msse2                         # Target SSE2 (safe, compatible baseline)
+      -fno-fast-math                 # Avoid unsafe FP optimizations
+      -fno-unsafe-math-optimizations # Accurate and safe math semantics
+      -flto                          # Enable link-time optimization
+   )
+add_link_options(
+   -Wl,-dead_strip                # Strip unused symbols from final binary
+   -flto=full                     # Full LTO (more aggressive)
+)
 
-   # MSVC (Visual Studio)
-   elseif(WIN32 AND MSVC)
-      add_compile_options(
-         /permissive-                   # Enforce strict ISO C++ conformance
-         /Zc:__cplusplus                # Set __cplusplus to actual version value
-         /Zc:preprocessor               # Standards-compliant preprocessor
-         /openmp:experimental           # Enable OpenMP support
-         /MP                            # Enable multi-core compilation
-         /O2                            # Optimize for speed
-         /W4                            # High warning level
-         /GL                            # Enable whole program optimization
-         /fp:precise                    # IEEE-accurate floating-point math
-         /Qpar                          # Enable automatic parallelization of loops
-      )
-      add_link_options(
-         /OPT:REF                       # Remove unreferenced functions/data
-         /OPT:ICF                       # Merge identical code/data blocks
-         /LTCG                          # Enable link-time code generation (LTO)
-      )
+# MSVC (Visual Studio)
+elseif(WIN32 AND MSVC)
+   add_compile_options(
+      /permissive-                   # Enforce strict ISO C++ conformance
+      /Zc:__cplusplus                # Set __cplusplus to actual version value
+      /Zc:preprocessor               # Standards-compliant preprocessor
+      /openmp:experimental           # Enable OpenMP support
+      /MP                            # Enable multi-core compilation
+      /O2                            # Optimize for speed
+      /W4                            # High warning level
+      /GL                            # Enable whole program optimization
+      /fp:precise                    # IEEE-accurate floating-point math
+      /Qpar                          # Enable automatic parallelization of loops
+   )
+add_link_options(
+   /OPT:REF                       # Remove unreferenced functions/data
+   /OPT:ICF                       # Merge identical code/data blocks
+   /LTCG                          # Enable link-time code generation (LTO)
+)
 
-   # macOS (Clang/AppleClang)
-   elseif(APPLE)
-      add_compile_options(
-         -O2                            # Optimize for speed
-         -Wall                          # Enable most warning messages
-         -Wextra                        # Enable additional warning messages
-         -fvectorize                    # Enable basic loop vectorization
-         -fslp-vectorize                # Enable straight-line (basic block) vectorization
-         -funroll-loops                 # Unroll loops to reduce branching overhead
-         -fomit-frame-pointer           # Omit frame pointer to free a register (faster function calls)
-         -fno-fast-math                 # Prevent aggressive FP optimizations (retain IEEE compliance)
-         -fno-unsafe-math-optimizations # Avoid math-related UB or precision loss
-         -flto                          # Enable Link Time Optimization
-      )
-      add_link_options(
-         -Wl,-dead_strip                # Remove unused functions/data from final binary
-         -flto=full                     # Full link-time optimization across all TU
-      )
+# macOS (Clang/AppleClang)
+elseif(APPLE)
+   add_compile_options(
+      -O2                            # Optimize for speed
+      -Wall                          # Enable most warning messages
+      -Wextra                        # Enable additional warning messages
+      -fvectorize                    # Enable basic loop vectorization
+      -fslp-vectorize                # Enable straight-line (basic block) vectorization
+      -funroll-loops                 # Unroll loops to reduce branching overhead
+      -fomit-frame-pointer           # Omit frame pointer to free a register (faster function calls)
+      -fno-fast-math                 # Prevent aggressive FP optimizations (retain IEEE compliance)
+      -fno-unsafe-math-optimizations # Avoid math-related UB or precision loss
+      -flto                          # Enable Link Time Optimization
+   )
+add_link_options(
+   -Wl,-dead_strip                # Remove unused functions/data from final binary
+   -flto=full                     # Full link-time optimization across all TU
+)
 
-   # Intel LLVM Compiler (Linux or Windows)
-   elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
-      add_compile_options(
-         -O2                            # Optimize for speed
-         -Wall                          # Enable most warning messages
-         -Wextra                        # Enable additional warning messages
-         -qopenmp-simd                  # Enable OpenMP SIMD loop support
-         -static                        # Statically link Intel runtime dependencies
-         -fvectorize                    # Enable loop vectorization
-         -fslp-vectorize                # Straight-line vectorization
-         -funroll-loops                 # Unroll simple loops for throughput
-         -fomit-frame-pointer           # Free up a general-purpose register
-         -msse2                         # Target SSE2 instruction set (safe baseline)
-         -fp-model=precise              # Disable aggressive FP optimization, retain precision
-      )
-      add_link_options(
-         -Wl,--gc-sections              # Discard unused code sections at link time
-         -flto=full                     # Enable aggressive full link-time optimization
-      )
+# Intel LLVM Compiler (Linux or Windows)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
+   add_compile_options(
+      -O2                            # Optimize for speed
+      -Wall                          # Enable most warning messages
+      -Wextra                        # Enable additional warning messages
+      -qopenmp-simd                  # Enable OpenMP SIMD loop support
+      -static                        # Statically link Intel runtime dependencies
+      -fvectorize                    # Enable loop vectorization
+      -fslp-vectorize                # Straight-line vectorization
+      -funroll-loops                 # Unroll simple loops for throughput
+      -fomit-frame-pointer           # Free up a general-purpose register
+      -msse2                         # Target SSE2 instruction set (safe baseline)
+      -fp-model=precise              # Disable aggressive FP optimization, retain precision
+   )
+add_link_options(
+   -Wl,--gc-sections              # Discard unused code sections at link time
+   -flto=full                     # Enable aggressive full link-time optimization
+)
 
-   # Linux on ARM64 (e.g., Raspberry Pi 4 or other AArch64)
-   elseif(UNIX AND CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-      add_compile_options(
-         -O2                            # Optimize for speed
-         -Wall                          # Enable most warning messages
-         -Wextra                        # Enable additional warning messages
-         -fopenmp                       # Enable OpenMP multithreading support
-         -ftree-vectorize               # Enable GCC’s automatic loop vectorizer
-         -funroll-loops                 # Improve loop performance
-         -fno-fast-math                 # Disable unsafe math optimizations
-         -fno-unsafe-math-optimizations # Use correct IEEE behavior
-         -flto                          # Link-time optimization for smaller binaries
-      )
-      add_link_options(
-         -Wl,--gc-sections              # Remove unused code/data
-         -flto                          # Link-time optimization
-      )
+# Linux on ARM64 (e.g., Raspberry Pi 4 or other AArch64)
+elseif(UNIX AND CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+   add_compile_options(
+      -O2                            # Optimize for speed
+      -Wall                          # Enable most warning messages
+      -Wextra                        # Enable additional warning messages
+      -fopenmp                       # Enable OpenMP multithreading support
+      -ftree-vectorize               # Enable GCC’s automatic loop vectorizer
+      -funroll-loops                 # Improve loop performance
+      -fno-fast-math                 # Disable unsafe math optimizations
+      -fno-unsafe-math-optimizations # Use correct IEEE behavior
+      -flto                          # Link-time optimization for smaller binaries
+   )
+add_link_options(
+   -Wl,--gc-sections              # Remove unused code/data
+   -flto                          # Link-time optimization
+)
 
-   # Generic x86_64 Linux (GCC or Clang)
-   elseif(UNIX)
-      add_compile_options(
-         -O2                            # Optimize for speed
-         -Wall                          # Enable most warning messages
-         -Wextra                        # Enable additional warning messages
-         -fopenmp                       # Enable multithreading via OpenMP
-         -ftree-vectorize               # Enable automatic vectorization
-         -funroll-loops                 # Improve loop performance by unrolling
-         -fomit-frame-pointer           # Optimize function call overhead
-         -msse2                         # Use SSE2 (supported on all x86_64 CPUs)
-         -fno-fast-math                 # IEEE-compliant floating point
-         -fno-unsafe-math-optimizations # Avoid unsafe math assumptions
-         -flto                          # Enable link-time optimization
-      )
-      add_link_options(
-         -Wl,--gc-sections              # Strip unused functions/data
-         -flto                          # Link-time optimization
-      )
+# Generic x86_64 Linux (GCC or Clang)
+elseif(UNIX)
+   add_compile_options(
+      -O2                            # Optimize for speed
+      -Wall                          # Enable most warning messages
+      -Wextra                        # Enable additional warning messages
+      -fopenmp                       # Enable multithreading via OpenMP
+      -ftree-vectorize               # Enable automatic vectorization
+      -funroll-loops                 # Improve loop performance by unrolling
+      -fomit-frame-pointer           # Optimize function call overhead
+      -msse2                         # Use SSE2 (supported on all x86_64 CPUs)
+      -fno-fast-math                 # IEEE-compliant floating point
+      -fno-unsafe-math-optimizations # Avoid unsafe math assumptions
+      -flto                          # Enable link-time optimization
+   )
+add_link_options(
+   -Wl,--gc-sections              # Strip unused functions/data
+   -flto                          # Link-time optimization
+)
 
-   endif()
+endif()
 endif()
 
 #-------------------------------------------------------------------------------
@@ -266,10 +274,10 @@ if(DEBUG_SANITIZER)
       -g                                # Generate debug symbols
       -fno-omit-frame-pointer           # Preserve frame pointers
    )
-   add_link_options(
-      -fsanitize=address                # Link AddressSanitizer
-      -fsanitize=undefined              # Link UndefinedBehaviorSanitizer
-   )
+add_link_options(
+   -fsanitize=address                # Link AddressSanitizer
+   -fsanitize=undefined              # Link UndefinedBehaviorSanitizer
+)
 endif()
 
 #-------------------------------------------------------------------------------

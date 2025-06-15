@@ -1,22 +1,23 @@
 /*
  * Serial Studio - https://serial-studio.github.io/
  *
- * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This file is part of the proprietary features of Serial Studio and is
+ * licensed under the Serial Studio Commercial License.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * Redistribution, modification, or use of this file in any form is permitted
+ * only under the terms of a valid Serial Studio Commercial License obtained
+ * from the author.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * This file must not be used or included in builds distributed under the
+ * GNU General Public License (GPL) unless explicitly permitted by a
+ * commercial agreement.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later
+ * For details, see:
+ * https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md
+ *
+ * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once
