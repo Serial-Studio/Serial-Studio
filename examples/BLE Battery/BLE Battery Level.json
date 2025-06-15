@@ -1,0 +1,41 @@
+{
+    "actions": [
+    ],
+    "checksum": "",
+    "decoder": 3,
+    "frameDetection": 2,
+    "frameEnd": "\\n",
+    "frameParser": "/**\n * @brief Converts a byte-like iterable into an array of numbers.\n * \n * @param frame An iterable containing byte values (0–255).\n * @return Array of numeric byte values.\n */\nfunction parse(frame) {\n    return Array.from(frame);\n}",
+    "frameStart": "$",
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 100,
+                    "min": 0,
+                    "overviewDisplay": false,
+                    "title": "Battery Level",
+                    "units": "%",
+                    "value": "--.--",
+                    "widget": "gauge",
+                    "xAxis": -1
+                }
+            ],
+            "title": "Group",
+            "widget": ""
+        }
+    ],
+    "hexadecimalDelimiters": false,
+    "mapTilerApiKey": "",
+    "thunderforestApiKey": "",
+    "title": "BLE Battery Level"
+}
