@@ -31,13 +31,13 @@
  * @typedef PlotDataX
  * @brief Represents the unique X-axis data points for a plot.
  */
-typedef std::vector<qreal> PlotDataX;
+typedef std::vector<double> PlotDataX;
 
 /**
  * @typedef PlotDataY
  * @brief Represents the Y-axis data points for a single curve.
  */
-typedef std::vector<qreal> PlotDataY;
+typedef std::vector<double> PlotDataY;
 
 #ifdef USE_QT_COMMERCIAL
 /**

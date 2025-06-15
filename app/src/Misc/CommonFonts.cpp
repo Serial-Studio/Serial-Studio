@@ -106,7 +106,7 @@ const QFont &Misc::CommonFonts::boldUiFont() const
  * @param bold True if the font should be bold, otherwise false.
  * @return The custom UI font.
  */
-QFont Misc::CommonFonts::customUiFont(const qreal fraction, const bool bold)
+QFont Misc::CommonFonts::customUiFont(const double fraction, const bool bold)
 {
   QFont font = bold ? m_boldUiFont : m_uiFont;
   font.setPointSizeF(m_uiFont.pointSizeF() * qMax(0.1, fraction));
@@ -118,7 +118,7 @@ QFont Misc::CommonFonts::customUiFont(const qreal fraction, const bool bold)
  * @param fraction The fractional size of the font (1=100% of normal font size)
  * @return The custom monospace font.
  */
-QFont Misc::CommonFonts::customMonoFont(const qreal fraction)
+QFont Misc::CommonFonts::customMonoFont(const double fraction)
 {
   QFont font = m_monoFont;
   font.setPointSizeF(m_monoFont.pointSizeF() * qMax(0.1, fraction));

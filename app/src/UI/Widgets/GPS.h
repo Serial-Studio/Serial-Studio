@@ -31,9 +31,9 @@ namespace Widgets
 class GPS : public QQuickItem
 {
   Q_OBJECT
-  Q_PROPERTY(qreal altitude READ altitude NOTIFY updated)
-  Q_PROPERTY(qreal latitude READ latitude NOTIFY updated)
-  Q_PROPERTY(qreal longitude READ longitude NOTIFY updated)
+  Q_PROPERTY(double altitude READ altitude NOTIFY updated)
+  Q_PROPERTY(double latitude READ latitude NOTIFY updated)
+  Q_PROPERTY(double longitude READ longitude NOTIFY updated)
 
 signals:
   void updated();
@@ -41,17 +41,17 @@ signals:
 public:
   GPS(const int index = -1, QQuickItem *parent = nullptr);
 
-  [[nodiscard]] qreal altitude() const;
-  [[nodiscard]] qreal latitude() const;
-  [[nodiscard]] qreal longitude() const;
+  [[nodiscard]] double altitude() const;
+  [[nodiscard]] double latitude() const;
+  [[nodiscard]] double longitude() const;
 
 private slots:
   void updateData();
 
 private:
   int m_index;
-  qreal m_altitude;
-  qreal m_latitude;
-  qreal m_longitude;
+  double m_altitude;
+  double m_latitude;
+  double m_longitude;
 };
 } // namespace Widgets

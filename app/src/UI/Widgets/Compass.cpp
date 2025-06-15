@@ -41,7 +41,7 @@ Widgets::Compass::Compass(const int index, QQuickItem *parent)
  * @brief Returns the current value of the compass.
  * @return The current value of the compass.
  */
-qreal Widgets::Compass::value() const
+double Widgets::Compass::value() const
 {
   return m_value;
 }

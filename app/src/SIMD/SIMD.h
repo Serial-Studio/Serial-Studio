@@ -55,19 +55,15 @@ namespace SIMD
  * @param count The total number of elements in the array.
  * @param value The value to initialize all elements in the array.
  */
-template<typename T>
-inline void fill(T *data, size_t count, T value)
+inline void fill(double *data, size_t count, const double value)
 {
-  // Obtain register width for SIMD operations
-  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
-
-  // SIMD bulk initialization
-  size_t i = 0;
   auto fillValue = simde_mm_set1_pd(value);
-  for (; i + simdWidth <= count; i += simdWidth)
-    simde_mm_storeu_pd(reinterpret_cast<double *>(data + i), fillValue);
+  constexpr size_t simdWidth = sizeof(simde__m128d) / sizeof(double);
 
-  // Handle remaining elements using a scalar loop
+  size_t i = 0;
+  for (; i + simdWidth <= count; i += simdWidth)
+    simde_mm_storeu_pd(data + i, fillValue);
+
   for (; i < count; ++i)
     data[i] = value;
 }
@@ -77,7 +73,7 @@ inline void fill(T *data, size_t count, T value)
  * bulk operations.
  *
  * This function uses SIMD instructions to fill an array with a sequence of
- * values starting from a specified `begin` value and incrementing by 1 for each
+ * values starting from a specified begin value and incrementing by 1 for each
  * element.
  *
  * For arrays larger than the SIMD width, it processes elements in chunks.
@@ -88,25 +84,19 @@ inline void fill(T *data, size_t count, T value)
  * @param count The total number of elements in the array.
  * @param begin The starting value for the range.
  */
-template<typename T>
-inline void fill_range(T *data, size_t count, T begin)
+inline void fill_range(double *data, size_t count, const double begin)
 {
-  // Obtain register width for SIMD operations
   size_t i = 0;
-  const auto step = static_cast<double>(1);
-  const auto start = static_cast<double>(begin);
-  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
-
-  // SIMD bulk initialization
+  constexpr size_t simdWidth = sizeof(simde__m128d) / sizeof(double);
   for (; i + simdWidth <= count; i += simdWidth)
   {
-    auto range = simde_mm_set_pd(start + step * (i + 1), start + step * i);
-    simde_mm_storeu_pd(reinterpret_cast<double *>(data + i), range);
+    auto range = simde_mm_set_pd(begin + i + 1, begin + i);
+    simde_mm_storeu_pd(data + i, range);
   }
 
-  // Handle remaining elements using a scalar loop
+  // Scalar tail
   for (; i < count; ++i)
-    data[i] = static_cast<T>(begin + i);
+    data[i] = begin + i;
 }
 
 /**
@@ -124,26 +114,24 @@ inline void fill_range(T *data, size_t count, T begin)
  * @param count The total number of elements in the array.
  * @param newValue The value to set at the last position after the shift.
  */
-template<typename T>
-inline void shift(T *data, size_t count, T newValue)
+inline void shift(double *data, size_t count, const double newValue)
 {
-  // Obtain register width for SIMD operations
-  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
+  // Obtain register width for SIMD operations (2 doubles per __m128d)
+  constexpr size_t simdWidth = sizeof(simde__m128d) / sizeof(double);
 
-  // Shift elements using SIMD operations
+  // SIMD shift
   size_t i = 0;
-  for (; i + simdWidth <= count; i += simdWidth)
+  for (; i + simdWidth + 1 <= count; i += simdWidth)
   {
-    auto next
-        = simde_mm_loadu_pd(reinterpret_cast<const double *>(data + i + 1));
-    simde_mm_storeu_pd(reinterpret_cast<double *>(data + i), next);
+    auto n = simde_mm_loadu_pd(reinterpret_cast<const double *>(data + i + 1));
+    simde_mm_storeu_pd(reinterpret_cast<double *>(data + i), n);
   }
 
-  // Handle remaining elements using a scalar loop
+  // Scalar fallback for remaining elements
   for (; i < count - 1; ++i)
     data[i] = data[i + 1];
 
-  // Set the last value of the array
+  // Set the final slot
   data[count - 1] = newValue;
 }
 
@@ -159,11 +147,10 @@ inline void shift(T *data, size_t count, T newValue)
  * @param count The total number of elements in the array.
  * @return The minimum value in the array.
  */
-template<typename T>
-inline T findMin(const T *data, size_t count)
+inline double findMin(const double *data, size_t count)
 {
   // Obtain register width for SIMD operations
-  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
+  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(double);
 
   // SIMD comparisons
   size_t i = 0;
@@ -175,15 +162,15 @@ inline T findMin(const T *data, size_t count)
   }
 
   // Reduce SIMD register to scalar
-  T minVal = data[0];
-  std::vector<T> buffer(simdWidth);
+  double minVal = data[0];
+  std::vector<double> buffer(simdWidth);
   simde_mm_storeu_pd(buffer.data(), minVec);
   for (size_t j = 0; j < simdWidth; ++j)
-    minVal = std::min<T>(minVal, buffer[j]);
+    minVal = std::min<double>(minVal, buffer[j]);
 
   // Scalar fallback for remaining elements
   for (; i < count; ++i)
-    minVal = std::min<T>(minVal, data[i]);
+    minVal = std::min<double>(minVal, data[i]);
 
   return minVal;
 }
@@ -200,11 +187,10 @@ inline T findMin(const T *data, size_t count)
  * @param count The total number of elements in the array.
  * @return The maximum value in the array.
  */
-template<typename T>
-inline T findMax(const T *data, size_t count)
+inline double findMax(const double *data, size_t count)
 {
   // Obtain register width for SIMD operations
-  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
+  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(double);
 
   // SIMD comparisons
   size_t i = 0;
@@ -216,15 +202,15 @@ inline T findMax(const T *data, size_t count)
   }
 
   // Reduce SIMD register to scalar
-  T maxVal = data[0];
-  std::vector<T> buffer(simdWidth);
+  double maxVal = data[0];
+  std::vector<double> buffer(simdWidth);
   simde_mm_storeu_pd(buffer.data(), maxVec);
   for (size_t j = 0; j < simdWidth; ++j)
-    maxVal = std::max<T>(maxVal, buffer[j]);
+    maxVal = std::max<double>(maxVal, buffer[j]);
 
   // Scalar fallback for remaining elements
   for (; i < count; ++i)
-    maxVal = std::max<T>(maxVal, data[i]);
+    maxVal = std::max<double>(maxVal, data[i]);
 
   return maxVal;
 }
@@ -242,13 +228,13 @@ inline T findMax(const T *data, size_t count)
  *
  * @param data The QVector<QPointF> containing the points to search.
  * @param extractor A callable that extracts the desired value from a QPointF
- *                  (e.g., `[](const QPointF& p) { return p.y(); }`).
+ *                  (e.g., [](const QPointF& p) { return p.y(); }).
  *
  * @return The minimum value in the QVector<QPointF> based on the extracted
  *         values.
  */
 template<typename Extractor>
-inline qreal findMin(const QVector<QPointF> &data, Extractor extractor)
+inline double findMin(const QVector<QPointF> &data, Extractor extractor)
 {
   // Do nothing if there is no data to compare
   size_t i = 0;
@@ -257,7 +243,7 @@ inline qreal findMin(const QVector<QPointF> &data, Extractor extractor)
     return 0;
 
   // Obtain register width for SIMD operations
-  constexpr auto simdWith = sizeof(simde__m128d) / sizeof(qreal);
+  constexpr auto simdWith = sizeof(simde__m128d) / sizeof(double);
   auto minVec = simde_mm_set1_pd(extractor(data[0]));
 
   // SIMD comparisons
@@ -268,15 +254,15 @@ inline qreal findMin(const QVector<QPointF> &data, Extractor extractor)
   }
 
   // Reduce SIMD register to scalar
-  alignas(16) qreal buffer[simdWith];
+  alignas(16) double buffer[simdWith];
   simde_mm_storeu_pd(buffer, minVec);
-  qreal minVal = buffer[0];
+  double minVal = buffer[0];
   for (size_t j = 1; j < simdWith; ++j)
-    minVal = std::min<qreal>(minVal, buffer[j]);
+    minVal = std::min<double>(minVal, buffer[j]);
 
   // Scalar fallback for remaining elements
   for (; i < count; ++i)
-    minVal = std::min<qreal>(minVal, extractor(data[i]));
+    minVal = std::min<double>(minVal, extractor(data[i]));
 
   return minVal;
 }
@@ -294,13 +280,13 @@ inline qreal findMin(const QVector<QPointF> &data, Extractor extractor)
  *
  * @param data The QVector<QPointF> containing the points to search.
  * @param extractor A callable that extracts the desired value from a QPointF
- *                  (e.g., `[](const QPointF& p) { return p.y(); }`).
+ *                  (e.g., [](const QPointF& p) { return p.y(); }).
  *
  * @return The maximum value in the QVector<QPointF> based on the extracted
  *         values.
  */
 template<typename Extractor>
-inline qreal findMax(const QVector<QPointF> &data, Extractor extractor)
+inline double findMax(const QVector<QPointF> &data, Extractor extractor)
 {
   // Do nothing if there is no data to compare
   size_t i = 0;
@@ -309,7 +295,7 @@ inline qreal findMax(const QVector<QPointF> &data, Extractor extractor)
     return 0;
 
   // Obtain register width for SIMD operations
-  constexpr auto simdWith = sizeof(simde__m128d) / sizeof(qreal);
+  constexpr auto simdWith = sizeof(simde__m128d) / sizeof(double);
   auto maxVec = simde_mm_set1_pd(extractor(data[0]));
 
   // SIMD comparisons
@@ -320,15 +306,15 @@ inline qreal findMax(const QVector<QPointF> &data, Extractor extractor)
   }
 
   // Reduce SIMD register to scalar
-  alignas(16) qreal buffer[simdWith];
+  alignas(16) double buffer[simdWith];
   simde_mm_storeu_pd(buffer, maxVec);
-  qreal maxVal = buffer[0];
+  double maxVal = buffer[0];
   for (size_t j = 1; j < simdWith; ++j)
-    maxVal = std::max<qreal>(maxVal, buffer[j]);
+    maxVal = std::max<double>(maxVal, buffer[j]);
 
   // Scalar fallback for remaining elements
   for (; i < count; ++i)
-    maxVal = std::max<qreal>(maxVal, extractor(data[i]));
+    maxVal = std::max<double>(maxVal, extractor(data[i]));
 
   return maxVal;
 }

@@ -31,7 +31,7 @@ namespace Widgets
 class Compass : public QQuickItem
 {
   Q_OBJECT
-  Q_PROPERTY(qreal value READ value NOTIFY updated)
+  Q_PROPERTY(double value READ value NOTIFY updated)
   Q_PROPERTY(QString text READ text NOTIFY updated)
 
 signals:
@@ -40,7 +40,7 @@ signals:
 public:
   explicit Compass(const int index = -1, QQuickItem *parent = nullptr);
 
-  [[nodiscard]] qreal value() const;
+  [[nodiscard]] double value() const;
   [[nodiscard]] QString text() const;
 
 private slots:
@@ -48,7 +48,7 @@ private slots:
 
 private:
   int m_index;
-  qreal m_value;
+  double m_value;
   QString m_text;
 };
 } // namespace Widgets

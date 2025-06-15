@@ -32,13 +32,13 @@ class Gyroscope : public QQuickItem
 {
   // clang-format off
   Q_OBJECT
-  Q_PROPERTY(qreal yaw
+  Q_PROPERTY(double yaw
              READ yaw
              NOTIFY updated)
-  Q_PROPERTY(qreal roll
+  Q_PROPERTY(double roll
              READ roll
              NOTIFY updated)
-  Q_PROPERTY(qreal pitch
+  Q_PROPERTY(double pitch
              READ pitch
              NOTIFY updated)
   Q_PROPERTY(bool integrateValues
@@ -54,9 +54,9 @@ signals:
 public:
   explicit Gyroscope(const int index = -1, QQuickItem *parent = nullptr);
 
-  [[nodiscard]] qreal yaw() const;
-  [[nodiscard]] qreal roll() const;
-  [[nodiscard]] qreal pitch() const;
+  [[nodiscard]] double yaw() const;
+  [[nodiscard]] double roll() const;
+  [[nodiscard]] double pitch() const;
   [[nodiscard]] bool integrateValues() const;
 
 private slots:
@@ -66,9 +66,9 @@ private slots:
 private:
   int m_index;
 
-  qreal m_yaw;
-  qreal m_roll;
-  qreal m_pitch;
+  double m_yaw;
+  double m_roll;
+  double m_pitch;
   QElapsedTimer m_timer;
 
   bool m_integrateValues;

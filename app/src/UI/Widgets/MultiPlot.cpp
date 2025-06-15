@@ -42,8 +42,8 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
   {
     // Obtain min/max values from datasets
     const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
-    m_minY = std::numeric_limits<qreal>::max();
-    m_maxY = std::numeric_limits<qreal>::lowest();
+    m_minY = std::numeric_limits<double>::max();
+    m_maxY = std::numeric_limits<double>::lowest();
     for (const auto &dataset : group.datasets())
     {
       m_labels.append(dataset.title());
@@ -87,7 +87,7 @@ int Widgets::MultiPlot::count() const
  * @brief Returns the minimum X-axis value.
  * @return The minimum X-axis value.
  */
-qreal Widgets::MultiPlot::minX() const
+double Widgets::MultiPlot::minX() const
 {
   return m_minX;
 }
@@ -96,7 +96,7 @@ qreal Widgets::MultiPlot::minX() const
  * @brief Returns the maximum X-axis value.
  * @return The maximum X-axis value.
  */
-qreal Widgets::MultiPlot::maxX() const
+double Widgets::MultiPlot::maxX() const
 {
   return m_maxX;
 }
@@ -105,7 +105,7 @@ qreal Widgets::MultiPlot::maxX() const
  * @brief Returns the minimum Y-axis value.
  * @return The minimum Y-axis value.
  */
-qreal Widgets::MultiPlot::minY() const
+double Widgets::MultiPlot::minY() const
 {
   return m_minY;
 }
@@ -114,7 +114,7 @@ qreal Widgets::MultiPlot::minY() const
  * @brief Returns the maximum Y-axis value.
  * @return The maximum Y-axis value.
  */
-qreal Widgets::MultiPlot::maxY() const
+double Widgets::MultiPlot::maxY() const
 {
   return m_maxY;
 }
@@ -123,7 +123,7 @@ qreal Widgets::MultiPlot::maxY() const
  * @brief Returns the X-axis tick interval.
  * @return The X-axis tick interval.
  */
-qreal Widgets::MultiPlot::xTickInterval() const
+double Widgets::MultiPlot::xTickInterval() const
 {
   return UI::Dashboard::smartInterval(m_minX, m_maxX);
 }
@@ -132,7 +132,7 @@ qreal Widgets::MultiPlot::xTickInterval() const
  * @brief Returns the Y-axis tick interval with human-readable values.
  * @return The Y-axis tick interval.
  */
-qreal Widgets::MultiPlot::yTickInterval() const
+double Widgets::MultiPlot::yTickInterval() const
 {
   return UI::Dashboard::smartInterval(m_minY, m_maxY);
 }
@@ -302,8 +302,8 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
   {
     const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
 
-    m_minY = std::numeric_limits<qreal>::max();
-    m_maxY = std::numeric_limits<qreal>::lowest();
+    m_minY = std::numeric_limits<double>::max();
+    m_maxY = std::numeric_limits<double>::lowest();
 
     for (const auto &dataset : group.datasets())
     {
@@ -323,8 +323,8 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
   if (!ok)
   {
     // Initialize values to ensure that min/max are set
-    m_minY = std::numeric_limits<qreal>::max();
-    m_maxY = std::numeric_limits<qreal>::lowest();
+    m_minY = std::numeric_limits<double>::max();
+    m_maxY = std::numeric_limits<double>::lowest();
 
     // Loop through each dataset and find the min and max values
     for (const auto &dataset : std::as_const(m_data))

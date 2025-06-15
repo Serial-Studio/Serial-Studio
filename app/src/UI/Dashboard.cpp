@@ -107,20 +107,20 @@ UI::Dashboard &UI::Dashboard::instance()
  * @param min The minimum value of the range.
  * @param max The maximum value of the range.
  * @param multiplier Scaling factor for step size granularity (default = 0.2).
- * @return qreal The computed interval size for the given range.
+ * @return double The computed interval size for the given range.
  *
  * @note Common intervals (e.g., 0.1, 0.2, 0.5, 1, 2, 5, 10) are selected
  *       to enhance readability. Ensures the interval divides the range evenly.
  */
-qreal UI::Dashboard::smartInterval(const qreal min, const qreal max,
-                                   const qreal multiplier)
+double UI::Dashboard::smartInterval(const double min, const double max,
+                                    const double multiplier)
 {
   // Calculate an initial step size
   const auto range = qAbs(max - min);
   const auto digits = static_cast<int>(std::ceil(std::log10(range)));
-  const qreal r = std::pow(10.0, -digits) * 10;
-  const qreal v = std::ceil(range * r) / r;
-  qreal step = qMax(0.0001, v * multiplier);
+  const double r = std::pow(10.0, -digits) * 10;
+  const double v = std::ceil(range * r) / r;
+  double step = qMax(0.0001, v * multiplier);
 
   // For smaller steps, use 0.1, 0.2, 0.5, etc.
   if (step < 1.0)
@@ -138,8 +138,8 @@ qreal UI::Dashboard::smartInterval(const qreal min, const qreal max,
   // For larger steps, round to 1, 2, 5, 10, etc.
   else
   {
-    const qreal factor = std::pow(10.0, std::floor(std::log10(step)));
-    const qreal normalizedStep = step / factor;
+    const double factor = std::pow(10.0, std::floor(std::log10(step)));
+    const double normalizedStep = step / factor;
 
     if (normalizedStep <= 1.0)
       step = factor;
@@ -1060,7 +1060,7 @@ void UI::Dashboard::updatePlots()
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
     auto *data = m_fftValues[i].data();
     auto count = m_fftValues[i].size();
-    SIMD::shift<qreal>(data, count, dataset.value().toDouble());
+    SIMD::shift(data, count, dataset.value().toDouble());
   }
 
   // Append latest values to linear plots data
@@ -1075,7 +1075,7 @@ void UI::Dashboard::updatePlots()
       yAxesMoved.insert(yDataset.index());
       auto *yData = m_yAxisData[yDataset.index()].data();
       auto yCount = m_yAxisData[yDataset.index()].size();
-      SIMD::shift<qreal>(yData, yCount, yDataset.value().toDouble());
+      SIMD::shift(yData, yCount, yDataset.value().toDouble());
     }
 
     // Shift X-axis points
@@ -1086,7 +1086,7 @@ void UI::Dashboard::updatePlots()
       const auto &xDataset = m_datasets[xAxisId];
       auto *xData = m_xAxisData[xAxisId].data();
       auto xCount = m_xAxisData[xAxisId].size();
-      SIMD::shift<qreal>(xData, xCount, xDataset.value().toDouble());
+      SIMD::shift(xData, xCount, xDataset.value().toDouble());
     }
   }
 
@@ -1099,7 +1099,7 @@ void UI::Dashboard::updatePlots()
       const auto &dataset = group.datasets()[j];
       auto *data = m_multipltValues[i].y[j].data();
       auto count = m_multipltValues[i].y[j].size();
-      SIMD::shift<qreal>(data, count, dataset.value().toDouble());
+      SIMD::shift(data, count, dataset.value().toDouble());
     }
   }
 
@@ -1154,7 +1154,7 @@ void UI::Dashboard::configureFftSeries()
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
     m_fftValues.append(PlotDataY());
     m_fftValues.last().resize(dataset.fftSamples());
-    SIMD::fill<qreal>(m_fftValues.last().data(), dataset.fftSamples(), 0);
+    SIMD::fill(m_fftValues.last().data(), dataset.fftSamples(), 0);
   }
 }
 
@@ -1184,7 +1184,7 @@ void UI::Dashboard::configureLineSeries()
   m_pltXAxis.clear();
   m_pltXAxis.shrink_to_fit();
   m_pltXAxis.resize(points() + 1);
-  SIMD::fill_range<qreal>(m_pltXAxis.data(), m_pltXAxis.size(), 0);
+  SIMD::fill_range(m_pltXAxis.data(), m_pltXAxis.size(), 0);
 
   // Construct X/Y axis data arrays
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
@@ -1228,8 +1228,8 @@ void UI::Dashboard::configureLineSeries()
       const auto &xDataset = m_datasets[yDataset.xAxisId()];
       m_xAxisData[xDataset.index()].resize(points() + 1);
       m_yAxisData[yDataset.index()].resize(points() + 1);
-      SIMD::fill<qreal>(m_xAxisData[xDataset.index()].data(), points() + 1, 0);
-      SIMD::fill<qreal>(m_yAxisData[yDataset.index()].data(), points() + 1, 0);
+      SIMD::fill(m_xAxisData[xDataset.index()].data(), points() + 1, 0);
+      SIMD::fill(m_yAxisData[yDataset.index()].data(), points() + 1, 0);
 
       LineSeries series;
       series.x = &m_xAxisData[xDataset.index()];
@@ -1241,7 +1241,7 @@ void UI::Dashboard::configureLineSeries()
     else
     {
       m_yAxisData[yDataset.index()].resize(points() + 1);
-      SIMD::fill<qreal>(m_yAxisData[yDataset.index()].data(), points() + 1, 0);
+      SIMD::fill(m_yAxisData[yDataset.index()].data(), points() + 1, 0);
 
       LineSeries series;
       series.x = &m_pltXAxis;
@@ -1271,7 +1271,7 @@ void UI::Dashboard::configureMultiLineSeries()
   m_multipltXAxis.clear();
   m_multipltXAxis.shrink_to_fit();
   m_multipltXAxis.resize(points() + 1);
-  SIMD::fill_range<qreal>(m_multipltXAxis.data(), m_multipltXAxis.size(), 0);
+  SIMD::fill_range(m_multipltXAxis.data(), m_multipltXAxis.size(), 0);
 
   // Construct multi-plot values structure
   for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i)
@@ -1284,7 +1284,7 @@ void UI::Dashboard::configureMultiLineSeries()
     {
       series.y.push_back(PlotDataY());
       series.y.back().resize(points() + 1);
-      SIMD::fill<qreal>(series.y.back().data(), points() + 1, 0);
+      SIMD::fill(series.y.back().data(), points() + 1, 0);
     }
 
     m_multipltValues.append(series);

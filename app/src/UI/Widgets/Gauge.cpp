@@ -61,7 +61,7 @@ const QString &Widgets::Gauge::units() const
  * @brief Returns the current value of the gauge.
  * @return The current value of the gauge.
  */
-qreal Widgets::Gauge::value() const
+double Widgets::Gauge::value() const
 {
   return m_value;
 }
@@ -70,7 +70,7 @@ qreal Widgets::Gauge::value() const
  * @brief Returns the minimum value of the gauge scale.
  * @return The minimum value of the gauge scale.
  */
-qreal Widgets::Gauge::minValue() const
+double Widgets::Gauge::minValue() const
 {
   return m_minValue;
 }
@@ -79,7 +79,7 @@ qreal Widgets::Gauge::minValue() const
  * @brief Returns the maximum value of the gauge scale.
  * @return The maximum value of the gauge scale.
  */
-qreal Widgets::Gauge::maxValue() const
+double Widgets::Gauge::maxValue() const
 {
   return m_maxValue;
 }
@@ -88,7 +88,7 @@ qreal Widgets::Gauge::maxValue() const
  * @brief Returns the alarm level of the gauge.
  * @return The alarm level of the gauge.
  */
-qreal Widgets::Gauge::alarmValue() const
+double Widgets::Gauge::alarmValue() const
 {
   return m_alarmValue;
 }

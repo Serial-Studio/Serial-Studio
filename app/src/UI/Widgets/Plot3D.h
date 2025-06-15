@@ -59,35 +59,35 @@ class Plot3D : public QQuickPaintedItem
              READ interpolationEnabled
              WRITE setInterpolationEnabled
              NOTIFY interpolationEnabledChanged)
-  Q_PROPERTY(qreal worldScale
+  Q_PROPERTY(double worldScale
              READ worldScale
              WRITE setWorldScale
              NOTIFY cameraChanged)
-  Q_PROPERTY(qreal cameraAngleX
+  Q_PROPERTY(double cameraAngleX
              READ cameraAngleX
              WRITE setCameraAngleX
              NOTIFY cameraChanged)
-  Q_PROPERTY(qreal cameraAngleY
+  Q_PROPERTY(double cameraAngleY
              READ cameraAngleY
              WRITE setCameraAngleY
              NOTIFY cameraChanged)
-  Q_PROPERTY(qreal cameraAngleZ
+  Q_PROPERTY(double cameraAngleZ
              READ cameraAngleZ
              WRITE setCameraAngleZ
              NOTIFY cameraChanged)
-  Q_PROPERTY(qreal cameraOffsetX
+  Q_PROPERTY(double cameraOffsetX
              READ cameraOffsetX
              WRITE setCameraOffsetX
              NOTIFY cameraChanged)
-  Q_PROPERTY(qreal cameraOffsetY
+  Q_PROPERTY(double cameraOffsetY
              READ cameraOffsetY
              WRITE setCameraOffsetY
              NOTIFY cameraChanged)
-  Q_PROPERTY(qreal cameraOffsetZ
+  Q_PROPERTY(double cameraOffsetZ
              READ cameraOffsetZ
              WRITE setCameraOffsetZ
              NOTIFY cameraChanged)
-  Q_PROPERTY(qreal idealWorldScale
+  Q_PROPERTY(double idealWorldScale
              READ idealWorldScale
              NOTIFY rangeChanged)
   Q_PROPERTY(float eyeSeparation
@@ -113,14 +113,14 @@ public:
   explicit Plot3D(const int index = -1, QQuickItem *parent = nullptr);
   void paint(QPainter *painter) override;
 
-  [[nodiscard]] qreal worldScale() const;
-  [[nodiscard]] qreal cameraAngleX() const;
-  [[nodiscard]] qreal cameraAngleY() const;
-  [[nodiscard]] qreal cameraAngleZ() const;
-  [[nodiscard]] qreal cameraOffsetX() const;
-  [[nodiscard]] qreal cameraOffsetY() const;
-  [[nodiscard]] qreal cameraOffsetZ() const;
-  [[nodiscard]] qreal idealWorldScale() const;
+  [[nodiscard]] double worldScale() const;
+  [[nodiscard]] double cameraAngleX() const;
+  [[nodiscard]] double cameraAngleY() const;
+  [[nodiscard]] double cameraAngleZ() const;
+  [[nodiscard]] double cameraOffsetX() const;
+  [[nodiscard]] double cameraOffsetY() const;
+  [[nodiscard]] double cameraOffsetZ() const;
+  [[nodiscard]] double idealWorldScale() const;
 
   [[nodiscard]] bool dirty() const;
 
@@ -132,13 +132,13 @@ public:
   [[nodiscard]] bool interpolationEnabled() const;
 
 public slots:
-  void setWorldScale(const qreal z);
-  void setCameraAngleX(const qreal angle);
-  void setCameraAngleY(const qreal angle);
-  void setCameraAngleZ(const qreal angle);
-  void setCameraOffsetX(const qreal offset);
-  void setCameraOffsetY(const qreal offset);
-  void setCameraOffsetZ(const qreal offset);
+  void setWorldScale(const double z);
+  void setCameraAngleX(const double angle);
+  void setCameraAngleY(const double angle);
+  void setCameraAngleZ(const double angle);
+  void setCameraOffsetX(const double offset);
+  void setCameraOffsetY(const double offset);
+  void setCameraOffsetZ(const double offset);
   void setAnaglyphEnabled(const bool enabled);
   void setOrbitNavigation(const bool enabled);
   void setEyeSeparation(const float separation);
@@ -158,7 +158,7 @@ private:
   void drawCameraIndicator();
 
 private:
-  qreal gridStep(const qreal scale = -1) const;
+  double gridStep(const double scale = -1) const;
   std::vector<QPointF> screenProjection(const PlotData3D &points,
                                         const QMatrix4x4 &matrix);
   void drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
@@ -179,20 +179,20 @@ protected:
 private:
   int m_index;
 
-  qreal m_minX;
-  qreal m_maxX;
-  qreal m_minY;
-  qreal m_maxY;
-  qreal m_minZ;
-  qreal m_maxZ;
+  double m_minX;
+  double m_maxX;
+  double m_minY;
+  double m_maxY;
+  double m_minZ;
+  double m_maxZ;
 
-  qreal m_worldScale;
-  qreal m_cameraAngleX;
-  qreal m_cameraAngleY;
-  qreal m_cameraAngleZ;
-  qreal m_cameraOffsetX;
-  qreal m_cameraOffsetY;
-  qreal m_cameraOffsetZ;
+  double m_worldScale;
+  double m_cameraAngleX;
+  double m_cameraAngleY;
+  double m_cameraAngleZ;
+  double m_cameraOffsetX;
+  double m_cameraOffsetY;
+  double m_cameraOffsetZ;
 
   float m_eyeSeparation;
 
@@ -223,10 +223,10 @@ private:
   QPixmap m_backgroundPixmap[2];
   QPixmap m_cameraIndicatorPixmap[2];
 
-  qreal m_orbitOffsetX;
-  qreal m_orbitOffsetY;
+  double m_orbitOffsetX;
+  double m_orbitOffsetY;
   QPointF m_lastMousePos;
-  qreal m_minimumWorldScale;
+  double m_minimumWorldScale;
 
   QVector3D m_minPoint;
   QVector3D m_maxPoint;

@@ -42,7 +42,7 @@ Widgets::Accelerometer::Accelerometer(const int index, QQuickItem *parent)
  * @brief Returns the current G-force magnitude of the accelerometer.
  * @return The current G-force magnitude.
  */
-qreal Widgets::Accelerometer::magnitude() const
+double Widgets::Accelerometer::magnitude() const
 {
   return m_magnitude;
 }
@@ -50,7 +50,7 @@ qreal Widgets::Accelerometer::magnitude() const
 /**
  * @brief Returns the current theta of the G-Force vector.
  */
-qreal Widgets::Accelerometer::theta() const
+double Widgets::Accelerometer::theta() const
 {
   return m_theta;
 }
@@ -77,7 +77,7 @@ void Widgets::Accelerometer::updateData()
     return;
 
   // Obtain the X, Y, and Z acceleration values
-  qreal x = 0, y = 0;
+  double x = 0, y = 0;
   for (int i = 0; i < 3; ++i)
   {
     auto dataset = acc.getDataset(i);
@@ -88,10 +88,10 @@ void Widgets::Accelerometer::updateData()
   }
 
   // Calculate the radius (magnitude) using only X and Y
-  const qreal r = qSqrt(qPow(x / 9.81, 2) + qPow(y / 9.81, 2));
+  const double r = qSqrt(qPow(x / 9.81, 2) + qPow(y / 9.81, 2));
 
   // Calculate the angle using atan2 for the X-Y plane
-  const qreal theta = qAtan2(y, x) * (180.0 / M_PI);
+  const double theta = qAtan2(y, x) * (180.0 / M_PI);
 
   // Redraw item if required
   if (!qFuzzyCompare(r, m_magnitude) || !qFuzzyCompare(theta, m_theta))

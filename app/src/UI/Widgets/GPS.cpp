@@ -42,7 +42,7 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
 /**
  * Returns the latest GPS altitude value extracted from the JSON data.
  */
-qreal Widgets::GPS::altitude() const
+double Widgets::GPS::altitude() const
 {
   return m_altitude;
 }
@@ -50,7 +50,7 @@ qreal Widgets::GPS::altitude() const
 /**
  * Returns the latest GPS latitude value extracted from the JSON data.
  */
-qreal Widgets::GPS::latitude() const
+double Widgets::GPS::latitude() const
 {
   return m_latitude;
 }
@@ -58,7 +58,7 @@ qreal Widgets::GPS::latitude() const
 /**
  * Returns the latest GPS longitude value extracted from the JSON data.
  */
-qreal Widgets::GPS::longitude() const
+double Widgets::GPS::longitude() const
 {
   return m_longitude;
 }
@@ -79,7 +79,7 @@ void Widgets::GPS::updateData()
   {
     const auto &group = GET_GROUP(SerialStudio::DashboardGPS, m_index);
 
-    qreal lat = 0, lon = 0, alt = 0;
+    double lat = 0, lon = 0, alt = 0;
     for (int i = 0; i < group.datasetCount(); ++i)
     {
       const auto &dataset = group.getDataset(i);

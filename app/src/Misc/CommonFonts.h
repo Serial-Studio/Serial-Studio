@@ -62,8 +62,8 @@ public:
   [[nodiscard]] const QFont &monoFont() const;
   [[nodiscard]] const QFont &boldUiFont() const;
 
-  Q_INVOKABLE QFont customUiFont(qreal fraction = 1, bool bold = false);
-  Q_INVOKABLE QFont customMonoFont(qreal fraction = 1);
+  Q_INVOKABLE QFont customUiFont(double fraction = 1, bool bold = false);
+  Q_INVOKABLE QFont customMonoFont(double fraction = 1);
 
 private:
   QFont m_uiFont;

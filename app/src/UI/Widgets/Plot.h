@@ -37,12 +37,12 @@ class Plot : public QQuickItem
   Q_OBJECT
   Q_PROPERTY(QString yLabel READ yLabel CONSTANT)
   Q_PROPERTY(QString xLabel READ xLabel CONSTANT)
-  Q_PROPERTY(qreal minX READ minX NOTIFY rangeChanged)
-  Q_PROPERTY(qreal maxX READ maxX NOTIFY rangeChanged)
-  Q_PROPERTY(qreal minY READ minY NOTIFY rangeChanged)
-  Q_PROPERTY(qreal maxY READ maxY NOTIFY rangeChanged)
-  Q_PROPERTY(qreal xTickInterval READ xTickInterval NOTIFY rangeChanged)
-  Q_PROPERTY(qreal yTickInterval READ yTickInterval NOTIFY rangeChanged)
+  Q_PROPERTY(double minX READ minX NOTIFY rangeChanged)
+  Q_PROPERTY(double maxX READ maxX NOTIFY rangeChanged)
+  Q_PROPERTY(double minY READ minY NOTIFY rangeChanged)
+  Q_PROPERTY(double maxY READ maxY NOTIFY rangeChanged)
+  Q_PROPERTY(double xTickInterval READ xTickInterval NOTIFY rangeChanged)
+  Q_PROPERTY(double yTickInterval READ yTickInterval NOTIFY rangeChanged)
 
 signals:
   void rangeChanged();
@@ -55,12 +55,12 @@ public:
     m_data.squeeze();
   }
 
-  [[nodiscard]] qreal minX() const;
-  [[nodiscard]] qreal maxX() const;
-  [[nodiscard]] qreal minY() const;
-  [[nodiscard]] qreal maxY() const;
-  [[nodiscard]] qreal xTickInterval() const;
-  [[nodiscard]] qreal yTickInterval() const;
+  [[nodiscard]] double minX() const;
+  [[nodiscard]] double maxX() const;
+  [[nodiscard]] double minY() const;
+  [[nodiscard]] double maxY() const;
+  [[nodiscard]] double xTickInterval() const;
+  [[nodiscard]] double yTickInterval() const;
   [[nodiscard]] const QString &yLabel() const;
   [[nodiscard]] const QString &xLabel() const;
 
@@ -74,15 +74,16 @@ private slots:
 
 private:
   template<typename Extractor>
-  bool computeMinMaxValues(qreal &min, qreal &max, const JSON::Dataset &dataset,
-                           const bool addPadding, Extractor extractor);
+  bool computeMinMaxValues(double &min, double &max,
+                           const JSON::Dataset &dataset, const bool addPadding,
+                           Extractor extractor);
 
 private:
   int m_index;
-  qreal m_minX;
-  qreal m_maxX;
-  qreal m_minY;
-  qreal m_maxY;
+  double m_minX;
+  double m_maxX;
+  double m_minY;
+  double m_maxY;
   QString m_yLabel;
   QString m_xLabel;
   QVector<QPointF> m_data;

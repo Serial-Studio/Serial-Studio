@@ -41,7 +41,7 @@ find_package(
 #-------------------------------------------------------------------------------
 
 option(DEBUG_SANITIZER "Enable sanitizers for debug builds" OFF)
-option(PRODUCTION_OPTIMIZATION "Enable production optimization flags" OFF)
+option(PRODUCTION_OPTIMIZATION "Enable production optimization flags" ON)
 
 #-------------------------------------------------------------------------------
 # Project information
@@ -263,14 +263,12 @@ if(DEBUG_SANITIZER)
    add_compile_options(
       -fsanitize=address                # Enable AddressSanitizer
       -fsanitize=undefined              # Enable UndefinedBehaviorSanitizer
-      -fsanitize=leak                   # Enable LeakSanitizer
       -g                                # Generate debug symbols
       -fno-omit-frame-pointer           # Preserve frame pointers
    )
    add_link_options(
       -fsanitize=address                # Link AddressSanitizer
       -fsanitize=undefined              # Link UndefinedBehaviorSanitizer
-      -fsanitize=leak                   # Link LeakSanitizer
    )
 endif()
 

@@ -71,7 +71,7 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
  * @brief Returns the minimum X-axis value.
  * @return The minimum X-axis value.
  */
-qreal Widgets::Plot::minX() const
+double Widgets::Plot::minX() const
 {
   return m_minX;
 }
@@ -80,7 +80,7 @@ qreal Widgets::Plot::minX() const
  * @brief Returns the maximum X-axis value.
  * @return The maximum X-axis value.
  */
-qreal Widgets::Plot::maxX() const
+double Widgets::Plot::maxX() const
 {
   return m_maxX;
 }
@@ -89,7 +89,7 @@ qreal Widgets::Plot::maxX() const
  * @brief Returns the minimum Y-axis value.
  * @return The minimum Y-axis value.
  */
-qreal Widgets::Plot::minY() const
+double Widgets::Plot::minY() const
 {
   return m_minY;
 }
@@ -98,7 +98,7 @@ qreal Widgets::Plot::minY() const
  * @brief Returns the maximum Y-axis value.
  * @return The maximum Y-axis value.
  */
-qreal Widgets::Plot::maxY() const
+double Widgets::Plot::maxY() const
 {
   return m_maxY;
 }
@@ -107,7 +107,7 @@ qreal Widgets::Plot::maxY() const
  * @brief Returns the X-axis tick interval.
  * @return The X-axis tick interval.
  */
-qreal Widgets::Plot::xTickInterval() const
+double Widgets::Plot::xTickInterval() const
 {
   return UI::Dashboard::smartInterval(m_minX, m_maxX);
 }
@@ -116,7 +116,7 @@ qreal Widgets::Plot::xTickInterval() const
  * @brief Returns the Y-axis tick interval with human-readable values.
  * @return The Y-axis tick interval.
  */
-qreal Widgets::Plot::yTickInterval() const
+double Widgets::Plot::yTickInterval() const
 {
   return UI::Dashboard::smartInterval(m_minY, m_maxY);
 }
@@ -292,7 +292,7 @@ void Widgets::Plot::calculateAutoScaleRange()
  * adjusted to provide a better display.
  */
 template<typename Extractor>
-bool Widgets::Plot::computeMinMaxValues(qreal &min, qreal &max,
+bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
                                         const JSON::Dataset &dataset,
                                         const bool addPadding,
                                         Extractor extractor)
@@ -324,8 +324,8 @@ bool Widgets::Plot::computeMinMaxValues(qreal &min, qreal &max,
   if (!ok)
   {
     // Initialize values to ensure that min/max are set
-    min = std::numeric_limits<qreal>::max();
-    max = std::numeric_limits<qreal>::lowest();
+    min = std::numeric_limits<double>::max();
+    max = std::numeric_limits<double>::lowest();
 
     // Loop through the plot data and update the min and max
     min = SIMD::findMin(m_data, extractor);

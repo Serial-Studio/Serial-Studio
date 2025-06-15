@@ -65,9 +65,9 @@ bool CSV::Player::isOpen() const
 /**
  * Returns the CSV playback progress in a range from 0.0 to 1.0
  */
-qreal CSV::Player::progress() const
+double CSV::Player::progress() const
 {
-  return ((qreal)framePosition()) / frameCount();
+  return ((double)framePosition()) / frameCount();
 }
 
 /**
@@ -393,7 +393,7 @@ void CSV::Player::openFile(const QString &filePath)
  * @note A silent reset is performed to refresh the dashboard plots without
  *       emitting unnecessary signals.
  */
-void CSV::Player::setProgress(const qreal progress)
+void CSV::Player::setProgress(const double progress)
 {
   // Clamp progress between 0 and 1
   const auto validProgress = std::clamp(progress, 0.0, 1.0);

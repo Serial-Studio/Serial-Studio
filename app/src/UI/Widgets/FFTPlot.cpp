@@ -70,7 +70,7 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
  * @brief Returns the minimum X-axis value.
  * @return The minimum X-axis value.
  */
-qreal Widgets::FFTPlot::minX() const
+double Widgets::FFTPlot::minX() const
 {
   return m_minX;
 }
@@ -79,7 +79,7 @@ qreal Widgets::FFTPlot::minX() const
  * @brief Returns the maximum X-axis value.
  * @return The maximum X-axis value.
  */
-qreal Widgets::FFTPlot::maxX() const
+double Widgets::FFTPlot::maxX() const
 {
   return m_maxX;
 }
@@ -88,7 +88,7 @@ qreal Widgets::FFTPlot::maxX() const
  * @brief Returns the minimum Y-axis value.
  * @return The minimum Y-axis value.
  */
-qreal Widgets::FFTPlot::minY() const
+double Widgets::FFTPlot::minY() const
 {
   return m_minY;
 }
@@ -97,7 +97,7 @@ qreal Widgets::FFTPlot::minY() const
  * @brief Returns the maximum Y-axis value.
  * @return The maximum Y-axis value.
  */
-qreal Widgets::FFTPlot::maxY() const
+double Widgets::FFTPlot::maxY() const
 {
   return m_maxY;
 }
@@ -106,7 +106,7 @@ qreal Widgets::FFTPlot::maxY() const
  * @brief Returns the X-axis tick interval.
  * @return The X-axis tick interval.
  */
-qreal Widgets::FFTPlot::xTickInterval() const
+double Widgets::FFTPlot::xTickInterval() const
 {
   return UI::Dashboard::smartInterval(m_minX, m_maxX);
 }
@@ -115,7 +115,7 @@ qreal Widgets::FFTPlot::xTickInterval() const
  * @brief Returns the Y-axis tick interval.
  * @return The Y-axis tick interval.
  */
-qreal Widgets::FFTPlot::yTickInterval() const
+double Widgets::FFTPlot::yTickInterval() const
 {
   return UI::Dashboard::smartInterval(m_minY, m_maxY);
 }
@@ -156,15 +156,15 @@ void Widgets::FFTPlot::updateData()
     m_transformer.rescale(m_fft.data());
 
     // Create a final array with the magnitudes for each point
-    qreal maxMagnitude = 0;
+    double maxMagnitude = 0;
     m_data.resize(m_size / 2);
     for (int i = 0; i < m_size / 2; ++i)
     {
-      const qreal re = m_fft[i];
-      const qreal im = m_fft[m_size / 2 + i];
-      const qreal m = sqrt(re * re + im * im);
-      const qreal f
-          = static_cast<qreal>(i) * m_samplingRate / static_cast<qreal>(m_size);
+      const double re = m_fft[i];
+      const double im = m_fft[m_size / 2 + i];
+      const double m = sqrt(re * re + im * im);
+      const double f = static_cast<double>(i) * m_samplingRate
+                       / static_cast<double>(m_size);
       m_data[i] = QPointF(f, m);
       if (m > maxMagnitude)
         maxMagnitude = m;
@@ -173,8 +173,8 @@ void Widgets::FFTPlot::updateData()
     // Convert to decibels
     for (int i = 0; i < m_size / 2; ++i)
     {
-      const qreal m = m_data[i].y() / maxMagnitude;
-      const qreal dB = (m > 0) ? 20 * log10(m) : -100;
+      const double m = m_data[i].y() / maxMagnitude;
+      const double dB = (m > 0) ? 20 * log10(m) : -100;
       m_data[i].setY(dB);
     }
   }

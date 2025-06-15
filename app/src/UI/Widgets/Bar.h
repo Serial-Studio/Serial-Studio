@@ -32,12 +32,12 @@ class Bar : public QQuickItem
 {
   Q_OBJECT
   Q_PROPERTY(QString units READ units CONSTANT)
-  Q_PROPERTY(qreal value READ value NOTIFY updated)
-  Q_PROPERTY(qreal minValue READ minValue CONSTANT)
-  Q_PROPERTY(qreal maxValue READ maxValue CONSTANT)
-  Q_PROPERTY(qreal alarmValue READ alarmValue CONSTANT)
-  Q_PROPERTY(qreal fractionalValue READ fractionalValue NOTIFY updated)
-  Q_PROPERTY(qreal alarmFractionalValue READ alarmFractionalValue CONSTANT)
+  Q_PROPERTY(double value READ value NOTIFY updated)
+  Q_PROPERTY(double minValue READ minValue CONSTANT)
+  Q_PROPERTY(double maxValue READ maxValue CONSTANT)
+  Q_PROPERTY(double alarmValue READ alarmValue CONSTANT)
+  Q_PROPERTY(double fractionalValue READ fractionalValue NOTIFY updated)
+  Q_PROPERTY(double alarmFractionalValue READ alarmFractionalValue CONSTANT)
 
 signals:
   void updated();
@@ -47,12 +47,12 @@ public:
 
   [[nodiscard]] const QString &units() const;
 
-  [[nodiscard]] qreal value() const;
-  [[nodiscard]] qreal minValue() const;
-  [[nodiscard]] qreal maxValue() const;
-  [[nodiscard]] qreal alarmValue() const;
-  [[nodiscard]] qreal fractionalValue() const;
-  [[nodiscard]] qreal alarmFractionalValue() const;
+  [[nodiscard]] double value() const;
+  [[nodiscard]] double minValue() const;
+  [[nodiscard]] double maxValue() const;
+  [[nodiscard]] double alarmValue() const;
+  [[nodiscard]] double fractionalValue() const;
+  [[nodiscard]] double alarmFractionalValue() const;
 
 private slots:
   void updateData();
@@ -60,9 +60,9 @@ private slots:
 private:
   int m_index;
   QString m_units;
-  qreal m_value;
-  qreal m_minValue;
-  qreal m_maxValue;
-  qreal m_alarmValue;
+  double m_value;
+  double m_minValue;
+  double m_maxValue;
+  double m_alarmValue;
 };
 } // namespace Widgets

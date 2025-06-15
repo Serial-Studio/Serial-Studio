@@ -34,12 +34,12 @@ namespace Widgets
 class FFTPlot : public QQuickItem
 {
   Q_OBJECT
-  Q_PROPERTY(qreal minX READ minX CONSTANT)
-  Q_PROPERTY(qreal maxX READ maxX CONSTANT)
-  Q_PROPERTY(qreal minY READ minY CONSTANT)
-  Q_PROPERTY(qreal maxY READ maxY CONSTANT)
-  Q_PROPERTY(qreal xTickInterval READ xTickInterval CONSTANT)
-  Q_PROPERTY(qreal yTickInterval READ yTickInterval CONSTANT)
+  Q_PROPERTY(double minX READ minX CONSTANT)
+  Q_PROPERTY(double maxX READ maxX CONSTANT)
+  Q_PROPERTY(double minY READ minY CONSTANT)
+  Q_PROPERTY(double maxY READ maxY CONSTANT)
+  Q_PROPERTY(double xTickInterval READ xTickInterval CONSTANT)
+  Q_PROPERTY(double yTickInterval READ yTickInterval CONSTANT)
 
 public:
   explicit FFTPlot(const int index = -1, QQuickItem *parent = nullptr);
@@ -49,12 +49,12 @@ public:
     m_data.squeeze();
   }
 
-  [[nodiscard]] qreal minX() const;
-  [[nodiscard]] qreal maxX() const;
-  [[nodiscard]] qreal minY() const;
-  [[nodiscard]] qreal maxY() const;
-  [[nodiscard]] qreal xTickInterval() const;
-  [[nodiscard]] qreal yTickInterval() const;
+  [[nodiscard]] double minX() const;
+  [[nodiscard]] double maxX() const;
+  [[nodiscard]] double minY() const;
+  [[nodiscard]] double maxY() const;
+  [[nodiscard]] double xTickInterval() const;
+  [[nodiscard]] double yTickInterval() const;
 
 public slots:
   void draw(QLineSeries *series);
@@ -67,10 +67,10 @@ private:
   int m_index;
   int m_samplingRate;
 
-  qreal m_minX;
-  qreal m_maxX;
-  qreal m_minY;
-  qreal m_maxY;
+  double m_minX;
+  double m_maxX;
+  double m_minY;
+  double m_maxY;
 
   QFourierTransformer m_transformer;
 

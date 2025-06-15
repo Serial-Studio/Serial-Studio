@@ -52,7 +52,7 @@ Widgets::Gyroscope::Gyroscope(const int index, QQuickItem *parent)
  *
  * @return Yaw angle in degrees, normalized to [-180, 180].
  */
-qreal Widgets::Gyroscope::yaw() const
+double Widgets::Gyroscope::yaw() const
 {
   return m_yaw;
 }
@@ -62,7 +62,7 @@ qreal Widgets::Gyroscope::yaw() const
  *
  * @return Roll angle in degrees, normalized to [-180, 180].
  */
-qreal Widgets::Gyroscope::roll() const
+double Widgets::Gyroscope::roll() const
 {
   return m_roll;
 }
@@ -72,7 +72,7 @@ qreal Widgets::Gyroscope::roll() const
  *
  * @return Pitch angle in degrees, normalized to [-180, 180].
  */
-qreal Widgets::Gyroscope::pitch() const
+double Widgets::Gyroscope::pitch() const
 {
   return m_pitch;
 }
@@ -110,12 +110,12 @@ void Widgets::Gyroscope::updateData()
     return;
 
   // Store previous orientation values
-  const qreal previousYaw = m_yaw;
-  const qreal previousRoll = m_roll;
-  const qreal previousPitch = m_pitch;
+  const double previousYaw = m_yaw;
+  const double previousRoll = m_roll;
+  const double previousPitch = m_pitch;
 
   // Calculate delta time for integration
-  qreal deltaT = 0.0;
+  double deltaT = 0.0;
   if (m_integrateValues)
   {
     deltaT = qMax(1, m_timer.elapsed()) / 1000.0;
@@ -134,7 +134,7 @@ void Widgets::Gyroscope::updateData()
   };
 
   // Normalize angle helper [-180, 180]
-  auto normalizeAngle = [](qreal angle) -> qreal {
+  auto normalizeAngle = [](double angle) -> double {
     angle = std::fmod(angle + 180.0, 360.0);
     if (angle < 0)
       angle += 360.0;

@@ -61,7 +61,7 @@ const QString &Widgets::Bar::units() const
  * @brief Returns the current value of the bar.
  * @return The current value of the bar.
  */
-qreal Widgets::Bar::value() const
+double Widgets::Bar::value() const
 {
   return m_value;
 }
@@ -70,7 +70,7 @@ qreal Widgets::Bar::value() const
  * @brief Returns the minimum value of the bar scale.
  * @return The minimum value of the bar scale.
  */
-qreal Widgets::Bar::minValue() const
+double Widgets::Bar::minValue() const
 {
   return m_minValue;
 }
@@ -79,7 +79,7 @@ qreal Widgets::Bar::minValue() const
  * @brief Returns the maximum value of the bar scale.
  * @return The maximum value of the bar scale.
  */
-qreal Widgets::Bar::maxValue() const
+double Widgets::Bar::maxValue() const
 {
   return m_maxValue;
 }
@@ -88,7 +88,7 @@ qreal Widgets::Bar::maxValue() const
  * @brief Returns the alarm level of the bar.
  * @return The alarm level of the bar.
  */
-qreal Widgets::Bar::alarmValue() const
+double Widgets::Bar::alarmValue() const
 {
   return m_alarmValue;
 }
@@ -100,15 +100,15 @@ qreal Widgets::Bar::alarmValue() const
  * the range defined by minValue() and maxValue(). It is used to determine
  * the visual height of the bar in the UI.
  */
-qreal Widgets::Bar::fractionalValue() const
+double Widgets::Bar::fractionalValue() const
 {
-  qreal min = qMin(minValue(), maxValue());
-  qreal max = qMax(minValue(), maxValue());
-  const qreal range = max - min;
+  double min = qMin(minValue(), maxValue());
+  double max = qMax(minValue(), maxValue());
+  const double range = max - min;
   if (qFuzzyIsNull(range))
     return 0.0;
 
-  const qreal level = value() - min;
+  const double level = value() - min;
   return qBound(0.0, level / range, 1.0);
 }
 
@@ -119,14 +119,14 @@ qreal Widgets::Bar::fractionalValue() const
  * the range defined by minValue() and maxValue(). It is used to determine
  * the position where the bar's color should change to indicate an alarm state.
  */
-qreal Widgets::Bar::alarmFractionalValue() const
+double Widgets::Bar::alarmFractionalValue() const
 {
-  const qreal range = maxValue() - minValue();
+  const double range = maxValue() - minValue();
   if (qFuzzyIsNull(range))
     return 0.0;
 
-  const qreal clampedAlarmLevel = qBound(minValue(), m_alarmValue, maxValue());
-  const qreal alarmPosition = clampedAlarmLevel - minValue();
+  const double clampedAlarmLevel = qBound(minValue(), m_alarmValue, maxValue());
+  const double alarmPosition = clampedAlarmLevel - minValue();
   return qBound(0.0, alarmPosition / range, 1.0);
 }
 

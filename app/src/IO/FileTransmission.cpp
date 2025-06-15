@@ -97,8 +97,8 @@ int IO::FileTransmission::transmissionProgress() const
     return 0;
 
   // Return progress as percentage
-  qreal txb = m_stream->pos();
-  qreal len = m_file.size();
+  double txb = m_stream->pos();
+  double len = m_file.size();
   return qMin(1.0, (txb / len)) * 100;
 }
 

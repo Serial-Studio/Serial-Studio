@@ -54,8 +54,8 @@ Popup {
   //
   Settings {
     category: "WindowManagement"
-    property alias console: _consoleBt.checked
     property alias autoLayout: _autoLayoutBt.checked
+    property alias consoleEnabled: _consoleBt.checked
   }
 
   //
