@@ -57,10 +57,9 @@ namespace SIMD
  */
 inline void fill(double *data, size_t count, const double value)
 {
+  size_t i = 0;
   auto fillValue = simde_mm_set1_pd(value);
   constexpr size_t simdWidth = sizeof(simde__m128d) / sizeof(double);
-
-  size_t i = 0;
   for (; i + simdWidth <= count; i += simdWidth)
     simde_mm_storeu_pd(data + i, fillValue);
 
@@ -94,7 +93,6 @@ inline void fill_range(double *data, size_t count, const double begin)
     simde_mm_storeu_pd(data + i, range);
   }
 
-  // Scalar tail
   for (; i < count; ++i)
     data[i] = begin + i;
 }
@@ -116,22 +114,17 @@ inline void fill_range(double *data, size_t count, const double begin)
  */
 inline void shift(double *data, size_t count, const double newValue)
 {
-  // Obtain register width for SIMD operations (2 doubles per __m128d)
-  constexpr size_t simdWidth = sizeof(simde__m128d) / sizeof(double);
-
-  // SIMD shift
   size_t i = 0;
+  constexpr size_t simdWidth = sizeof(simde__m128d) / sizeof(double);
   for (; i + simdWidth + 1 <= count; i += simdWidth)
   {
-    auto n = simde_mm_loadu_pd(reinterpret_cast<const double *>(data + i + 1));
-    simde_mm_storeu_pd(reinterpret_cast<double *>(data + i), n);
+    auto n = simde_mm_loadu_pd(data + i + 1);
+    simde_mm_storeu_pd(data + i, n);
   }
 
-  // Scalar fallback for remaining elements
   for (; i < count - 1; ++i)
     data[i] = data[i + 1];
 
-  // Set the final slot
   data[count - 1] = newValue;
 }
 
@@ -149,26 +142,21 @@ inline void shift(double *data, size_t count, const double newValue)
  */
 inline double findMin(const double *data, size_t count)
 {
-  // Obtain register width for SIMD operations
-  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(double);
-
-  // SIMD comparisons
   size_t i = 0;
   auto minVec = simde_mm_set1_pd(data[0]);
+  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(double);
   for (; i + simdWidth <= count; i += simdWidth)
   {
     auto values = simde_mm_loadu_pd(&data[i]);
     minVec = simde_mm_min_pd(minVec, values);
   }
 
-  // Reduce SIMD register to scalar
   double minVal = data[0];
   std::vector<double> buffer(simdWidth);
   simde_mm_storeu_pd(buffer.data(), minVec);
   for (size_t j = 0; j < simdWidth; ++j)
     minVal = std::min<double>(minVal, buffer[j]);
 
-  // Scalar fallback for remaining elements
   for (; i < count; ++i)
     minVal = std::min<double>(minVal, data[i]);
 
@@ -189,26 +177,21 @@ inline double findMin(const double *data, size_t count)
  */
 inline double findMax(const double *data, size_t count)
 {
-  // Obtain register width for SIMD operations
-  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(double);
-
-  // SIMD comparisons
   size_t i = 0;
   auto maxVec = simde_mm_set1_pd(data[0]);
+  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(double);
   for (; i + simdWidth <= count; i += simdWidth)
   {
     auto values = simde_mm_loadu_pd(&data[i]);
     maxVec = simde_mm_max_pd(maxVec, values);
   }
 
-  // Reduce SIMD register to scalar
   double maxVal = data[0];
   std::vector<double> buffer(simdWidth);
   simde_mm_storeu_pd(buffer.data(), maxVec);
   for (size_t j = 0; j < simdWidth; ++j)
     maxVal = std::max<double>(maxVal, buffer[j]);
 
-  // Scalar fallback for remaining elements
   for (; i < count; ++i)
     maxVal = std::max<double>(maxVal, data[i]);
 
@@ -236,31 +219,25 @@ inline double findMax(const double *data, size_t count)
 template<typename Extractor>
 inline double findMin(const QVector<QPointF> &data, Extractor extractor)
 {
-  // Do nothing if there is no data to compare
   size_t i = 0;
   size_t count = data.size();
   if (count == 0)
     return 0;
 
-  // Obtain register width for SIMD operations
-  constexpr auto simdWith = sizeof(simde__m128d) / sizeof(double);
   auto minVec = simde_mm_set1_pd(extractor(data[0]));
-
-  // SIMD comparisons
+  constexpr auto simdWith = sizeof(simde__m128d) / sizeof(double);
   for (; i + simdWith <= count; i += simdWith)
   {
     auto values = simde_mm_set_pd(extractor(data[i + 1]), extractor(data[i]));
     minVec = simde_mm_min_pd(minVec, values);
   }
 
-  // Reduce SIMD register to scalar
   alignas(16) double buffer[simdWith];
   simde_mm_storeu_pd(buffer, minVec);
   double minVal = buffer[0];
   for (size_t j = 1; j < simdWith; ++j)
     minVal = std::min<double>(minVal, buffer[j]);
 
-  // Scalar fallback for remaining elements
   for (; i < count; ++i)
     minVal = std::min<double>(minVal, extractor(data[i]));
 
@@ -288,31 +265,25 @@ inline double findMin(const QVector<QPointF> &data, Extractor extractor)
 template<typename Extractor>
 inline double findMax(const QVector<QPointF> &data, Extractor extractor)
 {
-  // Do nothing if there is no data to compare
   size_t i = 0;
   size_t count = data.size();
   if (count == 0)
     return 0;
 
-  // Obtain register width for SIMD operations
-  constexpr auto simdWith = sizeof(simde__m128d) / sizeof(double);
   auto maxVec = simde_mm_set1_pd(extractor(data[0]));
-
-  // SIMD comparisons
+  constexpr auto simdWith = sizeof(simde__m128d) / sizeof(double);
   for (; i + simdWith <= count; i += simdWith)
   {
     auto values = simde_mm_set_pd(extractor(data[i + 1]), extractor(data[i]));
     maxVec = simde_mm_max_pd(maxVec, values);
   }
 
-  // Reduce SIMD register to scalar
   alignas(16) double buffer[simdWith];
   simde_mm_storeu_pd(buffer, maxVec);
   double maxVal = buffer[0];
   for (size_t j = 1; j < simdWith; ++j)
     maxVal = std::max<double>(maxVal, buffer[j]);
 
-  // Scalar fallback for remaining elements
   for (; i < count; ++i)
     maxVal = std::max<double>(maxVal, extractor(data[i]));
 
