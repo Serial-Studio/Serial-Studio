@@ -269,14 +269,17 @@ void JSON::FrameBuilder::setOperationMode(
     case SerialStudio::DeviceSendsJSON:
       IO::Manager::instance().setStartSequence("");
       IO::Manager::instance().setFinishSequence("");
+      IO::Manager::instance().setChecksumAlgorithm("");
       break;
     case SerialStudio::ProjectFile:
       IO::Manager::instance().setFinishSequence(m_frame.frameEnd());
       IO::Manager::instance().setStartSequence(m_frame.frameStart());
+      IO::Manager::instance().setChecksumAlgorithm(m_frame.checksum());
       break;
     case SerialStudio::QuickPlot:
       IO::Manager::instance().setStartSequence("");
       IO::Manager::instance().setFinishSequence("");
+      IO::Manager::instance().setChecksumAlgorithm("");
       break;
     default:
       qWarning() << "Invalid operation mode selected" << mode;
