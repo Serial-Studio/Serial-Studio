@@ -1,6 +1,6 @@
 # BLE Battery Level Monitor
 
-This [Serial Studio](https://github.com/Serial-Studio/Serial-Studio) project visualizes the **battery level from BLE devices**, like iPhones, by connecting directly over Bluetooth Low Energy.
+This [Serial Studio](https://github.com/Serial-Studio/Serial-Studio) project visualizes the **battery level from BLE devices**, like iPhones, by connecting directly over [Bluetooth Low Energy](https://en.wikipedia.org/wiki/Bluetooth_Low_Energy).
 
 ![Screenshot](doc/screenshot.png)
 
