@@ -409,5 +409,11 @@
         <file>themes/default.json</file>
         <file>themes/light.json</file>
         <file>rcc.qrc</file>
+        <file>themes/ironframe.json</file>
+        <file>themes/code-editor/ironframe.xml</file>
+        <file>icons/taskbar/adjust.svg</file>
+        <file>icons/taskbar/console.svg</file>
+        <file>icons/taskbar/pause.svg</file>
+        <file>icons/taskbar/resume.svg</file>
     </qresource>
 </RCC>

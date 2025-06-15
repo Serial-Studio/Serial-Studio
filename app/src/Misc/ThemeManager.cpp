@@ -67,6 +67,7 @@ Misc::ThemeManager::ThemeManager()
       QStringLiteral("default"),
       QStringLiteral("light"),
       QStringLiteral("dark"),
+      QStringLiteral("ironframe")
   };
   // clang-format on
 

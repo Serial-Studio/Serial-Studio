@@ -36,111 +36,6 @@ Widgets.Pane {
   icon: "qrc:/rcc/icons/panes/dashboard.svg"
 
   //
-  // Workspace switcher
-  //
-  actionComponent: Component {
-    ComboBox {
-      id: control
-      textRole: "text"
-      model: taskBar.groupModel
-      currentIndex: taskBar.activeGroupIndex
-      onCurrentIndexChanged: {
-        if (currentIndex !== taskBar.activeGroupIndex)
-          taskBar.activeGroupIndex = currentIndex
-      }
-
-      indicator: Item {}
-
-      background: Rectangle {
-        color: "transparent"
-        border.width: 0
-      }
-
-      delegate: ItemDelegate {
-        width: control.width
-        required property var model
-        contentItem: RowLayout {
-          spacing: 8
-          anchors.verticalCenter: parent.verticalCenter
-          Component.onCompleted: {
-            var itemWidth = Math.min(480, implicitWidth + 32)
-            if (control.implicitWidth < itemWidth)
-              control.implicitWidth = itemWidth
-          }
-
-          Image {
-            source: model["icon"]
-            sourceSize: Qt.size(16, 16)
-            fillMode: Image.PreserveAspectFit
-          }
-
-          Label {
-            text: model["text"]
-            elide: Text.ElideRight
-            Layout.fillWidth: true
-            verticalAlignment: Text.AlignVCenter
-            font: text === control.currentText
-                  ? Cpp_Misc_CommonFonts.boldUiFont
-                  : Cpp_Misc_CommonFonts.uiFont
-          }
-        }
-      }
-
-      contentItem: RowLayout {
-        spacing: 4
-        anchors.verticalCenter: parent.verticalCenter
-
-        Label {
-          Layout.fillWidth: true
-          text: control.currentText
-          horizontalAlignment: Text.AlignRight
-          verticalAlignment: Text.AlignVCenter
-          font: Cpp_Misc_CommonFonts.boldUiFont
-          color: Cpp_ThemeManager.colors["pane_caption_foreground"]
-        }
-
-        Canvas {
-          width: 18
-          height: 18
-          opacity: 0.8
-          Layout.alignment: Qt.AlignVCenter
-
-          onPaint: {
-            const ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = Cpp_ThemeManager.colors["pane_caption_foreground"];
-
-            const spacing = 2;
-            const triangleWidth = 8;
-            const triangleHeight = 4;
-
-            const centerX = width / 2;
-            const totalHeight = triangleHeight * 2 + spacing;
-            const topY = (height - totalHeight) / 2;
-            const downTopY = topY + triangleHeight + spacing;
-
-            // Up Triangle
-            ctx.beginPath();
-            ctx.moveTo(centerX, topY);
-            ctx.lineTo(centerX - triangleWidth / 2, topY + triangleHeight);
-            ctx.lineTo(centerX + triangleWidth / 2, topY + triangleHeight);
-            ctx.closePath();
-            ctx.fill();
-
-            // Down Triangle
-            ctx.beginPath();
-            ctx.moveTo(centerX, downTopY + triangleHeight);
-            ctx.lineTo(centerX - triangleWidth / 2, downTopY);
-            ctx.lineTo(centerX + triangleWidth / 2, downTopY);
-            ctx.closePath();
-            ctx.fill();
-          }
-        }
-      }
-    }
-  }
-
-  //
   // Autolayout
   //
   function loadLayout() {
@@ -195,11 +90,11 @@ Widgets.Pane {
     Rectangle {
       z: 1000
       border.width: 1
-      implicitHeight: _actions.implicitHeight + 20
       Layout.topMargin: -1
       Layout.leftMargin: -1
       Layout.rightMargin: -1
       Layout.fillWidth: true
+      implicitHeight: _actions.implicitHeight + 20
       color: Cpp_ThemeManager.colors["groupbox_background"]
       border.color: Cpp_ThemeManager.colors["groupbox_border"]
       visible: Cpp_UI_Dashboard.actionCount > 0 &&

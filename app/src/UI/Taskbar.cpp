@@ -281,6 +281,25 @@ UI::WindowManager *UI::Taskbar::windowManager() const
 }
 
 /**
+ * @brief Checks if any tracked window is maximized.
+ *
+ * Iterates through all window IDs and returns true if at least one
+ * window is in the "maximized" state.
+ *
+ * @return true if a maximized window exists, false otherwise.
+ */
+bool UI::Taskbar::hasMaximizedWindow() const
+{
+  for (auto it = m_windowIDs.begin(); it != m_windowIDs.end(); ++it)
+  {
+    if (it.key()->state() == QStringLiteral("maximized"))
+      return true;
+  }
+
+  return false;
+}
+
+/**
  * @brief Returns the QML window (QQuickItem) for a given window ID.
  *
  * Looks up the internal window ID → QQuickItem map to retrieve the actual
@@ -580,6 +599,7 @@ void UI::Taskbar::unregisterWindow(QQuickItem *window)
 {
   if (m_windowIDs.contains(window))
   {
+    disconnect(window);
     m_windowIDs.remove(window);
     if (m_windowManager)
       m_windowManager->unregisterWindow(window);
@@ -617,6 +637,10 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem *window)
   m_windowIDs.insert(window, id);
   m_windowManager->registerWindow(id, window);
   Q_EMIT registeredWindowsChanged();
+
+  // Keep track of window state
+  connect(window, &QQuickItem::stateChanged, this,
+          [=] { Q_EMIT statesChanged(); });
 
   // Trigger a layout update when the QML code created all the windows
   if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager)

@@ -91,6 +91,27 @@ Item {
     }
 
     //
+    // Shortcuts
+    //
+    Widgets.TaskbarButton {
+      forceVisible: true
+      onClicked: app.showSettingsDialog()
+      icon.source: "qrc:/rcc/icons/taskbar/adjust.svg"
+    } Widgets.TaskbarButton {
+      forceVisible: true
+      focused: Cpp_UI_Dashboard.terminalEnabled
+      icon.source: "qrc:/rcc/icons/taskbar/console.svg"
+      onClicked: Cpp_UI_Dashboard.terminalEnabled = !Cpp_UI_Dashboard.terminalEnabled
+    } Widgets.TaskbarButton {
+      forceVisible: true
+      focused: Cpp_IO_Manager.paused
+      onClicked: Cpp_IO_Manager.paused = !Cpp_IO_Manager.paused
+      icon.source: Cpp_IO_Manager.paused ?
+                     "qrc:/rcc/icons/taskbar/resume.svg" :
+                     "qrc:/rcc/icons/taskbar/pause.svg"
+    }
+
+    //
     // Taskbar Buttons
     //
     Item {
@@ -133,9 +154,12 @@ Item {
             required property var model
 
             id: button
-            width: 144
             text: model.widgetName
+            forceVisible: taskBar.hasMaximizedWindow
             icon.source: SerialStudio.dashboardWidgetIcon(model.widgetType)
+
+            width: opacity > 0 ? 144 : 0
+            Behavior on width { NumberAnimation{} }
 
             Component.onCompleted: updateState()
 
@@ -144,8 +168,6 @@ Item {
               if (window !== null) {
                 if (taskBar.windowState(window) !== SS_Ui.TaskbarModel.WindowNormal)
                   taskBar.showWindow(window)
-                else if (taskBar.activeWindow === window)
-                  taskBar.minimizeWindow(window)
 
                 taskBar.activeWindow = window
               }
@@ -180,6 +202,118 @@ Item {
           icon.source: "qrc:/rcc/icons/buttons/forward.svg"
           icon.color: Cpp_ThemeManager.colors["taskbar_text"]
           onClicked: buttonsView.contentX = Math.min(buttonsView.contentWidth - buttonsView.width, buttonsView.contentX + 150)
+        }
+      }
+    }
+
+    //
+    // Workspace switcher
+    //
+    ComboBox {
+      id: _switcher
+      textRole: "text"
+      model: taskBar.groupModel
+      Layout.alignment: Qt.AlignVCenter
+      currentIndex: taskBar.activeGroupIndex
+      onCurrentIndexChanged: {
+        if (currentIndex !== taskBar.activeGroupIndex)
+          taskBar.activeGroupIndex = currentIndex
+      }
+
+      indicator: Item {}
+
+      background: Rectangle {
+        color: "transparent"
+        border.width: 0
+      }
+
+      delegate: ItemDelegate {
+        width: _switcher.width
+
+        contentItem: RowLayout {
+          spacing: 8
+          anchors.verticalCenter: parent.verticalCenter
+          Component.onCompleted: {
+            var itemWidth = Math.min(480, implicitWidth + 32)
+            if (_switcher.implicitWidth < itemWidth)
+              _switcher.implicitWidth = itemWidth
+          }
+
+          Image {
+            source: modelData["icon"]
+            sourceSize: Qt.size(16, 16)
+            fillMode: Image.PreserveAspectFit
+          }
+
+          Label {
+            text: modelData["text"]
+            elide: Text.ElideRight
+            Layout.fillWidth: true
+            verticalAlignment: Text.AlignVCenter
+            font: text === _switcher.currentText
+                  ? Cpp_Misc_CommonFonts.boldUiFont
+                  : Cpp_Misc_CommonFonts.uiFont
+          }
+        }
+      }
+
+      contentItem: RowLayout {
+        spacing: 4
+        anchors.verticalCenter: parent.verticalCenter
+
+        Label {
+          Layout.fillWidth: true
+          text: _switcher.currentText
+          horizontalAlignment: Text.AlignRight
+          verticalAlignment: Text.AlignVCenter
+          font: Cpp_Misc_CommonFonts.boldUiFont
+          color: Cpp_ThemeManager.colors["pane_caption_foreground"]
+        }
+
+        Canvas {
+          id: _canvas
+
+          width: 18
+          height: 18
+          opacity: 0.8
+          Layout.alignment: Qt.AlignVCenter
+          Connections {
+            target: Cpp_ThemeManager
+            function onThemeChanged() {
+              _canvas.requestPaint()
+            }
+          }
+
+          onPaint: {
+            const ctx = getContext("2d");
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = Cpp_ThemeManager.colors["pane_caption_foreground"];
+
+            const spacing = 2;
+            const triangleWidth = 8;
+            const triangleHeight = 4;
+
+            const centerX = width / 2;
+            const totalHeight = triangleHeight * 2 + spacing;
+            const topY = (height - totalHeight) / 2;
+            const downTopY = topY + triangleHeight + spacing;
+
+            // Up Triangle
+            ctx.beginPath();
+            ctx.moveTo(centerX, topY);
+            ctx.lineTo(centerX - triangleWidth / 2, topY + triangleHeight);
+            ctx.lineTo(centerX + triangleWidth / 2, topY + triangleHeight);
+            ctx.closePath();
+            ctx.fill();
+
+            // Down Triangle
+            ctx.beginPath();
+            ctx.moveTo(centerX, downTopY + triangleHeight);
+            ctx.lineTo(centerX - triangleWidth / 2, downTopY);
+            ctx.lineTo(centerX + triangleWidth / 2, downTopY);
+            ctx.closePath();
+            ctx.fill();
+          }
         }
       }
     }

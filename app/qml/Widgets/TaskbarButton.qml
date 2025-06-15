@@ -54,12 +54,19 @@ Item {
   // Control flags
   //
   property bool checkable: false
+  property bool forceVisible: false
 
   //
   // Opacity control properties
   //
   property real hoverOpacity: 0.5
   property real focusedOpacity: 1.0
+
+  //
+  // Hide taskbar when not needed
+  //
+  visible: opacity > 0
+  opacity: !open || minimized || startMenu || forceVisible ? 1 : 0
 
   //
   // Layout options
@@ -76,7 +83,6 @@ Item {
   //
   // General Opacity
   //
-  opacity: enabled ? 1 : 0.5
   Behavior on opacity { NumberAnimation{} }
 
   //
@@ -92,17 +98,17 @@ Item {
     State {
       name: "closed"
       when: !root.open
-      PropertyChanges { target: _label; opacity: 0.3 }
+      //PropertyChanges { target: _label; opacity: 0.3 }
     },
     State {
       name: "minimized"
       when: root.open && root.minimized
-      PropertyChanges { target: _label; opacity: 0.5 }
+      //PropertyChanges { target: _label; opacity: 0.5 }
     },
     State {
       name: "focused"
       when: root.open && !root.minimized && root.focused
-      PropertyChanges { target: _label; font: Cpp_Misc_CommonFonts.boldUiFont }
+      //PropertyChanges { target: _label; font: Cpp_Misc_CommonFonts.boldUiFont }
       PropertyChanges { target: _label; color: Cpp_ThemeManager.colors["taskbar_indicator_active"] }
     },
     State {
@@ -194,7 +200,6 @@ Item {
         id: _effects
         source: _icon
         anchors.fill: _icon
-        opacity: root.open ? (root.minimized ? 0.5 : 1) : 0.3
         saturation: !root.open ? -1 : (_mouseArea.containsMouse && root.enabled ? 0.07 : 0)
         brightness: _mouseArea.containsMouse && root.enabled ? (_mouseArea.containsPress ? -0.07 : 0.07) : 0
 
