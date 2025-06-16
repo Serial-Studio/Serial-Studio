@@ -1320,10 +1320,6 @@ void UI::Dashboard::configureActions(const JSON::Frame &frame)
   if (!frame.isValid())
     return;
 
-  // Stop if we don't have a device connected (CSV player does not count)
-  if (!IO::Manager::instance().isConnected())
-    return;
-
   // Delete actions
   m_actions.clear();
   m_actions.squeeze();
@@ -1346,32 +1342,38 @@ void UI::Dashboard::configureActions(const JSON::Frame &frame)
   m_actions = frame.actions();
 
   // Configure timers
-  for (int i = 0; i < m_actions.count(); ++i)
+  if (IO::Manager::instance().isConnected())
   {
-    const auto &action = m_actions[i];
-    if (action.timerMode() != JSON::Action::TimerMode::Off)
+    for (int i = 0; i < m_actions.count(); ++i)
     {
-      auto interval = action.timerIntervalMs();
-      if (interval > 0)
+      const auto &action = m_actions[i];
+      if (action.timerMode() != JSON::Action::TimerMode::Off)
       {
-        auto *timer = new QTimer(this);
-        timer->setInterval(interval);
-        timer->setTimerType(Qt::PreciseTimer);
-        connect(timer, &QTimer::timeout, this,
-                [this, i]() { activateAction(i, false); });
+        auto interval = action.timerIntervalMs();
+        if (interval > 0)
+        {
+          auto *timer = new QTimer(this);
+          timer->setInterval(interval);
+          timer->setTimerType(Qt::PreciseTimer);
+          connect(timer, &QTimer::timeout, this,
+                  [this, i]() { activateAction(i, false); });
 
-        if (action.timerMode() == JSON::Action::TimerMode::AutoStart
-            || action.autoExecuteOnConnect())
-          timer->start();
+          if (action.timerMode() == JSON::Action::TimerMode::AutoStart
+              || action.autoExecuteOnConnect())
+            timer->start();
 
-        m_timers.insert(i, timer);
-      }
+          m_timers.insert(i, timer);
+        }
 
-      else
-      {
-        qWarning() << "Interval for action" << action.title()
-                   << "must be greater than 0!";
+        else
+        {
+          qWarning() << "Interval for action" << action.title()
+                     << "must be greater than 0!";
+        }
       }
     }
   }
+
+  // Update actions
+  Q_EMIT actionStatusChanged();
 }

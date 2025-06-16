@@ -97,8 +97,7 @@ Widgets.Pane {
       implicitHeight: _actions.implicitHeight + 20
       color: Cpp_ThemeManager.colors["groupbox_background"]
       border.color: Cpp_ThemeManager.colors["groupbox_border"]
-      visible: Cpp_UI_Dashboard.actionCount > 0 &&
-               Cpp_UI_Dashboard.showActionPanel
+      visible: Cpp_UI_Dashboard.actionCount > 0 && Cpp_UI_Dashboard.showActionPanel
 
       ListView {
         id: _actions
@@ -127,7 +126,7 @@ Widgets.Pane {
           horizontalLayout: true
           checked: model["checked"]
           icon.source: model["icon"]
-          enabled: !Cpp_IO_Manager.paused
+          enabled: !Cpp_IO_Manager.paused && Cpp_IO_Manager.isConnected
           onClicked: Cpp_UI_Dashboard.activateAction(model["id"], true)
         }
       }
