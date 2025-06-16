@@ -639,7 +639,9 @@ void UI::Dashboard::resetData(const bool notify)
   m_lastFrame = JSON::Frame();
 
   // Configure actions
-  configureActions(JSON::FrameBuilder::instance().frame());
+  auto *frameBuilder = &JSON::FrameBuilder::instance();
+  if (frameBuilder->operationMode() == SerialStudio::ProjectFile)
+    configureActions(frameBuilder->frame());
 
   // Notify user interface
   if (notify)

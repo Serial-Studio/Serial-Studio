@@ -23,6 +23,16 @@
 
 #include <cstdint>
 
+#if defined(_MSC_VER)
+#  include <stdlib.h>
+#  define IS_LITTLE_ENDIAN 1
+#elif defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__)
+#  define IS_LITTLE_ENDIAN (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
+#else
+#  include <endian.h>
+#  define IS_LITTLE_ENDIAN (__BYTE_ORDER == __LITTLE_ENDIAN)
+#endif
+
 //------------------------------------------------------------------------------
 // Endian-correct memory utilities for checksum formatting
 //------------------------------------------------------------------------------
@@ -56,9 +66,10 @@
  */
 static void big_endian_memcpy(uint8_t *frame, const void *data, size_t size)
 {
+  assert(frame && data && size > 0);
   const uint8_t *raw_data = static_cast<const uint8_t *>(data);
 
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#if IS_LITTLE_ENDIAN
   for (size_t i = 0; i < size; ++i)
     frame[i] = raw_data[size - 1 - i];
 #else
@@ -82,13 +93,14 @@ static void big_endian_memcpy(uint8_t *frame, const void *data, size_t size)
  */
 static void little_endian_memcpy(uint8_t *frame, const void *data, size_t size)
 {
+  assert(frame && data && size > 0);
   const uint8_t *raw_data = static_cast<const uint8_t *>(data);
 
-#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#if IS_LITTLE_ENDIAN
+  memcpy(frame, raw_data, size);
+#else
   for (size_t i = 0; i < size; ++i)
     frame[i] = raw_data[size - 1 - i];
-#else
-  memcpy(frame, raw_data, size);
 #endif
 }
 
