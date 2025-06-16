@@ -6,7 +6,7 @@
   <developer id="com.serial-studio">
   <name>Serial Studio</name>
   </developer>
-  <summary>The universal dashboard for embedded systems</summary>
+  <summary>Visualize embedded device data</summary>
   <metadata_license>CC-BY-SA-4.0</metadata_license>
   <launchable type="desktop-id">com.serial_studio.Serial-Studio.desktop</launchable>
   <url type="homepage">https://serial-studio.com/</url>
@@ -36,6 +36,10 @@
     <category>Engineering</category>
     <category>Science</category>
   </categories>
+  <branding>
+    <color type="primary" scheme_preference="light">#3d6fa6</color>
+    <color type="primary" scheme_preference="dark">#244263</color>
+  </branding>
   <releases>
     <release version="3.1.5" date="2025-06-16">
       <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.5</url>
