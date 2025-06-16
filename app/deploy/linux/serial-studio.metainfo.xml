@@ -1,49 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>com.serial_studio.Serial-Studio</id>
-  <name>Serial Studio</name>
-  <project_license>LicenseRef-proprietary=https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md</project_license>
-  <developer id="com.serial-studio">
-  <name>Serial Studio</name>
-  </developer>
-  <summary>Visualize embedded device data</summary>
-  <metadata_license>CC-BY-SA-4.0</metadata_license>
-  <launchable type="desktop-id">com.serial_studio.Serial-Studio.desktop</launchable>
-  <url type="homepage">https://serial-studio.com/</url>
-  <url type="bugtracker">https://github.com/Serial-Studio/Serial-Studio/issues</url>
-  <url type="help">https://github.com/Serial-Studio/Serial-Studio/wiki</url>
-  <url type="donation">https://github.com/sponsors/alex-spataru</url>
-  <url type="contribute">https://github.com/Serial-Studio/Serial-Studio/wiki/Support-Serial-Studio</url>
-  <description>
-    <p>Serial Studio is an open-source, cross-platform telemetry dashboard and real-time data visualization tool. It supports input from serial ports, Bluetooth Low Energy (BLE), and TCP/UDP sockets. It's ideal for embedded devices, external tools, and network services.</p>
-    <p>Available on Windows, macOS, and Linux, it's built for telemetry monitoring, sensor analysis, and real-time debugging across educational, hobbyist, and professional use cases.</p>
-    <ul>
-      <li>Cross-platform: Native support for Windows, macOS, and Linux.</li>
+	<id>com.serial_studio.Serial-Studio</id>
+	<name>Serial Studio</name>
+	<project_license>LicenseRef-proprietary=https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md</project_license>
+	<developer id="com.serial-studio">
+		<name>Serial Studio</name>
+	</developer>
+	<summary>Visualize embedded device data</summary>
+	<metadata_license>CC-BY-SA-4.0</metadata_license>
+	<launchable type="desktop-id">com.serial_studio.Serial-Studio.desktop</launchable>
+	<url type="homepage">https://serial-studio.com/</url>
+	<url type="bugtracker">https://github.com/Serial-Studio/Serial-Studio/issues</url>
+	<url type="help">https://github.com/Serial-Studio/Serial-Studio/wiki</url>
+	<url type="donation">https://github.com/sponsors/alex-spataru</url>
+	<url type="contribute">https://github.com/Serial-Studio/Serial-Studio/wiki/Support-Serial-Studio</url>
+	<description>
+		<p>Serial Studio lets you see real-time data from microcontrollers and connected devices. It's perfect for visualizing sensor readings, telemetry, and debugging data from serial ports, Bluetooth Low Energy (BLE), and TCP/UDP sources.</p>
+		<p>Whether you're a student, hobbyist, or engineer, Serial Studio helps you understand what's happening inside your hardware.</p>
+		<ul>
+			<li>Cross-platform: Native support for Windows, macOS, and Linux.</li>
       <li>CSV export: Save incoming data for offline analysis or processing.</li>
       <li>Multiple inputs: Connect via serial, BLE, MQTT, or TCP/UDP.</li>
       <li>Custom dashboards: Build interfaces with visual widgets in the Project Editor.</li>
       <li>Advanced decoding: Use JavaScript to parse raw or binary data streams.</li>
-    </ul>
-    <p>This is the GPLv3 version. For MQTT support, XY plotting, 3D visualization, and other advanced features, see the Pro version.</p>
-  </description>
-  <screenshots>
-    <screenshot type="default">
-      <image>https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/doc/screenshot.png</image>
-    </screenshot>
-  </screenshots>
-  <categories>
-    <category>Electronics</category>
-    <category>Engineering</category>
-    <category>Science</category>
-  </categories>
-  <branding>
-    <color type="primary" scheme_preference="light">#3d6fa6</color>
-    <color type="primary" scheme_preference="dark">#244263</color>
-  </branding>
-  <releases>
-    <release version="3.1.5" date="2025-06-16">
-      <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.5</url>
-    </release>
-  </releases>
-  <content_rating type="oars-1.1"/>
+		</ul>
+		<p>For commercial use and advanced features like MQTT, XY plots, and 3D views, a Pro license is available.</p>
+	</description>
+	<screenshots>
+		<screenshot type="default">
+			<image>https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/doc/screenshot.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/examples/Hydrogen/doc/screenshot.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/examples/BLE%20Battery/doc/screenshot.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/examples/HexadecimalADC/doc/screenshot.png</image>
+		</screenshot>
+	</screenshots>
+	<categories>
+		<category>Electronics</category>
+		<category>Engineering</category>
+		<category>Science</category>
+	</categories>
+	<branding>
+		<color type="primary" scheme_preference="light">#3d6fa6</color>
+		<color type="primary" scheme_preference="dark">#244263</color>
+	</branding>
+	<releases>
+		<release version="3.1.5" date="2025-06-16">
+			<url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.5</url>
+		</release>
+	</releases>
+	<content_rating type="oars-1.1"/>
 </component>
