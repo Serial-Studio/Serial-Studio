@@ -23,7 +23,6 @@
 
 #include "SIMD/SIMD.h"
 #include "IO/Manager.h"
-#include "IO/Console.h"
 #include "CSV/Player.h"
 #include "Misc/TimerEvents.h"
 #include "JSON/FrameBuilder.h"
@@ -675,7 +674,9 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
   if (m_terminalEnabled != enabled)
   {
     m_terminalEnabled = enabled;
+    const auto frame = m_rawFrame;
     resetData(false);
+    processFrame(frame);
   }
 
   Q_EMIT terminalEnabledChanged();

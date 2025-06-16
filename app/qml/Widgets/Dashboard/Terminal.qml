@@ -311,8 +311,9 @@ Item {
         enabled: Cpp_IO_Manager.readWrite
         checked: Cpp_IO_Console.dataMode === 1
         onCheckedChanged: {
-          if (Cpp_IO_Console.dataMode !== checked)
-            Cpp_IO_Console.dataMode = checked ? 1 : 0
+          const newValue = checked ? 1 : 0
+          if (Cpp_IO_Console.dataMode !== newValue)
+            Cpp_IO_Console.dataMode = newValue
         }
       }
 
