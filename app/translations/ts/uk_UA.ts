@@ -3743,22 +3743,22 @@ Please provide the necessary credentials.</source>
         <translation>Надіслати дані на пристрій</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="356"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="357"/>
         <source>Show Timestamp</source>
         <translation>Показати часову мітку</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="367"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="368"/>
         <source>Echo</source>
         <translation>Ехо</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="378"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="379"/>
         <source>Emulate VT-100</source>
         <translation>Емуляція VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="400"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="401"/>
         <source>Display: %1</source>
         <translation>Дисплей: %1</translation>
     </message>
@@ -3918,17 +3918,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="873"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="876"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="890"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="893"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (резервний варіант)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="952"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="955"/>
         <source>LED Panel (%1)</source>
         <translation>Світлодіодна панель (%1)</translation>
     </message>

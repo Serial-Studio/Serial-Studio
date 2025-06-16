@@ -4975,7 +4975,7 @@ Por favor, proporciona las credenciales necesarias.</translation>
         <translation>Enviar datos al dispositivo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="367"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="368"/>
         <source>Echo</source>
         <translation>Eco</translation>
     </message>
@@ -4984,17 +4984,17 @@ Por favor, proporciona las credenciales necesarias.</translation>
         <translation type="vanished">Desplazamiento automático</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="356"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="357"/>
         <source>Show Timestamp</source>
         <translation>Mostrar marca de tiempo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="378"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="379"/>
         <source>Emulate VT-100</source>
         <translation>Emular VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="400"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="401"/>
         <source>Display: %1</source>
         <translation>Mostrar: %1</translation>
     </message>
@@ -5258,17 +5258,17 @@ Por favor, proporciona las credenciales necesarias.</translation>
         <translation type="vanished">Panel de estado</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="873"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="876"/>
         <source>Console</source>
         <translation>Consola</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="890"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="893"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Alternativa)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="952"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="955"/>
         <source>LED Panel (%1)</source>
         <translation>Panel LED (%1)</translation>
     </message>

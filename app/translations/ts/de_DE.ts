@@ -4991,22 +4991,22 @@ Bitte geben Sie die erforderlichen Anmeldedaten ein.</translation>
         <translation type="vanished">Automatisch scrollen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="356"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="357"/>
         <source>Show Timestamp</source>
         <translation>Zeitstempel anzeigen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="367"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="368"/>
         <source>Echo</source>
         <translation>Echo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="378"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="379"/>
         <source>Emulate VT-100</source>
         <translation>VT-100 emulieren</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="400"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="401"/>
         <source>Display: %1</source>
         <translation>Anzeige: %1</translation>
     </message>
@@ -5258,17 +5258,17 @@ Bitte geben Sie die erforderlichen Anmeldedaten ein.</translation>
         <translation type="vanished">Statusanzeige</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="873"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="876"/>
         <source>Console</source>
         <translation>Konsole</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="890"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="893"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Ausweichlösung)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="952"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="955"/>
         <source>LED Panel (%1)</source>
         <translation>LED-Panel (%1)</translation>
     </message>

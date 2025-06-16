@@ -4979,7 +4979,7 @@ Please provide the necessary credentials.</source>
         <translation>Отправить данные на устройство</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="367"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="368"/>
         <source>Echo</source>
         <translation>Эхо</translation>
     </message>
@@ -4988,17 +4988,17 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="356"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="357"/>
         <source>Show Timestamp</source>
         <translation>Показать временные метки</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="378"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="379"/>
         <source>Emulate VT-100</source>
         <translation>Эмуляция VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="400"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="401"/>
         <source>Display: %1</source>
         <translation>Отображение: %1</translation>
     </message>
@@ -5262,17 +5262,17 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">Панель состояния</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="873"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="876"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="890"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="893"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (резервный)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="952"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="955"/>
         <source>LED Panel (%1)</source>
         <translation>Светодиодная панель (%1)</translation>
     </message>
