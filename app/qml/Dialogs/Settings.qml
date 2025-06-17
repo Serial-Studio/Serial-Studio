@@ -123,6 +123,9 @@ Window {
           //
           Label {
             text: qsTr("Language")
+            opacity: enabled ? 1 : 0.5
+            enabled: !Cpp_IO_Manager.isConnected
+            color: Cpp_ThemeManager.colors["text"]
           } ComboBox {
             Layout.fillWidth: true
             opacity: enabled ? 1 : 0.5
@@ -140,9 +143,14 @@ Window {
           //
           Label {
             text: qsTr("Theme")
+            opacity: enabled ? 1 : 0.5
+            enabled: !Cpp_IO_Manager.isConnected
+            color: Cpp_ThemeManager.colors["text"]
           } ComboBox {
             id: _themeCombo
             Layout.fillWidth: true
+            opacity: enabled ? 1 : 0.5
+            enabled: !Cpp_IO_Manager.isConnected
             currentIndex: Cpp_ThemeManager.theme
             model: Cpp_ThemeManager.availableThemes
             onCurrentIndexChanged: {
@@ -156,9 +164,13 @@ Window {
           //
           Label {
             text: qsTr("Workspace Folder")
+            opacity: enabled ? 1 : 0.5
+            enabled: !Cpp_IO_Manager.isConnected
             color: Cpp_ThemeManager.colors["text"]
           } RowLayout {
             spacing: 2
+            opacity: enabled ? 1 : 0.5
+            enabled: !Cpp_IO_Manager.isConnected
 
             TextField {
               readOnly: true
@@ -218,6 +230,7 @@ Window {
           // Plugins enabled
           //
           Label {
+            color: Cpp_ThemeManager.colors["text"]
             text: qsTr("Enable TCP Plugins (Port 7777)")
           } Switch {
             id: _tcpPlugins
@@ -235,6 +248,7 @@ Window {
           // Software rendering
           //
           Label {
+            color: Cpp_ThemeManager.colors["text"]
             text: qsTr("Force Software Rendering")
           } Switch {
             Layout.rightMargin: -8
@@ -251,6 +265,7 @@ Window {
           // Auto-updater
           //
           Label {
+            color: Cpp_ThemeManager.colors["text"]
             text: qsTr("Automatically Check for Updates")
           } Switch {
             Layout.rightMargin: -8
@@ -301,6 +316,7 @@ Window {
           //
           Label {
             text: qsTr("Point Count")
+            color: Cpp_ThemeManager.colors["text"]
           } SpinBox {
             id: _points
 
@@ -320,6 +336,7 @@ Window {
           //
           Label {
             text: qsTr("Decimal Precision")
+            color: Cpp_ThemeManager.colors["text"]
           } SpinBox {
             id: _decimalDigits
 
@@ -339,6 +356,7 @@ Window {
           //
           Label {
             text: qsTr("Show Actions Panel")
+            color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: _actionsPanel
             Layout.rightMargin: -8
@@ -356,6 +374,7 @@ Window {
           //
           Label {
             text: qsTr("Enable Console Widget")
+            color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: _consoleWidget
             Layout.rightMargin: -8
