@@ -21,25 +21,6 @@ Serial Studio is available as source code and official precompiled binaries for 
 #### Microsoft Windows:
 Requires the [Microsoft Visual C++ Redistributable (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version). On first launch, Windows may show a warning about an unknown developer, click _"More Info → Run Anyway"_ to continue.
 
-#### Linux:
-Provided as an [AppImage](https://appimage.org/). Make it executable and run it:
-
-```bash
-chmod +x SerialStudio-3.0.6-Linux-x86_64.AppImage
-./SerialStudio-3.0.6-Linux-x86_64.AppImage
-```
-
-Some systems may require `libfuse2` to run AppImages:
-
-```bash
-sudo apt install libfuse2
-```
-
-**Recommendation:** Use [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher) to integrate Serial Studio with your desktop environment.
-
-##### Raspberry Pi / ARM64:
-An AppImage build for ARM64 is also available for devices like the Raspberry Pi. _Mileage may vary_ depending on your hardware and GPU drivers, as Serial Studio relies heavily on GPU-accelerated operations to render the user interface. A 64-bit Linux OS and `libfuse2` are required.
-
 #### macOS: 
 Distributed as a universal DMG. Open the DMG file and drag **Serial Studio** into the **Applications** folder.
 Alternatively, you can try installing via Homebrew:
@@ -49,6 +30,32 @@ brew install --cask serial-studio
 ```
 
 **Note:** The Homebrew cask is community-maintained. It’s available, but not officially developed or tested by me.
+
+#### Linux:
+The recommended way to install Serial Studio on Linux is via the official pre-built [AppImage](https://appimage.org/). Make it executable and run it:
+
+```bash
+chmod +x SerialStudio-3.0.6-Linux-x86_64.AppImage
+./SerialStudio-3.0.6-Linux-x86_64.AppImage
+```
+
+If the AppImage fails to launch, your system may be missing `libfuse2`:
+
+```bash
+sudo apt install libfuse2
+```
+
+**Tip:** For better desktop integration (menu entries, updates, icons), use [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher).
+
+##### Flatpak (via Flathub)
+Serial Studio is also available on [Flathub](https://flathub.org/apps/com.serial_studio.Serial-Studio). This version receives regular updates and may offer better support for ARM64 systems. However, minor graphical glitches may occur on some desktop environments—especially under Wayland (e.g., missing window shadows).
+
+##### Raspberry Pi / ARM64:
+An ARM64 AppImage is available for Raspberry Pi and similar devices. Performance varies based on hardware and GPU drivers, since the UI depends on GPU acceleration. The ARM64 AppImage requires:
+- A 64-bit Linux OS equivalent to or newer than **Ubuntu 24.04** (due to a `glibc 2.38` dependency)
+- `libfuse2` installed
+
+Make sure your system meets these requirements before running the AppImage.
 
 ## Features
 
