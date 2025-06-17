@@ -343,6 +343,18 @@ Item {
             Cpp_IO_Console.checksumMethod = currentIndex
         }
       }
+
+      Button {
+        icon.width: 18
+        icon.height: 18
+        implicitHeight: 24
+        Layout.maximumWidth: 32
+        onClicked: root.sendData()
+        opacity: enabled ? 1 : 0.5
+        icon.source: "qrc:/rcc/icons/buttons/send.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
+        enabled: Cpp_IO_Manager.readWrite && (send.length > 0 || Cpp_IO_Console.lineEnding != 0)
+      }
     }
 
     //

@@ -136,6 +136,7 @@
         <file>icons/buttons/print.svg</file>
         <file>icons/buttons/refresh.svg</file>
         <file>icons/buttons/save.svg</file>
+        <file>icons/buttons/send.svg</file>
         <file>icons/buttons/visible.svg</file>
         <file>icons/buttons/website.svg</file>
         <file>icons/code-editor/apply.svg</file>
@@ -314,6 +315,10 @@
         <file>icons/start/normal-screen.svg</file>
         <file>icons/start/pause.svg</file>
         <file>icons/start/resume.svg</file>
+        <file>icons/taskbar/adjust.svg</file>
+        <file>icons/taskbar/console.svg</file>
+        <file>icons/taskbar/pause.svg</file>
+        <file>icons/taskbar/resume.svg</file>
         <file>icons/toolbar/about.svg</file>
         <file>icons/toolbar/connect.svg</file>
         <file>icons/toolbar/csv.svg</file>
@@ -404,16 +409,11 @@
         <file>scripts/frame-parser.js</file>
         <file>themes/code-editor/dark.xml</file>
         <file>themes/code-editor/default.xml</file>
+        <file>themes/code-editor/ironframe.xml</file>
         <file>themes/code-editor/light.xml</file>
         <file>themes/dark.json</file>
         <file>themes/default.json</file>
-        <file>themes/light.json</file>
-        <file>rcc.qrc</file>
         <file>themes/ironframe.json</file>
-        <file>themes/code-editor/ironframe.xml</file>
-        <file>icons/taskbar/adjust.svg</file>
-        <file>icons/taskbar/console.svg</file>
-        <file>icons/taskbar/pause.svg</file>
-        <file>icons/taskbar/resume.svg</file>
+        <file>themes/light.json</file>
     </qresource>
 </RCC>
