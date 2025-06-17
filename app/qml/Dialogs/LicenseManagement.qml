@@ -360,13 +360,16 @@ Window {
                   sourceSize.width: 18
                   sourceSize.height: 18
                   source: "qrc:/rcc/icons/licensing/user.svg"
+                  visible: Cpp_Licensing_LemonSqueezy.customerName.length > 0
                 } Label {
                   text: qsTr("Licensee") + ":"
                   font: Cpp_Misc_CommonFonts.boldUiFont
+                  visible: Cpp_Licensing_LemonSqueezy.customerName.length > 0
                 } Label {
                   Layout.fillWidth: true
                   wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                   text: Cpp_Licensing_LemonSqueezy.customerName
+                  visible: Cpp_Licensing_LemonSqueezy.customerName.length > 0
                 }
 
                 Image {
