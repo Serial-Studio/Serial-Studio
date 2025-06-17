@@ -202,6 +202,7 @@ private:
   QStringList m_customDevices;
   QStringList m_deviceLocations;
 
+  QMutex m_errorHandlerMutex;
   QMap<QSerialPort::SerialPortError, QString> m_errorDescriptions;
 };
 } // namespace Drivers

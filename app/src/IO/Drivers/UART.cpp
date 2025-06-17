@@ -822,12 +822,19 @@ void IO::Drivers::UART::refreshSerialDevices()
  */
 void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
 {
+  // Ensure that this function is only called once
+  QMutexLocker locker(&m_errorHandlerMutex);
+
   // Ignore if port is not open
   if (port())
   {
     if (!port()->isOpen())
       return;
   }
+
+  // No need to show error if device was disconnected from previous error
+  if (!Manager::instance().isConnected())
+    return;
 
   // Log error
   if (error != QSerialPort::NoError)
@@ -840,20 +847,14 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
         return;
     }
 
-    // Fail silently on resource errors if auto-reconnect is enabled
-    if (m_autoReconnect && error == QSerialPort::ResourceError)
-    {
-      Manager::instance().disconnectDevice();
-      return;
-    }
+    // Disconnect the device
+    Manager::instance().disconnectDevice();
 
     // Display error
-    Misc::Utilities::showMessageBox(tr("Critical serial port error"),
-                                    m_errorDescriptions[error],
-                                    QMessageBox::Critical);
-
-    // Disconnect from device
-    Manager::instance().disconnectDevice();
+    if (!m_autoReconnect || error != QSerialPort::ResourceError)
+      Misc::Utilities::showMessageBox(tr("Critical serial port error"),
+                                      m_errorDescriptions[error],
+                                      QMessageBox::Critical);
   }
 }
 

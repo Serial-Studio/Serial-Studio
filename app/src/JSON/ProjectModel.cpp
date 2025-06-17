@@ -1318,6 +1318,9 @@ void JSON::ProjectModel::duplicateCurrentAction()
   action.m_eolSequence = m_selectedAction.eolSequence();
   action.m_txData = m_selectedAction.txData();
   action.m_icon = m_selectedAction.icon();
+  action.m_autoExecuteOnConnect = m_selectedAction.m_autoExecuteOnConnect;
+  action.m_timerIntervalMs = m_selectedAction.m_timerIntervalMs;
+  action.m_timerMode = m_selectedAction.m_timerMode;
 
   // Register the group
   m_actions.append(action);
