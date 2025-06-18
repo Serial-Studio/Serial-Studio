@@ -157,6 +157,18 @@ Misc::ModuleManager::ModuleManager()
   if (m_softwareRendering)
     QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
 
+  // Load native graphics API for each platform
+  else
+  {
+#if defined(Q_OS_WIN)
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11Rhi);
+#elif defined(Q_OS_MACOS)
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::MetalRhi);
+#else
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::VulkanRhi);
+#endif
+  }
+
   // Stop modules when application is about to quit
   connect(&m_engine, &QQmlApplicationEngine::quit, this,
           &Misc::ModuleManager::onQuit);
