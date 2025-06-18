@@ -96,40 +96,62 @@ void Widgets::DataGrid::setPaused(const bool paused)
  */
 void Widgets::DataGrid::updateData()
 {
-  if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index))
+  // Validate that the widget exists and that the dashboard is not paused
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index) || paused())
     return;
 
-  if (paused())
-    return;
-
+  // Obtain a reference to the datagrid group & copy current table data
   const auto &group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
+  auto rows = data();
 
+  // Initialize parameters
   bool changed = false;
-  auto currentData = data();
+  const int valueIndex = 1;
 
+  // Update values for every dataset in the group
   for (int i = 0; i < group.datasetCount(); ++i)
   {
+    // Obtain a reference to the dataset object & read its value
     const auto &dataset = group.getDataset(i);
-
     QString value = dataset.value();
+
+    // Convert the dataset to a number if needed
     bool isNumber;
     const double n = value.toDouble(&isNumber);
-
     if (isNumber)
       value = QString::number(n, 'f', UI::Dashboard::instance().precision());
 
+    // Append dataset units (if available)
     if (!dataset.units().isEmpty())
       value += " " + dataset.units();
 
-    if (currentData[i + 1][1] != value)
+    // Obtain the row index for the current dataset
+    const int rowIndex = i + 1;
+
+    // Validate to table data to ensure we can update it (issue #307)
+    if (rows.count() <= rowIndex || rows[rowIndex].count() <= valueIndex)
     {
-      currentData[i + 1][1] = value;
+      QList<QStringList> rows;
+      rows.append({tr("Title"), tr("Value")});
+      for (const auto &ds : group.datasets())
+        rows.append(getRow(ds));
+
+      setData(rows);
+      return;
+    }
+
+    // Update dataset value in current row
+    auto &row = rows[rowIndex];
+    if (row[valueIndex] != value)
+    {
+      row[valueIndex] = value;
       changed = true;
     }
   }
 
+  // Update table data & render
   if (changed)
-    setData(currentData);
+    setData(rows);
 }
 
 /**

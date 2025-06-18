@@ -137,6 +137,10 @@ void UI::WindowManager::clear()
   m_windowZ.clear();
   m_windows.clear();
   m_windowOrder.clear();
+  m_dragWindow = nullptr;
+  m_targetWindow = nullptr;
+  m_resizeWindow = nullptr;
+  m_focusedWindow = nullptr;
   m_snapIndicatorVisible = false;
 
   Q_EMIT zCounterChanged();
