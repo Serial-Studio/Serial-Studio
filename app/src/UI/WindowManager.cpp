@@ -221,6 +221,7 @@ void UI::WindowManager::autoLayout()
       win->setWidth(windowArea.width());
       win->setHeight(windowArea.height());
       Q_EMIT geometryChanged(win);
+
       return;
     }
 
@@ -260,6 +261,16 @@ void UI::WindowManager::autoLayout()
 
   // Kick off the recursive tiling process
   tileRecursive(tileRecursive, rootArea, visibleWindows);
+
+  // Ensure all windows are visible
+  for (auto *win : std::as_const(m_windows))
+  {
+    if (win && !win->isVisible())
+    {
+      if (win->state() == "normal" || win->state() == "maximized")
+        win->setVisible(true);
+    }
+  }
 }
 
 /**
@@ -334,6 +345,16 @@ void UI::WindowManager::cascadeLayout()
     // Update position counters
     x += offsetStep;
     y += offsetStep;
+  }
+
+  // Ensure all windows are visible
+  for (auto *win : std::as_const(m_windows))
+  {
+    if (win && !win->isVisible())
+    {
+      if (win->state() == "normal" || win->state() == "maximized")
+        win->setVisible(true);
+    }
   }
 }
 

@@ -124,8 +124,9 @@ Item {
   }
 
   //
-  // Disable the window when opacity falls below 1
+  // Enable/disable window when state changes
   //
+  state: "normal"
   enabled: root.state === "normal" || root.state === "maximized"
 
   //
