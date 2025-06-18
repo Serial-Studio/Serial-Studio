@@ -36,7 +36,6 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
 {
   // Set QML flags
   setMipmap(true);
-  setAntialiasing(true);
   setOpaquePainting(true);
   setAcceptTouchEvents(false);
   setFlag(ItemHasContents, true);
@@ -53,25 +52,6 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
     requestUpdate();
     redraw();
   });
-
-  // Redraw the widget at 24 Hz
-  m_timer.setTimerType(Qt::PreciseTimer);
-  connect(&m_timer, &QTimer::timeout, this, [=] { redraw(); });
-  connect(this, &QQuickPaintedItem::visibleChanged, this, [=] {
-    if (QQuickPaintedItem::isVisible())
-    {
-      requestUpdate();
-      redraw();
-      m_timer.start(1000 / 24);
-    }
-
-    else
-      m_timer.stop();
-  });
-
-  // Start the drawing loop
-  if (QQuickPaintedItem::isVisible())
-    m_timer.start(1000 / 24);
 }
 
 /**
@@ -135,7 +115,7 @@ void DeclarativeWidget::redraw(const QRect &rect)
     if (QQuickPaintedItem::isVisible() && m_updateRequested)
     {
       m_updateRequested = false;
-      m_pixmap = m_widget->grab();
+      m_pixmap = m_widget->grab().toImage();
       QQuickPaintedItem::update(rect);
     }
   }
@@ -148,7 +128,7 @@ void DeclarativeWidget::redraw(const QRect &rect)
 void DeclarativeWidget::paint(QPainter *painter)
 {
   if (painter != nullptr)
-    painter->drawPixmap(0, 0, m_pixmap);
+    painter->drawImage(0, 0, m_pixmap);
 }
 
 /**

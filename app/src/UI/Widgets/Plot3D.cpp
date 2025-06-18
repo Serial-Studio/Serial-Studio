@@ -67,8 +67,6 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   m_invertEyePositions = m_settings.value("Plot3D_InvertEyes", false).toBool();
 
   // Configure QML item behavior
-  setMipmap(true);
-  setAntialiasing(true);
   setOpaquePainting(true);
   setAcceptHoverEvents(true);
   setFiltersChildMouseEvents(true);
@@ -80,8 +78,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   setAcceptedMouseButtons(Qt::AllButtons);
 
   // Set rendering hints
-  setMipmap(false);
-  setAntialiasing(true);
+  setMipmap(true);
 
   // Update the plot data
   connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
@@ -89,11 +86,11 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
 
   // Mark everything as dirty when widget size changes
   connect(this, &Widgets::Plot3D::widthChanged, this,
-          &Widgets::Plot3D::markDirty);
+          &Widgets::Plot3D::updateSize);
   connect(this, &Widgets::Plot3D::heightChanged, this,
-          &Widgets::Plot3D::markDirty);
+          &Widgets::Plot3D::updateSize);
   connect(this, &Widgets::Plot3D::scaleChanged, this,
-          &Widgets::Plot3D::markDirty);
+          &Widgets::Plot3D::updateSize);
 
   // Obtain group information
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot3D, m_index))
@@ -141,7 +138,6 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
 void Widgets::Plot3D::paint(QPainter *painter)
 {
   // Configure render hints
-  painter->setRenderHint(QPainter::Antialiasing);
   painter->setBackground(m_outerBackgroundColor);
 
   // Re-draw background (if required)
@@ -160,64 +156,60 @@ void Widgets::Plot3D::paint(QPainter *painter)
   if (m_dirtyBackground)
     drawBackground();
 
-  // Generate list of pixmaps
-  QList<QPixmap *> pixmaps;
-  pixmaps.append(m_backgroundPixmap);
+  // Generate list of images
+  QList<QImage *> images;
+  images.append(m_bgImg);
 
   // User is below axis/plane...draw plot first then grid
   if (m_cameraAngleX <= 270 && m_cameraAngleX > 90.0)
   {
-    pixmaps.append(m_plotPixmap);
-    pixmaps.append(m_gridPixmap);
+    images.append(m_plotImg);
+    images.append(m_gridImg);
   }
 
   // User is above axis/plane...draw grid first then plot
   else
   {
-    pixmaps.append(m_gridPixmap);
-    pixmaps.append(m_plotPixmap);
+    images.append(m_gridImg);
+    images.append(m_plotImg);
   }
 
   // Add camera indicator
-  pixmaps.append(m_cameraIndicatorPixmap);
+  images.append(m_cameraIndicatorImg);
 
   // Anaglyph processing
   if (anaglyphEnabled())
   {
     // Initialize left eye pixmap
-    QPixmap left(m_backgroundPixmap[0].size());
+    QImage left(widgetSize(), QImage::Format_ARGB32_Premultiplied);
     left.setDevicePixelRatio(qApp->devicePixelRatio());
     left.fill(Qt::transparent);
 
     // Initialize right eye pixmap
-    QPixmap right(m_backgroundPixmap[1].size());
+    QImage right(widgetSize(), QImage::Format_ARGB32_Premultiplied);
     right.setDevicePixelRatio(qApp->devicePixelRatio());
     right.fill(Qt::transparent);
 
     // Compose the left eye scene
     QPainter leftScene(&left);
-    for (const auto *p : pixmaps)
-      leftScene.drawPixmap(0, 0, p[0]);
+    for (const auto *p : images)
+      leftScene.drawImage(0, 0, p[0]);
 
     // Compose the right eye scene
     QPainter rightScene(&right);
-    for (const auto *p : pixmaps)
-      rightScene.drawPixmap(0, 0, p[1]);
-
-    // Obtain two images from the scene
-    QImage leftImg = left.toImage();
-    QImage rightImg = right.toImage();
+    for (const auto *p : images)
+      rightScene.drawImage(0, 0, p[1]);
 
     // Build the anaglyph manually
-    QImage finalImage(leftImg.size(), QImage::Format_RGB32);
+    QImage finalImage(widgetSize(), QImage::Format_RGB32);
     finalImage.setDevicePixelRatio(qApp->devicePixelRatio());
-    for (int y = 0; y < leftImg.height(); ++y)
+    for (int y = 0; y < left.height(); ++y)
     {
-      for (int x = 0; x < leftImg.width(); ++x)
+      for (int x = 0; x < left.width(); ++x)
       {
         // Obtain pixels from both left and right image
-        const auto lRgb = leftImg.pixel(x, y);
-        const auto rRgb = rightImg.pixel(x, y);
+        const auto lRgb = left.pixel(x, y);
+        const auto rRgb = right.pixel(x, y);
 
         // Preserve red from left and cyan (green + blue) from right
         const auto outR = qRed(lRgb);
@@ -228,14 +220,14 @@ void Widgets::Plot3D::paint(QPainter *painter)
     }
 
     // Draw the final image
-    painter->drawPixmap(0, 0, QPixmap::fromImage(finalImage));
+    painter->drawImage(0, 0, finalImage);
   }
 
   // Standard processing
   else
   {
-    for (const auto *p : pixmaps)
-      painter->drawPixmap(0, 0, p[0]);
+    for (const auto *p : images)
+      painter->drawImage(0, 0, p[0]);
   }
 }
 
@@ -414,6 +406,19 @@ bool Widgets::Plot3D::orbitNavigation() const
 bool Widgets::Plot3D::interpolationEnabled() const
 {
   return m_interpolate;
+}
+
+/**
+ * @brief Returns the widget size in device pixels.
+ *
+ * Computes the widget's size multiplied by the current device pixel ratio,
+ * accounting for high-DPI displays.
+ *
+ * @return QSize representing the width and height in device pixels.
+ */
+const QSize &Widgets::Plot3D::widgetSize() const
+{
+  return m_size;
 }
 
 //------------------------------------------------------------------------------
@@ -721,6 +726,22 @@ void Widgets::Plot3D::markDirty()
 }
 
 /**
+ * @brief Updates the internal size to match the current widget size in device
+ * pixels.
+ *
+ * Recalculates and stores the size using the device pixel ratio to support
+ * high-DPI scaling.
+ */
+void Widgets::Plot3D::updateSize()
+{
+  auto dpr = qApp->devicePixelRatio();
+  m_size = QSize(static_cast<int>(width() * dpr),
+                 static_cast<int>(height() * dpr));
+
+  markDirty();
+}
+
+/**
  * @brief Renders the 3D plot foreground.
  *
  * This function draws the main 3D data points or objects in the plot.
@@ -778,8 +799,8 @@ void Widgets::Plot3D::drawData()
     eyes.second.scale(m_worldScale);
 
     // Render data
-    m_plotPixmap[0] = renderData(eyes.first, data);
-    m_plotPixmap[1] = renderData(eyes.second, data);
+    m_plotImg[0] = renderData(eyes.first, data);
+    m_plotImg[1] = renderData(eyes.second, data);
   }
 
   // Render single pixmap
@@ -792,7 +813,7 @@ void Widgets::Plot3D::drawData()
     matrix.scale(m_worldScale);
 
     // Render data
-    m_plotPixmap[0] = renderData(matrix, data);
+    m_plotImg[0] = renderData(matrix, data);
   }
 
   // Mark dirty flag as false to avoid needless rendering
@@ -831,8 +852,8 @@ void Widgets::Plot3D::drawGrid()
     eyes.second.scale(m_worldScale);
 
     // Render grid
-    m_gridPixmap[0] = renderGrid(eyes.first);
-    m_gridPixmap[1] = renderGrid(eyes.second);
+    m_gridImg[0] = renderGrid(eyes.first);
+    m_gridImg[1] = renderGrid(eyes.second);
   }
 
   // Render 2D pixmap
@@ -845,7 +866,7 @@ void Widgets::Plot3D::drawGrid()
     matrix.scale(m_worldScale);
 
     // Render grid
-    m_gridPixmap[0] = renderGrid(matrix);
+    m_gridImg[0] = renderGrid(matrix);
   }
 
   // Mark dirty flag as false to avoid needless rendering
@@ -857,22 +878,18 @@ void Widgets::Plot3D::drawGrid()
  *
  * This function draws the radial gradient background behind the 3D plot.
  *
- * The result is stored in m_backgroundPixmap[0] (left eye) and
- * m_backgroundPixmap[1] (right eye) for anaglyph mode, or only in
- * m_backgroundPixmap[0] for normal rendering.
+ * The result is stored in m_bgImg[0] (left eye) and
+ * m_bgImg[1] (right eye) for anaglyph mode, or only in
+ * m_bgImg[0] for normal rendering.
  *
  * Marks m_dirtyBackground as false to prevent unnecessary re-rendering.
  */
 void Widgets::Plot3D::drawBackground()
 {
-  // Prepare common pixmap size
-  const int pixWidth = static_cast<int>(width() * qApp->devicePixelRatio());
-  const int pixHeight = static_cast<int>(height() * qApp->devicePixelRatio());
-
-  // Create a transparent pixmap at high DPI resolution
-  QPixmap pixmap(pixWidth, pixHeight);
-  pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-  pixmap.fill(Qt::transparent);
+  // Create a transparent image at high DPI resolution
+  QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
+  img.setDevicePixelRatio(qApp->devicePixelRatio());
+  img.fill(Qt::transparent);
 
   // Set up a radial gradient centered in the widget
   QPointF center(width() * 0.5f, height() * 0.5f);
@@ -882,14 +899,13 @@ void Widgets::Plot3D::drawBackground()
   gradient.setColorAt(1.0, m_outerBackgroundColor);
 
   // Paint the gradient onto the pixmap with antialiasing enabled
-  QPainter painter(&pixmap);
-  painter.setRenderHint(QPainter::Antialiasing, true);
+  QPainter painter(&img);
   painter.fillRect(boundingRect(), gradient);
 
   // Assign background pixmaps
-  m_backgroundPixmap[0] = pixmap;
+  m_bgImg[0] = img;
   if (anaglyphEnabled())
-    m_backgroundPixmap[1] = pixmap;
+    m_bgImg[1] = img;
 
   // Mark dirty flag as false to avoid needless rendering
   m_dirtyBackground = false;
@@ -925,8 +941,8 @@ void Widgets::Plot3D::drawCameraIndicator()
     eyes.second.rotate(m_cameraAngleZ, 0, 0, 1);
 
     // Render camera indicator
-    m_cameraIndicatorPixmap[0] = renderCameraIndicator(eyes.first);
-    m_cameraIndicatorPixmap[1] = renderCameraIndicator(eyes.second);
+    m_cameraIndicatorImg[0] = renderCameraIndicator(eyes.first);
+    m_cameraIndicatorImg[1] = renderCameraIndicator(eyes.second);
   }
 
   // Render 2D pixmap
@@ -935,7 +951,7 @@ void Widgets::Plot3D::drawCameraIndicator()
     matrix.rotate(m_cameraAngleX, 1, 0, 0);
     matrix.rotate(m_cameraAngleY, 0, 1, 0);
     matrix.rotate(m_cameraAngleZ, 0, 0, 1);
-    m_cameraIndicatorPixmap[0] = renderCameraIndicator(matrix);
+    m_cameraIndicatorImg[0] = renderCameraIndicator(matrix);
   }
 
   // Mark dirty flag as false to avoid needless rendering
@@ -1118,18 +1134,15 @@ void Widgets::Plot3D::drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
  * @param matrix The camera view-projection matrix used for 3D to 2D projection.
  * @return A QPixmap containing the rendered grid overlay.
  */
-QPixmap Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
+QImage Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
 {
-  // Create the pixmap and initialize it to the widget's size
-  // clang-format off
-  QPixmap pixmap = QPixmap(static_cast<int>(width() * qApp->devicePixelRatio()),
-                           static_cast<int>(height() * qApp->devicePixelRatio()));
-  pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-  pixmap.fill(Qt::transparent);
-  // clang-format on
+  // Create the image and initialize it to the widget's size
+  QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
+  img.setDevicePixelRatio(qApp->devicePixelRatio());
+  img.fill(Qt::transparent);
 
   // Initialize paint device
-  QPainter painter(&pixmap);
+  QPainter painter(&img);
   painter.setRenderHint(QPainter::Antialiasing, true);
 
   // Obtain grid interval
@@ -1184,7 +1197,7 @@ QPixmap Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
   painter.drawText(QPoint(8, height() - 8), stepLabel);
 
   // Return the result
-  return pixmap;
+  return img;
 }
 
 /**
@@ -1196,7 +1209,7 @@ QPixmap Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
  * @param matrix Transform matrix for projection.
  * @return Rendered camera indicator pixmap.
  */
-QPixmap Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
+QImage Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
 {
   // Define a structure to hold axis data
   struct Axis
@@ -1213,20 +1226,17 @@ QPixmap Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
     QVector4D transformed;
   };
 
-  // Create the pixmap and initialize it to the widget's size
-  // clang-format off
-  QPixmap pixmap = QPixmap(static_cast<int>(width() * qApp->devicePixelRatio()),
-                           static_cast<int>(height() * qApp->devicePixelRatio()));
-  pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-  pixmap.fill(Qt::transparent);
-  // clang-format on
+  // Create the image and initialize it to the widget's size
+  QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
+  img.setDevicePixelRatio(qApp->devicePixelRatio());
+  img.fill(Qt::transparent);
 
   // Skip rendering if widget is too small
   if (width() < 240 || height() < 240)
-    return pixmap;
+    return img;
 
   // Initialize paint device
-  QPainter painter(&pixmap);
+  QPainter painter(&img);
   painter.setRenderHint(QPainter::Antialiasing, true);
 
   // Define widget constants & set origin to bottom left
@@ -1289,7 +1299,7 @@ QPixmap Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
   }
 
   // Return obtained pixmap
-  return pixmap;
+  return img;
 }
 
 /**
@@ -1302,19 +1312,16 @@ QPixmap Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
  * @param data 3D plot points.
  * @return Rendered foreground pixmap.
  */
-QPixmap Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
-                                    const PlotData3D &data)
+QImage Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
+                                   const PlotData3D &data)
 {
   // Create the pixmap and initialize it to the widget's size
-  // clang-format off
-  QPixmap pixmap = QPixmap(static_cast<int>(width() * qApp->devicePixelRatio()),
-                           static_cast<int>(height() * qApp->devicePixelRatio()));
-  pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-  pixmap.fill(Qt::transparent);
-  // clang-format on
+  QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
+  img.setDevicePixelRatio(qApp->devicePixelRatio());
+  img.fill(Qt::transparent);
 
   // Initialize paint device
-  QPainter painter(&pixmap);
+  QPainter painter(&img);
   painter.setRenderHint(QPainter::Antialiasing, true);
 
   // Project 3D points to 2D screen space
@@ -1349,7 +1356,7 @@ QPixmap Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
   }
 
   // Return the rendered pixmap
-  return pixmap;
+  return img;
 }
 
 //------------------------------------------------------------------------------

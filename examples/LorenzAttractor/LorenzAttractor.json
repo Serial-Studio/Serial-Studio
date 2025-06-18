@@ -1,6 +1,7 @@
 {
     "actions": [
     ],
+    "checksum": "",
     "decoder": 0,
     "frameDetection": 0,
     "frameEnd": "\\n",

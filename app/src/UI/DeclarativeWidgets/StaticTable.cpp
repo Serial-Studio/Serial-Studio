@@ -161,7 +161,7 @@ void StaticTable::setData(const QList<QStringList> &data)
 
   // Update user interface
   requestUpdate();
-  Q_EMIT dataChanged();
+  redraw();
 }
 
 /**

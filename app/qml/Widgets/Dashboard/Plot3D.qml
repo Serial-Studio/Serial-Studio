@@ -66,6 +66,11 @@ Item {
     }
   }
 
+  onVisibleChanged: {
+    if (visible)
+      animateToView(300, 0, 225, 0, 0)
+  }
+
   //
   // Zoom in/out shortcuts
   //

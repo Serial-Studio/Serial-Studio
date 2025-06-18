@@ -132,6 +132,8 @@ public:
   [[nodiscard]] bool orbitNavigation() const;
   [[nodiscard]] bool interpolationEnabled() const;
 
+  [[nodiscard]] const QSize &widgetSize() const;
+
 public slots:
   void setWorldScale(const double z);
   void setCameraAngleX(const double angle);
@@ -152,6 +154,7 @@ private slots:
 
 private:
   void markDirty();
+  void updateSize();
 
   void drawData();
   void drawGrid();
@@ -166,9 +169,9 @@ private:
                   const QVector3D &p1, const QVector3D &p2, QColor color,
                   float lineWidth, Qt::PenStyle style);
 
-  QPixmap renderGrid(const QMatrix4x4 &matrix);
-  QPixmap renderCameraIndicator(const QMatrix4x4 &matrix);
-  QPixmap renderData(const QMatrix4x4 &matrix, const PlotData3D &data);
+  QImage renderGrid(const QMatrix4x4 &matrix);
+  QImage renderCameraIndicator(const QMatrix4x4 &matrix);
+  QImage renderData(const QMatrix4x4 &matrix, const PlotData3D &data);
   QPair<QMatrix4x4, QMatrix4x4> eyeTransformations(const QMatrix4x4 &matrix);
 
 protected:
@@ -219,10 +222,10 @@ private:
   QColor m_innerBackgroundColor;
   QColor m_outerBackgroundColor;
 
-  QPixmap m_plotPixmap[2];
-  QPixmap m_gridPixmap[2];
-  QPixmap m_backgroundPixmap[2];
-  QPixmap m_cameraIndicatorPixmap[2];
+  QImage m_bgImg[2];
+  QImage m_plotImg[2];
+  QImage m_gridImg[2];
+  QImage m_cameraIndicatorImg[2];
 
   double m_orbitOffsetX;
   double m_orbitOffsetY;
@@ -232,6 +235,7 @@ private:
   QVector3D m_minPoint;
   QVector3D m_maxPoint;
 
+  QSize m_size;
   QSettings m_settings;
 };
 } // namespace Widgets

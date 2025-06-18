@@ -38,15 +38,10 @@ class StaticTable : public DeclarativeWidget
              READ headerFont
              WRITE setHeaderFont
              NOTIFY headerFontChanged)
-  Q_PROPERTY(const QList<QStringList>& data
-             READ data
-             WRITE setData
-             NOTIFY dataChanged)
   // clang-format on
 
 Q_SIGNALS:
   void fontChanged();
-  void dataChanged();
   void headerFontChanged();
 
 public:

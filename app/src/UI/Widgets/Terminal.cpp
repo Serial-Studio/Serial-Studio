@@ -89,8 +89,7 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   setAcceptedMouseButtons(Qt::AllButtons);
 
   // Set rendering hints
-  setMipmap(false);
-  setAntialiasing(true);
+  setMipmap(true);
   setOpaquePainting(true);
 
   // Load the welcome guide
