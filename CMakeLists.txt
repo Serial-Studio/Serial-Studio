@@ -40,9 +40,10 @@ find_package(
 # Options for build types
 #-------------------------------------------------------------------------------
 
-option(BUILD_GPL3              "Force GPLv3-only build"                OFF)
+option(BUILD_GPL3              "Force GPLv3-only build"                 ON)
 option(DEBUG_SANITIZER         "Enable sanitizers for debug builds"    OFF)
 option(PRODUCTION_OPTIMIZATION "Enable production optimization flags"   ON)
+option(BUILD_COMMERCIAL        "Enable commercial features"            OFF)
 
 #-------------------------------------------------------------------------------
 # Project information
@@ -75,22 +76,29 @@ add_definitions(-DPROJECT_APPCAST="${PROJECT_APPCAST}")
 add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 
 #-------------------------------------------------------------------------------
-# Automatically enable or disable commercial Qt modules
+# Licensing and validation
 #-------------------------------------------------------------------------------
 
 if(BUILD_GPL3)
+   if(BUILD_COMMERCIAL)
+      message(FATAL_ERROR
+         "You cannot enable commercial features (BUILD_COMMERCIAL=ON) when BUILD_GPL3=ON.\n"
+         "Set -DBUILD_GPL3=OFF to build with commercial modules.")
+   endif()
+
    set(BUILD_COMMERCIAL OFF CACHE BOOL "Commercial features disabled due to GPLv3 build mode" FORCE)
-   message(STATUS "BUILD_GPL3 is ON — forcing BUILD_COMMERCIAL=OFF for GPL compliance")
+   message(STATUS "BUILD_GPL3=ON — enforcing BUILD_COMMERCIAL=OFF for license compliance")
+
 else()
-   if(NOT DEFINED BUILD_COMMERCIAL)
+   if(NOT BUILD_COMMERCIAL)
       find_package(Qt6 COMPONENTS Mqtt SerialBus OPTIONAL_COMPONENTS)
 
       if(TARGET Qt6::Mqtt AND TARGET Qt6::SerialBus)
-         set(BUILD_COMMERCIAL ON CACHE BOOL "Enable features that require Qt Commercial" FORCE)
-         message(STATUS "Qt6::Mqtt and Qt6::SerialBus found — enabling BUILD_COMMERCIAL")
+         set(BUILD_COMMERCIAL ON CACHE BOOL "Commercial features enabled (Qt Commercial modules found)" FORCE)
+         message(STATUS "Found Qt6::Mqtt and Qt6::SerialBus — enabling BUILD_COMMERCIAL")
       else()
-         set(BUILD_COMMERCIAL OFF CACHE BOOL "Enable features that require Qt Commercial" FORCE)
-         message(WARNING "Qt6::Mqtt and/or Qt6::SerialBus NOT found — disabling BUILD_COMMERCIAL")
+         set(BUILD_COMMERCIAL OFF CACHE BOOL "Qt Commercial modules missing — disabling BUILD_COMMERCIAL" FORCE)
+         message(WARNING "Qt6::Mqtt and/or Qt6::SerialBus NOT found — commercial features disabled")
       endif()
    else()
       message(STATUS "BUILD_COMMERCIAL explicitly set to '${BUILD_COMMERCIAL}' — skipping auto-detection")
@@ -99,10 +107,51 @@ endif()
 
 if(BUILD_COMMERCIAL)
    add_compile_definitions(BUILD_COMMERCIAL)
-   message(STATUS "Defining BUILD_COMMERCIAL for compiler")
-else()
-   message(STATUS "BUILD_COMMERCIAL is OFF — commercial features excluded")
+   message(STATUS "BUILD_COMMERCIAL=ON — validating license with Lemon Squeezy")
+
+   set(LICENSE_KEY $ENV{SERIAL_STUDIO_LICENSE_KEY})
+   set(INSTANCE_ID $ENV{SERIAL_STUDIO_INSTANCE_ID})
+
+   if(NOT LICENSE_KEY OR NOT INSTANCE_ID)
+      message(FATAL_ERROR
+         "Missing SERIAL_STUDIO_LICENSE_KEY or SERIAL_STUDIO_INSTANCE_ID environment variables.\n"
+         "Set them before building with commercial features.")
+   endif()
+
+   find_program(CURL_EXECUTABLE curl)
+
+   if(NOT CURL_EXECUTABLE)
+       message(FATAL_ERROR "curl is not installed or not found in PATH. Cannot validate license.")
+   endif()
+
+   execute_process(
+      COMMAND curl -s -X POST https://api.lemonsqueezy.com/v1/licenses/validate
+      -H "Accept: application/vnd.api+json"
+      -H "Content-Type: application/vnd.api+json"
+      -d "{\"license_key\": \"${LICENSE_KEY}\", \"instance_id\": \"${INSTANCE_ID}\"}"
+      OUTPUT_VARIABLE LS_RESPONSE
+      ERROR_VARIABLE LS_ERROR
+      RESULT_VARIABLE LS_RESULT
+   )
+
+   if(NOT LS_RESULT EQUAL 0)
+      message(FATAL_ERROR "License validation request failed: ${LS_ERROR}")
+   endif()
+
+   string(FIND "${LS_RESPONSE}" "\"valid\":true" VALID_POS)
+
+   if(VALID_POS EQUAL -1)
+      message(FATAL_ERROR
+         "Commercial build denied: License not valid or not active.\n"
+         "Response: ${LS_RESPONSE}")
+   endif()
+
+   message(STATUS "License validation succeeded — building with commercial features")
 endif()
+
+#-------------------------------------------------------------------------------
+# Log CPU type
+#-------------------------------------------------------------------------------
 
 message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
 

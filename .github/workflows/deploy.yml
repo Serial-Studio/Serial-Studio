@@ -163,10 +163,13 @@ jobs:
         useLocalCache: true
 
     - name: '🚧 Configure with CMake'
+      env:
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         mkdir build
         cd build
-        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application'
       run: |
@@ -191,40 +194,11 @@ jobs:
 
         mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
 
-    - name: '📦 Create Native Packages'
-      run: |
-        cd "build/app"
-
-        export LDNP_DESCRIPTION="${{env.DESCRIPTION}}"
-        wget https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages/releases/download/continuous/linuxdeploy-plugin-native_packages-x86_64.AppImage
-        chmod +x linuxdeploy-plugin-native_packages-x86_64.AppImage
-
-        fakeroot ./linuxdeploy-plugin-native_packages-x86_64.AppImage --appdir AppDir --build deb
-        #fakeroot ./linuxdeploy-plugin-native_packages-x86_64.AppImage --appdir AppDir --build rpm
-
-        rm -rf AppDir
-        rm linuxdeploy-plugin-native_packages-x86_64.AppImage
-
-        mv *.deb ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
-        #mv *.rpm ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
-
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v4
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
-
-    - name: '📤 Upload artifact: Debian Package'
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
-
-    #- name: '📤 Upload artifact: RPM Package'
-    #  uses: actions/upload-artifact@v4
-    #  with:
-    #    name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
-    #    path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
 
 #-------------------------------------------------------------------------------
 # GNU/Linux build (aarch64)
@@ -326,10 +300,13 @@ jobs:
         useLocalCache: true
 
     - name: '🚧 Configure with CMake'
+      env:
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         mkdir build
         cd build
-        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application'
       run: |
@@ -427,10 +404,13 @@ jobs:
         node-version: 20
 
     - name: '🚧 Configure with CMake'
+      env:
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         mkdir build
         cd build
-        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application'
       run: |
@@ -560,10 +540,13 @@ jobs:
         arch: x64
 
     - name: '🚧 Configure with CMake'
+      env:
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application'
       run: |
@@ -644,9 +627,6 @@ jobs:
           name: 'Continuous Build'
           bodyFile: release-body.md
           artifacts: |
-            artifacts/*.deb
-            artifacts/*.rpm
             artifacts/*.AppImage
             artifacts/*.dmg
-            artifacts/*.exe
             artifacts/*.msi
