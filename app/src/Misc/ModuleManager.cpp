@@ -72,7 +72,7 @@
 #include "UI/Widgets/MultiPlot.h"
 #include "UI/Widgets/Accelerometer.h"
 
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
 #  include "MQTT/Client.h"
 #  include "UI/Widgets/Plot3D.h"
 #  include "Licensing/LemonSqueezy.h"
@@ -263,7 +263,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<Widgets::Accelerometer>("SerialStudio", 1, 0,
                                           "AccelerometerModel");
 
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   qmlRegisterType<Widgets::Plot3D>("SerialStudio", 1, 0, "Plot3DWidget");
 #endif
 
@@ -293,7 +293,7 @@ void Misc::ModuleManager::registerQmlTypes()
 void Misc::ModuleManager::initializeQmlInterface()
 {
   // Initialize licensing module first
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   auto lemonSqueezy = &Licensing::LemonSqueezy::instance();
 #endif
 
@@ -321,7 +321,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto miscWorkspaceManager = &Misc::WorkspaceManager::instance();
 
   // Initialize commercial modules
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   const bool qtCommercialAvailable = true;
   auto mqttClient = &MQTT::Client::instance();
 #else
@@ -369,7 +369,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_QtCommercial_Available", qtCommercialAvailable);
 
   // Register commercial C++ modules with QML
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   c->setContextProperty("Cpp_MQTT_Client", mqttClient);
   c->setContextProperty("Cpp_Licensing_LemonSqueezy", lemonSqueezy);
 #endif
@@ -402,7 +402,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   qInstallMessageHandler(MessageHandler);
 
   // Try to contact activation server to validate license
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   if (!lemonSqueezy->licensingData().isEmpty())
     QMetaObject::invokeMethod(lemonSqueezy, &Licensing::LemonSqueezy::validate);
 #endif

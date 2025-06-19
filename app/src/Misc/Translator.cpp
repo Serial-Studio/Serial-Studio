@@ -168,7 +168,7 @@ QString Misc::Translator::welcomeConsoleText() const
 
   // Define fallback text & default message path
   QString text = QObject::tr("Failed to load welcome text :(");
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   QString path = ":/rcc/messages/free/Welcome_" + lang + ".txt";
   if (SerialStudio::activated())
     path = ":/rcc/messages/pro/Welcome_" + lang + ".txt";

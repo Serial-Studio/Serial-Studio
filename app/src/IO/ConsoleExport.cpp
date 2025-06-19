@@ -1,22 +1,25 @@
 /*
  * Serial Studio - https://serial-studio.github.io/
  *
- * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This file contains both open-source and proprietary sections.
+ * Portions enabled via preprocessor macros (e.g., BUILD_COMMERCIAL)
+ * are part of Serial Studio's commercial feature set and may only be
+ * used under the terms of a valid Serial Studio Commercial License.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * You may use, modify, or distribute this file under the terms of
+ * the GNU General Public License (GPLv3) **only if** you:
+ *   - Do NOT compile or enable any gated commercial features
+ *   - Comply fully with the license terms defined in LICENSE.md
  *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * Attempting to use Pro features without activation or a valid license
+ * is a breach of this file’s licensing terms and may result in legal action.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later
+ * For full details, see:
+ * https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md
+ *
+ * SPDX-License-Identifier: LicenseRef-SerialStudio-Mixed
  */
 
 #include "ConsoleExport.h"
@@ -29,7 +32,7 @@
 
 #include "Misc/Utilities.h"
 
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
 #  include "IO/Console.h"
 #  include "IO/Manager.h"
 #  include "Misc/TimerEvents.h"
@@ -44,7 +47,7 @@
 IO::ConsoleExport::ConsoleExport()
   : m_exportEnabled(false)
 {
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   connect(&Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged, this, [=] {
             if (exportEnabled()
@@ -78,7 +81,7 @@ IO::ConsoleExport &IO::ConsoleExport::instance()
  */
 bool IO::ConsoleExport::isOpen() const
 {
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   return m_file.isOpen();
 #else
   return false;
@@ -90,7 +93,7 @@ bool IO::ConsoleExport::isOpen() const
  */
 bool IO::ConsoleExport::exportEnabled() const
 {
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   return m_exportEnabled;
 #else
   return false;
@@ -102,7 +105,7 @@ bool IO::ConsoleExport::exportEnabled() const
  */
 void IO::ConsoleExport::closeFile()
 {
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   if (isOpen())
   {
     if (m_buffer.size() > 0)
@@ -122,7 +125,7 @@ void IO::ConsoleExport::closeFile()
  */
 void IO::ConsoleExport::setupExternalConnections()
 {
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   connect(&IO::Console::instance(), &IO::Console::displayString, this,
           &IO::ConsoleExport::registerData);
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
@@ -137,7 +140,7 @@ void IO::ConsoleExport::setupExternalConnections()
  */
 void IO::ConsoleExport::setExportEnabled(const bool enabled)
 {
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   if (Licensing::LemonSqueezy::instance().isActivated())
   {
     m_exportEnabled = enabled;
@@ -173,7 +176,7 @@ void IO::ConsoleExport::setExportEnabled(const bool enabled)
  */
 void IO::ConsoleExport::writeData()
 {
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   // Device not connected, abort
   if (!IO::Manager::instance().isConnected())
     return;
@@ -205,7 +208,7 @@ void IO::ConsoleExport::writeData()
  */
 void IO::ConsoleExport::createFile()
 {
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   // Only enable this feature is program is activated
   if (Licensing::LemonSqueezy::instance().isActivated())
   {
@@ -253,7 +256,7 @@ void IO::ConsoleExport::createFile()
  */
 void IO::ConsoleExport::registerData(const QString &data)
 {
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   if (!data.isEmpty() && exportEnabled())
     m_buffer.append(data);
 #else

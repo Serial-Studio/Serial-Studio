@@ -32,7 +32,7 @@
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/Terminal.h"
 
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
@@ -124,7 +124,7 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   });
 
   // Update welcome guide when Serial Studio changes its activation status
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   connect(&Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged, this,
           &Widgets::Terminal::loadWelcomeGuide);

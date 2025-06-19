@@ -74,7 +74,7 @@ set(QT_LIBS
 )
 
 # Add required modules for Pro version if needed
-if(USE_QT_COMMERCIAL)
+if(BUILD_COMMERCIAL)
   set(QT_MODULES
     ${QT_MODULES}
     Mqtt
@@ -211,7 +211,7 @@ set(HEADERS
 )
 
 # Add headers & sources for commercial build
-if(USE_QT_COMMERCIAL)
+if(BUILD_COMMERCIAL)
   set(HEADERS
     ${HEADERS}
     src/MQTT/Client.h
@@ -298,7 +298,7 @@ set(QML_SRC
 )
 
 # Add extra QML files for commercial build
-if(USE_QT_COMMERCIAL)
+if(BUILD_COMMERCIAL)
   set(QML_SRC
     ${QML_SRC}
     qml/Widgets/Dashboard/Plot3D.qml

@@ -34,7 +34,7 @@
 #include "JSON/FrameBuilder.h"
 #include "Misc/WorkspaceManager.h"
 
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
 #  include "MQTT/Client.h"
 #endif
 
@@ -324,7 +324,7 @@ void CSV::Export::registerFrame(const JSON::Frame &frame)
     return;
 
   // Don't save CSV data when the device/service is not connected
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   if (!IO::Manager::instance().isConnected()
       && !(MQTT::Client::instance().isConnected()
            && MQTT::Client::instance().isSubscriber()))

@@ -1,22 +1,25 @@
 /*
  * Serial Studio - https://serial-studio.github.io/
  *
- * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This file contains both open-source and proprietary sections.
+ * Portions enabled via preprocessor macros (e.g., BUILD_COMMERCIAL)
+ * are part of Serial Studio's commercial feature set and may only be
+ * used under the terms of a valid Serial Studio Commercial License.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * You may use, modify, or distribute this file under the terms of
+ * the GNU General Public License (GPLv3) **only if** you:
+ *   - Do NOT compile or enable any gated commercial features
+ *   - Comply fully with the license terms defined in LICENSE.md
  *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * Attempting to use Pro features without activation or a valid license
+ * is a breach of this file’s licensing terms and may result in legal action.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later
+ * For full details, see:
+ * https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md
+ *
+ * SPDX-License-Identifier: LicenseRef-SerialStudio-Mixed
  */
 
 #pragma once
@@ -130,7 +133,7 @@ public:
   [[nodiscard]] const LineSeries &plotData(const int index) const;
   [[nodiscard]] const MultiLineSeries &multiplotData(const int index) const;
 
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   [[nodiscard]] const PlotData3D &plotData3D(const int index) const;
 #endif
 
@@ -173,7 +176,7 @@ private:
   QVector<PlotDataY> m_fftValues;            // FFT data per dataset
   QVector<LineSeries> m_pltValues;           // Line plot data
   QVector<MultiLineSeries> m_multipltValues; // Multi-line plot data
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   QVector<PlotData3D> m_plotData3D; // 3D plot data (commercial only)
 #endif
 

@@ -1,22 +1,25 @@
 /*
  * Serial Studio - https://serial-studio.github.io/
  *
- * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This file contains both open-source and proprietary sections.
+ * Portions enabled via preprocessor macros (e.g., BUILD_COMMERCIAL)
+ * are part of Serial Studio's commercial feature set and may only be
+ * used under the terms of a valid Serial Studio Commercial License.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * You may use, modify, or distribute this file under the terms of
+ * the GNU General Public License (GPLv3) **only if** you:
+ *   - Do NOT compile or enable any gated commercial features
+ *   - Comply fully with the license terms defined in LICENSE.md
  *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * Attempting to use Pro features without activation or a valid license
+ * is a breach of this file’s licensing terms and may result in legal action.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later
+ * For full details, see:
+ * https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md
+ *
+ * SPDX-License-Identifier: LicenseRef-SerialStudio-Mixed
  */
 
 #include "UI/Dashboard.h"
@@ -27,7 +30,7 @@
 #include "Misc/TimerEvents.h"
 #include "JSON/FrameBuilder.h"
 
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
 #  include "MQTT/Client.h"
 #endif
 
@@ -56,7 +59,7 @@ UI::Dashboard::Dashboard()
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   connect(
       &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this, [=] {
         const bool subscribed = MQTT::Client::instance().isSubscriber();
@@ -193,7 +196,7 @@ bool UI::Dashboard::streamAvailable() const
   bool available = IO::Manager::instance().isConnected();
   available |= CSV::Player::instance().isOpen();
 
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   available |= MQTT::Client::instance().isConnected()
                && MQTT::Client::instance().isSubscriber();
 #endif
@@ -218,7 +221,7 @@ bool UI::Dashboard::terminalEnabled() const
  */
 bool UI::Dashboard::pointsWidgetVisible() const
 {
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   return m_widgetGroups.contains(SerialStudio::DashboardMultiPlot)
          || m_widgetDatasets.contains(SerialStudio::DashboardPlot)
          || m_widgetGroups.contains(SerialStudio::DashboardPlot3D);
@@ -544,7 +547,7 @@ const MultiLineSeries &UI::Dashboard::multiplotData(const int index) const
   return m_multipltValues[index];
 }
 
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
 /**
  * @brief Provides the values for 3D plot visuals on the dashboard.
  * @return A reference to a QVector containing ThreeDimensionalSeries data.
@@ -617,7 +620,7 @@ void UI::Dashboard::resetData(const bool notify)
   m_multipltValues.squeeze();
 
   // Clear data for 3D plots
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   m_plotData3D.clear();
   m_plotData3D.squeeze();
 #endif
@@ -1043,7 +1046,7 @@ void UI::Dashboard::updatePlots()
     configureMultiLineSeries();
 
   // Check if we need to re-initialize 3D plot data
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   if (m_plotData3D.count() != widgetCount(SerialStudio::DashboardPlot3D))
   {
     m_plotData3D.clear();
@@ -1107,7 +1110,7 @@ void UI::Dashboard::updatePlots()
   }
 
 // Append latest values to 3D plots
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot3D); ++i)
   {
     // Get pointer to vector with 3D points for current widget

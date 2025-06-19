@@ -40,8 +40,9 @@ find_package(
 # Options for build types
 #-------------------------------------------------------------------------------
 
-option(DEBUG_SANITIZER "Enable sanitizers for debug builds" OFF)
-option(PRODUCTION_OPTIMIZATION "Enable production optimization flags" ON)
+option(BUILD_GPL3              "Force GPLv3-only build"                OFF)
+option(DEBUG_SANITIZER         "Enable sanitizers for debug builds"    OFF)
+option(PRODUCTION_OPTIMIZATION "Enable production optimization flags"   ON)
 
 #-------------------------------------------------------------------------------
 # Project information
@@ -77,32 +78,30 @@ add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 # Automatically enable or disable commercial Qt modules
 #-------------------------------------------------------------------------------
 
-option(BUILD_GPL3 "Force GPLv3-only build (disables commercial features regardless of Qt modules found)" OFF)
-
 if(BUILD_GPL3)
-   set(USE_QT_COMMERCIAL OFF CACHE BOOL "Commercial features disabled due to GPLv3 build mode" FORCE)
-   message(STATUS "BUILD_GPL3 is ON — forcing USE_QT_COMMERCIAL=OFF for GPL compliance")
+   set(BUILD_COMMERCIAL OFF CACHE BOOL "Commercial features disabled due to GPLv3 build mode" FORCE)
+   message(STATUS "BUILD_GPL3 is ON — forcing BUILD_COMMERCIAL=OFF for GPL compliance")
 else()
-   if(NOT DEFINED USE_QT_COMMERCIAL)
+   if(NOT DEFINED BUILD_COMMERCIAL)
       find_package(Qt6 COMPONENTS Mqtt SerialBus OPTIONAL_COMPONENTS)
 
       if(TARGET Qt6::Mqtt AND TARGET Qt6::SerialBus)
-         set(USE_QT_COMMERCIAL ON CACHE BOOL "Enable features that require Qt Commercial" FORCE)
-         message(STATUS "Qt6::Mqtt and Qt6::SerialBus found — enabling USE_QT_COMMERCIAL")
+         set(BUILD_COMMERCIAL ON CACHE BOOL "Enable features that require Qt Commercial" FORCE)
+         message(STATUS "Qt6::Mqtt and Qt6::SerialBus found — enabling BUILD_COMMERCIAL")
       else()
-         set(USE_QT_COMMERCIAL OFF CACHE BOOL "Enable features that require Qt Commercial" FORCE)
-         message(WARNING "Qt6::Mqtt and/or Qt6::SerialBus NOT found — disabling USE_QT_COMMERCIAL")
+         set(BUILD_COMMERCIAL OFF CACHE BOOL "Enable features that require Qt Commercial" FORCE)
+         message(WARNING "Qt6::Mqtt and/or Qt6::SerialBus NOT found — disabling BUILD_COMMERCIAL")
       endif()
    else()
-      message(STATUS "USE_QT_COMMERCIAL explicitly set to '${USE_QT_COMMERCIAL}' — skipping auto-detection")
+      message(STATUS "BUILD_COMMERCIAL explicitly set to '${BUILD_COMMERCIAL}' — skipping auto-detection")
    endif()
 endif()
 
-if(USE_QT_COMMERCIAL)
-   add_compile_definitions(USE_QT_COMMERCIAL)
-   message(STATUS "Defining USE_QT_COMMERCIAL for compiler")
+if(BUILD_COMMERCIAL)
+   add_compile_definitions(BUILD_COMMERCIAL)
+   message(STATUS "Defining BUILD_COMMERCIAL for compiler")
 else()
-   message(STATUS "USE_QT_COMMERCIAL is OFF — commercial features excluded")
+   message(STATUS "BUILD_COMMERCIAL is OFF — commercial features excluded")
 endif()
 
 message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")

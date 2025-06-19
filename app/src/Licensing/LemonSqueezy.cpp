@@ -3,18 +3,18 @@
  *
  * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
  *
- * This file is part of the proprietary features of Serial Studio and is
- * licensed under the Serial Studio Commercial License.
+ * This file is part of the proprietary feature set of Serial Studio
+ * and is licensed under the Serial Studio Commercial License.
  *
- * Redistribution, modification, or use of this file in any form is permitted
- * only under the terms of a valid Serial Studio Commercial License obtained
- * from the author.
+ * Redistribution, modification, or use of this file in any form
+ * is permitted only under the terms of a valid commercial license
+ * obtained from the author.
  *
- * This file must not be used or included in builds distributed under the
- * GNU General Public License (GPL) unless explicitly permitted by a
- * commercial agreement.
+ * This file may NOT be used in any build distributed under the
+ * GNU General Public License (GPL) unless explicitly authorized
+ * by a separate commercial agreement.
  *
- * For details, see:
+ * For license terms, see:
  * https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md
  *
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial

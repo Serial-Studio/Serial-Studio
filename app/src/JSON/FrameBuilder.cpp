@@ -29,7 +29,7 @@
 #include "JSON/ProjectModel.h"
 #include "JSON/FrameBuilder.h"
 
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
@@ -50,7 +50,7 @@ JSON::FrameBuilder::FrameBuilder()
   setOperationMode(static_cast<SerialStudio::OperationMode>(m));
 
   // Reload JSON map file when license is activated
-#ifdef USE_QT_COMMERCIAL
+#ifdef BUILD_COMMERCIAL
   connect(&Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged, this, [=] {
             if (!jsonMapFilepath().isEmpty())
