@@ -75,7 +75,7 @@ These features are **not GPL-licensed**, and **not allowed** under any free use 
 > If your build includes any of the above, it’s considered **proprietary** and subject to commercial terms.  
 > **You are not allowed to enable, replicate, modify, or unlock** any of these Pro features unless you’ve activated a valid commercial license.
 
-Any attempt to bypass the activation system, expose gated features, or distribute modified versions with Pro functionality is treated as a **deliberate license violation**.
+Any attempt to bypass or modify the activation system, expose gated features, or distribute modified versions with Pro functionality is treated as a **deliberate license violation**.
 
 ## 5. Qt Licensing Compliance
 
