@@ -88,26 +88,12 @@ The following features are **explicitly excluded** from GPLv3 and are **governed
 
 You are solely responsible for compliance with the Qt framework's licensing.
 
-### 5.1 Qt Usage Rules
-
 - **GPLv3 builds of Serial Studio may only use the open-source Qt version** licensed under GPL-compatible terms.
 - **Use of commercial Qt**, or linking against proprietary Qt modules, is only allowed if:
   - You hold a valid Qt commercial license from The Qt Company, **and**
   - You also comply with the **Serial Studio Commercial License**.
 
-- Having a commercial Qt license **does not waive** or replace the requirement for a Serial Studio commercial license.
-
-### 5.2 Exception for Authorized Maintainers
-
-**Trusted maintainers** (e.g., Flatpak, Snapcraft, selected Linux distributions) are granted permission to build and distribute **commercial-feature-enabled binaries**, provided that:
-
-- **No modifications** are made to source code, branding, or activation logic.
-- Gated features are **not unlocked or bypassed**.
-- The build is clearly marked as **proprietary**.
-- The package includes a prominent link to the [Commercial License Agreement](https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE_COMMERCIAL.md).
-- End users must still obtain a valid license and perform activation to access Pro functionality.
-
-Unauthorized modification, feature unlocking, or removal of licensing mechanisms is a breach of this license and may result in legal action.
+Having a commercial Qt license **does not waive** or replace the requirement for a Serial Studio commercial license.
 
 ## 6. Contributor Licensing Terms
 
@@ -182,7 +168,6 @@ Commercial licensees may receive support as specified in their license agreement
 | Use official binaries in commercial setting    | ❌       | Requires commercial license and activation                                                                                                              |
 | Fork for study or contribution (non-distributed)| ✅       | Allowed for personal study and bugfix contributions. Pro code may be referenced for fixes, but **activation, licensing, or feature unlocks must not be altered** |                                                      |
 | Redistribute modified build                    | ❌       | Not allowed — forks must not be distributed under any name unless fully rebranded, stripped of Pro code, and comply with license + attribution rules   |
-| Redistribute official build (e.g., Flatpak)    | ✅\*     | Must be unmodified, clearly proprietary, include license link — **only by authorized maintainers with explicit written permission**                    |
 
 ## 11. Tampering, Circumvention & Enforcement
 
