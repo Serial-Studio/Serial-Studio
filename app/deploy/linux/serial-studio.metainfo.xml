@@ -2,7 +2,7 @@
 <component type="desktop-application">
 	<id>com.serial_studio.Serial-Studio</id>
 	<name>Serial Studio</name>
-	<project_license>LicenseRef-proprietary=https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md</project_license>
+	<project_license>GPL-3.0-only</project_license>
 	<developer id="com.serial-studio">
 		<name>Serial Studio</name>
 	</developer>
@@ -15,16 +15,16 @@
 	<url type="donation">https://github.com/sponsors/alex-spataru</url>
 	<url type="contribute">https://github.com/Serial-Studio/Serial-Studio/wiki/Support-Serial-Studio</url>
 	<description>
-		<p>Serial Studio lets you see real-time data from microcontrollers and connected devices. It's perfect for visualizing sensor readings, telemetry, and debugging data from serial ports, Bluetooth Low Energy (BLE), and TCP/UDP sources.</p>
-		<p>Whether you're a student, hobbyist, or engineer, Serial Studio helps you understand what's happening inside your hardware.</p>
+		<p>Serial Studio lets you visualize real-time data from microcontrollers and connected devices. It's ideal for monitoring sensor output, debugging hardware, and analyzing telemetry from sources like serial ports, Bluetooth Low Energy (BLE), and TCP/UDP.</p>
+		<p>Whether you're a student, hobbyist, or engineer, Serial Studio gives you insight into what your hardware is doing, live.</p>
 		<ul>
-			<li>Cross-platform: Native support for Windows, macOS, and Linux.</li>
-      <li>CSV export: Save incoming data for offline analysis or processing.</li>
-      <li>Multiple inputs: Connect via serial, BLE, MQTT, or TCP/UDP.</li>
-      <li>Custom dashboards: Build interfaces with visual widgets in the Project Editor.</li>
-      <li>Advanced decoding: Use JavaScript to parse raw or binary data streams.</li>
+		  <li>Cross-platform: Native support for Windows, macOS, and Linux</li>
+		  <li>CSV export: Save incoming data for offline analysis</li>
+		  <li>Multiple inputs: Serial, BLE, TCP/UDP (MQTT available in Pro version)</li>
+		  <li>Custom dashboards: Design interfaces with visual widgets using the Project Editor</li>
+		  <li>Advanced decoding: Use JavaScript to parse structured or binary data streams</li>
 		</ul>
-		<p>For commercial use and advanced features like MQTT, XY plots, and 3D views, a Pro license is available.</p>
+		<p>Note: This Flatpak package includes the open-source GPLv3 version of Serial Studio only. Commercial features such as MQTT integration, 3D plotting, and XY analysis are not included.</p>
 	</description>
 	<screenshots>
 		<screenshot type="default">
