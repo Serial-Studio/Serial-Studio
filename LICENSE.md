@@ -47,7 +47,7 @@ You may use, modify, and redistribute the source code under the [GNU GPLv3](http
 
 ## 3. Commercial License Terms (Pro Features & Official Binaries)
 
-The **Serial Studio Commercial License** applies to:
+The [**Serial Studio Commercial License**](LICENSE_COMMERCIAL.md) applies to:
 
 - All **official precompiled binaries** distributed via [serial-studio.com](https://serial-studio.com/), GitHub, or any other official channel.
 - Any builds, regardless of origin, that include **any gated commercial features** (Section 4).
