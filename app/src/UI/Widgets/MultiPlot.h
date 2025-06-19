@@ -76,11 +76,12 @@ public:
 public slots:
   void draw(QXYSeries *series, const int index);
 
-private slots:
   void updateData();
   void updateRange();
-  void onThemeChanged();
   void calculateAutoScaleRange();
+
+private slots:
+  void onThemeChanged();
 
 private:
   int m_index;

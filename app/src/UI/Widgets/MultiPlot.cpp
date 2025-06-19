@@ -173,12 +173,6 @@ void Widgets::MultiPlot::draw(QXYSeries *series, const int index)
 {
   if (series && index >= 0 && index < count())
   {
-    if (index == 0)
-    {
-      updateData();
-      calculateAutoScaleRange();
-    }
-
     series->replace(m_data[index]);
     Q_EMIT series->update();
   }
@@ -248,36 +242,6 @@ void Widgets::MultiPlot::updateRange()
 
   // Update the plot
   Q_EMIT rangeChanged();
-}
-
-/**
- * @brief Updates the theme of the multiplot.
- */
-void Widgets::MultiPlot::onThemeChanged()
-{
-  // clang-format off
-  const auto colors = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
-  // clang-format on
-
-  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
-  {
-    const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
-
-    m_colors.clear();
-    m_colors.resize(group.datasetCount());
-    for (int i = 0; i < group.datasetCount(); ++i)
-    {
-      const auto &dataset = group.getDataset(i);
-      const auto index = dataset.index() - 1;
-      const auto color = colors.count() > index
-                             ? colors.at(index).toString()
-                             : colors.at(index % colors.count()).toString();
-
-      m_colors[i] = color;
-    }
-
-    Q_EMIT themeChanged();
-  }
 }
 
 /**
@@ -376,4 +340,34 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
   // Update user interface if required
   if (qFuzzyCompare(prevMinY, m_minY) || qFuzzyCompare(prevMaxY, m_maxY))
     Q_EMIT rangeChanged();
+}
+
+/**
+ * @brief Updates the theme of the multiplot.
+ */
+void Widgets::MultiPlot::onThemeChanged()
+{
+  // clang-format off
+  const auto colors = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
+  // clang-format on
+
+  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
+  {
+    const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+
+    m_colors.clear();
+    m_colors.resize(group.datasetCount());
+    for (int i = 0; i < group.datasetCount(); ++i)
+    {
+      const auto &dataset = group.getDataset(i);
+      const auto index = dataset.index() - 1;
+      const auto color = colors.count() > index
+                             ? colors.at(index).toString()
+                             : colors.at(index % colors.count()).toString();
+
+      m_colors[i] = color;
+    }
+
+    Q_EMIT themeChanged();
+  }
 }
