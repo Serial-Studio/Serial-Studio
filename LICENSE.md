@@ -42,9 +42,6 @@ You may use, modify, and redistribute the source code under the [GNU GPLv3](http
 - Builds distributed via package managers (e.g., AUR, Ubuntu, Fedora) **must comply** with all of the above conditions.
 - The project maintainer **does not verify or certify** GPL compliance of third-party builds. Users assume all risk when using such builds.
 
-> [!NOTE]
-> You can use the `-DBUILD_GPL3=ON` CMake flag to automatically produce a GPL-compatible build.
-
 ## 3. Commercial License Terms (Pro Features & Official Binaries)
 
 The [**Serial Studio Commercial License**](LICENSE_COMMERCIAL.md) applies to:
