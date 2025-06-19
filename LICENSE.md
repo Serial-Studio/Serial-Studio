@@ -153,8 +153,8 @@ If you’re a commercial license holder, support is available as agreed in your 
 | Build from source (with Pro features)          | ❌       | Requires a commercial license                                                                                                                           |
 | Use official binaries for personal/eval use    | ✅       | Allowed if non-commercial. Pro features remain locked                                                                                                   |
 | Use official binaries in commercial setting    | ❌       | Requires a commercial license and activation                                                                                                            |
-| Fork for study or contribution (non-distributed)| ✅       | Allowed for private use or bugfix PRs — no Pro feature enabling or tampering                                                                            |
-| Redistribute modified build                    | ❌       | Not allowed unless fully rebranded, Pro-free, and compliant                                                                                             |
+| Fork for study or contribution (non-distributed)| ✅       | Allowed for private use or bugfix PRs, but no Pro feature enabling or tampering                                                                            |
+| Redistribute modified build                    | ❌       | Not allowed unless fully rebranded, GPLv3 licensed, and compliant                                                                                             |
 | Redistribute official build (Flatpak, etc.)    | ✅*      | Only by trusted maintainers, no modifications, must link to commercial license                                                                         |
 
 ## 12. Contact
