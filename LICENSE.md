@@ -37,6 +37,17 @@ You may use, modify, and redistribute the source code under the [GNU GPLv3](http
 - You **must not** link to any proprietary or commercial-only Qt modules or third-party dependencies.
 - You **must preserve** all original license notices and comply with all GPLv3 obligations, including source code availability.
 
+> [!NOTE]
+> **Serial Studio is intentionally designed to protect contributors from accidental license violations**.
+> 
+> By default, it builds a fully **GPLv3-compliant** version with all proprietary features disabled.
+> 
+> Compiling a version with **Pro features** requires a **valid commercial license**, **explicit configuration**,  
+> and successful **network-based license validation**.
+> 
+> If a build includes gated features **without a license**, the build system was **tampered with**,  
+> and this constitutes a **willful breach of this license**.
+
 ### 2.2 Third-Party Package Distributions
 
 - Builds distributed via package managers (e.g., AUR, Ubuntu, Fedora) **must comply** with all of the above conditions.
