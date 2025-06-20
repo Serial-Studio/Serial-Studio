@@ -14,6 +14,9 @@ Serial Studio is provided under two distinct licensing models:
 - The **Serial Studio Commercial License** governs:
   - All **official precompiled binaries**.
   - Any **builds (user or third-party) that include gated commercial features**, regardless of how they were compiled or distributed.
+ 
+For full commercial licensing terms, see [LICENSE_COMMERCIAL.md](LICENSE_COMMERCIAL.md).
+For open-source GPL terms, see [LICENSE_GPL3.md](LICENSE_GPL3.md).
 
 > [!NOTE]
 > This project contains both open-source and proprietary components.  
