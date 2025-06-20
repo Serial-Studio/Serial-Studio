@@ -20,10 +20,12 @@ Serial Studio is provided under two distinct licensing models:
 > The **source code is transparent**, but **not all parts are open source**.  
 > You are free to **use, study, and contribute to** the GPL-licensed portions, but:  
 > - **Do not unlock, disable, or remove** activation or license enforcement mechanisms.  
-> - **Do not enable or distribute** gated Pro features without a valid license.  
-> - **Transparency is not permission** — Pro features remain proprietary, even if visible in the code.
+> - **Do not enable or distribute** gated Pro modules without a valid license.  
+> - **Transparency of source code does not imply usage rights**. Pro modules remain proprietary, regardless of visibility.
 
-Any inclusion of gated features **automatically revokes GPLv3 coverage** and places the entire build under the Serial Studio Commercial License.
+All source files include SPDX identifiers to clearly distinguish GPL-covered components from proprietary ones. This ensures transparency for users and compliance automation tools.
+
+If your build includes any gated features, it cannot be considered GPL-compliant and must instead be used under the terms of the Commercial License.
 
 ## 2. GPLv3 Licensing Terms (Source Code Use Only)
 
@@ -42,18 +44,19 @@ You may use, modify, and redistribute the source code under the [GNU GPLv3](http
 > 
 > By default, it builds a fully **GPLv3-compliant** version with all proprietary features disabled.
 > 
-> Compiling a version with **Pro features** requires a **valid commercial license**, **explicit configuration**,  
+> Compiling a version with **Pro modules** requires a **valid commercial license**, **explicit configuration**,  
 > and successful **network-based license validation**.
 > 
-> If a build includes gated features **without a license**, the build system was **tampered with**,  
-> and this constitutes a **willful breach of this license**.
+> If a build includes gated features **without a license**, the build system was modified in a way that
+> bypasses license enforcement, which constitutes a violation of this license's terms regarding
+> proprietary components.
 
 ### 2.2 Third-Party Package Distributions
 
 - Builds distributed via package managers (e.g., AUR, Ubuntu, Fedora) **must comply** with all of the above conditions.
 - The project maintainer **does not verify or certify** GPL compliance of third-party builds. Users assume all risk when using such builds.
 
-## 3. Commercial License Terms (Pro Features & Official Binaries)
+## 3. Commercial License Terms (Pro Modules & Official Binaries)
 
 The [**Serial Studio Commercial License**](LICENSE_COMMERCIAL.md) applies to:
 
@@ -78,7 +81,7 @@ The [**Serial Studio Commercial License**](LICENSE_COMMERCIAL.md) applies to:
 
 **If you’re not sure, you need a commercial license.**
 
-## 4. Gated Commercial Features (Pro Modules)
+## 4. Proprietary Features (Pro Modules)
 
 The following features are **explicitly excluded** from GPLv3 and are **governed exclusively** by the Commercial License:
 
@@ -90,35 +93,55 @@ The following features are **explicitly excluded** from GPLv3 and are **governed
 - Activation or license management systems.
 
 > [!NOTE]
-> Compiling or linking any of the above features, even in a self-built version, **automatically reclassifies** your build as proprietary and subject to the commercial terms. No exceptions.
+> Compiling or linking any of the above features, even in a self-built version, results in a build that is not covered by the
+> GPLv3 and must instead be licensed under the Commercial License.
 > 
-> **Under no circumstances may the listed Pro features be enabled, replicated, or unlocked outside of the activation system.**
-> **Any such attempt voids all rights under this license.**
+> **Under no circumstances may the listed Pro modules be enabled, replicated, or unlocked outside of the activation system.**  
+> **Any such attempt terminates your rights under the Serial Studio Commercial License. GPLv3-covered components remain governed by the GPL.**
 
 ## 5. Qt Licensing Compliance
 
-You are solely responsible for compliance with the Qt framework's licensing.
+Serial Studio is designed to comply with the licensing requirements of the Qt framework. Use of any version of Qt (open-source or commercial) is allowed only if all other licensing conditions in this document are fully respected.
 
-- **GPLv3 builds of Serial Studio may only use the open-source Qt version** licensed under GPL-compatible terms.
-- **Use of commercial Qt**, or linking against proprietary Qt modules, is only allowed if:
-  - You hold a valid Qt commercial license from The Qt Company, **and**
-  - You also comply with the **Serial Studio Commercial License**.
+### 5.1 GPLv3 Builds
 
-Having a commercial Qt license **does not waive** or replace the requirement for a Serial Studio commercial license.
+You may compile and use Serial Studio under GPLv3 using any version of Qt, provided that:
+
+- You do **not** link against any Qt modules that are only available under commercial terms.
+- You comply with all obligations of the Qt open-source license and the GNU GPLv3.
+- You **do not include, enable, or access** any of the proprietary Pro modules listed in Section 4.
+
+### 5.2 Commercial/Pro Builds
+
+Any build of Serial Studio that includes gated Pro modules (even if the features are not activated by default) **requires a valid Qt commercial license**.
+
+- This requirement is separate from and in addition to the Serial Studio Commercial License.
+- Gated Pro modules may depend on Qt libraries that are only available under Qt’s commercial terms.
+
+**Clarification**: Compiling a build that includes Pro functionality (regardless of activation state) is only legal if you hold both a valid Qt commercial license **and** a Serial Studio commercial license.
+
+You are solely responsible for ensuring your Qt license covers your intended use of Serial Studio.
 
 ## 6. Contributor Licensing Terms
 
-By submitting any contribution (code, documentation, translations, etc.) to this project, you:
+All contributors must agree to the Contributor License Agreement (CLA) before their code can be merged.
+
+By signing the CLA and submitting a contribution (code, documentation, translations, etc.) to this project, you:
 
 - **Explicitly and irrevocably grant** the author (Alex Spataru) the right to license your contributions under:
-  - GPLv3, for use in open-source distributions, **and**
+  - The GNU General Public License v3 (GPLv3), for use in open-source distributions, **and**
   - The Serial Studio Commercial License, for use in proprietary binaries and gated feature builds
 
-This dual-license grant is **perpetual, royalty-free, and non-exclusive**. If you do not accept these terms, **do not submit contributions** to this project.
+This dual-license grant is **perpetual, royalty-free, irrevocable, and non-exclusive**.
+
+This license **does not transfer ownership** of your contributions. It only grants the author the right to license them under both the GPLv3 and the Commercial License.
+
+> You will be prompted to sign the CLA automatically when opening a pull request.  
+> If you do not agree to the terms of the CLA, do not submit contributions.
 
 ## 7. Trademarks, Branding, and Forking Restrictions
 
-"Serial Studio", along with its logo, name, iconography, and visual identity, are **trademarks of Alex Spataru**.
+“Serial Studio” is a trademark of Alex Spataru. Whether registered or unregistered, its use is protected under applicable trademark law.
 
 ### Trademark Restrictions:
 
@@ -134,14 +157,14 @@ This dual-license grant is **perpetual, royalty-free, and non-exclusive**. If yo
   - **Must include a visible and functional link** to the original project repository:  
     [https://github.com/Serial-Studio/Serial-Studio](https://github.com/Serial-Studio/Serial-Studio)
 
-- You **may not imply endorsement, affiliation, or official status** without prior written permission from the author.
+The use of “Serial Studio” or derivative branding in a way that suggests endorsement, affiliation, or origin is strictly prohibited without express written permission.
 
 ### Forking for Study & Contributions:
 
 - Forking the project for **personal learning, code exploration, or contribution via pull request** is welcome and encouraged.
 - You may reference Pro-related code **only for identifying bugs or stability issues**. Contributions that help improve robustness or fix issues are accepted, as long as:
   - **You do not alter, remove, bypass, or disable** any activation or license enforcement logic.
-  - **You do not enable or expose** Pro features to users who have not activated a valid license.
+  - **You do not enable or expose** Pro modules to users who have not activated a valid license.
 
 - **Do not distribute** modified versions under any name (even for free) unless you comply fully with all branding, licensing, and rebranding conditions in this license.
 
@@ -160,18 +183,18 @@ Commercial licensees may receive support as specified in their license agreement
 
 | Use Case                                        | Allowed? | Conditions                                                                                                                                             |
 |------------------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Build from source (GPLv3)                      | ✅       | Must use GPL Qt, exclude gated features, comply with GPLv3                                                                                              |
-| Build from source (with Pro features)          | ❌       | Requires **commercial license** and valid Qt commercial license if applicable                                                                          |
+| Build from source (GPLv3)                      | ✅       | Must use GPL Qt, exclude gated features, comply with GPLv3                                                                                              | 
+| Build from source (with Pro modules)           | ❌       | Requires **commercial license** and valid Qt commercial license if applicable                                                                          |
 | Use official binaries for personal/eval use    | ✅       | Non-commercial only, gated features locked unless activated                                                                                             |
 | Use official binaries in commercial setting    | ❌       | Requires commercial license and activation                                                                                                              |
 | Fork for study or contribution (non-distributed)| ✅       | Allowed for personal study and bugfix contributions. Pro code may be referenced for fixes, but **activation, licensing, or feature unlocks must not be altered** |                                                      |
-| Redistribute modified build                    | ❌       | Not allowed — forks must not be distributed under any name unless fully rebranded, stripped of Pro code, and comply with license + attribution rules   |
+| Redistribute modified build | ✅ (*) | Only allowed if fully rebranded, excludes all Pro modules, complies with GPLv3 terms, and includes attribution with link to the original project
 
 ## 10. Tampering, Circumvention & Enforcement
 
 ### 10.1 Activation System Integrity
 
-The activation and license management system is included **only** for purposes of transparency, security auditing, and community trust. **Any modification, removal, bypass, or circumvention of this system is strictly prohibited**, regardless of whether the resulting build is used personally, privately, or non-commercially.
+The activation and license management system is included **only** for purposes of transparency, security auditing, and community trust. Any attempt to modify, remove, or bypass activation mechanisms within proprietary modules is strictly prohibited, regardless of intent or distribution.
 
 - This includes any change to:
   - Activation checks
@@ -180,45 +203,54 @@ The activation and license management system is included **only** for purposes o
   - Signature or token validation logic
   - UI or CLI code related to activation status
 
-**Attempting to enable Pro features through source code changes is a direct violation of this license.**
+**Attempting to enable Pro modules through source code changes is a direct violation of this license.**
 
-### 10.2 No GPL Exception
+### 10.2 Proprietary Module Restrictions
 
-The activation and license management system is **explicitly excluded** from GPLv3 rights. You are **not permitted** to modify, remove, or bypass it under open-source terms.
+The activation and license management system is part of the proprietary components explicitly excluded from GPLv3 coverage. It is **not compiled or included** in standard GPLv3 builds.
 
-This restriction also applies to all **gated commercial modules** listed in Section 4, such as 3D visualization, XY plotting, and MQTT integration:
+You may not modify, remove, or bypass these systems in any build that includes proprietary modules. Doing so violates the terms of the Serial Studio Commercial License.
 
-- You **may modify or improve** the source code of Pro modules (e.g., fixing bugs, improving performance), but:
-  - You **must not disable, bypass, or remove** the activation checks that control access to these modules.
-  - You **must not expose** or unlock any Pro features to unlicensed users.
+This restriction also applies to all gated commercial modules listed in Section 4 (e.g., 3D visualization, XY plotting, MQTT integration):
 
-Any modification that results in unrestricted access to Pro functionality, reclassifies your usage as **unauthorized** and voids all rights under this license. Such actions may result in legal consequences, including takedowns or civil claims.
+- You **may improve or patch** the source code of these proprietary modules (e.g., for bug fixes), but:
+  - You **must not disable, bypass, or remove** the activation checks that restrict access to these modules.
+  - You **must not expose or unlock** Pro modules to unlicensed users under any circumstances.
+
+Modifying the source in a way that enables unrestricted access to commercial features without a valid license constitutes **unauthorized use** and may result in termination of your license rights, DMCA action, or legal enforcement. Only users with an active, valid commercial license may compile and use these proprietary modules. Redistribution is not permitted unless explicitly authorized by the author.
 
 ### 10.3 Enforcement and Legal Action
 
 Bypassing license enforcement or enabling commercial features without valid activation:
-- **Terminates all rights** under this license (both GPL and Commercial)
-- May be considered **software piracy**
+- **Terminates all rights** under the Serial Studio Commercial License. GPLv3 rights remain governed by the GPL.
+- May violate applicable copyright laws.
 - May result in **DMCA takedowns**, cease-and-desist letters, and/or legal action
+
+Disabling or removing license enforcement in order to access or retain Pro modules without a valid commercial license is a violation of the Commercial License and does not place those modules under GPLv3 or any open-source license. Visibility of source code does not grant usage rights.
 
 The author **actively monitors** forks, builds, and public repositories. Unauthorized copies may be removed or prosecuted without prior notice.
 
+This license is governed by and construed in accordance with the laws of Mexico, without regard to its conflict of law provisions.
+If any provision of this license is found unenforceable, the remaining terms shall remain in full effect.
+
 ### 10.4 Build-Time Enforcement
 
-Serial Studio’s build system is intentionally designed to prevent unintentional license violations:
+Serial Studio’s build system is intentionally designed to prevent accidental license violations:
 
-- By default, all builds are GPLv3-compliant and exclude proprietary features.
-- Gated Pro features are only compiled if:
-  - A valid commercial license key and instance ID are provided via environment variables, and
+- By default, all builds are GPLv3-compliant and exclude all proprietary code.
+- Pro modules are only compiled if:
+  - A valid commercial license key and instance ID are provided via environment variables, and  
   - The build system explicitly detects and authorizes those credentials at configuration time.
 
-If a user successfully builds a version of Serial Studio that includes Pro features **without a valid license**, it indicates deliberate tampering with the build system, license checks, or activation mechanisms. This constitutes a direct and willful violation of this license agreement and **immediately voids all rights** under both the GPLv3 and the Serial Studio Commercial License.
+Compiling any build that includes Pro modules **without an active, valid commercial license** is explicitly forbidden. Doing so constitutes deliberate circumvention of license enforcement and a direct violation of this license.
+
+If a user successfully compiles a Pro-enabled build without proper authorization, **all rights under the Serial Studio Commercial License are immediately terminated**. GPLv3-covered components remain governed by the GPL.
 
 This safeguard exists to:
-- Protect compliant users and contributors from accidental infringement.
-- Clearly differentiate between good-faith usage and unauthorized circumvention.
+- Prevent accidental non-compliance.
+- Clearly distinguish between authorized users and those bypassing protections.
 
-Unauthorized Pro builds are not covered by open-source terms and may be subject to legal enforcement.
+**Unauthorized Pro builds may not be compiled, used, distributed, or retained in any form. Possession does not confer any rights. No part of the proprietary codebase may be compiled, linked, or activated without a valid commercial license.**
 
 ## 11. Contact
 
