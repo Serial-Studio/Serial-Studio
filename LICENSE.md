@@ -192,6 +192,23 @@ Bypassing license enforcement or enabling commercial features without valid acti
 
 The author **actively monitors** forks, builds, and public repositories. Unauthorized copies may be removed or prosecuted without prior notice.
 
+### 10.4 Build-Time Enforcement
+
+Serial Studio’s build system is intentionally designed to prevent unintentional license violations:
+
+- By default, all builds are GPLv3-compliant and exclude proprietary features.
+- Gated Pro features are only compiled if:
+  - A valid commercial license key and instance ID are provided via environment variables, and
+  - The build system explicitly detects and authorizes those credentials at configuration time.
+
+If a user successfully builds a version of Serial Studio that includes Pro features **without a valid license**, it indicates deliberate tampering with the build system, license checks, or activation mechanisms. This constitutes a direct and willful violation of this license agreement and **immediately voids all rights** under both the GPLv3 and the Serial Studio Commercial License.
+
+This safeguard exists to:
+- Protect compliant users and contributors from accidental infringement.
+- Clearly differentiate between good-faith usage and unauthorized circumvention.
+
+Unauthorized Pro builds are not covered by open-source terms and may be subject to legal enforcement.
+
 ## 11. Contact
 
 For license questions, edge cases, commercial inquiries, or to negotiate custom builds:
