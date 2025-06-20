@@ -121,41 +121,26 @@ If Serial Studio is useful to you, consider supporting its development in one of
 
 Commercial licenses directly fund continued development, bug fixes, and new features.
 
-## License
-Serial Studio is distributed under a dual-license model. For full licensing terms, see [LICENSE.md](LICENSE.md). 
+## Licensing
 
-#### Open Source (GPLv3)
+Serial Studio uses a **dual-license model**:
 
-The source code is licensed under the GNU General Public License v3 (GPLv3). You are free to use, modify, and redistribute it under GPL terms, provided any derivative works are also licensed under GPLv3.
+- [LICENSE.md](./LICENSE.md) — overview of GPLv3 and Commercial License structure
+- [LICENSE_COMMERCIAL.md](./LICENSE_COMMERCIAL.md) — terms for official binaries and proprietary Pro features
+- [LICENSE_GPL3.md](./LICENSE_GPL3.md) — GNU GPLv3 for open-source source code
 
-To use Serial Studio under the GPL:
-- You must compile it yourself using an open-source Qt installation, or
-- Use a GPL-compliant build distributed by a trusted package manager.
+## Choosing the Right Version of Serial Studio
 
-**Note:** The GPL license applies only to builds made from source using open-source Qt. It does not cover official binaries.
+Use the table below to determine which edition best fits your use case. It outlines key differences in licensing, feature access, and compliance obligations.
 
-### Commercial License
-All official binaries downloaded from [serial-studio.com](https://serial-studio.com/), GitHub Releases, or other channels maintained by the author are covered by a Commercial License.
-
-A paid license is required to:
-- Use the official binary in any commercial, enterprise, or proprietary environment.
-- Access Pro features (MQTT, XY plotting, 3D plots, etc.).
-- Receive priority support.
-
-Without a valid license, use of the binary is limited to personal and evaluation purposes only.
-
-### Choosing the Right Version of Serial Studio
-
-Refer to the comparison table below to understand the capabilities and limitations of each edition. This will help you select the appropriate license for your technical or organizational requirements.
-
-| Feature / Use Case         | GPL Version *(Build it yourself)* | Free Version *(Official binary)* | Pro Version *(Commercial license)* |
-|---------------------------|------------------------------------|----------------------------------|-------------------------------------|
-| Commercial Use            | ✅ If GPL terms are respected      | ❌ Personal use only             | ✅ Fully licensed                   |
-| Official Support          | ❌ Community only                  | ❌ None                          | ✅ Priority support                |
-| Pro Features *(MQTT, XY, 3D)* | ❌ Not included                | ❌ Not included                  | ✅ Included                        |
-| Usage Restrictions        | Must release source code           | No commercial use               | Licensed use only                 |
-| Precompiled Binary        | ❌ Build required                  | ✅ Included                      | ✅ Included                        |
-| Qt Licensing              | Must use open-source Qt            | Handled by developer            | Handled by developer              |
-| Activation                | ❌                                 | ❌                               | ✅ License key required           |
-| Business Use              | ✅ If GPL compliant                | ❌ Not allowed                   | ✅ Allowed                         |
-| Best For                  | Open source devs, students         | Hobbyists, evaluation           | Businesses, professional teams    |
+| Feature / Use Case           | GPL Version *(Build it yourself)* | Free Version *(Official binary)* | Pro Version *(Commercial license)* |
+|-----------------------------|------------------------------------|----------------------------------|-------------------------------------|
+| **Commercial Use**          | ✅ If GPL terms are respected      | ❌ Personal/eval only            | ✅ Fully licensed                   |
+| **Official Support**        | ❌ Community only                  | ❌ None                          | ✅ Priority channels                |
+| **Pro Features**            | ❌ Not included                    | ❌ Not included                  | ✅ MQTT, 3D, XY, license manager    |
+| **Usage Restrictions**      | Must release source and comply     | No redistribution, no commercial| Licensed use only                  |
+| **Precompiled Binary**      | ❌ Build required                  | ✅ Provided                      | ✅ Provided                         |
+| **Qt Licensing**            | Requires open-source Qt            | Covered by Licensor             | Covered by Licensor                |
+| **Activation**              | ❌ Not applicable                  | ❌ Not applicable                | ✅ License key required             |
+| **Business Use**            | ✅ If fully GPL compliant          | ❌ Not allowed                   | ✅ Allowed                          |
+| **Best For**                | OSS devs, students, contributors   | Hobbyists, evaluation use       | Businesses, professional teams     |
