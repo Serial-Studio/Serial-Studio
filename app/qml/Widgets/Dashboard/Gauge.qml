@@ -130,7 +130,7 @@ Item {
     // Spacer
     //
     Item {
-      implicitWidth: 4
+      implicitHeight: 4
     }
 
     //
@@ -153,7 +153,7 @@ Item {
     // Spacer
     //
     Item {
-      implicitWidth: 8
+      implicitHeight: 8
     }
   }
 }

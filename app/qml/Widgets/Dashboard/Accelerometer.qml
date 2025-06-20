@@ -47,28 +47,23 @@ Item {
   //
   // Widget layout
   //
-  RowLayout {
+  ColumnLayout {
     spacing: 0
     anchors.margins: 8
     anchors.fill: parent
-
-    //
-    // Spacer
-    //
-    Item {
-      Layout.fillWidth: true
-    }
 
     //
     // Create the widget background
     //
     Item {
       id: container
-      Layout.alignment: Qt.AlignVCenter
-      Layout.minimumWidth: Math.min(root.width, root.height) * 0.8
-      Layout.maximumWidth: Math.min(root.width, root.height) * 0.8
-      Layout.minimumHeight: Math.min(root.width, root.height) * 0.8
-      Layout.maximumHeight: Math.min(root.width, root.height) * 0.8
+      readonly property real gaugeSize: Math.min(root.width, root.height) - range.implicitHeight - 12
+
+      Layout.minimumWidth: gaugeSize
+      Layout.maximumWidth: gaugeSize
+      Layout.minimumHeight: gaugeSize
+      Layout.maximumHeight: gaugeSize
+      Layout.alignment: Qt.AlignHCenter
 
       //
       // Background gradient + glow
@@ -227,36 +222,31 @@ Item {
     // Spacer
     //
     Item {
-      Layout.fillWidth: true
-    }
-
-    //
-    // Spacer
-    //
-    Item {
-      implicitWidth: 4
+      implicitHeight: 4
     }
 
     //
     // Range/scale + current value display
     //
     VisualRange {
+      id: range
       units: "G"
       minValue: 0
       maxValue: 16
       alarm: value > 12
+      rangeVisible: false
       Layout.fillHeight: true
       value: root.model.magnitude
       maximumWidth: root.width * 0.3
-      rangeVisible: root.height >= 120
       Layout.minimumWidth: implicitWidth
+      Layout.alignment: Qt.AlignHCenter
     }
 
     //
     // Spacer
     //
     Item {
-      implicitWidth: 8
+      implicitHeight: 8
     }
   }
 }

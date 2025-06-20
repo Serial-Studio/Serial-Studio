@@ -194,9 +194,10 @@ Widgets.MiniWindow {
   // Embedded contents
   //
   Item {
+    clip: true
     id: container
-    anchors.fill: parent
     anchors.margins: 1
+    anchors.fill: parent
     anchors.topMargin: root.captionHeight
     Component.onCompleted: widgetLoader.createObject(container, {windowRoot: root})
   }
