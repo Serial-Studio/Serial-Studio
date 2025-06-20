@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 #include <QFile>
@@ -781,9 +781,9 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
   // Get file save path
   if (jsonFilePath().isEmpty() || askPath)
   {
-    const auto name = jsonProjectsPath() + "/" + title() + ".json";
-    auto path = QFileDialog::getSaveFileName(nullptr, tr("Save JSON project"),
-                                             name, "*.json");
+    const auto name = jsonProjectsPath() + "/" + title() + ".ssproj";
+    auto path = QFileDialog::getSaveFileName(
+        nullptr, tr("Save Serial Studio Project"), name, "*.ssproj");
     if (path.isEmpty())
       return false;
 
@@ -959,7 +959,8 @@ void JSON::ProjectModel::openJsonFile()
 {
   // Let user select a file
   const auto path = QFileDialog::getOpenFileName(
-      nullptr, tr("Select JSON file"), jsonProjectsPath(), "*.json");
+      nullptr, tr("Select Project File"), jsonProjectsPath(),
+      tr("Project Files (*.json *.ssproj)"));
 
   // Invalid path, abort
   if (path.isEmpty())
