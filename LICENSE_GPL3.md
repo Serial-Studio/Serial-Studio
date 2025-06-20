@@ -1,3 +1,15 @@
+# Serial Studio GPLv3 License
+
+This file contains the complete text of the **GNU General Public License v3**, which applies to the open-source portions of Serial Studio.
+
+Only components marked with an `SPDX-License-Identifier: GPL-3.0-only` are governed by this license. Proprietary features (e.g., Pro modules) are excluded from GPL coverage.
+
+See the full license policy at:  
+[LICENSE.md](./LICENSE.md) — Dual-license overview  
+[LICENSE_COMMERCIAL.md](./LICENSE_COMMERCIAL.md) — Terms for Pro modules and official binaries
+
+---
+
 GNU General Public License
 ==========================
 
