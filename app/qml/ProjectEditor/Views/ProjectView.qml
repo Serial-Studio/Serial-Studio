@@ -93,41 +93,6 @@ Widgets.Pane {
           id: delegate
           width: parent.width
           modelPointer: Cpp_JSON_ProjectModel.projectModel
-
-          footerItem: ColumnLayout {
-            spacing: 0
-
-            Image {
-              sourceSize: Qt.size(96, 96)
-              Layout.alignment: Qt.AlignHCenter
-              source: "qrc:/rcc/images/tip.svg"
-            }
-
-            Item {
-              implicitHeight: 16
-            }
-
-            Label {
-              Layout.alignment: Qt.AlignHCenter
-              text: qsTr("First, set up frame detection and data decoding.")
-              horizontalAlignment: Label.AlignHCenter
-              font: Cpp_Misc_CommonFonts.customUiFont(1.6, true)
-            }
-
-            Item {
-              implicitHeight: 8
-            }
-
-            Label {
-              opacity: 0.8
-              Layout.alignment: Qt.AlignHCenter
-              horizontalAlignment: Label.AlignHCenter
-              Layout.maximumWidth: delegate.width * 0.9
-              wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-              font: Cpp_Misc_CommonFonts.customUiFont(1.4, false)
-              text: qsTr("Frames are parsed into arrays, and datasets link each element to a widget.")
-            }
-          }
         }
       }
     }

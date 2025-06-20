@@ -172,41 +172,6 @@ Widgets.Pane {
         id: delegate
         width: parent.width
         modelPointer: Cpp_JSON_ProjectModel.actionModel
-
-        footerItem: ColumnLayout {
-          spacing: 0
-
-          Image {
-            sourceSize: Qt.size(128, 128)
-            Layout.alignment: Qt.AlignHCenter
-            source: "qrc:/rcc/images/action.svg"
-          }
-
-          Item {
-            implicitHeight: 16
-          }
-
-          Label {
-            Layout.alignment: Qt.AlignHCenter
-            text: qsTr("Send commands with a button click")
-            horizontalAlignment: Label.AlignHCenter
-            font: Cpp_Misc_CommonFonts.customUiFont(2, true)
-          }
-
-          Item {
-            implicitHeight: 8
-          }
-
-          Label {
-            opacity: 0.8
-            Layout.alignment: Qt.AlignHCenter
-            horizontalAlignment: Label.AlignHCenter
-            Layout.maximumWidth: delegate.width * 0.9
-            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-            font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
-            text: qsTr("Actions let you send custom commands to the connected device with a single button press.")
-          }
-        }
       }
     }
   }

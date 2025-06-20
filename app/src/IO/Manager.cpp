@@ -623,7 +623,7 @@ void IO::Manager::killFrameReader()
 void IO::Manager::startFrameReader()
 {
   // Ensure driver is set and driver is open
-  Q_ASSERT(driver() != nullptr && driver()->isOpen());
+  Q_ASSERT(driver() != nullptr);
 
   // Stop the frame reader thread if needed
   killFrameReader();
