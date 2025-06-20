@@ -136,20 +136,7 @@ This dual-license grant is **perpetual, royalty-free, and non-exclusive**. If yo
 
 Violations of these terms may result in takedown requests, legal action, or immediate termination of license rights.
 
-## 8. Authorized Redistribution by Trusted Maintainers
-
-Trusted redistributors (e.g., Flatpak, Snapcraft) are permitted to package and distribute the proprietary build **only if** the following strict conditions are met:
-
-- The build is **unmodified** (source, features, and branding).
-- All license checks, activation logic, and enforcement code must remain fully intact and unmodified.
-- Pro features remain gated and disabled unless activated by the end user.
-- Redistribution is accompanied by:
-  - A clear indication that the software is proprietary.
-  - A direct link to the [Commercial License Agreement](https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE_COMMERCIAL.md).
-
-Any deviation from these conditions constitutes unauthorized redistribution.
-
-## 9. Warranty Disclaimer
+## 8. Warranty Disclaimer
 
 To the maximum extent permitted by applicable law:
 
@@ -158,7 +145,7 @@ To the maximum extent permitted by applicable law:
 
 Commercial licensees may receive support as specified in their license agreement, but **no guarantees are implied unless contractually stated**.
 
-## 10. Summary Table
+## 9. Summary Table
 
 | Use Case                                        | Allowed? | Conditions                                                                                                                                             |
 |------------------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -169,9 +156,9 @@ Commercial licensees may receive support as specified in their license agreement
 | Fork for study or contribution (non-distributed)| ✅       | Allowed for personal study and bugfix contributions. Pro code may be referenced for fixes, but **activation, licensing, or feature unlocks must not be altered** |                                                      |
 | Redistribute modified build                    | ❌       | Not allowed — forks must not be distributed under any name unless fully rebranded, stripped of Pro code, and comply with license + attribution rules   |
 
-## 11. Tampering, Circumvention & Enforcement
+## 10. Tampering, Circumvention & Enforcement
 
-### 11.1 Activation System Integrity
+### 10.1 Activation System Integrity
 
 The activation and license management system is included **only** for purposes of transparency, security auditing, and community trust. **Any modification, removal, bypass, or circumvention of this system is strictly prohibited**, regardless of whether the resulting build is used personally, privately, or non-commercially.
 
@@ -184,7 +171,7 @@ The activation and license management system is included **only** for purposes o
 
 **Attempting to enable Pro features through source code changes is a direct violation of this license.**
 
-### 11.2 No GPL Exception
+### 10.2 No GPL Exception
 
 The activation and license management system is **explicitly excluded** from GPLv3 rights. You are **not permitted** to modify, remove, or bypass it under open-source terms.
 
@@ -196,7 +183,7 @@ This restriction also applies to all **gated commercial modules** listed in Sect
 
 Any modification that results in unrestricted access to Pro functionality, reclassifies your usage as **unauthorized** and voids all rights under this license. Such actions may result in legal consequences, including takedowns or civil claims.
 
-### 11.3 Enforcement and Legal Action
+### 10.3 Enforcement and Legal Action
 
 Bypassing license enforcement or enabling commercial features without valid activation:
 - **Terminates all rights** under this license (both GPL and Commercial)
@@ -205,7 +192,7 @@ Bypassing license enforcement or enabling commercial features without valid acti
 
 The author **actively monitors** forks, builds, and public repositories. Unauthorized copies may be removed or prosecuted without prior notice.
 
-## 12. Contact
+## 11. Contact
 
 For license questions, edge cases, commercial inquiries, or to negotiate custom builds:
 - GitHub: <https://github.com/Serial-Studio/Serial-Studio/issues>  
