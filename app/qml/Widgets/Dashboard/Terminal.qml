@@ -186,10 +186,12 @@ Item {
     // Data-write controls
     //
     RowLayout {
+      id: sendCtrl
       Layout.fillWidth: true
       visible: root.width > implicitWidth
 
       Button {
+        id: ftButton
         icon.width: 18
         icon.height: 18
         implicitHeight: 24
@@ -204,6 +206,7 @@ Item {
 
       TextField {
         id: send
+        implicitWidth: 128
         implicitHeight: 24
         font: terminal.font
         Layout.fillWidth: true
@@ -345,6 +348,7 @@ Item {
       }
 
       Button {
+        id: sendBt
         icon.width: 18
         icon.height: 18
         implicitHeight: 24
