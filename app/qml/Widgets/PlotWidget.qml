@@ -522,8 +522,8 @@ Item {
       width: parent.height
       anchors.centerIn: parent
       horizontalAlignment: Qt.AlignHCenter
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.91)
       color: Cpp_ThemeManager.colors["widget_text"]
+      font: Cpp_Misc_CommonFonts.customMonoFont(0.91, true)
       anchors.verticalCenterOffset: root.xLabelVisible && _yLabel.implicitWidth <= _graph.height ?
                                       -1 * Math.abs(_graph.marginBottom - _graph.marginTop) : 0
     }
@@ -550,8 +550,8 @@ Item {
       elide: Qt.ElideRight
       anchors.centerIn: parent
       horizontalAlignment: Qt.AlignHCenter
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.91)
       color: Cpp_ThemeManager.colors["widget_text"]
+      font: Cpp_Misc_CommonFonts.customMonoFont(0.91, true)
       anchors.horizontalCenterOffset: root.yLabelVisible ? Math.abs(_graph.marginLeft - _graph.marginRight) : 0
     }
   }

@@ -459,11 +459,11 @@ void UI::Taskbar::setActiveGroupId(int groupId)
     }
   }
 
-  // Focus the last window
+  // Focus the first window
   if (m_taskbarButtons->rowCount() > 0)
   {
-    auto lastGroup = m_taskbarButtons->item(m_taskbarButtons->rowCount() - 1);
-    auto windowId = lastGroup->data(TaskbarModel::WindowIdRole).toInt();
+    auto firstGroup = m_taskbarButtons->item(0);
+    auto windowId = firstGroup->data(TaskbarModel::WindowIdRole).toInt();
     for (auto it = m_windowIDs.begin(); it != m_windowIDs.end(); ++it)
     {
       if (it.value() == windowId)

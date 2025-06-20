@@ -85,9 +85,12 @@ Item {
       iconSize: 16
       startMenu: true
       text: qsTr("Menu")
-      onClicked: root.startClicked()
       implicitWidth: start.layout.implicitWidth + 8
       icon.source: Cpp_Misc_Utilities.hdpiImagePath("qrc:/rcc/logo/start.png")
+      onClicked: {
+        root.startClicked()
+        taskBar.activeWindow = null
+      }
     }
 
     //
@@ -95,20 +98,29 @@ Item {
     //
     Widgets.TaskbarButton {
       forceVisible: true
-      onClicked: app.showSettingsDialog()
       icon.source: "qrc:/rcc/icons/taskbar/adjust.svg"
+      onClicked: {
+        app.showSettingsDialog()
+        taskBar.activeWindow = null
+      }
     } Widgets.TaskbarButton {
       forceVisible: true
       focused: Cpp_UI_Dashboard.terminalEnabled
       icon.source: "qrc:/rcc/icons/taskbar/console.svg"
-      onClicked: Cpp_UI_Dashboard.terminalEnabled = !Cpp_UI_Dashboard.terminalEnabled
+      onClicked: {
+        taskBar.activeWindow = null
+        Cpp_UI_Dashboard.terminalEnabled = !Cpp_UI_Dashboard.terminalEnabled
+      }
     } Widgets.TaskbarButton {
       forceVisible: true
       focused: Cpp_IO_Manager.paused
-      onClicked: Cpp_IO_Manager.paused = !Cpp_IO_Manager.paused
       icon.source: Cpp_IO_Manager.paused ?
                      "qrc:/rcc/icons/taskbar/resume.svg" :
                      "qrc:/rcc/icons/taskbar/pause.svg"
+      onClicked: {
+        taskBar.activeWindow = null
+        Cpp_IO_Manager.paused = !Cpp_IO_Manager.paused
+      }
     }
 
     //
@@ -135,7 +147,10 @@ Item {
           visible: buttonsContainer.showNavButtons
           icon.source: "qrc:/rcc/icons/buttons/backward.svg"
           icon.color: Cpp_ThemeManager.colors["taskbar_text"]
-          onClicked: buttonsView.contentX = Math.max(0, buttonsView.contentX - 150)
+          onClicked: {
+            taskBar.activeWindow = null
+            buttonsView.contentX = Math.max(0, buttonsView.contentX - 150)
+          }
         }
 
         ListView {
@@ -201,7 +216,10 @@ Item {
           visible: buttonsContainer.showNavButtons
           icon.source: "qrc:/rcc/icons/buttons/forward.svg"
           icon.color: Cpp_ThemeManager.colors["taskbar_text"]
-          onClicked: buttonsView.contentX = Math.min(buttonsView.contentWidth - buttonsView.width, buttonsView.contentX + 150)
+          onClicked: {
+            taskBar.activeWindow = null
+            buttonsView.contentX = Math.min(buttonsView.contentWidth - buttonsView.width, buttonsView.contentX + 150)
+          }
         }
       }
     }
@@ -329,10 +347,13 @@ Item {
       Layout.preferredHeight: 24
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/buttons/auto-layout.svg"
-      onClicked: taskBar.windowManager.autoLayoutEnabled = !taskBar.windowManager.autoLayoutEnabled
       icon.color: taskBar.windowManager.autoLayoutEnabled ?
                     Cpp_ThemeManager.colors["tasbkar_highlight"] :
                     Cpp_ThemeManager.colors["taskbar_text"]
+      onClicked: {
+        taskBar.activeWindow = null
+        taskBar.windowManager.autoLayoutEnabled = !taskBar.windowManager.autoLayoutEnabled
+      }
     } Item {
       implicitWidth: 4
     }

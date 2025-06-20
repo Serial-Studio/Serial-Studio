@@ -30,7 +30,7 @@
  */
 Misc::CommonFonts::CommonFonts()
 {
-  // Platform-specific font selection
+  // Set fallback mono font to system font
   QString monoFont;
 #ifdef Q_OS_LINUX
   monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
@@ -41,6 +41,19 @@ Misc::CommonFonts::CommonFonts()
 #else
   monoFont = QStringLiteral("Courier");
 #endif
+
+  // Add custom mono font
+  const auto path = QStringLiteral(":/rcc/fonts/IBMPlexMono-Regular.ttf");
+  const auto id = QFontDatabase::addApplicationFont(path);
+  if (id != -1)
+  {
+    const auto families = QFontDatabase::applicationFontFamilies(id);
+    if (!families.isEmpty())
+    {
+      monoFont = families.at(0);
+      QFontDatabase::addApplicationFont(":/rcc/fonts/IBMPlexMono-Medium.ttf");
+    }
+  }
 
   // Set the UI font to the system default
   m_uiFont = QApplication::font();
@@ -55,8 +68,9 @@ Misc::CommonFonts::CommonFonts()
 
   // Setup monospace font
   m_monoFont = QFont(monoFont);
-  m_monoFont.setPointSizeF(m_uiFont.pointSizeF());
+  m_monoFont.setFixedPitch(true);
   m_monoFont.setStyleHint(QFont::Monospace);
+  m_monoFont.setPointSizeF(m_uiFont.pointSizeF());
 
   // Verify that the font was loaded correctly
   if (m_monoFont.family() != monoFont)
@@ -102,7 +116,7 @@ const QFont &Misc::CommonFonts::boldUiFont() const
 
 /**
  * @brief Creates a custom UI font with specified size and boldness.
- * @param fraction The fractional size of the font (1=100% of normal font size)
+ * @param fraction The fractional size of the font (1=100% default size)
  * @param bold True if the font should be bold, otherwise false.
  * @return The custom UI font.
  */
@@ -115,12 +129,16 @@ QFont Misc::CommonFonts::customUiFont(const double fraction, const bool bold)
 
 /**
  * @brief Creates a custom monospace font with specified size.
- * @param fraction The fractional size of the font (1=100% of normal font size)
+ * @param fraction The fractional size of the font (1=100% default size)
+ * @param bold True if the font should be bold, otherwise false.
  * @return The custom monospace font.
  */
-QFont Misc::CommonFonts::customMonoFont(const double fraction)
+QFont Misc::CommonFonts::customMonoFont(const double fraction, const bool bold)
 {
   QFont font = m_monoFont;
   font.setPointSizeF(m_monoFont.pointSizeF() * qMax(0.1, fraction));
+  if (bold)
+    font.setWeight(QFont::Medium);
+
   return font;
 }
