@@ -120,6 +120,10 @@
     "plot3d_background_inner": "#eff0f1",
     "plot3d_background_outer": "#eff0f1",
 
+    "welcome_gradient_top": "#76B5DF",
+    "welcome_gradient_bottom": "#AAAFE1",
+    "welcome_gradient_border": "#5995BE",
+
     "widget_colors": [
       "#007aff",
       "#ff9500",

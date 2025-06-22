@@ -1,5 +1,5 @@
 /*
- * Serial Studio - https://serial-studio.github.io/
+ * Serial Studio - https://serial-studio.com/
  *
  * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
  *
@@ -282,10 +282,10 @@ Window {
                     anchors.fill: parent
                     acceptedButtons: Qt.RightButton
                     onPressed: (mouse) => {
-                      if (mouse.button === Qt.RightButton) {
-                        _keyContextMenu.popup()
-                      }
-                    }
+                                 if (mouse.button === Qt.RightButton) {
+                                   _keyContextMenu.popup()
+                                 }
+                               }
 
                     Menu {
                       id: _keyContextMenu
@@ -420,10 +420,10 @@ Window {
                       anchors.fill: parent
                       acceptedButtons: Qt.RightButton
                       onPressed: (mouse) => {
-                        if (mouse.button === Qt.RightButton) {
-                          _uidContextMenu.popup()
-                        }
-                      }
+                                   if (mouse.button === Qt.RightButton) {
+                                     _uidContextMenu.popup()
+                                   }
+                                 }
 
                       Menu {
                         id: _uidContextMenu
@@ -464,10 +464,10 @@ Window {
                       anchors.fill: parent
                       acceptedButtons: Qt.RightButton
                       onPressed: (mouse) => {
-                        if (mouse.button === Qt.RightButton) {
-                          _licContextMenu.popup()
-                        }
-                      }
+                                   if (mouse.button === Qt.RightButton) {
+                                     _licContextMenu.popup()
+                                   }
+                                 }
 
                       Menu {
                         id: _licContextMenu

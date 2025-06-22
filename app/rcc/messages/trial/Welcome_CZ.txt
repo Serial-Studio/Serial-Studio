@@ -1,0 +1,24 @@
+▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
+
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Všechna práva vyhrazena.
+
+Aktuálně používáte zkušební verzi Serial Studio Pro.
+
+Tato verze je plně funkční a licencována pouze pro osobní,
+nekomerční použití a účely hodnocení. Chcete-li pokračovat
+v používání Serial Studio po skončení zkušební doby, přejděte
+na placený plán nebo si sami zkompilujte zdrojový kód pod
+licencí GPLv3.
+
+→ Podpora: alex@serial-studio.com
+→ Naplánovat hovor: https://calendly.com/serial-studio
+→ Více informací: https://serial-studio.com/
+
+Funkce Pro dostupné během zkušební doby:
+→ Integrace s MQTT
+→ Vizualizace XY a 3D
+→ Zpracování binárních dat
+→ Průběžné aktualizace

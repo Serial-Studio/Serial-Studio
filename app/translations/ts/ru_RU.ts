@@ -39,26 +39,30 @@
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="246"/>
-        <source>This configuration is for personal use only. Commercial use is prohibited unless a valid commercial license is activated.</source>
-        <translation>Эта конфигурация предназначена только для личного использования. Коммерческое использование запрещено, если не активирована действительная коммерческая лицензия.</translation>
+        <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
+        <translation>Эта конфигурация предназначена только для личного использования и оценки. Коммерческое использование запрещено, если не активирована действующая коммерческая лицензия.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="259"/>
+        <source>This configuration is for personal use only. Commercial use is prohibited unless a valid commercial license is activated.</source>
+        <translation type="vanished">Эта конфигурация предназначена только для личного использования. Коммерческое использование запрещено, если не активирована действительная коммерческая лицензия.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="260"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Это программное обеспечение предоставляется «как есть» без каких-либо гарантий, явных или подразумеваемых, включая, но не ограничиваясь, гарантии товарной пригодности или пригодности для конкретной цели. Автор ни при каких обстоятельствах не несет ответственности за любые убытки, возникшие в результате использования этого программного обеспечения.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="279"/>
+        <location filename="../../qml/Dialogs/About.qml" line="280"/>
         <source>Manage License</source>
         <translation>Управление лицензией</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="288"/>
+        <location filename="../../qml/Dialogs/About.qml" line="289"/>
         <source>Donate</source>
         <translation>Пожертвовать</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="308"/>
+        <location filename="../../qml/Dialogs/About.qml" line="309"/>
         <source>License Agreement</source>
         <translation>Лицензионное соглашение</translation>
     </message>
@@ -71,12 +75,12 @@
         <translation type="vanished">Программа предоставляется «КАК ЕСТЬ» БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ, ВКЛЮЧАЯ ГАРАНТИИ ДИЗАЙНА, ТОВАРНОЙ ПРИГОДНОСТИ И ПРИГОДНОСТИ ДЛЯ ОПРЕДЕЛЕННОЙ ЦЕЛИ.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="335"/>
+        <location filename="../../qml/Dialogs/About.qml" line="336"/>
         <source>Website</source>
         <translation>Вебсайт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="299"/>
+        <location filename="../../qml/Dialogs/About.qml" line="300"/>
         <source>Check for Updates</source>
         <translation>Проверить обновления</translation>
     </message>
@@ -85,7 +89,7 @@
         <translation type="vanished">Сделать пожертвование</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="317"/>
+        <location filename="../../qml/Dialogs/About.qml" line="318"/>
         <source>Report Bug</source>
         <translation>Сообщить об ошибке</translation>
     </message>
@@ -94,12 +98,12 @@
         <translation type="vanished">Документация</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="326"/>
+        <location filename="../../qml/Dialogs/About.qml" line="327"/>
         <source>Acknowledgements</source>
         <translation>Благодарности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="350"/>
+        <location filename="../../qml/Dialogs/About.qml" line="351"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -155,14 +159,12 @@
         <translation>Удалить это действие из проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="191"/>
         <source>Send commands with a button click</source>
-        <translation>Отправить команды нажатием кнопки</translation>
+        <translation type="vanished">Отправить команды нажатием кнопки</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="207"/>
         <source>Actions let you send custom commands to the connected device with a single button press.</source>
-        <translation>Действия позволяют отправлять на подключенное устройство пользовательские команды одним нажатием кнопки.</translation>
+        <translation type="vanished">Действия позволяют отправлять на подключенное устройство пользовательские команды одним нажатием кнопки.</translation>
     </message>
 </context>
 <context>
@@ -1018,14 +1020,12 @@
         <translation>Удалить текущую группу и все содержащиеся наборы данных</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="287"/>
         <source>Groups hold multiple datasets and organize your data.</source>
-        <translation>Группы содержат несколько наборов данных и организуют ваши данные.</translation>
+        <translation type="vanished">Группы содержат несколько наборов данных и организуют ваши данные.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="301"/>
         <source>Use the sub-toolbar to quickly add plots, FFTs, and other dataset types to this group.</source>
-        <translation>Используйте подпанель инструментов, чтобы быстро добавить графики, БПФ и другие типы наборов данных в эту группу.</translation>
+        <translation type="vanished">Используйте подпанель инструментов, чтобы быстро добавить графики, БПФ и другие типы наборов данных в эту группу.</translation>
     </message>
     <message>
         <source>Let's Add Some Datasets</source>
@@ -1424,62 +1424,62 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Скорость "%1" добавлена в список скоростей передачи</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="851"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="855"/>
         <source>Critical serial port error</source>
         <translation>Критическая ошибка последовательного порта</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="880"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
         <source>No error occurred.</source>
         <translation>Ошибок не произошло.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="882"/>
         <source>The specified device could not be found. Please check the connection and try again.</source>
         <translation>Указанное устройство не найдено. Пожалуйста, проверьте подключение и попробуйте снова.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="882"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="883"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Доступ запрещен. Убедитесь, что у приложения есть необходимые права доступа к устройству.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="884"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Не удалось открыть устройство. Возможно, оно уже используется или недоступно.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="885"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Произошла ошибка при записи данных на устройство.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="886"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Произошла ошибка при чтении данных с устройства.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="886"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="887"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>Произошла критическая ошибка ресурса. Устройство могло быть отключено или больше не доступно.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="887"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="888"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>Запрашиваемая операция не поддерживается на этом устройстве.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="888"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="889"/>
         <source>An unknown error occurred. Please check the device and try again.</source>
         <translation>Произошла неизвестная ошибка. Пожалуйста, проверьте устройство и попробуйте снова.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="889"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="890"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>Время операции истекло. Устройство может не отвечать.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="890"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="891"/>
         <source>The device is not open. Please open the device before attempting this operation.</source>
         <translation>Устройство не открыто. Пожалуйста, откройте устройство перед выполнением этой операции.</translation>
     </message>
@@ -1742,122 +1742,120 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>JSON::ProjectModel</name>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="289"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="295"/>
         <source>New Project</source>
         <translation>Новый проект</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="362"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="368"/>
         <source>Samples</source>
         <translation>Образцы</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="731"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="738"/>
         <source>Do you want to save your changes?</source>
         <translation>Вы хотите сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="732"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="739"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>У вас есть несохраненные изменения в этом проекте!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="767"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="774"/>
         <source>Project error</source>
         <translation>Ошибка проекта</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="768"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="775"/>
         <source>Project title cannot be empty!</source>
         <translation>Название проекта не может быть пустым!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="785"/>
         <source>Save JSON project</source>
-        <translation>Сохранить проект JSON</translation>
+        <translation type="vanished">Сохранить проект JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="797"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="804"/>
         <source>File open error</source>
         <translation>Ошибка открытия файла</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="918"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2228"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="925"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2239"/>
         <source>Untitled Project</source>
         <translation>Безымянный проект</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="962"/>
         <source>Select JSON file</source>
-        <translation>Выберите файл JSON</translation>
+        <translation type="vanished">Выберите файл JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1086"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1094"/>
         <source>Legacy frame parser function updated</source>
         <translation>Устаревшая функция парсинга трейм обновлена</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1087"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1095"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Ваш проект использовал устаревшую функцию парсинга трейм с аргументом ‘separator’. Она была автоматически переведена на новый формат.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1119"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1127"/>
         <source>Switch Serial Studio to Project Mode?</source>
         <translation>Переключить Serial Studio в режим проекта?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1120"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1128"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
         <translation>Этот режим работы необходим для загрузки и отображения панелей управления из файлов проектов.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1148"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1156"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Вы хотите удалить группу "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1149"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1190"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1229"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1157"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1198"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1237"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Это действие не может быть отменено. Вы хотите продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1189"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1197"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Вы хотите удалить действие «%1»?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1227"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1235"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Вы хотите удалить набор данных "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1278"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1317"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1353"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1286"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1325"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1364"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Копия)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1393"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1404"/>
         <source>Group</source>
         <translation>Группа</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1478"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1489"/>
         <source>New Dataset</source>
         <translation>Новый набор данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1481"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1492"/>
         <source>New Plot</source>
         <translation>Новый график</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1485"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1496"/>
         <source>New FFT Plot</source>
         <translation>Новый график FFT</translation>
     </message>
@@ -1866,61 +1864,61 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Новый виджет полосы</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1493"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1504"/>
         <source>New Gauge</source>
         <translation>Новый измерительный прибор</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1497"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1508"/>
         <source>New Compass</source>
         <translation>Новый компас</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1501"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1512"/>
         <source>New LED Indicator</source>
         <translation>Новый LED индикатор</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1637"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1648"/>
         <source>New Action</source>
         <translation>Новое действие</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1794"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1805"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Вы уверены, что хотите изменить виджет группы?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1795"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1806"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Существующие наборы данных для этой группы будут удалены</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1852"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1853"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1854"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1863"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1864"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1865"/>
         <source>Accelerometer %1</source>
         <translation>Акселерометр %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1898"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1899"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1900"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1909"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1910"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1911"/>
         <source>Gyro %1</source>
         <translation>Гироскоп %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1941"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1952"/>
         <source>Latitude</source>
         <translation>Широта</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1942"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1953"/>
         <source>Longitude</source>
         <translation>Долгота</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1943"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1954"/>
         <source>Altitude</source>
         <translation>Высота</translation>
     </message>
@@ -1929,41 +1927,41 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Функция разбора фреймов</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2226"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2401"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2465"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2664"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2237"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2412"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2476"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2675"/>
         <source>Title</source>
         <translation>Заголовок</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2229"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2240"/>
         <source>Project name/description</source>
         <translation>Название/описание проекта</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2255"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2266"/>
         <source>Frame Detection</source>
         <translation>Обнаружение кадров</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2257"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2268"/>
         <source>Strategy used for identifying frame data</source>
         <translation>Стратегия для идентификации данных кадра</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2832"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2843"/>
         <source>X-Axis Source</source>
         <translation>Источник оси X</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2833"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2844"/>
         <source>Data series for the X-Axis</source>
         <translation>Серия данных для оси X</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2850"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2863"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2861"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2874"/>
         <source>Required for range widgets, optional for plots</source>
         <translation>Обязательно для виджетов диапазона, необязательно для графиков</translation>
     </message>
@@ -1976,46 +1974,46 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Строка, используемая для разделения элементов в кадре</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2274"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2285"/>
         <source>Frame Start Delimeter</source>
         <translation>Разделитель начала фрейма</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2277"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2288"/>
         <source>String marking the start of a frame</source>
         <translation>Строка, обозначающая начало фрейма</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2293"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2304"/>
         <source>Frame End Delimeter</source>
         <translation>Разделитель конца фрейма</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2296"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2307"/>
         <source>String marking the end of a frame</source>
         <translation>Строка, обозначающая конец фрейма</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2240"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2251"/>
         <source>Data Conversion Method</source>
         <translation>Метод преобразования данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2242"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2253"/>
         <source>Input data format for frame parser</source>
         <translation>Формат входных данных для разбора фреймов</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2339"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2350"/>
         <source>Thunderforest API Key</source>
         <translation>API-ключ Thunderforest</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2341"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2355"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3045"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3049"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2352"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2366"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3056"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3060"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3067"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
@@ -2024,236 +2022,251 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Требуется для виджета GPS карты</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2342"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2353"/>
         <source>Required for Thunderforest maps</source>
         <translation>Требуется для карт Thunderforest</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2353"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2364"/>
         <source>MapTiler API Key</source>
         <translation>API-ключ MapTiler</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2356"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2367"/>
         <source>Required for satellite maps</source>
         <translation>Требуется для спутниковых карт</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2403"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2414"/>
         <source>Untitled Group</source>
         <translation>Безымянная группа</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2404"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2415"/>
         <source>Name or description of the group</source>
         <translation>Название или описание группы</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2432"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2742"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2443"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2753"/>
         <source>Widget</source>
         <translation>Виджет</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2434"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2445"/>
         <source>Group display widget (optional)</source>
         <translation>Виджет отображения группы (опционально)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2467"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2478"/>
         <source>Untitled Action</source>
         <translation>Безымянное действие</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2468"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2479"/>
         <source>Name or description of the action</source>
         <translation>Имя или описание действия</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2478"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2489"/>
         <source>Icon</source>
         <translation>Иконка</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2480"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2491"/>
         <source>Default Icon</source>
         <translation>Иконка по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2481"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2492"/>
         <source>Icon to display in the dashboard</source>
         <translation>Иконка для отображения на панели управления</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2523"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2534"/>
         <source>TX Data</source>
         <translation>Данные для передачи</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2508"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2525"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2519"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2536"/>
         <source>Command</source>
         <translation>Команда</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1489"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="793"/>
+        <source>Save Serial Studio Project</source>
+        <translation>Сохранить проект Serial Studio</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="969"/>
+        <source>Select Project File</source>
+        <translation>Выбрать файл проекта</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="970"/>
+        <source>Project Files (*.json *.ssproj)</source>
+        <translation>Файлы проекта (*.json *.ssproj)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1500"/>
         <source>New Level Indicator</source>
         <translation>Новый индикатор уровня</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1979"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1990"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1980"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1991"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1981"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1992"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2095"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2106"/>
         <source>Frame Parser Code</source>
         <translation>Код парсера фреймов</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2310"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2321"/>
         <source>Hexadecimal Delimeters</source>
         <translation>Шестнадцатеричные разделители</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2312"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2323"/>
         <source>Use hexadecimal delimiters for data frames</source>
         <translation>Использовать шестнадцатеричные разделители для кадров данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2326"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2337"/>
         <source>Checksum Algorithm</source>
         <translation>Алгоритм контрольной суммы</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2328"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2339"/>
         <source>Checksum algorithm used for frame validation</source>
         <translation>Алгоритм контрольной суммы, используемый для проверки кадра</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2490"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2501"/>
         <source>Binary Data</source>
         <translation>Бинарные данные</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2493"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2504"/>
         <source>Send binary data when the action is triggered.</source>
         <translation>Отправлять бинарные данные при срабатывании действия.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2506"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2517"/>
         <source>TX Data (Hex)</source>
         <translation>Данные TX (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2509"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2526"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2520"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2537"/>
         <source>Data to transmit when the action is triggered.</source>
         <translation>Данные для передачи при выполнении действия.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2555"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2566"/>
         <source>EOL Sequence</source>
         <translation>Последовательность EOL</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2557"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2568"/>
         <source>End-of-line (EOL) sequence to use</source>
         <translation>Последовательность конца строки (EOL) для использования</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2567"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2578"/>
         <source>Auto Execute on Connect</source>
         <translation>Автоматическое выполнение при подключении</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2571"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2582"/>
         <source>Trigger this action automatically when a device connects.</source>
         <translation>Выполнить это действие автоматически при подключении устройства.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2583"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2594"/>
         <source>Timer Mode</source>
         <translation>Режим таймера</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2585"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2596"/>
         <source>How and when the timer should activate.</source>
         <translation>Как и когда должен активироваться таймер.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2598"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2600"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2609"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2611"/>
         <source>Timer Interval (ms)</source>
         <translation>Интервал таймера (мс)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2602"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2613"/>
         <source>Interval in milliseconds between each timer-triggered action.</source>
         <translation>Интервал в миллисекундах между каждым действием, запускаемым таймером.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2666"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2677"/>
         <source>Untitled Dataset</source>
         <translation>Безымянный набор данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2667"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2678"/>
         <source>Name or description of the dataset</source>
         <translation>Название или описание набора данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2678"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2689"/>
         <source>Frame Index</source>
         <translation>Индекс фрейма</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2681"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2692"/>
         <source>Position in the frame</source>
         <translation>Позиция в фрейме</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2691"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2702"/>
         <source>Measurement Unit</source>
         <translation>Единица измерения</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2693"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2704"/>
         <source>Volts, Amps, etc.</source>
         <translation>Вольты, Амперы и т.д.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2694"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2705"/>
         <source>Unit of measurement (optional)</source>
         <translation>Единица измерения (опционально)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2706"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2717"/>
         <source>Overview</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2709"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2720"/>
         <source>Include widget in overview dashboard</source>
         <translation>Включить виджет в обзорную панель</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2744"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2755"/>
         <source>Display widget (optional)</source>
         <translation>Виджет отображения (опционально)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2847"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2858"/>
         <source>Minimum Value</source>
         <translation>Минимальное значение</translation>
     </message>
@@ -2262,127 +2275,127 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Требуется для виджетов шкал/графиков</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2860"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2871"/>
         <source>Maximum Value</source>
         <translation>Максимальное значение</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2876"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2887"/>
         <source>Alarm Value</source>
         <translation>Значение тревоги</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2879"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2890"/>
         <source>Triggers alarm in bar widgets and LED panels</source>
         <translation>Запускает тревогу в виджетах шкал и светодиодных панелях</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2774"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2785"/>
         <source>Oscilloscope Plot</source>
         <translation>График осциллографа</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2776"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2787"/>
         <source>Plot data in real-time</source>
         <translation>Построение данных в реальном времени</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2785"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2796"/>
         <source>FFT Plot</source>
         <translation>График БПФ</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2788"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2799"/>
         <source>Plot frequency-domain data</source>
         <translation>Построение данных в частотной области</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2901"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2912"/>
         <source>FFT Window Size</source>
         <translation>Размер окна FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2903"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2914"/>
         <source>Samples for FFT calculation</source>
         <translation>Образцы для расчета FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2914"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2925"/>
         <source>FFT Sampling Rate</source>
         <translation>Частота дискретизации FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2916"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2927"/>
         <source>Sampling rate (Hz) for FFT calculation</source>
         <translation>Частота дискретизации (Гц) для расчета FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2797"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2808"/>
         <source>Show in LED Panel</source>
         <translation>Отображать на светодиодной панели</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2800"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2811"/>
         <source>Quick status monitoring</source>
         <translation>Быстрый мониторинг состояния</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2931"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2942"/>
         <source>LED High (On) Value</source>
         <translation>Высокое значение LED (включено)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2934"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2945"/>
         <source>Threshold for LED on</source>
         <translation>Порог включения LED</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3006"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3017"/>
         <source>Off</source>
         <translation>Выключено</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3007"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3018"/>
         <source>Auto Start</source>
         <translation>Автоматический старт</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3008"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3019"/>
         <source>Start on Trigger</source>
         <translation>Запуск при срабатывании</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3009"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3020"/>
         <source>Toggle on Trigger</source>
         <translation>Переключение при срабатывании</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3013"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3024"/>
         <source>Plain Text (UTF8)</source>
         <translation>Простой текст (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3031"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3042"/>
         <source>No Delimiters</source>
         <translation>Без разделителей</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3059"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3070"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r\n)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3105"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3116"/>
         <source>Save changes to frame parser code?</source>
         <translation>Сохранить изменения в коде парсера кадров?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3106"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3117"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
         <translation>Выберите «Сохранить», чтобы сохранить изменения, «Отменить», чтобы потерять их навсегда, или «Отмена», чтобы вернуться.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3108"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3119"/>
         <source>Save Changes</source>
         <translation>Сохранить изменения</translation>
     </message>
@@ -2391,92 +2404,92 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Обычный (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3014"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3025"/>
         <source>Hexadecimal</source>
         <translation>Шестнадцатеричный</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3015"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3026"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3016"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3027"/>
         <source>Binary (Direct)</source>
         <translation>Двоичный (Прямой)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3023"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3034"/>
         <source>No Checksum</source>
         <translation>Без контрольной суммы</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3028"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3039"/>
         <source>End Delimiter Only</source>
         <translation>Только конечный разделитель</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3029"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3040"/>
         <source>Start Delimiter Only</source>
         <translation>Только начальный разделитель</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3030"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3041"/>
         <source>Start + End Delimiter</source>
         <translation>Начальный + конечный разделитель</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3039"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3050"/>
         <source>Data Grid</source>
         <translation>Таблица данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3040"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3051"/>
         <source>GPS Map</source>
         <translation>GPS карта</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3041"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3052"/>
         <source>Gyroscope</source>
         <translation>Гироскоп</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3042"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3053"/>
         <source>Multiple Plot</source>
         <translation>Множественный график</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3043"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3054"/>
         <source>Accelerometer</source>
         <translation>Акселерометр</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3044"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3055"/>
         <source>3D Plot</source>
         <translation>3D график</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3050"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3061"/>
         <source>Bar</source>
         <translation>Гистограмма</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3051"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3062"/>
         <source>Gauge</source>
         <translation>Индикатор</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3052"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3063"/>
         <source>Compass</source>
         <translation>Компас</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3057"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3068"/>
         <source>New Line (\n)</source>
         <translation>Новая строка (\n)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3058"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3069"/>
         <source>Carriage Return (\r)</source>
         <translation>Возврат каретки (\r)</translation>
     </message>
@@ -2489,12 +2502,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">ВК + НС (\r\n)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3063"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3074"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3064"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3075"/>
         <source>Linear Plot</source>
         <translation>Линейный график</translation>
     </message>
@@ -2560,8 +2573,8 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="294"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="429"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="473"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="432"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="476"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
@@ -2572,8 +2585,8 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="306"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="435"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="479"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="438"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="482"/>
         <source>Select All</source>
         <translation>Выбрать всё</translation>
     </message>
@@ -2588,37 +2601,37 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="364"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="365"/>
         <source>Licensee</source>
         <translation>Лицензиат</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="377"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="380"/>
         <source>Licensee E-Mail</source>
         <translation>Электронная почта лицензиата</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="390"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="393"/>
         <source>Device Usage</source>
         <translation>Использование устройства</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="396"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="399"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>%1 устройств используется (Безлимитный план)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="397"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="400"/>
         <source>%1 of %2 devices used</source>
         <translation>Использовано %1 из %2 устройств</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="407"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="410"/>
         <source>Device ID</source>
         <translation>Идентификатор устройства</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="449"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="452"/>
         <source>License Key</source>
         <translation>Лицензионный ключ</translation>
     </message>
@@ -2627,22 +2640,22 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
         <translation type="vanished">По любым вопросам, связанным с оплатой или активацией, обращайтесь в поддержку по адресу alex@serial-studio.com</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="509"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="512"/>
         <source>Customer Portal</source>
         <translation>Портал клиента</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="524"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="527"/>
         <source>Buy License</source>
         <translation>Купить лицензию</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="534"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="537"/>
         <source>Activate</source>
         <translation>Активировать</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="547"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="550"/>
         <source>Deactivate</source>
         <translation>Деактивировать</translation>
     </message>
@@ -2942,97 +2955,97 @@ Thank you again for supporting Serial Studio!</source>
         <translation type="vanished">Ошибка SSL/TLS клиента MQTT, игнорировать?</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="41"/>
+        <location filename="../../src/MQTT/Client.cpp" line="40"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="42"/>
+        <location filename="../../src/MQTT/Client.cpp" line="41"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="43"/>
+        <location filename="../../src/MQTT/Client.cpp" line="42"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="46"/>
+        <location filename="../../src/MQTT/Client.cpp" line="45"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="47"/>
+        <location filename="../../src/MQTT/Client.cpp" line="46"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="48"/>
+        <location filename="../../src/MQTT/Client.cpp" line="47"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 или новее</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="49"/>
+        <location filename="../../src/MQTT/Client.cpp" line="48"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 или новее</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="50"/>
+        <location filename="../../src/MQTT/Client.cpp" line="49"/>
         <source>Any Protocol</source>
         <translation>Любой протокол</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="51"/>
+        <location filename="../../src/MQTT/Client.cpp" line="50"/>
         <source>Secure Protocols Only</source>
         <translation>Только безопасные протоколы</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="54"/>
+        <location filename="../../src/MQTT/Client.cpp" line="53"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="55"/>
+        <location filename="../../src/MQTT/Client.cpp" line="54"/>
         <source>Query Peer</source>
         <translation>Запросить у партнера</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="56"/>
+        <location filename="../../src/MQTT/Client.cpp" line="55"/>
         <source>Verify Peer</source>
         <translation>Проверить партнера</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="57"/>
+        <location filename="../../src/MQTT/Client.cpp" line="56"/>
         <source>Auto Verify Peer</source>
         <translation>Автоматическая проверка партнера</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="333"/>
+        <location filename="../../src/MQTT/Client.cpp" line="332"/>
         <source>Use System Database</source>
         <translation>Использовать системную базу данных</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="334"/>
+        <location filename="../../src/MQTT/Client.cpp" line="333"/>
         <source>Load From Folder...</source>
         <translation>Загрузить из папки...</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="348"/>
+        <location filename="../../src/MQTT/Client.cpp" line="347"/>
         <source>MQTT Subscriber</source>
         <translation>Подписчик MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="349"/>
+        <location filename="../../src/MQTT/Client.cpp" line="348"/>
         <source>MQTT Publisher</source>
         <translation>Издатель MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="414"/>
+        <location filename="../../src/MQTT/Client.cpp" line="413"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>Функция MQTT требует коммерческой лицензии</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="415"/>
+        <location filename="../../src/MQTT/Client.cpp" line="414"/>
         <source>Connecting to MQTT brokers is only available with a valid Serial Studio commercial license.
 
 To unlock this feature, please activate your license or visit the store.</source>
@@ -3041,179 +3054,179 @@ To unlock this feature, please activate your license or visit the store.</source
 Чтобы разблокировать эту функцию, активируйте свою лицензию или посетите магазин.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="429"/>
+        <location filename="../../src/MQTT/Client.cpp" line="428"/>
         <source>Missing MQTT Topic</source>
         <translation>Отсутствует тема MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="430"/>
+        <location filename="../../src/MQTT/Client.cpp" line="429"/>
         <source>You must specify a topic before connecting as a publisher.</source>
         <translation>Вы должны указать тему перед подключением в качестве издателя.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="431"/>
-        <location filename="../../src/MQTT/Client.cpp" line="455"/>
+        <location filename="../../src/MQTT/Client.cpp" line="430"/>
+        <location filename="../../src/MQTT/Client.cpp" line="454"/>
         <source>Configuration Error</source>
         <translation>Ошибка конфигурации</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="439"/>
+        <location filename="../../src/MQTT/Client.cpp" line="438"/>
         <source>MQTT Topic Not Set</source>
         <translation>Тема MQTT не установлена</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="440"/>
+        <location filename="../../src/MQTT/Client.cpp" line="439"/>
         <source>You won't receive any messages until a topic is configured.</source>
         <translation>Вы не будете получать сообщения, пока не будет настроена тема.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="441"/>
+        <location filename="../../src/MQTT/Client.cpp" line="440"/>
         <source>Configuration Warning</source>
         <translation>Предупреждение конфигурации</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="453"/>
+        <location filename="../../src/MQTT/Client.cpp" line="452"/>
         <source>Invalid MQTT Topic</source>
         <translation>Недопустимая тема MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="454"/>
+        <location filename="../../src/MQTT/Client.cpp" line="453"/>
         <source>The topic "%1" is not valid.</source>
         <translation>Тема "%1" недействительна.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="648"/>
+        <location filename="../../src/MQTT/Client.cpp" line="647"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Выберите каталог сертификатов PEM</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="751"/>
+        <location filename="../../src/MQTT/Client.cpp" line="750"/>
         <source>Subscription Error</source>
         <translation>Ошибка подписки</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="752"/>
+        <location filename="../../src/MQTT/Client.cpp" line="751"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Не удалось подписаться на тему "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="771"/>
+        <location filename="../../src/MQTT/Client.cpp" line="770"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Недопустимая версия протокола MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="772"/>
+        <location filename="../../src/MQTT/Client.cpp" line="771"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
         <translation>Брокер MQTT отклонил соединение из-за неподдерживаемой версии протокола. Убедитесь, что ваш клиент и брокер поддерживают одну и ту же версию протокола.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="778"/>
+        <location filename="../../src/MQTT/Client.cpp" line="777"/>
         <source>Client ID Rejected</source>
         <translation>Идентификатор клиента отклонен</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="779"/>
+        <location filename="../../src/MQTT/Client.cpp" line="778"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
         <translation>Брокер отклонил идентификатор клиента. Он может быть неправильно сформирован, слишком длинным или уже использоваться. Попробуйте использовать другой идентификатор клиента.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="785"/>
+        <location filename="../../src/MQTT/Client.cpp" line="784"/>
         <source>MQTT Server Unavailable</source>
         <translation>Сервер MQTT недоступен</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="786"/>
+        <location filename="../../src/MQTT/Client.cpp" line="785"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
         <translation>Сетевое соединение установлено, но брокер в данный момент недоступен. Проверьте статус брокера и повторите попытку позже.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="792"/>
-        <location filename="../../src/MQTT/Client.cpp" line="862"/>
+        <location filename="../../src/MQTT/Client.cpp" line="791"/>
+        <location filename="../../src/MQTT/Client.cpp" line="861"/>
         <source>Authentication Error</source>
         <translation>Ошибка аутентификации</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="793"/>
+        <location filename="../../src/MQTT/Client.cpp" line="792"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
         <translation>Указанные имя пользователя или пароль неверны или имеют неправильный формат. Проверьте свои учетные данные и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="798"/>
+        <location filename="../../src/MQTT/Client.cpp" line="797"/>
         <source>Authorization Error</source>
         <translation>Ошибка авторизации</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="799"/>
+        <location filename="../../src/MQTT/Client.cpp" line="798"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
         <translation>MQTT брокер отклонил соединение из-за недостаточных прав доступа. Убедитесь, что у вашей учетной записи есть необходимые права доступа.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="805"/>
+        <location filename="../../src/MQTT/Client.cpp" line="804"/>
         <source>Network or Transport Error</source>
         <translation>Ошибка сети или транспорта</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="806"/>
+        <location filename="../../src/MQTT/Client.cpp" line="805"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
         <translation>Произошла проблема на уровне сети или транспорта, вызвавшая неожиданное отключение. Проверьте ваше сетевое соединение и настройки брокера.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="812"/>
+        <location filename="../../src/MQTT/Client.cpp" line="811"/>
         <source>MQTT Protocol Violation</source>
         <translation>Нарушение протокола MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="813"/>
+        <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
         <translation>Клиент обнаружил нарушение протокола MQTT и закрыл соединение. Проверьте вашу реализацию MQTT на соответствие.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="819"/>
+        <location filename="../../src/MQTT/Client.cpp" line="818"/>
         <source>Unknown Error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="820"/>
+        <location filename="../../src/MQTT/Client.cpp" line="819"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
         <translation>Произошла непредвиденная ошибка. Проверьте логи для получения более подробной информации или перезапустите приложение.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="825"/>
+        <location filename="../../src/MQTT/Client.cpp" line="824"/>
         <source>MQTT 5 Error</source>
         <translation>Ошибка MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="826"/>
+        <location filename="../../src/MQTT/Client.cpp" line="825"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
         <translation>Произошла ошибка уровня протокола MQTT 5. Проверьте логи брокера или коды причин для получения более подробной информации.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="848"/>
+        <location filename="../../src/MQTT/Client.cpp" line="847"/>
         <source>MQTT Authentication Failed</source>
         <translation>Ошибка аутентификации MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="849"/>
+        <location filename="../../src/MQTT/Client.cpp" line="848"/>
         <source>Authentication failed: %.</source>
         <translation>Ошибка аутентификации: %.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="863"/>
+        <location filename="../../src/MQTT/Client.cpp" line="862"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
         <translation>Требуется расширенная аутентификация, но MQTT 5.0 не включен.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="872"/>
+        <location filename="../../src/MQTT/Client.cpp" line="871"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="876"/>
+        <location filename="../../src/MQTT/Client.cpp" line="875"/>
         <source>MQTT Authentication Required</source>
         <translation>Требуется аутентификация MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="877"/>
+        <location filename="../../src/MQTT/Client.cpp" line="876"/>
         <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
@@ -3222,22 +3235,22 @@ Please provide the necessary credentials.</source>
 Пожалуйста, предоставьте необходимые учетные данные.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="885"/>
+        <location filename="../../src/MQTT/Client.cpp" line="884"/>
         <source>Enter MQTT Username</source>
         <translation>Введите имя пользователя MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="886"/>
+        <location filename="../../src/MQTT/Client.cpp" line="885"/>
         <source>Username:</source>
         <translation>Имя пользователя:</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="892"/>
+        <location filename="../../src/MQTT/Client.cpp" line="891"/>
         <source>Enter MQTT Password</source>
         <translation>Введите пароль MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="893"/>
+        <location filename="../../src/MQTT/Client.cpp" line="892"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
@@ -3499,12 +3512,12 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Misc::ModuleManager</name>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="423"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="439"/>
         <source>To apply this change, %1 needs to restart.</source>
         <translation>Для применения этого изменения необходимо перезапустить %1.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="424"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="440"/>
         <source>Would you like to restart now?</source>
         <translation>Хотите перезапустить сейчас?</translation>
     </message>
@@ -3627,7 +3640,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="240"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="243"/>
         <source>Samples</source>
         <translation>Образцы</translation>
     </message>
@@ -4475,22 +4488,52 @@ Please provide the necessary credentials.</source>
         <translation>Резервные виджеты будут использованы. Купите лицензию, чтобы разблокировать полную функциональность.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="112"/>
         <source>First, set up frame detection and data decoding.</source>
-        <translation>Сначала настройте обнаружение кадров и декодирование данных.</translation>
+        <translation type="vanished">Сначала настройте обнаружение кадров и декодирование данных.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="128"/>
         <source>Frames are parsed into arrays, and datasets link each element to a widget.</source>
-        <translation>Кадры разбираются в массивы, а наборы данных связывают каждый элемент с виджетом.</translation>
+        <translation type="vanished">Кадры разбираются в массивы, а наборы данных связывают каждый элемент с виджетом.</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/Misc/Translator.cpp" line="170"/>
+        <location filename="../../src/Misc/Translator.cpp" line="174"/>
         <source>Failed to load welcome text :(</source>
         <translation>Не удалось загрузить приветственный текст :(</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/Trial.cpp" line="274"/>
+        <source>Network error</source>
+        <translation>Ошибка сети</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/Trial.cpp" line="276"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="295"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="328"/>
+        <source>Trial Activation Error</source>
+        <translation>Ошибка активации пробной версии</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/Trial.cpp" line="292"/>
+        <source>Invalid server response</source>
+        <translation>Неверный ответ сервера</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/Trial.cpp" line="293"/>
+        <source>The server returned malformed data: %1</source>
+        <translation>Сервер вернул некорректные данные: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/Trial.cpp" line="326"/>
+        <source>Unexpected server response</source>
+        <translation>Неожиданный ответ сервера</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/Trial.cpp" line="327"/>
+        <source>The server response is missing required fields.</source>
+        <translation>В ответе сервера отсутствуют необходимые поля.</translation>
     </message>
 </context>
 <context>
@@ -4592,67 +4635,67 @@ Please provide the necessary credentials.</source>
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="207"/>
+        <location filename="../../src/SerialStudio.cpp" line="209"/>
         <source>Data Grids</source>
         <translation>Таблицы данных</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="210"/>
+        <location filename="../../src/SerialStudio.cpp" line="212"/>
         <source>Multiple Data Plots</source>
         <translation>Несколько графиков данных</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="213"/>
+        <location filename="../../src/SerialStudio.cpp" line="215"/>
         <source>Accelerometers</source>
         <translation>Акселерометры</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="216"/>
+        <location filename="../../src/SerialStudio.cpp" line="218"/>
         <source>Gyroscopes</source>
         <translation>Гироскопы</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="219"/>
+        <location filename="../../src/SerialStudio.cpp" line="221"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="222"/>
+        <location filename="../../src/SerialStudio.cpp" line="224"/>
         <source>FFT Plots</source>
         <translation>Графики FFT</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="225"/>
+        <location filename="../../src/SerialStudio.cpp" line="227"/>
         <source>LED Panels</source>
         <translation>Светодиодные панели</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="228"/>
+        <location filename="../../src/SerialStudio.cpp" line="230"/>
         <source>Data Plots</source>
         <translation>Графики данных</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="231"/>
+        <location filename="../../src/SerialStudio.cpp" line="233"/>
         <source>Bars</source>
         <translation>Столбцы</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="234"/>
+        <location filename="../../src/SerialStudio.cpp" line="236"/>
         <source>Gauges</source>
         <translation>Шкалы</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="237"/>
+        <location filename="../../src/SerialStudio.cpp" line="239"/>
         <source>Terminal</source>
         <translation>Терминал</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="240"/>
+        <location filename="../../src/SerialStudio.cpp" line="242"/>
         <source>Compasses</source>
         <translation>Компас</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="243"/>
+        <location filename="../../src/SerialStudio.cpp" line="245"/>
         <source>3D Plots</source>
         <translation>3D Графики</translation>
     </message>
@@ -4675,72 +4718,72 @@ Please provide the necessary credentials.</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="142"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="145"/>
         <source>Theme</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="158"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="166"/>
         <source>Workspace Folder</source>
         <translation>Рабочая папка</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="197"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="209"/>
         <source>Miscellaneous</source>
         <translation>Разное</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="221"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="234"/>
         <source>Enable TCP Plugins (Port 7777)</source>
         <translation>Включить TCP плагины (порт 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="238"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="252"/>
         <source>Force Software Rendering</source>
         <translation>Принудительное программное рендеринг</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="254"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="269"/>
         <source>Automatically Check for Updates</source>
         <translation>Автоматически проверять обновления</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="279"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="294"/>
         <source>Dashboard</source>
         <translation>Панель управления</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="303"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="318"/>
         <source>Point Count</source>
         <translation>Количество точек</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="322"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="338"/>
         <source>Decimal Precision</source>
         <translation>Точность десятичных знаков</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="341"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="358"/>
         <source>Show Actions Panel</source>
         <translation>Показать панель действий</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="358"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="376"/>
         <source>Enable Console Widget</source>
         <translation>Включить виджет консоли</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="397"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="416"/>
         <source>Reset</source>
         <translation>Сбросить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="422"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="441"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="432"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="451"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
@@ -4974,12 +5017,12 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">Данные пока не получены</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="213"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="216"/>
         <source>Send Data to Device</source>
         <translation>Отправить данные на устройство</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="368"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="384"/>
         <source>Echo</source>
         <translation>Эхо</translation>
     </message>
@@ -4988,17 +5031,17 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="357"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="373"/>
         <source>Show Timestamp</source>
         <translation>Показать временные метки</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="379"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="395"/>
         <source>Emulate VT-100</source>
         <translation>Эмуляция VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="401"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="417"/>
         <source>Display: %1</source>
         <translation>Отображение: %1</translation>
     </message>
@@ -5301,12 +5344,12 @@ Please provide the necessary credentials.</source>
 <context>
     <name>UI::WindowManager</name>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="350"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="375"/>
         <source>Select Background Image</source>
         <translation>Выбрать фоновое изображение</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="352"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="377"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
         <translation>Изображения (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
@@ -5486,6 +5529,111 @@ Please provide the necessary credentials.</source>
     </message>
 </context>
 <context>
+    <name>Welcome</name>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="176"/>
+        <source>Welcome to %1!</source>
+        <translation>Добро пожаловать в %1!</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="187"/>
+        <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
+        <translation>Serial Studio — это мощный инструмент для визуализации в реальном времени, созданный для инженеров, студентов и разработчиков.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="198"/>
+        <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
+        <translation>Вы можете начать полнофункциональную 14-дневную пробную версию, активировать её с помощью вашего лицензионного ключа или скачать и скомпилировать исходный код GPLv3 самостоятельно.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="208"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="362"/>
+        <source>Buying Pro supports the author directly and helps fund future development.</source>
+        <translation>Покупка Pro версии поддерживает автора напрямую и помогает финансировать дальнейшую разработку.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="216"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="370"/>
+        <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
+        <translation>Сборка версии GPLv3 самостоятельно помогает развивать сообщество и поощряет технические вклады.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="236"/>
+        <source>Please wait...</source>
+        <translation>Пожалуйста, подождите...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="268"/>
+        <source>%1 days remaining in your trial.</source>
+        <translation>Осталось %1 дней в вашей пробной версии.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="278"/>
+        <source>You’re currently using the fully-featured trial of %1 Pro. It’s valid for 14 days of personal, non-commercial use.</source>
+        <translation>В настоящее время вы используете полнофункциональную пробную версию %1 Pro. Она действительна в течение 14 дней для личного, некоммерческого использования.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="289"/>
+        <source>Upgrade to a paid plan to keep using Serial Studio Pro.</source>
+        <translation>Обновитесь до платного плана, чтобы продолжить использование Serial Studio Pro.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="297"/>
+        <source>Or, compile the GPLv3 source code to use it for free.</source>
+        <translation>Или скомпилируйте исходный код GPLv3, чтобы использовать его бесплатно.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="305"/>
+        <source>To see available subscription plans, click "Upgrade Now" below.</source>
+        <translation>Чтобы увидеть доступные тарифные планы, нажмите «Обновить сейчас» ниже.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="332"/>
+        <source>Your %1 trial has expired.</source>
+        <translation>Ваш пробный период %1 истек.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="342"/>
+        <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
+        <translation>Ваш пробный период закончился. Чтобы продолжить использовать %1 со всеми функциями Pro, пожалуйста, перейдите на платный план.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="353"/>
+        <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
+        <translation>Если вы предпочитаете, вы также можете скомпилировать версию с открытым исходным кодом под лицензией GPLv3.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="381"/>
+        <source>Thank you for trying %1!</source>
+        <translation>Спасибо, что попробовали %1!</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="425"/>
+        <source>Upgrade Now</source>
+        <translation>Обновить сейчас</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="437"/>
+        <source>Activate</source>
+        <translation>Активировать</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="458"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="458"/>
+        <source>Continue</source>
+        <translation>Продолжить</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="458"/>
+        <source>Start Trial</source>
+        <translation>Начать пробный период</translation>
+    </message>
+</context>
+<context>
     <name>WidgetGrid</name>
     <message>
         <source>Dashboard</source>
@@ -5539,11 +5687,13 @@ Please provide the necessary credentials.</source>
     <name>Widgets::DataGrid</name>
     <message>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="135"/>
         <source>Title</source>
         <translation>Заголовок</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="135"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
@@ -5581,7 +5731,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1181"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1194"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Интервал сетки: %1 единица(ы)</translation>
     </message>

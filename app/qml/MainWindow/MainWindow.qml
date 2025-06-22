@@ -1,22 +1,22 @@
 /*
- * Serial Studio - https://serial-studio.github.io/
+ * Serial Studio
+ * https://serial-studio.com/
  *
- * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020–2025 Alex Spataru
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This file is dual-licensed:
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
  *
- * SPDX-License-Identifier: GPL-3.0-only
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ *
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
 import QtCore
@@ -95,6 +95,37 @@ Widgets.SmartWindow {
   }
 
   //
+  // Window initialization code
+  //
+  function showWindow() {
+    // Increment app launch count
+    ++appLaunchCount
+
+    // Show donations dialog every 15 launches
+    if (root.appLaunchCount % 15 == 0)
+      donateDialog.showAutomatically()
+
+    // Ask user if he/she wants to enable automatic updates
+    if (root.appLaunchCount == 2 && Cpp_UpdaterEnabled) {
+      if (Cpp_Misc_Utilities.askAutomaticUpdates()) {
+        root.automaticUpdates = true
+        Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+      }
+
+      else
+        root.automaticUpdates = false
+    }
+
+    // Check for updates (if we are allowed)
+    if (root.automaticUpdates && Cpp_UpdaterEnabled)
+      Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+
+    // Obtain document title from JSON project editor & display the window
+    root.updateDocumentTitle()
+    root.displayWindow()
+  }
+
+  //
   // Wait a little before showing the dashboard to avoid UI glitches and/or
   // overloading the rendering engine
   //
@@ -165,37 +196,6 @@ Widgets.SmartWindow {
         root.firstValidFrame = false
       }
     }
-  }
-
-  //
-  // Loading code
-  //
-  Component.onCompleted: {
-    // Increment app launch count
-    ++appLaunchCount
-
-    // Show donations dialog every 15 launches
-    if (root.appLaunchCount % 15 == 0)
-      donateDialog.showAutomatically()
-
-    // Ask user if he/she wants to enable automatic updates
-    if (root.appLaunchCount == 2 && Cpp_UpdaterEnabled) {
-      if (Cpp_Misc_Utilities.askAutomaticUpdates()) {
-        root.automaticUpdates = true
-        Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
-      }
-
-      else
-        root.automaticUpdates = false
-    }
-
-    // Check for updates (if we are allowed)
-    if (root.automaticUpdates && Cpp_UpdaterEnabled)
-      Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
-
-    // Obtain document title from JSON project editor & display the window
-    root.updateDocumentTitle()
-    root.displayWindow()
   }
 
   //

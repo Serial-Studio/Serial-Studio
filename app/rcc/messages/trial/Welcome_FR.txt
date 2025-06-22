@@ -1,0 +1,24 @@
+▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
+
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Tous droits réservés.
+
+Vous utilisez actuellement une version d’essai de Serial Studio Pro.
+
+Cette version est entièrement fonctionnelle et licenciée uniquement
+pour une utilisation personnelle, non commerciale et à des fins
+d’évaluation. Pour continuer à utiliser Serial Studio après la fin
+de votre période d’essai, passez à une offre payante ou compilez le
+code source GPLv3 vous-même.
+
+→ Support : alex@serial-studio.com
+→ Planifier un appel : https://calendly.com/serial-studio
+→ En savoir plus : https://serial-studio.com/
+
+Fonctionnalités Pro disponibles pendant l’essai :
+→ Intégration MQTT
+→ Visualisation XY et 3D
+→ Analyse de données binaires
+→ Mises à jour continues

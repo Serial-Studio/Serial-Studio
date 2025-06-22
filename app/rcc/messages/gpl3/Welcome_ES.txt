@@ -19,9 +19,9 @@ herramientas para comenzar.
 → https://store.serial-studio.com/
 
 Pro incluye extras geniales como:
-✓ Soporte para MQTT
-✓ Gráficas XY y visualización en 3D
-✓ Licencia binaria amigable con empresas (sin obligaciones GPL)
-✓ Y más herramientas para mejorar tu flujo de trabajo embebido
+→ Soporte para MQTT
+→ Gráficas XY y visualización en 3D
+→ Licencia binaria amigable con empresas (sin obligaciones GPL)
+→ Y más herramientas para mejorar tu flujo de trabajo embebido
 
 → Más información: https://serial-studio.com/

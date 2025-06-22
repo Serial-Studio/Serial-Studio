@@ -1,25 +1,22 @@
 /*
- * Serial Studio - https://serial-studio.github.io/
+ * Serial Studio
+ * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020–2025 Alex Spataru
  *
- * This file contains both open-source and proprietary sections.
- * Portions enabled via preprocessor macros (e.g., BUILD_COMMERCIAL)
- * are part of Serial Studio's commercial feature set and may only be
- * used under the terms of a valid Serial Studio Commercial License.
+ * This file is dual-licensed:
  *
- * You may use, modify, or distribute this file under the terms of
- * the GNU General Public License (GPLv3) **only if** you:
- *   - Do NOT compile or enable any gated commercial features
- *   - Comply fully with the license terms defined in LICENSE.md
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
  *
- * Attempting to use Pro features without activation or a valid license
- * is a breach of this file’s licensing terms and may result in legal action.
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
  *
- * For full details, see:
- * https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
  *
- * SPDX-License-Identifier: LicenseRef-SerialStudio-Mixed
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
 #pragma once

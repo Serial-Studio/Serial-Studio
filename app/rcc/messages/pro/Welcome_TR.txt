@@ -16,10 +16,10 @@ Bu sürüm, ticari bir anlaşma kapsamında lisanslanmıştır ve ticari ile
 → Müşteri portalı: https://store.serial-studio.com/billing
 
 Pro sürüm özellikleri şunları içerir:
-✓ MQTT entegrasyonu
-✓ XY ve 3B görselleştirme
-✓ Öncelikli destek
-✓ İşletme dostu lisans
-✓ Sürekli güncellemeler
+→ MQTT entegrasyonu
+→ XY ve 3B görselleştirme
+→ Öncelikli destek
+→ İşletme dostu lisans
+→ Sürekli güncellemeler
 
 → Daha fazla bilgi: https://serial-studio.com/

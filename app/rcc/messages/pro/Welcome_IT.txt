@@ -16,10 +16,10 @@ Questa versione è concessa in licenza tramite un accordo commerciale ed
 → Portale clienti: https://store.serial-studio.com/billing
 
 Le funzionalità Pro includono:
-✓ Integrazione con MQTT
-✓ Visualizzazione XY e 3D
-✓ Supporto prioritario
-✓ Licenza adatta all’uso commerciale
-✓ Aggiornamenti continui
+→ Integrazione con MQTT
+→ Visualizzazione XY e 3D
+→ Supporto prioritario
+→ Licenza adatta all’uso commerciale
+→ Aggiornamenti continui
 
 → Scopri di più: https://serial-studio.com/

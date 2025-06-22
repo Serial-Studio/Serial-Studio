@@ -19,9 +19,9 @@ Ti piace questo progetto? Valuta di supportarlo acquistando la versione Pro:
 → https://store.serial-studio.com/
 
 La versione Pro include funzionalità extra come:
-✓ Supporto MQTT
-✓ Grafici XY e visualizzazione 3D
-✓ Licenza binaria adatta all’uso commerciale (senza obblighi GPL)
-✓ E altri strumenti per migliorare il tuo workflow embedded
+→ Supporto MQTT
+→ Grafici XY e visualizzazione 3D
+→ Licenza binaria adatta all’uso commerciale (senza obblighi GPL)
+→ E altri strumenti per migliorare il tuo workflow embedded
 
 → Scopri di più: https://serial-studio.com/

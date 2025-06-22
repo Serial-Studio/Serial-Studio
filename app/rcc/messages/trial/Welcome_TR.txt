@@ -1,0 +1,24 @@
+▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
+
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Tüm hakları saklıdır.
+
+Şu anda Serial Studio Pro'nun deneme sürümünü kullanıyorsunuz.
+
+Bu sürüm tamamen işlevseldir ve yalnızca kişisel, ticari olmayan
+kullanım ve değerlendirme amaçlı lisanslanmıştır. Deneme süreniz
+sona erdikten sonra Serial Studio'yu kullanmaya devam etmek için
+ücretli bir plana geçiş yapabilir veya GPLv3 kaynak kodunu kendiniz
+derleyebilirsiniz.
+
+→ Destek: alex@serial-studio.com
+→ Görüşme planla: https://calendly.com/serial-studio
+→ Daha fazla bilgi: https://serial-studio.com/
+
+Deneme süresince sunulan Pro özellikler:
+→ MQTT entegrasyonu
+→ XY ve 3D görselleştirme
+→ İkili veri ayrıştırma
+→ Sürekli güncellemeler

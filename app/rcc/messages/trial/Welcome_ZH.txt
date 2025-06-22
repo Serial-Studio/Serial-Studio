@@ -5,20 +5,18 @@
 Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
 保留所有权利。
 
-此版本的 Serial Studio 仅供个人和评估用途免费使用。未经有效的 Pro
-许可证，禁止商业用途。
+您当前正在使用 Serial Studio Pro 的试用版本。
 
-→ 需要商业许可证？https://store.serial-studio.com/
+该版本功能完整，仅授权用于评估和个人非商业用途。
+若要在试用期结束后继续使用 Serial Studio，请升级到
+付费计划或自行编译 GPLv3 开源代码。
 
-您可以根据 GNU GPLv3 许可证自行构建 Serial Studio，前提是使用开源
-版本的 Qt 安装。
+→ 支持邮箱：alex@serial-studio.com
+→ 预约通话：https://calendly.com/serial-studio
+→ 了解更多：https://serial-studio.com/
 
-→ 源代码：https://github.com/serial-studio/serial-studio
-
-第一次使用 Serial Studio？点击工具栏中的“帮助”按钮开始使用。
-
-Pro 版本包含强大的额外功能：
-✓ 支持 MQTT
-✓ XY 图表和 3D 可视化
-✓ 适用于商业用途的二进制许可证（无 GPL 义务）
-✓ 以及更多优化嵌入式工作流程的工具
+试用期间可用的 Pro 功能：
+→ MQTT 集成
+→ XY 和 3D 可视化
+→ 二进制数据解析
+→ 持续更新

@@ -7,7 +7,7 @@
 [![Buy Pro](https://img.shields.io/badge/Buy%20Pro-Lemon%20Squeezy-blue?logo=lemonsqueezy)](https://store.serial-studio.com/buy/ba46c099-0d51-4d98-9154-6be5c35bc1ec)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4b6f3ce14a684704980fea31d8c1632e)](https://app.codacy.com/gh/Serial-Studio/Serial-Studio/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-**Serial Studio** is an open source, cross-platform telemetry dashboard and real-time data visualization tool. It supports input from serial ports, Bluetooth Low Energy (BLE), MQTT, and TCP/UDP sockets, allowing data acquisition from embedded devices, external software, and networked services.
+**Serial Studio** is an open-core, cross-platform telemetry dashboard and real-time data visualization tool. It supports input from serial ports, Bluetooth Low Energy (BLE), MQTT, and TCP/UDP sockets, allowing data acquisition from embedded devices, external software, and networked services.
 
 Serial Studio runs on Windows, macOS, and Linux. It is suited for telemetry monitoring, sensor data analysis, and real-time debugging in educational, hobbyist, and professional environments.
 
@@ -110,7 +110,7 @@ This version includes most core features but excludes commercial modules such as
 
 If you are a Pro user or have a commercial license, [contact the project maintainer](mailto:alex@serial-studio.com) for build instructions and activation requirements.
 
-## Support & Licensing
+## Support the Project
 Serial Studio is developed and maintained by [Alex Spataru](https://github.com/alex-spataru).  
 It is open source and community-driven, with commercial options available for users who need advanced features or business-friendly licensing.
 
@@ -123,24 +123,33 @@ Commercial licenses directly fund continued development, bug fixes, and new feat
 
 ## Licensing
 
-Serial Studio uses a **dual-license model**:
+Serial Studio uses a **dual-license model** that distinguishes between open-source usage and commercial distribution:
 
-- [LICENSE.md](./LICENSE.md) — overview of GPLv3 and Commercial License structure
-- [LICENSE_COMMERCIAL.md](./LICENSE_COMMERCIAL.md) — terms for official binaries and proprietary Pro features
-- [LICENSE_GPL3.md](./LICENSE_GPL3.md) — GNU GPLv3 for open-source source code
+- [LICENSE.md](LICENSE.md): summary of dual-license structure and usage terms
+- [LICENSES/GPL-3.0-only.txt](LICENSES/GPL-3.0-only.txt): full GNU GPLv3 text for open-source source code
+- [LICENSES/LicenseRef-SerialStudio-Commercial.txt](LICENSES/LicenseRef-SerialStudio-Commercial.txt): full terms for proprietary features and official binaries
+
+Source files are individually marked with SPDX headers indicating whether they are:
+- Licensed under `GPL-3.0-only`
+- Licensed under `LicenseRef-SerialStudio-Commercial`
+- Or dual-licensed as `GPL-3.0-only OR LicenseRef-SerialStudio-Commercial`
+
+This structure allows developers to build and distribute GPL-compliant versions while protecting commercial functionality.
 
 ## Choosing the Right Version of Serial Studio
 
-Use the table below to determine which edition best fits your use case. It outlines key differences in licensing, feature access, and compliance obligations.
+The table below outlines licensing, feature access, and obligations across each edition:
 
-| Feature / Use Case           | GPL Version *(Build it yourself)* | Free Version *(Official binary)* | Pro Version *(Commercial license)* |
-|-----------------------------|------------------------------------|----------------------------------|-------------------------------------|
-| **Commercial Use**          | ✅ If GPL terms are respected      | ❌ Personal/eval only            | ✅ Fully licensed                   |
-| **Official Support**        | ❌ Community only                  | ❌ None                          | ✅ Priority channels                |
-| **Pro Features**            | ❌ Not included                    | ❌ Not included                  | ✅ MQTT, 3D, XY, license manager    |
-| **Usage Restrictions**      | Must release source and comply     | No redistribution, no commercial| Licensed use only                  |
-| **Precompiled Binary**      | ❌ Build required                  | ✅ Provided                      | ✅ Provided                         |
-| **Qt Licensing**            | Requires open-source Qt            | Covered by Licensor             | Covered by Licensor                |
-| **Activation**              | ❌ Not applicable                  | ❌ Not applicable                | ✅ License key required             |
-| **Business Use**            | ✅ If fully GPL compliant          | ❌ Not allowed                   | ✅ Allowed                          |
-| **Best For**                | OSS devs, students, contributors   | Hobbyists, evaluation use       | Businesses, professional teams     |
+| Feature / Use Case           | GPL Version *(Build it yourself)*       | Trial Version *(Official binary)*    | Pro Version *(Activated official binary)*    |
+|-----------------------------|------------------------------------------|---------------------------------------|----------------------------------------------|
+| **Commercial Use**          | ✅ If fully GPL compliant                | ❌ Evaluation only                    | ✅ Fully licensed                             |
+| **Official Support**        | ❌ Community only                        | ❌ None                               | ✅ Priority support                           |
+| **Pro Features**            | ❌ Not included                          | ✅ Included                           | ✅ Included                                   |
+| **Usage Restrictions**      | Must comply with GPL and Qt terms        | 14-day trial, no redistribution       | Bound by commercial license terms            |
+| **Precompiled Binary**      | ❌ Must build from source                | ✅ Provided for trial only            | ✅ Provided                                   |
+| **Qt Licensing**            | Requires GPL-compatible Qt               | Qt licensing covered by vendor        | Qt licensing covered by vendor               |
+| **Activation System**       | ❌ Not applicable                        | ✅ Trial disables after 14 days       | ✅ Requires valid license key                 |
+| **Business Use**            | ✅ If strictly GPL compliant             | ❌ Prohibited                         | ✅ Fully allowed                              |
+| **Best For**                | OSS devs, students, contributors         | Hobbyists, personal evaluation        | Businesses, teams, commercial products       |
+
+**Reminder:** Pro features and official binaries are proprietary and require a commercial license for any use beyond personal evaluation. Visibility of source code does **not** imply GPL rights unless explicitly licensed.

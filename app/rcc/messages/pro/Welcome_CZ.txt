@@ -15,10 +15,10 @@ použití v komerčním a proprietárním prostředí.
 → Klientský portál: https://store.serial-studio.com/billing
 
 Vaše funkce Pro verze:
-✓ Integrace s MQTT
-✓ XY a 3D vizualizace
-✓ Přednostní podpora
-✓ Licence vhodná pro firmy
-✓ Pravidelné aktualizace
+→ Integrace s MQTT
+→ XY a 3D vizualizace
+→ Přednostní podpora
+→ Licence vhodná pro firmy
+→ Pravidelné aktualizace
 
 → Více informací: https://serial-studio.com/

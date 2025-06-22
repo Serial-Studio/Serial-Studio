@@ -1,22 +1,22 @@
 #
-# Serial Studio - https://github.com/alex-spataru/serial-studio
+# Serial Studio
+# https://serial-studio.com/
 #
-# Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
+# Copyright (C) 2020–2025 Alex Spataru
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# This file is dual-licensed:
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
+# - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+# - Under the Serial Studio Commercial License for builds that include
+#   any Pro functionality.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# You must comply with the terms of one of these licenses, depending
+# on your use case.
 #
-# SPDX-License-Identifier: GPL-3.0-only
+# For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+# For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+#
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
 #
 
 cmake_minimum_required(VERSION 3.20)
@@ -44,6 +44,9 @@ option(BUILD_GPL3              "Force GPLv3-only build"                 ON)
 option(DEBUG_SANITIZER         "Enable sanitizers for debug builds"    OFF)
 option(PRODUCTION_OPTIMIZATION "Enable production optimization flags"   ON)
 option(BUILD_COMMERCIAL        "Enable commercial features"            OFF)
+
+set(SERIAL_STUDIO_LICENSE_KEY $ENV{SERIAL_STUDIO_LICENSE_KEY} CACHE STRING "License key for commercial build")
+set(SERIAL_STUDIO_INSTANCE_ID $ENV{SERIAL_STUDIO_INSTANCE_ID} CACHE STRING "Instance ID for license validation")
 
 #-------------------------------------------------------------------------------
 # Project information
@@ -88,65 +91,45 @@ if(BUILD_GPL3)
 
    set(BUILD_COMMERCIAL OFF CACHE BOOL "Commercial features disabled due to GPLv3 build mode" FORCE)
    message(STATUS "BUILD_GPL3=ON — enforcing BUILD_COMMERCIAL=OFF for license compliance")
-
-else()
-   if(NOT BUILD_COMMERCIAL)
-      find_package(Qt6 COMPONENTS Mqtt SerialBus OPTIONAL_COMPONENTS)
-
-      if(TARGET Qt6::Mqtt AND TARGET Qt6::SerialBus)
-         set(BUILD_COMMERCIAL ON CACHE BOOL "Commercial features enabled (Qt Commercial modules found)" FORCE)
-         message(STATUS "Found Qt6::Mqtt and Qt6::SerialBus — enabling BUILD_COMMERCIAL")
-      else()
-         set(BUILD_COMMERCIAL OFF CACHE BOOL "Qt Commercial modules missing — disabling BUILD_COMMERCIAL" FORCE)
-         message(WARNING "Qt6::Mqtt and/or Qt6::SerialBus NOT found — commercial features disabled")
-      endif()
-   else()
-      message(STATUS "BUILD_COMMERCIAL explicitly set to '${BUILD_COMMERCIAL}' — skipping auto-detection")
-   endif()
 endif()
 
 if(BUILD_COMMERCIAL)
-   add_compile_definitions(BUILD_COMMERCIAL)
-   message(STATUS "BUILD_COMMERCIAL=ON — validating license with Lemon Squeezy")
+    add_compile_definitions(BUILD_COMMERCIAL)
+    message(STATUS "BUILD_COMMERCIAL=ON — validating license with Lemon Squeezy")
 
-   set(LICENSE_KEY $ENV{SERIAL_STUDIO_LICENSE_KEY})
-   set(INSTANCE_ID $ENV{SERIAL_STUDIO_INSTANCE_ID})
+    if(NOT SERIAL_STUDIO_LICENSE_KEY OR NOT SERIAL_STUDIO_INSTANCE_ID)
+        message(FATAL_ERROR
+            "Missing SERIAL_STUDIO_LICENSE_KEY or SERIAL_STUDIO_INSTANCE_ID.\n"
+            "Pass them via -D flags or set them as environment variables.")
+    endif()
 
-   if(NOT LICENSE_KEY OR NOT INSTANCE_ID)
-      message(FATAL_ERROR
-         "Missing SERIAL_STUDIO_LICENSE_KEY or SERIAL_STUDIO_INSTANCE_ID environment variables.\n"
-         "Set them before building with commercial features.")
-   endif()
+    find_program(CURL_EXECUTABLE curl)
+    if(NOT CURL_EXECUTABLE)
+        message(FATAL_ERROR "curl not found in PATH — required to validate license.")
+    endif()
 
-   find_program(CURL_EXECUTABLE curl)
+    execute_process(
+        COMMAND curl -s -X POST https://api.lemonsqueezy.com/v1/licenses/validate
+        -H "Accept: application/vnd.api+json"
+        -H "Content-Type: application/vnd.api+json"
+        -d "{\"license_key\": \"${SERIAL_STUDIO_LICENSE_KEY}\", \"instance_id\": \"${SERIAL_STUDIO_INSTANCE_ID}\"}"
+        OUTPUT_VARIABLE LS_RESPONSE
+        ERROR_VARIABLE LS_ERROR
+        RESULT_VARIABLE LS_RESULT
+    )
 
-   if(NOT CURL_EXECUTABLE)
-       message(FATAL_ERROR "curl is not installed or not found in PATH. Cannot validate license.")
-   endif()
+    if(NOT LS_RESULT EQUAL 0)
+        message(FATAL_ERROR "License validation failed: ${LS_ERROR}")
+    endif()
 
-   execute_process(
-      COMMAND curl -s -X POST https://api.lemonsqueezy.com/v1/licenses/validate
-      -H "Accept: application/vnd.api+json"
-      -H "Content-Type: application/vnd.api+json"
-      -d "{\"license_key\": \"${LICENSE_KEY}\", \"instance_id\": \"${INSTANCE_ID}\"}"
-      OUTPUT_VARIABLE LS_RESPONSE
-      ERROR_VARIABLE LS_ERROR
-      RESULT_VARIABLE LS_RESULT
-   )
+    string(FIND "${LS_RESPONSE}" "\"valid\":true" VALID_POS)
+    if(VALID_POS EQUAL -1)
+        message(FATAL_ERROR
+            "Commercial build denied: License not valid or not active.\n"
+            "Response: ${LS_RESPONSE}")
+    endif()
 
-   if(NOT LS_RESULT EQUAL 0)
-      message(FATAL_ERROR "License validation request failed: ${LS_ERROR}")
-   endif()
-
-   string(FIND "${LS_RESPONSE}" "\"valid\":true" VALID_POS)
-
-   if(VALID_POS EQUAL -1)
-      message(FATAL_ERROR
-         "Commercial build denied: License not valid or not active.\n"
-         "Response: ${LS_RESPONSE}")
-   endif()
-
-   message(STATUS "License validation succeeded — building with commercial features")
+    message(STATUS "License validation succeeded — building with commercial features")
 endif()
 
 #-------------------------------------------------------------------------------

@@ -15,10 +15,10 @@ dans des environnements commerciaux et propriétaires.
 → Portail client : https://store.serial-studio.com/billing
 
 Vos fonctionnalités Pro incluent :
-✓ Intégration MQTT
-✓ Visualisation XY et 3D
-✓ Support prioritaire
-✓ Licence adaptée aux entreprises
-✓ Mises à jour continues
+→ Intégration MQTT
+→ Visualisation XY et 3D
+→ Support prioritaire
+→ Licence adaptée aux entreprises
+→ Mises à jour continues
 
 → En savoir plus : https://serial-studio.com/

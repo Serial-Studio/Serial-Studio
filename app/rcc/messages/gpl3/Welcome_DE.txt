@@ -19,9 +19,9 @@ Dir gefällt das Projekt? Unterstütze es durch den Kauf der Pro-Version:
 → https://store.serial-studio.com/
 
 Pro enthält coole Extras wie:
-✓ MQTT-Unterstützung
-✓ XY-Diagramme und 3D-Visualisierung
-✓ Unternehmensfreundliche Binärlizenz (ohne GPL-Verpflichtungen)
-✓ Und weitere Tools für deinen Embedded-Workflow
+→ MQTT-Unterstützung
+→ XY-Diagramme und 3D-Visualisierung
+→ Unternehmensfreundliche Binärlizenz (ohne GPL-Verpflichtungen)
+→ Und weitere Tools für deinen Embedded-Workflow
 
 → Mehr erfahren: https://serial-studio.com/

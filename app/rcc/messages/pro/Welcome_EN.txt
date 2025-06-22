@@ -15,10 +15,10 @@ use in commercial and proprietary environments.
 → Customer portal: https://store.serial-studio.com/billing
 
 Your Pro features include:
-✓ MQTT integration
-✓ XY and 3D visualization
-✓ Priority support
-✓ Business-friendly license
-✓ Continuous updates
+→ MQTT integration
+→ XY and 3D visualization
+→ Priority support
+→ Business-friendly license
+→ Continuous updates
 
 → Learn more: https://serial-studio.com/

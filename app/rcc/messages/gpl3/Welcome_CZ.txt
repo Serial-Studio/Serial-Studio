@@ -17,9 +17,9 @@ Líbí se vám projekt? Podpořte ho zakoupením verze Pro:
 → https://store.serial-studio.com/
 
 Pro verze obsahuje skvělé funkce navíc:
-✓ Podpora MQTT
-✓ XY grafy a 3D vizualizace
-✓ Podniková binární licence (bez GPL závazků)
-✓ A další nástroje pro embedded vývoj
+→ Podpora MQTT
+→ XY grafy a 3D vizualizace
+→ Podniková binární licence (bez GPL závazků)
+→ A další nástroje pro embedded vývoj
 
 → Více info: https://serial-studio.com/

@@ -18,9 +18,9 @@ Gostou do projeto? Considere apoiar comprando a versão Pro:
 → https://store.serial-studio.com/
 
 A versão Pro inclui recursos incríveis como:
-✓ Suporte a MQTT
-✓ Gráficos XY e visualização 3D
-✓ Licença binária para uso comercial (sem obrigações da GPL)
-✓ E mais ferramentas para turbinar seu fluxo de trabalho embarcado
+→ Suporte a MQTT
+→ Gráficos XY e visualização 3D
+→ Licença binária para uso comercial (sem obrigações da GPL)
+→ E mais ferramentas para turbinar seu fluxo de trabalho embarcado
 
 → Saiba mais: https://serial-studio.com/

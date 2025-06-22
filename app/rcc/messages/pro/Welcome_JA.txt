@@ -16,10 +16,10 @@ Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
 → 顧客ポータル: https://store.serial-studio.com/billing
 
 Pro版の機能には以下が含まれます：
-✓ MQTT統合
-✓ XYおよび3Dビジュアライゼーション
-✓ 優先サポート
-✓ 商用向けライセンス
-✓ 継続的なアップデート
+→ MQTT統合
+→ XYおよび3Dビジュアライゼーション
+→ 優先サポート
+→ 商用向けライセンス
+→ 継続的なアップデート
 
 → 詳細はこちら: https://serial-studio.com/

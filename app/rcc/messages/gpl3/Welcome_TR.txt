@@ -19,9 +19,9 @@ Projeyi beğendiniz mi? Pro sürümünü satın alarak desteklemeyi düşünebil
 → https://store.serial-studio.com/
 
 Pro sürüm aşağıdaki gibi harika ekstralar sunar:
-✓ MQTT desteği
-✓ XY grafikleri ve 3B görselleştirme
-✓ Ticari kullanıma uygun ikili lisans (GPL yükümlülüğü yok)
-✓ Gömülü iş akışınızı geliştirmek için daha fazla araç
+→ MQTT desteği
+→ XY grafikleri ve 3B görselleştirme
+→ Ticari kullanıma uygun ikili lisans (GPL yükümlülüğü yok)
+→ Gömülü iş akışınızı geliştirmek için daha fazla araç
 
 → Daha fazla bilgi: https://serial-studio.com/

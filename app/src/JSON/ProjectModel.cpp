@@ -1,25 +1,26 @@
 /*
- * Serial Studio - https://serial-studio.github.io/
+ * Serial Studio
+ * https://serial-studio.com/
  *
- * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020–2025 Alex Spataru
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This file is dual-licensed:
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
  *
- * SPDX-License-Identifier: GPL-3.0-only
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ *
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <QFile>
+#include <QTimer>
 #include <QFileInfo>
 #include <QJsonArray>
 #include <QFileDialog>
@@ -250,7 +251,12 @@ JSON::ProjectModel::CurrentView JSON::ProjectModel::currentView() const
  */
 SerialStudio::DecoderMethod JSON::ProjectModel::decoderMethod() const
 {
-  return m_frameDecoder;
+#ifdef BUILD_COMMERCIAL
+  if (SerialStudio::activated())
+    return m_frameDecoder;
+#endif
+
+  return SerialStudio::PlainText;
 }
 
 /**
@@ -540,7 +546,8 @@ bool JSON::ProjectModel::currentDatasetIsEditable() const
  */
 bool JSON::ProjectModel::containsCommercialFeatures() const
 {
-  return SerialStudio::commercialCfg(m_groups);
+  return SerialStudio::commercialCfg(m_groups)
+         || m_frameDecoder != SerialStudio::PlainText;
 }
 
 /**

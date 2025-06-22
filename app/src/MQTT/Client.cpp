@@ -1,23 +1,22 @@
 /*
- * Serial Studio - https://serial-studio.github.io/
+ * Serial Studio
+ * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020–2025 Alex Spataru
  *
- * This file is part of the proprietary feature set of Serial Studio
- * and is licensed under the Serial Studio Commercial License.
+ * This file is dual-licensed:
  *
- * Redistribution, modification, or use of this file in any form
- * is permitted only under the terms of a valid commercial license
- * obtained from the author.
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
  *
- * This file may NOT be used in any build distributed under the
- * GNU General Public License (GPL) unless explicitly authorized
- * by a separate commercial agreement.
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
  *
- * For license terms, see:
- * https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
  *
- * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
 #include <QFile>

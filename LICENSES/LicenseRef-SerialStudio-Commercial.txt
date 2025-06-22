@@ -1,0 +1,166 @@
+# Serial Studio Commercial License Agreement
+
+**Effective Date:** April 19, 2025  
+**Product:** Serial Studio (Official Precompiled Binary)  
+**Licensor:** Alex Spataru (<https://github.com/alex-spataru>)  
+**Contact:** [alex@serial-studio.com](mailto:alex@serial-studio.com)
+
+This Commercial License Agreement ("Agreement") is a legally binding contract between the end user ("Licensee") and Alex Spataru ("Licensor"). It governs the use of the official precompiled version of *Serial Studio* ("Software").
+
+By downloading, installing, activating, or using the Software, you agree to be bound by the terms of this Agreement.
+
+## 1. Grant of License
+
+Upon purchase and activation, the Licensor grants the Licensee a **limited, non-exclusive, non-transferable, revocable license** to install and use the Software in accordance with the terms below.
+
+This license:
+
+- Applies **only** to the official precompiled binaries distributed by the Licensor.
+- **Does not** include any rights to the source code, which is governed separately by [LICENSE.md](https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md).
+- **Does not** permit modification, reverse engineering, redistribution, sublicensing, or public deployment.
+- Includes **execution in runtime environments** on physical, virtual, cloud, or containerized infrastructure under the control of the Licensee.
+
+## 2. Permitted Use (With a Valid License)
+
+With a valid commercial license, the Licensee may:
+
+- Use the Software in commercial, institutional, enterprise, or academic environments.
+- Deploy the Software in production systems, internal tooling, and funded research.
+- Access and use proprietary Pro features, including:
+  - MQTT integration
+  - XY plotting
+  - 3D visualization
+  - Activation/licensing systems
+
+This license is granted **only to the purchasing legal entity**, defined as the organization registered under the purchasing account and payment method. It **does not extend** to affiliates, subsidiaries, contractors, clients, or any third party without explicit written consent.
+
+Use in shared networks, multi-tenant infrastructure, or for clients, resellers, or external users **requires a separate license**.
+
+## 3. Evaluation Use (Without a License)
+
+If no commercial license is held, the Software may be used **only** for:
+
+- Private, non-commercial evaluation
+- A **single-use, 14-day trial** per user and device
+
+During the trial period:
+
+- All features may be temporarily unlocked
+- Usage is restricted to **non-commercial personal evaluation** only
+
+The following are strictly prohibited during or after the trial:
+
+- Use in client work, production systems, or revenue-generating activities
+- Deployment in academic or institutional infrastructure
+- Inclusion in funded or proprietary research
+- Resetting, extending, spoofing, or bypassing the trial system using VMs, user accounts, system modifications, or reinstallation
+
+> Use beyond the trial period or in any prohibited context constitutes a **material license violation**.
+
+## 4. Restrictions
+
+The Licensee shall not:
+
+- Copy, redistribute, resell, or mirror the Software, directly or via container, firmware, or embedded system
+- Modify, decompile, disassemble, or reverse engineer any portion of the Software
+- Circumvent, disable, spoof, or tamper with license enforcement, activation, or trial systems
+- Access or enable Pro features without valid activation credentials
+- Use the Software to design or train a product with similar feature scope or commercial intent
+- Embed the Software into automated pipelines or products without a distribution license
+- Alter, remove, or obscure any license notices, branding, or author attribution
+- Represent the Software as free, open-source, or publicly licensed
+
+**Any violation immediately terminates this Agreement** and may result in legal action or permanent deactivation of license credentials.
+
+## 5. Term and Termination
+
+This license remains in effect until:
+
+- The paid term expires or is not renewed, **or**
+- The Licensee violates any term of this Agreement
+
+Upon termination:
+
+- All rights granted to the Licensee are revoked
+- The Licensee must immediately cease using the Software and delete all installed copies
+- No refunds, credits, or chargebacks are granted
+
+If requested, the Licensee shall provide written attestation confirming full deletion of all copies and activation data.
+
+## 6. Intellectual Property
+
+The Software is **licensed, not sold**. All intellectual property rights remain exclusively with the Licensor, including:
+
+- Proprietary source code, activation systems, and binaries
+- UI/UX design, data schemas, and feature logic
+- Branding, marks, logos, and trade dress
+
+The Software may include third-party libraries (e.g., Qt) under their own licenses. Use of such components must comply with their respective terms.
+
+Nothing in this Agreement transfers ownership or the right to represent the Software as your own.
+
+The Software may include **technical protection measures (TPMs)**. Bypassing such protections is a violation of this Agreement and may constitute a violation of **17 U.S.C. § 1201 (DMCA)**.
+
+## 7. Updates and Support
+
+Depending on your license tier, the Licensor may provide:
+
+- Updates and security patches released during the license term
+- Best-effort email support
+
+Unless otherwise stated in writing, **only minor and maintenance updates** are included. **Major version upgrades** may require a separate license.
+
+This Agreement does not include any service-level guarantees or support commitments.
+
+## 8. Warranty Disclaimer
+
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.  
+> TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE LICENSOR DISCLAIMS ALL WARRANTIES, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND AVAILABILITY.
+
+You assume full responsibility and risk for use of the Software. The Licensor disclaims liability for loss of data, disruption, or damage of any kind.
+
+## 9. Limitation of Liability
+
+> TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE LICENSOR SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF REVENUE, PROFITS, BUSINESS INTERRUPTION, OR DATA.
+
+The Licensor’s total liability for claims arising from or related to this Agreement shall not exceed the amount paid by the Licensee during the **calendar month** immediately preceding the claim.
+
+If no payment was made during that time, the Licensor’s liability shall be **zero**.
+
+Some jurisdictions do not allow exclusions or limitations of certain liabilities. In such jurisdictions, the Licensor’s liability shall be limited to the **minimum extent permitted by law**.
+
+## 10. Jurisdiction and Dispute Resolution
+
+This Agreement is governed by the laws of **Mexico**, without regard to conflict-of-law principles.
+
+All disputes shall be resolved in the courts of **Mexico City**, unless otherwise resolved via **binding arbitration** through the Mexican Arbitration Center (CAM), at the Licensor’s discretion.
+
+You agree to waive any objection to jurisdiction, forum, or venue.
+
+## 11. Enforcement and Remedies
+
+Violations of this Agreement may result in:
+
+- Immediate license termination and revocation of credentials
+- Legal action for breach of contract or IP infringement
+- Takedown actions under DMCA or local equivalents for unauthorized redistribution or circumvention
+- Blocking of access to future licensing, support, or updates
+
+DMCA claims will apply **only to the official binary** or modified works that circumvent license restrictions. **GPLv3 forks of the open-source repository are not covered by this Agreement.**
+
+## 12. Entire Agreement
+
+This Agreement is the entire understanding between Licensor and Licensee. It supersedes all prior discussions, representations, and agreements.
+
+If any provision is found unenforceable, the remainder shall remain in effect.
+
+Failure by the Licensor to enforce any provision does not constitute a waiver of enforcement rights.
+
+## 13. Contact
+
+**Alex Spataru**  
+Email: [alex@serial-studio.com](mailto:alex@serial-studio.com)  
+GitHub: [https://github.com/alex-spataru](https://github.com/alex-spataru)  
+Website: [https://serial-studio.com](https://serial-studio.com)
+
+**By using the official Serial Studio binary, you confirm that you have read, understood, and accepted this Agreement.**

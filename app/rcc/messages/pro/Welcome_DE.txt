@@ -15,10 +15,10 @@ in kommerziellen und proprietären Umgebungen freigegeben.
 → Kundenportal: https://store.serial-studio.com/billing
 
 Ihre Pro-Funktionen umfassen:
-✓ MQTT-Integration
-✓ XY- und 3D-Visualisierung
-✓ Priorisierter Support
-✓ Geschäftstaugliche Lizenz
-✓ Kontinuierliche Updates
+→ MQTT-Integration
+→ XY- und 3D-Visualisierung
+→ Priorisierter Support
+→ Geschäftstaugliche Lizenz
+→ Kontinuierliche Updates
 
 → Mehr erfahren: https://serial-studio.com/

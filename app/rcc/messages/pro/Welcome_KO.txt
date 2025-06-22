@@ -15,10 +15,10 @@ Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
 → 고객 포털: https://store.serial-studio.com/billing
 
 Pro 기능에는 다음이 포함됩니다:
-✓ MQTT 통합
-✓ XY 및 3D 시각화
-✓ 우선 지원
-✓ 비즈니스 친화적인 라이선스
-✓ 지속적인 업데이트
+→ MQTT 통합
+→ XY 및 3D 시각화
+→ 우선 지원
+→ 비즈니스 친화적인 라이선스
+→ 지속적인 업데이트
 
 → 자세히 알아보기: https://serial-studio.com/

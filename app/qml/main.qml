@@ -1,24 +1,25 @@
 /*
- * Serial Studio - https://serial-studio.github.io/
+ * Serial Studio
+ * https://serial-studio.com/
  *
- * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020–2025 Alex Spataru
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This file is dual-licensed:
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
  *
- * SPDX-License-Identifier: GPL-3.0-only
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ *
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+import QtCore
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
@@ -34,8 +35,8 @@ Item {
   //
   // Define application name
   //
-  readonly property string appIcon: proVersion ? "qrc:/rcc/logo/icon-pro.png" : "qrc:/rcc/logo/icon.png"
-  readonly property bool proVersion: Cpp_QtCommercial_Available ? Cpp_Licensing_LemonSqueezy.isActivated : false
+  readonly property string appIcon: Cpp_QtCommercial_Available && Cpp_Licensing_LemonSqueezy.isActivated ? "qrc:/rcc/logo/icon-pro.png" : "qrc:/rcc/logo/icon.png"
+  readonly property bool proVersion: Cpp_QtCommercial_Available ? Cpp_Licensing_LemonSqueezy.isActivated || Cpp_Licensing_Trial.trialEnabled : false
 
   //
   // Check for updates (non-silent mode)
@@ -57,11 +58,28 @@ Item {
   }
 
   //
+  // Launch welcome dialog or show main window during starup
+  //
+  Component.onCompleted: {
+    if (Cpp_QtCommercial_Available) {
+      if (!Cpp_Licensing_LemonSqueezy.isActivated) {
+        app.showWelcomeDialog()
+        return
+      }
+    }
+
+    app.showMainWindow()
+  }
+
+  //
   // Main window + subdialogs
   //
   MainWindow.MainWindow {
     id: mainWindow
-    onClosing: (close) => app.handleClose(close)
+    onClosing: {
+      if (visible)
+        (close) => app.handleClose(close)
+    }
 
     Dialogs.Settings {
       id: settingsDialog
@@ -98,11 +116,22 @@ Item {
       id: fileTransmissionDialog
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/FileTransmission.qml"
     }
+  }
 
-    DialogLoader {
-      id: licenseDialog
-      source: "qrc:/serial-studio.com/gui/qml/Dialogs/LicenseManagement.qml"
-    }
+  //
+  // License activation dialog
+  //
+  DialogLoader {
+    id: licenseDialog
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/LicenseManagement.qml"
+  }
+
+  //
+  // Welcome dialog
+  //
+  DialogLoader {
+    id: welcomeDialog
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/Welcome.qml"
   }
 
   //
@@ -110,6 +139,13 @@ Item {
   //
   ProjectEditor.ProjectEditor {
     id: projectEditor
+  }
+
+  //
+  // Main Window display function
+  //
+  function showMainWindow() {
+    mainWindow.showWindow()
   }
 
   //
@@ -130,5 +166,8 @@ Item {
   } function showMqttConfiguration() {
     if (Cpp_QtCommercial_Available)
       mqttConfiguration.activate()
+  } function showWelcomeDialog() {
+    if (Cpp_QtCommercial_Available)
+      welcomeDialog.activate()
   }
 }

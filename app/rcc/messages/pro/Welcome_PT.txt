@@ -15,10 +15,10 @@ ambientes comerciais e proprietários.
 → Portal do cliente: https://store.serial-studio.com/billing
 
 Os recursos do Pro incluem:
-✓ Integração com MQTT
-✓ Visualização XY e 3D
-✓ Suporte prioritário
-✓ Licença adequada para uso comercial
-✓ Atualizações contínuas
+→ Integração com MQTT
+→ Visualização XY e 3D
+→ Suporte prioritário
+→ Licença adequada para uso comercial
+→ Atualizações contínuas
 
 → Saiba mais: https://serial-studio.com/

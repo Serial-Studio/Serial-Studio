@@ -14,10 +14,10 @@ Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
 → 客户入口：https://store.serial-studio.com/billing
 
 您的 Pro 功能包括：
-✓ MQTT 集成
-✓ XY 和 3D 可视化
-✓ 优先支持
-✓ 面向企业的许可证
-✓ 持续更新
+→ MQTT 集成
+→ XY 和 3D 可视化
+→ 优先支持
+→ 面向企业的许可证
+→ 持续更新
 
 → 了解更多：https://serial-studio.com/

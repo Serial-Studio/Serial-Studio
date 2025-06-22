@@ -16,9 +16,9 @@ Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
 → https://store.serial-studio.com/
 
 Pro 版包含强大功能，例如：
-✓ 支持 MQTT
-✓ XY 图表与 3D 可视化
-✓ 适合商业使用的二进制许可证（无 GPL 义务）
-✓ 还有更多助力嵌入式开发的工具
+→ 支持 MQTT
+→ XY 图表与 3D 可视化
+→ 适合商业使用的二进制许可证（无 GPL 义务）
+→ 还有更多助力嵌入式开发的工具
 
 → 了解更多： https://serial-studio.com/

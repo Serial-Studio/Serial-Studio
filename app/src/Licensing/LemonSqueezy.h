@@ -1,5 +1,5 @@
 /*
- * Serial Studio - https://serial-studio.github.io/
+ * Serial Studio - https://serial-studio.com/
  *
  * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
  *
