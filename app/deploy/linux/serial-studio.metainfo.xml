@@ -50,8 +50,8 @@
 		<color type="primary" scheme_preference="dark">#244263</color>
 	</branding>
 	<releases>
-		<release version="3.1.5" date="2025-06-16">
-			<url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.5</url>
+	  <release version="3.1.6" date="2025-06-22">
+		  <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.6</url>
 		</release>
 	</releases>
 	<content_rating type="oars-1.1"/>

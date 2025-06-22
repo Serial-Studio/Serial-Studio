@@ -39,7 +39,7 @@ on:
 #-------------------------------------------------------------------------------
 
 env:
-  VERSION: "3.1.5"
+  VERSION: "3.1.6"
   QT_VERSION_LINUX: 6.9.1
   QT_VERSION_MACOS: 6.9.1
   QT_VERSION_WINDOWS: 6.9.1
@@ -48,9 +48,9 @@ env:
   UNIXNAME: "serial-studio"
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
-  INSTALL_QT_MACOS: true
-  INSTALL_QT_WINDOWS: true
-  INSTALL_QT_LINUX_INTEL: true
+  INSTALL_QT_MACOS: false
+  INSTALL_QT_WINDOWS: false
+  INSTALL_QT_LINUX_INTEL: false
   INSTALL_QT_LINUX_ARM64: false
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"

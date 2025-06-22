@@ -396,7 +396,7 @@ void IO::Drivers::Network::setUdpRemotePort(const quint16 port)
 void IO::Drivers::Network::setRemoteAddress(const QString &address)
 {
   // Check if host name exists
-  if (QHostAddress(address).isNull())
+  if (!address.isEmpty() && QHostAddress(address).isNull())
   {
     m_hostExists = false;
     lookup(address);
