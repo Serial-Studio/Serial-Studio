@@ -452,9 +452,7 @@ Window {
             icon.width: 18
             icon.height: 18
             rightPadding: 8
-            opacity: enabled ? 1 : 0.5
             Layout.alignment: Qt.AlignVCenter
-            enabled: !Cpp_Licensing_Trial.busy
             highlighted: !Cpp_Licensing_Trial.trialExpired
             icon.color: Cpp_ThemeManager.colors["button_text"]
             icon.source: Cpp_Licensing_Trial.trialExpired  ? "qrc:/rcc/icons/buttons/close.svg" : "qrc:/rcc/icons/buttons/apply.svg"

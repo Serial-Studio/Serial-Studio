@@ -263,11 +263,6 @@ void Licensing::Trial::onServerReply(QNetworkReply *reply)
   m_busy = false;
   Q_EMIT busyChanged();
 
-  // Set default state
-  m_trialEnabled = false;
-  m_deviceRegistered = false;
-  m_trialExpiry = QDateTime::currentDateTimeUtc();
-
   // Check for network error
   if (reply->error() != QNetworkReply::NoError)
   {
@@ -296,6 +291,11 @@ void Licensing::Trial::onServerReply(QNetworkReply *reply)
     Q_EMIT enabledChanged();
     return;
   }
+
+  // Set default state
+  m_trialEnabled = false;
+  m_deviceRegistered = false;
+  m_trialExpiry = QDateTime::currentDateTimeUtc();
 
   // Parse keys
   const auto object = document.object();
