@@ -238,6 +238,7 @@ Window {
         clip: true
         Layout.fillWidth: true
         Layout.fillHeight: true
+        Layout.minimumWidth: 356
         currentIndex: _tab.currentIndex
         Layout.topMargin: -parent.spacing - 1
         implicitHeight: Math.max(connectionSettings.implicitHeight,
