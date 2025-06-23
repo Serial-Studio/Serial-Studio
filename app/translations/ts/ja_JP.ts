@@ -1020,22 +1020,22 @@
 <context>
     <name>IO::ConsoleExport</name>
     <message>
-        <location filename="../../src/IO/ConsoleExport.cpp" line="165"/>
+        <location filename="../../src/IO/ConsoleExport.cpp" line="164"/>
         <source>Console Export is a Pro feature.</source>
         <translation>コンソールエクスポートはPro機能です。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConsoleExport.cpp" line="166"/>
+        <location filename="../../src/IO/ConsoleExport.cpp" line="165"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
         <translation>この機能にはライセンスが必要です。コンソールエクスポートを有効にするには購入してください。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConsoleExport.cpp" line="229"/>
+        <location filename="../../src/IO/ConsoleExport.cpp" line="228"/>
         <source>Console Output File Error</source>
         <translation>コンソール出力ファイルエラー</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConsoleExport.cpp" line="230"/>
+        <location filename="../../src/IO/ConsoleExport.cpp" line="229"/>
         <source>Cannot open file for writing!</source>
         <translation>書き込み用にファイルを開けません！</translation>
     </message>
@@ -2420,97 +2420,97 @@ Serial Studioをサポートしていただき、ありがとうございます�
 <context>
     <name>MQTT::Client</name>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="40"/>
+        <location filename="../../src/MQTT/Client.cpp" line="43"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="41"/>
+        <location filename="../../src/MQTT/Client.cpp" line="44"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="42"/>
+        <location filename="../../src/MQTT/Client.cpp" line="45"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="45"/>
+        <location filename="../../src/MQTT/Client.cpp" line="48"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="46"/>
+        <location filename="../../src/MQTT/Client.cpp" line="49"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="47"/>
+        <location filename="../../src/MQTT/Client.cpp" line="50"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3以上</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="48"/>
+        <location filename="../../src/MQTT/Client.cpp" line="51"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2以上</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="49"/>
+        <location filename="../../src/MQTT/Client.cpp" line="52"/>
         <source>Any Protocol</source>
         <translation>任意のプロトコル</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="50"/>
+        <location filename="../../src/MQTT/Client.cpp" line="53"/>
         <source>Secure Protocols Only</source>
         <translation>セキュアプロトコルのみ</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="53"/>
+        <location filename="../../src/MQTT/Client.cpp" line="56"/>
         <source>None</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="54"/>
+        <location filename="../../src/MQTT/Client.cpp" line="57"/>
         <source>Query Peer</source>
         <translation>ピアを照会</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="55"/>
+        <location filename="../../src/MQTT/Client.cpp" line="58"/>
         <source>Verify Peer</source>
         <translation>ピアを検証</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="56"/>
+        <location filename="../../src/MQTT/Client.cpp" line="59"/>
         <source>Auto Verify Peer</source>
         <translation>ピアを自動検証</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="332"/>
+        <location filename="../../src/MQTT/Client.cpp" line="335"/>
         <source>Use System Database</source>
         <translation>システムデータベースを使用</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="333"/>
+        <location filename="../../src/MQTT/Client.cpp" line="336"/>
         <source>Load From Folder...</source>
         <translation>フォルダーから読み込む...</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="347"/>
+        <location filename="../../src/MQTT/Client.cpp" line="350"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT サブスクライバー</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="348"/>
+        <location filename="../../src/MQTT/Client.cpp" line="351"/>
         <source>MQTT Publisher</source>
         <translation>MQTT パブリッシャー</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="413"/>
+        <location filename="../../src/MQTT/Client.cpp" line="416"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>MQTT 機能には商用ライセンスが必要です</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="414"/>
+        <location filename="../../src/MQTT/Client.cpp" line="417"/>
         <source>Connecting to MQTT brokers is only available with a valid Serial Studio commercial license.
 
 To unlock this feature, please activate your license or visit the store.</source>
@@ -2519,179 +2519,179 @@ To unlock this feature, please activate your license or visit the store.</source
 この機能を有効にするには、ライセンスをアクティベートするか、ストアをご覧ください。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="428"/>
+        <location filename="../../src/MQTT/Client.cpp" line="431"/>
         <source>Missing MQTT Topic</source>
         <translation>MQTT トピックがありません</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="429"/>
+        <location filename="../../src/MQTT/Client.cpp" line="432"/>
         <source>You must specify a topic before connecting as a publisher.</source>
         <translation>パブリッシャーとして接続する前にトピックを指定する必要があります。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="430"/>
-        <location filename="../../src/MQTT/Client.cpp" line="454"/>
+        <location filename="../../src/MQTT/Client.cpp" line="433"/>
+        <location filename="../../src/MQTT/Client.cpp" line="457"/>
         <source>Configuration Error</source>
         <translation>設定エラー</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="438"/>
+        <location filename="../../src/MQTT/Client.cpp" line="441"/>
         <source>MQTT Topic Not Set</source>
         <translation>MQTT トピックが設定されていません</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="439"/>
+        <location filename="../../src/MQTT/Client.cpp" line="442"/>
         <source>You won't receive any messages until a topic is configured.</source>
         <translation>トピックが設定されるまでメッセージを受信することはできません。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="440"/>
+        <location filename="../../src/MQTT/Client.cpp" line="443"/>
         <source>Configuration Warning</source>
         <translation>構成警告</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="452"/>
+        <location filename="../../src/MQTT/Client.cpp" line="455"/>
         <source>Invalid MQTT Topic</source>
         <translation>無効なMQTTトピック</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="453"/>
+        <location filename="../../src/MQTT/Client.cpp" line="456"/>
         <source>The topic "%1" is not valid.</source>
         <translation>トピック「%1」は無効です。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="647"/>
+        <location filename="../../src/MQTT/Client.cpp" line="681"/>
         <source>Select PEM Certificates Directory</source>
         <translation>PEM証明書ディレクトリを選択</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="750"/>
+        <location filename="../../src/MQTT/Client.cpp" line="784"/>
         <source>Subscription Error</source>
         <translation>購読エラー</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="751"/>
+        <location filename="../../src/MQTT/Client.cpp" line="785"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>トピック「%1」への購読に失敗しました。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="770"/>
+        <location filename="../../src/MQTT/Client.cpp" line="804"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>無効なMQTTプロトコルバージョン</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="771"/>
+        <location filename="../../src/MQTT/Client.cpp" line="805"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
         <translation>MQTTブローカーは、サポートされていないプロトコルバージョンのため接続を拒否しました。クライアントとブローカーが同じプロトコルバージョンをサポートしていることを確認してください。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="777"/>
+        <location filename="../../src/MQTT/Client.cpp" line="811"/>
         <source>Client ID Rejected</source>
         <translation>クライアントIDが拒否されました</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="778"/>
+        <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
         <translation>ブローカーはクライアントIDを拒否しました。それは不正な形式、長すぎる、またはすでに使用されている可能性があります。別のクライアントIDを使用してみてください。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="784"/>
+        <location filename="../../src/MQTT/Client.cpp" line="818"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTTサーバーが利用できません</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="785"/>
+        <location filename="../../src/MQTT/Client.cpp" line="819"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
         <translation>ネットワーク接続は確立されましたが、ブローカーは現在利用できません。ブローカーの状態を確認し、後でもう一度お試しください。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="791"/>
-        <location filename="../../src/MQTT/Client.cpp" line="861"/>
+        <location filename="../../src/MQTT/Client.cpp" line="825"/>
+        <location filename="../../src/MQTT/Client.cpp" line="895"/>
         <source>Authentication Error</source>
         <translation>認証エラー</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="792"/>
+        <location filename="../../src/MQTT/Client.cpp" line="826"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
         <translation>提供されたユーザー名またはパスワードが正しくないか、形式が不正です。資格情報を再確認し、もう一度お試しください。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="797"/>
+        <location filename="../../src/MQTT/Client.cpp" line="831"/>
         <source>Authorization Error</source>
         <translation>認可エラー</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="798"/>
+        <location filename="../../src/MQTT/Client.cpp" line="832"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
         <translation>MQTTブローカーは、権限が不十分なため接続を拒否しました。アカウントに必要なアクセス権があることを確認してください。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="804"/>
+        <location filename="../../src/MQTT/Client.cpp" line="838"/>
         <source>Network or Transport Error</source>
         <translation>ネットワークまたはトランスポートエラー</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="805"/>
+        <location filename="../../src/MQTT/Client.cpp" line="839"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
         <translation>ネットワークまたはトランスポート層の問題が発生し、予期しない接続障害が発生しました。ネットワーク接続とブローカー設定を確認してください。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="811"/>
+        <location filename="../../src/MQTT/Client.cpp" line="845"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTTプロトコル違反</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="812"/>
+        <location filename="../../src/MQTT/Client.cpp" line="846"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
         <translation>クライアントがMQTTプロトコルの違反を検出し、接続を閉じました。MQTTの実装が準拠しているか確認してください。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="818"/>
+        <location filename="../../src/MQTT/Client.cpp" line="852"/>
         <source>Unknown Error</source>
         <translation>不明なエラー</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="819"/>
+        <location filename="../../src/MQTT/Client.cpp" line="853"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
         <translation>予期しないエラーが発生しました。詳細についてはログを確認するか、アプリケーションを再起動してください。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="824"/>
+        <location filename="../../src/MQTT/Client.cpp" line="858"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5 エラー</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="825"/>
+        <location filename="../../src/MQTT/Client.cpp" line="859"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
         <translation>MQTT プロトコルレベル 5 のエラーが発生しました。詳細についてはブローカーログまたは理由コードを確認してください。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="847"/>
+        <location filename="../../src/MQTT/Client.cpp" line="881"/>
         <source>MQTT Authentication Failed</source>
         <translation>MQTT 認証に失敗しました</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="848"/>
+        <location filename="../../src/MQTT/Client.cpp" line="882"/>
         <source>Authentication failed: %.</source>
         <translation>認証に失敗しました: %。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="862"/>
+        <location filename="../../src/MQTT/Client.cpp" line="896"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
         <translation>拡張認証が必要ですが、MQTT 5.0 が有効になっていません。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="871"/>
+        <location filename="../../src/MQTT/Client.cpp" line="905"/>
         <source>Unknown</source>
         <translation>不明</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="875"/>
+        <location filename="../../src/MQTT/Client.cpp" line="909"/>
         <source>MQTT Authentication Required</source>
         <translation>MQTT 認証が必要です</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="876"/>
+        <location filename="../../src/MQTT/Client.cpp" line="910"/>
         <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
@@ -2700,22 +2700,22 @@ Please provide the necessary credentials.</source>
 必要な資格情報を提供してください。</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="884"/>
+        <location filename="../../src/MQTT/Client.cpp" line="918"/>
         <source>Enter MQTT Username</source>
         <translation>MQTTユーザー名を入力</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="885"/>
+        <location filename="../../src/MQTT/Client.cpp" line="919"/>
         <source>Username:</source>
         <translation>ユーザー名:</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="891"/>
+        <location filename="../../src/MQTT/Client.cpp" line="925"/>
         <source>Enter MQTT Password</source>
         <translation>MQTTパスワードを入力</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="892"/>
+        <location filename="../../src/MQTT/Client.cpp" line="926"/>
         <source>Password:</source>
         <translation>パスワード:</translation>
     </message>
@@ -2768,117 +2768,122 @@ Please provide the necessary credentials.</source>
         <translation>ポート</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="319"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="310"/>
+        <source>Client ID</source>
+        <translation>クライアントID</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="322"/>
         <source>Keep Alive (s)</source>
         <translation>キープアライブ (秒)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="332"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="335"/>
         <source>Clean Session</source>
         <translation>クリーンセッション</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="381"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="384"/>
         <source>Username</source>
         <translation>ユーザー名</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="386"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="389"/>
         <source>MQTT Username</source>
         <translation>MQTTユーザー名</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="393"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="396"/>
         <source>Password</source>
         <translation>パスワード</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="403"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="406"/>
         <source>MQTT Password</source>
         <translation>MQTTパスワード</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="460"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="463"/>
         <source>Version</source>
         <translation>バージョン</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="472"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="475"/>
         <source>Mode</source>
         <translation>モード</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="484"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="487"/>
         <source>Topic</source>
         <translation>トピック</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="489"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="492"/>
         <source>e.g. sensors/temperature or home/+/status</source>
         <translation>例: センサー/温度 または ホーム/+/ステータス</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="496"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="499"/>
         <source>Will Retain</source>
         <translation>Will Retain</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="507"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="510"/>
         <source>Will QoS</source>
         <translation>Will QoS</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="519"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="522"/>
         <source>Will Topic</source>
         <translation>Will トピック</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="524"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="527"/>
         <source>e.g. device/alerts/offline</source>
         <translation>例: デバイス/アラート/オフライン</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="531"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="534"/>
         <source>Will Message</source>
         <translation>Will メッセージ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="536"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="539"/>
         <source>e.g. Device unexpectedly disconnected</source>
         <translation>例: デバイスが予期せず切断されました</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="584"/>
         <source>Enable SSL</source>
         <translation>SSLを有効にする</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="592"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="595"/>
         <source>SSL Protocol</source>
         <translation>SSLプロトコル</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="608"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="611"/>
         <source>Verify Depth</source>
         <translation>検証深度</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="626"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="629"/>
         <source>Verify Mode</source>
         <translation>検証モード</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="658"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="661"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="677"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="680"/>
         <source>Disconnect</source>
         <translation>切断</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="677"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="680"/>
         <source>Connect</source>
         <translation>接続</translation>
     </message>
@@ -3404,24 +3409,24 @@ Please provide the necessary credentials.</source>
         <translation>ウェルカムテキストの読み込みに失敗しました :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="274"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="269"/>
         <source>Network error</source>
         <translation>ネットワークエラー</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="276"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="295"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="271"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="290"/>
         <location filename="../../src/Licensing/Trial.cpp" line="328"/>
         <source>Trial Activation Error</source>
         <translation>トライアルアクティベーションエラー</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="292"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="287"/>
         <source>Invalid server response</source>
         <translation>無効なサーバー応答</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="293"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="288"/>
         <source>The server returned malformed data: %1</source>
         <translation>サーバーが不正なデータを返しました: %1</translation>
     </message>
@@ -4045,104 +4050,104 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Welcome</name>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="176"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="177"/>
         <source>Welcome to %1!</source>
         <translation>%1へようこそ！</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="187"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="188"/>
         <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
         <translation>Serial Studioは、エンジニア、学生、メーカーのために作られた強力なリアルタイム可視化ツールです。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="198"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="199"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
         <translation>フル機能の14日間トライアルを開始するか、ライセンスキーでアクティベートするか、GPLv3ソースコードを自分でダウンロードしてコンパイルできます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="208"/>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="362"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="209"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="365"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
         <translation>Proを購入すると、著者を直接サポートし、将来の開発資金に貢献できます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="216"/>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="370"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="217"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="373"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
         <translation>自分でGPLv3バージョンを構築すると、コミュニティの成長を助け、技術的な貢献を奨励します。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="236"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="237"/>
         <source>Please wait...</source>
         <translation>お待ちください...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="268"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="270"/>
         <source>%1 days remaining in your trial.</source>
         <translation>トライアル期間はあと%1日です。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="278"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="280"/>
         <source>You’re currently using the fully-featured trial of %1 Pro. It’s valid for 14 days of personal, non-commercial use.</source>
         <translation>現在、%1 Proのフル機能トライアルを使用しています。これは個人の非商業利用として14日間有効です。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="291"/>
         <source>Upgrade to a paid plan to keep using Serial Studio Pro.</source>
         <translation>Serial Studio Proを使用し続けるには、有料プランにアップグレードしてください。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="299"/>
         <source>Or, compile the GPLv3 source code to use it for free.</source>
         <translation>または、GPLv3ソースコードをコンパイルして無料で使用してください。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="307"/>
         <source>To see available subscription plans, click "Upgrade Now" below.</source>
         <translation>利用可能なサブスクリプションプランを見るには、下の「今すぐアップグレード」をクリックしてください。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="332"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="335"/>
         <source>Your %1 trial has expired.</source>
         <translation>あなたの%1トライアルは期限切れです。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="342"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="345"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
         <translation>トライアル期間が終了しました。すべてのPro機能を使用して%1を継続するには、有料プランにアップグレードしてください。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="353"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="356"/>
         <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
         <translation>ご希望の場合は、GPLv3ライセンスの下でオープンソース版をコンパイルすることもできます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="381"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="384"/>
         <source>Thank you for trying %1!</source>
         <translation>%1をお試しいただきありがとうございます！</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="425"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="428"/>
         <source>Upgrade Now</source>
         <translation>今すぐアップグレード</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="437"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="440"/>
         <source>Activate</source>
         <translation>有効化</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="458"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="459"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="458"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="459"/>
         <source>Continue</source>
         <translation>続行</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="458"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="459"/>
         <source>Start Trial</source>
         <translation>トライアルを開始</translation>
     </message>

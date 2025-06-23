@@ -110,7 +110,7 @@ Window {
 
     property alias host: _host.text
     property alias port: _port.text
-    //property alias clientId: _clientID.text
+    property alias clientId: _clientID.text
     property alias keepAlive: _keepAlive.text
     property alias cleanSession: _cleanSession.checked
 
@@ -305,16 +305,19 @@ Window {
               }
             }
 
-            /*Label { text: qsTr("Client ID") + ":" }
-            TextField {
+            Label {
+              opacity: enabled ? 1 : 0.5
+              text: qsTr("Client ID") + ":"
+            } TextField {
               id: _clientID
               Layout.fillWidth: true
+              opacity: enabled ? 1 : 0.5
               text: Cpp_MQTT_Client.clientId
               onTextChanged: {
                 if (Cpp_MQTT_Client.clientId !== text)
                   Cpp_MQTT_Client.clientId = text
               }
-            }*/
+            }
 
             Label { text: qsTr("Keep Alive (s)") + ":" }
             TextField {

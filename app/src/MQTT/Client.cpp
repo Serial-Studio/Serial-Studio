@@ -36,6 +36,9 @@ MQTT::Client::Client()
   : m_publisher(false)
   , m_sslEnabled(false)
 {
+  // Set initial random client ID
+  regenerateClientId();
+
   // Initialize MQTT versions model
   m_mqttVersions.insert(tr("MQTT 3.1"), QMqttClient::MQTT_3_1);
   m_mqttVersions.insert(tr("MQTT 3.1.1"), QMqttClient::MQTT_3_1_1);
@@ -148,7 +151,7 @@ bool MQTT::Client::cleanSession() const
  */
 QString MQTT::Client::clientId() const
 {
-  return m_client.clientId();
+  return m_clientId;
 }
 
 /**
@@ -457,6 +460,10 @@ void MQTT::Client::openConnection()
     }
   }
 
+  // Use random client ID if needed
+  if (clientId().isEmpty())
+    regenerateClientId();
+
   // Connect the client
   if (m_sslEnabled)
     m_client.connectToHostEncrypted(m_sslConfiguration);
@@ -490,6 +497,32 @@ void MQTT::Client::toggleConnection()
 }
 
 /**
+ * @brief Regenerates and sets a new random MQTT client ID.
+ *
+ * This method creates a new client ID using a pseudo-random sequence of
+ * lowercase alphanumeric characters. The generated ID is 16 characters long
+ * and is assigned to the client using setClientId().
+ *
+ * This helps ensure uniqueness across MQTT client sessions and can be used
+ * to recover or randomize identity without requiring external input.
+ *
+ * @note The character set used includes only lowercase letters and digits.
+ */
+void MQTT::Client::regenerateClientId()
+{
+  QString clientId;
+  constexpr int length = 16;
+  const QString charset = "abcdefghijklmnopqrstuvwxyz0123456789";
+  for (int i = 0; i < length; ++i)
+  {
+    int index = QRandomGenerator::global()->bounded(charset.length());
+    clientId.append(charset.at(index));
+  }
+
+  setClientId(clientId);
+}
+
+/**
  * @brief Sets the client mode (0=subscriber, 1=publisher).
  * @param mode Index of the desired mode.
  */
@@ -516,6 +549,7 @@ void MQTT::Client::setTopic(const QString &topic)
  */
 void MQTT::Client::setClientId(const QString &id)
 {
+  m_clientId = id;
   m_client.setClientId(id);
   Q_EMIT mqttConfigurationChanged();
 }

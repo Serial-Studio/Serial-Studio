@@ -150,6 +150,7 @@ public slots:
   void openConnection();
   void closeConnection();
   void toggleConnection();
+  void regenerateClientId();
   void setMode(const quint8 mode);
   void setTopic(const QString &topic);
   void setClientId(const QString &id);
@@ -188,6 +189,8 @@ private:
   quint8 m_mode;
   bool m_publisher;
   bool m_sslEnabled;
+
+  QString m_clientId;
   QString m_topicFilter;
 
   QMqttClient m_client;
