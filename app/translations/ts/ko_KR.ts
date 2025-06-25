@@ -1298,19 +1298,29 @@
 <context>
     <name>IO::Manager</name>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="231"/>
+        <location filename="../../src/IO/Manager.cpp" line="237"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="232"/>
+        <location filename="../../src/IO/Manager.cpp" line="238"/>
         <source>Network Socket</source>
         <translation>네트워크 소켓</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="233"/>
+        <location filename="../../src/IO/Manager.cpp" line="239"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Manager.cpp" line="316"/>
+        <source>Your trial period has ended.</source>
+        <translation>체험 기간이 종료되었습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Manager.cpp" line="317"/>
+        <source>To continue using Serial Studio, please activate your license.</source>
+        <translation>Serial Studio를 계속 사용하려면 라이센스를 활성화하세요.</translation>
     </message>
 </context>
 <context>
@@ -1334,52 +1344,50 @@
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="135"/>
         <source>Select JSON map file</source>
-        <translation>JSON 맵 파일 선택</translation>
+        <translation type="vanished">JSON 맵 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="137"/>
         <source>JSON files</source>
-        <translation>JSON 파일</translation>
+        <translation type="vanished">JSON 파일</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="186"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="171"/>
         <source>JSON parse error</source>
         <translation>JSON 구문 오류</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="218"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="203"/>
         <source>Invalid JSON project format</source>
         <translation>잘못된 JSON 프로젝트 형식</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="231"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="216"/>
         <source>Cannot read JSON file</source>
         <translation>JSON 파일을 읽을 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="232"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="217"/>
         <source>Please check file permissions &amp; location</source>
         <translation>파일 권한 및 위치를 확인하세요</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="430"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="415"/>
         <source>Channel %1</source>
         <translation>채널 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="440"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="425"/>
         <source>Quick Plot</source>
         <translation>빠른 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="445"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="430"/>
         <source>Quick Plot Data</source>
         <translation>빠른 플롯 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="458"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="443"/>
         <source>Multiple Plots</source>
         <translation>다중 플롯</translation>
     </message>
@@ -3924,7 +3932,7 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="309"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="339"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
         <source>Disconnect</source>
         <translation>연결 해제</translation>
     </message>
@@ -3937,6 +3945,16 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>장치 또는 MQTT 브로커에 연결 또는 연결 해제</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="353"/>
+        <source>Activate</source>
+        <translation>활성화</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="357"/>
+        <source>Manage license and activate the application</source>
+        <translation>라이센스를 관리하고 애플리케이션을 활성화하세요</translation>
     </message>
 </context>
 <context>
@@ -4153,8 +4171,12 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="459"/>
+        <source>Open in Limited Mode</source>
+        <translation>제한 모드로 열기</translation>
+    </message>
+    <message>
         <source>Close</source>
-        <translation>닫기</translation>
+        <translation type="vanished">닫기</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="459"/>

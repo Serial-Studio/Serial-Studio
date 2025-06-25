@@ -195,7 +195,7 @@ Window {
           Label {
             opacity: 0.8
             text: qsTr("All Rights Reserved")
-            visible: Cpp_QtCommercial_Available
+            visible: Cpp_CommercialBuild
           }
         }
       }
@@ -207,7 +207,7 @@ Window {
         opacity: 0.8
         Layout.fillWidth: true
         Layout.minimumWidth: 360
-        visible: !Cpp_QtCommercial_Available
+        visible: !Cpp_CommercialBuild
         Layout.maximumWidth: _logo.implicitWidth
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         text: qsTr("%1 is free software: you can redistribute it and/or modify " +
@@ -228,7 +228,7 @@ Window {
         Layout.fillWidth: true
         Layout.maximumWidth: _logo.implicitWidth
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-        visible: Cpp_QtCommercial_Available && Cpp_Licensing_LemonSqueezy.isActivated
+        visible: Cpp_CommercialBuild && Cpp_Licensing_LemonSqueezy.isActivated
         text: qsTr("This configuration is licensed for commercial and proprietary use. " +
                    "It may be used in closed-source and commercial applications, " +
                    "subject to the terms of the commercial license.")
@@ -242,7 +242,7 @@ Window {
         Layout.fillWidth: true
         Layout.maximumWidth: _logo.implicitWidth
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-        visible: Cpp_QtCommercial_Available && !Cpp_Licensing_LemonSqueezy.isActivated
+        visible: Cpp_CommercialBuild && !Cpp_Licensing_LemonSqueezy.isActivated
         text: qsTr("This configuration is for personal and evaluation purposes only. " +
                    "Commercial use is prohibited unless a valid commercial " +
                    "license is activated.")
@@ -254,7 +254,7 @@ Window {
       Label {
         opacity: 0.7
         Layout.fillWidth: true
-        visible: Cpp_QtCommercial_Available
+        visible: Cpp_CommercialBuild
         Layout.maximumWidth: _logo.implicitWidth
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         text: qsTr("This software is provided 'as is' without warranty of " +
@@ -278,7 +278,7 @@ Window {
       Button {
         Layout.fillWidth: true
         text: qsTr("Manage License")
-        visible: Cpp_QtCommercial_Available
+        visible: Cpp_CommercialBuild
         onClicked: app.showLicenseDialog()
       }
 

@@ -114,7 +114,7 @@ Rectangle {
           icon.height: 18
           horizontalPadding: 8
           text: qsTr("Visit Website")
-          visible: !Cpp_QtCommercial_Available
+          visible: !Cpp_CommercialBuild
           icon.source: "qrc:/rcc/icons/buttons/website.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
           onClicked: Qt.openUrlExternally("https://serial-studio.com/")
@@ -129,7 +129,7 @@ Rectangle {
           icon.color: Cpp_ThemeManager.colors["button_text"]
 
           onClicked: {
-            if (Cpp_QtCommercial_Available)
+            if (Cpp_CommercialBuild)
               Cpp_Licensing_LemonSqueezy.buy()
             else
               Qt.openUrlExternally("https://store.serial-studio.com")
@@ -142,7 +142,7 @@ Rectangle {
           horizontalPadding: 8
           text: qsTr("Activate")
           onClicked: app.showLicenseDialog()
-          visible: Cpp_QtCommercial_Available
+          visible: Cpp_CommercialBuild
           icon.source: "qrc:/rcc/icons/buttons/activate.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
         }

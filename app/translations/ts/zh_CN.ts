@@ -1521,19 +1521,29 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">串口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="231"/>
+        <location filename="../../src/IO/Manager.cpp" line="237"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="232"/>
+        <location filename="../../src/IO/Manager.cpp" line="238"/>
         <source>Network Socket</source>
         <translation>网络套接字</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="233"/>
+        <location filename="../../src/IO/Manager.cpp" line="239"/>
         <source>Bluetooth LE</source>
         <translation>蓝牙低功耗</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Manager.cpp" line="316"/>
+        <source>Your trial period has ended.</source>
+        <translation>您的试用期已结束。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Manager.cpp" line="317"/>
+        <source>To continue using Serial Studio, please activate your license.</source>
+        <translation>要继续使用Serial Studio，请激活您的许可证。</translation>
     </message>
 </context>
 <context>
@@ -1557,47 +1567,45 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="135"/>
         <source>Select JSON map file</source>
-        <translation>选择JSON映射文件</translation>
+        <translation type="vanished">选择JSON映射文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="137"/>
         <source>JSON files</source>
-        <translation>JSON文件</translation>
+        <translation type="vanished">JSON文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="186"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="171"/>
         <source>JSON parse error</source>
         <translation>JSON解析错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="218"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="203"/>
         <source>Invalid JSON project format</source>
         <translation>JSON 项目格式无效</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="231"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="216"/>
         <source>Cannot read JSON file</source>
         <translation>无法读取JSON文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="232"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="217"/>
         <source>Please check file permissions &amp; location</source>
         <translation>请检查文件权限和位置</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="430"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="415"/>
         <source>Channel %1</source>
         <translation>通道 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="445"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="430"/>
         <source>Quick Plot Data</source>
         <translation>快速绘图数据</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="458"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="443"/>
         <source>Multiple Plots</source>
         <translation>多个绘图</translation>
     </message>
@@ -1606,7 +1614,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">数据网格</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="440"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="425"/>
         <source>Quick Plot</source>
         <translation>快速绘图</translation>
     </message>
@@ -5180,7 +5188,7 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="309"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="339"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
     </message>
@@ -5193,6 +5201,16 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>连接或断开设备或 MQTT 代理的连接</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="353"/>
+        <source>Activate</source>
+        <translation>激活</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="357"/>
+        <source>Manage license and activate the application</source>
+        <translation>管理许可证并激活应用程序</translation>
     </message>
     <message>
         <source>New</source>
@@ -5631,8 +5649,12 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="459"/>
+        <source>Open in Limited Mode</source>
+        <translation>在限制模式下打开</translation>
+    </message>
+    <message>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation type="vanished">关闭</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="459"/>

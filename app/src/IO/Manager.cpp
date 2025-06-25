@@ -28,6 +28,12 @@
 
 #include <QApplication>
 
+#ifdef BUILD_COMMERCIAL
+#  include "Misc/Utilities.h"
+#  include "Licensing/Trial.h"
+#  include "Licensing/LemonSqueezy.h"
+#endif
+
 //------------------------------------------------------------------------------
 // Constructor & singleton access functions
 //------------------------------------------------------------------------------
@@ -299,6 +305,20 @@ void IO::Manager::toggleConnection()
  */
 void IO::Manager::connectDevice()
 {
+  // Stop if trial expired
+#ifdef BUILD_COMMERCIAL
+  bool expired = Licensing::Trial::instance().trialExpired();
+  bool activated = Licensing::LemonSqueezy::instance().isActivated();
+  if (expired && !activated)
+  {
+    disconnectDevice();
+    Misc::Utilities::showMessageBox(
+        tr("Your trial period has ended."),
+        tr("To continue using Serial Studio, please activate your license."));
+    return;
+  }
+#endif
+
   // Configure current device
   if (driver())
   {

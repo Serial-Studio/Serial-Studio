@@ -102,7 +102,7 @@ Widgets.SmartWindow {
     ++appLaunchCount
 
     // Show donations dialog every 15 launches
-    if (root.appLaunchCount % 15 == 0)
+    if (root.appLaunchCount % 15 == 0 && !Cpp_CommercialBuild)
       donateDialog.showAutomatically()
 
     // Ask user if he/she wants to enable automatic updates

@@ -1521,19 +1521,29 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation type="vanished">Puerto serial</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="231"/>
+        <location filename="../../src/IO/Manager.cpp" line="237"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="232"/>
+        <location filename="../../src/IO/Manager.cpp" line="238"/>
         <source>Network Socket</source>
         <translation>Socket de red</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="233"/>
+        <location filename="../../src/IO/Manager.cpp" line="239"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Manager.cpp" line="316"/>
+        <source>Your trial period has ended.</source>
+        <translation>Tu periodo de prueba ha terminado.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Manager.cpp" line="317"/>
+        <source>To continue using Serial Studio, please activate your license.</source>
+        <translation>Para continuar usando Serial Studio, por favor activa tu licencia.</translation>
     </message>
 </context>
 <context>
@@ -1557,47 +1567,45 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="135"/>
         <source>Select JSON map file</source>
-        <translation>Seleccionar archivo de mapa JSON</translation>
+        <translation type="vanished">Seleccionar archivo de mapa JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="137"/>
         <source>JSON files</source>
-        <translation>Archivos JSON</translation>
+        <translation type="vanished">Archivos JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="186"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="171"/>
         <source>JSON parse error</source>
         <translation>Error al analizar JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="218"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="203"/>
         <source>Invalid JSON project format</source>
         <translation>Proyecto JSON inválido</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="231"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="216"/>
         <source>Cannot read JSON file</source>
         <translation>No se puede leer el archivo JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="232"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="217"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Por favor, verifica los permisos y la ubicación del archivo</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="430"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="415"/>
         <source>Channel %1</source>
         <translation>Canal %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="445"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="430"/>
         <source>Quick Plot Data</source>
         <translation>Gráfica Rápida de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="458"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="443"/>
         <source>Multiple Plots</source>
         <translation>Gráficas Múltiples</translation>
     </message>
@@ -1606,7 +1614,7 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation type="vanished">Cuadrícula de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="440"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="425"/>
         <source>Quick Plot</source>
         <translation>Gráfico Rápido</translation>
     </message>
@@ -5172,7 +5180,7 @@ Por favor, proporciona las credenciales necesarias.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="309"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="339"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
         <source>Disconnect</source>
         <translation>Desconectar</translation>
     </message>
@@ -5185,6 +5193,16 @@ Por favor, proporciona las credenciales necesarias.</translation>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>Conectar o desconectar del dispositivo o broker MQTT</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="353"/>
+        <source>Activate</source>
+        <translation>Activar</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="357"/>
+        <source>Manage license and activate the application</source>
+        <translation>Administrar licencia y activar la aplicación</translation>
     </message>
     <message>
         <source>New Project</source>
@@ -5635,8 +5653,12 @@ Por favor, proporciona las credenciales necesarias.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="459"/>
+        <source>Open in Limited Mode</source>
+        <translation>Abrir en Modo Limitado</translation>
+    </message>
+    <message>
         <source>Close</source>
-        <translation>Cerrar</translation>
+        <translation type="vanished">Cerrar</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="459"/>

@@ -86,7 +86,6 @@ public:
   [[nodiscard]] SerialStudio::OperationMode operationMode() const;
 
 public slots:
-  void loadJsonMap();
   void setupExternalConnections();
   void loadJsonMap(const QString &path);
   void setFrameParser(JSON::FrameParser *editor);

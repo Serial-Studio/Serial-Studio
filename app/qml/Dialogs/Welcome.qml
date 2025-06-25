@@ -61,7 +61,7 @@ Window {
   // Quit app
   //
   onClosing: {
-    if (Cpp_QtCommercial_Available)
+    if (Cpp_CommercialBuild)
       if (!mainWindow.visible)
         Qt.quit()
   }
@@ -454,17 +454,19 @@ Window {
             rightPadding: 8
             Layout.alignment: Qt.AlignVCenter
             highlighted: !Cpp_Licensing_Trial.trialExpired
+            icon.source: "qrc:/rcc/icons/buttons/apply.svg"
             icon.color: Cpp_ThemeManager.colors["button_text"]
-            icon.source: Cpp_Licensing_Trial.trialExpired  ? "qrc:/rcc/icons/buttons/close.svg" : "qrc:/rcc/icons/buttons/apply.svg"
-            text: Cpp_Licensing_Trial.trialExpired ? qsTr("Close") : (Cpp_Licensing_Trial.trialEnabled ? qsTr("Continue") : qsTr("Start Trial"))
+            text: Cpp_Licensing_Trial.trialExpired ? qsTr("Open in Limited Mode") : (Cpp_Licensing_Trial.trialEnabled ? qsTr("Continue") : qsTr("Start Trial"))
             onClicked: {
-              if (Cpp_Licensing_Trial.trialExpired)
+              if (Cpp_Licensing_Trial.trialExpired) {
+                app.showMainWindow()
                 root.close()
+              }
 
               else if (!Cpp_Licensing_Trial.trialEnabled)
                 Cpp_Licensing_Trial.enableTrial()
 
-              else if (Cpp_Licensing_Trial.trialEnabled) {
+              else {
                 app.showMainWindow()
                 root.close()
               }

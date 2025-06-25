@@ -1298,19 +1298,29 @@
 <context>
     <name>IO::Manager</name>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="231"/>
+        <location filename="../../src/IO/Manager.cpp" line="237"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="232"/>
+        <location filename="../../src/IO/Manager.cpp" line="238"/>
         <source>Network Socket</source>
         <translation>Ağ Soketi</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="233"/>
+        <location filename="../../src/IO/Manager.cpp" line="239"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Manager.cpp" line="316"/>
+        <source>Your trial period has ended.</source>
+        <translation>Deneme süreniz sona erdi.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Manager.cpp" line="317"/>
+        <source>To continue using Serial Studio, please activate your license.</source>
+        <translation>Serial Studio'yu kullanmaya devam etmek için lütfen lisansınızı etkinleştirin.</translation>
     </message>
 </context>
 <context>
@@ -1334,52 +1344,50 @@
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="135"/>
         <source>Select JSON map file</source>
-        <translation>JSON harita dosyasını seçin</translation>
+        <translation type="vanished">JSON harita dosyasını seçin</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="137"/>
         <source>JSON files</source>
-        <translation>JSON dosyaları</translation>
+        <translation type="vanished">JSON dosyaları</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="186"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="171"/>
         <source>JSON parse error</source>
         <translation>JSON ayrıştırma hatası</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="218"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="203"/>
         <source>Invalid JSON project format</source>
         <translation>Geçersiz JSON proje formatı</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="231"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="216"/>
         <source>Cannot read JSON file</source>
         <translation>JSON dosyası okunamıyor</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="232"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="217"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Lütfen dosya izinlerini ve konumunu kontrol edin</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="430"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="415"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="440"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="425"/>
         <source>Quick Plot</source>
         <translation>Hızlı Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="445"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="430"/>
         <source>Quick Plot Data</source>
         <translation>Hızlı Grafik Verisi</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="458"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="443"/>
         <source>Multiple Plots</source>
         <translation>Birden Fazla Grafik</translation>
     </message>
@@ -3924,7 +3932,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="309"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="339"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
         <source>Disconnect</source>
         <translation>Bağlantıyı Kes</translation>
     </message>
@@ -3937,6 +3945,16 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>Cihaz veya MQTT broker ile bağlantı kur veya bağlantıyı kes</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="353"/>
+        <source>Activate</source>
+        <translation>Etkinleştir</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="357"/>
+        <source>Manage license and activate the application</source>
+        <translation>Lisansı yönetin ve uygulamayı etkinleştirin</translation>
     </message>
 </context>
 <context>
@@ -4153,8 +4171,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="459"/>
+        <source>Open in Limited Mode</source>
+        <translation>Sınırlı Modda Aç</translation>
+    </message>
+    <message>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation type="vanished">Kapat</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="459"/>

@@ -20,7 +20,6 @@
  */
 
 #include <QFileInfo>
-#include <QFileDialog>
 
 #include "IO/Manager.h"
 #include "Misc/Utilities.h"
@@ -124,20 +123,6 @@ JSON::FrameParser *JSON::FrameBuilder::frameParser() const
 SerialStudio::OperationMode JSON::FrameBuilder::operationMode() const
 {
   return m_opMode;
-}
-
-/**
- * Creates a file dialog & lets the user select the JSON file map
- */
-void JSON::FrameBuilder::loadJsonMap()
-{
-  const auto file = QFileDialog::getOpenFileName(
-      nullptr, tr("Select JSON map file"),
-      JSON::ProjectModel::instance().jsonProjectsPath(),
-      tr("JSON files") + QStringLiteral(" (*.json)"));
-
-  if (!file.isEmpty())
-    loadJsonMap(file);
 }
 
 /**

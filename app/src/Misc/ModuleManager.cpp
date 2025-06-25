@@ -369,7 +369,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_IO_ConsoleExport", ioConsoleExport);
   c->setContextProperty("Cpp_IO_FileTransmission", ioFileTransmission);
   c->setContextProperty("Cpp_Misc_WorkspaceManager", miscWorkspaceManager);
-  c->setContextProperty("Cpp_QtCommercial_Available", qtCommercialAvailable);
+  c->setContextProperty("Cpp_CommercialBuild", qtCommercialAvailable);
 
   // Register commercial C++ modules with QML
 #ifdef BUILD_COMMERCIAL

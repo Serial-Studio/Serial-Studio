@@ -167,7 +167,7 @@ Widgets.Pane {
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
-        onClicked: Cpp_JSON_FrameBuilder.loadJsonMap()
+        onClicked: Cpp_JSON_ProjectModel.openJsonFile()
         enabled: Cpp_JSON_FrameBuilder.operationMode === SerialStudio.ProjectFile
         text: (Cpp_JSON_FrameBuilder.jsonMapFilename.length ?
                  qsTr("Change Project File (%1)").arg(Cpp_JSON_FrameBuilder.jsonMapFilename) :

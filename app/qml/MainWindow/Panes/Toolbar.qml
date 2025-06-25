@@ -174,7 +174,7 @@ Rectangle {
       Layout.fillHeight: true
       Layout.maximumHeight: 64
       Layout.alignment: Qt.AlignVCenter
-      visible: Cpp_QtCommercial_Available
+      visible: Cpp_CommercialBuild
       color: Cpp_ThemeManager.colors["toolbar_separator"]
     }
 
@@ -209,7 +209,7 @@ Rectangle {
       Layout.fillHeight: true
       Layout.maximumHeight: 64
       Layout.alignment: Qt.AlignVCenter
-      visible: Cpp_QtCommercial_Available
+      visible: Cpp_CommercialBuild
       color: Cpp_ThemeManager.colors["toolbar_separator"]
     }
 
@@ -217,7 +217,7 @@ Rectangle {
     // MQTT Setup
     //
     Loader {
-      active: Cpp_QtCommercial_Available
+      active: Cpp_CommercialBuild
       sourceComponent: Component {
         Widgets.ToolbarButton {
           text: qsTr("MQTT")
@@ -312,9 +312,14 @@ Rectangle {
       ToolTip.text: qsTr("Connect or disconnect from device or MQTT broker")
 
       //
+      // Hide button when trial expires
+      //
+      visible: Cpp_CommercialBuild ? (Cpp_Licensing_Trial.trialExpired && !Cpp_Licensing_LemonSqueezy.isActivated ? false : true) : true
+
+      //
       // Get MQTT status
       //
-      readonly property bool mqttSubscriber: Cpp_QtCommercial_Available ? (Cpp_MQTT_Client.isConnected && Cpp_MQTT_Client.isSubscriber) : false
+      readonly property bool mqttSubscriber: Cpp_CommercialBuild ? (Cpp_MQTT_Client.isConnected && Cpp_MQTT_Client.isSubscriber) : false
 
       //
       // Enable/disable the connect button
@@ -339,6 +344,18 @@ Rectangle {
         text: " " + qsTr("Disconnect") + " "
         font: Cpp_Misc_CommonFonts.boldUiFont
       }
+    }
+
+    //
+    // Activate button
+    //
+    Widgets.ToolbarButton {
+      text: qsTr("Activate")
+      onClicked: app.showLicenseDialog()
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/rcc/icons/toolbar/activate.svg"
+      ToolTip.text: qsTr("Manage license and activate the application")
+      visible: Cpp_CommercialBuild ? Cpp_Licensing_Trial.trialExpired && !Cpp_Licensing_LemonSqueezy.isActivated : false
     }
 
     //

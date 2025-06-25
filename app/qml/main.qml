@@ -35,8 +35,8 @@ Item {
   //
   // Define application name
   //
-  readonly property string appIcon: Cpp_QtCommercial_Available && Cpp_Licensing_LemonSqueezy.isActivated ? "qrc:/rcc/logo/icon-pro.png" : "qrc:/rcc/logo/icon.png"
-  readonly property bool proVersion: Cpp_QtCommercial_Available ? Cpp_Licensing_LemonSqueezy.isActivated || Cpp_Licensing_Trial.trialEnabled : false
+  readonly property string appIcon: Cpp_CommercialBuild && Cpp_Licensing_LemonSqueezy.isActivated ? "qrc:/rcc/logo/icon-pro.png" : "qrc:/rcc/logo/icon.png"
+  readonly property bool proVersion: Cpp_CommercialBuild ? Cpp_Licensing_LemonSqueezy.isActivated || Cpp_Licensing_Trial.trialEnabled : false
 
   //
   // Check for updates (non-silent mode)
@@ -61,7 +61,7 @@ Item {
   // Launch welcome dialog or show main window during starup
   //
   Component.onCompleted: {
-    if (Cpp_QtCommercial_Available) {
+    if (Cpp_CommercialBuild) {
       if (!Cpp_Licensing_LemonSqueezy.isActivated) {
         app.showWelcomeDialog()
         return
@@ -161,13 +161,13 @@ Item {
   // Dialog display functions (commercial)
   //
   function showLicenseDialog() {
-    if (Cpp_QtCommercial_Available)
+    if (Cpp_CommercialBuild)
       licenseDialog.activate()
   } function showMqttConfiguration() {
-    if (Cpp_QtCommercial_Available)
+    if (Cpp_CommercialBuild)
       mqttConfiguration.activate()
   } function showWelcomeDialog() {
-    if (Cpp_QtCommercial_Available)
+    if (Cpp_CommercialBuild)
       welcomeDialog.activate()
   }
 }

@@ -418,5 +418,6 @@
         <file>themes/ironframe.json</file>
         <file>themes/light.json</file>
         <file>icons/dashboard-buttons/earth.svg</file>
+        <file>icons/toolbar/activate.svg</file>
     </qresource>
 </RCC>
