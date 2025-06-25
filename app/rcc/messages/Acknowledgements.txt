@@ -1,7 +1,19 @@
 # Acknowledgements
 
-Serial Studio makes use of several libraries in order to provide functionality.
-Below, you can find the libraries used and their respective licenses:
+Serial Studio makes use of several libraries and data providers to deliver its full functionality.
+Below is a list of external components and services, along with their respective licenses or attribution.
+
+## Satellite & Map Imagery
+
+Satellite and mapping imagery in this application is sourced from the following providers:
+
+**NASA GIBS (Global Imagery Browse Services)**
+VIIRS Corrected Reflectance (TrueColor) imagery is provided by NASA EOSDIS through the GIBS platform.
+[https://earthdata.nasa.gov/gibs](https://earthdata.nasa.gov/gibs)
+
+**Esri / ArcGIS Online**
+Basemaps and geographic reference layers are provided by Esri through ArcGIS Online services, including World Imagery, Street Map, Topographic, and others.
+[https://www.esri.com/en-us/arcgis/products/arcgis-online/overview](https://www.esri.com/en-us/arcgis/products/arcgis-online/overview)
 
 ## SIMDe
 

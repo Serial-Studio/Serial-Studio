@@ -838,14 +838,22 @@
         <translation type="vanished">지도 레이어: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="165"/>
         <source>VIIRS: %1</source>
-        <translation>VIIRS: %1</translation>
+        <translation type="vanished">VIIRS: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="vanished">지도: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="168"/>
+        <source>Base Map: %1</source>
+        <translation>기본 지도: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="189"/>
-        <source>Map: %1</source>
-        <translation>지도: %1</translation>
+        <source>VIIRS Imagery: %1</source>
+        <translation>VIIRS 이미지: %1</translation>
     </message>
 </context>
 <context>

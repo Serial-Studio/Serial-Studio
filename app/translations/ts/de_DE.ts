@@ -905,14 +905,22 @@
         <translation type="vanished">Kartenebene: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="165"/>
         <source>VIIRS: %1</source>
-        <translation>VIIRS: %1</translation>
+        <translation type="vanished">VIIRS: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="vanished">Karte: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="168"/>
+        <source>Base Map: %1</source>
+        <translation>Basiskarte: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="189"/>
-        <source>Map: %1</source>
-        <translation>Karte: %1</translation>
+        <source>VIIRS Imagery: %1</source>
+        <translation>VIIRS-Bildmaterial: %1</translation>
     </message>
 </context>
 <context>

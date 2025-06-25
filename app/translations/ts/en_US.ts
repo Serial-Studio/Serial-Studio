@@ -808,13 +808,13 @@
 <context>
     <name>GPS</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="165"/>
-        <source>VIIRS: %1</source>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="168"/>
+        <source>Base Map: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="189"/>
-        <source>Map: %1</source>
+        <source>VIIRS Imagery: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

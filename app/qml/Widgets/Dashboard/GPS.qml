@@ -154,45 +154,46 @@ Item {
       }
     }
 
-    ComboBox {
-      id: _weatherOffset
+    ColumnLayout {
+      spacing: 2
       Layout.fillWidth: true
-      Layout.minimumHeight: 24
-      Layout.maximumHeight: 24
-      opacity: enabled ? 1 : 0.5
-      enabled: _showWeather.checked
-      Layout.alignment: Qt.AlignVCenter
-      displayText: qsTr("VIIRS: %1").arg(currentText)
 
-      onCurrentIndexChanged: {
-        if (root.model) {
-          if (root.model.weatherOffset !== currentIndex) {
-            root.model.weatherOffset = currentIndex
-            currentIndex = root.model.weatherOffset
+      ComboBox {
+        id: _mapType
+        Layout.fillWidth: true
+        Layout.minimumHeight: 18
+        Layout.maximumHeight: 18
+        Layout.alignment: Qt.AlignVCenter
+        font: Cpp_Misc_CommonFonts.customUiFont(0.85)
+        displayText: qsTr("Base Map: %1").arg(currentText)
+
+        onCurrentIndexChanged: {
+          if (root.model) {
+            if (root.model.mapType !== currentIndex) {
+              root.model.mapType = currentIndex
+              currentIndex = root.model.mapType
+            }
           }
         }
       }
-    }
 
-    Rectangle {
-      implicitWidth: 1
-      implicitHeight: 24
-      color: Cpp_ThemeManager.colors["widget_border"]
-    }
+      ComboBox {
+        id: _weatherOffset
+        Layout.fillWidth: true
+        Layout.minimumHeight: 18
+        Layout.maximumHeight: 18
+        opacity: enabled ? 1 : 0.5
+        enabled: _showWeather.checked
+        Layout.alignment: Qt.AlignVCenter
+        font: Cpp_Misc_CommonFonts.customUiFont(0.85)
+        displayText: qsTr("VIIRS Imagery: %1").arg(currentText)
 
-    ComboBox {
-      id: _mapType
-      Layout.fillWidth: true
-      Layout.minimumHeight: 24
-      Layout.maximumHeight: 24
-      Layout.alignment: Qt.AlignVCenter
-      displayText: qsTr("Map: %1").arg(currentText)
-
-      onCurrentIndexChanged: {
-        if (root.model) {
-          if (root.model.mapType !== currentIndex) {
-            root.model.mapType = currentIndex
-            currentIndex = root.model.mapType
+        onCurrentIndexChanged: {
+          if (root.model) {
+            if (root.model.weatherOffset !== currentIndex) {
+              root.model.weatherOffset = currentIndex
+              currentIndex = root.model.weatherOffset
+            }
           }
         }
       }

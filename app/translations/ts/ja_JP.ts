@@ -838,14 +838,22 @@
         <translation type="vanished">マップレイヤー: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="165"/>
         <source>VIIRS: %1</source>
-        <translation>VIIRS: %1</translation>
+        <translation type="vanished">VIIRS: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="vanished">地図: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="168"/>
+        <source>Base Map: %1</source>
+        <translation>ベースマップ: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="189"/>
-        <source>Map: %1</source>
-        <translation>地図: %1</translation>
+        <source>VIIRS Imagery: %1</source>
+        <translation>VIIRS イメージ: %1</translation>
     </message>
 </context>
 <context>

@@ -1045,7 +1045,9 @@ void Widgets::GPS::paintAttributionText(QPainter *painter, const QSize &view)
 
   // Attribution string to display
   const int margin = 6;
-  const QString attribution = "Copyright © Esri, Maxar, Earthstar Geographics";
+  QString attribution = "Copyright © Esri, Maxar, Earthstar Geographics";
+  if (m_showWeather)
+    attribution += " | NASA EOSDIS GIBS, Suomi NPP VIIRS";
 
   // Font styling for the label
   const QFont font = Misc::CommonFonts::instance().customUiFont(0.85);
