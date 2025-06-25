@@ -417,5 +417,6 @@
         <file>themes/default.json</file>
         <file>themes/ironframe.json</file>
         <file>themes/light.json</file>
+        <file>icons/dashboard-buttons/earth.svg</file>
     </qresource>
 </RCC>

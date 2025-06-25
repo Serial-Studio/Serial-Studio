@@ -462,32 +462,32 @@
         <translation>Serial Studio'yu Destekleyin</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="195"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="143"/>
         <source>Support the development of %1!</source>
         <translation>%1'in gelişimini destekleyin!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="206"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="154"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio, gönüllüler tarafından desteklenen ücretsiz ve açık kaynaklı bir yazılımdır. Geliştirme çabalarını desteklemek için bağış yapmayı veya Pro lisansı almayı düşünün :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="219"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="167"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>Bu projeyi paylaşarak, hataları bildirerek ve yeni özellikler önererek de destekleyebilirsiniz!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="235"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="183"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="249"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="197"/>
         <source>Donate</source>
         <translation>Bağış Yap</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="267"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="215"/>
         <source>Get Serial Studio Pro</source>
         <translation>Serial Studio Pro Al</translation>
     </message>
@@ -834,9 +834,18 @@
         <translation type="vanished">Harita Türü: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="96"/>
         <source>Map Layer: %1</source>
-        <translation>Harita Katmanı: %1</translation>
+        <translation type="vanished">Harita Katmanı: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="165"/>
+        <source>VIIRS: %1</source>
+        <translation>VIIRS: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="189"/>
+        <source>Map: %1</source>
+        <translation>Harita: %1</translation>
     </message>
 </context>
 <context>
@@ -3968,17 +3977,17 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="866"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="879"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="883"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="896"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Yedek)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="945"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="958"/>
         <source>LED Panel (%1)</source>
         <translation>LED Paneli (%1)</translation>
     </message>
@@ -4211,47 +4220,66 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
 <context>
     <name>Widgets::GPS</name>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="72"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="79"/>
         <source>Satellite Imagery</source>
         <translation>Uydu Görüntüsü</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="72"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="79"/>
+        <source>Satellite Imagery with Labels</source>
+        <translation>Etiketli Uydu Görüntüleri</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
         <source>Street Map</source>
         <translation>Sokak Haritası</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="73"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
         <source>Topographic Map</source>
         <translation>Topografik Harita</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="73"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
         <source>Terrain</source>
         <translation>Arazi</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="74"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="81"/>
         <source>Light Gray Canvas</source>
         <translation>Açık Gri Tuval</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="74"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="81"/>
         <source>Dark Gray Canvas</source>
         <translation>Koyu Gri Tuval</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="75"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="82"/>
         <source>National Geographic</source>
         <translation>National Geographic</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="433"/>
+        <source>Today (partial</source>
+        <translation type="vanished">Bugün (kısmi</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
+        <source>Yesterday (full)</source>
+        <translation>Dün (tam)</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
+        <source>Today (partial)</source>
+        <translation>Bugün (kısmi)</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="385"/>
         <source>Additional map layers are available only for Pro users.</source>
         <translation>Ek harita katmanları yalnızca Pro kullanıcılar için mevcuttur.</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="434"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="386"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>ArcGIS API anahtarı gerçek maliyetler getirdiği için sınırsız erişim sunamıyoruz.</translation>
     </message>
@@ -4267,7 +4295,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1194"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1195"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Izgara Aralığı: %1 birim</translation>
     </message>

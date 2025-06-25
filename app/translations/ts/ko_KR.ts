@@ -462,32 +462,32 @@
         <translation>Serial Studio 지원</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="195"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="143"/>
         <source>Support the development of %1!</source>
         <translation>%1의 개발을 지원하세요!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="206"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="154"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio는 자원봉사자들이 지원하는 무료 및 오픈 소스 소프트웨어입니다. 개발 노력을 지원하기 위해 기부하거나 Pro 라이센스를 고려해보세요 :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="219"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="167"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>이 프로젝트를 공유하거나, 버그를 보고하고, 새로운 기능을 제안함으로써도 지원할 수 있습니다!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="235"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="183"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="249"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="197"/>
         <source>Donate</source>
         <translation>기부하기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="267"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="215"/>
         <source>Get Serial Studio Pro</source>
         <translation>Serial Studio Pro 얻기</translation>
     </message>
@@ -834,9 +834,18 @@
         <translation type="vanished">지도 유형: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="96"/>
         <source>Map Layer: %1</source>
-        <translation>지도 레이어: %1</translation>
+        <translation type="vanished">지도 레이어: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="165"/>
+        <source>VIIRS: %1</source>
+        <translation>VIIRS: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="189"/>
+        <source>Map: %1</source>
+        <translation>지도: %1</translation>
     </message>
 </context>
 <context>
@@ -3968,17 +3977,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="866"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="879"/>
         <source>Console</source>
         <translation>콘솔</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="883"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="896"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (대체)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="945"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="958"/>
         <source>LED Panel (%1)</source>
         <translation>LED 패널 (%1)</translation>
     </message>
@@ -4211,47 +4220,66 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Widgets::GPS</name>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="72"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="79"/>
         <source>Satellite Imagery</source>
         <translation>위성 이미지</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="72"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="79"/>
+        <source>Satellite Imagery with Labels</source>
+        <translation>레이블이 있는 위성 이미지</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
         <source>Street Map</source>
         <translation>거리 지도</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="73"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
         <source>Topographic Map</source>
         <translation>지형도</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="73"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
         <source>Terrain</source>
         <translation>지형</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="74"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="81"/>
         <source>Light Gray Canvas</source>
         <translation>밝은 회색 캔버스</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="74"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="81"/>
         <source>Dark Gray Canvas</source>
         <translation>어두운 회색 캔버스</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="75"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="82"/>
         <source>National Geographic</source>
         <translation>내셔널 지오그래픽</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="433"/>
+        <source>Today (partial</source>
+        <translation type="vanished">오늘 (부분)</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
+        <source>Yesterday (full)</source>
+        <translation>어제 (전체)</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
+        <source>Today (partial)</source>
+        <translation>오늘 (부분)</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="385"/>
         <source>Additional map layers are available only for Pro users.</source>
         <translation>추가 지도 레이어는 프로 사용자에게만 제공됩니다.</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="434"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="386"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>ArcGIS API 키는 실제 비용이 발생하기 때문에 무제한 액세스를 제공할 수 없습니다.</translation>
     </message>
@@ -4267,7 +4295,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1194"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1195"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>격자 간격: %1 단위</translation>
     </message>

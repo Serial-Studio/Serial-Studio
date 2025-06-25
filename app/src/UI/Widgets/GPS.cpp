@@ -36,6 +36,7 @@
 //------------------------------------------------------------------------------
 
 constexpr int MIN_ZOOM = 2;
+constexpr int WEATHER_MAX_ZOOM = 9;
 
 //------------------------------------------------------------------------------
 // Constructor function
@@ -55,8 +56,11 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
   , m_zoom(MIN_ZOOM)
   , m_index(index)
   , m_mapType(0)
+  , m_weatherOffset(0)
   , m_autoCenter(true)
+  , m_showWeather(false)
   , m_plotTrajectory(true)
+  , m_enableReferenceLayer(false)
   , m_altitude(0)
   , m_latitude(0)
   , m_longitude(0)
@@ -69,16 +73,17 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
   setFlags(QQuickPaintedItem::ItemHasContents);
 
   // Configure cache
-  m_tileCache.setMaxCost(256);
+  m_tileCache.setMaxCost(512);
 
   // Set user-friendly map names
-  m_mapTypes << tr("Satellite Imagery") << tr("Street Map")
-             << tr("Topographic Map") << tr("Terrain")
+  m_mapTypes << tr("Satellite Imagery") << tr("Satellite Imagery with Labels")
+             << tr("Street Map") << tr("Topographic Map") << tr("Terrain")
              << tr("Light Gray Canvas") << tr("Dark Gray Canvas")
              << tr("National Geographic");
 
   // Set URL/tile server map type IDs
   m_mapIDs << "World_Imagery"
+           << "World_Imagery"
            << "World_Street_Map"
            << "World_Topo_Map"
            << "World_Terrain_Base"
@@ -86,13 +91,19 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
            << "Canvas/World_Dark_Gray_Base"
            << "NatGeo_World_Map";
 
+  // Set weather layers
+  m_weatherDays << 0 << -1;
+  m_weatherLayers << tr("Today (partial)") << tr("Yesterday (full)");
+
   // Set max zoom for each map type
-  m_mapMaxZoom << 18 << 18 << 18 << 9 << 16 << 16 << 16;
+  m_mapMaxZoom << 18 << 18 << 18 << 18 << 9 << 16 << 16 << 16;
 
   // Read settings
   setMapType(m_settings.value("gpsMapType", 0).toInt());
-  setAutoCenter(m_settings.value("gpsAutoCenter", true).toBool());
-  setPlotTrajectory(m_settings.value("gpsPlotTrajectory", true).toBool());
+  m_showWeather = m_settings.value("gpsWeather", false).toBool();
+  m_autoCenter = m_settings.value("gpsAutoCenter", true).toBool();
+  m_weatherOffset = m_settings.value("gpsWeatherOffset", 0).toInt();
+  m_plotTrajectory = m_settings.value("gpsPlotTrajectory", true).toBool();
 
   // Connect to the theme manager to update the colors
   onThemeChanged();
@@ -203,12 +214,39 @@ int Widgets::GPS::zoomLevel() const
 }
 
 /**
+ * @brief Returns the selected weather imagery date offset for the GIBS layer.
+ *
+ * This value represents the number of days to subtract from the current UTC
+ * date when requesting weather imagery. Typically used to populate or react to
+ * a combo box selection (e.g., 0 = today, 1 = yesterday, etc.).
+ *
+ * @return The weather imagery date offset in days.
+ */
+int Widgets::GPS::weatherOffset() const
+{
+  return m_weatherOffset;
+}
+
+/**
  * @brief Returns @c true if the map shall be centered on the coordinate
  *        every time it's updated.
  */
 bool Widgets::GPS::autoCenter() const
 {
   return m_autoCenter;
+}
+
+/**
+ * @brief Returns the current state of the weather overlay visibility flag.
+ *
+ * This flag determines whether weather tiles from NASA GIBS are being
+ * requested and rendered over the base map.
+ *
+ * @return True if the weather overlay is enabled, false otherwise.
+ */
+bool Widgets::GPS::showWeather() const
+{
+  return m_showWeather;
 }
 
 /**
@@ -234,6 +272,23 @@ bool Widgets::GPS::plotTrajectory() const
 const QStringList &Widgets::GPS::mapTypes()
 {
   return m_mapTypes;
+}
+
+/**
+ * @brief Returns the list of available weather layer labels for the UI.
+ *
+ * This list is typically used to populate a combo box, where each entry
+ * represents a relative date offset for selecting weather imagery
+ * (e.g., "Today", "Yesterday", "2 Days Ago", etc.).
+ *
+ * The index in this list corresponds to the offset used when constructing
+ * GIBS tile URLs.
+ *
+ * @return Reference to the list of weather layer labels.
+ */
+const QStringList &Widgets::GPS::weatherLayers()
+{
+  return m_weatherLayers;
 }
 
 //------------------------------------------------------------------------------
@@ -336,6 +391,11 @@ void Widgets::GPS::setMapType(const int type)
     m_tileCache.clear();
     m_settings.setValue(QStringLiteral("gpsMapType"), mapId);
 
+    if (mapId == 1)
+      m_enableReferenceLayer = true;
+    else
+      m_enableReferenceLayer = false;
+
     if (m_zoom > m_mapMaxZoom[type])
       m_zoom = m_mapMaxZoom[type];
 
@@ -344,6 +404,37 @@ void Widgets::GPS::setMapType(const int type)
     updateData();
 
     Q_EMIT mapTypeChanged();
+  }
+}
+
+/**
+ * @brief Sets the weather imagery date offset based on the selected index.
+ *
+ * This function updates the offset used to request weather tiles from NASA
+ * GIBS, where the index typically represents how many days to subtract from the
+ * current UTC date (e.g., 0 = today, 1 = yesterday, etc.). The index is clamped
+ * to valid bounds based on the available weather layers.
+ *
+ * If the value changes, the map tile cache is cleared and weather tiles are
+ * re-fetched accordingly. The setting is also persisted to application
+ * settings.
+ *
+ * @param index Index of the selected weather offset (0 or greater).
+ */
+void Widgets::GPS::setWeatherOffset(const int index)
+{
+  auto id = qBound(0, index, m_weatherLayers.count() - 1);
+  if (m_weatherOffset != id)
+  {
+    m_weatherOffset = id;
+    m_tileCache.clear();
+    m_settings.setValue(QStringLiteral("gpsWeatherOffset"), id);
+
+    updateTiles();
+    precacheWorld();
+    updateData();
+
+    Q_EMIT weatherOffsetChanged();
   }
 }
 
@@ -362,6 +453,35 @@ void Widgets::GPS::setAutoCenter(const bool enabled)
       center();
 
     Q_EMIT autoCenterChanged();
+  }
+}
+
+/**
+ * @brief Enables or disables the display of weather overlay tiles from NASA
+ *        GIBS.
+ *
+ * When enabled, this flag triggers additional tile requests and rendering
+ * of real-time weather imagery sourced from NASA's Global Imagery Browse
+ * Services (GIBS). This setting is persisted to user configuration under the
+ * "gpsWeather" key.
+ *
+ * Changing this value forces a tile refresh, re-fetching visible tiles and
+ * updating all related map data and cache state.
+ *
+ * @param enabled True to show the weather overlay, false to hide it.
+ */
+void Widgets::GPS::setShowWeather(const bool enabled)
+{
+  if (m_showWeather != enabled)
+  {
+    m_showWeather = enabled;
+    m_settings.setValue(QStringLiteral("gpsWeather"), enabled);
+
+    updateTiles();
+    precacheWorld();
+    updateData();
+
+    Q_EMIT showWeatherChanged();
   }
 }
 
@@ -509,6 +629,34 @@ void Widgets::GPS::updateTiles()
         // When finished, call the tile fetched handler
         connect(reply, &QNetworkReply::finished, this,
                 [=]() { onTileFetched(reply); });
+      }
+
+      // Request tiles for reference layer
+      if (m_enableReferenceLayer)
+      {
+        const auto refUrl = referenceUrl(tx, ty, m_zoom);
+        if (!m_tileCache.contains(refUrl) && !m_pending.contains(refUrl))
+        {
+          QNetworkReply *reply = m_network.get(QNetworkRequest(QUrl(refUrl)));
+          m_pending[refUrl] = reply;
+
+          connect(reply, &QNetworkReply::finished, this,
+                  [=]() { onTileFetched(reply); });
+        }
+      }
+
+      // Request tiles for weather layer
+      if (m_showWeather && m_zoom <= WEATHER_MAX_ZOOM)
+      {
+        const auto gibsUrl = weatherUrl(tx, ty, m_zoom);
+        if (!m_tileCache.contains(gibsUrl) && !m_pending.contains(gibsUrl))
+        {
+          QNetworkReply *reply = m_network.get(QNetworkRequest(QUrl(gibsUrl)));
+          m_pending[gibsUrl] = reply;
+
+          connect(reply, &QNetworkReply::finished, this,
+                  [=]() { onTileFetched(reply); });
+        }
       }
     }
   }
@@ -716,6 +864,31 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
           // Stop as soon as we successfully rendered one fallback tile
           break;
         }
+      }
+
+      // Overlay weather tile on top of the base tile
+      if (m_showWeather && m_zoom <= WEATHER_MAX_ZOOM)
+      {
+        const QString gibsUrl = weatherUrl(wrappedTx, ty, m_zoom);
+
+        if (m_tileCache.contains(gibsUrl))
+        {
+          QImage *weatherTile = m_tileCache.object(gibsUrl);
+
+          painter->save();
+          painter->setOpacity(0.8);
+          painter->setCompositionMode(QPainter::CompositionMode_Screen);
+          painter->drawImage(drawPoint, *weatherTile);
+          painter->restore();
+        }
+      }
+
+      // Overlay reference tile on top of the base tile
+      if (m_enableReferenceLayer)
+      {
+        const QString refUrl = referenceUrl(wrappedTx, ty, m_zoom);
+        if (m_tileCache.contains(refUrl))
+          painter->drawImage(drawPoint, *m_tileCache.object(refUrl));
       }
     }
   }
@@ -968,6 +1141,10 @@ QPointF Widgets::GPS::latLonToTile(double lat, double lon, int zoom)
   return QPointF(x, y);
 }
 
+//------------------------------------------------------------------------------
+// Tile URLs
+//------------------------------------------------------------------------------
+
 /**
  * @brief Constructs the URL to request a specific map tile.
  *
@@ -994,6 +1171,74 @@ QString Widgets::GPS::tileUrl(const int tx, const int ty, const int zoom) const
   return QStringLiteral(
              "https://services.arcgisonline.com/ArcGIS/rest/services/"
              "World_Imagery/MapServer/tile/%1/%2/%3")
+      .arg(zoom)
+      .arg(ty)
+      .arg(tx);
+#endif
+}
+
+/**
+ * @brief Constructs the tile URL for NASA GIBS weather imagery.
+ *
+ * This function returns the URL to fetch a Composite VIIRS Corrected
+ * Reflectance tile from NASA's Global Imagery Browse Services (GIBS),
+ * using the current UTC date.
+ *
+ * The tiles follow the Google Maps compatible scheme (EPSG:3857).
+ *
+ * Note: This layer supports zoom levels up to 9. Higher requested zoom levels
+ * are clamped to 9 to avoid invalid tile requests.
+ *
+ * @param tx Tile X coordinate (column).
+ * @param ty Tile Y coordinate (row).
+ * @param zoom Requested zoom level.
+ *
+ * @return Fully constructed weather tile URL for the given coordinates and
+ * date.
+ */
+QString Widgets::GPS::weatherUrl(const int tx, const int ty,
+                                 const int zoom) const
+{
+  const int days = m_weatherDays[m_weatherOffset];
+  const QString date = QDate::currentDate().addDays(days).toString(Qt::ISODate);
+  return QStringLiteral("https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/"
+                        "VIIRS_SNPP_CorrectedReflectance_TrueColor/default/%1/"
+                        "GoogleMapsCompatible_Level9/%2/%3/%4.jpg")
+      .arg(date)
+      .arg(qMin(zoom, WEATHER_MAX_ZOOM))
+      .arg(ty)
+      .arg(tx);
+}
+
+/**
+ * @brief Constructs the URL to request a label (reference) tile overlay.
+ *
+ * This overlay adds geographic labels (boundaries, place names) on top of the
+ * base map, typically used with the World_Imagery map to create a satellite map
+ * with labels. In commercial builds, an API key is appended for authenticated
+ * access.
+ *
+ * @param tx Tile X coordinate (column).
+ * @param ty Tile Y coordinate (row).
+ * @param zoom Zoom level.
+ * @return Fully constructed URL for the reference tile.
+ */
+QString Widgets::GPS::referenceUrl(const int tx, const int ty,
+                                   const int zoom) const
+{
+#ifdef BUILD_COMMERCIAL
+  return QStringLiteral(
+             "https://services.arcgisonline.com/ArcGIS/rest/services/"
+             "Reference/World_Boundaries_and_Places/MapServer/tile/%1/%2/"
+             "%3?token=%4")
+      .arg(zoom)
+      .arg(ty)
+      .arg(tx)
+      .arg(ARCGIS_API_KEY);
+#else
+  return QStringLiteral(
+             "https://services.arcgisonline.com/ArcGIS/rest/services/"
+             "Reference/World_Boundaries_and_Places/MapServer/tile/%1/%2/%3")
       .arg(zoom)
       .arg(ty)
       .arg(tx);

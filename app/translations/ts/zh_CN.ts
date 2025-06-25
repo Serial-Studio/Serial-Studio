@@ -506,17 +506,17 @@
         <translation>支持 Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="206"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="154"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio 是由志愿者支持的免费开源软件。考虑捐赠或获取专业许可证以支持开发工作 :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="249"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="197"/>
         <source>Donate</source>
         <translation>捐赠</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="267"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="215"/>
         <source>Get Serial Studio Pro</source>
         <translation>获取 Serial Studio Pro</translation>
     </message>
@@ -525,12 +525,12 @@
         <translation type="vanished">稍后</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="235"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="183"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="195"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="143"/>
         <source>Support the development of %1!</source>
         <translation>支持 %1 的开发！</translation>
     </message>
@@ -539,7 +539,7 @@
         <translation type="vanished">Serial Studio 是由志愿者支持的免费和开源软件。请考虑捐赠以支持开发工作 :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="219"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="167"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>您还可以通过分享此项目、报告错误和提出新功能建议来支持此项目！</translation>
     </message>
@@ -901,9 +901,18 @@
         <translation type="vanished">地图类型：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="96"/>
         <source>Map Layer: %1</source>
-        <translation>地图图层：%1</translation>
+        <translation type="vanished">地图图层：%1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="165"/>
+        <source>VIIRS: %1</source>
+        <translation>VIIRS：%1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="189"/>
+        <source>Map: %1</source>
+        <translation>地图：%1</translation>
     </message>
 </context>
 <context>
@@ -5300,17 +5309,17 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">状态面板</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="866"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="879"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="883"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="896"/>
         <source>%1 (Fallback)</source>
         <translation>%1（备用）</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="945"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="958"/>
         <source>LED Panel (%1)</source>
         <translation>LED 面板（%1）</translation>
     </message>
@@ -5707,47 +5716,66 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Widgets::GPS</name>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="72"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="79"/>
         <source>Satellite Imagery</source>
         <translation>卫星影像</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="72"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="79"/>
+        <source>Satellite Imagery with Labels</source>
+        <translation>带标签的卫星图像</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
         <source>Street Map</source>
         <translation>街道地图</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="73"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
         <source>Topographic Map</source>
         <translation>地形图</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="73"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
         <source>Terrain</source>
         <translation>地形</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="74"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="81"/>
         <source>Light Gray Canvas</source>
         <translation>浅灰色画布</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="74"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="81"/>
         <source>Dark Gray Canvas</source>
         <translation>深灰色画布</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="75"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="82"/>
         <source>National Geographic</source>
         <translation>国家地理</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="433"/>
+        <source>Today (partial</source>
+        <translation type="vanished">今天（部分）</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
+        <source>Yesterday (full)</source>
+        <translation>昨天（完整）</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
+        <source>Today (partial)</source>
+        <translation>今天（部分）</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="385"/>
         <source>Additional map layers are available only for Pro users.</source>
         <translation>额外的地图图层仅对专业用户开放。</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="434"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="386"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>我们无法提供无限制访问，因为ArcGIS API密钥会产生实际费用。</translation>
     </message>
@@ -5774,7 +5802,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1194"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1195"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>网格间隔：%1 单位</translation>
     </message>

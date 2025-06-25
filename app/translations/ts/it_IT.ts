@@ -462,32 +462,32 @@
         <translation>Supporta Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="195"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="143"/>
         <source>Support the development of %1!</source>
         <translation>Supporta lo sviluppo di %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="206"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="154"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio è un software gratuito e open-source supportato da volontari. Considera di fare una donazione o di ottenere una licenza Pro per supportare gli sforzi di sviluppo :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="219"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="167"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>Puoi anche supportare questo progetto condividendolo, segnalando bug e proponendo nuove funzionalità!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="235"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="183"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="249"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="197"/>
         <source>Donate</source>
         <translation>Dona</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="267"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="215"/>
         <source>Get Serial Studio Pro</source>
         <translation>Ottieni Serial Studio Pro</translation>
     </message>
@@ -834,9 +834,18 @@
         <translation type="vanished">Tipo di mappa: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="96"/>
         <source>Map Layer: %1</source>
-        <translation>Livello mappa: %1</translation>
+        <translation type="vanished">Livello mappa: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="165"/>
+        <source>VIIRS: %1</source>
+        <translation>VIIRS: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="189"/>
+        <source>Map: %1</source>
+        <translation>Mappa: %1</translation>
     </message>
 </context>
 <context>
@@ -3968,17 +3977,17 @@ Si prega di fornire le credenziali necessarie.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="866"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="879"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="883"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="896"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Ripiego)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="945"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="958"/>
         <source>LED Panel (%1)</source>
         <translation>Pannello LED (%1)</translation>
     </message>
@@ -4211,47 +4220,66 @@ Si prega di fornire le credenziali necessarie.</translation>
 <context>
     <name>Widgets::GPS</name>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="72"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="79"/>
         <source>Satellite Imagery</source>
         <translation>Immagini satellitari</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="72"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="79"/>
+        <source>Satellite Imagery with Labels</source>
+        <translation>Immagini satellitari con etichette</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
         <source>Street Map</source>
         <translation>Mappa stradale</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="73"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
         <source>Topographic Map</source>
         <translation>Mappa topografica</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="73"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
         <source>Terrain</source>
         <translation>Terreno</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="74"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="81"/>
         <source>Light Gray Canvas</source>
         <translation>Tela grigio chiaro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="74"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="81"/>
         <source>Dark Gray Canvas</source>
         <translation>Tela grigio scuro</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="75"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="82"/>
         <source>National Geographic</source>
         <translation>National Geographic</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="433"/>
+        <source>Today (partial</source>
+        <translation type="vanished">Oggi (parziale</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
+        <source>Yesterday (full)</source>
+        <translation>Ieri (completo)</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
+        <source>Today (partial)</source>
+        <translation>Oggi (parziale)</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="385"/>
         <source>Additional map layers are available only for Pro users.</source>
         <translation>Strati di mappa aggiuntivi sono disponibili solo per gli utenti Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="434"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="386"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>Non possiamo offrire accesso illimitato perché la chiave API di ArcGIS comporta costi reali.</translation>
     </message>
@@ -4267,7 +4295,7 @@ Si prega di fornire le credenziali necessarie.</translation>
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1194"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1195"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Intervallo griglia: %1 unità</translation>
     </message>

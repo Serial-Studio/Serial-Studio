@@ -54,7 +54,10 @@ Item {
       _mapType.model = model.mapTypes
       _mapType.currentIndex = model.mapType
       _autoCenter.checked = model.autoCenter
-      _trajectory.checked = model.plotTrajectory
+      _showWeather.checked = model.showWeather
+      _weatherOffset.model = model.weatherLayers
+      _plotTrajectory.checked = model.plotTrajectory
+      _weatherOffset.currentIndex = model.weatherOffset
     }
   }
 
@@ -90,7 +93,7 @@ Item {
     }
 
     ToolButton {
-      id: _trajectory
+      id: _plotTrajectory
       icon.width: 24
       icon.height: 24
       icon.color: "transparent"
@@ -109,7 +112,7 @@ Item {
       color: Cpp_ThemeManager.colors["widget_border"]
     }
 
-    ToolButton {
+    /*ToolButton {
       icon.width: 24
       icon.height: 24
       icon.color: "transparent"
@@ -135,6 +138,46 @@ Item {
       implicitWidth: 1
       implicitHeight: 24
       color: Cpp_ThemeManager.colors["widget_border"]
+    }*/
+
+    ToolButton {
+      id: _showWeather
+      icon.width: 24
+      icon.height: 24
+      icon.color: "transparent"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/earth.svg"
+      onClicked: {
+        if (root.model) {
+          root.model.showWeather = !root.model.showWeather
+          checked = root.model.showWeather
+        }
+      }
+    }
+
+    ComboBox {
+      id: _weatherOffset
+      Layout.fillWidth: true
+      Layout.minimumHeight: 24
+      Layout.maximumHeight: 24
+      opacity: enabled ? 1 : 0.5
+      enabled: _showWeather.checked
+      Layout.alignment: Qt.AlignVCenter
+      displayText: qsTr("VIIRS: %1").arg(currentText)
+
+      onCurrentIndexChanged: {
+        if (root.model) {
+          if (root.model.weatherOffset !== currentIndex) {
+            root.model.weatherOffset = currentIndex
+            currentIndex = root.model.weatherOffset
+          }
+        }
+      }
+    }
+
+    Rectangle {
+      implicitWidth: 1
+      implicitHeight: 24
+      color: Cpp_ThemeManager.colors["widget_border"]
     }
 
     ComboBox {
@@ -143,7 +186,7 @@ Item {
       Layout.minimumHeight: 24
       Layout.maximumHeight: 24
       Layout.alignment: Qt.AlignVCenter
-      displayText: qsTr("Map Layer: %1").arg(currentText)
+      displayText: qsTr("Map: %1").arg(currentText)
 
       onCurrentIndexChanged: {
         if (root.model) {

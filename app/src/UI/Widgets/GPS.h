@@ -59,6 +59,10 @@ class GPS : public QQuickPaintedItem
              READ autoCenter
              WRITE setAutoCenter
              NOTIFY autoCenterChanged)
+  Q_PROPERTY(bool showWeather
+             READ showWeather
+             WRITE setShowWeather
+             NOTIFY showWeatherChanged)
   Q_PROPERTY(bool plotTrajectory
              READ plotTrajectory
              WRITE setPlotTrajectory
@@ -67,8 +71,15 @@ class GPS : public QQuickPaintedItem
              READ zoomLevel
              WRITE setZoomLevel
              NOTIFY zoomLevelChanged)
+  Q_PROPERTY(int weatherOffset
+             READ weatherOffset
+             WRITE setWeatherOffset
+             NOTIFY weatherOffsetChanged)
   Q_PROPERTY(QStringList mapTypes
              READ mapTypes
+             CONSTANT)
+  Q_PROPERTY(QStringList weatherLayers
+             READ weatherLayers
              CONSTANT)
   // clang-format on
 
@@ -77,6 +88,8 @@ signals:
   void mapTypeChanged();
   void zoomLevelChanged();
   void autoCenterChanged();
+  void showWeatherChanged();
+  void weatherOffsetChanged();
   void plotTrajectoryChanged();
 
 public:
@@ -89,17 +102,22 @@ public:
 
   [[nodiscard]] int mapType() const;
   [[nodiscard]] int zoomLevel() const;
+  [[nodiscard]] int weatherOffset() const;
 
   [[nodiscard]] bool autoCenter() const;
+  [[nodiscard]] bool showWeather() const;
   [[nodiscard]] bool plotTrajectory() const;
 
   [[nodiscard]] const QStringList &mapTypes();
+  [[nodiscard]] const QStringList &weatherLayers();
 
 public slots:
   void center();
   void setZoomLevel(int zoom);
   void setMapType(const int type);
+  void setWeatherOffset(const int index);
   void setAutoCenter(const bool enabled);
+  void setShowWeather(const bool enabled);
   void setPlotTrajectory(const bool enabled);
 
 private slots:
@@ -118,7 +136,10 @@ private:
   QPointF clampCenterTile(QPointF tile) const;
   QPointF tileToLatLon(const QPointF &tile, int zoom);
   QPointF latLonToTile(double lat, double lon, int zoom);
+
   QString tileUrl(const int tx, const int ty, const int zoom) const;
+  QString weatherUrl(const int tx, const int ty, const int zoom) const;
+  QString referenceUrl(const int tx, const int ty, const int zoom) const;
 
 protected:
   void wheelEvent(QWheelEvent *event) override;
@@ -130,9 +151,12 @@ private:
   int m_zoom;
   int m_index;
   int m_mapType;
+  int m_weatherOffset;
 
   bool m_autoCenter;
+  bool m_showWeather;
   bool m_plotTrajectory;
+  bool m_enableReferenceLayer;
 
   double m_altitude;
   double m_latitude;
@@ -147,7 +171,10 @@ private:
 
   QStringList m_mapIDs;
   QStringList m_mapTypes;
+  QStringList m_weatherLayers;
+
   QList<int> m_mapMaxZoom;
+  QList<int> m_weatherDays;
 
   QNetworkAccessManager m_network;
   QCache<QString, QImage> m_tileCache;
