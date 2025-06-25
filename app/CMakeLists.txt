@@ -45,14 +45,13 @@ set(QT_MODULES
   Svg
   Gui
   Qml
+  Sql
   Core
   Quick
   Graphs
   Widgets
-  Location
   Bluetooth
   SerialPort
-  Positioning
   LinguistTools
   QuickControls2
 )
@@ -61,15 +60,14 @@ set(QT_MODULES
 set(QT_LIBS
   Qt6::Core
   Qt6::Svg
+  Qt6::Sql
   Qt6::Gui
   Qt6::Qml
   Qt6::Quick
   Qt6::Graphs
   Qt6::Widgets
-  Qt6::Location
   Qt6::Bluetooth
   Qt6::SerialPort
-  Qt6::Positioning
   Qt6::QuickControls2
 )
 
@@ -97,6 +95,7 @@ find_package(
 # Qt project setup & policies
 qt_standard_project_setup()
 qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0002 NEW)
 qt_policy(SET QTP0004 NEW)
 
 #-------------------------------------------------------------------------------
@@ -163,7 +162,6 @@ set(HEADERS
   src/Misc/ThemeManager.h
   src/Misc/TimerEvents.h
   src/Misc/Translator.h
-  src/Misc/OsmTemplateServer.h
   src/Misc/WorkspaceManager.h
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h

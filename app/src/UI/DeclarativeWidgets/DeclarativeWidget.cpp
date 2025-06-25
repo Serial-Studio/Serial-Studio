@@ -35,7 +35,7 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
   , m_updateRequested(true)
 {
   // Set QML flags
-  setMipmap(true);
+  setMipmap(false);
   setOpaquePainting(true);
   setAcceptTouchEvents(false);
   setFlag(ItemHasContents, true);
@@ -112,10 +112,10 @@ void DeclarativeWidget::redraw(const QRect &rect)
       reinterpret_cast<PwnedWidget *>(m_widget)->updateGeometries();
     }
 
-    if (QQuickPaintedItem::isVisible() && m_updateRequested)
+    if (m_updateRequested)
     {
       m_updateRequested = false;
-      m_pixmap = m_widget->grab().toImage();
+      m_image = m_widget->grab().toImage();
       QQuickPaintedItem::update(rect);
     }
   }
@@ -128,7 +128,7 @@ void DeclarativeWidget::redraw(const QRect &rect)
 void DeclarativeWidget::paint(QPainter *painter)
 {
   if (painter != nullptr)
-    painter->drawImage(0, 0, m_pixmap);
+    painter->drawImage(0, 0, m_image);
 }
 
 /**

@@ -84,7 +84,7 @@ public Q_SLOTS:
   void setPalette(const QPalette &palette);
 
 private:
-  QImage m_pixmap;
+  QImage m_image;
   QWidget *m_widget;
   int m_contentWidth;
   int m_contentHeight;

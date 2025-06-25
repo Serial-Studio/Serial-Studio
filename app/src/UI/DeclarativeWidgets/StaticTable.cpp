@@ -56,6 +56,7 @@ StaticTable::StaticTable(QQuickItem *parent)
 
   // Redraw UI
   loadTheme();
+  redraw();
 }
 
 /**

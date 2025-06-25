@@ -753,17 +753,7 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 
   // Send data payload
   if (!IO::Manager::instance().paused())
-  {
-    // Build data payload
-    QByteArray bin;
-    if (action.binaryData())
-      bin = SerialStudio::hexToBytes(action.txData());
-    else
-      bin = QString(action.txData() + action.eolSequence()).toUtf8();
-
-    // Transmit via IO Manager
-    IO::Manager::instance().writeData(bin);
-  }
+    IO::Manager::instance().writeData(action.txByteArray());
 
   // Update action model
   Q_EMIT actionStatusChanged();

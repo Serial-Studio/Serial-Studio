@@ -57,6 +57,7 @@ public:
 
   [[nodiscard]] int actionId() const;
   [[nodiscard]] bool binaryData() const;
+  [[nodiscard]] QByteArray txByteArray() const;
 
   [[nodiscard]] const QString &icon() const;
   [[nodiscard]] const QString &title() const;

@@ -21,37 +21,113 @@
 
 #pragma once
 
-#include <QQuickItem>
+#include <QCache>
+#include <QPixmap>
+#include <QSettings>
+#include <QQuickPaintedItem>
+#include <QNetworkAccessManager>
 
 namespace Widgets
 {
 /**
- * @brief A widget that displays the GPS data on a map.
+ * @class Widgets::GPS
+ * @brief A custom QML widget for displaying GPS position on a tile-based map.
+ *
+ * This class implements a standalone, embeddable GPS map viewer using
+ * Bing Maps tile servers. It handles map tile rendering, zooming,
+ * panning, and dynamic GPS data updates. The widget is based on
+ * QQuickPaintedItem, requiring no external plugins or QtLocation support.
+ *
+ * Features:
+ * - Fetches and caches Bing Maps tiles (Aerial, Road, Hybrid)
+ * - Supports zoom and drag interaction
+ * - Draws a red crosshair at the current GPS location
+ * - Integrates with Serial Studio's dashboard system
+ *
+ * Designed to be lightweight, dependency-free (beyond QtNetwork),
+ * and fully embeddable into any QML/QtQuick scene.
  */
-class GPS : public QQuickItem
+class GPS : public QQuickPaintedItem
 {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(double altitude READ altitude NOTIFY updated)
-  Q_PROPERTY(double latitude READ latitude NOTIFY updated)
-  Q_PROPERTY(double longitude READ longitude NOTIFY updated)
+  Q_PROPERTY(int mapType
+             READ mapType
+             WRITE setMapType
+             NOTIFY mapTypeChanged)
+  Q_PROPERTY(bool autoCenter
+             READ autoCenter
+             WRITE setAutoCenter
+             NOTIFY autoCenterChanged)
+  Q_PROPERTY(QStringList mapTypes
+             READ mapTypes
+             CONSTANT)
+  // clang-format on
 
 signals:
   void updated();
+  void mapTypeChanged();
+  void autoCenterChanged();
 
 public:
   GPS(const int index = -1, QQuickItem *parent = nullptr);
+  void paint(QPainter *painter) override;
 
   [[nodiscard]] double altitude() const;
   [[nodiscard]] double latitude() const;
   [[nodiscard]] double longitude() const;
 
+  [[nodiscard]] int mapType() const;
+  [[nodiscard]] int zoomLevel() const;
+  [[nodiscard]] bool autoCenter() const;
+
+  [[nodiscard]] const QStringList &mapTypes();
+
+public slots:
+  void center();
+  void setZoomLevel(int zoom);
+  void setMapType(const int type);
+  void setAutoCenter(const bool enabled);
+
 private slots:
   void updateData();
+  void updateTiles();
+  void precacheWorld();
+  void onTileFetched(QNetworkReply *reply);
 
 private:
+  QPointF clampCenterTile(QPointF tile) const;
+  QPointF tileToLatLon(const QPointF &tile, int zoom);
+  QPointF latLonToTile(double lat, double lon, int zoom);
+  QString tileUrl(const int tx, const int ty, const int zoom) const;
+
+protected:
+  void wheelEvent(QWheelEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+
+private:
+  int m_zoom;
   int m_index;
+  int m_mapType;
+  bool m_autoCenter;
+
   double m_altitude;
   double m_latitude;
   double m_longitude;
+
+  QPointF m_centerTile;
+  QPoint m_lastMousePos;
+
+  QSettings m_settings;
+
+  QStringList m_mapIDs;
+  QStringList m_mapTypes;
+  QList<int> m_mapMaxZoom;
+
+  QNetworkAccessManager m_network;
+  QCache<QString, QImage> m_tileCache;
+  QHash<QString, QNetworkReply *> m_pending;
 };
 } // namespace Widgets

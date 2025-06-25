@@ -345,7 +345,7 @@ void IO::Console::send(const QString &data)
   if (dataMode() == DataMode::DataHexadecimal)
     bin = SerialStudio::hexToBytes(data);
   else
-    bin = data.toUtf8();
+    bin = SerialStudio::resolveEscapeSequences(data).toUtf8();
 
   // Add EOL character
   switch (lineEnding())

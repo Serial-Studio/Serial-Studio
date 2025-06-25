@@ -19,6 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "SerialStudio.h"
 #include "JSON/Action.h"
 
 /**
@@ -84,6 +85,39 @@ int JSON::Action::actionId() const
 bool JSON::Action::binaryData() const
 {
   return m_binaryData;
+}
+
+/**
+ * @brief Generates the byte array to be transmitted over the serial or network
+ *        interface.
+ *
+ * This method returns a QByteArray that represents the data to transmit. If
+ * binary mode is enabled (`m_binaryData == true`), the method interprets the
+ * input string `m_txData` as hexadecimal byte values. Otherwise, it resolves
+ * C-style escape sequences (e.g. "\\r", "\\n") in the string and converts the
+ * result to UTF-8.
+ *
+ * If an end-of-line (EOL) sequence is defined (`m_eolSequence` is not empty),
+ * it is also processed for escape sequences and appended to the final output.
+ *
+ * @return QByteArray containing the full transmission payload, including any
+ * EOL suffix.
+ */
+QByteArray JSON::Action::txByteArray() const
+{
+  // Convert data to byte array
+  QByteArray bin;
+  if (binaryData())
+    bin = SerialStudio::hexToBytes(txData());
+  else
+    bin = SerialStudio::resolveEscapeSequences(txData()).toUtf8();
+
+  // Append EOL character (if any)
+  if (!eolSequence().isEmpty())
+    bin.append(SerialStudio::resolveEscapeSequences(eolSequence()).toUtf8());
+
+  // Return the binary data
+  return bin;
 }
 
 /**

@@ -52,6 +52,8 @@ Widgets::DataGrid::DataGrid(const int index, QQuickItem *parent)
   setHeaderFont(Misc::CommonFonts::instance().boldUiFont());
   connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
           &Widgets::DataGrid::updateData);
+
+  updateData();
 }
 
 /**

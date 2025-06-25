@@ -544,7 +544,8 @@ QByteArray SerialStudio::hexToBytes(const QString &data)
 QString SerialStudio::resolveEscapeSequences(const QString &str)
 {
   QString escapedStr = str;
-  escapedStr.replace(QStringLiteral("\\\\"), QStringLiteral("\\"));
+  escapedStr.replace('\n', QLatin1String(""));
+  escapedStr.replace('\r', QLatin1String(""));
   escapedStr.replace(QStringLiteral("\\a"), QStringLiteral("\a"));
   escapedStr.replace(QStringLiteral("\\b"), QStringLiteral("\b"));
   escapedStr.replace(QStringLiteral("\\f"), QStringLiteral("\f"));
@@ -552,6 +553,7 @@ QString SerialStudio::resolveEscapeSequences(const QString &str)
   escapedStr.replace(QStringLiteral("\\r"), QStringLiteral("\r"));
   escapedStr.replace(QStringLiteral("\\t"), QStringLiteral("\t"));
   escapedStr.replace(QStringLiteral("\\v"), QStringLiteral("\v"));
+  escapedStr.replace(QStringLiteral("\\\\"), QStringLiteral("\\"));
   return escapedStr;
 }
 

@@ -328,16 +328,7 @@ void JSON::FrameBuilder::onConnectedChanged()
   for (const auto &action : actions)
   {
     if (action.autoExecuteOnConnect())
-    {
-      QByteArray bin;
-
-      if (action.binaryData())
-        bin = SerialStudio::hexToBytes(action.txData());
-      else
-        bin = QString(action.txData() + action.eolSequence()).toUtf8();
-
-      IO::Manager::instance().writeData(bin);
-    }
+      IO::Manager::instance().writeData(action.txByteArray());
   }
 }
 

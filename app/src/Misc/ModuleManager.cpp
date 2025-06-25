@@ -252,7 +252,7 @@ void Misc::ModuleManager::registerQmlTypes()
 {
   // Register custom QML widgets & widget models
   qmlRegisterType<Widgets::Bar>("SerialStudio", 1, 0, "BarModel");
-  qmlRegisterType<Widgets::GPS>("SerialStudio", 1, 0, "GPSModel");
+  qmlRegisterType<Widgets::GPS>("SerialStudio", 1, 0, "GPSWidget");
   qmlRegisterType<Widgets::Plot>("SerialStudio", 1, 0, "PlotModel");
   qmlRegisterType<Widgets::Gauge>("SerialStudio", 1, 0, "GaugeModel");
   qmlRegisterType<Widgets::Compass>("SerialStudio", 1, 0, "CompassModel");

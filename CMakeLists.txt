@@ -45,6 +45,7 @@ option(DEBUG_SANITIZER         "Enable sanitizers for debug builds"    OFF)
 option(PRODUCTION_OPTIMIZATION "Enable production optimization flags"   ON)
 option(BUILD_COMMERCIAL        "Enable commercial features"            OFF)
 
+set(ARCGIS_API_KEY $ENV{ARCGIS_API_KEY} CACHE STRING "API Key for ArcGIS map")
 set(SERIAL_STUDIO_LICENSE_KEY $ENV{SERIAL_STUDIO_LICENSE_KEY} CACHE STRING "License key for commercial build")
 set(SERIAL_STUDIO_INSTANCE_ID $ENV{SERIAL_STUDIO_INSTANCE_ID} CACHE STRING "Instance ID for license validation")
 
@@ -95,6 +96,7 @@ endif()
 
 if(BUILD_COMMERCIAL)
     add_compile_definitions(BUILD_COMMERCIAL)
+    add_definitions(-DARCGIS_API_KEY="${ARCGIS_API_KEY}")
     message(STATUS "BUILD_COMMERCIAL=ON — validating license with Lemon Squeezy")
 
     if(NOT SERIAL_STUDIO_LICENSE_KEY OR NOT SERIAL_STUDIO_INSTANCE_ID)
@@ -161,7 +163,6 @@ if(PRODUCTION_OPTIMIZATION)
          -O2                            # Optimize for speed
          -Wall                          # Enable most warning messages
          -Wextra                        # Enable additional warnings
-         -fuse-linker-plugin            # Required for LTO with GCC
          -ftree-vectorize               # Enable loop vectorization
          -funroll-loops                 # Unroll loops to reduce branching overhead
          -fomit-frame-pointer           # Free up register, faster stack ops
@@ -171,7 +172,6 @@ if(PRODUCTION_OPTIMIZATION)
       )
       add_link_options(
          -Wl,--gc-sections              # Remove unused code/data at link time
-         -fuse-linker-plugin            # Required for LTO with GCC
       )
 
    # Clang (MinGW) on Windows
@@ -187,11 +187,9 @@ if(PRODUCTION_OPTIMIZATION)
          -msse2                         # Target SSE2 (safe, compatible baseline)
          -fno-fast-math                 # Avoid unsafe FP optimizations
          -fno-unsafe-math-optimizations # Accurate and safe math semantics
-         -flto                          # Enable link-time optimization
       )
       add_link_options(
          -Wl,-dead_strip                # Strip unused symbols from final binary
-         -flto=full                     # Full LTO (more aggressive)
       )
 
    # MSVC (Visual Studio)
@@ -211,7 +209,6 @@ if(PRODUCTION_OPTIMIZATION)
       add_link_options(
          /OPT:REF                       # Remove unreferenced functions/data
          /OPT:ICF                       # Merge identical code/data blocks
-         /LTCG                          # Enable link-time code generation (LTO)
       )
 
    # macOS (Clang/AppleClang)
@@ -226,11 +223,9 @@ if(PRODUCTION_OPTIMIZATION)
          -fomit-frame-pointer           # Omit frame pointer to free a register (faster function calls)
          -fno-fast-math                 # Prevent aggressive FP optimizations (retain IEEE compliance)
          -fno-unsafe-math-optimizations # Avoid math-related UB or precision loss
-         -flto                          # Enable Link Time Optimization
       )
       add_link_options(
          -Wl,-dead_strip                # Remove unused functions/data from final binary
-         -flto=full                     # Full link-time optimization across all TU
       )
 
    # Intel LLVM Compiler (Linux or Windows)
@@ -250,7 +245,6 @@ if(PRODUCTION_OPTIMIZATION)
       )
       add_link_options(
          -Wl,--gc-sections              # Discard unused code sections at link time
-         -flto=full                     # Enable aggressive full link-time optimization
       )
 
    # Linux on ARM64 (e.g., Raspberry Pi 4 or other AArch64)
@@ -264,11 +258,9 @@ if(PRODUCTION_OPTIMIZATION)
          -funroll-loops                 # Improve loop performance
          -fno-fast-math                 # Disable unsafe math optimizations
          -fno-unsafe-math-optimizations # Use correct IEEE behavior
-         -flto                          # Link-time optimization for smaller binaries
       )
       add_link_options(
          -Wl,--gc-sections              # Remove unused code/data
-         -flto                          # Link-time optimization
       )
 
    # Generic x86_64 Linux (GCC or Clang)
@@ -284,11 +276,9 @@ if(PRODUCTION_OPTIMIZATION)
          -msse2                         # Use SSE2 (supported on all x86_64 CPUs)
          -fno-fast-math                 # IEEE-compliant floating point
          -fno-unsafe-math-optimizations # Avoid unsafe math assumptions
-         -flto                          # Enable link-time optimization
       )
       add_link_options(
          -Wl,--gc-sections              # Strip unused functions/data
-         -flto                          # Link-time optimization
       )
    endif()
 endif()
