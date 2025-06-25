@@ -26,7 +26,6 @@
 
 #include <QCursor>
 #include <QPainter>
-#include <QSvgRenderer>
 #include <QNetworkReply>
 
 //------------------------------------------------------------------------------

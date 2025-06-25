@@ -22,7 +22,7 @@
 #pragma once
 
 #include <QCache>
-#include <QPixmap>
+#include <QImage>
 #include <QSettings>
 #include <QQuickPaintedItem>
 #include <QNetworkAccessManager>
