@@ -59,6 +59,14 @@ class GPS : public QQuickPaintedItem
              READ autoCenter
              WRITE setAutoCenter
              NOTIFY autoCenterChanged)
+  Q_PROPERTY(bool plotTrajectory
+             READ plotTrajectory
+             WRITE setPlotTrajectory
+             NOTIFY plotTrajectoryChanged)
+  Q_PROPERTY(int zoomLevel
+             READ zoomLevel
+             WRITE setZoomLevel
+             NOTIFY zoomLevelChanged)
   Q_PROPERTY(QStringList mapTypes
              READ mapTypes
              CONSTANT)
@@ -67,7 +75,9 @@ class GPS : public QQuickPaintedItem
 signals:
   void updated();
   void mapTypeChanged();
+  void zoomLevelChanged();
   void autoCenterChanged();
+  void plotTrajectoryChanged();
 
 public:
   GPS(const int index = -1, QQuickItem *parent = nullptr);
@@ -79,7 +89,9 @@ public:
 
   [[nodiscard]] int mapType() const;
   [[nodiscard]] int zoomLevel() const;
+
   [[nodiscard]] bool autoCenter() const;
+  [[nodiscard]] bool plotTrajectory() const;
 
   [[nodiscard]] const QStringList &mapTypes();
 
@@ -88,12 +100,19 @@ public slots:
   void setZoomLevel(int zoom);
   void setMapType(const int type);
   void setAutoCenter(const bool enabled);
+  void setPlotTrajectory(const bool enabled);
 
 private slots:
   void updateData();
   void updateTiles();
   void precacheWorld();
+  void onThemeChanged();
   void onTileFetched(QNetworkReply *reply);
+
+private:
+  void paintMap(QPainter *painter, const QSize &view);
+  void paintPathData(QPainter *painter, const QSize &view);
+  void paintAttributionText(QPainter *painter, const QSize &view);
 
 private:
   QPointF clampCenterTile(QPointF tile) const;
@@ -111,7 +130,9 @@ private:
   int m_zoom;
   int m_index;
   int m_mapType;
+
   bool m_autoCenter;
+  bool m_plotTrajectory;
 
   double m_altitude;
   double m_latitude;
@@ -119,6 +140,8 @@ private:
 
   QPointF m_centerTile;
   QPoint m_lastMousePos;
+  QColor m_lineHeadColor;
+  QColor m_lineTailColor;
 
   QSettings m_settings;
 

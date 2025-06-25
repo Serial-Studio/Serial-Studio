@@ -40,7 +40,8 @@ Item {
   //
   // Window flags
   //
-  property bool hasToolbar: true
+  property bool hasToolbar: root.height >= 220 && root.width >= toolbar.implicitWidth
+  readonly property int toolbarHeight: windowRoot.objectName === "ExternalWindow" ? 47 : 48
 
   //
   // Configure module widget on load
@@ -53,6 +54,7 @@ Item {
       _mapType.model = model.mapTypes
       _mapType.currentIndex = model.mapType
       _autoCenter.checked = model.autoCenter
+      _trajectory.checked = model.plotTrajectory
     }
   }
 
@@ -87,6 +89,54 @@ Item {
       }
     }
 
+    ToolButton {
+      id: _trajectory
+      icon.width: 24
+      icon.height: 24
+      icon.color: "transparent"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/poliline.svg"
+      onClicked: {
+        if (root.model) {
+          root.model.plotTrajectory = !root.model.plotTrajectory
+          checked = root.model.plotTrajectory
+        }
+      }
+    }
+
+    Rectangle {
+      implicitWidth: 1
+      implicitHeight: 24
+      color: Cpp_ThemeManager.colors["widget_border"]
+    }
+
+    ToolButton {
+      icon.width: 24
+      icon.height: 24
+      icon.color: "transparent"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-in.svg"
+      onClicked: {
+        if (root.model)
+          root.model.zoomLevel = root.model.zoomLevel + 1
+      }
+    }
+
+    ToolButton {
+      icon.width: 24
+      icon.height: 24
+      icon.color: "transparent"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-out.svg"
+      onClicked: {
+        if (root.model)
+          root.model.zoomLevel = root.model.zoomLevel - 1
+      }
+    }
+
+    Rectangle {
+      implicitWidth: 1
+      implicitHeight: 24
+      color: Cpp_ThemeManager.colors["widget_border"]
+    }
+
     ComboBox {
       id: _mapType
       Layout.fillWidth: true
@@ -112,6 +162,6 @@ Item {
   Item {
     id: container
     anchors.fill: parent
-    anchors.topMargin: root.hasToolbar ? 48 : 0
+    anchors.topMargin: root.hasToolbar ? root.toolbarHeight : 0
   }
 }

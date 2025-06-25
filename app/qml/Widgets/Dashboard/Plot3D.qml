@@ -42,6 +42,7 @@ Item {
   // Window flags
   //
   readonly property bool hasToolbar: root.width >= toolbar.implicitWidth
+  readonly property int toolbarHeight: windowRoot.objectName === "ExternalWindow" ? 47 : 48
 
   //
   // Disable navigation
@@ -311,6 +312,6 @@ Item {
   Item {
     id: container
     anchors.fill: parent
-    anchors.topMargin: root.hasToolbar ? 48 : 0
+    anchors.topMargin: root.hasToolbar ? root.toolbarHeight : 0
   }
 }

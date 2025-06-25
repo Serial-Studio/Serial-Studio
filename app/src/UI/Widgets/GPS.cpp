@@ -23,10 +23,13 @@
 #include "UI/Widgets/GPS.h"
 #include "Misc/Utilities.h"
 #include "Misc/CommonFonts.h"
+#include "Misc/ThemeManager.h"
 
 #include <QCursor>
 #include <QPainter>
+#include <QPainterPath>
 #include <QNetworkReply>
+#include <QLinearGradient>
 
 //------------------------------------------------------------------------------
 // Global parameters
@@ -53,6 +56,7 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
   , m_index(index)
   , m_mapType(0)
   , m_autoCenter(true)
+  , m_plotTrajectory(true)
   , m_altitude(0)
   , m_latitude(0)
   , m_longitude(0)
@@ -88,6 +92,12 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
   // Read settings
   setMapType(m_settings.value("gpsMapType", 0).toInt());
   setAutoCenter(m_settings.value("gpsAutoCenter", true).toBool());
+  setPlotTrajectory(m_settings.value("gpsPlotTrajectory", true).toBool());
+
+  // Connect to the theme manager to update the colors
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Widgets::GPS::onThemeChanged);
 
   // Configure signals/slots with the dashboard
   if (VALIDATE_WIDGET(SerialStudio::DashboardGPS, m_index))
@@ -104,206 +114,42 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
 //------------------------------------------------------------------------------
 
 /**
- * @brief Paints the GPS map widget using tile data and overlays.
+ * @brief Renders the GPS widget onto the screen.
  *
- * This method renders the visible portion of the world map using pre-cached
- * Esri World Imagery tiles. It calculates which tiles intersect the view,
- * attempts to draw them from cache, and falls back to scaled-down parent tiles
- * from lower zoom levels when data is missing.
+ * This function is called by the Qt framework whenever the widget needs to be
+ * repainted. It verifies that the widget is both enabled and properly
+ * configured before proceeding. The rendering process is broken into three main
+ * steps:
  *
- * Additionally, it renders a crosshair marker at the current GPS coordinates.
- * To support horizontal wrap-around of the map, the crosshair is also drawn
- * offset by ±360° (i.e., one world width) so it remains visible near the map's
- * left/right edges.
+ * - Drawing the map tiles (`paintMap`)
+ * - Drawing optional path data (e.g., trajectory lines) (`paintPathData`)
+ * - Drawing attribution and copyright labels (`paintAttributionText`)
  *
- * Tile rendering supports:
- * - Sub-tile positioning with pixel offsets for smooth panning.
- * - Wrapping of X coordinates for seamless horizontal panning.
- * - Dynamic fallback to parent tiles when zoomed-in tiles are missing.
+ * The function ensures anti-aliasing is enabled for smooth visuals and uses
+ * the current viewport size for all rendering operations.
  *
- * @param painter Pointer to the QPainter used for rendering the map.
+ * @param painter Pointer to the QPainter used for rendering the widget.
  */
 void Widgets::GPS::paint(QPainter *painter)
 {
+  // No need to update if widget is not enabled
+  if (!isEnabled())
+    return;
+
+  // No need to update if widget is invalid
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardGPS, m_index))
+    return;
+
   // Configure painter hints
   painter->setRenderHint(QPainter::Antialiasing);
-  painter->fillRect(painter->viewport(), QColor(0x0C, 0x47, 0x5C));
 
-  // Tile sizing constants
-  constexpr int tileSize = 256;
+  // Get the dimenstions of the rendered widget in pixels
+  const QSize viewport = size().toSize();
 
-  // Dimensions of the rendered widget in pixels
-  const QSize viewSize = size().toSize();
-
-  // Current center of the map in fractional tile coordinates
-  const QPointF centerTile = m_centerTile;
-
-  // Integer tile coordinates of the center tile
-  const int centerX = static_cast<int>(centerTile.x());
-  const int centerY = static_cast<int>(centerTile.y());
-
-  // Pixel offset inside the center tile (sub-tile precision)
-  const double offsetX = (centerTile.x() - centerX) * tileSize;
-  const double offsetY = (centerTile.y() - centerY) * tileSize;
-
-  // Number of tiles needed horizontally and vertically (including margins)
-  const int tilesX = viewSize.width() / tileSize + 2;
-  const int tilesY = viewSize.height() / tileSize + 2;
-
-  // Render visible tiles
-  for (int dx = -tilesX / 2; dx <= tilesX / 2; ++dx)
-  {
-    for (int dy = -tilesY / 2; dy <= tilesY / 2; ++dy)
-    {
-      // Compute absolute tile coordinates relative to map center
-      const int tx = centerX + dx;
-      const int ty = centerY + dy;
-
-      // Wrap X to allow seamless east/west panning around the globe
-      const int wrappedTx
-          = (tx % (1 << m_zoom) + (1 << m_zoom)) % (1 << m_zoom);
-
-      // Skip if tile is outside vertical bounds (no wrapping in Y)
-      if (ty < 0 || ty >= (1 << m_zoom))
-        continue;
-
-      // Generate tile URL for current zoom level
-      const QString url = tileUrl(wrappedTx, ty, m_zoom);
-
-      // Compute pixel position on screen for drawing this tile
-      const QPoint drawPoint(viewSize.width() / 2 + dx * tileSize - offsetX,
-                             viewSize.height() / 2 + dy * tileSize - offsetY);
-
-      // Draw tile if it's already in cache
-      if (m_tileCache.contains(url))
-        painter->drawImage(drawPoint, *m_tileCache.object(url));
-
-      // Tile not found: fallback to scaled lower-zoom tiles if possible
-      else
-      {
-        for (int z = m_zoom - 1; z >= MIN_ZOOM; --z)
-        {
-          const int dz = m_zoom - z;
-          const int scale = 1 << dz;
-
-          // Compute coordinates of parent tile at this lower zoom level
-          const int parentTx = tx >> dz;
-          const int parentTy = ty >> dz;
-
-          // Wrap parent X coordinate for global map continuity
-          const int wrappedParentTx
-              = (parentTx % (1 << z) + (1 << z)) % (1 << z);
-
-          // Generate URL for the lower-zoom parent tile
-          const QString parentUrl = tileUrl(wrappedParentTx, parentTy, z);
-
-          // Skip if tile isn't in the cache
-          if (!m_tileCache.contains(parentUrl))
-            continue;
-
-          // Extract subregion of the parent tile corresponding to target tile
-          auto *src = m_tileCache.object(parentUrl);
-          const QRect sourceRect((tx % scale) * (tileSize / scale),
-                                 (ty % scale) * (tileSize / scale),
-                                 tileSize / scale, tileSize / scale);
-
-          // Get parent tile
-          QImage finalTile;
-          const auto cropped = src->copy(sourceRect);
-
-          // Fill with the dominant color if parent zoom level is too coarse
-          if (qAbs(m_zoom - z) > 5)
-          {
-            QImage img = cropped.scaled(1, 1, Qt::IgnoreAspectRatio,
-                                        Qt::FastTransformation);
-            QColor dominant = img.pixelColor(0, 0);
-
-            QImage finalTile(tileSize, tileSize, QImage::Format_ARGB32);
-            finalTile.fill(dominant);
-          }
-
-          // Otherwise, scale up the subregion to tile size
-          else
-          {
-            finalTile = cropped.scaled(tileSize, tileSize, Qt::KeepAspectRatio,
-                                       Qt::FastTransformation);
-          }
-
-          // Render the fallback tile
-          painter->drawImage(drawPoint, finalTile);
-
-          // Stop as soon as we successfully rendered one fallback tile
-          break;
-        }
-      }
-    }
-  }
-
-  // Attribution string to display
-  const int margin = 6;
-  const QString attribution = "Copyright © Esri, Maxar, Earthstar Geographics";
-
-  // Font styling for the label
-  const QFont font = Misc::CommonFonts::instance().customUiFont(0.85);
-  painter->setFont(font);
-
-  // Measure the size of the text
-  const QFontMetrics metrics(font);
-  const QSize textSize = metrics.size(Qt::TextSingleLine, attribution);
-
-  // Define the background rectangle at bottom-right, tight to the text
-  QRect backgroundRect(viewSize.width() - textSize.width() - 2 * margin,
-                       viewSize.height() - textSize.height() - 2 * margin,
-                       textSize.width() + 2 * margin,
-                       textSize.height() + 2 * margin);
-
-  // Draw semi-transparent solid background
-  painter->setPen(Qt::NoPen);
-  painter->setBrush(QColor(0, 0, 0, 128));
-  painter->drawRect(backgroundRect);
-
-  // Draw white attribution text with slight transparency
-  painter->setPen(QColor(255, 255, 255, 220));
-  painter->drawText(backgroundRect.adjusted(margin, margin, -margin, -margin),
-                    Qt::AlignLeft | Qt::AlignVCenter, attribution);
-
-  // Convert current lat/lon to tile-space at current zoom
-  const QPointF gpsTile = latLonToTile(m_latitude, m_longitude, m_zoom);
-  const QPointF deltaBase = gpsTile - centerTile;
-
-  // Render the cross-hair three times: centre plus one wrap left / right
-  for (int wrap = -1; wrap <= 1; ++wrap)
-  {
-    // Shift X by ±(2^zoom) tiles to handle east/west wrap-around
-    const QPointF delta = deltaBase + QPointF(wrap * (1 << m_zoom), 0);
-
-    // Convert tile delta to on-screen pixel position
-    const QPoint drawPos(viewSize.width() / 2 + delta.x() * tileSize,
-                         viewSize.height() / 2 + delta.y() * tileSize);
-
-    // Set indicator sizes
-    constexpr int dotRadius = 5;
-    constexpr int haloRadius = 14;
-    constexpr int outerRadius = 7;
-
-    // Set indicator colors
-    constexpr QColor dotColor(0x00, 0x7a, 0xff);
-    constexpr QColor borderColor(0xff, 0xff, 0xff);
-    constexpr QColor haloColor(0x00, 0x7a, 0xff, 0x3f);
-
-    // Draw outer halo
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(haloColor);
-    painter->drawEllipse(drawPos, haloRadius, haloRadius);
-
-    // Draw white border
-    painter->setBrush(borderColor);
-    painter->drawEllipse(drawPos, outerRadius, outerRadius);
-
-    // Draw inner blue dot
-    painter->setBrush(dotColor);
-    painter->drawEllipse(drawPos, dotRadius, dotRadius);
-  }
+  // Paint widget data
+  paintMap(painter, viewport);
+  paintPathData(painter, viewport);
+  paintAttributionText(painter, viewport);
 }
 
 //------------------------------------------------------------------------------
@@ -366,6 +212,19 @@ bool Widgets::GPS::autoCenter() const
 }
 
 /**
+ * @brief Indicates whether the map should display the GPS trajectory.
+ *
+ * When enabled, the widget will render a visual trail representing
+ * the past GPS positions received over time.
+ *
+ * @return @c true if the trajectory line should be drawn; otherwise @c false.
+ */
+bool Widgets::GPS::plotTrajectory() const
+{
+  return m_plotTrajectory;
+}
+
+/**
  * @brief Provides the list of available user-friendly map type names.
  *
  * These names are suitable for display in a UI element (e.g., dropdown menu).
@@ -395,18 +254,57 @@ void Widgets::GPS::center()
 }
 
 /**
- * @brief Sets the zoom level.
- * @param zoom New zoom level.
+ * @brief Sets the map zoom level, preserving viewport center if auto-centering
+ *        is disabled.
  *
- * Updates the zoom and triggers repaint if it changed.
+ * If auto-centering is off, the map is re-centered so that the geographic
+ * location currently at the center of the viewport remains centered after
+ * the zoom level change.
+ *
+ * If auto-centering is on, the map recenters on the current GPS position.
+ *
+ * @param zoom Desired zoom level. It will be clamped to the valid range
+ *             for the current map type.
  */
 void Widgets::GPS::setZoomLevel(int zoom)
 {
+  // Bound zoom to valid zoom level
   const auto z = qBound(MIN_ZOOM, zoom, m_mapMaxZoom[m_mapType]);
-  if (m_zoom != z)
+
+  // Skip if zoom is the same
+  if (m_zoom == z)
+    return;
+
+  // Set zoom level and center map on viewport center
+  if (!autoCenter())
+  {
+    // Compute which lat/lon is currently at the center of the widget
+    const QPointF pixelCenter(width() / 2.0, height() / 2.0);
+    const QPointF tileCenter
+        = m_centerTile
+          + QPointF((pixelCenter.x() - width() / 2.0) / 256.0,
+                    (pixelCenter.y() - height() / 2.0) / 256.0);
+
+    // Convert screen center tile to geographic lat/lon
+    const QPointF geo = tileToLatLon(tileCenter, m_zoom);
+
+    // Update zoom, then reproject lat/lon to new zoom level
+    m_zoom = z;
+    const QPointF newTile = latLonToTile(geo.x(), geo.y(), m_zoom);
+
+    // Set new center tile so that geo stays centered in the widget
+    m_centerTile = clampCenterTile(newTile);
+
+    // Redraw the widget
+    updateTiles();
+    update();
+  }
+
+  // Set the zoom level and let center() fix the world for us
+  else
   {
     m_zoom = z;
-    update();
+    center();
   }
 }
 
@@ -467,6 +365,27 @@ void Widgets::GPS::setAutoCenter(const bool enabled)
   }
 }
 
+/**
+ * @brief Enables or disables the trajectory visualization on the map.
+ *
+ * When set to @c true, the GPS widget draws a trail that represents the
+ * historical path of the tracked GPS location. This value is persisted
+ * in the application settings and takes effect immediately.
+ *
+ * @param enabled @c true to display the trajectory; @c false to hide it.
+ */
+void Widgets::GPS::setPlotTrajectory(const bool enabled)
+{
+  if (m_plotTrajectory != enabled)
+  {
+    m_plotTrajectory = enabled;
+    m_settings.setValue(QStringLiteral("gpsPlotTrajectory"), enabled);
+
+    update();
+    Q_EMIT plotTrajectoryChanged();
+  }
+}
+
 //------------------------------------------------------------------------------
 // Data model updating
 //------------------------------------------------------------------------------
@@ -479,44 +398,55 @@ void Widgets::GPS::setAutoCenter(const bool enabled)
  */
 void Widgets::GPS::updateData()
 {
+  // No need to update if widget is not enabled
   if (!isEnabled())
     return;
 
-  if (VALIDATE_WIDGET(SerialStudio::DashboardGPS, m_index))
+  // No need to update if widget is invalid
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardGPS, m_index))
+    return;
+
+  // Obtain series data
+  const auto &series = UI::Dashboard::instance().gpsSeries(m_index);
+  if (series.latitudes.empty() || series.longitudes.empty()
+      || series.altitudes.empty())
+    return;
+
+  // Grab most recent GPS values
+  const double alt = series.altitudes.back();
+  const double lat = series.latitudes.back();
+  const double lon = series.longitudes.back();
+
+  // Stop update if data is invalid
+  if (std::isnan(alt) && std::isnan(lat) && std::isnan(lon))
+    return;
+
+  // Stop update if data did not change
+  if (qFuzzyCompare(lat, m_latitude) && qFuzzyCompare(lon, m_longitude)
+      && qFuzzyCompare(alt, m_altitude))
+    return;
+
+  // Update tracking values
+  if (!std::isnan(lat))
+    m_latitude = lat;
+  if (!std::isnan(lon))
+    m_longitude = lon;
+  if (std::isnan(alt))
+    m_altitude = alt;
+
+  // Auto-center (redraws widget)
+  if (autoCenter())
+    center();
+
+  // Redraw widget
+  else
   {
-    const auto &group = GET_GROUP(SerialStudio::DashboardGPS, m_index);
-
-    double lat = 0, lon = 0, alt = 0;
-    for (int i = 0; i < group.datasetCount(); ++i)
-    {
-      const auto &dataset = group.getDataset(i);
-      if (dataset.widget() == QStringLiteral("lat"))
-        lat = dataset.value().toDouble();
-      else if (dataset.widget() == QStringLiteral("lon"))
-        lon = dataset.value().toDouble();
-      else if (dataset.widget() == QStringLiteral("alt"))
-        alt = dataset.value().toDouble();
-    }
-
-    if (!qFuzzyCompare(lat, m_latitude) || !qFuzzyCompare(lon, m_longitude)
-        || !qFuzzyCompare(alt, m_altitude))
-    {
-      m_latitude = lat;
-      m_altitude = alt;
-      m_longitude = lon;
-
-      if (autoCenter())
-        center();
-
-      else
-      {
-        updateTiles();
-        update();
-      }
-
-      Q_EMIT updated();
-    }
+    update();
+    updateTiles();
   }
+
+  // Update UI
+  Q_EMIT updated();
 }
 
 //------------------------------------------------------------------------------
@@ -610,6 +540,28 @@ void Widgets::GPS::precacheWorld()
 }
 
 /**
+ * @brief Updates colors based on the current theme.
+ *
+ * Sets line head/tail colors as a brightness gradient around the base color.
+ * Also updates grid and axis colors from the theme manager.
+ */
+void Widgets::GPS::onThemeChanged()
+{
+  // Obtain color for latest line data
+  auto c = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
+  if (c.count() > m_index)
+    m_lineHeadColor = c.at(m_index).toString();
+  else
+    m_lineHeadColor = c.at(m_index % c.count()).toString();
+
+  // Create gradient based on widget index
+  QColor midCurve(m_lineHeadColor);
+  m_lineTailColor = midCurve.darker(130);
+  m_lineHeadColor = midCurve.lighter(130);
+  m_lineTailColor.setAlpha(156);
+}
+
+/**
  * @brief Called when a tile download finishes.
  * @param reply Pointer to the completed QNetworkReply.
  *
@@ -633,6 +585,318 @@ void Widgets::GPS::onTileFetched(QNetworkReply *reply)
 
   reply->deleteLater();
   m_pending.remove(url);
+}
+
+//------------------------------------------------------------------------------
+// Widget painting functions
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Renders the visible portion of the map using cached tiles.
+ *
+ * This function draws the background map tiles based on the current center
+ * tile coordinates and zoom level. It first fills the viewport with a solid
+ * color, then attempts to draw each visible tile. If a tile is missing at
+ * the current zoom level, it falls back to a parent tile from a lower zoom,
+ * scaling it appropriately. If the parent tile is too coarse (difference > 5),
+ * it fills the tile with the tile's dominant color to avoid visual noise.
+ *
+ * Horizontal wrapping is handled to allow seamless east-west panning. Vertical
+ * wrapping is not allowed.
+ *
+ * @param painter Pointer to the QPainter used for rendering.
+ * @param view The current size of the widget viewport in pixels.
+ */
+void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
+{
+  // Validate arguments
+  Q_ASSERT(painter);
+
+  // Fill the painter with a background
+  painter->fillRect(painter->viewport(), QColor(0x0C, 0x47, 0x5C));
+
+  // Tile sizing constants
+  constexpr int tileSize = 256;
+  const QPointF centerTile = m_centerTile;
+
+  // Integer tile coordinates of the center tile
+  const int centerX = static_cast<int>(centerTile.x());
+  const int centerY = static_cast<int>(centerTile.y());
+
+  // Pixel offset inside the center tile (sub-tile precision)
+  const double offsetX = (centerTile.x() - centerX) * tileSize;
+  const double offsetY = (centerTile.y() - centerY) * tileSize;
+
+  // Number of tiles needed horizontally and vertically (including margins)
+  const int tilesX = view.width() / tileSize + 2;
+  const int tilesY = view.height() / tileSize + 2;
+
+  // Render visible tiles
+  for (int dx = -tilesX / 2; dx <= tilesX / 2; ++dx)
+  {
+    for (int dy = -tilesY / 2; dy <= tilesY / 2; ++dy)
+    {
+      // Compute absolute tile coordinates relative to map center
+      const int tx = centerX + dx;
+      const int ty = centerY + dy;
+
+      // Wrap X to allow seamless east/west panning around the globe
+      const int wrappedTx
+          = (tx % (1 << m_zoom) + (1 << m_zoom)) % (1 << m_zoom);
+
+      // Skip if tile is outside vertical bounds (no wrapping in Y)
+      if (ty < 0 || ty >= (1 << m_zoom))
+        continue;
+
+      // Generate tile URL for current zoom level
+      const QString url = tileUrl(wrappedTx, ty, m_zoom);
+
+      // Compute pixel position on screen for drawing this tile
+      const QPoint drawPoint(view.width() / 2 + dx * tileSize - offsetX,
+                             view.height() / 2 + dy * tileSize - offsetY);
+
+      // Draw tile if it's already in cache
+      if (m_tileCache.contains(url))
+        painter->drawImage(drawPoint, *m_tileCache.object(url));
+
+      // Tile not found: fallback to scaled lower-zoom tiles if possible
+      else
+      {
+        for (int z = m_zoom - 1; z >= MIN_ZOOM; --z)
+        {
+          const int dz = m_zoom - z;
+          const int scale = 1 << dz;
+
+          // Compute coordinates of parent tile at this lower zoom level
+          const int parentTx = tx >> dz;
+          const int parentTy = ty >> dz;
+
+          // Wrap parent X coordinate for global map continuity
+          const int wrappedParentTx
+              = (parentTx % (1 << z) + (1 << z)) % (1 << z);
+
+          // Generate URL for the lower-zoom parent tile
+          const QString parentUrl = tileUrl(wrappedParentTx, parentTy, z);
+
+          // Skip if tile isn't in the cache
+          if (!m_tileCache.contains(parentUrl))
+            continue;
+
+          // Extract subregion of the parent tile corresponding to target tile
+          auto *src = m_tileCache.object(parentUrl);
+          const QRect sourceRect((tx % scale) * (tileSize / scale),
+                                 (ty % scale) * (tileSize / scale),
+                                 tileSize / scale, tileSize / scale);
+
+          // Get parent tile
+          QImage finalTile;
+          const auto cropped = src->copy(sourceRect);
+
+          // Fill with the dominant color if parent zoom level is too coarse
+          if (qAbs(m_zoom - z) > 5)
+          {
+            QImage img = cropped.scaled(1, 1, Qt::IgnoreAspectRatio,
+                                        Qt::FastTransformation);
+            QColor dominant = img.pixelColor(0, 0);
+
+            QImage finalTile(tileSize, tileSize, QImage::Format_ARGB32);
+            finalTile.fill(dominant);
+          }
+
+          // Otherwise, scale up the subregion to tile size
+          else
+          {
+            finalTile = cropped.scaled(tileSize, tileSize, Qt::KeepAspectRatio,
+                                       Qt::FastTransformation);
+          }
+
+          // Render the fallback tile
+          painter->drawImage(drawPoint, finalTile);
+
+          // Stop as soon as we successfully rendered one fallback tile
+          break;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * @brief Paints the GPS trajectory and position marker overlay.
+ *
+ * This function draws the cached image containing the GPS path data,
+ * including the historical trajectory and current location indicator.
+ * It assumes that the path image (`m_gpsDataImage`) has already been
+ * updated via `updateData()` or a similar method and is aligned with
+ * the current view transformation.
+ *
+ * @param painter Pointer to the QPainter used for rendering.
+ * @param view The current size of the widget viewport (unused).
+ */
+void Widgets::GPS::paintPathData(QPainter *painter, const QSize &view)
+{
+  // Validate arguments
+  Q_ASSERT(painter);
+
+  // No need to update if widget is not enabled
+  if (!isEnabled())
+    return;
+
+  // No need to update if widget is invalid
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardGPS, m_index))
+    return;
+
+  // Obtain series data
+  const auto &series = UI::Dashboard::instance().gpsSeries(m_index);
+  if (series.latitudes.empty() || series.longitudes.empty()
+      || series.altitudes.empty())
+    return;
+
+  // Initialize parameters
+  constexpr int tileSize = 256;
+  const QPointF centerTile = m_centerTile;
+
+  // Plot the trajectory of the tracked device
+  if (m_plotTrajectory)
+  {
+    // Initialize parameters
+    constexpr int tileSize = 256;
+    const double world = 1 << m_zoom;
+    const QPointF cTile = m_centerTile;
+
+    // Project lat/lon to on-screen pixel
+    auto project = [&](double lat, double lon) -> QPointF {
+      QPointF tile = latLonToTile(lat, lon, m_zoom);
+
+      double dx = tile.x() - cTile.x();
+      dx -= std::round(dx / world) * world;
+
+      QPointF delta(dx, tile.y() - cTile.y());
+      return {view.width() * 0.5 + delta.x() * tileSize,
+              view.height() * 0.5 + delta.y() * tileSize};
+    };
+
+    // Generate a path with historical samples
+    QVector<QPointF> path;
+    for (size_t i = 0; i < series.latitudes.size(); ++i)
+    {
+      const double lat = series.latitudes[i];
+      const double lon = series.longitudes[i];
+      if (!std::isnan(lat) && !std::isnan(lon))
+        path.append(project(lat, lon));
+    }
+
+    // Append current location to path
+    if (!std::isnan(m_latitude) && !std::isnan(m_longitude))
+      path.append(project(m_latitude, m_longitude));
+
+    // Skip if nothing on screen
+    const QRectF vp(0, 0, view.width(), view.height());
+    auto v = std::any_of(path.cbegin(), path.cend(),
+                         [&](const QPointF &p) { return vp.contains(p); });
+
+    // Draw the path
+    if (v && path.size() > 1)
+    {
+      QPainterPath linePath(path[0]);
+      for (qsizetype i = 1; i < path.size(); ++i)
+        linePath.lineTo(path[i]);
+
+      QLinearGradient grad(path.first(), path.last());
+      grad.setColorAt(0.0, m_lineTailColor);
+      grad.setColorAt(1.0, m_lineHeadColor);
+
+      QPen pen(QBrush(grad), 2);
+      painter->setPen(pen);
+      painter->drawPath(linePath);
+    }
+  }
+
+  // Convert current lat/lon to tile-space at current zoom
+  const QPointF gpsTile = latLonToTile(m_latitude, m_longitude, m_zoom);
+  const QPointF deltaBase = gpsTile - centerTile;
+
+  // Render the indicator three times: centre plus one wrap left / right
+  for (int wrap = -1; wrap <= 1; ++wrap)
+  {
+    // Shift X by ±(2^zoom) tiles to handle east/west wrap-around
+    const QPointF delta = deltaBase + QPointF(wrap * (1 << m_zoom), 0);
+
+    // Convert tile delta to on-screen pixel position
+    const QPoint drawPos(view.width() / 2 + delta.x() * tileSize,
+                         view.height() / 2 + delta.y() * tileSize);
+
+    // Set indicator sizes
+    constexpr int dotRadius = 5;
+    constexpr int haloRadius = 14;
+    constexpr int outerRadius = 7;
+
+    // Set indicator colors
+    auto dotColor = m_lineHeadColor;
+    auto haloColor = m_lineHeadColor;
+    auto borderColor = QColor(0xff, 0xff, 0xff);
+    haloColor.setAlpha(0x3f);
+
+    // Draw outer halo
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(haloColor);
+    painter->drawEllipse(drawPos, haloRadius, haloRadius);
+
+    // Draw white border
+    painter->setBrush(borderColor);
+    painter->drawEllipse(drawPos, outerRadius, outerRadius);
+
+    // Draw inner blue dot
+    painter->setBrush(dotColor);
+    painter->drawEllipse(drawPos, dotRadius, dotRadius);
+  }
+}
+
+/**
+ * @brief Renders the map attribution text in the bottom-right corner.
+ *
+ * Draws a semi-transparent black background rectangle with white text
+ * on top, indicating the copyright and attribution for map tile sources.
+ * The text is anchored to the bottom-right of the current viewport.
+ *
+ * This function ensures compliance with usage requirements from tile
+ * providers like Esri, Maxar, and Earthstar Geographics.
+ *
+ * @param painter Pointer to the QPainter used for rendering.
+ * @param view Size of the current viewport, used to position the text.
+ */
+void Widgets::GPS::paintAttributionText(QPainter *painter, const QSize &view)
+{
+  // Validate arguments
+  Q_ASSERT(painter);
+
+  // Attribution string to display
+  const int margin = 6;
+  const QString attribution = "Copyright © Esri, Maxar, Earthstar Geographics";
+
+  // Font styling for the label
+  const QFont font = Misc::CommonFonts::instance().customUiFont(0.85);
+  painter->setFont(font);
+
+  // Measure the size of the text
+  const QFontMetrics metrics(font);
+  const QSize textSize = metrics.size(Qt::TextSingleLine, attribution);
+
+  // Define the background rectangle at bottom-right, tight to the text
+  QRect backgroundRect(view.width() - textSize.width() - 2 * margin,
+                       view.height() - textSize.height() - 2 * margin,
+                       textSize.width() + 2 * margin,
+                       textSize.height() + 2 * margin);
+
+  // Draw semi-transparent solid background
+  painter->setPen(Qt::NoPen);
+  painter->setBrush(QColor(0, 0, 0, 128));
+  painter->drawRect(backgroundRect);
+
+  // Draw white attribution text with slight transparency
+  painter->setPen(QColor(255, 255, 255, 220));
+  painter->drawText(backgroundRect.adjusted(margin, margin, -margin, -margin),
+                    Qt::AlignLeft | Qt::AlignVCenter, attribution);
 }
 
 //------------------------------------------------------------------------------
@@ -755,19 +1019,27 @@ void Widgets::GPS::wheelEvent(QWheelEvent *event)
 
   if (newZoom != m_zoom)
   {
-    const QPointF cursorPos = event->position();
-    const QPointF cursorTileOffset((cursorPos.x() - width() / 2.0) / 256.0,
-                                   (cursorPos.y() - height() / 2.0) / 256.0);
+    if (!autoCenter())
+    {
+      const QPointF cursorPos = event->position();
+      const QPointF cursorTileOffset((cursorPos.x() - width() / 2.0) / 256.0,
+                                     (cursorPos.y() - height() / 2.0) / 256.0);
 
-    const QPointF cursorTile = m_centerTile + cursorTileOffset;
-    const QPointF geo = tileToLatLon(cursorTile, m_zoom);
-    setZoomLevel(newZoom);
+      const QPointF cursorTile = m_centerTile + cursorTileOffset;
+      const QPointF geo = tileToLatLon(cursorTile, m_zoom);
+      m_zoom = newZoom;
 
-    const QPointF newTile = latLonToTile(geo.x(), geo.y(), m_zoom);
-    m_centerTile = clampCenterTile(newTile - cursorTileOffset);
+      const QPointF newTile = latLonToTile(geo.x(), geo.y(), m_zoom);
+      m_centerTile = clampCenterTile(newTile - cursorTileOffset);
 
-    updateTiles();
-    update();
+      updateTiles();
+      update();
+
+      Q_EMIT zoomLevelChanged();
+    }
+
+    else
+      setZoomLevel(newZoom);
   }
 
   event->accept();

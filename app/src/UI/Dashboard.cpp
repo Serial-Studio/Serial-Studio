@@ -514,7 +514,7 @@ const JSON::Frame &UI::Dashboard::processedFrame()
 }
 
 //------------------------------------------------------------------------------
-// Plot data access
+// Time-series data access
 //------------------------------------------------------------------------------
 
 /**
@@ -524,6 +524,15 @@ const JSON::Frame &UI::Dashboard::processedFrame()
 const PlotDataY &UI::Dashboard::fftData(const int index) const
 {
   return m_fftValues[index];
+}
+
+/**
+ * @brief Provides the GPS trajectory data currently displayed on the dashboard.
+ * @return A reference to a QVector containing the GpsSeries data.
+ */
+const GpsSeries &UI::Dashboard::gpsSeries(const int index) const
+{
+  return m_gpsValues[index];
 }
 
 /**
@@ -621,6 +630,10 @@ void UI::Dashboard::resetData(const bool notify)
   m_plotData3D.clear();
   m_plotData3D.squeeze();
 #endif
+
+  // Clear GPS data
+  m_gpsValues.clear();
+  m_gpsValues.squeeze();
 
   // Clear X/Y axis arrays
   m_xAxisData.clear();
@@ -831,7 +844,7 @@ void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
   }
 
   // Update plot memory structures
-  updatePlots();
+  updateDataSeries();
 }
 
 /**
@@ -996,7 +1009,8 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
     m_datasetReferences[uid].append(&dataset);
   }
 
-  // Update actions
+  // Initialize data series & update actions
+  updateDataSeries();
   configureActions(frame);
 
   // Update user interface
@@ -1004,21 +1018,36 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
 }
 
 //------------------------------------------------------------------------------
-// Plot data processing
+// Time series data processing
 //------------------------------------------------------------------------------
 
 /**
- * @brief Updates the plot data for all dashboard widgets.
+ * @brief Updates time-series data for all dashboard widgets that require
+ * historical tracking.
  *
- * This function ensures that the data structures for FFT plots, linear plots,
- * and multiplots are correctly initialized and updated with the latest values
- * from the datasets. It handles reinitialization if the widget count changes
- * and shifts data to accommodate new samples.
+ * This method handles real-time updating of internal data buffers for all
+ * widgets that visualize ordered or continuous data over time, including:
+ * - FFT plots
+ * - Linear (2D) plots
+ * - Multi-series (grouped) plots
+ * - GPS trajectory widgets (lat/lon/alt history)
+ * - 3D trajectory plots (X/Y/Z vectors) [Pro only]
  *
- * @note This function is typically called in real-time to keep plots
- *       synchronized with incoming data.
+ * For each type, the function:
+ * - Checks if the internal buffer count matches the current number of widgets.
+ *   If not, the corresponding `configure*Series()` method is called to
+ *   allocate/initialize memory.
+ * - Shifts in the latest sample from the dashboard dataset into the correct
+ *   slot of the buffer.
+ *
+ * @note This method is typically called once per update frame (e.g., 24Hz) to
+ * ensure smooth, accurate rendering of time-dependent data.
+ *
+ * @warning GPS and 3D plots rely on structured dataset groups and expect the
+ *          widgets to provide fields like [`lat`, `lon`, `alt`], or
+ *          [`x`, `y`, `z`].
  */
-void UI::Dashboard::updatePlots()
+void UI::Dashboard::updateDataSeries()
 {
   // Check if we need to re-initialize FFT plots data
   if (m_fftValues.count() != widgetCount(SerialStudio::DashboardFFT))
@@ -1032,19 +1061,14 @@ void UI::Dashboard::updatePlots()
   if (m_multipltValues.count() != widgetCount(SerialStudio::DashboardMultiPlot))
     configureMultiLineSeries();
 
+  // Check if we need to re-initialize GPS data
+  if (m_gpsValues.count() != widgetCount(SerialStudio::DashboardGPS))
+    configureGpsSeries();
+
   // Check if we need to re-initialize 3D plot data
 #ifdef BUILD_COMMERCIAL
   if (m_plotData3D.count() != widgetCount(SerialStudio::DashboardPlot3D))
-  {
-    m_plotData3D.clear();
-    m_plotData3D.squeeze();
-    m_plotData3D.resize(widgetCount(SerialStudio::DashboardPlot3D));
-    for (int i = 0; i < m_plotData3D.count(); ++i)
-    {
-      m_plotData3D[i].clear();
-      m_plotData3D[i].shrink_to_fit();
-    }
-  }
+    configurePlot3DSeries();
 #endif
 
   // Append latest values to FFT plots data
@@ -1123,6 +1147,81 @@ void UI::Dashboard::updatePlots()
       plotData.erase(plotData.begin(), plotData.end() - points());
   }
 #endif
+
+  // Append latest values to GPS trajectory data
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardGPS); ++i)
+  {
+    const auto &group = getGroupWidget(SerialStudio::DashboardGPS, i);
+    auto &series = m_gpsValues[i];
+
+    double lat = -1, lon = -1, alt = -1;
+    for (int j = 0; j < group.datasetCount(); ++j)
+    {
+      const auto &dataset = group.datasets()[j];
+      const QString id = dataset.widget();
+
+      if (id == "lat")
+        lat = dataset.value().toDouble();
+      else if (id == "lon")
+        lon = dataset.value().toDouble();
+      else if (id == "alt")
+        alt = dataset.value().toDouble();
+    }
+
+    // Shift GPS time series data
+    auto *latData = series.latitudes.data();
+    auto *lonData = series.longitudes.data();
+    auto *altData = series.altitudes.data();
+    const int count = series.latitudes.size();
+    SIMD::shift(latData, count, lat);
+    SIMD::shift(lonData, count, lon);
+    SIMD::shift(altData, count, alt);
+  }
+}
+
+/**
+ * @brief Initializes the GPS series structure for all GPS widgets.
+ *
+ * This method prepares internal storage for GPS trajectory data by:
+ * - Clearing any existing series
+ * - Allocating new `GpsSeries` entries for each GPS widget in the dashboard
+ * - Pre-sizing the latitude, longitude, and altitude arrays with default values
+ *
+ * Each vector is resized to hold `points() + 1` samples, where `points()`
+ * represents the maximum number of time-series points tracked. The default
+ * value of -1 is used to represent invalid or uninitialized data.
+ *
+ * Called once during setup or reset of the dashboard's GPS data series.
+ */
+void UI::Dashboard::configureGpsSeries()
+{
+  // Clear memory
+  m_gpsValues.clear();
+  m_gpsValues.squeeze();
+
+  // Construct GPS data structure
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardGPS); ++i)
+  {
+    GpsSeries series;
+    const auto &group = getGroupWidget(SerialStudio::DashboardGPS, i);
+    const QMap<QString, std::vector<double> *> fieldMap
+        = {{"lat", &series.latitudes},
+           {"lon", &series.longitudes},
+           {"alt", &series.altitudes}};
+
+    for (int j = 0; j < group.datasetCount(); ++j)
+    {
+      const auto &dataset = group.datasets()[j];
+      if (fieldMap.contains(dataset.widget()))
+      {
+        auto *vector = fieldMap[dataset.widget()];
+        vector->resize(points() + 1);
+        SIMD::fill(vector->data(), points() + 1, std::nan(""));
+      }
+    }
+
+    m_gpsValues.append(series);
+  }
 }
 
 /**
@@ -1244,6 +1343,33 @@ void UI::Dashboard::configureLineSeries()
   }
 }
 
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Initializes internal data structures for 3D trajectory plot widgets.
+ *
+ * This method ensures that the internal storage (`m_plotData3D`) is correctly
+ * resized and cleared to match the current number of 3D plot widgets in the
+ * dashboard. Each entry in the list corresponds to a widget and holds a
+ * time-ordered list of 3D points (`QVector3D`) representing the X, Y, and
+ * Z axes.
+ *
+ * @note This function is typically called when the number of widgets changes or
+ *       during dashboard reinitialization to prevent buffer overflows or stale
+ *       data.
+ */
+void UI::Dashboard::configurePlot3DSeries()
+{
+  m_plotData3D.clear();
+  m_plotData3D.squeeze();
+  m_plotData3D.resize(widgetCount(SerialStudio::DashboardPlot3D));
+  for (int i = 0; i < m_plotData3D.count(); ++i)
+  {
+    m_plotData3D[i].clear();
+    m_plotData3D[i].shrink_to_fit();
+  }
+}
+#endif
+
 /**
  * @brief Configures the multi-line series data structure for the dashboard.
  *
@@ -1283,6 +1409,10 @@ void UI::Dashboard::configureMultiLineSeries()
     m_multipltValues.append(series);
   }
 }
+
+//------------------------------------------------------------------------------
+// Action configuration
+//------------------------------------------------------------------------------
 
 /**
  * @brief Configures dashboard actions and associated timers from the

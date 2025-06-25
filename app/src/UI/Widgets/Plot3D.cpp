@@ -685,8 +685,9 @@ void Widgets::Plot3D::onThemeChanged()
 
   // Create gradient based on widget index
   QColor midCurve(m_lineHeadColor);
-  m_lineTailColor = midCurve.darker(130);
-  m_lineHeadColor = midCurve.lighter(130);
+  m_lineHeadColor = midCurve.darker(130);
+  m_lineTailColor = midCurve.lighter(130);
+  m_lineTailColor.setAlpha(156);
 
   // Obtain colors for XY plane & axes
   // clang-format off
@@ -1330,16 +1331,16 @@ QImage Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
   // Interpolate points by generated a gradient line
   if (m_interpolate)
   {
-    const auto &endColor = m_lineTailColor;
-    const auto &startColor = m_lineHeadColor;
+    const auto &endColor = m_lineHeadColor;
+    const auto &startColor = m_lineTailColor;
     const auto numPoints = static_cast<qsizetype>(points.size());
     for (qsizetype i = 1; i < numPoints; ++i)
     {
       QColor c;
-      double tVal = double(i) / numPoints;
-      c.setRedF(startColor.redF() * (1 - tVal) + endColor.redF() * tVal);
-      c.setGreenF(startColor.greenF() * (1 - tVal) + endColor.greenF() * tVal);
-      c.setBlueF(startColor.blueF() * (1 - tVal) + endColor.blueF() * tVal);
+      double t = double(i) / numPoints;
+      c.setRedF(startColor.redF() * (1 - t) + endColor.redF() * t);
+      c.setGreenF(startColor.greenF() * (1 - t) + endColor.greenF() * t);
+      c.setBlueF(startColor.blueF() * (1 - t) + endColor.blueF() * t);
 
       painter.setPen(QPen(c, 2));
       painter.drawLine(points[i - 1], points[i]);

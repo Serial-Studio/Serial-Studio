@@ -70,18 +70,48 @@ typedef std::vector<PlotDataY> MultiPlotDataY;
  */
 typedef struct
 {
-  PlotDataX *x;
-  PlotDataY *y;
+  PlotDataX *x; ///< X-axis data (e.g., time or samples)
+  PlotDataY *y; ///< Y-axis data (e.g., sensor readings)
 } LineSeries;
 
 /**
- * @typedef MultiLineSeries
+ * @struct MultiLineSeries
+ * @brief Represents a set of line plots sharing a common X-axis.
+ *
+ * This structure is used for rendering multi-curve plots, such as when multiple
+ * sensors or variables are plotted against the same time base or domain.
+ *
+ * - `x`: Pointer to the shared X-axis data (e.g., time).
+ * - `y`: A list of Y-axis data vectors, where each entry represents one curve.
+ *
+ * All Y-series are expected to align with the length and indexing of the
+ * shared X-axis.
  */
 typedef struct
 {
-  PlotDataX *x;
-  std::vector<PlotDataY> y;
+  PlotDataX *x;             ///< Shared X-axis data (e.g., time or index)
+  std::vector<PlotDataY> y; ///< Y-axis data for each individual curve
 } MultiLineSeries;
+
+/**
+ * @struct GpsSeries
+ * @brief Represents a time-ordered sequence of GPS position data.
+ *
+ * This structure stores a trajectory as three parallel vectors:
+ * - `latitudes`: The latitude values in degrees.
+ * - `longitudes`: The longitude values in degrees.
+ * - `altitudes`: The altitude values in meters.
+ *
+ * Each index across the three vectors corresponds to a single
+ * recorded GPS point in time. This format is optimized for
+ * visualization, analysis, and storage of path-based geospatial data.
+ */
+typedef struct
+{
+  std::vector<double> latitudes;  ///< Latitude values (degrees)
+  std::vector<double> longitudes; ///< Longitude values (degrees)
+  std::vector<double> altitudes;  ///< Altitude values (meters)
+} GpsSeries;
 
 /**
  * @class SerialStudio

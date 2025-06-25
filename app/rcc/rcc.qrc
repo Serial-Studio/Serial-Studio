@@ -166,12 +166,15 @@
         <file>icons/dashboard-buttons/orthogonal_view.svg</file>
         <file>icons/dashboard-buttons/pan.svg</file>
         <file>icons/dashboard-buttons/pause.svg</file>
+        <file>icons/dashboard-buttons/poliline.svg</file>
         <file>icons/dashboard-buttons/resume.svg</file>
         <file>icons/dashboard-buttons/return.svg</file>
         <file>icons/dashboard-buttons/save-as.svg</file>
         <file>icons/dashboard-buttons/top_view.svg</file>
         <file>icons/dashboard-buttons/x.svg</file>
         <file>icons/dashboard-buttons/y.svg</file>
+        <file>icons/dashboard-buttons/zoom-in.svg</file>
+        <file>icons/dashboard-buttons/zoom-out.svg</file>
         <file>icons/dashboard-large/accelerometer.svg</file>
         <file>icons/dashboard-large/bar.svg</file>
         <file>icons/dashboard-large/compass.svg</file>

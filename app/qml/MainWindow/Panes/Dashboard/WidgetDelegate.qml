@@ -219,6 +219,7 @@ Widgets.MiniWindow {
         height: 480
         visible: true
         transientParent: null
+        objectName: "ExternalWindow"
         minimumWidth: root.minimumWidth
         minimumHeight: root.minimumHeight
         onClosing: externalWindowLoader.active = false

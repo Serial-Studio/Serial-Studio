@@ -127,6 +127,7 @@ public:
   [[nodiscard]] const JSON::Frame &rawFrame();
   [[nodiscard]] const JSON::Frame &processedFrame();
   [[nodiscard]] const PlotDataY &fftData(const int index) const;
+  [[nodiscard]] const GpsSeries &gpsSeries(const int index) const;
   [[nodiscard]] const LineSeries &plotData(const int index) const;
   [[nodiscard]] const MultiLineSeries &multiplotData(const int index) const;
 
@@ -149,10 +150,11 @@ private:
   void updateDashboardData(const JSON::Frame &frame);
   void reconfigureDashboard(const JSON::Frame &frame);
 
-  void updatePlots();
-
+  void updateDataSeries();
+  void configureGpsSeries();
   void configureFftSeries();
   void configureLineSeries();
+  void configurePlot3DSeries();
   void configureMultiLineSeries();
   void configureActions(const JSON::Frame &frame);
 
@@ -170,6 +172,7 @@ private:
   QMap<int, PlotDataX> m_xAxisData; // X-axis data per dataset index
   QMap<int, PlotDataY> m_yAxisData; // Y-axis data per dataset index
 
+  QVector<GpsSeries> m_gpsValues;            // GPS data per GPS widget
   QVector<PlotDataY> m_fftValues;            // FFT data per dataset
   QVector<LineSeries> m_pltValues;           // Line plot data
   QVector<MultiLineSeries> m_multipltValues; // Multi-line plot data
