@@ -402,6 +402,7 @@ void Widgets::GPS::setMapType(const int type)
     updateTiles();
     precacheWorld();
     updateData();
+    update();
 
     Q_EMIT mapTypeChanged();
   }
@@ -427,12 +428,10 @@ void Widgets::GPS::setWeatherOffset(const int index)
   if (m_weatherOffset != id)
   {
     m_weatherOffset = id;
-    m_tileCache.clear();
     m_settings.setValue(QStringLiteral("gpsWeatherOffset"), id);
 
     updateTiles();
-    precacheWorld();
-    updateData();
+    update();
 
     Q_EMIT weatherOffsetChanged();
   }
@@ -478,8 +477,7 @@ void Widgets::GPS::setShowWeather(const bool enabled)
     m_settings.setValue(QStringLiteral("gpsWeather"), enabled);
 
     updateTiles();
-    precacheWorld();
-    updateData();
+    update();
 
     Q_EMIT showWeatherChanged();
   }
