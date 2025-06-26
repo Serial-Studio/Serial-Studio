@@ -231,8 +231,7 @@ This license is governed by the laws of **Mexico**, and any legal action must be
 To report license violations or respond to a takedown:
 
 - **Agent**: Alex Spataru  
-- **Email**: [alex@serial-studio.com]  
-- **Address**: [Insert business/legal mailing address]
+- **Email**: alex@serial-studio.com
 
 This project complies with 17 U.S.C. § 512 and issues takedowns for:
 
