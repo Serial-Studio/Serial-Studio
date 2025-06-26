@@ -55,9 +55,7 @@ Item {
       _mapType.currentIndex = model.mapType
       _autoCenter.checked = model.autoCenter
       _showWeather.checked = model.showWeather
-      _weatherOffset.model = model.weatherLayers
       _plotTrajectory.checked = model.plotTrajectory
-      _weatherOffset.currentIndex = model.weatherOffset
     }
   }
 
@@ -112,7 +110,7 @@ Item {
       color: Cpp_ThemeManager.colors["widget_border"]
     }
 
-    /*ToolButton {
+    ToolButton {
       icon.width: 24
       icon.height: 24
       icon.color: "transparent"
@@ -138,14 +136,14 @@ Item {
       implicitWidth: 1
       implicitHeight: 24
       color: Cpp_ThemeManager.colors["widget_border"]
-    }*/
+    }
 
     ToolButton {
       id: _showWeather
       icon.width: 24
       icon.height: 24
       icon.color: "transparent"
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/earth.svg"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/weather.svg"
       onClicked: {
         if (root.model) {
           root.model.showWeather = !root.model.showWeather
@@ -154,46 +152,31 @@ Item {
       }
     }
 
-    ColumnLayout {
-      spacing: 2
+    Rectangle {
+      implicitWidth: 1
+      implicitHeight: 24
+      color: Cpp_ThemeManager.colors["widget_border"]
+    }
+
+    ToolButton {
+      icon.width: 24
+      icon.height: 24
+      enabled: false
+      icon.color: "transparent"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/map.svg"
+    }
+
+    ComboBox {
+      id: _mapType
       Layout.fillWidth: true
+      Layout.alignment: Qt.AlignVCenter
+      displayText: qsTr("Base Map: %1").arg(currentText)
 
-      ComboBox {
-        id: _mapType
-        Layout.fillWidth: true
-        Layout.minimumHeight: 18
-        Layout.maximumHeight: 18
-        Layout.alignment: Qt.AlignVCenter
-        font: Cpp_Misc_CommonFonts.customUiFont(0.85)
-        displayText: qsTr("Base Map: %1").arg(currentText)
-
-        onCurrentIndexChanged: {
-          if (root.model) {
-            if (root.model.mapType !== currentIndex) {
-              root.model.mapType = currentIndex
-              currentIndex = root.model.mapType
-            }
-          }
-        }
-      }
-
-      ComboBox {
-        id: _weatherOffset
-        Layout.fillWidth: true
-        Layout.minimumHeight: 18
-        Layout.maximumHeight: 18
-        opacity: enabled ? 1 : 0.5
-        enabled: _showWeather.checked
-        Layout.alignment: Qt.AlignVCenter
-        font: Cpp_Misc_CommonFonts.customUiFont(0.85)
-        displayText: qsTr("VIIRS Imagery: %1").arg(currentText)
-
-        onCurrentIndexChanged: {
-          if (root.model) {
-            if (root.model.weatherOffset !== currentIndex) {
-              root.model.weatherOffset = currentIndex
-              currentIndex = root.model.weatherOffset
-            }
+      onCurrentIndexChanged: {
+        if (root.model) {
+          if (root.model.mapType !== currentIndex) {
+            root.model.mapType = currentIndex
+            currentIndex = root.model.mapType
           }
         }
       }

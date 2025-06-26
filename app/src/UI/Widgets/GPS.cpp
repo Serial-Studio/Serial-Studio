@@ -35,8 +35,11 @@
 // Global parameters
 //------------------------------------------------------------------------------
 
+// clang-format off
 constexpr int MIN_ZOOM = 2;
-constexpr int WEATHER_MAX_ZOOM = 9;
+constexpr int WEATHER_MAX_ZOOM = 6;
+constexpr auto CLOUD_URL = "https://clouds.matteason.co.uk/images/4096x2048/clouds-alpha.png";
+// clang-format on
 
 //------------------------------------------------------------------------------
 // Constructor function
@@ -56,7 +59,6 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
   , m_zoom(MIN_ZOOM)
   , m_index(index)
   , m_mapType(0)
-  , m_weatherOffset(0)
   , m_autoCenter(true)
   , m_showWeather(false)
   , m_plotTrajectory(true)
@@ -91,10 +93,6 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
            << "Canvas/World_Dark_Gray_Base"
            << "NatGeo_World_Map";
 
-  // Set weather layers
-  m_weatherDays << 0 << -1;
-  m_weatherLayers << tr("Today (partial)") << tr("Yesterday (full)");
-
   // Set max zoom for each map type
   m_mapMaxZoom << 18 << 18 << 18 << 18 << 9 << 16 << 16 << 16;
 
@@ -102,13 +100,31 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
   setMapType(m_settings.value("gpsMapType", 0).toInt());
   m_showWeather = m_settings.value("gpsWeather", false).toBool();
   m_autoCenter = m_settings.value("gpsAutoCenter", true).toBool();
-  m_weatherOffset = m_settings.value("gpsWeatherOffset", 0).toInt();
   m_plotTrajectory = m_settings.value("gpsPlotTrajectory", true).toBool();
 
   // Connect to the theme manager to update the colors
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
           this, &Widgets::GPS::onThemeChanged);
+
+  // Download cloud overlay
+  QUrl cloudUrl(CLOUD_URL);
+  QNetworkRequest request(cloudUrl);
+  QNetworkReply *reply = m_network.get(request);
+  connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+    reply->deleteLater();
+
+    if (reply->error() == QNetworkReply::NoError)
+    {
+      QByteArray imageData = reply->readAll();
+      QImage image;
+      if (image.loadFromData(imageData))
+      {
+        m_cloudOverlay = image;
+        update();
+      }
+    }
+  });
 
   // Configure signals/slots with the dashboard
   if (VALIDATE_WIDGET(SerialStudio::DashboardGPS, m_index))
@@ -214,20 +230,6 @@ int Widgets::GPS::zoomLevel() const
 }
 
 /**
- * @brief Returns the selected weather imagery date offset for the GIBS layer.
- *
- * This value represents the number of days to subtract from the current UTC
- * date when requesting weather imagery. Typically used to populate or react to
- * a combo box selection (e.g., 0 = today, 1 = yesterday, etc.).
- *
- * @return The weather imagery date offset in days.
- */
-int Widgets::GPS::weatherOffset() const
-{
-  return m_weatherOffset;
-}
-
-/**
  * @brief Returns @c true if the map shall be centered on the coordinate
  *        every time it's updated.
  */
@@ -272,23 +274,6 @@ bool Widgets::GPS::plotTrajectory() const
 const QStringList &Widgets::GPS::mapTypes()
 {
   return m_mapTypes;
-}
-
-/**
- * @brief Returns the list of available weather layer labels for the UI.
- *
- * This list is typically used to populate a combo box, where each entry
- * represents a relative date offset for selecting weather imagery
- * (e.g., "Today", "Yesterday", "2 Days Ago", etc.).
- *
- * The index in this list corresponds to the offset used when constructing
- * GIBS tile URLs.
- *
- * @return Reference to the list of weather layer labels.
- */
-const QStringList &Widgets::GPS::weatherLayers()
-{
-  return m_weatherLayers;
 }
 
 //------------------------------------------------------------------------------
@@ -409,35 +394,6 @@ void Widgets::GPS::setMapType(const int type)
 }
 
 /**
- * @brief Sets the weather imagery date offset based on the selected index.
- *
- * This function updates the offset used to request weather tiles from NASA
- * GIBS, where the index typically represents how many days to subtract from the
- * current UTC date (e.g., 0 = today, 1 = yesterday, etc.). The index is clamped
- * to valid bounds based on the available weather layers.
- *
- * If the value changes, the map tile cache is cleared and weather tiles are
- * re-fetched accordingly. The setting is also persisted to application
- * settings.
- *
- * @param index Index of the selected weather offset (0 or greater).
- */
-void Widgets::GPS::setWeatherOffset(const int index)
-{
-  auto id = qBound(0, index, m_weatherLayers.count() - 1);
-  if (m_weatherOffset != id)
-  {
-    m_weatherOffset = id;
-    m_settings.setValue(QStringLiteral("gpsWeatherOffset"), id);
-
-    updateTiles();
-    update();
-
-    Q_EMIT weatherOffsetChanged();
-  }
-}
-
-/**
  * @brief Enables/disables centering the map on the latest coordinate.
  * @param enabled boolean indicating if auto center is enabled.
  */
@@ -476,7 +432,6 @@ void Widgets::GPS::setShowWeather(const bool enabled)
     m_showWeather = enabled;
     m_settings.setValue(QStringLiteral("gpsWeather"), enabled);
 
-    updateTiles();
     update();
 
     Q_EMIT showWeatherChanged();
@@ -642,20 +597,6 @@ void Widgets::GPS::updateTiles()
                   [=]() { onTileFetched(reply); });
         }
       }
-
-      // Request tiles for weather layer
-      if (m_showWeather && m_zoom <= WEATHER_MAX_ZOOM)
-      {
-        const auto gibsUrl = weatherUrl(tx, ty, m_zoom);
-        if (!m_tileCache.contains(gibsUrl) && !m_pending.contains(gibsUrl))
-        {
-          QNetworkReply *reply = m_network.get(QNetworkRequest(QUrl(gibsUrl)));
-          m_pending[gibsUrl] = reply;
-
-          connect(reply, &QNetworkReply::finished, this,
-                  [=]() { onTileFetched(reply); });
-        }
-      }
     }
   }
 }
@@ -762,7 +703,7 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
   painter->fillRect(painter->viewport(), QColor(0x0C, 0x47, 0x5C));
 
   // Tile sizing constants
-  constexpr int tileSize = 256;
+  const int tileSize = 256;
   const QPointF centerTile = m_centerTile;
 
   // Integer tile coordinates of the center tile
@@ -864,21 +805,47 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
         }
       }
 
-      // Overlay weather tile on top of the base tile
-      if (m_showWeather && m_zoom <= WEATHER_MAX_ZOOM)
+      // Overlay global cloud image tile
+      if (m_showWeather && !m_cloudOverlay.isNull()
+          && m_zoom <= WEATHER_MAX_ZOOM)
       {
-        const QString gibsUrl = weatherUrl(wrappedTx, ty, m_zoom);
+        // Get dimensions of the cloud image (equirectangular: 4096x2048)
+        const int cloudWidth = m_cloudOverlay.width();
+        const int cloudHeight = m_cloudOverlay.height();
 
-        if (m_tileCache.contains(gibsUrl))
-        {
-          QImage *weatherTile = m_tileCache.object(gibsUrl);
+        // Number of tiles at the current zoom level
+        const double n = 1 << m_zoom;
 
-          painter->save();
-          painter->setOpacity(0.8);
-          painter->setCompositionMode(QPainter::CompositionMode_Screen);
-          painter->drawImage(drawPoint, *weatherTile);
-          painter->restore();
-        }
+        // Compute geographic longitude bounds of the tile
+        double lon0 = (wrappedTx / n) * 360.0 - 180.0;
+        double lon1 = ((wrappedTx + 1) / n) * 360.0 - 180.0;
+
+        // Convert tile Y to latitude using inverse Web Mercator
+        double lat0
+            = 180.0 / M_PI * std::atan(std::sinh(M_PI * (1 - 2.0 * ty / n)));
+        double lat1 = 180.0 / M_PI
+                      * std::atan(std::sinh(M_PI * (1 - 2.0 * (ty + 1) / n)));
+
+        // Normalize longitude to [0,1] horizontal UV range
+        double u0 = (lon0 + 180.0) / 360.0;
+        double u1 = (lon1 + 180.0) / 360.0;
+
+        // Normalize latitude to [0,1] vertical UV range (top = 0, bottom = 1)
+        double v0 = (90.0 - lat0) / 180.0;
+        double v1 = (90.0 - lat1) / 180.0;
+
+        // Convert UVs to source pixel rectangle in the cloud image
+        QRect sourceRect(int(u0 * cloudWidth), int(v0 * cloudHeight),
+                         int((u1 - u0) * cloudWidth),
+                         int((v1 - v0) * cloudHeight));
+
+        // Crop and scale the source image tile to screen tile size
+        QImage cropped = m_cloudOverlay.copy(sourceRect)
+                             .scaled(tileSize, tileSize, Qt::IgnoreAspectRatio,
+                                     Qt::SmoothTransformation);
+
+        // Draw the cloud overlay with partial transparency
+        painter->drawImage(drawPoint, cropped);
       }
 
       // Overlay reference tile on top of the base tile
@@ -1043,9 +1010,7 @@ void Widgets::GPS::paintAttributionText(QPainter *painter, const QSize &view)
 
   // Attribution string to display
   const int margin = 6;
-  QString attribution = "Copyright © Esri, Maxar, Earthstar Geographics";
-  if (m_showWeather)
-    attribution += " | NASA EOSDIS GIBS, Suomi NPP VIIRS";
+  const QString attribution = "Copyright © Esri, Maxar, Earthstar Geographics";
 
   // Font styling for the label
   const QFont font = Misc::CommonFonts::instance().customUiFont(0.85);
@@ -1175,39 +1140,6 @@ QString Widgets::GPS::tileUrl(const int tx, const int ty, const int zoom) const
       .arg(ty)
       .arg(tx);
 #endif
-}
-
-/**
- * @brief Constructs the tile URL for NASA GIBS weather imagery.
- *
- * This function returns the URL to fetch a Composite VIIRS Corrected
- * Reflectance tile from NASA's Global Imagery Browse Services (GIBS),
- * using the current UTC date.
- *
- * The tiles follow the Google Maps compatible scheme (EPSG:3857).
- *
- * Note: This layer supports zoom levels up to 9. Higher requested zoom levels
- * are clamped to 9 to avoid invalid tile requests.
- *
- * @param tx Tile X coordinate (column).
- * @param ty Tile Y coordinate (row).
- * @param zoom Requested zoom level.
- *
- * @return Fully constructed weather tile URL for the given coordinates and
- * date.
- */
-QString Widgets::GPS::weatherUrl(const int tx, const int ty,
-                                 const int zoom) const
-{
-  const int days = m_weatherDays[m_weatherOffset];
-  const QString date = QDate::currentDate().addDays(days).toString(Qt::ISODate);
-  return QStringLiteral("https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/"
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor/default/%1/"
-                        "GoogleMapsCompatible_Level9/%2/%3/%4.jpg")
-      .arg(date)
-      .arg(qMin(zoom, WEATHER_MAX_ZOOM))
-      .arg(ty)
-      .arg(tx);
 }
 
 /**

@@ -71,15 +71,8 @@ class GPS : public QQuickPaintedItem
              READ zoomLevel
              WRITE setZoomLevel
              NOTIFY zoomLevelChanged)
-  Q_PROPERTY(int weatherOffset
-             READ weatherOffset
-             WRITE setWeatherOffset
-             NOTIFY weatherOffsetChanged)
   Q_PROPERTY(QStringList mapTypes
              READ mapTypes
-             CONSTANT)
-  Q_PROPERTY(QStringList weatherLayers
-             READ weatherLayers
              CONSTANT)
   // clang-format on
 
@@ -89,7 +82,6 @@ signals:
   void zoomLevelChanged();
   void autoCenterChanged();
   void showWeatherChanged();
-  void weatherOffsetChanged();
   void plotTrajectoryChanged();
 
 public:
@@ -102,20 +94,17 @@ public:
 
   [[nodiscard]] int mapType() const;
   [[nodiscard]] int zoomLevel() const;
-  [[nodiscard]] int weatherOffset() const;
 
   [[nodiscard]] bool autoCenter() const;
   [[nodiscard]] bool showWeather() const;
   [[nodiscard]] bool plotTrajectory() const;
 
   [[nodiscard]] const QStringList &mapTypes();
-  [[nodiscard]] const QStringList &weatherLayers();
 
 public slots:
   void center();
   void setZoomLevel(int zoom);
   void setMapType(const int type);
-  void setWeatherOffset(const int index);
   void setAutoCenter(const bool enabled);
   void setShowWeather(const bool enabled);
   void setPlotTrajectory(const bool enabled);
@@ -138,7 +127,6 @@ private:
   QPointF latLonToTile(double lat, double lon, int zoom);
 
   QString tileUrl(const int tx, const int ty, const int zoom) const;
-  QString weatherUrl(const int tx, const int ty, const int zoom) const;
   QString referenceUrl(const int tx, const int ty, const int zoom) const;
 
 protected:
@@ -151,7 +139,6 @@ private:
   int m_zoom;
   int m_index;
   int m_mapType;
-  int m_weatherOffset;
 
   bool m_autoCenter;
   bool m_showWeather;
@@ -168,10 +155,10 @@ private:
   QColor m_lineTailColor;
 
   QSettings m_settings;
+  QImage m_cloudOverlay;
 
   QStringList m_mapIDs;
   QStringList m_mapTypes;
-  QStringList m_weatherLayers;
 
   QList<int> m_mapMaxZoom;
   QList<int> m_weatherDays;

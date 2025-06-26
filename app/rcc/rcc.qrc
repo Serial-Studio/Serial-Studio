@@ -162,6 +162,7 @@
         <file>icons/dashboard-buttons/invert.svg</file>
         <file>icons/dashboard-buttons/labels.svg</file>
         <file>icons/dashboard-buttons/left_view.svg</file>
+        <file>icons/dashboard-buttons/map.svg</file>
         <file>icons/dashboard-buttons/orbit.svg</file>
         <file>icons/dashboard-buttons/orthogonal_view.svg</file>
         <file>icons/dashboard-buttons/pan.svg</file>
@@ -171,6 +172,7 @@
         <file>icons/dashboard-buttons/return.svg</file>
         <file>icons/dashboard-buttons/save-as.svg</file>
         <file>icons/dashboard-buttons/top_view.svg</file>
+        <file>icons/dashboard-buttons/weather.svg</file>
         <file>icons/dashboard-buttons/x.svg</file>
         <file>icons/dashboard-buttons/y.svg</file>
         <file>icons/dashboard-buttons/zoom-in.svg</file>
@@ -325,6 +327,7 @@
         <file>icons/taskbar/pause.svg</file>
         <file>icons/taskbar/resume.svg</file>
         <file>icons/toolbar/about.svg</file>
+        <file>icons/toolbar/activate.svg</file>
         <file>icons/toolbar/connect.svg</file>
         <file>icons/toolbar/csv.svg</file>
         <file>icons/toolbar/deepwiki.svg</file>
@@ -417,7 +420,5 @@
         <file>themes/default.json</file>
         <file>themes/ironframe.json</file>
         <file>themes/light.json</file>
-        <file>icons/dashboard-buttons/earth.svg</file>
-        <file>icons/toolbar/activate.svg</file>
     </qresource>
 </RCC>
