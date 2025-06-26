@@ -43,11 +43,23 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
   setFlag(ItemAcceptsInputMethod, false);
   setAcceptedMouseButtons(Qt::NoButton);
 
+  // Paint the widget
+  requestUpdate();
+  redraw();
+
   // Resize widget when the item's size is changed
   connect(this, &QQuickPaintedItem::widthChanged, this,
           &DeclarativeWidget::resizeWidget);
   connect(this, &QQuickPaintedItem::heightChanged, this,
           &DeclarativeWidget::resizeWidget);
+
+  // Redraw widget when visibility changes
+  connect(this, &DeclarativeWidget::visibleChanged, [=]() {
+    requestUpdate();
+    redraw();
+  });
+
+  // Redraw widget when widget changes
   connect(this, &DeclarativeWidget::widgetChanged, [=]() {
     requestUpdate();
     redraw();
@@ -112,7 +124,7 @@ void DeclarativeWidget::redraw(const QRect &rect)
       reinterpret_cast<PwnedWidget *>(m_widget)->updateGeometries();
     }
 
-    if (m_updateRequested)
+    if (isVisible() && m_updateRequested)
     {
       m_updateRequested = false;
       m_image = m_widget->grab().toImage();
