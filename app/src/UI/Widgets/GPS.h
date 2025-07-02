@@ -63,6 +63,10 @@ class GPS : public QQuickPaintedItem
              READ showWeather
              WRITE setShowWeather
              NOTIFY showWeatherChanged)
+  Q_PROPERTY(bool showNasaWeather
+             READ showNasaWeather
+             WRITE setShowNasaWeather
+             NOTIFY showNasaWeatherChanged)
   Q_PROPERTY(bool plotTrajectory
              READ plotTrajectory
              WRITE setPlotTrajectory
@@ -83,6 +87,7 @@ signals:
   void autoCenterChanged();
   void showWeatherChanged();
   void plotTrajectoryChanged();
+  void showNasaWeatherChanged();
 
 public:
   GPS(const int index = -1, QQuickItem *parent = nullptr);
@@ -98,6 +103,7 @@ public:
   [[nodiscard]] bool autoCenter() const;
   [[nodiscard]] bool showWeather() const;
   [[nodiscard]] bool plotTrajectory() const;
+  [[nodiscard]] bool showNasaWeather() const;
 
   [[nodiscard]] const QStringList &mapTypes();
 
@@ -108,6 +114,7 @@ public slots:
   void setAutoCenter(const bool enabled);
   void setShowWeather(const bool enabled);
   void setPlotTrajectory(const bool enabled);
+  void setShowNasaWeather(const bool enabled);
 
 private slots:
   void updateData();
@@ -128,6 +135,7 @@ private:
 
   QString tileUrl(const int tx, const int ty, const int zoom) const;
   QString referenceUrl(const int tx, const int ty, const int zoom) const;
+  QString nasaWeatherUrl(const int tx, const int ty, const int zoom) const;
 
 protected:
   void wheelEvent(QWheelEvent *event) override;
@@ -143,6 +151,7 @@ private:
   bool m_autoCenter;
   bool m_showWeather;
   bool m_plotTrajectory;
+  bool m_showNasaWeather;
   bool m_enableReferenceLayer;
 
   double m_altitude;

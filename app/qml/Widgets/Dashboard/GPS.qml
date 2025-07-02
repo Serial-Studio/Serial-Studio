@@ -54,8 +54,9 @@ Item {
       _mapType.model = model.mapTypes
       _mapType.currentIndex = model.mapType
       _autoCenter.checked = model.autoCenter
-      _showWeather.checked = model.showWeather
+      _showWeather.checked = root.model.showWeather
       _plotTrajectory.checked = model.plotTrajectory
+      _showNasaWeather.checked = root.model.showNasaWeather
     }
   }
 
@@ -147,7 +148,23 @@ Item {
       onClicked: {
         if (root.model) {
           root.model.showWeather = !root.model.showWeather
-          checked = root.model.showWeather
+          _showWeather.checked = root.model.showWeather
+          _showNasaWeather.checked = root.model.showNasaWeather
+        }
+      }
+    }
+
+    ToolButton {
+      id: _showNasaWeather
+      icon.width: 24
+      icon.height: 24
+      icon.color: "transparent"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/nasa.svg"
+      onClicked: {
+        if (root.model) {
+          root.model.showNasaWeather = !root.model.showNasaWeather
+          _showWeather.checked = root.model.showWeather
+          _showNasaWeather.checked = root.model.showNasaWeather
         }
       }
     }

@@ -38,6 +38,7 @@
 // clang-format off
 constexpr int MIN_ZOOM = 2;
 constexpr int WEATHER_MAX_ZOOM = 6;
+constexpr int WEATHER_GIBS_MAX_ZOOM = 9;
 constexpr auto CLOUD_URL = "https://clouds.matteason.co.uk/images/4096x2048/clouds-alpha.png";
 // clang-format on
 
@@ -62,6 +63,7 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
   , m_autoCenter(true)
   , m_showWeather(false)
   , m_plotTrajectory(true)
+  , m_showNasaWeather(false)
   , m_enableReferenceLayer(false)
   , m_altitude(0)
   , m_latitude(0)
@@ -100,31 +102,39 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
   setMapType(m_settings.value("gpsMapType", 0).toInt());
   m_showWeather = m_settings.value("gpsWeather", false).toBool();
   m_autoCenter = m_settings.value("gpsAutoCenter", true).toBool();
+  m_showNasaWeather = m_settings.value("gpsNasaWeather", false).toBool();
   m_plotTrajectory = m_settings.value("gpsPlotTrajectory", true).toBool();
+
+  // Only enable one of the weather overlays
+  if (m_showNasaWeather && m_showWeather)
+    m_showWeather = false;
+
+  // Download cloud map
+  if (m_showWeather)
+  {
+    QUrl cloudUrl(CLOUD_URL);
+    QNetworkRequest request(cloudUrl);
+    QNetworkReply *reply = m_network.get(request);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+      reply->deleteLater();
+
+      if (reply->error() == QNetworkReply::NoError)
+      {
+        QByteArray imageData = reply->readAll();
+        QImage image;
+        if (image.loadFromData(imageData))
+        {
+          m_cloudOverlay = image;
+          update();
+        }
+      }
+    });
+  }
 
   // Connect to the theme manager to update the colors
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
           this, &Widgets::GPS::onThemeChanged);
-
-  // Download cloud overlay
-  QUrl cloudUrl(CLOUD_URL);
-  QNetworkRequest request(cloudUrl);
-  QNetworkReply *reply = m_network.get(request);
-  connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-    reply->deleteLater();
-
-    if (reply->error() == QNetworkReply::NoError)
-    {
-      QByteArray imageData = reply->readAll();
-      QImage image;
-      if (image.loadFromData(imageData))
-      {
-        m_cloudOverlay = image;
-        update();
-      }
-    }
-  });
 
   // Configure signals/slots with the dashboard
   if (VALIDATE_WIDGET(SerialStudio::DashboardGPS, m_index))
@@ -241,8 +251,8 @@ bool Widgets::GPS::autoCenter() const
 /**
  * @brief Returns the current state of the weather overlay visibility flag.
  *
- * This flag determines whether weather tiles from NASA GIBS are being
- * requested and rendered over the base map.
+ * This flag determines whether a global weather tile is used for the cloud
+ * overlay using the Live Cloud Maps API.
  *
  * @return True if the weather overlay is enabled, false otherwise.
  */
@@ -262,6 +272,19 @@ bool Widgets::GPS::showWeather() const
 bool Widgets::GPS::plotTrajectory() const
 {
   return m_plotTrajectory;
+}
+
+/**
+ * @brief Returns the current state of the weather overlay visibility flag.
+ *
+ * This flag determines whether weather tiles from NASA GIBS are being
+ * requested and rendered over the base map.
+ *
+ * @return True if the weather overlay is enabled, false otherwise.
+ */
+bool Widgets::GPS::showNasaWeather() const
+{
+  return m_showNasaWeather;
 }
 
 /**
@@ -412,16 +435,11 @@ void Widgets::GPS::setAutoCenter(const bool enabled)
 }
 
 /**
- * @brief Enables or disables the display of weather overlay tiles from NASA
- *        GIBS.
+ * @brief Enables or disables the display of weather overlay image from the
+ *        Live Cloud Maps API.
  *
- * When enabled, this flag triggers additional tile requests and rendering
- * of real-time weather imagery sourced from NASA's Global Imagery Browse
- * Services (GIBS). This setting is persisted to user configuration under the
- * "gpsWeather" key.
- *
- * Changing this value forces a tile refresh, re-fetching visible tiles and
- * updating all related map data and cache state.
+ * When enabled, this flag downloads an image from the Live Cloud Maps API with
+ * the latest available global cloud imagery.
  *
  * @param enabled True to show the weather overlay, false to hide it.
  */
@@ -432,7 +450,31 @@ void Widgets::GPS::setShowWeather(const bool enabled)
     m_showWeather = enabled;
     m_settings.setValue(QStringLiteral("gpsWeather"), enabled);
 
-    update();
+    if (enabled && showNasaWeather())
+      setShowNasaWeather(false);
+    else
+      update();
+
+    if (enabled && m_cloudOverlay.isNull())
+    {
+      QUrl cloudUrl(CLOUD_URL);
+      QNetworkRequest request(cloudUrl);
+      QNetworkReply *reply = m_network.get(request);
+      connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        reply->deleteLater();
+
+        if (reply->error() == QNetworkReply::NoError)
+        {
+          QByteArray imageData = reply->readAll();
+          QImage image;
+          if (image.loadFromData(imageData))
+          {
+            m_cloudOverlay = image;
+            update();
+          }
+        }
+      });
+    }
 
     Q_EMIT showWeatherChanged();
   }
@@ -456,6 +498,37 @@ void Widgets::GPS::setPlotTrajectory(const bool enabled)
 
     update();
     Q_EMIT plotTrajectoryChanged();
+  }
+}
+
+/**
+ * @brief Enables or disables the display of weather overlay tiles from NASA
+ *        GIBS.
+ *
+ * When enabled, this flag triggers additional tile requests and rendering
+ * of real-time weather imagery sourced from NASA's Global Imagery Browse
+ * Services (GIBS). This setting is persisted to user configuration under the
+ * "gpsNasaWeather" key.
+ *
+ * Changing this value forces a tile refresh, re-fetching visible tiles and
+ * updating all related map data and cache state.
+ *
+ * @param enabled True to show the weather overlay, false to hide it.
+ */
+void Widgets::GPS::setShowNasaWeather(const bool enabled)
+{
+  if (m_showNasaWeather != enabled)
+  {
+    m_showNasaWeather = enabled;
+    m_settings.setValue(QStringLiteral("gpsNasaWeather"), enabled);
+
+    updateTiles();
+    if (enabled && showWeather())
+      setShowWeather(false);
+    else
+      update();
+
+    Q_EMIT showNasaWeatherChanged();
   }
 }
 
@@ -582,6 +655,20 @@ void Widgets::GPS::updateTiles()
         // When finished, call the tile fetched handler
         connect(reply, &QNetworkReply::finished, this,
                 [=]() { onTileFetched(reply); });
+      }
+
+      // Request tiles for weather layer
+      if (m_showNasaWeather && m_zoom <= WEATHER_GIBS_MAX_ZOOM)
+      {
+        const auto gibsUrl = nasaWeatherUrl(tx, ty, m_zoom);
+        if (!m_tileCache.contains(gibsUrl) && !m_pending.contains(gibsUrl))
+        {
+          QNetworkReply *reply = m_network.get(QNetworkRequest(QUrl(gibsUrl)));
+          m_pending[gibsUrl] = reply;
+
+          connect(reply, &QNetworkReply::finished, this,
+                  [=]() { onTileFetched(reply); });
+        }
       }
 
       // Request tiles for reference layer
@@ -848,6 +935,22 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
         painter->drawImage(drawPoint, cropped);
       }
 
+      // Overlay weather tile on top of the base tile
+      if (m_showNasaWeather && m_zoom <= WEATHER_GIBS_MAX_ZOOM)
+      {
+        const QString gibsUrl = nasaWeatherUrl(wrappedTx, ty, m_zoom);
+
+        if (m_tileCache.contains(gibsUrl))
+        {
+          QImage *weatherTile = m_tileCache.object(gibsUrl);
+
+          painter->save();
+          painter->setCompositionMode(QPainter::CompositionMode_Screen);
+          painter->drawImage(drawPoint, *weatherTile);
+          painter->restore();
+        }
+      }
+
       // Overlay reference tile on top of the base tile
       if (m_enableReferenceLayer)
       {
@@ -1010,7 +1113,11 @@ void Widgets::GPS::paintAttributionText(QPainter *painter, const QSize &view)
 
   // Attribution string to display
   const int margin = 6;
-  const QString attribution = "Copyright © Esri, Maxar, Earthstar Geographics";
+  QString attribution = "Copyright © Esri, Maxar, Earthstar Geographics";
+  if (m_showNasaWeather)
+    attribution += " | NASA EOSDIS GIBS, Suomi NPP VIIRS";
+  else if (m_showWeather)
+    attribution += " | Matt Eason";
 
   // Font styling for the label
   const QFont font = Misc::CommonFonts::instance().customUiFont(0.85);
@@ -1175,6 +1282,38 @@ QString Widgets::GPS::referenceUrl(const int tx, const int ty,
       .arg(ty)
       .arg(tx);
 #endif
+}
+
+/**
+ * @brief Constructs the tile URL for NASA GIBS weather imagery.
+ *
+ * This function returns the URL to fetch a Composite VIIRS Corrected
+ * Reflectance tile from NASA's Global Imagery Browse Services (GIBS),
+ * using the current UTC date.
+ *
+ * The tiles follow the Google Maps compatible scheme (EPSG:3857).
+ *
+ * Note: This layer supports zoom levels up to 9. Higher requested zoom levels
+ * are clamped to 9 to avoid invalid tile requests.
+ *
+ * @param tx Tile X coordinate (column).
+ * @param ty Tile Y coordinate (row).
+ * @param zoom Requested zoom level.
+ *
+ * @return Fully constructed weather tile URL for the given coordinates and
+ * date.
+ */
+QString Widgets::GPS::nasaWeatherUrl(const int tx, const int ty,
+                                     const int zoom) const
+{
+  const QString date = QDate::currentDate().addDays(0).toString(Qt::ISODate);
+  return QStringLiteral("https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/"
+                        "VIIRS_SNPP_CorrectedReflectance_TrueColor/default/%1/"
+                        "GoogleMapsCompatible_Level9/%2/%3/%4.jpg")
+      .arg(date)
+      .arg(qMin(zoom, WEATHER_GIBS_MAX_ZOOM))
+      .arg(ty)
+      .arg(tx);
 }
 
 //------------------------------------------------------------------------------

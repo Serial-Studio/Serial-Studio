@@ -420,5 +420,6 @@
         <file>themes/default.json</file>
         <file>themes/ironframe.json</file>
         <file>themes/light.json</file>
+        <file>icons/dashboard-buttons/nasa.svg</file>
     </qresource>
 </RCC>

@@ -18,6 +18,10 @@ The cloud texture is used in equirectangular projection with alpha transparency.
 
 Special thanks to [Matt Eason](https://twitter.com/MattEason) for maintaining the cloud data service.
 
+**NASA GIBS (Global Imagery Browse Services)**
+VIIRS Corrected Reflectance (TrueColor) imagery is provided by NASA EOSDIS through the GIBS platform.
+[https://earthdata.nasa.gov/gibs](https://earthdata.nasa.gov/gibs)
+
 ## Satellite & Map Imagery
 
 Satellite and mapping imagery in this application is sourced from the following providers:
