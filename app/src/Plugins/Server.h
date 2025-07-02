@@ -38,19 +38,29 @@
 namespace Plugins
 {
 /**
- * @brief The Server class
+ * @class Plugins::Server
+ * @brief TCP server interface for plugin communication in Serial Studio.
  *
- * Implements a simple TCP server on port 7777, which allows Serial Studio to
- * interact with other applications on the computer or in the LAN. "Plugins"
- * receive incoming frames processed by Serial Studio, and can write data to the
- * device by simply writting data on the TCP socket.
+ * Implements a TCP server that listens on port 7777, allowing external
+ * applications (referred to as "plugins") to exchange data with Serial Studio
+ * over the local network or localhost.
  *
- * An example of such application can be found at:
- *  https://github.com/Kaan-Sat/CC2021-Control-Panel
+ * Connected plugins can:
+ * - Receive real-time JSON data frames processed by Serial Studio.
+ * - Transmit raw data directly to the underlying I/O device via the TCP socket.
  *
- * A benefit of implementing plugins in this manner is that you can write your
- * Serial Studio companion application in any language and framework that you
- * desire, you do not have to force yourself to use Qt or C/C++.
+ * This design enables companion applications to be written in any language or
+ * framework, without requiring integration with Qt or C++.
+ *
+ * The server supports multiple simultaneous plugin connections and handles
+ * connection management, data serialization, and dispatch internally. It can
+ * be enabled or disabled at runtime using setEnabled(), and will only accept
+ * connections when enabled.
+ *
+ * Example plugin: https://github.com/Kaan-Sat/CC2021-Control-Panel
+ *
+ * @note Accessed as a singleton via Plugins::Server::instance().
+ * @note Not thread-safe; must be used from the main Qt thread.
  */
 class Server : public QObject
 {

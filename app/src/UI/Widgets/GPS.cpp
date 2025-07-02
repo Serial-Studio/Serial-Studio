@@ -1114,9 +1114,9 @@ void Widgets::GPS::paintAttributionText(QPainter *painter, const QSize &view)
   // Attribution string to display
   const int margin = 6;
   QString attribution = "Copyright © Esri, Maxar, Earthstar Geographics";
-  if (m_showNasaWeather)
+  if (m_showNasaWeather && m_zoom <= WEATHER_GIBS_MAX_ZOOM)
     attribution += " | NASA EOSDIS GIBS, Suomi NPP VIIRS";
-  else if (m_showWeather)
+  else if (m_showWeather && m_zoom <= WEATHER_MAX_ZOOM)
     attribution += " | Matt Eason";
 
   // Font styling for the label

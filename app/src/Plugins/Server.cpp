@@ -31,12 +31,15 @@
 #include "Misc/TimerEvents.h"
 
 /**
- * Constructor function
+ * @brief Constructs the plugin server.
+ *
+ * Initializes signal-slot connections for processing raw and structured
+ * data frames, sets up socket handling, and prepares the TCP server
+ * for later activation via setEnabled().
  */
 Plugins::Server::Server()
   : m_enabled(false)
 {
-
   // Send processed data at 1 Hz
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
           this, &Plugins::Server::registerFrame);
@@ -50,19 +53,12 @@ Plugins::Server::Server()
   // Configure TCP server
   connect(&m_server, &QTcpServer::newConnection, this,
           &Plugins::Server::acceptConnection);
-
-  // Begin listening on TCP port
-  if (!m_server.listen(QHostAddress::Any, PLUGINS_TCP_PORT))
-  {
-    Misc::Utilities::showMessageBox(tr("Unable to start plugin TCP server"),
-                                    m_server.errorString(),
-                                    QMessageBox::Warning);
-    m_server.close();
-  }
 }
 
 /**
- * Destructor function
+ * @brief Destroys the plugin server.
+ *
+ * Shuts down the TCP server and closes all existing connections.
  */
 Plugins::Server::~Server()
 {
@@ -70,7 +66,9 @@ Plugins::Server::~Server()
 }
 
 /**
- * Returns a pointer to the only instance of the class
+ * @brief Gets the singleton instance of the plugin server.
+ *
+ * @return Reference to the only instance of Plugins::Server.
  */
 Plugins::Server &Plugins::Server::instance()
 {
@@ -79,7 +77,10 @@ Plugins::Server &Plugins::Server::instance()
 }
 
 /**
- * Returns @c true if the plugin sub-system is enabled
+ * @brief Checks whether the plugin server is currently enabled.
+ *
+ * @return true if the plugin subsystem is active and serving connections;
+ *         false otherwise.
  */
 bool Plugins::Server::enabled() const
 {
@@ -87,7 +88,10 @@ bool Plugins::Server::enabled() const
 }
 
 /**
- * Disconnects the socket used for communicating with plugins.
+ * @brief Disconnects a client socket from the server.
+ *
+ * Removes the socket from the active connections list and deletes it.
+ * Triggered automatically when a client disconnects or encounters an error.
  */
 void Plugins::Server::removeConnection()
 {
@@ -97,22 +101,19 @@ void Plugins::Server::removeConnection()
   // Remove socket from registered sockets
   if (socket)
   {
-    for (int i = 0; i < m_sockets.count(); ++i)
-    {
-      if (m_sockets.at(i) == socket)
-      {
-        m_sockets.removeAt(i);
-        i = 0;
-      }
-    }
-
-    // Delete socket handler
+    m_sockets.removeAll(socket);
     socket->deleteLater();
   }
 }
 
 /**
- * Enables/disables the plugin subsystem
+ * @brief Enables or disables the TCP plugin server.
+ *
+ * When enabling, starts listening for incoming TCP connections.
+ * When disabling, stops the server, closes all sockets, and clears
+ * frame buffers.
+ *
+ * @param enabled If true, activates the server. If false, deactivates it.
  */
 void Plugins::Server::setEnabled(const bool enabled)
 {
@@ -120,13 +121,28 @@ void Plugins::Server::setEnabled(const bool enabled)
   m_enabled = enabled;
   Q_EMIT enabledChanged();
 
-  // If not enabled, remove all connections
-  if (!enabled)
+  // Enable the TCP plugin server
+  if (enabled)
   {
+    if (!m_server.isListening())
+    {
+      if (!m_server.listen(QHostAddress::Any, PLUGINS_TCP_PORT))
+      {
+        Misc::Utilities::showMessageBox(tr("Unable to start plugin TCP server"),
+                                        m_server.errorString(),
+                                        QMessageBox::Warning);
+        m_server.close();
+      }
+    }
+  }
+
+  // Disable the TCP plugin server
+  else
+  {
+    m_server.close();
     for (int i = 0; i < m_sockets.count(); ++i)
     {
       auto socket = m_sockets.at(i);
-
       if (socket)
       {
         socket->abort();
@@ -135,15 +151,16 @@ void Plugins::Server::setEnabled(const bool enabled)
     }
 
     m_sockets.clear();
+    m_frames.clear();
+    m_frames.squeeze();
   }
-
-  // Clear frames array to avoid memory leaks
-  m_frames.clear();
-  m_frames.squeeze();
 }
 
 /**
- * Process incoming data and writes it directly to the connected I/O device
+ * @brief Handles incoming data from a client socket.
+ *
+ * Forwards raw data from the client directly to the I/O manager
+ * for processing or device transmission.
  */
 void Plugins::Server::onDataReceived()
 {
@@ -156,7 +173,10 @@ void Plugins::Server::onDataReceived()
 }
 
 /**
- * Configures incoming connection requests
+ * @brief Accepts new incoming TCP connections.
+ *
+ * Validates new client sockets and attaches relevant signal handlers.
+ * Rejects connections if the server is not enabled.
  */
 void Plugins::Server::acceptConnection()
 {
@@ -202,10 +222,10 @@ void Plugins::Server::acceptConnection()
 }
 
 /**
- * Sends an array of frames with the following information:
- * - Frame ID number
- * - RX timestamp
- * - Frame JSON data
+ * @brief Sends all collected structured data frames to connected clients.
+ *
+ * Frames are serialized into a compact JSON array and sent to each
+ * writable socket. Called periodically (1 Hz) via timer events.
  */
 void Plugins::Server::sendProcessedData()
 {
@@ -241,7 +261,7 @@ void Plugins::Server::sendProcessedData()
     auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
     // Send data to each plugin
-    Q_FOREACH (auto socket, m_sockets)
+    for (auto *socket : std::as_const(m_sockets))
     {
       if (!socket)
         continue;
@@ -257,8 +277,12 @@ void Plugins::Server::sendProcessedData()
 }
 
 /**
- * Encodes the given @a data in Base64 and sends it through the TCP socket
- * connected to the localhost.
+ * @brief Sends raw binary data to all connected clients.
+ *
+ * The data is base64-encoded and wrapped in a JSON object before
+ * being transmitted over each writable TCP socket.
+ *
+ * @param data Raw data bytes received from the I/O layer.
  */
 void Plugins::Server::sendRawData(const QByteArray &data)
 {
@@ -279,7 +303,7 @@ void Plugins::Server::sendRawData(const QByteArray &data)
   const auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
   // Send data to each plugin
-  Q_FOREACH (auto socket, m_sockets)
+  for (auto *socket : std::as_const(m_sockets))
   {
     if (!socket)
       continue;
@@ -290,8 +314,12 @@ void Plugins::Server::sendRawData(const QByteArray &data)
 }
 
 /**
- * Obtains the latest JSON dataframe & appends it to the JSON list, which is
- * later read and sent by the @c sendProcessedData() function.
+ * @brief Registers a new structured data frame.
+ *
+ * Appends the frame to an internal buffer that will be transmitted
+ * to clients by sendProcessedData().
+ *
+ * @param frame JSON::Frame object to register.
  */
 void Plugins::Server::registerFrame(const JSON::Frame &frame)
 {
@@ -300,16 +328,17 @@ void Plugins::Server::registerFrame(const JSON::Frame &frame)
 }
 
 /**
- * This function is called whenever a socket error occurs, it disconnects the
- * socket from the host and displays the error in a message box.
+ * @brief Handles socket-level errors from connected clients.
+ *
+ * Logs the error to debug output and attempts to cleanly disconnect
+ * the faulty socket.
+ *
+ * @param socketError Error code provided by the QAbstractSocket.
  */
 void Plugins::Server::onErrorOccurred(
     const QAbstractSocket::SocketError socketError)
 {
-  // Get caller socket
   auto socket = static_cast<QTcpSocket *>(QObject::sender());
-
-  // Print error
   if (socket)
     qDebug() << socket->errorString();
   else
