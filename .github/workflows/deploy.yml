@@ -455,8 +455,12 @@ jobs:
         cp -a "$VOLUME/${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
         hdiutil detach "$VOLUME"
 
-    - name: '✍🏻 Sign Application'
-      run: codesign --force --deep --options runtime --sign "${{secrets.APPLE_APPID_TEAM_ID}}" "${{env.APPLICATION}}.app"
+    - name: '✍🏻 Sign Application with Entitlements'
+      run: |
+        codesign --force --deep --options runtime \
+          --entitlements "${GITHUB_WORKSPACE}/app/deploy/macOS/Serial-Studio.entitlements" \
+          --sign "${{secrets.APPLE_APPID_TEAM_ID}}" \
+          "${{env.APPLICATION}}.app"
 
     - name: '💽 Create nice DMG'
       run: |
