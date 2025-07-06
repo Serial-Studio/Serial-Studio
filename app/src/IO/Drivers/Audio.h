@@ -204,6 +204,7 @@ public slots:
   void setSelectedOutputChannelConfiguration(const int index);
 
 private slots:
+  void generateLists();
   void configureInput();
   void configureOutput();
   void onInputReadyRead();

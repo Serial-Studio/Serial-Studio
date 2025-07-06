@@ -20,7 +20,9 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#include "Audio.h"
+#include "IO/Drivers/Audio.h"
+
+#include "Misc/Translator.h"
 #include "Misc/TimerEvents.h"
 
 #include <QDebug>
@@ -60,19 +62,7 @@ IO::Drivers::Audio::Audio()
   , m_outputStream(nullptr)
 {
   // Initialize maps to connect user friendly strings to actual values
-  m_sampleFormats = {{QAudioFormat::UInt8, tr("Unsigned 8-bit")},
-                     {QAudioFormat::Int16, tr("Signed 16-bit")},
-                     {QAudioFormat::Int32, tr("Signed 32-bit")},
-                     {QAudioFormat::Float, tr("Float 32-bit")}};
-  m_knownConfigs = {{QAudioFormat::ChannelConfigMono, tr("Mono")},
-                    {QAudioFormat::ChannelConfigStereo, tr("Stereo")},
-                    {QAudioFormat::ChannelConfig2Dot1, "2.1"},
-                    {QAudioFormat::ChannelConfig3Dot0, "3.0"},
-                    {QAudioFormat::ChannelConfig3Dot1, "3.1"},
-                    {QAudioFormat::ChannelConfigSurround5Dot0, "5.0"},
-                    {QAudioFormat::ChannelConfigSurround5Dot1, "5.1"},
-                    {QAudioFormat::ChannelConfigSurround7Dot0, "7.0"},
-                    {QAudioFormat::ChannelConfigSurround7Dot1, "7.1"}};
+  generateLists();
 
   // Get list of devices
   refreshAudioInputs();
@@ -95,6 +85,10 @@ IO::Drivers::Audio::Audio()
           &Audio::refreshAudioInputs);
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
           &Audio::refreshAudioOutputs);
+
+  // Update lists when language changes
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, &IO::Drivers::Audio::generateLists);
 }
 
 /**
@@ -841,6 +835,43 @@ void IO::Drivers::Audio::setSelectedOutputChannelConfiguration(int index)
 
   m_selectedOutputChannelConfiguration = index;
   configureOutput();
+}
+
+//------------------------------------------------------------------------------
+// UI helpers
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Initializes audio format and channel configuration lists.
+ *
+ * Populates `m_sampleFormats` with supported sample format descriptions and
+ * `m_knownConfigs` with known channel configuration labels. This setup is
+ * used to present user-friendly audio input/output options.
+ *
+ * Emits `inputSettingsChanged()` and `outputSettingsChanged()` signals after
+ * updating the internal lists, so any dependent UI or logic can refresh
+ * accordingly.
+ *
+ * @note This should be called during initialization and when language changes.
+ */
+void IO::Drivers::Audio::generateLists()
+{
+  m_sampleFormats = {{QAudioFormat::UInt8, tr("Unsigned 8-bit")},
+                     {QAudioFormat::Int16, tr("Signed 16-bit")},
+                     {QAudioFormat::Int32, tr("Signed 32-bit")},
+                     {QAudioFormat::Float, tr("Float 32-bit")}};
+  m_knownConfigs = {{QAudioFormat::ChannelConfigMono, tr("Mono")},
+                    {QAudioFormat::ChannelConfigStereo, tr("Stereo")},
+                    {QAudioFormat::ChannelConfig2Dot1, "2.1"},
+                    {QAudioFormat::ChannelConfig3Dot0, "3.0"},
+                    {QAudioFormat::ChannelConfig3Dot1, "3.1"},
+                    {QAudioFormat::ChannelConfigSurround5Dot0, "5.0"},
+                    {QAudioFormat::ChannelConfigSurround5Dot1, "5.1"},
+                    {QAudioFormat::ChannelConfigSurround7Dot0, "7.0"},
+                    {QAudioFormat::ChannelConfigSurround7Dot1, "7.1"}};
+
+  Q_EMIT inputSettingsChanged();
+  Q_EMIT outputSettingsChanged();
 }
 
 //------------------------------------------------------------------------------
