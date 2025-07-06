@@ -77,11 +77,13 @@ if(BUILD_COMMERCIAL)
     ${QT_MODULES}
     Mqtt
     SerialBus
+    Multimedia
   )
   set(QT_LIBS
     ${QT_LIBS}
     Qt6::Mqtt
     Qt6::SerialBus
+    Qt6::Multimedia
   )
 endif()
 
@@ -213,6 +215,7 @@ if(BUILD_COMMERCIAL)
   set(HEADERS
     ${HEADERS}
     src/MQTT/Client.h
+    src/IO/Drivers/Audio.h
     src/IO/Drivers/CANBus.h
     src/IO/Drivers/Modbus.h
     src/UI/Widgets/Plot3D.h
@@ -224,6 +227,7 @@ if(BUILD_COMMERCIAL)
   set(SOURCES
     ${SOURCES}
     src/MQTT/Client.cpp
+    src/IO/Drivers/Audio.cpp
     src/IO/Drivers/CANBus.cpp
     src/IO/Drivers/Modbus.cpp
     src/UI/Widgets/Plot3D.cpp
@@ -306,6 +310,7 @@ if(BUILD_COMMERCIAL)
     qml/Dialogs/Welcome.qml
     qml/Dialogs/MQTTConfiguration.qml
     qml/Dialogs/LicenseManagement.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml
   )

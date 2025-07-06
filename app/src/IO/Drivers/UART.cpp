@@ -27,6 +27,35 @@
 #include "Misc/TimerEvents.h"
 
 //------------------------------------------------------------------------------
+// Static utility functions
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Calculates an ideal read buffer size for a serial port.
+ *
+ * The buffer is sized to hold approximately 200 milliseconds worth of data
+ * based on the given baud rate. This helps balance memory use and latency,
+ * avoiding overflows without introducing unnecessary delay.
+ *
+ * The result is clamped between 256 bytes and 16 kilobytes, and aligned to
+ * the nearest 256-byte boundary.
+ *
+ * @param baud The serial port baud rate in bits per second.
+ * @return Ideal buffer size in bytes.
+ */
+static size_t idealSerialBufferSize(const qint32 baud)
+{
+  size_t bytes = static_cast<size_t>(baud * 0.02);
+  bytes = std::max<size_t>(256, bytes);
+  bytes = std::min<size_t>(16384, bytes);
+
+  constexpr size_t granularity = 256;
+  bytes = ((bytes + granularity - 1) / granularity) * granularity;
+
+  return bytes;
+}
+
+//------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
 //------------------------------------------------------------------------------
 
@@ -226,6 +255,7 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
     port()->setDataBits(dataBits());
     port()->setStopBits(stopBits());
     port()->setFlowControl(flowControl());
+    port()->setReadBufferSize(idealSerialBufferSize(baudRate()));
 
     // Connect signals/slots
     connect(port(), &QSerialPort::errorOccurred, this,

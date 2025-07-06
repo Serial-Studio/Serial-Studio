@@ -76,6 +76,7 @@
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Client.h"
 #  include "Licensing/Trial.h"
+#  include "IO/Drivers/Audio.h"
 #  include "UI/Widgets/Plot3D.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
@@ -327,6 +328,7 @@ void Misc::ModuleManager::initializeQmlInterface()
 #ifdef BUILD_COMMERCIAL
   const bool qtCommercialAvailable = true;
   auto mqttClient = &MQTT::Client::instance();
+  auto audioDriver = &IO::Drivers::Audio::instance();
 #else
   const bool qtCommercialAvailable = false;
 #endif
@@ -373,8 +375,9 @@ void Misc::ModuleManager::initializeQmlInterface()
 
   // Register commercial C++ modules with QML
 #ifdef BUILD_COMMERCIAL
-  c->setContextProperty("Cpp_MQTT_Client", mqttClient);
+  c->setContextProperty("Cpp_IO_Audio", audioDriver);
   c->setContextProperty("Cpp_Licensing_Trial", trial);
+  c->setContextProperty("Cpp_MQTT_Client", mqttClient);
   c->setContextProperty("Cpp_Licensing_LemonSqueezy", lemonSqueezy);
 #endif
 

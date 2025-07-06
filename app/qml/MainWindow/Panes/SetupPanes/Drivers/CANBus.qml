@@ -28,9 +28,6 @@ Item {
   id: root
   implicitHeight: layout.implicitHeight
 
-  //
-  // Control layout
-  //
   ColumnLayout {
     id: layout
     spacing: 4

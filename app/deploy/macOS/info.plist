@@ -3,34 +3,54 @@
 <plist version="1.0">
 <dict>
   <key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleExecutable</key>
+	<string>en</string>
+
+  <key>CFBundleExecutable</key>
 	<string>Serial-Studio</string>
-	<key>CFBundleGetInfoString</key>
-	<string>Copyright © 2020–2025 Alex Spataru</string>
-	<key>CFBundleIconFile</key>
+
+  <key>CFBundleGetInfoString</key>
+	<string>© 2020–2025 Alex Spataru</string>
+
+  <key>CFBundleIconFile</key>
 	<string>icon</string>
-	<key>CFBundleIdentifier</key>
+
+  <key>CFBundleIdentifier</key>
 	<string>org.alexspataru.serial-studio</string>
-	<key>CFBundleInfoDictionaryVersion</key>
+
+  <key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-	<key>CFBundleName</key>
+
+  <key>CFBundleName</key>
 	<string>Serial Studio</string>
-	<key>CFBundlePackageType</key>
+
+  <key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
+
+  <key>CFBundleShortVersionString</key>
 	<string>3.1.7</string>
-	<key>LSHasLocalizedDisplayName</key>
+
+  <key>CFBundleVersion</key>
+	<string>3.1.7</string>
+
+  <key>LSHasLocalizedDisplayName</key>
 	<true/>
-	<key>NSPrincipalClass</key>
+
+  <key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>NSSupportsSuddenTermination</key>
+
+  <key>NSSupportsSuddenTermination</key>
 	<false/>
-	<key>NSRequiresAquaSystemAppearance</key>
+
+  <key>NSRequiresAquaSystemAppearance</key>
 	<false/>
-	<key>NSHighResolutionCapable</key>
+
+  <key>NSHighResolutionCapable</key>
 	<true/>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Serial Studio uses Bluetooth LE to connect and exchange data with nearby devices.</string>
+
+  <key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Serial Studio uses Bluetooth Low Energy to communicate with nearby devices.</string>
+
+  <key>NSMicrophoneUsageDescription</key>
+	<string>Serial Studio needs access to your microphone to record and analyze audio input.</string>
 </dict>
 </plist>

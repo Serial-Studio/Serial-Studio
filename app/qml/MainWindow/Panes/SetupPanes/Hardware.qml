@@ -99,6 +99,19 @@ Rectangle {
       Layout.fillWidth: true
       Layout.fillHeight: true
       active: Cpp_CommercialBuild
+      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml"
+
+      onLoaded: {
+        if (item)
+          root.buses.push(item)
+      }
+    }
+
+    Loader {
+      asynchronous: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      active: Cpp_CommercialBuild
       source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml"
 
       onLoaded: {

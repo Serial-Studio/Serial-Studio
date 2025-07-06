@@ -234,6 +234,7 @@ public:
     Network,     /**< Network socket communication. */
     BluetoothLE, /**< Bluetooth Low Energy communication. */
 #ifdef BUILD_COMMERCIAL
+    Audio,  /**< Audio input device */
     ModBus, /**< MODBUS communication */
     CanBus, /**< CANBUS communication */
 #endif

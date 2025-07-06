@@ -5,26 +5,31 @@
     <name>About</name>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="38"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="38"/>
         <source>About</source>
         <translation>O aplikaci</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="182"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="182"/>
         <source>Version %1</source>
         <translation>Verze %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="192"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="192"/>
         <source>Copyright © %1 %2</source>
         <translation>Copyright © %1 %2</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="197"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="197"/>
         <source>All Rights Reserved</source>
         <translation>Všechna práva vyhrazena</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="213"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="213"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -34,6 +39,7 @@
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="232"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>Tato konfigurace je licencována pro komerční a proprietární použití. Může být použita v uzavřených a komerčních aplikacích, v souladu s podmínkami komerční licence.</translation>
     </message>
@@ -43,51 +49,61 @@
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="246"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="246"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>Tato konfigurace je určena pouze pro osobní a hodnotící účely. Komerční použití je zakázáno, pokud není aktivována platná komerční licence.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="260"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="260"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Tento software je poskytován "tak, jak je" bez jakékoliv záruky, výslovné či předpokládané, včetně, ale nikoli výhradně, záruk prodejnosti nebo vhodnosti pro určitý účel. Autor v žádném případě nenese odpovědnost za jakékoliv škody vyplývající z použití tohoto softwaru.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="280"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="280"/>
         <source>Manage License</source>
         <translation>Spravovat licenci</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="289"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="289"/>
         <source>Donate</source>
         <translation>Darovat</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="300"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="300"/>
         <source>Check for Updates</source>
         <translation>Zkontrolovat aktualizace</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="309"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="309"/>
         <source>License Agreement</source>
         <translation>Licenční smlouva</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="318"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="318"/>
         <source>Report Bug</source>
         <translation>Nahlásit chybu</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="327"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="327"/>
         <source>Acknowledgements</source>
         <translation>Poděkování</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="336"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="336"/>
         <source>Website</source>
         <translation>Webová stránka</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="351"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="351"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -96,16 +112,19 @@
     <name>Acknowledgements</name>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="35"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="35"/>
         <source>Acknowledgements</source>
         <translation>Poděkování</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="172"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="172"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="186"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="186"/>
         <source>About Qt...</source>
         <translation>O Qt...</translation>
     </message>
@@ -114,31 +133,37 @@
     <name>ActionView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="104"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <source>Change Icon</source>
         <translation>Změnit ikonu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="106"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="106"/>
         <source>Change the icon used for this action</source>
         <translation>Změnit ikonu použitou pro tuto akci</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="127"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="127"/>
         <source>Duplicate</source>
         <translation>Duplikovat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="129"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="129"/>
         <source>Duplicate this action with all its settings</source>
         <translation>Duplikovat tuto akci se všemi jejími nastaveními</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="139"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="139"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="143"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="143"/>
         <source>Delete this action from the project</source>
         <translation>Odstranit tuto akci z projektu</translation>
     </message>
@@ -152,29 +177,82 @@
     </message>
 </context>
 <context>
+    <name>Audio</name>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="57"/>
+        <source>Buffer Size</source>
+        <translation>Velikost vyrovnávací paměti</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="85"/>
+        <source>Input Device</source>
+        <translation>Vstupní zařízení</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="103"/>
+        <source>Input Sample Rate</source>
+        <translation>Vzorkovací frekvence vstupu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="121"/>
+        <source>Input Sample Format</source>
+        <translation>Vstupní formát vzorků</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="139"/>
+        <source>Input Channels</source>
+        <translation>Vstupní kanály</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="169"/>
+        <source>Output Device</source>
+        <translation>Výstupní zařízení</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="187"/>
+        <source>Output Sample Rate</source>
+        <translation>Vzorkovací frekvence výstupu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="205"/>
+        <source>Output Sample Format</source>
+        <translation>Výstupní formát vzorků</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="223"/>
+        <source>Output Channels</source>
+        <translation>Výstupní kanály</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothLE</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
         <source>Device</source>
         <translation>Zařízení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
         <source>Service</source>
         <translation>Služba</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
         <source>Characteristic</source>
         <translation>Charakteristika</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="172"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="172"/>
         <source>Scanning....</source>
         <translation>Skenování....</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="195"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="195"/>
         <source>Sorry, this system is not supported yet. We'll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
         <translation>Omlouváme se, tento systém zatím není podporován. Aktualizujeme Serial Studio, aby pracovalo s tímto operačním systémem, jakmile ho Qt oficiálně podpoří.</translation>
     </message>
@@ -300,26 +378,31 @@
     <name>Canvas</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="55"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Canvas.qml" line="55"/>
         <source>Set Wallpaper...</source>
         <translation>Nastavit tapetu...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="61"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Canvas.qml" line="61"/>
         <source>Clear Wallpaper</source>
         <translation>Vymazat tapetu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="71"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Canvas.qml" line="71"/>
         <source>Tile Windows</source>
         <translation>Uspořádat okna</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="84"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Canvas.qml" line="84"/>
         <source>Pro features detected in this project.</source>
         <translation>V tomto projektu byly zjištěny profesionální funkce.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="85"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Canvas.qml" line="85"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
         <translation>Záložní widgety jsou aktivní. Pro plnou funkčnost si zakupte licenci.</translation>
     </message>
@@ -328,6 +411,7 @@
     <name>Console</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Console.qml" line="31"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Console.qml" line="31"/>
         <source>Console</source>
         <translation>Konzole</translation>
     </message>
@@ -336,6 +420,7 @@
     <name>CsvPlayer</name>
     <message>
         <location filename="../../qml/Dialogs/CsvPlayer.qml" line="35"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/CsvPlayer.qml" line="35"/>
         <source>CSV Player</source>
         <translation>CSV přehrávač</translation>
     </message>
@@ -344,6 +429,7 @@
     <name>Dashboard</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="34"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard.qml" line="34"/>
         <source>Dashboard</source>
         <translation>Řídicí panel</translation>
     </message>
@@ -352,11 +438,13 @@
     <name>DataGrid</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <source>Pause</source>
         <translation>Pozastavit</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <source>Resume</source>
         <translation>Pokračovat</translation>
     </message>
@@ -365,91 +453,109 @@
     <name>DatasetView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
         <source>Pro features detected in this project.</source>
         <translation>V tomto projektu byly zjištěny profesionální funkce.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
         <translation>Budou použity náhradní widgety. Kupte si licenci pro odemknutí plné funkčnosti.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
         <source>Plot</source>
         <translation>Graf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
         <source>Toggle 2D plot visualization for this dataset</source>
         <translation>Přepnout 2D vizualizaci grafu pro tento datový soubor</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
         <source>FFT Plot</source>
         <translation>FFT Graf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <source>Toggle FFT plot to visualize frequency content</source>
         <translation>Přepnout FFT graf pro zobrazení frekvenčního obsahu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
         <source>Bar/Level</source>
         <translation>Sloupec/Úroveň</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
         <source>Toggle bar/level indicator for this dataset</source>
         <translation>Přepnout sloupcový/úrovňový indikátor pro tento datový soubor</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
         <source>Gauge</source>
         <translation>Měřidlo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <source>Toggle gauge widget for analog-style display</source>
         <translation>Přepnout ukazatel měřidla pro analogový styl zobrazení</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <source>Toggle compass widget for directional data</source>
         <translation>Přepnout kompasový widget pro směrová data</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
         <translation>Přepnout LED indikátor pro binární nebo prahové hodnoty</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
         <source>Duplicate</source>
         <translation>Duplikovat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
         <source>Duplicate this dataset with the same configuration</source>
         <translation>Duplikovat tento datový soubor se stejnou konfigurací</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
         <source>Delete this dataset from the group</source>
         <translation>Odstranit tento datový soubor ze skupiny</translation>
     </message>
@@ -458,36 +564,43 @@
     <name>Donate</name>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="36"/>
         <source>Support Serial Studio</source>
         <translation>Podpořte Serial Studio</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="143"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="143"/>
         <source>Support the development of %1!</source>
         <translation>Podpořte vývoj %1!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="154"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="154"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio je bezplatný a open-source software podporovaný dobrovolníky. Zvažte darování nebo získání Pro licence na podporu vývojových snah :)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="167"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="167"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>Tento projekt můžete podpořit také sdílením, hlášením chyb a navrhováním nových funkcí!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="183"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="183"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="197"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="197"/>
         <source>Donate</source>
         <translation>Darovat</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="215"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="215"/>
         <source>Get Serial Studio Pro</source>
         <translation>Získat Serial Studio Pro</translation>
     </message>
@@ -657,11 +770,13 @@
     <name>FFTPlot</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="217"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="217"/>
         <source>Magnitude (dB)</source>
         <translation>Magnituda (dB)</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="218"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="218"/>
         <source>Frequency (Hz)</source>
         <translation>Frekvence (Hz)</translation>
     </message>
@@ -670,51 +785,61 @@
     <name>FileTransmission</name>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="36"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
         <source>File Transmission</source>
         <translation>Přenos souboru</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="137"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="137"/>
         <source>File Selection:</source>
         <translation>Výběr souboru:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="155"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="155"/>
         <source>Select File...</source>
         <translation>Vybrat soubor...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="172"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="172"/>
         <source>Transmission Interval:</source>
         <translation>Interval přenosu:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
         <source>msecs</source>
         <translation>ms</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="225"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="225"/>
         <source>Progress: %1</source>
         <translation>Postup: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="241"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="241"/>
         <source>Pause Transmission</source>
         <translation>Pozastavit přenos</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="242"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="242"/>
         <source>Resume Transmission</source>
         <translation>Obnovit přenos</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="243"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="243"/>
         <source>Stop Transmission</source>
         <translation>Zastavit přenos</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="244"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="244"/>
         <source>Begin Transmission</source>
         <translation>Zahájit přenos</translation>
     </message>
@@ -723,106 +848,131 @@
     <name>FrameParserView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="32"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="32"/>
         <source>modified</source>
         <translation>upraveno</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="82"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="238"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="82"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="238"/>
         <source>Undo</source>
         <translation>Zpět</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="89"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="252"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="89"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="252"/>
         <source>Redo</source>
         <translation>Znovu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="98"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="277"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="98"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="277"/>
         <source>Cut</source>
         <translation>Vyjmout</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="103"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="290"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="103"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="290"/>
         <source>Copy</source>
         <translation>Kopírovat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="108"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="303"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="108"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="303"/>
         <source>Paste</source>
         <translation>Vložit</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="115"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="115"/>
         <source>Select All</source>
         <translation>Vybrat vše</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="187"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="187"/>
         <source>Reset</source>
         <translation>Obnovit</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="192"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="192"/>
         <source>Reset to the default parsing script</source>
         <translation>Obnovit výchozí skript pro zpracování</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="200"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="200"/>
         <source>Import</source>
         <translation>Importovat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="205"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="205"/>
         <source>Import a JavaScript file for data parsing</source>
         <translation>Importovat soubor JavaScript pro zpracování dat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="214"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="214"/>
         <source>Validate &amp; Save</source>
         <translation>Ověřit a uložit</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="219"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="219"/>
         <source>Validate syntax and apply parsing changes</source>
         <translation>Ověřit syntaxi a použít změny zpracování</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="244"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="244"/>
         <source>Undo the last code edit</source>
         <translation>Vrátit poslední úpravu kódu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="258"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="258"/>
         <source>Redo the previously undone edit</source>
         <translation>Obnovit předchozí vrácenou úpravu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="282"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="282"/>
         <source>Cut selected code to clipboard</source>
         <translation>Vyjmout vybraný kód do schránky</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="295"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="295"/>
         <source>Copy selected code to clipboard</source>
         <translation>Kopírovat vybraný kód do schránky</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="308"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="308"/>
         <source>Paste code from clipboard</source>
         <translation>Vložit kód ze schránky</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="327"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="327"/>
         <source>Help</source>
         <translation>Nápověda</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="332"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="332"/>
         <source>Open help documentation for JavaScript data parsing</source>
         <translation>Otevřít dokumentaci nápovědy pro zpracování dat v JavaScriptu</translation>
     </message>
@@ -846,115 +996,135 @@
         <translation type="vanished">Mapa: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="168"/>
+        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="190"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <source>Base Map: %1</source>
         <translation>Základní mapa: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="189"/>
         <source>VIIRS Imagery: %1</source>
-        <translation>VIIRS snímky: %1</translation>
+        <translation type="vanished">VIIRS snímky: %1</translation>
     </message>
 </context>
 <context>
     <name>GroupView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="81"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
         <translation>V tomto projektu byly zjištěny profesionální funkce.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="83"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
         <translation>Budou použity náhradní widgety. Kupte si licenci pro odemčení plné funkčnosti.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="116"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="116"/>
         <source>Dataset</source>
         <translation>Datová sada</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="121"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="121"/>
         <source>Add a generic dataset to the current group</source>
         <translation>Přidat obecnou datovou sadu do aktuální skupiny</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="129"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="129"/>
         <source>Plot</source>
         <translation>Graf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="135"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="135"/>
         <source>Add a 2D plot to visualize numeric data</source>
         <translation>Přidat 2D graf pro vizualizaci číselných dat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="144"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="144"/>
         <source>FFT Plot</source>
         <translation>FFT graf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="149"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="149"/>
         <source>Add an FFT plot for frequency domain visualization</source>
         <translation>Přidat FFT graf pro vizualizaci ve frekvenční oblasti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="158"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="158"/>
         <source>Bar/Level</source>
         <translation>Sloupec/Úroveň</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="163"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="163"/>
         <source>Add a bar or level indicator for scaled values</source>
         <translation>Přidat sloupcový nebo úrovňový indikátor pro škálované hodnoty</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="171"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="171"/>
         <source>Gauge</source>
         <translation>Měřidlo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="177"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="177"/>
         <source>Add a gauge widget for analog-style visualization</source>
         <translation>Přidat widget měřidla pro analogovou vizualizaci</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="186"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="186"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="191"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="191"/>
         <source>Add a compass to display directional or angular data</source>
         <translation>Přidat kompas pro zobrazení směrových nebo úhlových dat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="199"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="199"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="205"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <source>Add an LED indicator for binary status signals</source>
         <translation>Přidat LED indikátor pro binární stavové signály</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="221"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="221"/>
         <source>Duplicate</source>
         <translation>Duplikovat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="225"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="225"/>
         <source>Duplicate the current group and its contents</source>
         <translation>Duplikovat aktuální skupinu a její obsah</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="234"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="234"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="238"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="238"/>
         <source>Delete the current group and all contained datasets</source>
         <translation>Smazat aktuální skupinu a všechny obsažené datové sady</translation>
     </message>
@@ -971,21 +1141,25 @@
     <name>Gyroscope</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="99"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="99"/>
         <source>Integrate Angles</source>
         <translation>Integrovat úhly</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="343"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="343"/>
         <source>Roll: %1</source>
         <translation>Náklon: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="361"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="361"/>
         <source>Yaw: %1</source>
         <translation>Otočení: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="379"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="379"/>
         <source>Pitch: %1</source>
         <translation>Klopení: %1</translation>
     </message>
@@ -1059,6 +1233,39 @@
         <location filename="../../src/IO/ConsoleExport.cpp" line="229"/>
         <source>Cannot open file for writing!</source>
         <translation>Nelze otevřít soubor pro zápis!</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Drivers::Audio</name>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="63"/>
+        <source>Unsigned 8-bit</source>
+        <translation>Neoznačený 8bitový</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="64"/>
+        <source>Signed 16-bit</source>
+        <translation>Podepsaný 16bitový</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="65"/>
+        <source>Signed 32-bit</source>
+        <translation>Podepsaný 32bitový</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="66"/>
+        <source>Float 32-bit</source>
+        <translation>Plovoucí desetinná čárka 32bitová</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="67"/>
+        <source>Mono</source>
+        <translation>Mono</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="68"/>
+        <source>Stereo</source>
+        <translation>Stereo</translation>
     </message>
 </context>
 <context>
@@ -1155,61 +1362,61 @@
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="50"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="51"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="376"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="418"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="79"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="80"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="406"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="448"/>
         <source>None</source>
         <translation>Žádný</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="247"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="277"/>
         <source>Failed to connect to serial port device</source>
         <translation>Nepodařilo se připojit k zařízení sériového portu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="345"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="746"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="375"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="776"/>
         <source>Select Port</source>
         <translation>Vyberte port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="377"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="407"/>
         <source>Even</source>
         <translation>Sudá</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="378"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="408"/>
         <source>Odd</source>
         <translation>Lichá</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="379"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="409"/>
         <source>Space</source>
         <translation>Mezerník</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="380"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="410"/>
         <source>Mark</source>
         <translation>Označit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="419"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="449"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="420"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="450"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="570"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="600"/>
         <source>"%1" is not a valid path</source>
         <translation>„%1“ není platná cesta</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="571"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="601"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>Zadejte jinou cestu pro registraci vlastního sériového zařízení</translation>
     </message>
@@ -1222,62 +1429,62 @@
         <translation type="vanished">Rychlost „%1“ byla přidána do seznamu přenosových rychlostí</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="855"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="885"/>
         <source>Critical serial port error</source>
         <translation>Kritická chyba sériového portu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="881"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="911"/>
         <source>No error occurred.</source>
         <translation>Žádná chyba nenastala.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="882"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="912"/>
         <source>The specified device could not be found. Please check the connection and try again.</source>
         <translation>Zadané zařízení nebylo nalezeno. Zkontrolujte připojení a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="883"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="913"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Oprávnění odepřeno. Ujistěte se, že aplikace má potřebná přístupová práva k zařízení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="884"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="914"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Nepodařilo se otevřít zařízení. Může být již používáno nebo nedostupné.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="915"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Došlo k chybě při zápisu dat do zařízení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="886"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="916"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Došlo k chybě při čtení dat ze zařízení.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="887"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="917"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>Došlo k chybě kritického zdroje. Zařízení mohlo být odpojeno nebo již není přístupné.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="888"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="918"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>Požadovaná operace není na tomto zařízení podporována.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="889"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="919"/>
         <source>An unknown error occurred. Please check the device and try again.</source>
         <translation>Došlo k neznámé chybě. Zkontrolujte prosím zařízení a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="890"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="920"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>Operace překročila časový limit. Zařízení nemusí reagovat.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="891"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="921"/>
         <source>The device is not open. Please open the device before attempting this operation.</source>
         <translation>Zařízení není otevřeno. Otevřete prosím zařízení před pokusem o tuto operaci.</translation>
     </message>
@@ -1298,27 +1505,36 @@
 <context>
     <name>IO::Manager</name>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="237"/>
+        <location filename="../../src/IO/Manager.cpp" line="238"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="238"/>
+        <location filename="../../src/IO/Manager.cpp" line="239"/>
         <source>Network Socket</source>
         <translation>Síťová zásuvka</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="239"/>
+        <location filename="../../src/IO/Manager.cpp" line="240"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="316"/>
+        <location filename="../../src/IO/Manager.cpp" line="242"/>
+        <source>Audio Stream</source>
+        <translation>Zvukový proud</translation>
+    </message>
+    <message>
+        <source>Audio</source>
+        <translation type="vanished">Zvuk</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Manager.cpp" line="318"/>
         <source>Your trial period has ended.</source>
         <translation>Vaše zkušební období skončilo.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="317"/>
+        <location filename="../../src/IO/Manager.cpp" line="319"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Pro pokračování v používání Serial Studio prosím aktivujte svou licenci.</translation>
     </message>
@@ -1327,16 +1543,19 @@
     <name>IconPicker</name>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="45"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="45"/>
         <source>Select Icon</source>
         <translation>Vyberte ikonu</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="161"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="161"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="170"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="170"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
@@ -2185,6 +2404,7 @@
     <name>JSONDropArea</name>
     <message>
         <location filename="../../qml/Widgets/JSONDropArea.qml" line="116"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/JSONDropArea.qml" line="116"/>
         <source>Drop JSON and CSV files here</source>
         <translation>Přetáhněte sem soubory JSON a CSV</translation>
     </message>
@@ -2911,16 +3131,19 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>MainWindow</name>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="85"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="85"/>
         <source>Device Defined Project</source>
         <translation>Projekt definovaný zařízením</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="88"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="88"/>
         <source>Quick Plot Mode</source>
         <translation>Režim rychlého zobrazení grafu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="94"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="94"/>
         <source>Empty Project</source>
         <translation>Prázdný projekt</translation>
     </message>
@@ -2953,12 +3176,12 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
 <context>
     <name>Misc::ModuleManager</name>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="439"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="442"/>
         <source>To apply this change, %1 needs to restart.</source>
         <translation>Pro použití této změny je potřeba restartovat %1.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="440"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="443"/>
         <source>Would you like to restart now?</source>
         <translation>Chcete restartovat nyní?</translation>
     </message>
@@ -3078,6 +3301,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>MultiPlot</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="243"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="243"/>
         <source>Samples</source>
         <translation>Ukázky</translation>
     </message>
@@ -3086,36 +3310,43 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>Network</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="86"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="86"/>
         <source>Socket Type</source>
         <translation>Typ socketu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="107"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="107"/>
         <source>Remote Address</source>
         <translation>Vzdálená adresa</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="128"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="128"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="162"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="162"/>
         <source>Local Port</source>
         <translation>Místní port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="168"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="168"/>
         <source>Type 0 for automatic port</source>
         <translation>Zadejte 0 pro automatický port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="193"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="193"/>
         <source>Remote Port</source>
         <translation>Vzdálený port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="223"/>
         <source>Multicast</source>
         <translation>Multicast</translation>
     </message>
@@ -3123,17 +3354,17 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
 <context>
     <name>Plugins::Server</name>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="57"/>
+        <location filename="../../src/Plugins/Server.cpp" line="131"/>
         <source>Unable to start plugin TCP server</source>
         <translation>Nelze spustit plugin TCP server</translation>
     </message>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="167"/>
+        <location filename="../../src/Plugins/Server.cpp" line="187"/>
         <source>Plugin server</source>
         <translation>Plugin server</translation>
     </message>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="168"/>
+        <location filename="../../src/Plugins/Server.cpp" line="188"/>
         <source>Invalid pending connection</source>
         <translation>Neplatné čekající připojení</translation>
     </message>
@@ -3142,16 +3373,19 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>ProNotice</name>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="116"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="116"/>
         <source>Visit Website</source>
         <translation>Navštívit web</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="127"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="127"/>
         <source>Buy License</source>
         <translation>Koupit licenci</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="143"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="143"/>
         <source>Activate</source>
         <translation>Aktivovat</translation>
     </message>
@@ -3160,6 +3394,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>ProjectEditor</name>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="43"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="43"/>
         <source>modified</source>
         <translation>upraveno</translation>
     </message>
@@ -3168,11 +3403,13 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>ProjectStructure</name>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <source>Project Structure</source>
         <translation>Struktura projektu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="241"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="241"/>
         <source>IDX %1</source>
         <translation>IDX %1</translation>
     </message>
@@ -3181,220 +3418,267 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>ProjectToolbar</name>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="134"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="134"/>
         <source>New</source>
         <translation>Nový</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="137"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="137"/>
         <source>Create a new JSON project</source>
         <translation>Vytvořit nový JSON projekt</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="153"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="153"/>
         <source>Open</source>
         <translation>Otevřít</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="157"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="157"/>
         <source>Open an existing JSON project</source>
         <translation>Otevřít existující projekt JSON</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="163"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="163"/>
         <source>Save</source>
         <translation>Uložit</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="166"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="166"/>
         <source>Save the current project</source>
         <translation>Uložit aktuální projekt</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
         <source>Save As</source>
         <translation>Uložit jako</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="178"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="178"/>
         <source>Save the current project under a new name</source>
         <translation>Uložit aktuální projekt pod novým názvem</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="199"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="199"/>
         <source>Action</source>
         <translation>Akce</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="202"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="202"/>
         <source>Add a new action to the project</source>
         <translation>Přidat novou akci do projektu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="221"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="221"/>
         <source>Dataset</source>
         <translation>Datová sada</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="223"/>
         <source>Add a generic dataset</source>
         <translation>Přidat obecnou datovou sadu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="239"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="239"/>
         <source>Plot</source>
         <translation>Graf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="244"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="244"/>
         <source>Add a 2D plot dataset</source>
         <translation>Přidat datovou sadu pro 2D graf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="250"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="250"/>
         <source>FFT Plot</source>
         <translation>FFT Graf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
         <source>Add a Fast Fourier Transform plot</source>
         <translation>Přidat graf rychlé Fourierovy transformace</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="261"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="261"/>
         <source>Gauge</source>
         <translation>Měřidlo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <source>Add a gauge widget for numeric data</source>
         <translation>Přidat ukazatel pro číselná data</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="272"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="272"/>
         <source>Level Indicator</source>
         <translation>Indikátor úrovně</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
         <source>Add a vertical bar level indicator</source>
         <translation>Přidat svislý indikátor úrovně</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="283"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="283"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <source>Add a compass widget for directional data</source>
         <translation>Přidat kompasový widget pro směrová data</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="294"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="294"/>
         <source>LED Indicator</source>
         <translation>LED indikátor</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <source>Add an LED-style status indicator</source>
         <translation>Přidat stavový indikátor ve stylu LED</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="320"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="320"/>
         <source>Group</source>
         <translation>Skupina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="322"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="322"/>
         <source>Add a dataset container group</source>
         <translation>Přidat skupinu kontejnerů datové sady</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="324"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="324"/>
         <source>Dataset Container</source>
         <translation>Kontejner datové sady</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <source>Table</source>
         <translation>Tabulka</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="343"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="343"/>
         <source>Add a data table view</source>
         <translation>Přidat zobrazení datové tabulky</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="345"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="345"/>
         <source>Data Grid</source>
         <translation>Datová mřížka</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="349"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="349"/>
         <source>Multi-Plot</source>
         <translation>Multi-graf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
         <source>Add a 2D plot with multiple signals</source>
         <translation>Přidat 2D graf s více signály</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="356"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="356"/>
         <source>Multiple Plot</source>
         <translation>Více grafů</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="360"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="367"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="360"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="367"/>
         <source>3D Plot</source>
         <translation>3D graf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <source>Add a 3D plot visualization</source>
         <translation>Přidat 3D vizualizaci grafu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="371"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="378"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="371"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="378"/>
         <source>Accelerometer</source>
         <translation>Akcelerometr</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
         <source>Add a group for 3-axis accelerometer data</source>
         <translation>Přidat skupinu pro data z 3-osého akcelerometru</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="382"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="388"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="382"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="388"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="389"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="389"/>
         <source>Add a group for 3-axis gyroscope data (angular rates are integrated into orientation automatically)</source>
         <translation>Přidat skupinu pro data z 3-osého gyroskopu (úhlové rychlosti jsou automaticky integrovány do orientace)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="393"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="400"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="393"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="400"/>
         <source>GPS Map</source>
         <translation>GPS mapa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
         <source>Add a map widget for GPS data</source>
         <translation>Přidat mapový widget pro GPS data</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="419"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="419"/>
         <source>Help</source>
         <translation>Nápověda</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="422"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="422"/>
         <source>Open the online Project Editor documentation</source>
         <translation>Otevřít online dokumentaci Editoru projektů</translation>
     </message>
@@ -3403,11 +3687,13 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>ProjectView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
         <source>Pro features detected in this project.</source>
         <translation>V tomto projektu byly zjištěny profesionální funkce.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
         <translation>Budou použity záložní widgety. Kupte si licenci pro odemknutí plné funkčnosti.</translation>
     </message>
@@ -3532,86 +3818,103 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>Settings</name>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="36"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="36"/>
         <source>Preferences</source>
         <translation>Předvolby</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="101"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="101"/>
         <source>General</source>
         <translation>Obecné</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="125"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="125"/>
         <source>Language</source>
         <translation>Jazyk</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="145"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="145"/>
         <source>Theme</source>
         <translation>Motiv</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="166"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="166"/>
         <source>Workspace Folder</source>
         <translation>Pracovní složka</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="209"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="209"/>
         <source>Miscellaneous</source>
         <translation>Různé</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="234"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="234"/>
         <source>Enable TCP Plugins (Port 7777)</source>
         <translation>Povolit TCP pluginy (port 7777)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="252"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="252"/>
         <source>Force Software Rendering</source>
         <translation>Vynutit softwarové vykreslování</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="269"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="269"/>
         <source>Automatically Check for Updates</source>
         <translation>Automaticky kontrolovat aktualizace</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="294"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="294"/>
         <source>Dashboard</source>
         <translation>Řídicí panel</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="318"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="318"/>
         <source>Point Count</source>
         <translation>Počet bodů</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="338"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="338"/>
         <source>Decimal Precision</source>
         <translation>Desetinná přesnost</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="358"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="358"/>
         <source>Show Actions Panel</source>
         <translation>Zobrazit panel akcí</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="376"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="376"/>
         <source>Enable Console Widget</source>
         <translation>Povolit konzolový widget</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="416"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="416"/>
         <source>Reset</source>
         <translation>Resetovat</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="441"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="441"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="451"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="451"/>
         <source>Apply</source>
         <translation>Použít</translation>
     </message>
@@ -3621,56 +3924,68 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="33"/>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="240"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="33"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="240"/>
         <source>Device Setup</source>
         <translation>Nastavení zařízení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="124"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="124"/>
         <source>Frame Parsing</source>
         <translation>Zpracování rámce</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="132"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="132"/>
         <source>No Parsing (Device Sends JSON Data)</source>
         <translation>Bez zpracování (zařízení odesílá JSON data)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="143"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="143"/>
         <source>Quick Plot (Comma Separated Values)</source>
         <translation>Rychlý graf (hodnoty oddělené čárkou)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="154"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="154"/>
         <source>Parse via JSON Project File</source>
         <translation>Zpracovat pomocí JSON projektového souboru</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="173"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="173"/>
         <source>Change Project File (%1)</source>
         <translation>Změnit projektový soubor (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="174"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="174"/>
         <source>Select Project File</source>
         <translation>Vybrat projektový soubor</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="188"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="188"/>
         <source>Data Export</source>
         <translation>Export dat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="201"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="201"/>
         <source>Create CSV File</source>
         <translation>Vytvořit CSV soubor</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="219"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="219"/>
         <source>Export Console Data</source>
         <translation>Exportovat data konzole</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="248"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="248"/>
         <source>I/O Interface: %1</source>
         <translation>I/O rozhraní: %1</translation>
     </message>
@@ -3679,71 +3994,85 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>StartMenu</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="147"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="147"/>
         <source>Workspaces</source>
         <translation>Pracovní prostory</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
         <source>No Groups Available</source>
         <translation>Žádné skupiny nejsou k dispozici</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="188"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="188"/>
         <source>Actions</source>
         <translation>Akce</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <source>No Actions Available</source>
         <translation>Žádné akce nejsou k dispozici</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <source>Auto Layout</source>
         <translation>Automatické rozvržení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <source>Full Screen</source>
         <translation>Celá obrazovka</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
         <source>CSV Logging</source>
         <translation>Protokolování CSV</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
         <source>Console Logging</source>
         <translation>Protokolování konzole</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="293"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="293"/>
         <source>Console</source>
         <translation>Konzole</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="308"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="308"/>
         <source>Preferences</source>
         <translation>Předvolby</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="318"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="318"/>
         <source>Help</source>
         <translation>Nápověda</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="342"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="342"/>
         <source>Resume</source>
         <translation>Pokračovat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="343"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="343"/>
         <source>Pause</source>
         <translation>Pozastavit</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="352"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="352"/>
         <source>Disconnect</source>
         <translation>Odpojit</translation>
     </message>
@@ -3752,6 +4081,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>SubMenuCombo</name>
     <message>
         <location filename="../../qml/Widgets/SubMenuCombo.qml" line="80"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <source>No Data Available</source>
         <translation>Žádná data nejsou k dispozici</translation>
     </message>
@@ -3760,11 +4090,13 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>TableDelegate</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="122"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="122"/>
         <source>Parameter</source>
         <translation>Parametr</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="142"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="142"/>
         <source>Value</source>
         <translation>Hodnota</translation>
     </message>
@@ -3774,11 +4106,13 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
@@ -3787,6 +4121,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>Taskbar</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="87"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="87"/>
         <source>Menu</source>
         <translation>Menu</translation>
     </message>
@@ -3795,41 +4130,49 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>Terminal</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="122"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="122"/>
         <source>Copy</source>
         <translation>Kopírovat</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="129"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="129"/>
         <source>Select all</source>
         <translation>Vybrat vše</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="136"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="136"/>
         <source>Clear</source>
         <translation>Vymazat</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="216"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="216"/>
         <source>Send Data to Device</source>
         <translation>Odeslat data do zařízení</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="373"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="373"/>
         <source>Show Timestamp</source>
         <translation>Zobrazit časové razítko</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="384"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="384"/>
         <source>Echo</source>
         <translation>Echo</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="395"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="395"/>
         <source>Emulate VT-100</source>
         <translation>Emulovat VT-100</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="417"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="417"/>
         <source>Display: %1</source>
         <translation>Zobrazení: %1</translation>
     </message>
@@ -3838,117 +4181,141 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>Toolbar</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="150"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="150"/>
         <source>Project Editor</source>
         <translation>Editor projektu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="154"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="154"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Otevřít Editor projektů pro vytvoření nebo úpravu vašeho JSON rozvržení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="161"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="161"/>
         <source>CSV Player</source>
         <translation>CSV přehrávač</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="166"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="166"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Přehrát CSV soubor jako živá data ze senzoru</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="186"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="186"/>
         <source>Devices</source>
         <translation>Zařízení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="190"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="190"/>
         <source>Configure device connection via Serial, BLE, or network socket</source>
         <translation>Nastavit připojení zařízení přes Serial, BLE, nebo síťový socket</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="197"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="197"/>
         <source>Preferences</source>
         <translation>Předvolby</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="201"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="201"/>
         <source>Open application settings and preferences</source>
         <translation>Otevřít nastavení a předvolby aplikace</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="223"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="230"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="230"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
         <translation>Nastavit připojení MQTT (publikovat nebo odebírat)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="250"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="250"/>
         <source>Examples</source>
         <translation>Příklady</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="253"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="253"/>
         <source>Browse example projects on GitHub</source>
         <translation>Procházet ukázkové projekty na GitHubu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="261"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="261"/>
         <source>Help</source>
         <translation>Nápověda</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="264"/>
         <source>Open the online documentation for help and guidance</source>
         <translation>Otevřít online dokumentaci pro pomoc a vedení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="272"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="272"/>
         <source>AI Help</source>
         <translation>Nápověda AI</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="275"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="275"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Zobrazit podrobnou dokumentaci a klást otázky na DeepWiki</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="283"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="283"/>
         <source>About</source>
         <translation>O aplikaci</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="287"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="287"/>
         <source>Show application info and license details</source>
         <translation>Zobrazit informace o aplikaci a podrobnosti o licenci</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="309"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="309"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="344"/>
         <source>Disconnect</source>
         <translation>Odpojit</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="309"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="309"/>
         <source>Connect</source>
         <translation>Připojit</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>Připojit nebo odpojit od zařízení nebo MQTT brokeru</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="353"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="353"/>
         <source>Activate</source>
         <translation>Aktivovat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="357"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="357"/>
         <source>Manage license and activate the application</source>
         <translation>Spravovat licenci a aktivovat aplikaci</translation>
     </message>
@@ -3957,41 +4324,49 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <name>UART</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="78"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="78"/>
         <source>COM Port</source>
         <translation>COM port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="106"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="106"/>
         <source>Baud Rate</source>
         <translation>Přenosová rychlost</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="165"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="165"/>
         <source>Data Bits</source>
         <translation>Datové bity</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="181"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="181"/>
         <source>Parity</source>
         <translation>Parita</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="197"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="197"/>
         <source>Stop Bits</source>
         <translation>Stop bity</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="213"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="213"/>
         <source>Flow Control</source>
         <translation>Řízení toku</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="240"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="240"/>
         <source>Auto Reconnect</source>
         <translation>Automatické opětovné připojení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="257"/>
+        <location filename="../../../build/Qt_6_9_1_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="257"/>
         <source>Send DTR Signal</source>
         <translation>Odeslat DTR signál</translation>
     </message>
@@ -4246,42 +4621,42 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
 <context>
     <name>Widgets::GPS</name>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="79"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="83"/>
         <source>Satellite Imagery</source>
         <translation>Satelitní snímky</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="79"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="83"/>
         <source>Satellite Imagery with Labels</source>
         <translation>Satelitní snímky s popisky</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="84"/>
         <source>Street Map</source>
         <translation>Ulice mapa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="84"/>
         <source>Topographic Map</source>
         <translation>Topografická mapa</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="80"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="84"/>
         <source>Terrain</source>
         <translation>Terén</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="81"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Light Gray Canvas</source>
         <translation>Světle šedé plátno</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="81"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Dark Gray Canvas</source>
         <translation>Tmavě šedé plátno</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="82"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="86"/>
         <source>National Geographic</source>
         <translation>National Geographic</translation>
     </message>
@@ -4290,22 +4665,20 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
         <translation type="vanished">Dnes (částečně</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
         <source>Yesterday (full)</source>
-        <translation>Včera (úplně)</translation>
+        <translation type="vanished">Včera (úplně)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
         <source>Today (partial)</source>
-        <translation>Dnes (částečně)</translation>
+        <translation type="vanished">Dnes (částečně)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="385"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="393"/>
         <source>Additional map layers are available only for Pro users.</source>
         <translation>Další vrstvy map jsou k dispozici pouze pro Pro uživatele.</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="386"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="394"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>Nemůžeme nabídnout neomezený přístup, protože klíč API ArcGIS přináší skutečné náklady.</translation>
     </message>
