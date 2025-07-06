@@ -98,6 +98,8 @@ public:
   [[nodiscard]] const QString &value() const;
   [[nodiscard]] const QString &units() const;
   [[nodiscard]] const QString &widget() const;
+  [[nodiscard]] const QString &fftWindowFn() const;
+
   [[nodiscard]] const QJsonObject &jsonData() const;
 
   [[nodiscard]] QJsonObject serialize() const;
@@ -122,6 +124,7 @@ private:
   QString m_value;
   QString m_units;
   QString m_widget;
+  QString m_fftWindowFn;
   QJsonObject m_jsonData;
 
   int m_index;

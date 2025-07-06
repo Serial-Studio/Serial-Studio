@@ -67,10 +67,10 @@ Item {
       id: _bufferSize
       Layout.fillWidth: true
       model: Cpp_IO_Audio.bufferSizes
-      currentIndex: Cpp_IO_Audio.bufferSize
+      currentIndex: Cpp_IO_Audio.bufferSizeIdx
       onCurrentIndexChanged: {
-        if (Cpp_IO_Audio.bufferSize !== currentIndex)
-          Cpp_IO_Audio.bufferSize = currentIndex
+        if (Cpp_IO_Audio.bufferSizeIdx !== currentIndex)
+          Cpp_IO_Audio.bufferSizeIdx = currentIndex
       }
     }
 

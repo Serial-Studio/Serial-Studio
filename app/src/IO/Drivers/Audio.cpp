@@ -242,7 +242,7 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   if (mode & QIODevice::ReadOnly)
   {
     m_source = new QAudioSource(inputDevice(), m_inputFormat, this);
-    m_source->setBufferSize(bufferSizes().at(m_bufferSizeIdx).toInt());
+    m_source->setBufferSize(bufferSize());
     m_inputStream = m_source->start();
     if (!m_inputStream)
     {
@@ -458,6 +458,16 @@ int IO::Drivers::Audio::selectedOutputChannelConfiguration() const
 //------------------------------------------------------------------------------
 
 /**
+ * @brief Returns the currently selected audio buffer size.
+ *
+ * @return The selected buffer size.
+ */
+int IO::Drivers::Audio::bufferSize() const
+{
+  return bufferSizes().at(m_bufferSizeIdx).toInt();
+}
+
+/**
  * @brief Returns the index of the currently selected audio buffer size.
  *
  * This index corresponds to an entry in the list returned by `bufferSizes()`,
@@ -465,7 +475,7 @@ int IO::Drivers::Audio::selectedOutputChannelConfiguration() const
  *
  * @return Index of the selected buffer size.
  */
-int IO::Drivers::Audio::bufferSize() const
+int IO::Drivers::Audio::bufferSizeIdx() const
 {
   return m_bufferSizeIdx;
 }
@@ -655,7 +665,7 @@ const QVector<QAudioDevice> &IO::Drivers::Audio::outputDevices() const
  *
  * @param index Index to the new buffer size in the list set by bufferSizes().
  */
-void IO::Drivers::Audio::setBufferSize(int index)
+void IO::Drivers::Audio::setBufferSizeIdx(int index)
 {
   if (isOpen())
     return;

@@ -36,12 +36,19 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
   , m_maxX(0)
   , m_minY(0)
   , m_maxY(0)
+  , m_center(0)
+  , m_halfRange(1)
+  , m_scaleIsValid(false)
   , m_transformer(0, QStringLiteral("Hann"))
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index))
   {
     // Get FFT dataset
     const auto &dataset = GET_DATASET(SerialStudio::DashboardFFT, m_index);
+
+    // Set FFT window type
+    if (!dataset.fftWindowFn().isEmpty())
+      m_transformer.setWindowFunction(dataset.fftWindowFn());
 
     // Initialize FFT size
     int size = qMax(8, dataset.fftSamples());
@@ -63,6 +70,22 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
     m_maxY = 0;
     m_minY = -100;
     m_maxX = m_samplingRate / 2;
+
+    // Obtain minimum and maximum values
+    double minVal = dataset.min();
+    double maxVal = dataset.max();
+
+    // Fix inverted limits
+    if (maxVal < minVal)
+      std::swap(minVal, maxVal);
+
+    // Accept only if the range is positive and non-zero
+    if (maxVal - minVal > 0.0)
+    {
+      m_scaleIsValid = true;
+      m_center = (maxVal + minVal) * 0.5;
+      m_halfRange = qMax(1e-12, (maxVal - minVal) * 0.5);
+    }
   }
 }
 
@@ -144,38 +167,33 @@ void Widgets::FFTPlot::updateData()
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index))
   {
-    // Get the plot data
+    // Grab fresh time-domain samples and normalize to -1..1 (if possible)
     const auto &data = UI::Dashboard::instance().fftData(m_index);
-
-    // Obtain samples from data
     for (int i = 0; i < m_size; ++i)
-      m_samples[i] = static_cast<float>(data[i]);
+    {
+      if (m_scaleIsValid)
+        m_samples[i] = static_cast<float>((data[i] - m_center) / m_halfRange);
+      else
+        m_samples[i] = static_cast<float>(data[i]);
+    }
 
-    // Obtain FFT transformation
+    // Forward FFT
     m_transformer.forwardTransform(m_samples.data(), m_fft.data());
     m_transformer.rescale(m_fft.data());
 
-    // Create a final array with the magnitudes for each point
-    double maxMagnitude = 0;
+    // Build magnitude spectrum in dB
+    constexpr double eps = 1e-12;
+    constexpr double floorDB = -100.0;
     m_data.resize(m_size / 2);
     for (int i = 0; i < m_size / 2; ++i)
     {
       const double re = m_fft[i];
       const double im = m_fft[m_size / 2 + i];
-      const double m = sqrt(re * re + im * im);
-      const double f = static_cast<double>(i) * m_samplingRate
-                       / static_cast<double>(m_size);
-      m_data[i] = QPointF(f, m);
-      if (m > maxMagnitude)
-        maxMagnitude = m;
-    }
+      const double mag = sqrt(re * re + im * im);
+      const double dB = 20.0 * log10(qMax(mag, eps));
+      const double f = static_cast<double>(i) * m_samplingRate / m_size;
 
-    // Convert to decibels
-    for (int i = 0; i < m_size / 2; ++i)
-    {
-      const double m = m_data[i].y() / maxMagnitude;
-      const double dB = (m > 0) ? 20 * log10(m) : -100;
-      m_data[i].setY(dB);
+      m_data[i] = QPointF(f, qMax(dB, floorDB));
     }
   }
 }

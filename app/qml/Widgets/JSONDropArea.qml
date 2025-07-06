@@ -33,7 +33,7 @@ DropArea {
     // Get file name & set color of rectangle accordingly
     if (drag.urls.length > 0) {
       var path = drag.urls[0].toString()
-      if (path.endsWith(".json") || path.endsWith(".csv")) {
+      if (path.endsWith(".json") || path.endsWith(".csv") || path.endsWith(".ssproj")) {
         drag.accept(Qt.LinkAction)
         dropRectangle.color = Qt.darker(palette.highlight, 1.4)
       }
@@ -65,7 +65,7 @@ DropArea {
     var cleanPath = decodeURIComponent(path);
 
     // Process JSON files
-    if (cleanPath.endsWith(".json")) {
+    if (cleanPath.endsWith(".json") || path.endsWith(".ssproj")) {
       Cpp_JSON_FrameBuilder.operationMode = SerialStudio.ProjectFile
       Cpp_JSON_FrameBuilder.loadJsonMap(cleanPath)
     }
@@ -113,7 +113,7 @@ DropArea {
 
       Label {
         Layout.alignment: Qt.AlignHCenter
-        text: qsTr("Drop JSON and CSV files here")
+        text: qsTr("Drop Projects and CSV files here")
         font: Cpp_Misc_CommonFonts.customUiFont(2, true)
         color: Cpp_ThemeManager.colors["highlighted_text"]
       }

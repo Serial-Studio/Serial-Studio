@@ -72,6 +72,10 @@ private:
   double m_minY;
   double m_maxY;
 
+  double m_center;
+  double m_halfRange;
+  bool m_scaleIsValid;
+
   QFourierTransformer m_transformer;
 
   QList<QPointF> m_data;

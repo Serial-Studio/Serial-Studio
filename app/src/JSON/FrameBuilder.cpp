@@ -29,6 +29,7 @@
 #include "JSON/FrameBuilder.h"
 
 #ifdef BUILD_COMMERCIAL
+#  include "IO/Drivers/Audio.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
@@ -339,8 +340,12 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
   // Lock access to frame data
   QWriteLocker locker(&m_dataLock);
 
+  // Get operation mode & bus type
+  const auto opMode = operationMode();
+  const auto busType = IO::Manager::instance().busType();
+
   // Serial device sends JSON (auto mode)
-  if (operationMode() == SerialStudio::DeviceSendsJSON)
+  if (opMode == SerialStudio::DeviceSendsJSON)
   {
     auto jsonData = QJsonDocument::fromJson(data).object();
     if (m_frame.read(jsonData))
@@ -348,7 +353,7 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
   }
 
   // Data is separated and parsed by Serial Studio project
-  else if (operationMode() == SerialStudio::ProjectFile && m_frameParser)
+  else if (opMode == SerialStudio::ProjectFile && m_frameParser)
   {
     // Obtain state of the app
     const bool csvPlaying = CSV::Player::instance().isOpen();
@@ -399,8 +404,87 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
   }
 
   // Data is separated by comma separated values
-  else if (operationMode() == SerialStudio::QuickPlot)
+  else if (opMode == SerialStudio::QuickPlot)
   {
+    // Parse audio data
+#ifdef BUILD_COMMERCIAL
+    if (busType == SerialStudio::BusType::Audio)
+    {
+      // Get reference to Audio driver
+      const auto *audio = &IO::Drivers::Audio::instance();
+
+      // Get audio parameters
+      const auto format = audio->inputFormat();
+      const auto sampleRate = format.sampleRate();
+      const auto sampleFormat = format.sampleFormat();
+
+      // Compute audio parameters
+      double maxValue = 1;
+      double minValue = 0;
+      switch (sampleFormat)
+      {
+        case QAudioFormat::UInt8:
+          maxValue = 0xFF;
+          minValue = 0x00;
+          break;
+        case QAudioFormat::Int16:
+          maxValue = 0x7FFF;
+          minValue = -0x7FFF;
+          break;
+        case QAudioFormat::Int32:
+          maxValue = 0x7FFFFFFF;
+          minValue = -0x7FFFFFFF;
+          break;
+        case QAudioFormat::Float:
+          maxValue = 1.0;
+          minValue = -1.0;
+          break;
+        default:
+          break;
+      }
+
+      // Obtain microphone values for each channel
+      int index = 1;
+      auto channels = data.split(',');
+      QVector<JSON::Dataset> datasets;
+      for (const auto &channel : std::as_const(channels))
+      {
+        JSON::Dataset dataset;
+        dataset.m_fft = true;
+        dataset.m_groupId = 0;
+        dataset.m_graph = true;
+        dataset.m_index = index;
+        dataset.m_max = maxValue;
+        dataset.m_min = minValue;
+        dataset.m_fftSamples = 2048;
+        dataset.m_fftWindowFn = "Hann";
+        dataset.m_fftSamplingRate = sampleRate;
+        dataset.m_title = tr("Channel %1").arg(index);
+        dataset.m_value = QString::fromUtf8(channel);
+        datasets.append(dataset);
+
+        ++index;
+      }
+
+      // Create the holder group
+      JSON::Group group(0);
+      group.m_datasets = datasets;
+      group.m_title = tr("Multiple Plots");
+      if (index > 2)
+        group.m_widget = QStringLiteral("multiplot");
+
+      // Create a project frame object
+      JSON::Frame frame;
+      frame.m_title = tr("Quick Plot");
+      frame.m_groups.append(group);
+
+      // Update user interface
+      frame.buildUniqueIds();
+      Q_EMIT frameChanged(frame);
+      return;
+    }
+#endif
+
     // Obtain fields from data frame
     auto fields = data.split(',');
 
