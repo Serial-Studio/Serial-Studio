@@ -230,6 +230,7 @@ jobs:
           libgstreamer-plugins-good1.0-0 \
           libgstreamer-gl1.0-0 \
           libpulse-dev \
+          pulseaudio \
           libssl-dev \
           libudev-dev \
           libzstd-dev \
