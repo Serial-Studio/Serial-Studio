@@ -123,8 +123,7 @@ jobs:
           gstreamer1.0-gl \
           gstreamer1.0-libav \
           gstreamer1.0-rtsp \
-          gstreamer1.0-x \
-          gstreamer1.0-qt6
+          gstreamer1.0-x 
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3
