@@ -149,6 +149,7 @@ private:
 public:
   static Audio &instance();
 
+  void closeDevice();
   void close() override;
 
   [[nodiscard]] bool isOpen() const override;

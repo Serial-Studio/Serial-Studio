@@ -20,6 +20,7 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
+#include "IO/Manager.h"
 #include "IO/Drivers/Audio.h"
 
 #include "Misc/Translator.h"
@@ -116,7 +117,7 @@ IO::Drivers::Audio &IO::Drivers::Audio::instance()
  * disconnects signal handlers, and clears internal stream pointers.
  * Sets the open state to false.
  */
-void IO::Drivers::Audio::close()
+void IO::Drivers::Audio::closeDevice()
 {
   if (!m_isOpen)
     return;
@@ -142,6 +143,18 @@ void IO::Drivers::Audio::close()
   }
 
   m_isOpen = false;
+}
+
+/**
+ * @brief Closes all open audio streams and resets internal state.
+ *
+ * Stops and deletes the active QAudioSource and QAudioSink instances,
+ * disconnects signal handlers, and clears internal stream pointers.
+ * Sets the open state to false.
+ */
+void IO::Drivers::Audio::close()
+{
+  closeDevice();
 }
 
 /**
@@ -1174,6 +1187,29 @@ void IO::Drivers::Audio::refreshAudioInputs()
     m_inputDevices = audioInputs;
     Q_EMIT inputSettingsChanged();
   }
+
+  else if (m_isOpen)
+  {
+    bool stillConnected = false;
+    const auto id = inputDevice().id();
+    for (auto &device : audioInputs)
+    {
+      if (device.id() == id)
+      {
+        stillConnected = true;
+        break;
+      }
+    }
+
+    if (!stillConnected)
+    {
+      IO::Manager::instance().disconnectDevice();
+
+      m_inputDevices = audioInputs;
+      Q_EMIT inputSettingsChanged();
+      Q_EMIT configurationChanged();
+    }
+  }
 }
 
 /**
@@ -1191,6 +1227,29 @@ void IO::Drivers::Audio::refreshAudioOutputs()
   {
     m_outputDevices = audioOutputs;
     Q_EMIT outputSettingsChanged();
+  }
+
+  else if (m_isOpen)
+  {
+    bool stillConnected = false;
+    const auto id = outputDevice().id();
+    for (auto &device : audioOutputs)
+    {
+      if (device.id() == id)
+      {
+        stillConnected = true;
+        break;
+      }
+    }
+
+    if (!stillConnected)
+    {
+      IO::Manager::instance().disconnectDevice();
+      m_outputDevices = audioOutputs;
+
+      Q_EMIT outputSettingsChanged();
+      Q_EMIT configurationChanged();
+    }
   }
 }
 

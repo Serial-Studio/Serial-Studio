@@ -162,9 +162,11 @@ void Widgets::FFTPlot::draw(QLineSeries *series)
  */
 void Widgets::FFTPlot::updateData()
 {
+  // Skip if widget is disabled
   if (!isEnabled())
     return;
 
+  // Only work with valid data
   if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index))
   {
     // Grab fresh time-domain samples and normalize to -1..1 (if possible)
