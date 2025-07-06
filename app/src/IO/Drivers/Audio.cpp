@@ -655,13 +655,16 @@ const QVector<QAudioDevice> &IO::Drivers::Audio::outputDevices() const
  *
  * @param index Index to the new buffer size in the list set by bufferSizes().
  */
-void IO::Drivers::Audio::setBufferSize(const int index)
+void IO::Drivers::Audio::setBufferSize(int index)
 {
-  if (m_bufferSizeIdx != index)
-  {
-    m_bufferSizeIdx = index;
-    Q_EMIT bufferSizeChanged();
-  }
+  if (isOpen())
+    return;
+
+  if (index < 0 || index >= bufferSizes().size())
+    index = 0;
+
+  m_bufferSizeIdx = index;
+  Q_EMIT bufferSizeChanged();
 }
 
 //------------------------------------------------------------------------------
@@ -682,9 +685,11 @@ void IO::Drivers::Audio::setBufferSize(const int index)
  */
 void IO::Drivers::Audio::setSelectedInputDevice(int index)
 {
-  Q_ASSERT(index >= 0 && index < inputDeviceList().size());
-  if (isOpen() || index == m_selectedInputDevice)
+  if (isOpen())
     return;
+
+  if (index < 0 || index >= inputDeviceList().size())
+    index = 0;
 
   // Modify device index
   m_selectedInputDevice = index;
@@ -707,9 +712,11 @@ void IO::Drivers::Audio::setSelectedInputDevice(int index)
  */
 void IO::Drivers::Audio::setSelectedInputSampleRate(int index)
 {
-  Q_ASSERT(index >= 0 && index < inputSampleRates().size());
-  if (isOpen() || index == m_selectedInputSampleRate)
+  if (isOpen())
     return;
+
+  if (index < 0 || index >= inputSampleRates().size())
+    index = 0;
 
   m_selectedInputSampleRate = index;
   configureInput();
@@ -725,9 +732,11 @@ void IO::Drivers::Audio::setSelectedInputSampleRate(int index)
  */
 void IO::Drivers::Audio::setSelectedInputSampleFormat(int index)
 {
-  Q_ASSERT(index >= 0 && index < inputSampleFormats().size());
-  if (isOpen() || index == m_selectedInputSampleFormat)
+  if (isOpen())
     return;
+
+  if (index < 0 || index >= inputSampleFormats().size())
+    index = 0;
 
   m_selectedInputSampleFormat = index;
   configureInput();
@@ -743,9 +752,11 @@ void IO::Drivers::Audio::setSelectedInputSampleFormat(int index)
  */
 void IO::Drivers::Audio::setSelectedInputChannelConfiguration(int index)
 {
-  Q_ASSERT(index >= 0 && index < inputChannelConfigurations().size());
-  if (isOpen() || index == m_selectedInputChannelConfiguration)
+  if (isOpen())
     return;
+
+  if (index < 0 || index >= inputChannelConfigurations().size())
+    index = 0;
 
   m_selectedInputChannelConfiguration = index;
   configureInput();
@@ -768,9 +779,11 @@ void IO::Drivers::Audio::setSelectedInputChannelConfiguration(int index)
  */
 void IO::Drivers::Audio::setSelectedOutputDevice(int index)
 {
-  Q_ASSERT(index >= 0 && index < outputDeviceList().size());
-  if (isOpen() || index == m_selectedOutputDevice)
+  if (isOpen())
     return;
+
+  if (index < 0 || index >= outputDeviceList().size())
+    index = 0;
 
   // Modify device index
   m_selectedOutputDevice = index;
@@ -793,9 +806,11 @@ void IO::Drivers::Audio::setSelectedOutputDevice(int index)
  */
 void IO::Drivers::Audio::setSelectedOutputSampleRate(int index)
 {
-  Q_ASSERT(index >= 0 && index < outputSampleRates().size());
-  if (isOpen() || index == m_selectedOutputSampleRate)
+  if (isOpen())
     return;
+
+  if (index < 0 || index >= outputSampleRates().size())
+    index = 0;
 
   m_selectedOutputSampleRate = index;
   configureOutput();
@@ -811,9 +826,11 @@ void IO::Drivers::Audio::setSelectedOutputSampleRate(int index)
  */
 void IO::Drivers::Audio::setSelectedOutputSampleFormat(int index)
 {
-  Q_ASSERT(index >= 0 && index < outputSampleFormats().size());
-  if (isOpen() || index == m_selectedOutputSampleFormat)
+  if (isOpen())
     return;
+
+  if (index < 0 || index >= outputSampleFormats().size())
+    index = 0;
 
   m_selectedOutputSampleFormat = index;
   configureOutput();
@@ -829,9 +846,11 @@ void IO::Drivers::Audio::setSelectedOutputSampleFormat(int index)
  */
 void IO::Drivers::Audio::setSelectedOutputChannelConfiguration(int index)
 {
-  Q_ASSERT(index >= 0 && index < outputChannelConfigurations().size());
-  if (isOpen() || index == m_selectedOutputChannelConfiguration)
+  if (isOpen())
     return;
+
+  if (index < 0 || index >= outputChannelConfigurations().size())
+    index = 0;
 
   m_selectedOutputChannelConfiguration = index;
   configureOutput();

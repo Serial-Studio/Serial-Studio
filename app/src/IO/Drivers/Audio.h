@@ -63,7 +63,7 @@ class Audio : public HAL_Driver
 {
   // clang-format off
   Q_OBJECT
-  Q_PROPERTY(bool bufferSize
+  Q_PROPERTY(int bufferSize
              READ bufferSize
              WRITE setBufferSize
              NOTIFY bufferSizeChanged)
@@ -191,17 +191,17 @@ public:
   [[nodiscard]] const QVector<QAudioDevice> &outputDevices() const;
 
 public slots:
-  void setBufferSize(const int index);
+  void setBufferSize(int index);
 
-  void setSelectedInputDevice(const int index);
-  void setSelectedInputSampleRate(const int index);
-  void setSelectedInputSampleFormat(const int index);
-  void setSelectedInputChannelConfiguration(const int index);
+  void setSelectedInputDevice(int index);
+  void setSelectedInputSampleRate(int index);
+  void setSelectedInputSampleFormat(int index);
+  void setSelectedInputChannelConfiguration(int index);
 
-  void setSelectedOutputDevice(const int index);
-  void setSelectedOutputSampleRate(const int index);
-  void setSelectedOutputSampleFormat(const int index);
-  void setSelectedOutputChannelConfiguration(const int index);
+  void setSelectedOutputDevice(int index);
+  void setSelectedOutputSampleRate(int index);
+  void setSelectedOutputSampleFormat(int index);
+  void setSelectedOutputChannelConfiguration(int index);
 
 private slots:
   void generateLists();

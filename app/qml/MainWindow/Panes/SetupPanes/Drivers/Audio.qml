@@ -30,11 +30,19 @@ Item {
   implicitHeight: layout.implicitHeight
 
   //
-  // Settings
+  // Save settings
   //
   Settings {
-    category: "Audio"
+    category: "AudioDriver"
+    property alias inputDevice: _inDev.currentIndex
+    property alias outputDevice: _outDev.currentIndex
     property alias bufferSize: _bufferSize.currentIndex
+    property alias inputSampleRate: _inRate.currentIndex
+    property alias inputSampleFormat: _inFmt.currentIndex
+    property alias outputSampleRate: _outRate.currentIndex
+    property alias outputSampleFormat: _outFmt.currentIndex
+    property alias inputChannelConfiguration: _inChan.currentIndex
+    property alias outputChannelConfiguration: _outChan.currentIndex
   }
 
   //
