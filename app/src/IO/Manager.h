@@ -23,6 +23,7 @@
 
 #include <QThread>
 #include <QObject>
+#include <QSettings>
 #include <QPointer>
 #include <QKeyEvent>
 
@@ -47,40 +48,44 @@ class Manager : public QObject
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool readOnly
-                 READ readOnly
-                     NOTIFY connectedChanged)
+             READ readOnly
+             NOTIFY connectedChanged)
   Q_PROPERTY(bool readWrite
-                 READ readWrite
-                     NOTIFY connectedChanged)
+             READ readWrite
+             NOTIFY connectedChanged)
   Q_PROPERTY(bool isConnected
-                 READ isConnected
-                     NOTIFY connectedChanged)
+             READ isConnected
+             NOTIFY connectedChanged)
   Q_PROPERTY(bool paused
-                 READ paused
-                     WRITE setPaused
-                         NOTIFY pausedChanged)
+             READ paused
+             WRITE setPaused
+             NOTIFY pausedChanged)
+  Q_PROPERTY(bool threadedFrameExtraction
+             READ threadedFrameExtraction
+             WRITE setThreadedFrameExtraction
+             NOTIFY threadedFrameExtractionChanged)
   Q_PROPERTY(SerialStudio::BusType busType
-                 READ busType
-                     WRITE setBusType
-                         NOTIFY busTypeChanged)
+             READ busType
+             WRITE setBusType
+             NOTIFY busTypeChanged)
   Q_PROPERTY(QByteArray startSequence
-                 READ startSequence
-                     WRITE setStartSequence
-                         NOTIFY startSequenceChanged)
+             READ startSequence
+             WRITE setStartSequence
+             NOTIFY startSequenceChanged)
   Q_PROPERTY(QByteArray finishSequence
-                 READ finishSequence
-                     WRITE setFinishSequence
-                         NOTIFY finishSequenceChanged)
+             READ finishSequence
+             WRITE setFinishSequence
+             NOTIFY finishSequenceChanged)
   Q_PROPERTY(QString checksumAlgorithm
-                 READ checksumAlgorithm
-                     WRITE setChecksumAlgorithm
-                         NOTIFY checksumAlgorithmChanged)
+             READ checksumAlgorithm
+             WRITE setChecksumAlgorithm
+             NOTIFY checksumAlgorithmChanged)
   Q_PROPERTY(bool configurationOk
-                 READ configurationOk
-                     NOTIFY configurationChanged)
+             READ configurationOk
+             NOTIFY configurationChanged)
   Q_PROPERTY(QStringList availableBuses
-                 READ availableBuses
-                     NOTIFY busListChanged)
+             READ availableBuses
+             NOTIFY busListChanged)
   // clang-format on
 
 signals:
@@ -95,6 +100,7 @@ signals:
   void startSequenceChanged();
   void finishSequenceChanged();
   void checksumAlgorithmChanged();
+  void threadedFrameExtractionChanged();
   void dataSent(const QByteArray &data);
   void dataReceived(const QByteArray &data);
   void frameReceived(const QByteArray &frame);
@@ -114,6 +120,7 @@ public:
   [[nodiscard]] bool readWrite();
   [[nodiscard]] bool isConnected();
   [[nodiscard]] bool configurationOk();
+  [[nodiscard]] bool threadedFrameExtraction();
 
   [[nodiscard]] HAL_Driver *driver();
   [[nodiscard]] SerialStudio::BusType busType() const;
@@ -138,6 +145,7 @@ public slots:
   void setStartSequence(const QByteArray &sequence);
   void setFinishSequence(const QByteArray &sequence);
   void setChecksumAlgorithm(const QString &algorithm);
+  void setThreadedFrameExtraction(const bool enabled);
   void setBusType(const SerialStudio::BusType &driver);
 
 private slots:
@@ -147,6 +155,7 @@ private slots:
 private:
   bool m_paused;
   bool m_writeEnabled;
+  bool m_threadedFrameExtraction;
   SerialStudio::BusType m_busType;
 
   HAL_Driver *m_driver;
@@ -156,6 +165,7 @@ private:
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
 
+  QSettings m_settings;
   QString m_checksumAlgorithm;
 };
 } // namespace IO

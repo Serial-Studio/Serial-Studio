@@ -50,12 +50,16 @@
 IO::Manager::Manager()
   : m_paused(false)
   , m_writeEnabled(true)
+  , m_threadedFrameExtraction(true)
   , m_driver(nullptr)
   , m_workerThread(nullptr)
   , m_frameReader(nullptr)
   , m_startSequence(QByteArray("/*"))
   , m_finishSequence(QByteArray("*/"))
 {
+  m_threadedFrameExtraction
+      = m_settings.value("threadedFrameExtraction", true).toBool();
+
   setBusType(SerialStudio::BusType::UART);
   connect(this, &IO::Manager::busTypeChanged, this,
           &IO::Manager::configurationChanged);
@@ -154,6 +158,16 @@ bool IO::Manager::configurationOk()
     return driver()->configurationOk();
 
   return false;
+}
+
+/**
+ * @brief Returns whether threaded frame extraction is enabled.
+ *
+ * @return true if frame extraction runs in a separate thread, false otherwise.
+ */
+bool IO::Manager::threadedFrameExtraction()
+{
+  return m_threadedFrameExtraction;
 }
 
 /**
@@ -507,6 +521,32 @@ void IO::Manager::setChecksumAlgorithm(const QString &algorithm)
   Q_EMIT checksumAlgorithmChanged();
 }
 
+/**
+ * @brief Enables or disables threaded frame extraction.
+ *
+ * If the IO manager is not connected and the requested state differs
+ * from the current setting, this function updates the internal flag
+ * controlling whether frame extraction runs on a separate thread.
+ * The new value is stored in persistent settings and a signal is emitted
+ * to notify listeners of the change.
+ *
+ * @param enabled Set to true to enable threaded frame extraction,
+ *                or false to disable it.
+ */
+void IO::Manager::setThreadedFrameExtraction(const bool enabled)
+{
+  if (!isConnected())
+  {
+    if (m_threadedFrameExtraction != enabled)
+    {
+      m_threadedFrameExtraction = enabled;
+      m_settings.setValue("threadedFrameExtraction", enabled);
+
+      Q_EMIT threadedFrameExtractionChanged();
+    }
+  }
+}
+
 //------------------------------------------------------------------------------
 // Driver configuration functions
 //------------------------------------------------------------------------------
@@ -658,10 +698,13 @@ void IO::Manager::startFrameReader()
 
   // Create new thread and frame reader instance
   m_frameReader = new FrameReader();
-  m_workerThread = new QThread(this);
 
   // Move to the worker thread
-  m_frameReader->moveToThread(m_workerThread);
+  if (m_threadedFrameExtraction)
+  {
+    m_workerThread = new QThread(this);
+    m_frameReader->moveToThread(m_workerThread);
+  }
 
   // Configure initial state for the frame reader
   QMetaObject::invokeMethod(
@@ -688,5 +731,6 @@ void IO::Manager::startFrameReader()
           });
 
   // Start the worker thread
-  m_workerThread->start(QThread::TimeCriticalPriority);
+  if (m_threadedFrameExtraction)
+    m_workerThread->start(QThread::TimeCriticalPriority);
 }
