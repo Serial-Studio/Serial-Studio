@@ -21,7 +21,6 @@
 
 #include "UI/Dashboard.h"
 
-#include "SIMD/SIMD.h"
 #include "IO/Manager.h"
 #include "CSV/Player.h"
 #include "Misc/TimerEvents.h"
@@ -1194,7 +1193,7 @@ void UI::Dashboard::configureGpsSeries()
   {
     GpsSeries series;
     const auto &group = getGroupWidget(SerialStudio::DashboardGPS, i);
-    const QMap<QString, FixedQueue<double> *> fieldMap
+    const QMap<QString, IO::FixedQueue<double> *> fieldMap
         = {{"lat", &series.latitudes},
            {"lon", &series.longitudes},
            {"alt", &series.altitudes}};

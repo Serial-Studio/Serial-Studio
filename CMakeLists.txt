@@ -166,7 +166,8 @@ if(PRODUCTION_OPTIMIZATION)
          -ftree-vectorize               # Enable loop vectorization
          -funroll-loops                 # Unroll loops to reduce branching overhead
          -fomit-frame-pointer           # Free up register, faster stack ops
-         -msse2                         # Use SSE2 (baseline for x86_64 CPUs)
+         -frename-registers             # Better instruction scheduling
+         -fprefetch-loop-arrays         # Cache prefetching for loops
          -fno-fast-math                 # Disable unsafe floating point optimizations
          -fno-unsafe-math-optimizations # Prevent invalid math assumptions
       )
@@ -183,8 +184,9 @@ if(PRODUCTION_OPTIMIZATION)
          -fvectorize                    # Enable loop vectorization
          -fslp-vectorize                # Enable straight-line vectorization
          -funroll-loops                 # Unroll loops for performance
+         -frename-registers             # Better instruction scheduling
+         -fprefetch-loop-arrays         # Cache prefetching for loops
          -fomit-frame-pointer           # Free a register, speed up stack ops
-         -msse2                         # Target SSE2 (safe, compatible baseline)
          -fno-fast-math                 # Avoid unsafe FP optimizations
          -fno-unsafe-math-optimizations # Accurate and safe math semantics
       )
@@ -198,7 +200,6 @@ if(PRODUCTION_OPTIMIZATION)
          /permissive-                   # Enforce strict ISO C++ conformance
          /Zc:__cplusplus                # Set __cplusplus to actual version value
          /Zc:preprocessor               # Standards-compliant preprocessor
-         /openmp:experimental           # Enable OpenMP support
          /MP                            # Enable multi-core compilation
          /O2                            # Optimize for speed
          /W4                            # High warning level
@@ -209,6 +210,7 @@ if(PRODUCTION_OPTIMIZATION)
       add_link_options(
          /OPT:REF                       # Remove unreferenced functions/data
          /OPT:ICF                       # Merge identical code/data blocks
+         /LTCG                          # Link-time optimization
       )
 
    # macOS (Clang/AppleClang)
@@ -223,9 +225,11 @@ if(PRODUCTION_OPTIMIZATION)
          -fomit-frame-pointer           # Omit frame pointer to free a register (faster function calls)
          -fno-fast-math                 # Prevent aggressive FP optimizations (retain IEEE compliance)
          -fno-unsafe-math-optimizations # Avoid math-related UB or precision loss
+         -flto                          # Enable Link-Time Optimization
       )
       add_link_options(
          -Wl,-dead_strip                # Remove unused functions/data from final binary
+         -flto                          # Enable Link-Time Optimization
       )
 
    # Intel LLVM Compiler (Linux or Windows)
@@ -234,13 +238,13 @@ if(PRODUCTION_OPTIMIZATION)
          -O2                            # Optimize for speed
          -Wall                          # Enable most warning messages
          -Wextra                        # Enable additional warning messages
-         -qopenmp-simd                  # Enable OpenMP SIMD loop support
          -static                        # Statically link Intel runtime dependencies
          -fvectorize                    # Enable loop vectorization
          -fslp-vectorize                # Straight-line vectorization
          -funroll-loops                 # Unroll simple loops for throughput
          -fomit-frame-pointer           # Free up a general-purpose register
-         -msse2                         # Target SSE2 instruction set (safe baseline)
+         -frename-registers             # Better instruction scheduling
+         -fprefetch-loop-arrays         # Cache prefetching for loops
          -fp-model=precise              # Disable aggressive FP optimization, retain precision
       )
       add_link_options(
@@ -253,9 +257,10 @@ if(PRODUCTION_OPTIMIZATION)
          -O2                            # Optimize for speed
          -Wall                          # Enable most warning messages
          -Wextra                        # Enable additional warning messages
-         -fopenmp                       # Enable OpenMP multithreading support
          -ftree-vectorize               # Enable GCC’s automatic loop vectorizer
          -funroll-loops                 # Improve loop performance
+         -frename-registers             # Better instruction scheduling
+         -fprefetch-loop-arrays         # Cache prefetching for loops
          -fno-fast-math                 # Disable unsafe math optimizations
          -fno-unsafe-math-optimizations # Use correct IEEE behavior
       )
@@ -269,11 +274,11 @@ if(PRODUCTION_OPTIMIZATION)
          -O2                            # Optimize for speed
          -Wall                          # Enable most warning messages
          -Wextra                        # Enable additional warning messages
-         -fopenmp                       # Enable multithreading via OpenMP
          -ftree-vectorize               # Enable automatic vectorization
          -funroll-loops                 # Improve loop performance by unrolling
          -fomit-frame-pointer           # Optimize function call overhead
-         -msse2                         # Use SSE2 (supported on all x86_64 CPUs)
+         -frename-registers             # Better instruction scheduling
+         -fprefetch-loop-arrays         # Cache prefetching for loops
          -fno-fast-math                 # IEEE-compliant floating point
          -fno-unsafe-math-optimizations # Avoid unsafe math assumptions
       )

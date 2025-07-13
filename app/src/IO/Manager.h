@@ -150,7 +150,6 @@ private:
   SerialStudio::BusType m_busType;
 
   HAL_Driver *m_driver;
-  QThread *m_workerThread;
   QPointer<FrameReader> m_frameReader;
 
   QByteArray m_startSequence;

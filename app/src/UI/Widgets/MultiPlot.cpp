@@ -190,19 +190,20 @@ void Widgets::MultiPlot::updateData()
     const auto &data = UI::Dashboard::instance().multiplotData(m_index);
     const auto &X = *data.x;
 
-    const qsizetype xSize = X.size();
     const qsizetype plotCount = data.y.size();
     for (qsizetype i = 0; i < plotCount; ++i)
     {
       const auto &series = data.y[i];
-      const qsizetype seriesSize = series.size();
+      const qsizetype seriesSize = std::min(X.size(), series.size());
 
       if (m_data[i].size() != seriesSize)
         m_data[i].resize(seriesSize);
 
-      const qsizetype count = std::min(xSize, seriesSize);
-      for (qsizetype j = 0; j < count; ++j)
-        m_data[i][j] = QPointF(X[j], series[j]);
+      for (qsizetype j = 0; j < seriesSize; ++j)
+      {
+        m_data[i][j].rx() = X[j];
+        m_data[i][j].ry() = series[j];
+      }
     }
   }
 }

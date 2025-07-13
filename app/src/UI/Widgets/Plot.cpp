@@ -175,7 +175,10 @@ void Widgets::Plot::updateData()
 
     // Convert data to list of QPointF
     for (qsizetype i = 0; i < count; ++i)
-      m_data[i] = QPointF(X[i], Y[i]);
+    {
+      m_data[i].rx() = X[i];
+      m_data[i].ry() = Y[i];
+    }
   }
 }
 
@@ -322,7 +325,7 @@ bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
   // Set the min and max to the lowest and highest values
   if (!ok)
   {
-    // Initialize values to ensure that min/max are set
+    // Get minimum and maximum values from data
     min = std::numeric_limits<double>::max();
     max = std::numeric_limits<double>::lowest();
 

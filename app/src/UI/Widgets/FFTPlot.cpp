@@ -198,7 +198,8 @@ void Widgets::FFTPlot::updateData()
       const double dB = 20.0 * log10(qMax(mag, eps));
       const double f = static_cast<double>(i) * m_samplingRate / m_size;
 
-      m_data[i] = QPointF(f, qMax(dB, floorDB));
+      m_data[i].rx() = f;
+      m_data[i].ry() = qMax(dB, floorDB);
     }
   }
 }

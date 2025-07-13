@@ -39,6 +39,8 @@
  *
  * @tparam T Type of elements stored in the queue.
  */
+namespace IO
+{
 template<typename T>
 class FixedQueue
 {
@@ -320,3 +322,4 @@ private:
   std::size_t m_start;         ///< Index of the oldest element.
   std::size_t m_size;          ///< Current number of elements.
 };
+} // namespace IO
