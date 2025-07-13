@@ -337,12 +337,8 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
   if (data.isEmpty())
     return;
 
-  // Lock access to frame data
-  QWriteLocker locker(&m_dataLock);
-
-  // Get operation mode & bus type
+  // Get operation mode
   const auto opMode = operationMode();
-  const auto busType = IO::Manager::instance().busType();
 
   // Serial device sends JSON (auto mode)
   if (opMode == SerialStudio::DeviceSendsJSON)
@@ -408,6 +404,7 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
   {
     // Parse audio data
 #ifdef BUILD_COMMERCIAL
+    const auto busType = IO::Manager::instance().busType();
     if (busType == SerialStudio::BusType::Audio)
     {
       // Get reference to Audio driver

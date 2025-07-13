@@ -23,7 +23,6 @@
 
 #include <QFont>
 #include <QObject>
-#include <QReadWriteLock>
 
 #include "JSON/Frame.h"
 #include "SerialStudio.h"
@@ -194,8 +193,7 @@ private:
   // Datasets by widget type
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Dataset>> m_widgetDatasets;
 
-  JSON::Frame m_rawFrame;            // Unmodified incoming frame
-  JSON::Frame m_lastFrame;           // Processed frame used in UI
-  mutable QReadWriteLock m_dataLock; // Thread-safe data access
+  JSON::Frame m_rawFrame;  // Unmodified incoming frame
+  JSON::Frame m_lastFrame; // Processed frame used in UI
 };
 } // namespace UI

@@ -793,9 +793,6 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   if (!frame.isValid() || !streamAvailable())
     return;
 
-  // Lock access to frame data
-  QWriteLocker locker(&m_dataLock);
-
   // Regenerate dashboard model if frame structure changed
   if (!frame.equalsStructure(m_rawFrame))
   {
