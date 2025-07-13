@@ -206,6 +206,7 @@ void CSV::Export::writeValues()
   // Clear frames
   m_frames.clear();
   m_frames.squeeze();
+  m_frames.reserve(1000);
 }
 
 /**
@@ -336,7 +337,7 @@ void CSV::Export::registerFrame(const JSON::Frame &frame)
 
   // Register raw frame to list
   TimestampFrame tframe;
-  tframe.data = frame;
+  tframe.data = std::move(frame);
   tframe.rxDateTime = QDateTime::currentDateTime();
   m_frames.append(tframe);
 }

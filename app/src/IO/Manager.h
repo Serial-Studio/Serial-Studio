@@ -47,40 +47,40 @@ class Manager : public QObject
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool readOnly
-             READ readOnly
-             NOTIFY connectedChanged)
+                 READ readOnly
+                     NOTIFY connectedChanged)
   Q_PROPERTY(bool readWrite
-             READ readWrite
-             NOTIFY connectedChanged)
+                 READ readWrite
+                     NOTIFY connectedChanged)
   Q_PROPERTY(bool isConnected
-             READ isConnected
-             NOTIFY connectedChanged)
+                 READ isConnected
+                     NOTIFY connectedChanged)
   Q_PROPERTY(bool paused
-             READ paused
-             WRITE setPaused
-             NOTIFY pausedChanged)
+                 READ paused
+                     WRITE setPaused
+                         NOTIFY pausedChanged)
   Q_PROPERTY(SerialStudio::BusType busType
-             READ busType
-             WRITE setBusType
-             NOTIFY busTypeChanged)
+                 READ busType
+                     WRITE setBusType
+                         NOTIFY busTypeChanged)
   Q_PROPERTY(QByteArray startSequence
-             READ startSequence
-             WRITE setStartSequence
-             NOTIFY startSequenceChanged)
+                 READ startSequence
+                     WRITE setStartSequence
+                         NOTIFY startSequenceChanged)
   Q_PROPERTY(QByteArray finishSequence
-             READ finishSequence
-             WRITE setFinishSequence
-             NOTIFY finishSequenceChanged)
+                 READ finishSequence
+                     WRITE setFinishSequence
+                         NOTIFY finishSequenceChanged)
   Q_PROPERTY(QString checksumAlgorithm
-             READ checksumAlgorithm
-             WRITE setChecksumAlgorithm
-             NOTIFY checksumAlgorithmChanged)
+                 READ checksumAlgorithm
+                     WRITE setChecksumAlgorithm
+                         NOTIFY checksumAlgorithmChanged)
   Q_PROPERTY(bool configurationOk
-             READ configurationOk
-             NOTIFY configurationChanged)
+                 READ configurationOk
+                     NOTIFY configurationChanged)
   Q_PROPERTY(QStringList availableBuses
-             READ availableBuses
-             NOTIFY busListChanged)
+                 READ availableBuses
+                     NOTIFY busListChanged)
   // clang-format on
 
 signals:
@@ -150,6 +150,7 @@ private:
   SerialStudio::BusType m_busType;
 
   HAL_Driver *m_driver;
+  QThread *m_workerThread;
   QPointer<FrameReader> m_frameReader;
 
   QByteArray m_startSequence;

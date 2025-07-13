@@ -36,7 +36,6 @@ Item {
     category: "AudioDriver"
     property alias inputDevice: _inDev.currentIndex
     property alias outputDevice: _outDev.currentIndex
-    property alias bufferSize: _bufferSize.currentIndex
     property alias inputSampleRate: _inRate.currentIndex
     property alias inputSampleFormat: _inFmt.currentIndex
     property alias outputSampleRate: _outRate.currentIndex
@@ -57,33 +56,6 @@ Item {
     anchors.fill: parent
     opacity: enabled ? 1 : 0.5
     enabled: !Cpp_IO_Manager.isConnected
-
-    //
-    // Buffer size
-    //
-    Label {
-      text: qsTr("Buffer Size") + ":"
-    } ComboBox {
-      id: _bufferSize
-      Layout.fillWidth: true
-      model: Cpp_IO_Audio.bufferSizes
-      currentIndex: Cpp_IO_Audio.bufferSizeIdx
-      onCurrentIndexChanged: {
-        if (Cpp_IO_Audio.bufferSizeIdx !== currentIndex)
-          Cpp_IO_Audio.bufferSizeIdx = currentIndex
-      }
-    }
-
-    //
-    // Spacer
-    //
-    Item {
-      Layout.minimumHeight: 8 / 2
-      Layout.maximumHeight: 8 / 2
-    } Item {
-      Layout.minimumHeight: 8 / 2
-      Layout.maximumHeight: 8 / 2
-    }
 
     //
     // Input device selection

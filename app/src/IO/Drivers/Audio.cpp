@@ -48,7 +48,6 @@
  */
 IO::Drivers::Audio::Audio()
   : m_isOpen(false)
-  , m_bufferSizeIdx(0)
   , m_selectedInputDevice(0)
   , m_selectedInputSampleRate(0)
   , m_selectedInputSampleFormat(0)
@@ -255,7 +254,6 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   if (mode & QIODevice::ReadOnly)
   {
     m_source = new QAudioSource(inputDevice(), m_inputFormat, this);
-    m_source->setBufferSize(bufferSize());
     m_inputStream = m_source->start();
     if (!m_inputStream)
     {
@@ -467,51 +465,6 @@ int IO::Drivers::Audio::selectedOutputChannelConfiguration() const
 }
 
 //------------------------------------------------------------------------------
-// Streaming models
-//------------------------------------------------------------------------------
-
-/**
- * @brief Returns the currently selected audio buffer size.
- *
- * @return The selected buffer size.
- */
-int IO::Drivers::Audio::bufferSize() const
-{
-  return bufferSizes().at(m_bufferSizeIdx).toInt();
-}
-
-/**
- * @brief Returns the index of the currently selected audio buffer size.
- *
- * This index corresponds to an entry in the list returned by `bufferSizes()`,
- * which represents the available buffer sizes in bytes.
- *
- * @return Index of the selected buffer size.
- */
-int IO::Drivers::Audio::bufferSizeIdx() const
-{
-  return m_bufferSizeIdx;
-}
-
-/**
- * @brief Returns a list of commonly used audio buffer sizes.
- *
- * Each entry in the list is a string representing the buffer size in bytes.
- * These values are used to configure the internal buffer for audio streaming,
- * affecting latency and performance.
- *
- * @return List of buffer sizes in bytes (as strings).
- */
-QStringList IO::Drivers::Audio::bufferSizes() const
-{
-  // clang-format off
-  const QStringList list  = {"128", "256", "512", "1024", "2048", "4096",
-                             "8192", "16384", "32768"};
-  return list;
-  // clang-format on
-}
-
-//------------------------------------------------------------------------------
 // Input device parameter models
 //------------------------------------------------------------------------------
 
@@ -664,30 +617,6 @@ const QVector<QAudioDevice> &IO::Drivers::Audio::inputDevices() const
 const QVector<QAudioDevice> &IO::Drivers::Audio::outputDevices() const
 {
   return m_outputDevices;
-}
-
-//------------------------------------------------------------------------------
-// Data format configuration setters
-//------------------------------------------------------------------------------
-
-/**
- * @brief Sets the audio input buffer size by selecting a predefined option.
- *
- * This function updates the internal buffer size index, which is later used
- * when configuring the QAudioSource. A signal is emitted if the index changes.
- *
- * @param index Index to the new buffer size in the list set by bufferSizes().
- */
-void IO::Drivers::Audio::setBufferSizeIdx(int index)
-{
-  if (isOpen())
-    return;
-
-  if (index < 0 || index >= bufferSizes().size())
-    index = 0;
-
-  m_bufferSizeIdx = index;
-  Q_EMIT bufferSizeChanged();
 }
 
 //------------------------------------------------------------------------------

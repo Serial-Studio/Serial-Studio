@@ -102,7 +102,7 @@ int main(int argc, char **argv)
   QApplication app(argc, argv);
 
   // Set thread priority
-  QThread::currentThread()->setPriority(QThread::HighestPriority);
+  QThread::currentThread()->setPriority(QThread::TimeCriticalPriority);
 
   // Set application style
   app.setStyle(QStyleFactory::create("Fusion"));

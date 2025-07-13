@@ -51,6 +51,7 @@ IO::Manager::Manager()
   : m_paused(false)
   , m_writeEnabled(true)
   , m_driver(nullptr)
+  , m_workerThread(nullptr)
   , m_frameReader(nullptr)
   , m_startSequence(QByteArray("/*"))
   , m_finishSequence(QByteArray("*/"))
@@ -621,6 +622,17 @@ void IO::Manager::killFrameReader()
     m_frameReader->deleteLater();
     m_frameReader.clear();
   }
+
+  // Quit the thread event loop and wait for it to exit
+  if (m_workerThread)
+  {
+
+    m_workerThread->quit();
+    m_workerThread->wait(100);
+
+    delete m_workerThread;
+    m_workerThread = nullptr;
+  }
 }
 
 /**
@@ -646,20 +658,35 @@ void IO::Manager::startFrameReader()
 
   // Create new thread and frame reader instance
   m_frameReader = new FrameReader();
-  if (m_frameReader && driver())
-  {
-    QObject::connect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
-                     &IO::FrameReader::processData);
+  m_workerThread = new QThread(this);
 
-    connect(m_frameReader, &IO::FrameReader::frameReady, this,
-            [this](const QByteArray &frame) {
-              if (!paused())
-                Q_EMIT frameReceived(frame);
-            });
-    connect(m_frameReader, &IO::FrameReader::dataReceived, this,
-            [this](const QByteArray &data) {
-              if (!paused())
-                Q_EMIT dataReceived(data);
-            });
-  }
+  // Move to the worker thread
+  m_frameReader->moveToThread(m_workerThread);
+
+  // Configure initial state for the frame reader
+  QMetaObject::invokeMethod(
+      m_frameReader,
+      [reader = m_frameReader, drv = driver()] {
+        if (reader && drv)
+        {
+          QObject::connect(drv, &IO::HAL_Driver::dataReceived, reader,
+                           &IO::FrameReader::processData, Qt::QueuedConnection);
+        }
+      },
+      Qt::QueuedConnection);
+
+  // Connect frame reader events to IO::Manager
+  connect(m_frameReader, &IO::FrameReader::frameReady, this,
+          [this](const QByteArray &frame) {
+            if (!paused())
+              Q_EMIT frameReceived(frame);
+          });
+  connect(m_frameReader, &IO::FrameReader::dataReceived, this,
+          [this](const QByteArray &data) {
+            if (!paused())
+              Q_EMIT dataReceived(data);
+          });
+
+  // Start the worker thread
+  m_workerThread->start(QThread::TimeCriticalPriority);
 }

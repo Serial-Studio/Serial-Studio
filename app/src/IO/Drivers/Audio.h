@@ -63,10 +63,6 @@ class Audio : public HAL_Driver
 {
   // clang-format off
   Q_OBJECT
-  Q_PROPERTY(int bufferSizeIdx
-             READ bufferSizeIdx
-             WRITE setBufferSizeIdx
-             NOTIFY bufferSizeChanged)
   Q_PROPERTY(QAudioFormat inputFormat
              READ inputFormat
              NOTIFY inputSettingsChanged)
@@ -129,13 +125,9 @@ class Audio : public HAL_Driver
   Q_PROPERTY(QStringList outputChannelConfigurations
              READ outputChannelConfigurations
              NOTIFY outputSettingsChanged)
-  Q_PROPERTY(QStringList bufferSizes
-             READ bufferSizes
-             CONSTANT)
   // clang-format on
 
 signals:
-  void bufferSizeChanged();
   void inputSettingsChanged();
   void outputSettingsChanged();
 
@@ -175,10 +167,6 @@ public:
   [[nodiscard]] int selectedOutputSampleFormat() const;
   [[nodiscard]] int selectedOutputChannelConfiguration() const;
 
-  [[nodiscard]] int bufferSize() const;
-  [[nodiscard]] int bufferSizeIdx() const;
-  [[nodiscard]] QStringList bufferSizes() const;
-
   [[nodiscard]] QStringList inputDeviceList() const;
   [[nodiscard]] QStringList inputSampleRates() const;
   [[nodiscard]] QStringList inputSampleFormats() const;
@@ -193,8 +181,6 @@ public:
   [[nodiscard]] const QVector<QAudioDevice> &outputDevices() const;
 
 public slots:
-  void setBufferSizeIdx(int index);
-
   void setSelectedInputDevice(int index);
   void setSelectedInputSampleRate(int index);
   void setSelectedInputSampleFormat(int index);
@@ -222,7 +208,6 @@ private:
 
 private:
   bool m_isOpen;
-  int m_bufferSizeIdx;
 
   int m_selectedInputDevice;
   int m_selectedInputSampleRate;
