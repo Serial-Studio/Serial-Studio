@@ -57,7 +57,7 @@ Item {
   }
 
   //
-  // Configure module widget on load
+  // Configure widget on load
   //
   onModelChanged: {
     if (model) {
@@ -67,6 +67,9 @@ Item {
     }
   }
 
+  //
+  // Load default camera
+  //
   onVisibleChanged: {
     if (visible)
       animateToView(300, 0, 225, 0, 0)

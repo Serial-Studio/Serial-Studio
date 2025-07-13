@@ -19,7 +19,6 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "SIMD/SIMD.h"
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/MultiPlot.h"
@@ -228,6 +227,9 @@ void Widgets::MultiPlot::updateRange()
   m_data.clear();
   m_data.squeeze();
 
+  // Get data
+  auto data = UI::Dashboard::instance().multiplotData(m_index);
+
   // Get the multiplot group and loop through each dataset
   const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
   for (int i = 0; i < group.datasetCount(); ++i)
@@ -291,15 +293,13 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     m_maxY = std::numeric_limits<double>::lowest();
 
     // Loop through each dataset and find the min and max values
-    for (const auto &dataset : std::as_const(m_data))
+    for (const auto &curve : std::as_const(m_data))
     {
-      m_minY = qMin(m_minY, SIMD::findMin(dataset, [](const QPointF &p) {
-                      return p.y();
-                    }));
-
-      m_maxY = qMax(m_maxY, SIMD::findMax(dataset, [](const QPointF &p) {
-                      return p.y();
-                    }));
+      for (auto i = 0; i < curve.count(); ++i)
+      {
+        m_minY = qMin(m_minY, curve[i].y());
+        m_maxY = qMax(m_maxY, curve[i].y());
+      }
     }
 
     // If the min and max are the same, set the range to 0-1

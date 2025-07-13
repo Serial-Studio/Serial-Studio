@@ -79,6 +79,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
 
   // Set rendering hints
   setMipmap(true);
+  setAntialiasing(false);
 
   // Update the plot data
   connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,

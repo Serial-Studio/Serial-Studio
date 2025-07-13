@@ -171,7 +171,10 @@ void Widgets::FFTPlot::updateData()
   {
     // Grab fresh time-domain samples and normalize to -1..1 (if possible)
     const auto &data = UI::Dashboard::instance().fftData(m_index);
-    for (int i = 0; i < m_size; ++i)
+    m_size = data.size();
+
+    // Populate samples with scaled data
+    for (auto i = 0; i < m_size; ++i)
     {
       if (m_scaleIsValid)
         m_samples[i] = static_cast<float>((data[i] - m_center) / m_halfRange);

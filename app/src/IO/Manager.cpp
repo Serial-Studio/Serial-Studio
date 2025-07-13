@@ -661,10 +661,10 @@ void IO::Manager::startFrameReader()
   m_workerThread = new QThread(this);
 
   // Move to the worker thread
-  m_frameReader->moveToThread(m_workerThread);
+  /*m_frameReader->moveToThread(m_workerThread);*/
 
   // Configure initial state for the frame reader
-  QMetaObject::invokeMethod(
+  /*QMetaObject::invokeMethod(
       m_frameReader,
       [reader = m_frameReader, drv = driver()] {
         if (reader && drv)
@@ -673,19 +673,27 @@ void IO::Manager::startFrameReader()
                            &IO::FrameReader::processData, Qt::QueuedConnection);
         }
       },
-      Qt::QueuedConnection);
+      Qt::QueuedConnection);*/
+
+  if (m_frameReader && driver())
+  {
+    QObject::connect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
+                     &IO::FrameReader::processData);
+
+    connect(m_frameReader, &IO::FrameReader::frameReady, this,
+            [this](const QByteArray &frame) {
+              if (!paused())
+                Q_EMIT frameReceived(frame);
+            });
+    connect(m_frameReader, &IO::FrameReader::dataReceived, this,
+            [this](const QByteArray &data) {
+              if (!paused())
+                Q_EMIT dataReceived(data);
+            });
+  }
 
   // Connect frame reader events to IO::Manager
-  connect(m_frameReader, &IO::FrameReader::frameReady, this,
-          [this](const QByteArray &frame) {
-            if (!paused())
-              Q_EMIT frameReceived(frame);
-          });
-  connect(m_frameReader, &IO::FrameReader::dataReceived, this,
-          [this](const QByteArray &data) {
-            if (!paused())
-              Q_EMIT dataReceived(data);
-          });
+  /**/
 
   // Start the worker thread
   m_workerThread->start();

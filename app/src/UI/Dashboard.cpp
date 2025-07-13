@@ -47,6 +47,8 @@ UI::Dashboard::Dashboard()
   , m_updateRequired(false)
   , m_showActionPanel(true)
   , m_terminalEnabled(false)
+  , m_pltXAxis(100)
+  , m_multipltXAxis(100)
 {
   // clang-format off
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(true); });
@@ -1075,9 +1077,7 @@ void UI::Dashboard::updateDataSeries()
   for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i)
   {
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
-    auto *data = m_fftValues[i].data();
-    auto count = m_fftValues[i].size();
-    SIMD::shift(data, count, dataset.value().toDouble());
+    m_fftValues[i].push(dataset.value().toDouble());
   }
 
   // Append latest values to linear plots data
@@ -1090,9 +1090,7 @@ void UI::Dashboard::updateDataSeries()
     if (!yAxesMoved.contains(yDataset.index()))
     {
       yAxesMoved.insert(yDataset.index());
-      auto *yData = m_yAxisData[yDataset.index()].data();
-      auto yCount = m_yAxisData[yDataset.index()].size();
-      SIMD::shift(yData, yCount, yDataset.value().toDouble());
+      m_yAxisData[yDataset.index()].push(yDataset.value().toDouble());
     }
 
     // Shift X-axis points
@@ -1101,9 +1099,7 @@ void UI::Dashboard::updateDataSeries()
     {
       xAxesMoved.insert(xAxisId);
       const auto &xDataset = m_datasets[xAxisId];
-      auto *xData = m_xAxisData[xAxisId].data();
-      auto xCount = m_xAxisData[xAxisId].size();
-      SIMD::shift(xData, xCount, xDataset.value().toDouble());
+      m_xAxisData[xAxisId].push(xDataset.value().toDouble());
     }
   }
 
@@ -1114,9 +1110,7 @@ void UI::Dashboard::updateDataSeries()
     for (int j = 0; j < group.datasetCount(); ++j)
     {
       const auto &dataset = group.datasets()[j];
-      auto *data = m_multipltValues[i].y[j].data();
-      auto count = m_multipltValues[i].y[j].size();
-      SIMD::shift(data, count, dataset.value().toDouble());
+      m_multipltValues[i].y[j].push(dataset.value().toDouble());
     }
   }
 
@@ -1169,13 +1163,9 @@ void UI::Dashboard::updateDataSeries()
     }
 
     // Shift GPS time series data
-    auto *latData = series.latitudes.data();
-    auto *lonData = series.longitudes.data();
-    auto *altData = series.altitudes.data();
-    const int count = series.latitudes.size();
-    SIMD::shift(latData, count, lat);
-    SIMD::shift(lonData, count, lon);
-    SIMD::shift(altData, count, alt);
+    series.latitudes.push(lat);
+    series.altitudes.push(alt);
+    series.longitudes.push(lon);
   }
 }
 
@@ -1204,7 +1194,7 @@ void UI::Dashboard::configureGpsSeries()
   {
     GpsSeries series;
     const auto &group = getGroupWidget(SerialStudio::DashboardGPS, i);
-    const QMap<QString, std::vector<double> *> fieldMap
+    const QMap<QString, FixedQueue<double> *> fieldMap
         = {{"lat", &series.latitudes},
            {"lon", &series.longitudes},
            {"alt", &series.altitudes}};
@@ -1216,7 +1206,7 @@ void UI::Dashboard::configureGpsSeries()
       {
         auto *vector = fieldMap[dataset.widget()];
         vector->resize(points() + 1);
-        SIMD::fill(vector->data(), points() + 1, std::nan(""));
+        vector->fill(std::nan(""));
       }
     }
 
@@ -1244,9 +1234,7 @@ void UI::Dashboard::configureFftSeries()
   for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i)
   {
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
-    m_fftValues.append(PlotDataY());
-    m_fftValues.last().resize(dataset.fftSamples());
-    SIMD::fill(m_fftValues.last().data(), dataset.fftSamples(), 0);
+    m_fftValues.append(PlotDataY(dataset.fftSamples()));
   }
 }
 
@@ -1273,10 +1261,8 @@ void UI::Dashboard::configureLineSeries()
   m_pltValues.squeeze();
 
   // Reset default X-axis data
-  m_pltXAxis.clear();
-  m_pltXAxis.shrink_to_fit();
-  m_pltXAxis.resize(points() + 1);
-  SIMD::fill_range(m_pltXAxis.data(), m_pltXAxis.size(), 0);
+  m_pltXAxis = PlotDataX(points() + 1);
+  m_pltXAxis.fillRange(0, 1);
 
   // Construct X/Y axis data arrays
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
@@ -1289,9 +1275,10 @@ void UI::Dashboard::configureLineSeries()
     {
       if (d->graph())
       {
-        // Register X-axis
-        PlotDataY yAxis;
+        // Register Y-axis
+        PlotDataY yAxis(points() + 1);
         m_yAxisData.insert(d->index(), yAxis);
+        m_yAxisData[d->index()].fill(0);
 
         // Register X-axis
         if (SerialStudio::activated())
@@ -1299,9 +1286,12 @@ void UI::Dashboard::configureLineSeries()
           int xSource = d->xAxisId();
           if (!m_xAxisData.contains(xSource))
           {
-            PlotDataX xAxis;
+            PlotDataX xAxis(points() + 1);
             if (m_datasets.contains(xSource))
+            {
               m_xAxisData.insert(xSource, xAxis);
+              m_xAxisData[xSource].fill(0);
+            }
           }
         }
       }
@@ -1318,11 +1308,6 @@ void UI::Dashboard::configureLineSeries()
     if (m_datasets.contains(yDataset.xAxisId()) && SerialStudio::activated())
     {
       const auto &xDataset = m_datasets[yDataset.xAxisId()];
-      m_xAxisData[xDataset.index()].resize(points() + 1);
-      m_yAxisData[yDataset.index()].resize(points() + 1);
-      SIMD::fill(m_xAxisData[xDataset.index()].data(), points() + 1, 0);
-      SIMD::fill(m_yAxisData[yDataset.index()].data(), points() + 1, 0);
-
       LineSeries series;
       series.x = &m_xAxisData[xDataset.index()];
       series.y = &m_yAxisData[yDataset.index()];
@@ -1332,9 +1317,6 @@ void UI::Dashboard::configureLineSeries()
     // Only use Y-axis data, use samples/points as X-axis
     else
     {
-      m_yAxisData[yDataset.index()].resize(points() + 1);
-      SIMD::fill(m_yAxisData[yDataset.index()].data(), points() + 1, 0);
-
       LineSeries series;
       series.x = &m_pltXAxis;
       series.y = &m_yAxisData[yDataset.index()];
@@ -1387,10 +1369,8 @@ void UI::Dashboard::configureMultiLineSeries()
   m_multipltValues.squeeze();
 
   // Reset default X-axis data
-  m_multipltXAxis.clear();
-  m_multipltXAxis.shrink_to_fit();
-  m_multipltXAxis.resize(points() + 1);
-  SIMD::fill_range(m_multipltXAxis.data(), m_multipltXAxis.size(), 0);
+  m_multipltXAxis = PlotDataX(points() + 1);
+  m_multipltXAxis.fillRange(0, 1);
 
   // Construct multi-plot values structure
   for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i)
@@ -1401,9 +1381,8 @@ void UI::Dashboard::configureMultiLineSeries()
     series.x = &m_multipltXAxis;
     for (int j = 0; j < group.datasetCount(); ++j)
     {
-      series.y.push_back(PlotDataY());
-      series.y.back().resize(points() + 1);
-      SIMD::fill(series.y.back().data(), points() + 1, 0);
+      series.y.push_back(PlotDataY(points() + 1));
+      series.y.back().fill(0);
     }
 
     m_multipltValues.append(series);

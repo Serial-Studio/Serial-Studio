@@ -1163,7 +1163,7 @@ void IO::Drivers::Audio::onInputReadyRead()
     csv += '\n';
   }
 
-  processData(csv);
+  Q_EMIT dataReceived(csv);
 }
 
 //------------------------------------------------------------------------------

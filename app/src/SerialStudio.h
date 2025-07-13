@@ -26,18 +26,19 @@
 
 #include "JSON/Group.h"
 #include "JSON/Dataset.h"
+#include "IO/FixedQueue.h"
 
 /**
  * @typedef PlotDataX
  * @brief Represents the unique X-axis data points for a plot.
  */
-typedef std::vector<double> PlotDataX;
+typedef FixedQueue<double> PlotDataX;
 
 /**
  * @typedef PlotDataY
  * @brief Represents the Y-axis data points for a single curve.
  */
-typedef std::vector<double> PlotDataY;
+typedef FixedQueue<double> PlotDataY;
 
 #ifdef BUILD_COMMERCIAL
 /**
@@ -108,9 +109,9 @@ typedef struct
  */
 typedef struct
 {
-  std::vector<double> latitudes;  ///< Latitude values (degrees)
-  std::vector<double> longitudes; ///< Longitude values (degrees)
-  std::vector<double> altitudes;  ///< Altitude values (meters)
+  FixedQueue<double> latitudes;  ///< Latitude values (degrees)
+  FixedQueue<double> longitudes; ///< Longitude values (degrees)
+  FixedQueue<double> altitudes;  ///< Altitude values (meters)
 } GpsSeries;
 
 /**

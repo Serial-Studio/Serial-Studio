@@ -23,7 +23,6 @@
 
 #include <QObject>
 #include <QIODevice>
-#include <QReadWriteLock>
 
 namespace IO
 {
@@ -48,26 +47,12 @@ signals:
   void dataReceived(const QByteArray &data);
 
 public:
-  /**
-   * @brief Close the device connection.
-   */
   virtual void close() = 0;
-
   [[nodiscard]] virtual bool isOpen() const = 0;
   [[nodiscard]] virtual bool isReadable() const = 0;
   [[nodiscard]] virtual bool isWritable() const = 0;
   [[nodiscard]] virtual bool configurationOk() const = 0;
   [[nodiscard]] virtual quint64 write(const QByteArray &data) = 0;
   [[nodiscard]] virtual bool open(const QIODevice::OpenMode mode) = 0;
-
-protected:
-  void processData(const QByteArray &data)
-  {
-    QWriteLocker locker(&m_dataLock);
-    Q_EMIT dataReceived(data);
-  }
-
-private:
-  mutable QReadWriteLock m_dataLock;
 };
 } // namespace IO

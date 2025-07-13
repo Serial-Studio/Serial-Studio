@@ -193,6 +193,7 @@ set(HEADERS
   src/IO/HAL_Driver.h
   src/IO/Checksum.h
   src/IO/ConsoleExport.h
+  src/IO/FixedQueue.h
   src/IO/CircularBuffer.h
   src/IO/FileTransmission.h
   src/IO/FrameReader.h
@@ -205,7 +206,6 @@ set(HEADERS
   src/JSON/FrameBuilder.h
   src/CSV/Export.h
   src/CSV/Player.h
-  src/SIMD/SIMD.h
   src/AppInfo.h
   src/SerialStudio.h
 )
@@ -365,7 +365,6 @@ target_link_libraries(
 
   ${QT_LIBS}
 
-  simde
   QCodeEditor
   QRealFourier
   QSimpleUpdater

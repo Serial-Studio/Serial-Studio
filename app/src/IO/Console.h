@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QObject>
+
 #include "IO/CircularBuffer.h"
 
 namespace IO
@@ -75,10 +76,6 @@ class Console : public QObject
   Q_PROPERTY(QStringList checksumMethods
              READ checksumMethods
              NOTIFY languageChanged)
-  Q_PROPERTY(int scrollback
-             READ scrollback
-             WRITE setScrollback
-             NOTIFY scrollbackChanged)
   Q_PROPERTY(int checksumMethod
              READ checksumMethod
              WRITE setChecksumMethod
@@ -89,7 +86,6 @@ signals:
   void echoChanged();
   void dataModeChanged();
   void languageChanged();
-  void scrollbackChanged();
   void lineEndingChanged();
   void displayModeChanged();
   void historyItemChanged();
@@ -133,8 +129,6 @@ public:
 
   [[nodiscard]] bool echo() const;
   [[nodiscard]] bool showTimestamp() const;
-
-  [[nodiscard]] int scrollback() const;
   [[nodiscard]] int checksumMethod() const;
 
   [[nodiscard]] DataMode dataMode() const;
@@ -157,7 +151,6 @@ public slots:
   void setupExternalConnections();
   void send(const QString &data);
   void setEcho(const bool enabled);
-  void setScrollback(const int lines);
   void setChecksumMethod(const int method);
   void setShowTimestamp(const bool enabled);
   void setDataMode(const IO::Console::DataMode &mode);
@@ -180,7 +173,6 @@ private:
   LineEnding m_lineEnding;
   DisplayMode m_displayMode;
 
-  int m_scrollback;
   int m_historyItem;
   int m_checksumMethod;
 
@@ -190,8 +182,6 @@ private:
   bool m_lastCharWasCR;
 
   QStringList m_historyItems;
-
-  QString m_printFont;
   CircularBuffer<QByteArray, char> m_textBuffer;
 };
 } // namespace IO

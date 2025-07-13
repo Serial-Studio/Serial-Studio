@@ -134,7 +134,7 @@ bool JSON::Dataset::graph() const
  */
 double JSON::Dataset::min() const
 {
-  return m_min;
+  return qMin(m_min, m_max);
 }
 
 /**
@@ -142,7 +142,7 @@ double JSON::Dataset::min() const
  */
 double JSON::Dataset::max() const
 {
-  return m_max;
+  return qMax(m_min, m_max);
 }
 
 /**
@@ -284,8 +284,8 @@ QJsonObject JSON::Dataset::serialize() const
   object.insert(QStringLiteral("fft"), m_fft);
   object.insert(QStringLiteral("led"), m_led);
   object.insert(QStringLiteral("log"), m_log);
-  object.insert(QStringLiteral("min"), m_min);
-  object.insert(QStringLiteral("max"), m_max);
+  object.insert(QStringLiteral("min"), qMin(m_min, m_max));
+  object.insert(QStringLiteral("max"), qMax(m_min, m_max));
   object.insert(QStringLiteral("index"), m_index);
   object.insert(QStringLiteral("alarm"), m_alarm);
   object.insert(QStringLiteral("graph"), m_graph);
@@ -330,6 +330,9 @@ bool JSON::Dataset::read(const QJsonObject &object)
     m_displayInOverview = SAFE_READ(object, "overviewDisplay", false).toBool();
     if (m_value.isEmpty())
       m_value = QStringLiteral("--.--");
+
+    m_min = qMin(m_min, m_max);
+    m_max = qMax(m_min, m_max);
 
     return true;
   }

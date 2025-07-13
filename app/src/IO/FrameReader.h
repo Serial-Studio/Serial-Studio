@@ -25,7 +25,6 @@
 #include <QThread>
 #include <QObject>
 #include <QByteArray>
-#include <QReadWriteLock>
 
 #include "SerialStudio.h"
 #include "IO/CircularBuffer.h"
@@ -60,7 +59,7 @@ public:
   explicit FrameReader(QObject *parent = nullptr);
 
 public slots:
-  void processData(const QByteArray &data);
+  void processData(QByteArray data);
   void setChecksum(const QString &checksum);
   void setStartSequence(const QByteArray &start);
   void setFinishSequence(const QByteArray &finish);
@@ -87,7 +86,5 @@ private:
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
   QList<QByteArray> m_quickPlotEndSequences;
-
-  mutable QReadWriteLock m_dataLock;
 };
 } // namespace IO

@@ -19,7 +19,6 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "SIMD/SIMD.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/Plot.h"
 
@@ -328,8 +327,11 @@ bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
     max = std::numeric_limits<double>::lowest();
 
     // Loop through the plot data and update the min and max
-    min = SIMD::findMin(m_data, extractor);
-    max = SIMD::findMax(m_data, extractor);
+    for (auto i = 0; i < m_data.size(); ++i)
+    {
+      min = qMin(min, extractor(m_data[i]));
+      max = qMax(max, extractor(m_data[i]));
+    }
 
     // If min and max are the same, adjust the range
     if (qFuzzyCompare(min, max))

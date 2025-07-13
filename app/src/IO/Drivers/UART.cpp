@@ -894,7 +894,7 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
 void IO::Drivers::UART::onReadyRead()
 {
   if (isOpen())
-    processData(port()->readAll());
+    Q_EMIT dataReceived(port()->readAll());
 }
 
 /**

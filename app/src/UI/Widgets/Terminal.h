@@ -108,8 +108,8 @@ public:
   [[nodiscard]] int charWidth() const;
   [[nodiscard]] int charHeight() const;
 
-  [[nodiscard]] QFont font() const;
-  [[nodiscard]] QPalette palette() const;
+  [[nodiscard]] const QFont &font() const;
+  [[nodiscard]] const QPalette &palette() const;
 
   [[nodiscard]] bool autoscroll() const;
   [[nodiscard]] bool copyAvailable() const;
@@ -120,7 +120,7 @@ public:
   [[nodiscard]] int scrollOffsetY() const;
   [[nodiscard]] int maxCharsPerLine() const;
 
-  [[nodiscard]] QPoint cursorPosition() const;
+  [[nodiscard]] const QPoint &cursorPosition() const;
   [[nodiscard]] QPoint positionToCursor(const QPoint &pos) const;
 
 public slots:
@@ -137,7 +137,6 @@ private slots:
   void toggleCursor();
   void onThemeChanged();
   void loadWelcomeGuide();
-  void onScrollbackChanged();
   void append(const QString &data);
   void appendString(const QString &string);
   void removeStringFromCursor(const Direction direction = RightDirection,
@@ -150,12 +149,12 @@ private:
   void processFormat(const QChar &byte, QString &text);
   void processResetFont(const QChar &byte, QString &text);
 
-  void setCursorPosition(const QPoint position);
+  void setCursorPosition(const QPoint &position);
   void setCursorPosition(const int x, const int y);
-  void replaceData(qsizetype x, qsizetype y, QChar byte);
+  void replaceData(int x, int y, const QChar &byte);
 
 protected:
-  bool shouldEndSelection(const QChar c);
+  bool shouldEndSelection(const QChar &c);
   void wheelEvent(QWheelEvent *event) override;
   void mouseMoveEvent(QMouseEvent *event) override;
   void mousePressEvent(QMouseEvent *event) override;

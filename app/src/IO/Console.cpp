@@ -35,7 +35,6 @@ IO::Console::Console()
   : m_dataMode(DataMode::DataUTF8)
   , m_lineEnding(LineEnding::NoLineEnding)
   , m_displayMode(DisplayMode::DisplayPlainText)
-  , m_scrollback(1000)
   , m_historyItem(0)
   , m_checksumMethod(0)
   , m_echo(true)
@@ -71,19 +70,6 @@ bool IO::Console::echo() const
 bool IO::Console::showTimestamp() const
 {
   return m_showTimestamp;
-}
-
-/**
- * Returns the number of lines that terminal display widgets should limit
- * scrollback to. You can change this value by calling the setScrollback()
- * function.
- *
- * @note This value is not used directly by the IO::Console class, as it does
- *       not take into account line numbers.
- */
-int IO::Console::scrollback() const
-{
-  return m_scrollback;
 }
 
 /**
@@ -396,18 +382,6 @@ void IO::Console::setEcho(const bool enabled)
   {
     m_echo = enabled;
     Q_EMIT echoChanged();
-  }
-}
-
-/**
- * Modifies the number of lines that can be displayed by the terminal widget.
- */
-void IO::Console::setScrollback(const int lines)
-{
-  if (scrollback() != lines)
-  {
-    m_scrollback = lines;
-    Q_EMIT scrollbackChanged();
   }
 }
 

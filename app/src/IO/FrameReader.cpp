@@ -72,11 +72,8 @@ IO::FrameReader::FrameReader(QObject *parent)
  *
  * @param data The incoming data to process.
  */
-void IO::FrameReader::processData(const QByteArray &data)
+void IO::FrameReader::processData(QByteArray data)
 {
-  // Lock access to frame data
-  QWriteLocker locker(&m_dataLock);
-
   // Add data to circular buffer
   m_dataBuffer.append(data);
   Q_EMIT dataReceived(data);
@@ -105,7 +102,6 @@ void IO::FrameReader::processData(const QByteArray &data)
  */
 void IO::FrameReader::setChecksum(const QString &checksum)
 {
-  QWriteLocker locker(&m_dataLock);
   if (m_checksum != checksum)
   {
     m_checksum = checksum;
@@ -131,7 +127,6 @@ void IO::FrameReader::setChecksum(const QString &checksum)
  */
 void IO::FrameReader::setStartSequence(const QByteArray &start)
 {
-  QWriteLocker locker(&m_dataLock);
   if (m_startSequence != start)
   {
     m_startSequence = start;
@@ -149,7 +144,6 @@ void IO::FrameReader::setStartSequence(const QByteArray &start)
  */
 void IO::FrameReader::setFinishSequence(const QByteArray &finish)
 {
-  QWriteLocker locker(&m_dataLock);
   if (m_finishSequence != finish)
   {
     m_finishSequence = finish;
@@ -167,7 +161,6 @@ void IO::FrameReader::setFinishSequence(const QByteArray &finish)
  */
 void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 {
-  QWriteLocker locker(&m_dataLock);
   if (m_operationMode != mode)
   {
     m_operationMode = mode;
@@ -194,7 +187,6 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 void IO::FrameReader::setFrameDetectionMode(
     const SerialStudio::FrameDetection mode)
 {
-  QWriteLocker locker(&m_dataLock);
   if (m_frameDetectionMode != mode)
   {
     m_frameDetectionMode = mode;

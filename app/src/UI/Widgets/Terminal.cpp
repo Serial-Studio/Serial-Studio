@@ -37,6 +37,11 @@
 #endif
 
 /**
+ * @brief Define the number of max lines supported
+ */
+constexpr int MAX_LINES = 1000;
+
+/**
  * @brief Constructs a Terminal object with the given parent item.
  *
  * Initializes the terminal widget, setting up various configurations, including
@@ -106,8 +111,6 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   // Receive data from the IO::Console handler
   connect(&IO::Console::instance(), &IO::Console::displayString, this,
           &Widgets::Terminal::append);
-  connect(&IO::Console::instance(), &IO::Console::scrollbackChanged, this,
-          &Widgets::Terminal::onScrollbackChanged);
 
   // Clear the screen when device is connected/disconnected
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] {
@@ -405,7 +408,7 @@ int Widgets::Terminal::charHeight() const
  *
  * @return The QFont object representing the terminal's current font.
  */
-QFont Widgets::Terminal::font() const
+const QFont &Widgets::Terminal::font() const
 {
   return m_font;
 }
@@ -415,7 +418,7 @@ QFont Widgets::Terminal::font() const
  *
  * @return The QPalette object representing the terminal's color palette.
  */
-QPalette Widgets::Terminal::palette() const
+const QPalette &Widgets::Terminal::palette() const
 {
   return m_palette;
 }
@@ -522,7 +525,7 @@ int Widgets::Terminal::maxCharsPerLine() const
  * @return A QPoint representing the current cursor position, in character
  *         coordinates.
  */
-QPoint Widgets::Terminal::cursorPosition() const
+const QPoint &Widgets::Terminal::cursorPosition() const
 {
   return m_cursorPosition;
 }
@@ -842,16 +845,6 @@ void Widgets::Terminal::loadWelcomeGuide()
 }
 
 /**
- * Reacts to the scrollback change event.
- */
-void Widgets::Terminal::onScrollbackChanged()
-{
-  auto lines = IO::Console::instance().scrollback();
-  while (m_data.length() > lines - 1)
-    m_data.removeFirst();
-}
-
-/**
  * @brief Appends a string of data to the terminal, processing each character
  *        accordingly.
  *
@@ -916,9 +909,22 @@ void Widgets::Terminal::append(const QString &data)
  */
 void Widgets::Terminal::appendString(const QString &string)
 {
-  // Remove lines from scrollback
-  // while (m_data.length() > IO::Console::instance().scrollback() - 1)
-  //  m_data.removeFirst();
+  // Ensure buffer memory does not exceed MAX_LINES
+  const int linesToDrop = m_data.size() - MAX_LINES + 1;
+  if (m_data.size() >= MAX_LINES && linesToDrop > 0)
+  {
+    m_data.erase(m_data.begin(), m_data.begin() + linesToDrop);
+
+    if (m_cursorPosition.y() >= linesToDrop)
+      m_cursorPosition.setY(m_cursorPosition.y() - linesToDrop);
+    else
+      m_cursorPosition.setY(0);
+
+    if (m_scrollOffsetY >= linesToDrop)
+      m_scrollOffsetY -= linesToDrop;
+    else
+      m_scrollOffsetY = 0;
+  }
 
   // Register each character in the provided string
   foreach (QChar character, string)
@@ -1036,7 +1042,7 @@ void Widgets::Terminal::initBuffer()
   m_data.clear();
   m_data.squeeze();
   m_scrollOffsetY = 0;
-  m_data.reserve(IO::Console::instance().scrollback());
+  m_data.reserve(MAX_LINES);
 }
 
 /**
@@ -1074,7 +1080,6 @@ void Widgets::Terminal::processText(const QChar &byte, QString &text)
   {
     appendString(text);
     text.clear();
-    m_data.append("");
     setCursorPosition(0, m_cursorPosition.y() + 1);
   }
 
@@ -1301,11 +1306,12 @@ void Widgets::Terminal::processResetFont(const QChar &byte, QString &text)
  *
  * @see cursorMoved()
  */
-void Widgets::Terminal::setCursorPosition(const QPoint position)
+void Widgets::Terminal::setCursorPosition(const QPoint &position)
 {
-  if (m_cursorPosition != position)
+  const QPoint clamped(position.x(), qBound(0, position.y(), MAX_LINES));
+  if (m_cursorPosition != clamped)
   {
-    m_cursorPosition = position;
+    m_cursorPosition = clamped;
     Q_EMIT cursorMoved();
   }
 }
@@ -1351,28 +1357,24 @@ void Widgets::Terminal::setCursorPosition(const int x, const int y)
  *
  * @see lineCount(), m_data
  */
-void Widgets::Terminal::replaceData(qsizetype x, qsizetype y, QChar byte)
+void Widgets::Terminal::replaceData(int x, int y, const QChar &byte)
 {
-  // Make sure the line at y exists in the buffer
-  if (y >= lineCount())
+  // Ensure the line exists
+  if (y >= m_data.size())
     m_data.resize(y + 1);
 
   // Get reference to current line
-  QString &currentLine = m_data[y];
+  QString &line = m_data[y];
 
-  // Ensure the current line is long enough to hold the character at x
-  if (x > currentLine.size())
-    currentLine = currentLine.leftJustified(x, ' ');
+  // Pad line to x if needed
+  if (x > line.size())
+    line = line.leftJustified(x, ' ');
 
-  // Ensure that byte is a printable character
-  if (!byte.isPrint())
-    byte = '.';
-
-  // Replace or insert the character at the cursor position
-  if (x < currentLine.size() && x >= 0)
-    currentLine[x] = byte;
+  // Set or append the printable character
+  if (x >= 0 && x < line.size())
+    line[x] = byte.isPrint() ? byte : '.';
   else if (x >= 0)
-    currentLine.append(byte);
+    line.append(byte.isPrint() ? byte : '.');
 }
 
 /**
@@ -1393,7 +1395,7 @@ void Widgets::Terminal::replaceData(qsizetype x, qsizetype y, QChar byte)
  * 3. `c` is neither a letter nor a number, meaning punctuation marks, symbols,
  *    and other non-alphanumeric characters will end the selection.
  */
-bool Widgets::Terminal::shouldEndSelection(const QChar c)
+bool Widgets::Terminal::shouldEndSelection(const QChar &c)
 {
   bool end = false;
   end |= c.isSpace();
