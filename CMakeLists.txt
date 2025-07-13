@@ -244,7 +244,6 @@ if(PRODUCTION_OPTIMIZATION)
          -funroll-loops                 # Unroll simple loops for throughput
          -fomit-frame-pointer           # Free up a general-purpose register
          -frename-registers             # Better instruction scheduling
-         -fprefetch-loop-arrays         # Cache prefetching for loops
          -fp-model=precise              # Disable aggressive FP optimization, retain precision
       )
       add_link_options(
@@ -260,7 +259,6 @@ if(PRODUCTION_OPTIMIZATION)
          -ftree-vectorize               # Enable GCC’s automatic loop vectorizer
          -funroll-loops                 # Improve loop performance
          -frename-registers             # Better instruction scheduling
-         -fprefetch-loop-arrays         # Cache prefetching for loops
          -fno-fast-math                 # Disable unsafe math optimizations
          -fno-unsafe-math-optimizations # Use correct IEEE behavior
       )
@@ -278,7 +276,6 @@ if(PRODUCTION_OPTIMIZATION)
          -funroll-loops                 # Improve loop performance by unrolling
          -fomit-frame-pointer           # Optimize function call overhead
          -frename-registers             # Better instruction scheduling
-         -fprefetch-loop-arrays         # Cache prefetching for loops
          -fno-fast-math                 # IEEE-compliant floating point
          -fno-unsafe-math-optimizations # Avoid unsafe math assumptions
       )
