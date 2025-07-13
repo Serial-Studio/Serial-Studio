@@ -47,17 +47,6 @@ Item {
   }
 
   //
-  // Ask the user to save the project file before closing the app
-  //
-  function handleClose(close) {
-    close.accepted = false
-    if (Cpp_JSON_ProjectModel.askSave()) {
-      close.accepted = true
-      Qt.quit();
-    }
-  }
-
-  //
   // Launch welcome dialog or show main window during starup
   //
   Component.onCompleted: {
@@ -76,10 +65,11 @@ Item {
   //
   MainWindow.MainWindow {
     id: mainWindow
-    onClosing: {
-      if (visible)
-        (close) => app.handleClose(close)
-    }
+    onClosing: (close) => {
+                 close.accepted = Cpp_JSON_ProjectModel.askSave()
+                 if (close.accepted)
+                 Qt.quit()
+               }
 
     Dialogs.Settings {
       id: settingsDialog
@@ -116,6 +106,10 @@ Item {
       id: fileTransmissionDialog
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/FileTransmission.qml"
     }
+
+    ProjectEditor.ProjectEditor {
+      id: projectEditor
+    }
   }
 
   //
@@ -132,13 +126,6 @@ Item {
   DialogLoader {
     id: welcomeDialog
     source: "qrc:/serial-studio.com/gui/qml/Dialogs/Welcome.qml"
-  }
-
-  //
-  // Project Editor
-  //
-  ProjectEditor.ProjectEditor {
-    id: projectEditor
   }
 
   //
