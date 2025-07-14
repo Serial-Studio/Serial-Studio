@@ -1,4 +1,5 @@
 {
+  "color-space-for-untagged-svg-colors" : "display-p3",
   "fill" : {
     "linear-gradient" : [
       "display-p3:0.23560,0.49219,0.76416,1.00000",
@@ -230,9 +231,8 @@
     }
   ],
   "supported-platforms" : {
-    "circles" : [
-      "watchOS"
-    ],
-    "squares" : "shared"
+    "squares" : [
+      "macOS"
+    ]
   }
 }
