@@ -43,10 +43,12 @@ class MultiPlot : public QQuickItem
   Q_PROPERTY(QStringList colors READ colors NOTIFY themeChanged)
   Q_PROPERTY(double xTickInterval READ xTickInterval NOTIFY rangeChanged)
   Q_PROPERTY(double yTickInterval READ yTickInterval NOTIFY rangeChanged)
+  Q_PROPERTY(QList<bool> visibleCurves READ visibleCurves NOTIFY curvesChanged)
 
 signals:
   void rangeChanged();
   void themeChanged();
+  void curvesChanged();
 
 public:
   explicit MultiPlot(const int index = -1, QQuickItem *parent = nullptr);
@@ -70,8 +72,9 @@ public:
   [[nodiscard]] double xTickInterval() const;
   [[nodiscard]] double yTickInterval() const;
   [[nodiscard]] const QString &yLabel() const;
-  [[nodiscard]] const QStringList &colors() const;
+  [[nodiscard]] const QStringList& colors() const;
   [[nodiscard]] const QStringList &labels() const;
+  [[nodiscard]] const QList<bool> &visibleCurves() const;
 
 public slots:
   void draw(QXYSeries *series, const int index);
@@ -79,6 +82,7 @@ public slots:
   void updateData();
   void updateRange();
   void calculateAutoScaleRange();
+  void modifyCurveVisibility(const int index, const bool visible);
 
 private slots:
   void onThemeChanged();
@@ -92,6 +96,7 @@ private:
   QString m_yLabel;
   QStringList m_colors;
   QStringList m_labels;
+  QList<bool> m_visibleCurves;
   QVector<QVector<QPointF>> m_data;
 };
 } // namespace Widgets

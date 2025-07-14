@@ -43,8 +43,13 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
     const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
     m_minY = std::numeric_limits<double>::max();
     m_maxY = std::numeric_limits<double>::lowest();
-    for (const auto &dataset : group.datasets())
+
+    // Populate data from datasets
+    for (int i = 0; i < group.datasetCount(); ++i)
     {
+      const auto &dataset = group.datasets()[i];
+
+      m_visibleCurves.append(true);
       m_labels.append(dataset.title());
       m_minY = qMin(m_minY, qMin(dataset.min(), dataset.max()));
       m_maxY = qMax(m_maxY, qMax(dataset.min(), dataset.max()));
@@ -164,13 +169,26 @@ const QStringList &Widgets::MultiPlot::labels() const
 }
 
 /**
+ * @brief Returns the visibility state of all curves.
+ *
+ * Provides a reference to the internal list indicating which curves are
+ * currently visible.
+ *
+ * @return Reference to a QList of booleans representing curve visibility.
+ */
+const QList<bool> &Widgets::MultiPlot::visibleCurves() const
+{
+  return m_visibleCurves;
+}
+
+/**
  * @brief Draws the data on the given QLineSeries.
  * @param series The QXYSeries to draw the data on.
  * @param index The index of the dataset to draw.
  */
 void Widgets::MultiPlot::draw(QXYSeries *series, const int index)
 {
-  if (series && index >= 0 && index < count())
+  if (series && index >= 0 && index < count() && m_visibleCurves[index])
   {
     series->replace(m_data[index]);
     Q_EMIT series->update();
@@ -272,17 +290,23 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     m_minY = std::numeric_limits<double>::max();
     m_maxY = std::numeric_limits<double>::lowest();
 
+    int index = 0;
     for (const auto &dataset : group.datasets())
     {
       ok &= !qFuzzyCompare(dataset.min(), dataset.max());
-      if (ok)
+      if (ok && m_visibleCurves[index])
       {
         m_minY = qMin(m_minY, qMin(dataset.min(), dataset.max()));
         m_maxY = qMax(m_maxY, qMax(dataset.min(), dataset.max()));
       }
 
       else
+      {
+        ok = false;
         break;
+      }
+
+      ++index;
     }
   }
 
@@ -294,13 +318,19 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     m_maxY = std::numeric_limits<double>::lowest();
 
     // Loop through each dataset and find the min and max values
+    int index = 0;
     for (const auto &curve : std::as_const(m_data))
     {
-      for (auto i = 0; i < curve.count(); ++i)
+      if (m_visibleCurves[index])
       {
-        m_minY = qMin(m_minY, curve[i].y());
-        m_maxY = qMax(m_maxY, curve[i].y());
+        for (auto i = 0; i < curve.count(); ++i)
+        {
+          m_minY = qMin(m_minY, curve[i].y());
+          m_maxY = qMax(m_maxY, curve[i].y());
+        }
       }
+
+      ++index;
     }
 
     // If the min and max are the same, set the range to 0-1
@@ -320,12 +350,27 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
       }
     }
 
-    // If the min and max are not the same, set the range to 10% more
+    // Expand range symmetrically around midY, with a 10% padding
     else
     {
-      double range = m_maxY - m_minY;
-      m_minY -= range * 0.1;
-      m_maxY += range * 0.1;
+      // Calculate center and half-range
+      const double midY = (m_minY + m_maxY) / 2.0;
+      const double halfRange = (m_maxY - m_minY) / 2.0;
+
+      // Expand range symmetrically around midY, with a 10% padding
+      double paddedRange = halfRange * 1.1;
+      if (qFuzzyIsNull(paddedRange))
+        paddedRange = 1;
+
+      m_minY = std::floor(midY - paddedRange);
+      m_maxY = std::ceil(midY + paddedRange);
+
+      // Safety check to avoid zero-range
+      if (qFuzzyCompare(m_minY, m_maxY))
+      {
+        m_minY -= 1;
+        m_maxY += 1;
+      }
     }
 
     // Round to integer numbers
@@ -341,6 +386,26 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
   // Update user interface if required
   if (qFuzzyCompare(prevMinY, m_minY) || qFuzzyCompare(prevMaxY, m_maxY))
     Q_EMIT rangeChanged();
+}
+
+/**
+ * @brief Modifies the visibility state of a specific curve in the multi-plot.
+ *
+ * Updates the visibility flag for the curve at the given index. If the index is
+ * valid, the internal visibility list is updated, the autoscale range is
+ * recalculated, and the curvesChanged() signal is emitted.
+ *
+ * @param index   Index of the curve to modify.
+ * @param visible True to show the curve, false to hide it.
+ */
+void Widgets::MultiPlot::modifyCurveVisibility(const int index,
+                                               const bool visible)
+{
+  if (index >= 0 && index < m_visibleCurves.count())
+  {
+    m_visibleCurves[index] = visible;
+    Q_EMIT curvesChanged();
+  }
 }
 
 /**
@@ -370,5 +435,6 @@ void Widgets::MultiPlot::onThemeChanged()
     }
 
     Q_EMIT themeChanged();
+    Q_EMIT curvesChanged();
   }
 }
