@@ -4,53 +4,45 @@
 <dict>
   <key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
-
-  <key>CFBundleExecutable</key>
+	<key>CFBundleExecutable</key>
 	<string>Serial-Studio</string>
-
-  <key>CFBundleGetInfoString</key>
+	<key>CFBundleGetInfoString</key>
 	<string>© 2020–2025 Alex Spataru</string>
-
-  <key>CFBundleIconFile</key>
-	<string>icon</string>
-
-  <key>CFBundleIdentifier</key>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon.icns</string>
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
+	<key>CFBundleIdentifier</key>
 	<string>org.alexspataru.serial-studio</string>
-
-  <key>CFBundleInfoDictionaryVersion</key>
+	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-
-  <key>CFBundleName</key>
+	<key>CFBundleName</key>
 	<string>Serial Studio</string>
-
-  <key>CFBundlePackageType</key>
+	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-
-  <key>CFBundleShortVersionString</key>
+	<key>CFBundleShortVersionString</key>
 	<string>3.1.7</string>
-
-  <key>CFBundleVersion</key>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+	  <string>MacOSX</string>
+	</array>
+	<key>CFBundleVersion</key>
 	<string>3.1.7</string>
-
-  <key>LSHasLocalizedDisplayName</key>
+	<key>LSHasLocalizedDisplayName</key>
 	<true/>
-
-  <key>NSPrincipalClass</key>
-	<string>NSApplication</string>
-
-  <key>NSSupportsSuddenTermination</key>
-	<false/>
-
-  <key>NSRequiresAquaSystemAppearance</key>
-	<false/>
-
-  <key>NSHighResolutionCapable</key>
-	<true/>
-
-  <key>NSBluetoothAlwaysUsageDescription</key>
+	<key>LSMinimumSystemVersion</key>
+	<string>13.0</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Serial Studio uses Bluetooth Low Energy to communicate with nearby devices.</string>
-
-  <key>NSMicrophoneUsageDescription</key>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSMicrophoneUsageDescription</key>
 	<string>Serial Studio needs access to your microphone to record and analyze audio input.</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSRequiresAquaSystemAppearance</key>
+	<false/>
+	<key>NSSupportsSuddenTermination</key>
+	<false/>
 </dict>
 </plist>

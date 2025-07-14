@@ -72,7 +72,7 @@ public:
   [[nodiscard]] double xTickInterval() const;
   [[nodiscard]] double yTickInterval() const;
   [[nodiscard]] const QString &yLabel() const;
-  [[nodiscard]] const QStringList& colors() const;
+  [[nodiscard]] const QStringList &colors() const;
   [[nodiscard]] const QStringList &labels() const;
   [[nodiscard]] const QList<bool> &visibleCurves() const;
 

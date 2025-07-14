@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QQuickItem>
+#include <QElapsedTimer>
 
 namespace Widgets
 {

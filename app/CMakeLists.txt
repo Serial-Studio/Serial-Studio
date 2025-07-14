@@ -324,13 +324,15 @@ if(WIN32)
   set(WIN_RC "${CMAKE_CURRENT_SOURCE_DIR}/deploy/windows/info.rc")
   set(SOURCES ${SOURCES} ${WIN_RC} "src/Platform/NativeWindow_Windows.cpp")
 elseif(APPLE)
-  set(ICON_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/icon.icns")
   set(INFO_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/info.plist")
+  set(ICON_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/AppIcon.icns")
+  set(ASSETS_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/Assets.car")
   set_source_files_properties(
     ${ICON_MACOSX}
+    ${ASSETS_MACOSX}
     PROPERTIES MACOSX_PACKAGE_LOCATION "Resources"
   )
-set(SOURCES ${SOURCES} ${ICON_MACOSX} "src/Platform/NativeWindow_macOS.mm")
+set(SOURCES ${SOURCES} ${ICON_MACOSX} ${ASSETS_MACOSX} "src/Platform/NativeWindow_macOS.mm")
 set_source_files_properties(
   "src/Platform/NativeWindow_macOS.mm" PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
 )
