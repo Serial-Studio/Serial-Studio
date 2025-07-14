@@ -1,6 +1,9 @@
 {
   "fill" : {
-    "automatic-gradient" : "extended-srgb:0.00000,0.47843,1.00000,1.00000"
+    "linear-gradient" : [
+      "display-p3:0.23560,0.49219,0.76416,1.00000",
+      "display-p3:0.17578,0.21021,0.67529,1.00000"
+    ]
   },
   "groups" : [
     {
@@ -224,56 +227,6 @@
           }
         }
       ]
-    },
-    {
-      "hidden" : false,
-      "layers" : [
-        {
-          "glass" : false,
-          "hidden-specializations" : [
-            {
-              "value" : false
-            },
-            {
-              "idiom" : "square",
-              "value" : false
-            }
-          ],
-          "image-name" : "Serial Studio B L1.svg",
-          "name" : "Serial Studio B L1",
-          "opacity-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : 0
-            },
-            {
-              "appearance" : "tinted",
-              "value" : 1
-            }
-          ],
-          "position-specializations" : [
-            {
-              "idiom" : "watchOS",
-              "value" : {
-                "scale" : 1.07,
-                "translation-in-points" : [
-                  0,
-                  0
-                ]
-              }
-            }
-          ]
-        }
-      ],
-      "shadow" : {
-        "kind" : "none",
-        "opacity" : 0.5
-      },
-      "specular" : false,
-      "translucency" : {
-        "enabled" : false,
-        "value" : 0.5
-      }
     }
   ],
   "supported-platforms" : {
