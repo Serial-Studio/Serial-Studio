@@ -476,7 +476,7 @@ if(WIN32)
   set(CPACK_PACKAGE_ICON                "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\icon.ico")
   set(CPACK_PACKAGE_INSTALL_DIRECTORY   "${CPACK_PACKAGE_NAME}")
 else()
-  set(CPACK_PACKAGE_ICON                "${CMAKE_CURRENT_SOURCE_DIR}/doc/AppIcon.png")
+  set(CPACK_PACKAGE_ICON                "${CMAKE_CURRENT_SOURCE_DIR}/deploy/PackageIcon.png")
   set(CPACK_PACKAGE_INSTALL_DIRECTORY   "${CPACK_PACKAGE_NAME}")
 endif()
 
