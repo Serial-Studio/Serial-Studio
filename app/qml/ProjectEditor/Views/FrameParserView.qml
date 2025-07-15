@@ -27,6 +27,8 @@ import SerialStudio as SerialStudio
 import "../../Widgets" as Widgets
 
 Widgets.Pane {
+  id: root
+  focus: true
   icon: Cpp_JSON_ProjectModel.selectedIcon
   Component.onCompleted: Cpp_JSON_FrameBuilder.setFrameParser(frameParser)
   title: Cpp_JSON_ProjectModel.selectedText + (frameParser.isModified ? " (" + qsTr("modified") + ")" : "")
@@ -43,30 +45,39 @@ Widgets.Pane {
   // Shortcuts
   //
   Shortcut {
+    enabled: frameParser.activeFocus
     onActivated: frameParser.selectAll()
     sequences: [StandardKey.SelectAll]
   } Shortcut {
+    enabled: frameParser.activeFocus
     onActivated: frameParser.reload()
     sequences: [StandardKey.New]
   } Shortcut {
+    enabled: frameParser.activeFocus
     onActivated: frameParser.import()
     sequences: [StandardKey.Open]
   } Shortcut {
+    enabled: frameParser.activeFocus
     onActivated: frameParser.undo()
     sequences: [StandardKey.Undo]
   } Shortcut {
+    enabled: frameParser.activeFocus
     onActivated: frameParser.redo()
     sequences: [StandardKey.Redo]
   } Shortcut {
+    enabled: frameParser.activeFocus
     onActivated: frameParser.cut()
     sequences: [StandardKey.Cut]
   } Shortcut {
+    enabled: frameParser.activeFocus
     onActivated: frameParser.copy()
     sequences: [StandardKey.Copy]
   } Shortcut {
+    enabled: frameParser.activeFocus
     onActivated: frameParser.paste()
     sequences: [StandardKey.Paste]
   } Shortcut {
+    enabled: frameParser.activeFocus
     onActivated: frameParser.apply()
     sequences: [StandardKey.Save, StandardKey.SaveAs]
   }

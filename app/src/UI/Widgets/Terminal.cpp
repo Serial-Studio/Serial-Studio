@@ -1539,6 +1539,8 @@ void Widgets::Terminal::mousePressEvent(QMouseEvent *event)
     m_selectionStart = m_selectionStartCursor;
     m_selectionEnd = m_selectionStartCursor;
     m_stateChanged = true;
+
+    forceActiveFocus();
     Q_EMIT selectionChanged();
   }
 }

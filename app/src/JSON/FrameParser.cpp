@@ -29,6 +29,7 @@
 
 #include "JSON/FrameParser.h"
 #include "JSON/ProjectModel.h"
+#include <QtGui/qshortcut.h>
 
 #include "Misc/Utilities.h"
 #include "Misc/CommonFonts.h"
@@ -594,6 +595,7 @@ void JSON::FrameParser::mousePressEvent(QMouseEvent *event)
                         event->pointingDevice());
 
   DW_EXEC_EVENT(&m_widget, mousePressEvent, &eventCopy);
+  forceActiveFocus();
 }
 
 /**

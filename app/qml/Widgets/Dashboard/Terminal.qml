@@ -104,9 +104,11 @@ Item {
   //
   Shortcut {
     onActivated: root.selectAll()
+    enabled: terminal.activeFocus
     sequences: [StandardKey.SelectAll]
   } Shortcut {
     onActivated: root.copy()
+    enabled: terminal.activeFocus
     sequences: [StandardKey.Copy]
   }
 
