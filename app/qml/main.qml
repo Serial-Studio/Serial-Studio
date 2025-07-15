@@ -34,8 +34,7 @@ Item {
 
   //
   // Define application name
-  //
-  readonly property string appIcon: Cpp_CommercialBuild && Cpp_Licensing_LemonSqueezy.isActivated ? "qrc:/rcc/logo/icon-pro.png" : "qrc:/rcc/logo/icon.png"
+  // 
   readonly property bool proVersion: Cpp_CommercialBuild ? Cpp_Licensing_LemonSqueezy.isActivated || Cpp_Licensing_Trial.trialEnabled : false
 
   //

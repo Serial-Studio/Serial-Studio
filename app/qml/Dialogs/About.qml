@@ -152,14 +152,19 @@ Window {
         spacing: 8
         Layout.fillWidth: true
 
-        Image {
-          Layout.minimumWidth: 128
-          Layout.maximumWidth: 128
-          Layout.minimumHeight: 128
-          Layout.maximumHeight: 128
-          sourceSize: Qt.size(128, 128)
+        Item {
+          Layout.minimumWidth: 144
+          Layout.maximumWidth: 144
+          Layout.minimumHeight: 144
+          Layout.maximumHeight: 144
           Layout.alignment: Qt.AlignVCenter
-          source: Cpp_Misc_Utilities.hdpiImagePath(app.appIcon)
+
+          Image {
+            sourceSize.width: 128
+            anchors.centerIn: parent
+            source: Qt.platform.os === "osx" ? "qrc:/rcc/logo/icon-macOS.png" :
+                                               "qrc:/rcc/logo/icon.svg"
+          }
         }
 
         ColumnLayout {

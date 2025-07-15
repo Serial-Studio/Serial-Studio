@@ -86,7 +86,7 @@ Item {
       startMenu: true
       text: qsTr("Menu")
       implicitWidth: start.layout.implicitWidth + 8
-      icon.source: Cpp_Misc_Utilities.hdpiImagePath("qrc:/rcc/logo/start.png")
+      icon.source: Cpp_ThemeManager.parameters["start-icon"]
       onClicked: {
         root.startClicked()
         taskBar.activeWindow = null

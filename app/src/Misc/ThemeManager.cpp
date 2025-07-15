@@ -121,6 +121,15 @@ const QJsonObject &Misc::ThemeManager::themeData() const
 }
 
 /**
+ * @brief Fetches the current theme parameters as a QJsonObject.
+ * @return QJsonObject containing all the properties of the loaded theme.
+ */
+const QJsonObject &Misc::ThemeManager::parameters() const
+{
+  return m_parameters;
+}
+
+/**
  * @brief Returns a list of theme names that are available.
  * @return QStringList containing the names of all loaded themes.
  */
@@ -172,6 +181,7 @@ void Misc::ThemeManager::setTheme(const int index)
   // Load actual theme data
   m_themeData = m_themes.value(m_themeName);
   m_colors = m_themeData.value("colors").toObject();
+  m_parameters = m_themeData.value("parameters").toObject();
 
   // Hint Qt about the effective color scheme
   const auto bg = getColor(QStringLiteral("base"));

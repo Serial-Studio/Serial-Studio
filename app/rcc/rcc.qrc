@@ -163,6 +163,7 @@
         <file>icons/dashboard-buttons/labels.svg</file>
         <file>icons/dashboard-buttons/left_view.svg</file>
         <file>icons/dashboard-buttons/map.svg</file>
+        <file>icons/dashboard-buttons/nasa.svg</file>
         <file>icons/dashboard-buttons/orbit.svg</file>
         <file>icons/dashboard-buttons/orthogonal_view.svg</file>
         <file>icons/dashboard-buttons/pan.svg</file>
@@ -208,6 +209,7 @@
         <file>icons/licensing/devices.svg</file>
         <file>icons/licensing/email.svg</file>
         <file>icons/licensing/key.svg</file>
+        <file>icons/licensing/license.svg</file>
         <file>icons/licensing/plan.svg</file>
         <file>icons/licensing/user.svg</file>
         <file>icons/licensing/uuid.svg</file>
@@ -344,8 +346,7 @@
         <file>images/banner@2x.png</file>
         <file>images/buy-qr.svg</file>
         <file>images/code.svg</file>
-        <file>images/dialog-banner.png</file>
-        <file>images/dialog-banner@2x.png</file>
+        <file>images/dialog-banner.svg</file>
         <file>images/drag-and-drop.svg</file>
         <file>images/hammer.svg</file>
         <file>images/spinner.svg</file>
@@ -355,19 +356,12 @@
         <file>instruments/compass_background.svg</file>
         <file>instruments/compass_case.svg</file>
         <file>instruments/compass_needle.svg</file>
-        <file>logo/activation@1x.png</file>
-        <file>logo/activation@2x.png</file>
-        <file>logo/dekstop-icon.png</file>
-        <file>logo/icon-pro-small@1x.png</file>
-        <file>logo/icon-pro-small@2x.png</file>
-        <file>logo/icon-pro@1x.png</file>
-        <file>logo/icon-pro@2x.png</file>
-        <file>logo/icon@1x.png</file>
-        <file>logo/icon@2x.png</file>
-        <file>logo/small-icon@1x.png</file>
-        <file>logo/small-icon@2x.png</file>
-        <file>logo/start@1x.png</file>
-        <file>logo/start@2x.png</file>
+        <file>logo/desktop-icon.png</file>
+        <file>logo/icon-macOS.png</file>
+        <file>logo/icon-macOS@2x.png</file>
+        <file>logo/icon.svg</file>
+        <file>logo/start-dark.svg</file>
+        <file>logo/start.svg</file>
         <file>messages/gpl3/Welcome_CZ.txt</file>
         <file>messages/gpl3/Welcome_DE.txt</file>
         <file>messages/gpl3/Welcome_EN.txt</file>
@@ -420,6 +414,5 @@
         <file>themes/default.json</file>
         <file>themes/ironframe.json</file>
         <file>themes/light.json</file>
-        <file>icons/dashboard-buttons/nasa.svg</file>
     </qresource>
 </RCC>

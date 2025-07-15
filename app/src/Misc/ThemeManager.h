@@ -94,18 +94,21 @@ class ThemeManager : public QObject
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int theme
-                 READ theme
-                     WRITE setTheme
-                         NOTIFY themeChanged)
+             READ theme
+             WRITE setTheme
+             NOTIFY themeChanged)
   Q_PROPERTY(const QString& themeName
-                 READ themeName
-                     NOTIFY themeChanged)
+             READ themeName
+             NOTIFY themeChanged)
   Q_PROPERTY(const QJsonObject& colors
-                 READ colors
-                     NOTIFY themeChanged)
+             READ colors
+             NOTIFY themeChanged)
+  Q_PROPERTY(const QJsonObject& parameters
+             READ parameters
+             NOTIFY themeChanged)
   Q_PROPERTY(QStringList availableThemes
-                 READ availableThemes
-                     CONSTANT)
+             READ availableThemes
+             CONSTANT)
   // clang-format on
 
 signals:
@@ -125,6 +128,7 @@ public:
   [[nodiscard]] const QString &themeName() const;
   [[nodiscard]] const QJsonObject &colors() const;
   [[nodiscard]] const QJsonObject &themeData() const;
+  [[nodiscard]] const QJsonObject &parameters() const;
   [[nodiscard]] const QStringList &availableThemes() const;
   [[nodiscard]] QColor getColor(const QString &name) const;
 
@@ -143,6 +147,7 @@ private:
   QSettings m_settings;
   QJsonObject m_colors;
   QJsonObject m_themeData;
+  QJsonObject m_parameters;
 
   QStringList m_availableThemes;
   QMap<QString, QJsonObject> m_themes;

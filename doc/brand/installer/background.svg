@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="986" height="624" viewBox="0 0 986 624"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     style="clip-rule:evenodd;fill-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <defs>
+    <!-- Panel Gradient -->
+    <linearGradient id="leftPaneGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1B84C6"/>
+      <stop offset="100%" stop-color="#344DBF"/>
+    </linearGradient>
+
+    <!-- Icon Gradients -->
+    <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="-0.016" gradientUnits="userSpaceOnUse"
+                    gradientTransform="matrix(-206.925,-455.235,455.235,-206.925,718.456,510.255)">
+      <stop offset="0" stop-color="white"/>
+      <stop offset="0.23" stop-color="white"/>
+      <stop offset="0.53" stop-color="#6a8ed2"/>
+      <stop offset="1" stop-color="#6a8ed2"/>
+    </linearGradient>
+
+    <linearGradient id="_Linear2" x1="0" y1="0" x2="1" y2="0.014" gradientUnits="userSpaceOnUse"
+                    gradientTransform="matrix(-331.08,901.064,-901.064,-331.08,610.223,258.387)">
+      <stop offset="0" stop-color="white"/>
+      <stop offset="0.23" stop-color="white"/>
+      <stop offset="0.54" stop-color="#6a8ed2"/>
+      <stop offset="1" stop-color="#6a8ed2"/>
+    </linearGradient>
+
+    <!-- Subtle grid pattern -->
+    <pattern id="gridPattern" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M30 0 L0 0 0 30" fill="none" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background with rounded corners -->
+  <rect x="0" y="0" width="986" height="624" rx="12" ry="12" fill="#ffffff"/>
+
+  <!-- Left gradient panel with subtle grid overlay -->
+  <g mask="url(#signalMask)">
+    <rect x="0" y="0" width="296" height="624" fill="url(#leftPaneGradient)"/>
+    <rect x="0" y="0" width="296" height="624" fill="url(#gridPattern)" />
+  </g>
+
+  <!-- Thin shadow divider between panels -->
+  <rect x="296" y="0" width="1" height="624" fill="#000000" opacity="0.05"/>
+
+  <!-- Icon (preserved gradients) -->
+  <g transform="matrix(0.302,0,0,0.302,-6.53,157.29)">
+    <g transform="matrix(1.42433,0,0,1.45525,-217.274,-233.072)">
+      <path d="M490.918,395.423C512.988,335.417 601.28,322.286 626.12,381.2l8.733,19.574 66.171,148.305H856.033V427.172H780.099L667.716,175.276H575.616" fill="url(#_Linear1)"/>
+      <path d="M667.716,175.276H571.91L491.393,394.203c-.158.407-.323.807-.475,1.22l-90.977,247.352-19.965,58.095c-13.63,39.662-60.774,42.108-77.861,3.808l60.194,144.02h91.842l80.517-218.926c.158-.408.323-.807.475-1.22L626.12,381.2l19.965-58.095c13.63-39.662 68.798-42.109 85.885-3.808z" fill="url(#_Linear2)"/>
+      <path d="M535.143,628.552c-22.07,60.006-106.222,61.965-131.061,3.051l-75.78-182.86H167.99v121.958h78.869l115.214,277.997h92.1" fill="#FFFFFF"/>
+    </g>
+  </g>
+</svg>

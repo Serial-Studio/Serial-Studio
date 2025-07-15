@@ -1,7 +1,12 @@
 {
   "title": "Ironframe",
-  "code-editor-theme": "ironframe",
+  "parameters": {
+    "code-editor-theme": "ironframe",
+    "start-icon": "qrc:/rcc/logo/start.svg"
+  },
   "colors": {
+    "start-icon": "qrc:/rcc/logo/start.svg",
+
     "groupbox_border": "#B0B0B0",
     "groupbox_background": "#ECECEC",
     "groupbox_hard_border": "#A0A0A0",

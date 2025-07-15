@@ -125,9 +125,8 @@ Window {
         Image {
           id: banner
           Layout.leftMargin: -1
-          sourceSize.width: 151
-          sourceSize.height: 312
-          source: "qrc:/rcc/images/dialog-banner.png"
+          sourceSize.width: 164
+          source: "qrc:/rcc/images/dialog-banner.svg"
         } Rectangle {
           implicitWidth: 1
           Layout.fillHeight: true
@@ -219,6 +218,7 @@ Window {
 
             Item {
               Layout.fillHeight: true
+              implicitHeight: 12
             }
 
             RowLayout {
@@ -243,6 +243,7 @@ Window {
 
             Item {
               Layout.fillHeight: true
+              implicitHeight: 12
             }
           }
 

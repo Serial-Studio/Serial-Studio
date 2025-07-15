@@ -1,6 +1,9 @@
 {
   "title": "Default",
-  "code-editor-theme": "default",
+  "parameters": {
+    "code-editor-theme": "default",
+    "start-icon": "qrc:/rcc/logo/start-dark.svg"
+  },
   "colors": {
     "groupbox_border": "#c2c2c2",
     "groupbox_background": "#eff0f1",

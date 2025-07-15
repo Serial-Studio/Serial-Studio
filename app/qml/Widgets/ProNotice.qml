@@ -62,16 +62,20 @@ Rectangle {
     anchors.fill: parent
 
     //
-    // Pro icon
+    // Activate icon
     //
-    Image {
+    Item {
       Layout.minimumWidth: 96
       Layout.maximumWidth: 96
       Layout.minimumHeight: 96
       Layout.maximumHeight: 96
-      sourceSize: Qt.size(96, 96)
       Layout.alignment: Qt.AlignVCenter
-      source: Cpp_Misc_Utilities.hdpiImagePath("qrc:/rcc/logo/icon-pro.png")
+
+      Image {
+        sourceSize.width: 72
+        anchors.centerIn: parent
+        source: "qrc:/rcc/icons/toolbar/activate.svg"
+      }
     }
 
     //

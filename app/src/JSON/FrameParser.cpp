@@ -495,7 +495,7 @@ void JSON::FrameParser::selectAll()
 void JSON::FrameParser::onThemeChanged()
 {
   static const auto *t = &Misc::ThemeManager::instance();
-  const auto name = t->themeData().value("code-editor-theme").toString();
+  const auto name = t->parameters().value("code-editor-theme").toString();
   const auto path = QString(":/rcc/themes/code-editor/%1.xml").arg(name);
 
   QFile file(path);

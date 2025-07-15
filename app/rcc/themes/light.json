@@ -1,6 +1,9 @@
 {
   "title": "Light",
-  "code-editor-theme": "light",
+  "parameters": {
+    "code-editor-theme": "light",
+    "start-icon": "qrc:/rcc/logo/start.svg"
+  },
   "colors": {
     "groupbox_border": "#C1C5CB",
     "groupbox_background": "#FAFAFA",
