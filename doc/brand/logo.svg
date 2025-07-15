@@ -1,0 +1,49 @@
+<svg width="24" height="24" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/"
+     style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <defs>
+    <!-- Brighter Gradients -->
+    <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse"
+                    gradientTransform="matrix(429.855,0,0,673.422,302.115,511.987)">
+      <stop offset="0" style="stop-color:#5AC8FA;stop-opacity:1"/>
+      <stop offset="1" style="stop-color:#567DFF;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="_Linear2" x1="0" y1="0" x2="1" y2="-0.016" gradientUnits="userSpaceOnUse"
+                    gradientTransform="matrix(-206.925,-455.235,455.235,-206.925,718.456,510.255)">
+      <stop offset="0" style="stop-color:#5AC8FA;stop-opacity:1"/>
+      <stop offset="1" style="stop-color:#567DFF;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="_SolidBlue" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse"
+                    gradientTransform="matrix(500,0,0,1,0,0)">
+      <stop offset="0" style="stop-color:#57B9FF;stop-opacity:1"/>
+      <stop offset="1" style="stop-color:#3D78FF;stop-opacity:1"/>
+    </linearGradient>
+
+    <!-- Soft Drop Shadow -->
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="black" flood-opacity="0.15"/>
+    </filter>
+
+    <!-- Inner Glow -->
+    <filter id="innerGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feComposite in="blur" in2="SourceAlpha" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g transform="matrix(1.42433,0,0,1.45525,-217.274,-233.072)" filter="url(#softShadow)">
+    <g id="Layer-3" serif:id="Layer 3" filter="url(#innerGlow)">
+      <path d="M667.716,175.276L571.91,175.276L491.393,394.203C491.235,394.61 491.07,395.01 490.918,395.423L399.941,642.775L379.976,700.87C366.346,740.532 319.202,742.978 302.115,704.678L362.309,848.698L454.151,848.698L534.668,629.772C534.826,629.364 534.991,628.965 535.143,628.552L626.12,381.2L646.085,323.105C659.715,283.443 714.883,280.996 731.97,319.297L667.716,175.276Z" style="fill:url(#_Linear1);fill-rule:nonzero;"/>
+    </g>
+    <g id="Layer-2" serif:id="Layer 2" filter="url(#innerGlow)">
+      <path d="M490.918,395.423C512.988,335.417 601.28,322.286 626.12,381.2L634.853,400.774L701.024,549.079L856.033,549.079L856.033,427.172L780.099,427.172L667.716,175.276L575.616,175.276" style="fill:url(#_Linear2);fill-rule:nonzero;"/>
+    </g>
+    <g id="Layer-1" serif:id="Layer 1" filter="url(#innerGlow)">
+      <path d="M535.143,628.552C513.073,688.558 428.921,690.517 404.082,631.603L404.082,631.603L328.302,448.743L167.99,448.743L167.99,570.701L246.859,570.701L362.073,848.698L454.173,848.698" style="fill:url(#_SolidBlue);fill-rule:nonzero;"/>
+    </g>
+  </g>
+</svg>

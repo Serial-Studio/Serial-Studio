@@ -1,4 +1,4 @@
-# Serial Studio
+# ![Application Icon for Serial Studio](./doc/brand/logo.svg) Serial Studio
 
 [![GitHub downloads](https://img.shields.io/github/downloads/Serial-Studio/Serial-Studio/total.svg?logo=github)](https://github.com/Serial-Studio/Serial-Studio/releases/)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Serial-Studio/Serial-Studio)
