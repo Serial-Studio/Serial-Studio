@@ -158,9 +158,11 @@ void Widgets::Plot::draw(QXYSeries *series)
  */
 void Widgets::Plot::updateData()
 {
+  // Stop if widget is disabled
   if (!isEnabled())
     return;
 
+  // Only obtain data if widget data is still valid
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
   {
     // Get plotting data
@@ -174,11 +176,9 @@ void Widgets::Plot::updateData()
       m_data.resize(count);
 
     // Convert data to list of QPointF
+    QPointF *ptr = m_data.data();
     for (qsizetype i = 0; i < count; ++i)
-    {
-      m_data[i].rx() = X[i];
-      m_data[i].ry() = Y[i];
-    }
+      ptr[i] = QPointF(X[i], Y[i]);
   }
 }
 

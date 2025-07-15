@@ -200,28 +200,36 @@ void Widgets::MultiPlot::draw(QXYSeries *series, const int index)
  */
 void Widgets::MultiPlot::updateData()
 {
+  // Stop if widget is disabled
   if (!isEnabled())
     return;
 
+  // Only obtain data if widget data is still valid
   if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
   {
+    // Fetch multiplot source data (shared X axis, multiple Y series)
     const auto &data = UI::Dashboard::instance().multiplotData(m_index);
     const auto &X = *data.x;
 
+    // Ensure output container has one QVector<QPointF> per series
     const qsizetype plotCount = data.y.size();
+    m_data.resize(plotCount);
+
+    // Populate plot data
     for (qsizetype i = 0; i < plotCount; ++i)
     {
+      // Determine how many points we can safely plot for this series
       const auto &series = data.y[i];
-      const qsizetype seriesSize = std::min(X.size(), series.size());
+      const qsizetype count = std::min(X.size(), series.size());
 
-      if (m_data[i].size() != seriesSize)
-        m_data[i].resize(seriesSize);
+      // Resize output series if necessary
+      QVector<QPointF> &outSeries = m_data[i];
+      outSeries.resize(count);
 
-      for (qsizetype j = 0; j < seriesSize; ++j)
-      {
-        m_data[i][j].rx() = X[j];
-        m_data[i][j].ry() = series[j];
-      }
+      // Fill output buffer with QPointF(x, y) from shared X and current Y
+      QPointF *dst = outSeries.data();
+      for (qsizetype j = 0; j < count; ++j)
+        dst[j] = QPointF(X[j], series[j]);
     }
   }
 }
