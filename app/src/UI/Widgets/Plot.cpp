@@ -175,10 +175,23 @@ void Widgets::Plot::updateData()
     if (m_data.size() != count)
       m_data.resize(count);
 
-    // Convert data to list of QPointF
-    QPointF *ptr = m_data.data();
+    // Obtain raw pointers
+    QPointF *out = m_data.data();
+    const auto *xData = X.raw();
+    const auto *yData = Y.raw();
+
+    // Get queue states for faster iteration
+    std::size_t xIdx = X.frontIndex();
+    std::size_t yIdx = Y.frontIndex();
+
+    // Update plot data points, avoid queue operations overhead
     for (qsizetype i = 0; i < count; ++i)
-      ptr[i] = QPointF(X[i], Y[i]);
+    {
+      out[i].setX(xData[xIdx]);
+      out[i].setY(yData[yIdx]);
+      xIdx = (xIdx + 1) % X.capacity();
+      yIdx = (yIdx + 1) % Y.capacity();
+    }
   }
 }
 

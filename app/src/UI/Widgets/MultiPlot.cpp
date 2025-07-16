@@ -215,21 +215,43 @@ void Widgets::MultiPlot::updateData()
     const qsizetype plotCount = data.y.size();
     m_data.resize(plotCount);
 
-    // Populate plot data
+    // Get raw X pointer and state
+    const double *xData = X.raw();
+    std::size_t xIdx = X.frontIndex();
+    const std::size_t xCap = X.capacity();
+
+    // Populate data for each plot
     for (qsizetype i = 0; i < plotCount; ++i)
     {
-      // Determine how many points we can safely plot for this series
-      const auto &series = data.y[i];
-      const qsizetype count = std::min(X.size(), series.size());
+      // Get raw pointer to dashboard data
+      const auto &Y = data.y[i];
+      const double *yData = Y.raw();
 
-      // Resize output series if necessary
+      // Get queue states for faster iteration
+      std::size_t yIdx = Y.frontIndex();
+      const std::size_t yCap = Y.capacity();
+
+      // Obtain the length of the shortest axis
+      const qsizetype count = std::min(X.size(), Y.size());
+
+      // Resize plot data if needed
       QVector<QPointF> &outSeries = m_data[i];
-      outSeries.resize(count);
+      if (outSeries.size() != count)
+        outSeries.resize(count);
 
-      // Fill output buffer with QPointF(x, y) from shared X and current Y
+      // Keep local copies to avoid resetting each plot
+      std::size_t xi = xIdx;
+      std::size_t yi = yIdx;
+
+      // Update plot data points, avoid queue operations overhead
       QPointF *dst = outSeries.data();
       for (qsizetype j = 0; j < count; ++j)
-        dst[j] = QPointF(X[j], series[j]);
+      {
+        dst[j].setX(xData[xi]);
+        dst[j].setY(yData[yi]);
+        xi = (xi + 1) % xCap;
+        yi = (yi + 1) % yCap;
+      }
     }
   }
 }

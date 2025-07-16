@@ -152,6 +152,15 @@ public:
   [[nodiscard]] bool empty() const { return m_size == 0; }
 
   /**
+   * @brief Returns the internal index of the front (oldest) element.
+   * This is the raw index into the underlying buffer where the first valid
+   * element resides. Useful for direct buffer access or optimized iteration.
+   *
+   * @return Index of the front element in the internal array.
+   */
+  [[nodiscard]] std::size_t frontIndex() const { return m_start; }
+
+  /**
    * @brief Provides read-only access to an element at a given index.
    *
    * @param index Index relative to the logical front of the queue.
