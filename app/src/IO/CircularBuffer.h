@@ -228,18 +228,19 @@ T IO::CircularBuffer<T, StorageType>::read(qsizetype size)
   if (size > m_size)
     throw std::underflow_error("Not enough data in buffer");
 
-  QByteArray result;
+  T result;
   result.resize(size);
 
-  for (qsizetype i = 0; i < size; ++i)
-  {
-    result[i] = m_buffer[m_head];
-    m_head = (m_head + 1) % m_capacity;
-  }
+  const qsizetype firstChunk = std::min(size, m_capacity - m_head);
+  std::memcpy(result.data(), &m_buffer[m_head], firstChunk);
 
+  if (size > firstChunk)
+    std::memcpy(result.data() + firstChunk, &m_buffer[0], size - firstChunk);
+
+  m_head = (m_head + size) % m_capacity;
   m_size -= size;
 
-  return result;
+  return std::move(result);
 }
 
 /**
@@ -273,7 +274,8 @@ T IO::CircularBuffer<T, StorageType>::peek(qsizetype size) const
     std::memcpy(result.data() + firstChunk, &m_buffer[0], secondChunk);
   }
 
-  return result;
+  return std::move(result);
+  ;
 }
 
 /**
