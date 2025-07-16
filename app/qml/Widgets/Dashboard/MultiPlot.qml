@@ -81,7 +81,6 @@ Item {
     function onTimeout24Hz() {
       if (root.visible && root.running) {
         root.model.updateData()
-        root.model.calculateAutoScaleRange()
 
         const count = plot.graph.seriesList.length
         for (let i = 0; i < count; ++i) {
@@ -92,6 +91,16 @@ Item {
             ptr.clear()
         }
       }
+    }
+  }
+
+  //
+  // Re-draw whole plot when curves changes
+  //
+  Connections {
+    target: root.model
+
+    function onCurvesChanged() {
     }
   }
 

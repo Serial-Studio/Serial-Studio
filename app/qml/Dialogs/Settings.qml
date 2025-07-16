@@ -34,7 +34,6 @@ Window {
   // Window options
   //
   title: qsTr("Preferences")
-  modality: Qt.WindowModal
   minimumWidth: layout.implicitWidth + 32
   maximumWidth: layout.implicitWidth + 32
   minimumHeight: layout.implicitHeight + 32
@@ -42,6 +41,7 @@ Window {
   Component.onCompleted: {
     root.flags = Qt.Dialog |
         Qt.WindowTitleHint |
+        Qt.WindowStaysOnTopHint |
         Qt.WindowCloseButtonHint
   }
 

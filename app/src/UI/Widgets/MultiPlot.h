@@ -96,6 +96,7 @@ private:
   QString m_yLabel;
   QStringList m_colors;
   QStringList m_labels;
+  QList<int> m_drawOrders;
   QList<bool> m_visibleCurves;
   QVector<QVector<QPointF>> m_data;
 };

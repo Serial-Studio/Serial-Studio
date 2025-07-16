@@ -43,10 +43,6 @@ Window {
   minimumHeight: 480 + 32
   maximumHeight: 480 + 32
   title: qsTr("Select Icon")
-
-  //
-  // Make window stay on top
-  //
   Component.onCompleted: {
     root.flags = Qt.Dialog |
         Qt.WindowTitleHint |

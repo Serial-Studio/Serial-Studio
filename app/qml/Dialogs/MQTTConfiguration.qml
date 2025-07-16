@@ -41,10 +41,6 @@ Window {
   maximumWidth: column.implicitWidth + 32
   minimumHeight: column.implicitHeight + root.titlebarHeight + 32
   maximumHeight: column.implicitHeight + root.titlebarHeight + 32
-
-  //
-  // Make window stay on top
-  //
   Component.onCompleted: {
     root.flags = Qt.Dialog |
         Qt.WindowTitleHint |

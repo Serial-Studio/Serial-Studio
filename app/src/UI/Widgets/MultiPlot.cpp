@@ -49,6 +49,7 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
     {
       const auto &dataset = group.datasets()[i];
 
+      m_drawOrders.append(i);
       m_visibleCurves.append(true);
       m_labels.append(dataset.title());
       m_minY = qMin(m_minY, qMin(dataset.min(), dataset.max()));
@@ -191,6 +192,13 @@ void Widgets::MultiPlot::draw(QXYSeries *series, const int index)
   if (series && index >= 0 && index < count() && m_visibleCurves[index])
   {
     series->replace(m_data[index]);
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+    const int drawOrder = m_drawOrders.indexOf(index);
+    if (series->drawOrder() != drawOrder)
+      series->setDrawOrder(drawOrder);
+#endif
+
     Q_EMIT series->update();
   }
 }
@@ -223,6 +231,10 @@ void Widgets::MultiPlot::updateData()
     // Populate data for each plot
     for (qsizetype i = 0; i < plotCount; ++i)
     {
+      // Skip if curve is not visible
+      if (!m_visibleCurves[i])
+        continue;
+
       // Get raw pointer to dashboard data
       const auto &Y = data.y[i];
       const double *yData = Y.raw();
@@ -253,6 +265,9 @@ void Widgets::MultiPlot::updateData()
         yi = (yi + 1) % yCap;
       }
     }
+
+    // Calculate auto scale range
+    calculateAutoScaleRange();
   }
 }
 
@@ -434,6 +449,12 @@ void Widgets::MultiPlot::modifyCurveVisibility(const int index,
   if (index >= 0 && index < m_visibleCurves.count())
   {
     m_visibleCurves[index] = visible;
+    if (visible)
+    {
+      m_drawOrders.removeAll(index);
+      m_drawOrders.append(index);
+    }
+
     Q_EMIT curvesChanged();
   }
 }

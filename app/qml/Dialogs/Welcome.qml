@@ -39,10 +39,6 @@ Window {
   maximumWidth: layout.implicitWidth
   minimumHeight: layout.implicitHeight
   maximumHeight: layout.implicitHeight
-
-  //
-  // Make window stay on top
-  //
   Component.onCompleted: {
     root.flags = Qt.Dialog |
         Qt.WindowTitleHint |
