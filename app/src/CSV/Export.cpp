@@ -31,6 +31,7 @@
 #  include "MQTT/Client.h"
 #endif
 
+#include <QDir>
 #include <QDateTime>
 
 /**
