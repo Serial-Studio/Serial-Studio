@@ -77,14 +77,19 @@ if(BUILD_COMMERCIAL)
     ${QT_MODULES}
     Mqtt
     SerialBus
-    Multimedia
   )
   set(QT_LIBS
     ${QT_LIBS}
     Qt6::Mqtt
     Qt6::SerialBus
-    Qt6::Multimedia
   )
+
+  if(LINUX)
+    set(QT_LIBS
+      ${QT_LIBS}
+      asound
+    )
+  endif()
 endif()
 
 # Find the Qt package and its modules
@@ -206,6 +211,9 @@ set(HEADERS
   src/JSON/FrameBuilder.h
   src/CSV/Export.h
   src/CSV/Player.h
+  src/ThirdParty/atomicops.h
+  src/ThirdParty/readerwriterqueue.h
+  src/ThirdParty/readerwritercircularbuffer.h
   src/AppInfo.h
   src/SerialStudio.h
 )
@@ -223,19 +231,20 @@ if(BUILD_COMMERCIAL)
     src/Licensing/MachineID.h
     src/Licensing/SimpleCrypt.h
     src/Licensing/LemonSqueezy.h
+    src/ThirdParty/miniaudio.h
   )
-  set(SOURCES
-    ${SOURCES}
-    src/MQTT/Client.cpp
-    src/IO/Drivers/Audio.cpp
-    src/IO/Drivers/CANBus.cpp
-    src/IO/Drivers/Modbus.cpp
-    src/UI/Widgets/Plot3D.cpp
-    src/Licensing/Trial.cpp
-    src/Licensing/MachineID.cpp
-    src/Licensing/SimpleCrypt.cpp
-    src/Licensing/LemonSqueezy.cpp
-  )
+set(SOURCES
+  ${SOURCES}
+  src/MQTT/Client.cpp
+  src/IO/Drivers/Audio.cpp
+  src/IO/Drivers/CANBus.cpp
+  src/IO/Drivers/Modbus.cpp
+  src/UI/Widgets/Plot3D.cpp
+  src/Licensing/Trial.cpp
+  src/Licensing/MachineID.cpp
+  src/Licensing/SimpleCrypt.cpp
+  src/Licensing/LemonSqueezy.cpp
+)
 endif()
 
 #-------------------------------------------------------------------------------
@@ -414,10 +423,10 @@ elseif(UNIX)
     DESTINATION share/pixmaps
   )
 
-  install(
-    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.metainfo.xml
-    DESTINATION share/metainfo
-  )
+install(
+  FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.metainfo.xml
+  DESTINATION share/metainfo
+)
 
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.desktop

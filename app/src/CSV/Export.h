@@ -22,34 +22,64 @@
 #pragma once
 
 #include <QFile>
+#include <QMutex>
+#include <QTimer>
+#include <QThread>
 #include <QVector>
 #include <QObject>
-#include <QVariant>
-#include <QDateTime>
 #include <QTextStream>
-#include <QJsonObject>
 
 #include "JSON/Frame.h"
+#include "ThirdParty/readerwriterqueue.h"
 
 namespace CSV
 {
 /**
- * @brief The Export class
+ * @brief Represents a single timestamped frame for CSV export.
  *
- * The CSV export class receives data from the @c IO::Manager class and
- * exports the received frames into a CSV file selected by the user.
- *
- * CSV-data is generated periodically each time the @c Misc::TimerEvents
- * low-frequency timer expires (e.g. every 1 second). The idea behind this
- * is to allow exporting data, but avoid freezing the application when serial
- * data is received continuously.
+ * Stores a JSON frame and the associated reception timestamp (in local time).
+ * Designed to be move-only for performance reasons, especially when using
+ * concurrent queues.
  */
-typedef struct
+struct TimestampFrame
 {
-  JSON::Frame data;
-  QDateTime rxDateTime;
-} TimestampFrame;
+  JSON::Frame data;     ///< The actual data frame.
+  QDateTime rxDateTime; ///< Time at which the frame was received.
 
+  /**
+   * @brief Default constructor.
+   */
+  TimestampFrame() {}
+
+  /**
+   * @brief Constructs a timestamped frame with current time.
+   *
+   * @param d The data frame (moved).
+   */
+  TimestampFrame(JSON::Frame &&d)
+    : data(std::move(d))
+    , rxDateTime(QDateTime::currentDateTime())
+  {
+  }
+
+  // Disable copy constructs and use standard move assignments
+  TimestampFrame(TimestampFrame &&) = default;
+  TimestampFrame(const TimestampFrame &) = delete;
+  TimestampFrame &operator=(TimestampFrame &&) = default;
+  TimestampFrame &operator=(const TimestampFrame &) = delete;
+};
+
+/**
+ * @brief Handles CSV export of incoming data frames.
+ *
+ * The Export class collects incoming JSON frames tagged with a timestamp,
+ * writes them asynchronously to a CSV file, and manages output buffering
+ * and formatting.
+ *
+ * This class is implemented as a singleton and runs a background thread
+ * to offload file I/O operations. It supports enabling/disabling export
+ * dynamically and integrates with external modules (IO manager, MQTT, etc.).
+ */
 class Export : public QObject
 {
   // clang-format off
@@ -92,12 +122,17 @@ private slots:
   void registerFrame(const JSON::Frame &frame);
 
 private:
-  QVector<QPair<int, QString>> createCsvFile(const CSV::TimestampFrame &frame);
+  QVector<QPair<int, QString>> createCsvFile(const JSON::Frame &frame);
 
 private:
   QFile m_csvFile;
+  QMutex m_queueLock;
   bool m_exportEnabled;
+  QTimer *m_workerTimer;
+  QThread m_workerThread;
   QTextStream m_textStream;
-  QVector<TimestampFrame> m_frames;
+  std::vector<TimestampFrame> m_writeBuffer;
+  QVector<QPair<int, QString>> m_indexHeaderPairs;
+  moodycamel::ReaderWriterQueue<TimestampFrame> m_pendingFrames{8128};
 };
 } // namespace CSV

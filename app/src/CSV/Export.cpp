@@ -21,16 +21,9 @@
 
 #include "Export.h"
 
-#include <QDir>
-#include <QUrl>
-#include <QFileInfo>
-#include <QApplication>
-#include <QDesktopServices>
-
 #include "IO/Manager.h"
 #include "CSV/Player.h"
 #include "Misc/Utilities.h"
-#include "Misc/TimerEvents.h"
 #include "JSON/FrameBuilder.h"
 #include "Misc/WorkspaceManager.h"
 
@@ -38,25 +31,66 @@
 #  include "MQTT/Client.h"
 #endif
 
+#include <QDateTime>
+
 /**
- * Constructor function, configures the path in which Serial Studio shall
- * automatically write generated CSV files.
+ * @brief Constructs the CSV export manager.
+ *
+ * Initializes the write buffer, sets up the background worker thread
+ * and starts a timer for periodic data export.
  */
 CSV::Export::Export()
   : m_exportEnabled(true)
+  , m_workerTimer(new QTimer())
 {
+  // Pre-allocate memory for the write buffer
+  m_writeBuffer.reserve(m_pendingFrames.max_capacity());
+
+  // Configure the data write timer
+  m_workerTimer->setInterval(1000);
+  m_workerTimer->setTimerType(Qt::PreciseTimer);
+  m_workerTimer->moveToThread(&m_workerThread);
+  connect(m_workerTimer, &QTimer::timeout, this, &Export::writeValues,
+          Qt::QueuedConnection);
+
+  // Start the data writting thread
+  m_workerThread.start();
+  connect(&m_workerThread, &QThread::finished, m_workerTimer,
+          &QObject::deleteLater);
+
+  // Start the data writting timer
+  QMetaObject::invokeMethod(m_workerTimer, "start", Qt::QueuedConnection);
 }
 
 /**
- * Close file & finnish write-operations before destroying the class.
+ * @brief Destructor for the export manager.
+ *
+ * Ensures all data is flushed to disk, stops the background thread
+ * and cleans up the timer.
  */
 CSV::Export::~Export()
 {
+  // Close the file
   closeFile();
+
+  // Stop the worker thread
+  if (m_workerTimer)
+  {
+    QMetaObject::invokeMethod(m_workerTimer, "stop", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(m_workerTimer, "deleteLater",
+                              Qt::QueuedConnection);
+    m_workerTimer = nullptr;
+  }
+
+  // Wait for the worker thread to finish before quitting
+  m_workerThread.quit();
+  m_workerThread.wait();
 }
 
 /**
- * Returns a pointer to the only instance of this class.
+ * @brief Singleton access to the export manager.
+ *
+ * @return Reference to the global instance.
  */
 CSV::Export &CSV::Export::instance()
 {
@@ -65,7 +99,9 @@ CSV::Export &CSV::Export::instance()
 }
 
 /**
- * Returns @c true if the CSV output file is open.
+ * @brief Checks whether a CSV file is currently open.
+ *
+ * @return true if file is open, false otherwise.
  */
 bool CSV::Export::isOpen() const
 {
@@ -73,7 +109,9 @@ bool CSV::Export::isOpen() const
 }
 
 /**
- * Returns @c true if CSV export is enabled.
+ * @brief Checks whether CSV export is currently enabled.
+ *
+ * @return true if export is enabled, false otherwise.
  */
 bool CSV::Export::exportEnabled() const
 {
@@ -81,8 +119,9 @@ bool CSV::Export::exportEnabled() const
 }
 
 /**
- * Configures the signal/slot connections with the rest of the modules of the
- * application.
+ * @brief Sets up connections with other modules.
+ *
+ * Links to IO and JSON frame events to control export behavior.
  */
 void CSV::Export::setupExternalConnections()
 {
@@ -90,8 +129,6 @@ void CSV::Export::setupExternalConnections()
           &Export::closeFile);
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
           this, &Export::registerFrame);
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
-          &Export::writeValues);
   connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this, [=] {
     if (IO::Manager::instance().paused())
       closeFile();
@@ -99,150 +136,134 @@ void CSV::Export::setupExternalConnections()
 }
 
 /**
- * Enables or disables data export.
+ * @brief Enables or disables CSV export.
+ *
+ * When disabling, writes remaining data to disk and closes the file.
+ *
+ * @param enabled True to enable export, false to disable.
  */
 void CSV::Export::setExportEnabled(const bool enabled)
 {
+  // Write all pending data to disk & close file
+  if (!enabled && isOpen())
+    closeFile();
+
+  // Update the enabled status
   m_exportEnabled = enabled;
   Q_EMIT enabledChanged();
-
-  if (!exportEnabled() && isOpen())
-  {
-    m_frames.clear();
-    m_frames.squeeze();
-    closeFile();
-  }
 }
 
 /**
- * Write all remaining JSON frames & close the CSV file.
+ * @brief Closes the currently open CSV file.
+ *
+ * Flushes any buffered data to disk, clears headers, and resets output.
  */
 void CSV::Export::closeFile()
 {
-  if (isOpen())
-  {
-    while (!m_frames.isEmpty())
-      writeValues();
+  // No point in closing a file that is not open...
+  if (!isOpen())
+    return;
 
-    m_csvFile.close();
-    m_textStream.setDevice(nullptr);
+  // Write pending data to disk
+  writeValues();
 
-    Q_EMIT openChanged();
-  }
+  // Close the file & reset the status
+  m_csvFile.close();
+  m_indexHeaderPairs.clear();
+  m_textStream.setDevice(nullptr);
+
+  // Update UI
+  Q_EMIT openChanged();
 }
 
 /**
- * @brief Writes frame data to the current CSV file.
+ * @brief Writes all queued frames to the CSV file.
  *
- * This function writes the data from all stored frames (`m_frames`) to the
- * currently open CSV file. It ensures that values in each row are written
- * in the same order as the headers, based on dataset indexes.
- *
- * If the file is not open, it creates the CSV file using the first frame and
- * sets up the headers before writing data. Missing dataset values are replaced
- * with empty strings.
- *
- * After writing, the stream is flushed to ensure the data is saved, and
- * the frame buffer (`m_frames`) is cleared.
+ * Flushes data in `m_pendingFrames` to disk using the output stream.
+ * If no file is open, a new file is created before writing.
  */
 void CSV::Export::writeValues()
 {
-  // Initialize a list of pairs between indexes & headers
-  static QVector<QPair<int, QString>> indexHeaderPairs;
+  // Export disabled, abort
+  if (!exportEnabled())
+    return;
 
-  // Write each frame
-  for (auto i = m_frames.begin(); i != m_frames.end(); ++i)
+  // Reset the write buffer
+  m_writeBuffer.clear();
+
+  // Read frames in queue
+  TimestampFrame frame;
+  while (m_pendingFrames.try_dequeue(frame))
+    m_writeBuffer.push_back(std::move(frame));
+
+  // Nothing to write, abort
+  if (m_writeBuffer.size() <= 0)
+    return;
+
+  // File deleted, create new file
+  if (!isOpen())
   {
-    // File not open, create it & add cell titles
-    if (!isOpen() && exportEnabled())
-    {
-      indexHeaderPairs.clear();
-      indexHeaderPairs.squeeze();
-      indexHeaderPairs = createCsvFile(*i);
-    }
-
-    // Continue if index/header pairs is not empty
-    if (indexHeaderPairs.isEmpty())
+    m_indexHeaderPairs = createCsvFile(m_writeBuffer.begin()->data);
+    if (m_indexHeaderPairs.isEmpty())
       return;
+  }
 
-    // Obtain frame data
-    const auto &data = i->data;
-    const auto &rxTime = i->rxDateTime;
-
+  // Write every frame to the CSV file
+  for (const auto &i : m_writeBuffer)
+  {
     // Write RX date/time
     const auto format = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
-    m_textStream << rxTime.toString(format) << QStringLiteral(",");
+    m_textStream << i.rxDateTime.toString(format) << QStringLiteral(",");
 
-    // Write frame data in the order of sorted fields
-    const auto &groups = data.groups();
+    // Obtain a set of unique dataset values (based on dataset index)
     QMap<int, QString> fieldValues;
-
-    // Iterate through groups and datasets to collect field values
-    for (auto g = groups.constBegin(); g != groups.constEnd(); ++g)
+    for (const auto &g : i.data.groups())
     {
-      const auto &datasets = g->datasets();
-      for (auto d = datasets.constBegin(); d != datasets.constEnd(); ++d)
-        fieldValues[d->index()] = d->value().simplified();
+      for (const auto &d : g.datasets())
+        fieldValues[d.index()] = d.value().simplified();
     }
 
-    // Write data according to the sorted field order
-    for (int j = 0; j < indexHeaderPairs.count(); ++j)
+    // Write data to output stream
+    for (int j = 0; j < m_indexHeaderPairs.count(); ++j)
     {
-      // Print value for current pair
-      const auto fieldIndex = indexHeaderPairs[j].first;
-      m_textStream << fieldValues.value(fieldIndex, QLatin1String(""));
-
-      // Add comma or newline based on the position in the row
-      if (j < indexHeaderPairs.count() - 1)
-        m_textStream << QStringLiteral(",");
-      else
-        m_textStream << QStringLiteral("\n");
+      m_textStream << fieldValues.value(m_indexHeaderPairs[j].first, "");
+      m_textStream << (j < m_indexHeaderPairs.count() - 1 ? "," : "\n");
     }
   }
 
-  // Flush the stream to writte it to the hard disk
+  // Flush the output stream to the disk
   m_textStream.flush();
-
-  // Clear frames
-  m_frames.clear();
-  m_frames.squeeze();
-  m_frames.reserve(1000);
 }
 
 /**
- * @brief Creates and initializes a new CSV file for exporting frame data.
+ * @brief Creates a new CSV file and writes the header.
  *
- * This function generates a CSV file in a project-specific directory using the
- * frame's data and timestamps. The dataset headers are added to the CSV file,
- * sorted by their indexes, ensuring ordered column headers. If the file cannot
- * be created or opened, an error message is displayed, and the function returns
- * an empty vector.
+ * Builds a sorted header based on dataset indices and opens the file
+ * in the appropriate location.
  *
- * @param frame The frame containing data and timestamp information.
- * @return A vector of pairs, each containing a dataset index and its
- * corresponding header string, sorted by the dataset index.
+ * @param frame The frame used to extract header information.
+ * @return List of index-title pairs for each dataset.
  */
 QVector<QPair<int, QString>>
-CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
+CSV::Export::createCsvFile(const JSON::Frame &frame)
 {
-  // Obtain frame data
-  const auto &data = frame.data;
-  const auto &rxTime = frame.rxDateTime;
+  // Get filename based on date time
+  const auto dt = QDateTime::currentDateTime();
+  const auto fileName = dt.toString("yyyy-MM-dd_HH-mm-ss") + ".csv";
 
-  // Get file name
-  const auto fileName = rxTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss"))
-                        + QStringLiteral(".csv");
+  // Get file path
+  const auto subdir = Misc::WorkspaceManager::instance().path("CSV");
+  const QString path = QString("%1/%2/").arg(subdir, frame.title());
 
-  // Get path
-  const QString path = QStringLiteral("%1/%2/").arg(
-      Misc::WorkspaceManager::instance().path("CSV"), data.title());
-
-  // Generate file path if required
+  // Create the CSVs directory if needed
   QDir dir(path);
-  if (!dir.exists())
-    dir.mkpath(QStringLiteral("."));
+  if (!dir.exists() && !dir.mkpath("."))
+  {
+    qWarning() << "Failed to create directory:" << path;
+    return {};
+  }
 
-  // Open file
+  // Open the CSV file for writting
   m_csvFile.setFileName(dir.filePath(fileName));
   if (!m_csvFile.open(QIODevice::WriteOnly | QIODevice::Text))
   {
@@ -250,10 +271,10 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
                                     tr("Cannot open CSV file for writing!"),
                                     QMessageBox::Critical);
     closeFile();
-    return QVector<QPair<int, QString>>();
+    return {};
   }
 
-  // Add cell titles & force UTF-8 codec
+  // Configure the output stream to use the file, and set data mode to UTF-8
   m_textStream.setDevice(&m_csvFile);
   m_textStream.setGenerateByteOrderMark(true);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -262,69 +283,55 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
   m_textStream.setEncoding(QStringConverter::Utf8);
 #endif
 
-  // Get number of fields by counting datasets with non-duplicated indexes
-  QVector<QString> headers;
-  QVector<int> datasetIndexes;
-  const auto &groups = data.groups();
-  for (auto g = groups.constBegin(); g != groups.constEnd(); ++g)
+  // Create a list of pairs that relate dataset indexes to header titles
+  QSet<int> seenIndexes;
+  QVector<QPair<int, QString>> pairs;
+  for (const auto &g : frame.groups())
   {
-    const auto &datasets = g->datasets();
-    for (auto d = datasets.constBegin(); d != datasets.constEnd(); ++d)
+    for (const auto &d : g.datasets())
     {
-      if (!datasetIndexes.contains(d->index()))
-      {
-        auto header = QString("%1/%2").arg(g->title(), d->title()).simplified();
-        datasetIndexes.append(d->index());
-        headers.append(header);
-      }
+      const int idx = d.index();
+      if (seenIndexes.contains(idx))
+        continue;
+
+      seenIndexes.insert(idx);
+      auto header = QString("%1/%2").arg(g.title(), d.title()).simplified();
+      pairs.append(qMakePair(idx, header));
     }
   }
 
-  // Combine fields and headers into pairs for sorting
-  QVector<QPair<int, QString>> fieldHeaderPairs;
-  for (int i = 0; i < datasetIndexes.count(); ++i)
-    fieldHeaderPairs.append(qMakePair(datasetIndexes[i], headers[i]));
+  // Sort the pairs by their dataset index
+  std::sort(pairs.begin(), pairs.end(),
+            [](const auto &a, const auto &b) { return a.first < b.first; });
 
-  // Sort the pairs based on the field values (first element of the pair)
-  std::sort(fieldHeaderPairs.begin(), fieldHeaderPairs.end(),
-            [](const QPair<int, QString> &a, const QPair<int, QString> &b) {
-              return a.first < b.first;
-            });
+  // Write CSV header
+  m_textStream << "RX Date/Time";
+  for (const auto &pair : pairs)
+    m_textStream << ',' << pair.second;
 
-  // Add CSV header directly from sorted pairs
-  m_textStream << QStringLiteral("RX Date/Time,");
-  for (int i = 0; i < fieldHeaderPairs.count(); ++i)
-  {
-    m_textStream << fieldHeaderPairs[i].second;
-    if (i < fieldHeaderPairs.count() - 1)
-      m_textStream << QStringLiteral(",");
-    else
-      m_textStream << QStringLiteral("\n");
-  }
+  // Add EOL to header line
+  m_textStream << '\n';
 
-  // Update UI
+  // Update user interface & return the data model
   Q_EMIT openChanged();
-  return fieldHeaderPairs;
+  return pairs;
 }
 
 /**
- * Appends the latest frame from the device to the output buffer.
+ * @brief Registers a new data frame for export.
+ *
+ * Pushes the frame into the pending queue for async export if conditions are
+ * met.
+ *
+ * @param frame The data frame to export.
  */
 void CSV::Export::registerFrame(const JSON::Frame &frame)
 {
-  // Ignore if CSV export is disabled
-  if (!exportEnabled())
+  // Skip if export is disabled, frame is invalid or user is playing a CSV file
+  if (!exportEnabled() || !frame.isValid() || CSV::Player::instance().isOpen())
     return;
 
-  // Don't generate a CSV file when we are playing a CSV file
-  if (CSV::Player::instance().isOpen())
-    return;
-
-  // Ignore if frame is invalid
-  if (!frame.isValid())
-    return;
-
-  // Don't save CSV data when the device/service is not connected
+  // Skip if not connected to a device
 #ifdef BUILD_COMMERCIAL
   if (!IO::Manager::instance().isConnected()
       && !(MQTT::Client::instance().isConnected()
@@ -335,9 +342,7 @@ void CSV::Export::registerFrame(const JSON::Frame &frame)
     return;
 #endif
 
-  // Register raw frame to list
-  TimestampFrame tframe;
-  tframe.data = std::move(frame);
-  tframe.rxDateTime = QDateTime::currentDateTime();
-  m_frames.append(tframe);
+  // Add frame to pending frame queue
+  if (!m_pendingFrames.enqueue(TimestampFrame(JSON::Frame(frame))))
+    qWarning() << "CSV Export: Dropping frame (queue full)";
 }

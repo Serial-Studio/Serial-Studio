@@ -82,11 +82,7 @@ jobs:
           libegl1 \
           libfuse2 \
           libgl1-mesa-dev \
-          libgstreamer1.0-0 \
-          libgstreamer-plugins-base1.0-0 \
-          libgstreamer-plugins-good1.0-0 \
-          libgstreamer-gl1.0-0 \
-          libpulse-dev \
+          libasound2-dev \
           libssl-dev \
           libudev-dev \
           libzstd-dev \
@@ -225,8 +221,7 @@ jobs:
           libegl1 \
           libfuse2 \
           libgl1-mesa-dev \
-          libpulse-dev \
-          pulseaudio \
+          libasound2-dev \
           libssl-dev \
           libudev-dev \
           libzstd-dev \
@@ -253,22 +248,7 @@ jobs:
           libxcb-xtest0 \
           libxkbcommon-dev \
           libxkbcommon-x11-0 \
-          libxkbcommon-x11-dev \
-          libgstreamer1.0-dev \
-          libgstreamer-plugins-bad1.0-dev \
-          libgstreamer-plugins-base1.0-dev \
-          libgstreamer-plugins-good1.0-dev \
-          libgstreamer-gl1.0-0 \
-          gstreamer1.0-plugins-bad \
-          gstreamer1.0-plugins-base \
-          gstreamer1.0-plugins-good \
-          gstreamer1.0-plugins-ugly \
-          gstreamer1.0-plugins-rtp \
-          gstreamer1.0-gl \
-          gstreamer1.0-libav \
-          gstreamer1.0-rtsp \
-          gstreamer1.0-x \
-          gstreamer1.0-qt6
+          libxkbcommon-x11-dev
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3

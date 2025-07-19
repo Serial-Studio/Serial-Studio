@@ -247,6 +247,9 @@ Widgets.Pane {
         model: Cpp_IO_Manager.availableBuses
         displayText: qsTr("I/O Interface: %1").arg(currentText)
         onCurrentIndexChanged: {
+          if (currentIndex < 0 || count <= currentIndex)
+            currentIndex = 0
+
           if (Cpp_IO_Manager.busType !== currentIndex)
             Cpp_IO_Manager.busType = currentIndex
         }

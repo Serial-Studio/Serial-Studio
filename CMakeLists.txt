@@ -264,6 +264,7 @@ if(PRODUCTION_OPTIMIZATION)
       )
       add_link_options(
          -Wl,--gc-sections              # Remove unused code/data
+         -latomic                       # Required for MiniAudio
       )
 
    # Generic x86_64 Linux (GCC or Clang)

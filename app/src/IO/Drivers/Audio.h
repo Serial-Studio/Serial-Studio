@@ -22,60 +22,41 @@
 
 #pragma once
 
+//------------------------------------------------------------------------------
+// Class declaration & Qt Libs
+//------------------------------------------------------------------------------
+
 #include <QMap>
+#include <QMutex>
+#include <QTimer>
+#include <QThread>
 #include <QVector>
 #include <QObject>
-#include <QAudioFormat>
-#include <QAudioDevice>
-#include <QElapsedTimer>
+
+#include <QBuffer>
+#include <QTextStream>
 
 #include "IO/HAL_Driver.h"
-
-class QAudioSink;
-class QAudioSource;
+#include "ThirdParty/miniaudio.h"
 
 namespace IO
 {
 namespace Drivers
 {
-/**
- * @class IO::Drivers::Audio
- * @brief High-level audio I/O driver for input/output stream capture and
- *        playback.
- *
- * This class handles configuration, device enumeration, data format selection,
- * and streaming for both input (e.g., microphone) and output (e.g., speakers).
- *
- * It supports dynamic reconfiguration, format negotiation, and real-time audio
- * data acquisition using Qt Multimedia (QAudioSource/QAudioSink).
- *
- * Key features:
- * - Selectable input/output devices and formats
- * - Buffered audio stream handling
- * - CSV-formatted audio sample export for downstream processing
- * - Configurable timestamp injection for precise data alignment
- * - Safe fallback if output stream fails, allowing input-only capture
- *
- * Used primarily in Serial Studio to enable audio-based signal analysis or
- * visualization.
- */
 class Audio : public HAL_Driver
 {
   // clang-format off
   Q_OBJECT
-  Q_PROPERTY(QAudioFormat inputFormat
-             READ inputFormat
-             NOTIFY inputSettingsChanged)
-  Q_PROPERTY(QAudioFormat outputFormat
-             READ outputFormat
-             NOTIFY outputSettingsChanged)
   Q_PROPERTY(int selectedInputDevice
              READ selectedInputDevice
              WRITE setSelectedInputDevice
              NOTIFY inputSettingsChanged)
-  Q_PROPERTY(int selectedInputSampleRate
-             READ selectedInputSampleRate
-             WRITE setSelectedInputSampleRate
+  Q_PROPERTY(int selectedSampleRate
+             READ selectedSampleRate
+             WRITE setSelectedSampleRate
+             NOTIFY inputSettingsChanged)
+  Q_PROPERTY(QStringList sampleRates
+             READ sampleRates
              NOTIFY inputSettingsChanged)
   Q_PROPERTY(int selectedInputSampleFormat
              READ selectedInputSampleFormat
@@ -85,13 +66,18 @@ class Audio : public HAL_Driver
              READ selectedInputChannelConfiguration
              WRITE setSelectedInputChannelConfiguration
              NOTIFY inputSettingsChanged)
+  Q_PROPERTY(QStringList inputDeviceList
+             READ inputDeviceList
+             NOTIFY inputSettingsChanged)
+  Q_PROPERTY(QStringList inputSampleFormats
+             READ inputSampleFormats
+             NOTIFY inputSettingsChanged)
+  Q_PROPERTY(QStringList inputChannelConfigurations
+             READ inputChannelConfigurations
+             NOTIFY inputSettingsChanged)
   Q_PROPERTY(int selectedOutputDevice
              READ selectedOutputDevice
              WRITE setSelectedOutputDevice
-             NOTIFY outputSettingsChanged)
-  Q_PROPERTY(int selectedOutputSampleRate
-             READ selectedOutputSampleRate
-             WRITE setSelectedOutputSampleRate
              NOTIFY outputSettingsChanged)
   Q_PROPERTY(int selectedOutputSampleFormat
              READ selectedOutputSampleFormat
@@ -101,23 +87,8 @@ class Audio : public HAL_Driver
              READ selectedOutputChannelConfiguration
              WRITE setSelectedOutputChannelConfiguration
              NOTIFY outputSettingsChanged)
-  Q_PROPERTY(QStringList inputDeviceList
-             READ inputDeviceList
-             NOTIFY inputSettingsChanged)
-  Q_PROPERTY(QStringList inputSampleRates
-             READ inputSampleRates
-             NOTIFY inputSettingsChanged)
-  Q_PROPERTY(QStringList inputSampleFormats
-             READ inputSampleFormats
-             NOTIFY inputSettingsChanged)
-  Q_PROPERTY(QStringList inputChannelConfigurations
-             READ inputChannelConfigurations
-             NOTIFY inputSettingsChanged)
   Q_PROPERTY(QStringList outputDeviceList
              READ outputDeviceList
-             NOTIFY outputSettingsChanged)
-  Q_PROPERTY(QStringList outputSampleRates
-             READ outputSampleRates
              NOTIFY outputSettingsChanged)
   Q_PROPERTY(QStringList outputSampleFormats
              READ outputSampleFormats
@@ -138,7 +109,16 @@ private:
   Audio &operator=(Audio &&) = delete;
   Audio &operator=(const Audio &) = delete;
 
+  ~Audio();
+
 public:
+  struct DeviceCapabilities
+  {
+    QList<int> supportedSampleRates;
+    QList<ma_format> supportedFormats;
+    QList<int> supportedChannelCounts;
+  };
+
   static Audio &instance();
 
   void closeDevice();
@@ -151,43 +131,38 @@ public:
   [[nodiscard]] quint64 write(const QByteArray &data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 
-  [[nodiscard]] QAudioFormat inputFormat() const;
-  [[nodiscard]] QAudioFormat outputFormat() const;
+  [[nodiscard]] inline const ma_device_config &config() const
+  {
+    return m_config;
+  }
 
-  [[nodiscard]] const QAudioDevice &inputDevice() const;
-  [[nodiscard]] const QAudioDevice &outputDevice() const;
+  [[nodiscard]] int selectedSampleRate() const;
+  [[nodiscard]] QStringList sampleRates() const;
 
   [[nodiscard]] int selectedInputDevice() const;
-  [[nodiscard]] int selectedInputSampleRate() const;
   [[nodiscard]] int selectedInputSampleFormat() const;
   [[nodiscard]] int selectedInputChannelConfiguration() const;
 
   [[nodiscard]] int selectedOutputDevice() const;
-  [[nodiscard]] int selectedOutputSampleRate() const;
   [[nodiscard]] int selectedOutputSampleFormat() const;
   [[nodiscard]] int selectedOutputChannelConfiguration() const;
 
   [[nodiscard]] QStringList inputDeviceList() const;
-  [[nodiscard]] QStringList inputSampleRates() const;
   [[nodiscard]] QStringList inputSampleFormats() const;
   [[nodiscard]] QStringList inputChannelConfigurations() const;
 
   [[nodiscard]] QStringList outputDeviceList() const;
-  [[nodiscard]] QStringList outputSampleRates() const;
   [[nodiscard]] QStringList outputSampleFormats() const;
   [[nodiscard]] QStringList outputChannelConfigurations() const;
 
-  [[nodiscard]] const QVector<QAudioDevice> &inputDevices() const;
-  [[nodiscard]] const QVector<QAudioDevice> &outputDevices() const;
-
 public slots:
+  void setSelectedSampleRate(int index);
+
   void setSelectedInputDevice(int index);
-  void setSelectedInputSampleRate(int index);
   void setSelectedInputSampleFormat(int index);
   void setSelectedInputChannelConfiguration(int index);
 
   void setSelectedOutputDevice(int index);
-  void setSelectedOutputSampleRate(int index);
   void setSelectedOutputSampleFormat(int index);
   void setSelectedOutputChannelConfiguration(int index);
 
@@ -195,43 +170,68 @@ private slots:
   void generateLists();
   void configureInput();
   void configureOutput();
-  void onInputReadyRead();
-  void refreshAudioInputs();
-  void refreshAudioOutputs();
+  void processInputBuffer();
+  void refreshAudioDevices();
   void syncInputParameters();
   void syncOutputParameters();
 
 private:
-  QStringList getSampleRates(const QAudioDevice &device) const;
-  QStringList getSampleFormats(const QAudioDevice &device) const;
-  QStringList getChannelConfigurations(const QAudioDevice &device) const;
+  inline bool validateInput() const
+  {
+    return m_init && m_selectedInputDevice >= 0
+           && m_selectedInputDevice < m_inputDevices.size()
+           && m_selectedInputDevice < m_inputCapabilities.size();
+  }
+
+  inline bool validateOutput() const
+  {
+    return m_init && m_selectedOutputDevice >= 0
+           && m_selectedOutputDevice < m_outputDevices.size()
+           && m_selectedOutputDevice < m_outputCapabilities.size();
+  }
+
+  void handleCallback(void *output, const void *input, ma_uint32 frameCount);
+  static void callback(ma_device *device, void *output, const void *input,
+                       ma_uint32 frameCount);
 
 private:
+  bool m_init;
   bool m_isOpen;
 
+  int m_selectedSampleRate;
+
   int m_selectedInputDevice;
-  int m_selectedInputSampleRate;
   int m_selectedInputSampleFormat;
   int m_selectedInputChannelConfiguration;
 
   int m_selectedOutputDevice;
-  int m_selectedOutputSampleRate;
   int m_selectedOutputSampleFormat;
   int m_selectedOutputChannelConfiguration;
 
-  QAudioFormat m_inputFormat;
-  QAudioFormat m_outputFormat;
+  QMap<ma_format, QString> m_sampleFormats;
+  QMap<ma_channel, QString> m_knownConfigs;
 
-  QVector<QAudioDevice> m_inputDevices;
-  QVector<QAudioDevice> m_outputDevices;
+  ma_device m_device;
+  ma_context m_context;
+  ma_device_config m_config;
+  QVector<ma_device_info> m_inputDevices;
+  QVector<ma_device_info> m_outputDevices;
 
-  QAudioSink *m_sink;
-  QAudioSource *m_source;
-  QIODevice *m_inputStream;
-  QIODevice *m_outputStream;
+  QMutex m_inputBufferLock;
+  QByteArray m_rawInput;
 
-  QMap<QAudioFormat::SampleFormat, QString> m_sampleFormats;
-  QMap<QAudioFormat::ChannelConfig, QString> m_knownConfigs;
+  mutable QBuffer m_csvBuffer;
+  mutable QByteArray m_csvData;
+  mutable QTextStream m_csvStream;
+
+  QMutex m_outputBufferLock;
+  QVector<QVector<quint8>> m_outputQueue;
+
+  QTimer *m_inputWorkerTimer;
+  QThread m_inputWorkerThread;
+
+  QVector<DeviceCapabilities> m_inputCapabilities;
+  QVector<DeviceCapabilities> m_outputCapabilities;
 };
 } // namespace Drivers
 } // namespace IO

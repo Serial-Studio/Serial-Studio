@@ -408,31 +408,28 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     if (busType == SerialStudio::BusType::Audio)
     {
       // Get reference to Audio driver
-      const auto *audio = &IO::Drivers::Audio::instance();
-
-      // Get audio parameters
-      const auto format = audio->inputFormat();
-      const auto sampleRate = format.sampleRate();
-      const auto sampleFormat = format.sampleFormat();
+      const auto &audio = IO::Drivers::Audio::instance();
+      const auto format = audio.config().capture.format;
+      const auto sampleRate = audio.config().sampleRate;
 
       // Compute audio parameters
-      double maxValue = 1;
-      double minValue = 0;
-      switch (sampleFormat)
+      double maxValue = 1.0;
+      double minValue = 0.0;
+      switch (format)
       {
-        case QAudioFormat::UInt8:
-          maxValue = 0xFF;
-          minValue = 0x00;
+        case ma_format_u8:
+          maxValue = 255;
+          minValue = 0;
           break;
-        case QAudioFormat::Int16:
-          maxValue = 0x7FFF;
-          minValue = -0x7FFF;
+        case ma_format_s16:
+          maxValue = 32767;
+          minValue = -32768;
           break;
-        case QAudioFormat::Int32:
-          maxValue = 0x7FFFFFFF;
-          minValue = -0x7FFFFFFF;
+        case ma_format_s32:
+          maxValue = 2147483647;
+          minValue = -2147483648;
           break;
-        case QAudioFormat::Float:
+        case ma_format_f32:
           maxValue = 1.0;
           minValue = -1.0;
           break;

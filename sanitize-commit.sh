@@ -52,8 +52,9 @@ rm -f "$tempfile"
 echo "Running clang-format..."
 for dir in app doc examples; do
     if [[ -d "$dir" ]]; then
-        find "$dir" -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.c' \) -print0 | \
-        xargs -0 clang-format -i || echo "clang-format failed in $dir"
+        find "$dir" -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.c' \) \
+            ! -name 'miniaudio.h' \
+            -print0 | xargs -0 clang-format -i || echo "clang-format failed in $dir"
     fi
 done
 

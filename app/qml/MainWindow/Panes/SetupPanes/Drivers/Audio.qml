@@ -34,11 +34,10 @@ Item {
   //
   Settings {
     category: "AudioDriver"
+    property alias sampleRate: _rate.currentIndex
     property alias inputDevice: _inDev.currentIndex
     property alias outputDevice: _outDev.currentIndex
-    property alias inputSampleRate: _inRate.currentIndex
     property alias inputSampleFormat: _inFmt.currentIndex
-    property alias outputSampleRate: _outRate.currentIndex
     property alias outputSampleFormat: _outFmt.currentIndex
     property alias inputChannelConfiguration: _inChan.currentIndex
     property alias outputChannelConfiguration: _outChan.currentIndex
@@ -70,6 +69,9 @@ Item {
       model: Cpp_IO_Audio.inputDeviceList
       currentIndex: Cpp_IO_Audio.selectedInputDevice
       onCurrentIndexChanged: {
+        if (currentIndex < 0 || count <= currentIndex)
+          currentIndex = 0
+
         if (Cpp_IO_Audio.selectedInputDevice !== currentIndex)
           Cpp_IO_Audio.selectedInputDevice = currentIndex
       }
@@ -79,17 +81,20 @@ Item {
     // Input sample rate selection
     //
     Label {
-      visible: _inRate.visible
-      text: qsTr("Input Sample Rate") + ":"
+      visible: _rate.visible
+      text: qsTr("Sample Rate") + ":"
     } ComboBox {
-      id: _inRate
+      id: _rate
       Layout.fillWidth: true
       visible: count > 0 && _inDev.visible
-      model: Cpp_IO_Audio.inputSampleRates
-      currentIndex: Cpp_IO_Audio.selectedInputSampleRate
+      model: Cpp_IO_Audio.sampleRates
+      currentIndex: Cpp_IO_Audio.selectedSampleRate
       onCurrentIndexChanged: {
-        if (Cpp_IO_Audio.selectedInputSampleRate !== currentIndex)
-          Cpp_IO_Audio.selectedInputSampleRate = currentIndex
+        if (currentIndex < 0 || count <= currentIndex)
+          currentIndex = 0
+
+        if (Cpp_IO_Audio.selectedSampleRate !== currentIndex)
+          Cpp_IO_Audio.selectedSampleRate = currentIndex
       }
     }
 
@@ -98,7 +103,7 @@ Item {
     //
     Label {
       visible: _inFmt.visible
-      text: qsTr("Input Sample Format") + ":"
+      text: qsTr("Sample Format") + ":"
     } ComboBox {
       id: _inFmt
       Layout.fillWidth: true
@@ -106,6 +111,9 @@ Item {
       model: Cpp_IO_Audio.inputSampleFormats
       currentIndex: Cpp_IO_Audio.selectedInputSampleFormat
       onCurrentIndexChanged: {
+        if (currentIndex < 0 || count <= currentIndex)
+          currentIndex = 0
+
         if (Cpp_IO_Audio.selectedInputSampleFormat !== currentIndex)
           Cpp_IO_Audio.selectedInputSampleFormat = currentIndex
       }
@@ -116,7 +124,7 @@ Item {
     //
     Label {
       visible: _inChan.visible
-      text: qsTr("Input Channels") + ":"
+      text: qsTr("Channels") + ":"
     } ComboBox {
       id: _inChan
       Layout.fillWidth: true
@@ -124,6 +132,9 @@ Item {
       model: Cpp_IO_Audio.inputChannelConfigurations
       currentIndex: Cpp_IO_Audio.selectedInputChannelConfiguration
       onCurrentIndexChanged: {
+        if (currentIndex < 0 || count <= currentIndex)
+          currentIndex = 0
+
         if (Cpp_IO_Audio.selectedInputChannelConfiguration !== currentIndex)
           Cpp_IO_Audio.selectedInputChannelConfiguration = currentIndex
       }
@@ -154,26 +165,11 @@ Item {
       model: Cpp_IO_Audio.outputDeviceList
       currentIndex: Cpp_IO_Audio.selectedOutputDevice
       onCurrentIndexChanged: {
+        if (currentIndex < 0 || count <= currentIndex)
+          currentIndex = 0
+
         if (Cpp_IO_Audio.selectedOutputDevice !== currentIndex)
           Cpp_IO_Audio.selectedOutputDevice = currentIndex
-      }
-    }
-
-    //
-    // Output sample rate selection
-    //
-    Label {
-      visible: _outRate.visible
-      text: qsTr("Output Sample Rate") + ":"
-    } ComboBox {
-      id: _outRate
-      Layout.fillWidth: true
-      visible: count > 0 && _outDev.visible
-      model: Cpp_IO_Audio.outputSampleRates
-      currentIndex: Cpp_IO_Audio.selectedOutputSampleRate
-      onCurrentIndexChanged: {
-        if (Cpp_IO_Audio.selectedOutputSampleRate !== currentIndex)
-          Cpp_IO_Audio.selectedOutputSampleRate = currentIndex
       }
     }
 
@@ -182,7 +178,7 @@ Item {
     //
     Label {
       visible: _outFmt.visible
-      text: qsTr("Output Sample Format") + ":"
+      text: qsTr("Sample Format") + ":"
     } ComboBox {
       id: _outFmt
       Layout.fillWidth: true
@@ -190,6 +186,9 @@ Item {
       model: Cpp_IO_Audio.outputSampleFormats
       currentIndex: Cpp_IO_Audio.selectedOutputSampleFormat
       onCurrentIndexChanged: {
+        if (currentIndex < 0 || count <= currentIndex)
+          currentIndex = 0
+
         if (Cpp_IO_Audio.selectedOutputSampleFormat !== currentIndex)
           Cpp_IO_Audio.selectedOutputSampleFormat = currentIndex
       }
@@ -200,7 +199,7 @@ Item {
     //
     Label {
       visible: _outChan.visible
-      text: qsTr("Output Channels") + ":"
+      text: qsTr("Channels") + ":"
     } ComboBox {
       id: _outChan
       Layout.fillWidth: true
@@ -208,6 +207,9 @@ Item {
       model: Cpp_IO_Audio.outputChannelConfigurations
       currentIndex: Cpp_IO_Audio.selectedOutputChannelConfiguration
       onCurrentIndexChanged: {
+        if (currentIndex < 0 || count <= currentIndex)
+          currentIndex = 0
+
         if (Cpp_IO_Audio.selectedOutputChannelConfiguration !== currentIndex)
           Cpp_IO_Audio.selectedOutputChannelConfiguration = currentIndex
       }
