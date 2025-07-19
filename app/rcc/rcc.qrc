@@ -414,5 +414,6 @@
         <file>themes/default.json</file>
         <file>themes/ironframe.json</file>
         <file>themes/light.json</file>
+        <file>images/no-mic.svg</file>
     </qresource>
 </RCC>

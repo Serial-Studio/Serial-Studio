@@ -44,6 +44,42 @@ Item {
   }
 
   //
+  // No Mic Found Indicator
+  //
+  ColumnLayout {
+    spacing: 4
+    anchors.centerIn: parent
+    visible: _inDev.count <= 0
+
+    Image {
+      sourceSize: Qt.size(96, 96)
+      Layout.alignment: Qt.AlignHCenter
+      source: "qrc:/rcc/images/no-mic.svg"
+    }
+
+    Item {
+      implicitHeight: 4
+    }
+
+    Label {
+      wrapMode: Label.WordWrap
+      Layout.alignment: Qt.AlignHCenter
+      Layout.maximumWidth: root.width - 64
+      text: qsTr("No Microphone Detected")
+      font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
+    }
+
+    Label {
+      opacity: 0.8
+      wrapMode: Label.WordWrap
+      Layout.alignment: Qt.AlignHCenter
+      Layout.maximumWidth: root.width - 64
+      text: qsTr("Connect a mic or check your settings")
+      font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
+    }
+  }
+
+  //
   // Layout
   //
   GridLayout {
@@ -54,6 +90,7 @@ Item {
     anchors.margins: 0
     anchors.fill: parent
     opacity: enabled ? 1 : 0.5
+    visible: _inDev.count > 0
     enabled: !Cpp_IO_Manager.isConnected
 
     //
