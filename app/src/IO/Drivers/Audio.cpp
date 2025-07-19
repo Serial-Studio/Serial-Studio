@@ -1394,6 +1394,20 @@ void IO::Drivers::Audio::refreshAudioDevices()
       m_outputDevices, newOutputDevices, m_selectedOutputDevice, m_isOpen,
       [this] { Q_EMIT outputSettingsChanged(); },
       [this] { Q_EMIT configurationChanged(); }, m_outputCapabilities);
+
+  // Update fallback input device index if needed
+  if (m_selectedInputDevice < 0 && newInputDevices.count() > 0)
+  {
+    m_selectedInputDevice = 0;
+    Q_EMIT inputSettingsChanged();
+  }
+
+  // Update fallback output device index if needed
+  if (m_selectedOutputDevice < 0 && newOutputDevices.count() > 0)
+  {
+    m_selectedOutputDevice = 0;
+    Q_EMIT outputSettingsChanged();
+  }
 }
 
 //------------------------------------------------------------------------------
