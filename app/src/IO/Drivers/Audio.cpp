@@ -76,10 +76,10 @@ static bool deviceListsDiffer(const QVector<ma_device_info> &a,
  * falls back to common defaults (e.g., 16-bit PCM and 44.1kHz).
  *
  * @param info The `ma_device_info` structure containing native format metadata.
- * @return A populated `DeviceCapabilities` struct with format, rate,
+ * @return A populated `AudioDeviceInfo` struct with format, rate,
  *         and channel support.
  */
-static IO::Drivers::Audio::DeviceCapabilities
+static IO::Drivers::Audio::AudioDeviceInfo
 extractCapabilities(const ma_device_info &info)
 {
   // Parse native data formats from the operating system
@@ -99,7 +99,7 @@ extractCapabilities(const ma_device_info &info)
   }
 
   // Initialize the device capabilities structure
-  IO::Drivers::Audio::DeviceCapabilities caps;
+  IO::Drivers::Audio::AudioDeviceInfo caps;
   caps.supportedFormats = formats.values();
   caps.supportedSampleRates = sampleRates.values();
   caps.supportedChannelCounts = channelCounts.values();
@@ -155,7 +155,7 @@ static bool checkAndUpdateDeviceList(
     const QVector<ma_device_info> &newList, int selectedIndex, bool isOpen,
     const std::function<void()> &settingsChanged,
     const std::function<void()> &configurationChanged,
-    QVector<IO::Drivers::Audio::DeviceCapabilities> &capabilities)
+    QVector<IO::Drivers::Audio::AudioDeviceInfo> &capabilities)
 {
   // Device is not open, we are free to update the lists
   if (!isOpen)
@@ -1148,7 +1148,7 @@ void IO::Drivers::Audio::configureInput()
     return;
 
   // Obtain current capabilities
-  const DeviceCapabilities &caps = m_inputCapabilities[m_selectedInputDevice];
+  const AudioDeviceInfo &caps = m_inputCapabilities[m_selectedInputDevice];
   if (caps.supportedSampleRates.isEmpty() || caps.supportedFormats.isEmpty()
       || caps.supportedChannelCounts.isEmpty())
   {
@@ -1201,7 +1201,7 @@ void IO::Drivers::Audio::configureOutput()
     return;
 
   // Obtain current capabilities
-  const DeviceCapabilities &caps = m_outputCapabilities[m_selectedOutputDevice];
+  const AudioDeviceInfo &caps = m_outputCapabilities[m_selectedOutputDevice];
   if (caps.supportedSampleRates.isEmpty() || caps.supportedFormats.isEmpty()
       || caps.supportedChannelCounts.isEmpty())
   {

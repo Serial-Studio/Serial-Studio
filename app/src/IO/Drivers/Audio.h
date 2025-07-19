@@ -112,12 +112,12 @@ private:
   ~Audio();
 
 public:
-  struct DeviceCapabilities
+  typedef struct
   {
     QList<int> supportedSampleRates;
     QList<ma_format> supportedFormats;
     QList<int> supportedChannelCounts;
-  };
+  } AudioDeviceInfo;
 
   static Audio &instance();
 
@@ -230,8 +230,8 @@ private:
   QTimer *m_inputWorkerTimer;
   QThread m_inputWorkerThread;
 
-  QVector<DeviceCapabilities> m_inputCapabilities;
-  QVector<DeviceCapabilities> m_outputCapabilities;
+  QVector<AudioDeviceInfo> m_inputCapabilities;
+  QVector<AudioDeviceInfo> m_outputCapabilities;
 };
 } // namespace Drivers
 } // namespace IO
