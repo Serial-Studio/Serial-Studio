@@ -108,22 +108,10 @@ extractCapabilities(const ma_device_info &info)
   if (caps.supportedFormats.isEmpty() || caps.supportedSampleRates.isEmpty()
       || caps.supportedChannelCounts.isEmpty())
   {
-    caps.supportedFormats = {ma_format_u8,
-                             ma_format_s16,
-                             ma_format_s32,
-                             ma_format_f32};
-    caps.supportedSampleRates = {8000,
-                                 11025,
-                                 16000,
-                                 22050,
-                                 44100,
-                                 48000,
-                                 88200,
-                                 96000,
-                                 176400,
-                                 192000,
-                                 352800,
-                                 384000};
+    caps.supportedFormats
+        = {ma_format_u8, ma_format_s16, ma_format_s32, ma_format_f32};
+    caps.supportedSampleRates = {8000,  11025, 16000,  22050,  44100,  48000,
+                                 88200, 96000, 176400, 192000, 352800, 384000};
 
     if (strstr(info.name, "Microphone"))
       caps.supportedChannelCounts = {1};

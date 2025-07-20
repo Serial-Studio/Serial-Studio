@@ -81,7 +81,8 @@ public:
    * @param parent Optional QObject parent.
    */
   explicit HAL_Driver(QObject *parent = nullptr)
-    : QObject(parent), m_bufferSize(4096)
+    : QObject(parent)
+    , m_bufferSize(4096)
   {
     m_buffer.reserve(m_bufferSize);
   }
@@ -177,8 +178,8 @@ public:
   [[nodiscard]] virtual bool open(const QIODevice::OpenMode mode) = 0;
 
 protected:
-  mutable QMutex m_mutex;           ///< Mutex to guard buffer access.
-  std::vector<char> m_buffer;       ///< Internal data buffer.
-  size_t m_bufferSize;              ///< Threshold in bytes to emit data.
+  mutable QMutex m_mutex;     ///< Mutex to guard buffer access.
+  std::vector<char> m_buffer; ///< Internal data buffer.
+  size_t m_bufferSize;        ///< Threshold in bytes to emit data.
 };
 } // namespace IO
