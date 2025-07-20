@@ -239,20 +239,20 @@ IO::Drivers::Audio::Audio()
   , m_selectedOutputChannelConfiguration(0)
   , m_inputWorkerTimer(nullptr)
 {
-  // Select backend depending on operating system
+  // Manually select backend for each operating system
 #if defined(Q_OS_WIN)
-  ma_backend backends[] = {ma_backend_wasapi};
-#elif defined(Q_OS_MAC)
-  ma_backend backends[] = {ma_backend_coreaudio};
+  ma_backend backend[] = {ma_backend_wasapi};
+#elif defined(Q_OS_APPLE)
+  ma_backend backend[] = {ma_backend_coreaudio};
 #elif defined(Q_OS_LINUX)
-  ma_backend backends[] = {ma_backend_alsa};
+  ma_backend backend[] = {ma_backend_alsa};
 #else
-  ma_backend backends[] = {ma_backend_null};
+#  error "Unsupported platform"
 #endif
 
   // Initialize Mini Audio
   m_config = ma_device_config_init(ma_device_type_duplex);
-  m_init = ma_context_init(backends, 1, nullptr, &m_context) == MA_SUCCESS;
+  m_init = ma_context_init(backend, 1, nullptr, &m_context) == MA_SUCCESS;
   if (!m_init)
     qWarning("Failed to initialize miniaudio context");
 

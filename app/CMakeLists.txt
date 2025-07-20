@@ -83,13 +83,6 @@ if(BUILD_COMMERCIAL)
     Qt6::Mqtt
     Qt6::SerialBus
   )
-
-  if(LINUX)
-    set(QT_LIBS
-      ${QT_LIBS}
-      asound
-    )
-  endif()
 endif()
 
 # Find the Qt package and its modules
@@ -233,18 +226,18 @@ if(BUILD_COMMERCIAL)
     src/Licensing/LemonSqueezy.h
     src/ThirdParty/miniaudio.h
   )
-set(SOURCES
-  ${SOURCES}
-  src/MQTT/Client.cpp
-  src/IO/Drivers/Audio.cpp
-  src/IO/Drivers/CANBus.cpp
-  src/IO/Drivers/Modbus.cpp
-  src/UI/Widgets/Plot3D.cpp
-  src/Licensing/Trial.cpp
-  src/Licensing/MachineID.cpp
-  src/Licensing/SimpleCrypt.cpp
-  src/Licensing/LemonSqueezy.cpp
-)
+  set(SOURCES
+    ${SOURCES}
+    src/MQTT/Client.cpp
+    src/IO/Drivers/Audio.cpp
+    src/IO/Drivers/CANBus.cpp
+    src/IO/Drivers/Modbus.cpp
+    src/UI/Widgets/Plot3D.cpp
+    src/Licensing/Trial.cpp
+    src/Licensing/MachineID.cpp
+    src/Licensing/SimpleCrypt.cpp
+    src/Licensing/LemonSqueezy.cpp
+  )
 endif()
 
 #-------------------------------------------------------------------------------
@@ -341,10 +334,10 @@ elseif(APPLE)
     ${ASSETS_MACOSX}
     PROPERTIES MACOSX_PACKAGE_LOCATION "Resources"
   )
-set(SOURCES ${SOURCES} ${ICON_MACOSX} ${ASSETS_MACOSX} "src/Platform/NativeWindow_macOS.mm")
-set_source_files_properties(
-  "src/Platform/NativeWindow_macOS.mm" PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
-)
+  set(SOURCES ${SOURCES} ${ICON_MACOSX} ${ASSETS_MACOSX} "src/Platform/NativeWindow_macOS.mm")
+  set_source_files_properties(
+    "src/Platform/NativeWindow_macOS.mm" PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
+  )
 elseif(UNIX)
   set(SOURCES ${SOURCES} "src/Platform/NativeWindow_UNIX.cpp")
 endif()
@@ -399,6 +392,44 @@ qt_add_qml_module(
 )
 
 #-------------------------------------------------------------------------------
+# MiniAudio configuration
+#-------------------------------------------------------------------------------
+
+if (BUILD_COMMERCIAL)
+  target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE
+    MA_ENABLE_ONLY_SPECIFIC_BACKENDS
+    MA_NO_DECODING
+    MA_NO_ENCODING
+    MA_NO_WAV
+    MA_NO_FLAC
+    MA_NO_MP3
+    MA_NO_RESOURCE_MANAGER
+    MA_NO_NODE_GRAPH
+    MA_NO_ENGINE
+    MA_NO_GENERATION
+    MA_NO_CUSTOM
+    MA_NO_NULL
+  )
+
+  if(WIN32)
+    target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE MA_ENABLE_WASAPI)
+  elseif(APPLE)
+    target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE MA_ENABLE_COREAUDIO)
+  elseif(UNIX)
+    target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE MA_ENABLE_ALSA)
+    target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE asound)
+  endif()
+
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64)$")
+    target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE MA_SUPPORT_SSE2)
+  endif()
+
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$" AND NOT APPLE)
+    target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE MA_SUPPORT_NEON)
+  endif()
+endif()
+
+#-------------------------------------------------------------------------------
 # Deployment options
 #-------------------------------------------------------------------------------
 
@@ -417,21 +448,18 @@ elseif(APPLE)
   )
 elseif(UNIX)
   install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION bin)
-
   install(
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.svg
     DESTINATION share/pixmaps
   )
-
-install(
-  FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.metainfo.xml
-  DESTINATION share/metainfo
-)
-
-install(
-  FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.desktop
-  DESTINATION share/applications
-)
+  install(
+    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.metainfo.xml
+    DESTINATION share/metainfo
+  )
+  install(
+    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.desktop
+    DESTINATION share/applications
+  )
 endif()
 
 #-------------------------------------------------------------------------------
