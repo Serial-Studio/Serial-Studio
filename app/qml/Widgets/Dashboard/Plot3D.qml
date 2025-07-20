@@ -296,7 +296,7 @@ Item {
       value: model.eyeSeparation * 1e3
       opacity: model.anaglyphEnabled ? 1 : 0
       onValueChanged: {
-        if (model) {
+        if (!isNaN(value) && model) {
           var separation = value / 1e3
           if (model.eyeSeparation !== separation)
             model.eyeSeparation = separation

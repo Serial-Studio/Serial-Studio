@@ -36,7 +36,7 @@
 #endif
 
 //------------------------------------------------------------------------------
-// Constructor & singleton access functions
+// Constructor, destructor & singleton access functions
 //------------------------------------------------------------------------------
 
 /**
@@ -67,6 +67,31 @@ IO::Manager::Manager()
           &IO::Manager::connectedChanged);
   connect(qApp, &QApplication::aboutToQuit, this,
           &IO::Manager::killFrameReader);
+}
+
+/**
+ * @brief Destructor for the IO::Manager.
+ *
+ * Shuts down any device connection before destruction.
+ */
+IO::Manager::~Manager()
+{
+  if (m_frameReader)
+  {
+    m_frameReader->disconnect();
+    QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
+                        &IO::FrameReader::processData);
+
+    QMetaObject::invokeMethod(m_frameReader, "deleteLater",
+                              Qt::QueuedConnection);
+    m_frameReader.clear();
+  }
+
+  if (m_workerThread.isRunning())
+  {
+    m_workerThread.quit();
+    m_workerThread.wait();
+  }
 }
 
 /**
@@ -659,19 +684,16 @@ void IO::Manager::killFrameReader()
     QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
                         &IO::FrameReader::processData);
 
-    m_frameReader->deleteLater();
+    QMetaObject::invokeMethod(m_frameReader, "deleteLater",
+                              Qt::QueuedConnection);
     m_frameReader.clear();
   }
 
-  // Quit the thread event loop and wait for it to exit
-  if (m_workerThread)
+  // Stop the worker thread
+  if (m_workerThread.isRunning())
   {
-
-    m_workerThread->quit();
-    m_workerThread->wait(100);
-
-    delete m_workerThread;
-    m_workerThread = nullptr;
+    m_workerThread.quit();
+    m_workerThread.wait();
   }
 }
 
@@ -701,10 +723,7 @@ void IO::Manager::startFrameReader()
 
   // Move to the worker thread
   if (m_threadedFrameExtraction)
-  {
-    m_workerThread = new QThread(this);
-    m_frameReader->moveToThread(m_workerThread);
-  }
+    m_frameReader->moveToThread(&m_workerThread);
 
   // Configure initial state for the frame reader
   QMetaObject::invokeMethod(
@@ -732,5 +751,8 @@ void IO::Manager::startFrameReader()
 
   // Start the worker thread
   if (m_threadedFrameExtraction)
-    m_workerThread->start(QThread::TimeCriticalPriority);
+  {
+    if (!m_workerThread.isRunning())
+      m_workerThread.start();
+  }
 }
