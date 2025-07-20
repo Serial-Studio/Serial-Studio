@@ -738,10 +738,13 @@ void IO::Manager::startFrameReader()
       Qt::QueuedConnection);
 
   // Connect frame reader events to IO::Manager
-  connect(m_frameReader, &IO::FrameReader::frameReady, this,
-          [this](const QByteArray &frame) {
+  connect(m_frameReader, &IO::FrameReader::framesReady, this,
+          [this](const QVector<QByteArray> &frames) {
             if (!paused())
-              Q_EMIT frameReceived(frame);
+            {
+              for (const auto &frame : frames)
+                Q_EMIT frameReceived(frame);
+            }
           });
   connect(m_frameReader, &IO::FrameReader::dataReceived, this,
           [this](const QByteArray &data) {

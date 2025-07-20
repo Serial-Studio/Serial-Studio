@@ -84,7 +84,7 @@ void IO::FrameReader::processData(const QByteArray &data)
   // Read frames in no-delimiter mode directly
   if (m_operationMode == SerialStudio::ProjectFile
       && m_frameDetectionMode == SerialStudio::NoDelimiters)
-    Q_EMIT frameReady(m_dataBuffer.read(data.size()));
+    Q_EMIT framesReady({m_dataBuffer.read(data.size())});
 
   // Read frame data
   else
@@ -262,6 +262,8 @@ void IO::FrameReader::readFrames()
  */
 void IO::FrameReader::readEndDelimetedFrames()
 {
+  // Read data into an array of frames
+  QVector<QByteArray> frames;
   while (true)
   {
     // Initialize parameters
@@ -305,7 +307,7 @@ void IO::FrameReader::readEndDelimetedFrames()
       auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk)
       {
-        Q_EMIT frameReady(frame);
+        frames.append(frame);
         (void)m_dataBuffer.read(frameEndPos);
       }
 
@@ -322,6 +324,9 @@ void IO::FrameReader::readEndDelimetedFrames()
     else
       (void)m_dataBuffer.read(frameEndPos);
   }
+
+  // Send data to user interface
+  Q_EMIT framesReady(frames);
 }
 
 /**
@@ -336,6 +341,8 @@ void IO::FrameReader::readEndDelimetedFrames()
  */
 void IO::FrameReader::readStartDelimitedFrames()
 {
+  // Read data into an array of frames
+  QVector<QByteArray> frames;
   while (true)
   {
     // Find the first start delimiter in the buffer
@@ -390,7 +397,7 @@ void IO::FrameReader::readStartDelimitedFrames()
       const auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk)
       {
-        Q_EMIT frameReady(frame);
+        frames.append(frame);
         (void)m_dataBuffer.read(frameEndPos);
       }
 
@@ -407,6 +414,9 @@ void IO::FrameReader::readStartDelimitedFrames()
     else
       (void)m_dataBuffer.read(frameEndPos);
   }
+
+  // Send data to user interface
+  Q_EMIT framesReady(frames);
 }
 
 /**
@@ -421,6 +431,8 @@ void IO::FrameReader::readStartDelimitedFrames()
  */
 void IO::FrameReader::readStartEndDelimetedFrames()
 {
+  // Read data into an array of frames
+  QVector<QByteArray> frames;
   while (true)
   {
     // Locate end delimiter
@@ -458,7 +470,7 @@ void IO::FrameReader::readStartEndDelimetedFrames()
       auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk)
       {
-        Q_EMIT frameReady(frame);
+        frames.append(frame);
         (void)m_dataBuffer.read(frameEndPos);
       }
 
@@ -475,6 +487,9 @@ void IO::FrameReader::readStartEndDelimetedFrames()
     else
       (void)m_dataBuffer.read(frameEndPos);
   }
+
+  // Send data to user interface
+  Q_EMIT framesReady(frames);
 }
 
 //------------------------------------------------------------------------------

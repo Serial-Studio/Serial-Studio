@@ -53,8 +53,8 @@ class FrameReader : public QObject
   Q_OBJECT
 
 signals:
-  void frameReady(const QByteArray &frame);
   void dataReceived(const QByteArray &data);
+  void framesReady(const QVector<QByteArray> &frame);
 
 public:
   explicit FrameReader(QObject *parent = nullptr);

@@ -287,20 +287,13 @@ if(PRODUCTION_OPTIMIZATION)
 endif()
 
 #-------------------------------------------------------------------------------
-# Enable platform-specific SIMD (SSE2 for x86_64, NEON for ARM)
+# Enable platform-specific SIMD (SSE2 for x86_64 so far)
 #-------------------------------------------------------------------------------
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64)$")
   message(STATUS "Enabling SSE2 optimizations")
   if(NOT MSVC)
     add_compile_options(-msse2)
-  endif()
-endif()
-
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$")
-  message(STATUS "Enabling NEON optimizations")
-  if(NOT MSVC AND NOT APPLE)
-    add_compile_options(-mfpu=neon)
   endif()
 endif()
 
