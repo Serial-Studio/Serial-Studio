@@ -42,7 +42,7 @@ find_package(
 
 option(BUILD_GPL3              "Force GPLv3-only build"                 ON)
 option(DEBUG_SANITIZER         "Enable sanitizers for debug builds"    OFF)
-option(PRODUCTION_OPTIMIZATION "Enable production optimization flags"   ON)
+option(PRODUCTION_OPTIMIZATION "Enable production optimization flags"  OFF)
 option(BUILD_COMMERCIAL        "Enable commercial features"            OFF)
 
 set(ARCGIS_API_KEY $ENV{ARCGIS_API_KEY} CACHE STRING "API Key for ArcGIS map")
