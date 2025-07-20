@@ -48,7 +48,7 @@ Item {
   // Custom properties
   //
   property bool running: true
-  property bool showAreaUnderPlot: true
+  property bool showAreaUnderPlot: false
 
   //
   // Save settings

@@ -108,8 +108,23 @@ extractCapabilities(const ma_device_info &info)
   if (caps.supportedFormats.isEmpty() || caps.supportedSampleRates.isEmpty()
       || caps.supportedChannelCounts.isEmpty())
   {
-    caps.supportedFormats = {ma_format_s16, ma_format_s32, ma_format_f32};
-    caps.supportedSampleRates = {44100, 48000, 96000};
+    caps.supportedFormats = {ma_format_u8,
+                             ma_format_s16,
+                             ma_format_s32,
+                             ma_format_f32};
+    caps.supportedSampleRates = {8000,
+                                 11025,
+                                 16000,
+                                 22050,
+                                 44100,
+                                 48000,
+                                 88200,
+                                 96000,
+                                 176400,
+                                 192000,
+                                 352800,
+                                 384000};
+
     if (strstr(info.name, "Microphone"))
       caps.supportedChannelCounts = {1};
     else
@@ -368,6 +383,9 @@ void IO::Drivers::Audio::closeDevice()
     m_outputQueue.clear();
   }
 
+  // Flush output thread
+  flushBuffer();
+
   // Set open flag to false
   m_isOpen = false;
 }
@@ -588,6 +606,9 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   m_config.sampleRate = m_inputCapabilities[m_selectedInputDevice].supportedSampleRates[m_selectedSampleRate];
   // clang-format on
 
+  // Update buffer size
+  setBufferSize(m_config.sampleRate / 40);
+
   // Initialize capture device
   if (mode & QIODevice::ReadOnly)
   {
@@ -653,7 +674,10 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
 
   // Start the worker thread
   if (!m_inputWorkerThread.isRunning())
+  {
     m_inputWorkerThread.start();
+    m_inputWorkerThread.setPriority(QThread::TimeCriticalPriority);
+  }
 
   // Start the read timer @ 100 Hz
   QMetaObject::invokeMethod(m_inputWorkerTimer, "start", Qt::QueuedConnection);
@@ -1332,7 +1356,7 @@ void IO::Drivers::Audio::processInputBuffer()
 
   // Report only the valid chunk of CSV data that we wrote
   const auto length = m_csvBuffer.pos();
-  Q_EMIT dataReceived(m_csvData.left(length));
+  processData(m_csvData.left(length));
 }
 
 //------------------------------------------------------------------------------
@@ -1438,7 +1462,11 @@ void IO::Drivers::Audio::syncInputParameters()
   m_selectedSampleRate = caps.supportedSampleRates.indexOf(m_config.sampleRate);
   if (m_selectedSampleRate < 0)
   {
+#ifdef Q_OS_WIN
+    int fallback = caps.supportedSampleRates.indexOf(22050);
+#else
     int fallback = caps.supportedSampleRates.indexOf(44100);
+#endif
     m_selectedSampleRate = fallback >= 0 ? fallback : 0;
   }
 

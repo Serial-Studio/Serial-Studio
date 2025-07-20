@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <QMutex>
 #include <QObject>
 #include <QIODevice>
 
@@ -28,31 +29,156 @@ namespace IO
 {
 /**
  * @class HAL_Driver
- * @brief Base class for hardware abstraction layer (HAL) drivers.
+ * @brief Abstract base class for hardware abstraction layer drivers.
  *
- * Provides a common interface for device I/O operations and data access.
- * Subclasses must implement all pure virtual methods to handle
- * protocol-specific functionality.
+ * This interface defines the core API for all I/O drivers in the system.
+ * It provides methods for opening, closing, and checking the state of the
+ * device, as well as sending and receiving data.
  *
- * Signals are available for configuration changes, data transmission, and data
- * reception.
+ * The class includes a high-efficiency buffered data processing mechanism
+ * through `processData()`, which reduces signal overhead in high-frequency
+ * environments by aggregating data until a configurable buffer threshold is
+ * reached.
+ *
+ * Once the threshold is met, the data is emitted via `dataReceived()`.
+ *
+ * Subclasses must implement the pure virtual methods to handle specific device
+ * protocols and behavior.
+ *
+ * Thread safety is ensured for buffer operations, making `processData()` safe
+ * to call from multiple threads.
+ *
+ * @note Emitting signals across threads requires connected slots to handle
+ *       queued events properly.
+ *
+ * @see setBufferSize(), processData(), flushBuffer()
  */
 class HAL_Driver : public QObject
 {
   Q_OBJECT
 
 signals:
+  /**
+   * @brief Emitted when the driver configuration changes.
+   */
   void configurationChanged();
+
+  /**
+   * @brief Emitted after data is sent.
+   * @param data The raw data that was sent.
+   */
   void dataSent(const QByteArray &data);
+
+  /**
+   * @brief Emitted when buffered data is ready.
+   * @param data The buffered data.
+   */
   void dataReceived(const QByteArray &data);
 
 public:
+  /**
+   * @brief Constructor.
+   * @param parent Optional QObject parent.
+   */
+  explicit HAL_Driver(QObject *parent = nullptr)
+    : QObject(parent), m_bufferSize(4096)
+  {
+    m_buffer.reserve(m_bufferSize);
+  }
+
+  /**
+   * @brief Virtual destructor.
+   */
+  virtual ~HAL_Driver() = default;
+
+  /**
+   * @brief Set the internal buffer size threshold for data emission.
+   * @param size New buffer size in bytes.
+   */
+  void setBufferSize(size_t size)
+  {
+    QMutexLocker locker(&m_mutex);
+    m_bufferSize = size;
+    m_buffer.reserve(m_bufferSize);
+  }
+
+  /**
+   * @brief Process incoming data and emit when buffer threshold is reached.
+   * @note This function is real-time safe if signal emission is handled in a
+   *       dedicated Qt thread.
+   * @param data The incoming data to process.
+   */
+  void processData(const QByteArray &data)
+  {
+    if (data.isEmpty())
+      return;
+
+    QMutexLocker locker(&m_mutex);
+    m_buffer.insert(m_buffer.end(), data.begin(), data.end());
+    if (m_buffer.size() >= m_bufferSize)
+    {
+      QByteArray emitData(m_buffer.data(), static_cast<int>(m_buffer.size()));
+      emit dataReceived(emitData);
+      m_buffer.clear();
+    }
+  }
+
+  /**
+   * @brief Force flush any buffered data, even if threshold is not reached.
+   */
+  void flushBuffer()
+  {
+    QMutexLocker locker(&m_mutex);
+    if (!m_buffer.empty())
+      m_buffer.clear();
+  }
+
+  /**
+   * @brief Close the driver.
+   */
   virtual void close() = 0;
+
+  /**
+   * @brief Check if the device is open.
+   * @return True if open.
+   */
   [[nodiscard]] virtual bool isOpen() const = 0;
+
+  /**
+   * @brief Check if the device is readable.
+   * @return True if readable.
+   */
   [[nodiscard]] virtual bool isReadable() const = 0;
+
+  /**
+   * @brief Check if the device is writable.
+   * @return True if writable.
+   */
   [[nodiscard]] virtual bool isWritable() const = 0;
+
+  /**
+   * @brief Check if the current configuration is valid.
+   * @return True if configuration is OK.
+   */
   [[nodiscard]] virtual bool configurationOk() const = 0;
+
+  /**
+   * @brief Write data to the device.
+   * @param data The data to write.
+   * @return Number of bytes successfully written.
+   */
   [[nodiscard]] virtual quint64 write(const QByteArray &data) = 0;
+
+  /**
+   * @brief Open the device with the given mode.
+   * @param mode The open mode.
+   * @return True if successfully opened.
+   */
   [[nodiscard]] virtual bool open(const QIODevice::OpenMode mode) = 0;
+
+protected:
+  mutable QMutex m_mutex;           ///< Mutex to guard buffer access.
+  std::vector<char> m_buffer;       ///< Internal data buffer.
+  size_t m_bufferSize;              ///< Threshold in bytes to emit data.
 };
 } // namespace IO
