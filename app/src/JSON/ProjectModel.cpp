@@ -1039,7 +1039,8 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
           tr("Legacy frame parser function updated"),
           tr("Your project used a legacy frame parser function with a "
              "'separator' argument. It has been automatically migrated to "
-             "the new format."));
+             "the new format."),
+          QMessageBox::Information);
       saveJsonFile(false);
       return;
     }

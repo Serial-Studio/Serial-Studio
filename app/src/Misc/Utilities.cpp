@@ -90,7 +90,7 @@ bool Misc::Utilities::askAutomaticUpdates()
          "You can always check for updates manually from "
          "the \"About\" dialog")
           .arg(APP_NAME),
-      QMessageBox::NoIcon, APP_NAME, QMessageBox::Yes | QMessageBox::No);
+      QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
   return result == QMessageBox::Yes;
 }
 

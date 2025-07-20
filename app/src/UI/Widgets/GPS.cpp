@@ -392,7 +392,8 @@ void Widgets::GPS::setMapType(const int type)
       Misc::Utilities::showMessageBox(
           tr("Additional map layers are available only for Pro users."),
           tr("We can't offer unrestricted access because the ArcGIS API key "
-             "incurs real costs."));
+             "incurs real costs."),
+          QMessageBox::Information);
     }
 
     m_mapType = mapId;

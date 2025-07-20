@@ -51,7 +51,7 @@ public:
   // clang-format off
   static int showMessageBox(const QString& text,
                             const QString& informativeText = "",
-                            QMessageBox::Icon icon = QMessageBox::NoIcon,
+                            QMessageBox::Icon icon = QMessageBox::Information,
                             const QString& windowTitle = "",
                             QMessageBox::StandardButtons bt = QMessageBox::Ok,
                             QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,

@@ -241,7 +241,8 @@ bool JSON::FrameParser::save(const bool silent)
     if (!silent)
       Misc::Utilities::showMessageBox(
           tr("Frame parser code updated successfully!"),
-          tr("No errors have been detected in the code."));
+          tr("No errors have been detected in the code."),
+          QMessageBox::Information);
 
     // Everything good
     Q_EMIT modifiedChanged();

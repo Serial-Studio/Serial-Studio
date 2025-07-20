@@ -201,7 +201,10 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
         m_frame.clear();
         m_jsonMap.close();
         setJsonPathSetting("");
-        Misc::Utilities::showMessageBox(tr("Invalid JSON project format"));
+        Misc::Utilities::showMessageBox(
+            tr("This file isn’t a valid project file"),
+            tr("Make sure it’s a properly formatted JSON project."),
+            QMessageBox::Warning);
       }
     }
 
