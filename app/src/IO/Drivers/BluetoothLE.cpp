@@ -165,16 +165,16 @@ quint64 IO::Drivers::BluetoothLE::write(const QByteArray &data)
 
     else
     {
-      qWarning()
-          << "Failed to write data to BLE device: invalid characteristic";
-      return -1;
+      qWarning() << "Failed to write to BLE device: invalid characteristic";
+
+      return 0;
     }
   }
 
   qWarning() << "Failed to write data to BLE device: ensure that a "
                 "characteristic is selected";
 
-  return -1;
+  return 0;
 }
 
 /**

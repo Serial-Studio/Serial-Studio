@@ -171,7 +171,7 @@ void Widgets::FFTPlot::updateData()
   {
     // Fetch time-domain data
     const auto &data = UI::Dashboard::instance().fftData(m_index);
-    m_size = data.size();
+    m_size = static_cast<int>(data.size());
 
     // Access the internal buffer and state of the circular queue
     const double *in = data.raw();

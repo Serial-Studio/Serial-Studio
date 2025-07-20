@@ -133,12 +133,12 @@ void Widgets::DataGrid::updateData()
     // Validate to table data to ensure we can update it (issue #307)
     if (rows.count() <= rowIndex || rows[rowIndex].count() <= valueIndex)
     {
-      QList<QStringList> rows;
-      rows.append({tr("Title"), tr("Value")});
+      QList<QStringList> r;
+      r.append({tr("Title"), tr("Value")});
       for (const auto &ds : group.datasets())
-        rows.append(getRow(ds));
+        r.append(getRow(ds));
 
-      setData(rows);
+      setData(r);
       return;
     }
 

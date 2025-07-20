@@ -206,7 +206,7 @@ quint64 IO::Drivers::UART::write(const QByteArray &data)
   if (isWritable())
     return port()->write(data);
 
-  return -1;
+  return 0;
 }
 
 /**

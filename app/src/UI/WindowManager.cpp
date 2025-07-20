@@ -744,12 +744,12 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
         if (m_targetWindow && m_targetWindow != m_dragWindow)
         {
           // Resize drag window if needed
-          const auto w = qMin(m_dragWindow->width(), m_targetWindow->width());
-          const auto h = qMin(m_dragWindow->height(), m_targetWindow->height());
-          if (m_dragWindow->width() != w || m_dragWindow->height() != h)
+          auto nW = qMin(m_dragWindow->width(), m_targetWindow->width());
+          auto nH = qMin(m_dragWindow->height(), m_targetWindow->height());
+          if (m_dragWindow->width() != nW || m_dragWindow->height() != nH)
           {
-            m_dragWindow->setWidth(w);
-            m_dragWindow->setHeight(h);
+            m_dragWindow->setWidth(nW);
+            m_dragWindow->setHeight(nH);
           }
 
           // Set snap indicator geometry to target window geometry

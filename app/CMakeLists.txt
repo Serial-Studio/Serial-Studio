@@ -397,7 +397,6 @@ qt_add_qml_module(
 
 if (BUILD_COMMERCIAL)
   target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE
-    MA_ENABLE_ONLY_SPECIFIC_BACKENDS
     MA_NO_DECODING
     MA_NO_ENCODING
     MA_NO_WAV
@@ -411,12 +410,7 @@ if (BUILD_COMMERCIAL)
     MA_NO_NULL
   )
 
-  if(WIN32)
-    target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE MA_ENABLE_WASAPI)
-  elseif(APPLE)
-    target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE MA_ENABLE_COREAUDIO)
-  elseif(UNIX)
-    target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE MA_ENABLE_ALSA)
+  if(LINUX)
     target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE asound)
   endif()
 

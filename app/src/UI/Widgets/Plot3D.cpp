@@ -51,7 +51,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   , m_cameraOffsetX(0)
   , m_cameraOffsetY(0)
   , m_cameraOffsetZ(-10)
-  , m_eyeSeparation(0.069)
+  , m_eyeSeparation(0.069f)
   , m_anaglyph(false)
   , m_interpolate(true)
   , m_orbitNavigation(true)
@@ -63,7 +63,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   // Read settings
   m_anaglyph = m_settings.value("Plot3D_Anaglyph", false).toBool();
   m_interpolate = m_settings.value("Plot3D_Interpolate", true).toBool();
-  m_eyeSeparation = m_settings.value("Plot3D_EyeSeparation", 0.069).toDouble();
+  m_eyeSeparation = m_settings.value("Plot3D_EyeSeparation", 0.069).toFloat();
   m_invertEyePositions = m_settings.value("Plot3D_InvertEyes", false).toBool();
 
   // Configure QML item behavior
@@ -779,7 +779,7 @@ void Widgets::Plot3D::drawData()
 
   // Initialize camera matrix
   QMatrix4x4 matrix;
-  matrix.perspective(45, float(width()) / height(), 0.1, 100);
+  matrix.perspective(45.0f, float(width()) / height(), 0.1f, 100.0f);
   matrix.translate(m_cameraOffsetX, m_cameraOffsetY, m_cameraOffsetZ);
 
   // Render 3D pixmaps
@@ -832,7 +832,7 @@ void Widgets::Plot3D::drawGrid()
 {
   // Initialize camera matrix
   QMatrix4x4 matrix;
-  matrix.perspective(45, float(width()) / height(), 0.1, 100);
+  matrix.perspective(45.0f, float(width()) / height(), 0.1f, 100.0f);
   matrix.translate(m_cameraOffsetX, m_cameraOffsetY, m_cameraOffsetZ);
 
   // Render 3D pixmaps

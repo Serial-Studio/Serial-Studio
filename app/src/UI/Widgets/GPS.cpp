@@ -874,7 +874,7 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
                                         Qt::FastTransformation);
             QColor dominant = img.pixelColor(0, 0);
 
-            QImage finalTile(tileSize, tileSize, QImage::Format_ARGB32);
+            finalTile = QImage(tileSize, tileSize, QImage::Format_ARGB32);
             finalTile.fill(dominant);
           }
 
@@ -1002,7 +1002,6 @@ void Widgets::GPS::paintPathData(QPainter *painter, const QSize &view)
   if (m_plotTrajectory)
   {
     // Initialize parameters
-    constexpr int tileSize = 256;
     const double world = 1 << m_zoom;
     const QPointF cTile = m_centerTile;
 

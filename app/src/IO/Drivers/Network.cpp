@@ -185,7 +185,7 @@ quint64 IO::Drivers::Network::write(const QByteArray &data)
       return m_tcpSocket.write(data);
   }
 
-  return -1;
+  return 0;
 }
 
 /**
