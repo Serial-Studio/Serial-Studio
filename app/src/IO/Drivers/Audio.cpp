@@ -67,65 +67,92 @@ static bool deviceListsDiffer(const QVector<ma_device_info> &a,
 }
 
 /**
- * @brief Extracts audio device capabilities from a given device info struct.
+ * @brief Extracts audio device capabilities using MiniAudio's backend context.
  *
- * This function parses native data formats provided by the operating system
- * to determine supported sample formats, sample rates, and channel counts.
+ * This function queries the backend via `ma_context_get_device_info()` to
+ * retrieve a fully populated `ma_device_info` structure for the specified
+ * device. It parses the `nativeDataFormats` array to extract supported sample
+ * formats, sample rates, and channel counts. Wildcard entries (e.g., 0 sample
+ * rate or channel count) are expanded using common defaults.
  *
- * If no valid formats are detected (due to OS or driver limitations), it
- * falls back to common defaults (e.g., 16-bit PCM and 44.1kHz).
+ * If the backend fails to provide detailed format information, this function
+ * falls back to a conservative set of standard sample formats, sample rates,
+ * and channels.
  *
- * @param info The `ma_device_info` structure containing native format metadata.
- * @return A populated `AudioDeviceInfo` struct with format, rate,
- *         and channel support.
+ * @param context The MiniAudio context used to query the device.
+ * @param info    The basic `ma_device_info` from enumeration.
+ * @param type    The device type (capture, playback or duplex)
+ *
+ * @return A populated `AudioDeviceInfo` structure listing supported formats,
+ *         sample rates, and channel counts.
  */
 static IO::Drivers::Audio::AudioDeviceInfo
-extractCapabilities(const ma_device_info &info)
+extractCapabilities(ma_context *context, const ma_device_info &info,
+                    ma_device_type type)
 {
-  // Parse native data formats from the operating system
+  // Set default number of channels
+  const QSet<int> defaultChannels = {1, 2};
+
+  // Set default sample rates
+  const QSet<int> defaultSampleRates
+      = {8000,  11025, 16000,  22050,  44100,  48000,
+         88200, 96000, 176400, 192000, 352800, 384000};
+
+  // Set default formats
+  const QSet<ma_format> defaultFormats = {
+      ma_format_u8, ma_format_s16, ma_format_s24, ma_format_s32, ma_format_f32};
+
+  // Extract device info
+  ma_device_info fullInfo = {};
+  auto r = ma_context_get_device_info(context, type, &info.id, &fullInfo);
+  if (r != MA_SUCCESS)
+    fullInfo = info;
+
+  // Extract native supported formats
   QSet<int> sampleRates;
   QSet<int> channelCounts;
   QSet<ma_format> formats;
-  for (ma_uint32 i = 0; i < info.nativeDataFormatCount; ++i)
+  for (ma_uint32 i = 0; i < fullInfo.nativeDataFormatCount; ++i)
   {
-    const auto &f = info.nativeDataFormats[i];
+    const auto &f = fullInfo.nativeDataFormats[i];
 
-    if (f.format != ma_format_unknown)
+    if (f.format == ma_format_unknown)
+      formats.unite(defaultFormats);
+    else
       formats.insert(f.format);
-    if (f.sampleRate != 0)
-      sampleRates.insert(static_cast<int>(f.sampleRate));
-    if (f.channels != 0)
+
+    if (f.channels == 0)
+      channelCounts.unite(defaultChannels);
+    else
       channelCounts.insert(static_cast<int>(f.channels));
+
+    if (f.sampleRate == 0)
+      sampleRates.unite(defaultSampleRates);
+    else
+      sampleRates.insert(static_cast<int>(f.sampleRate));
   }
 
-  // Initialize the device capabilities structure
+  // Fallback values
+  if (formats.isEmpty())
+    formats = defaultFormats;
+  if (sampleRates.isEmpty())
+    sampleRates = defaultSampleRates;
+  if (defaultChannels.isEmpty())
+    channelCounts = defaultChannels;
+
+  // Generate device capabilities structure
   IO::Drivers::Audio::AudioDeviceInfo caps;
   caps.supportedFormats = formats.values();
   caps.supportedSampleRates = sampleRates.values();
   caps.supportedChannelCounts = channelCounts.values();
 
-  // Fill with fallback data if the operating system fails to capabilities
-  if (caps.supportedFormats.isEmpty() || caps.supportedSampleRates.isEmpty()
-      || caps.supportedChannelCounts.isEmpty())
-  {
-    caps.supportedFormats
-        = {ma_format_u8, ma_format_s16, ma_format_s32, ma_format_f32};
-    caps.supportedSampleRates = {8000,  11025, 16000,  22050,  44100,  48000,
-                                 88200, 96000, 176400, 192000, 352800, 384000};
-
-    if (strstr(info.name, "Microphone"))
-      caps.supportedChannelCounts = {1};
-    else
-      caps.supportedChannelCounts = {1, 2};
-  }
-
-  // Sort capabilities for some UI polish
+  // Final UI polish
   std::sort(caps.supportedFormats.begin(), caps.supportedFormats.end());
   std::sort(caps.supportedSampleRates.begin(), caps.supportedSampleRates.end());
   std::sort(caps.supportedChannelCounts.begin(),
             caps.supportedChannelCounts.end());
 
-  // Return the obtained structure
+  // Return result
   return caps;
 }
 
@@ -154,6 +181,7 @@ extractCapabilities(const ma_device_info &info)
  * otherwise.
  */
 static bool checkAndUpdateDeviceList(
+    ma_context *context, ma_device_type type,
     QVector<ma_device_info> &currentList,
     const QVector<ma_device_info> &newList, int selectedIndex, bool isOpen,
     const std::function<void()> &settingsChanged,
@@ -168,7 +196,7 @@ static bool checkAndUpdateDeviceList(
       currentList = newList;
       capabilities.clear();
       for (const auto &info : std::as_const(currentList))
-        capabilities.append(extractCapabilities(info));
+        capabilities.append(extractCapabilities(context, info, type));
 
       settingsChanged();
       return true;
@@ -199,7 +227,7 @@ static bool checkAndUpdateDeviceList(
     currentList = newList;
     capabilities.clear();
     for (const auto &info : std::as_const(currentList))
-      capabilities.append(extractCapabilities(info));
+      capabilities.append(extractCapabilities(context, info, type));
 
     settingsChanged();
     configurationChanged();
@@ -514,6 +542,23 @@ quint64 IO::Drivers::Audio::write(const QByteArray &data)
       break;
     }
 
+    // Convert to 24-bit signed integer (S24LE, packed 3 bytes)
+    else if (format == ma_format_s24)
+    {
+      int value = parts[i].toInt(&ok);
+      if (!ok)
+      {
+        qWarning() << "Invalid Signed 24-bit number:" << parts[i];
+        return 0;
+      }
+
+      value = qBound(-8388608, value, 8388607);
+      frame.append(static_cast<quint8>(value & 0xFF));
+      frame.append(static_cast<quint8>((value >> 8) & 0xFF));
+      frame.append(static_cast<quint8>((value >> 16) & 0xFF));
+      break;
+    }
+
     // Convert to 32-bit signed integer
     else if (format == ma_format_s32)
     {
@@ -593,6 +638,33 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   m_config.dataCallback = &Audio::callback;
   m_config.sampleRate = m_inputCapabilities[m_selectedInputDevice].supportedSampleRates[m_selectedSampleRate];
   // clang-format on
+
+  // Set common flags
+  m_config.noClip = MA_FALSE;
+  m_config.noDisableDenormals = MA_FALSE;
+  m_config.noFixedSizedCallback = MA_TRUE;
+  m_config.noPreSilencedOutputBuffer = MA_FALSE;
+
+  // macOS configuration
+#ifdef Q_OS_MAC
+  m_config.coreaudio.allowNominalSampleRateChange = MA_TRUE;
+#endif
+
+  // Windows configuration
+#ifdef Q_OS_WIN
+  m_config.wasapi.noAutoConvertSRC = MA_FALSE;
+  m_config.wasapi.noDefaultQualitySRC = MA_FALSE;
+  m_config.wasapi.noAutoStreamRouting = MA_FALSE;
+  m_config.wasapi.noHardwareOffloading = MA_TRUE;
+#endif
+
+  // Linux configuration
+#ifdef Q_OS_LINUX
+  m_config.alsa.noMMap = MA_FALSE;
+  m_config.alsa.noAutoFormat = MA_FALSE;
+  m_config.alsa.noAutoChannels = MA_FALSE;
+  m_config.alsa.noAutoResample = MA_FALSE;
+#endif
 
   // Update buffer size
   setBufferSize(m_config.sampleRate / 40);
@@ -1127,6 +1199,7 @@ void IO::Drivers::Audio::generateLists()
 {
   m_sampleFormats = {{ma_format_u8, tr("Unsigned 8-bit")},
                      {ma_format_s16, tr("Signed 16-bit")},
+                     {ma_format_s24, tr("Signed 24-bit")},
                      {ma_format_s32, tr("Signed 32-bit")},
                      {ma_format_f32, tr("Float 32-bit")}};
   m_knownConfigs = {{1, tr("Mono")}, {2, tr("Stereo")}, {3, "3.0"}, {4, "4.0"},
@@ -1315,6 +1388,18 @@ void IO::Drivers::Audio::processInputBuffer()
           m_csvStream << sample;
           break;
         }
+        case ma_format_s24: {
+          const quint8 *b = reinterpret_cast<const quint8 *>(ptr);
+          qint32 sample = static_cast<qint32>(b[0])
+                          | (static_cast<qint32>(b[1]) << 8)
+                          | (static_cast<qint32>(b[2]) << 16);
+
+          if (sample & 0x800000)
+            sample |= 0xFF000000;
+
+          m_csvStream << sample;
+          break;
+        }
         case ma_format_s32: {
           const qint32 sample = qFromLittleEndian<qint32>(
               reinterpret_cast<const quint8 *>(ptr));
@@ -1397,13 +1482,15 @@ void IO::Drivers::Audio::refreshAudioDevices()
 
   // Update list of input devices
   checkAndUpdateDeviceList(
-      m_inputDevices, newInputDevices, m_selectedInputDevice, m_isOpen,
+      &m_context, ma_device_type_capture, m_inputDevices, newInputDevices,
+      m_selectedInputDevice, m_isOpen,
       [this] { Q_EMIT inputSettingsChanged(); },
       [this] { Q_EMIT configurationChanged(); }, m_inputCapabilities);
 
   // Update list of output devices
   checkAndUpdateDeviceList(
-      m_outputDevices, newOutputDevices, m_selectedOutputDevice, m_isOpen,
+      &m_context, ma_device_type_playback, m_outputDevices, newOutputDevices,
+      m_selectedOutputDevice, m_isOpen,
       [this] { Q_EMIT outputSettingsChanged(); },
       [this] { Q_EMIT configurationChanged(); }, m_outputCapabilities);
 

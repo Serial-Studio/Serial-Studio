@@ -428,6 +428,10 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
           maxValue = 32767;
           minValue = -32768;
           break;
+        case ma_format_s24:
+          maxValue = 8388607;
+          minValue = -8388608;
+          break;
         case ma_format_s32:
           maxValue = 2147483647;
           minValue = -2147483648;
