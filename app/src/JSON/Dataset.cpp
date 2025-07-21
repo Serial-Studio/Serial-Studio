@@ -280,25 +280,25 @@ const QJsonObject &JSON::Dataset::jsonData() const
  */
 QJsonObject JSON::Dataset::serialize() const
 {
-  QJsonObject object;
-  object.insert(QStringLiteral("fft"), m_fft);
-  object.insert(QStringLiteral("led"), m_led);
-  object.insert(QStringLiteral("log"), m_log);
-  object.insert(QStringLiteral("min"), qMin(m_min, m_max));
-  object.insert(QStringLiteral("max"), qMax(m_min, m_max));
-  object.insert(QStringLiteral("index"), m_index);
-  object.insert(QStringLiteral("alarm"), m_alarm);
-  object.insert(QStringLiteral("graph"), m_graph);
-  object.insert(QStringLiteral("xAxis"), m_xAxisId);
-  object.insert(QStringLiteral("ledHigh"), m_ledHigh);
-  object.insert(QStringLiteral("fftSamples"), m_fftSamples);
-  object.insert(QStringLiteral("value"), m_value.simplified());
-  object.insert(QStringLiteral("title"), m_title.simplified());
-  object.insert(QStringLiteral("units"), m_units.simplified());
-  object.insert(QStringLiteral("widget"), m_widget.simplified());
-  object.insert(QStringLiteral("fftSamplingRate"), m_fftSamplingRate);
-  object.insert(QStringLiteral("overviewDisplay"), m_displayInOverview);
-  return object;
+  QJsonObject o;
+  o.insert(QStringLiteral("fft"), m_fft);
+  o.insert(QStringLiteral("led"), m_led);
+  o.insert(QStringLiteral("log"), m_log);
+  o.insert(QStringLiteral("min"), qMin(m_min, m_max));
+  o.insert(QStringLiteral("max"), qMax(m_min, m_max));
+  o.insert(QStringLiteral("index"), m_index);
+  o.insert(QStringLiteral("alarm"), m_alarm);
+  o.insert(QStringLiteral("graph"), m_graph);
+  o.insert(QStringLiteral("xAxis"), m_xAxisId);
+  o.insert(QStringLiteral("ledHigh"), m_ledHigh);
+  o.insert(QStringLiteral("fftSamples"), m_fftSamples);
+  o.insert(QStringLiteral("title"), m_title.simplified());
+  o.insert(QStringLiteral("value"), m_value.simplified());
+  o.insert(QStringLiteral("units"), m_units.simplified());
+  o.insert(QStringLiteral("widget"), m_widget.simplified());
+  o.insert(QStringLiteral("fftSamplingRate"), m_fftSamplingRate);
+  o.insert(QStringLiteral("overviewDisplay"), m_displayInOverview);
+  return o;
 }
 
 /**

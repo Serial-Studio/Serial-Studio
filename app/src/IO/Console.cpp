@@ -23,8 +23,9 @@
 #include <QDateTime>
 
 #include "SerialStudio.h"
-#include "IO/Manager.h"
+
 #include "IO/Console.h"
+#include "IO/Manager.h"
 #include "IO/Checksum.h"
 #include "Misc/Translator.h"
 
@@ -299,12 +300,6 @@ void IO::Console::historyDown()
  */
 void IO::Console::setupExternalConnections()
 {
-  // Read received data automatically
-  auto dm = &Manager::instance();
-  connect(dm, &Manager::dataSent, this, &IO::Console::onDataSent);
-  connect(dm, &Manager::dataReceived, this, &IO::Console::onDataReceived);
-
-  // Update lists when language changes
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
           this, &IO::Console::languageChanged);
 }
@@ -507,22 +502,22 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 }
 
 /**
+ * Displays the given @a data in the console
+ */
+void IO::Console::displayData(const QByteArray &data)
+{
+  append(dataToString(data), showTimestamp());
+}
+
+/**
  * Displays the given @a data in the console. @c QByteArray to ~@c QString
  * conversion is done by the @c dataToString() function, which displays incoming
  * data either in UTF-8 or in hexadecimal mode.
  */
-void IO::Console::onDataSent(const QByteArray &data)
+void IO::Console::displaySentData(const QByteArray &data)
 {
   if (echo())
     append(dataToString(data) + QStringLiteral("\n"), showTimestamp());
-}
-
-/**
- * Displays the given @a data in the console
- */
-void IO::Console::onDataReceived(const QByteArray &data)
-{
-  append(dataToString(data), showTimestamp());
 }
 
 /**

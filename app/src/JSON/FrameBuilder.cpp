@@ -33,11 +33,16 @@
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
+#include "CSV/Export.h"
+#include "UI/Dashboard.h"
+#include "Plugins/Server.h"
+
 /**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
 JSON::FrameBuilder::FrameBuilder()
-  : m_frameParser(nullptr)
+  : m_quickPlotChannels(-1)
+  , m_frameParser(nullptr)
   , m_opMode(SerialStudio::ProjectFile)
 {
   // Read JSON map location
@@ -134,8 +139,6 @@ void JSON::FrameBuilder::setupExternalConnections()
 {
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &JSON::FrameBuilder::onConnectedChanged);
-  connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
-          &JSON::FrameBuilder::readData);
 }
 
 /**
@@ -280,14 +283,6 @@ void JSON::FrameBuilder::setOperationMode(
 }
 
 /**
- * Saves the location of the last valid JSON map file that was opened (if any)
- */
-void JSON::FrameBuilder::setJsonPathSetting(const QString &path)
-{
-  m_settings.setValue(QStringLiteral("json_map_location"), path);
-}
-
-/**
  * @brief Handles device connection events and triggers auto-execute actions.
  *
  * This slot is called when the connection state of the serial device changes.
@@ -304,6 +299,9 @@ void JSON::FrameBuilder::setJsonPathSetting(const QString &path)
  */
 void JSON::FrameBuilder::onConnectedChanged()
 {
+  // Reset quick plot field count
+  m_quickPlotChannels = -1;
+
   // Validate that the device is connected
   if (!IO::Manager::instance().isConnected())
     return;
@@ -322,219 +320,334 @@ void JSON::FrameBuilder::onConnectedChanged()
 }
 
 /**
- * Tries to parse the given data as a JSON document according to the selected
- * operation mode.
+ * Saves the location of the last valid JSON map file that was opened (if any)
+ */
+void JSON::FrameBuilder::setJsonPathSetting(const QString &path)
+{
+  m_settings.setValue(QStringLiteral("json_map_location"), path);
+}
+
+//------------------------------------------------------------------------------
+// Hotpath data processing functions
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Dispatches raw data to the appropriate frame parser based on the
+ * current operation mode.
  *
- * Possible operation modes:
- * - Auto:   serial data contains the JSON data frame
- * - Manual: serial data only contains the comma-separated values, and we need
- *           to use a JSON map file (given by the user) to know what each value
- *           means
+ * This is a hotpath function executed at high frequency.
  *
- * If JSON parsing is successfull, then the class shall notify the rest of the
- * application in order to process packet data.
+ * It routes the incoming binary data to the correct parsing strategy:
+ * - If the device sends JSON directly, parses it using QJsonDocument.
+ * - If using a project file, delegates parsing to the configured frame parser.
+ * - If in Quick Plot mode, parses CSV-like data for plotting.
+ *
+ * @param data Raw binary input data to be processed.
  */
 void JSON::FrameBuilder::readData(const QByteArray &data)
 {
-  // Data empty, abort
-  if (data.isEmpty())
-    return;
-
-  // Get operation mode
-  const auto opMode = operationMode();
-
-  // Serial device sends JSON (auto mode)
-  if (opMode == SerialStudio::DeviceSendsJSON)
+  switch (operationMode())
   {
-    auto jsonData = QJsonDocument::fromJson(data).object();
-    if (m_frame.read(jsonData))
-      Q_EMIT frameChanged(m_frame);
+    case SerialStudio::QuickPlot:
+      parseQuickPlotFrame(data);
+      break;
+    case SerialStudio::ProjectFile:
+      parseProjectFrame(data);
+      break;
+    case SerialStudio::DeviceSendsJSON:
+      if (m_rawFrame.read(QJsonDocument::fromJson(data).object()))
+        publishFrame(m_rawFrame);
+      break;
+  }
+}
+
+//------------------------------------------------------------------------------
+// Frame parsing
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Parses a project frame using the configured decoding method.
+ *
+ * Converts incoming binary data into structured field values based on the
+ * decoder method defined in the project model (e.g., plain text, hex, base64,
+ * binary). If CSV playback is active, skips decoding and parses the simplified
+ * string directly. Updates all frame datasets with the parsed values and
+ * triggers a UI update.
+ *
+ * @param data Raw binary input to be decoded and assigned to frame datasets.
+ *
+ * @note This function is part of the high-frequency data path. Optimize later.
+ */
+void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
+{
+  // Obtain state of the app
+  const bool csvPlaying = CSV::Player::instance().isOpen();
+
+  // Real-time data, parse data & perform conversion
+  QStringList channels;
+  if (!csvPlaying && m_frameParser)
+  {
+    switch (JSON::ProjectModel::instance().decoderMethod())
+    {
+      case SerialStudio::PlainText:
+        channels = m_frameParser->parse(QString::fromUtf8(data));
+        break;
+      case SerialStudio::Hexadecimal:
+        channels = m_frameParser->parse(QString::fromUtf8(data.toHex()));
+        break;
+      case SerialStudio::Base64:
+        channels = m_frameParser->parse(QString::fromUtf8(data.toBase64()));
+        break;
+      case SerialStudio::Binary:
+        channels = m_frameParser->parse(data);
+        break;
+      default:
+        channels = m_frameParser->parse(QString::fromUtf8(data));
+        break;
+    }
   }
 
-  // Data is separated and parsed by Serial Studio project
-  else if (opMode == SerialStudio::ProjectFile && m_frameParser)
+  // CSV data, no need to perform conversions or use frame parser
+  else
+    channels = QString::fromUtf8(data.simplified()).split(',');
+
+  // Replace data in frame
+  for (int g = 0; g < m_frame.groupCount(); ++g)
   {
-    // Obtain state of the app
-    const bool csvPlaying = CSV::Player::instance().isOpen();
-
-    // Real-time data, parse data & perform conversion
-    QStringList fields;
-    if (!csvPlaying)
+    auto &group = m_frame.m_groups[g];
+    for (int d = 0; d < group.datasetCount(); ++d)
     {
-      switch (JSON::ProjectModel::instance().decoderMethod())
-      {
-        case SerialStudio::PlainText:
-          fields = m_frameParser->parse(QString::fromUtf8(data));
-          break;
-        case SerialStudio::Hexadecimal:
-          fields = m_frameParser->parse(QString::fromUtf8(data.toHex()));
-          break;
-        case SerialStudio::Base64:
-          fields = m_frameParser->parse(QString::fromUtf8(data.toBase64()));
-          break;
-        case SerialStudio::Binary:
-          fields = m_frameParser->parse(data);
-          break;
-        default:
-          fields = m_frameParser->parse(QString::fromUtf8(data));
-          break;
-      }
+      auto &dataset = group.m_datasets[d];
+      const auto index = dataset.index();
+      if (index <= channels.count() && index > 0)
+        dataset.m_value = channels[index - 1];
     }
-
-    // CSV data, no need to perform conversions or use frame parser
-    else
-      fields = QString::fromUtf8(data.simplified()).split(',');
-
-    // Replace data in frame
-    for (int g = 0; g < m_frame.groupCount(); ++g)
-    {
-      auto &group = m_frame.m_groups[g];
-      for (int d = 0; d < group.datasetCount(); ++d)
-      {
-        auto &dataset = group.m_datasets[d];
-        const auto index = dataset.index();
-        if (index <= fields.count() && index > 0)
-          dataset.m_value = fields.at(index - 1);
-      }
-    }
-
-    // Update user interface
-    Q_EMIT frameChanged(m_frame);
   }
 
-  // Data is separated by comma separated values
-  else if (opMode == SerialStudio::QuickPlot)
+  // Update user interface
+  publishFrame(m_frame);
+}
+
+/**
+ * @brief Parses and updates the Quick Plot frame with incoming comma-separated
+ *       values.
+ *
+ * Converts UTF-8 encoded CSV data into channel values. If the number of
+ * channels has changed since the last call, it rebuilds the internal frame
+ * layout via buildQuickPlotFrame(). Then updates the dataset values in the
+ * existing frame and publishes it to the UI.
+ *
+ * @param data UTF-8 encoded, comma-separated channel values for plotting.
+ *
+ * @note This function is part of the high-frequency data path. Optimize later.
+ */
+void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
+{
+  // Rebuild project frame if required
+  QStringList channels = QString::fromUtf8(data).simplified().split(',');
+  if (channels.count() != m_quickPlotChannels)
   {
-    // Parse audio data
+    buildQuickPlotFrame(channels);
+    m_quickPlotChannels = channels.count();
+  }
+
+  // Replace data in frame
+  for (int g = 0; g < m_quickPlotFrame.groupCount(); ++g)
+  {
+    auto &group = m_quickPlotFrame.m_groups[g];
+    for (int d = 0; d < group.datasetCount(); ++d)
+    {
+      auto &dataset = group.m_datasets[d];
+      const auto index = dataset.index();
+      if (index <= channels.count() && index > 0)
+        dataset.m_value = channels[index - 1];
+    }
+  }
+
+  // Update user interface
+  publishFrame(m_quickPlotFrame);
+}
+
+//------------------------------------------------------------------------------
+// Quick-plot project generation functions
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Rebuilds the internal frame structure for Quick Plot mode based on
+ *        current channel count.
+ *
+ * Constructs a new `JSON::Frame` and associated `JSON::Group`/`Dataset` layout
+ * using the provided channel values. If the build is configured for commercial
+ * use and the audio bus is active, the function includes additional metadata
+ * required for FFT plotting (e.g., sample rate, min/max). Otherwise, it builds
+ * a generic datagrid and multiplot view for standard Quick Plot channels.
+ *
+ * This function is only called when the number of input channels changes, not
+ * on every data frame.
+ *
+ * @param channels List of channel values received in the most recent data
+ *                 frame.
+ *
+ * @note This function allocates and initializes all datasets and groups from
+ *       scratch, which is expensive. It should be called only when the number
+ *       of channels changes. Avoid calling this in the real-time path unless
+ *       necessary.
+ */
+void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
+{
+  // Parse audio data
 #ifdef BUILD_COMMERCIAL
-    const auto busType = IO::Manager::instance().busType();
-    if (busType == SerialStudio::BusType::Audio)
+  const auto busType = IO::Manager::instance().busType();
+  if (busType == SerialStudio::BusType::Audio)
+  {
+    // Get reference to Audio driver
+    const auto &audio = IO::Drivers::Audio::instance();
+    const auto format = audio.config().capture.format;
+    const auto sampleRate = audio.config().sampleRate;
+
+    // Compute audio parameters
+    double maxValue = 1.0;
+    double minValue = 0.0;
+    switch (format)
     {
-      // Get reference to Audio driver
-      const auto &audio = IO::Drivers::Audio::instance();
-      const auto format = audio.config().capture.format;
-      const auto sampleRate = audio.config().sampleRate;
-
-      // Compute audio parameters
-      double maxValue = 1.0;
-      double minValue = 0.0;
-      switch (format)
-      {
-        case ma_format_u8:
-          maxValue = 255;
-          minValue = 0;
-          break;
-        case ma_format_s16:
-          maxValue = 32767;
-          minValue = -32768;
-          break;
-        case ma_format_s24:
-          maxValue = 8388607;
-          minValue = -8388608;
-          break;
-        case ma_format_s32:
-          maxValue = 2147483647;
-          minValue = -2147483648;
-          break;
-        case ma_format_f32:
-          maxValue = 1.0;
-          minValue = -1.0;
-          break;
-        default:
-          break;
-      }
-
-      // Obtain microphone values for each channel
-      int index = 1;
-      auto channels = data.split(',');
-      QVector<JSON::Dataset> datasets;
-      for (const auto &channel : std::as_const(channels))
-      {
-        JSON::Dataset dataset;
-        dataset.m_fft = true;
-        dataset.m_groupId = 0;
-        dataset.m_graph = true;
-        dataset.m_index = index;
-        dataset.m_max = maxValue;
-        dataset.m_min = minValue;
-        dataset.m_fftSamples = 2048;
-        dataset.m_fftWindowFn = "Hann";
-        dataset.m_fftSamplingRate = sampleRate;
-        dataset.m_title = tr("Channel %1").arg(index);
-        dataset.m_value = QString::fromUtf8(channel);
-        datasets.append(dataset);
-
-        ++index;
-      }
-
-      // Create the holder group
-      JSON::Group group(0);
-      group.m_datasets = datasets;
-      group.m_title = tr("Multiple Plots");
-      if (index > 2)
-        group.m_widget = QStringLiteral("multiplot");
-
-      // Create a project frame object
-      JSON::Frame frame;
-      frame.m_title = tr("Quick Plot");
-      frame.m_groups.append(group);
-
-      // Update user interface
-      frame.buildUniqueIds();
-      Q_EMIT frameChanged(frame);
-      return;
+      case ma_format_u8:
+        maxValue = 255;
+        minValue = 0;
+        break;
+      case ma_format_s16:
+        maxValue = 32767;
+        minValue = -32768;
+        break;
+      case ma_format_s24:
+        maxValue = 8388607;
+        minValue = -8388608;
+        break;
+      case ma_format_s32:
+        maxValue = 2147483647;
+        minValue = -2147483648;
+        break;
+      case ma_format_f32:
+        maxValue = 1.0;
+        minValue = -1.0;
+        break;
+      default:
+        break;
     }
-#endif
 
-    // Obtain fields from data frame
-    auto fields = data.split(',');
-
-    // Create datasets from the data
-    int channel = 1;
+    // Obtain microphone values for each channel
+    int index = 1;
     QVector<JSON::Dataset> datasets;
-    for (const auto &field : std::as_const(fields))
+    for (const auto &channel : std::as_const(channels))
     {
       JSON::Dataset dataset;
+      dataset.m_fft = true;
       dataset.m_groupId = 0;
-      dataset.m_index = channel;
-      dataset.m_title = tr("Channel %1").arg(channel);
-      dataset.m_value = QString::fromUtf8(field);
-      dataset.m_graph = false;
+      dataset.m_graph = true;
+      dataset.m_index = index;
+      dataset.m_max = maxValue;
+      dataset.m_min = minValue;
+      dataset.m_fftSamples = 2048;
+      dataset.m_fftWindowFn = "Hann";
+      dataset.m_fftSamplingRate = sampleRate;
+      dataset.m_title = tr("Channel %1").arg(index);
+      dataset.m_value = channel;
       datasets.append(dataset);
 
-      ++channel;
+      ++index;
     }
 
-    // Create a project frame from the groups
-    JSON::Frame frame;
-    frame.m_title = tr("Quick Plot");
+    // Create the holder group
+    JSON::Group group(0);
+    group.m_datasets = datasets;
+    group.m_title = tr("Audio Input");
+    if (index > 2)
+      group.m_widget = QStringLiteral("multiplot");
 
-    // Create a datagrid group from the dataset array
-    JSON::Group datagrid(0);
-    datagrid.m_datasets = datasets;
-    datagrid.m_title = tr("Quick Plot Data");
-    datagrid.m_widget = QStringLiteral("datagrid");
-    for (int i = 0; i < datagrid.m_datasets.count(); ++i)
-      datagrid.m_datasets[i].m_graph = true;
-
-    // Append datagrid to frame
-    frame.m_groups.append(datagrid);
-
-    // Create a multiplot group when multiple datasets are found
-    if (datasets.count() > 1)
-    {
-      JSON::Group multiplot(1);
-      multiplot.m_datasets = datasets;
-      multiplot.m_title = tr("Multiple Plots");
-      multiplot.m_widget = QStringLiteral("multiplot");
-      for (int i = 0; i < multiplot.m_datasets.count(); ++i)
-        multiplot.m_datasets[i].m_groupId = 1;
-
-      frame.m_groups.append(multiplot);
-    }
+    // Create a project frame object
+    m_quickPlotFrame.clear();
+    m_quickPlotFrame.m_title = tr("Quick Plot");
+    m_quickPlotFrame.m_groups.append(group);
 
     // Update user interface
-    frame.buildUniqueIds();
-    Q_EMIT frameChanged(frame);
+    m_quickPlotFrame.buildUniqueIds();
+    return;
   }
+#endif
+
+  // Create datasets from the data
+  int idx = 1;
+  QVector<JSON::Dataset> datasets;
+  for (const auto &channel : std::as_const(channels))
+  {
+    JSON::Dataset dataset;
+    dataset.m_groupId = 0;
+    dataset.m_index = idx;
+    dataset.m_title = tr("Channel %1").arg(idx);
+    dataset.m_value = channel;
+    dataset.m_graph = false;
+    datasets.append(dataset);
+
+    ++idx;
+  }
+
+  // Create a project frame from the groups
+  m_quickPlotFrame.clear();
+  m_quickPlotFrame.m_title = tr("Quick Plot");
+
+  // Create a datagrid group from the dataset array
+  JSON::Group datagrid(0);
+  datagrid.m_datasets = datasets;
+  datagrid.m_title = tr("Quick Plot Data");
+  datagrid.m_widget = QStringLiteral("datagrid");
+  for (int i = 0; i < datagrid.m_datasets.count(); ++i)
+    datagrid.m_datasets[i].m_graph = true;
+
+  // Append datagrid to frame
+  m_quickPlotFrame.m_groups.append(datagrid);
+
+  // Create a multiplot group when multiple datasets are found
+  if (datasets.count() > 1)
+  {
+    JSON::Group multiplot(1);
+    multiplot.m_datasets = datasets;
+    multiplot.m_title = tr("Multiple Plots");
+    multiplot.m_widget = QStringLiteral("multiplot");
+    for (int i = 0; i < multiplot.m_datasets.count(); ++i)
+      multiplot.m_datasets[i].m_groupId = 1;
+
+    m_quickPlotFrame.m_groups.append(multiplot);
+  }
+
+  // Update user interface
+  m_quickPlotFrame.buildUniqueIds();
+}
+
+//------------------------------------------------------------------------------
+// Hotpath data publishing functions
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Publishes a fully constructed JSON frame to all registered output
+ *        modules.
+ *
+ * Dispatches the provided frame to:
+ * - The dashboard UI for real-time visualization.
+ * - The CSV export system for logging.
+ * - The plugin server for external data consumption.
+ *
+ * @param frame The fully populated frame to distribute.
+ *
+ * @note This function touches multiple subsystems, including I/O and UI.
+ *       Do not call it in tight loops unless you're sure the frame is
+ *       finalized.
+ */
+void JSON::FrameBuilder::publishFrame(const JSON::Frame &frame)
+{
+  static auto &csvExport = CSV::Export::instance();
+  static auto &dashboard = UI::Dashboard::instance();
+  static auto &pluginsServer = Plugins::Server::instance();
+
+  dashboard.processFrame(frame);
+  csvExport.registerFrame(frame);
+  pluginsServer.registerFrame(frame);
 }

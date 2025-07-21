@@ -86,21 +86,32 @@ public:
 
 public slots:
   void setupExternalConnections();
+  void readData(const QByteArray &data);
   void loadJsonMap(const QString &path);
   void setFrameParser(JSON::FrameParser *editor);
   void setOperationMode(const SerialStudio::OperationMode mode);
 
-public slots:
-  void setJsonPathSetting(const QString &path);
-
 private slots:
   void onConnectedChanged();
-  void readData(const QByteArray &data);
+
+private:
+  void setJsonPathSetting(const QString &path);
+
+  void parseProjectFrame(const QByteArray &data);
+  void parseQuickPlotFrame(const QByteArray &data);
+  void buildQuickPlotFrame(const QStringList &channels);
+
+  void publishFrame(const JSON::Frame &frame);
 
 private:
   QFile m_jsonMap;
+
   JSON::Frame m_frame;
+  JSON::Frame m_rawFrame;
+  JSON::Frame m_quickPlotFrame;
+
   QSettings m_settings;
+  int m_quickPlotChannels;
   JSON::FrameParser *m_frameParser;
   SerialStudio::OperationMode m_opMode;
 };

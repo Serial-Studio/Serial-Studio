@@ -53,7 +53,6 @@ UI::Dashboard::Dashboard()
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(true); });
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] { resetData(true); });
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=] { resetData(); });
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged, this, &UI::Dashboard::processFrame);
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
@@ -819,29 +818,24 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
  */
 void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
 {
-  // Iterate over all datasets in the incoming frame
   for (const auto &group : frame.groups())
   {
     for (const auto &dataset : group.datasets())
     {
-      // Get the dataset UID
-      auto uid = dataset.uniqueId();
-
-      // UID not registered -> frame structure changed
-      if (!m_datasetReferences.contains(uid))
+      const auto &uid = dataset.uniqueId();
+      auto it = m_datasetReferences.find(uid);
+      if (it == m_datasetReferences.end())
       {
         resetData(false);
         processFrame(frame);
         return;
       }
 
-      // Update internal references to the **exact** same dataset
-      for (auto *ptr : std::as_const(m_datasetReferences[uid]))
+      for (auto *ptr : std::as_const(it.value()))
         ptr->setValue(dataset.value());
     }
   }
 
-  // Update plot memory structures
   updateDataSeries();
 }
 

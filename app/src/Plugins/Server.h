@@ -86,13 +86,13 @@ public:
 public slots:
   void removeConnection();
   void setEnabled(const bool enabled);
+  void sendRawData(const QByteArray &data);
+  void registerFrame(const JSON::Frame &frame);
 
 private slots:
   void onDataReceived();
   void acceptConnection();
   void sendProcessedData();
-  void sendRawData(const QByteArray &data);
-  void registerFrame(const JSON::Frame &frame);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:

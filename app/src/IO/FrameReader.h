@@ -53,8 +53,8 @@ class FrameReader : public QObject
   Q_OBJECT
 
 signals:
+  void frameReady(const QByteArray &frame);
   void dataReceived(const QByteArray &data);
-  void framesReady(const QVector<QByteArray> &frame);
 
 public:
   explicit FrameReader(QObject *parent = nullptr);
@@ -86,7 +86,7 @@ private:
   QString m_checksum;
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
-  QList<QByteArray> m_quickPlotEndSequences;
+  QVector<QByteArray> m_quickPlotEndSequences;
 
   mutable QReadWriteLock m_dataLock;
 };

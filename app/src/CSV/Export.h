@@ -116,10 +116,10 @@ public slots:
   void closeFile();
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
+  void registerFrame(const JSON::Frame &frame);
 
 private slots:
   void writeValues();
-  void registerFrame(const JSON::Frame &frame);
 
 private:
   QVector<QPair<int, QString>> createCsvFile(const JSON::Frame &frame);

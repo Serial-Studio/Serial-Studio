@@ -25,8 +25,6 @@
 
 #include "IO/Manager.h"
 #include "Plugins/Server.h"
-#include "JSON/FrameBuilder.h"
-
 #include "Misc/Utilities.h"
 #include "Misc/TimerEvents.h"
 
@@ -41,14 +39,8 @@ Plugins::Server::Server()
   : m_enabled(false)
 {
   // Send processed data at 1 Hz
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
-          this, &Plugins::Server::registerFrame);
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
           &Plugins::Server::sendProcessedData);
-
-  // Send I/O "raw" data directly
-  connect(&IO::Manager::instance(), &IO::Manager::dataReceived, this,
-          &Plugins::Server::sendRawData);
 
   // Configure TCP server
   connect(&m_server, &QTcpServer::newConnection, this,
@@ -154,6 +146,57 @@ void Plugins::Server::setEnabled(const bool enabled)
     m_frames.clear();
     m_frames.squeeze();
   }
+}
+
+/**
+ * @brief Sends raw binary data to all connected clients.
+ *
+ * The data is base64-encoded and wrapped in a JSON object before
+ * being transmitted over each writable TCP socket.
+ *
+ * @param data Raw data bytes received from the I/O layer.
+ */
+void Plugins::Server::sendRawData(const QByteArray &data)
+{
+  // Stop if system is not enabled
+  if (!enabled())
+    return;
+
+  // Stop if no sockets are available
+  if (m_sockets.count() < 1)
+    return;
+
+  // Create JSON structure with incoming data encoded in Base-64
+  QJsonObject object;
+  object.insert(QStringLiteral("data"), QString::fromUtf8(data.toBase64()));
+
+  // Get JSON string in compact format & send it over the TCP socket
+  QJsonDocument document(object);
+  const auto json = document.toJson(QJsonDocument::Compact) + "\n";
+
+  // Send data to each plugin
+  for (auto *socket : std::as_const(m_sockets))
+  {
+    if (!socket)
+      continue;
+
+    if (socket->isWritable())
+      socket->write(json);
+  }
+}
+
+/**
+ * @brief Registers a new structured data frame.
+ *
+ * Appends the frame to an internal buffer that will be transmitted
+ * to clients by sendProcessedData().
+ *
+ * @param frame JSON::Frame object to register.
+ */
+void Plugins::Server::registerFrame(const JSON::Frame &frame)
+{
+  if (enabled())
+    m_frames.append(frame);
 }
 
 /**
@@ -274,57 +317,6 @@ void Plugins::Server::sendProcessedData()
   // Clear frame list
   m_frames.clear();
   m_frames.squeeze();
-}
-
-/**
- * @brief Sends raw binary data to all connected clients.
- *
- * The data is base64-encoded and wrapped in a JSON object before
- * being transmitted over each writable TCP socket.
- *
- * @param data Raw data bytes received from the I/O layer.
- */
-void Plugins::Server::sendRawData(const QByteArray &data)
-{
-  // Stop if system is not enabled
-  if (!enabled())
-    return;
-
-  // Stop if no sockets are available
-  if (m_sockets.count() < 1)
-    return;
-
-  // Create JSON structure with incoming data encoded in Base-64
-  QJsonObject object;
-  object.insert(QStringLiteral("data"), QString::fromUtf8(data.toBase64()));
-
-  // Get JSON string in compact format & send it over the TCP socket
-  QJsonDocument document(object);
-  const auto json = document.toJson(QJsonDocument::Compact) + "\n";
-
-  // Send data to each plugin
-  for (auto *socket : std::as_const(m_sockets))
-  {
-    if (!socket)
-      continue;
-
-    if (socket->isWritable())
-      socket->write(json);
-  }
-}
-
-/**
- * @brief Registers a new structured data frame.
- *
- * Appends the frame to an internal buffer that will be transmitted
- * to clients by sendProcessedData().
- *
- * @param frame JSON::Frame object to register.
- */
-void Plugins::Server::registerFrame(const JSON::Frame &frame)
-{
-  if (enabled())
-    m_frames.append(frame);
 }
 
 /**

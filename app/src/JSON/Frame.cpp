@@ -130,21 +130,31 @@ void JSON::Frame::buildUniqueIds()
  */
 bool JSON::Frame::equalsStructure(const JSON::Frame &other) const
 {
-  if (groupCount() != other.groupCount())
+  const int groupCountA = groupCount();
+  const int groupCountB = other.groupCount();
+  if (groupCountA != groupCountB)
     return false;
 
-  for (int i = 0; i < groupCount(); ++i)
+  const auto &groupsA = groups();
+  const auto &groupsB = other.groups();
+  for (int i = 0; i < groupCountA; ++i)
   {
-    const auto &g1 = groups()[i];
-    const auto &g2 = other.groups()[i];
+    const auto &g1 = groupsA[i];
+    const auto &g2 = groupsB[i];
 
-    if (g1.groupId() != g2.groupId()
-        || g1.datasets().size() != g2.datasets().size())
+    if (g1.groupId() != g2.groupId())
       return false;
 
-    for (int j = 0; j < g1.datasets().size(); ++j)
+    const auto &datasetsA = g1.datasets();
+    const auto &datasetsB = g2.datasets();
+
+    const int datasetCount = datasetsA.size();
+    if (datasetCount != datasetsB.size())
+      return false;
+
+    for (int j = 0; j < datasetCount; ++j)
     {
-      if (g1.datasets()[j].index() != g2.datasets()[j].index())
+      if (datasetsA[j].index() != datasetsB[j].index())
         return false;
     }
   }

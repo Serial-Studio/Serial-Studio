@@ -158,10 +158,11 @@ public slots:
   void setDisplayMode(const IO::Console::DisplayMode &mode);
   void append(const QString &str, const bool addTimestamp = false);
 
+  void displayData(const QByteArray &data);
+  void displaySentData(const QByteArray &data);
+
 private slots:
-  void onDataSent(const QByteArray &data);
   void addToHistory(const QString &command);
-  void onDataReceived(const QByteArray &data);
 
 private:
   QString dataToString(const QByteArray &data);

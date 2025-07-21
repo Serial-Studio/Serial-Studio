@@ -141,8 +141,8 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
     std::cout << output.toStdString() << std::endl;
     output.append("\n");
 
-    // Use IO::Manager signal to avoid messing up tokens in console
-    Q_EMIT IO::Manager::instance().dataReceived(output.toUtf8());
+    // Display data in console
+    IO::Console::instance().displayData(output.toUtf8());
   }
 }
 

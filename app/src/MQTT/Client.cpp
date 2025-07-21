@@ -82,10 +82,6 @@ MQTT::Client::Client()
               closeConnection();
           });
 
-  // Publish incoming data frames
-  connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
-          &MQTT::Client::publishMessage);
-
   // Set default parameters
   setPort(1883);
   setPeerVerifyDepth(10);

@@ -20,15 +20,19 @@
  */
 
 #include "IO/Manager.h"
+#include "IO/Console.h"
 #include "IO/Drivers/UART.h"
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/BluetoothLE.h"
 
+#include "Plugins/Server.h"
 #include "Misc/Translator.h"
+#include "JSON/FrameBuilder.h"
 
 #include <QApplication>
 
 #ifdef BUILD_COMMERCIAL
+#  include "MQTT/Client.h"
 #  include "Misc/Utilities.h"
 #  include "Licensing/Trial.h"
 #  include "IO/Drivers/Audio.h"
@@ -310,7 +314,7 @@ qint64 IO::Manager::writeData(const QByteArray &data)
     {
       auto writtenData = data;
       writtenData.chop(data.length() - bytes);
-      Q_EMIT dataSent(writtenData);
+      IO::Console::instance().displaySentData(writtenData);
     }
 
     return bytes;
@@ -478,8 +482,8 @@ void IO::Manager::processPayload(const QByteArray &payload)
 {
   if (!payload.isEmpty())
   {
-    Q_EMIT dataReceived(payload);
-    Q_EMIT frameReceived(payload);
+    publishData(payload);
+    publishFrame(payload);
   }
 }
 
@@ -684,7 +688,7 @@ void IO::Manager::killFrameReader()
     QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
                         &IO::FrameReader::processData);
 
-    QMetaObject::invokeMethod(m_frameReader, "deleteLater",
+    QMetaObject::invokeMethod(m_frameReader, &QObject::deleteLater,
                               Qt::QueuedConnection);
     m_frameReader.clear();
   }
@@ -738,18 +742,15 @@ void IO::Manager::startFrameReader()
       Qt::QueuedConnection);
 
   // Connect frame reader events to IO::Manager
-  connect(m_frameReader, &IO::FrameReader::framesReady, this,
-          [this](const QVector<QByteArray> &frames) {
+  connect(m_frameReader, &IO::FrameReader::frameReady, this,
+          [this](const QByteArray &frame) {
             if (!paused())
-            {
-              for (const auto &frame : frames)
-                Q_EMIT frameReceived(frame);
-            }
+              publishFrame(frame);
           });
   connect(m_frameReader, &IO::FrameReader::dataReceived, this,
           [this](const QByteArray &data) {
             if (!paused())
-              Q_EMIT dataReceived(data);
+              publishData(data);
           });
 
   // Start the worker thread
@@ -758,4 +759,42 @@ void IO::Manager::startFrameReader()
     if (!m_workerThread.isRunning())
       m_workerThread.start();
   }
+}
+
+//------------------------------------------------------------------------------
+// Hotpath data publishing functions
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Sends raw binary data to the console and server.
+ *
+ * Displays the data via IO::Console and transmits it using Plugins::Server.
+ *
+ * @param data Raw data to be displayed and sent.
+ */
+void IO::Manager::publishData(const QByteArray &data)
+{
+  static auto &console = IO::Console::instance();
+  static auto &server = Plugins::Server::instance();
+  console.displayData(data);
+  server.sendRawData(data);
+}
+
+/**
+ * @brief Processes a single data frame and optionally publishes it over MQTT.
+ *
+ * Parses the data using JSON::FrameBuilder. On commercial builds, the same
+ * data is also published to the MQTT broker.
+ *
+ * @param data A binary frame to process and optionally publish.
+ */
+void IO::Manager::publishFrame(const QByteArray &data)
+{
+  static auto &frameBuilder = JSON::FrameBuilder::instance();
+  frameBuilder.readData(data);
+
+#ifdef BUILD_COMMERCIAL
+  static auto &mqtt = MQTT::Client::instance();
+  mqtt.publishMessage(data);
+#endif
 }

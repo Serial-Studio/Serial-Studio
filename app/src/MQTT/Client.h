@@ -176,8 +176,9 @@ public slots:
   void setSslProtocol(const quint8 protocol);
   void setPeerVerifyMode(const quint8 verifyMode);
 
-private slots:
   void publishMessage(const QByteArray &data);
+
+private slots:
   void onStateChanged(QMqttClient::ClientState state);
   void onErrorChanged(QMqttClient::ClientError error);
   void onAuthenticationFinished(const QMqttAuthenticationProperties &p);

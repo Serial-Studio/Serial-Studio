@@ -142,7 +142,6 @@ public slots:
   void setTerminalEnabled(const bool enabled);
   void activateAction(const int index, const bool guiTrigger = false);
 
-private slots:
   void processFrame(const JSON::Frame &frame);
 
 private:

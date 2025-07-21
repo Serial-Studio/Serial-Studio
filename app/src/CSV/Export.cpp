@@ -24,7 +24,6 @@
 #include "IO/Manager.h"
 #include "CSV/Player.h"
 #include "Misc/Utilities.h"
-#include "JSON/FrameBuilder.h"
 #include "Misc/WorkspaceManager.h"
 
 #ifdef BUILD_COMMERCIAL
@@ -128,8 +127,6 @@ void CSV::Export::setupExternalConnections()
 {
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &Export::closeFile);
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
-          this, &Export::registerFrame);
   connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this, [=] {
     if (IO::Manager::instance().paused())
       closeFile();
@@ -237,6 +234,36 @@ void CSV::Export::writeValues()
 }
 
 /**
+ * @brief Registers a new data frame for export.
+ *
+ * Pushes the frame into the pending queue for async export if conditions are
+ * met.
+ *
+ * @param frame The data frame to export.
+ */
+void CSV::Export::registerFrame(const JSON::Frame &frame)
+{
+  // Skip if export is disabled, frame is invalid or user is playing a CSV file
+  if (!exportEnabled() || !frame.isValid() || CSV::Player::instance().isOpen())
+    return;
+
+  // Skip if not connected to a device
+#ifdef BUILD_COMMERCIAL
+  if (!IO::Manager::instance().isConnected()
+      && !(MQTT::Client::instance().isConnected()
+           && MQTT::Client::instance().isSubscriber()))
+    return;
+#else
+  if (!IO::Manager::instance().isConnected())
+    return;
+#endif
+
+  // Add frame to pending frame queue
+  if (!m_pendingFrames.enqueue(TimestampFrame(JSON::Frame(frame))))
+    qWarning() << "CSV Export: Dropping frame (queue full)";
+}
+
+/**
  * @brief Creates a new CSV file and writes the header.
  *
  * Builds a sorted header based on dataset indices and opens the file
@@ -316,34 +343,4 @@ CSV::Export::createCsvFile(const JSON::Frame &frame)
   // Update user interface & return the data model
   Q_EMIT openChanged();
   return pairs;
-}
-
-/**
- * @brief Registers a new data frame for export.
- *
- * Pushes the frame into the pending queue for async export if conditions are
- * met.
- *
- * @param frame The data frame to export.
- */
-void CSV::Export::registerFrame(const JSON::Frame &frame)
-{
-  // Skip if export is disabled, frame is invalid or user is playing a CSV file
-  if (!exportEnabled() || !frame.isValid() || CSV::Player::instance().isOpen())
-    return;
-
-  // Skip if not connected to a device
-#ifdef BUILD_COMMERCIAL
-  if (!IO::Manager::instance().isConnected()
-      && !(MQTT::Client::instance().isConnected()
-           && MQTT::Client::instance().isSubscriber()))
-    return;
-#else
-  if (!IO::Manager::instance().isConnected())
-    return;
-#endif
-
-  // Add frame to pending frame queue
-  if (!m_pendingFrames.enqueue(TimestampFrame(JSON::Frame(frame))))
-    qWarning() << "CSV Export: Dropping frame (queue full)";
 }

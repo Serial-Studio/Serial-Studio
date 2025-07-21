@@ -101,9 +101,6 @@ signals:
   void finishSequenceChanged();
   void checksumAlgorithmChanged();
   void threadedFrameExtractionChanged();
-  void dataSent(const QByteArray &data);
-  void dataReceived(const QByteArray &data);
-  void frameReceived(const QByteArray &frame);
 
 private:
   explicit Manager();
@@ -150,9 +147,11 @@ public slots:
   void setThreadedFrameExtraction(const bool enabled);
   void setBusType(const SerialStudio::BusType &driver);
 
-private slots:
+private:
   void killFrameReader();
   void startFrameReader();
+  void publishData(const QByteArray &data);
+  void publishFrame(const QByteArray &data);
 
 private:
   bool m_paused;

@@ -95,8 +95,8 @@ public:
   [[nodiscard]] int datasetId() const;
 
   [[nodiscard]] const QString &title() const;
-  [[nodiscard]] const QString &value() const;
   [[nodiscard]] const QString &units() const;
+  [[nodiscard]] const QString &value() const;
   [[nodiscard]] const QString &widget() const;
   [[nodiscard]] const QString &fftWindowFn() const;
 
@@ -108,8 +108,8 @@ public:
   void setMin(double min) { m_min = min; }
   void setMax(double max) { m_max = max; }
   void setUniqueId(const quint32 id) { m_uniqueId = id; }
-  void setValue(const QString &value) { m_value = value; }
   void setTitle(const QString &title) { m_title = title; }
+  void setValue(const QString &value) { m_value = value; }
 
 private:
   quint32 m_uniqueId;
@@ -121,9 +121,9 @@ private:
   bool m_displayInOverview;
 
   QString m_title;
-  QString m_value;
   QString m_units;
   QString m_widget;
+  QString m_value;
   QString m_fftWindowFn;
   QJsonObject m_jsonData;
 
