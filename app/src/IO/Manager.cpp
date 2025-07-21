@@ -794,7 +794,7 @@ void IO::Manager::hotpathTxFrame(const QByteArray &frame)
   {
     frameBuilder.hotpathRxFrame(frame);
 #ifdef BUILD_COMMERCIAL
-    mqtt.publishMessage(frame);
+    mqtt.hotpathTxFrame(frame);
 #endif
   }
 }

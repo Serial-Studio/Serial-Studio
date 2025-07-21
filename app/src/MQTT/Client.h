@@ -176,7 +176,7 @@ public slots:
   void setSslProtocol(const quint8 protocol);
   void setPeerVerifyMode(const quint8 verifyMode);
 
-  void publishMessage(const QByteArray &data);
+  void hotpathTxFrame(const QByteArray &data);
 
 private slots:
   void onStateChanged(QMqttClient::ClientState state);

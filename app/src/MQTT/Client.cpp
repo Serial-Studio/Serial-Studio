@@ -738,18 +738,22 @@ void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
 }
 
 //------------------------------------------------------------------------------
-// Private slots
+// Hotpath functions
 //------------------------------------------------------------------------------
 
 /**
  * @brief Publishes a message to the broker if connected and in publisher mode.
  */
-void MQTT::Client::publishMessage(const QByteArray &data)
+void MQTT::Client::hotpathTxFrame(const QByteArray &data)
 {
   if (isConnected() && isPublisher() && m_topicName.isValid()
       && SerialStudio::activated())
     m_client.publish(m_topicName, data);
 }
+
+//------------------------------------------------------------------------------
+// Private slots
+//------------------------------------------------------------------------------
 
 /**
  * @brief Handles changes in the client's connection state.
