@@ -137,8 +137,8 @@ private slots:
   void toggleCursor();
   void onThemeChanged();
   void loadWelcomeGuide();
-  void append(const QString &data);
-  void appendString(const QString &string);
+  void append(QStringView data);
+  void appendString(QStringView string);
   void removeStringFromCursor(const Direction direction = RightDirection,
                               int len = INT_MAX);
 

@@ -68,7 +68,7 @@ public slots:
 private slots:
   void writeData();
   void createFile();
-  void registerData(const QString &data);
+  void registerData(QStringView data);
 
 private:
   QFile m_file;

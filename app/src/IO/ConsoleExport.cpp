@@ -250,7 +250,7 @@ void IO::ConsoleExport::createFile()
 /**
  * Appends the given console data to the output buffer.
  */
-void IO::ConsoleExport::registerData(const QString &data)
+void IO::ConsoleExport::registerData(QStringView data)
 {
 #ifdef BUILD_COMMERCIAL
   if (!data.isEmpty() && exportEnabled())

@@ -504,7 +504,7 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 /**
  * Displays the given @a data in the console
  */
-void IO::Console::hotpathRxData(const QByteArray &data)
+void IO::Console::hotpathRxData(QByteArrayView data)
 {
   append(dataToString(data), showTimestamp());
 }
@@ -514,10 +514,10 @@ void IO::Console::hotpathRxData(const QByteArray &data)
  * conversion is done by the @c dataToString() function, which displays incoming
  * data either in UTF-8 or in hexadecimal mode.
  */
-void IO::Console::displaySentData(const QByteArray &data)
+void IO::Console::displaySentData(QByteArrayView data)
 {
   if (echo())
-    append(dataToString(data) + QStringLiteral("\n"), showTimestamp());
+    append(dataToString(data), showTimestamp());
 }
 
 /**
@@ -539,7 +539,7 @@ void IO::Console::addToHistory(const QString &command)
  * Converts the given @a data to a string according to the console display mode
  * set by the user.
  */
-QString IO::Console::dataToString(const QByteArray &data)
+QString IO::Console::dataToString(QByteArrayView data)
 {
   switch (displayMode())
   {
@@ -564,7 +564,7 @@ QString IO::Console::dataToString(const QByteArray &data)
  * @param data The QByteArray to convert.
  * @return QString A human-readable string representation of the input data.
  */
-QString IO::Console::plainTextStr(const QByteArray &data)
+QString IO::Console::plainTextStr(QByteArrayView data)
 {
   // Filter out non-printable characters, but keep line breaks
   QString filteredData;
@@ -591,7 +591,7 @@ QString IO::Console::plainTextStr(const QByteArray &data)
 /**
  * Converts the given @a data into a HEX representation string.
  */
-QString IO::Console::hexadecimalStr(const QByteArray &data)
+QString IO::Console::hexadecimalStr(QByteArrayView data)
 {
   // Initialize parameters
   QString out;

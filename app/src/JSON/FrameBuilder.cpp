@@ -413,7 +413,7 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
 
   // CSV data, no need to perform conversions or use frame parser
   else
-    channels = QString::fromUtf8(data.simplified()).split(',');
+    channels = QString::fromUtf8(data).simplified().split(',');
 
   // Replace data in frame
   for (int g = 0; g < m_frame.groupCount(); ++g)
@@ -445,7 +445,7 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
  *
  * @note This function is part of the high-frequency data path. Optimize later.
  */
-void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
+void JSON::FrameBuilder::parseQuickPlotFrame(QByteArrayView data)
 {
   // Rebuild project frame if required
   QStringList channels = QString::fromUtf8(data).simplified().split(',');

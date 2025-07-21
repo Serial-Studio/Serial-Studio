@@ -860,7 +860,7 @@ void Widgets::Terminal::loadWelcomeGuide()
  * @see processText(), processEscape(), processFormat(), processResetFont(),
  * appendString()
  */
-void Widgets::Terminal::append(const QString &data)
+void Widgets::Terminal::append(QStringView data)
 {
   QString text;
   auto it = data.constBegin();
@@ -908,7 +908,7 @@ void Widgets::Terminal::append(const QString &data)
  *
  * @see replaceData(), setCursorPosition(), autoscroll()
  */
-void Widgets::Terminal::appendString(const QString &string)
+void Widgets::Terminal::appendString(QStringView string)
 {
   // Ensure buffer memory does not exceed MAX_LINES
   const int linesToDrop = m_data.size() - MAX_LINES + 1;
@@ -928,7 +928,7 @@ void Widgets::Terminal::appendString(const QString &string)
   }
 
   // Register each character in the provided string
-  foreach (QChar character, string)
+  for (const auto &character : string)
   {
     // Obtain the current (x, y) cursor position
     int cursorX = m_cursorPosition.x();

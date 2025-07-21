@@ -92,7 +92,7 @@ signals:
   void textDocumentChanged();
   void showTimestampChanged();
   void checksumMethodChanged();
-  void displayString(const QString &text);
+  void displayString(QStringView text);
 
 private:
   explicit Console();
@@ -158,16 +158,16 @@ public slots:
   void setDisplayMode(const IO::Console::DisplayMode &mode);
   void append(const QString &str, const bool addTimestamp = false);
 
-  void hotpathRxData(const QByteArray &data);
-  void displaySentData(const QByteArray &data);
+  void hotpathRxData(QByteArrayView data);
+  void displaySentData(QByteArrayView data);
 
 private slots:
   void addToHistory(const QString &command);
 
 private:
-  QString dataToString(const QByteArray &data);
-  QString plainTextStr(const QByteArray &data);
-  QString hexadecimalStr(const QByteArray &data);
+  QString dataToString(QByteArrayView data);
+  QString plainTextStr(QByteArrayView data);
+  QString hexadecimalStr(QByteArrayView data);
 
 private:
   DataMode m_dataMode;
