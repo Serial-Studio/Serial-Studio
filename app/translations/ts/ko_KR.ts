@@ -28,28 +28,24 @@
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
-        <translation>%1은 자유 소프트웨어입니다. 자유 소프트웨어 재단이 발표한 GNU 일반 공중 사용 허가서의 조건에 따라 재배포 및/또는 수정할 수 있습니다. 이 라이선스의 버전 3 또는 (선택에 따라) 그 이후 버전을 따릅니다.
+        <translation>%1은 자유 소프트웨어입니다. GNU General Public License의 조건에 따라 재배포 및/또는 수정할 수 있습니다. 이 라이선스는 Free Software Foundation에서 발행한 버전 3 또는 (선택에 따라) 이후 버전입니다.
 
-%1은 유용할 것이라는 희망으로 배포되지만, 어떤 형태의 보증도 제공하지 않습니다. 상업성이나 특정 목적에의 적합성에 대한 묵시적 보증조차도 포함되지 않습니다. 자세한 내용은 GNU 일반 공중 사용 허가서를 참조하십시오.</translation>
+%1은 유용할 것이라는 희망으로 배포되지만, 상업성 또는 특정 목적에 대한 적합성의 묵시적 보증을 포함하여 어떠한 보증도 제공되지 않습니다. 자세한 내용은 GNU General Public License를 참조하십시오.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="233"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
-        <translation>이 구성은 상업적 및 독점적 사용을 위해 라이선스가 부여되었습니다. 상업적 라이선스의 조건에 따라 폐쇄형 소스 및 상업적 응용 프로그램에서 사용할 수 있습니다.</translation>
-    </message>
-    <message>
-        <source>This configuration is for personal use only. Commercial use is prohibited unless a valid commercial license is activated.</source>
-        <translation type="vanished">이 구성은 개인 사용만을 위한 것입니다. 유효한 상업적 라이선스가 활성화되지 않는 한 상업적 사용은 금지됩니다.</translation>
+        <translation>이 구성은 상업적 및 독점적 사용을 위해 라이선스가 부여되었습니다. 상업적 라이선스의 조건에 따라 폐쇄 소스 및 상업적 응용 프로그램에서 사용할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="247"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
-        <translation>이 구성은 개인 및 평가 용도로만 사용됩니다. 유효한 상업용 라이선스가 활성화되지 않는 한 상업적 사용은 금지됩니다.</translation>
+        <translation>이 구성은 개인 및 평가 목적으로만 사용됩니다. 유효한 상업적 라이선스가 활성화되지 않는 한 상업적 사용은 금지됩니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="261"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>이 소프트웨어는 명시적이거나 묵시적인 어떤 종류의 보증 없이 '있는 그대로' 제공됩니다. 여기에는 상업성 또는 특정 목적에의 적합성에 대한 보증이 포함되지만 이에 국한되지 않습니다. 저자는 이 소프트웨어의 사용으로 인해 발생하는 어떤 손해에 대해서도 책임을 지지 않습니다.</translation>
+        <translation>이 소프트웨어는 명시적 또는 묵시적 보증 없이 '있는 그대로' 제공됩니다. 상업성 또는 특정 목적에 대한 적합성의 보증을 포함하되 이에 국한되지 않습니다. 이 소프트웨어의 사용으로 인한 손해에 대해 저자는 어떠한 책임도 지지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="281"/>
@@ -74,7 +70,7 @@
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="319"/>
         <source>Report Bug</source>
-        <translation>버그 보고</translation>
+        <translation>버그 신고</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="328"/>
@@ -125,12 +121,12 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="127"/>
         <source>Duplicate</source>
-        <translation>중복</translation>
+        <translation>복제</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="129"/>
         <source>Duplicate this action with all its settings</source>
-        <translation>모든 설정과 함께 이 작업 복제</translation>
+        <translation>이 작업을 모든 설정과 함께 복제</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="139"/>
@@ -142,21 +138,9 @@
         <source>Delete this action from the project</source>
         <translation>프로젝트에서 이 작업 삭제</translation>
     </message>
-    <message>
-        <source>Send commands with a button click</source>
-        <translation type="vanished">버튼 클릭으로 명령 보내기</translation>
-    </message>
-    <message>
-        <source>Actions let you send custom commands to the connected device with a single button press.</source>
-        <translation type="vanished">작업을 통해 연결된 장치에 사용자 지정 명령을 단일 버튼 누름으로 보낼 수 있습니다.</translation>
-    </message>
 </context>
 <context>
     <name>Audio</name>
-    <message>
-        <source>Buffer Size</source>
-        <translation type="vanished">버퍼 크기</translation>
-    </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="68"/>
         <source>No Microphone Detected</source>
@@ -175,13 +159,13 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="122"/>
         <source>Sample Rate</source>
-        <translation>샘플 레이트</translation>
+        <translation>샘플 속도</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="143"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="218"/>
         <source>Sample Format</source>
-        <translation>샘플 포맷</translation>
+        <translation>샘플 형식</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="164"/>
@@ -190,33 +174,9 @@
         <translation>채널</translation>
     </message>
     <message>
-        <source>Input Sample Rate</source>
-        <translation type="vanished">입력 샘플 레이트</translation>
-    </message>
-    <message>
-        <source>Input Sample Format</source>
-        <translation type="vanished">입력 샘플 형식</translation>
-    </message>
-    <message>
-        <source>Input Channels</source>
-        <translation type="vanished">입력 채널</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="197"/>
         <source>Output Device</source>
         <translation>출력 장치</translation>
-    </message>
-    <message>
-        <source>Output Sample Rate</source>
-        <translation type="vanished">출력 샘플 레이트</translation>
-    </message>
-    <message>
-        <source>Output Sample Format</source>
-        <translation type="vanished">출력 샘플 형식</translation>
-    </message>
-    <message>
-        <source>Output Channels</source>
-        <translation type="vanished">출력 채널</translation>
     </message>
 </context>
 <context>
@@ -239,12 +199,12 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="172"/>
         <source>Scanning....</source>
-        <translation>스캔 중....</translation>
+        <translation>검색 중....</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="195"/>
         <source>Sorry, this system is not supported yet. We'll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
-        <translation>죄송합니다, 이 시스템은 아직 지원되지 않습니다. Qt가 공식적으로 지원하는 대로 이 운영 체제와 함께 작동하도록 Serial Studio를 업데이트하겠습니다.</translation>
+        <translation>죄송합니다, 이 시스템은 아직 지원되지 않습니다. Qt가 공식적으로 지원하면 Serial Studio를 업데이트하여 이 운영 체제에서 작동하도록 하겠습니다.</translation>
     </message>
 </context>
 <context>
@@ -257,7 +217,7 @@
     <message>
         <location filename="../../src/CSV/Export.cpp" line="272"/>
         <source>Cannot open CSV file for writing!</source>
-        <translation>CSV 파일을 열 수 없습니다!</translation>
+        <translation>CSV 파일을 쓰기 위해 열 수 없습니다!</translation>
     </message>
 </context>
 <context>
@@ -275,12 +235,12 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="278"/>
         <source>Device Connection Active</source>
-        <translation>장치 연결 활성화됨</translation>
+        <translation>장치 연결 활성화</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="279"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
-        <translation>이 기능을 사용하려면 장치 연결을 해제해야 합니다. 계속 하시겠습니까?</translation>
+        <translation>이 기능을 사용하려면 장치 연결을 끊어야 합니다. 계속하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="343"/>
@@ -290,7 +250,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="344"/>
         <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
-        <translation>CSV 파일에는 최소 두 개의 프레임(데이터 행)이 있어야 합니다. 파일을 확인하고 다시 시도하세요.</translation>
+        <translation>CSV 파일에는 최소한 두 개의 프레임(데이터 행)이 있어야 합니다. 파일을 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="355"/>
@@ -300,7 +260,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="356"/>
         <source>Please check file permissions &amp; location</source>
-        <translation>파일 권한 및 위치를 확인하세요</translation>
+        <translation>파일 권한 및 위치를 확인하십시오</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="513"/>
@@ -315,7 +275,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="525"/>
         <source>Select a date/time column</source>
-        <translation>날짜/시간 열 선택</translation>
+        <translation>날짜/시간 열을 선택하십시오</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="525"/>
@@ -379,7 +339,7 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="71"/>
         <source>Tile Windows</source>
-        <translation>창 타일 배열</translation>
+        <translation>창 타일링</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="84"/>
@@ -421,7 +381,7 @@
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <source>Pause</source>
-        <translation>일시 정지</translation>
+        <translation>일시 중지</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
@@ -439,7 +399,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>대체 위젯이 사용됩니다. 전체 기능을 잠금 해제하려면 라이센스를 구매하세요.</translation>
+        <translation>대체 위젯이 사용됩니다. 전체 기능을 사용하려면 라이선스를 구매하세요.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
@@ -449,7 +409,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
         <source>Toggle 2D plot visualization for this dataset</source>
-        <translation>이 데이터셋의 2D 플롯 시각화 전환</translation>
+        <translation>이 데이터셋에 대한 2D 플롯 시각화를 전환합니다</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
@@ -459,17 +419,17 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <source>Toggle FFT plot to visualize frequency content</source>
-        <translation>주파수 내용을 시각화하기 위한 FFT 플롯 전환</translation>
+        <translation>주파수 내용을 시각화하기 위해 FFT 플롯을 전환합니다</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
         <source>Bar/Level</source>
-        <translation>막대/레벨</translation>
+        <translation>바/레벨</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
         <source>Toggle bar/level indicator for this dataset</source>
-        <translation>이 데이터셋의 바/레벨 표시기 전환</translation>
+        <translation>이 데이터셋에 대한 바/레벨 표시기를 전환합니다</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
@@ -479,7 +439,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <source>Toggle gauge widget for analog-style display</source>
-        <translation>아날로그 스타일 디스플레이를 위한 게이지 위젯 전환</translation>
+        <translation>아날로그 스타일 디스플레이를 위한 게이지 위젯을 전환합니다</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
@@ -489,7 +449,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <source>Toggle compass widget for directional data</source>
-        <translation>방향 데이터를 위한 나침반 위젯 전환</translation>
+        <translation>방향 데이터에 대한 나침반 위젯 전환</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
@@ -499,7 +459,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
-        <translation>이진 또는 임계값 값을 위한 LED 표시기 전환</translation>
+        <translation>이진 또는 임계값의 LED 표시기 전환</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
@@ -509,7 +469,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
         <source>Duplicate this dataset with the same configuration</source>
-        <translation>동일한 구성으로 이 데이터셋 복제</translation>
+        <translation>동일한 구성으로 이 데이터세트 복제</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
@@ -519,7 +479,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
         <source>Delete this dataset from the group</source>
-        <translation>이 데이터셋을 그룹에서 삭제</translation>
+        <translation>그룹에서 이 데이터세트 삭제</translation>
     </message>
 </context>
 <context>
@@ -537,12 +497,12 @@
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="150"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
-        <translation>Serial Studio는 자원봉사자들이 지원하는 무료 및 오픈 소스 소프트웨어입니다. 개발 노력을 지원하기 위해 기부하거나 Pro 라이센스를 고려해보세요 :)</translation>
+        <translation>Serial Studio는 자원봉사자가 지원하는 무료 오픈 소스 소프트웨어입니다. 개발 노력을 지원하기 위해 기부하거나 Pro 라이선스를 고려해 보세요 :)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="163"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
-        <translation>이 프로젝트를 공유하거나, 버그를 보고하고, 새로운 기능을 제안함으로써도 지원할 수 있습니다!</translation>
+        <translation>이 프로젝트를 공유하고, 버그를 보고하며, 새로운 기능을 제안하여 지원할 수 있습니다!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="179"/>
@@ -552,12 +512,12 @@
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="193"/>
         <source>Donate</source>
-        <translation>기부하기</translation>
+        <translation>기부</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="211"/>
         <source>Get Serial Studio Pro</source>
-        <translation>Serial Studio Pro 얻기</translation>
+        <translation>Serial Studio Pro 받기</translation>
     </message>
 </context>
 <context>
@@ -607,7 +567,7 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="211"/>
         <source>The installer will open separately</source>
-        <translation>설치 관리자가 별도로 열립니다</translation>
+        <translation>설치 프로그램이 별도로 열립니다</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="219"/>
@@ -617,12 +577,12 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="221"/>
         <source>In order to install the update, you may need to quit the application.</source>
-        <translation>업데이트를 설치하려면 애플리케이션을 종료해야 할 수 있습니다.</translation>
+        <translation>업데이트를 설치하려면 응용 프로그램을 종료해야 할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="225"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application</source>
-        <translation>업데이트를 설치하려면 애플리케이션을 종료해야 할 수 있습니다. 이것은 필수 업데이트이며, 지금 종료하면 애플리케이션이 닫힙니다</translation>
+        <translation>업데이트를 설치하려면 응용 프로그램을 종료해야 할 수 있습니다. 이것은 필수 업데이트이며, 지금 종료하면 응용 프로그램이 닫힙니다</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="245"/>
@@ -642,7 +602,7 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="267"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
-        <translation>다운로드를 취소하시겠습니까? 이것은 필수 업데이트이며, 지금 종료하면 응용 프로그램이 닫힙니다.</translation>
+        <translation>다운로드를 취소하시겠습니까? 이것은 필수 업데이트이며, 지금 종료하면 응용 프로그램이 닫힙니다</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="327"/>
@@ -690,12 +650,12 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="402"/>
         <source>about one hour</source>
-        <translation>약 1시간</translation>
+        <translation>약 한 시간</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="411"/>
         <source>%1 minutes</source>
-        <translation>%1분</translation>
+        <translation>%1 분</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="413"/>
@@ -711,14 +671,6 @@
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="423"/>
         <source>1 second</source>
         <translation>1초</translation>
-    </message>
-    <message>
-        <source>Time remaining: 0 minutes</source>
-        <translation type="vanished">남은 시간: 0분</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="vanished">열기</translation>
     </message>
 </context>
 <context>
@@ -764,7 +716,7 @@
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="221"/>
         <source>Progress: %1</source>
-        <translation>진행 상황: %1</translation>
+        <translation>진행: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="237"/>
@@ -837,7 +789,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="203"/>
         <source>Reset to the default parsing script</source>
-        <translation>기본 파싱 스크립트로 재설정</translation>
+        <translation>기본 구문 분석 스크립트로 재설정</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="211"/>
@@ -847,17 +799,17 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="216"/>
         <source>Import a JavaScript file for data parsing</source>
-        <translation>데이터 파싱을 위한 JavaScript 파일 가져오기</translation>
+        <translation>데이터 구문 분석을 위한 JavaScript 파일 가져오기</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="225"/>
         <source>Validate &amp; Save</source>
-        <translation>검증 및 저장</translation>
+        <translation>유효성 검사 및 저장</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="230"/>
         <source>Validate syntax and apply parsing changes</source>
-        <translation>구문을 검증하고 파싱 변경 사항 적용</translation>
+        <translation>구문을 확인하고 구문 분석 변경 적용</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="255"/>
@@ -877,7 +829,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="306"/>
         <source>Copy selected code to clipboard</source>
-        <translation>선택한 코드를 클립보드로 복사</translation>
+        <translation>선택한 코드를 클립보드로 복사하기</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="319"/>
@@ -898,29 +850,9 @@
 <context>
     <name>GPS</name>
     <message>
-        <source>Map Type: %1</source>
-        <translation type="vanished">지도 유형: %1</translation>
-    </message>
-    <message>
-        <source>Map Layer: %1</source>
-        <translation type="vanished">지도 레이어: %1</translation>
-    </message>
-    <message>
-        <source>VIIRS: %1</source>
-        <translation type="vanished">VIIRS: %1</translation>
-    </message>
-    <message>
-        <source>Map: %1</source>
-        <translation type="vanished">지도: %1</translation>
-    </message>
-    <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <source>Base Map: %1</source>
         <translation>기본 지도: %1</translation>
-    </message>
-    <message>
-        <source>VIIRS Imagery: %1</source>
-        <translation type="vanished">VIIRS 이미지: %1</translation>
     </message>
 </context>
 <context>
@@ -933,7 +865,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>대체 위젯이 사용됩니다. 전체 기능을 잠금 해제하려면 라이센스를 구매하세요.</translation>
+        <translation>대체 위젯이 사용됩니다. 전체 기능을 사용하려면 라이센스를 구매하세요.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="116"/>
@@ -973,7 +905,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="163"/>
         <source>Add a bar or level indicator for scaled values</source>
-        <translation>스케일된 값을 위한 막대 또는 레벨 표시기 추가</translation>
+        <translation>스케일 값에 대한 막대 또는 레벨 표시기 추가</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="171"/>
@@ -1003,7 +935,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <source>Add an LED indicator for binary status signals</source>
-        <translation>이진 상태 신호를 위한 LED 표시기 추가</translation>
+        <translation>이진 상태 신호를 위한 LED 표시기를 추가합니다</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="221"/>
@@ -1013,7 +945,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="225"/>
         <source>Duplicate the current group and its contents</source>
-        <translation>현재 그룹과 그 내용을 복제</translation>
+        <translation>현재 그룹 및 그 내용을 복제합니다</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="234"/>
@@ -1023,15 +955,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="238"/>
         <source>Delete the current group and all contained datasets</source>
-        <translation>현재 그룹과 포함된 모든 데이터셋 삭제</translation>
-    </message>
-    <message>
-        <source>Groups hold multiple datasets and organize your data.</source>
-        <translation type="vanished">그룹은 여러 데이터 세트를 보유하고 데이터를 구성합니다.</translation>
-    </message>
-    <message>
-        <source>Use the sub-toolbar to quickly add plots, FFTs, and other dataset types to this group.</source>
-        <translation type="vanished">하위 도구 모음을 사용하여 이 그룹에 플롯, FFT 및 기타 데이터 세트 유형을 빠르게 추가하십시오.</translation>
+        <translation>현재 그룹 및 모든 포함된 데이터 세트를 삭제합니다</translation>
     </message>
 </context>
 <context>
@@ -1072,7 +996,7 @@
     <message>
         <location filename="../../src/IO/Console.cpp" line="163"/>
         <source>No Line Ending</source>
-        <translation>줄 끝 없음</translation>
+        <translation>줄 바꿈 없음</translation>
     </message>
     <message>
         <location filename="../../src/IO/Console.cpp" line="164"/>
@@ -1115,7 +1039,7 @@
     <message>
         <location filename="../../src/IO/ConsoleExport.cpp" line="165"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
-        <translation>이 기능은 라이선스가 필요합니다. 콘솔 내보내기를 활성화하려면 구매하십시오.</translation>
+        <translation>이 기능은 라이선스가 필요합니다. 콘솔 내보내기를 활성화하려면 구매하세요.</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConsoleExport.cpp" line="228"/>
@@ -1131,38 +1055,47 @@
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="864"/>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="937"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="954"/>
+        <source>channels</source>
+        <translation>채널</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1027"/>
         <source> channels</source>
         <translation>채널</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1116"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1206"/>
         <source>Unsigned 8-bit</source>
         <translation>부호 없는 8비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1117"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1207"/>
         <source>Signed 16-bit</source>
         <translation>부호 있는 16비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1118"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1208"/>
+        <source>Signed 24-bit</source>
+        <translation>부호 있는 24비트</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1209"/>
         <source>Signed 32-bit</source>
         <translation>부호 있는 32비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1119"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1210"/>
         <source>Float 32-bit</source>
-        <translation>부동소수점 32비트</translation>
+        <translation>부동 소수점 32비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
         <source>Mono</source>
         <translation>모노</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
         <source>Stereo</source>
         <translation>스테레오</translation>
     </message>
@@ -1222,7 +1155,7 @@
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="584"/>
         <source>Descriptor read error</source>
-        <translation>디스크립터 읽기 오류</translation>
+        <translation>설명자 읽기 오류</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="601"/>
@@ -1271,7 +1204,7 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="277"/>
         <source>Failed to connect to serial port device</source>
-        <translation>직렬 포트 장치에 연결 실패</translation>
+        <translation>직렬 포트 장치에 연결하지 못했습니다</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="375"/>
@@ -1317,20 +1250,12 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="601"/>
         <source>Please type another path to register a custom serial device</source>
-        <translation>사용자 지정 시리얼 장치를 등록하려면 다른 경로를 입력하세요</translation>
-    </message>
-    <message>
-        <source>Baud rate registered successfully</source>
-        <translation type="vanished">전송 속도가 성공적으로 등록되었습니다</translation>
-    </message>
-    <message>
-        <source>Rate "%1" has been added to baud rate list</source>
-        <translation type="vanished">속도 "%1"이(가) 전송 속도 목록에 추가되었습니다</translation>
+        <translation>사용자 정의 직렬 장치를 등록하려면 다른 경로를 입력하세요</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="885"/>
         <source>Critical serial port error</source>
-        <translation>중대한 시리얼 포트 오류</translation>
+        <translation>심각한 시리얼 포트 오류</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="911"/>
@@ -1340,17 +1265,17 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="912"/>
         <source>The specified device could not be found. Please check the connection and try again.</source>
-        <translation>지정된 장치를 찾을 수 없습니다. 연결을 확인하고 다시 시도하세요.</translation>
+        <translation>지정된 장치를 찾을 수 없습니다. 연결을 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="913"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
-        <translation>권한이 거부되었습니다. 애플리케이션이 장치에 필요한 접근 권한을 가지고 있는지 확인하십시오.</translation>
+        <translation>권한이 거부되었습니다. 응용 프로그램에 장치에 대한 필요한 액세스 권한이 있는지 확인하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="914"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
-        <translation>장치를 열지 못했습니다. 이미 사용 중이거나 사용할 수 없을 수 있습니다.</translation>
+        <translation>장치를 여는 데 실패했습니다. 이미 사용 중이거나 사용할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="915"/>
@@ -1365,7 +1290,7 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="917"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
-        <translation>중대한 리소스 오류가 발생했습니다. 장치가 연결 해제되었거나 더 이상 접근할 수 없을 수 있습니다.</translation>
+        <translation>중요한 리소스 오류가 발생했습니다. 장치가 연결이 끊어졌거나 더 이상 접근할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="918"/>
@@ -1416,16 +1341,12 @@
     <message>
         <location filename="../../src/IO/Manager.cpp" line="279"/>
         <source>Bluetooth LE</source>
-        <translation>Bluetooth LE</translation>
+        <translation>블루투스 LE</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="281"/>
         <source>Audio Stream</source>
         <translation>오디오 스트림</translation>
-    </message>
-    <message>
-        <source>Audio</source>
-        <translation type="vanished">오디오</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="357"/>
@@ -1435,7 +1356,7 @@
     <message>
         <location filename="../../src/IO/Manager.cpp" line="358"/>
         <source>To continue using Serial Studio, please activate your license.</source>
-        <translation>Serial Studio를 계속 사용하려면 라이센스를 활성화하세요.</translation>
+        <translation>Serial Studio를 계속 사용하려면 라이선스를 활성화하십시오.</translation>
     </message>
 </context>
 <context>
@@ -1459,21 +1380,9 @@
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <source>Select JSON map file</source>
-        <translation type="vanished">JSON 맵 파일 선택</translation>
-    </message>
-    <message>
-        <source>JSON files</source>
-        <translation type="vanished">JSON 파일</translation>
-    </message>
-    <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="172"/>
         <source>JSON parse error</source>
         <translation>JSON 구문 오류</translation>
-    </message>
-    <message>
-        <source>Invalid JSON project format</source>
-        <translation type="vanished">잘못된 JSON 프로젝트 형식</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="205"/>
@@ -1483,7 +1392,7 @@
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="206"/>
         <source>Make sure it’s a properly formatted JSON project.</source>
-        <translation>올바르게 포맷된 JSON 프로젝트인지 확인하세요.</translation>
+        <translation>올바르게 형식화된 JSON 프로젝트인지 확인하세요.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="220"/>
@@ -1496,27 +1405,27 @@
         <translation>파일 권한 및 위치를 확인하세요</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="459"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="496"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="463"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="500"/>
         <source>Channel %1</source>
         <translation>채널 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="475"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="506"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="473"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="528"/>
+        <source>Multiple Plots</source>
+        <translation>다중 플롯</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="479"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="510"/>
         <source>Quick Plot</source>
         <translation>빠른 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="511"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="515"/>
         <source>Quick Plot Data</source>
         <translation>빠른 플롯 데이터</translation>
-    </message>
-    <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="469"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="524"/>
-        <source>Multiple Plots</source>
-        <translation>다중 플롯</translation>
     </message>
 </context>
 <context>
@@ -1557,7 +1466,7 @@
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="315"/>
         <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
-        <translation>'parse' 함수에 두 개의 인수('%1', '%2')가 있습니다. 이는 오래된 형식의 사용을 나타냅니다. 프레임 데이터만 인수로 받는 새로운 형식으로 업데이트하십시오.</translation>
+        <translation>'parse' 함수에 두 개의 인수('%1', '%2')가 있어 구형 포맷을 사용하고 있음을 나타냅니다. 프레임 데이터만 인수로 받는 새로운 포맷으로 업데이트하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="422"/>
@@ -1607,11 +1516,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="727"/>
         <source>Project title cannot be empty!</source>
-        <translation>프로젝트 제목은 비워 둘 수 없습니다!</translation>
+        <translation>프로젝트 제목은 비워둘 수 없습니다!</translation>
     </message>
     <message>
-        <source>Save JSON project</source>
-        <translation type="vanished">JSON 프로젝트 저장</translation>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="745"/>
+        <source>Save Serial Studio Project</source>
+        <translation>Serial Studio 프로젝트 저장</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="756"/>
@@ -1622,16 +1532,7 @@
         <location filename="../../src/JSON/ProjectModel.cpp" line="873"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2184"/>
         <source>Untitled Project</source>
-        <translation>제목 없는 프로젝트</translation>
-    </message>
-    <message>
-        <source>Select JSON file</source>
-        <translation type="vanished">JSON 파일 선택</translation>
-    </message>
-    <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="745"/>
-        <source>Save Serial Studio Project</source>
-        <translation>Serial Studio 프로젝트 저장</translation>
+        <translation>제목 없음 프로젝트</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="916"/>
@@ -1646,12 +1547,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1039"/>
         <source>Legacy frame parser function updated</source>
-        <translation>레거시 프레임 파서 기능 업데이트됨</translation>
+        <translation>레거시 프레임 파서 함수가 업데이트되었습니다</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1040"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>귀하의 프로젝트는 '구분자' 인수가 있는 레거시 프레임 파서 기능을 사용했습니다. 새 형식으로 자동으로 마이그레이션되었습니다.</translation>
+        <translation>프로젝트에서 '구분자' 인수를 사용하는 레거시 프레임 파서 함수를 사용했습니다. 자동으로 새 형식으로 마이그레이션되었습니다.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1072"/>
@@ -1673,7 +1574,7 @@
         <location filename="../../src/JSON/ProjectModel.cpp" line="1143"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1182"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
-        <translation>이 작업은 실행 취소할 수 없습니다. 계속하시겠습니까?</translation>
+        <translation>이 작업은 취소할 수 없습니다. 계속하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1142"/>
@@ -1690,7 +1591,7 @@
         <location filename="../../src/JSON/ProjectModel.cpp" line="1270"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1309"/>
         <source>%1 (Copy)</source>
-        <translation>%1 (복사)</translation>
+        <translation>%1 (복사본)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1349"/>
@@ -1735,12 +1636,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1593"/>
         <source>New Action</source>
-        <translation>새 동작</translation>
+        <translation>새 작업</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1750"/>
         <source>Are you sure you want to change the group-level widget?</source>
-        <translation>그룹 수준의 위젯을 변경하시겠습니까?</translation>
+        <translation>그룹 수준 위젯을 변경하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1751"/>
@@ -1817,7 +1718,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2198"/>
         <source>Input data format for frame parser</source>
-        <translation>프레임 파서를 위한 입력 데이터 형식</translation>
+        <translation>프레임 파서의 입력 데이터 형식</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2211"/>
@@ -1827,7 +1728,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2213"/>
         <source>Strategy used for identifying frame data</source>
-        <translation>프레임 데이터를 식별하는 데 사용되는 전략</translation>
+        <translation>프레임 데이터 식별에 사용되는 전략</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2230"/>
@@ -1857,7 +1758,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2268"/>
         <source>Use hexadecimal delimiters for data frames</source>
-        <translation>데이터 프레임에 16진수 구분자 사용</translation>
+        <translation>데이터 프레임에 16진수 구분자를 사용</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2282"/>
@@ -1867,30 +1768,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2284"/>
         <source>Checksum algorithm used for frame validation</source>
-        <translation>프레임 검증에 사용된 체크섬 알고리즘</translation>
-    </message>
-    <message>
-        <source>Thunderforest API Key</source>
-        <translation type="vanished">Thunderforest API 키</translation>
-    </message>
-    <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2969"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2976"/>
-        <source>None</source>
-        <translation>없음</translation>
-    </message>
-    <message>
-        <source>Required for Thunderforest maps</source>
-        <translation type="vanished">Thunderforest 지도에 필요</translation>
-    </message>
-    <message>
-        <source>MapTiler API Key</source>
-        <translation type="vanished">MapTiler API 키</translation>
-    </message>
-    <message>
-        <source>Required for satellite maps</source>
-        <translation type="vanished">위성 지도에 필요</translation>
+        <translation>프레임 검증에 사용되는 체크섬 알고리즘</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2332"/>
@@ -1946,7 +1824,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2422"/>
         <source>Send binary data when the action is triggered.</source>
-        <translation>작동이 트리거될 때 이진 데이터를 전송합니다.</translation>
+        <translation>작업이 실행될 때 이진 데이터를 전송합니다.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2435"/>
@@ -1963,7 +1841,7 @@
         <location filename="../../src/JSON/ProjectModel.cpp" line="2438"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2455"/>
         <source>Data to transmit when the action is triggered.</source>
-        <translation>작동이 트리거될 때 전송할 데이터</translation>
+        <translation>작업이 실행될 때 전송할 데이터.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2452"/>
@@ -1988,7 +1866,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2500"/>
         <source>Trigger this action automatically when a device connects.</source>
-        <translation>장치가 연결될 때 이 작업을 자동으로 실행합니다.</translation>
+        <translation>장치가 연결될 때 이 동작을 자동으로 트리거합니다.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2512"/>
@@ -2009,7 +1887,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2531"/>
         <source>Interval in milliseconds between each timer-triggered action.</source>
-        <translation>각 타이머 트리거 작업 간의 밀리초 간격.</translation>
+        <translation>각 타이머 트리거 동작 사이의 간격(밀리초).</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2595"/>
@@ -2059,7 +1937,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2673"/>
         <source>Display widget (optional)</source>
-        <translation>위젯 표시 (선택 사항)</translation>
+        <translation>표시 위젯 (선택 사항)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2703"/>
@@ -2069,7 +1947,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2705"/>
         <source>Plot data in real-time</source>
-        <translation>실시간 데이터 플롯</translation>
+        <translation>실시간으로 데이터 플롯</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2714"/>
@@ -2079,7 +1957,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2717"/>
         <source>Plot frequency-domain data</source>
-        <translation>주파수 영역 데이터 플롯</translation>
+        <translation>주파수 도메인 데이터 플롯</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2726"/>
@@ -2115,22 +1993,22 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2789"/>
         <source>Maximum Value</source>
-        <translation>최대 값</translation>
+        <translation>최대값</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2805"/>
         <source>Alarm Value</source>
-        <translation>알람 값</translation>
+        <translation>경고 값</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2808"/>
         <source>Triggers alarm in bar widgets and LED panels</source>
-        <translation>바 위젯 및 LED 패널에서 알람을 트리거합니다</translation>
+        <translation>바 위젯 및 LED 패널에서 경고를 트리거합니다</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2830"/>
         <source>FFT Window Size</source>
-        <translation>FFT 윈도우 크기</translation>
+        <translation>FFT 창 크기</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2832"/>
@@ -2160,7 +2038,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2926"/>
         <source>Off</source>
-        <translation>끄기</translation>
+        <translation>꺼짐</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2927"/>
@@ -2195,7 +2073,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2936"/>
         <source>Binary (Direct)</source>
-        <translation>바이너리(직접)</translation>
+        <translation>이진수 (직접)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2943"/>
@@ -2220,7 +2098,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2951"/>
         <source>No Delimiters</source>
-        <translation>구분자 없음</translation>
+        <translation>구분 기호 없음</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2959"/>
@@ -2250,7 +2128,14 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2964"/>
         <source>3D Plot</source>
-        <translation>3D 도표</translation>
+        <translation>3D 플롯</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2969"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2976"/>
+        <source>None</source>
+        <translation>없음</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2970"/>
@@ -2270,7 +2155,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2977"/>
         <source>New Line (\n)</source>
-        <translation>새 줄 (\n)</translation>
+        <translation>새 줄 (</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2978"/>
@@ -2280,27 +2165,27 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2979"/>
         <source>CRLF (\r\n)</source>
-        <translation>CRLF (\r\n)</translation>
+        <translation>CRLF (\r</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2983"/>
         <source>No</source>
-        <translation>아니오</translation>
+        <translation>아니요</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2984"/>
         <source>Linear Plot</source>
-        <translation>선형 도표</translation>
+        <translation>선형 플롯</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3025"/>
         <source>Save changes to frame parser code?</source>
-        <translation>프레임 파서 코드를 저장하시겠습니까?</translation>
+        <translation>프레임 파서 코드의 변경 사항을 저장하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3026"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation>변경 사항을 유지하려면 '저장', 영구적으로 삭제하려면 '삭제', 돌아가려면 '취소'를 선택하세요.</translation>
+        <translation>변경 사항을 유지하려면 '저장', 영구적으로 잃으려면 '삭제', 돌아가려면 '취소'를 선택하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3028"/>
@@ -2310,10 +2195,6 @@
 </context>
 <context>
     <name>JSONDropArea</name>
-    <message>
-        <source>Drop JSON and CSV files here</source>
-        <translation type="vanished">JSON 및 CSV 파일을 여기에 드롭하세요</translation>
-    </message>
     <message>
         <location filename="../../qml/Widgets/JSONDropArea.qml" line="116"/>
         <source>Drop Projects and CSV files here</source>
@@ -2325,12 +2206,12 @@
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="37"/>
         <source>Licensing</source>
-        <translation>라이선스</translation>
+        <translation>라이선스 관리</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="214"/>
         <source>Please wait...</source>
-        <translation>잠시만 기다려 주세요...</translation>
+        <translation>잠시 기다려 주세요...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="241"/>
@@ -2340,13 +2221,13 @@
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="251"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
-        <translation>Pro 기능인 MQTT, 3D 플로팅 등을 잠금 해제하려면 아래에 라이선스 키를 붙여넣으세요.</translation>
+        <translation>아래에 라이선스 키를 붙여넣어 MQTT, 3D 플로팅 등 Pro 기능을 잠금 해제하세요.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="262"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
-        <translation>귀하의 라이선스에는 5개의 기기 활성화가 포함되어 있습니다.
+        <translation>귀하의 라이선스에는 5대의 기기 활성화가 포함됩니다.
 계획에는 월간, 연간 및 평생 옵션이 포함됩니다.</translation>
     </message>
     <message>
@@ -2391,36 +2272,32 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="384"/>
         <source>Licensee E-Mail</source>
-        <translation>라이선스 사용자 이메일</translation>
+        <translation>사용자 이메일</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="397"/>
         <source>Device Usage</source>
-        <translation>기기 사용</translation>
+        <translation>장치 사용</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="403"/>
         <source>%1 devices in use (Unlimited plan)</source>
-        <translation>%1대의 기기 사용 중 (무제한 플랜)</translation>
+        <translation>%1대의 장치 사용 중 (무제한 플랜)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="404"/>
         <source>%1 of %2 devices used</source>
-        <translation>%1/%2대의 기기 사용 중</translation>
+        <translation>%1/%2대의 장치 사용 중</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="414"/>
         <source>Device ID</source>
-        <translation>기기 ID</translation>
+        <translation>장치 ID</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="456"/>
         <source>License Key</source>
         <translation>라이선스 키</translation>
-    </message>
-    <message>
-        <source>For any issues with payment or activation, contact support via alex@serial-studio.com</source>
-        <translation type="vanished">결제 또는 활성화 관련 문제는 alex@serial-studio.com으로 지원팀에 문의하십시오.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="516"/>
@@ -2448,14 +2325,14 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="579"/>
         <source>There was an issue validating your license.</source>
-        <translation>라이선스를 검증하는 중 문제가 발생했습니다.</translation>
+        <translation>라이선스를 검증하는 데 문제가 발생했습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="896"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
-        <translation>제공하신 라이선스 키는 Serial Studio에 속하지 않습니다.</translation>
+        <translation>제공된 라이선스 키는 Serial Studio에 속하지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
@@ -2474,7 +2351,7 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="787"/>
         <source>Please deactivate it there first or contact support for help.</source>
-        <translation>먼저 그곳에서 비활성화하거나 지원팀에 도움을 요청하세요.</translation>
+        <translation>먼저 해당 장치에서 비활성화하거나 지원팀에 도움을 요청하세요.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
@@ -2502,7 +2379,7 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="651"/>
         <source>Could not validate your license at this time.</source>
-        <translation>현재 라이선스를 검증할 수 없습니다.</translation>
+        <translation>현재 라이센스를 확인할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="652"/>
@@ -2524,7 +2401,7 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="699"/>
         <source>Your license has been successfully activated.</source>
-        <translation>라이선스가 성공적으로 활성화되었습니다.</translation>
+        <translation>라이센스가 성공적으로 활성화되었습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="700"/>
@@ -2536,39 +2413,39 @@ You now have access to all premium features.</source>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="762"/>
         <source>There was an issue activating your license.</source>
-        <translation>라이선스를 활성화하는 데 문제가 발생했습니다.</translation>
+        <translation>라이센스 활성화에 문제가 발생했습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="813"/>
         <source>Something went wrong on the server...</source>
-        <translation>서버에서 문제가 발생했습니다...</translation>
+        <translation>서버에 문제가 발생했습니다...</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="825"/>
         <source>Could not activate your license at this time.</source>
-        <translation>지금은 라이센스를 활성화할 수 없습니다.</translation>
+        <translation>현재 라이센스를 활성화할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="885"/>
         <source>There was an issue deactivating your license.</source>
-        <translation>라이센스를 비활성화하는 데 문제가 발생했습니다.</translation>
+        <translation>라이선스를 비활성화하는 데 문제가 발생했습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="909"/>
         <source>Could not deactivate your license at this time.</source>
-        <translation>지금은 라이센스를 비활성화할 수 없습니다.</translation>
+        <translation>현재 라이선스를 비활성화할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="919"/>
         <source>Your license has been deactivated.</source>
-        <translation>라이센스가 비활성화되었습니다.</translation>
+        <translation>라이선스가 비활성화되었습니다.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="920"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
-        <translation>Pro 기능에 대한 액세스가 제거되었습니다.
-Serial Studio를 지원해 주셔서 다시 한번 감사드립니다!</translation>
+        <translation>Pro 기능에 대한 접근이 제거되었습니다.
+Serial Studio를 지원해 주셔서 다시 한번 감사합니다!</translation>
     </message>
 </context>
 <context>
@@ -2601,7 +2478,7 @@ Serial Studio를 지원해 주셔서 다시 한번 감사드립니다!</translat
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="50"/>
         <source>TLS 1.3 or Later</source>
-        <translation>TLS 1.3 이상</translation>
+        <translation>TLS 1.3 또는 이후</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="51"/>
@@ -2631,12 +2508,12 @@ Serial Studio를 지원해 주셔서 다시 한번 감사드립니다!</translat
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="58"/>
         <source>Verify Peer</source>
-        <translation>피어 검증</translation>
+        <translation>피어 확인</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="59"/>
         <source>Auto Verify Peer</source>
-        <translation>자동 피어 검증</translation>
+        <translation>피어 자동 확인</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="335"/>
@@ -2646,7 +2523,7 @@ Serial Studio를 지원해 주셔서 다시 한번 감사드립니다!</translat
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="336"/>
         <source>Load From Folder...</source>
-        <translation>폴더에서 불러오기...</translation>
+        <translation>폴더에서 로드...</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="350"/>
@@ -2668,9 +2545,9 @@ Serial Studio를 지원해 주셔서 다시 한번 감사드립니다!</translat
         <source>Connecting to MQTT brokers is only available with a valid Serial Studio commercial license.
 
 To unlock this feature, please activate your license or visit the store.</source>
-        <translation>MQTT 브로커에 연결하는 기능은 유효한 Serial Studio 상업용 라이선스가 있어야만 사용할 수 있습니다.
+        <translation>MQTT 브로커에 연결하려면 유효한 Serial Studio 상업용 라이선스가 필요합니다.
 
-이 기능을 활성화하려면 라이선스를 활성화하거나 상점을 방문하십시오.</translation>
+이 기능을 활성화하려면 라이선스를 활성화하거나 스토어를 방문하세요.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="431"/>
@@ -2696,7 +2573,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="442"/>
         <source>You won't receive any messages until a topic is configured.</source>
-        <translation>주제가 구성될 때까지 메시지를 받을 수 없습니다.</translation>
+        <translation>주제가 설정될 때까지 메시지를 받을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="443"/>
@@ -2711,7 +2588,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="456"/>
         <source>The topic "%1" is not valid.</source>
-        <translation>주제 "%1"이(가) 유효하지 않습니다.</translation>
+        <translation>주제 "%1"은(는) 유효하지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="681"/>
@@ -2736,7 +2613,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="805"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
-        <translation>MQTT 브로커가 지원되지 않는 프로토콜 버전 때문에 연결을 거부했습니다. 클라이언트와 브로커가 동일한 프로토콜 버전을 지원하는지 확인하십시오.</translation>
+        <translation>MQTT 브로커가 지원되지 않는 프로토콜 버전으로 인해 연결을 거부했습니다. 클라이언트와 브로커가 동일한 프로토콜 버전을 지원하는지 확인하세요.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="811"/>
@@ -2746,17 +2623,17 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
-        <translation>브로커가 클라이언트 ID를 거부했습니다. 형식이 잘못되었거나 너무 길거나 이미 사용 중일 수 있습니다. 다른 클라이언트 ID를 사용해 보십시오.</translation>
+        <translation>브로커가 클라이언트 ID를 거부했습니다. 형식이 잘못되었거나 너무 길거나 이미 사용 중일 수 있습니다. 다른 클라이언트 ID를 사용해 보세요.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="818"/>
         <source>MQTT Server Unavailable</source>
-        <translation>MQTT 서버를 사용할 수 없습니다.</translation>
+        <translation>MQTT 서버 사용 불가</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="819"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
-        <translation>네트워크 연결이 설정되었지만 브로커를 현재 사용할 수 없습니다. 브로커 상태를 확인하고 나중에 다시 시도하십시오.</translation>
+        <translation>네트워크 연결은 설정되었지만 브로커가 현재 사용 불가능합니다. 브로커 상태를 확인하고 나중에 다시 시도하세요.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="825"/>
@@ -2777,7 +2654,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="832"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
-        <translation>MQTT 브로커가 권한 부족으로 인해 연결을 거부했습니다. 계정에 필요한 접근 권한이 있는지 확인하십시오.</translation>
+        <translation>MQTT 브로커가 권한 부족으로 연결을 거부했습니다. 계정에 필요한 접근 권한이 있는지 확인하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="838"/>
@@ -2787,7 +2664,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="839"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
-        <translation>네트워크 또는 전송 계층 문제로 인해 예기치 않은 연결 실패가 발생했습니다. 네트워크 연결과 브로커 설정을 확인하십시오.</translation>
+        <translation>네트워크 또는 전송 계층 문제로 인해 예상치 못한 연결 실패가 발생했습니다. 네트워크 연결 및 브로커 설정을 확인하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="845"/>
@@ -2797,7 +2674,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="846"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
-        <translation>클라이언트가 MQTT 프로토콜 위반을 감지하고 연결을 종료했습니다. MQTT 구현이 준수하는지 확인하십시오.</translation>
+        <translation>클라이언트가 MQTT 프로토콜 위반을 감지하고 연결을 종료했습니다. MQTT 구현이 규정을 준수하는지 확인하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="852"/>
@@ -2807,7 +2684,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="853"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
-        <translation>예기치 않은 오류가 발생했습니다. 자세한 내용은 로그를 확인하거나 애플리케이션을 다시 시작하세요.</translation>
+        <translation>예기치 않은 오류가 발생했습니다. 자세한 내용은 로그를 확인하거나 애플리케이션을 다시 시작하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="858"/>
@@ -2817,7 +2694,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="859"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
-        <translation>MQTT 프로토콜 레벨 5 오류가 발생했습니다. 자세한 내용은 브로커 로그 또는 이유 코드를 확인하세요.</translation>
+        <translation>MQTT 프로토콜 레벨 5 오류가 발생했습니다. 자세한 내용은 브로커 로그 또는 이유 코드를 확인하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="881"/>
@@ -2851,7 +2728,7 @@ To unlock this feature, please activate your license or visit the store.</source
 Please provide the necessary credentials.</source>
         <translation>MQTT 브로커가 "%1" 방법을 사용한 인증을 요구합니다.
 
-필요한 자격 증명을 제공하세요.</translation>
+필요한 자격 증명을 제공하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="918"/>
@@ -2889,7 +2766,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="193"/>
         <source>Activate your license or visit the store to unlock MQTT support.</source>
-        <translation>라이선스를 활성화하거나 스토어를 방문하여 MQTT 지원을 활성화하세요.</translation>
+        <translation>라이센스를 활성화하거나 스토어를 방문하여 MQTT 지원을 해제하세요.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="205"/>
@@ -2934,7 +2811,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="332"/>
         <source>Clean Session</source>
-        <translation>클린 세션</translation>
+        <translation>세션 초기화</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="381"/>
@@ -2979,17 +2856,17 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="496"/>
         <source>Will Retain</source>
-        <translation>유지 설정</translation>
+        <translation>유지</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="507"/>
         <source>Will QoS</source>
-        <translation>QoS 설정</translation>
+        <translation>QoS</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="519"/>
         <source>Will Topic</source>
-        <translation>주제 설정</translation>
+        <translation>주제</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="524"/>
@@ -2999,12 +2876,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="531"/>
         <source>Will Message</source>
-        <translation>메시지 설정</translation>
+        <translation>메시지</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="536"/>
         <source>e.g. Device unexpectedly disconnected</source>
-        <translation>예: 장치가 예기치 않게 연결이 끊어짐</translation>
+        <translation>예: 장치가 예기치 않게 연결 해제됨</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
@@ -3019,12 +2896,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="608"/>
         <source>Verify Depth</source>
-        <translation>검증 깊이</translation>
+        <translation>깊이 확인</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="626"/>
         <source>Verify Mode</source>
-        <translation>검증 모드</translation>
+        <translation>모드 확인</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="658"/>
@@ -3067,7 +2944,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="148"/>
         <source>Completer</source>
-        <translation>완성기</translation>
+        <translation>자동 완성기</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="150"/>
@@ -3158,7 +3035,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="172"/>
         <source>Retry</source>
-        <translation>다시 시도</translation>
+        <translation>재시도</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="174"/>
@@ -3178,7 +3055,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="180"/>
         <source>Discard</source>
-        <translation>취소</translation>
+        <translation>버리기</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="182"/>
@@ -3242,7 +3119,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="168"/>
         <source>Type 0 for automatic port</source>
-        <translation>자동 포트에 대해 0 입력</translation>
+        <translation>자동 포트는 0 입력</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="193"/>
@@ -3260,7 +3137,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="131"/>
         <source>Unable to start plugin TCP server</source>
-        <translation>플러그인 TCP 서버를 시작할 수 없음</translation>
+        <translation>플러그인 TCP 서버 시작 불가</translation>
     </message>
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="187"/>
@@ -3270,7 +3147,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="188"/>
         <source>Invalid pending connection</source>
-        <translation>유효하지 않은 대기 연결</translation>
+        <translation>잘못된 대기 연결</translation>
     </message>
 </context>
 <context>
@@ -3432,7 +3309,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <source>Add an LED-style status indicator</source>
-        <translation>LED 스타일 상태 표시기를 추가</translation>
+        <translation>LED 스타일 상태 표시기 추가</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="320"/>
@@ -3467,12 +3344,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="349"/>
         <source>Multi-Plot</source>
-        <translation>멀티 플롯</translation>
+        <translation>다중 플롯</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
         <source>Add a 2D plot with multiple signals</source>
-        <translation>다중 신호를 포함한 2D 플롯 추가</translation>
+        <translation>다중 신호의 2D 플롯 추가</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="356"/>
@@ -3510,7 +3387,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="389"/>
         <source>Add a group for 3-axis gyroscope data (angular rates are integrated into orientation automatically)</source>
-        <translation>3축 자이로스코프 데이터를 위한 그룹 추가 (각속도는 자동으로 방향에 통합됨)</translation>
+        <translation>3축 자이로스코프 데이터를 위한 그룹 추가 (각속도는 자동으로 방향으로 통합됨)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="393"/>
@@ -3546,21 +3423,13 @@ Please provide the necessary credentials.</source>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
         <translation>대체 위젯이 사용됩니다. 전체 기능을 사용하려면 라이센스를 구매하세요.</translation>
     </message>
-    <message>
-        <source>First, set up frame detection and data decoding.</source>
-        <translation type="vanished">먼저 프레임 감지 및 데이터 디코딩을 설정하세요.</translation>
-    </message>
-    <message>
-        <source>Frames are parsed into arrays, and datasets link each element to a widget.</source>
-        <translation type="vanished">프레임은 배열로 구문 분석되며, 데이터 세트는 각 요소를 위젯에 연결합니다.</translation>
-    </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <location filename="../../src/Misc/Translator.cpp" line="174"/>
         <source>Failed to load welcome text :(</source>
-        <translation>환영 메시지를 불러오지 못했습니다 :(</translation>
+        <translation>환영 메시지 로드 실패 :(</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="269"/>
@@ -3572,7 +3441,7 @@ Please provide the necessary credentials.</source>
         <location filename="../../src/Licensing/Trial.cpp" line="290"/>
         <location filename="../../src/Licensing/Trial.cpp" line="328"/>
         <source>Trial Activation Error</source>
-        <translation>체험판 활성화 오류</translation>
+        <translation>시험 활성화 오류</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="287"/>
@@ -3668,7 +3537,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="36"/>
         <source>Preferences</source>
-        <translation>환경 설정</translation>
+        <translation>기본 설정</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="101"/>
@@ -3708,7 +3577,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="269"/>
         <source>Automatically Check for Updates</source>
-        <translation>자동 업데이트 확인</translation>
+        <translation>업데이트 자동 확인</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="294"/>
@@ -3718,7 +3587,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="318"/>
         <source>Point Count</source>
-        <translation>점 개수</translation>
+        <translation>포인트 수</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="338"/>
@@ -3743,7 +3612,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
         <source>Reset</source>
-        <translation>초기화</translation>
+        <translation>재설정</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="462"/>
@@ -3767,12 +3636,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="124"/>
         <source>Frame Parsing</source>
-        <translation>프레임 구문 분석</translation>
+        <translation>프레임 분석</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="132"/>
         <source>No Parsing (Device Sends JSON Data)</source>
-        <translation>구문 분석 안 함 (장치에서 JSON 데이터 전송)</translation>
+        <translation>분석 없음 (장치가 JSON 데이터 전송)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="143"/>
@@ -3782,7 +3651,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="154"/>
         <source>Parse via JSON Project File</source>
-        <translation>JSON 프로젝트 파일을 통해 구문 분석</translation>
+        <translation>JSON 프로젝트 파일로 구문 분석</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="173"/>
@@ -3875,7 +3744,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="342"/>
         <source>Resume</source>
-        <translation>다시 시작</translation>
+        <translation>재개</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="343"/>
@@ -3907,10 +3776,6 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="142"/>
         <source>Value</source>
         <translation>값</translation>
-    </message>
-    <message>
-        <source>Parameter Description</source>
-        <translation type="vanished">매개변수 설명</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
@@ -3984,7 +3849,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="154"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
-        <translation>JSON 레이아웃을 생성하거나 수정하기 위해 프로젝트 편집기 열기</translation>
+        <translation>JSON 레이아웃을 만들거나 수정하려면 프로젝트 편집기를 여십시오</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="161"/>
@@ -4004,7 +3869,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="190"/>
         <source>Configure device connection via Serial, BLE, or network socket</source>
-        <translation>시리얼, BLE 또는 네트워크 소켓을 통한 장치 연결 구성</translation>
+        <translation>직렬, BLE 또는 네트워크 소켓을 통한 장치 연결 구성</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="197"/>
@@ -4034,7 +3899,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="253"/>
         <source>Browse example projects on GitHub</source>
-        <translation>GitHub에서 예제 프로젝트 둘러보기</translation>
+        <translation>GitHub에서 예제 프로젝트 탐색</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="261"/>
@@ -4054,7 +3919,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="275"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
-        <translation>자세한 문서를 보고 DeepWiki에서 질문하기</translation>
+        <translation>DeepWiki에서 자세한 문서를 보고 질문하세요</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="283"/>
@@ -4064,13 +3929,13 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="287"/>
         <source>Show application info and license details</source>
-        <translation>애플리케이션 정보 및 라이선스 세부 정보 표시</translation>
+        <translation>애플리케이션 정보 및 라이선스 세부 정보 보기</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="309"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
         <source>Disconnect</source>
-        <translation>연결 해제</translation>
+        <translation>연결 끊기</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="309"/>
@@ -4080,7 +3945,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect or disconnect from device or MQTT broker</source>
-        <translation>장치 또는 MQTT 브로커에 연결 또는 연결 해제</translation>
+        <translation>장치 또는 MQTT 브로커에 연결하거나 연결 끊기</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="353"/>
@@ -4090,7 +3955,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="357"/>
         <source>Manage license and activate the application</source>
-        <translation>라이센스를 관리하고 애플리케이션을 활성화하세요</translation>
+        <translation>라이선스를 관리하고 애플리케이션을 활성화하세요</translation>
     </message>
 </context>
 <context>
@@ -4133,7 +3998,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="257"/>
         <source>Send DTR Signal</source>
-        <translation>DTR 신호 전송</translation>
+        <translation>DTR 신호 보내기</translation>
     </message>
 </context>
 <context>
@@ -4198,12 +4063,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="441"/>
         <source>Would you like to download the update now? This is a mandatory update, exiting now will close the application</source>
-        <translation>지금 업데이트를 다운로드하시겠습니까? 이 업데이트는 필수이며, 지금 종료하면 애플리케이션이 닫힙니다</translation>
+        <translation>지금 업데이트를 다운로드하시겠습니까? 이 업데이트는 필수입니다. 종료하면 애플리케이션이 닫힙니다.</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="447"/>
         <source>Version %1 of %2 has been released!</source>
-        <translation>%2의 버전 %1이(가) 출시되었습니다!</translation>
+        <translation>%2의 버전 %1이 출시되었습니다!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="485"/>
@@ -4213,7 +4078,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="487"/>
         <source>Congratulations! You are running the latest version of %1</source>
-        <translation>축하합니다! 최신 버전의 %1을(를) 사용 중입니다</translation>
+        <translation>축하합니다! 최신 버전의 %1을 실행 중입니다</translation>
     </message>
 </context>
 <context>
@@ -4226,24 +4091,24 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="183"/>
         <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
-        <translation>Serial Studio는 엔지니어, 학생, 제작자를 위해 설계된 강력한 실시간 시각화 도구입니다.</translation>
+        <translation>Serial Studio는 엔지니어, 학생, 제작자를 위해 만들어진 강력한 실시간 시각화 도구입니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="194"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
-        <translation>완전 기능의 14일 체험을 시작하거나, 라이센스 키로 활성화하거나, GPLv3 소스 코드를 직접 다운로드하여 컴파일할 수 있습니다.</translation>
+        <translation>완전 기능의 14일 체험을 시작하거나, 라이선스 키로 활성화하거나, GPLv3 소스 코드를 직접 다운로드하여 컴파일할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="204"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="362"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
-        <translation>Pro 구매는 저자를 직접 지원하며, 향후 개발 자금을 지원합니다.</translation>
+        <translation>Pro 구매는 저자를 직접 지원하고 향후 개발 자금을 돕습니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="212"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="370"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
-        <translation>GPLv3 버전을 직접 빌드하면 커뮤니티 성장을 돕고 기술 기여를 장려합니다.</translation>
+        <translation>GPLv3 버전을 직접 빌드하면 커뮤니티 성장과 기술적 기여를 장려합니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="233"/>
@@ -4258,7 +4123,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="277"/>
         <source>You’re currently using the fully-featured trial of %1 Pro. It’s valid for 14 days of personal, non-commercial use.</source>
-        <translation>현재 %1 Pro의 모든 기능이 포함된 체험판을 사용 중입니다. 이는 개인적, 비상업적 용도로 14일간 유효합니다.</translation>
+        <translation>현재 %1 Pro의 모든 기능을 갖춘 체험판을 사용 중입니다. 개인적, 비상업적 용도로 14일간 유효합니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="288"/>
@@ -4273,22 +4138,22 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="304"/>
         <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>사용 가능한 구독 플랜을 보려면 아래의 "지금 업그레이드"를 클릭하세요.</translation>
+        <translation>이용 가능한 구독 플랜을 보려면 아래의 "지금 업그레이드"를 클릭하세요.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="332"/>
         <source>Your %1 trial has expired.</source>
-        <translation>%1 체험 기간이 만료되었습니다.</translation>
+        <translation>귀하의 %1 체험 기간이 만료되었습니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="342"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
-        <translation>체험 기간이 종료되었습니다. 모든 Pro 기능과 함께 %1을 계속 사용하려면 유료 플랜으로 업그레이드하세요.</translation>
+        <translation>체험 기간이 종료되었습니다. 모든 Pro 기능을 사용하려면 %1을(를) 유료 플랜으로 업그레이드하세요.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="353"/>
         <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
-        <translation>원하시면, GPLv3 라이선스 하에 오픈 소스 버전을 컴파일할 수도 있습니다.</translation>
+        <translation>원하시면, GPLv3 라이선스 하에 오픈소스 버전을 컴파일할 수도 있습니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="381"/>
@@ -4309,10 +4174,6 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
         <source>Open in Limited Mode</source>
         <translation>제한 모드로 열기</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">닫기</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
@@ -4388,7 +4249,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="83"/>
         <source>Satellite Imagery</source>
-        <translation>위성 이미지</translation>
+        <translation>위성 영상</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="83"/>
@@ -4413,12 +4274,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Light Gray Canvas</source>
-        <translation>밝은 회색 캔버스</translation>
+        <translation>연한 회색 캔버스</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Dark Gray Canvas</source>
-        <translation>어두운 회색 캔버스</translation>
+        <translation>짙은 회색 캔버스</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="86"/>
@@ -4426,26 +4287,14 @@ Please provide the necessary credentials.</source>
         <translation>내셔널 지오그래픽</translation>
     </message>
     <message>
-        <source>Today (partial</source>
-        <translation type="vanished">오늘 (부분)</translation>
-    </message>
-    <message>
-        <source>Yesterday (full)</source>
-        <translation type="vanished">어제 (전체)</translation>
-    </message>
-    <message>
-        <source>Today (partial)</source>
-        <translation type="vanished">오늘 (부분)</translation>
-    </message>
-    <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="393"/>
         <source>Additional map layers are available only for Pro users.</source>
-        <translation>추가 지도 레이어는 프로 사용자에게만 제공됩니다.</translation>
+        <translation>추가 지도 레이어는 Pro 사용자만 사용할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="394"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
-        <translation>ArcGIS API 키는 실제 비용이 발생하기 때문에 무제한 액세스를 제공할 수 없습니다.</translation>
+        <translation>ArcGIS API 키는 실제 비용이 발생하므로 무제한 액세스를 제공할 수 없습니다.</translation>
     </message>
 </context>
 <context>
@@ -4461,7 +4310,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1196"/>
         <source>Grid Interval: %1 unit(s)</source>
-        <translation>격자 간격: %1 단위</translation>
+        <translation>그리드 간격: %1 단위</translation>
     </message>
 </context>
 </TS>

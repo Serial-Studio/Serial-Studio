@@ -28,18 +28,14 @@
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
-        <translation>%1 özgür bir yazılımdır: Free Software Foundation tarafından yayımlanan GNU Genel Kamu Lisansı'nın 3. sürümü veya (tercihinize bağlı olarak) daha sonraki herhangi bir sürümü şartları altında yeniden dağıtabilir ve/veya değiştirebilirsiniz.
+        <translation>%1 özgür bir yazılımdır: GNU Genel Kamu Lisansı'nın Free Software Foundation tarafından yayımlanan ya 3. sürümü ya da (tercihinize bağlı olarak) daha sonraki bir sürümü altında yeniden dağıtabilir ve/veya değiştirebilirsiniz.
 
-%1 faydalı olacağı umuduyla dağıtılmaktadır, ancak HERHANGİ BİR GARANTİ OLMAKSIZIN; hatta TİCARİ ELVERİŞLİLİK veya BELİRLİ BİR AMACA UYGUNLUK garantileri olmaksızın. Daha fazla ayrıntı için GNU Genel Kamu Lisansı'na bakınız.</translation>
+%1, yararlı olacağı umuduyla dağıtılmaktadır, ancak TİCARİ ELVERİŞLİLİK veya BELİRLİ BİR AMACA UYGUNLUK garantisi olmaksızın. Daha fazla bilgi için GNU Genel Kamu Lisansı'na bakın.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="233"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
-        <translation>Bu yapılandırma ticari ve tescilli kullanım için lisanslanmıştır. Ticari lisans şartlarına tabi olarak kapalı kaynak ve ticari uygulamalarda kullanılabilir.</translation>
-    </message>
-    <message>
-        <source>This configuration is for personal use only. Commercial use is prohibited unless a valid commercial license is activated.</source>
-        <translation type="vanished">Bu yapılandırma yalnızca kişisel kullanım içindir. Geçerli bir ticari lisans etkinleştirilmedikçe ticari kullanım yasaktır.</translation>
+        <translation>Bu yapılandırma ticari ve tescilli kullanım için lisanslanmıştır. Kapalı kaynak ve ticari uygulamalarda, ticari lisansın şartlarına tabi olarak kullanılabilir.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="247"/>
@@ -49,7 +45,7 @@
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="261"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Bu yazılım, açık veya zımni herhangi bir garanti olmaksızın 'olduğu gibi' sağlanmaktadır; ticari elverişlilik veya belirli bir amaca uygunluk garantileri dahil ancak bunlarla sınırlı olmamak üzere. Yazar, bu yazılımın kullanımından doğacak herhangi bir zarardan sorumlu tutulamaz.</translation>
+        <translation>Bu yazılım, açık veya zımni herhangi bir garanti olmaksızın 'olduğu gibi' sağlanmaktadır, bunlarla sınırlı olmamak üzere, ticari elverişlilik veya belirli bir amaca uygunluk garantileri dahil. Yazar, bu yazılımın kullanımından kaynaklanan herhangi bir zarardan sorumlu tutulamaz.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="281"/>
@@ -69,7 +65,7 @@
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="310"/>
         <source>License Agreement</source>
-        <translation>Lisans Sözleşmesi</translation>
+        <translation>Lisans Anlaşması</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="319"/>
@@ -130,7 +126,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="129"/>
         <source>Duplicate this action with all its settings</source>
-        <translation>Bu eylemi tüm ayarlarıyla birlikte kopyala</translation>
+        <translation>Bu eylemi tüm ayarlarıyla çoğalt</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="139"/>
@@ -142,21 +138,9 @@
         <source>Delete this action from the project</source>
         <translation>Bu eylemi projeden sil</translation>
     </message>
-    <message>
-        <source>Send commands with a button click</source>
-        <translation type="vanished">Komutları bir düğme tıklamasıyla gönder</translation>
-    </message>
-    <message>
-        <source>Actions let you send custom commands to the connected device with a single button press.</source>
-        <translation type="vanished">Eylemler, bağlı cihaza tek bir düğme basışıyla özel komutlar göndermenizi sağlar.</translation>
-    </message>
 </context>
 <context>
     <name>Audio</name>
-    <message>
-        <source>Buffer Size</source>
-        <translation type="vanished">Tampon Boyutu</translation>
-    </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="68"/>
         <source>No Microphone Detected</source>
@@ -170,7 +154,7 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="101"/>
         <source>Input Device</source>
-        <translation>Giriş Aygıtı</translation>
+        <translation>Giriş Cihazı</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="122"/>
@@ -190,33 +174,9 @@
         <translation>Kanallar</translation>
     </message>
     <message>
-        <source>Input Sample Rate</source>
-        <translation type="vanished">Giriş Örnekleme Hızı</translation>
-    </message>
-    <message>
-        <source>Input Sample Format</source>
-        <translation type="vanished">Giriş Örnekleme Biçimi</translation>
-    </message>
-    <message>
-        <source>Input Channels</source>
-        <translation type="vanished">Giriş Kanalları</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="197"/>
         <source>Output Device</source>
-        <translation>Çıkış Aygıtı</translation>
-    </message>
-    <message>
-        <source>Output Sample Rate</source>
-        <translation type="vanished">Çıkış Örnekleme Hızı</translation>
-    </message>
-    <message>
-        <source>Output Sample Format</source>
-        <translation type="vanished">Çıkış Örnekleme Biçimi</translation>
-    </message>
-    <message>
-        <source>Output Channels</source>
-        <translation type="vanished">Çıkış Kanalları</translation>
+        <translation>Çıkış Cihazı</translation>
     </message>
 </context>
 <context>
@@ -229,22 +189,22 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
         <source>Service</source>
-        <translation>Hizmet</translation>
+        <translation>Servis</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
         <source>Characteristic</source>
-        <translation>Özellik</translation>
+        <translation>Karakteristik</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="172"/>
         <source>Scanning....</source>
-        <translation>Taranıyor....</translation>
+        <translation>Tarama yapılıyor....</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="195"/>
         <source>Sorry, this system is not supported yet. We'll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
-        <translation>Üzgünüz, bu sistem henüz desteklenmiyor. Qt resmi olarak desteklediğinde Serial Studio'yu bu işletim sistemiyle çalışacak şekilde güncelleyeceğiz.</translation>
+        <translation>Üzgünüz, bu sistem henüz desteklenmiyor. Qt resmi olarak desteklediğinde, Serial Studio'yu bu işletim sistemiyle çalışacak şekilde güncelleyeceğiz.</translation>
     </message>
 </context>
 <context>
@@ -290,7 +250,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="344"/>
         <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
-        <translation>Devam etmek için CSV dosyası en az iki kare (veri satırı) içermelidir. Lütfen dosyayı kontrol edin ve tekrar deneyin.</translation>
+        <translation>Devam etmek için CSV dosyasında en az iki kare (veri satırı) bulunmalıdır. Lütfen dosyayı kontrol edip tekrar deneyin.</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="355"/>
@@ -321,7 +281,7 @@
         <location filename="../../src/CSV/Player.cpp" line="525"/>
         <location filename="../../src/CSV/Player.cpp" line="535"/>
         <source>Set interval manually</source>
-        <translation>Aralığı manuel olarak ayarlayın</translation>
+        <translation>Aralığı elle ayarla</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="527"/>
@@ -346,7 +306,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="553"/>
         <source>Select Date/Time Column</source>
-        <translation>Tarih/Saat Sütunu Seçin</translation>
+        <translation>Tarih/Saat Sütununu Seç</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="554"/>
@@ -389,7 +349,7 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="85"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
-        <translation>Yedek widget'lar aktif. Tam işlevsellik için bir lisans satın alın.</translation>
+        <translation>Yedek widget'lar aktif. Tam işlevsellik için lisans satın alın.</translation>
     </message>
 </context>
 <context>
@@ -426,7 +386,7 @@
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <source>Resume</source>
-        <translation>Sürdür</translation>
+        <translation>Devam Et</translation>
     </message>
 </context>
 <context>
@@ -439,7 +399,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>Yedek widget'ler kullanılacak. Tam işlevselliği açmak için bir lisans satın alın.</translation>
+        <translation>Yedek widget'lar kullanılacak. Tüm işlevselliği açmak için bir lisans satın alın.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
@@ -449,7 +409,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
         <source>Toggle 2D plot visualization for this dataset</source>
-        <translation>Bu veri seti için 2D grafik görselleştirmesini aç/kapat</translation>
+        <translation>Bu veri kümesi için 2D grafik görselleştirmesini değiştir</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
@@ -459,7 +419,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <source>Toggle FFT plot to visualize frequency content</source>
-        <translation>Frekans içeriğini görselleştirmek için FFT grafiğini aç/kapat</translation>
+        <translation>Frekans içeriğini görselleştirmek için FFT grafiğini değiştir</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
@@ -469,7 +429,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
         <source>Toggle bar/level indicator for this dataset</source>
-        <translation>Bu veri seti için çubuk/seviye göstergesini aç/kapat</translation>
+        <translation>Bu veri kümesi için çubuk/seviye göstergesini değiştir</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
@@ -479,7 +439,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <source>Toggle gauge widget for analog-style display</source>
-        <translation>Analog tarzı gösterim için gösterge widget'ını aç/kapat</translation>
+        <translation>Analog tarzı gösterim için gösterge widget'ını değiştir</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
@@ -489,7 +449,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <source>Toggle compass widget for directional data</source>
-        <translation>Yön verileri için pusula widget'ını aç/kapat</translation>
+        <translation>Yön verileri için pusula widget'ını değiştir</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
@@ -499,7 +459,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
-        <translation>İkili veya eşik değerleri için LED göstergesini aç/kapat</translation>
+        <translation>İkili veya eşik değerleri için LED göstergesini değiştir</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
@@ -509,7 +469,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
         <source>Duplicate this dataset with the same configuration</source>
-        <translation>Bu veri setini aynı yapılandırma ile kopyala</translation>
+        <translation>Aynı yapılandırmayla bu veri kümesini çoğalt</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
@@ -527,7 +487,7 @@
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
         <source>Support Serial Studio</source>
-        <translation>Serial Studio'yu Destekleyin</translation>
+        <translation>Serial Studio'yu Destekle</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="139"/>
@@ -537,7 +497,7 @@
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="150"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
-        <translation>Serial Studio, gönüllüler tarafından desteklenen ücretsiz ve açık kaynaklı bir yazılımdır. Geliştirme çabalarını desteklemek için bağış yapmayı veya Pro lisansı almayı düşünün :)</translation>
+        <translation>Serial Studio, gönüllüler tarafından desteklenen ücretsiz ve açık kaynaklı bir yazılımdır. Geliştirme çabalarını desteklemek için bağış yapmayı veya Pro lisans almayı düşünün :)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="163"/>
@@ -557,7 +517,7 @@
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="211"/>
         <source>Get Serial Studio Pro</source>
-        <translation>Serial Studio Pro Al</translation>
+        <translation>Serial Studio Pro'yu Al</translation>
     </message>
 </context>
 <context>
@@ -592,7 +552,7 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="190"/>
         <source>Cannot find downloaded update!</source>
-        <translation>İndirilen güncelleme bulunamadı!</translation>
+        <translation>İndirilen güncelleme bulunamıyor!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="209"/>
@@ -612,7 +572,7 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="219"/>
         <source>Click "OK" to begin installing the update</source>
-        <translation>Güncellemeyi yüklemeye başlamak için "Tamam"ı tıklayın</translation>
+        <translation>Güncellemeyi yüklemek için "Tamam"a tıklayın</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="221"/>
@@ -622,7 +582,7 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="225"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application</source>
-        <translation>Güncellemeyi yüklemek için uygulamadan çıkmanız gerekebilir. Bu zorunlu bir güncellemedir, şimdi çıkış yaparsanız uygulama kapanacaktır</translation>
+        <translation>Güncellemeyi yüklemek için uygulamadan çıkmanız gerekebilir. Bu zorunlu bir güncellemedir, şimdi çıkarsanız uygulama kapanacaktır</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="245"/>
@@ -642,7 +602,7 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="267"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
-        <translation>İndirmeyi iptal etmek istediğinizden emin misiniz? Bu zorunlu bir güncellemedir, şimdi çıkarsanız uygulama kapanacaktır.</translation>
+        <translation>İndirmeyi iptal etmek istediğinizden emin misiniz? Bu zorunlu bir güncellemedir, şimdi çıkarsanız uygulama kapanacaktır</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="327"/>
@@ -680,7 +640,7 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
         <source>Unknown</source>
-        <translation>Bilinmiyor</translation>
+        <translation>Bilinmeyen</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="400"/>
@@ -711,14 +671,6 @@
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="423"/>
         <source>1 second</source>
         <translation>1 saniye</translation>
-    </message>
-    <message>
-        <source>Time remaining: 0 minutes</source>
-        <translation type="vanished">Kalan süre: 0 dakika</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="vanished">Aç</translation>
     </message>
 </context>
 <context>
@@ -769,22 +721,22 @@
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="237"/>
         <source>Pause Transmission</source>
-        <translation>Aktarımı Durdur</translation>
+        <translation>İletimi Durdur</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="238"/>
         <source>Resume Transmission</source>
-        <translation>Aktarımı Sürdür</translation>
+        <translation>İletimi Sürdür</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="239"/>
         <source>Stop Transmission</source>
-        <translation>Aktarımı Durdur</translation>
+        <translation>İletimi Durdur</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="240"/>
         <source>Begin Transmission</source>
-        <translation>Aktarımı Başlat</translation>
+        <translation>İletimi Başlat</translation>
     </message>
 </context>
 <context>
@@ -867,7 +819,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="269"/>
         <source>Redo the previously undone edit</source>
-        <translation>Önceden geri alınan düzenlemeyi yeniden yap</translation>
+        <translation>Önceden geri alınan düzenlemeyi yinele</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="293"/>
@@ -882,7 +834,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="319"/>
         <source>Paste code from clipboard</source>
-        <translation>Kodları panodan yapıştır</translation>
+        <translation>Panodan kodu yapıştır</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="338"/>
@@ -898,29 +850,9 @@
 <context>
     <name>GPS</name>
     <message>
-        <source>Map Type: %1</source>
-        <translation type="vanished">Harita Türü: %1</translation>
-    </message>
-    <message>
-        <source>Map Layer: %1</source>
-        <translation type="vanished">Harita Katmanı: %1</translation>
-    </message>
-    <message>
-        <source>VIIRS: %1</source>
-        <translation type="vanished">VIIRS: %1</translation>
-    </message>
-    <message>
-        <source>Map: %1</source>
-        <translation type="vanished">Harita: %1</translation>
-    </message>
-    <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <source>Base Map: %1</source>
         <translation>Temel Harita: %1</translation>
-    </message>
-    <message>
-        <source>VIIRS Imagery: %1</source>
-        <translation type="vanished">VIIRS Görüntüsü: %1</translation>
     </message>
 </context>
 <context>
@@ -928,7 +860,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
-        <translation>Bu projede Pro özellikleri tespit edildi.</translation>
+        <translation>Bu projede Pro özellikler algılandı.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="83"/>
@@ -938,12 +870,12 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="116"/>
         <source>Dataset</source>
-        <translation>Veri Seti</translation>
+        <translation>Veri Kümesi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="121"/>
         <source>Add a generic dataset to the current group</source>
-        <translation>Geçerli gruba genel bir veri seti ekle</translation>
+        <translation>Mevcut gruba genel bir veri kümesi ekle</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="129"/>
@@ -953,7 +885,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="135"/>
         <source>Add a 2D plot to visualize numeric data</source>
-        <translation>Sayısal veriyi görselleştirmek için 2D grafik ekle</translation>
+        <translation>Sayısal veriyi görselleştirmek için bir 2D grafik ekleyin</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="144"/>
@@ -963,7 +895,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="149"/>
         <source>Add an FFT plot for frequency domain visualization</source>
-        <translation>Frekans alanı görselleştirmesi için FFT grafiği ekle</translation>
+        <translation>Frekans alanı görselleştirmesi için bir FFT grafiği ekleyin</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="158"/>
@@ -973,7 +905,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="163"/>
         <source>Add a bar or level indicator for scaled values</source>
-        <translation>Ölçekli değerler için bir çubuk veya seviye göstergesi ekle</translation>
+        <translation>Ölçekli değerler için bir çubuk veya seviye göstergesi ekleyin</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="171"/>
@@ -983,7 +915,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="177"/>
         <source>Add a gauge widget for analog-style visualization</source>
-        <translation>Analog tarzda görselleştirme için bir gösterge widget'ı ekle</translation>
+        <translation>Analog tarzı görselleştirme için bir gösterge bileşeni ekleyin</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="186"/>
@@ -993,7 +925,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="191"/>
         <source>Add a compass to display directional or angular data</source>
-        <translation>Yön veya açısal verileri göstermek için bir pusula ekle</translation>
+        <translation>Yön veya açısal veriyi göstermek için bir pusula ekleyin</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="199"/>
@@ -1003,7 +935,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <source>Add an LED indicator for binary status signals</source>
-        <translation>İkili durum sinyalleri için bir LED göstergesi ekle</translation>
+        <translation>İkili durum sinyalleri için bir LED göstergesi ekleyin</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="221"/>
@@ -1013,7 +945,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="225"/>
         <source>Duplicate the current group and its contents</source>
-        <translation>Geçerli grubu ve içeriğini kopyala</translation>
+        <translation>Mevcut grubu ve içeriğini çoğalt</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="234"/>
@@ -1023,15 +955,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="238"/>
         <source>Delete the current group and all contained datasets</source>
-        <translation>Geçerli grubu ve içindeki tüm veri setlerini sil</translation>
-    </message>
-    <message>
-        <source>Groups hold multiple datasets and organize your data.</source>
-        <translation type="vanished">Gruplar, birden fazla veri kümesi barındırır ve verilerinizi düzenler.</translation>
-    </message>
-    <message>
-        <source>Use the sub-toolbar to quickly add plots, FFTs, and other dataset types to this group.</source>
-        <translation type="vanished">Bu gruba hızlı bir şekilde grafikler, FFT'ler ve diğer veri kümesi türlerini eklemek için alt araç çubuğunu kullanın.</translation>
+        <translation>Mevcut grubu ve içindeki tüm veri kümelerini sil</translation>
     </message>
 </context>
 <context>
@@ -1049,12 +973,12 @@
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="361"/>
         <source>Yaw: %1</source>
-        <translation>Sapma: %1</translation>
+        <translation>Yön: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="379"/>
         <source>Pitch: %1</source>
-        <translation>Yükselme: %1</translation>
+        <translation>Eğilme: %1</translation>
     </message>
 </context>
 <context>
@@ -1087,7 +1011,7 @@
     <message>
         <location filename="../../src/IO/Console.cpp" line="166"/>
         <source>CR + NL</source>
-        <translation>CR + NL</translation>
+        <translation>SB + YS</translation>
     </message>
     <message>
         <location filename="../../src/IO/Console.cpp" line="177"/>
@@ -1102,7 +1026,7 @@
     <message>
         <location filename="../../src/IO/Console.cpp" line="199"/>
         <source>No Checksum</source>
-        <translation>Checksum Yok</translation>
+        <translation>Sağlama Yok</translation>
     </message>
 </context>
 <context>
@@ -1115,7 +1039,7 @@
     <message>
         <location filename="../../src/IO/ConsoleExport.cpp" line="165"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
-        <translation>Bu özellik bir lisans gerektirir. Lütfen konsol dışa aktarmayı etkinleştirmek için bir lisans satın alın.</translation>
+        <translation>Bu özellik bir lisans gerektirir. Lütfen konsol dışa aktarmayı etkinleştirmek için bir tane satın alın.</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConsoleExport.cpp" line="228"/>
@@ -1131,38 +1055,47 @@
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="864"/>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="937"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="954"/>
+        <source>channels</source>
+        <translation>kanallar</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1027"/>
         <source> channels</source>
         <translation>kanallar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1116"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1206"/>
         <source>Unsigned 8-bit</source>
         <translation>İşaretsiz 8-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1117"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1207"/>
         <source>Signed 16-bit</source>
-        <translation>İmzalı 16-bit</translation>
+        <translation>İşaretli 16-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1118"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1208"/>
+        <source>Signed 24-bit</source>
+        <translation>İşaretli 24-bit</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1209"/>
         <source>Signed 32-bit</source>
-        <translation>İmzalı 32-bit</translation>
+        <translation>İşaretli 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1119"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1210"/>
         <source>Float 32-bit</source>
-        <translation>Kayan nokta 32-bit</translation>
+        <translation>Float 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
@@ -1177,22 +1110,22 @@
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="279"/>
         <source>Select Device</source>
-        <translation>Cihaz Seç</translation>
+        <translation>Cihazı Seç</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="290"/>
         <source>Select Service</source>
-        <translation>Hizmet Seç</translation>
+        <translation>Servisi Seç</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="302"/>
         <source>Select Characteristic</source>
-        <translation>Özellik Seç</translation>
+        <translation>Özelliği Seç</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="430"/>
         <source>Error while configuring BLE service</source>
-        <translation>BLE hizmeti yapılandırılırken hata oluştu</translation>
+        <translation>BLE servisi yapılandırılırken hata oluştu</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="569"/>
@@ -1217,7 +1150,7 @@
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="581"/>
         <source>Characteristic read error</source>
-        <translation>Özellik okuma hatası</translation>
+        <translation>Karakteristik okuma hatası</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="584"/>
@@ -1297,7 +1230,7 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="410"/>
         <source>Mark</source>
-        <translation>İşaretle</translation>
+        <translation>İşaret</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="449"/>
@@ -1317,15 +1250,7 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="601"/>
         <source>Please type another path to register a custom serial device</source>
-        <translation>Lütfen özel bir seri cihaz kaydetmek için başka bir yol yazın</translation>
-    </message>
-    <message>
-        <source>Baud rate registered successfully</source>
-        <translation type="vanished">Baud hızı başarıyla kaydedildi</translation>
-    </message>
-    <message>
-        <source>Rate "%1" has been added to baud rate list</source>
-        <translation type="vanished">"%1" hızı baud hızı listesine eklendi</translation>
+        <translation>Özel bir seri cihaz kaydetmek için başka bir yol yazın</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="885"/>
@@ -1335,7 +1260,7 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="911"/>
         <source>No error occurred.</source>
-        <translation>Bir hata oluşmadı.</translation>
+        <translation>Hata oluşmadı.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="912"/>
@@ -1350,7 +1275,7 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="914"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
-        <translation>Cihaz açılamadı. Zaten kullanılıyor veya kullanılamıyor olabilir.</translation>
+        <translation>Cihaz açılamadı. Zaten kullanımda olabilir veya kullanılamaz durumda.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="915"/>
@@ -1365,7 +1290,7 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="917"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
-        <translation>Kritik bir kaynak hatası oluştu. Cihaz bağlantısı kesilmiş veya artık erişilebilir olmayabilir.</translation>
+        <translation>Kritik bir kaynak hatası meydana geldi. Cihaz bağlantısı kesilmiş olabilir veya artık erişilemez durumda.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="918"/>
@@ -1393,7 +1318,7 @@
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="85"/>
         <source>No file selected...</source>
-        <translation>Dosya seçilmedi...</translation>
+        <translation>Seçili dosya yok...</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="121"/>
@@ -1422,10 +1347,6 @@
         <location filename="../../src/IO/Manager.cpp" line="281"/>
         <source>Audio Stream</source>
         <translation>Ses Akışı</translation>
-    </message>
-    <message>
-        <source>Audio</source>
-        <translation type="vanished">Ses</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="357"/>
@@ -1459,21 +1380,9 @@
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <source>Select JSON map file</source>
-        <translation type="vanished">JSON harita dosyasını seçin</translation>
-    </message>
-    <message>
-        <source>JSON files</source>
-        <translation type="vanished">JSON dosyaları</translation>
-    </message>
-    <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="172"/>
         <source>JSON parse error</source>
         <translation>JSON ayrıştırma hatası</translation>
-    </message>
-    <message>
-        <source>Invalid JSON project format</source>
-        <translation type="vanished">Geçersiz JSON proje formatı</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="205"/>
@@ -1483,7 +1392,7 @@
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="206"/>
         <source>Make sure it’s a properly formatted JSON project.</source>
-        <translation>Doğru formatlanmış bir JSON projesi olduğundan emin olun.</translation>
+        <translation>Doğru biçimlendirilmiş bir JSON projesi olduğundan emin olun.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="220"/>
@@ -1496,27 +1405,27 @@
         <translation>Lütfen dosya izinlerini ve konumunu kontrol edin</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="459"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="496"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="463"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="500"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="475"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="506"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="473"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="528"/>
+        <source>Multiple Plots</source>
+        <translation>Birden Fazla Grafik</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="479"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="510"/>
         <source>Quick Plot</source>
         <translation>Hızlı Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="511"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="515"/>
         <source>Quick Plot Data</source>
         <translation>Hızlı Grafik Verisi</translation>
-    </message>
-    <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="469"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="524"/>
-        <source>Multiple Plots</source>
-        <translation>Birden Fazla Grafik</translation>
     </message>
 </context>
 <context>
@@ -1529,7 +1438,7 @@
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="244"/>
         <source>No errors have been detected in the code.</source>
-        <translation>Kodda herhangi bir hata tespit edilmedi.</translation>
+        <translation>Kodda hata tespit edilmedi.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="284"/>
@@ -1547,7 +1456,7 @@
         <location filename="../../src/JSON/FrameParser.cpp" line="305"/>
         <location filename="../../src/JSON/FrameParser.cpp" line="329"/>
         <source>No valid 'parse' function declaration found in the script!</source>
-        <translation>Betikte geçerli bir 'parse' fonksiyonu tanımı bulunamadı!</translation>
+        <translation>Scripte geçerli bir 'parse' fonksiyonu tanımı bulunamadı!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="314"/>
@@ -1557,7 +1466,7 @@
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="315"/>
         <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
-        <translation>'parse' fonksiyonu iki argüman ('%1', '%2') alıyor, bu eski formatın kullanıldığını gösteriyor. Lütfen sadece çerçeve verilerini argüman olarak alan yeni formata güncelleyin.</translation>
+        <translation>'parse' fonksiyonu iki argüman ('%1', '%2') alıyor, bu da eski formatın kullanıldığını gösteriyor. Lütfen yalnızca çerçeve verisini argüman olarak alan yeni formata güncelleyin.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="422"/>
@@ -1574,7 +1483,7 @@
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="452"/>
         <source>Select Javascript file to import</source>
-        <translation>İçe aktarılacak Javascript dosyasını seçin</translation>
+        <translation>İçe aktarmak için Javascript dosyasını seçin</translation>
     </message>
 </context>
 <context>
@@ -1610,8 +1519,9 @@
         <translation>Proje başlığı boş olamaz!</translation>
     </message>
     <message>
-        <source>Save JSON project</source>
-        <translation type="vanished">JSON projesini kaydet</translation>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="745"/>
+        <source>Save Serial Studio Project</source>
+        <translation>Serial Studio Projesini Kaydet</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="756"/>
@@ -1622,16 +1532,7 @@
         <location filename="../../src/JSON/ProjectModel.cpp" line="873"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2184"/>
         <source>Untitled Project</source>
-        <translation>Başlıksız Proje</translation>
-    </message>
-    <message>
-        <source>Select JSON file</source>
-        <translation type="vanished">JSON dosyasını seç</translation>
-    </message>
-    <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="745"/>
-        <source>Save Serial Studio Project</source>
-        <translation>Seri Stüdyo Projesini Kaydet</translation>
+        <translation>İsimsiz Proje</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="916"/>
@@ -1646,17 +1547,17 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1039"/>
         <source>Legacy frame parser function updated</source>
-        <translation>Eski çerçeve ayrıştırıcı işlevi güncellendi</translation>
+        <translation>Eski çerçeve ayrıştırıcı fonksiyonu güncellendi</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1040"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>Projeniz, 'ayırıcı' argümanıyla eski bir çerçeve ayrıştırıcı işlevi kullanıyordu. Yeni formata otomatik olarak taşındı.</translation>
+        <translation>Projeniz, 'separator' argümanıyla eski bir çerçeve ayrıştırıcı fonksiyonu kullanıyordu. Yeni formata otomatik olarak geçirildi.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1072"/>
         <source>Switch Serial Studio to Project Mode?</source>
-        <translation>Serial Studio'yu Proje Moduna geçirin mi?</translation>
+        <translation>Serial Studio'yu Proje Moduna Geçirmek İster misiniz?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1073"/>
@@ -1683,7 +1584,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1180"/>
         <source>Do you want to delete dataset "%1"?</source>
-        <translation>"%1" veri setini silmek istiyor musunuz?</translation>
+        <translation>Veri kümesini silmek istiyor musunuz "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1231"/>
@@ -1700,7 +1601,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1434"/>
         <source>New Dataset</source>
-        <translation>Yeni Veri Seti</translation>
+        <translation>Yeni Veri Kümesi</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1437"/>
@@ -1720,7 +1621,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1449"/>
         <source>New Gauge</source>
-        <translation>Yeni Ölçüm Cihazı</translation>
+        <translation>Yeni Gösterge</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1453"/>
@@ -1740,12 +1641,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1750"/>
         <source>Are you sure you want to change the group-level widget?</source>
-        <translation>Grup seviyesindeki bileşeni değiştirmek istediğinizden emin misiniz?</translation>
+        <translation>Grup düzeyindeki widget'ı değiştirmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1751"/>
         <source>Existing datasets for this group will be deleted</source>
-        <translation>Bu gruba ait mevcut veri setleri silinecek</translation>
+        <translation>Bu grup için mevcut veri kümeleri silinecek</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1808"/>
@@ -1842,22 +1743,22 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2249"/>
         <source>Frame End Delimeter</source>
-        <translation>Çerçeve Bitiş Ayırıcı</translation>
+        <translation>Çerçeve Sonlandırıcı</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2252"/>
         <source>String marking the end of a frame</source>
-        <translation>Bir çerçevenin sonunu işaretleyen dize</translation>
+        <translation>Bir çerçevenin sonunu belirten dize</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2266"/>
         <source>Hexadecimal Delimeters</source>
-        <translation>Onaltılık Ayırıcılar</translation>
+        <translation>Onaltılık Ayraçlar</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2268"/>
         <source>Use hexadecimal delimiters for data frames</source>
-        <translation>Veri çerçeveleri için onaltılık ayırıcılar kullan</translation>
+        <translation>Veri çerçeveleri için onaltılık ayraçlar kullan</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2282"/>
@@ -1870,32 +1771,9 @@
         <translation>Çerçeve doğrulaması için kullanılan checksum algoritması</translation>
     </message>
     <message>
-        <source>Thunderforest API Key</source>
-        <translation type="vanished">Thunderforest API Anahtarı</translation>
-    </message>
-    <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2969"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2976"/>
-        <source>None</source>
-        <translation>Yok</translation>
-    </message>
-    <message>
-        <source>Required for Thunderforest maps</source>
-        <translation type="vanished">Thunderforest haritaları için gerekli</translation>
-    </message>
-    <message>
-        <source>MapTiler API Key</source>
-        <translation type="vanished">MapTiler API Anahtarı</translation>
-    </message>
-    <message>
-        <source>Required for satellite maps</source>
-        <translation type="vanished">Uydu haritaları için gerekli</translation>
-    </message>
-    <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2332"/>
         <source>Untitled Group</source>
-        <translation>Adsız Grup</translation>
+        <translation>İsimsiz Grup</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2333"/>
@@ -1916,7 +1794,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2396"/>
         <source>Untitled Action</source>
-        <translation>Adsız Eylem</translation>
+        <translation>İsimsiz Eylem</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2397"/>
@@ -1946,7 +1824,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2422"/>
         <source>Send binary data when the action is triggered.</source>
-        <translation>Eylem tetiklendiğinde ikili veri gönder</translation>
+        <translation>Eylem tetiklendiğinde ikili veri gönder.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2435"/>
@@ -1963,7 +1841,7 @@
         <location filename="../../src/JSON/ProjectModel.cpp" line="2438"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2455"/>
         <source>Data to transmit when the action is triggered.</source>
-        <translation>Eylem tetiklendiğinde iletilecek veri</translation>
+        <translation>Eylem tetiklendiğinde iletilecek veri.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2452"/>
@@ -1988,7 +1866,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2500"/>
         <source>Trigger this action automatically when a device connects.</source>
-        <translation>Bir cihaz bağlandığında bu eylemi otomatik olarak tetikle.</translation>
+        <translation>Bir cihaz bağlandığında bu işlemi otomatik olarak tetikleyin.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2512"/>
@@ -2009,12 +1887,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2531"/>
         <source>Interval in milliseconds between each timer-triggered action.</source>
-        <translation>Her zamanlayıcı tetiklemeli eylem arasındaki milisaniye cinsinden aralık.</translation>
+        <translation>Her zamanlayıcı tetiklemeli işlem arasındaki milisaniye cinsinden aralık.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2595"/>
         <source>Untitled Dataset</source>
-        <translation>Adsız Veri Kümesi</translation>
+        <translation>İsimsiz Veri Kümesi</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2596"/>
@@ -2024,17 +1902,17 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2607"/>
         <source>Frame Index</source>
-        <translation>Çerçeve Dizini</translation>
+        <translation>Çerçeve İndeksi</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2610"/>
         <source>Position in the frame</source>
-        <translation>Çerçevedeki konum</translation>
+        <translation>Çerçevedeki Konum</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2620"/>
         <source>Measurement Unit</source>
-        <translation>Ölçü Birimi</translation>
+        <translation>Ölçüm Birimi</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2622"/>
@@ -2044,7 +1922,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2623"/>
         <source>Unit of measurement (optional)</source>
-        <translation>Ölçü birimi (isteğe bağlı)</translation>
+        <translation>Ölçüm birimi (isteğe bağlı)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2635"/>
@@ -2054,12 +1932,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2638"/>
         <source>Include widget in overview dashboard</source>
-        <translation>Genel bakış kontrol paneline widget ekle</translation>
+        <translation>Genel bakış panosuna widget ekle</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2673"/>
         <source>Display widget (optional)</source>
-        <translation>Widget'ı göster (isteğe bağlı)</translation>
+        <translation>Widget gösterimi (isteğe bağlı)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2703"/>
@@ -2069,7 +1947,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2705"/>
         <source>Plot data in real-time</source>
-        <translation>Verileri gerçek zamanlı olarak grafikte göster</translation>
+        <translation>Gerçek zamanlı veri grafiği</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2714"/>
@@ -2079,7 +1957,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2717"/>
         <source>Plot frequency-domain data</source>
-        <translation>Frekans alanı verilerini grafikte göster</translation>
+        <translation>Frekans alanı verilerini grafiğe dök</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2726"/>
@@ -2125,7 +2003,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2808"/>
         <source>Triggers alarm in bar widgets and LED panels</source>
-        <translation>Alarmı çubuk widget'larında ve LED panellerinde tetikler</translation>
+        <translation>Çubuk widget'larında ve LED panellerinde alarmı tetikler</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2830"/>
@@ -2140,17 +2018,17 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2843"/>
         <source>FFT Sampling Rate</source>
-        <translation>FFT Örnekleme Hızı</translation>
+        <translation>FFT Örnekleme Oranı</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2845"/>
         <source>Sampling rate (Hz) for FFT calculation</source>
-        <translation>FFT hesaplaması için örnekleme hızı (Hz)</translation>
+        <translation>FFT hesaplaması için örnekleme oranı (Hz)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2860"/>
         <source>LED High (On) Value</source>
-        <translation>LED Yüksek (Açık) Değer</translation>
+        <translation>LED Yüksek (Açık) Değeri</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2863"/>
@@ -2170,12 +2048,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2928"/>
         <source>Start on Trigger</source>
-        <translation>Tetiklemede Başlat</translation>
+        <translation>Tetikleyici ile Başlat</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2929"/>
         <source>Toggle on Trigger</source>
-        <translation>Tetiklemede Değiştir</translation>
+        <translation>Tetikleyici ile Geçiş</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2933"/>
@@ -2205,22 +2083,22 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2948"/>
         <source>End Delimiter Only</source>
-        <translation>Yalnızca Son Sınırlayıcı</translation>
+        <translation>Sadece Son Ayraç</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2949"/>
         <source>Start Delimiter Only</source>
-        <translation>Yalnızca Başlangıç Sınırlayıcı</translation>
+        <translation>Sadece Başlangıç Ayraç</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2950"/>
         <source>Start + End Delimiter</source>
-        <translation>Başlangıç + Son Sınırlayıcı</translation>
+        <translation>Başlangıç + Son Ayraç</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2951"/>
         <source>No Delimiters</source>
-        <translation>Sınırlayıcı Yok</translation>
+        <translation>Ayırıcı Yok</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2959"/>
@@ -2253,6 +2131,13 @@
         <translation>3D Grafik</translation>
     </message>
     <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2969"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2976"/>
+        <source>None</source>
+        <translation>Yok</translation>
+    </message>
+    <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2970"/>
         <source>Bar</source>
         <translation>Çubuk</translation>
@@ -2270,7 +2155,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2977"/>
         <source>New Line (\n)</source>
-        <translation>Yeni Satır (\n)</translation>
+        <translation>Yeni Satır (</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2978"/>
@@ -2280,7 +2165,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2979"/>
         <source>CRLF (\r\n)</source>
-        <translation>CRLF (\r\n)</translation>
+        <translation>CRLF (\r</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2983"/>
@@ -2295,12 +2180,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3025"/>
         <source>Save changes to frame parser code?</source>
-        <translation>Çerçeve ayrıştırıcı kodunda yapılan değişiklikler kaydedilsin mi?</translation>
+        <translation>Çerçeve ayrıştırıcı kodundaki değişiklikleri kaydet?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3026"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation>Değişikliklerinizi saklamak için 'Kaydet'i, kalıcı olarak kaybetmek için 'Vazgeç'i seçin veya geri dönmek için 'İptal'i seçin.</translation>
+        <translation>Değişikliklerinizi korumak için 'Kaydet'i, kalıcı olarak kaybetmek için 'Vazgeç'i veya geri dönmek için 'İptal'i seçin.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3028"/>
@@ -2310,10 +2195,6 @@
 </context>
 <context>
     <name>JSONDropArea</name>
-    <message>
-        <source>Drop JSON and CSV files here</source>
-        <translation type="vanished">JSON ve CSV dosyalarını buraya bırakın</translation>
-    </message>
     <message>
         <location filename="../../qml/Widgets/JSONDropArea.qml" line="116"/>
         <source>Drop Projects and CSV files here</source>
@@ -2340,13 +2221,13 @@
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="251"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
-        <translation>MQTT, 3D grafikleme ve daha fazlası gibi Pro özelliklerinin kilidini açmak için lisans anahtarınızı aşağıya yapıştırın.</translation>
+        <translation>MQTT, 3D grafikler ve daha fazlası gibi Pro özelliklerini açmak için lisans anahtarınızı aşağıya yapıştırın.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="262"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
-        <translation>Lisansınız 5 cihaz aktivasyonunu içerir.
+        <translation>Lisansınız 5 cihaz etkinleştirmesi içerir.
 Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
     </message>
     <message>
@@ -2391,7 +2272,7 @@ Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="384"/>
         <source>Licensee E-Mail</source>
-        <translation>Lisans Sahibi E-Postası</translation>
+        <translation>Lisans Sahibi E-Posta</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="397"/>
@@ -2401,7 +2282,7 @@ Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="403"/>
         <source>%1 devices in use (Unlimited plan)</source>
-        <translation>%1 cihaz kullanımda (Sınırsız plan)</translation>
+        <translation>%1 cihaz kullanılıyor (Sınırsız plan)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="404"/>
@@ -2417,10 +2298,6 @@ Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="456"/>
         <source>License Key</source>
         <translation>Lisans Anahtarı</translation>
-    </message>
-    <message>
-        <source>For any issues with payment or activation, contact support via alex@serial-studio.com</source>
-        <translation type="vanished">Ödeme veya aktivasyon ile ilgili herhangi bir sorun için, alex@serial-studio.com üzerinden destek ile iletişime geçin</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="516"/>
@@ -2497,7 +2374,7 @@ Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="640"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="814"/>
         <source>No activation ID was returned.</source>
-        <translation>Herhangi bir aktivasyon kimliği döndürülmedi.</translation>
+        <translation>Aktivasyon kimliği döndürülmedi.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="651"/>
@@ -2530,7 +2407,7 @@ Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="700"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
-        <translation>Serial Studio'u desteklediğiniz için teşekkür ederiz!
+        <translation>Serial Studio'yu desteklediğiniz için teşekkür ederiz!
 Artık tüm premium özelliklere erişiminiz var.</translation>
     </message>
     <message>
@@ -2546,7 +2423,7 @@ Artık tüm premium özelliklere erişiminiz var.</translation>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="825"/>
         <source>Could not activate your license at this time.</source>
-        <translation>Lisansınızı şu anda etkinleştirilemedi.</translation>
+        <translation>Lisansınız şu anda etkinleştirilemedi.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="885"/>
@@ -2556,7 +2433,7 @@ Artık tüm premium özelliklere erişiminiz var.</translation>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="909"/>
         <source>Could not deactivate your license at this time.</source>
-        <translation>Lisansınızı şu anda devre dışı bırakılamadı.</translation>
+        <translation>Şu anda lisansınızı devre dışı bırakamadık.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="919"/>
@@ -2568,7 +2445,7 @@ Artık tüm premium özelliklere erişiminiz var.</translation>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Pro özelliklere erişim kaldırıldı.
-Serial Studio'u desteklediğiniz için tekrar teşekkür ederiz!</translation>
+Serial Studio'yu desteklediğiniz için tekrar teşekkürler!</translation>
     </message>
 </context>
 <context>
@@ -2601,7 +2478,7 @@ Serial Studio'u desteklediğiniz için tekrar teşekkür ederiz!</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="50"/>
         <source>TLS 1.3 or Later</source>
-        <translation>TLS 1.3 veya Daha Yeni</translation>
+        <translation>TLS 1.3 veya Daha Sonrası</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="51"/>
@@ -2621,22 +2498,22 @@ Serial Studio'u desteklediğiniz için tekrar teşekkür ederiz!</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="56"/>
         <source>None</source>
-        <translation>Hiçbiri</translation>
+        <translation>Yok</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="57"/>
         <source>Query Peer</source>
-        <translation>Eş Sorgula</translation>
+        <translation>Karşı Tarafı Sorgula</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="58"/>
         <source>Verify Peer</source>
-        <translation>Eşi Doğrula</translation>
+        <translation>Karşı Tarafı Doğrula</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="59"/>
         <source>Auto Verify Peer</source>
-        <translation>Eşi Otomatik Doğrula</translation>
+        <translation>Karşı Tarafı Otomatik Doğrula</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="335"/>
@@ -2651,12 +2528,12 @@ Serial Studio'u desteklediğiniz için tekrar teşekkür ederiz!</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="350"/>
         <source>MQTT Subscriber</source>
-        <translation>MQTT Abone</translation>
+        <translation>MQTT Abonesi</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="351"/>
         <source>MQTT Publisher</source>
-        <translation>MQTT Yayıncı</translation>
+        <translation>MQTT Yayıncısı</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="416"/>
@@ -2670,12 +2547,12 @@ Serial Studio'u desteklediğiniz için tekrar teşekkür ederiz!</translation>
 To unlock this feature, please activate your license or visit the store.</source>
         <translation>MQTT brokerlarına bağlanmak yalnızca geçerli bir Serial Studio ticari lisansı ile mümkündür.
 
-Bu özelliği etkinleştirmek için lütfen lisansınızı etkinleştirin veya mağazayı ziyaret edin.</translation>
+Bu özelliği açmak için lütfen lisansınızı etkinleştirin veya mağazayı ziyaret edin.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="431"/>
         <source>Missing MQTT Topic</source>
-        <translation>Eksik MQTT Konusu</translation>
+        <translation>MQTT Konusu Eksik</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="432"/>
@@ -2696,7 +2573,7 @@ Bu özelliği etkinleştirmek için lütfen lisansınızı etkinleştirin veya m
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="442"/>
         <source>You won't receive any messages until a topic is configured.</source>
-        <translation>Bir konu yapılandırılana kadar herhangi bir mesaj almayacaksınız.</translation>
+        <translation>Bir konu yapılandırılmadıkça herhangi bir mesaj almayacaksınız.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="443"/>
@@ -2711,7 +2588,7 @@ Bu özelliği etkinleştirmek için lütfen lisansınızı etkinleştirin veya m
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="456"/>
         <source>The topic "%1" is not valid.</source>
-        <translation>"%1" konusu geçerli değil.</translation>
+        <translation>Konu "%1" geçerli değil.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="681"/>
@@ -2736,7 +2613,7 @@ Bu özelliği etkinleştirmek için lütfen lisansınızı etkinleştirin veya m
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="805"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
-        <translation>MQTT broker, desteklenmeyen bir protokol sürümü nedeniyle bağlantıyı reddetti. İstemcinizin ve brokerınızın aynı protokol sürümünü desteklediğinden emin olun.</translation>
+        <translation>MQTT broker, desteklenmeyen protokol sürümü nedeniyle bağlantıyı reddetti. İstemcinizin ve brokerınızın aynı protokol sürümünü desteklediğinden emin olun.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="811"/>
@@ -2746,7 +2623,7 @@ Bu özelliği etkinleştirmek için lütfen lisansınızı etkinleştirin veya m
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
-        <translation>Broker, istemci kimliğini reddetti. Hatalı biçimlendirilmiş, çok uzun veya zaten kullanılıyor olabilir. Farklı bir istemci kimliği kullanmayı deneyin.</translation>
+        <translation>Broker istemci kimliğini reddetti. Hatalı, çok uzun veya zaten kullanılıyor olabilir. Farklı bir istemci kimliği kullanmayı deneyin.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="818"/>
@@ -2767,7 +2644,7 @@ Bu özelliği etkinleştirmek için lütfen lisansınızı etkinleştirin veya m
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="826"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
-        <translation>Sağlanan kullanıcı adı veya parola yanlış veya hatalı biçimlendirilmiş. Kimlik bilgilerinizi tekrar kontrol edin ve tekrar deneyin.</translation>
+        <translation>Sağlanan kullanıcı adı veya şifre yanlış veya hatalı. Kimlik bilgilerinizi kontrol edin ve tekrar deneyin.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="831"/>
@@ -2787,7 +2664,7 @@ Bu özelliği etkinleştirmek için lütfen lisansınızı etkinleştirin veya m
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="839"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
-        <translation>Bir ağ veya taşıma katmanı sorunu meydana geldi ve beklenmedik bir bağlantı hatasına neden oldu. Ağ bağlantınızı ve broker ayarlarınızı kontrol edin.</translation>
+        <translation>Ağ veya taşıma katmanı sorunu oluştu ve beklenmedik bir bağlantı hatasına neden oldu. Ağ bağlantınızı ve broker ayarlarını kontrol edin.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="845"/>
@@ -2797,7 +2674,7 @@ Bu özelliği etkinleştirmek için lütfen lisansınızı etkinleştirin veya m
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="846"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
-        <translation>İstemci, MQTT protokolünün ihlal edildiğini tespit etti ve bağlantıyı kapattı. MQTT uygulamanızın uyumluluğunu kontrol edin.</translation>
+        <translation>İstemci, MQTT protokolü ihlali tespit etti ve bağlantıyı kapattı. MQTT uygulamanızın uyumluluğunu kontrol edin.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="852"/>
@@ -2807,7 +2684,7 @@ Bu özelliği etkinleştirmek için lütfen lisansınızı etkinleştirin veya m
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="853"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
-        <translation>Beklenmeyen bir hata oluştu. Daha fazla ayrıntı için logları kontrol edin veya uygulamayı yeniden başlatın.</translation>
+        <translation>Beklenmedik bir hata oluştu. Daha fazla ayrıntı için logları kontrol edin veya uygulamayı yeniden başlatın.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="858"/>
@@ -2817,7 +2694,7 @@ Bu özelliği etkinleştirmek için lütfen lisansınızı etkinleştirin veya m
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="859"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
-        <translation>MQTT protokol seviyesi 5 hatası oluştu. Daha fazla ayrıntı için broker loglarını veya sebep kodlarını kontrol edin.</translation>
+        <translation>MQTT protokol seviyesi 5 hatası oluştu. Daha fazla bilgi için broker günlüklerini veya neden kodlarını kontrol edin.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="881"/>
@@ -2827,12 +2704,12 @@ Bu özelliği etkinleştirmek için lütfen lisansınızı etkinleştirin veya m
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="882"/>
         <source>Authentication failed: %.</source>
-        <translation>Kimlik doğrulama başarısız oldu: %.</translation>
+        <translation>Kimlik doğrulama başarısız: %.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="896"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
-        <translation>Genişletilmiş kimlik doğrulama gereklidir, ancak MQTT 5.0 etkin değil.</translation>
+        <translation>Genişletilmiş kimlik doğrulama gerekli, ancak MQTT 5.0 etkin değil.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="905"/>
@@ -2842,21 +2719,21 @@ Bu özelliği etkinleştirmek için lütfen lisansınızı etkinleştirin veya m
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="909"/>
         <source>MQTT Authentication Required</source>
-        <translation>MQTT Kimlik Doğrulaması Gerekli</translation>
+        <translation>MQTT Kimlik Doğrulama Gerekli</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="910"/>
         <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
-        <translation>MQTT brokerı "%1" yöntemi kullanılarak kimlik doğrulaması gerektiriyor.
+        <translation>MQTT broker, "%1" yöntemiyle kimlik doğrulama gerektiriyor.
 
 Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="918"/>
         <source>Enter MQTT Username</source>
-        <translation>MQTT Kullanıcı Adını Girin</translation>
+        <translation>MQTT Kullanıcı Adı Girin</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="919"/>
@@ -2866,12 +2743,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="925"/>
         <source>Enter MQTT Password</source>
-        <translation>MQTT Şifresini Girin</translation>
+        <translation>MQTT Parolasını Girin</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="926"/>
         <source>Password:</source>
-        <translation>Şifre:</translation>
+        <translation>Parola:</translation>
     </message>
 </context>
 <context>
@@ -2889,7 +2766,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="193"/>
         <source>Activate your license or visit the store to unlock MQTT support.</source>
-        <translation>MQTT desteğini açmak için lisansınızı etkinleştirin veya mağazayı ziyaret edin.</translation>
+        <translation>Lisansınızı etkinleştirin veya mağazayı ziyaret ederek MQTT desteğini açın.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="205"/>
@@ -2914,22 +2791,22 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="279"/>
         <source>Host</source>
-        <translation>Ana Bilgisayar</translation>
+        <translation>Sunucu</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="291"/>
         <source>Port</source>
-        <translation>Bağlantı Noktası</translation>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="307"/>
         <source>Client ID</source>
-        <translation>Müşteri Kimliği</translation>
+        <translation>İstemci Kimliği</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="319"/>
         <source>Keep Alive (s)</source>
-        <translation>Bağlantıyı Açık Tut (s)</translation>
+        <translation>Canlı Tutma (s)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="332"/>
@@ -2974,37 +2851,37 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="489"/>
         <source>e.g. sensors/temperature or home/+/status</source>
-        <translation>ör. sensörler/sıcaklık veya ev/+/durum</translation>
+        <translation>örn. sensors/temperature veya home/+/status</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="496"/>
         <source>Will Retain</source>
-        <translation>Will Retain</translation>
+        <translation>Saklanacak</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="507"/>
         <source>Will QoS</source>
-        <translation>Will QoS</translation>
+        <translation>QoS Olacak</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="519"/>
         <source>Will Topic</source>
-        <translation>Will Konu</translation>
+        <translation>Konu Olacak</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="524"/>
         <source>e.g. device/alerts/offline</source>
-        <translation>ör. cihaz/uyarılar/çevrimdışı</translation>
+        <translation>örn. device/alerts/offline</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="531"/>
         <source>Will Message</source>
-        <translation>Will Mesaj</translation>
+        <translation>Mesaj Olacak</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="536"/>
         <source>e.g. Device unexpectedly disconnected</source>
-        <translation>ör. Cihaz beklenmedik şekilde bağlantıyı kesti</translation>
+        <translation>örn. Cihaz beklenmedik şekilde bağlantıyı kesti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
@@ -3019,12 +2896,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="608"/>
         <source>Verify Depth</source>
-        <translation>Doğrulama Derinliği</translation>
+        <translation>Derinliği Doğrula</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="626"/>
         <source>Verify Mode</source>
-        <translation>Doğrulama Modu</translation>
+        <translation>Modu Doğrula</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="658"/>
@@ -3052,7 +2929,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="88"/>
         <source>Quick Plot Mode</source>
-        <translation>Hızlı Çizim Modu</translation>
+        <translation>Hızlı Grafik Modu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="94"/>
@@ -3082,7 +2959,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="214"/>
         <source> spaces</source>
-        <translation> boşluklar</translation>
+        <translation>boşluklar</translation>
     </message>
 </context>
 <context>
@@ -3103,12 +2980,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="88"/>
         <source>Check for updates automatically?</source>
-        <translation>Güncellemeleri otomatik olarak kontrol et?</translation>
+        <translation>Güncellemeleri otomatik kontrol et?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="89"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation>%1 güncellemeleri otomatik olarak kontrol etmeli mi? Her zaman "Hakkında" diyalogundan güncellemeleri manuel olarak kontrol edebilirsiniz.</translation>
+        <translation>%1 güncellemeleri otomatik kontrol etsin mi? "Hakkında" penceresinden her zaman manuel olarak kontrol edebilirsiniz.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="154"/>
@@ -3138,7 +3015,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="164"/>
         <source>Yes to all</source>
-        <translation>Hepsine evet</translation>
+        <translation>Tümüne Evet</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="166"/>
@@ -3148,7 +3025,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="168"/>
         <source>No to all</source>
-        <translation>Hepsine hayır</translation>
+        <translation>Tümüne Hayır</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="170"/>
@@ -3158,7 +3035,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="172"/>
         <source>Retry</source>
-        <translation>Yeniden dene</translation>
+        <translation>Yeniden Dene</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="174"/>
@@ -3173,12 +3050,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="178"/>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>İptal Et</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="180"/>
         <source>Discard</source>
-        <translation>Sil</translation>
+        <translation>At</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="182"/>
@@ -3247,7 +3124,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="193"/>
         <source>Remote Port</source>
-        <translation>Uzak Port</translation>
+        <translation>Uzaktan Port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="223"/>
@@ -3288,7 +3165,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="147"/>
         <source>Activate</source>
-        <translation>Aktifleştir</translation>
+        <translation>Etkinleştir</translation>
     </message>
 </context>
 <context>
@@ -3332,7 +3209,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="157"/>
         <source>Open an existing JSON project</source>
-        <translation>Mevcut bir JSON projesini aç</translation>
+        <translation>Mevcut bir JSON projesi aç</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="163"/>
@@ -3342,7 +3219,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="166"/>
         <source>Save the current project</source>
-        <translation>Geçerli projeyi kaydet</translation>
+        <translation>Mevcut projeyi kaydet</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
@@ -3352,7 +3229,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="178"/>
         <source>Save the current project under a new name</source>
-        <translation>Geçerli projeyi yeni bir adla kaydet</translation>
+        <translation>Mevcut projeyi yeni bir adla kaydet</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="199"/>
@@ -3367,7 +3244,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="221"/>
         <source>Dataset</source>
-        <translation>Veri Kümesi</translation>
+        <translation>Veri kümesi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="223"/>
@@ -3432,7 +3309,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <source>Add an LED-style status indicator</source>
-        <translation>LED tarzı durum göstergesi ekle</translation>
+        <translation>LED tarzı bir durum göstergesi ekle</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="320"/>
@@ -3442,12 +3319,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="322"/>
         <source>Add a dataset container group</source>
-        <translation>Veri kümesi konteyner grubu ekle</translation>
+        <translation>Veri seti konteyner grubu ekle</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="324"/>
         <source>Dataset Container</source>
-        <translation>Veri Kümesi Kabı</translation>
+        <translation>Veri Seti Konteyneri</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
@@ -3457,7 +3334,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="343"/>
         <source>Add a data table view</source>
-        <translation>Veri tablosu görünümü ekle</translation>
+        <translation>Bir veri tablosu görünümü ekle</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="345"/>
@@ -3488,7 +3365,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <source>Add a 3D plot visualization</source>
-        <translation>3D grafik görselleştirme ekle</translation>
+        <translation>3D grafik görselleştirmesi ekle</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="371"/>
@@ -3499,7 +3376,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
         <source>Add a group for 3-axis accelerometer data</source>
-        <translation>3 eksenli ivmeölçer verileri için bir grup ekle</translation>
+        <translation>3 eksen ivmeölçer verisi için bir grup ekle</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="382"/>
@@ -3510,7 +3387,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="389"/>
         <source>Add a group for 3-axis gyroscope data (angular rates are integrated into orientation automatically)</source>
-        <translation>3 eksenli jiroskop verileri için bir grup ekle (açısal hızlar otomatik olarak yöne entegre edilir)</translation>
+        <translation>3 eksenli jiroskop verileri için bir grup ekleyin (açısal hızlar otomatik olarak yönlendirmeye entegre edilir)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="393"/>
@@ -3521,7 +3398,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
         <source>Add a map widget for GPS data</source>
-        <translation>GPS verileri için bir harita widget'ı ekle</translation>
+        <translation>GPS verileri için bir harita bileşeni ekleyin</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="419"/>
@@ -3531,7 +3408,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="422"/>
         <source>Open the online Project Editor documentation</source>
-        <translation>Çevrimiçi Proje Düzenleyici belgelerini aç</translation>
+        <translation>Çevrimiçi Proje Düzenleyici belgelerini açın</translation>
     </message>
 </context>
 <context>
@@ -3539,20 +3416,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
         <source>Pro features detected in this project.</source>
-        <translation>Bu projede Pro özellikler tespit edildi.</translation>
+        <translation>Bu projede Pro özellikler algılandı.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>Yedek widget'lar kullanılacak. Tam işlevselliği açmak için bir lisans satın alın.</translation>
-    </message>
-    <message>
-        <source>First, set up frame detection and data decoding.</source>
-        <translation type="vanished">Öncelikle, çerçeve algılama ve veri kod çözmeyi ayarlayın.</translation>
-    </message>
-    <message>
-        <source>Frames are parsed into arrays, and datasets link each element to a widget.</source>
-        <translation type="vanished">Çerçeveler dizilere ayrılır ve veri kümeleri her bir öğeyi bir widget ile bağlantılar.</translation>
+        <translation>Yedek bileşenler kullanılacak. Tam işlevselliği açmak için bir lisans satın alın.</translation>
     </message>
 </context>
 <context>
@@ -3560,7 +3429,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/Misc/Translator.cpp" line="174"/>
         <source>Failed to load welcome text :(</source>
-        <translation>Karşılama metni yüklenemedi :(</translation>
+        <translation>Hoş geldiniz metni yüklenemedi :(</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="269"/>
@@ -3572,7 +3441,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
         <location filename="../../src/Licensing/Trial.cpp" line="290"/>
         <location filename="../../src/Licensing/Trial.cpp" line="328"/>
         <source>Trial Activation Error</source>
-        <translation>Deneme Etkinleştirme Hatası</translation>
+        <translation>Deneme Aktivasyon Hatası</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="287"/>
@@ -3600,12 +3469,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="209"/>
         <source>Data Grids</source>
-        <translation>Veri Izgaraları</translation>
+        <translation>Veri Tabloları</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="212"/>
         <source>Multiple Data Plots</source>
-        <translation>Birden Fazla Veri Grafiği</translation>
+        <translation>Çoklu Veri Grafikleri</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="215"/>
@@ -3660,7 +3529,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="245"/>
         <source>3D Plots</source>
-        <translation>3D Grafikler</translation>
+        <translation>3D Grafikleri</translation>
     </message>
 </context>
 <context>
@@ -3703,17 +3572,17 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="252"/>
         <source>Force Software Rendering</source>
-        <translation>Yazılım Tabanlı İşlemeyi Zorla</translation>
+        <translation>Yazılım Tabanlı Çizim Zorla</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="269"/>
         <source>Automatically Check for Updates</source>
-        <translation>Güncellemeleri Otomatik Olarak Kontrol Et</translation>
+        <translation>Güncellemeleri Otomatik Kontrol Et</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="294"/>
         <source>Dashboard</source>
-        <translation>Kontrol Paneli</translation>
+        <translation>Gösterge Paneli</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="318"/>
@@ -3728,17 +3597,17 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="361"/>
         <source>Threaded mode (better for high-rate data)</source>
-        <translation>İplikli mod (yüksek oranlı veri için daha iyi)</translation>
+        <translation>İplikli mod (yüksek hızlı veri için daha iyi)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="379"/>
         <source>Show Actions Panel</source>
-        <translation>Eylemler Panelini Göster</translation>
+        <translation>Eylem Panelini Göster</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="397"/>
         <source>Enable Console Widget</source>
-        <translation>Konsol Bileşenini Etkinleştir</translation>
+        <translation>Konsol Araç Takımını Etkinleştir</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
@@ -3835,7 +3704,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <source>No Actions Available</source>
-        <translation>Kullanılabilir Eylem Yok</translation>
+        <translation>Eylem Yok</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
@@ -3909,10 +3778,6 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
         <translation>Değer</translation>
     </message>
     <message>
-        <source>Parameter Description</source>
-        <translation type="vanished">Parametre Açıklaması</translation>
-    </message>
-    <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
         <source>No</source>
         <translation>Hayır</translation>
@@ -3941,7 +3806,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="131"/>
         <source>Select all</source>
-        <translation>Tümünü seç</translation>
+        <translation>Tümünü Seç</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="138"/>
@@ -3951,7 +3816,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="218"/>
         <source>Send Data to Device</source>
-        <translation>Verileri Cihaza Gönder</translation>
+        <translation>Cihaza Veri Gönder</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="375"/>
@@ -3966,7 +3831,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="397"/>
         <source>Emulate VT-100</source>
-        <translation>VT-100'ü Taklit Et</translation>
+        <translation>VT-100 Taklit Et</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="419"/>
@@ -3984,7 +3849,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="154"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
-        <translation>JSON düzeninizi oluşturmak veya değiştirmek için Proje Düzenleyici'yi aç</translation>
+        <translation>JSON düzeninizi oluşturmak veya değiştirmek için Proje Düzenleyiciyi açın</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="161"/>
@@ -4070,7 +3935,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="309"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
         <source>Disconnect</source>
-        <translation>Bağlantıyı Kes</translation>
+        <translation>Bağlantıyı kes</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="309"/>
@@ -4080,7 +3945,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect or disconnect from device or MQTT broker</source>
-        <translation>Cihaz veya MQTT broker ile bağlantı kur veya bağlantıyı kes</translation>
+        <translation>Cihaza veya MQTT broker'a bağlanın veya bağlantıyı kesin</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="353"/>
@@ -4113,7 +3978,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="181"/>
         <source>Parity</source>
-        <translation>Eşlik</translation>
+        <translation>Parite</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="197"/>
@@ -4180,12 +4045,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="375"/>
         <source>Select Background Image</source>
-        <translation>Arka Plan Resmi Seç</translation>
+        <translation>Arka Plan Resmini Seç</translation>
     </message>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="377"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
-        <translation>Resimler (*.png *.jpg *.jpeg *.bmp)</translation>
+        <translation>Görüntüler (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
 </context>
 <context>
@@ -4198,7 +4063,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="441"/>
         <source>Would you like to download the update now? This is a mandatory update, exiting now will close the application</source>
-        <translation>Güncellemeyi şimdi indirmek ister misiniz? Bu zorunlu bir güncellemedir, şimdi çıkış yapmak uygulamayı kapatacaktır</translation>
+        <translation>Güncellemeyi şimdi indirmek ister misiniz? Bu zorunlu bir güncellemedir, şimdi çıkmak uygulamayı kapatacaktır</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="447"/>
@@ -4221,23 +4086,23 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="172"/>
         <source>Welcome to %1!</source>
-        <translation>%1'e hoş geldiniz!</translation>
+        <translation>%1'e Hoş Geldiniz!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="183"/>
         <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
-        <translation>Serial Studio, mühendisler, öğrenciler ve üreticiler için geliştirilmiş güçlü bir gerçek zamanlı görselleştirme aracıdır.</translation>
+        <translation>Serial Studio, mühendisler, öğrenciler ve maker'lar için geliştirilmiş güçlü bir gerçek zamanlı görselleştirme aracıdır.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="194"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
-        <translation>Tam işlevli bir 14 günlük deneme başlatabilir, lisans anahtarınızla etkinleştirebilir veya GPLv3 kaynak kodunu kendiniz indirip derleyebilirsiniz.</translation>
+        <translation>Tam işlevli 14 günlük bir deneme başlatabilir, lisans anahtarınızla etkinleştirebilir veya GPLv3 kaynak kodunu indirip kendiniz derleyebilirsiniz.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="204"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="362"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
-        <translation>Pro satın almak, yazarı doğrudan destekler ve gelecekteki geliştirmelere katkıda bulunur.</translation>
+        <translation>Pro satın almak, yazarı doğrudan destekler ve gelecekteki geliştirmeleri finanse etmeye yardımcı olur.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="212"/>
@@ -4273,12 +4138,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="304"/>
         <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>Mevcut abonelik planlarını görmek için aşağıdaki "Şimdi Yükselt" seçeneğine tıklayın.</translation>
+        <translation>Mevcut abonelik planlarını görmek için aşağıdaki "Şimdi Yükselt"e tıklayın.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="332"/>
         <source>Your %1 trial has expired.</source>
-        <translation>%1 deneme süreniz sona erdi.</translation>
+        <translation>%1 deneme süreniz doldu.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="342"/>
@@ -4309,10 +4174,6 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
         <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
         <source>Open in Limited Mode</source>
         <translation>Sınırlı Modda Aç</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">Kapat</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
@@ -4424,18 +4285,6 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="86"/>
         <source>National Geographic</source>
         <translation>National Geographic</translation>
-    </message>
-    <message>
-        <source>Today (partial</source>
-        <translation type="vanished">Bugün (kısmi</translation>
-    </message>
-    <message>
-        <source>Yesterday (full)</source>
-        <translation type="vanished">Dün (tam)</translation>
-    </message>
-    <message>
-        <source>Today (partial)</source>
-        <translation type="vanished">Bugün (kısmi)</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="393"/>

@@ -28,28 +28,24 @@
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
-        <translation>%1 je svobodný software: můžete jej šířit a/nebo upravovat podle podmínek GNU General Public License, jak ji vydala Free Software Foundation; buď verze 3 této Licence, nebo (dle vašeho uvážení) jakékoli pozdější verze.
+        <translation>%1 je svobodný software: můžete jej šířit a/nebo upravovat podle podmínek GNU General Public License, jak ji vydala Free Software Foundation; buď verze 3 Licence, nebo (podle vašeho uvážení) jakákoli novější verze.
 
 %1 je distribuován v naději, že bude užitečný, ale BEZ JAKÉKOLIV ZÁRUKY; dokonce i bez předpokládané záruky PRODEJNOSTI nebo VHODNOSTI PRO URČITÝ ÚČEL. Podrobnosti naleznete v GNU General Public License.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="233"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
-        <translation>Tato konfigurace je licencována pro komerční a proprietární použití. Může být použita v uzavřených a komerčních aplikacích, v souladu s podmínkami komerční licence.</translation>
-    </message>
-    <message>
-        <source>This configuration is for personal use only. Commercial use is prohibited unless a valid commercial license is activated.</source>
-        <translation type="vanished">Tato konfigurace je pouze pro osobní použití. Komerční použití je zakázáno, pokud není aktivována platná komerční licence.</translation>
+        <translation>Tato konfigurace je licencována pro komerční a proprietární použití. Může být použita v uzavřených a komerčních aplikacích, s výhradou podmínek komerční licence.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="247"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
-        <translation>Tato konfigurace je určena pouze pro osobní a hodnotící účely. Komerční použití je zakázáno, pokud není aktivována platná komerční licence.</translation>
+        <translation>Tato konfigurace je pouze pro osobní a hodnotící účely. Komerční použití je zakázáno, pokud není aktivována platná komerční licence.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="261"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Tento software je poskytován "tak, jak je" bez jakékoliv záruky, výslovné či předpokládané, včetně, ale nikoli výhradně, záruk prodejnosti nebo vhodnosti pro určitý účel. Autor v žádném případě nenese odpovědnost za jakékoliv škody vyplývající z použití tohoto softwaru.</translation>
+        <translation>Tento software je poskytován 'tak, jak je' bez jakékoli záruky, výslovné či předpokládané, včetně, ale nejen, záruk prodejnosti nebo vhodnosti pro určitý účel. Autor nenese žádnou odpovědnost za jakékoli škody vzniklé použitím tohoto softwaru.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="281"/>
@@ -140,27 +136,15 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="143"/>
         <source>Delete this action from the project</source>
-        <translation>Odstranit tuto akci z projektu</translation>
-    </message>
-    <message>
-        <source>Send commands with a button click</source>
-        <translation type="vanished">Odeslat příkazy kliknutím na tlačítko</translation>
-    </message>
-    <message>
-        <source>Actions let you send custom commands to the connected device with a single button press.</source>
-        <translation type="vanished">Akce vám umožňují odesílat vlastní příkazy připojenému zařízení jediným stisknutím tlačítka.</translation>
+        <translation>Smazat tuto akci z projektu</translation>
     </message>
 </context>
 <context>
     <name>Audio</name>
     <message>
-        <source>Buffer Size</source>
-        <translation type="vanished">Velikost vyrovnávací paměti</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="68"/>
         <source>No Microphone Detected</source>
-        <translation>Nebyl zjištěn žádný mikrofon</translation>
+        <translation>Mikrofon nebyl detekován</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="77"/>
@@ -190,33 +174,9 @@
         <translation>Kanály</translation>
     </message>
     <message>
-        <source>Input Sample Rate</source>
-        <translation type="vanished">Vzorkovací frekvence vstupu</translation>
-    </message>
-    <message>
-        <source>Input Sample Format</source>
-        <translation type="vanished">Vstupní formát vzorků</translation>
-    </message>
-    <message>
-        <source>Input Channels</source>
-        <translation type="vanished">Vstupní kanály</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="197"/>
         <source>Output Device</source>
         <translation>Výstupní zařízení</translation>
-    </message>
-    <message>
-        <source>Output Sample Rate</source>
-        <translation type="vanished">Vzorkovací frekvence výstupu</translation>
-    </message>
-    <message>
-        <source>Output Sample Format</source>
-        <translation type="vanished">Výstupní formát vzorků</translation>
-    </message>
-    <message>
-        <source>Output Channels</source>
-        <translation type="vanished">Výstupní kanály</translation>
     </message>
 </context>
 <context>
@@ -244,7 +204,7 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="195"/>
         <source>Sorry, this system is not supported yet. We'll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
-        <translation>Omlouváme se, tento systém zatím není podporován. Aktualizujeme Serial Studio, aby pracovalo s tímto operačním systémem, jakmile ho Qt oficiálně podpoří.</translation>
+        <translation>Omlouváme se, tento systém zatím není podporován. Aktualizujeme Serial Studio, aby fungovalo s tímto operačním systémem, jakmile to Qt oficiálně podpoří.</translation>
     </message>
 </context>
 <context>
@@ -252,7 +212,7 @@
     <message>
         <location filename="../../src/CSV/Export.cpp" line="271"/>
         <source>CSV File Error</source>
-        <translation>Chyba souboru CSV</translation>
+        <translation>Chyba CSV souboru</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Export.cpp" line="272"/>
@@ -275,7 +235,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="278"/>
         <source>Device Connection Active</source>
-        <translation>Připojení k zařízení aktivní</translation>
+        <translation>Připojení zařízení aktivní</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="279"/>
@@ -295,7 +255,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="355"/>
         <source>Cannot read CSV file</source>
-        <translation>Nelze přečíst CSV soubor</translation>
+        <translation>Nelze číst CSV soubor</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="356"/>
@@ -310,7 +270,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="514"/>
         <source>The CSV file does not contain any data or headers.</source>
-        <translation>Soubor CSV neobsahuje žádná data ani záhlaví.</translation>
+        <translation>CSV soubor neobsahuje žádná data ani záhlaví.</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="525"/>
@@ -331,7 +291,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="528"/>
         <source>Choose how to handle the date/time data:</source>
-        <translation>Vyberte, jak zpracovat data o datu/času:</translation>
+        <translation>Zvolte, jak zpracovat data data/času:</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="538"/>
@@ -341,17 +301,17 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="539"/>
         <source>Please enter the interval between rows in milliseconds:</source>
-        <translation>Zadejte, prosím, interval mezi řádky v milisekundách:</translation>
+        <translation>Zadejte prosím interval mezi řádky v milisekundách:</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="553"/>
         <source>Select Date/Time Column</source>
-        <translation>Vyberte sloupec s datem/časem</translation>
+        <translation>Vyberte sloupec data/času</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="554"/>
         <source>Please select the column that contains the date/time data:</source>
-        <translation>Vyberte, prosím, sloupec, který obsahuje data o datu/času:</translation>
+        <translation>Vyberte prosím sloupec, který obsahuje data data/času:</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="563"/>
@@ -379,7 +339,7 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="71"/>
         <source>Tile Windows</source>
-        <translation>Uspořádat okna</translation>
+        <translation>Dlaždicová okna</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="84"/>
@@ -389,7 +349,7 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Canvas.qml" line="85"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
-        <translation>Záložní widgety jsou aktivní. Pro plnou funkčnost si zakupte licenci.</translation>
+        <translation>Náhradní widgety jsou aktivní. Pro plnou funkčnost zakupte licenci.</translation>
     </message>
 </context>
 <context>
@@ -439,7 +399,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>Budou použity náhradní widgety. Kupte si licenci pro odemknutí plné funkčnosti.</translation>
+        <translation>Náhradní widgety budou použity. Kupte si licenci pro odemčení plné funkčnosti.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
@@ -449,7 +409,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
         <source>Toggle 2D plot visualization for this dataset</source>
-        <translation>Přepnout 2D vizualizaci grafu pro tento datový soubor</translation>
+        <translation>Přepnout vizualizaci 2D grafu pro tuto datovou sadu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
@@ -469,7 +429,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
         <source>Toggle bar/level indicator for this dataset</source>
-        <translation>Přepnout sloupcový/úrovňový indikátor pro tento datový soubor</translation>
+        <translation>Přepnout indikátor sloupce/úrovně pro tuto datovou sadu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
@@ -479,7 +439,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <source>Toggle gauge widget for analog-style display</source>
-        <translation>Přepnout ukazatel měřidla pro analogový styl zobrazení</translation>
+        <translation>Přepnout widget měřidla pro analogové zobrazení</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
@@ -489,7 +449,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <source>Toggle compass widget for directional data</source>
-        <translation>Přepnout kompasový widget pro směrová data</translation>
+        <translation>Přepnout widget kompasu pro směrová data</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
@@ -509,7 +469,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
         <source>Duplicate this dataset with the same configuration</source>
-        <translation>Duplikovat tento datový soubor se stejnou konfigurací</translation>
+        <translation>Duplikovat tuto datovou sadu se stejnou konfigurací</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
@@ -519,7 +479,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
         <source>Delete this dataset from the group</source>
-        <translation>Odstranit tento datový soubor ze skupiny</translation>
+        <translation>Smazat tuto datovou sadu ze skupiny</translation>
     </message>
 </context>
 <context>
@@ -537,12 +497,12 @@
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="150"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
-        <translation>Serial Studio je bezplatný a open-source software podporovaný dobrovolníky. Zvažte darování nebo získání Pro licence na podporu vývojových snah :)</translation>
+        <translation>Serial Studio je zdarma a open-source software podporovaný dobrovolníky. Zvažte darování nebo získání Pro licence na podporu vývoje :)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="163"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
-        <translation>Tento projekt můžete podpořit také sdílením, hlášením chyb a navrhováním nových funkcí!</translation>
+        <translation>Projekt můžete také podpořit jeho sdílením, hlášením chyb a navrhováním nových funkcí!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="179"/>
@@ -617,12 +577,12 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="221"/>
         <source>In order to install the update, you may need to quit the application.</source>
-        <translation>Pro instalaci aktualizace může být nutné ukončit aplikaci.</translation>
+        <translation>Pro instalaci aktualizace možná budete muset ukončit aplikaci.</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="225"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application</source>
-        <translation>Pro instalaci aktualizace může být nutné ukončit aplikaci. Jedná se o povinnou aktualizaci, ukončení nyní zavře aplikaci</translation>
+        <translation>Pro instalaci aktualizace možná budete muset ukončit aplikaci. Toto je povinná aktualizace, ukončení nyní zavře aplikaci</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="245"/>
@@ -642,7 +602,7 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="267"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
-        <translation>Opravdu chcete zrušit stahování? Jedná se o povinnou aktualizaci, ukončení nyní zavře aplikaci</translation>
+        <translation>Opravdu chcete zrušit stahování? Toto je povinná aktualizace, ukončení nyní zavře aplikaci</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="327"/>
@@ -712,14 +672,6 @@
         <source>1 second</source>
         <translation>1 sekunda</translation>
     </message>
-    <message>
-        <source>Time remaining: 0 minutes</source>
-        <translation type="vanished">Zbývající čas: 0 minut</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="vanished">Otevřít</translation>
-    </message>
 </context>
 <context>
     <name>FFTPlot</name>
@@ -764,7 +716,7 @@
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="221"/>
         <source>Progress: %1</source>
-        <translation>Postup: %1</translation>
+        <translation>Pokrok: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="237"/>
@@ -837,7 +789,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="203"/>
         <source>Reset to the default parsing script</source>
-        <translation>Obnovit výchozí skript pro zpracování</translation>
+        <translation>Obnovit na výchozí skript pro analýzu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="211"/>
@@ -847,7 +799,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="216"/>
         <source>Import a JavaScript file for data parsing</source>
-        <translation>Importovat soubor JavaScript pro zpracování dat</translation>
+        <translation>Importovat JavaScriptový soubor pro analýzu dat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="225"/>
@@ -857,7 +809,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="230"/>
         <source>Validate syntax and apply parsing changes</source>
-        <translation>Ověřit syntaxi a použít změny zpracování</translation>
+        <translation>Ověřit syntaxi a aplikovat změny analýzy</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="255"/>
@@ -867,7 +819,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="269"/>
         <source>Redo the previously undone edit</source>
-        <translation>Obnovit předchozí vrácenou úpravu</translation>
+        <translation>Znovu provést dříve vrácenou úpravu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="293"/>
@@ -877,7 +829,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="306"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Kopírovat vybraný kód do schránky</translation>
+        <translation>Zkopírovat vybraný kód do schránky</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="319"/>
@@ -892,35 +844,15 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="343"/>
         <source>Open help documentation for JavaScript data parsing</source>
-        <translation>Otevřít dokumentaci nápovědy pro zpracování dat v JavaScriptu</translation>
+        <translation>Otevřít dokumentaci nápovědy pro analýzu dat v JavaScriptu</translation>
     </message>
 </context>
 <context>
     <name>GPS</name>
     <message>
-        <source>Map Type: %1</source>
-        <translation type="vanished">Typ mapy: %1</translation>
-    </message>
-    <message>
-        <source>Map Layer: %1</source>
-        <translation type="vanished">Vrstva mapy: %1</translation>
-    </message>
-    <message>
-        <source>VIIRS: %1</source>
-        <translation type="vanished">VIIRS: %1</translation>
-    </message>
-    <message>
-        <source>Map: %1</source>
-        <translation type="vanished">Mapa: %1</translation>
-    </message>
-    <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <source>Base Map: %1</source>
         <translation>Základní mapa: %1</translation>
-    </message>
-    <message>
-        <source>VIIRS Imagery: %1</source>
-        <translation type="vanished">VIIRS snímky: %1</translation>
     </message>
 </context>
 <context>
@@ -928,7 +860,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
-        <translation>V tomto projektu byly zjištěny profesionální funkce.</translation>
+        <translation>V tomto projektu byly detekovány profesionální funkce.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="83"/>
@@ -958,7 +890,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="144"/>
         <source>FFT Plot</source>
-        <translation>FFT graf</translation>
+        <translation>FFT Graf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="149"/>
@@ -983,7 +915,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="177"/>
         <source>Add a gauge widget for analog-style visualization</source>
-        <translation>Přidat widget měřidla pro analogovou vizualizaci</translation>
+        <translation>Přidat měřidlo pro analogovou vizualizaci</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="186"/>
@@ -1025,14 +957,6 @@
         <source>Delete the current group and all contained datasets</source>
         <translation>Smazat aktuální skupinu a všechny obsažené datové sady</translation>
     </message>
-    <message>
-        <source>Groups hold multiple datasets and organize your data.</source>
-        <translation type="vanished">Skupiny obsahují více datových sad a organizují vaše data.</translation>
-    </message>
-    <message>
-        <source>Use the sub-toolbar to quickly add plots, FFTs, and other dataset types to this group.</source>
-        <translation type="vanished">Použijte podpanel nástrojů pro rychlé přidání grafů, FFT a dalších typů datových sad do této skupiny.</translation>
-    </message>
 </context>
 <context>
     <name>Gyroscope</name>
@@ -1049,12 +973,12 @@
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="361"/>
         <source>Yaw: %1</source>
-        <translation>Otočení: %1</translation>
+        <translation>Směr: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="379"/>
         <source>Pitch: %1</source>
-        <translation>Klopení: %1</translation>
+        <translation>Kývání: %1</translation>
     </message>
 </context>
 <context>
@@ -1102,7 +1026,7 @@
     <message>
         <location filename="../../src/IO/Console.cpp" line="199"/>
         <source>No Checksum</source>
-        <translation>Žádná kontrolní součet</translation>
+        <translation>Bez kontrolního součtu</translation>
     </message>
 </context>
 <context>
@@ -1110,17 +1034,17 @@
     <message>
         <location filename="../../src/IO/ConsoleExport.cpp" line="164"/>
         <source>Console Export is a Pro feature.</source>
-        <translation>Export konzole je funkce Pro.</translation>
+        <translation>Export konzole je prémiová funkce.</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConsoleExport.cpp" line="165"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
-        <translation>Tato funkce vyžaduje licenci. Prosím, zakupte si ji pro povolení exportu konzole.</translation>
+        <translation>Tato funkce vyžaduje licenci. Prosím, zakupte si ji pro povolení exportu do konzole.</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConsoleExport.cpp" line="228"/>
         <source>Console Output File Error</source>
-        <translation>Chyba výstupního souboru konzole</translation>
+        <translation>Chyba souboru výstupu konzole</translation>
     </message>
     <message>
         <location filename="../../src/IO/ConsoleExport.cpp" line="229"/>
@@ -1131,38 +1055,47 @@
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="864"/>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="937"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="954"/>
+        <source>channels</source>
+        <translation>kanály</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1027"/>
         <source> channels</source>
         <translation>kanály</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1116"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1206"/>
         <source>Unsigned 8-bit</source>
-        <translation>Neoznačený 8bitový</translation>
+        <translation>Nezáporný 8-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1117"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1207"/>
         <source>Signed 16-bit</source>
-        <translation>Podepsaný 16bitový</translation>
+        <translation>Záporný 16-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1118"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1208"/>
+        <source>Signed 24-bit</source>
+        <translation>Záporný 24-bit</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1209"/>
         <source>Signed 32-bit</source>
-        <translation>Podepsaný 32bitový</translation>
+        <translation>Záporný 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1119"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1210"/>
         <source>Float 32-bit</source>
-        <translation>Plovoucí desetinná čárka 32bitová</translation>
+        <translation>Float 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1120"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
@@ -1207,7 +1140,7 @@
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="575"/>
         <source>Descriptor write error</source>
-        <translation>Chyba zápisu popisovače</translation>
+        <translation>Chyba zápisu deskriptoru</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="578"/>
@@ -1217,12 +1150,12 @@
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="581"/>
         <source>Characteristic read error</source>
-        <translation>Chyba čtení charakteristiky</translation>
+        <translation>Chyba při čtení charakteristiky</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="584"/>
         <source>Descriptor read error</source>
-        <translation>Chyba čtení popisovače</translation>
+        <translation>Chyba při čtení popisovače</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="601"/>
@@ -1242,12 +1175,12 @@
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="610"/>
         <source>Unsupported discovery method</source>
-        <translation>Nepodporovaná metoda zjišťování</translation>
+        <translation>Nepodporovaná metoda vyhledávání</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="613"/>
         <source>General I/O error</source>
-        <translation>Obecná chyba vstupu/výstupu</translation>
+        <translation>Obecná I/O chyba</translation>
     </message>
 </context>
 <context>
@@ -1297,7 +1230,7 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="410"/>
         <source>Mark</source>
-        <translation>Označit</translation>
+        <translation>Značka</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="449"/>
@@ -1312,20 +1245,12 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="600"/>
         <source>"%1" is not a valid path</source>
-        <translation>„%1“ není platná cesta</translation>
+        <translation>"%1" není platná cesta</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="601"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>Zadejte jinou cestu pro registraci vlastního sériového zařízení</translation>
-    </message>
-    <message>
-        <source>Baud rate registered successfully</source>
-        <translation type="vanished">Přenosová rychlost byla úspěšně zaregistrována</translation>
-    </message>
-    <message>
-        <source>Rate "%1" has been added to baud rate list</source>
-        <translation type="vanished">Rychlost „%1“ byla přidána do seznamu přenosových rychlostí</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="885"/>
@@ -1345,7 +1270,7 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="913"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
-        <translation>Oprávnění odepřeno. Ujistěte se, že aplikace má potřebná přístupová práva k zařízení.</translation>
+        <translation>Přístup odepřen. Ujistěte se, že aplikace má potřebná přístupová práva k zařízení.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="914"/>
@@ -1375,17 +1300,17 @@
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="919"/>
         <source>An unknown error occurred. Please check the device and try again.</source>
-        <translation>Došlo k neznámé chybě. Zkontrolujte prosím zařízení a zkuste to znovu.</translation>
+        <translation>Došlo k neznámé chybě. Zkontrolujte zařízení a zkuste to znovu.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="920"/>
         <source>The operation timed out. The device may not be responding.</source>
-        <translation>Operace překročila časový limit. Zařízení nemusí reagovat.</translation>
+        <translation>Operace vypršela. Zařízení nemusí reagovat.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="921"/>
         <source>The device is not open. Please open the device before attempting this operation.</source>
-        <translation>Zařízení není otevřeno. Otevřete prosím zařízení před pokusem o tuto operaci.</translation>
+        <translation>Zařízení není otevřeno. Otevřete zařízení před pokusem o tuto operaci.</translation>
     </message>
 </context>
 <context>
@@ -1424,10 +1349,6 @@
         <translation>Zvukový proud</translation>
     </message>
     <message>
-        <source>Audio</source>
-        <translation type="vanished">Zvuk</translation>
-    </message>
-    <message>
         <location filename="../../src/IO/Manager.cpp" line="357"/>
         <source>Your trial period has ended.</source>
         <translation>Vaše zkušební období skončilo.</translation>
@@ -1435,7 +1356,7 @@
     <message>
         <location filename="../../src/IO/Manager.cpp" line="358"/>
         <source>To continue using Serial Studio, please activate your license.</source>
-        <translation>Pro pokračování v používání Serial Studio prosím aktivujte svou licenci.</translation>
+        <translation>Pro pokračování v používání Serial Studio aktivujte svou licenci.</translation>
     </message>
 </context>
 <context>
@@ -1443,7 +1364,7 @@
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="45"/>
         <source>Select Icon</source>
-        <translation>Vyberte ikonu</translation>
+        <translation>Vybrat ikonu</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="157"/>
@@ -1459,21 +1380,9 @@
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <source>Select JSON map file</source>
-        <translation type="vanished">Vyberte soubor mapy JSON</translation>
-    </message>
-    <message>
-        <source>JSON files</source>
-        <translation type="vanished">JSON soubory</translation>
-    </message>
-    <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="172"/>
         <source>JSON parse error</source>
-        <translation>Chyba analýzy JSON</translation>
-    </message>
-    <message>
-        <source>Invalid JSON project format</source>
-        <translation type="vanished">Neplatný formát JSON projektu</translation>
+        <translation>Chyba při analýze JSON</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="205"/>
@@ -1496,27 +1405,27 @@
         <translation>Zkontrolujte oprávnění a umístění souboru</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="459"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="496"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="463"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="500"/>
         <source>Channel %1</source>
         <translation>Kanál %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="475"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="506"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="473"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="528"/>
+        <source>Multiple Plots</source>
+        <translation>Více grafů</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="479"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="510"/>
         <source>Quick Plot</source>
         <translation>Rychlý graf</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="511"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="515"/>
         <source>Quick Plot Data</source>
         <translation>Data pro rychlý graf</translation>
-    </message>
-    <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="469"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="524"/>
-        <source>Multiple Plots</source>
-        <translation>Více grafů</translation>
     </message>
 </context>
 <context>
@@ -1547,17 +1456,17 @@
         <location filename="../../src/JSON/FrameParser.cpp" line="305"/>
         <location filename="../../src/JSON/FrameParser.cpp" line="329"/>
         <source>No valid 'parse' function declaration found in the script!</source>
-        <translation>V skriptu nebylo nalezeno žádné platné deklarování funkce 'parse'!</translation>
+        <translation>Ve skriptu nebylo nalezeno platné deklarování funkce 'parse'!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="314"/>
         <source>Legacy frame parser function detected</source>
-        <translation>Byla detekována funkce parseru pro starší rámec</translation>
+        <translation>Detekována funkce starého analyzátoru rámců</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="315"/>
         <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
-        <translation>Funkce 'parse' má dva argumenty ('%1', '%2'), což naznačuje použití starého formátu. Aktualizujte ji na nový formát, který bere jako argument pouze data rámce.</translation>
+        <translation>Funkce 'parse' má dva argumenty ('%1', '%2'), což naznačuje použití starého formátu. Aktualizujte ji prosím na nový formát, který bere jako argument pouze data rámce.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="422"/>
@@ -1587,7 +1496,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="346"/>
         <source>Samples</source>
-        <translation>Ukázky</translation>
+        <translation>Vzorky</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="690"/>
@@ -1597,7 +1506,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="691"/>
         <source>You have unsaved modifications in this project!</source>
-        <translation>Máte neuložené změny v tomto projektu!</translation>
+        <translation>Máte neuložené úpravy v tomto projektu!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="726"/>
@@ -1610,8 +1519,9 @@
         <translation>Název projektu nesmí být prázdný!</translation>
     </message>
     <message>
-        <source>Save JSON project</source>
-        <translation type="vanished">Uložit JSON projekt</translation>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="745"/>
+        <source>Save Serial Studio Project</source>
+        <translation>Uložit projekt Serial Studio</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="756"/>
@@ -1622,16 +1532,7 @@
         <location filename="../../src/JSON/ProjectModel.cpp" line="873"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2184"/>
         <source>Untitled Project</source>
-        <translation>Projekt bez názvu</translation>
-    </message>
-    <message>
-        <source>Select JSON file</source>
-        <translation type="vanished">Vyberte JSON soubor</translation>
-    </message>
-    <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="745"/>
-        <source>Save Serial Studio Project</source>
-        <translation>Uložit projekt Serial Studio</translation>
+        <translation>Nepojmenovaný projekt</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="916"/>
@@ -1641,17 +1542,17 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="917"/>
         <source>Project Files (*.json *.ssproj)</source>
-        <translation>Projektové soubory (*.json *.ssproj)</translation>
+        <translation>Soubor projektu (*.json *.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1039"/>
         <source>Legacy frame parser function updated</source>
-        <translation>Funkce parseru rámců pro starší verze byla aktualizována</translation>
+        <translation>Funkce parseru starého rámce byla aktualizována</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1040"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>Váš projekt používal funkci parseru rámců pro starší verze s argumentem 'separator'. Byl automaticky převeden na nový formát.</translation>
+        <translation>Váš projekt používal funkci parseru starého rámce s argumentem 'separator'. Byl automaticky převeden na nový formát.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1072"/>
@@ -1661,7 +1562,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1073"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
-        <translation>Tento provozní režim je vyžadován pro načítání a zobrazení dashboardů z projektových souborů.</translation>
+        <translation>Tento režim je nutný pro načtení a zobrazení dashboardů ze souborů projektu.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1101"/>
@@ -1720,7 +1621,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1449"/>
         <source>New Gauge</source>
-        <translation>Nový měřič</translation>
+        <translation>Nový ukazatel</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1453"/>
@@ -1807,12 +1708,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2185"/>
         <source>Project name/description</source>
-        <translation>Název/projektový popis</translation>
+        <translation>Název/projekt popis</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2196"/>
         <source>Data Conversion Method</source>
-        <translation>Metoda konverze dat</translation>
+        <translation>Metoda převodu dat</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2198"/>
@@ -1822,7 +1723,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2211"/>
         <source>Frame Detection</source>
-        <translation>Detekce rámce</translation>
+        <translation>Detekce rámců</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2213"/>
@@ -1842,60 +1743,37 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2249"/>
         <source>Frame End Delimeter</source>
-        <translation>Oddělovač konce rámce</translation>
+        <translation>Konecní Delimetr Snímku</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2252"/>
         <source>String marking the end of a frame</source>
-        <translation>Řetězec označující konec rámce</translation>
+        <translation>Řetězec označující konec snímku</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2266"/>
         <source>Hexadecimal Delimeters</source>
-        <translation>Hexadecimální oddělovače</translation>
+        <translation>Hexadecimální Delimitery</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2268"/>
         <source>Use hexadecimal delimiters for data frames</source>
-        <translation>Použít hexadecimální oddělovače pro datové rámce</translation>
+        <translation>Použijte hexadecimální delimitery pro datové snímky</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2282"/>
         <source>Checksum Algorithm</source>
-        <translation>Algoritmus kontrolního součtu</translation>
+        <translation>Algoritmus Kontrolního Součtu</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2284"/>
         <source>Checksum algorithm used for frame validation</source>
-        <translation>Algoritmus kontrolního součtu použitý pro ověření rámce</translation>
-    </message>
-    <message>
-        <source>Thunderforest API Key</source>
-        <translation type="vanished">API klíč Thunderforest</translation>
-    </message>
-    <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2969"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2976"/>
-        <source>None</source>
-        <translation>Žádný</translation>
-    </message>
-    <message>
-        <source>Required for Thunderforest maps</source>
-        <translation type="vanished">Vyžadováno pro mapy Thunderforest</translation>
-    </message>
-    <message>
-        <source>MapTiler API Key</source>
-        <translation type="vanished">API klíč MapTiler</translation>
-    </message>
-    <message>
-        <source>Required for satellite maps</source>
-        <translation type="vanished">Vyžadováno pro satelitní mapy</translation>
+        <translation>Algoritmus kontrolního součtu použitý pro ověření snímku</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2332"/>
         <source>Untitled Group</source>
-        <translation>Skupina bez názvu</translation>
+        <translation>Nepojmenovaná Skupina</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2333"/>
@@ -1911,12 +1789,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2363"/>
         <source>Group display widget (optional)</source>
-        <translation>Widget zobrazení skupiny (volitelné)</translation>
+        <translation>Zobrazovací widget skupiny (volitelně)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2396"/>
         <source>Untitled Action</source>
-        <translation>Akce bez názvu</translation>
+        <translation>Nepojmenovaná akce</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2397"/>
@@ -1946,12 +1824,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2422"/>
         <source>Send binary data when the action is triggered.</source>
-        <translation>Odeslat binární data, když je akce spuštěna.</translation>
+        <translation>Odeslat binární data při spuštění akce.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2435"/>
         <source>TX Data (Hex)</source>
-        <translation>TX data (Hex)</translation>
+        <translation>TX Data (Hex)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2437"/>
@@ -1963,17 +1841,17 @@
         <location filename="../../src/JSON/ProjectModel.cpp" line="2438"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2455"/>
         <source>Data to transmit when the action is triggered.</source>
-        <translation>Data k odeslání, když je akce spuštěna.</translation>
+        <translation>Data k odeslání při spuštění akce.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2452"/>
         <source>TX Data</source>
-        <translation>TX data</translation>
+        <translation>TX Data</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2484"/>
         <source>EOL Sequence</source>
-        <translation>EOL sekvence</translation>
+        <translation>EOL Sekvence</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2486"/>
@@ -1988,7 +1866,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2500"/>
         <source>Trigger this action automatically when a device connects.</source>
-        <translation>Spustit tuto akci automaticky, když se zařízení připojí.</translation>
+        <translation>Spusťte tuto akci automaticky, když se zařízení připojí.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2512"/>
@@ -1998,7 +1876,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2514"/>
         <source>How and when the timer should activate.</source>
-        <translation>Jak a kdy by se měl časovač aktivovat.</translation>
+        <translation>Jak a kdy by měl časovač aktivovat.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2527"/>
@@ -2014,22 +1892,22 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2595"/>
         <source>Untitled Dataset</source>
-        <translation>Sada dat bez názvu</translation>
+        <translation>Nepojmenovaná datová sada</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2596"/>
         <source>Name or description of the dataset</source>
-        <translation>Název nebo popis sady dat</translation>
+        <translation>Název nebo popis datové sady</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2607"/>
         <source>Frame Index</source>
-        <translation>Index snímku</translation>
+        <translation>Index rámce</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2610"/>
         <source>Position in the frame</source>
-        <translation>Poloha ve snímku</translation>
+        <translation>Pozice v rámci</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2620"/>
@@ -2064,7 +1942,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2703"/>
         <source>Oscilloscope Plot</source>
-        <translation>Graf osciloskopu</translation>
+        <translation>Osciloskopický graf</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2705"/>
@@ -2079,7 +1957,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2717"/>
         <source>Plot frequency-domain data</source>
-        <translation>Zobrazit data ve frekvenční oblasti</translation>
+        <translation>Zobrazit data v kmitočtové oblasti</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2726"/>
@@ -2110,7 +1988,7 @@
         <location filename="../../src/JSON/ProjectModel.cpp" line="2779"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2792"/>
         <source>Required for range widgets, optional for plots</source>
-        <translation>Požadováno pro widgety rozsahu, volitelné pro grafy</translation>
+        <translation>Požadováno pro rozsahové widgety, volitelné pro grafy</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2789"/>
@@ -2125,12 +2003,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2808"/>
         <source>Triggers alarm in bar widgets and LED panels</source>
-        <translation>Spouští alarm v lištových widgetech a LED panelech</translation>
+        <translation>Spouští alarm v panelových widgetech a LED panelech</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2830"/>
         <source>FFT Window Size</source>
-        <translation>Velikost okna FFT</translation>
+        <translation>Velikost FFT okna</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2832"/>
@@ -2150,7 +2028,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2860"/>
         <source>LED High (On) Value</source>
-        <translation>Vysoká hodnota LED (Zapnuto)</translation>
+        <translation>Hodnota LED vysoká (Zapnuto)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2863"/>
@@ -2170,12 +2048,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2928"/>
         <source>Start on Trigger</source>
-        <translation>Spustit při spuštění</translation>
+        <translation>Spustit na spouštěč</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2929"/>
         <source>Toggle on Trigger</source>
-        <translation>Přepnout při spuštění</translation>
+        <translation>Přepnout na spouštěč</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2933"/>
@@ -2195,12 +2073,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2936"/>
         <source>Binary (Direct)</source>
-        <translation>Binární (přímý)</translation>
+        <translation>Binární (Přímé)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2943"/>
         <source>No Checksum</source>
-        <translation>Žádná kontrolní součet</translation>
+        <translation>Bez kontrolního součtu</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2948"/>
@@ -2220,7 +2098,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2951"/>
         <source>No Delimiters</source>
-        <translation>Bez oddělovačů</translation>
+        <translation>Žádné oddělovače</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2959"/>
@@ -2251,6 +2129,13 @@
         <location filename="../../src/JSON/ProjectModel.cpp" line="2964"/>
         <source>3D Plot</source>
         <translation>3D graf</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2969"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2976"/>
+        <source>None</source>
+        <translation>Žádný</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2970"/>
@@ -2295,12 +2180,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3025"/>
         <source>Save changes to frame parser code?</source>
-        <translation>Uložit změny v kódu rámcového analyzátoru?</translation>
+        <translation>Uložit změny do kódu analyzátoru rámců?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3026"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation>Vyberte „Uložit“ pro zachování změn, „Zahodit“ pro jejich trvalou ztrátu, nebo „Zrušit“ pro návrat.</translation>
+        <translation>Vyberte 'Uložit' pro zachování změn, 'Zahodit' pro jejich trvalou ztrátu, nebo 'Zrušit' pro návrat.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3028"/>
@@ -2311,13 +2196,9 @@
 <context>
     <name>JSONDropArea</name>
     <message>
-        <source>Drop JSON and CSV files here</source>
-        <translation type="vanished">Přetáhněte sem soubory JSON a CSV</translation>
-    </message>
-    <message>
         <location filename="../../qml/Widgets/JSONDropArea.qml" line="116"/>
         <source>Drop Projects and CSV files here</source>
-        <translation>Sem přetáhněte projekty a soubory CSV</translation>
+        <translation>Přetáhněte sem projekty a soubory CSV</translation>
     </message>
 </context>
 <context>
@@ -2330,7 +2211,7 @@
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="214"/>
         <source>Please wait...</source>
-        <translation>Prosím, čekejte...</translation>
+        <translation>Prosím čekejte...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="241"/>
@@ -2340,7 +2221,7 @@
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="251"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
-        <translation>Vložte svůj licenční klíč níže pro odemčení Pro funkcí, jako je MQTT, 3D vykreslování a další.</translation>
+        <translation>Vložte svůj licenční klíč níže pro odemknutí Pro funkcí jako MQTT, 3D vykreslování a další.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="262"/>
@@ -2352,7 +2233,7 @@ Plány zahrnují měsíční, roční a doživotní možnosti.</translation>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="279"/>
         <source>Paste your license key here…</source>
-        <translation>Vložte sem svůj licenční klíč…</translation>
+        <translation>Vložte svůj licenční klíč sem…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="298"/>
@@ -2386,12 +2267,12 @@ Plány zahrnují měsíční, roční a doživotní možnosti.</translation>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="369"/>
         <source>Licensee</source>
-        <translation>Licenční uživatel</translation>
+        <translation>Licencovaný uživatel</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="384"/>
         <source>Licensee E-Mail</source>
-        <translation>E-mail licenčního uživatele</translation>
+        <translation>E-mail licencovaného uživatele</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="397"/>
@@ -2406,7 +2287,7 @@ Plány zahrnují měsíční, roční a doživotní možnosti.</translation>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="404"/>
         <source>%1 of %2 devices used</source>
-        <translation>%1 z %2 zařízení použito</translation>
+        <translation>Použito %1 z %2 zařízení</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="414"/>
@@ -2444,21 +2325,21 @@ Plány zahrnují měsíční, roční a doživotní možnosti.</translation>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="579"/>
         <source>There was an issue validating your license.</source>
-        <translation>Při ověřování vaší licence došlo k problému.</translation>
+        <translation>Nastal problém s ověřením vaší licence.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="896"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
-        <translation>Licenční klíč, který jste zadali, nepatří do Serial Studio.</translation>
+        <translation>Poskytnutý licenční klíč nepatří k Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="774"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="897"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
-        <translation>Prosím, zkontrolujte, zda jste licenci zakoupili v oficiálním obchodě Serial Studio.</translation>
+        <translation>Zkontrolujte prosím, zda jste licenci zakoupili v oficiálním obchodě Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
@@ -2470,7 +2351,7 @@ Plány zahrnují měsíční, roční a doživotní možnosti.</translation>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="787"/>
         <source>Please deactivate it there first or contact support for help.</source>
-        <translation>Nejprve ji prosím deaktivujte tam nebo kontaktujte podporu pro pomoc.</translation>
+        <translation>Nejprve jej tam prosím deaktivujte nebo kontaktujte podporu pro pomoc.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
@@ -2498,14 +2379,14 @@ Plány zahrnují měsíční, roční a doživotní možnosti.</translation>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="651"/>
         <source>Could not validate your license at this time.</source>
-        <translation>Vaši licenci se momentálně nepodařilo ověřit.</translation>
+        <translation>V tuto chvíli nelze ověřit vaši licenci.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="652"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="826"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="910"/>
         <source>Please try again later.</source>
-        <translation>Zkuste to prosím znovu později.</translation>
+        <translation>Zkuste to prosím později.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="672"/>
@@ -2526,7 +2407,7 @@ Plány zahrnují měsíční, roční a doživotní možnosti.</translation>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="700"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
-        <translation>Děkujeme, že podporujete Serial Studio!
+        <translation>Děkujeme za podporu Serial Studio!
 Nyní máte přístup ke všem prémiovým funkcím.</translation>
     </message>
     <message>
@@ -2542,17 +2423,17 @@ Nyní máte přístup ke všem prémiovým funkcím.</translation>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="825"/>
         <source>Could not activate your license at this time.</source>
-        <translation>V tuto chvíli nelze aktivovat vaši licenci.</translation>
+        <translation>V tuto chvíli nelze vaši licenci aktivovat.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="885"/>
         <source>There was an issue deactivating your license.</source>
-        <translation>Při deaktivaci vaší licence došlo k problému.</translation>
+        <translation>Došlo k problému při deaktivaci vaší licence.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="909"/>
         <source>Could not deactivate your license at this time.</source>
-        <translation>V tuto chvíli nelze deaktivovat vaši licenci.</translation>
+        <translation>Vaši licenci se nyní nepodařilo deaktivovat.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="919"/>
@@ -2564,7 +2445,7 @@ Nyní máte přístup ke všem prémiovým funkcím.</translation>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Přístup k funkcím Pro byl odstraněn.
-Ještě jednou děkujeme za podporu Serial Studio!</translation>
+Děkujeme vám znovu za podporu Serial Studio!</translation>
     </message>
 </context>
 <context>
@@ -2607,7 +2488,7 @@ Ještě jednou děkujeme za podporu Serial Studio!</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="52"/>
         <source>Any Protocol</source>
-        <translation>Jakýkoli protokol</translation>
+        <translation>Jakýkoliv protokol</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="53"/>
@@ -2622,7 +2503,7 @@ Ještě jednou děkujeme za podporu Serial Studio!</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="57"/>
         <source>Query Peer</source>
-        <translation>Dotaz na protějšek</translation>
+        <translation>Dotázat se na protějšek</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="58"/>
@@ -2632,7 +2513,7 @@ Ještě jednou děkujeme za podporu Serial Studio!</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="59"/>
         <source>Auto Verify Peer</source>
-        <translation>Automaticky ověřit partnera</translation>
+        <translation>Automaticky ověřit protějšek</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="335"/>
@@ -2652,7 +2533,7 @@ Ještě jednou děkujeme za podporu Serial Studio!</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="351"/>
         <source>MQTT Publisher</source>
-        <translation>MQTT vydavatel</translation>
+        <translation>MQTT Vydavatel</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="416"/>
@@ -2666,12 +2547,12 @@ Ještě jednou děkujeme za podporu Serial Studio!</translation>
 To unlock this feature, please activate your license or visit the store.</source>
         <translation>Připojení k MQTT brokerům je dostupné pouze s platnou komerční licencí Serial Studio.
 
-Pro odemčení této funkce prosím aktivujte svou licenci nebo navštivte obchod.</translation>
+Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="431"/>
         <source>Missing MQTT Topic</source>
-        <translation>Chybějící MQTT téma</translation>
+        <translation>Chybí MQTT téma</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="432"/>
@@ -2692,12 +2573,12 @@ Pro odemčení této funkce prosím aktivujte svou licenci nebo navštivte obcho
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="442"/>
         <source>You won't receive any messages until a topic is configured.</source>
-        <translation>Nebudete přijímat žádné zprávy, dokud nebude téma nakonfigurováno.</translation>
+        <translation>Nebudete přijímat žádné zprávy, dokud nebude nakonfigurováno téma.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="443"/>
         <source>Configuration Warning</source>
-        <translation>Upozornění na konfiguraci</translation>
+        <translation>Varování konfigurace</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="455"/>
@@ -2707,32 +2588,32 @@ Pro odemčení této funkce prosím aktivujte svou licenci nebo navštivte obcho
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="456"/>
         <source>The topic "%1" is not valid.</source>
-        <translation>Téma "%1" není platné.</translation>
+        <translation>Téma „%1“ není platné.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="681"/>
         <source>Select PEM Certificates Directory</source>
-        <translation>Vyberte adresář s PEM certifikáty</translation>
+        <translation>Vyberte adresář certifikátů PEM</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="784"/>
         <source>Subscription Error</source>
-        <translation>Chyba při odběru</translation>
+        <translation>Chyba přihlášení</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="785"/>
         <source>Failed to subscribe to topic "%1".</source>
-        <translation>Nepodařilo se přihlásit k odběru tématu "%1".</translation>
+        <translation>Nepodařilo se přihlásit k tématu „%1“.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="804"/>
         <source>Invalid MQTT Protocol Version</source>
-        <translation>Neplatná verze MQTT protokolu</translation>
+        <translation>Neplatná verze protokolu MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="805"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
-        <translation>MQTT broker odmítl připojení z důvodu nepodporované verze protokolu. Ujistěte se, že váš klient a broker podporují stejnou verzi protokolu.</translation>
+        <translation>MQTT broker odmítl připojení kvůli nepodporované verzi protokolu. Ujistěte se, že váš klient a broker podporují stejnou verzi protokolu.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="811"/>
@@ -2742,7 +2623,7 @@ Pro odemčení této funkce prosím aktivujte svou licenci nebo navštivte obcho
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
-        <translation>Broker odmítl ID klienta. Může být nesprávně formátováno, příliš dlouhé nebo již používáno. Zkuste použít jiné ID klienta.</translation>
+        <translation>Broker odmítl ID klienta. Může být poškozené, příliš dlouhé nebo již použité. Zkuste použít jiné ID klienta.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="818"/>
@@ -2752,18 +2633,18 @@ Pro odemčení této funkce prosím aktivujte svou licenci nebo navštivte obcho
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="819"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
-        <translation>Síťové připojení bylo navázáno, ale broker je momentálně nedostupný. Ověřte stav brokera a zkuste to znovu později.</translation>
+        <translation>Síťové připojení bylo navázáno, ale broker je momentálně nedostupný. Ověřte stav brokeru a zkuste to znovu později.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="825"/>
         <location filename="../../src/MQTT/Client.cpp" line="895"/>
         <source>Authentication Error</source>
-        <translation>Chyba ověřování</translation>
+        <translation>Chyba ověření</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="826"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
-        <translation>Zadané uživatelské jméno nebo heslo je nesprávné nebo špatně formátované. Zkontrolujte své přihlašovací údaje a zkuste to znovu.</translation>
+        <translation>Poskytnuté uživatelské jméno nebo heslo je nesprávné nebo špatně formátované. Zkontrolujte své přihlašovací údaje a zkuste to znovu.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="831"/>
@@ -2773,17 +2654,17 @@ Pro odemčení této funkce prosím aktivujte svou licenci nebo navštivte obcho
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="832"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
-        <translation>MQTT broker odmítl připojení z důvodu nedostatečných oprávnění. Ujistěte se, že váš účet má potřebná přístupová práva.</translation>
+        <translation>MQTT broker odmítl připojení kvůli nedostatečným oprávněním. Ujistěte se, že váš účet má potřebná přístupová práva.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="838"/>
         <source>Network or Transport Error</source>
-        <translation>Chyba sítě nebo transportu</translation>
+        <translation>Chyba sítě nebo přenosu</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="839"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
-        <translation>Došlo k problému na úrovni sítě nebo transportní vrstvy, což způsobilo neočekávané selhání připojení. Zkontrolujte své síťové připojení a nastavení brokera.</translation>
+        <translation>Došlo k problému na síťové nebo transportní vrstvě, což způsobilo neočekávané selhání připojení. Zkontrolujte své síťové připojení a nastavení brokeru.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="845"/>
@@ -2793,7 +2674,7 @@ Pro odemčení této funkce prosím aktivujte svou licenci nebo navštivte obcho
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="846"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
-        <translation>Klient zjistil porušení protokolu MQTT a uzavřel připojení. Zkontrolujte, zda vaše implementace MQTT splňuje požadavky.</translation>
+        <translation>Klient zjistil porušení protokolu MQTT a ukončil připojení. Zkontrolujte, zda vaše implementace MQTT odpovídá normám.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="852"/>
@@ -2818,22 +2699,22 @@ Pro odemčení této funkce prosím aktivujte svou licenci nebo navštivte obcho
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="881"/>
         <source>MQTT Authentication Failed</source>
-        <translation>Autentizace MQTT selhala</translation>
+        <translation>Selhání ověření MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="882"/>
         <source>Authentication failed: %.</source>
-        <translation>Autentizace selhala: %.</translation>
+        <translation>Ověření selhalo: %.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="896"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
-        <translation>Je vyžadována rozšířená autentizace, ale MQTT 5.0 není povoleno.</translation>
+        <translation>Je vyžadováno rozšířené ověření, ale MQTT 5.0 není povoleno.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="905"/>
         <source>Unknown</source>
-        <translation>Neznámý</translation>
+        <translation>Neznámé</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="909"/>
@@ -2847,7 +2728,7 @@ Pro odemčení této funkce prosím aktivujte svou licenci nebo navštivte obcho
 Please provide the necessary credentials.</source>
         <translation>MQTT broker vyžaduje ověření pomocí metody: "%1".
 
-Prosím, zadejte potřebné přihlašovací údaje.</translation>
+Poskytněte prosím potřebné údaje.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="918"/>
@@ -2862,7 +2743,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="925"/>
         <source>Enter MQTT Password</source>
-        <translation>Zadejte heslo MQTT</translation>
+        <translation>Zadejte MQTT heslo</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="926"/>
@@ -2880,12 +2761,12 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="192"/>
         <source>MQTT is a Pro Feature</source>
-        <translation>MQTT je profesionální funkce</translation>
+        <translation>MQTT je prémiová funkce</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="193"/>
         <source>Activate your license or visit the store to unlock MQTT support.</source>
-        <translation>Aktivujte svou licenci nebo navštivte obchod pro odemčení podpory MQTT.</translation>
+        <translation>Aktivujte svou licenci nebo navštivte obchod pro odemknutí podpory MQTT.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="205"/>
@@ -2895,7 +2776,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="211"/>
         <source>Authentication</source>
-        <translation>Autentizace</translation>
+        <translation>Ověřování</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="217"/>
@@ -2925,12 +2806,12 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="319"/>
         <source>Keep Alive (s)</source>
-        <translation>Udržování spojení (s)</translation>
+        <translation>Udržovat naživu (s)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="332"/>
         <source>Clean Session</source>
-        <translation>Čistá relace</translation>
+        <translation>Čisté sezení</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="381"/>
@@ -2940,7 +2821,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="386"/>
         <source>MQTT Username</source>
-        <translation>Uživatelské jméno MQTT</translation>
+        <translation>MQTT uživatelské jméno</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="393"/>
@@ -2950,7 +2831,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="403"/>
         <source>MQTT Password</source>
-        <translation>MQTT Heslo</translation>
+        <translation>MQTT heslo</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="460"/>
@@ -2975,17 +2856,17 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="496"/>
         <source>Will Retain</source>
-        <translation>Udržet</translation>
+        <translation>Zachovat vůli</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="507"/>
         <source>Will QoS</source>
-        <translation>QoS</translation>
+        <translation>Kvalita služby vůle</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="519"/>
         <source>Will Topic</source>
-        <translation>Téma</translation>
+        <translation>Téma vůle</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="524"/>
@@ -2995,12 +2876,12 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="531"/>
         <source>Will Message</source>
-        <translation>Zpráva</translation>
+        <translation>Zpráva vůle</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="536"/>
         <source>e.g. Device unexpectedly disconnected</source>
-        <translation>Např. Zařízení neočekávaně odpojeno</translation>
+        <translation>např. Zařízení neočekávaně odpojeno</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
@@ -3010,7 +2891,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="592"/>
         <source>SSL Protocol</source>
-        <translation>Protokol SSL</translation>
+        <translation>SSL protokol</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="608"/>
@@ -3048,7 +2929,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="88"/>
         <source>Quick Plot Mode</source>
-        <translation>Režim rychlého zobrazení grafu</translation>
+        <translation>Režim rychlého vykreslení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="94"/>
@@ -3086,12 +2967,12 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../src/Misc/ModuleManager.cpp" line="442"/>
         <source>To apply this change, %1 needs to restart.</source>
-        <translation>Pro použití této změny je potřeba restartovat %1.</translation>
+        <translation>Pro aplikaci této změny je třeba, aby se %1 restartoval.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ModuleManager.cpp" line="443"/>
         <source>Would you like to restart now?</source>
-        <translation>Chcete restartovat nyní?</translation>
+        <translation>Chcete nyní restartovat?</translation>
     </message>
 </context>
 <context>
@@ -3104,7 +2985,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="89"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation>Má %1 automaticky kontrolovat aktualizace? Aktualizace můžete vždy zkontrolovat ručně v dialogu "O programu".</translation>
+        <translation>Má %1 automaticky kontrolovat aktualizace? Aktualizace můžete vždy zkontrolovat ručně v dialogu "O aplikaci".</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="154"/>
@@ -3154,7 +3035,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="172"/>
         <source>Retry</source>
-        <translation>Zkusit znovu</translation>
+        <translation>Opakovat</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="174"/>
@@ -3210,7 +3091,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="251"/>
         <source>Samples</source>
-        <translation>Ukázky</translation>
+        <translation>Vzorky</translation>
     </message>
 </context>
 <context>
@@ -3218,7 +3099,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="86"/>
         <source>Socket Type</source>
-        <translation>Typ socketu</translation>
+        <translation>Typ soketu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="107"/>
@@ -3274,7 +3155,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="120"/>
         <source>Visit Website</source>
-        <translation>Navštívit web</translation>
+        <translation>Navštivte web</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="131"/>
@@ -3328,7 +3209,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="157"/>
         <source>Open an existing JSON project</source>
-        <translation>Otevřít existující projekt JSON</translation>
+        <translation>Otevřít existující JSON projekt</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="163"/>
@@ -3378,7 +3259,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="244"/>
         <source>Add a 2D plot dataset</source>
-        <translation>Přidat datovou sadu pro 2D graf</translation>
+        <translation>Přidat 2D graf datové sady</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="250"/>
@@ -3398,17 +3279,17 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <source>Add a gauge widget for numeric data</source>
-        <translation>Přidat ukazatel pro číselná data</translation>
+        <translation>Přidat měřicí widget pro numerická data</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="272"/>
         <source>Level Indicator</source>
-        <translation>Indikátor úrovně</translation>
+        <translation>Ukazatel úrovně</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
         <source>Add a vertical bar level indicator</source>
-        <translation>Přidat svislý indikátor úrovně</translation>
+        <translation>Přidat svislý sloupcový ukazatel úrovně</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="283"/>
@@ -3438,7 +3319,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="322"/>
         <source>Add a dataset container group</source>
-        <translation>Přidat skupinu kontejnerů datové sady</translation>
+        <translation>Přidat skupinu kontejneru datové sady</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="324"/>
@@ -3463,7 +3344,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="349"/>
         <source>Multi-Plot</source>
-        <translation>Multi-graf</translation>
+        <translation>Multi-Graf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
@@ -3479,7 +3360,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="360"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="367"/>
         <source>3D Plot</source>
-        <translation>3D graf</translation>
+        <translation>3D Graf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
@@ -3495,7 +3376,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
         <source>Add a group for 3-axis accelerometer data</source>
-        <translation>Přidat skupinu pro data z 3-osého akcelerometru</translation>
+        <translation>Přidat skupinu pro data 3-osého akcelerometru</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="382"/>
@@ -3506,18 +3387,18 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="389"/>
         <source>Add a group for 3-axis gyroscope data (angular rates are integrated into orientation automatically)</source>
-        <translation>Přidat skupinu pro data z 3-osého gyroskopu (úhlové rychlosti jsou automaticky integrovány do orientace)</translation>
+        <translation>Přidejte skupinu pro data 3osého gyroskopu (úhlové rychlosti jsou automaticky integrovány do orientace)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="393"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="400"/>
         <source>GPS Map</source>
-        <translation>GPS mapa</translation>
+        <translation>GPS Mapa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
         <source>Add a map widget for GPS data</source>
-        <translation>Přidat mapový widget pro GPS data</translation>
+        <translation>Přidejte mapový widget pro GPS data</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="419"/>
@@ -3527,7 +3408,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="422"/>
         <source>Open the online Project Editor documentation</source>
-        <translation>Otevřít online dokumentaci Editoru projektů</translation>
+        <translation>Otevřete online dokumentaci Editoru projektu</translation>
     </message>
 </context>
 <context>
@@ -3535,20 +3416,12 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
         <source>Pro features detected in this project.</source>
-        <translation>V tomto projektu byly zjištěny profesionální funkce.</translation>
+        <translation>V tomto projektu byly zjištěny Pro funkce.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>Budou použity záložní widgety. Kupte si licenci pro odemknutí plné funkčnosti.</translation>
-    </message>
-    <message>
-        <source>First, set up frame detection and data decoding.</source>
-        <translation type="vanished">Nejprve nastavte detekci rámců a dekódování dat.</translation>
-    </message>
-    <message>
-        <source>Frames are parsed into arrays, and datasets link each element to a widget.</source>
-        <translation type="vanished">Rámce jsou zpracovány do polí a datové sady propojují každý prvek s widgetem.</translation>
+        <translation>Budou použity náhradní widgety. Kupte si licenci pro odemčení plné funkčnosti.</translation>
     </message>
 </context>
 <context>
@@ -3578,7 +3451,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="288"/>
         <source>The server returned malformed data: %1</source>
-        <translation>Server vrátil chybně formátovaná data: %1</translation>
+        <translation>Server vrátil poškozená data: %1</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="326"/>
@@ -3588,7 +3461,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="327"/>
         <source>The server response is missing required fields.</source>
-        <translation>Odpověď serveru postrádá potřebná pole.</translation>
+        <translation>Odpovědi serveru chybí potřebná pole.</translation>
     </message>
 </context>
 <context>
@@ -3621,7 +3494,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="224"/>
         <source>FFT Plots</source>
-        <translation>Grafy FFT</translation>
+        <translation>FFT grafy</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="227"/>
@@ -3664,7 +3537,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="36"/>
         <source>Preferences</source>
-        <translation>Předvolby</translation>
+        <translation>Nastavení</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="101"/>
@@ -3679,7 +3552,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="145"/>
         <source>Theme</source>
-        <translation>Motiv</translation>
+        <translation>Téma</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="166"/>
@@ -3694,7 +3567,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="234"/>
         <source>Enable TCP Plugins (Port 7777)</source>
-        <translation>Povolit TCP pluginy (port 7777)</translation>
+        <translation>Povolit TCP pluginy (Port 7777)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="252"/>
@@ -3724,7 +3597,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="361"/>
         <source>Threaded mode (better for high-rate data)</source>
-        <translation>Závitový režim (lepší pro data s vysokou frekvencí)</translation>
+        <translation>Režim s vlákny (lepší pro vysokou rychlost dat)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="379"/>
@@ -3739,7 +3612,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
         <source>Reset</source>
-        <translation>Resetovat</translation>
+        <translation>Obnovit</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="462"/>
@@ -3763,12 +3636,12 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="124"/>
         <source>Frame Parsing</source>
-        <translation>Zpracování rámce</translation>
+        <translation>Zpracování rámců</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="132"/>
         <source>No Parsing (Device Sends JSON Data)</source>
-        <translation>Bez zpracování (zařízení odesílá JSON data)</translation>
+        <translation>Žádné zpracování (zařízení odesílá data ve formátu JSON)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="143"/>
@@ -3778,7 +3651,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="154"/>
         <source>Parse via JSON Project File</source>
-        <translation>Zpracovat pomocí JSON projektového souboru</translation>
+        <translation>Analyzovat pomocí JSON projektového souboru</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="173"/>
@@ -3821,7 +3694,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
         <source>No Groups Available</source>
-        <translation>Žádné skupiny nejsou k dispozici</translation>
+        <translation>Nejsou dostupné žádné skupiny</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="188"/>
@@ -3831,7 +3704,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <source>No Actions Available</source>
-        <translation>Žádné akce nejsou k dispozici</translation>
+        <translation>Nejsou dostupné žádné akce</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
@@ -3846,12 +3719,12 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
         <source>CSV Logging</source>
-        <translation>Protokolování CSV</translation>
+        <translation>CSV protokolování</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
         <source>Console Logging</source>
-        <translation>Protokolování konzole</translation>
+        <translation>Konzolové protokolování</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="293"/>
@@ -3876,7 +3749,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="343"/>
         <source>Pause</source>
-        <translation>Pozastavit</translation>
+        <translation>Pauza</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="352"/>
@@ -3903,10 +3776,6 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="142"/>
         <source>Value</source>
         <translation>Hodnota</translation>
-    </message>
-    <message>
-        <source>Parameter Description</source>
-        <translation type="vanished">Popis parametru</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
@@ -3980,7 +3849,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="154"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
-        <translation>Otevřít Editor projektů pro vytvoření nebo úpravu vašeho JSON rozvržení</translation>
+        <translation>Otevřete Editor projektu pro vytvoření nebo úpravu vašeho JSON rozvržení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="161"/>
@@ -3990,7 +3859,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="166"/>
         <source>Play a CSV file as if it were live sensor data</source>
-        <translation>Přehrát CSV soubor jako živá data ze senzoru</translation>
+        <translation>Přehrávat CSV soubor, jako by to byla živá data ze senzoru</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="186"/>
@@ -4000,7 +3869,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="190"/>
         <source>Configure device connection via Serial, BLE, or network socket</source>
-        <translation>Nastavit připojení zařízení přes Serial, BLE, nebo síťový socket</translation>
+        <translation>Nakonfigurujte připojení zařízení přes Serial, BLE nebo síťový socket</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="197"/>
@@ -4010,7 +3879,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="201"/>
         <source>Open application settings and preferences</source>
-        <translation>Otevřít nastavení a předvolby aplikace</translation>
+        <translation>Otevřete nastavení aplikace a předvolby</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="223"/>
@@ -4020,7 +3889,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="230"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
-        <translation>Nastavit připojení MQTT (publikovat nebo odebírat)</translation>
+        <translation>Nakonfigurujte připojení MQTT (publikování nebo odběr)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="250"/>
@@ -4030,7 +3899,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="253"/>
         <source>Browse example projects on GitHub</source>
-        <translation>Procházet ukázkové projekty na GitHubu</translation>
+        <translation>Procházejte ukázkové projekty na GitHubu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="261"/>
@@ -4040,12 +3909,12 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
         <source>Open the online documentation for help and guidance</source>
-        <translation>Otevřít online dokumentaci pro pomoc a vedení</translation>
+        <translation>Otevřete online dokumentaci pro pomoc a vedení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="272"/>
         <source>AI Help</source>
-        <translation>Nápověda AI</translation>
+        <translation>AI Nápověda</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="275"/>
@@ -4129,7 +3998,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="257"/>
         <source>Send DTR Signal</source>
-        <translation>Odeslat DTR signál</translation>
+        <translation>Odeslat signál DTR</translation>
     </message>
 </context>
 <context>
@@ -4142,7 +4011,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="894"/>
         <source>%1 (Fallback)</source>
-        <translation>%1 (náhradní)</translation>
+        <translation>%1 (Záložní)</translation>
     </message>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="956"/>
@@ -4176,7 +4045,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="375"/>
         <source>Select Background Image</source>
-        <translation>Vybrat obrázek na pozadí</translation>
+        <translation>Vyberte obrázek na pozadí</translation>
     </message>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="377"/>
@@ -4194,7 +4063,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="441"/>
         <source>Would you like to download the update now? This is a mandatory update, exiting now will close the application</source>
-        <translation>Chcete nyní stáhnout aktualizaci? Toto je povinná aktualizace, ukončení nyní zavře aplikaci</translation>
+        <translation>Chcete nyní stáhnout aktualizaci? Tato aktualizace je povinná, ukončení nyní zavře aplikaci</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="447"/>
@@ -4227,7 +4096,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="194"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
-        <translation>Můžete začít plně funkční 14denní zkušební verzi, aktivovat ji pomocí svého licenčního klíče nebo si sami stáhnout a zkompilovat zdrojový kód GPLv3.</translation>
+        <translation>Můžete začít plně funkční 14denní zkušební verzi, aktivovat ji pomocí licenčního klíče nebo si sami stáhnout a zkompilovat zdrojový kód GPLv3.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="204"/>
@@ -4239,7 +4108,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
         <location filename="../../qml/Dialogs/Welcome.qml" line="212"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="370"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
-        <translation>Vytvoření verze GPLv3 sami pomáhá růstu komunity a podporuje technické příspěvky.</translation>
+        <translation>Sestavením verze GPLv3 sami pomáháte růstu komunity a podporujete technické příspěvky.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="233"/>
@@ -4254,7 +4123,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="277"/>
         <source>You’re currently using the fully-featured trial of %1 Pro. It’s valid for 14 days of personal, non-commercial use.</source>
-        <translation>Právě používáte plně vybavenou zkušební verzi %1 Pro. Je platná pro 14 dní osobního, nekomerčního použití.</translation>
+        <translation>Právě používáte plně vybavenou zkušební verzi %1 Pro. Platí pro 14 dní osobního, nekomerčního použití.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="288"/>
@@ -4269,17 +4138,17 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="304"/>
         <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>Chcete-li zobrazit dostupné plány předplatného, klikněte níže na "Přejít na vyšší verzi".</translation>
+        <translation>Chcete-li zobrazit dostupné plány předplatného, klikněte níže na "Upgradovat nyní".</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="332"/>
         <source>Your %1 trial has expired.</source>
-        <translation>Vaše %1 zkušební verze vypršela.</translation>
+        <translation>Vaše zkušební verze %1 vypršela.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="342"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
-        <translation>Vaše zkušební období skončilo. Chcete-li pokračovat v používání %1 se všemi funkcemi Pro, prosím přejděte na placený plán.</translation>
+        <translation>Vaše zkušební období skončilo. Pro pokračování v používání %1 se všemi Pro funkcemi prosím přejděte na placený plán.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="353"/>
@@ -4294,7 +4163,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="425"/>
         <source>Upgrade Now</source>
-        <translation>Přejít na vyšší verzi</translation>
+        <translation>Upgradovat nyní</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="437"/>
@@ -4305,10 +4174,6 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
         <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
         <source>Open in Limited Mode</source>
         <translation>Otevřít v omezeném režimu</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">Zavřít</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
@@ -4422,21 +4287,9 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
         <translation>National Geographic</translation>
     </message>
     <message>
-        <source>Today (partial</source>
-        <translation type="vanished">Dnes (částečně</translation>
-    </message>
-    <message>
-        <source>Yesterday (full)</source>
-        <translation type="vanished">Včera (úplně)</translation>
-    </message>
-    <message>
-        <source>Today (partial)</source>
-        <translation type="vanished">Dnes (částečně)</translation>
-    </message>
-    <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="393"/>
         <source>Additional map layers are available only for Pro users.</source>
-        <translation>Další vrstvy map jsou k dispozici pouze pro Pro uživatele.</translation>
+        <translation>Další mapové vrstvy jsou k dispozici pouze pro Pro uživatele.</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="394"/>
@@ -4457,7 +4310,7 @@ Prosím, zadejte potřebné přihlašovací údaje.</translation>
     <message>
         <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1196"/>
         <source>Grid Interval: %1 unit(s)</source>
-        <translation>Interval mřížky: %1 jednotka/jednotky</translation>
+        <translation>Interval mřížky: %1 jednotka(y)</translation>
     </message>
 </context>
 </TS>

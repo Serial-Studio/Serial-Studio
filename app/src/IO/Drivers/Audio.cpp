@@ -140,6 +140,12 @@ extractCapabilities(ma_context *context, const ma_device_info &info,
   if (defaultChannels.isEmpty())
     channelCounts = defaultChannels;
 
+  // Add sample rate fallbacks for Windows (low performance @ 44.1KHz)
+#ifdef Q_OS_WIN
+  QSet<int> lowSampleRates = {8000, 11025, 16000, 22050, 44100};
+  sampleRates.unite(lowSampleRates);
+#endif
+
   // Generate device capabilities structure
   IO::Drivers::Audio::AudioDeviceInfo caps;
   caps.supportedFormats = formats.values();
@@ -945,7 +951,7 @@ QStringList IO::Drivers::Audio::inputChannelConfigurations() const
     if (m_knownConfigs.contains(static_cast<ma_channel>(channels)))
       list.append(m_knownConfigs.value(static_cast<ma_channel>(channels)));
     else
-      list.append(QString::number(channels) + tr(" channels"));
+      list.append(QString::number(channels) + " " + tr("channels"));
   }
 
   return list;
