@@ -143,8 +143,10 @@ void Plugins::Server::setEnabled(const bool enabled)
     }
 
     m_sockets.clear();
-    m_frames.clear();
-    m_frames.squeeze();
+    JSON::Frame frame;
+    while (m_pendingFrames.try_dequeue(frame))
+    {
+    }
   }
 }
 
@@ -156,7 +158,7 @@ void Plugins::Server::setEnabled(const bool enabled)
  *
  * @param data Raw data bytes received from the I/O layer.
  */
-void Plugins::Server::sendRawData(const QByteArray &data)
+void Plugins::Server::hotpathTxData(const QByteArray &data)
 {
   // Stop if system is not enabled
   if (!enabled())
@@ -193,10 +195,10 @@ void Plugins::Server::sendRawData(const QByteArray &data)
  *
  * @param frame JSON::Frame object to register.
  */
-void Plugins::Server::registerFrame(const JSON::Frame &frame)
+void Plugins::Server::hotpathTxFrame(const JSON::Frame &frame)
 {
   if (enabled())
-    m_frames.append(frame);
+    m_pendingFrames.enqueue(frame);
 }
 
 /**
@@ -276,20 +278,18 @@ void Plugins::Server::sendProcessedData()
   if (!enabled())
     return;
 
-  // Stop if frame list is empty
-  if (m_frames.count() <= 0)
-    return;
-
   // Stop if no sockets are available
   if (m_sockets.count() < 1)
     return;
 
   // Create JSON array with frame data
   QJsonArray array;
-  for (int i = 0; i < m_frames.count(); ++i)
+  JSON::Frame frame;
+  while (m_pendingFrames.try_dequeue(frame))
+  {
+  }
   {
     QJsonObject object;
-    auto frame = m_frames.at(i);
     object.insert(QStringLiteral("data"), frame.serialize());
     array.append(object);
   }
@@ -313,10 +313,6 @@ void Plugins::Server::sendProcessedData()
         socket->write(json);
     }
   }
-
-  // Clear frame list
-  m_frames.clear();
-  m_frames.squeeze();
 }
 
 /**

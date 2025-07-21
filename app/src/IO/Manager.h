@@ -150,8 +150,9 @@ public slots:
 private:
   void killFrameReader();
   void startFrameReader();
-  void publishData(const QByteArray &data);
-  void publishFrame(const QByteArray &data);
+
+  void hotpathTxData(const QByteArray &data);
+  void hotpathTxFrame(const QByteArray &data);
 
 private:
   bool m_paused;

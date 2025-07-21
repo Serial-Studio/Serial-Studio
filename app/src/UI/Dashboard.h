@@ -142,7 +142,7 @@ public slots:
   void setTerminalEnabled(const bool enabled);
   void activateAction(const int index, const bool guiTrigger = false);
 
-  void processFrame(const JSON::Frame &frame);
+  void hotpathRxFrame(const JSON::Frame &frame);
 
 private:
   void updateDashboardData(const JSON::Frame &frame);

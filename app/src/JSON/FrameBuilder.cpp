@@ -344,7 +344,7 @@ void JSON::FrameBuilder::setJsonPathSetting(const QString &path)
  *
  * @param data Raw binary input data to be processed.
  */
-void JSON::FrameBuilder::readData(const QByteArray &data)
+void JSON::FrameBuilder::hotpathRxFrame(const QByteArray &data)
 {
   switch (operationMode())
   {
@@ -356,7 +356,7 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
       break;
     case SerialStudio::DeviceSendsJSON:
       if (m_rawFrame.read(QJsonDocument::fromJson(data).object()))
-        publishFrame(m_rawFrame);
+        hotpathTxFrame(m_rawFrame);
       break;
   }
 }
@@ -425,7 +425,7 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
   }
 
   // Update user interface
-  publishFrame(m_frame);
+  hotpathTxFrame(m_frame);
 }
 
 /**
@@ -465,7 +465,7 @@ void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
   }
 
   // Update user interface
-  publishFrame(m_quickPlotFrame);
+  hotpathTxFrame(m_quickPlotFrame);
 }
 
 //------------------------------------------------------------------------------
@@ -641,13 +641,13 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
  *       Do not call it in tight loops unless you're sure the frame is
  *       finalized.
  */
-void JSON::FrameBuilder::publishFrame(const JSON::Frame &frame)
+void JSON::FrameBuilder::hotpathTxFrame(const JSON::Frame &frame)
 {
   static auto &csvExport = CSV::Export::instance();
   static auto &dashboard = UI::Dashboard::instance();
   static auto &pluginsServer = Plugins::Server::instance();
 
-  dashboard.processFrame(frame);
-  csvExport.registerFrame(frame);
-  pluginsServer.registerFrame(frame);
+  dashboard.hotpathRxFrame(frame);
+  csvExport.hotpathTxFrame(frame);
+  pluginsServer.hotpathTxFrame(frame);
 }

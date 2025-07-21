@@ -482,8 +482,8 @@ void IO::Manager::processPayload(const QByteArray &payload)
 {
   if (!payload.isEmpty())
   {
-    publishData(payload);
-    publishFrame(payload);
+    hotpathTxData(payload);
+    hotpathTxFrame(payload);
   }
 }
 
@@ -566,13 +566,10 @@ void IO::Manager::setThreadedFrameExtraction(const bool enabled)
 {
   if (!isConnected())
   {
-    if (m_threadedFrameExtraction != enabled)
-    {
-      m_threadedFrameExtraction = enabled;
-      m_settings.setValue("threadedFrameExtraction", enabled);
+    m_threadedFrameExtraction = enabled;
+    m_settings.setValue("threadedFrameExtraction", enabled);
 
-      Q_EMIT threadedFrameExtractionChanged();
-    }
+    Q_EMIT threadedFrameExtractionChanged();
   }
 }
 
@@ -743,15 +740,9 @@ void IO::Manager::startFrameReader()
 
   // Connect frame reader events to IO::Manager
   connect(m_frameReader, &IO::FrameReader::frameReady, this,
-          [this](const QByteArray &frame) {
-            if (!paused())
-              publishFrame(frame);
-          });
+          &IO::Manager::hotpathTxFrame);
   connect(m_frameReader, &IO::FrameReader::dataReceived, this,
-          [this](const QByteArray &data) {
-            if (!paused())
-              publishData(data);
-          });
+          &IO::Manager::hotpathTxData);
 
   // Start the worker thread
   if (m_threadedFrameExtraction)
@@ -772,12 +763,16 @@ void IO::Manager::startFrameReader()
  *
  * @param data Raw data to be displayed and sent.
  */
-void IO::Manager::publishData(const QByteArray &data)
+void IO::Manager::hotpathTxData(const QByteArray &data)
 {
   static auto &console = IO::Console::instance();
   static auto &server = Plugins::Server::instance();
-  console.displayData(data);
-  server.sendRawData(data);
+
+  if (!m_paused)
+  {
+    server.hotpathTxData(data);
+    console.hotpathRxData(data);
+  }
 }
 
 /**
@@ -788,13 +783,18 @@ void IO::Manager::publishData(const QByteArray &data)
  *
  * @param data A binary frame to process and optionally publish.
  */
-void IO::Manager::publishFrame(const QByteArray &data)
+void IO::Manager::hotpathTxFrame(const QByteArray &frame)
 {
   static auto &frameBuilder = JSON::FrameBuilder::instance();
-  frameBuilder.readData(data);
-
 #ifdef BUILD_COMMERCIAL
   static auto &mqtt = MQTT::Client::instance();
-  mqtt.publishMessage(data);
 #endif
+
+  if (!m_paused)
+  {
+    frameBuilder.hotpathRxFrame(frame);
+#ifdef BUILD_COMMERCIAL
+    mqtt.publishMessage(frame);
+#endif
+  }
 }

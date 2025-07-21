@@ -504,7 +504,7 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 /**
  * Displays the given @a data in the console
  */
-void IO::Console::displayData(const QByteArray &data)
+void IO::Console::hotpathRxData(const QByteArray &data)
 {
   append(dataToString(data), showTimestamp());
 }

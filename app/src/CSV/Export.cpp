@@ -33,6 +33,10 @@
 #include <QDir>
 #include <QDateTime>
 
+//------------------------------------------------------------------------------
+// Constructor, destructor & singleton access functions
+//------------------------------------------------------------------------------
+
 /**
  * @brief Constructs the CSV export manager.
  *
@@ -98,6 +102,10 @@ CSV::Export &CSV::Export::instance()
   return singleton;
 }
 
+//------------------------------------------------------------------------------
+// State access functions
+//------------------------------------------------------------------------------
+
 /**
  * @brief Checks whether a CSV file is currently open.
  *
@@ -116,6 +124,33 @@ bool CSV::Export::isOpen() const
 bool CSV::Export::exportEnabled() const
 {
   return m_exportEnabled;
+}
+
+//------------------------------------------------------------------------------
+// Public slots
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Closes the currently open CSV file.
+ *
+ * Flushes any buffered data to disk, clears headers, and resets output.
+ */
+void CSV::Export::closeFile()
+{
+  // No point in closing a file that is not open...
+  if (!isOpen())
+    return;
+
+  // Write pending data to disk
+  writeValues();
+
+  // Close the file & reset the status
+  m_csvFile.close();
+  m_indexHeaderPairs.clear();
+  m_textStream.setDevice(nullptr);
+
+  // Update UI
+  Q_EMIT openChanged();
 }
 
 /**
@@ -151,28 +186,43 @@ void CSV::Export::setExportEnabled(const bool enabled)
   Q_EMIT enabledChanged();
 }
 
+//------------------------------------------------------------------------------
+// Hotpath data processing
+//------------------------------------------------------------------------------
+
 /**
- * @brief Closes the currently open CSV file.
+ * @brief Registers a new data frame for export.
  *
- * Flushes any buffered data to disk, clears headers, and resets output.
+ * Pushes the frame into the pending queue for async export if conditions are
+ * met.
+ *
+ * @param frame The data frame to export.
  */
-void CSV::Export::closeFile()
+void CSV::Export::hotpathTxFrame(const JSON::Frame &frame)
 {
-  // No point in closing a file that is not open...
-  if (!isOpen())
+  // Skip if export is disabled, frame is invalid or user is playing a CSV file
+  if (!exportEnabled() || !frame.isValid() || CSV::Player::instance().isOpen())
     return;
 
-  // Write pending data to disk
-  writeValues();
+  // Skip if not connected to a device
+#ifdef BUILD_COMMERCIAL
+  if (!IO::Manager::instance().isConnected()
+      && !(MQTT::Client::instance().isConnected()
+           && MQTT::Client::instance().isSubscriber()))
+    return;
+#else
+  if (!IO::Manager::instance().isConnected())
+    return;
+#endif
 
-  // Close the file & reset the status
-  m_csvFile.close();
-  m_indexHeaderPairs.clear();
-  m_textStream.setDevice(nullptr);
-
-  // Update UI
-  Q_EMIT openChanged();
+  // Add frame to pending frame queue
+  if (!m_pendingFrames.enqueue(TimestampFrame(JSON::Frame(frame))))
+    qWarning() << "CSV Export: Dropping frame (queue full)";
 }
+
+//------------------------------------------------------------------------------
+// CSV data processing
+//------------------------------------------------------------------------------
 
 /**
  * @brief Writes all queued frames to the CSV file.
@@ -231,36 +281,6 @@ void CSV::Export::writeValues()
 
   // Flush the output stream to the disk
   m_textStream.flush();
-}
-
-/**
- * @brief Registers a new data frame for export.
- *
- * Pushes the frame into the pending queue for async export if conditions are
- * met.
- *
- * @param frame The data frame to export.
- */
-void CSV::Export::registerFrame(const JSON::Frame &frame)
-{
-  // Skip if export is disabled, frame is invalid or user is playing a CSV file
-  if (!exportEnabled() || !frame.isValid() || CSV::Player::instance().isOpen())
-    return;
-
-  // Skip if not connected to a device
-#ifdef BUILD_COMMERCIAL
-  if (!IO::Manager::instance().isConnected()
-      && !(MQTT::Client::instance().isConnected()
-           && MQTT::Client::instance().isSubscriber()))
-    return;
-#else
-  if (!IO::Manager::instance().isConnected())
-    return;
-#endif
-
-  // Add frame to pending frame queue
-  if (!m_pendingFrames.enqueue(TimestampFrame(JSON::Frame(frame))))
-    qWarning() << "CSV Export: Dropping frame (queue full)";
 }
 
 /**

@@ -746,11 +746,8 @@ void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
  */
 void MQTT::Client::publishMessage(const QByteArray &data)
 {
-  if (!SerialStudio::activated())
-    return;
-
   if (isConnected() && isPublisher() && m_topicName.isValid()
-      && !data.isEmpty())
+      && SerialStudio::activated())
     m_client.publish(m_topicName, data);
 }
 

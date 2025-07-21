@@ -689,7 +689,7 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
     m_terminalEnabled = enabled;
     const auto frame = m_rawFrame;
     resetData(false);
-    processFrame(frame);
+    hotpathRxFrame(frame);
   }
 
   Q_EMIT terminalEnabledChanged();
@@ -773,7 +773,7 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 }
 
 //------------------------------------------------------------------------------
-// Frame processing & dashboard model generation
+// Hotpath data processing
 //------------------------------------------------------------------------------
 
 /**
@@ -786,7 +786,7 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
  *
  * @param frame The new JSON data frame to process.
  */
-void UI::Dashboard::processFrame(const JSON::Frame &frame)
+void UI::Dashboard::hotpathRxFrame(const JSON::Frame &frame)
 {
   // Validate frame
   if (!frame.isValid() || !streamAvailable())
@@ -808,6 +808,10 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   m_updateRequired = true;
 }
 
+//------------------------------------------------------------------------------
+// Frame processing & dashboard model generation
+//------------------------------------------------------------------------------
+
 /**
  * @brief Updates dataset values and plot data based on the given frame.
  *
@@ -827,7 +831,7 @@ void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
       if (it == m_datasetReferences.end())
       {
         resetData(false);
-        processFrame(frame);
+        hotpathRxFrame(frame);
         return;
       }
 

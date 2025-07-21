@@ -116,7 +116,8 @@ public slots:
   void closeFile();
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
-  void registerFrame(const JSON::Frame &frame);
+
+  void hotpathTxFrame(const JSON::Frame &frame);
 
 private slots:
   void writeValues();

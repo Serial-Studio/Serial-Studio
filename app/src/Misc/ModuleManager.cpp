@@ -142,7 +142,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
     output.append("\n");
 
     // Display data in console
-    IO::Console::instance().displayData(output.toUtf8());
+    IO::Console::instance().hotpathRxData(output.toUtf8());
   }
 }
 

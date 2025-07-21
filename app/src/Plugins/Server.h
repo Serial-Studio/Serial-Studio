@@ -28,6 +28,7 @@
 #include <QHostAddress>
 
 #include "JSON/Frame.h"
+#include "ThirdParty/readerwriterqueue.h"
 
 /**
  * Default TCP port to use for incoming connections, I choose 7777 because 7 is
@@ -86,8 +87,8 @@ public:
 public slots:
   void removeConnection();
   void setEnabled(const bool enabled);
-  void sendRawData(const QByteArray &data);
-  void registerFrame(const JSON::Frame &frame);
+  void hotpathTxData(const QByteArray &data);
+  void hotpathTxFrame(const JSON::Frame &frame);
 
 private slots:
   void onDataReceived();
@@ -98,7 +99,7 @@ private slots:
 private:
   bool m_enabled;
   QTcpServer m_server;
-  QVector<JSON::Frame> m_frames;
   QVector<QTcpSocket *> m_sockets;
+  moodycamel::ReaderWriterQueue<JSON::Frame> m_pendingFrames{2048};
 };
 } // namespace Plugins
