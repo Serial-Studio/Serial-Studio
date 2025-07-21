@@ -210,12 +210,12 @@
 <context>
     <name>CSV::Export</name>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="271"/>
+        <location filename="../../src/CSV/Export.cpp" line="318"/>
         <source>CSV File Error</source>
         <translation>Error de archivo CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="272"/>
+        <location filename="../../src/CSV/Export.cpp" line="319"/>
         <source>Cannot open CSV file for writing!</source>
         <translation>¡No se puede abrir el archivo CSV para escritura!</translation>
     </message>
@@ -984,47 +984,47 @@
 <context>
     <name>IO::Console</name>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="151"/>
+        <location filename="../../src/IO/Console.cpp" line="152"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="152"/>
+        <location filename="../../src/IO/Console.cpp" line="153"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="163"/>
+        <location filename="../../src/IO/Console.cpp" line="164"/>
         <source>No Line Ending</source>
         <translation>Sin fin de línea</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="164"/>
+        <location filename="../../src/IO/Console.cpp" line="165"/>
         <source>New Line</source>
         <translation>Nueva línea</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="165"/>
+        <location filename="../../src/IO/Console.cpp" line="166"/>
         <source>Carriage Return</source>
         <translation>Retorno de carro</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="166"/>
+        <location filename="../../src/IO/Console.cpp" line="167"/>
         <source>CR + NL</source>
         <translation>RC + NL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="177"/>
+        <location filename="../../src/IO/Console.cpp" line="178"/>
         <source>Plain Text</source>
         <translation>Texto plano</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="178"/>
+        <location filename="../../src/IO/Console.cpp" line="179"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimal</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="199"/>
+        <location filename="../../src/IO/Console.cpp" line="200"/>
         <source>No Checksum</source>
         <translation>Sin suma de verificación</translation>
     </message>
@@ -1055,47 +1055,47 @@
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="954"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="948"/>
         <source>channels</source>
         <translation>canales</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1027"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1021"/>
         <source> channels</source>
         <translation>canales</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1206"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1200"/>
         <source>Unsigned 8-bit</source>
         <translation>Sin signo de 8 bits</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1207"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1201"/>
         <source>Signed 16-bit</source>
         <translation>Con signo de 16 bits</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1208"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1202"/>
         <source>Signed 24-bit</source>
         <translation>Con signo de 24 bits</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1209"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1203"/>
         <source>Signed 32-bit</source>
         <translation>Con signo de 32 bits</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1210"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1204"/>
         <source>Float 32-bit</source>
         <translation>Flotante de 32 bits</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1205"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1205"/>
         <source>Stereo</source>
         <translation>Estéreo</translation>
     </message>
@@ -1329,32 +1329,32 @@
 <context>
     <name>IO::Manager</name>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="277"/>
+        <location filename="../../src/IO/Manager.cpp" line="281"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="278"/>
+        <location filename="../../src/IO/Manager.cpp" line="282"/>
         <source>Network Socket</source>
         <translation>Socket de Red</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="279"/>
+        <location filename="../../src/IO/Manager.cpp" line="283"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="281"/>
+        <location filename="../../src/IO/Manager.cpp" line="285"/>
         <source>Audio Stream</source>
         <translation>Transmisión de Audio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="357"/>
+        <location filename="../../src/IO/Manager.cpp" line="361"/>
         <source>Your trial period has ended.</source>
         <translation>Tu periodo de prueba ha terminado.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="358"/>
+        <location filename="../../src/IO/Manager.cpp" line="362"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Para continuar usando Serial Studio, por favor activa tu licencia.</translation>
     </message>
@@ -1380,50 +1380,54 @@
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="172"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="175"/>
         <source>JSON parse error</source>
         <translation>Error al analizar JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="205"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="208"/>
         <source>This file isn’t a valid project file</source>
         <translation>Este archivo no es un archivo de proyecto válido</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="206"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="209"/>
         <source>Make sure it’s a properly formatted JSON project.</source>
         <translation>Asegúrate de que sea un proyecto JSON con el formato adecuado.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="220"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="223"/>
         <source>Cannot read JSON file</source>
         <translation>No se puede leer el archivo JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="221"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="224"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Por favor verifica los permisos y la ubicación del archivo</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="463"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="500"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="552"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="585"/>
         <source>Channel %1</source>
         <translation>Canal %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="473"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="528"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="562"/>
+        <source>Audio Input</source>
+        <translation>Entrada de Audio</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="613"/>
         <source>Multiple Plots</source>
         <translation>Múltiples Gráficas</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="479"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="510"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="568"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="595"/>
         <source>Quick Plot</source>
         <translation>Gráfica Rápida</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="515"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="600"/>
         <source>Quick Plot Data</source>
         <translation>Datos de Gráfica Rápida</translation>
     </message>
@@ -2516,32 +2520,32 @@ Thank you again for supporting Serial Studio!</source>
         <translation>Verificación Automática del Par</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="335"/>
+        <location filename="../../src/MQTT/Client.cpp" line="331"/>
         <source>Use System Database</source>
         <translation>Usar Base de Datos del Sistema</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="336"/>
+        <location filename="../../src/MQTT/Client.cpp" line="332"/>
         <source>Load From Folder...</source>
         <translation>Cargar Desde Carpeta...</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="350"/>
+        <location filename="../../src/MQTT/Client.cpp" line="346"/>
         <source>MQTT Subscriber</source>
         <translation>Suscriptor MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="351"/>
+        <location filename="../../src/MQTT/Client.cpp" line="347"/>
         <source>MQTT Publisher</source>
         <translation>Publicador MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="416"/>
+        <location filename="../../src/MQTT/Client.cpp" line="412"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>La función MQTT requiere una licencia comercial</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="417"/>
+        <location filename="../../src/MQTT/Client.cpp" line="413"/>
         <source>Connecting to MQTT brokers is only available with a valid Serial Studio commercial license.
 
 To unlock this feature, please activate your license or visit the store.</source>
@@ -2550,179 +2554,179 @@ To unlock this feature, please activate your license or visit the store.</source
 Para desbloquear esta función, por favor active su licencia o visite la tienda.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="431"/>
+        <location filename="../../src/MQTT/Client.cpp" line="427"/>
         <source>Missing MQTT Topic</source>
         <translation>Falta tema MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="432"/>
+        <location filename="../../src/MQTT/Client.cpp" line="428"/>
         <source>You must specify a topic before connecting as a publisher.</source>
         <translation>Debe especificar un tema antes de conectarse como publicador.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="433"/>
-        <location filename="../../src/MQTT/Client.cpp" line="457"/>
+        <location filename="../../src/MQTT/Client.cpp" line="429"/>
+        <location filename="../../src/MQTT/Client.cpp" line="453"/>
         <source>Configuration Error</source>
         <translation>Error de configuración</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="441"/>
+        <location filename="../../src/MQTT/Client.cpp" line="437"/>
         <source>MQTT Topic Not Set</source>
         <translation>Tema MQTT no configurado</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="442"/>
+        <location filename="../../src/MQTT/Client.cpp" line="438"/>
         <source>You won't receive any messages until a topic is configured.</source>
         <translation>No recibirá ningún mensaje hasta que se configure un tema.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="443"/>
+        <location filename="../../src/MQTT/Client.cpp" line="439"/>
         <source>Configuration Warning</source>
         <translation>Advertencia de configuración</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="455"/>
+        <location filename="../../src/MQTT/Client.cpp" line="451"/>
         <source>Invalid MQTT Topic</source>
         <translation>Tema MQTT inválido</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="456"/>
+        <location filename="../../src/MQTT/Client.cpp" line="452"/>
         <source>The topic "%1" is not valid.</source>
         <translation>El tema "%1" no es válido.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="681"/>
+        <location filename="../../src/MQTT/Client.cpp" line="677"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Seleccionar Directorio de Certificados PEM</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="784"/>
+        <location filename="../../src/MQTT/Client.cpp" line="781"/>
         <source>Subscription Error</source>
         <translation>Error de Suscripción</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="785"/>
+        <location filename="../../src/MQTT/Client.cpp" line="782"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>No se pudo suscribir al tema "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="804"/>
+        <location filename="../../src/MQTT/Client.cpp" line="801"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Versión de Protocolo MQTT Inválida</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="805"/>
+        <location filename="../../src/MQTT/Client.cpp" line="802"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
         <translation>El broker MQTT rechazó la conexión debido a una versión de protocolo no compatible. Asegúrate de que tu cliente y broker soporten la misma versión de protocolo.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="811"/>
+        <location filename="../../src/MQTT/Client.cpp" line="808"/>
         <source>Client ID Rejected</source>
         <translation>ID de Cliente Rechazado</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="812"/>
+        <location filename="../../src/MQTT/Client.cpp" line="809"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
         <translation>El broker rechazó el ID de cliente. Puede estar mal formado, ser demasiado largo o ya estar en uso. Intenta usar un ID de cliente diferente.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="818"/>
+        <location filename="../../src/MQTT/Client.cpp" line="815"/>
         <source>MQTT Server Unavailable</source>
         <translation>Servidor MQTT No Disponible</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="819"/>
+        <location filename="../../src/MQTT/Client.cpp" line="816"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
         <translation>La conexión de red se estableció, pero el broker no está disponible actualmente. Verifica el estado del broker e intenta de nuevo más tarde.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="825"/>
-        <location filename="../../src/MQTT/Client.cpp" line="895"/>
+        <location filename="../../src/MQTT/Client.cpp" line="822"/>
+        <location filename="../../src/MQTT/Client.cpp" line="892"/>
         <source>Authentication Error</source>
         <translation>Error de autenticación</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="826"/>
+        <location filename="../../src/MQTT/Client.cpp" line="823"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
         <translation>El nombre de usuario o la contraseña proporcionados son incorrectos o están mal formados. Verifica tus credenciales e inténtalo de nuevo.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="831"/>
+        <location filename="../../src/MQTT/Client.cpp" line="828"/>
         <source>Authorization Error</source>
         <translation>Error de autorización</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="832"/>
+        <location filename="../../src/MQTT/Client.cpp" line="829"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
         <translation>El broker MQTT negó la conexión debido a permisos insuficientes. Asegúrate de que tu cuenta tenga los derechos de acceso necesarios.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="838"/>
+        <location filename="../../src/MQTT/Client.cpp" line="835"/>
         <source>Network or Transport Error</source>
         <translation>Error de red o transporte</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="839"/>
+        <location filename="../../src/MQTT/Client.cpp" line="836"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
         <translation>Ocurrió un problema en la capa de red o transporte, causando una falla inesperada de conexión. Verifica tu conexión de red y la configuración del broker.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="845"/>
+        <location filename="../../src/MQTT/Client.cpp" line="842"/>
         <source>MQTT Protocol Violation</source>
         <translation>Violación del protocolo MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="846"/>
+        <location filename="../../src/MQTT/Client.cpp" line="843"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
         <translation>El cliente detectó una violación del protocolo MQTT y cerró la conexión. Verifica que tu implementación de MQTT cumpla con las normas.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="852"/>
+        <location filename="../../src/MQTT/Client.cpp" line="849"/>
         <source>Unknown Error</source>
         <translation>Error desconocido</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="853"/>
+        <location filename="../../src/MQTT/Client.cpp" line="850"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
         <translation>Ocurrió un error inesperado. Revisa los registros para más detalles o reinicia la aplicación.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="858"/>
+        <location filename="../../src/MQTT/Client.cpp" line="855"/>
         <source>MQTT 5 Error</source>
         <translation>Error de MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="859"/>
+        <location filename="../../src/MQTT/Client.cpp" line="856"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
         <translation>Ocurrió un error de nivel 5 del protocolo MQTT. Revisa los registros del broker o los códigos de razón para más detalles.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="881"/>
+        <location filename="../../src/MQTT/Client.cpp" line="878"/>
         <source>MQTT Authentication Failed</source>
         <translation>Falló la autenticación de MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="882"/>
+        <location filename="../../src/MQTT/Client.cpp" line="879"/>
         <source>Authentication failed: %.</source>
         <translation>Falló la autenticación: %.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="896"/>
+        <location filename="../../src/MQTT/Client.cpp" line="893"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
         <translation>Se requiere autenticación extendida, pero MQTT 5.0 no está habilitado.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="905"/>
+        <location filename="../../src/MQTT/Client.cpp" line="902"/>
         <source>Unknown</source>
         <translation>Desconocido</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="909"/>
+        <location filename="../../src/MQTT/Client.cpp" line="906"/>
         <source>MQTT Authentication Required</source>
         <translation>Se requiere autenticación de MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="910"/>
+        <location filename="../../src/MQTT/Client.cpp" line="907"/>
         <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
@@ -2731,22 +2735,22 @@ Please provide the necessary credentials.</source>
 Por favor, proporciona las credenciales necesarias.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="918"/>
+        <location filename="../../src/MQTT/Client.cpp" line="915"/>
         <source>Enter MQTT Username</source>
         <translation>Introduce el nombre de usuario de MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="919"/>
+        <location filename="../../src/MQTT/Client.cpp" line="916"/>
         <source>Username:</source>
         <translation>Nombre de usuario:</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="925"/>
+        <location filename="../../src/MQTT/Client.cpp" line="922"/>
         <source>Enter MQTT Password</source>
         <translation>Ingresar Contraseña de MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="926"/>
+        <location filename="../../src/MQTT/Client.cpp" line="923"/>
         <source>Password:</source>
         <translation>Contraseña:</translation>
     </message>
@@ -3135,17 +3139,17 @@ Por favor, proporciona las credenciales necesarias.</translation>
 <context>
     <name>Plugins::Server</name>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="131"/>
+        <location filename="../../src/Plugins/Server.cpp" line="123"/>
         <source>Unable to start plugin TCP server</source>
         <translation>No se puede iniciar el servidor TCP del complemento</translation>
     </message>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="187"/>
+        <location filename="../../src/Plugins/Server.cpp" line="232"/>
         <source>Plugin server</source>
         <translation>Servidor de complemento</translation>
     </message>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="188"/>
+        <location filename="../../src/Plugins/Server.cpp" line="233"/>
         <source>Invalid pending connection</source>
         <translation>Conexión pendiente no válida</translation>
     </message>
@@ -4004,17 +4008,17 @@ Por favor, proporciona las credenciales necesarias.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="877"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="875"/>
         <source>Console</source>
         <translation>Consola</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="894"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="892"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Alternativa)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="956"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="954"/>
         <source>LED Panel (%1)</source>
         <translation>Panel LED (%1)</translation>
     </message>

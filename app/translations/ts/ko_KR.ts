@@ -210,12 +210,12 @@
 <context>
     <name>CSV::Export</name>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="271"/>
+        <location filename="../../src/CSV/Export.cpp" line="318"/>
         <source>CSV File Error</source>
         <translation>CSV 파일 오류</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="272"/>
+        <location filename="../../src/CSV/Export.cpp" line="319"/>
         <source>Cannot open CSV file for writing!</source>
         <translation>CSV 파일을 쓰기 위해 열 수 없습니다!</translation>
     </message>
@@ -984,47 +984,47 @@
 <context>
     <name>IO::Console</name>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="151"/>
+        <location filename="../../src/IO/Console.cpp" line="152"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="152"/>
+        <location filename="../../src/IO/Console.cpp" line="153"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="163"/>
+        <location filename="../../src/IO/Console.cpp" line="164"/>
         <source>No Line Ending</source>
         <translation>줄 바꿈 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="164"/>
+        <location filename="../../src/IO/Console.cpp" line="165"/>
         <source>New Line</source>
         <translation>새 줄</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="165"/>
+        <location filename="../../src/IO/Console.cpp" line="166"/>
         <source>Carriage Return</source>
         <translation>캐리지 리턴</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="166"/>
+        <location filename="../../src/IO/Console.cpp" line="167"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="177"/>
+        <location filename="../../src/IO/Console.cpp" line="178"/>
         <source>Plain Text</source>
         <translation>일반 텍스트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="178"/>
+        <location filename="../../src/IO/Console.cpp" line="179"/>
         <source>Hexadecimal</source>
         <translation>16진수</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="199"/>
+        <location filename="../../src/IO/Console.cpp" line="200"/>
         <source>No Checksum</source>
         <translation>체크섬 없음</translation>
     </message>
@@ -1055,47 +1055,47 @@
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="954"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="948"/>
         <source>channels</source>
         <translation>채널</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1027"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1021"/>
         <source> channels</source>
         <translation>채널</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1206"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1200"/>
         <source>Unsigned 8-bit</source>
         <translation>부호 없는 8비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1207"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1201"/>
         <source>Signed 16-bit</source>
         <translation>부호 있는 16비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1208"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1202"/>
         <source>Signed 24-bit</source>
         <translation>부호 있는 24비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1209"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1203"/>
         <source>Signed 32-bit</source>
         <translation>부호 있는 32비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1210"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1204"/>
         <source>Float 32-bit</source>
         <translation>부동 소수점 32비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1205"/>
         <source>Mono</source>
         <translation>모노</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1205"/>
         <source>Stereo</source>
         <translation>스테레오</translation>
     </message>
@@ -1329,32 +1329,32 @@
 <context>
     <name>IO::Manager</name>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="277"/>
+        <location filename="../../src/IO/Manager.cpp" line="281"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="278"/>
+        <location filename="../../src/IO/Manager.cpp" line="282"/>
         <source>Network Socket</source>
         <translation>네트워크 소켓</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="279"/>
+        <location filename="../../src/IO/Manager.cpp" line="283"/>
         <source>Bluetooth LE</source>
         <translation>블루투스 LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="281"/>
+        <location filename="../../src/IO/Manager.cpp" line="285"/>
         <source>Audio Stream</source>
         <translation>오디오 스트림</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="357"/>
+        <location filename="../../src/IO/Manager.cpp" line="361"/>
         <source>Your trial period has ended.</source>
         <translation>체험 기간이 종료되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="358"/>
+        <location filename="../../src/IO/Manager.cpp" line="362"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Serial Studio를 계속 사용하려면 라이선스를 활성화하십시오.</translation>
     </message>
@@ -1380,50 +1380,54 @@
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="172"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="175"/>
         <source>JSON parse error</source>
         <translation>JSON 구문 오류</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="205"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="208"/>
         <source>This file isn’t a valid project file</source>
         <translation>이 파일은 유효한 프로젝트 파일이 아닙니다</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="206"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="209"/>
         <source>Make sure it’s a properly formatted JSON project.</source>
         <translation>올바르게 형식화된 JSON 프로젝트인지 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="220"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="223"/>
         <source>Cannot read JSON file</source>
         <translation>JSON 파일을 읽을 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="221"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="224"/>
         <source>Please check file permissions &amp; location</source>
         <translation>파일 권한 및 위치를 확인하세요</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="463"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="500"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="552"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="585"/>
         <source>Channel %1</source>
         <translation>채널 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="473"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="528"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="562"/>
+        <source>Audio Input</source>
+        <translation>오디오 입력</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="613"/>
         <source>Multiple Plots</source>
         <translation>다중 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="479"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="510"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="568"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="595"/>
         <source>Quick Plot</source>
         <translation>빠른 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="515"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="600"/>
         <source>Quick Plot Data</source>
         <translation>빠른 플롯 데이터</translation>
     </message>
@@ -2516,32 +2520,32 @@ Serial Studio를 지원해 주셔서 다시 한번 감사합니다!</translation
         <translation>피어 자동 확인</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="335"/>
+        <location filename="../../src/MQTT/Client.cpp" line="331"/>
         <source>Use System Database</source>
         <translation>시스템 데이터베이스 사용</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="336"/>
+        <location filename="../../src/MQTT/Client.cpp" line="332"/>
         <source>Load From Folder...</source>
         <translation>폴더에서 로드...</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="350"/>
+        <location filename="../../src/MQTT/Client.cpp" line="346"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT 구독자</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="351"/>
+        <location filename="../../src/MQTT/Client.cpp" line="347"/>
         <source>MQTT Publisher</source>
         <translation>MQTT 발행자</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="416"/>
+        <location filename="../../src/MQTT/Client.cpp" line="412"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>MQTT 기능은 상업용 라이선스가 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="417"/>
+        <location filename="../../src/MQTT/Client.cpp" line="413"/>
         <source>Connecting to MQTT brokers is only available with a valid Serial Studio commercial license.
 
 To unlock this feature, please activate your license or visit the store.</source>
@@ -2550,179 +2554,179 @@ To unlock this feature, please activate your license or visit the store.</source
 이 기능을 활성화하려면 라이선스를 활성화하거나 스토어를 방문하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="431"/>
+        <location filename="../../src/MQTT/Client.cpp" line="427"/>
         <source>Missing MQTT Topic</source>
         <translation>MQTT 주제 누락</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="432"/>
+        <location filename="../../src/MQTT/Client.cpp" line="428"/>
         <source>You must specify a topic before connecting as a publisher.</source>
         <translation>발행자로 연결하기 전에 주제를 지정해야 합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="433"/>
-        <location filename="../../src/MQTT/Client.cpp" line="457"/>
+        <location filename="../../src/MQTT/Client.cpp" line="429"/>
+        <location filename="../../src/MQTT/Client.cpp" line="453"/>
         <source>Configuration Error</source>
         <translation>구성 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="441"/>
+        <location filename="../../src/MQTT/Client.cpp" line="437"/>
         <source>MQTT Topic Not Set</source>
         <translation>MQTT 주제가 설정되지 않음</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="442"/>
+        <location filename="../../src/MQTT/Client.cpp" line="438"/>
         <source>You won't receive any messages until a topic is configured.</source>
         <translation>주제가 설정될 때까지 메시지를 받을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="443"/>
+        <location filename="../../src/MQTT/Client.cpp" line="439"/>
         <source>Configuration Warning</source>
         <translation>구성 경고</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="455"/>
+        <location filename="../../src/MQTT/Client.cpp" line="451"/>
         <source>Invalid MQTT Topic</source>
         <translation>잘못된 MQTT 주제</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="456"/>
+        <location filename="../../src/MQTT/Client.cpp" line="452"/>
         <source>The topic "%1" is not valid.</source>
         <translation>주제 "%1"은(는) 유효하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="681"/>
+        <location filename="../../src/MQTT/Client.cpp" line="677"/>
         <source>Select PEM Certificates Directory</source>
         <translation>PEM 인증서 디렉토리 선택</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="784"/>
+        <location filename="../../src/MQTT/Client.cpp" line="781"/>
         <source>Subscription Error</source>
         <translation>구독 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="785"/>
+        <location filename="../../src/MQTT/Client.cpp" line="782"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>주제 "%1"에 구독하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="804"/>
+        <location filename="../../src/MQTT/Client.cpp" line="801"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>잘못된 MQTT 프로토콜 버전</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="805"/>
+        <location filename="../../src/MQTT/Client.cpp" line="802"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
         <translation>MQTT 브로커가 지원되지 않는 프로토콜 버전으로 인해 연결을 거부했습니다. 클라이언트와 브로커가 동일한 프로토콜 버전을 지원하는지 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="811"/>
+        <location filename="../../src/MQTT/Client.cpp" line="808"/>
         <source>Client ID Rejected</source>
         <translation>클라이언트 ID 거부됨</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="812"/>
+        <location filename="../../src/MQTT/Client.cpp" line="809"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
         <translation>브로커가 클라이언트 ID를 거부했습니다. 형식이 잘못되었거나 너무 길거나 이미 사용 중일 수 있습니다. 다른 클라이언트 ID를 사용해 보세요.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="818"/>
+        <location filename="../../src/MQTT/Client.cpp" line="815"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT 서버 사용 불가</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="819"/>
+        <location filename="../../src/MQTT/Client.cpp" line="816"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
         <translation>네트워크 연결은 설정되었지만 브로커가 현재 사용 불가능합니다. 브로커 상태를 확인하고 나중에 다시 시도하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="825"/>
-        <location filename="../../src/MQTT/Client.cpp" line="895"/>
+        <location filename="../../src/MQTT/Client.cpp" line="822"/>
+        <location filename="../../src/MQTT/Client.cpp" line="892"/>
         <source>Authentication Error</source>
         <translation>인증 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="826"/>
+        <location filename="../../src/MQTT/Client.cpp" line="823"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
         <translation>제공된 사용자 이름 또는 비밀번호가 잘못되었거나 형식이 잘못되었습니다. 자격 증명을 다시 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="831"/>
+        <location filename="../../src/MQTT/Client.cpp" line="828"/>
         <source>Authorization Error</source>
         <translation>권한 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="832"/>
+        <location filename="../../src/MQTT/Client.cpp" line="829"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
         <translation>MQTT 브로커가 권한 부족으로 연결을 거부했습니다. 계정에 필요한 접근 권한이 있는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="838"/>
+        <location filename="../../src/MQTT/Client.cpp" line="835"/>
         <source>Network or Transport Error</source>
         <translation>네트워크 또는 전송 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="839"/>
+        <location filename="../../src/MQTT/Client.cpp" line="836"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
         <translation>네트워크 또는 전송 계층 문제로 인해 예상치 못한 연결 실패가 발생했습니다. 네트워크 연결 및 브로커 설정을 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="845"/>
+        <location filename="../../src/MQTT/Client.cpp" line="842"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTT 프로토콜 위반</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="846"/>
+        <location filename="../../src/MQTT/Client.cpp" line="843"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
         <translation>클라이언트가 MQTT 프로토콜 위반을 감지하고 연결을 종료했습니다. MQTT 구현이 규정을 준수하는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="852"/>
+        <location filename="../../src/MQTT/Client.cpp" line="849"/>
         <source>Unknown Error</source>
         <translation>알 수 없는 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="853"/>
+        <location filename="../../src/MQTT/Client.cpp" line="850"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
         <translation>예기치 않은 오류가 발생했습니다. 자세한 내용은 로그를 확인하거나 애플리케이션을 다시 시작하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="858"/>
+        <location filename="../../src/MQTT/Client.cpp" line="855"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="859"/>
+        <location filename="../../src/MQTT/Client.cpp" line="856"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
         <translation>MQTT 프로토콜 레벨 5 오류가 발생했습니다. 자세한 내용은 브로커 로그 또는 이유 코드를 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="881"/>
+        <location filename="../../src/MQTT/Client.cpp" line="878"/>
         <source>MQTT Authentication Failed</source>
         <translation>MQTT 인증 실패</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="882"/>
+        <location filename="../../src/MQTT/Client.cpp" line="879"/>
         <source>Authentication failed: %.</source>
         <translation>인증 실패: %.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="896"/>
+        <location filename="../../src/MQTT/Client.cpp" line="893"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
         <translation>확장 인증이 필요하지만 MQTT 5.0이 활성화되어 있지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="905"/>
+        <location filename="../../src/MQTT/Client.cpp" line="902"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="909"/>
+        <location filename="../../src/MQTT/Client.cpp" line="906"/>
         <source>MQTT Authentication Required</source>
         <translation>MQTT 인증 필요</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="910"/>
+        <location filename="../../src/MQTT/Client.cpp" line="907"/>
         <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
@@ -2731,22 +2735,22 @@ Please provide the necessary credentials.</source>
 필요한 자격 증명을 제공하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="918"/>
+        <location filename="../../src/MQTT/Client.cpp" line="915"/>
         <source>Enter MQTT Username</source>
         <translation>MQTT 사용자 이름 입력</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="919"/>
+        <location filename="../../src/MQTT/Client.cpp" line="916"/>
         <source>Username:</source>
         <translation>사용자 이름:</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="925"/>
+        <location filename="../../src/MQTT/Client.cpp" line="922"/>
         <source>Enter MQTT Password</source>
         <translation>MQTT 비밀번호 입력</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="926"/>
+        <location filename="../../src/MQTT/Client.cpp" line="923"/>
         <source>Password:</source>
         <translation>비밀번호:</translation>
     </message>
@@ -3135,17 +3139,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Plugins::Server</name>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="131"/>
+        <location filename="../../src/Plugins/Server.cpp" line="123"/>
         <source>Unable to start plugin TCP server</source>
         <translation>플러그인 TCP 서버 시작 불가</translation>
     </message>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="187"/>
+        <location filename="../../src/Plugins/Server.cpp" line="232"/>
         <source>Plugin server</source>
         <translation>플러그인 서버</translation>
     </message>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="188"/>
+        <location filename="../../src/Plugins/Server.cpp" line="233"/>
         <source>Invalid pending connection</source>
         <translation>잘못된 대기 연결</translation>
     </message>
@@ -4004,17 +4008,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="877"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="875"/>
         <source>Console</source>
         <translation>콘솔</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="894"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="892"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (대체)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="956"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="954"/>
         <source>LED Panel (%1)</source>
         <translation>LED 패널 (%1)</translation>
     </message>

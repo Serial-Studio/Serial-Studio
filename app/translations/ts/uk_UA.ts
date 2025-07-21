@@ -210,12 +210,12 @@
 <context>
     <name>CSV::Export</name>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="271"/>
+        <location filename="../../src/CSV/Export.cpp" line="318"/>
         <source>CSV File Error</source>
         <translation>Помилка CSV файлу</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="272"/>
+        <location filename="../../src/CSV/Export.cpp" line="319"/>
         <source>Cannot open CSV file for writing!</source>
         <translation>Неможливо відкрити CSV файл для запису!</translation>
     </message>
@@ -984,47 +984,47 @@
 <context>
     <name>IO::Console</name>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="151"/>
+        <location filename="../../src/IO/Console.cpp" line="152"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="152"/>
+        <location filename="../../src/IO/Console.cpp" line="153"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="163"/>
+        <location filename="../../src/IO/Console.cpp" line="164"/>
         <source>No Line Ending</source>
         <translation>Без закінчення рядка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="164"/>
+        <location filename="../../src/IO/Console.cpp" line="165"/>
         <source>New Line</source>
         <translation>Новий рядок</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="165"/>
+        <location filename="../../src/IO/Console.cpp" line="166"/>
         <source>Carriage Return</source>
         <translation>Повернення каретки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="166"/>
+        <location filename="../../src/IO/Console.cpp" line="167"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="177"/>
+        <location filename="../../src/IO/Console.cpp" line="178"/>
         <source>Plain Text</source>
         <translation>Звичайний текст</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="178"/>
+        <location filename="../../src/IO/Console.cpp" line="179"/>
         <source>Hexadecimal</source>
         <translation>Шістнадцятковий</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="199"/>
+        <location filename="../../src/IO/Console.cpp" line="200"/>
         <source>No Checksum</source>
         <translation>Без контрольної суми</translation>
     </message>
@@ -1055,47 +1055,47 @@
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="954"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="948"/>
         <source>channels</source>
         <translation>канали</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1027"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1021"/>
         <source> channels</source>
         <translation>канали</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1206"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1200"/>
         <source>Unsigned 8-bit</source>
         <translation>Беззнаковий 8-біт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1207"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1201"/>
         <source>Signed 16-bit</source>
         <translation>Знаковий 16-біт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1208"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1202"/>
         <source>Signed 24-bit</source>
         <translation>Знаковий 24-біт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1209"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1203"/>
         <source>Signed 32-bit</source>
         <translation>Знаковий 32-біт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1210"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1204"/>
         <source>Float 32-bit</source>
         <translation>Плаваюча кома 32-біт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1205"/>
         <source>Mono</source>
         <translation>Моно</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1211"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1205"/>
         <source>Stereo</source>
         <translation>Стерео</translation>
     </message>
@@ -1329,32 +1329,32 @@
 <context>
     <name>IO::Manager</name>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="277"/>
+        <location filename="../../src/IO/Manager.cpp" line="281"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="278"/>
+        <location filename="../../src/IO/Manager.cpp" line="282"/>
         <source>Network Socket</source>
         <translation>Мережевий сокет</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="279"/>
+        <location filename="../../src/IO/Manager.cpp" line="283"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="281"/>
+        <location filename="../../src/IO/Manager.cpp" line="285"/>
         <source>Audio Stream</source>
         <translation>Аудіо потік</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="357"/>
+        <location filename="../../src/IO/Manager.cpp" line="361"/>
         <source>Your trial period has ended.</source>
         <translation>Ваш пробний період закінчився.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="358"/>
+        <location filename="../../src/IO/Manager.cpp" line="362"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Щоб продовжити використання Serial Studio, активуйте вашу ліцензію.</translation>
     </message>
@@ -1380,50 +1380,54 @@
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="172"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="175"/>
         <source>JSON parse error</source>
         <translation>Помилка розбору JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="205"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="208"/>
         <source>This file isn’t a valid project file</source>
         <translation>Цей файл не є дійсним файлом проекту</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="206"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="209"/>
         <source>Make sure it’s a properly formatted JSON project.</source>
         <translation>Переконайтеся, що це правильно відформатований JSON проект.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="220"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="223"/>
         <source>Cannot read JSON file</source>
         <translation>Неможливо прочитати JSON файл</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="221"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="224"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Будь ласка, перевірте дозволи та розташування файлу</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="463"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="500"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="552"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="585"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="473"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="528"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="562"/>
+        <source>Audio Input</source>
+        <translation>Аудіо вхід</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="613"/>
         <source>Multiple Plots</source>
         <translation>Кілька графіків</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="479"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="510"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="568"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="595"/>
         <source>Quick Plot</source>
         <translation>Швидкий графік</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="515"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="600"/>
         <source>Quick Plot Data</source>
         <translation>Дані швидкого графіка</translation>
     </message>
@@ -2516,32 +2520,32 @@ Thank you again for supporting Serial Studio!</source>
         <translation>Автоматична перевірка вузла</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="335"/>
+        <location filename="../../src/MQTT/Client.cpp" line="331"/>
         <source>Use System Database</source>
         <translation>Використовувати системну базу даних</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="336"/>
+        <location filename="../../src/MQTT/Client.cpp" line="332"/>
         <source>Load From Folder...</source>
         <translation>Завантажити з папки...</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="350"/>
+        <location filename="../../src/MQTT/Client.cpp" line="346"/>
         <source>MQTT Subscriber</source>
         <translation>Підписник MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="351"/>
+        <location filename="../../src/MQTT/Client.cpp" line="347"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Видавець</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="416"/>
+        <location filename="../../src/MQTT/Client.cpp" line="412"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>Функція MQTT вимагає комерційної ліцензії</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="417"/>
+        <location filename="../../src/MQTT/Client.cpp" line="413"/>
         <source>Connecting to MQTT brokers is only available with a valid Serial Studio commercial license.
 
 To unlock this feature, please activate your license or visit the store.</source>
@@ -2550,179 +2554,179 @@ To unlock this feature, please activate your license or visit the store.</source
 Щоб розблокувати цю функцію, активуйте свою ліцензію або відвідайте магазин.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="431"/>
+        <location filename="../../src/MQTT/Client.cpp" line="427"/>
         <source>Missing MQTT Topic</source>
         <translation>Відсутня тема MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="432"/>
+        <location filename="../../src/MQTT/Client.cpp" line="428"/>
         <source>You must specify a topic before connecting as a publisher.</source>
         <translation>Ви повинні вказати тему перед підключенням як видавець.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="433"/>
-        <location filename="../../src/MQTT/Client.cpp" line="457"/>
+        <location filename="../../src/MQTT/Client.cpp" line="429"/>
+        <location filename="../../src/MQTT/Client.cpp" line="453"/>
         <source>Configuration Error</source>
         <translation>Помилка конфігурації</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="441"/>
+        <location filename="../../src/MQTT/Client.cpp" line="437"/>
         <source>MQTT Topic Not Set</source>
         <translation>Тема MQTT не встановлена</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="442"/>
+        <location filename="../../src/MQTT/Client.cpp" line="438"/>
         <source>You won't receive any messages until a topic is configured.</source>
         <translation>Ви не отримаєте жодних повідомлень, доки не буде налаштована тема.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="443"/>
+        <location filename="../../src/MQTT/Client.cpp" line="439"/>
         <source>Configuration Warning</source>
         <translation>Попередження конфігурації</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="455"/>
+        <location filename="../../src/MQTT/Client.cpp" line="451"/>
         <source>Invalid MQTT Topic</source>
         <translation>Неправильна тема MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="456"/>
+        <location filename="../../src/MQTT/Client.cpp" line="452"/>
         <source>The topic "%1" is not valid.</source>
         <translation>Тема "%1" є недійсною.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="681"/>
+        <location filename="../../src/MQTT/Client.cpp" line="677"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Виберіть каталог сертифікатів PEM</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="784"/>
+        <location filename="../../src/MQTT/Client.cpp" line="781"/>
         <source>Subscription Error</source>
         <translation>Помилка підписки</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="785"/>
+        <location filename="../../src/MQTT/Client.cpp" line="782"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Не вдалося підписатися на тему "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="804"/>
+        <location filename="../../src/MQTT/Client.cpp" line="801"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Недійсна версія протоколу MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="805"/>
+        <location filename="../../src/MQTT/Client.cpp" line="802"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
         <translation>Брокер MQTT відхилив з'єднання через непідтримувану версію протоколу. Переконайтеся, що ваш клієнт і брокер підтримують ту саму версію протоколу.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="811"/>
+        <location filename="../../src/MQTT/Client.cpp" line="808"/>
         <source>Client ID Rejected</source>
         <translation>Ідентифікатор клієнта відхилено</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="812"/>
+        <location filename="../../src/MQTT/Client.cpp" line="809"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
         <translation>Брокер відхилив ідентифікатор клієнта. Він може бути неправильно сформований, занадто довгий або вже використовується. Спробуйте використовувати інший ідентифікатор клієнта.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="818"/>
+        <location filename="../../src/MQTT/Client.cpp" line="815"/>
         <source>MQTT Server Unavailable</source>
         <translation>Сервер MQTT недоступний</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="819"/>
+        <location filename="../../src/MQTT/Client.cpp" line="816"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
         <translation>Мережеве з'єднання встановлено, але брокер наразі недоступний. Перевірте статус брокера і спробуйте пізніше.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="825"/>
-        <location filename="../../src/MQTT/Client.cpp" line="895"/>
+        <location filename="../../src/MQTT/Client.cpp" line="822"/>
+        <location filename="../../src/MQTT/Client.cpp" line="892"/>
         <source>Authentication Error</source>
         <translation>Помилка автентифікації</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="826"/>
+        <location filename="../../src/MQTT/Client.cpp" line="823"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
         <translation>Вказане ім'я користувача або пароль є неправильним або пошкодженим. Перевірте свої облікові дані та спробуйте знову.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="831"/>
+        <location filename="../../src/MQTT/Client.cpp" line="828"/>
         <source>Authorization Error</source>
         <translation>Помилка авторизації</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="832"/>
+        <location filename="../../src/MQTT/Client.cpp" line="829"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
         <translation>MQTT брокер відхилив підключення через недостатні права. Переконайтеся, що ваш обліковий запис має необхідні права доступу.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="838"/>
+        <location filename="../../src/MQTT/Client.cpp" line="835"/>
         <source>Network or Transport Error</source>
         <translation>Помилка мережі або транспорту</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="839"/>
+        <location filename="../../src/MQTT/Client.cpp" line="836"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
         <translation>Виникла проблема на рівні мережі або транспорту, що спричинила несподіване розірвання з'єднання. Перевірте своє мережеве підключення та налаштування брокера.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="845"/>
+        <location filename="../../src/MQTT/Client.cpp" line="842"/>
         <source>MQTT Protocol Violation</source>
         <translation>Порушення протоколу MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="846"/>
+        <location filename="../../src/MQTT/Client.cpp" line="843"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
         <translation>Клієнт виявив порушення протоколу MQTT і закрив з'єднання. Перевірте вашу реалізацію MQTT на відповідність.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="852"/>
+        <location filename="../../src/MQTT/Client.cpp" line="849"/>
         <source>Unknown Error</source>
         <translation>Невідома помилка</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="853"/>
+        <location filename="../../src/MQTT/Client.cpp" line="850"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
         <translation>Виникла несподівана помилка. Перевірте журнали для отримання додаткової інформації або перезапустіть застосунок.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="858"/>
+        <location filename="../../src/MQTT/Client.cpp" line="855"/>
         <source>MQTT 5 Error</source>
         <translation>Помилка MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="859"/>
+        <location filename="../../src/MQTT/Client.cpp" line="856"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
         <translation>Сталася помилка протоколу MQTT рівня 5. Перевірте журнали брокера або коди причин для отримання додаткової інформації.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="881"/>
+        <location filename="../../src/MQTT/Client.cpp" line="878"/>
         <source>MQTT Authentication Failed</source>
         <translation>Помилка автентифікації MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="882"/>
+        <location filename="../../src/MQTT/Client.cpp" line="879"/>
         <source>Authentication failed: %.</source>
         <translation>Автентифікація не вдалася: %.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="896"/>
+        <location filename="../../src/MQTT/Client.cpp" line="893"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
         <translation>Потрібна розширена автентифікація, але MQTT 5.0 не увімкнено.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="905"/>
+        <location filename="../../src/MQTT/Client.cpp" line="902"/>
         <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="909"/>
+        <location filename="../../src/MQTT/Client.cpp" line="906"/>
         <source>MQTT Authentication Required</source>
         <translation>Потрібна автентифікація MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="910"/>
+        <location filename="../../src/MQTT/Client.cpp" line="907"/>
         <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
@@ -2731,22 +2735,22 @@ Please provide the necessary credentials.</source>
 Будь ласка, надайте необхідні облікові дані.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="918"/>
+        <location filename="../../src/MQTT/Client.cpp" line="915"/>
         <source>Enter MQTT Username</source>
         <translation>Введіть ім'я користувача MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="919"/>
+        <location filename="../../src/MQTT/Client.cpp" line="916"/>
         <source>Username:</source>
         <translation>Ім'я користувача:</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="925"/>
+        <location filename="../../src/MQTT/Client.cpp" line="922"/>
         <source>Enter MQTT Password</source>
         <translation>Введіть пароль MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="926"/>
+        <location filename="../../src/MQTT/Client.cpp" line="923"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
@@ -3135,17 +3139,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Plugins::Server</name>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="131"/>
+        <location filename="../../src/Plugins/Server.cpp" line="123"/>
         <source>Unable to start plugin TCP server</source>
         <translation>Не вдалося запустити плагін TCP сервер</translation>
     </message>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="187"/>
+        <location filename="../../src/Plugins/Server.cpp" line="232"/>
         <source>Plugin server</source>
         <translation>Сервер плагінів</translation>
     </message>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="188"/>
+        <location filename="../../src/Plugins/Server.cpp" line="233"/>
         <source>Invalid pending connection</source>
         <translation>Неприпустиме очікуване з'єднання</translation>
     </message>
@@ -4004,17 +4008,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="877"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="875"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="894"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="892"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Резервний)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="956"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="954"/>
         <source>LED Panel (%1)</source>
         <translation>Панель LED (%1)</translation>
     </message>
