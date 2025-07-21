@@ -54,13 +54,13 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
           &DeclarativeWidget::resizeWidget);
 
   // Redraw widget when visibility changes
-  connect(this, &DeclarativeWidget::visibleChanged, [=]() {
+  connect(this, &DeclarativeWidget::visibleChanged, [=, this]() {
     requestUpdate();
     redraw();
   });
 
   // Redraw widget when widget changes
-  connect(this, &DeclarativeWidget::widgetChanged, [=]() {
+  connect(this, &DeclarativeWidget::widgetChanged, [=, this]() {
     requestUpdate();
     redraw();
   });

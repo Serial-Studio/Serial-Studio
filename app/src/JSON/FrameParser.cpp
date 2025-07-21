@@ -93,7 +93,7 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
 
   // Connect modification check signals
   connect(&m_widget, &QCodeEditor::textChanged, this,
-          [=] { Q_EMIT modifiedChanged(); });
+          [=, this] { Q_EMIT modifiedChanged(); });
 
   // Make project editor modification status depend on code modification status
   connect(this, &JSON::FrameParser::modifiedChanged, &ProjectModel::instance(),

@@ -77,7 +77,7 @@ MQTT::Client::Client()
 
   // Disconnect from MQTT server when Serial Studio is deactivated
   connect(&Licensing::LemonSqueezy::instance(),
-          &Licensing::LemonSqueezy::activatedChanged, this, [=] {
+          &Licensing::LemonSqueezy::activatedChanged, this, [=, this] {
             if (isConnected() && !SerialStudio::activated())
               closeConnection();
           });

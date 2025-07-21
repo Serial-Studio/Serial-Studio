@@ -57,7 +57,7 @@ JSON::FrameBuilder::FrameBuilder()
   // Reload JSON map file when license is activated
 #ifdef BUILD_COMMERCIAL
   connect(&Licensing::LemonSqueezy::instance(),
-          &Licensing::LemonSqueezy::activatedChanged, this, [=] {
+          &Licensing::LemonSqueezy::activatedChanged, this, [=, this] {
             if (!jsonMapFilepath().isEmpty())
               loadJsonMap(jsonMapFilepath());
           });
@@ -282,6 +282,44 @@ void JSON::FrameBuilder::setOperationMode(
   Q_EMIT operationModeChanged();
 }
 
+//------------------------------------------------------------------------------
+// Hotpath data processing functions
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Dispatches raw data to the appropriate frame parser based on the
+ * current operation mode.
+ *
+ * This is a hotpath function executed at high frequency.
+ *
+ * It routes the incoming binary data to the correct parsing strategy:
+ * - If the device sends JSON directly, parses it using QJsonDocument.
+ * - If using a project file, delegates parsing to the configured frame parser.
+ * - If in Quick Plot mode, parses CSV-like data for plotting.
+ *
+ * @param data Raw binary input data to be processed.
+ */
+void JSON::FrameBuilder::hotpathRxFrame(const QByteArray &data)
+{
+  switch (operationMode())
+  {
+    case SerialStudio::QuickPlot:
+      parseQuickPlotFrame(data);
+      break;
+    case SerialStudio::ProjectFile:
+      parseProjectFrame(data);
+      break;
+    case SerialStudio::DeviceSendsJSON:
+      if (m_rawFrame.read(QJsonDocument::fromJson(data).object()))
+        hotpathTxFrame(m_rawFrame);
+      break;
+  }
+}
+
+//------------------------------------------------------------------------------
+// Private slots
+//------------------------------------------------------------------------------
+
 /**
  * @brief Handles device connection events and triggers auto-execute actions.
  *
@@ -325,40 +363,6 @@ void JSON::FrameBuilder::onConnectedChanged()
 void JSON::FrameBuilder::setJsonPathSetting(const QString &path)
 {
   m_settings.setValue(QStringLiteral("json_map_location"), path);
-}
-
-//------------------------------------------------------------------------------
-// Hotpath data processing functions
-//------------------------------------------------------------------------------
-
-/**
- * @brief Dispatches raw data to the appropriate frame parser based on the
- * current operation mode.
- *
- * This is a hotpath function executed at high frequency.
- *
- * It routes the incoming binary data to the correct parsing strategy:
- * - If the device sends JSON directly, parses it using QJsonDocument.
- * - If using a project file, delegates parsing to the configured frame parser.
- * - If in Quick Plot mode, parses CSV-like data for plotting.
- *
- * @param data Raw binary input data to be processed.
- */
-void JSON::FrameBuilder::hotpathRxFrame(const QByteArray &data)
-{
-  switch (operationMode())
-  {
-    case SerialStudio::QuickPlot:
-      parseQuickPlotFrame(data);
-      break;
-    case SerialStudio::ProjectFile:
-      parseProjectFrame(data);
-      break;
-    case SerialStudio::DeviceSendsJSON:
-      if (m_rawFrame.read(QJsonDocument::fromJson(data).object()))
-        hotpathTxFrame(m_rawFrame);
-      break;
-  }
 }
 
 //------------------------------------------------------------------------------

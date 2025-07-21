@@ -162,10 +162,11 @@ void CSV::Export::setupExternalConnections()
 {
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &Export::closeFile);
-  connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this, [=] {
-    if (IO::Manager::instance().paused())
-      closeFile();
-  });
+  connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this,
+          [=, this] {
+            if (IO::Manager::instance().paused())
+              closeFile();
+          });
 }
 
 /**

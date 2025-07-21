@@ -86,10 +86,11 @@ public:
 
 public slots:
   void setupExternalConnections();
-  void hotpathRxFrame(const QByteArray &data);
   void loadJsonMap(const QString &path);
   void setFrameParser(JSON::FrameParser *editor);
   void setOperationMode(const SerialStudio::OperationMode mode);
+
+  void hotpathRxFrame(const QByteArray &data);
 
 private slots:
   void onConnectedChanged();

@@ -829,7 +829,7 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray &data)
   }
 
   // Create a validation call to save settings
-  QMetaObject::invokeMethod(this, [=] {
+  QMetaObject::invokeMethod(this, [=, this] {
     m_busy = false;
     m_instanceId = instanceId;
     m_silentValidation = false;

@@ -97,7 +97,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot3D, m_index))
   {
     connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz,
-            this, [=] {
+            this, [=, this] {
               if (isVisible() && dirty())
                 update();
             });
@@ -109,7 +109,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
           this, &Widgets::Plot3D::onThemeChanged);
 
   // Set zoom automatically
-  connect(this, &Widgets::Plot3D::rangeChanged, this, [=] {
+  connect(this, &Widgets::Plot3D::rangeChanged, this, [=, this] {
     if (m_worldScale < idealWorldScale())
       setWorldScale(idealWorldScale());
   });

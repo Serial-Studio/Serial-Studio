@@ -655,7 +655,7 @@ void Widgets::GPS::updateTiles()
 
         // When finished, call the tile fetched handler
         connect(reply, &QNetworkReply::finished, this,
-                [=]() { onTileFetched(reply); });
+                [=, this]() { onTileFetched(reply); });
       }
 
       // Request tiles for weather layer
@@ -668,7 +668,7 @@ void Widgets::GPS::updateTiles()
           m_pending[gibsUrl] = reply;
 
           connect(reply, &QNetworkReply::finished, this,
-                  [=]() { onTileFetched(reply); });
+                  [=, this]() { onTileFetched(reply); });
         }
       }
 
@@ -682,7 +682,7 @@ void Widgets::GPS::updateTiles()
           m_pending[refUrl] = reply;
 
           connect(reply, &QNetworkReply::finished, this,
-                  [=]() { onTileFetched(reply); });
+                  [=, this]() { onTileFetched(reply); });
         }
       }
     }
@@ -708,7 +708,7 @@ void Widgets::GPS::precacheWorld()
         QNetworkReply *reply = m_network.get(QNetworkRequest(QUrl(url)));
         m_pending[url] = reply;
         connect(reply, &QNetworkReply::finished, this,
-                [=]() { onTileFetched(reply); });
+                [=, this]() { onTileFetched(reply); });
       }
     }
   }

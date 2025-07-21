@@ -46,7 +46,7 @@ IO::ConsoleExport::ConsoleExport()
 {
 #ifdef BUILD_COMMERCIAL
   connect(&Licensing::LemonSqueezy::instance(),
-          &Licensing::LemonSqueezy::activatedChanged, this, [=] {
+          &Licensing::LemonSqueezy::activatedChanged, this, [=, this] {
             if (exportEnabled() && !SerialStudio::activated())
               setExportEnabled(false);
           });

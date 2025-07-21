@@ -253,7 +253,7 @@ void IO::FileTransmission::sendLine()
   // Send next line to device
   if (m_stream && !m_stream->atEnd())
   {
-    QMetaObject::invokeMethod(this, [=] {
+    QMetaObject::invokeMethod(this, [=, this] {
       if (m_stream)
       {
         auto line = m_stream->readLine();

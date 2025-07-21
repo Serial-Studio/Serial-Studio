@@ -53,9 +53,9 @@ IO::Drivers::Network::Network()
 
   // Update open state when socket states change
   connect(&m_tcpSocket, &QUdpSocket::stateChanged, this,
-          [=] { Q_EMIT configurationChanged(); });
+          [=, this] { Q_EMIT configurationChanged(); });
   connect(&m_udpSocket, &QUdpSocket::stateChanged, this,
-          [=] { Q_EMIT configurationChanged(); });
+          [=, this] { Q_EMIT configurationChanged(); });
 
   // Report socket errors
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)

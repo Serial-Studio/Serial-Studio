@@ -640,7 +640,7 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem *window)
 
   // Keep track of window state
   connect(window, &QQuickItem::stateChanged, this,
-          [=] { Q_EMIT statesChanged(); });
+          [=, this] { Q_EMIT statesChanged(); });
 
   // Trigger a layout update when the QML code created all the windows
   if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager)

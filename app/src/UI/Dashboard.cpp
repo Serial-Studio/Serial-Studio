@@ -50,27 +50,28 @@ UI::Dashboard::Dashboard()
   , m_multipltXAxis(100)
 {
   // clang-format off
-  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(true); });
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] { resetData(true); });
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=] { resetData(); });
+  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=, this] { resetData(true); });
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=, this] { resetData(true); });
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=, this] { resetData(); });
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
 #ifdef BUILD_COMMERCIAL
-  connect(
-      &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this, [=] {
-        const bool subscribed = MQTT::Client::instance().isSubscriber();
-        const bool wasSubscribed = !MQTT::Client::instance().isConnected()
-                                   && MQTT::Client::instance().isSubscriber();
+  connect(&MQTT::Client::instance(), &MQTT::Client::connectedChanged, this,
+          [=, this] {
+            const bool subscribed = MQTT::Client::instance().isSubscriber();
+            const bool wasSubscribed
+                = !MQTT::Client::instance().isConnected()
+                  && MQTT::Client::instance().isSubscriber();
 
-        if (subscribed || wasSubscribed)
-          resetData(true);
-      });
+            if (subscribed || wasSubscribed)
+              resetData(true);
+          });
 #endif
 
   // Update the dashboard widgets at 24 Hz
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
-          [=] {
+          [=, this] {
             if (m_updateRequired)
             {
               m_updateRequired = false;
