@@ -115,12 +115,16 @@ UI::Dashboard &UI::Dashboard::instance()
 double UI::Dashboard::smartInterval(const double min, const double max,
                                     const double multiplier)
 {
-  // Calculate an initial step size
-  const auto range = qAbs(max - min);
-  const auto digits = static_cast<int>(std::ceil(std::log10(range)));
-  const double r = std::pow(10.0, -digits) * 10;
-  const double v = std::ceil(range * r) / r;
-  double step = qMax(0.0001, v * multiplier);
+  // dDfault fallback for degenerate range
+  const double range = qAbs(max - min);
+  if (range == 0.0)
+    return 1.0;
+
+  // Estimate initial step size
+  const int magnitude = static_cast<int>(std::ceil(std::log10(range)));
+  const double scale = std::pow(10.0, -magnitude) * 10;
+  const double normalizedRange = std::ceil(range * scale) / scale;
+  double step = qMax(0.0001, normalizedRange * multiplier);
 
   // For smaller steps, use 0.1, 0.2, 0.5, etc.
   if (step < 1.0)
@@ -138,21 +142,22 @@ double UI::Dashboard::smartInterval(const double min, const double max,
   // For larger steps, round to 1, 2, 5, 10, etc.
   else
   {
-    const double factor = std::pow(10.0, std::floor(std::log10(step)));
-    const double normalizedStep = step / factor;
+    const double base = std::pow(10.0, std::floor(std::log10(step)));
+    const double normalized = step / base;
 
-    if (normalizedStep <= 1.0)
-      step = factor;
-    else if (normalizedStep <= 2.0)
-      step = 2 * factor;
-    else if (normalizedStep <= 5.0)
-      step = 5 * factor;
+    if (normalized <= 1.0)
+      step = base;
+    else if (normalized <= 2.0)
+      step = 2 * base;
+    else if (normalized <= 5.0)
+      step = 5 * base;
     else
-      step = 10 * factor;
+      step = 10 * base;
   }
 
-  // Recompute step to ensure it divides the range cleanly
-  if (std::fmod(range, step) != 0.0)
+  // Ensure the interval divides the range
+  const double remainder = std::fmod(range, step);
+  if (remainder != 0.0)
     step = range / std::ceil(range / step);
 
   // Return obtained step size
@@ -191,15 +196,19 @@ bool UI::Dashboard::showActionPanel() const
  */
 bool UI::Dashboard::streamAvailable() const
 {
-  bool available = IO::Manager::instance().isConnected();
-  available |= CSV::Player::instance().isOpen();
+  static auto &player = CSV::Player::instance();
+  static auto &manager = IO::Manager::instance();
+
+  const bool csvOpen = player.isOpen();
+  const bool serialConnected = manager.isConnected();
 
 #ifdef BUILD_COMMERCIAL
-  available |= MQTT::Client::instance().isConnected()
-               && MQTT::Client::instance().isSubscriber();
+  static auto &mqtt = MQTT::Client::instance();
+  const bool mqttConnected = mqtt.isConnected() && mqtt.isSubscriber();
+  return serialConnected || csvOpen || mqttConnected;
+#else
+  return serialConnected || csvOpen;
 #endif
-
-  return available;
 }
 
 /**
@@ -317,10 +326,8 @@ bool UI::Dashboard::frameValid() const
  */
 int UI::Dashboard::relativeIndex(const int widgetIndex)
 {
-  if (m_widgetMap.contains(widgetIndex))
-    return m_widgetMap.value(widgetIndex).second;
-
-  return -1;
+  const auto it = m_widgetMap.constFind(widgetIndex);
+  return it != m_widgetMap.cend() ? it->second : -1;
 }
 
 /**
@@ -332,10 +339,8 @@ int UI::Dashboard::relativeIndex(const int widgetIndex)
  */
 SerialStudio::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex)
 {
-  if (m_widgetMap.contains(widgetIndex))
-    return m_widgetMap.value(widgetIndex).first;
-
-  return SerialStudio::DashboardNoWidget;
+  const auto it = m_widgetMap.constFind(widgetIndex);
+  return it != m_widgetMap.cend() ? it->first : SerialStudio::DashboardNoWidget;
 }
 
 /**
@@ -348,10 +353,16 @@ SerialStudio::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex)
 int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
 {
   if (SerialStudio::isGroupWidget(widget))
-    return m_widgetGroups.value(widget).count();
+  {
+    auto it = m_widgetGroups.constFind(widget);
+    return it != m_widgetGroups.cend() ? it->count() : 0;
+  }
 
-  else if (SerialStudio::isDatasetWidget(widget))
-    return m_widgetDatasets.value(widget).count();
+  if (SerialStudio::isDatasetWidget(widget))
+  {
+    auto it = m_widgetDatasets.constFind(widget);
+    return it != m_widgetDatasets.cend() ? it->count() : 0;
+  }
 
   return 0;
 }
@@ -468,8 +479,11 @@ const JSON::Group &
 UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
                               const int index) const
 {
-  Q_ASSERT(index >= 0 && index < m_widgetGroups[widget].count());
-  return m_widgetGroups[widget].at(index);
+  const auto it = m_widgetGroups.constFind(widget);
+  Q_ASSERT(it != m_widgetGroups.cend());
+  Q_ASSERT(index >= 0 && index < it->size());
+
+  return it->at(index);
 }
 
 /**
@@ -485,8 +499,11 @@ const JSON::Dataset &
 UI::Dashboard::getDatasetWidget(const SerialStudio::DashboardWidget widget,
                                 const int index) const
 {
-  Q_ASSERT(index >= 0 && index < m_widgetDatasets[widget].count());
-  return m_widgetDatasets[widget].at(index);
+  const auto it = m_widgetDatasets.constFind(widget);
+  Q_ASSERT(it != m_widgetDatasets.cend());
+  Q_ASSERT(index >= 0 && index < it->size());
+
+  return it->at(index);
 }
 
 //------------------------------------------------------------------------------
@@ -519,8 +536,10 @@ const JSON::Frame &UI::Dashboard::processedFrame()
 //------------------------------------------------------------------------------
 
 /**
- * @brief Provides the FFT plot values currently displayed on the dashboard.
- * @return A reference to a QVector containing the FFT PlotDataY data.
+ * @brief Returns the FFT plot data currently displayed on the dashboard.
+ *
+ * @param index The widget index for the FFT plot.
+ * @return Reference to the corresponding PlotDataY buffer.
  */
 const PlotDataY &UI::Dashboard::fftData(const int index) const
 {
@@ -528,8 +547,10 @@ const PlotDataY &UI::Dashboard::fftData(const int index) const
 }
 
 /**
- * @brief Provides the GPS trajectory data currently displayed on the dashboard.
- * @return A reference to a QVector containing the GpsSeries data.
+ * @brief Returns the GPS trajectory data currently tracked by the dashboard.
+ *
+ * @param index The widget index for the GPS display.
+ * @return Reference to the corresponding GpsSeries structure.
  */
 const GpsSeries &UI::Dashboard::gpsSeries(const int index) const
 {
@@ -537,8 +558,10 @@ const GpsSeries &UI::Dashboard::gpsSeries(const int index) const
 }
 
 /**
- * @brief Provides the linear plot values currently displayed on the dashboard.
- * @return A reference to a QVector containing the linear PlotDataY data.
+ * @brief Returns the Y-axis values for a linear plot widget.
+ *
+ * @param index The widget index for the linear plot.
+ * @return Reference to the corresponding LineSeries buffer.
  */
 const LineSeries &UI::Dashboard::plotData(const int index) const
 {
@@ -546,8 +569,10 @@ const LineSeries &UI::Dashboard::plotData(const int index) const
 }
 
 /**
- * @brief Provides the values for multiplot visuals on the dashboard.
- * @return A reference to a QVector containing MultiPlotDataY data.
+ * @brief Returns the series data used by a multiplot widget.
+ *
+ * @param index The widget index for the multiplot.
+ * @return Reference to the corresponding MultiLineSeries container.
  */
 const MultiLineSeries &UI::Dashboard::multiplotData(const int index) const
 {
@@ -556,8 +581,10 @@ const MultiLineSeries &UI::Dashboard::multiplotData(const int index) const
 
 #ifdef BUILD_COMMERCIAL
 /**
- * @brief Provides the values for 3D plot visuals on the dashboard.
- * @return A reference to a QVector containing ThreeDimensionalSeries data.
+ * @brief Returns the 3D trajectory data for a 3D plot widget.
+ *
+ * @param index The widget index for the 3D plot.
+ * @return Reference to the corresponding PlotData3D buffer.
  */
 const PlotData3D &UI::Dashboard::plotData3D(const int index) const
 {
@@ -790,11 +817,11 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 void UI::Dashboard::hotpathRxFrame(const JSON::Frame &frame)
 {
   // Validate frame
-  if (!frame.isValid() || !streamAvailable())
+  if (!frame.isValid() || !streamAvailable()) [[unlikely]]
     return;
 
   // Regenerate dashboard model if frame structure changed
-  if (!frame.equalsStructure(m_rawFrame))
+  if (!frame.equalsStructure(m_rawFrame)) [[unlikely]]
   {
     const bool hadProFeatures = m_rawFrame.containsCommercialFeatures();
     reconfigureDashboard(frame);
@@ -827,16 +854,17 @@ void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
   {
     for (const auto &dataset : group.datasets())
     {
-      const auto &uid = dataset.uniqueId();
-      auto it = m_datasetReferences.find(uid);
-      if (it == m_datasetReferences.end())
+      const auto uid = dataset.uniqueId();
+      const auto it = m_datasetReferences.find(uid);
+      if (it == m_datasetReferences.end()) [[unlikely]]
       {
         resetData(false);
         hotpathRxFrame(frame);
         return;
       }
 
-      for (auto *ptr : std::as_const(it.value()))
+      const auto &datasets = it.value();
+      for (auto *ptr : datasets)
         ptr->setValue(dataset.value());
     }
   }
@@ -1037,39 +1065,62 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
  * - Shifts in the latest sample from the dashboard dataset into the correct
  *   slot of the buffer.
  *
- * @note This method is typically called once per update frame (e.g., 24Hz) to
- * ensure smooth, accurate rendering of time-dependent data.
- *
  * @warning GPS and 3D plots rely on structured dataset groups and expect the
  *          widgets to provide fields like [`lat`, `lon`, `alt`], or
  *          [`x`, `y`, `z`].
  */
 void UI::Dashboard::updateDataSeries()
 {
-  // Check if we need to re-initialize FFT plots data
-  if (m_fftValues.count() != widgetCount(SerialStudio::DashboardFFT))
-    configureFftSeries();
-
-  // Check if we need to re-initialize linear plots data
-  if (m_pltValues.count() != widgetCount(SerialStudio::DashboardPlot))
-    configureLineSeries();
-
-  // Check if we need to re-initialize multiplot data
-  if (m_multipltValues.count() != widgetCount(SerialStudio::DashboardMultiPlot))
-    configureMultiLineSeries();
-
-  // Check if we need to re-initialize GPS data
-  if (m_gpsValues.count() != widgetCount(SerialStudio::DashboardGPS))
-    configureGpsSeries();
-
-  // Check if we need to re-initialize 3D plot data
+  // Cache widget counts
+  const int gpsCount = widgetCount(SerialStudio::DashboardGPS);
+  const int fftCount = widgetCount(SerialStudio::DashboardFFT);
+  const int plotCount = widgetCount(SerialStudio::DashboardPlot);
+  const int multiCount = widgetCount(SerialStudio::DashboardMultiPlot);
 #ifdef BUILD_COMMERCIAL
-  if (m_plotData3D.count() != widgetCount(SerialStudio::DashboardPlot3D))
+  const int plot3DCount = widgetCount(SerialStudio::DashboardPlot3D);
+#endif
+
+  // Resize data points if needed
+  if (m_gpsValues.size() != gpsCount) [[unlikely]]
+    configureGpsSeries();
+  if (m_fftValues.size() != fftCount) [[unlikely]]
+    configureFftSeries();
+  if (m_pltValues.size() != plotCount) [[unlikely]]
+    configureLineSeries();
+  if (m_multipltValues.size() != multiCount) [[unlikely]]
+    configureMultiLineSeries();
+#ifdef BUILD_COMMERCIAL
+  if (m_plotData3D.size() != plot3DCount) [[unlikely]]
     configurePlot3DSeries();
 #endif
 
-  // Append latest values to FFT plots data
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i)
+  // Update GPS data
+  for (int i = 0; i < gpsCount; ++i)
+  {
+    const auto &group = getGroupWidget(SerialStudio::DashboardGPS, i);
+    auto &series = m_gpsValues[i];
+
+    double lat = -1, lon = -1, alt = -1;
+    for (const auto &dataset : group.datasets())
+    {
+      const QString &id = dataset.widget();
+      const double val = dataset.value().toDouble();
+
+      if (id == "lat")
+        lat = val;
+      else if (id == "lon")
+        lon = val;
+      else if (id == "alt")
+        alt = val;
+    }
+
+    series.latitudes.push(lat);
+    series.longitudes.push(lon);
+    series.altitudes.push(alt);
+  }
+
+  // Update FFT plots
+  for (int i = 0; i < fftCount; ++i)
   {
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
     m_fftValues[i].push(dataset.value().toDouble());
@@ -1078,7 +1129,7 @@ void UI::Dashboard::updateDataSeries()
   // Append latest values to linear plots data
   QSet<int> xAxesMoved;
   QSet<int> yAxesMoved;
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i)
+  for (int i = 0; i < plotCount; ++i)
   {
     // Shift Y-axis points
     const auto &yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
@@ -1098,70 +1149,41 @@ void UI::Dashboard::updateDataSeries()
     }
   }
 
-  // Append latest values to multiplots data
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i)
+  // Update Multi-plots
+  for (int i = 0; i < multiCount; ++i)
   {
     const auto &group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
+    auto &multiSeries = m_multipltValues[i];
     for (int j = 0; j < group.datasetCount(); ++j)
-    {
-      const auto &dataset = group.datasets()[j];
-      m_multipltValues[i].y[j].push(dataset.value().toDouble());
-    }
+      multiSeries.y[j].push(group.datasets()[j].value().toDouble());
   }
 
-// Append latest values to 3D plots
+  // Update 3D plots
 #ifdef BUILD_COMMERCIAL
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot3D); ++i)
+  for (int i = 0; i < plot3DCount; ++i)
   {
-    // Get pointer to vector with 3D points for current widget
     auto &plotData = m_plotData3D[i];
 
-    // Initialize new point
     QVector3D point;
     const auto &group = getGroupWidget(SerialStudio::DashboardPlot3D, i);
-    for (int j = 0; j < group.datasetCount(); ++j)
+    for (const auto &dataset : group.datasets())
     {
-      const auto &dataset = group.datasets()[j];
-      if (dataset.widget().toLower() == "x")
-        point.setX(dataset.value().toDouble());
-      else if (dataset.widget().toLower() == "y")
-        point.setY(dataset.value().toDouble());
-      else if (dataset.widget().toLower() == "z")
-        point.setZ(dataset.value().toDouble());
+      const QString &id = dataset.widget();
+      const double val = dataset.value().toDouble();
+      if (id == "x" || id == "X")
+        point.setX(val);
+      else if (id == "y" || id == "Y")
+        point.setY(val);
+      else if (id == "z" || id == "Z")
+        point.setZ(val);
     }
 
-    // Add point to data
     plotData.push_back(point);
-    if (static_cast<int>(plotData.size()) > points())
-      plotData.erase(plotData.begin(), plotData.end() - points());
+    const size_t maxPoints = static_cast<size_t>(points());
+    if (plotData.size() > maxPoints)
+      plotData.erase(plotData.begin(), plotData.end() - maxPoints);
   }
 #endif
-
-  // Append latest values to GPS trajectory data
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardGPS); ++i)
-  {
-    const auto &group = getGroupWidget(SerialStudio::DashboardGPS, i);
-    auto &series = m_gpsValues[i];
-
-    double lat = -1, lon = -1, alt = -1;
-    for (int j = 0; j < group.datasetCount(); ++j)
-    {
-      const auto &dataset = group.datasets()[j];
-      const QString id = dataset.widget();
-
-      if (id == "lat")
-        lat = dataset.value().toDouble();
-      else if (id == "lon")
-        lon = dataset.value().toDouble();
-      else if (id == "alt")
-        alt = dataset.value().toDouble();
-    }
-
-    // Shift GPS time series data
-    series.latitudes.push(lat);
-    series.altitudes.push(alt);
-    series.longitudes.push(lon);
-  }
 }
 
 /**

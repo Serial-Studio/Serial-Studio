@@ -384,18 +384,12 @@ void JSON::FrameBuilder::setJsonPathSetting(const QString &path)
  */
 void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
 {
-  // Obtain state of the app
-  const bool csvPlaying = CSV::Player::instance().isOpen();
-
   // Real-time data, parse data & perform conversion
   QStringList channels;
-  if (!csvPlaying && m_frameParser)
+  if (!CSV::Player::instance().isOpen() && m_frameParser) [[likely]]
   {
     switch (JSON::ProjectModel::instance().decoderMethod())
     {
-      case SerialStudio::PlainText:
-        channels = m_frameParser->parse(QString::fromUtf8(data));
-        break;
       case SerialStudio::Hexadecimal:
         channels = m_frameParser->parse(QString::fromUtf8(data.toHex()));
         break;
@@ -405,6 +399,7 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
       case SerialStudio::Binary:
         channels = m_frameParser->parse(data);
         break;
+      case SerialStudio::PlainText:
       default:
         channels = m_frameParser->parse(QString::fromUtf8(data));
         break;
@@ -413,18 +408,19 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
 
   // CSV data, no need to perform conversions or use frame parser
   else
-    channels = QString::fromUtf8(data).simplified().split(',');
+    channels = QString::fromUtf8(data).split(',', Qt::SkipEmptyParts);
 
   // Replace data in frame
+  const int channelCount = channels.size();
   for (int g = 0; g < m_frame.groupCount(); ++g)
   {
     auto &group = m_frame.m_groups[g];
     for (int d = 0; d < group.datasetCount(); ++d)
     {
       auto &dataset = group.m_datasets[d];
-      const auto index = dataset.index();
-      if (index <= channels.count() && index > 0)
-        dataset.m_value = channels[index - 1];
+      const int idx = dataset.index();
+      if (idx > 0 && idx <= channelCount) [[likely]]
+        dataset.m_value = channels[idx - 1];
     }
   }
 
@@ -447,28 +443,53 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
  */
 void JSON::FrameBuilder::parseQuickPlotFrame(QByteArrayView data)
 {
-  // Rebuild project frame if required
-  QStringList channels = QString::fromUtf8(data).simplified().split(',');
-  if (channels.count() != m_quickPlotChannels)
+  // Create a vector of channels
+  QVector<QStringView> channels;
+  if (m_quickPlotChannels > 0) [[likely]]
+    channels.reserve(m_quickPlotChannels);
+  else
+    channels.reserve(64);
+
+  // Split the string into commas
+  int start = 0;
+  const auto str = QString::fromUtf8(data);
+  const int dataLength = str.size();
+  for (int i = 0; i <= dataLength; ++i)
   {
-    buildQuickPlotFrame(channels);
-    m_quickPlotChannels = channels.count();
+    if (i == dataLength || str[i] == ',')
+    {
+      channels.append(str.mid(start, i - start).trimmed());
+      start = i + 1;
+    }
   }
 
-  // Replace data in frame
+  // Regenerate the quick plot frame if needed
+  const int channelCount = channels.count();
+  if (channelCount != m_quickPlotChannels) [[unlikely]]
+  {
+    QStringList channelStrs;
+    channelStrs.reserve(channelCount);
+    for (const auto &v : channels)
+      channelStrs.append(v.toString());
+
+    buildQuickPlotFrame(channelStrs);
+    m_quickPlotChannels = channelCount;
+  }
+
+  // Update the values of the quick plot frame
   for (int g = 0; g < m_quickPlotFrame.groupCount(); ++g)
   {
     auto &group = m_quickPlotFrame.m_groups[g];
     for (int d = 0; d < group.datasetCount(); ++d)
     {
       auto &dataset = group.m_datasets[d];
-      const auto index = dataset.index();
-      if (index <= channels.count() && index > 0)
-        dataset.m_value = channels[index - 1];
+      const int index = dataset.index();
+      if (index > 0 && index <= channelCount) [[likely]]
+        dataset.m_value = channels[index - 1].toString();
     }
   }
 
-  // Update user interface
+  // Process the frame
   hotpathTxFrame(m_quickPlotFrame);
 }
 

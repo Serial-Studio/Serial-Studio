@@ -768,7 +768,7 @@ void IO::Manager::hotpathTxData(const QByteArray &data)
   static auto &console = IO::Console::instance();
   static auto &server = Plugins::Server::instance();
 
-  if (!m_paused)
+  if (!m_paused) [[likely]]
   {
     server.hotpathTxData(data);
     console.hotpathRxData(data);
@@ -790,7 +790,7 @@ void IO::Manager::hotpathTxFrame(const QByteArray &frame)
   static auto &mqtt = MQTT::Client::instance();
 #endif
 
-  if (!m_paused)
+  if (!m_paused) [[likely]]
   {
     frameBuilder.hotpathRxFrame(frame);
 #ifdef BUILD_COMMERCIAL

@@ -82,7 +82,6 @@ Item {
           bottom: parent.bottom
           margins: parent.border.width
         }
-
       }
 
       //

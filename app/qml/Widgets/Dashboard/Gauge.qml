@@ -76,11 +76,6 @@ Item {
       capStyle: Qt.FlatCap
 
       //
-      // Anumations
-      //
-      Behavior on value {NumberAnimation{}}
-
-      //
       // Track widths
       //
       progressWidth: trackWidth

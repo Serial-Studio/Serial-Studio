@@ -90,7 +90,7 @@ void JSON::Frame::clear()
  */
 bool JSON::Frame::isValid() const
 {
-  return !title().isEmpty() && groupCount() > 0;
+  return !m_title.isEmpty() && !m_groups.isEmpty();
 }
 
 /**
@@ -106,13 +106,10 @@ bool JSON::Frame::isValid() const
 void JSON::Frame::buildUniqueIds()
 {
   quint32 id = 1;
-  for (int i = 0; i < m_groups.count(); ++i)
+  for (auto &group : m_groups)
   {
-    for (int j = 0; j < m_groups[i].datasetCount(); ++j)
-    {
-      m_groups[i].m_datasets[j].setUniqueId(id);
-      ++id;
-    }
+    for (auto &dataset : group.m_datasets)
+      dataset.setUniqueId(id++);
   }
 }
 
@@ -130,14 +127,13 @@ void JSON::Frame::buildUniqueIds()
  */
 bool JSON::Frame::equalsStructure(const JSON::Frame &other) const
 {
-  const int groupCountA = groupCount();
-  const int groupCountB = other.groupCount();
-  if (groupCountA != groupCountB)
+  if (groupCount() != other.groupCount())
     return false;
 
   const auto &groupsA = groups();
   const auto &groupsB = other.groups();
-  for (int i = 0; i < groupCountA; ++i)
+
+  for (int i = 0, gc = groupsA.size(); i < gc; ++i)
   {
     const auto &g1 = groupsA[i];
     const auto &g2 = groupsB[i];
@@ -148,11 +144,11 @@ bool JSON::Frame::equalsStructure(const JSON::Frame &other) const
     const auto &datasetsA = g1.datasets();
     const auto &datasetsB = g2.datasets();
 
-    const int datasetCount = datasetsA.size();
-    if (datasetCount != datasetsB.size())
+    const int dc = datasetsA.size();
+    if (dc != datasetsB.size())
       return false;
 
-    for (int j = 0; j < datasetCount; ++j)
+    for (int j = 0; j < dc; ++j)
     {
       if (datasetsA[j].index() != datasetsB[j].index())
         return false;

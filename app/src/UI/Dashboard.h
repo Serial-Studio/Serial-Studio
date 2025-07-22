@@ -27,15 +27,8 @@
 #include "JSON/Frame.h"
 #include "SerialStudio.h"
 
-// clang-format off
-#define GET_GROUP(type, index) UI::Dashboard::instance().getGroupWidget(type, index)
-#define GET_DATASET(type, index) UI::Dashboard::instance().getDatasetWidget(type, index)
-#define VALIDATE_WIDGET(type, index) (index >= 0 && index < UI::Dashboard::instance().widgetCount(type))
-// clang-format on
-
 namespace UI
 {
-
 /**
  * @class UI::Dashboard
  * @brief Real-time dashboard manager for displaying data-driven widgets.
@@ -196,3 +189,60 @@ private:
   JSON::Frame m_lastFrame; // Processed frame used in UI
 };
 } // namespace UI
+
+//------------------------------------------------------------------------------
+// Inline functions for widgets
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Retrieves a reference to a dataset group widget by type and index.
+ *
+ * Provides direct access to a dataset group from the dashboard instance.
+ * Use this in contexts where group-based widgets (e.g., GPS, 3D, multi-plot)
+ * are expected.
+ *
+ * @param type The widget type (must be a group-based widget).
+ * @param index Index of the widget in the corresponding group list.
+ * @return Reference to the matching JSON::Group.
+ *
+ * @note Caller is responsible for ensuring the index is valid.
+ */
+inline const JSON::Group &GET_GROUP(const SerialStudio::DashboardWidget type,
+                                    int index)
+{
+  return UI::Dashboard::instance().getGroupWidget(type, index);
+}
+
+/**
+ * @brief Retrieves a reference to a dataset widget by type and index.
+ *
+ * Provides direct access to a single dataset widget from the dashboard
+ * instance. Use for widget types tied to individual datasets (e.g., plots,
+ * FFT, gauges).
+ *
+ * @param type The widget type (must be a dataset-based widget).
+ * @param index Index of the widget in the corresponding dataset list.
+ * @return Reference to the matching JSON::Dataset.
+ *
+ * @note Caller is responsible for ensuring the index is valid.
+ */
+inline const JSON::Dataset &
+GET_DATASET(const SerialStudio::DashboardWidget type, int index)
+{
+  return UI::Dashboard::instance().getDatasetWidget(type, index);
+}
+
+/**
+ * @brief Validates whether a widget index is in bounds for the given type.
+ *
+ * Checks if a widget of the given type exists at the specified index.
+ * Prevents out-of-bounds access when working with dashboard widgets.
+ *
+ * @param type The widget type to check.
+ * @param index Index to validate.
+ * @return true if the widget index is valid, false otherwise.
+ */
+inline bool VALIDATE_WIDGET(const SerialStudio::DashboardWidget type, int index)
+{
+  return index >= 0 && index < UI::Dashboard::instance().widgetCount(type);
+}
