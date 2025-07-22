@@ -208,12 +208,12 @@
 <context>
     <name>CSV::Export</name>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="318"/>
+        <location filename="../../src/CSV/Export.cpp" line="319"/>
         <source>CSV File Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="319"/>
+        <location filename="../../src/CSV/Export.cpp" line="320"/>
         <source>Cannot open CSV file for writing!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1403,29 +1403,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="552"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="585"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="577"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="610"/>
         <source>Channel %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="562"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="587"/>
         <source>Audio Input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="613"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="638"/>
         <source>Multiple Plots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="568"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="595"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="593"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="620"/>
         <source>Quick Plot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="600"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="625"/>
         <source>Quick Plot Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3999,17 +3999,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="875"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="904"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="892"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="921"/>
         <source>%1 (Fallback)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="954"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="983"/>
         <source>LED Panel (%1)</source>
         <translation type="unfinished"></translation>
     </message>

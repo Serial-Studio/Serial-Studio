@@ -210,12 +210,12 @@
 <context>
     <name>CSV::Export</name>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="318"/>
+        <location filename="../../src/CSV/Export.cpp" line="319"/>
         <source>CSV File Error</source>
         <translation>CSV 文件错误</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="319"/>
+        <location filename="../../src/CSV/Export.cpp" line="320"/>
         <source>Cannot open CSV file for writing!</source>
         <translation>无法打开 CSV 文件进行写入！</translation>
     </message>
@@ -1405,29 +1405,29 @@
         <translation>请检查文件权限和位置</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="552"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="585"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="577"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="610"/>
         <source>Channel %1</source>
         <translation>通道 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="562"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="587"/>
         <source>Audio Input</source>
         <translation>音频输入</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="613"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="638"/>
         <source>Multiple Plots</source>
         <translation>多个图表</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="568"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="595"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="593"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="620"/>
         <source>Quick Plot</source>
         <translation>快速绘图</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="600"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="625"/>
         <source>Quick Plot Data</source>
         <translation>快速绘图数据</translation>
     </message>
@@ -4008,17 +4008,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="875"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="904"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="892"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="921"/>
         <source>%1 (Fallback)</source>
         <translation>%1（备用）</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="954"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="983"/>
         <source>LED Panel (%1)</source>
         <translation>LED面板（%1）</translation>
     </message>
