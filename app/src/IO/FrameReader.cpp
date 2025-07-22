@@ -66,29 +66,28 @@ IO::FrameReader::FrameReader(QObject *parent)
  * settings.
  *
  * Appends the incoming data to an internal buffer and attempts to extract
- * frames based on the operation mode and frame detection mode. Removes
- * processed data from the buffer and truncates it if it exceeds the maximum
- * buffer size.
+ * frames based on the operation mode and frame detection mode.
  *
  * @param data The incoming data to process.
  */
 void IO::FrameReader::processData(const QByteArray &data)
 {
-  // Lock access to frame data
-  QWriteLocker locker(&m_dataLock);
-
-  // Add data to circular buffer
-  m_dataBuffer.append(data);
-  Q_EMIT dataReceived(data);
-
   // Read frames in no-delimiter mode directly
   if (m_operationMode == SerialStudio::ProjectFile
       && m_frameDetectionMode == SerialStudio::NoDelimiters)
-    Q_EMIT frameReady(m_dataBuffer.read(data.size()));
+  {
+    Q_EMIT frameReady(data);
+    Q_EMIT dataReceived(data);
+  }
 
   // Read frame data
   else
+  {
+    m_dataBuffer.append(data);
     readFrames();
+
+    Q_EMIT dataReceived(data);
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -105,20 +104,13 @@ void IO::FrameReader::processData(const QByteArray &data)
  */
 void IO::FrameReader::setChecksum(const QString &checksum)
 {
-  QWriteLocker locker(&m_dataLock);
-  if (m_checksum != checksum)
-  {
-    m_checksum = checksum;
-
-    const auto &map = IO::checksumFunctionMap();
-    const auto it = map.find(m_checksum);
-    if (it != map.end())
-      m_checksumLength = it.value()("", 0).size();
-    else
-      m_checksumLength = 0;
-
-    m_dataBuffer.clear();
-  }
+  m_checksum = checksum;
+  const auto &map = IO::checksumFunctionMap();
+  const auto it = map.find(m_checksum);
+  if (it != map.end())
+    m_checksumLength = it.value()("", 0).size();
+  else
+    m_checksumLength = 0;
 }
 
 /**
@@ -131,12 +123,7 @@ void IO::FrameReader::setChecksum(const QString &checksum)
  */
 void IO::FrameReader::setStartSequence(const QByteArray &start)
 {
-  QWriteLocker locker(&m_dataLock);
-  if (m_startSequence != start)
-  {
-    m_startSequence = start;
-    m_dataBuffer.clear();
-  }
+  m_startSequence = start;
 }
 
 /**
@@ -149,12 +136,7 @@ void IO::FrameReader::setStartSequence(const QByteArray &start)
  */
 void IO::FrameReader::setFinishSequence(const QByteArray &finish)
 {
-  QWriteLocker locker(&m_dataLock);
-  if (m_finishSequence != finish)
-  {
-    m_finishSequence = finish;
-    m_dataBuffer.clear();
-  }
+  m_finishSequence = finish;
 }
 
 /**
@@ -167,17 +149,11 @@ void IO::FrameReader::setFinishSequence(const QByteArray &finish)
  */
 void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 {
-  QWriteLocker locker(&m_dataLock);
-  if (m_operationMode != mode)
+  m_operationMode = mode;
+  if (m_operationMode != SerialStudio::ProjectFile)
   {
-    m_operationMode = mode;
-    if (m_operationMode != SerialStudio::ProjectFile)
-    {
-      m_checksumLength = 0;
-      m_checksum = QLatin1String("");
-    }
-
-    m_dataBuffer.clear();
+    m_checksumLength = 0;
+    m_checksum = QLatin1String("");
   }
 }
 
@@ -194,12 +170,7 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 void IO::FrameReader::setFrameDetectionMode(
     const SerialStudio::FrameDetection mode)
 {
-  QWriteLocker locker(&m_dataLock);
-  if (m_frameDetectionMode != mode)
-  {
-    m_frameDetectionMode = mode;
-    m_dataBuffer.clear();
-  }
+  m_frameDetectionMode = mode;
 }
 
 //------------------------------------------------------------------------------

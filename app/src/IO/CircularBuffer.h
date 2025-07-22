@@ -68,8 +68,6 @@ private:
   qsizetype m_tail;
   qsizetype m_capacity;
   std::vector<StorageType> m_buffer;
-
-  // mutable std::mutex m_mutex;
 };
 } // namespace IO
 
@@ -106,8 +104,6 @@ IO::CircularBuffer<T, StorageType>::CircularBuffer(qsizetype capacity)
 template<typename T, typename StorageType>
 StorageType &IO::CircularBuffer<T, StorageType>::operator[](qsizetype index)
 {
-  // std::lock_guard<std::mutex> lock(m_mutex);
-
   if (index < 0 || index >= m_size)
     throw std::out_of_range("Index out of range");
 
@@ -123,7 +119,6 @@ StorageType &IO::CircularBuffer<T, StorageType>::operator[](qsizetype index)
 template<typename T, typename StorageType>
 void IO::CircularBuffer<T, StorageType>::clear()
 {
-  // std::lock_guard<std::mutex> lock(m_mutex);
   m_size = 0;
   m_head = 0;
   m_tail = 0;
@@ -141,9 +136,6 @@ void IO::CircularBuffer<T, StorageType>::clear()
 template<typename T, typename StorageType>
 void IO::CircularBuffer<T, StorageType>::append(const T &data)
 {
-  // Lock the mutex
-  // std::lock_guard<std::mutex> lock(m_mutex);
-
   // Obtain the length of the input data & a pointer to it
   const qsizetype dataSize = data.size();
   const uint8_t *src = reinterpret_cast<const uint8_t *>(data.data());
@@ -223,8 +215,6 @@ qsizetype IO::CircularBuffer<T, StorageType>::freeSpace() const
 template<typename T, typename StorageType>
 T IO::CircularBuffer<T, StorageType>::read(qsizetype size)
 {
-  // std::lock_guard<std::mutex> lock(m_mutex);
-
   if (size > m_size)
     throw std::underflow_error("Not enough data in buffer");
 
@@ -258,8 +248,6 @@ T IO::CircularBuffer<T, StorageType>::read(qsizetype size)
 template<typename T, typename StorageType>
 T IO::CircularBuffer<T, StorageType>::peek(qsizetype size) const
 {
-  // std::lock_guard<std::mutex> lock(m_mutex);
-
   size = std::min(size, m_size);
 
   T result;
@@ -275,7 +263,6 @@ T IO::CircularBuffer<T, StorageType>::peek(qsizetype size) const
   }
 
   return std::move(result);
-  ;
 }
 
 /**
@@ -306,8 +293,6 @@ template<typename T, typename StorageType>
 int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T &pattern,
                                                        const int pos)
 {
-  // std::lock_guard<std::mutex> lock(m_mutex);
-
   // Validate search pattern
   if (pattern.isEmpty() || m_size < pattern.size())
     return -1;

@@ -453,12 +453,13 @@ void JSON::FrameBuilder::parseQuickPlotFrame(QByteArrayView data)
   // Split the string into commas
   int start = 0;
   const auto str = QString::fromUtf8(data);
-  const int dataLength = str.size();
+  QStringView view(str);
+  const int dataLength = view.size();
   for (int i = 0; i <= dataLength; ++i)
   {
-    if (i == dataLength || str[i] == ',')
+    if (i == dataLength || view[i] == ',')
     {
-      channels.append(str.mid(start, i - start).trimmed());
+      channels.append(view.mid(start, i - start).trimmed());
       start = i + 1;
     }
   }
