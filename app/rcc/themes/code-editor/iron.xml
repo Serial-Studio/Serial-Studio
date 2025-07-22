@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<style-scheme version="1.0" name="Ironframe">
+<style-scheme version="1.0" name="Iron">
   <!-- General Colors -->
   <style name="Text" foreground="#1A1A1A" background="#F7F7F7"/>
   <style name="Selection" background="#E9C979" foreground="#1A1A1A"/>

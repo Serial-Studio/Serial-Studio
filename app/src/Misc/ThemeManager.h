@@ -108,11 +108,12 @@ class ThemeManager : public QObject
              NOTIFY themeChanged)
   Q_PROPERTY(QStringList availableThemes
              READ availableThemes
-             CONSTANT)
+             NOTIFY languageChanged)
   // clang-format on
 
 signals:
   void themeChanged();
+  void languageChanged();
 
 private:
   explicit ThemeManager();
@@ -137,6 +138,7 @@ public slots:
 
 private slots:
   void loadSystemTheme();
+  void updateLocalizedThemeNames();
 
 protected:
   bool eventFilter(QObject *watched, QEvent *event) override;
@@ -150,6 +152,7 @@ private:
   QJsonObject m_parameters;
 
   QStringList m_availableThemes;
+  QStringList m_availableThemeNames;
   QMap<QString, QJsonObject> m_themes;
 };
 } // namespace Misc

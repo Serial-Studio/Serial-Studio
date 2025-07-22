@@ -27,6 +27,8 @@
 #include <QJsonDocument>
 #include <QGuiApplication>
 
+#include "Misc/Translator.h"
+
 /**
  * @brief Constructs the ThemeManager object and initializes theme loading.
  *
@@ -45,7 +47,8 @@ Misc::ThemeManager::ThemeManager()
       QStringLiteral("default"),
       QStringLiteral("light"),
       QStringLiteral("dark"),
-      QStringLiteral("ironframe")
+      QStringLiteral("iron"),
+      QStringLiteral("midnight"),
   };
   // clang-format on
 
@@ -69,6 +72,11 @@ Misc::ThemeManager::ThemeManager()
 
   // Set application theme
   setTheme(m_settings.value("ApplicationTheme", 0).toInt());
+
+  // Load localized theme names
+  updateLocalizedThemeNames();
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, &Misc::ThemeManager::updateLocalizedThemeNames);
 
   // Install event filter only once
   qApp->installEventFilter(this);
@@ -135,7 +143,7 @@ const QJsonObject &Misc::ThemeManager::parameters() const
  */
 const QStringList &Misc::ThemeManager::availableThemes() const
 {
-  return m_availableThemes;
+  return m_availableThemeNames;
 }
 
 /**
@@ -163,12 +171,12 @@ void Misc::ThemeManager::setTheme(const int index)
 {
   // Validate index
   int filteredIndex = index;
-  if (index < 0 || index >= availableThemes().count())
+  if (index < 0 || index >= m_availableThemes.count())
     filteredIndex = 0;
 
   // Update the theme name
   m_theme = filteredIndex;
-  m_themeName = availableThemes().at(filteredIndex);
+  m_themeName = m_availableThemes.at(filteredIndex);
   m_settings.setValue("ApplicationTheme", filteredIndex);
 
   // Load theme (dark/light) automagically
@@ -192,7 +200,8 @@ void Misc::ThemeManager::setTheme(const int index)
     qApp->styleHints()->setColorScheme(Qt::ColorScheme::Light);
 
   // Update UI
-  Q_EMIT themeChanged();
+  QMetaObject::invokeMethod(
+      this, [this]() { Q_EMIT themeChanged(); }, Qt::QueuedConnection);
 }
 
 /**
@@ -234,11 +243,106 @@ void Misc::ThemeManager::loadSystemTheme()
   // Set theme data
   m_themeData = themeData;
   m_themeName = QStringLiteral("System");
-  m_theme = availableThemes().indexOf(m_themeName);
+  m_theme = m_availableThemes.indexOf(m_themeName);
   m_colors = themeData.value("colors").toObject();
+  m_parameters = themeData.value("parameters").toObject();
 
   // Update user interface
-  Q_EMIT themeChanged();
+  QMetaObject::invokeMethod(
+      this, [this]() { Q_EMIT themeChanged(); }, Qt::QueuedConnection);
+}
+
+/**
+ * @brief Updates the localized names of available themes based on current UI
+ *        language.
+ *
+ * This method rebuilds the `m_availableThemeNames` list by extracting the
+ * appropriate translation for each theme from its `translations` object in the
+ * theme JSON data. It uses the current language as returned by
+ * `Misc::Translator::instance().language()` to select the corresponding
+ * translation key (e.g. "es_MX", "de_DE", etc).
+ *
+ * If a translation is missing or empty, the theme's default `title` is used as
+ * fallback. The "System" theme is handled separately and translated via
+ * `tr("System")`.
+ *
+ * After rebuilding the list, the `languageChanged()` signal is emitted to
+ * notify the UI of the updated theme names.
+ *
+ * @see Misc::Translator::language()
+ * @see availableThemes()
+ */
+void Misc::ThemeManager::updateLocalizedThemeNames()
+{
+  m_availableThemeNames.clear();
+  const auto lang = Translator::instance().language();
+
+  for (const auto &themeName : std::as_const(m_availableThemes))
+  {
+    if (themeName == QStringLiteral("System"))
+    {
+      m_availableThemeNames.append(tr("System"));
+      continue;
+    }
+
+    const auto themeObj = m_themes.value(themeName);
+    const auto translations = themeObj.value("translations").toObject();
+
+    QString localized;
+    switch (lang)
+    {
+      case Translator::Spanish:
+        localized = translations.value("es_MX").toString();
+        break;
+      case Translator::Chinese:
+        localized = translations.value("zh_CN").toString();
+        break;
+      case Translator::German:
+        localized = translations.value("de_DE").toString();
+        break;
+      case Translator::Russian:
+        localized = translations.value("ru_RU").toString();
+        break;
+      case Translator::French:
+        localized = translations.value("fr_FR").toString();
+        break;
+      case Translator::Japanese:
+        localized = translations.value("ja_JP").toString();
+        break;
+      case Translator::Korean:
+        localized = translations.value("ko_KR").toString();
+        break;
+      case Translator::Portuguese:
+        localized = translations.value("pt_BR").toString();
+        break;
+      case Translator::Italian:
+        localized = translations.value("it_IT").toString();
+        break;
+      case Translator::Polish:
+        localized = translations.value("pl_PL").toString();
+        break;
+      case Translator::Turkish:
+        localized = translations.value("tr_TR").toString();
+        break;
+      case Translator::Ukrainian:
+        localized = translations.value("uk_UA").toString();
+        break;
+      case Translator::Czech:
+        localized = translations.value("cs_CZ").toString();
+        break;
+      case Translator::English:
+      default:
+        localized = themeObj.value("title").toString();
+        break;
+    }
+
+    if (localized.isEmpty())
+      localized = themeObj.value("title").toString();
+
+    m_availableThemeNames.append(localized);
+  }
+
+  Q_EMIT languageChanged();
 }
 
 /**
