@@ -1401,10 +1401,14 @@ void JSON::ProjectModel::ensureValidGroup()
     {
       if (isValidGroup(group.widget()))
       {
+        hasGroupSelected = true;
         m_selectedGroup = group;
         break;
       }
     }
+
+    if (!hasGroupSelected)
+      addGroup(tr("Group"), SerialStudio::NoGroupWidget);
   }
 }
 

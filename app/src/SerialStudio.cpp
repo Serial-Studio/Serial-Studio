@@ -379,7 +379,7 @@ SerialStudio::GroupWidget SerialStudio::groupWidgetFromId(const QString &id)
   else if (id == "gyro" || id == "gyroscope")
     return Gyroscope;
 
-  else if (id == "gps")
+  else if (id == "gps" || id == "map")
     return GPS;
 
   else if (id == "multiplot")
