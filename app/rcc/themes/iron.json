@@ -72,7 +72,7 @@
                 "highlighted_text": "#1A1A1A",
 
                 "console_text": "#434649",
-                "console_base": "#FFFFFF",
+                "console_base": "#F9F9F9",
                 "console_border": "#B0B0B0",
                 "console_highlight": "#FFF8DC",
 
@@ -120,7 +120,7 @@
                 "snap_indicator_background": "#401A83CA",
 
                 "table_text": "#1A1A1A",
-                "table_cell_bg": "#FFFFFF",
+                "table_cell_bg": "#F9F9F9",
                 "table_fg_header": "#1A1A1A",
                 "table_separator": "#B0B0B0",
                 "table_border_header": "#B0B0B0",

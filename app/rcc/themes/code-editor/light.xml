@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <style-scheme version="1.0" name="Serial Studio Light">
   <!-- General Colors -->
-  <style name="Text" foreground="#1C1C1C" background="#F9F9F9"/>
+  <style name="Text" foreground="#1C1C1C" background="#FFFFFF"/>
   <style name="Selection" background="#229DEE" foreground="#FFFFFF"/>
   <style name="LineNumber" foreground="#999999" background="#F9F9F9"/>
   <style name="CurrentLine" background="#EFEFEF"/>

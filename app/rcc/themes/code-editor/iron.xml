@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <style-scheme version="1.0" name="Iron">
   <!-- General Colors -->
-  <style name="Text" foreground="#1A1A1A" background="#F7F7F7"/>
+  <style name="Text" foreground="#1A1A1A" background="#F9F9F9"/>
   <style name="Selection" background="#E9C979" foreground="#1A1A1A"/>
   <style name="LineNumber" foreground="#6E6E6E" background="#F7F7F7"/>
   <style name="CurrentLine" background="#E5E5E5"/>
