@@ -783,9 +783,11 @@ void IO::Manager::onReadyRead()
   static auto &mqtt = MQTT::Client::instance();
 #endif
 
-  if (!m_paused && m_frameReader) [[likely]]
+  auto reader = m_frameReader;
+  if (!m_paused && reader) [[likely]]
   {
-    while (m_frameReader->queue().try_dequeue(m_frame))
+    auto &queue = reader->queue();
+    while (queue.try_dequeue(m_frame))
     {
       frameBuilder.hotpathRxFrame(m_frame);
 #ifdef BUILD_COMMERCIAL
