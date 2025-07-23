@@ -399,9 +399,6 @@ void IO::Drivers::Audio::closeDevice()
     m_outputQueue.clear();
   }
 
-  // Flush output thread
-  flushBuffer();
-
   // Set open flag to false
   m_isOpen = false;
 }
@@ -666,9 +663,6 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   m_config.alsa.noAutoResample = MA_FALSE;
 #endif
 
-  // Update buffer size
-  setBufferSize(m_config.sampleRate / 40);
-
   // Initialize capture device
   if (mode & QIODevice::ReadOnly)
   {
@@ -736,7 +730,7 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   if (!m_inputWorkerThread.isRunning())
   {
     m_inputWorkerThread.start();
-    m_inputWorkerThread.setPriority(QThread::TimeCriticalPriority);
+    m_inputWorkerThread.setPriority(QThread::HighestPriority);
   }
 
   // Start the read timer @ 100 Hz
@@ -1429,7 +1423,7 @@ void IO::Drivers::Audio::processInputBuffer()
 
   // Report only the valid chunk of CSV data that we wrote
   const auto length = m_csvBuffer.pos();
-  processData(m_csvData.left(length));
+  Q_EMIT dataReceived(m_csvData.left(length));
 }
 
 //------------------------------------------------------------------------------

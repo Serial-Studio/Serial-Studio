@@ -441,7 +441,7 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
  *
  * @note This function is part of the high-frequency data path. Optimize later.
  */
-void JSON::FrameBuilder::parseQuickPlotFrame(QByteArrayView data)
+void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
 {
   // Create a vector of channels
   QVector<QStringView> channels;

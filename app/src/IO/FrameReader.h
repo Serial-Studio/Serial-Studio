@@ -25,6 +25,7 @@
 #include <QByteArray>
 
 #include "SerialStudio.h"
+#include "ThirdParty/readerwriterqueue.h"
 #include "IO/CircularBuffer.h"
 
 namespace IO
@@ -58,19 +59,18 @@ public:
 
 public slots:
   void processData(const QByteArray &data);
+
   void setChecksum(const QString &checksum);
   void setStartSequence(const QByteArray &start);
   void setFinishSequence(const QByteArray &finish);
   void setOperationMode(const SerialStudio::OperationMode mode);
   void setFrameDetectionMode(const SerialStudio::FrameDetection mode);
 
-private slots:
-  void readFrames();
-
 private:
   void readEndDelimetedFrames();
   void readStartDelimitedFrames();
   void readStartEndDelimetedFrames();
+
   ValidationStatus checksum(const QByteArray &frame, qsizetype crcPosition);
 
 private:
@@ -78,11 +78,15 @@ private:
   SerialStudio::OperationMode m_operationMode;
   SerialStudio::FrameDetection m_frameDetectionMode;
 
-  CircularBuffer<QByteArray, char> m_dataBuffer;
+  CircularBuffer<QByteArray, char> m_frameDataBuffer;
 
   QString m_checksum;
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
   QVector<QByteArray> m_quickPlotEndSequences;
+
+  std::atomic_bool m_consumeScheduled{false};
+  moodycamel::ReaderWriterQueue<char> m_dataQueue{1024};
+  moodycamel::ReaderWriterQueue<QByteArray> m_frameQueue{1024};
 };
 } // namespace IO

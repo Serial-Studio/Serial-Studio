@@ -99,7 +99,7 @@ private:
   void setJsonPathSetting(const QString &path);
 
   void parseProjectFrame(const QByteArray &data);
-  void parseQuickPlotFrame(QByteArrayView data);
+  void parseQuickPlotFrame(const QByteArray &data);
   void buildQuickPlotFrame(const QStringList &channels);
 
   void hotpathTxFrame(const JSON::Frame &frame);

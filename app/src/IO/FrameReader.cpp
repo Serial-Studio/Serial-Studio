@@ -44,7 +44,7 @@ IO::FrameReader::FrameReader(QObject *parent)
   , m_checksumLength(0)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
-  , m_dataBuffer(1024 * 1024 * 10)
+  , m_frameDataBuffer(1024 * 1024 * 10)
 {
   m_quickPlotEndSequences.append(QByteArray("\n"));
   m_quickPlotEndSequences.append(QByteArray("\r"));
@@ -62,31 +62,87 @@ IO::FrameReader::FrameReader(QObject *parent)
 //------------------------------------------------------------------------------
 
 /**
- * @brief Processes incoming data and detects frames based on the current
- * settings.
+ * @brief Handles incoming data for parsing and UI display.
  *
- * Appends the incoming data to an internal buffer and attempts to extract
- * frames based on the operation mode and frame detection mode.
+ * Queues bytes for the UI to show raw data without blocking.
+ * If in passthrough  mode, emits the full frame immediately.
+ * Otherwise, buffers the data and extracts frames based on the current parsing
+ * config. Parsed frames are emitted. Raw data emission is deferred to avoid
+ * flooding the UI thread.
  *
- * @param data The incoming data to process.
+ * @param data Incoming data bytes.
  */
 void IO::FrameReader::processData(const QByteArray &data)
 {
-  // Read frames in no-delimiter mode directly
+  // Queue raw bytes for UI batching
+  for (const auto byte : data)
+    m_dataQueue.try_enqueue(byte);
+
+  // Parse frames immediately
   if (m_operationMode == SerialStudio::ProjectFile
       && m_frameDetectionMode == SerialStudio::NoDelimiters)
-  {
-    Q_EMIT frameReady(data);
-    Q_EMIT dataReceived(data);
-  }
+    Q_EMIT frameReady(QByteArray(data.data(), data.size()));
 
-  // Read frame data
+  // Parse frames using a circular buffer
   else
   {
-    m_dataBuffer.append(data);
-    readFrames();
+    // Append to circular buffer
+    m_frameDataBuffer.append(data);
 
-    Q_EMIT dataReceived(data);
+    // Extract frames based on current mode
+    switch (m_operationMode)
+    {
+      case SerialStudio::QuickPlot:
+        readEndDelimetedFrames();
+        break;
+      case SerialStudio::DeviceSendsJSON:
+        readStartEndDelimetedFrames();
+        break;
+      case SerialStudio::ProjectFile:
+        switch (m_frameDetectionMode)
+        {
+          case SerialStudio::EndDelimiterOnly:
+            readEndDelimetedFrames();
+            break;
+          case SerialStudio::StartDelimiterOnly:
+            readStartDelimitedFrames();
+            break;
+          case SerialStudio::StartAndEndDelimiter:
+            readStartEndDelimetedFrames();
+            break;
+          default:
+            break;
+        }
+        break;
+      default:
+        break;
+    }
+
+    // Emit extracted frames
+    QByteArray frame;
+    while (m_frameQueue.try_dequeue(frame))
+      Q_EMIT frameReady(frame);
+  }
+
+  // Schedule raw data emission if not already scheduled
+  if (!m_consumeScheduled.exchange(true))
+  {
+    QMetaObject::invokeMethod(
+        this,
+        [this]() {
+          QByteArray packet;
+          packet.reserve(m_dataQueue.size_approx());
+
+          char ch;
+          while (m_dataQueue.try_dequeue(ch))
+            packet.append(ch);
+
+          if (!packet.isEmpty())
+            Q_EMIT dataReceived(packet);
+
+          m_consumeScheduled = false;
+        },
+        Qt::QueuedConnection);
   }
 }
 
@@ -174,47 +230,6 @@ void IO::FrameReader::setFrameDetectionMode(
 }
 
 //------------------------------------------------------------------------------
-// General frame reading job
-//------------------------------------------------------------------------------
-
-/**
- * @brief Dispatches frame parsing based on the configured operation and
- *        detection modes.
- *
- * Depending on the current operation mode and frame detection configuration,
- * this function delegates to one of the specialized frame readers:
- * - JSON mode → uses both start and end delimiters.
- * - Project mode → supports start, end, or start+end delimited parsing.
- * - QuickPlot mode → uses a set of predefined end delimiters.
- */
-void IO::FrameReader::readFrames()
-{
-  // Handle quick plot data
-  if (m_operationMode == SerialStudio::QuickPlot)
-    readEndDelimetedFrames();
-
-  // Project mode, obtain which frame detection method to use
-  else if (m_operationMode == SerialStudio::ProjectFile)
-  {
-    // Read using only an end delimiter
-    if (m_frameDetectionMode == SerialStudio::EndDelimiterOnly)
-      readEndDelimetedFrames();
-
-    // Read using only a start delimeter
-    else if (m_frameDetectionMode == SerialStudio::StartDelimiterOnly)
-      readStartDelimitedFrames();
-
-    // Read using both a start & end delimiter
-    else if (m_frameDetectionMode == SerialStudio::StartAndEndDelimiter)
-      readStartEndDelimetedFrames();
-  }
-
-  // JSON mode, read until default frame start & end sequences are found
-  else if (m_operationMode == SerialStudio::DeviceSendsJSON)
-    readStartEndDelimetedFrames();
-}
-
-//------------------------------------------------------------------------------
 // Frame detection functions
 //------------------------------------------------------------------------------
 
@@ -244,7 +259,7 @@ void IO::FrameReader::readEndDelimetedFrames()
     {
       for (const QByteArray &d : std::as_const(m_quickPlotEndSequences))
       {
-        int index = m_dataBuffer.findPatternKMP(d);
+        int index = m_frameDataBuffer.findPatternKMP(d);
         if (index != -1 && (endIndex == -1 || index < endIndex))
         {
           endIndex = index;
@@ -258,7 +273,7 @@ void IO::FrameReader::readEndDelimetedFrames()
     else if (m_frameDetectionMode == SerialStudio::EndDelimiterOnly)
     {
       delimiter = m_finishSequence;
-      endIndex = m_dataBuffer.findPatternKMP(delimiter);
+      endIndex = m_frameDataBuffer.findPatternKMP(delimiter);
     }
 
     // No frame found
@@ -266,19 +281,19 @@ void IO::FrameReader::readEndDelimetedFrames()
       break;
 
     // Extract frame data
-    const auto frame = m_dataBuffer.peek(endIndex);
+    const auto frame = m_frameDataBuffer.peek(endIndex);
     const auto crcPosition = endIndex + delimiter.size();
     const auto frameEndPos = crcPosition + m_checksumLength;
 
     // Read frame
     if (!frame.isEmpty())
     {
-      // Validate checksum
+      // Validate checksum & register the frame
       auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk)
       {
-        Q_EMIT frameReady(frame);
-        (void)m_dataBuffer.read(frameEndPos);
+        m_frameQueue.try_enqueue(std::move(frame));
+        (void)m_frameDataBuffer.read(frameEndPos);
       }
 
       // Incomplete data to calculate checksum
@@ -287,12 +302,12 @@ void IO::FrameReader::readEndDelimetedFrames()
 
       // Incorrect checksum
       else
-        (void)m_dataBuffer.read(frameEndPos);
+        (void)m_frameDataBuffer.read(frameEndPos);
     }
 
     // Invalid frame
     else
-      (void)m_dataBuffer.read(frameEndPos);
+      (void)m_frameDataBuffer.read(frameEndPos);
   }
 }
 
@@ -311,12 +326,12 @@ void IO::FrameReader::readStartDelimitedFrames()
   while (true)
   {
     // Find the first start delimiter in the buffer
-    int startIndex = m_dataBuffer.findPatternKMP(m_startSequence);
+    int startIndex = m_frameDataBuffer.findPatternKMP(m_startSequence);
     if (startIndex == -1)
       break;
 
     // Try to find the next start delimiter after this one
-    int nextStartIndex = m_dataBuffer.findPatternKMP(
+    int nextStartIndex = m_frameDataBuffer.findPatternKMP(
         m_startSequence, startIndex + m_startSequence.size());
 
     // Calculate start and end positions of the current frame
@@ -326,7 +341,7 @@ void IO::FrameReader::readStartDelimitedFrames()
     // No second start delimiter found...maybe the last frame in the stream
     if (nextStartIndex == -1)
     {
-      frameEndPos = m_dataBuffer.size();
+      frameEndPos = m_frameDataBuffer.size();
       if ((frameEndPos - frameStart) < m_checksumLength)
         break;
     }
@@ -339,7 +354,7 @@ void IO::FrameReader::readStartDelimitedFrames()
     qsizetype frameLength = frameEndPos - frameStart;
     if (frameLength <= 0)
     {
-      (void)m_dataBuffer.read(frameEndPos);
+      (void)m_frameDataBuffer.read(frameEndPos);
       continue;
     }
 
@@ -347,23 +362,23 @@ void IO::FrameReader::readStartDelimitedFrames()
     const auto crcPosition = frameEndPos - m_checksumLength;
     if (crcPosition < frameStart)
     {
-      (void)m_dataBuffer.read(frameEndPos);
+      (void)m_frameDataBuffer.read(frameEndPos);
       continue;
     }
 
     // Build the frame byte array
-    const auto frame = m_dataBuffer.peek(frameEndPos)
+    const auto frame = m_frameDataBuffer.peek(frameEndPos)
                            .mid(frameStart, frameLength - m_checksumLength);
 
     // Validate the frame
     if (!frame.isEmpty())
     {
-      // Execute checksum algorithm
+      // Execute checksum algorithm and register the frame
       const auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk)
       {
-        Q_EMIT frameReady(frame);
-        (void)m_dataBuffer.read(frameEndPos);
+        m_frameQueue.try_enqueue(std::move(frame));
+        (void)m_frameDataBuffer.read(frameEndPos);
       }
 
       // Not enough bytes yet to compute checksum, wait for more
@@ -372,12 +387,12 @@ void IO::FrameReader::readStartDelimitedFrames()
 
       // Invalid checksum...discard and move on
       else
-        (void)m_dataBuffer.read(frameEndPos);
+        (void)m_frameDataBuffer.read(frameEndPos);
     }
 
     // Empty frame or invalid data, discard...
     else
-      (void)m_dataBuffer.read(frameEndPos);
+      (void)m_frameDataBuffer.read(frameEndPos);
   }
 }
 
@@ -397,15 +412,15 @@ void IO::FrameReader::readStartEndDelimetedFrames()
   while (true)
   {
     // Locate end delimiter
-    int finishIndex = m_dataBuffer.findPatternKMP(m_finishSequence);
+    int finishIndex = m_frameDataBuffer.findPatternKMP(m_finishSequence);
     if (finishIndex == -1)
       break;
 
     // Locate start delimiter and ensure it's before the end
-    int startIndex = m_dataBuffer.findPatternKMP(m_startSequence);
+    int startIndex = m_frameDataBuffer.findPatternKMP(m_startSequence);
     if (startIndex == -1 || startIndex >= finishIndex)
     {
-      (void)m_dataBuffer.read(finishIndex + m_finishSequence.size());
+      (void)m_frameDataBuffer.read(finishIndex + m_finishSequence.size());
       continue;
     }
 
@@ -414,25 +429,25 @@ void IO::FrameReader::readStartEndDelimetedFrames()
     qsizetype frameLength = finishIndex - frameStart;
     if (frameLength <= 0)
     {
-      (void)m_dataBuffer.read(finishIndex + m_finishSequence.size());
+      (void)m_frameDataBuffer.read(finishIndex + m_finishSequence.size());
       continue;
     }
 
     // Extract frame data
     const auto crcPosition = finishIndex + m_finishSequence.size();
     const auto frameEndPos = crcPosition + m_checksumLength;
-    const auto frame = m_dataBuffer.peek(frameStart + frameLength)
+    const auto frame = m_frameDataBuffer.peek(frameStart + frameLength)
                            .mid(frameStart, frameLength);
 
     // Read frame
     if (!frame.isEmpty())
     {
-      // Validate checksum
+      // Validate checksum and register the frame
       auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk)
       {
-        Q_EMIT frameReady(frame);
-        (void)m_dataBuffer.read(frameEndPos);
+        m_frameQueue.try_enqueue(std::move(frame));
+        (void)m_frameDataBuffer.read(frameEndPos);
       }
 
       // Incomplete data to calculate checksum
@@ -441,12 +456,12 @@ void IO::FrameReader::readStartEndDelimetedFrames()
 
       // Incorrect checksum
       else
-        (void)m_dataBuffer.read(frameEndPos);
+        (void)m_frameDataBuffer.read(frameEndPos);
     }
 
     // Invalid frame
     else
-      (void)m_dataBuffer.read(frameEndPos);
+      (void)m_frameDataBuffer.read(frameEndPos);
   }
 }
 
@@ -476,7 +491,7 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray &frame,
     return ValidationStatus::FrameOk;
 
   // Validate that we can read the checksum
-  const auto buffer = m_dataBuffer.peek(m_dataBuffer.size());
+  const auto buffer = m_frameDataBuffer.peek(m_frameDataBuffer.size());
   if (buffer.size() < crcPosition + m_checksumLength)
     return ValidationStatus::ChecksumIncomplete;
 

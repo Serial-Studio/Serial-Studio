@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include <QMutex>
 #include <QObject>
 #include <QIODevice>
 
@@ -82,57 +81,13 @@ public:
    */
   explicit HAL_Driver(QObject *parent = nullptr)
     : QObject(parent)
-    , m_bufferSize(4096)
   {
-    m_buffer.reserve(m_bufferSize);
   }
 
   /**
    * @brief Virtual destructor.
    */
   virtual ~HAL_Driver() = default;
-
-  /**
-   * @brief Set the internal buffer size threshold for data emission.
-   * @param size New buffer size in bytes.
-   */
-  void setBufferSize(size_t size)
-  {
-    QMutexLocker locker(&m_mutex);
-    m_bufferSize = size;
-    m_buffer.reserve(m_bufferSize);
-  }
-
-  /**
-   * @brief Process incoming data and emit when buffer threshold is reached.
-   * @note This function is real-time safe if signal emission is handled in a
-   *       dedicated Qt thread.
-   * @param data The incoming data to process.
-   */
-  void processData(const QByteArray &data)
-  {
-    if (data.isEmpty())
-      return;
-
-    QMutexLocker locker(&m_mutex);
-    m_buffer.insert(m_buffer.end(), data.begin(), data.end());
-    if (m_buffer.size() >= m_bufferSize)
-    {
-      QByteArray emitData(m_buffer.data(), static_cast<int>(m_buffer.size()));
-      emit dataReceived(emitData);
-      m_buffer.clear();
-    }
-  }
-
-  /**
-   * @brief Force flush any buffered data, even if threshold is not reached.
-   */
-  void flushBuffer()
-  {
-    QMutexLocker locker(&m_mutex);
-    if (!m_buffer.empty())
-      m_buffer.clear();
-  }
 
   /**
    * @brief Close the driver.
@@ -176,10 +131,5 @@ public:
    * @return True if successfully opened.
    */
   [[nodiscard]] virtual bool open(const QIODevice::OpenMode mode) = 0;
-
-protected:
-  mutable QMutex m_mutex;     ///< Mutex to guard buffer access.
-  std::vector<char> m_buffer; ///< Internal data buffer.
-  size_t m_bufferSize;        ///< Threshold in bytes to emit data.
 };
 } // namespace IO
