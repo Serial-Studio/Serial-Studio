@@ -68,9 +68,9 @@ public slots:
   void setFrameDetectionMode(const SerialStudio::FrameDetection mode);
 
 private:
-  void readEndDelimetedFrames();
+  void readEndDelimitedFrames();
   void readStartDelimitedFrames();
-  void readStartEndDelimetedFrames();
+  void readStartEndDelimitedFrames();
 
   ValidationStatus checksum(const QByteArray &frame, qsizetype crcPosition);
 

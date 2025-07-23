@@ -94,22 +94,22 @@ void IO::FrameReader::processData(const QByteArray &data)
     switch (m_operationMode)
     {
       case SerialStudio::QuickPlot:
-        readEndDelimetedFrames();
+        readEndDelimitedFrames();
         break;
       case SerialStudio::DeviceSendsJSON:
-        readStartEndDelimetedFrames();
+        readStartEndDelimitedFrames();
         break;
       case SerialStudio::ProjectFile:
         switch (m_frameDetectionMode)
         {
           case SerialStudio::EndDelimiterOnly:
-            readEndDelimetedFrames();
+            readEndDelimitedFrames();
             break;
           case SerialStudio::StartDelimiterOnly:
             readStartDelimitedFrames();
             break;
           case SerialStudio::StartAndEndDelimiter:
-            readStartEndDelimetedFrames();
+            readStartEndDelimitedFrames();
             break;
           default:
             break;
@@ -224,7 +224,7 @@ void IO::FrameReader::setFrameDetectionMode(
  *
  * The checksum is expected immediately after the delimiter.
  */
-void IO::FrameReader::readEndDelimetedFrames()
+void IO::FrameReader::readEndDelimitedFrames()
 {
   while (true)
   {
@@ -384,7 +384,7 @@ void IO::FrameReader::readStartDelimitedFrames()
  * The function extracts the frame payload, validates it against the checksum,
  * and emits the frame if valid.
  */
-void IO::FrameReader::readStartEndDelimetedFrames()
+void IO::FrameReader::readStartEndDelimitedFrames()
 {
   // Read data into an array of frames
   while (true)
