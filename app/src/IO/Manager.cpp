@@ -789,7 +789,7 @@ void IO::Manager::onReadyRead()
     {
       frameBuilder.hotpathRxFrame(m_frame);
 #ifdef BUILD_COMMERCIAL
-      mqtt.hotpathTxFrame(frame);
+      mqtt.hotpathTxFrame(m_frame);
 #endif
     }
   }

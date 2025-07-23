@@ -230,7 +230,7 @@ T IO::CircularBuffer<T, StorageType>::read(qsizetype size)
   m_head = (m_head + size) % m_capacity;
   m_size -= size;
 
-  return std::move(result);
+  return result;
 }
 
 /**
@@ -262,7 +262,7 @@ T IO::CircularBuffer<T, StorageType>::peek(qsizetype size) const
     std::memcpy(result.data() + firstChunk, &m_buffer[0], secondChunk);
   }
 
-  return std::move(result);
+  return result;
 }
 
 /**
