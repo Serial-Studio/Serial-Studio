@@ -1055,47 +1055,47 @@
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="948"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="942"/>
         <source>channels</source>
         <translation>kanallar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1021"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1015"/>
         <source> channels</source>
         <translation>kanallar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1200"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1194"/>
         <source>Unsigned 8-bit</source>
         <translation>İşaretsiz 8-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1201"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1195"/>
         <source>Signed 16-bit</source>
         <translation>İşaretli 16-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1202"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1196"/>
         <source>Signed 24-bit</source>
         <translation>İşaretli 24-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1203"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1197"/>
         <source>Signed 32-bit</source>
         <translation>İşaretli 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1204"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1198"/>
         <source>Float 32-bit</source>
         <translation>Float 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1205"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1199"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1205"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1199"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
@@ -3608,19 +3608,23 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
         <translation>Ondalık Hassasiyeti</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="361"/>
         <source>Threaded mode (better for high-rate data)</source>
-        <translation>İplikli mod (yüksek hızlı veri için daha iyi)</translation>
+        <translation type="vanished">İplikli mod (yüksek hızlı veri için daha iyi)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="379"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="358"/>
         <source>Show Actions Panel</source>
         <translation>Eylem Panelini Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="397"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="376"/>
         <source>Enable Console Widget</source>
         <translation>Konsol Araç Takımını Etkinleştir</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="397"/>
+        <source>Use Separate Thread for Frame Extraction</source>
+        <translation>Çerçeve Çıkartma için Ayrı İş Parçacığı Kullan</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
@@ -3628,12 +3632,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
         <translation>Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="462"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="463"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="472"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="473"/>
         <source>Apply</source>
         <translation>Uygula</translation>
     </message>

@@ -446,6 +446,7 @@ Window {
             Cpp_Plugins_Bridge.enabled = false
             mainWindow.automaticUpdates  = true
             Cpp_UI_Dashboard.terminalEnabled = false
+            Cpp_IO_Manager.threadedFrameExtraction = false
             Cpp_Misc_ModuleManager.softwareRendering = false
           }
         }
