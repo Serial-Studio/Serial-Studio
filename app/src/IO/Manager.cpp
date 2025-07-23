@@ -61,6 +61,7 @@ IO::Manager::Manager()
   , m_startSequence(QByteArray("/*"))
   , m_finishSequence(QByteArray("*/"))
 {
+  m_frame.reserve(4096);
   m_threadedFrameExtraction
       = m_settings.value("threadedFrameExtraction", true).toBool();
 
@@ -784,10 +785,9 @@ void IO::Manager::onReadyRead()
 
   if (!m_paused && m_frameReader) [[likely]]
   {
-    QByteArray frame;
-    while (m_frameReader->queue().try_dequeue(frame))
+    while (m_frameReader->queue().try_dequeue(m_frame))
     {
-      frameBuilder.hotpathRxFrame(frame);
+      frameBuilder.hotpathRxFrame(m_frame);
 #ifdef BUILD_COMMERCIAL
       mqtt.hotpathTxFrame(frame);
 #endif

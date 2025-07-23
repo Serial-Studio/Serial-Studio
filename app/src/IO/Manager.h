@@ -164,6 +164,7 @@ private:
   QThread m_workerThread;
   QPointer<FrameReader> m_frameReader;
 
+  QByteArray m_frame;
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
 

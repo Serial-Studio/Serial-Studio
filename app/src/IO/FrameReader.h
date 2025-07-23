@@ -85,6 +85,6 @@ private:
   QVector<QByteArray> m_quickPlotEndSequences;
 
   CircularBuffer<QByteArray, char> m_circularBuffer;
-  moodycamel::ReaderWriterQueue<QByteArray> m_queue{1024};
+  moodycamel::ReaderWriterQueue<QByteArray> m_queue{4096};
 };
 } // namespace IO
