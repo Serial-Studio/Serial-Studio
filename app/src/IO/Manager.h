@@ -151,8 +151,8 @@ private:
   void killFrameReader();
   void startFrameReader();
 
-  void hotpathTxData(const QByteArray &data);
-  void hotpathTxFrame(const QByteArray &data);
+  void onReadyRead();
+  void onDataReceived(const QByteArray &data);
 
 private:
   bool m_paused;

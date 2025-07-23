@@ -54,7 +54,7 @@
 IO::Manager::Manager()
   : m_paused(false)
   , m_writeEnabled(true)
-  , m_threadedFrameExtraction(true)
+  , m_threadedFrameExtraction(false)
   , m_driver(nullptr)
   , m_workerThread(nullptr)
   , m_frameReader(nullptr)
@@ -482,8 +482,18 @@ void IO::Manager::processPayload(const QByteArray &payload)
 {
   if (!payload.isEmpty())
   {
-    hotpathTxData(payload);
-    hotpathTxFrame(payload);
+    static auto &console = IO::Console::instance();
+    static auto &server = Plugins::Server::instance();
+    static auto &frameBuilder = JSON::FrameBuilder::instance();
+
+    server.hotpathTxData(payload);
+    console.hotpathRxData(payload);
+    frameBuilder.hotpathRxFrame(payload);
+
+#ifdef BUILD_COMMERCIAL
+    static auto &mqtt = MQTT::Client::instance();
+    mqtt.hotpathTxFrame(payload);
+#endif
   }
 }
 
@@ -592,8 +602,12 @@ void IO::Manager::setDriver(HAL_Driver *driver)
   if (m_driver != driver)
   {
     if (driver)
+    {
+      connect(driver, &IO::HAL_Driver::dataReceived, this,
+              &IO::Manager::onDataReceived);
       connect(driver, &IO::HAL_Driver::configurationChanged, this,
               &IO::Manager::configurationChanged);
+    }
 
     if (m_driver)
       disconnect(m_driver);
@@ -721,28 +735,23 @@ void IO::Manager::startFrameReader()
 
   // Create new thread and frame reader instance
   m_frameReader = new FrameReader();
+  if (!m_frameReader)
+  {
+    qCritical() << "Failed to allocate memory for frame reader";
+    return;
+  }
 
   // Move to the worker thread
   if (m_threadedFrameExtraction)
     m_frameReader->moveToThread(&m_workerThread);
 
   // Configure initial state for the frame reader
-  QMetaObject::invokeMethod(
-      m_frameReader,
-      [reader = m_frameReader, drv = driver()] {
-        if (reader && drv)
-        {
-          QObject::connect(drv, &IO::HAL_Driver::dataReceived, reader,
-                           &IO::FrameReader::processData, Qt::QueuedConnection);
-        }
-      },
-      Qt::QueuedConnection);
+  QObject::connect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
+                   &IO::FrameReader::processData);
 
   // Connect frame reader events to IO::Manager
-  connect(m_frameReader, &IO::FrameReader::frameReady, this,
-          &IO::Manager::hotpathTxFrame);
-  connect(m_frameReader, &IO::FrameReader::dataReceived, this,
-          &IO::Manager::hotpathTxData);
+  connect(m_frameReader, &IO::FrameReader::readyRead, this,
+          &IO::Manager::onReadyRead);
 
   // Start the worker thread
   if (m_threadedFrameExtraction)
@@ -757,13 +766,47 @@ void IO::Manager::startFrameReader()
 //------------------------------------------------------------------------------
 
 /**
- * @brief Sends raw binary data to the console and server.
+ * @brief Processes dequeued frames and routes them to consumers.
  *
- * Displays the data via IO::Console and transmits it using Plugins::Server.
+ * Called when new frames are available in the frame reader's queue.
+ * Pulls frames in a loop and dispatches them to the appropriate handlers:
+ * - The JSON FrameBuilder for internal parsing.
+ * - The MQTT client (if enabled) for external transmission.
  *
- * @param data Raw data to be displayed and sent.
+ * Frame dispatch occurs only when the system is not paused.
  */
-void IO::Manager::hotpathTxData(const QByteArray &data)
+void IO::Manager::onReadyRead()
+{
+  static auto &frameBuilder = JSON::FrameBuilder::instance();
+#ifdef BUILD_COMMERCIAL
+  static auto &mqtt = MQTT::Client::instance();
+#endif
+
+  if (!m_paused && m_frameReader) [[likely]]
+  {
+    QByteArray frame;
+    while (m_frameReader->queue().try_dequeue(frame))
+    {
+      frameBuilder.hotpathRxFrame(frame);
+#ifdef BUILD_COMMERCIAL
+      mqtt.hotpathTxFrame(frame);
+#endif
+    }
+  }
+}
+
+/**
+ * @brief Handles raw data received from the device.
+ *
+ * Forwards incoming byte streams to registered components for live processing:
+ * - The Console for display/logging.
+ * - The Server plugin for external broadcasting.
+ *
+ * Data is processed only if the system is not paused.
+ *
+ * @param data Raw input bytes from the communication channel.
+ */
+void IO::Manager::onDataReceived(const QByteArray &data)
 {
   static auto &console = IO::Console::instance();
   static auto &server = Plugins::Server::instance();
@@ -772,29 +815,5 @@ void IO::Manager::hotpathTxData(const QByteArray &data)
   {
     server.hotpathTxData(data);
     console.hotpathRxData(data);
-  }
-}
-
-/**
- * @brief Processes a single data frame and optionally publishes it over MQTT.
- *
- * Parses the data using JSON::FrameBuilder. On commercial builds, the same
- * data is also published to the MQTT broker.
- *
- * @param data A binary frame to process and optionally publish.
- */
-void IO::Manager::hotpathTxFrame(const QByteArray &frame)
-{
-  static auto &frameBuilder = JSON::FrameBuilder::instance();
-#ifdef BUILD_COMMERCIAL
-  static auto &mqtt = MQTT::Client::instance();
-#endif
-
-  if (!m_paused) [[likely]]
-  {
-    frameBuilder.hotpathRxFrame(frame);
-#ifdef BUILD_COMMERCIAL
-    mqtt.hotpathTxFrame(frame);
-#endif
   }
 }

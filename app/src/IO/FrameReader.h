@@ -51,11 +51,12 @@ class FrameReader : public QObject
   Q_OBJECT
 
 signals:
-  void frameReady(const QByteArray &frame);
-  void dataReceived(const QByteArray &data);
+  void readyRead();
 
 public:
   explicit FrameReader(QObject *parent = nullptr);
+
+  inline moodycamel::ReaderWriterQueue<QByteArray> &queue() { return m_queue; }
 
 public slots:
   void processData(const QByteArray &data);
@@ -78,15 +79,12 @@ private:
   SerialStudio::OperationMode m_operationMode;
   SerialStudio::FrameDetection m_frameDetectionMode;
 
-  CircularBuffer<QByteArray, char> m_frameDataBuffer;
-
   QString m_checksum;
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
   QVector<QByteArray> m_quickPlotEndSequences;
 
-  std::atomic_bool m_consumeScheduled{false};
-  moodycamel::ReaderWriterQueue<char> m_dataQueue{1024};
-  moodycamel::ReaderWriterQueue<QByteArray> m_frameQueue{1024};
+  CircularBuffer<QByteArray, char> m_circularBuffer;
+  moodycamel::ReaderWriterQueue<QByteArray> m_queue{1024};
 };
 } // namespace IO

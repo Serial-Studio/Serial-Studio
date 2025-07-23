@@ -352,27 +352,6 @@ Window {
           }
 
           //
-          // Frame extraction
-          //
-          Label {
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_IO_Manager.isConnected
-            color: Cpp_ThemeManager.colors["text"]
-            text: qsTr("Threaded mode (better for high-rate data)")
-          } Switch {
-            Layout.rightMargin: -8
-            opacity: enabled ? 1 : 0.5
-            Layout.alignment: Qt.AlignRight
-            enabled: !Cpp_IO_Manager.isConnected
-            checked: Cpp_IO_Manager.threadedFrameExtraction
-            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
-            onCheckedChanged: {
-              if (checked !== Cpp_IO_Manager.threadedFrameExtraction)
-                Cpp_IO_Manager.threadedFrameExtraction = checked
-            }
-          }
-
-          //
           // Console
           //
           Label {
@@ -405,6 +384,27 @@ Window {
             onCheckedChanged: {
               if (checked !== Cpp_UI_Dashboard.terminalEnabled)
                 Cpp_UI_Dashboard.terminalEnabled = checked
+            }
+          }
+
+          //
+          // Frame extraction
+          //
+          Label {
+            opacity: enabled ? 1 : 0.5
+            enabled: !Cpp_IO_Manager.isConnected
+            color: Cpp_ThemeManager.colors["text"]
+            text: qsTr("Use Separate Thread for Frame Extraction")
+          } Switch {
+            Layout.rightMargin: -8
+            opacity: enabled ? 1 : 0.5
+            Layout.alignment: Qt.AlignRight
+            enabled: !Cpp_IO_Manager.isConnected
+            checked: Cpp_IO_Manager.threadedFrameExtraction
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_IO_Manager.threadedFrameExtraction)
+                Cpp_IO_Manager.threadedFrameExtraction = checked
             }
           }
         }
