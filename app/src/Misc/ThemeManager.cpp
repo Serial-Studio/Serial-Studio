@@ -23,11 +23,36 @@
 
 #include <QDir>
 #include <QPalette>
+#include <QJsonArray>
 #include <QStyleHints>
 #include <QJsonDocument>
 #include <QGuiApplication>
 
 #include "Misc/Translator.h"
+
+static QVariantMap jsonObjectToVariantMap(const QJsonObject &obj)
+{
+  QVariantMap map;
+  for (auto it = obj.constBegin(); it != obj.constEnd(); ++it)
+    map.insert(it.key(), it.value().toVariant());
+
+  return map;
+}
+
+static QVector<QColor> extractWidgetColors(const QJsonObject &colorsObject)
+{
+  QVector<QColor> result;
+  const QJsonArray array = colorsObject.value("widget_colors").toArray();
+  result.reserve(array.size());
+
+  for (const auto &val : array)
+  {
+    if (val.isString())
+      result.append(QColor(val.toString()));
+  }
+
+  return result;
+}
 
 /**
  * @brief Constructs the ThemeManager object and initializes theme loading.
@@ -111,30 +136,45 @@ const QString &Misc::ThemeManager::themeName() const
 }
 
 /**
- * @brief Fetches the color scheme of the current theme as a QJsonObject.
- * @return QJsonObject containing the color scheme of the current theme.
+ * @brief Returns the current theme's color map.
+ *
+ * The map contains key-value pairs where each key is a color role and the value
+ * is its color, typically represented as a hex string (e.g., "#RRGGBB").
+ *
+ * @return const reference to a QVariantMap of color definitions.
  */
-const QJsonObject &Misc::ThemeManager::colors() const
+const QVariantMap &Misc::ThemeManager::colors() const
 {
   return m_colors;
 }
 
 /**
- * @brief Fetches the current theme as a QJsonObject.
- * @return QJsonObject containing all the properties of the loaded theme.
+ * @brief Returns the current theme's parameter map.
+ *
+ * Theme parameters may include additional metadata like icon paths or
+ * editor theme identifiers used to configure the application appearance.
+ *
+ * @return const reference to a QVariantMap of theme parameters.
  */
-const QJsonObject &Misc::ThemeManager::themeData() const
+const QVariantMap &Misc::ThemeManager::parameters() const
 {
-  return m_themeData;
+  return m_parameters;
 }
 
 /**
- * @brief Fetches the current theme parameters as a QJsonObject.
- * @return QJsonObject containing all the properties of the loaded theme.
+ * @brief Returns the list of widget accent colors defined in the current theme.
+ *
+ * This corresponds to the "widget_colors" array in the theme's "colors"
+ * section. These colors are typically used for dynamic UI elements such as
+ * highlights, indicators, or charts where a sequence of accent colors is
+ * required.
+ *
+ * @return const reference to a QVector of QColor objects representing the
+ * widget colors.
  */
-const QJsonObject &Misc::ThemeManager::parameters() const
+const QVector<QColor> &Misc::ThemeManager::widgetColors() const
 {
-  return m_parameters;
+  return m_widgetColors;
 }
 
 /**
@@ -187,21 +227,25 @@ void Misc::ThemeManager::setTheme(const int index)
   }
 
   // Load actual theme data
-  m_themeData = m_themes.value(m_themeName);
-  m_colors = m_themeData.value("colors").toObject();
-  m_parameters = m_themeData.value("parameters").toObject();
+  auto data = m_themes.value(m_themeName);
+  m_colors = jsonObjectToVariantMap(data.value("colors").toObject());
+  m_widgetColors = extractWidgetColors(data.value("colors").toObject());
+  m_parameters = jsonObjectToVariantMap(data.value("parameters").toObject());
 
-  // Hint Qt about the effective color scheme
-  const auto bg = getColor(QStringLiteral("base"));
-  const auto fg = getColor(QStringLiteral("text"));
-  if (fg.lightness() > bg.lightness())
-    qApp->styleHints()->setColorScheme(Qt::ColorScheme::Dark);
-  else
-    qApp->styleHints()->setColorScheme(Qt::ColorScheme::Light);
-
-  // Update UI
+  // Hint Qt about the effective color scheme and update user interface
   QMetaObject::invokeMethod(
-      this, [this]() { Q_EMIT themeChanged(); }, Qt::QueuedConnection);
+      this,
+      [this]() {
+        const auto bg = getColor(QStringLiteral("base"));
+        const auto fg = getColor(QStringLiteral("text"));
+        if (fg.lightness() > bg.lightness())
+          qApp->styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+        else
+          qApp->styleHints()->setColorScheme(Qt::ColorScheme::Light);
+
+        Q_EMIT themeChanged();
+      },
+      Qt::QueuedConnection);
 }
 
 /**
@@ -238,14 +282,14 @@ void Misc::ThemeManager::loadSystemTheme()
     resolved = QStringLiteral("Light");
 
   // Load theme data
-  const auto themeData = m_themes.value(resolved);
+  const auto data = m_themes.value(resolved);
 
   // Set theme data
-  m_themeData = themeData;
   m_themeName = QStringLiteral("System");
   m_theme = m_availableThemes.indexOf(m_themeName);
-  m_colors = themeData.value("colors").toObject();
-  m_parameters = themeData.value("parameters").toObject();
+  m_colors = jsonObjectToVariantMap(data.value("colors").toObject());
+  m_widgetColors = extractWidgetColors(data.value("colors").toObject());
+  m_parameters = jsonObjectToVariantMap(data.value("parameters").toObject());
 
   // Update user interface
   QMetaObject::invokeMethod(

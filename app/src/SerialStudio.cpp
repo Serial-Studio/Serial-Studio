@@ -27,8 +27,6 @@
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
-#include <QJsonArray>
-
 //------------------------------------------------------------------------------
 // Commercial feature detection, appreciate your respect for this project
 //------------------------------------------------------------------------------
@@ -451,14 +449,14 @@ SerialStudio::DatasetWidget SerialStudio::datasetWidgetFromId(const QString &id)
  * @param index The frame index of the dataset.
  * @return A QString representing the color associated with the dataset index.
  */
-QString SerialStudio::getDatasetColor(const int index)
+QColor SerialStudio::getDatasetColor(const int index)
 {
   static const auto *theme = &Misc::ThemeManager::instance();
   const auto idx = index - 1;
-  const auto colors = theme->colors()["widget_colors"].toArray();
-  const auto color = colors.count() > idx
-                         ? colors.at(idx).toString()
-                         : colors.at(idx % colors.count()).toString();
+  const auto colors = theme->widgetColors();
+  const auto color
+      = colors.count() > idx ? colors.at(idx) : colors.at(idx % colors.count());
+
   return color;
 }
 

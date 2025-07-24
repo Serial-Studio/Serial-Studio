@@ -464,10 +464,7 @@ void Widgets::MultiPlot::modifyCurveVisibility(const int index,
  */
 void Widgets::MultiPlot::onThemeChanged()
 {
-  // clang-format off
-  const auto colors = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
-  // clang-format on
-
+  const auto &colors = Misc::ThemeManager::instance().widgetColors();
   if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
   {
     const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
@@ -479,10 +476,10 @@ void Widgets::MultiPlot::onThemeChanged()
       const auto &dataset = group.getDataset(i);
       const auto index = dataset.index() - 1;
       const auto color = colors.count() > index
-                             ? colors.at(index).toString()
-                             : colors.at(index % colors.count()).toString();
+                             ? colors.at(index)
+                             : colors.at(index % colors.count());
 
-      m_colors[i] = color;
+      m_colors[i] = color.name();
     }
 
     Q_EMIT themeChanged();

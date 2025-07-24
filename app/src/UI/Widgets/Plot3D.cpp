@@ -678,11 +678,11 @@ void Widgets::Plot3D::updateData()
 void Widgets::Plot3D::onThemeChanged()
 {
   // Obtain color for latest line data
-  auto c = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
-  if (c.count() > m_index)
-    m_lineHeadColor = c.at(m_index).toString();
+  const auto &colors = Misc::ThemeManager::instance().widgetColors();
+  if (colors.count() > m_index)
+    m_lineHeadColor = colors.at(m_index);
   else
-    m_lineHeadColor = c.at(m_index % c.count()).toString();
+    m_lineHeadColor = colors.at(m_index % colors.count());
 
   // Create gradient based on widget index
   QColor midCurve(m_lineHeadColor);

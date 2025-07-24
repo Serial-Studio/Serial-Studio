@@ -97,13 +97,13 @@ class ThemeManager : public QObject
              READ theme
              WRITE setTheme
              NOTIFY themeChanged)
-  Q_PROPERTY(const QString& themeName
+  Q_PROPERTY(QString themeName
              READ themeName
              NOTIFY themeChanged)
-  Q_PROPERTY(const QJsonObject& colors
+  Q_PROPERTY(QVariantMap colors
              READ colors
              NOTIFY themeChanged)
-  Q_PROPERTY(const QJsonObject& parameters
+  Q_PROPERTY(QVariantMap parameters
              READ parameters
              NOTIFY themeChanged)
   Q_PROPERTY(QStringList availableThemes
@@ -127,9 +127,10 @@ public:
 
   [[nodiscard]] int theme() const;
   [[nodiscard]] const QString &themeName() const;
-  [[nodiscard]] const QJsonObject &colors() const;
-  [[nodiscard]] const QJsonObject &themeData() const;
-  [[nodiscard]] const QJsonObject &parameters() const;
+  [[nodiscard]] const QVariantMap &colors() const;
+  [[nodiscard]] const QVariantMap &parameters() const;
+  [[nodiscard]] const QVector<QColor> &widgetColors() const;
+
   [[nodiscard]] const QStringList &availableThemes() const;
   [[nodiscard]] QColor getColor(const QString &name) const;
 
@@ -147,12 +148,13 @@ private:
   int m_theme;
   QString m_themeName;
   QSettings m_settings;
-  QJsonObject m_colors;
-  QJsonObject m_themeData;
-  QJsonObject m_parameters;
+  QVariantMap m_colors;
+  QVariantMap m_parameters;
 
   QStringList m_availableThemes;
   QStringList m_availableThemeNames;
   QMap<QString, QJsonObject> m_themes;
+
+  QVector<QColor> m_widgetColors;
 };
 } // namespace Misc

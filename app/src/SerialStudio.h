@@ -368,7 +368,7 @@ public:
   //
   // Utility functions
   //
-  [[nodiscard]] static QString getDatasetColor(const int index);
+  [[nodiscard]] static QColor getDatasetColor(const int index);
 
   //
   // String processing
