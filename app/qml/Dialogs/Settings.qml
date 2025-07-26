@@ -144,13 +144,11 @@ Window {
           Label {
             text: qsTr("Theme")
             opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_IO_Manager.isConnected
             color: Cpp_ThemeManager.colors["text"]
           } ComboBox {
             id: _themeCombo
             Layout.fillWidth: true
             opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_IO_Manager.isConnected
             currentIndex: Cpp_ThemeManager.theme
             model: Cpp_ThemeManager.availableThemes
             onCurrentIndexChanged: {

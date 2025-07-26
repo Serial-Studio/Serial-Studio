@@ -107,8 +107,8 @@ extractCapabilities(ma_context *context, const ma_device_info &info,
 
   // Extract native supported formats
   QSet<int> sampleRates;
-  QSet<int> channelCounts;
   QSet<ma_format> formats;
+  QSet<int> channelCounts = {1};
   for (ma_uint32 i = 0; i < fullInfo.nativeDataFormatCount; ++i)
   {
     const auto &f = fullInfo.nativeDataFormats[i];
