@@ -234,6 +234,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/Modbus.cpp
     src/UI/Widgets/Plot3D.cpp
     src/Licensing/Trial.cpp
+    src/ThirdParty/miniaudio.cpp
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp
     src/Licensing/LemonSqueezy.cpp

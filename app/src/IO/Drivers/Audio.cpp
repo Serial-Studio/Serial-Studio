@@ -26,9 +26,6 @@
 #include "Misc/Translator.h"
 #include "Misc/TimerEvents.h"
 
-#define MINIAUDIO_IMPLEMENTATION
-#include "ThirdParty/miniaudio.h"
-
 #include <QtEndian>
 
 //------------------------------------------------------------------------------

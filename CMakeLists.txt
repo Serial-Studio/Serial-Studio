@@ -157,133 +157,150 @@ endif()
 #-------------------------------------------------------------------------------
 
 if(PRODUCTION_OPTIMIZATION)
+   # Print status
+   message("Enabling production optimization flags...")
+
    # GCC (MinGW) on Windows
    if(WIN32 AND MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
       add_compile_options(
-         -O2                            # Optimize for speed
-         -Wall                          # Enable most warning messages
-         -Wextra                        # Enable additional warnings
-         -ftree-vectorize               # Enable loop vectorization
-         -funroll-loops                 # Unroll loops to reduce branching overhead
-         -fomit-frame-pointer           # Free up register, faster stack ops
-         -frename-registers             # Better instruction scheduling
-         -fprefetch-loop-arrays         # Cache prefetching for loops
-         -fno-fast-math                 # Disable unsafe floating point optimizations
-         -fno-unsafe-math-optimizations # Prevent invalid math assumptions
+         -O2                             # Optimize for speed
+         -Wall                           # Enable most warning messages
+         -Wextra                         # Enable additional warnings
+         -ftree-vectorize                # Enable loop vectorization
+         -funroll-loops                  # Unroll loops to reduce branching overhead
+         -fomit-frame-pointer            # Free up register, faster stack ops
+         -frename-registers              # Better instruction scheduling
+         -fno-fast-math                  # Disable unsafe floating point optimizations
+         -fno-unsafe-math-optimizations  # Prevent invalid math assumptions
+         -fstack-reuse=all               # Reuse stack slots
+         -fno-unwind-tables              # Strip sync. unwind tables
+         -fno-asynchronous-unwind-tables # Strip async. unwind tables
+         -ffunction-sections             # Place each function in its own section
+         -fdata-sections                 # Place each data item in its own section
       )
       add_link_options(
-         -Wl,--gc-sections              # Remove unused code/data at link time
+         -Wl,--gc-sections               # Remove unused code/data at link time
       )
 
    # Clang (MinGW) on Windows
    elseif(WIN32 AND MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
       add_compile_options(
-         -O2                            # Optimize for speed
-         -Wall                          # Enable most warnings
-         -Wextra                        # Extra warnings
-         -fvectorize                    # Enable loop vectorization
-         -fslp-vectorize                # Enable straight-line vectorization
-         -funroll-loops                 # Unroll loops for performance
-         -frename-registers             # Better instruction scheduling
-         -fprefetch-loop-arrays         # Cache prefetching for loops
-         -fomit-frame-pointer           # Free a register, speed up stack ops
-         -fno-fast-math                 # Avoid unsafe FP optimizations
-         -fno-unsafe-math-optimizations # Accurate and safe math semantics
+         -O2                             # Optimize for speed
+         -Wall                           # Enable most warning messages
+         -Wextra                         # Enable additional warning messages
+         -ftree-vectorize                # Enable automatic vectorization
+         -funroll-loops                  # Improve loop performance by unrolling
+         -fomit-frame-pointer            # Optimize function call overhead
+         -frename-registers              # Better instruction scheduling
+         -fno-fast-math                  # IEEE-compliant floating point
+         -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
+         -fstack-reuse=all               # Reuse stack slots
+         -finline-functions              # Inline functions where possible
+         -fno-unwind-tables              # Strip sync. unwind tables
+         -fno-asynchronous-unwind-tables # Strip async. unwind tables
+         -ffunction-sections             # Place each function in its own section
+         -fdata-sections                 # Place each data item in its own section
       )
       add_link_options(
-         -Wl,-dead_strip                # Strip unused symbols from final binary
+         -Wl,--gc-sections               # Strip unused functions/data
+         -latomic                        # Required for MiniAudio
       )
 
    # MSVC (Visual Studio)
    elseif(WIN32 AND MSVC)
       add_compile_options(
-         /permissive-                   # Enforce strict ISO C++ conformance
-         /Zc:__cplusplus                # Set __cplusplus to actual version value
-         /Zc:preprocessor               # Standards-compliant preprocessor
-         /MP                            # Enable multi-core compilation
-         /O2                            # Optimize for speed
-         /W4                            # High warning level
-         /GL                            # Enable whole program optimization
-         /fp:precise                    # IEEE-accurate floating-point math
-         /Qpar                          # Enable automatic parallelization of loops
+         /permissive-                    # Enforce strict ISO C++ conformance
+         /Zc:__cplusplus                 # Set __cplusplus to actual version value
+         /Zc:preprocessor                # Standards-compliant preprocessor
+         /MP                             # Enable multi-core compilation
+         /O2                             # Optimize for speed
+         /W4                             # High warning level
+         /GL                             # Enable whole program optimization
+         /fp:precise                     # IEEE-accurate floating-point math
+         /Qpar                           # Enable automatic parallelization of loops
+         /Gw                             # Put functions/data into separate COMDATs
       )
       add_link_options(
-         /OPT:REF                       # Remove unreferenced functions/data
-         /OPT:ICF                       # Merge identical code/data blocks
-         /LTCG                          # Link-time optimization
+         /OPT:REF                        # Remove unreferenced functions/data
+         /OPT:ICF                        # Merge identical code/data blocks
+         /LTCG                           # Link-time optimization
       )
 
    # macOS (Clang/AppleClang)
    elseif(APPLE)
       add_compile_options(
-         -O2                            # Optimize for speed
-         -Wall                          # Enable most warning messages
-         -Wextra                        # Enable additional warning messages
-         -fvectorize                    # Enable basic loop vectorization
-         -fslp-vectorize                # Enable straight-line (basic block) vectorization
-         -funroll-loops                 # Unroll loops to reduce branching overhead
-         -fomit-frame-pointer           # Omit frame pointer to free a register (faster function calls)
-         -fno-fast-math                 # Prevent aggressive FP optimizations (retain IEEE compliance)
-         -fno-unsafe-math-optimizations # Avoid math-related UB or precision loss
-         -flto                          # Enable Link-Time Optimization
+         -O2                             # Optimize for speed
+         -Wall                           # Enable most warning messages
+         -Wextra                         # Enable additional warning messages
+         -fvectorize                     # Enable basic loop vectorization
+         -fslp-vectorize                 # Enable straight-line (basic block) vectorization
+         -funroll-loops                  # Unroll loops to reduce branching overhead
+         -fomit-frame-pointer            # Omit frame pointer to free a register (faster function calls)
+         -fno-fast-math                  # Prevent aggressive FP optimizations (retain IEEE compliance)
+         -fno-unsafe-math-optimizations  # Avoid math-related UB or precision loss
+         -flto                           # Enable Link-Time Optimization
+         -finline-functions              # Inline functions where possible
+         -fno-unwind-tables              # Strip sync. unwind tables
+         -fno-asynchronous-unwind-tables # Strip async. unwind tables
+         -ffunction-sections             # Place each function in its own section
+         -fdata-sections                 # Place each data item in its own section
       )
       add_link_options(
-         -Wl,-dead_strip                # Remove unused functions/data from final binary
-         -flto                          # Enable Link-Time Optimization
+         -Wl,-dead_strip                 # Remove unused functions/data from final binary
+         -flto                           # Enable Link-Time Optimization
       )
 
    # Intel LLVM Compiler (Linux or Windows)
    elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
       add_compile_options(
-         -O2                            # Optimize for speed
-         -Wall                          # Enable most warning messages
-         -Wextra                        # Enable additional warning messages
-         -static                        # Statically link Intel runtime dependencies
-         -fvectorize                    # Enable loop vectorization
-         -fslp-vectorize                # Straight-line vectorization
-         -funroll-loops                 # Unroll simple loops for throughput
-         -fomit-frame-pointer           # Free up a general-purpose register
-         -frename-registers             # Better instruction scheduling
-         -fp-model=precise              # Disable aggressive FP optimization, retain precision
+         -O2                             # Optimize for speed
+         -Wall                           # Enable most warning messages
+         -Wextra                         # Enable additional warning messages
+         -static                         # Statically link Intel runtime dependencies
+         -fvectorize                     # Enable loop vectorization
+         -fslp-vectorize                 # Straight-line vectorization
+         -funroll-loops                  # Unroll simple loops for throughput
+         -fomit-frame-pointer            # Free up a general-purpose register
+         -frename-registers              # Better instruction scheduling
+         -fp-model=precise               # Disable aggressive FP optimization, retain precision
+         -finline-functions              # Inline functions where possible
+         -fno-unwind-tables              # Strip sync. unwind tables
+         -fno-asynchronous-unwind-tables # Strip async. unwind tables
+         -ffunction-sections             # Place each function in its own section
+         -fdata-sections                 # Place each data item in its own section
       )
       add_link_options(
-         -Wl,--gc-sections              # Discard unused code sections at link time
+         -Wl,--gc-sections               # Discard unused code sections at link time
       )
 
-   # Linux on ARM64 (e.g., Raspberry Pi 4 or other AArch64)
-   elseif(UNIX AND CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-      add_compile_options(
-         -O2                            # Optimize for speed
-         -Wall                          # Enable most warning messages
-         -Wextra                        # Enable additional warning messages
-         -ftree-vectorize               # Enable GCC’s automatic loop vectorizer
-         -funroll-loops                 # Improve loop performance
-         -frename-registers             # Better instruction scheduling
-         -fno-fast-math                 # Disable unsafe math optimizations
-         -fno-unsafe-math-optimizations # Use correct IEEE behavior
-      )
-      add_link_options(
-         -Wl,--gc-sections              # Remove unused code/data
-         -latomic                       # Required for MiniAudio
-      )
-
-   # Generic x86_64 Linux (GCC or Clang)
+   # Generic Linux (GCC or Clang)
    elseif(UNIX)
       add_compile_options(
-         -O2                            # Optimize for speed
-         -Wall                          # Enable most warning messages
-         -Wextra                        # Enable additional warning messages
-         -ftree-vectorize               # Enable automatic vectorization
-         -funroll-loops                 # Improve loop performance by unrolling
-         -fomit-frame-pointer           # Optimize function call overhead
-         -frename-registers             # Better instruction scheduling
-         -fno-fast-math                 # IEEE-compliant floating point
-         -fno-unsafe-math-optimizations # Avoid unsafe math assumptions
+         -O2                             # Optimize for speed
+         -Wall                           # Enable most warning messages
+         -Wextra                         # Enable additional warning messages
+         -ftree-vectorize                # Enable automatic vectorization
+         -funroll-loops                  # Improve loop performance by unrolling
+         -fomit-frame-pointer            # Optimize function call overhead
+         -frename-registers              # Better instruction scheduling
+         -fno-fast-math                  # IEEE-compliant floating point
+         -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
+         -fstack-reuse=all               # Reuse stack slots
+         -finline-functions              # Inline functions where possible
+         -fno-unwind-tables              # Strip sync. unwind tables
+         -fno-asynchronous-unwind-tables # Strip async. unwind tables
+         -ffunction-sections             # Place each function in its own section
+         -fdata-sections                 # Place each data item in its own section
       )
       add_link_options(
-         -Wl,--gc-sections              # Strip unused functions/data
+         -Wl,--gc-sections               # Strip unused functions/data
       )
+      if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
+         add_link_options(-latomic)      # Required for MiniAudio
+      endif()
    endif()
+else()
+   message("Disabling production optimization flags...")
 endif()
 
 #-------------------------------------------------------------------------------
