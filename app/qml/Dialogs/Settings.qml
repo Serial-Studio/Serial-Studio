@@ -351,7 +351,7 @@ Window {
           // Console
           //
           Label {
-            text: qsTr("Always Show Tashbar Buttons")
+            text: qsTr("Always Show Taskbar Buttons")
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: _taskbarButtons
