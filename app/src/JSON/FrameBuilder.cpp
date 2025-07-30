@@ -595,7 +595,8 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
     }
 
     // Create the holder group
-    JSON::Group group(0);
+    JSON::Group group;
+    group.groupId = 0;
     group.datasets = datasets;
     group.title = tr("Audio Input");
     if (index > 2)
@@ -635,7 +636,8 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
   m_quickPlotFrame.title = tr("Quick Plot");
 
   // Create a datagrid group from the dataset array
-  JSON::Group datagrid(0);
+  JSON::Group datagrid;
+  datagrid.groupId = 0;
   datagrid.datasets = datasets;
   datagrid.title = tr("Quick Plot Data");
   datagrid.widget = QStringLiteral("datagrid");
@@ -648,7 +650,8 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
   // Create a multiplot group when multiple datasets are found
   if (datasets.size() > 1)
   {
-    JSON::Group multiplot(1);
+    JSON::Group multiplot;
+    multiplot.groupId = 1;
     multiplot.datasets = datasets;
     multiplot.title = tr("Multiple Plots");
     multiplot.widget = QStringLiteral("multiplot");
