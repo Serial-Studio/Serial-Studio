@@ -21,11 +21,11 @@
 
 #pragma once
 
+#include "JSON/Frame.h"
 #include <QObject>
 #include <QVector>
 
-#include "JSON/Group.h"
-#include "JSON/Dataset.h"
+#include "JSON/Frame.h"
 #include "IO/FixedQueue.h"
 
 /**
@@ -343,7 +343,8 @@ public:
   // Commercial-related functions
   //
   [[nodiscard]] static bool activated();
-  [[nodiscard]] static bool commercialCfg(const QVector<JSON::Group> &groups);
+  [[nodiscard]] static bool commercialCfg(const QVector<JSON::Group> &g);
+  [[nodiscard]] static bool commercialCfg(const std::vector<JSON::Group> &g);
 
   //
   // Dashboard logic

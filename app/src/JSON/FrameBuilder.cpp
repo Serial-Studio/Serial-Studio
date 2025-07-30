@@ -153,7 +153,8 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
   // Close previous file (if open)
   if (m_jsonMap.isOpen())
   {
-    m_frame.clear();
+    clear_frame(m_frame);
+
     m_jsonMap.close();
     Q_EMIT jsonFileMapChanged();
   }
@@ -168,7 +169,8 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
     auto document = QJsonDocument::fromJson(data, &error);
     if (error.error != QJsonParseError::NoError)
     {
-      m_frame.clear();
+      clear_frame(m_frame);
+
       m_jsonMap.close();
       setJsonPathSetting("");
       Misc::Utilities::showMessageBox(
@@ -182,18 +184,20 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
       setJsonPathSetting(path);
 
       // Load frame from data
-      m_frame.clear();
-      const bool ok = m_frame.read(document.object());
+      clear_frame(m_frame);
+      const bool ok = read(m_frame, document.object());
 
       // Update I/O manager settings
-      if (ok && m_frame.isValid())
+      if (ok)
       {
         if (operationMode() == SerialStudio::ProjectFile)
         {
-          IO::Manager::instance().setFinishSequence(m_frame.frameEnd());
-          IO::Manager::instance().setStartSequence(m_frame.frameStart());
-          IO::Manager::instance().setChecksumAlgorithm(m_frame.checksum());
+          read_io_settings(m_frameStart, m_frameFinish, m_checksum,
+                           document.object());
 
+          IO::Manager::instance().setStartSequence(m_frameStart);
+          IO::Manager::instance().setFinishSequence(m_frameFinish);
+          IO::Manager::instance().setChecksumAlgorithm(m_checksum);
           IO::Manager::instance().resetFrameReader();
         }
       }
@@ -201,7 +205,7 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
       // Invalid frame data
       else
       {
-        m_frame.clear();
+        clear_frame(m_frame);
         m_jsonMap.close();
         setJsonPathSetting("");
         Misc::Utilities::showMessageBox(
@@ -264,9 +268,9 @@ void JSON::FrameBuilder::setOperationMode(
       IO::Manager::instance().setChecksumAlgorithm("");
       break;
     case SerialStudio::ProjectFile:
-      IO::Manager::instance().setFinishSequence(m_frame.frameEnd());
-      IO::Manager::instance().setStartSequence(m_frame.frameStart());
-      IO::Manager::instance().setChecksumAlgorithm(m_frame.checksum());
+      IO::Manager::instance().setStartSequence(m_frameStart);
+      IO::Manager::instance().setFinishSequence(m_frameFinish);
+      IO::Manager::instance().setChecksumAlgorithm(m_checksum);
       break;
     case SerialStudio::QuickPlot:
       IO::Manager::instance().setStartSequence("");
@@ -310,7 +314,7 @@ void JSON::FrameBuilder::hotpathRxFrame(const QByteArray &data)
       parseProjectFrame(data);
       break;
     case SerialStudio::DeviceSendsJSON:
-      if (m_rawFrame.read(QJsonDocument::fromJson(data).object()))
+      if (read(m_rawFrame, QJsonDocument::fromJson(data).object()))
         hotpathTxFrame(m_rawFrame);
       break;
   }
@@ -349,11 +353,11 @@ void JSON::FrameBuilder::onConnectedChanged()
     return;
 
   // Auto-execute actions if required
-  const auto actions = m_frame.actions();
+  const auto &actions = m_frame.actions;
   for (const auto &action : actions)
   {
-    if (action.autoExecuteOnConnect())
-      IO::Manager::instance().writeData(action.txByteArray());
+    if (action.autoExecuteOnConnect)
+      IO::Manager::instance().writeData(get_tx_bytes(action));
   }
 }
 
@@ -412,15 +416,18 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
 
   // Replace data in frame
   const int channelCount = channels.size();
-  for (int g = 0; g < m_frame.groupCount(); ++g)
+  for (size_t g = 0; g < m_frame.groups.size(); ++g)
   {
-    auto &group = m_frame.m_groups[g];
-    for (int d = 0; d < group.datasetCount(); ++d)
+    auto &group = m_frame.groups[g];
+    for (size_t d = 0; d < group.datasets.size(); ++d)
     {
-      auto &dataset = group.m_datasets[d];
-      const int idx = dataset.index();
+      auto &dataset = group.datasets[d];
+      const int idx = dataset.index;
       if (idx > 0 && idx <= channelCount) [[likely]]
-        dataset.m_value = channels[idx - 1];
+      {
+        dataset.value = channels[idx - 1];
+        dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+      }
     }
   }
 
@@ -478,15 +485,18 @@ void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
   }
 
   // Update the values of the quick plot frame
-  for (int g = 0; g < m_quickPlotFrame.groupCount(); ++g)
+  for (size_t g = 0; g < m_quickPlotFrame.groups.size(); ++g)
   {
-    auto &group = m_quickPlotFrame.m_groups[g];
-    for (int d = 0; d < group.datasetCount(); ++d)
+    auto &group = m_quickPlotFrame.groups[g];
+    for (size_t d = 0; d < group.datasets.size(); ++d)
     {
-      auto &dataset = group.m_datasets[d];
-      const int index = dataset.index();
+      auto &dataset = group.datasets[d];
+      const int index = dataset.index;
       if (index > 0 && index <= channelCount) [[likely]]
-        dataset.m_value = channels[index - 1].toString();
+      {
+        dataset.value = channels[index - 1].toString();
+        dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+      }
     }
   }
 
@@ -562,90 +572,94 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
 
     // Obtain microphone values for each channel
     int index = 1;
-    QVector<JSON::Dataset> datasets;
+    std::vector<JSON::Dataset> datasets;
+    datasets.reserve(channels.count());
     for (const auto &channel : std::as_const(channels))
     {
       JSON::Dataset dataset;
-      dataset.m_fft = true;
-      dataset.m_groupId = 0;
-      dataset.m_graph = true;
-      dataset.m_index = index;
-      dataset.m_max = maxValue;
-      dataset.m_min = minValue;
-      dataset.m_fftSamples = 2048;
-      dataset.m_fftWindowFn = "Hann";
-      dataset.m_fftSamplingRate = sampleRate;
-      dataset.m_title = tr("Channel %1").arg(index);
-      dataset.m_value = channel;
-      datasets.append(dataset);
+      dataset.fft = true;
+      dataset.plt = true;
+      dataset.groupId = 0;
+      dataset.index = index;
+      dataset.max = maxValue;
+      dataset.min = minValue;
+      dataset.value = channel;
+      dataset.fftSamples = 2048;
+      dataset.fftWindow = "Hann";
+      dataset.fftSamplingRate = sampleRate;
+      dataset.title = tr("Channel %1").arg(index);
+      dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+      datasets.push_back(dataset);
 
       ++index;
     }
 
     // Create the holder group
     JSON::Group group(0);
-    group.m_datasets = datasets;
-    group.m_title = tr("Audio Input");
+    group.datasets = datasets;
+    group.title = tr("Audio Input");
     if (index > 2)
-      group.m_widget = QStringLiteral("multiplot");
+      group.widget = QStringLiteral("multiplot");
 
     // Create a project frame object
-    m_quickPlotFrame.clear();
-    m_quickPlotFrame.m_title = tr("Quick Plot");
-    m_quickPlotFrame.m_groups.append(group);
+    clear_frame(m_quickPlotFrame);
+    m_quickPlotFrame.title = tr("Quick Plot");
+    m_quickPlotFrame.groups.push_back(group);
 
-    // Update user interface
-    m_quickPlotFrame.buildUniqueIds();
+    // Build dataset UIDs
+    finalize_frame(m_quickPlotFrame);
     return;
   }
 #endif
 
   // Create datasets from the data
   int idx = 1;
-  QVector<JSON::Dataset> datasets;
+  std::vector<JSON::Dataset> datasets;
+  datasets.reserve(channels.count());
   for (const auto &channel : std::as_const(channels))
   {
     JSON::Dataset dataset;
-    dataset.m_groupId = 0;
-    dataset.m_index = idx;
-    dataset.m_title = tr("Channel %1").arg(idx);
-    dataset.m_value = channel;
-    dataset.m_graph = false;
-    datasets.append(dataset);
+    dataset.groupId = 0;
+    dataset.index = idx;
+    dataset.plt = false;
+    dataset.value = channel;
+    dataset.title = tr("Channel %1").arg(idx);
+    dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+    datasets.push_back(dataset);
 
     ++idx;
   }
 
   // Create a project frame from the groups
-  m_quickPlotFrame.clear();
-  m_quickPlotFrame.m_title = tr("Quick Plot");
+  clear_frame(m_quickPlotFrame);
+  m_quickPlotFrame.title = tr("Quick Plot");
 
   // Create a datagrid group from the dataset array
   JSON::Group datagrid(0);
-  datagrid.m_datasets = datasets;
-  datagrid.m_title = tr("Quick Plot Data");
-  datagrid.m_widget = QStringLiteral("datagrid");
-  for (int i = 0; i < datagrid.m_datasets.count(); ++i)
-    datagrid.m_datasets[i].m_graph = true;
+  datagrid.datasets = datasets;
+  datagrid.title = tr("Quick Plot Data");
+  datagrid.widget = QStringLiteral("datagrid");
+  for (size_t i = 0; i < datagrid.datasets.size(); ++i)
+    datagrid.datasets[i].plt = true;
 
   // Append datagrid to frame
-  m_quickPlotFrame.m_groups.append(datagrid);
+  m_quickPlotFrame.groups.push_back(datagrid);
 
   // Create a multiplot group when multiple datasets are found
-  if (datasets.count() > 1)
+  if (datasets.size() > 1)
   {
     JSON::Group multiplot(1);
-    multiplot.m_datasets = datasets;
-    multiplot.m_title = tr("Multiple Plots");
-    multiplot.m_widget = QStringLiteral("multiplot");
-    for (int i = 0; i < multiplot.m_datasets.count(); ++i)
-      multiplot.m_datasets[i].m_groupId = 1;
+    multiplot.datasets = datasets;
+    multiplot.title = tr("Multiple Plots");
+    multiplot.widget = QStringLiteral("multiplot");
+    for (size_t i = 0; i < multiplot.datasets.size(); ++i)
+      multiplot.datasets[i].groupId = 1;
 
-    m_quickPlotFrame.m_groups.append(multiplot);
+    m_quickPlotFrame.groups.push_back(multiplot);
   }
 
-  // Update user interface
-  m_quickPlotFrame.buildUniqueIds();
+  // Build dataset UIDs
+  finalize_frame(m_quickPlotFrame);
 }
 
 //------------------------------------------------------------------------------

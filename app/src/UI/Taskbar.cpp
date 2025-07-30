@@ -178,16 +178,16 @@ QVariantList UI::Taskbar::groupModel() const
   // Count number of widgets for overview section
   int groupCount = 0;
   int widgetGroups = 0;
-  for (const auto &group : UI::Dashboard::instance().rawFrame().groups())
+  for (const auto &group : UI::Dashboard::instance().rawFrame().groups)
   {
     ++groupCount;
     auto widget = SerialStudio::getDashboardWidget(group);
     if (widget != SerialStudio::DashboardNoWidget)
       ++widgetGroups;
 
-    for (const auto &dataset : group.datasets())
+    for (const auto &dataset : group.datasets)
     {
-      if (dataset.displayInOverview())
+      if (dataset.overviewDisplay)
         ++widgetGroups;
     }
   }
@@ -718,7 +718,7 @@ void UI::Taskbar::rebuildModel()
 
   // Obtain and validate latest frame
   const auto &frame = db->processedFrame();
-  if (!frame.isValid())
+  if (frame.title.isEmpty() || frame.groups.size() <= 0)
   {
     setActiveGroupId(-1);
     Q_EMIT fullModelChanged();
@@ -730,11 +730,11 @@ void UI::Taskbar::rebuildModel()
   // Loop through the groups in the dashboard
   QSet<int> groupIds;
   const auto &widgetMap = db->widgetMap();
-  for (const JSON::Group &group : frame.groups())
+  for (const JSON::Group &group : frame.groups)
   {
     // Obtain group parameters
-    const auto groupId = group.groupId();
-    const auto groupName = group.title();
+    const auto groupId = group.groupId;
+    const auto groupName = group.title;
     const auto groupType = SerialStudio::getDashboardWidget(group);
     const auto groupIcon = SerialStudio::dashboardWidgetIcon(groupType, true);
 
@@ -751,7 +751,7 @@ void UI::Taskbar::rebuildModel()
       if (SerialStudio::isGroupWidget(widgetType))
       {
         const auto dbGroup = db->getGroupWidget(widgetType, relativeIndex);
-        if (dbGroup.groupId() == groupId)
+        if (dbGroup.groupId == groupId)
         {
           windowIds.append(windowId);
           widgetTypes.append(widgetType);
@@ -762,7 +762,7 @@ void UI::Taskbar::rebuildModel()
       else if (SerialStudio::isDatasetWidget(widgetType))
       {
         const auto dbDataset = db->getDatasetWidget(widgetType, relativeIndex);
-        if (dbDataset.groupId() == groupId)
+        if (dbDataset.groupId == groupId)
         {
           windowIds.append(windowId);
           widgetTypes.append(widgetType);
@@ -821,7 +821,7 @@ void UI::Taskbar::rebuildModel()
       if (SerialStudio::isGroupWidget(widgetTypes[i]))
       {
         auto &dbGroup = db->getGroupWidget(widgetTypes[i], relativeIds[i]);
-        child->setData(dbGroup.title(), TaskbarModel::WidgetNameRole);
+        child->setData(dbGroup.title, TaskbarModel::WidgetNameRole);
         child->setData(false, TaskbarModel::OverviewRole);
       }
 
@@ -829,9 +829,8 @@ void UI::Taskbar::rebuildModel()
       else if (SerialStudio::isDatasetWidget(widgetTypes[i]))
       {
         auto &dbDataset = db->getDatasetWidget(widgetTypes[i], relativeIds[i]);
-        child->setData(dbDataset.title(), TaskbarModel::WidgetNameRole);
-        child->setData(dbDataset.displayInOverview(),
-                       TaskbarModel::OverviewRole);
+        child->setData(dbDataset.title, TaskbarModel::WidgetNameRole);
+        child->setData(dbDataset.overviewDisplay, TaskbarModel::OverviewRole);
       }
 
       // Register the child
@@ -853,7 +852,7 @@ void UI::Taskbar::rebuildModel()
         auto g = m_fullModel->item(i);
         if (g)
         {
-          if (g->data(TaskbarModel::GroupIdRole).toInt() == group.groupId())
+          if (g->data(TaskbarModel::GroupIdRole).toInt() == group.groupId)
           {
             g->appendRow(groupItem);
             break;

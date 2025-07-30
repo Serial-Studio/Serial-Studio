@@ -43,11 +43,11 @@
  */
 UI::Dashboard::Dashboard()
   : m_points(100)
-  , m_precision(2)
   , m_widgetCount(0)
   , m_updateRequired(false)
   , m_showActionPanel(true)
   , m_terminalEnabled(false)
+  , m_showTaskbarButtons(false)
   , m_pltXAxis(100)
   , m_multipltXAxis(100)
 {
@@ -223,6 +223,22 @@ bool UI::Dashboard::terminalEnabled() const
 }
 
 /**
+ * @brief Determines if the taskbar buttons should be always visible.
+ *
+ * By default, the taskbar buttons are only shown when either:
+ * - At least a window is maximized
+ * - Or the window in question is closed or minimized.
+ *
+ * If this function returns @c true, the taskbar will behave similar to
+ * what someone would expect from GNOME 2 or Windows, where all taskbar
+ * buttons are active regardless of window state.
+ */
+bool UI::Dashboard::showTaskbarButtons() const
+{
+  return m_showTaskbarButtons;
+}
+
+/**
  * @brief Determines if the point-selector widget should be visible based on the
  *        presence of relevant widget groups or datasets.
  *
@@ -262,7 +278,7 @@ bool UI::Dashboard::precisionWidgetVisible() const
  */
 bool UI::Dashboard::containsCommercialFeatures() const
 {
-  return m_rawFrame.containsCommercialFeatures();
+  return m_rawFrame.containsCommercialFeatures;
 }
 
 //------------------------------------------------------------------------------
@@ -276,15 +292,6 @@ bool UI::Dashboard::containsCommercialFeatures() const
 int UI::Dashboard::points() const
 {
   return m_points;
-}
-
-/**
- * @brief Gets the number of decimal points for the dashboard widgets.
- * @return Current precision level.
- */
-int UI::Dashboard::precision() const
-{
-  return m_precision;
 }
 
 /**
@@ -315,7 +322,7 @@ int UI::Dashboard::totalWidgetCount() const
  */
 bool UI::Dashboard::frameValid() const
 {
-  return m_lastFrame.isValid();
+  return m_lastFrame.groups.size() > 0;
 }
 
 /**
@@ -330,6 +337,26 @@ int UI::Dashboard::relativeIndex(const int widgetIndex)
 {
   const auto it = m_widgetMap.constFind(widgetIndex);
   return it != m_widgetMap.cend() ? it->second : -1;
+}
+
+/**
+ * @brief Formats a numerical value according to its context range.
+ *
+ * This method delegates to `FMT_VAL` to determine the appropriate number of
+ * decimal places for a given value, based on the provided `min` and `max`
+ * range. It is typically used to provide human-readable display of values
+ * within QML UIs.
+ *
+ * @param val The value to format.
+ * @param min The minimum value of the expected range.
+ * @param max The maximum value of the expected range.
+ * @return A QString representing the formatted value.
+ *
+ * @see FMT_VAL
+ */
+QString UI::Dashboard::formatValue(double val, double min, double max) const
+{
+  return FMT_VAL(val, min, max);
 }
 
 /**
@@ -379,7 +406,7 @@ int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
  */
 const QString &UI::Dashboard::title() const
 {
-  return m_lastFrame.title();
+  return m_lastFrame.title;
 }
 
 /**
@@ -409,9 +436,9 @@ QVariantList UI::Dashboard::actions() const
     QVariantMap m;
     m["id"] = i;
     m["checked"] = false;
-    m["text"] = action.title();
-    m["icon"] = QStringLiteral("qrc:/rcc/actions/%1.svg").arg(action.icon());
-    if (action.timerMode() == JSON::Action::TimerMode::ToggleOnTrigger)
+    m["text"] = action.title;
+    m["icon"] = QStringLiteral("qrc:/rcc/actions/%1.svg").arg(action.icon);
+    if (action.timerMode == JSON::TimerMode::ToggleOnTrigger)
     {
       if (m_timers.contains(i) && m_timers[i] && m_timers[i]->isActive())
         m["checked"] = true;
@@ -624,21 +651,6 @@ void UI::Dashboard::setPoints(const int points)
 }
 
 /**
- * @brief Sets the precision level for the dashboard, if changed, and emits
- *        the @c precisionChanged signal to update the UI.
- *
- * @param precision The new precision level.
- */
-void UI::Dashboard::setPrecision(const int precision)
-{
-  if (m_precision != precision)
-  {
-    m_precision = precision;
-    Q_EMIT precisionChanged();
-  }
-}
-
-/**
  * @brief Resets all data in the dashboard, including plot values,
  *        widget structures, and actions. Emits relevant signals to notify the
  *        UI about the reset state.
@@ -725,6 +737,19 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
   Q_EMIT terminalEnabledChanged();
 }
 
+/**
+ * @brief Enables/disables displaying all taskbar buttons, regardless of
+ *        window state.
+ */
+void UI::Dashboard::setShowTaskbarButtons(const bool enabled)
+{
+  if (m_showTaskbarButtons != enabled)
+  {
+    m_showTaskbarButtons = enabled;
+    Q_EMIT showTaskbarButtonsChanged();
+  }
+}
+
 //------------------------------------------------------------------------------
 // Action activation, more complex that it seems...
 //------------------------------------------------------------------------------
@@ -771,17 +796,17 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
   {
     auto *timer = m_timers[index];
     if (!timer)
-      qWarning() << "Invalid timer pointer for action" << action.title();
+      qWarning() << "Invalid timer pointer for action" << action.title;
 
     else
     {
-      if (action.timerMode() == JSON::Action::TimerMode::StartOnTrigger)
+      if (action.timerMode == JSON::TimerMode::StartOnTrigger)
       {
         if (!timer->isActive())
           timer->start();
       }
 
-      else if (action.timerMode() == JSON::Action::TimerMode::ToggleOnTrigger)
+      else if (action.timerMode == JSON::TimerMode::ToggleOnTrigger)
       {
         if (guiTrigger)
         {
@@ -796,7 +821,7 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 
   // Send data payload
   if (!IO::Manager::instance().paused())
-    IO::Manager::instance().writeData(action.txByteArray());
+    IO::Manager::instance().writeData(JSON::get_tx_bytes(action));
 
   // Update action model
   Q_EMIT actionStatusChanged();
@@ -819,15 +844,15 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 void UI::Dashboard::hotpathRxFrame(const JSON::Frame &frame)
 {
   // Validate frame
-  if (!frame.isValid() || !streamAvailable()) [[unlikely]]
+  if (frame.groups.size() <= 0 || !streamAvailable()) [[unlikely]]
     return;
 
   // Regenerate dashboard model if frame structure changed
-  if (!frame.equalsStructure(m_rawFrame)) [[unlikely]]
+  if (!JSON::compare_frames(frame, m_rawFrame)) [[unlikely]]
   {
-    const bool hadProFeatures = m_rawFrame.containsCommercialFeatures();
+    const bool hadProFeatures = m_rawFrame.containsCommercialFeatures;
     reconfigureDashboard(frame);
-    if (hadProFeatures != frame.containsCommercialFeatures())
+    if (hadProFeatures != frame.containsCommercialFeatures)
       Q_EMIT containsCommercialFeaturesChanged();
   }
 
@@ -852,11 +877,11 @@ void UI::Dashboard::hotpathRxFrame(const JSON::Frame &frame)
  */
 void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
 {
-  for (const auto &group : frame.groups())
+  for (const auto &group : frame.groups)
   {
-    for (const auto &dataset : group.datasets())
+    for (const auto &dataset : group.datasets)
     {
-      const auto uid = dataset.uniqueId();
+      const auto uid = dataset.uniqueId;
       const auto it = m_datasetReferences.find(uid);
       if (it == m_datasetReferences.end()) [[unlikely]]
       {
@@ -867,7 +892,11 @@ void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
 
       const auto &datasets = it.value();
       for (auto *ptr : datasets)
-        ptr->setValue(dataset.value());
+      {
+        ptr->value = dataset.value;
+        ptr->isNumeric = dataset.isNumeric;
+        ptr->numericValue = dataset.numericValue;
+      }
     }
   }
 
@@ -901,14 +930,15 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
   if (m_terminalEnabled)
   {
     JSON::Group terminal;
-    terminal.m_groupId = m_lastFrame.groupCount();
-    terminal.m_widget = "terminal";
-    terminal.m_title = tr("Console");
-    m_lastFrame.m_groups.append(terminal);
+    terminal.widget = "terminal";
+    terminal.title = tr("Console");
+    terminal.groupId = m_lastFrame.groups.size();
+
+    m_lastFrame.groups.push_back(terminal);
   }
 
   // Parse frame groups
-  for (const auto &group : m_lastFrame.groups())
+  for (const auto &group : m_lastFrame.groups)
   {
     // Append group widgets
     const auto key = SerialStudio::getDashboardWidget(group);
@@ -920,14 +950,14 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
     {
       m_widgetGroups.remove(key);
       auto copy = group;
-      copy.m_title = tr("%1 (Fallback)").arg(group.title());
+      copy.title = tr("%1 (Fallback)").arg(group.title);
       m_widgetGroups[SerialStudio::DashboardMultiPlot].append(copy);
-      for (int i = 0; i < m_lastFrame.groupCount(); ++i)
+      for (size_t i = 0; i < m_lastFrame.groups.size(); ++i)
       {
-        if (m_lastFrame.groups()[i].groupId() == group.groupId())
+        if (m_lastFrame.groups[i].groupId == group.groupId)
         {
-          m_lastFrame.m_groups[i].m_widget = "multiplot";
-          m_lastFrame.m_groups[i].m_title = copy.m_title;
+          m_lastFrame.groups[i].title = copy.title;
+          m_lastFrame.groups[i].widget = "multiplot";
           break;
         }
       }
@@ -947,23 +977,23 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
 
     // Parse group datasets
     JSON::Group ledPanel;
-    for (const auto &dataset : group.datasets())
+    for (const auto &dataset : group.datasets)
     {
       // Register a new dataset
-      if (!m_datasets.contains(dataset.index()))
-        m_datasets.insert(dataset.index(), dataset);
+      if (!m_datasets.contains(dataset.index))
+        m_datasets.insert(dataset.index, dataset);
 
       // Dataset already registered, update min/max values
       else
       {
-        auto prev = m_datasets.value(dataset.index());
-        double newMin = qMin(prev.min(), dataset.min());
-        double newMax = qMax(prev.max(), dataset.max());
+        auto prev = m_datasets.value(dataset.index);
+        double newMin = qMin(prev.min, dataset.min);
+        double newMax = qMax(prev.max, dataset.max);
 
         auto d = dataset;
-        d.setMin(newMin);
-        d.setMax(newMax);
-        m_datasets.insert(dataset.index(), d);
+        d.min = newMin;
+        d.max = newMax;
+        m_datasets.insert(dataset.index, d);
       }
 
       // Register dataset widgets
@@ -971,7 +1001,7 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
       for (const auto &widgetKeys : std::as_const(keys))
       {
         if (widgetKeys == SerialStudio::DashboardLED)
-          ledPanel.m_datasets.append(dataset);
+          ledPanel.datasets.push_back(dataset);
 
         else if (widgetKeys != SerialStudio::DashboardNoWidget)
           m_widgetDatasets[widgetKeys].append(dataset);
@@ -979,11 +1009,11 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
     }
 
     // Add group-level LED panel
-    if (ledPanel.datasetCount() > 0)
+    if (ledPanel.datasets.size() > 0)
     {
-      ledPanel.m_groupId = group.groupId();
-      ledPanel.m_title = tr("LED Panel (%1)").arg(group.title());
-      ledPanel.m_widget = "led-panel";
+      ledPanel.widget = "led-panel";
+      ledPanel.groupId = group.groupId;
+      ledPanel.title = tr("LED Panel (%1)").arg(group.title);
       m_widgetGroups[SerialStudio::DashboardLED].append(ledPanel);
     }
   }
@@ -1011,11 +1041,8 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
   {
     for (auto &group : groupList)
     {
-      for (auto &dataset : group.m_datasets)
-      {
-        const quint32 uid = dataset.uniqueId();
-        m_datasetReferences[uid].append(&dataset);
-      }
+      for (auto &dataset : group.datasets)
+        m_datasetReferences[dataset.uniqueId].append(&dataset);
     }
   }
 
@@ -1023,18 +1050,12 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
   for (auto &datasetList : m_widgetDatasets)
   {
     for (auto &dataset : datasetList)
-    {
-      const quint32 uid = dataset.uniqueId();
-      m_datasetReferences[uid].append(&dataset);
-    }
+      m_datasetReferences[dataset.uniqueId].append(&dataset);
   }
 
   // Transverse all plot datasets
   for (auto &dataset : m_datasets)
-  {
-    const quint32 uid = dataset.uniqueId();
-    m_datasetReferences[uid].append(&dataset);
-  }
+    m_datasetReferences[dataset.uniqueId].append(&dataset);
 
   // Initialize data series & update actions
   updateDataSeries();
@@ -1103,17 +1124,15 @@ void UI::Dashboard::updateDataSeries()
     auto &series = m_gpsValues[i];
 
     double lat = -1, lon = -1, alt = -1;
-    for (const auto &dataset : group.datasets())
+    for (const auto &dataset : group.datasets)
     {
-      const QString &id = dataset.widget();
-      const double val = dataset.value().toDouble();
-
+      const QString &id = dataset.widget;
       if (id == "lat")
-        lat = val;
+        lat = dataset.numericValue;
       else if (id == "lon")
-        lon = val;
+        lon = dataset.numericValue;
       else if (id == "alt")
-        alt = val;
+        alt = dataset.numericValue;
     }
 
     series.latitudes.push(lat);
@@ -1125,7 +1144,7 @@ void UI::Dashboard::updateDataSeries()
   for (int i = 0; i < fftCount; ++i)
   {
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
-    m_fftValues[i].push(dataset.value().toDouble());
+    m_fftValues[i].push(dataset.numericValue);
   }
 
   // Append latest values to linear plots data
@@ -1135,19 +1154,19 @@ void UI::Dashboard::updateDataSeries()
   {
     // Shift Y-axis points
     const auto &yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
-    if (!yAxesMoved.contains(yDataset.index()))
+    if (!yAxesMoved.contains(yDataset.index))
     {
-      yAxesMoved.insert(yDataset.index());
-      m_yAxisData[yDataset.index()].push(yDataset.value().toDouble());
+      yAxesMoved.insert(yDataset.index);
+      m_yAxisData[yDataset.index].push(yDataset.numericValue);
     }
 
     // Shift X-axis points
-    auto xAxisId = SerialStudio::activated() ? yDataset.xAxisId() : 0;
+    auto xAxisId = SerialStudio::activated() ? yDataset.xAxisId : 0;
     if (m_datasets.contains(xAxisId) && !xAxesMoved.contains(xAxisId))
     {
       xAxesMoved.insert(xAxisId);
       const auto &xDataset = m_datasets[xAxisId];
-      m_xAxisData[xAxisId].push(xDataset.value().toDouble());
+      m_xAxisData[xAxisId].push(xDataset.numericValue);
     }
   }
 
@@ -1156,8 +1175,8 @@ void UI::Dashboard::updateDataSeries()
   {
     const auto &group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
     auto &multiSeries = m_multipltValues[i];
-    for (int j = 0; j < group.datasetCount(); ++j)
-      multiSeries.y[j].push(group.datasets()[j].value().toDouble());
+    for (size_t j = 0; j < group.datasets.size(); ++j)
+      multiSeries.y[j].push(group.datasets[j].numericValue);
   }
 
   // Update 3D plots
@@ -1168,16 +1187,15 @@ void UI::Dashboard::updateDataSeries()
 
     QVector3D point;
     const auto &group = getGroupWidget(SerialStudio::DashboardPlot3D, i);
-    for (const auto &dataset : group.datasets())
+    for (const auto &dataset : group.datasets)
     {
-      const QString &id = dataset.widget();
-      const double val = dataset.value().toDouble();
+      const QString &id = dataset.widget;
       if (id == "x" || id == "X")
-        point.setX(val);
+        point.setX(dataset.numericValue);
       else if (id == "y" || id == "Y")
-        point.setY(val);
+        point.setY(dataset.numericValue);
       else if (id == "z" || id == "Z")
-        point.setZ(val);
+        point.setZ(dataset.numericValue);
     }
 
     plotData.push_back(point);
@@ -1218,12 +1236,12 @@ void UI::Dashboard::configureGpsSeries()
            {"lon", &series.longitudes},
            {"alt", &series.altitudes}};
 
-    for (int j = 0; j < group.datasetCount(); ++j)
+    for (size_t j = 0; j < group.datasets.size(); ++j)
     {
-      const auto &dataset = group.datasets()[j];
-      if (fieldMap.contains(dataset.widget()))
+      const auto &dataset = group.datasets[j];
+      if (fieldMap.contains(dataset.widget))
       {
-        auto *vector = fieldMap[dataset.widget()];
+        auto *vector = fieldMap[dataset.widget];
         vector->resize(points() + 1);
         vector->fill(std::nan(""));
       }
@@ -1253,7 +1271,7 @@ void UI::Dashboard::configureFftSeries()
   for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i)
   {
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
-    m_fftValues.append(PlotDataY(dataset.fftSamples()));
+    m_fftValues.append(PlotDataY(dataset.fftSamples));
   }
 }
 
@@ -1292,17 +1310,17 @@ void UI::Dashboard::configureLineSeries()
     // Iterate over all the datasets
     for (auto d = datasets.begin(); d != datasets.end(); ++d)
     {
-      if (d->graph())
+      if (d->plt)
       {
         // Register Y-axis
         PlotDataY yAxis(points() + 1);
-        m_yAxisData.insert(d->index(), yAxis);
-        m_yAxisData[d->index()].fill(0);
+        m_yAxisData.insert(d->index, yAxis);
+        m_yAxisData[d->index].fill(0);
 
         // Register X-axis
         if (SerialStudio::activated())
         {
-          int xSource = d->xAxisId();
+          int xSource = d->xAxisId;
           if (!m_xAxisData.contains(xSource))
           {
             PlotDataX xAxis(points() + 1);
@@ -1324,12 +1342,12 @@ void UI::Dashboard::configureLineSeries()
     const auto &yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
 
     // Add X-axis data & generate a line series with X/Y data
-    if (m_datasets.contains(yDataset.xAxisId()) && SerialStudio::activated())
+    if (m_datasets.contains(yDataset.xAxisId) && SerialStudio::activated())
     {
-      const auto &xDataset = m_datasets[yDataset.xAxisId()];
+      const auto &xDataset = m_datasets[yDataset.xAxisId];
       LineSeries series;
-      series.x = &m_xAxisData[xDataset.index()];
-      series.y = &m_yAxisData[yDataset.index()];
+      series.x = &m_xAxisData[xDataset.index];
+      series.y = &m_yAxisData[yDataset.index];
       m_pltValues.append(series);
     }
 
@@ -1338,7 +1356,7 @@ void UI::Dashboard::configureLineSeries()
     {
       LineSeries series;
       series.x = &m_pltXAxis;
-      series.y = &m_yAxisData[yDataset.index()];
+      series.y = &m_yAxisData[yDataset.index];
       m_pltValues.append(series);
     }
   }
@@ -1398,7 +1416,7 @@ void UI::Dashboard::configureMultiLineSeries()
 
     MultiLineSeries series;
     series.x = &m_multipltXAxis;
-    for (int j = 0; j < group.datasetCount(); ++j)
+    for (size_t j = 0; j < group.datasets.size(); ++j)
     {
       series.y.push_back(PlotDataY(points() + 1));
       series.y.back().fill(0);
@@ -1438,7 +1456,7 @@ void UI::Dashboard::configureMultiLineSeries()
 void UI::Dashboard::configureActions(const JSON::Frame &frame)
 {
   // Stop if frame is not valid
-  if (!frame.isValid())
+  if (frame.groups.size() <= 0)
     return;
 
   // Delete actions
@@ -1460,7 +1478,8 @@ void UI::Dashboard::configureActions(const JSON::Frame &frame)
   m_timers.clear();
 
   // Update actions
-  m_actions = frame.actions();
+  for (const auto &action : frame.actions)
+    m_actions.append(action);
 
   // Configure timers
   if (IO::Manager::instance().isConnected())
@@ -1468,9 +1487,9 @@ void UI::Dashboard::configureActions(const JSON::Frame &frame)
     for (int i = 0; i < m_actions.count(); ++i)
     {
       const auto &action = m_actions[i];
-      if (action.timerMode() != JSON::Action::TimerMode::Off)
+      if (action.timerMode != JSON::TimerMode::Off)
       {
-        auto interval = action.timerIntervalMs();
+        auto interval = action.timerIntervalMs;
         if (interval > 0)
         {
           auto *timer = new QTimer(this);
@@ -1479,8 +1498,8 @@ void UI::Dashboard::configureActions(const JSON::Frame &frame)
           connect(timer, &QTimer::timeout, this,
                   [this, i]() { activateAction(i, false); });
 
-          if (action.timerMode() == JSON::Action::TimerMode::AutoStart
-              || action.autoExecuteOnConnect())
+          if (action.timerMode == JSON::TimerMode::AutoStart
+              || action.autoExecuteOnConnect)
             timer->start();
 
           m_timers.insert(i, timer);
@@ -1488,7 +1507,7 @@ void UI::Dashboard::configureActions(const JSON::Frame &frame)
 
         else
         {
-          qWarning() << "Interval for action" << action.title()
+          qWarning() << "Interval for action" << action.title
                      << "must be greater than 0!";
         }
       }

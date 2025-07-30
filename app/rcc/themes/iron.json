@@ -46,7 +46,7 @@
                 "toolbar_checked_button_background": "#DCDCDC",
 
                 "error": "#C62828",
-                "alarm": "#FF8F00",
+                "alarm": "#fa0a0a",
                 "dashboard_background": "#F0F0F0",
 
                 "mid": "#B0B0B0",
@@ -143,9 +143,9 @@
 
                 "widget_colors": [
                         "#007aff",
-                        "#ff9500",
+                        "#EA580C",
                         "#34c759",
-                        "#ff3b30",
+                        "#ea580c",
                         "#af52de",
                         "#ffcc00",
                         "#ff2d55",

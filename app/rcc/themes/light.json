@@ -44,7 +44,7 @@
                 "toolbar_checked_button_background": "#E5E7EB",
 
                 "error": "#DC2626",
-                "alarm": "#EA580C",
+                "alarm": "#fa0a0a",
                 "dashboard_background": "#F9FAFB",
 
                 "mid": "#C1C5CB",
@@ -143,7 +143,7 @@
                         "#007aff",
                         "#ff9500",
                         "#34c759",
-                        "#ff3b30",
+                        "#ea580c",
                         "#af52de",
                         "#ffcc00",
                         "#ff2d55",

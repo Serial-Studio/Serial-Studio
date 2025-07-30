@@ -49,8 +49,8 @@ Window {
     category: "Preferences"
     property alias plugins: _tcpPlugins.checked
     property alias dashboardPoints: _points.value
-    property alias dashboardPrecision: _decimalDigits.value
     property alias dashboardActionPanel: _actionsPanel.checked
+    property alias alwaysShowTaskbarBt: _taskbarButtons.checked
   }
 
   //
@@ -330,26 +330,6 @@ Window {
           }
 
           //
-          // Decimal digits
-          //
-          Label {
-            text: qsTr("Decimal Precision")
-            color: Cpp_ThemeManager.colors["text"]
-          } SpinBox {
-            id: _decimalDigits
-
-            to: 5
-            from: 0
-            editable: true
-            Layout.fillWidth: true
-            value: Cpp_UI_Dashboard.precision
-            onValueChanged: {
-              if (value !== Cpp_UI_Dashboard.precision)
-                Cpp_UI_Dashboard.precision = value
-            }
-          }
-
-          //
           // Console
           //
           Label {
@@ -364,6 +344,24 @@ Window {
             onCheckedChanged: {
               if (checked !== Cpp_UI_Dashboard.showActionPanel)
                 Cpp_UI_Dashboard.showActionPanel = checked
+            }
+          }
+
+          //
+          // Console
+          //
+          Label {
+            text: qsTr("Always Show Tashbar Buttons")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            id: _taskbarButtons
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_UI_Dashboard.showTaskbarButtons
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_UI_Dashboard.showTaskbarButtons)
+                Cpp_UI_Dashboard.showTaskbarButtons = checked
             }
           }
 

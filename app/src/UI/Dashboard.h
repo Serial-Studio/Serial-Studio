@@ -57,23 +57,23 @@ class Dashboard : public QObject
   Q_PROPERTY(int points READ points WRITE setPoints NOTIFY pointsChanged)
   Q_PROPERTY(QVariantList actions READ actions NOTIFY actionStatusChanged)
   Q_PROPERTY(int totalWidgetCount READ totalWidgetCount NOTIFY widgetCountChanged)
-  Q_PROPERTY(int precision READ precision WRITE setPrecision NOTIFY precisionChanged)
   Q_PROPERTY(bool pointsWidgetVisible READ pointsWidgetVisible NOTIFY widgetCountChanged)
   Q_PROPERTY(bool precisionWidgetVisible READ precisionWidgetVisible NOTIFY widgetCountChanged)
   Q_PROPERTY(bool showActionPanel READ showActionPanel WRITE setShowActionPanel NOTIFY showActionPanelChanged)
   Q_PROPERTY(bool terminalEnabled READ terminalEnabled WRITE setTerminalEnabled NOTIFY terminalEnabledChanged)
   Q_PROPERTY(bool containsCommercialFeatures READ containsCommercialFeatures NOTIFY containsCommercialFeaturesChanged)
+  Q_PROPERTY(bool showTaskbarButtons READ showTaskbarButtons WRITE setShowTaskbarButtons NOTIFY showTaskbarButtonsChanged)
   // clang-format on
 
 signals:
   void updated();
   void dataReset();
   void pointsChanged();
-  void precisionChanged();
   void widgetCountChanged();
   void actionStatusChanged();
   void showActionPanelChanged();
   void terminalEnabledChanged();
+  void showTaskbarButtonsChanged();
   void containsCommercialFeaturesChanged();
 
 private:
@@ -92,17 +92,18 @@ public:
   [[nodiscard]] bool showActionPanel() const;
   [[nodiscard]] bool streamAvailable() const;
   [[nodiscard]] bool terminalEnabled() const;
+  [[nodiscard]] bool showTaskbarButtons() const;
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool precisionWidgetVisible() const;
   [[nodiscard]] bool containsCommercialFeatures() const;
 
   [[nodiscard]] int points() const;
-  [[nodiscard]] int precision() const;
   [[nodiscard]] int actionCount() const;
   [[nodiscard]] int totalWidgetCount() const;
 
   Q_INVOKABLE bool frameValid() const;
   Q_INVOKABLE int relativeIndex(const int widgetIndex);
+  Q_INVOKABLE QString formatValue(double val, double min, double max) const;
   Q_INVOKABLE SerialStudio::DashboardWidget widgetType(const int widgetIndex);
   Q_INVOKABLE int widgetCount(const SerialStudio::DashboardWidget widget) const;
 
@@ -129,10 +130,10 @@ public:
 
 public slots:
   void setPoints(const int points);
-  void setPrecision(const int precision);
   void resetData(const bool notify = true);
   void setShowActionPanel(const bool enabled);
   void setTerminalEnabled(const bool enabled);
+  void setShowTaskbarButtons(const bool enabled);
   void activateAction(const int index, const bool guiTrigger = false);
 
   void hotpathRxFrame(const JSON::Frame &frame);
@@ -150,12 +151,12 @@ private:
   void configureActions(const JSON::Frame &frame);
 
 private:
-  int m_points;           // Number of plot points to retain
-  int m_precision;        // Decimal display precision
-  int m_widgetCount;      // Total number of active widgets
-  bool m_updateRequired;  // Flag to trigger plot/UI update
-  bool m_showActionPanel; // Whenever the UI shall display an action panel
-  bool m_terminalEnabled; // Whether terminal group is enabled
+  int m_points;              // Number of plot points to retain
+  int m_widgetCount;         // Total number of active widgets
+  bool m_updateRequired;     // Flag to trigger plot/UI update
+  bool m_showActionPanel;    // Whenever the UI shall display an action panel
+  bool m_terminalEnabled;    // Whether terminal group is enabled
+  bool m_showTaskbarButtons; // Always show taskbar buttons, regardless of state
 
   PlotDataX m_pltXAxis;      // Default X-axis data for line plots
   PlotDataX m_multipltXAxis; // Default X-axis data for multi-line plots
@@ -193,6 +194,90 @@ private:
 //------------------------------------------------------------------------------
 // Inline functions for widgets
 //------------------------------------------------------------------------------
+
+/**
+ * @brief Formats a floating-point value with dynamic decimal precision based on
+ * context.
+ *
+ * This function determines a suitable number of decimal places for the input
+ * value `val` based on the magnitudes of `min` and `max`, which define the
+ * expected range of values. The formatting logic is intended to make numeric
+ * output clean, readable, and free from scientific notation in most practical
+ * engineering use cases.
+ *
+ * If `min` and `max` are both zero, it will determine the precision solely from
+ * `val`.
+ *
+ * @param val The value to format.
+ * @param min The minimum value of the range.
+ * @param max The maximum value of the range.
+ * @return A QString representing the formatted number.
+ */
+inline QString FMT_VAL(double val, double min, double max)
+{
+  auto decPoints = [](double v) {
+    double abs = std::abs(v);
+    if (qFuzzyIsNull(abs))
+      return 2;
+    if (abs >= 1e6)
+      return 0;
+    if (abs >= 1e5)
+      return 0;
+    if (abs >= 1e4)
+      return 0;
+    if (abs >= 1e3)
+      return 1;
+    if (abs >= 1e2)
+      return 2;
+    if (abs >= 1e1)
+      return 2;
+    if (abs >= 1.0)
+      return 3;
+    if (abs >= 1e-1)
+      return 4;
+    if (abs >= 1e-2)
+      return 5;
+    if (abs >= 1e-3)
+      return 6;
+    if (abs >= 1e-4)
+      return 7;
+    if (abs >= 1e-5)
+      return 8;
+    if (abs >= 1e-6)
+      return 9;
+
+    // Beyond this is just sad
+    return 10;
+  };
+
+  if (qFuzzyIsNull(min) && qFuzzyIsNull(max))
+    return QString::number(val, 'f', decPoints(val));
+
+  else
+  {
+    const int p = std::max(decPoints(min), decPoints(max));
+    return QString::number(val, 'f', p);
+  }
+}
+
+/**
+ * @brief Formats a floating-point value with adaptive decimal precision based
+ * on dataset range.
+ *
+ * Determines the number of decimal places to display based on the magnitude of
+ * the dataset’s min and max. Useful for presenting values in UIs where
+ * consistent but meaningful precision is important.
+ *
+ * @param val The value to format.
+ * @param dataset A dataset providing context (min/max) for determining
+ *                required precision.
+ *
+ * @return QString Formatted number with appropriate decimal places.
+ */
+inline QString FMT_VAL(double val, const JSON::Dataset &dataset)
+{
+  return FMT_VAL(val, dataset.min, dataset.max);
+}
 
 /**
  * @brief Retrieves a reference to a dataset group widget by type and index.

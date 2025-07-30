@@ -135,7 +135,7 @@ Widgets.Pane {
     //
     // Widget windows
     //
-    DbItems.Canvas {
+    DbItems.DashboardCanvas {
       id: canvas
       taskBar: root.taskBar
       Layout.topMargin: -1

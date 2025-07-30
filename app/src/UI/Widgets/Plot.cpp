@@ -39,24 +39,24 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
   {
     const auto &yDataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
 
-    m_minY = qMin(yDataset.min(), yDataset.max());
-    m_maxY = qMax(yDataset.min(), yDataset.max());
+    m_minY = qMin(yDataset.min, yDataset.max);
+    m_maxY = qMax(yDataset.min, yDataset.max);
 
-    const auto xAxisId = SerialStudio::activated() ? yDataset.xAxisId() : 0;
+    const auto xAxisId = SerialStudio::activated() ? yDataset.xAxisId : 0;
     if (UI::Dashboard::instance().datasets().contains(xAxisId))
     {
       const auto &xDataset = UI::Dashboard::instance().datasets()[xAxisId];
-      m_xLabel = xDataset.title();
-      if (!xDataset.units().isEmpty())
-        m_xLabel += " (" + xDataset.units() + ")";
+      m_xLabel = xDataset.title;
+      if (!xDataset.units.isEmpty())
+        m_xLabel += " (" + xDataset.units + ")";
     }
 
     else
       m_xLabel = tr("Samples");
 
-    m_yLabel = yDataset.title();
-    if (!yDataset.units().isEmpty())
-      m_yLabel += " (" + yDataset.units() + ")";
+    m_yLabel = yDataset.title;
+    if (!yDataset.units.isEmpty())
+      m_yLabel += " (" + yDataset.units + ")";
 
     connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this,
             &Plot::updateRange);
@@ -209,11 +209,11 @@ void Widgets::Plot::updateRange()
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
   {
     const auto &yD = GET_DATASET(SerialStudio::DashboardPlot, m_index);
-    if (yD.xAxisId() > 0)
+    if (yD.xAxisId > 0)
     {
-      const auto &xD = UI::Dashboard::instance().datasets()[yD.xAxisId()];
-      m_minX = xD.min();
-      m_maxX = xD.max();
+      const auto &xD = UI::Dashboard::instance().datasets()[yD.xAxisId];
+      m_minX = xD.min;
+      m_maxX = xD.max;
     }
 
     else
@@ -257,9 +257,9 @@ void Widgets::Plot::calculateAutoScaleRange()
   // Obtain range scale for X-axis
   if (SerialStudio::activated())
   {
-    if (UI::Dashboard::instance().datasets().contains(dy.xAxisId()))
+    if (UI::Dashboard::instance().datasets().contains(dy.xAxisId))
     {
-      const auto &dx = UI::Dashboard::instance().datasets()[dy.xAxisId()];
+      const auto &dx = UI::Dashboard::instance().datasets()[dy.xAxisId];
       xChanged = computeMinMaxValues(m_minX, m_maxX, dx, false,
                                      [](const QPointF &p) { return p.x(); });
     }
@@ -327,11 +327,11 @@ bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
   // Obtain min/max values from datasets
   else
   {
-    ok &= !qFuzzyCompare(dataset.min(), dataset.max());
+    ok &= !qFuzzyCompare(dataset.min, dataset.max);
     if (ok)
     {
-      min = qMin(dataset.min(), dataset.max());
-      max = qMax(dataset.min(), dataset.max());
+      min = qMin(dataset.min, dataset.max);
+      max = qMax(dataset.min, dataset.max);
     }
   }
 

@@ -25,7 +25,7 @@
 #include <QXYSeries>
 #include <QQuickItem>
 
-#include "JSON/Dataset.h"
+#include "JSON/Frame.h"
 
 namespace Widgets
 {

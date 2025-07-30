@@ -170,8 +170,8 @@ Item {
 
             id: button
             text: model.widgetName
-            forceVisible: taskBar.hasMaximizedWindow
             icon.source: SerialStudio.dashboardWidgetIcon(model.widgetType)
+            forceVisible: Cpp_UI_Dashboard.showTaskbarButtons || taskBar.hasMaximizedWindow
 
             width: opacity > 0 ? 144 : 0
             Behavior on width { NumberAnimation{} }

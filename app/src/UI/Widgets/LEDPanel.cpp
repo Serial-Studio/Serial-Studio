@@ -35,16 +35,16 @@ Widgets::LEDPanel::LEDPanel(const int index, QQuickItem *parent)
   if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index))
   {
     const auto &group = GET_GROUP(SerialStudio::DashboardLED, m_index);
-    m_states.resize(group.datasetCount());
-    m_titles.resize(group.datasetCount());
-    m_colors.resize(group.datasetCount());
-    m_alarms.resize(group.datasetCount());
+    m_states.resize(group.datasets.size());
+    m_titles.resize(group.datasets.size());
+    m_colors.resize(group.datasets.size());
+    m_alarms.resize(group.datasets.size());
 
-    for (int i = 0; i < group.datasetCount(); ++i)
+    for (size_t i = 0; i < group.datasets.size(); ++i)
     {
       m_states[i] = false;
       m_alarms[i] = false;
-      m_titles[i] = group.getDataset(i).title();
+      m_titles[i] = group.datasets[i].title;
     }
 
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
@@ -123,16 +123,18 @@ void Widgets::LEDPanel::updateData()
     // Get the LED group and update the LED states
     bool changed = false;
     const auto &group = GET_GROUP(SerialStudio::DashboardLED, m_index);
-    for (int i = 0; i < group.datasetCount(); ++i)
+    for (size_t i = 0; i < group.datasets.size(); ++i)
     {
       // Get the dataset and its values
-      const auto &dataset = group.getDataset(i);
-      const auto value = dataset.value().toDouble();
-      const auto alarmValue = dataset.alarm();
+      const auto &dataset = group.datasets[i];
+      const auto value = dataset.numericValue;
+      const auto alarmLow = dataset.alarmLow;
+      const auto alarmHigh = dataset.alarmHigh;
 
       // Obtain the LED state
-      const bool enabled = (value >= dataset.ledHigh());
-      const bool alarm = (alarmValue != 0 && value >= alarmValue);
+      const bool enabled = (value >= dataset.ledHigh);
+      const bool alarm = (!std::isnan(alarmLow) && value <= alarmLow)
+                         || (!std::isnan(alarmHigh) && value >= alarmHigh);
 
       // Update the alarm state
       if (m_alarms[i] != alarm)
@@ -186,11 +188,11 @@ void Widgets::LEDPanel::onThemeChanged()
     const auto &group = GET_GROUP(SerialStudio::DashboardLED, m_index);
 
     m_colors.clear();
-    m_colors.resize(group.datasetCount());
-    for (int i = 0; i < group.datasetCount(); ++i)
+    m_colors.resize(group.datasets.size());
+    for (size_t i = 0; i < group.datasets.size(); ++i)
     {
-      const auto &dataset = group.getDataset(i);
-      const auto index = dataset.index() - 1;
+      const auto &dataset = group.datasets[i];
+      const auto index = dataset.index - 1;
       const auto color = colors.count() > index
                              ? colors.at(index)
                              : colors.at(index % colors.count());

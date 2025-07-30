@@ -94,7 +94,7 @@ QColor UI::DashboardWidget::widgetColor() const
     if (SerialStudio::isDatasetWidget(m_widgetType))
     {
       const auto &dataset = GET_DATASET(m_widgetType, m_relativeIndex);
-      return QColor(SerialStudio::getDatasetColor(dataset.index()));
+      return QColor(SerialStudio::getDatasetColor(dataset.index));
     }
   }
 
@@ -111,13 +111,13 @@ QString UI::DashboardWidget::widgetTitle() const
     if (SerialStudio::isDatasetWidget(m_widgetType))
     {
       const auto &dataset = GET_DATASET(m_widgetType, m_relativeIndex);
-      return dataset.title();
+      return dataset.title;
     }
 
     else if (SerialStudio::isGroupWidget(m_widgetType))
     {
       const auto &group = GET_GROUP(m_widgetType, m_relativeIndex);
-      return group.title();
+      return group.title;
     }
   }
 

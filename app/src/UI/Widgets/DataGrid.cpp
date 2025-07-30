@@ -44,7 +44,7 @@ Widgets::DataGrid::DataGrid(const int index, QQuickItem *parent)
   QList<QStringList> rows;
   rows.append({tr("Title"), tr("Value")});
 
-  for (const auto &dataset : group.datasets())
+  for (const auto &dataset : group.datasets)
     rows.append(getRow(dataset));
 
   setData(rows);
@@ -111,21 +111,21 @@ void Widgets::DataGrid::updateData()
   const int valueIndex = 1;
 
   // Update values for every dataset in the group
-  for (int i = 0; i < group.datasetCount(); ++i)
+  for (size_t i = 0; i < group.datasets.size(); ++i)
   {
     // Obtain a reference to the dataset object & read its value
-    const auto &dataset = group.getDataset(i);
-    QString value = dataset.value();
+    const auto &dataset = group.datasets[i];
+    QString value = dataset.value;
 
     // Convert the dataset to a number if needed
     bool isNumber;
     const double n = value.toDouble(&isNumber);
     if (isNumber)
-      value = QString::number(n, 'f', UI::Dashboard::instance().precision());
+      value = FMT_VAL(n, dataset);
 
     // Append dataset units (if available)
-    if (!dataset.units().isEmpty())
-      value += " " + dataset.units();
+    if (!dataset.units.isEmpty())
+      value += " " + dataset.units;
 
     // Obtain the row index for the current dataset
     const int rowIndex = i + 1;
@@ -135,7 +135,7 @@ void Widgets::DataGrid::updateData()
     {
       QList<QStringList> r;
       r.append({tr("Title"), tr("Value")});
-      for (const auto &ds : group.datasets())
+      for (const auto &ds : group.datasets)
         r.append(getRow(ds));
 
       setData(r);
@@ -167,10 +167,10 @@ void Widgets::DataGrid::updateData()
  */
 QStringList Widgets::DataGrid::getRow(const JSON::Dataset &dataset)
 {
-  const QString title = dataset.title();
-  const QString units = dataset.units();
-  QString value = dataset.value();
+  const QString title = dataset.title;
+  const QString units = dataset.units;
 
+  QString value = dataset.value;
   if (!units.isEmpty())
     value += " " + units;
 

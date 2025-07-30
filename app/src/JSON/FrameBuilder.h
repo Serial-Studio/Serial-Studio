@@ -111,6 +111,10 @@ private:
   JSON::Frame m_rawFrame;
   JSON::Frame m_quickPlotFrame;
 
+  QString m_checksum;
+  QByteArray m_frameStart;
+  QByteArray m_frameFinish;
+
   QSettings m_settings;
   int m_quickPlotChannels;
   JSON::FrameParser *m_frameParser;

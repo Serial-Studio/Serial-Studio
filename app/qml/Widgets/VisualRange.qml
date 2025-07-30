@@ -51,32 +51,26 @@ ColumnLayout {
   property real maximumWidth: root.width
 
   //
-  // Calculates the maximum string length (including digits,
-  // decimal point, and minus sign) required to display
-  // the minValue or maxValue, based on configured precision.
-  // This is used to determine how much horizontal space
-  // to reserve for the value display.
+  // Uses C++ side formatting logic to compute the longest label,
+  // ensuring visual alignment and consistent layout.
   //
   function maxTextLength() {
-    const precision = Cpp_UI_Dashboard.precision
-    const minStr = root.minValue.toFixed(precision)
-    const maxStr = root.maxValue.toFixed(precision)
-    let maxLen = Math.max(minStr.length, maxStr.length)
-    if (root.minValue >= 0 && root.maxValue >= 0 && root.value < 0) {
-      maxLen += 1
-    }
+    const minStr = Cpp_UI_Dashboard.formatValue(root.minValue, root.minValue, root.maxValue)
+    const maxStr = Cpp_UI_Dashboard.formatValue(root.maxValue, root.minValue, root.maxValue)
+    const valStr = Cpp_UI_Dashboard.formatValue(root.value, root.minValue, root.maxValue)
+
+    let maxLen = Math.max(minStr.length, maxStr.length, valStr.length)
     return maxLen
   }
 
   //
-  // Pads the numeric value with left spaces to match the maximum
-  // reference length calculated by maxTextLength(). This ensures
-  // consistent visual width regardless of sign or digit count.
+  // Pads the formatted value with spaces so it matches the width of the
+  // largest possible formatted value (min/max/value). Useful for monospaced
+  // alignment in visuals.
   //
   function getPaddedText(value) {
-    const precision = Cpp_UI_Dashboard.precision
     const referenceLen = maxTextLength()
-    let valueText = value.toFixed(precision)
+    const valueText = Cpp_UI_Dashboard.formatValue(value, root.minValue, root.maxValue)
     const padding = " ".repeat(Math.max(0, referenceLen - valueText.length))
     return padding + valueText
   }

@@ -145,9 +145,6 @@ set(SOURCES
   src/JSON/ProjectModel.cpp
   src/JSON/FrameBuilder.cpp
   src/JSON/Frame.cpp
-  src/JSON/Action.cpp
-  src/JSON/Dataset.cpp
-  src/JSON/Group.cpp
   src/CSV/Player.cpp
   src/CSV/Export.cpp
   src/main.cpp
@@ -198,9 +195,6 @@ set(HEADERS
   src/JSON/FrameParser.h
   src/JSON/ProjectModel.h
   src/JSON/Frame.h
-  src/JSON/Action.h
-  src/JSON/Dataset.h
-  src/JSON/Group.h
   src/JSON/FrameBuilder.h
   src/CSV/Export.h
   src/CSV/Player.h
@@ -254,10 +248,10 @@ set(QML_SRC
   qml/Dialogs/IconPicker.qml
   qml/Dialogs/FileTransmission.qml
   qml/Dialogs/Settings.qml
-  qml/MainWindow/Panes/Dashboard/Canvas.qml
   qml/MainWindow/Panes/Dashboard/Taskbar.qml
   qml/MainWindow/Panes/Dashboard/StartMenu.qml
   qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml
+  qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml
   qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml
   qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml
   qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml
@@ -289,7 +283,6 @@ set(QML_SRC
   qml/Widgets/Dashboard/Plot.qml
   qml/Widgets/Dashboard/Terminal.qml
   qml/Widgets/ProNotice.qml
-  qml/Widgets/CircularSlider.qml
   qml/Widgets/JSONDropArea.qml
   qml/Widgets/Pane.qml
   qml/Widgets/TaskbarButton.qml

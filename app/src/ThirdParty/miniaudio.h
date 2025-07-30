@@ -27564,7 +27564,7 @@ static void ma_context_iterate_rates_and_add_native_data_format__alsa(ma_context
     ma_uint32 iSampleRate;
     unsigned int minSampleRate;
     unsigned int maxSampleRate;
-    int sampleRateDir;  /* Not used. Just passed into snd_pcm_hw_params_get_rate_min/max(). */
+    int sampleRateDir;  /* Not used. Just passed into snd_pcm_hw_params_get_rate_min/max. */
 
     /* There could be a range. */
     ((ma_snd_pcm_hw_params_get_rate_min_proc)pContext->alsa.snd_pcm_hw_params_get_rate_min)(pHWParams, &minSampleRate, &sampleRateDir);
@@ -27999,7 +27999,7 @@ static ma_result ma_device_init_by_type__alsa(ma_device* pDevice, const ma_devic
     if (resultALSA < 0) {
         ma_free(pSWParams, &pDevice->pContext->allocationCallbacks);
         ((ma_snd_pcm_close_proc)pDevice->pContext->alsa.snd_pcm_close)(pPCM);
-        ma_log_post(ma_device_get_log(pDevice), MA_LOG_LEVEL_ERROR, "[ALSA] snd_pcm_sw_params_set_avail_min() failed.");
+        ma_log_post(ma_device_get_log(pDevice), MA_LOG_LEVEL_ERROR, "[ALSA] snd_pcm_sw_params_set_avail_min failed.");
         return ma_result_from_errno(-resultALSA);
     }
 

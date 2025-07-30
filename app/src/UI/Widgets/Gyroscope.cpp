@@ -106,7 +106,7 @@ void Widgets::Gyroscope::updateData()
 
   // Obtain group data from dashboard & validate widget count
   const auto &gyro = GET_GROUP(SerialStudio::DashboardGyroscope, m_index);
-  if (gyro.datasetCount() != 3)
+  if (gyro.datasets.size() != 3)
     return;
 
   // Store previous orientation values
@@ -145,9 +145,9 @@ void Widgets::Gyroscope::updateData()
   for (int i = 0; i < 3; ++i)
   {
     // Obtain dataset values & widget type
-    const auto &dataset = gyro.getDataset(i);
-    const auto &widget = dataset.widget();
-    const auto angle = dataset.value().toDouble();
+    const auto &dataset = gyro.datasets[i];
+    const auto &widget = dataset.widget;
+    const auto angle = dataset.numericValue;
 
     // Continously integrate the values
     if (m_integrateValues)

@@ -30,8 +30,7 @@
 #include "CSV/Export.h"
 #include "CSV/Player.h"
 
-#include "JSON/Group.h"
-#include "JSON/Dataset.h"
+#include "JSON/Frame.h"
 #include "JSON/FrameParser.h"
 #include "JSON/ProjectModel.h"
 #include "JSON/FrameBuilder.h"

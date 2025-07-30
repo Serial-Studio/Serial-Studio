@@ -59,19 +59,42 @@ bool SerialStudio::activated()
  * @param groups A vector of JSON::Group objects to analyze.
  * @return true if any commercial-only features are detected; false otherwise.
  */
-bool SerialStudio::commercialCfg(const QVector<JSON::Group> &groups)
+bool SerialStudio::commercialCfg(const QVector<JSON::Group> &g)
 {
-  for (const auto &group : std::as_const(groups))
+  for (const auto &group : std::as_const(g))
   {
-    if (group.widget() == QStringLiteral("plot3d"))
+    if (group.widget == QStringLiteral("plot3d"))
     {
       return true;
       break;
     }
 
-    for (const auto &dataset : std::as_const((group.datasets())))
+    for (const auto &dataset : std::as_const((group.datasets)))
     {
-      if (dataset.xAxisId() > 0)
+      if (dataset.xAxisId > 0)
+      {
+        return true;
+        break;
+      }
+    }
+  }
+
+  return false;
+}
+
+bool SerialStudio::commercialCfg(const std::vector<JSON::Group> &g)
+{
+  for (const auto &group : std::as_const(g))
+  {
+    if (group.widget == QStringLiteral("plot3d"))
+    {
+      return true;
+      break;
+    }
+
+    for (const auto &dataset : std::as_const((group.datasets)))
+    {
+      if (dataset.xAxisId > 0)
       {
         return true;
         break;
@@ -261,7 +284,7 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
 SerialStudio::DashboardWidget
 SerialStudio::getDashboardWidget(const JSON::Group &group)
 {
-  const auto &widget = group.widget();
+  const auto &widget = group.widget;
 
   if (widget == "accelerometer")
     return DashboardAccelerometer;
@@ -297,7 +320,7 @@ QList<SerialStudio::DashboardWidget>
 SerialStudio::getDashboardWidgets(const JSON::Dataset &dataset)
 {
   QList<DashboardWidget> list;
-  const auto &widget = dataset.widget();
+  const auto &widget = dataset.widget;
 
   if (widget == "compass")
     list.append(DashboardCompass);
@@ -308,13 +331,13 @@ SerialStudio::getDashboardWidgets(const JSON::Dataset &dataset)
   else if (widget == "gauge")
     list.append(DashboardGauge);
 
-  if (dataset.graph())
+  if (dataset.plt)
     list.append(DashboardPlot);
 
-  if (dataset.fft())
+  if (dataset.fft)
     list.append(DashboardFFT);
 
-  if (dataset.led())
+  if (dataset.led)
     list.append(DashboardLED);
 
   return list;

@@ -21,44 +21,18 @@
 
 #pragma once
 
-#include <QQuickItem>
+#include "Bar.h"
 
 namespace Widgets
 {
-/**
- * @brief A widget that displays a gauge.
- */
-class Gauge : public QQuickItem
+class Gauge : public Bar
 {
   Q_OBJECT
-  Q_PROPERTY(QString units READ units CONSTANT)
-  Q_PROPERTY(double value READ value NOTIFY updated)
-  Q_PROPERTY(double minValue READ minValue CONSTANT)
-  Q_PROPERTY(double maxValue READ maxValue CONSTANT)
-  Q_PROPERTY(double alarmValue READ alarmValue CONSTANT)
-
-signals:
-  void updated();
 
 public:
   explicit Gauge(const int index = -1, QQuickItem *parent = nullptr);
 
-  [[nodiscard]] const QString &units() const;
-
-  [[nodiscard]] double value() const;
-  [[nodiscard]] double minValue() const;
-  [[nodiscard]] double maxValue() const;
-  [[nodiscard]] double alarmValue() const;
-
 private slots:
-  void updateData();
-
-private:
-  int m_index;
-  QString m_units;
-  double m_value;
-  double m_minValue;
-  double m_maxValue;
-  double m_alarmValue;
+  void updateData() override;
 };
 } // namespace Widgets

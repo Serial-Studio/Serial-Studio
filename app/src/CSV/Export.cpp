@@ -202,7 +202,7 @@ void CSV::Export::setExportEnabled(const bool enabled)
 void CSV::Export::hotpathTxFrame(const JSON::Frame &frame)
 {
   // Skip if export is disabled, frame is invalid or user is playing a CSV file
-  if (!exportEnabled() || !frame.isValid() || CSV::Player::instance().isOpen())
+  if (!exportEnabled() || CSV::Player::instance().isOpen())
     return;
 
   // Skip if not connected to a device
@@ -266,10 +266,10 @@ void CSV::Export::writeValues()
 
     // Obtain a set of unique dataset values (based on dataset index)
     QMap<int, QString> fieldValues;
-    for (const auto &g : i.data.groups())
+    for (const auto &g : i.data.groups)
     {
-      for (const auto &d : g.datasets())
-        fieldValues[d.index()] = d.value().simplified();
+      for (const auto &d : g.datasets)
+        fieldValues[d.index] = d.value.simplified();
     }
 
     // Write data to output stream
@@ -302,7 +302,7 @@ CSV::Export::createCsvFile(const JSON::Frame &frame)
 
   // Get file path
   const auto subdir = Misc::WorkspaceManager::instance().path("CSV");
-  const QString path = QString("%1/%2/").arg(subdir, frame.title());
+  const QString path = QString("%1/%2/").arg(subdir, frame.title);
 
   // Create the CSVs directory if needed
   QDir dir(path);
@@ -335,16 +335,16 @@ CSV::Export::createCsvFile(const JSON::Frame &frame)
   // Create a list of pairs that relate dataset indexes to header titles
   QSet<int> seenIndexes;
   QVector<QPair<int, QString>> pairs;
-  for (const auto &g : frame.groups())
+  for (const auto &g : frame.groups)
   {
-    for (const auto &d : g.datasets())
+    for (const auto &d : g.datasets)
     {
-      const int idx = d.index();
+      const int idx = d.index;
       if (seenIndexes.contains(idx))
         continue;
 
       seenIndexes.insert(idx);
-      auto header = QString("%1/%2").arg(g.title(), d.title()).simplified();
+      auto header = QString("%1/%2").arg(g.title, d.title).simplified();
       pairs.append(qMakePair(idx, header));
     }
   }

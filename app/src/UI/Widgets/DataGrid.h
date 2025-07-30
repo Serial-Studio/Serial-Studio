@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "JSON/Dataset.h"
+#include "JSON/Frame.h"
 #include "UI/DeclarativeWidgets/StaticTable.h"
 
 namespace Widgets

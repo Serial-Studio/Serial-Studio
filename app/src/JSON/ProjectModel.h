@@ -25,11 +25,8 @@
 #include <QStandardItemModel>
 #include <QItemSelectionModel>
 
+#include "JSON/Frame.h"
 #include "SerialStudio.h"
-
-#include "JSON/Group.h"
-#include "JSON/Action.h"
-#include "JSON/Dataset.h"
 
 namespace JSON
 {
@@ -237,7 +234,7 @@ public:
   [[nodiscard]] int groupCount() const;
   [[nodiscard]] int datasetCount() const;
   [[nodiscard]] quint8 datasetOptions() const;
-  [[nodiscard]] const QVector<JSON::Group> &groups() const;
+  [[nodiscard]] const std::vector<Group> &groups() const;
 
   [[nodiscard]] CustomModel *treeModel() const;
   [[nodiscard]] QItemSelectionModel *selectionModel() const;
@@ -325,8 +322,8 @@ private:
   QMap<QStandardItem *, JSON::Action> m_actionItems;
   QMap<QStandardItem *, JSON::Dataset> m_datasetItems;
 
-  QVector<JSON::Group> m_groups;
-  QVector<JSON::Action> m_actions;
+  std::vector<JSON::Group> m_groups;
+  std::vector<JSON::Action> m_actions;
 
   CustomModel *m_treeModel;
   QItemSelectionModel *m_selectionModel;

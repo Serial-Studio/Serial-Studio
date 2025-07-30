@@ -69,13 +69,12 @@ void Widgets::Compass::updateData()
   if (VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index))
   {
     const auto &dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
-    const auto value = dataset.value().toDouble();
+    const auto value = dataset.numericValue;
     if (!qFuzzyCompare(value, m_value))
     {
       // Update values
       m_value = qMin(360.0, qMax(0.0, value));
-      m_text = QString::number(m_value, 'f',
-                               UI::Dashboard::instance().precision());
+      m_text = FMT_VAL(m_value, dataset);
 
       // Ensure that angle always has 3 characters to avoid jiggling
       const int deg = qCeil(m_value);

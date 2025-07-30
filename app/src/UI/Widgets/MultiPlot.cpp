@@ -45,23 +45,23 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
     m_maxY = std::numeric_limits<double>::lowest();
 
     // Populate data from datasets
-    for (int i = 0; i < group.datasetCount(); ++i)
+    for (size_t i = 0; i < group.datasets.size(); ++i)
     {
-      const auto &dataset = group.datasets()[i];
+      const auto &dataset = group.datasets[i];
 
       m_drawOrders.append(i);
       m_visibleCurves.append(true);
-      m_labels.append(dataset.title());
-      m_minY = qMin(m_minY, qMin(dataset.min(), dataset.max()));
-      m_maxY = qMax(m_maxY, qMax(dataset.min(), dataset.max()));
+      m_labels.append(dataset.title);
+      m_minY = qMin(m_minY, qMin(dataset.min, dataset.max));
+      m_maxY = qMax(m_maxY, qMax(dataset.min, dataset.max));
     }
 
     // Obtain group title
-    m_yLabel = group.title();
+    m_yLabel = group.title;
 
     // Resize data container to fit curves
-    m_data.resize(group.datasetCount());
-    for (auto i = 0; i < group.datasetCount(); ++i)
+    m_data.resize(group.datasets.size());
+    for (size_t i = 0; i < group.datasets.size(); ++i)
       m_data[i].resize(UI::Dashboard::instance().points());
 
     // Connect to the dashboard signals
@@ -296,7 +296,7 @@ void Widgets::MultiPlot::updateRange()
 
   // Get the multiplot group and loop through each dataset
   const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
-  for (int i = 0; i < group.datasetCount(); ++i)
+  for (size_t i = 0; i < group.datasets.size(); ++i)
   {
     m_data.append(QVector<QPointF>());
     m_data.last().resize(UI::Dashboard::instance().points() + 1);
@@ -336,13 +336,13 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     m_maxY = std::numeric_limits<double>::lowest();
 
     int index = 0;
-    for (const auto &dataset : group.datasets())
+    for (const auto &dataset : group.datasets)
     {
-      ok &= !qFuzzyCompare(dataset.min(), dataset.max());
+      ok &= !qFuzzyCompare(dataset.min, dataset.max);
       if (ok && m_visibleCurves[index])
       {
-        m_minY = qMin(m_minY, qMin(dataset.min(), dataset.max()));
-        m_maxY = qMax(m_maxY, qMax(dataset.min(), dataset.max()));
+        m_minY = qMin(m_minY, qMin(dataset.min, dataset.max));
+        m_maxY = qMax(m_maxY, qMax(dataset.min, dataset.max));
       }
 
       else
@@ -470,11 +470,11 @@ void Widgets::MultiPlot::onThemeChanged()
     const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
 
     m_colors.clear();
-    m_colors.resize(group.datasetCount());
-    for (int i = 0; i < group.datasetCount(); ++i)
+    m_colors.resize(group.datasets.size());
+    for (size_t i = 0; i < group.datasets.size(); ++i)
     {
-      const auto &dataset = group.getDataset(i);
-      const auto index = dataset.index() - 1;
+      const auto &dataset = group.datasets[i];
+      const auto index = dataset.index - 1;
       const auto color = colors.count() > index
                              ? colors.at(index)
                              : colors.at(index % colors.count());

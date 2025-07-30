@@ -290,7 +290,7 @@ void Plugins::Server::sendProcessedData()
   }
   {
     QJsonObject object;
-    object.insert(QStringLiteral("data"), frame.serialize());
+    object.insert(QStringLiteral("data"), serialize(frame));
     array.append(object);
   }
 

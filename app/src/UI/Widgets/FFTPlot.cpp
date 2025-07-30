@@ -47,11 +47,11 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
     const auto &dataset = GET_DATASET(SerialStudio::DashboardFFT, m_index);
 
     // Set FFT window type
-    if (!dataset.fftWindowFn().isEmpty())
-      m_transformer.setWindowFunction(dataset.fftWindowFn());
+    if (!dataset.fftWindow.isEmpty())
+      m_transformer.setWindowFunction(dataset.fftWindow);
 
     // Initialize FFT size
-    int size = qMax(8, dataset.fftSamples());
+    int size = qMax(8, dataset.fftSamples);
     while (m_transformer.setSize(size) != QFourierTransformer::FixedSize)
       --size;
 
@@ -59,7 +59,7 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
     m_size = size;
 
     // Obtain sampling rate from dataset
-    m_samplingRate = dataset.fftSamplingRate();
+    m_samplingRate = dataset.fftSamplingRate;
 
     // Allocate FFT and sample arrays
     m_fft.reset(new float[m_size]);
@@ -72,8 +72,8 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
     m_maxX = m_samplingRate / 2;
 
     // Obtain minimum and maximum values
-    double minVal = dataset.min();
-    double maxVal = dataset.max();
+    double minVal = dataset.min;
+    double maxVal = dataset.max;
 
     // Fix inverted limits
     if (maxVal < minVal)

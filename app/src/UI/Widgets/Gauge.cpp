@@ -24,25 +24,32 @@
 
 /**
  * @brief Constructs a Gauge widget.
- * @param index The index of the gauge in the Dashboard.
- * @param parent The parent QQuickItem (optional).
+ *
+ * Initializes a gauge-specific data model by bypassing the default Bar
+ * initialization logic and loading values from the DashboardGauge dataset.
+ *
+ * This constructor disables the automatic Bar dataset loading by passing
+ * `false` to the Bar constructor, and instead applies custom Gauge setup.
+ *
+ * @param index Dataset index for the gauge.
+ * @param parent Optional QML parent item.
  */
 Widgets::Gauge::Gauge(const int index, QQuickItem *parent)
-  : QQuickItem(parent)
-  , m_index(index)
-  , m_value(0)
-  , m_minValue(0)
-  , m_maxValue(100)
-  , m_alarmValue(0)
+  : Bar(index, parent, false)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index))
   {
     const auto &dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
 
-    m_units = dataset.units();
-    m_alarmValue = dataset.alarm();
-    m_minValue = qMin(dataset.min(), dataset.max());
-    m_maxValue = qMax(dataset.min(), dataset.max());
+    m_units = dataset.units;
+    m_minValue = qMin(dataset.min, dataset.max);
+    m_maxValue = qMax(dataset.min, dataset.max);
+    m_alarmLow = qMin(dataset.alarmLow, dataset.alarmHigh);
+    m_alarmHigh = qMax(dataset.alarmLow, dataset.alarmHigh);
+    m_alarmLow = qBound(m_minValue, m_alarmLow, m_maxValue);
+    m_alarmHigh = qBound(m_minValue, m_alarmHigh, m_maxValue);
+    m_alarmsDefined = (m_alarmLow > m_minValue)
+                      || (m_alarmHigh < m_maxValue && m_alarmHigh > m_minValue);
 
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
             &Gauge::updateData);
@@ -50,54 +57,12 @@ Widgets::Gauge::Gauge(const int index, QQuickItem *parent)
 }
 
 /**
- * @brief Returns the measurement units of the dataset.
- */
-const QString &Widgets::Gauge::units() const
-{
-  return m_units;
-}
-
-/**
- * @brief Returns the current value of the gauge.
- * @return The current value of the gauge.
- */
-double Widgets::Gauge::value() const
-{
-  return m_value;
-}
-
-/**
- * @brief Returns the minimum value of the gauge scale.
- * @return The minimum value of the gauge scale.
- */
-double Widgets::Gauge::minValue() const
-{
-  return m_minValue;
-}
-
-/**
- * @brief Returns the maximum value of the gauge scale.
- * @return The maximum value of the gauge scale.
- */
-double Widgets::Gauge::maxValue() const
-{
-  return m_maxValue;
-}
-
-/**
- * @brief Returns the alarm level of the gauge.
- * @return The alarm level of the gauge.
- */
-double Widgets::Gauge::alarmValue() const
-{
-  return m_alarmValue;
-}
-
-/**
- * @brief Updates the gauge data from the Dashboard.
+ * @brief Updates the gauge value from the dashboard source.
  *
- * This method retrieves the latest data for this gauge from the Dashboard
- * and updates the gauge's value and text display accordingly.
+ * Reads the current numeric value from the DashboardBar dataset and clamps
+ * it to the configured min/max range. Emits `updated()` if the value changes.
+ *
+ * This function overrides Bar's logic to retrieve data from a different source.
  */
 void Widgets::Gauge::updateData()
 {
@@ -107,7 +72,7 @@ void Widgets::Gauge::updateData()
   if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index))
   {
     const auto &dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
-    auto value = qMax(m_minValue, qMin(m_maxValue, dataset.value().toDouble()));
+    auto value = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
     if (!qFuzzyCompare(value, m_value))
     {
       m_value = value;

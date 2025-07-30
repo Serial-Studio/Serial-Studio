@@ -85,7 +85,8 @@ typedef enum
   kDatasetView_Plot,             /**< Dataset plot mode item. */
   kDatasetView_Min,              /**< Dataset minimum value item. */
   kDatasetView_Max,              /**< Dataset maximum value item. */
-  kDatasetView_Alarm,            /**< Dataset alarm value item. */
+  kDatasetView_AlarmLow,         /**< Dataset alarm low value item. */
+  kDatasetView_AlarmHigh,        /**< Dataset alarm high value item. */
   kDatasetView_FFT_Samples,      /**< FFT window size item. */
   kDatasetView_FFT_SamplingRate, /**< FFT sampling rate item. */
   kDatasetView_xAxis,            /**< Plot X axis item. */
@@ -348,12 +349,12 @@ QStringList JSON::ProjectModel::xDataSources() const
   QMap<int, QString> datasets;
   for (const auto &group : m_groups)
   {
-    for (const auto &dataset : group.datasets())
+    for (const auto &dataset : group.datasets)
     {
-      const auto index = dataset.index();
+      const auto index = dataset.index;
       if (!datasets.contains(index))
       {
-        const auto t = QString("%1 (%2)").arg(dataset.title(), group.title());
+        const auto t = QString("%1 (%2)").arg(dataset.title, group.title);
         datasets.insert(index, t);
       }
     }
@@ -382,7 +383,7 @@ const QString &JSON::ProjectModel::title() const
  */
 const QString JSON::ProjectModel::actionIcon() const
 {
-  return m_selectedAction.icon();
+  return m_selectedAction.icon;
 }
 
 /**
@@ -455,7 +456,7 @@ bool JSON::ProjectModel::currentGroupIsEditable() const
 {
   if (m_currentView == GroupView)
   {
-    const auto widget = m_selectedGroup.widget();
+    const auto widget = m_selectedGroup.widget;
     if (widget != "" && widget != "multiplot" && widget != "datagrid")
       return false;
   }
@@ -480,10 +481,10 @@ bool JSON::ProjectModel::currentDatasetIsEditable() const
 {
   if (m_currentView == DatasetView)
   {
-    const auto groupId = m_selectedDataset.groupId();
-    if (m_groups.count() > groupId)
+    const auto groupId = m_selectedDataset.groupId;
+    if (m_groups.size() > static_cast<size_t>(groupId))
     {
-      const auto widget = m_groups[groupId].widget();
+      const auto widget = m_groups[groupId].widget;
       if (widget != "" && widget != "multiplot" && widget != "datagrid")
         return false;
     }
@@ -512,7 +513,7 @@ bool JSON::ProjectModel::containsCommercialFeatures() const
  */
 int JSON::ProjectModel::groupCount() const
 {
-  return groups().count();
+  return static_cast<int>(m_groups.size());
 }
 
 /**
@@ -526,11 +527,8 @@ int JSON::ProjectModel::groupCount() const
 int JSON::ProjectModel::datasetCount() const
 {
   int count = 0;
-  for (auto i = 0; i < m_groups.count(); ++i)
-  {
-    for (auto j = 0; j < m_groups.at(i).datasetCount(); ++j)
-      ++count;
-  }
+  for (const auto &group : m_groups)
+    count += group.datasets.size();
 
   return count;
 }
@@ -548,22 +546,22 @@ quint8 JSON::ProjectModel::datasetOptions() const
 {
   quint8 option = SerialStudio::DatasetGeneric;
 
-  if (m_selectedDataset.graph())
+  if (m_selectedDataset.plt)
     option |= SerialStudio::DatasetPlot;
 
-  if (m_selectedDataset.fft())
+  if (m_selectedDataset.fft)
     option |= SerialStudio::DatasetFFT;
 
-  if (m_selectedDataset.led())
+  if (m_selectedDataset.led)
     option |= SerialStudio::DatasetLED;
 
-  if (m_selectedDataset.widget() == QStringLiteral("bar"))
+  if (m_selectedDataset.widget == QStringLiteral("bar"))
     option |= SerialStudio::DatasetBar;
 
-  else if (m_selectedDataset.widget() == QStringLiteral("gauge"))
+  else if (m_selectedDataset.widget == QStringLiteral("gauge"))
     option |= SerialStudio::DatasetGauge;
 
-  else if (m_selectedDataset.widget() == QStringLiteral("compass"))
+  else if (m_selectedDataset.widget == QStringLiteral("compass"))
     option |= SerialStudio::DatasetCompass;
 
   return option;
@@ -577,7 +575,7 @@ quint8 JSON::ProjectModel::datasetOptions() const
  *
  * @return A reference to the vector of groups.
  */
-const QVector<JSON::Group> &JSON::ProjectModel::groups() const
+const std::vector<JSON::Group> &JSON::ProjectModel::groups() const
 {
   return m_groups;
 }
@@ -772,7 +770,7 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
   // Create group array
   QJsonArray groupArray;
   for (const auto &group : std::as_const(m_groups))
-    groupArray.append(group.serialize());
+    groupArray.append(JSON::serialize(group));
 
   // Add groups array to JSON
   json.insert("groups", groupArray);
@@ -780,7 +778,7 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
   // Create actions array
   QJsonArray actionsArray;
   for (const auto &action : std::as_const(m_actions))
-    actionsArray.append(action.serialize());
+    actionsArray.append(JSON::serialize(action));
 
   // Insert actions array to JSON
   json.insert("actions", actionsArray);
@@ -983,18 +981,20 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   auto groups = json.value("groups").toArray();
   for (int g = 0; g < groups.count(); ++g)
   {
-    JSON::Group group(g);
-    if (group.read(groups.at(g).toObject()))
-      m_groups.append(group);
+    JSON::Group group;
+    group.groupId = g;
+    if (JSON::read(group, groups.at(g).toObject()))
+      m_groups.push_back(group);
   }
 
   // Read actions from JSON document
   auto actions = json.value("actions").toArray();
   for (int a = 0; a < actions.count(); ++a)
   {
-    JSON::Action action(a);
-    if (action.read(actions.at(a).toObject()))
-      m_actions.append(action);
+    JSON::Action action;
+    action.actionId = a;
+    if (JSON::read(action, actions.at(a).toObject()))
+      m_actions.push_back(action);
   }
 
   // Regenerate the tree model
@@ -1098,7 +1098,7 @@ void JSON::ProjectModel::deleteCurrentGroup()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
-      tr("Do you want to delete group \"%1\"?").arg(m_selectedGroup.title()),
+      tr("Do you want to delete group \"%1\"?").arg(m_selectedGroup.title),
       tr("This action cannot be undone. Do you wish to proceed?"),
       QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
 
@@ -1107,15 +1107,15 @@ void JSON::ProjectModel::deleteCurrentGroup()
     return;
 
   // Delete the group
-  m_groups.removeAt(m_selectedGroup.groupId());
+  m_groups.erase(m_groups.begin() + m_selectedGroup.groupId);
 
   // Regenerate group IDs
   int id = 0;
   for (auto g = m_groups.begin(); g != m_groups.end(); ++g, ++id)
   {
-    g->m_groupId = id;
-    for (auto d = g->m_datasets.begin(); d != g->m_datasets.end(); ++d)
-      d->m_groupId = id;
+    g->groupId = id;
+    for (auto d = g->datasets.begin(); d != g->datasets.end(); ++d)
+      d->groupId = id;
   }
 
   // Build tree model & set modification flag
@@ -1139,7 +1139,7 @@ void JSON::ProjectModel::deleteCurrentAction()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
-      tr("Do you want to delete action \"%1\"?").arg(m_selectedAction.title()),
+      tr("Do you want to delete action \"%1\"?").arg(m_selectedAction.title),
       tr("This action cannot be undone. Do you wish to proceed?"),
       QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
 
@@ -1148,12 +1148,12 @@ void JSON::ProjectModel::deleteCurrentAction()
     return;
 
   // Delete the action
-  m_actions.removeAt(m_selectedAction.actionId());
+  m_actions.erase(m_actions.begin() + m_selectedAction.actionId);
 
   // Regenerate action IDs
   int id = 0;
   for (auto a = m_actions.begin(); a != m_actions.end(); ++a, ++id)
-    a->m_actionId = id;
+    a->actionId = id;
 
   // Build tree model & set modification flag
   buildTreeModel();
@@ -1177,8 +1177,7 @@ void JSON::ProjectModel::deleteCurrentDataset()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
-      tr("Do you want to delete dataset \"%1\"?")
-          .arg(m_selectedDataset.title()),
+      tr("Do you want to delete dataset \"%1\"?").arg(m_selectedDataset.title),
       tr("This action cannot be undone. Do you wish to proceed?"),
       QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
 
@@ -1187,18 +1186,19 @@ void JSON::ProjectModel::deleteCurrentDataset()
     return;
 
   // Get group ID & dataset ID
-  const auto groupId = m_selectedDataset.groupId();
-  const auto datasetId = m_selectedDataset.datasetId();
+  const auto groupId = m_selectedDataset.groupId;
+  const auto datasetId = m_selectedDataset.datasetId;
 
   // Remove dataset
-  m_groups[groupId].m_datasets.removeAt(datasetId);
+  m_groups[groupId].datasets.erase(m_groups[groupId].datasets.begin()
+                                   + datasetId);
 
   // Reassign dataset IDs
   int id = 0;
-  auto begin = m_groups[groupId].m_datasets.begin();
-  auto end = m_groups[groupId].m_datasets.end();
+  auto end = m_groups[groupId].datasets.end();
+  auto begin = m_groups[groupId].datasets.begin();
   for (auto dataset = begin; dataset != end; ++dataset, ++id)
-    dataset->m_datasetId = id;
+    dataset->datasetId = id;
 
   // Build tree model & set modification flag
   buildTreeModel();
@@ -1207,7 +1207,7 @@ void JSON::ProjectModel::deleteCurrentDataset()
   // Select parent group
   for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
   {
-    if (i.value().groupId() == groupId)
+    if (i.value().groupId == groupId)
     {
       m_selectionModel->setCurrentIndex(i.key()->index(),
                                         QItemSelectionModel::ClearAndSelect);
@@ -1226,19 +1226,20 @@ void JSON::ProjectModel::deleteCurrentDataset()
 void JSON::ProjectModel::duplicateCurrentGroup()
 {
   // Initialize a new group
-  auto group = JSON::Group(m_groups.count());
-  group.m_widget = m_selectedGroup.widget();
-  group.m_title = tr("%1 (Copy)").arg(m_selectedGroup.title());
-  for (auto i = 0; i < m_selectedGroup.m_datasets.count(); ++i)
+  JSON::Group group;
+  group.groupId = m_groups.size();
+  group.widget = m_selectedGroup.widget;
+  group.title = tr("%1 (Copy)").arg(m_selectedGroup.title);
+  for (size_t i = 0; i < m_selectedGroup.datasets.size(); ++i)
   {
-    auto dataset = m_selectedGroup.m_datasets.at(i);
-    dataset.m_groupId = group.groupId();
-    dataset.m_index = nextDatasetIndex() + i;
-    group.m_datasets.append(dataset);
+    auto &dataset = m_selectedGroup.datasets[i];
+    dataset.groupId = group.groupId;
+    dataset.index = nextDatasetIndex() + i;
+    group.datasets.push_back(dataset);
   }
 
   // Register the group
-  m_groups.append(group);
+  m_groups.push_back(group);
 
   // Build tree model & set modification flag
   buildTreeModel();
@@ -1247,7 +1248,7 @@ void JSON::ProjectModel::duplicateCurrentGroup()
   // Select the group
   for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
   {
-    if (i.value().groupId() == group.groupId())
+    if (i.value().groupId == group.groupId)
     {
       m_selectionModel->setCurrentIndex(i.key()->index(),
                                         QItemSelectionModel::ClearAndSelect);
@@ -1266,17 +1267,18 @@ void JSON::ProjectModel::duplicateCurrentGroup()
 void JSON::ProjectModel::duplicateCurrentAction()
 {
   // Initialize a new group
-  auto action = JSON::Action(m_actions.count());
-  action.m_title = tr("%1 (Copy)").arg(m_selectedAction.title());
-  action.m_eolSequence = m_selectedAction.eolSequence();
-  action.m_txData = m_selectedAction.txData();
-  action.m_icon = m_selectedAction.icon();
-  action.m_autoExecuteOnConnect = m_selectedAction.m_autoExecuteOnConnect;
-  action.m_timerIntervalMs = m_selectedAction.m_timerIntervalMs;
-  action.m_timerMode = m_selectedAction.m_timerMode;
+  JSON::Action action;
+  action.actionId = m_actions.size();
+  action.icon = m_selectedAction.icon;
+  action.txData = m_selectedAction.txData;
+  action.timerMode = m_selectedAction.timerMode;
+  action.eolSequence = m_selectedAction.eolSequence;
+  action.timerIntervalMs = m_selectedAction.timerIntervalMs;
+  action.title = tr("%1 (Copy)").arg(m_selectedAction.title);
+  action.autoExecuteOnConnect = m_selectedAction.autoExecuteOnConnect;
 
   // Register the group
-  m_actions.append(action);
+  m_actions.push_back(action);
 
   // Build tree model & set modification flag
   buildTreeModel();
@@ -1285,7 +1287,7 @@ void JSON::ProjectModel::duplicateCurrentAction()
   // Select the action
   for (auto i = m_actionItems.constBegin(); i != m_actionItems.constEnd(); ++i)
   {
-    if (i.value().actionId() == action.actionId())
+    if (i.value().actionId == action.actionId)
     {
       m_selectionModel->setCurrentIndex(i.key()->index(),
                                         QItemSelectionModel::ClearAndSelect);
@@ -1306,12 +1308,12 @@ void JSON::ProjectModel::duplicateCurrentDataset()
 {
   // Initialize a new dataset
   auto dataset = m_selectedDataset;
-  dataset.m_title = tr("%1 (Copy)").arg(dataset.title());
-  dataset.m_index = nextDatasetIndex();
-  dataset.m_datasetId = m_groups[dataset.groupId()].datasetCount();
+  dataset.index = nextDatasetIndex();
+  dataset.title = tr("%1 (Copy)").arg(dataset.title);
+  dataset.datasetId = m_groups[dataset.groupId].datasets.size();
 
   // Register the dataset to the group
-  m_groups[dataset.groupId()].m_datasets.append(dataset);
+  m_groups[dataset.groupId].datasets.push_back(dataset);
 
   // Build tree model & set modification flag
   buildTreeModel();
@@ -1320,8 +1322,8 @@ void JSON::ProjectModel::duplicateCurrentDataset()
   // Select dataset
   for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i)
   {
-    if (i.value().groupId() == dataset.groupId()
-        && i.value().datasetId() == dataset.datasetId())
+    if (i.value().groupId == dataset.groupId
+        && i.value().datasetId == dataset.datasetId)
     {
       m_selectionModel->setCurrentIndex(i.key()->index(),
                                         QItemSelectionModel::ClearAndSelect);
@@ -1345,7 +1347,7 @@ void JSON::ProjectModel::duplicateCurrentDataset()
 void JSON::ProjectModel::ensureValidGroup()
 {
   // Add a group if needed
-  if (m_groups.isEmpty())
+  if (m_groups.empty())
     addGroup(tr("Group"), SerialStudio::NoGroupWidget);
 
   // Lambda to check if a group is compatible
@@ -1372,18 +1374,18 @@ void JSON::ProjectModel::ensureValidGroup()
 
     if (item && m_groupItems.contains(item))
     {
-      if (isValidGroup(m_groupItems.value(item).widget()))
+      if (isValidGroup(m_groupItems.value(item).widget))
         hasGroupSelected = true;
     }
 
     else if (item && m_datasetItems.contains(item))
     {
-      auto groupId = m_selectedDataset.m_groupId;
+      auto groupId = m_selectedDataset.groupId;
       for (const auto &group : std::as_const(m_groups))
       {
-        if (group.groupId() == groupId)
+        if (group.groupId == groupId)
         {
-          if (isValidGroup(group.widget()))
+          if (isValidGroup(group.widget))
           {
             m_selectedGroup = group;
             hasGroupSelected = true;
@@ -1399,7 +1401,7 @@ void JSON::ProjectModel::ensureValidGroup()
   {
     for (const auto &group : std::as_const(m_groups))
     {
-      if (isValidGroup(group.widget()))
+      if (isValidGroup(group.widget))
       {
         hasGroupSelected = true;
         m_selectedGroup = group;
@@ -1427,8 +1429,9 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
 {
   // Initialize a new dataset
   ensureValidGroup();
-  const auto groupId = m_selectedGroup.groupId();
-  JSON::Dataset dataset(groupId);
+  const auto groupId = m_selectedGroup.groupId;
+  JSON::Dataset dataset;
+  dataset.groupId = groupId;
 
   // Configure dataset options
   QString title;
@@ -1439,27 +1442,27 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
       break;
     case SerialStudio::DatasetPlot:
       title = tr("New Plot");
-      dataset.m_graph = true;
+      dataset.plt = true;
       break;
     case SerialStudio::DatasetFFT:
       title = tr("New FFT Plot");
-      dataset.m_fft = true;
+      dataset.fft = true;
       break;
     case SerialStudio::DatasetBar:
       title = tr("New Level Indicator");
-      dataset.m_widget = QStringLiteral("bar");
+      dataset.widget = QStringLiteral("bar");
       break;
     case SerialStudio::DatasetGauge:
       title = tr("New Gauge");
-      dataset.m_widget = QStringLiteral("gauge");
+      dataset.widget = QStringLiteral("gauge");
       break;
     case SerialStudio::DatasetCompass:
       title = tr("New Compass");
-      dataset.m_widget = QStringLiteral("compass");
+      dataset.widget = QStringLiteral("compass");
       break;
     case SerialStudio::DatasetLED:
       title = tr("New LED Indicator");
-      dataset.m_led = true;
+      dataset.led = true;
       break;
     default:
       break;
@@ -1468,9 +1471,9 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
   // Check if any existing dataset has the same title
   int count = 1;
   QString newTitle = title;
-  for (const auto &d : std::as_const(m_groups[groupId].m_datasets))
+  for (const auto &d : std::as_const(m_groups[groupId].datasets))
   {
-    if (d.m_title == newTitle)
+    if (d.title == newTitle)
     {
       count++;
       newTitle = QString("%1 (%2)").arg(title).arg(count);
@@ -1481,9 +1484,9 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
   while (count > 1)
   {
     bool titleExists = false;
-    for (const auto &d : std::as_const(m_groups[groupId].m_datasets))
+    for (const auto &d : std::as_const(m_groups[groupId].datasets))
     {
-      if (d.m_title == newTitle)
+      if (d.title == newTitle)
       {
         count++;
         newTitle = QString("%1 (%2)").arg(title).arg(count);
@@ -1497,12 +1500,12 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
   }
 
   // Assign dataset title, ID & frame index
-  dataset.m_title = newTitle;
-  dataset.m_index = nextDatasetIndex();
-  dataset.m_datasetId = m_groups[groupId].m_datasets.count();
+  dataset.title = newTitle;
+  dataset.index = nextDatasetIndex();
+  dataset.datasetId = m_groups[groupId].datasets.size();
 
   // Add dataset to group
-  m_groups[groupId].m_datasets.append(dataset);
+  m_groups[groupId].datasets.push_back(dataset);
 
   // Build tree model & set modification flag
   buildTreeModel();
@@ -1511,8 +1514,8 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
   // Select newly added dataset item
   for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i)
   {
-    if (i.value().datasetId() == dataset.datasetId()
-        && i.value().groupId() == dataset.groupId())
+    if (i.value().datasetId == dataset.datasetId
+        && i.value().groupId == dataset.groupId)
     {
       m_selectionModel->setCurrentIndex(i.key()->index(),
                                         QItemSelectionModel::ClearAndSelect);
@@ -1540,31 +1543,31 @@ void JSON::ProjectModel::changeDatasetOption(
   switch (option)
   {
     case SerialStudio::DatasetPlot:
-      m_selectedDataset.m_graph = checked;
+      m_selectedDataset.plt = checked;
       break;
     case SerialStudio::DatasetFFT:
-      m_selectedDataset.m_fft = checked;
+      m_selectedDataset.fft = checked;
       break;
     case SerialStudio::DatasetBar:
-      m_selectedDataset.m_widget = checked ? QStringLiteral("bar") : "";
+      m_selectedDataset.widget = checked ? QStringLiteral("bar") : "";
       break;
     case SerialStudio::DatasetGauge:
-      m_selectedDataset.m_widget = checked ? QStringLiteral("gauge") : "";
+      m_selectedDataset.widget = checked ? QStringLiteral("gauge") : "";
       break;
     case SerialStudio::DatasetCompass:
-      m_selectedDataset.m_widget = checked ? QStringLiteral("compass") : "";
+      m_selectedDataset.widget = checked ? QStringLiteral("compass") : "";
       break;
     case SerialStudio::DatasetLED:
-      m_selectedDataset.m_led = checked;
+      m_selectedDataset.led = checked;
       break;
     default:
       break;
   }
 
   // Replace dataset
-  const auto groupId = m_selectedDataset.groupId();
-  const auto datasetId = m_selectedDataset.datasetId();
-  m_groups[groupId].m_datasets.replace(datasetId, m_selectedDataset);
+  const auto groupId = m_selectedDataset.groupId;
+  const auto datasetId = m_selectedDataset.datasetId;
+  m_groups[groupId].datasets[datasetId] = m_selectedDataset;
 
   // Build tree model & set modification flag
   buildTreeModel();
@@ -1573,7 +1576,7 @@ void JSON::ProjectModel::changeDatasetOption(
   // Select dataset item again to rebuild dataset model
   for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i)
   {
-    if (i.value().datasetId() == datasetId && i.value().groupId() == groupId)
+    if (i.value().datasetId == datasetId && i.value().groupId == groupId)
     {
       m_selectionModel->setCurrentIndex(i.key()->index(),
                                         QItemSelectionModel::ClearAndSelect);
@@ -1597,7 +1600,7 @@ void JSON::ProjectModel::addAction()
   QString title = tr("New Action");
   for (const auto &action : std::as_const(m_actions))
   {
-    if (action.m_title == title)
+    if (action.title == title)
     {
       count++;
       title = QString("%1 (%2)").arg(title).arg(count);
@@ -1610,7 +1613,7 @@ void JSON::ProjectModel::addAction()
     bool titleExists = false;
     for (const auto &action : std::as_const(m_actions))
     {
-      if (action.m_title == title)
+      if (action.title == title)
       {
         count++;
         title = QString("%1 (%2)").arg(title).arg(count);
@@ -1624,11 +1627,12 @@ void JSON::ProjectModel::addAction()
   }
 
   // Create a new action
-  JSON::Action action(m_actions.count());
-  action.m_title = title;
+  JSON::Action action;
+  action.title = title;
+  action.actionId = m_actions.size();
 
   // Register the action
-  m_actions.append(action);
+  m_actions.push_back(action);
 
   // Update the user interface
   buildTreeModel();
@@ -1637,7 +1641,7 @@ void JSON::ProjectModel::addAction()
   // Select action
   for (auto i = m_actionItems.constBegin(); i != m_actionItems.constEnd(); ++i)
   {
-    if (i.value().actionId() == action.actionId())
+    if (i.value().actionId == action.actionId)
     {
       m_selectionModel->setCurrentIndex(i.key()->index(),
                                         QItemSelectionModel::ClearAndSelect);
@@ -1665,7 +1669,7 @@ void JSON::ProjectModel::addGroup(const QString &title,
   QString newTitle = title;
   for (const auto &group : std::as_const(m_groups))
   {
-    if (group.m_title == newTitle)
+    if (group.title == newTitle)
     {
       count++;
       newTitle = QString("%1 (%2)").arg(title).arg(count);
@@ -1678,7 +1682,7 @@ void JSON::ProjectModel::addGroup(const QString &title,
     bool titleExists = false;
     for (const auto &group : std::as_const(m_groups))
     {
-      if (group.m_title == newTitle)
+      if (group.title == newTitle)
       {
         count++;
         newTitle = QString("%1 (%2)").arg(title).arg(count);
@@ -1692,12 +1696,13 @@ void JSON::ProjectModel::addGroup(const QString &title,
   }
 
   // Create a new group
-  JSON::Group group(m_groups.count());
-  group.m_title = newTitle;
+  JSON::Group group;
+  group.title = newTitle;
+  group.groupId = m_groups.size();
 
   // Register the group & add the widget
-  m_groups.append(group);
-  setGroupWidget(m_groups.count() - 1, widget);
+  m_groups.push_back(group);
+  setGroupWidget(m_groups.size() - 1, widget);
 
   // Update the user interface
   buildTreeModel();
@@ -1706,7 +1711,7 @@ void JSON::ProjectModel::addGroup(const QString &title,
   // Select group
   for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
   {
-    if (i.value().groupId() == group.groupId())
+    if (i.value().groupId == group.groupId)
     {
       m_selectionModel->setCurrentIndex(i.key()->index(),
                                         QItemSelectionModel::ClearAndSelect);
@@ -1736,17 +1741,17 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
                                         const SerialStudio::GroupWidget widget)
 {
   // Get group data
-  auto grp = m_groups.at(group);
-  const auto groupId = grp.groupId();
+  auto &grp = m_groups[group];
+  const auto groupId = grp.groupId;
 
   // Warn user if group contains existing datasets
-  if (!(grp.m_datasets.isEmpty()))
+  if (!grp.datasets.empty())
   {
     if ((widget == SerialStudio::DataGrid || widget == SerialStudio::MultiPlot
          || widget == SerialStudio::NoGroupWidget)
-        && (grp.widget() == "multiplot" || grp.widget() == "datagrid"
-            || grp.widget() == ""))
-      grp.m_widget = "";
+        && (grp.widget == "multiplot" || grp.widget == "datagrid"
+            || grp.widget == ""))
+      grp.widget = "";
 
     else
     {
@@ -1757,197 +1762,197 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
       if (ret == QMessageBox::No)
         return false;
       else
-        grp.m_datasets.clear();
+        grp.datasets.clear();
     }
   }
 
   // No widget
   if (widget == SerialStudio::NoGroupWidget)
-    grp.m_widget = "";
+    grp.widget = "";
 
   // Data grid widget
   if (widget == SerialStudio::DataGrid)
-    grp.m_widget = "datagrid";
+    grp.widget = "datagrid";
 
   // Multiplot widget
   else if (widget == SerialStudio::MultiPlot)
-    grp.m_widget = "multiplot";
+    grp.widget = "multiplot";
 
   // Accelerometer widget
   else if (widget == SerialStudio::Accelerometer)
   {
     // Set widget type
-    grp.m_widget = "accelerometer";
+    grp.widget = "accelerometer";
 
     // Create datasets
     JSON::Dataset x, y, z;
 
     // Set dataset IDs
-    x.m_datasetId = 0;
-    y.m_datasetId = 1;
-    z.m_datasetId = 2;
+    x.datasetId = 0;
+    y.datasetId = 1;
+    z.datasetId = 2;
 
     // Register parent group for the datasets
-    x.m_groupId = groupId;
-    y.m_groupId = groupId;
-    z.m_groupId = groupId;
+    x.groupId = groupId;
+    y.groupId = groupId;
+    z.groupId = groupId;
 
     // Set dataset indexes
-    x.m_index = nextDatasetIndex();
-    y.m_index = nextDatasetIndex() + 1;
-    z.m_index = nextDatasetIndex() + 2;
+    x.index = nextDatasetIndex();
+    y.index = nextDatasetIndex() + 1;
+    z.index = nextDatasetIndex() + 2;
 
     // Set measurement units
-    x.m_units = "m/s²";
-    y.m_units = "m/s²";
-    z.m_units = "m/s²";
+    x.units = "m/s²";
+    y.units = "m/s²";
+    z.units = "m/s²";
 
     // Set dataset properties
-    x.m_widget = "x";
-    y.m_widget = "y";
-    z.m_widget = "z";
-    x.m_graph = true;
-    y.m_graph = true;
-    z.m_graph = true;
-    x.m_title = tr("Accelerometer %1").arg("X");
-    y.m_title = tr("Accelerometer %1").arg("Y");
-    z.m_title = tr("Accelerometer %1").arg("Z");
+    x.plt = true;
+    y.plt = true;
+    z.plt = true;
+    x.widget = "x";
+    y.widget = "y";
+    z.widget = "z";
+    x.title = tr("Accelerometer %1").arg("X");
+    y.title = tr("Accelerometer %1").arg("Y");
+    z.title = tr("Accelerometer %1").arg("Z");
 
     // Add datasets to group
-    grp.m_datasets.append(x);
-    grp.m_datasets.append(y);
-    grp.m_datasets.append(z);
+    grp.datasets.push_back(x);
+    grp.datasets.push_back(y);
+    grp.datasets.push_back(z);
   }
 
   // Gyroscope widget
   else if (widget == SerialStudio::Gyroscope)
   {
     // Set widget type
-    grp.m_widget = "gyro";
+    grp.widget = "gyro";
 
     // Create datasets
     JSON::Dataset x, y, z;
 
     // Set dataset IDs
-    x.m_datasetId = 0;
-    y.m_datasetId = 1;
-    z.m_datasetId = 2;
+    x.datasetId = 0;
+    y.datasetId = 1;
+    z.datasetId = 2;
 
     // Register parent group for the datasets
-    x.m_groupId = groupId;
-    y.m_groupId = groupId;
-    z.m_groupId = groupId;
+    x.groupId = groupId;
+    y.groupId = groupId;
+    z.groupId = groupId;
 
     // Set dataset indexes
-    x.m_index = nextDatasetIndex();
-    y.m_index = nextDatasetIndex() + 1;
-    z.m_index = nextDatasetIndex() + 2;
+    x.index = nextDatasetIndex();
+    y.index = nextDatasetIndex() + 1;
+    z.index = nextDatasetIndex() + 2;
 
     // Set measurement units
-    x.m_units = "deg/s";
-    y.m_units = "deg/s";
-    z.m_units = "deg/s";
+    x.units = "deg/s";
+    y.units = "deg/s";
+    z.units = "deg/s";
 
     // Set dataset properties
-    x.m_widget = "x";
-    y.m_widget = "y";
-    z.m_widget = "z";
-    x.m_graph = true;
-    y.m_graph = true;
-    z.m_graph = true;
-    x.m_title = tr("Gyro %1").arg("X");
-    y.m_title = tr("Gyro %1").arg("Y");
-    z.m_title = tr("Gyro %1").arg("Z");
+    x.plt = true;
+    y.plt = true;
+    z.plt = true;
+    x.widget = "x";
+    y.widget = "y";
+    z.widget = "z";
+    x.title = tr("Gyro %1").arg("X");
+    y.title = tr("Gyro %1").arg("Y");
+    z.title = tr("Gyro %1").arg("Z");
 
     // Add datasets to group
-    grp.m_datasets.append(x);
-    grp.m_datasets.append(y);
-    grp.m_datasets.append(z);
+    grp.datasets.push_back(x);
+    grp.datasets.push_back(y);
+    grp.datasets.push_back(z);
   }
 
   // Map widget
   else if (widget == SerialStudio::GPS)
   {
     // Set widget type
-    grp.m_widget = "map";
+    grp.widget = "map";
 
     // Create datasets
     JSON::Dataset lat, lon, alt;
 
     // Set dataset IDs
-    lat.m_datasetId = 0;
-    lon.m_datasetId = 1;
-    alt.m_datasetId = 2;
+    lat.datasetId = 0;
+    lon.datasetId = 1;
+    alt.datasetId = 2;
 
     // Register parent group for the datasets
-    lat.m_groupId = groupId;
-    lon.m_groupId = groupId;
-    alt.m_groupId = groupId;
+    lat.groupId = groupId;
+    lon.groupId = groupId;
+    alt.groupId = groupId;
 
     // Set dataset indexes
-    lat.m_index = nextDatasetIndex();
-    lon.m_index = nextDatasetIndex() + 1;
-    alt.m_index = nextDatasetIndex() + 2;
+    lat.index = nextDatasetIndex();
+    lon.index = nextDatasetIndex() + 1;
+    alt.index = nextDatasetIndex() + 2;
 
     // Set measurement units
-    lat.m_units = "°";
-    lon.m_units = "°";
-    alt.m_units = "m";
+    lat.units = "°";
+    lon.units = "°";
+    alt.units = "m";
 
     // Set dataset properties
-    lat.m_widget = "lat";
-    lon.m_widget = "lon";
-    alt.m_widget = "alt";
-    lat.m_title = tr("Latitude");
-    lon.m_title = tr("Longitude");
-    alt.m_title = tr("Altitude");
+    lat.widget = "lat";
+    lon.widget = "lon";
+    alt.widget = "alt";
+    lat.title = tr("Latitude");
+    lon.title = tr("Longitude");
+    alt.title = tr("Altitude");
 
     // Add datasets to group
-    grp.m_datasets.append(lat);
-    grp.m_datasets.append(lon);
-    grp.m_datasets.append(alt);
+    grp.datasets.push_back(lat);
+    grp.datasets.push_back(lon);
+    grp.datasets.push_back(alt);
   }
 
   // 3D plot widget
   else if (widget == SerialStudio::Plot3D)
   {
     // Set widget type
-    grp.m_widget = "plot3d";
+    grp.widget = "plot3d";
 
     // Create datasets
     JSON::Dataset x, y, z;
 
     // Set dataset IDs
-    x.m_datasetId = 0;
-    y.m_datasetId = 1;
-    z.m_datasetId = 2;
+    x.datasetId = 0;
+    y.datasetId = 1;
+    z.datasetId = 2;
 
     // Register parent group for the datasets
-    x.m_groupId = groupId;
-    y.m_groupId = groupId;
-    z.m_groupId = groupId;
+    x.groupId = groupId;
+    y.groupId = groupId;
+    z.groupId = groupId;
 
     // Set dataset indexes
-    x.m_index = nextDatasetIndex();
-    y.m_index = nextDatasetIndex() + 1;
-    z.m_index = nextDatasetIndex() + 2;
+    x.index = nextDatasetIndex();
+    y.index = nextDatasetIndex() + 1;
+    z.index = nextDatasetIndex() + 2;
 
     // Set dataset properties
-    x.m_widget = "x";
-    y.m_widget = "y";
-    z.m_widget = "z";
-    x.m_title = tr("X");
-    y.m_title = tr("Y");
-    z.m_title = tr("Z");
+    x.widget = "x";
+    y.widget = "y";
+    z.widget = "z";
+    x.title = tr("X");
+    y.title = tr("Y");
+    z.title = tr("Z");
 
     // Add datasets to group
-    grp.m_datasets.append(x);
-    grp.m_datasets.append(y);
-    grp.m_datasets.append(z);
+    grp.datasets.push_back(x);
+    grp.datasets.push_back(y);
+    grp.datasets.push_back(z);
   }
 
   // Replace previous group with new group
-  m_groups.replace(group, grp);
+  m_groups[group] = grp;
 
   // Update UI
   return true;
@@ -2075,17 +2080,17 @@ void JSON::ProjectModel::buildTreeModel()
   m_rootItems.insert(frameParsingCode, kFrameParser);
 
   // Iterare through the actions and add them to the model
-  for (int aIndex = 0; aIndex < m_actions.size(); ++aIndex)
+  for (size_t idx = 0; idx < m_actions.size(); ++idx)
   {
     // Create action item
-    const auto action = m_actions[aIndex];
-    auto *actionItem = new QStandardItem(action.title());
+    const auto action = m_actions[idx];
+    auto *actionItem = new QStandardItem(action.title);
 
     // Configure action item
     const auto icon = "qrc:/rcc/icons/project-editor/treeview/action.svg";
     actionItem->setData(-1, TreeViewFrameIndex);
     actionItem->setData(icon, TreeViewIcon);
-    actionItem->setData(action.title(), TreeViewText);
+    actionItem->setData(action.title, TreeViewText);
 
     // Register action item
     root->appendRow(actionItem);
@@ -2093,11 +2098,11 @@ void JSON::ProjectModel::buildTreeModel()
   }
 
   // Iterate through the groups and add them to the model
-  for (int gIndex = 0; gIndex < m_groups.size(); ++gIndex)
+  for (size_t idx = 0; idx < m_groups.size(); ++idx)
   {
     // Create group item
-    const auto group = m_groups[gIndex];
-    auto *groupItem = new QStandardItem(group.title());
+    const auto group = m_groups[idx];
+    auto *groupItem = new QStandardItem(group.title);
 
     // Get which icon to use for the group
     auto widget = SerialStudio::getDashboardWidget(group);
@@ -2106,14 +2111,14 @@ void JSON::ProjectModel::buildTreeModel()
     // Set metadata for the group item
     groupItem->setData(icon, TreeViewIcon);
     groupItem->setData(-1, TreeViewFrameIndex);
-    groupItem->setData(group.title(), TreeViewText);
+    groupItem->setData(group.title, TreeViewText);
 
     // Iterate through the datasets within this group and add them as children
-    for (int dIndex = 0; dIndex < group.datasets().size(); ++dIndex)
+    for (size_t dIndex = 0; dIndex < group.datasets.size(); ++dIndex)
     {
       // Create dataset item
-      const auto dataset = group.datasets()[dIndex];
-      auto *datasetItem = new QStandardItem(dataset.title());
+      const auto dataset = group.datasets[dIndex];
+      auto *datasetItem = new QStandardItem(dataset.title);
 
       // Get which icon to use for the DATASET
       auto widgets = SerialStudio::getDashboardWidgets(dataset);
@@ -2123,8 +2128,8 @@ void JSON::ProjectModel::buildTreeModel()
 
       // Set metadata for the dataset item
       datasetItem->setData(dIcon, TreeViewIcon);
-      datasetItem->setData(dataset.title(), TreeViewText);
-      datasetItem->setData(dataset.index(), TreeViewFrameIndex);
+      datasetItem->setData(dataset.title, TreeViewText);
+      datasetItem->setData(dataset.index, TreeViewFrameIndex);
 
       // Add dataset item as child for group item
       groupItem->appendRow(datasetItem);
@@ -2135,7 +2140,7 @@ void JSON::ProjectModel::buildTreeModel()
 
     // Restore expanded states for the group
     restoreExpandedStateMap(groupItem, expandedStates,
-                            root->text() + "/" + group.title());
+                            root->text() + "/" + group.title);
 
     // Add the group item to the root
     root->appendRow(groupItem);
@@ -2330,7 +2335,7 @@ void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
   auto title = new QStandardItem();
   title->setEditable(true);
   title->setData(TextField, WidgetType);
-  title->setData(group.title(), EditableValue);
+  title->setData(group.title, EditableValue);
   title->setData(tr("Title"), ParameterName);
   title->setData(kGroupView_Title, ParameterType);
   title->setData(tr("Untitled Group"), PlaceholderValue);
@@ -2345,7 +2350,7 @@ void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
   for (auto it = m_groupWidgets.begin(); it != m_groupWidgets.end();
        ++it, ++index)
   {
-    if (it.key() == group.widget())
+    if (it.key() == group.widget)
     {
       found = true;
       break;
@@ -2394,7 +2399,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   auto title = new QStandardItem();
   title->setEditable(true);
   title->setData(TextField, WidgetType);
-  title->setData(action.title(), EditableValue);
+  title->setData(action.title, EditableValue);
   title->setData(tr("Title"), ParameterName);
   title->setData(kActionView_Title, ParameterType);
   title->setData(tr("Untitled Action"), PlaceholderValue);
@@ -2407,7 +2412,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   auto icon = new QStandardItem();
   icon->setEditable(true);
   icon->setData(IconPicker, WidgetType);
-  icon->setData(action.icon(), EditableValue);
+  icon->setData(action.icon, EditableValue);
   icon->setData(tr("Icon"), ParameterName);
   icon->setData(kActionView_Icon, ParameterType);
   icon->setData(tr("Default Icon"), PlaceholderValue);
@@ -2419,7 +2424,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   auto binaryData = new QStandardItem();
   binaryData->setEditable(true);
   binaryData->setData(CheckBox, WidgetType);
-  binaryData->setData(action.binaryData(), EditableValue);
+  binaryData->setData(action.binaryData, EditableValue);
   binaryData->setData(tr("Binary Data"), ParameterName);
   binaryData->setData(kActionView_Binary, ParameterType);
   binaryData->setData(0, PlaceholderValue);
@@ -2430,12 +2435,12 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   m_actionModel->appendRow(binaryData);
 
   // Add binary action data
-  if (action.binaryData())
+  if (action.binaryData)
   {
     auto data = new QStandardItem();
     data->setEditable(true);
     data->setData(HexTextField, WidgetType);
-    data->setData(action.txData(), EditableValue);
+    data->setData(action.txData, EditableValue);
     data->setData(tr("TX Data (Hex)"), ParameterName);
     data->setData(kActionView_Data, ParameterType);
     data->setData(tr("Command"), PlaceholderValue);
@@ -2452,7 +2457,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
     auto data = new QStandardItem();
     data->setEditable(true);
     data->setData(TextField, WidgetType);
-    data->setData(action.txData(), EditableValue);
+    data->setData(action.txData, EditableValue);
     data->setData(tr("TX Data"), ParameterName);
     data->setData(kActionView_Data, ParameterType);
     data->setData(tr("Command"), PlaceholderValue);
@@ -2468,7 +2473,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
     for (auto it = m_eolSequences.begin(); it != m_eolSequences.end();
          ++it, ++eolIndex)
     {
-      if (it.key() == action.eolSequence())
+      if (it.key() == action.eolSequence)
       {
         found = true;
         break;
@@ -2496,7 +2501,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   auto autoExecute = new QStandardItem();
   autoExecute->setEditable(true);
   autoExecute->setData(CheckBox, WidgetType);
-  autoExecute->setData(action.autoExecuteOnConnect(), EditableValue);
+  autoExecute->setData(action.autoExecuteOnConnect, EditableValue);
   autoExecute->setData(tr("Auto Execute on Connect"), ParameterName);
   autoExecute->setData(kActionView_AutoExecute, ParameterType);
   autoExecute->setData(0, PlaceholderValue);
@@ -2512,7 +2517,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   timerMode->setEditable(true);
   timerMode->setData(ComboBox, WidgetType);
   timerMode->setData(m_timerModes, ComboBoxData);
-  timerMode->setData(static_cast<int>(action.timerMode()), EditableValue);
+  timerMode->setData(static_cast<int>(action.timerMode), EditableValue);
   timerMode->setData(tr("Timer Mode"), ParameterName);
   timerMode->setData(kActionView_TimerMode, ParameterType);
   timerMode->setData(tr("How and when the timer should activate."),
@@ -2522,12 +2527,12 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   m_actionModel->appendRow(timerMode);
 
   // Timer interval
-  if (action.timerMode() != JSON::Action::TimerMode::Off)
+  if (action.timerMode != JSON::TimerMode::Off)
   {
     auto timerInterval = new QStandardItem();
     timerInterval->setEditable(true);
     timerInterval->setData(IntField, WidgetType);
-    timerInterval->setData(action.timerIntervalMs(), EditableValue);
+    timerInterval->setData(action.timerIntervalMs, EditableValue);
     timerInterval->setData(tr("Timer Interval (ms)"), ParameterName);
     timerInterval->setData(kActionView_TimerInterval, ParameterType);
     timerInterval->setData(tr("Timer Interval (ms)"), PlaceholderValue);
@@ -2580,20 +2585,20 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
 
   // Get which optional parameters should be displayed
   const bool showWidget = currentDatasetIsEditable();
-  const bool showFFTOptions = dataset.fft();
-  const bool showLedOptions = dataset.led();
-  const bool showMinMax = dataset.graph() || dataset.widget() == "gauge"
-                          || dataset.widget() == "bar"
-                          || m_selectedGroup.widget() == "multiplot";
-  const bool showAlarm = dataset.led() || dataset.widget() == "gauge"
-                         || dataset.widget() == "bar"
-                         || m_selectedGroup.widget() == "datagrid";
+  const bool showFFTOptions = dataset.fft;
+  const bool showLedOptions = dataset.led;
+  const bool showMinMax = dataset.plt || dataset.widget == "gauge"
+                          || dataset.widget == "bar"
+                          || m_selectedGroup.widget == "multiplot";
+  const bool showAlarm = dataset.led || dataset.widget == "gauge"
+                         || dataset.widget == "bar"
+                         || m_selectedGroup.widget == "datagrid";
 
   // Add dataset title
   auto title = new QStandardItem();
   title->setEditable(true);
   title->setData(TextField, WidgetType);
-  title->setData(dataset.title(), EditableValue);
+  title->setData(dataset.title, EditableValue);
   title->setData(tr("Title"), ParameterName);
   title->setData(kDatasetView_Title, ParameterType);
   title->setData(tr("Untitled Dataset"), PlaceholderValue);
@@ -2607,7 +2612,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   auto index = new QStandardItem();
   index->setEditable(true);
   index->setData(IntField, WidgetType);
-  index->setData(dataset.index(), EditableValue);
+  index->setData(dataset.index, EditableValue);
   index->setData(tr("Frame Index"), ParameterName);
   index->setData(kDatasetView_Index, ParameterType);
   index->setData(nextDatasetIndex(), PlaceholderValue);
@@ -2620,7 +2625,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   auto units = new QStandardItem();
   units->setEditable(true);
   units->setData(TextField, WidgetType);
-  units->setData(dataset.units(), EditableValue);
+  units->setData(dataset.units, EditableValue);
   units->setData(tr("Measurement Unit"), ParameterName);
   units->setData(kDatasetView_Units, ParameterType);
   units->setData(tr("Volts, Amps, etc."), PlaceholderValue);
@@ -2630,14 +2635,14 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   m_datasetModel->appendRow(units);
 
   // Add show in overview method
-  bool hasWidget = showFFTOptions || showMinMax || !dataset.widget().isEmpty();
-  if (hasWidget && m_groups.count() > 1)
+  bool hasWidget = showFFTOptions || showMinMax || !dataset.widget.isEmpty();
+  if (hasWidget && m_groups.size() > 1)
   {
     auto overview = new QStandardItem();
     overview->setEditable(true);
     overview->setData(CheckBox, WidgetType);
     overview->setData(tr("Overview"), ParameterName);
-    overview->setData(dataset.displayInOverview(), EditableValue);
+    overview->setData(dataset.overviewDisplay, EditableValue);
     overview->setData(kDatasetView_Overview, ParameterType);
     overview->setData(tr("Include widget in overview dashboard"),
                       ParameterDescription);
@@ -2655,7 +2660,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     for (auto it = m_datasetWidgets.begin(); it != m_datasetWidgets.end();
          ++it, ++widgetIndex)
     {
-      if (it.key() == dataset.widget())
+      if (it.key() == dataset.widget)
       {
         found = true;
         break;
@@ -2683,7 +2688,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   // Get appropiate plotting mode index for current dataset
   int plotIndex = 0;
   bool found = false;
-  const auto currentPair = qMakePair(dataset.graph(), dataset.log());
+  const auto currentPair = qMakePair(dataset.plt, dataset.log);
   for (auto it = m_plotOptions.begin(); it != m_plotOptions.end();
        ++it, ++plotIndex)
   {
@@ -2714,7 +2719,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   auto fft = new QStandardItem();
   fft->setEditable(true);
   fft->setData(CheckBox, WidgetType);
-  fft->setData(dataset.fft(), EditableValue);
+  fft->setData(dataset.fft, EditableValue);
   fft->setData(tr("FFT Plot"), ParameterName);
   fft->setData(kDatasetView_FFT, ParameterType);
   fft->setData(0, PlaceholderValue);
@@ -2726,7 +2731,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   auto led = new QStandardItem();
   led->setEditable(true);
   led->setData(CheckBox, WidgetType);
-  led->setData(dataset.led(), EditableValue);
+  led->setData(dataset.led, EditableValue);
   led->setData(tr("Show in LED Panel"), ParameterName);
   led->setData(kDatasetView_LED, ParameterType);
   led->setData(0, PlaceholderValue);
@@ -2735,16 +2740,16 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   m_datasetModel->appendRow(led);
 
   // Add X-axis selector
-  if (dataset.graph())
+  if (dataset.plt)
   {
     // Ensure X-axis ID is reset to "Samples" when an invalid index is set
     int xAxisIdx = 0;
     for (const auto &group : std::as_const(m_groups))
     {
-      for (const auto &d : group.datasets())
+      for (const auto &d : group.datasets)
       {
-        const auto idx = d.index();
-        if (idx == m_selectedDataset.xAxisId())
+        const auto idx = d.index;
+        if (idx == m_selectedDataset.xAxisId)
         {
           xAxisIdx = idx;
           break;
@@ -2776,7 +2781,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     auto min = new QStandardItem();
     min->setEditable(true);
     min->setData(FloatField, WidgetType);
-    min->setData(dataset.min(), EditableValue);
+    min->setData(dataset.min, EditableValue);
     min->setData(tr("Minimum Value"), ParameterName);
     min->setData(kDatasetView_Min, ParameterType);
     min->setData(0, PlaceholderValue);
@@ -2789,7 +2794,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     auto max = new QStandardItem();
     max->setEditable(true);
     max->setData(FloatField, WidgetType);
-    max->setData(dataset.max(), EditableValue);
+    max->setData(dataset.max, EditableValue);
     max->setData(tr("Maximum Value"), ParameterName);
     max->setData(kDatasetView_Max, ParameterType);
     max->setData(0, PlaceholderValue);
@@ -2802,25 +2807,38 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   // Add alarm value
   if (showAlarm)
   {
-    auto alarm = new QStandardItem();
-    alarm->setEditable(true);
-    alarm->setData(FloatField, WidgetType);
-    alarm->setData(dataset.alarm(), EditableValue);
-    alarm->setData(tr("Alarm Value"), ParameterName);
-    alarm->setData(kDatasetView_Alarm, ParameterType);
-    alarm->setData(0, PlaceholderValue);
-    alarm->setData(tr("Triggers alarm in bar widgets and LED panels"),
-                   ParameterDescription);
-    alarm->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
-                   ParameterIcon);
-    m_datasetModel->appendRow(alarm);
+    auto alarmLow = new QStandardItem();
+    alarmLow->setEditable(true);
+    alarmLow->setData(FloatField, WidgetType);
+    alarmLow->setData(dataset.alarmLow, EditableValue);
+    alarmLow->setData(tr("Alarm Low Value"), ParameterName);
+    alarmLow->setData(kDatasetView_AlarmLow, ParameterType);
+    alarmLow->setData(0, PlaceholderValue);
+    alarmLow->setData(tr("Triggers alarm in bar widgets and LED panels"),
+                      ParameterDescription);
+    alarmLow->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
+                      ParameterIcon);
+    m_datasetModel->appendRow(alarmLow);
+
+    auto alarmHigh = new QStandardItem();
+    alarmHigh->setEditable(true);
+    alarmHigh->setData(FloatField, WidgetType);
+    alarmHigh->setData(dataset.alarmHigh, EditableValue);
+    alarmHigh->setData(tr("Alarm High Value"), ParameterName);
+    alarmHigh->setData(kDatasetView_AlarmHigh, ParameterType);
+    alarmHigh->setData(0, PlaceholderValue);
+    alarmHigh->setData(tr("Triggers alarm in bar widgets and LED panels"),
+                       ParameterDescription);
+    alarmHigh->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
+                       ParameterIcon);
+    m_datasetModel->appendRow(alarmHigh);
   }
 
   // FFT-specific options
   if (showFFTOptions)
   {
     // Get FFT window size index
-    const auto windowSize = QString::number(dataset.fftSamples());
+    const auto windowSize = QString::number(dataset.fftSamples);
     int windowIndex = m_fftSamples.indexOf(windowSize);
     if (windowIndex < 0)
       windowIndex = 7;
@@ -2843,7 +2861,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     fftSamplingRate->setEditable(true);
     fftSamplingRate->setData(IntField, WidgetType);
     fftSamplingRate->setData(100, PlaceholderValue);
-    fftSamplingRate->setData(dataset.fftSamplingRate(), EditableValue);
+    fftSamplingRate->setData(dataset.fftSamplingRate, EditableValue);
     fftSamplingRate->setData(tr("FFT Sampling Rate"), ParameterName);
     fftSamplingRate->setData(kDatasetView_FFT_SamplingRate, ParameterType);
     fftSamplingRate->setData(tr("Sampling rate (Hz) for FFT calculation"),
@@ -2860,7 +2878,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     auto ledHigh = new QStandardItem();
     ledHigh->setEditable(true);
     ledHigh->setData(FloatField, WidgetType);
-    ledHigh->setData(dataset.ledHigh(), EditableValue);
+    ledHigh->setData(dataset.ledHigh, EditableValue);
     ledHigh->setData(tr("LED High (On) Value"), ParameterName);
     ledHigh->setData(kDatasetView_LED_High, ParameterType);
     ledHigh->setData(0, PlaceholderValue);
@@ -3088,14 +3106,14 @@ void JSON::ProjectModel::onGroupItemChanged(QStandardItem *item)
 
   // Obtain group ID
   bool modified = false;
-  const auto groupId = m_selectedGroup.groupId();
+  const auto groupId = m_selectedGroup.groupId;
 
   // Change group title
   if (id == kGroupView_Title)
   {
-    modified = m_selectedGroup.m_title != value.toString();
-    m_selectedGroup.m_title = value.toString();
-    m_groups.replace(groupId, m_selectedGroup);
+    modified = m_selectedGroup.title != value.toString();
+    m_selectedGroup.title = value.toString();
+    m_groups[groupId] = m_selectedGroup;
   }
 
   // Change group widget
@@ -3122,7 +3140,7 @@ void JSON::ProjectModel::onGroupItemChanged(QStandardItem *item)
     // Update group
     modified = setGroupWidget(groupId, widget);
     if (modified)
-      m_selectedGroup.m_widget = widgetStr;
+      m_selectedGroup.widget = widgetStr;
 
     // User canceled the operation, reload model GUI to restore previous value
     else
@@ -3130,7 +3148,7 @@ void JSON::ProjectModel::onGroupItemChanged(QStandardItem *item)
       buildTreeModel();
       for (auto g = m_groupItems.begin(); g != m_groupItems.end(); ++g)
       {
-        if (g.value().groupId() == m_selectedGroup.groupId())
+        if (g.value().groupId == m_selectedGroup.groupId)
         {
           m_selectionModel->setCurrentIndex(
               g.key()->index(), QItemSelectionModel::ClearAndSelect);
@@ -3184,40 +3202,38 @@ void JSON::ProjectModel::onActionItemChanged(QStandardItem *item)
   switch (static_cast<ActionItem>(id.toInt()))
   {
     case kActionView_Title:
-      m_selectedAction.m_title = value.toString();
+      m_selectedAction.title = value.toString();
       break;
     case kActionView_Data:
-      m_selectedAction.m_txData = value.toString();
+      m_selectedAction.txData = value.toString();
       break;
     case kActionView_EOL:
-      m_selectedAction.m_eolSequence = eolSequences.at(value.toInt());
+      m_selectedAction.eolSequence = eolSequences.at(value.toInt());
       break;
     case kActionView_Icon:
-      m_selectedAction.m_icon = value.toString();
+      m_selectedAction.icon = value.toString();
       Q_EMIT actionModelChanged();
       break;
     case kActionView_Binary:
-      m_selectedAction.m_binaryData = value.toBool();
+      m_selectedAction.binaryData = value.toBool();
       buildActionModel(m_selectedAction);
       break;
     case kActionView_AutoExecute:
-      m_selectedAction.m_autoExecuteOnConnect = value.toBool();
+      m_selectedAction.autoExecuteOnConnect = value.toBool();
       break;
     case kActionView_TimerMode:
-      m_selectedAction.m_timerMode
-          = static_cast<JSON::Action::TimerMode>(value.toInt());
+      m_selectedAction.timerMode = static_cast<JSON::TimerMode>(value.toInt());
       buildActionModel(m_selectedAction);
       break;
     case kActionView_TimerInterval:
-      m_selectedAction.m_timerIntervalMs = value.toInt();
+      m_selectedAction.timerIntervalMs = value.toInt();
       break;
     default:
       break;
   }
 
   // Replace action data
-  const auto actionId = m_selectedAction.actionId();
-  m_actions.replace(actionId, m_selectedAction);
+  m_actions[m_selectedAction.actionId] = m_selectedAction;
   buildTreeModel();
 
   // Mark document as modified
@@ -3337,65 +3353,68 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
   switch (static_cast<DatasetItem>(id.toInt()))
   {
     case kDatasetView_Title:
-      m_selectedDataset.m_title = value.toString();
+      m_selectedDataset.title = value.toString();
       break;
     case kDatasetView_Index:
-      m_selectedDataset.m_index = value.toInt();
+      m_selectedDataset.index = value.toInt();
       break;
     case kDatasetView_Units:
-      m_selectedDataset.m_units = value.toString();
+      m_selectedDataset.units = value.toString();
       break;
     case kDatasetView_Widget:
-      m_selectedDataset.m_widget = widgets.at(value.toInt());
+      m_selectedDataset.widget = widgets.at(value.toInt());
       buildDatasetModel(m_selectedDataset);
       break;
     case kDatasetView_FFT:
-      m_selectedDataset.m_fft = value.toBool();
+      m_selectedDataset.fft = value.toBool();
       buildDatasetModel(m_selectedDataset);
       break;
     case kDatasetView_LED:
-      m_selectedDataset.m_led = value.toBool();
+      m_selectedDataset.led = value.toBool();
       buildDatasetModel(m_selectedDataset);
       break;
     case kDatasetView_LED_High:
-      m_selectedDataset.m_ledHigh = value.toDouble();
+      m_selectedDataset.ledHigh = value.toDouble();
       break;
     case kDatasetView_Overview:
-      m_selectedDataset.m_displayInOverview = value.toBool();
+      m_selectedDataset.overviewDisplay = value.toBool();
       break;
     case kDatasetView_Plot:
-      m_selectedDataset.m_graph = plotOptions.at(value.toInt()).first;
-      m_selectedDataset.m_log = plotOptions.at(value.toInt()).second;
+      m_selectedDataset.plt = plotOptions.at(value.toInt()).first;
+      m_selectedDataset.log = plotOptions.at(value.toInt()).second;
       buildDatasetModel(m_selectedDataset);
       break;
     case kDatasetView_xAxis:
-      m_selectedDataset.m_xAxisId = value.toInt();
+      m_selectedDataset.xAxisId = value.toInt();
       break;
     case kDatasetView_Min:
-      m_selectedDataset.m_min = value.toDouble();
+      m_selectedDataset.min = value.toDouble();
       break;
     case kDatasetView_Max:
-      m_selectedDataset.m_max = value.toDouble();
+      m_selectedDataset.max = value.toDouble();
       break;
-    case kDatasetView_Alarm:
-      m_selectedDataset.m_alarm = value.toDouble();
+    case kDatasetView_AlarmLow:
+      m_selectedDataset.alarmLow = value.toDouble();
+      break;
+    case kDatasetView_AlarmHigh:
+      m_selectedDataset.alarmHigh = value.toDouble();
       break;
     case kDatasetView_FFT_Samples:
-      m_selectedDataset.m_fftSamples = m_fftSamples.at(value.toInt()).toInt();
+      m_selectedDataset.fftSamples = m_fftSamples.at(value.toInt()).toInt();
       break;
     case kDatasetView_FFT_SamplingRate:
-      m_selectedDataset.m_fftSamplingRate = value.toInt();
+      m_selectedDataset.fftSamplingRate = value.toInt();
       break;
     default:
       break;
   }
 
   // Replace dataset in parent group
-  const auto groupId = m_selectedDataset.groupId();
-  const auto datasetId = m_selectedDataset.datasetId();
-  auto group = m_groups.at(groupId);
-  group.m_datasets.replace(datasetId, m_selectedDataset);
-  m_groups.replace(groupId, group);
+  const auto groupId = m_selectedDataset.groupId;
+  const auto datasetId = m_selectedDataset.datasetId;
+  auto &group = m_groups[groupId];
+  group.datasets[datasetId] = m_selectedDataset;
+  m_groups[groupId] = group;
   buildTreeModel();
 
   // Mark document as modified
@@ -3489,13 +3508,14 @@ void JSON::ProjectModel::onCurrentSelectionChanged(const QModelIndex &current,
 int JSON::ProjectModel::nextDatasetIndex()
 {
   int maxIndex = 1;
-  for (auto i = 0; i < m_groups.count(); ++i)
+  for (size_t i = 0; i < m_groups.size(); ++i)
   {
-    for (auto j = 0; j < m_groups.at(i).datasetCount(); ++j)
+    const auto &group = m_groups[i];
+    for (size_t j = 0; j < group.datasets.size(); ++j)
     {
-      const auto dataset = m_groups.at(i).datasets().at(j);
-      if (dataset.m_index >= maxIndex)
-        maxIndex = dataset.m_index + 1;
+      const auto &dataset = group.datasets[j];
+      if (dataset.index >= maxIndex)
+        maxIndex = dataset.index + 1;
     }
   }
 

@@ -73,18 +73,18 @@ void Widgets::Accelerometer::updateData()
 
   // Get the accelerometer data and validate the dataset count
   const auto &acc = GET_GROUP(SerialStudio::DashboardAccelerometer, m_index);
-  if (acc.datasetCount() != 3)
+  if (acc.datasets.size() != 3)
     return;
 
   // Obtain the X, Y, and Z acceleration values
   double x = 0, y = 0;
   for (int i = 0; i < 3; ++i)
   {
-    auto dataset = acc.getDataset(i);
-    if (dataset.widget() == QStringLiteral("x"))
-      x = dataset.value().toDouble();
-    else if (dataset.widget() == QStringLiteral("y"))
-      y = dataset.value().toDouble();
+    auto dataset = acc.datasets[i];
+    if (dataset.widget == QStringLiteral("x"))
+      x = dataset.numericValue;
+    else if (dataset.widget == QStringLiteral("y"))
+      y = dataset.numericValue;
   }
 
   // Calculate the radius (magnitude) using only X and Y

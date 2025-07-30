@@ -35,8 +35,15 @@ Item {
   // Widget data inputs
   //
   required property color color
-  required property GaugeModel model
   required property var windowRoot
+  required property GaugeModel model
+
+  //
+  // Custom properties
+  //
+  property real normalizedValue: model.normalizedValue
+  Behavior on normalizedValue {NumberAnimation{duration: 100}}
+  onNormalizedValueChanged: control.requestPaint()
 
   //
   // Widget layout
@@ -49,75 +56,256 @@ Item {
     //
     // Gauge control
     //
-    CircularSlider {
+    Canvas {
       id: control
 
-      //
-      // Layout
-      //
+      antialiasing: true
       Layout.fillWidth: true
       Layout.fillHeight: true
-      Layout.topMargin: trackWidth / 2
-      Layout.alignment: Qt.AlignHCenter
 
-      //
-      // Colors
-      //
-      progressColor: root.color
-      alarmColor: Cpp_ThemeManager.colors["alarm"]
-      trackColor: Cpp_ThemeManager.colors["widget_base"]
+      property int steps: 5
+      property int subSteps: 4
+      property real arcWidth: 10
+      property real endAngle: 45
+      property real tickLength: 8
+      property real needleWidth: 3
+      property real startAngle: 135
+      property real subTickLength: 4
+      property color needleColor: root.color
+      property color alarmColor: Cpp_ThemeManager.colors["alarm"]
+      property color tickColor: Cpp_ThemeManager.colors["widget_border"]
+      property color borderColor: Cpp_ThemeManager.colors["widget_border"]
+      property color backgroundColor: Cpp_ThemeManager.colors["widget_base"]
+      property color minorTickColor: Cpp_ThemeManager.colors["widget_border"]
 
-      //
-      // Angles + rotation
-      //
-      endAngle: 320
-      rotation: 180
-      startAngle: 40
-      capStyle: Qt.FlatCap
+      function formatValue(val) {
+        return Cpp_UI_Dashboard.formatValue(val, model.minValue, model.maxValue)
+      }
 
-      //
-      // Track widths
-      //
-      progressWidth: trackWidth
-      trackWidth: Math.min(20, Math.max(5, Math.min(root.width, root.height) / 10)) + 2
+      Connections {
+        target: Cpp_ThemeManager
+        function onThemeChanged() {
+          control.requestPaint()
+        }
+      }
 
-      //
-      // Dataset/model input
-      //
-      value: root.model.value
-      minValue: root.model.minValue
-      maxValue: root.model.maxValue
-      alarmValue: root.model.alarmValue
-      alarmEnabled: root.model.alarmValue !== 0
+      TextMetrics {
+        id: labelMetrics
+        text: model.maxValue.toFixed(0)
+        font: Cpp_Misc_CommonFonts.customMonoFont(1, true)
+      }
 
-      //
-      // Alarm line
-      //
-      Shape {
-        layer.samples: 8
-        layer.enabled: true
-        width: control.width - 2 * control.trackWidth
-        height: control.height
-        visible: control.alarmEnabled && root.width >= root.height
+      onPaint: {
+        const ctx = getContext("2d")
+        ctx.clearRect(0, 0, width, height)
 
-        Behavior on opacity {NumberAnimation{}}
-        opacity: root.model.value >= root.model.alarmValue ? 1 : 0.5
+        // Iterator variables
+        let i = 0
+        let j = 0
 
-        ShapePath {
-          capStyle: Qt.RoundCap
-          fillColor: "transparent"
-          strokeColor: Cpp_ThemeManager.colors["alarm"]
-          strokeWidth: Math.max(control.trackWidth / 4, 2)
+        // Font & context setup
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+        ctx.font = `${labelMetrics.font.pixelSize}px '${labelMetrics.font.family}'`
 
-          PathAngleArc {
-            centerX: control.width / 2
-            centerY: control.height / 2
-            startAngle: control.alarmStartAngle - 90
-            sweepAngle: control.endAngle - control.alarmStartAngle
-            radiusX: control.baseRadius + control.trackWidth / 2 + 5
-            radiusY: control.baseRadius + control.trackWidth / 2 + 5
+        // Dimensions
+        const w = width
+        const h = height
+        const padding = labelMetrics.height * 2
+        const radius = Math.min(w, h - padding) / 2 - 10
+        const cx = w / 2
+        const cy = h / 2 + labelMetrics.height * 0.5
+
+        // Angles
+        const startRad = startAngle * Math.PI / 180
+        const endRad = endAngle * Math.PI / 180
+        const angleSpan = (2 * Math.PI + endRad - startRad) % (2 * Math.PI)
+
+        // Value calculations
+        const min = model.minValue
+        const max = model.maxValue
+        const normVal = root.normalizedValue
+        const needleAngle = startRad + angleSpan * normVal
+
+        const alarmLowNorm = isNaN(model.alarmLow) ? -1 : model.normalizedAlarmLow
+        const alarmHighNorm = isNaN(model.alarmHigh) ? 2 : model.normalizedAlarmHigh
+
+        const arcStart = radius
+        const arcWidthPx = arcWidth
+
+        // Determine value scaling factor
+        const range = max - min
+        let magnitude = 1
+        let suffix = ""
+
+        // Dynamic scaling for both large and small ranges
+        if (range >= 1e6) {
+          magnitude = 1e6
+          suffix = "×10⁶"
+        } else if (range >= 1e3) {
+          magnitude = 1e3
+          suffix = "×1000"
+        } else if (range >= 100) {
+          magnitude = 100
+          suffix = "×100"
+        } else if (range >= 10) {
+          magnitude = 10
+          suffix = "×10"
+        } else if (range >= 1) {
+          magnitude = 1
+          suffix = ""
+        } else if (range >= 1e-1) {
+          magnitude = 1e-1
+          suffix = "×0.1"
+        } else if (range >= 1e-2) {
+          magnitude = 1e-2
+          suffix = "×0.01"
+        } else if (range >= 1e-3) {
+          magnitude = 1e-3
+          suffix = "×0.001"
+        } else {
+          magnitude = 1e-6
+          suffix = "×10⁻⁶"
+        }
+
+        // Label formatting
+        function formatLabel(val) {
+          const scaled = val / magnitude
+          return scaled.toFixed(2)
+        }
+
+        // Draw inner background circle
+        ctx.beginPath()
+        ctx.arc(cx, cy, radius - arcWidthPx, 0, 2 * Math.PI)
+        ctx.fillStyle = backgroundColor
+        ctx.fill()
+
+        // Draw safe arc segment
+        const safeStart = Math.max(startRad + angleSpan * alarmLowNorm, startRad)
+        const safeEnd = Math.min(startRad + angleSpan * alarmHighNorm, endRad)
+        ctx.beginPath()
+        ctx.arc(cx, cy, radius, safeStart, safeEnd)
+        ctx.strokeStyle = backgroundColor
+        ctx.lineWidth = arcWidthPx
+        ctx.stroke()
+
+        // Draw alarm zones (red gradients)
+        const gradient = ctx.createLinearGradient(cx - radius, cy, cx + radius, cy)
+        gradient.addColorStop(0, alarmColor)
+        gradient.addColorStop(1, alarmColor)
+        if (alarmLowNorm >= 0 && alarmLowNorm < 1) {
+          const aStart = startRad
+          const aEnd = startRad + angleSpan * alarmLowNorm
+          ctx.beginPath()
+          ctx.arc(cx, cy, radius, aStart, aEnd)
+          ctx.strokeStyle = gradient
+          ctx.lineWidth = arcWidthPx
+          ctx.stroke()
+        }
+        if (alarmHighNorm > 0 && alarmHighNorm <= 1) {
+          const aStart = startRad + angleSpan * alarmHighNorm
+          const aEnd = endRad
+          ctx.beginPath()
+          ctx.arc(cx, cy, radius, aStart, aEnd)
+          ctx.strokeStyle = gradient
+          ctx.lineWidth = arcWidthPx
+          ctx.stroke()
+        }
+
+        // Arc border
+        ctx.beginPath()
+        ctx.arc(cx, cy, radius + arcWidthPx / 2, startRad, endRad)
+        ctx.strokeStyle = borderColor
+        ctx.lineWidth = arcWidthPx / 2
+        ctx.stroke()
+
+        // Ticks and labels
+        const labelRadius = radius - arcWidthPx - 16
+        const innerTickOffset = radius - (radius - arcWidthPx - 4) + 6
+        const outerTickOffset = arcWidthPx - 4
+
+        // Major ticks & labels
+        ctx.lineWidth = 3
+        ctx.strokeStyle = tickColor
+        ctx.fillStyle = Cpp_ThemeManager.colors["widget_text"]
+        for (i = 0; i <= steps; i++) {
+          const frac = i / steps
+          const angle = startRad + angleSpan * frac
+          const cosA = Math.cos(angle)
+          const sinA = Math.sin(angle)
+
+          // Tick
+          const x1 = cx + cosA * (radius - innerTickOffset)
+          const y1 = cy + sinA * (radius - innerTickOffset)
+          const x2 = cx + cosA * (radius + outerTickOffset)
+          const y2 = cy + sinA * (radius + outerTickOffset)
+          ctx.beginPath()
+          ctx.moveTo(x1, y1)
+          ctx.lineTo(x2, y2)
+          ctx.stroke()
+
+          // Label with collision check
+          const rawVal = (1 - frac) * min + frac * max
+          const displayVal = formatLabel(rawVal)
+          const textWidth = ctx.measureText(displayVal).width
+          let lx = cx + cosA * labelRadius
+          let ly = cy + sinA * labelRadius
+
+          // Calculate distance from center to label
+          const labelDist = Math.sqrt(Math.pow(lx - cx, 2) + Math.pow(ly - cy, 2))
+
+          // If it overflows inward, pull it closer to center
+          const maxLabelRadius = radius - arcWidthPx - innerTickOffset
+          if (labelDist + textWidth / 2 > maxLabelRadius) {
+            const overshoot = (labelDist + textWidth / 2) - maxLabelRadius
+            lx -= cosA * overshoot
+            ly -= sinA * overshoot
+          }
+
+          ctx.fillText(displayVal, lx, ly)
+        }
+
+        // Subticks
+        ctx.lineWidth = 2
+        ctx.strokeStyle = minorTickColor
+        for (i = 0; i < steps; i++) {
+          for (j = 1; j < subSteps; j++) {
+            const frac = (i + j / subSteps) / steps
+            const angle = startRad + angleSpan * frac
+            const cosA = Math.cos(angle)
+            const sinA = Math.sin(angle)
+
+            const x1 = cx + cosA * (radius - innerTickOffset + outerTickOffset)
+            const y1 = cy + sinA * (radius - innerTickOffset + outerTickOffset)
+            const x2 = cx + cosA * (radius + outerTickOffset)
+            const y2 = cy + sinA * (radius + outerTickOffset)
+            ctx.beginPath()
+            ctx.moveTo(x1, y1)
+            ctx.lineTo(x2, y2)
+            ctx.stroke()
           }
         }
+
+        // Needle
+        const needleLength = radius
+        const nx = cx + Math.cos(needleAngle) * needleLength
+        const ny = cy + Math.sin(needleAngle) * needleLength
+        ctx.beginPath()
+        ctx.moveTo(cx, cy)
+        ctx.lineTo(nx, ny)
+        ctx.strokeStyle = root.color
+        ctx.lineWidth = needleWidth
+        ctx.stroke()
+
+        // Center dot
+        ctx.beginPath()
+        ctx.arc(cx, cy, 6, 0, 2 * Math.PI)
+        ctx.fillStyle = root.color
+        ctx.fill()
+
+        // Multiplier/suffix note
+        ctx.fillStyle = Cpp_ThemeManager.colors["widget_text"]
+        ctx.fillText(suffix, cx, cy + labelMetrics.height * 2.2)
       }
     }
 
@@ -138,10 +326,10 @@ Item {
       rangeVisible: false
       maxValue: model.maxValue
       minValue: model.minValue
-      maximumWidth: root.width * 0.3
+      alarm: model.alarmTriggered
       Layout.alignment: Qt.AlignHCenter
       Layout.minimumWidth: implicitWidth
-      alarm: root.model.alarmValue !== 0 && root.model.value >= root.model.alarmValue
+      Layout.leftMargin: control.labelPadding
     }
 
     //
