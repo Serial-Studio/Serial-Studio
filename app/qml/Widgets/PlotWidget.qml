@@ -530,29 +530,58 @@ Item {
   }
 
   //
-  // X-axis label
+  // X-axis label + real time mouse position
   //
   Item {
     id: _xLabelContainer
-    height: _xLabel.height
-    visible: root.xLabelVisible
+    height: _layout.implicitHeight
 
     anchors {
       right: parent.right
       bottom: parent.bottom
       left: _yLabelContainer.right
-      leftMargin: root.yLabelVisible ? 4 : 0
+      leftMargin: 4
     }
 
-    Label {
-      id: _xLabel
+    ColumnLayout {
+      id: _layout
+      spacing: 0
       width: parent.width
-      elide: Qt.ElideRight
       anchors.centerIn: parent
-      horizontalAlignment: Qt.AlignHCenter
-      color: Cpp_ThemeManager.colors["widget_text"]
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.91, true)
-      anchors.horizontalCenterOffset: root.yLabelVisible ? Math.abs(_graph.marginLeft - _graph.marginRight) : 0
+      anchors.horizontalCenterOffset: Math.abs(_graph.marginLeft - _graph.marginRight)
+
+      Label {
+        id: _xLabel
+        elide: Qt.ElideRight
+        visible: root.xLabelVisible
+        Layout.alignment: Qt.AlignHCenter
+        horizontalAlignment: Qt.AlignHCenter
+        color: Cpp_ThemeManager.colors["widget_text"]
+        font: Cpp_Misc_CommonFonts.customMonoFont(0.91, true)
+      }
+
+      Item {
+        implicitHeight: 2
+        visible: _xLabel.visible && _posLabel.visible
+      }
+
+      Label {
+        id: _posLabel
+        elide: Qt.ElideRight
+        Layout.alignment: Qt.AlignHCenter
+        horizontalAlignment: Qt.AlignHCenter
+        color: Cpp_ThemeManager.colors["widget_text"]
+        font: Cpp_Misc_CommonFonts.customMonoFont(0.91, false)
+        text: qsTr("%1, %2").arg(_xPosLabel.text).arg(_yPosLabel.text)
+        opacity: (root.mouseAreaEnabled && _xPosLabel.text.length > 0 && _yPosLabel.text.length) > 0 ? 1 : 0
+
+        Behavior on opacity {NumberAnimation{}}
+      }
+
+      Item {
+        implicitHeight: 4
+        visible: _posLabel.visible
+      }
     }
   }
 
