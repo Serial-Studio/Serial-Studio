@@ -78,12 +78,14 @@ Item {
       onWidthChanged: requestPaint()
       onHeightChanged: requestPaint()
       Layout.alignment: Qt.AlignHCenter
-      Layout.maximumWidth: Math.min(256,
-                                    root.width > root.height ? root.width * 0.5 : root.width)
+      Layout.maximumWidth: isHorizontal ? root.width - 32 :
+                                          ((root.width > root.height) ? root.width * 0.5 : root.width)
+
 
       property color normalColor: root.color
       property real labelPadding: labelMetrics.width + 10
       property color alarmColor: Cpp_ThemeManager.colors["alarm"]
+      readonly property bool isHorizontal: root.width > 1.5 * root.height
 
       function formatValue(val) {
         return Cpp_UI_Dashboard.formatValue(val, model.minValue, model.maxValue)
@@ -108,72 +110,110 @@ Item {
 
       onPaint: {
         const ctx = getContext("2d")
-        ctx.clearRect(0, 0, width, height)
 
-        // Set basic geometry
+        // Clear paint & get font
+        ctx.clearRect(0, 0, width, height)
+        ctx.font = `${labelMetrics.font.pixelSize}px '${labelMetrics.font.family}'`
+
+        // Constants
         const bw = 2
         const w = width
         const h = height
-
-        // Set painter font
-        ctx.font = `${labelMetrics.font.pixelSize}px '${labelMetrics.font.family}'`
-
-        // Dynamic Padding based on label width
-        const barX = labelPadding
-        const barW = w - labelPadding - bw
-        const barY = bw + labelMetrics.height;
-        const barH = h - 2 * bw - (2 * labelMetrics.height);
-
-        // Extract and sanitize model values
+        const steps = 5
         const value = root.value
         const min = model.minValue
         const max = model.maxValue
         const isAlarm = model.alarmTriggered
-        const alarmLow = isNaN(model.normalizedAlarmLow) ? -1 : model.normalizedAlarmLow
-        const alarmHigh = isNaN(model.normalizedAlarmHigh) ? 2 : model.normalizedAlarmHigh
-
-        // Set final values for painting
-        const clampedVal = Math.max(min, Math.min(max, value))
-        const normVal = (clampedVal - min) / (max - min)
+        const normVal = model.normalizedValue
         const fillColor = isAlarm ? alarmColor : normalColor
+        const clampedVal = Math.max(min, Math.min(max, value))
+        const widgetBase = Cpp_ThemeManager.colors["widget_base"]
+        const widgetText = Cpp_ThemeManager.colors["widget_text"]
+        const widgetBorder = Cpp_ThemeManager.colors["widget_border"]
 
-        // Paint background
-        ctx.fillStyle = Cpp_ThemeManager.colors["widget_base"]
-        ctx.fillRect(barX, barY, barW, barH)
+        // Draw a vertical bar
+        if (!control.isHorizontal) {
+          const barX = Math.round(labelPadding)
+          const barW = Math.round(w - labelPadding - bw)
+          const barY = Math.round(bw + labelMetrics.height)
+          const barH = Math.round(h - 2 * bw - (2 * labelMetrics.height))
+          const fillH = Math.round(normVal * barH)
+          const fillY = Math.round(barY + barH - fillH)
 
-        // Paint fill   
-        const fillH = normVal * barH
-        const fillY = barY + barH - fillH
-        ctx.fillStyle = fillColor
-        ctx.fillRect(barX, fillY, barW, fillH)
+          // Background
+          ctx.fillStyle = widgetBase
+          ctx.fillRect(barX, barY, barW, barH)
 
-        // Paint border
-        ctx.strokeStyle = Cpp_ThemeManager.colors["widget_border"]
-        ctx.lineWidth = bw
-        ctx.strokeRect(barX + 0.5, barY + 0.5, barW - 1, barH - 1)
+          // Fill
+          ctx.fillStyle = fillColor
+          ctx.fillRect(barX, fillY, barW, fillH)
 
-        // Tick Marks + Labels
-        ctx.strokeStyle = Cpp_ThemeManager.colors["widget_border"]
-        ctx.fillStyle = Cpp_ThemeManager.colors["widget_text"]
-        ctx.textAlign = "right"
-        ctx.lineWidth = 1
-        const steps = 5
-        for (let i = 0; i <= steps; i++) {
-          const frac = i / steps
-          const valAtTick = min + frac * (max - min)
-          const relY = 1 - frac
-          const yLine = barY + relY * barH
+          // Ticks & labels
+          ctx.strokeStyle = widgetBorder
+          ctx.fillStyle = widgetText
+          ctx.textAlign = "right"
+          for (let i = 0; i <= steps; i++) {
+            const frac = i / steps
+            const valAtTick = min + frac * (max - min)
+            const relY = 1 - frac
+            const yLine = Math.round(barY + relY * barH)
 
-          // Tick line
-          ctx.beginPath();
-          ctx.moveTo(barX - 6, yLine)
-          ctx.lineTo(barX, yLine)
-          ctx.stroke()
+            ctx.beginPath()
+            ctx.moveTo(barX - 6, yLine)
+            ctx.lineTo(barX, yLine)
+            ctx.stroke()
 
-          // Label
-          ctx.fillText(formatValue(valAtTick),
-                       barX - 8,
-                       yLine + labelMetrics.height / 4)
+            ctx.fillText(formatValue(valAtTick),
+                         barX - 8,
+                         yLine - labelMetrics.height / 2)
+          }
+
+          // Border
+          ctx.strokeStyle = widgetBorder
+          ctx.lineWidth = bw
+          ctx.strokeRect(barX, barY, barW, barH)
+        }
+
+        // Draw horizontal bar
+        else {
+          const barY = Math.round(labelMetrics.height)
+          const barH = Math.round(h - 2 * bw - (2 * labelMetrics.height))
+          const barX = Math.round(bw + labelMetrics.width)
+          const barW = Math.round(w - 2 * barX)
+          const fillW = Math.round(normVal * barW)
+
+          // Background
+          ctx.fillStyle = widgetBase
+          ctx.fillRect(barX, barY, barW, barH)
+
+          // Fill
+          ctx.fillStyle = fillColor
+          ctx.fillRect(barX, barY, fillW, barH)
+
+          // Ticks & labels
+          ctx.strokeStyle = widgetBorder
+          ctx.fillStyle = widgetText
+          ctx.textAlign = "center"
+          ctx.textBaseline = "top"
+          for (let i = 0; i <= steps; i++) {
+            const frac = i / steps
+            const valAtTick = min + frac * (max - min)
+            const xLine = Math.round(barX + frac * barW)
+
+            ctx.beginPath()
+            ctx.moveTo(xLine, barY + barH)
+            ctx.lineTo(xLine, barY + barH + 6)
+            ctx.stroke()
+
+            ctx.fillText(formatValue(valAtTick),
+                         xLine,
+                         barY + barH + 8)
+          }
+
+          // Border
+          ctx.strokeStyle = widgetBorder
+          ctx.lineWidth = bw
+          ctx.strokeRect(barX, barY, barW, barH)
         }
       }
     }
