@@ -338,9 +338,13 @@ Item {
 
         // Multiplier/suffix note
         if (labelsVisible) {
+          ctx.fillStyle = root.color
           const suffixY = cy + radius - arcWidthPx * 3
-          ctx.fillStyle = Cpp_ThemeManager.colors["widget_text"]
-          ctx.fillText(suffix, cx, suffixY)
+
+          if (model.units.length > 0)
+            ctx.fillText(model.units + " " + suffix, cx, suffixY)
+          else
+            ctx.fillText(suffix, cx, suffixY)
         }
       }
     }
