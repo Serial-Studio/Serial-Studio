@@ -50,8 +50,16 @@ Item {
   //
   ColumnLayout {
     spacing: 0
-    anchors.margins: 8
     anchors.fill: parent
+    anchors.leftMargin: 8
+    anchors.rightMargin: 8
+
+    //
+    // Spacer
+    //
+    Item {
+      implicitHeight: 4
+    }
 
     //
     // Gauge control
@@ -63,7 +71,6 @@ Item {
       Layout.fillWidth: true
       Layout.fillHeight: true
 
-      property int steps: 5
       property int subSteps: 4
       property real arcWidth: 10
       property real endAngle: 45
@@ -99,41 +106,9 @@ Item {
         const ctx = getContext("2d")
         ctx.clearRect(0, 0, width, height)
 
-        // Iterator variables
-        let i = 0
-        let j = 0
-
-        // Font & context setup
-        ctx.textAlign = "center"
-        ctx.textBaseline = "middle"
-        ctx.font = `${labelMetrics.font.pixelSize}px '${labelMetrics.font.family}'`
-
-        // Dimensions
-        const w = width
-        const h = height
-        const padding = labelMetrics.height * 2
-        const radius = Math.min(w, h - padding) / 2 - 10
-        const cx = w / 2
-        const cy = h / 2 + labelMetrics.height * 0.5
-
-        // Angles
-        const startRad = startAngle * Math.PI / 180
-        const endRad = endAngle * Math.PI / 180
-        const angleSpan = (2 * Math.PI + endRad - startRad) % (2 * Math.PI)
-
-        // Value calculations
+        // Determine value scaling factor
         const min = model.minValue
         const max = model.maxValue
-        const normVal = root.normalizedValue
-        const needleAngle = startRad + angleSpan * normVal
-
-        const alarmLowNorm = isNaN(model.alarmLow) ? -1 : model.normalizedAlarmLow
-        const alarmHighNorm = isNaN(model.alarmHigh) ? 2 : model.normalizedAlarmHigh
-
-        const arcStart = radius
-        const arcWidthPx = arcWidth
-
-        // Determine value scaling factor
         const range = max - min
         let magnitude = 1
         let suffix = ""
@@ -171,8 +146,51 @@ Item {
         // Label formatting
         function formatLabel(val) {
           const scaled = val / magnitude
-          return scaled.toFixed(2)
+          return radius < 60 ? scaled.toFixed(1) : scaled.toFixed(2)
         }
+
+        // Iterator variables
+        let i = 0
+        let j = 0
+
+        // Font & context setup
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+        ctx.font = `${labelMetrics.font.pixelSize}px '${labelMetrics.font.family}'`
+
+        // Dimensions
+        const w = width
+        const h = height
+        const padding = labelMetrics.height * 2
+        const radius = Math.min(w, h - padding) / 2 - 10
+        const cx = w / 2
+        const cy = h / 2 + labelMetrics.height * 0.5
+
+        // Angles
+        const startRad = startAngle * Math.PI / 180
+        const endRad = endAngle * Math.PI / 180
+        const angleSpan = (2 * Math.PI + endRad - startRad) % (2 * Math.PI)
+
+        // Value calculations
+        const normVal = root.normalizedValue
+        const needleAngle = startRad + angleSpan * normVal
+
+        const alarmLowNorm = isNaN(model.alarmLow) ? -1 : model.normalizedAlarmLow
+        const alarmHighNorm = isNaN(model.alarmHigh) ? 2 : model.normalizedAlarmHigh
+
+        const arcStart = radius
+        const arcWidthPx = arcWidth
+
+        // Size dependent calculations
+        const availableArcLength = angleSpan * radius
+        const approxSpacingPerStep = availableArcLength / 5
+        const maxLabelWidth = ctx.measureText(formatLabel(max)).width
+        const steps = Math.max(3, Math.floor(availableArcLength / (3 * maxLabelWidth)))
+        const labelsVisible = 2 * maxLabelWidth < radius
+
+        // Enable shadows
+        ctx.shadowColor = Cpp_ThemeManager.colors["shadow"]
+        ctx.shadowBlur = 4
 
         // Draw inner background circle
         ctx.beginPath()
@@ -185,7 +203,7 @@ Item {
         const safeEnd = Math.min(startRad + angleSpan * alarmHighNorm, endRad)
         ctx.beginPath()
         ctx.arc(cx, cy, radius, safeStart, safeEnd)
-        ctx.strokeStyle = backgroundColor
+        ctx.strokeStyle = Cpp_ThemeManager.colors["widget_highlight"]
         ctx.lineWidth = arcWidthPx
         ctx.stroke()
 
@@ -262,7 +280,8 @@ Item {
             ly -= sinA * overshoot
           }
 
-          ctx.fillText(displayVal, lx, ly)
+          if (labelsVisible)
+            ctx.fillText(displayVal, lx, ly)
         }
 
         // Subticks
@@ -287,25 +306,42 @@ Item {
         }
 
         // Needle
-        const needleLength = radius
-        const nx = cx + Math.cos(needleAngle) * needleLength
-        const ny = cy + Math.sin(needleAngle) * needleLength
-        ctx.beginPath()
-        ctx.moveTo(cx, cy)
-        ctx.lineTo(nx, ny)
-        ctx.strokeStyle = root.color
-        ctx.lineWidth = needleWidth
-        ctx.stroke()
+        const needleLength = radius * 0.95
+        const baseWidth = needleWidth * 3
 
-        // Center dot
+        // Needle tip
+        const tipX = cx + Math.cos(needleAngle) * needleLength
+        const tipY = cy + Math.sin(needleAngle) * needleLength
+
+        // Base corners (perpendicular to needle)
+        const angleOffset = Math.PI / 2
+        const leftX = cx + Math.cos(needleAngle - angleOffset) * baseWidth
+        const leftY = cy + Math.sin(needleAngle - angleOffset) * baseWidth
+        const rightX = cx + Math.cos(needleAngle + angleOffset) * baseWidth
+        const rightY = cy + Math.sin(needleAngle + angleOffset) * baseWidth
+
+        // Begin combined path
         ctx.beginPath()
-        ctx.arc(cx, cy, 6, 0, 2 * Math.PI)
+        ctx.moveTo(tipX, tipY)
+        ctx.lineTo(leftX, leftY)
+        ctx.arc(cx, cy, baseWidth, needleAngle - Math.PI / 2, needleAngle + Math.PI / 2)
+        ctx.lineTo(rightX, rightY)
+        ctx.closePath()
         ctx.fillStyle = root.color
         ctx.fill()
 
+        // Center dot
+        ctx.beginPath()
+        ctx.arc(cx, cy, baseWidth + 2, 0, 2 * Math.PI)
+        ctx.fillStyle = borderColor
+        ctx.fill()
+
         // Multiplier/suffix note
-        ctx.fillStyle = Cpp_ThemeManager.colors["widget_text"]
-        ctx.fillText(suffix, cx, cy + labelMetrics.height * 2.2)
+        if (labelsVisible) {
+          const suffixY = cy + radius - arcWidthPx * 3
+          ctx.fillStyle = Cpp_ThemeManager.colors["widget_text"]
+          ctx.fillText(suffix, cx, suffixY)
+        }
       }
     }
 
@@ -336,7 +372,7 @@ Item {
     // Spacer
     //
     Item {
-      implicitHeight: 8
+      implicitHeight: 16
     }
   }
 }

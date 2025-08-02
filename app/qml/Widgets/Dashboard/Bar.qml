@@ -141,7 +141,7 @@ Item {
         ctx.fillStyle = Cpp_ThemeManager.colors["widget_base"]
         ctx.fillRect(barX, barY, barW, barH)
 
-        // Paint fill
+        // Paint fill   
         const fillH = normVal * barH
         const fillY = barY + barH - fillH
         ctx.fillStyle = fillColor
@@ -156,7 +156,7 @@ Item {
         ctx.strokeStyle = Cpp_ThemeManager.colors["widget_border"]
         ctx.fillStyle = Cpp_ThemeManager.colors["widget_text"]
         ctx.textAlign = "right"
-        ctx.lineWidth = 0.5
+        ctx.lineWidth = 1
         const steps = 5
         for (let i = 0; i <= steps; i++) {
           const frac = i / steps
