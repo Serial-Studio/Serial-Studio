@@ -1024,12 +1024,18 @@ void Widgets::GPS::paintPathData(QPainter *painter, const QSize &view)
       const double lat = series.latitudes[i];
       const double lon = series.longitudes[i];
       if (!std::isnan(lat) && !std::isnan(lon))
-        path.append(project(lat, lon));
+      {
+        if (!qFuzzyIsNull(lat) && !qFuzzyIsNull(lon))
+          path.append(project(lat, lon));
+      }
     }
 
     // Append current location to path
     if (!std::isnan(m_latitude) && !std::isnan(m_longitude))
-      path.append(project(m_latitude, m_longitude));
+    {
+      if (!qFuzzyIsNull(m_latitude) && !qFuzzyIsNull(m_longitude))
+        path.append(project(m_latitude, m_longitude));
+    }
 
     // Skip if nothing on screen
     const QRectF vp(0, 0, view.width(), view.height());
@@ -1039,17 +1045,19 @@ void Widgets::GPS::paintPathData(QPainter *painter, const QSize &view)
     // Draw the path
     if (v && path.size() > 1)
     {
-      QPainterPath linePath(path[0]);
-      for (qsizetype i = 1; i < path.size(); ++i)
-        linePath.lineTo(path[i]);
-
       QLinearGradient grad(path.first(), path.last());
       grad.setColorAt(0.0, m_lineTailColor);
       grad.setColorAt(1.0, m_lineHeadColor);
 
       QPen pen(QBrush(grad), 2);
       painter->setPen(pen);
-      painter->drawPath(linePath);
+
+      for (int i = 1; i < path.size(); ++i)
+      {
+        const QPointF &p1 = path[i - 1];
+        const QPointF &p2 = path[i];
+        painter->drawLine(p1, p2);
+      }
     }
   }
 
@@ -1306,7 +1314,7 @@ QString Widgets::GPS::referenceUrl(const int tx, const int ty,
 QString Widgets::GPS::nasaWeatherUrl(const int tx, const int ty,
                                      const int zoom) const
 {
-  const QString date = QDate::currentDate().addDays(0).toString(Qt::ISODate);
+  const QString date = QDate::currentDate().addDays(-1).toString(Qt::ISODate);
   return QStringLiteral("https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/"
                         "VIIRS_SNPP_CorrectedReflectance_TrueColor/default/%1/"
                         "GoogleMapsCompatible_Level9/%2/%3/%4.jpg")
