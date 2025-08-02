@@ -1,0 +1,126 @@
+{
+    "actions": [
+    ],
+    "checksum": "",
+    "decoder": 0,
+    "frameDetection": 0,
+    "frameEnd": "\\n",
+    "frameParser": "/**\n * @brief Parses a JSON-encoded frame from Serial Studio and extracts ISS telemetry data.\n *\n * This function takes a string `frame` that is expected to be a valid JSON object\n * containing at least the keys: `latitude`, `longitude`, `altitude`, and `velocity`.\n * If the frame is non-empty and successfully parsed, it returns these values as an array.\n * If the frame is empty, it returns an empty array.\n *\n * @param frame A JSON string containing telemetry data.\n * @return An array in the order [latitude, longitude, altitude, velocity], \n *         or an empty array if the input is invalid or empty.\n */\nfunction parse(frame) {\n    if (frame.length > 0) {\n        let data = JSON.parse(frame);\n        return [data.latitude, data.longitude, data.altitude, data.velocity];\n    }\n    \n    return [];\n}",
+    "frameStart": "$",
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "overviewDisplay": false,
+                    "title": "Latitude",
+                    "units": "°",
+                    "value": "--.--",
+                    "widget": "lat",
+                    "xAxis": -1
+                },
+                {
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "overviewDisplay": false,
+                    "title": "Longitude",
+                    "units": "°",
+                    "value": "--.--",
+                    "widget": "lon",
+                    "xAxis": -1
+                },
+                {
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "overviewDisplay": false,
+                    "title": "Altitude",
+                    "units": "m",
+                    "value": "--.--",
+                    "widget": "alt",
+                    "xAxis": -1
+                }
+            ],
+            "title": "ISS Position",
+            "widget": "map"
+        },
+        {
+            "datasets": [
+                {
+                    "alarmHigh": 650,
+                    "alarmLow": 350,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 700,
+                    "min": 300,
+                    "overviewDisplay": false,
+                    "title": "Altitude",
+                    "units": "km",
+                    "value": "--.--",
+                    "widget": "bar",
+                    "xAxis": -1
+                },
+                {
+                    "alarmHigh": 28000,
+                    "alarmLow": 27500,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 4,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 28500,
+                    "min": 27000,
+                    "overviewDisplay": false,
+                    "title": "Speed",
+                    "units": "km/h",
+                    "value": "--.--",
+                    "widget": "gauge",
+                    "xAxis": -1
+                }
+            ],
+            "title": "Sensor Readings",
+            "widget": ""
+        }
+    ],
+    "hexadecimalDelimiters": false,
+    "title": "ISS Tracker"
+}

@@ -67,7 +67,19 @@ Some examples also include Serial Studio project files (`*.json`) to simplify th
   - Sends waveform data over UDP, making it ideal for network-based signal processing.
   - Option to print generated data for debugging and analysis.
   - Warns about high frequencies that may cause aliasing or distortion.
-- :warning: Using sub-millisecond intervals can overload Serial Studio's event system, potentially causing crashes and/or hangs. If you encounter this issue, consider running Serial Studio with a debugger and sharing your findings to help improve and address this limitation in future releases. Your feedback is invaluable in making Serial Studio more robust!
+
+### 8. ISS Tracker
+- **Description**: This example fetches real-time position and velocity data of the International Space Station (ISS) from a public API and transmits it over a local UDP socket. Serial Studio visualizes the data on a live map, bar graph, and gauge.
+- **Contents**:
+  - **iss.py**: Python script that pulls telemetry from the API and sends it over UDP.
+  - **iss-tracker.ssproj**: Serial Studio project file preconfigured for map, altitude, and speed widgets.
+  - **README.md**: Setup guide for running the tracker and configuring Serial Studio.
+  - **Screenshot**: `screenshot.png` showing the ISS telemetry in Serial Studio.
+- **Features**:
+  - Real-time position tracking using latitude and longitude.
+  - Altitude monitoring with unit conversion and alarm thresholds.
+  - Orbital velocity gauge with color-coded ranges.
+  - No microcontroller or external hardware required.
 
 ## Getting Started
 
