@@ -414,25 +414,29 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
   else
     channels = QString::fromUtf8(data).split(',', Qt::SkipEmptyParts);
 
-  // Replace data in frame
-  const int channelCount = channels.size();
-  for (size_t g = 0; g < m_frame.groups.size(); ++g)
+  // Process data
+  if (!channels.isEmpty())
   {
-    auto &group = m_frame.groups[g];
-    for (size_t d = 0; d < group.datasets.size(); ++d)
+    // Replace data in frame
+    const int channelCount = channels.size();
+    for (size_t g = 0; g < m_frame.groups.size(); ++g)
     {
-      auto &dataset = group.datasets[d];
-      const int idx = dataset.index;
-      if (idx > 0 && idx <= channelCount) [[likely]]
+      auto &group = m_frame.groups[g];
+      for (size_t d = 0; d < group.datasets.size(); ++d)
       {
-        dataset.value = channels[idx - 1];
-        dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+        auto &dataset = group.datasets[d];
+        const int idx = dataset.index;
+        if (idx > 0 && idx <= channelCount) [[likely]]
+        {
+          dataset.value = channels[idx - 1];
+          dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+        }
       }
     }
-  }
 
-  // Update user interface
-  hotpathTxFrame(m_frame);
+    // Update user interface
+    hotpathTxFrame(m_frame);
+  }
 }
 
 /**
@@ -471,37 +475,41 @@ void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
     }
   }
 
-  // Regenerate the quick plot frame if needed
+  // Process data
   const int channelCount = channels.count();
-  if (channelCount != m_quickPlotChannels) [[unlikely]]
+  if (channelCount > 0)
   {
-    QStringList channelStrs;
-    channelStrs.reserve(channelCount);
-    for (const auto &v : channels)
-      channelStrs.append(v.toString());
-
-    buildQuickPlotFrame(channelStrs);
-    m_quickPlotChannels = channelCount;
-  }
-
-  // Update the values of the quick plot frame
-  for (size_t g = 0; g < m_quickPlotFrame.groups.size(); ++g)
-  {
-    auto &group = m_quickPlotFrame.groups[g];
-    for (size_t d = 0; d < group.datasets.size(); ++d)
+    // Regenerate the quick plot frame if needed
+    if (channelCount != m_quickPlotChannels) [[unlikely]]
     {
-      auto &dataset = group.datasets[d];
-      const int index = dataset.index;
-      if (index > 0 && index <= channelCount) [[likely]]
+      QStringList channelStrs;
+      channelStrs.reserve(channelCount);
+      for (const auto &v : channels)
+        channelStrs.append(v.toString());
+
+      buildQuickPlotFrame(channelStrs);
+      m_quickPlotChannels = channelCount;
+    }
+
+    // Update the values of the quick plot frame
+    for (size_t g = 0; g < m_quickPlotFrame.groups.size(); ++g)
+    {
+      auto &group = m_quickPlotFrame.groups[g];
+      for (size_t d = 0; d < group.datasets.size(); ++d)
       {
-        dataset.value = channels[index - 1].toString();
-        dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+        auto &dataset = group.datasets[d];
+        const int index = dataset.index;
+        if (index > 0 && index <= channelCount) [[likely]]
+        {
+          dataset.value = channels[index - 1].toString();
+          dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+        }
       }
     }
-  }
 
-  // Process the frame
-  hotpathTxFrame(m_quickPlotFrame);
+    // Process the frame
+    hotpathTxFrame(m_quickPlotFrame);
+  }
 }
 
 //------------------------------------------------------------------------------
