@@ -48,7 +48,7 @@ env:
   UNIXNAME: "serial-studio"
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
-  INSTALL_QT_MACOS: false
+  INSTALL_QT_MACOS: true
   INSTALL_QT_WINDOWS: false
   INSTALL_QT_LINUX_INTEL: false
   INSTALL_QT_LINUX_ARM64: false
@@ -550,7 +550,7 @@ jobs:
         $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
         mkdir build
         cd build
-        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
+        cmake ../ -G "MinGW Makefiles" -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
   
     - name: '🚧 Build application'
       env:
