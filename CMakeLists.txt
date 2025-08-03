@@ -153,6 +153,23 @@ if (UNIX AND NOT APPLE)
 endif()
 
 #-------------------------------------------------------------------------------
+# Set compiler warnings (MSVC excluded... it’s allergic to standards)
+#-------------------------------------------------------------------------------
+
+if(NOT MSVC)
+  add_compile_options(
+    -Wall                          # Enable common warning messages
+    -Wextra                        # Enable extra warnings
+    -Wno-deprecated                # Ignore warnings about deprecated features
+    -Wno-deprecated-declarations   # Ignore warnings over deprecated declarations
+    -Wno-unused-variable           # Ignore unused variables
+    -Wno-unused-function           # Ignore unused functions
+    -Wno-unused-parameter          # Ignore unused parameters
+    -Wno-sign-compare              # Silence signed/unsigned comparison
+  )
+endif()
+
+#-------------------------------------------------------------------------------
 # Production optimization flags
 #-------------------------------------------------------------------------------
 
@@ -161,33 +178,9 @@ if(PRODUCTION_OPTIMIZATION)
    message("Enabling production optimization flags...")
 
    # GCC (MinGW) on Windows
-   if(WIN32 AND MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+   if(WIN32 AND MINGW)
       add_compile_options(
          -O2                             # Optimize for speed
-         -Wall                           # Enable most warning messages
-         -Wextra                         # Enable additional warnings
-         -ftree-vectorize                # Enable loop vectorization
-         -funroll-loops                  # Unroll loops to reduce branching overhead
-         -fomit-frame-pointer            # Free up register, faster stack ops
-         -frename-registers              # Better instruction scheduling
-         -fno-fast-math                  # Disable unsafe floating point optimizations
-         -fno-unsafe-math-optimizations  # Prevent invalid math assumptions
-         -fstack-reuse=all               # Reuse stack slots
-         -fno-unwind-tables              # Strip sync. unwind tables
-         -fno-asynchronous-unwind-tables # Strip async. unwind tables
-         -ffunction-sections             # Place each function in its own section
-         -fdata-sections                 # Place each data item in its own section
-      )
-      add_link_options(
-         -Wl,--gc-sections               # Remove unused code/data at link time
-      )
-
-   # Clang (MinGW) on Windows
-   elseif(WIN32 AND MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-      add_compile_options(
-         -O2                             # Optimize for speed
-         -Wall                           # Enable most warning messages
-         -Wextra                         # Enable additional warning messages
          -ftree-vectorize                # Enable automatic vectorization
          -funroll-loops                  # Improve loop performance by unrolling
          -fomit-frame-pointer            # Optimize function call overhead
@@ -196,14 +189,11 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
          -fstack-reuse=all               # Reuse stack slots
          -finline-functions              # Inline functions where possible
-         -fno-unwind-tables              # Strip sync. unwind tables
-         -fno-asynchronous-unwind-tables # Strip async. unwind tables
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
       )
       add_link_options(
-         -Wl,--gc-sections               # Strip unused functions/data
-         -latomic                        # Required for MiniAudio
+         -Wl,--gc-sections               # Remove unused code/data at link time
       )
 
    # MSVC (Visual Studio)
@@ -230,18 +220,15 @@ if(PRODUCTION_OPTIMIZATION)
    elseif(APPLE)
       add_compile_options(
          -O2                             # Optimize for speed
-         -Wall                           # Enable most warning messages
-         -Wextra                         # Enable additional warning messages
-         -fvectorize                     # Enable basic loop vectorization
-         -fslp-vectorize                 # Enable straight-line (basic block) vectorization
-         -funroll-loops                  # Unroll loops to reduce branching overhead
-         -fomit-frame-pointer            # Omit frame pointer to free a register (faster function calls)
-         -fno-fast-math                  # Prevent aggressive FP optimizations (retain IEEE compliance)
-         -fno-unsafe-math-optimizations  # Avoid math-related UB or precision loss
-         -flto                           # Enable Link-Time Optimization
+         -ftree-vectorize                # Enable automatic vectorization
+         -funroll-loops                  # Improve loop performance by unrolling
+         -fomit-frame-pointer            # Optimize function call overhead
+         -frename-registers              # Better instruction scheduling
+         -fno-fast-math                  # IEEE-compliant floating point
+         -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
+         -fstack-reuse=all               # Reuse stack slots
+         -flto                           # Enable Link-Time optimization
          -finline-functions              # Inline functions where possible
-         -fno-unwind-tables              # Strip sync. unwind tables
-         -fno-asynchronous-unwind-tables # Strip async. unwind tables
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
       )
@@ -254,18 +241,15 @@ if(PRODUCTION_OPTIMIZATION)
    elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
       add_compile_options(
          -O2                             # Optimize for speed
-         -Wall                           # Enable most warning messages
-         -Wextra                         # Enable additional warning messages
-         -static                         # Statically link Intel runtime dependencies
-         -fvectorize                     # Enable loop vectorization
-         -fslp-vectorize                 # Straight-line vectorization
-         -funroll-loops                  # Unroll simple loops for throughput
-         -fomit-frame-pointer            # Free up a general-purpose register
+         -static                         # Include Intel dependencies
+         -ftree-vectorize                # Enable automatic vectorization
+         -funroll-loops                  # Improve loop performance by unrolling
+         -fomit-frame-pointer            # Optimize function call overhead
          -frename-registers              # Better instruction scheduling
-         -fp-model=precise               # Disable aggressive FP optimization, retain precision
+         -fno-fast-math                  # IEEE-compliant floating point
+         -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
+         -fstack-reuse=all               # Reuse stack slots
          -finline-functions              # Inline functions where possible
-         -fno-unwind-tables              # Strip sync. unwind tables
-         -fno-asynchronous-unwind-tables # Strip async. unwind tables
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
       )
@@ -277,8 +261,6 @@ if(PRODUCTION_OPTIMIZATION)
    elseif(UNIX)
       add_compile_options(
          -O2                             # Optimize for speed
-         -Wall                           # Enable most warning messages
-         -Wextra                         # Enable additional warning messages
          -ftree-vectorize                # Enable automatic vectorization
          -funroll-loops                  # Improve loop performance by unrolling
          -fomit-frame-pointer            # Optimize function call overhead
@@ -287,8 +269,6 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
          -fstack-reuse=all               # Reuse stack slots
          -finline-functions              # Inline functions where possible
-         -fno-unwind-tables              # Strip sync. unwind tables
-         -fno-asynchronous-unwind-tables # Strip async. unwind tables
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
       )

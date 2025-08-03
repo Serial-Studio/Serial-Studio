@@ -263,11 +263,14 @@ unsigned int fec_get_enc_msg_length(fec_scheme   _scheme,
     case LIQUID_FEC_CONV_V29P67:
     case LIQUID_FEC_CONV_V29P78:
         liquid_error(LIQUID_EUMODE,"fec_get_enc_msg_length(), convolutional codes unavailable (install libfec)");
+        break;
     case LIQUID_FEC_RS_M8:
         liquid_error(LIQUID_EUMODE,"fec_get_enc_msg_length(), Reed-Solomon codes unavailable (install libfec)");
+        break;
 #endif
     default:
         liquid_error(LIQUID_EIMODE,"fec_get_enc_msg_length(), unknown/unsupported scheme: %d\n", _scheme);
+        break;
     }
     return 0;
 }

@@ -111,6 +111,17 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
   else
     message = msg;
 
+  // Filter out unfixable Windows warnings...I tried, Qt won
+#ifdef Q_OS_WIN
+  if (type == QtWarningMsg)
+  {
+    if (message.startsWith("Qt was built without Direct3D 12 support"))
+      return;
+    if (message.startsWith("setGeometry: Unable to set geometry"))
+      return;
+  }
+#endif
+
   // Show message & warning level
   QString output;
   switch (type)
@@ -158,18 +169,6 @@ Misc::ModuleManager::ModuleManager()
   m_softwareRendering = m_settings.value("SoftwareRendering", false).toBool();
   if (m_softwareRendering)
     QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
-
-  // Load native graphics API for each platform
-  else
-  {
-#if defined(Q_OS_WIN)
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11Rhi);
-#elif defined(Q_OS_MACOS)
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::MetalRhi);
-#else
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::VulkanRhi);
-#endif
-  }
 
   // Stop modules when application is about to quit
   connect(&m_engine, &QQmlApplicationEngine::quit, this,

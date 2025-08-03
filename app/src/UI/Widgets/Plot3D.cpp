@@ -1173,7 +1173,6 @@ QImage Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
   // Construct axis lines
   QPair<QVector3D, QVector3D> xAxis = {QVector3D(-l, 0, 0), QVector3D(l, 0, 0)};
   QPair<QVector3D, QVector3D> yAxis = {QVector3D(0, -l, 0), QVector3D(0, l, 0)};
-  QPair<QVector3D, QVector3D> zAxis = {QVector3D(0, 0, -l), QVector3D(0, 0, l)};
 
   // Render horizontal & vertical lines
   auto color = m_gridMinorColor;

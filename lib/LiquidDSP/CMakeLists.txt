@@ -1,13 +1,8 @@
 # cmake build file for liquid-dsp
 cmake_minimum_required(VERSION 3.10)
 
-# run custom command to parse version number from include/liquid.h
-execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/version.sh
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    OUTPUT_VARIABLE LIQUID_VERSION)
-
 # project definition
-project(liquid VERSION ${LIQUID_VERSION} LANGUAGES C CXX)
+project(liquid LANGUAGES C CXX)
 
 # ---------------------------------------- options ----------------------------------------
 
@@ -45,15 +40,6 @@ include (CheckSymbolExists)
 # check for hardware acceleration
 include(cmake/FindSIMD.cmake)
 # TODO: check for FFTW
-
-# global flags
-if (MSVC)
-    # warning level 4
-    add_compile_options(/W4)
-else()
-    # additional warnings
-    add_compile_options(-Wall -fPIC -O3 -Wno-deprecated -Wno-deprecated-declarations)
-endif()
 
 include (CheckTypeSize)
 check_type_size(int SIZEOF_INT LANGUAGE C)

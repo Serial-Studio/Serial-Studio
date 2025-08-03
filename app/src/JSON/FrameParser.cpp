@@ -233,7 +233,9 @@ bool JSON::FrameParser::save(const bool silent)
   // Update text edit
   if (loadScript(text()))
   {
-    ProjectModel::instance().setFrameParserCode(text());
+    auto& model = ProjectModel::instance();
+    bool prevModif = model.modified();
+    model.setFrameParserCode(text());
     m_widget.document()->setModified(false);
     m_widget.document()->clearUndoRedoStacks();
 
@@ -243,6 +245,8 @@ bool JSON::FrameParser::save(const bool silent)
           tr("Frame parser code updated successfully!"),
           tr("No errors have been detected in the code."),
           QMessageBox::Information);
+    else
+      model.setModified(prevModif);
 
     // Everything good
     Q_EMIT modifiedChanged();
