@@ -546,11 +546,19 @@ jobs:
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
         QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/mingw_64/bin
+        QT_TOOLS_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/Tools/mingw1310_64/bin
       run: |
         $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
         mkdir build
         cd build
-        cmake ../ -G "MinGW Makefiles" -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
+        cmake ../ `
+          -G "MinGW Makefiles" `
+          -DCMAKE_C_COMPILER=$env:QT_TOOLS_PATH/gcc.exe `
+          -DCMAKE_CXX_COMPILER=$env:QT_TOOLS_PATH/c++.exe `
+          -DPRODUCTION_OPTIMIZATION=ON `
+          -DCMAKE_BUILD_TYPE=Release `
+          -DBUILD_COMMERCIAL=ON `
+          -DBUILD_GPL3=OFF
   
     - name: '🚧 Build application'
       env:
