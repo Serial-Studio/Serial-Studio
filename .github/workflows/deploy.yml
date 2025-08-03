@@ -174,7 +174,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release -j 16
+        cmake --build . --config Release --parallel 16
 
     - name: '📦 Create AppImage'
       run: |
@@ -311,7 +311,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release -j 16
+        cmake --build . --config Release --parallel 16
 
     - name: '📦 Create AppImage'
       run: |
@@ -416,7 +416,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release -j 16
+        cmake --build . --config Release --parallel 16
 
     - name: '📦 Package application'
       run: |
@@ -540,36 +540,34 @@ jobs:
       with:
         useLocalCache: true
   
-    - name: '🛠 Install MinGW'
-      run: choco install mingw -y
-  
     - name: '🚧 Configure with CMake (MinGW)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
+        QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/mingw_64/bin
       run: |
+        $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
         mkdir build
         cd build
-        cmake ../ `
-          -G "MinGW Makefiles" `
-          -DCMAKE_C_COMPILER=gcc `
-          -DCMAKE_CXX_COMPILER=g++ `
-          -DPRODUCTION_OPTIMIZATION=ON `
-          -DCMAKE_BUILD_TYPE=Release `
-          -DBUILD_COMMERCIAL=ON `
-          -DBUILD_GPL3=OFF
+        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
   
-    - name: '🚧 Build application (MinGW)'
+    - name: '🚧 Build application'
+      env:
+        QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/mingw_64/bin
       run: |
+        $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
         cd build
-        mingw32-make -j 4
+        cmake --build . --config Release --parallel 16
   
     - name: '⚙️ Install WiX'
       run: dotnet tool install --global wix
   
     - name: '📦 Package application'
+      env:
+        QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/mingw_64/bin
       run: |
+        $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
         cd build
         cpack --verbose
         mv *.msi ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
