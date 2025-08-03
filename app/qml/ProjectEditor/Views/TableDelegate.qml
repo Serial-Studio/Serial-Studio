@@ -43,7 +43,7 @@ ColumnLayout {
   //
   readonly property real rowHeight: 30
   readonly property real iconWidth: 30
-  readonly property real parameterWidth: Math.min(root.width * 0.3, 256)
+  property real parameterWidth: Math.min((root.width - root.iconWidth - 16) / 2, 420)
 
   //
   // Table header

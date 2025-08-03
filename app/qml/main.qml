@@ -105,10 +105,13 @@ Item {
       id: fileTransmissionDialog
       source: "qrc:/qml/Dialogs/FileTransmission.qml"
     }
+  }
 
-    ProjectEditor.ProjectEditor {
-      id: projectEditor
-    }
+  //
+  // Project editor dialog
+  //
+  ProjectEditor.ProjectEditor {
+    id: projectEditor
   }
 
   //
