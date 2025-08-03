@@ -553,8 +553,8 @@ jobs:
         cd build
         cmake ../ `
           -G "MinGW Makefiles" `
-          -DCMAKE_C_COMPILER=$env:QT_TOOLS_PATH/gcc.exe `
-          -DCMAKE_CXX_COMPILER=$env:QT_TOOLS_PATH/c++.exe `
+          -DCMAKE_C_COMPILER="${env:QT_TOOLS_PATH}\\gcc.exe" `
+          -DCMAKE_CXX_COMPILER="${env:QT_TOOLS_PATH}\\c++.exe" `
           -DPRODUCTION_OPTIMIZATION=ON `
           -DCMAKE_BUILD_TYPE=Release `
           -DBUILD_COMMERCIAL=ON `
