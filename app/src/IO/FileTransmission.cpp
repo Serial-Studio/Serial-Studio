@@ -116,15 +116,14 @@ int IO::FileTransmission::lineTransmissionInterval() const
  */
 void IO::FileTransmission::openFile()
 {
-  auto* dialog = new QFileDialog(nullptr,
-                                 tr("Select file to transmit"),
+  auto *dialog = new QFileDialog(nullptr, tr("Select file to transmit"),
                                  QDir::homePath());
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   connect(dialog, &QFileDialog::fileSelected, this,
-          [this, dialog](const QString& path) {
+          [this, dialog](const QString &path) {
             dialog->deleteLater();
 
             if (path.isEmpty())
@@ -134,12 +133,15 @@ void IO::FileTransmission::openFile()
               closeFile();
 
             m_file.setFileName(path);
-            if (m_file.open(QFile::ReadOnly)) {
+            if (m_file.open(QFile::ReadOnly))
+            {
               m_stream = new QTextStream(&m_file);
 
               emit fileChanged();
               emit transmissionProgressChanged();
-            } else {
+            }
+            else
+            {
               qWarning() << "File open error:" << m_file.errorString();
             }
           });

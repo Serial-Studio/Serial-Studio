@@ -500,7 +500,7 @@ bool JSON::ProjectModel::currentDatasetIsEditable() const
 bool JSON::ProjectModel::containsCommercialFeatures() const
 {
   return SerialStudio::commercialCfg(m_groups)
-  || m_frameDecoder != SerialStudio::PlainText;
+         || m_frameDecoder != SerialStudio::PlainText;
 }
 
 /**
@@ -685,10 +685,10 @@ bool JSON::ProjectModel::askSave()
     return true;
 
   auto ret = Misc::Utilities::showMessageBox(
-    tr("Do you want to save your changes?"),
-    tr("You have unsaved modifications in this project!"),
-    QMessageBox::Question, APP_NAME,
-    QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+      tr("Do you want to save your changes?"),
+      tr("You have unsaved modifications in this project!"),
+      QMessageBox::Question, APP_NAME,
+      QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 
   if (ret == QMessageBox::Cancel)
     return false;
@@ -736,26 +736,26 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
   }
 
   // Get file save path
-  if (jsonFilePath().isEmpty() || askPath) {
-    auto* dialog = new QFileDialog(
-      nullptr,
-      tr("Save Serial Studio Project"),
-      jsonProjectsPath() + "/" + title() + ".ssproj",
-      tr("Serial Studio Project Files (*.ssproj)"));
+  if (jsonFilePath().isEmpty() || askPath)
+  {
+    auto *dialog
+        = new QFileDialog(nullptr, tr("Save Serial Studio Project"),
+                          jsonProjectsPath() + "/" + title() + ".ssproj",
+                          tr("Serial Studio Project Files (*.ssproj)"));
 
     dialog->setAcceptMode(QFileDialog::AcceptSave);
     dialog->setFileMode(QFileDialog::AnyFile);
     dialog->setOption(QFileDialog::DontUseNativeDialog);
 
     connect(dialog, &QFileDialog::fileSelected, this,
-            [this, dialog](const QString& path) {
+            [this, dialog](const QString &path) {
               dialog->deleteLater();
 
               if (path.isEmpty())
                 return;
 
               m_filePath = path;
-              (void) finalizeProjectSave();
+              (void)finalizeProjectSave();
             });
 
     dialog->open();
@@ -763,7 +763,7 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
   }
 
   // File already on disk, just write new data to it
-  (void) finalizeProjectSave();
+  (void)finalizeProjectSave();
   return false;
 }
 
@@ -790,20 +790,20 @@ void JSON::ProjectModel::setupExternalConnections()
 
             switch (currentView())
             {
-            case ProjectView:
-              buildProjectModel();
-              break;
-            case GroupView:
-              buildGroupModel(m_selectedGroup);
-              break;
-            case ActionView:
-              buildActionModel(m_selectedAction);
-              break;
-            case DatasetView:
-              buildDatasetModel(m_selectedDataset);
-              break;
-            default:
-              break;
+              case ProjectView:
+                buildProjectModel();
+                break;
+              case GroupView:
+                buildGroupModel(m_selectedGroup);
+                break;
+              case ActionView:
+                buildActionModel(m_selectedAction);
+                break;
+              case DatasetView:
+                buildDatasetModel(m_selectedDataset);
+                break;
+              default:
+                break;
             }
           });
 }
@@ -880,16 +880,14 @@ void JSON::ProjectModel::newJsonFile()
  */
 void JSON::ProjectModel::openJsonFile()
 {
-  auto* dialog = new QFileDialog(
-    nullptr,
-    tr("Select Project File"),
-    jsonProjectsPath(),
-    tr("Project Files (*.json *.ssproj)"));
+  auto *dialog
+      = new QFileDialog(nullptr, tr("Select Project File"), jsonProjectsPath(),
+                        tr("Project Files (*.json *.ssproj)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setOption(QFileDialog::DontUseNativeDialog);
   connect(dialog, &QFileDialog::fileSelected, this,
-          [this, dialog](const QString& path) {
+          [this, dialog](const QString &path) {
             if (path.isEmpty())
               openJsonFile(path);
 
@@ -946,9 +944,9 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   m_frameStartSequence = json.value("frameStart").toString();
   m_hexadecimalDelimiters = json.value("hexadecimalDelimiters").toBool();
   m_frameDecoder
-    = static_cast<SerialStudio::DecoderMethod>(json.value("decoder").toInt());
+      = static_cast<SerialStudio::DecoderMethod>(json.value("decoder").toInt());
   m_frameDetection = static_cast<SerialStudio::FrameDetection>(
-    json.value("frameDetection").toInt());
+      json.value("frameDetection").toInt());
 
   // Preserve compatibility with previous projects
   if (!json.contains("frameDetection"))
@@ -992,32 +990,32 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
 
     // Detect if it's a simple legacy default function
     static QRegularExpression legacyRegex(
-      R"(function\s+parse\s*\(\s*frame\s*,\s*separator\s*\)\s*\{\s*return\s+frame\.split\(separator\);\s*\})");
+        R"(function\s+parse\s*\(\s*frame\s*,\s*separator\s*\)\s*\{\s*return\s+frame\.split\(separator\);\s*\})");
     if (legacyRegex.match(m_frameParserCode).hasMatch())
     {
       // Migrate to new format
       if (separator.length() > 1)
         m_frameParserCode
-          = QStringLiteral(
-              "/**\n * Automatically migrated frame parser function.\n "
-              "*/\nfunction parse(frame) {\n    return "
-              "frame.split(\"%1\");\n}")
-              .arg(separator);
+            = QStringLiteral(
+                  "/**\n * Automatically migrated frame parser function.\n "
+                  "*/\nfunction parse(frame) {\n    return "
+                  "frame.split(\"%1\");\n}")
+                  .arg(separator);
       else
         m_frameParserCode
-          = QStringLiteral(
-              "/**\n * Automatically migrated frame parser function.\n "
-              "*/\nfunction parse(frame) {\n    return "
-              "frame.split(\'%1\');\n}")
-              .arg(separator);
+            = QStringLiteral(
+                  "/**\n * Automatically migrated frame parser function.\n "
+                  "*/\nfunction parse(frame) {\n    return "
+                  "frame.split(\'%1\');\n}")
+                  .arg(separator);
 
       // Notify user about the change
       Misc::Utilities::showMessageBox(
-        tr("Legacy frame parser function updated"),
-        tr("Your project used a legacy frame parser function with a "
-           "'separator' argument. It has been automatically migrated to "
-           "the new format."),
-        QMessageBox::Information);
+          tr("Legacy frame parser function updated"),
+          tr("Your project used a legacy frame parser function with a "
+             "'separator' argument. It has been automatically migrated to "
+             "the new format."),
+          QMessageBox::Information);
       saveJsonFile(false);
       return;
     }
@@ -1046,15 +1044,15 @@ void JSON::ProjectModel::enableProjectMode()
   if (opMode != SerialStudio::ProjectFile)
   {
     auto answ = Misc::Utilities::showMessageBox(
-      tr("Switch Serial Studio to Project Mode?"),
-      tr("This operation mode is required to load and display dashboards "
-         "from project files."),
-      QMessageBox::Question, qApp->applicationDisplayName(),
-      QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        tr("Switch Serial Studio to Project Mode?"),
+        tr("This operation mode is required to load and display dashboards "
+           "from project files."),
+        QMessageBox::Question, qApp->applicationDisplayName(),
+        QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
     if (answ == QMessageBox::Yes)
       JSON::FrameBuilder::instance().setOperationMode(
-        SerialStudio::ProjectFile);
+          SerialStudio::ProjectFile);
   }
 }
 
@@ -1075,9 +1073,9 @@ void JSON::ProjectModel::deleteCurrentGroup()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
-    tr("Do you want to delete group \"%1\"?").arg(m_selectedGroup.title),
-    tr("This action cannot be undone. Do you wish to proceed?"),
-    QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
+      tr("Do you want to delete group \"%1\"?").arg(m_selectedGroup.title),
+      tr("This action cannot be undone. Do you wish to proceed?"),
+      QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
 
   // Validate the user input
   if (ret != QMessageBox::Yes)
@@ -1116,9 +1114,9 @@ void JSON::ProjectModel::deleteCurrentAction()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
-    tr("Do you want to delete action \"%1\"?").arg(m_selectedAction.title),
-    tr("This action cannot be undone. Do you wish to proceed?"),
-    QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
+      tr("Do you want to delete action \"%1\"?").arg(m_selectedAction.title),
+      tr("This action cannot be undone. Do you wish to proceed?"),
+      QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
 
   // Validate the user input
   if (ret != QMessageBox::Yes)
@@ -1154,9 +1152,9 @@ void JSON::ProjectModel::deleteCurrentDataset()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
-    tr("Do you want to delete dataset \"%1\"?").arg(m_selectedDataset.title),
-    tr("This action cannot be undone. Do you wish to proceed?"),
-    QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
+      tr("Do you want to delete dataset \"%1\"?").arg(m_selectedDataset.title),
+      tr("This action cannot be undone. Do you wish to proceed?"),
+      QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
 
   // Validate the user input
   if (ret != QMessageBox::Yes)
@@ -1331,12 +1329,12 @@ void JSON::ProjectModel::ensureValidGroup()
   const auto isValidGroup = [](const QString &widgetId) -> bool {
     switch (SerialStudio::groupWidgetFromId(widgetId))
     {
-    case SerialStudio::MultiPlot:
-    case SerialStudio::DataGrid:
-    case SerialStudio::NoGroupWidget:
-      return true;
-    default:
-      return false;
+      case SerialStudio::MultiPlot:
+      case SerialStudio::DataGrid:
+      case SerialStudio::NoGroupWidget:
+        return true;
+      default:
+        return false;
     }
   };
 
@@ -1414,35 +1412,35 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
   QString title;
   switch (option)
   {
-  case SerialStudio::DatasetGeneric:
-    title = tr("New Dataset");
-    break;
-  case SerialStudio::DatasetPlot:
-    title = tr("New Plot");
-    dataset.plt = true;
-    break;
-  case SerialStudio::DatasetFFT:
-    title = tr("New FFT Plot");
-    dataset.fft = true;
-    break;
-  case SerialStudio::DatasetBar:
-    title = tr("New Level Indicator");
-    dataset.widget = QStringLiteral("bar");
-    break;
-  case SerialStudio::DatasetGauge:
-    title = tr("New Gauge");
-    dataset.widget = QStringLiteral("gauge");
-    break;
-  case SerialStudio::DatasetCompass:
-    title = tr("New Compass");
-    dataset.widget = QStringLiteral("compass");
-    break;
-  case SerialStudio::DatasetLED:
-    title = tr("New LED Indicator");
-    dataset.led = true;
-    break;
-  default:
-    break;
+    case SerialStudio::DatasetGeneric:
+      title = tr("New Dataset");
+      break;
+    case SerialStudio::DatasetPlot:
+      title = tr("New Plot");
+      dataset.plt = true;
+      break;
+    case SerialStudio::DatasetFFT:
+      title = tr("New FFT Plot");
+      dataset.fft = true;
+      break;
+    case SerialStudio::DatasetBar:
+      title = tr("New Level Indicator");
+      dataset.widget = QStringLiteral("bar");
+      break;
+    case SerialStudio::DatasetGauge:
+      title = tr("New Gauge");
+      dataset.widget = QStringLiteral("gauge");
+      break;
+    case SerialStudio::DatasetCompass:
+      title = tr("New Compass");
+      dataset.widget = QStringLiteral("compass");
+      break;
+    case SerialStudio::DatasetLED:
+      title = tr("New LED Indicator");
+      dataset.led = true;
+      break;
+    default:
+      break;
   }
 
   // Check if any existing dataset has the same title
@@ -1514,31 +1512,31 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
  *                (true) or disabled (false).
  */
 void JSON::ProjectModel::changeDatasetOption(
-  const SerialStudio::DatasetOption option, const bool checked)
+    const SerialStudio::DatasetOption option, const bool checked)
 {
   // Modify dataset options
   switch (option)
   {
-  case SerialStudio::DatasetPlot:
-    m_selectedDataset.plt = checked;
-    break;
-  case SerialStudio::DatasetFFT:
-    m_selectedDataset.fft = checked;
-    break;
-  case SerialStudio::DatasetBar:
-    m_selectedDataset.widget = checked ? QStringLiteral("bar") : "";
-    break;
-  case SerialStudio::DatasetGauge:
-    m_selectedDataset.widget = checked ? QStringLiteral("gauge") : "";
-    break;
-  case SerialStudio::DatasetCompass:
-    m_selectedDataset.widget = checked ? QStringLiteral("compass") : "";
-    break;
-  case SerialStudio::DatasetLED:
-    m_selectedDataset.led = checked;
-    break;
-  default:
-    break;
+    case SerialStudio::DatasetPlot:
+      m_selectedDataset.plt = checked;
+      break;
+    case SerialStudio::DatasetFFT:
+      m_selectedDataset.fft = checked;
+      break;
+    case SerialStudio::DatasetBar:
+      m_selectedDataset.widget = checked ? QStringLiteral("bar") : "";
+      break;
+    case SerialStudio::DatasetGauge:
+      m_selectedDataset.widget = checked ? QStringLiteral("gauge") : "";
+      break;
+    case SerialStudio::DatasetCompass:
+      m_selectedDataset.widget = checked ? QStringLiteral("compass") : "";
+      break;
+    case SerialStudio::DatasetLED:
+      m_selectedDataset.led = checked;
+      break;
+    default:
+      break;
   }
 
   // Replace dataset
@@ -1734,9 +1732,9 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
     else
     {
       auto ret = Misc::Utilities::showMessageBox(
-        tr("Are you sure you want to change the group-level widget?"),
-        tr("Existing datasets for this group will be deleted"),
-        QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
+          tr("Are you sure you want to change the group-level widget?"),
+          tr("Existing datasets for this group will be deleted"),
+          QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
       if (ret == QMessageBox::No)
         return false;
       else
@@ -2194,13 +2192,13 @@ void JSON::ProjectModel::buildProjectModel()
   frameDetection->setData(ComboBox, WidgetType);
   frameDetection->setData(m_frameDetectionMethods, ComboBoxData);
   frameDetection->setData(
-    m_frameDetectionMethodsValues.indexOf(m_frameDetection), EditableValue);
+      m_frameDetectionMethodsValues.indexOf(m_frameDetection), EditableValue);
   frameDetection->setData(tr("Frame Detection"), ParameterName);
   frameDetection->setData(kProjectView_FrameDetection, ParameterType);
   frameDetection->setData(tr("Strategy used for identifying frame data"),
                           ParameterDescription);
   frameDetection->setData(
-    "qrc:/rcc/icons/project-editor/model/frame-detection.svg", ParameterIcon);
+      "qrc:/rcc/icons/project-editor/model/frame-detection.svg", ParameterIcon);
   m_projectModel->appendRow(frameDetection);
 
   // Get frame type data
@@ -2220,8 +2218,8 @@ void JSON::ProjectModel::buildProjectModel()
     frameStart->setData(tr("String marking the start of a frame"),
                         ParameterDescription);
     frameStart->setData(
-      "qrc:/rcc/icons/project-editor/model/start-delimiter.svg",
-      ParameterIcon);
+        "qrc:/rcc/icons/project-editor/model/start-delimiter.svg",
+        ParameterIcon);
     m_projectModel->appendRow(frameStart);
   }
 
@@ -2484,8 +2482,8 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   autoExecute->setData(kActionView_AutoExecute, ParameterType);
   autoExecute->setData(0, PlaceholderValue);
   autoExecute->setData(
-    tr("Trigger this action automatically when a device connects."),
-    ParameterDescription);
+      tr("Trigger this action automatically when a device connects."),
+      ParameterDescription);
   autoExecute->setData("qrc:/rcc/icons/project-editor/model/auto-execute.svg",
                        ParameterIcon);
   m_actionModel->appendRow(autoExecute);
@@ -2515,8 +2513,8 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
     timerInterval->setData(kActionView_TimerInterval, ParameterType);
     timerInterval->setData(tr("Timer Interval (ms)"), PlaceholderValue);
     timerInterval->setData(
-      tr("Interval in milliseconds between each timer-triggered action."),
-      ParameterDescription);
+        tr("Interval in milliseconds between each timer-triggered action."),
+        ParameterDescription);
     timerInterval->setData("qrc:/rcc/icons/project-editor/model/interval.svg",
                            ParameterIcon);
     m_actionModel->appendRow(timerInterval);
@@ -2845,8 +2843,8 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     fftSamplingRate->setData(tr("Sampling rate (Hz) for FFT calculation"),
                              ParameterDescription);
     fftSamplingRate->setData(
-      "qrc:/rcc/icons/project-editor/model/fft-sampling-rate.svg",
-      ParameterIcon);
+        "qrc:/rcc/icons/project-editor/model/fft-sampling-rate.svg",
+        ParameterIcon);
     m_datasetModel->appendRow(fftSamplingRate);
   }
 
@@ -3022,11 +3020,11 @@ void JSON::ProjectModel::setCurrentView(const CurrentView currentView)
     {
       bool changeView = false;
       const auto ret = Misc::Utilities::showMessageBox(
-        tr("Save changes to frame parser code?"),
-        tr("Select 'Save' to keep your changes, 'Discard' to lose them "
-           "permanently, or 'Cancel' to return."),
-        QMessageBox::Question, tr("Save Changes"),
-        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+          tr("Save changes to frame parser code?"),
+          tr("Select 'Save' to keep your changes, 'Discard' to lose them "
+             "permanently, or 'Cancel' to return."),
+          QMessageBox::Question, tr("Save Changes"),
+          QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 
       if (ret == QMessageBox::Save)
         changeView = parser->save(true);
@@ -3129,7 +3127,7 @@ void JSON::ProjectModel::onGroupItemChanged(QStandardItem *item)
         if (g.value().groupId == m_selectedGroup.groupId)
         {
           m_selectionModel->setCurrentIndex(
-            g.key()->index(), QItemSelectionModel::ClearAndSelect);
+              g.key()->index(), QItemSelectionModel::ClearAndSelect);
           break;
         }
       }
@@ -3179,35 +3177,35 @@ void JSON::ProjectModel::onActionItemChanged(QStandardItem *item)
   // Update internal members of the class accordingly
   switch (static_cast<ActionItem>(id.toInt()))
   {
-  case kActionView_Title:
-    m_selectedAction.title = value.toString();
-    break;
-  case kActionView_Data:
-    m_selectedAction.txData = value.toString();
-    break;
-  case kActionView_EOL:
-    m_selectedAction.eolSequence = eolSequences.at(value.toInt());
-    break;
-  case kActionView_Icon:
-    m_selectedAction.icon = value.toString();
-    Q_EMIT actionModelChanged();
-    break;
-  case kActionView_Binary:
-    m_selectedAction.binaryData = value.toBool();
-    buildActionModel(m_selectedAction);
-    break;
-  case kActionView_AutoExecute:
-    m_selectedAction.autoExecuteOnConnect = value.toBool();
-    break;
-  case kActionView_TimerMode:
-    m_selectedAction.timerMode = static_cast<JSON::TimerMode>(value.toInt());
-    buildActionModel(m_selectedAction);
-    break;
-  case kActionView_TimerInterval:
-    m_selectedAction.timerIntervalMs = value.toInt();
-    break;
-  default:
-    break;
+    case kActionView_Title:
+      m_selectedAction.title = value.toString();
+      break;
+    case kActionView_Data:
+      m_selectedAction.txData = value.toString();
+      break;
+    case kActionView_EOL:
+      m_selectedAction.eolSequence = eolSequences.at(value.toInt());
+      break;
+    case kActionView_Icon:
+      m_selectedAction.icon = value.toString();
+      Q_EMIT actionModelChanged();
+      break;
+    case kActionView_Binary:
+      m_selectedAction.binaryData = value.toBool();
+      buildActionModel(m_selectedAction);
+      break;
+    case kActionView_AutoExecute:
+      m_selectedAction.autoExecuteOnConnect = value.toBool();
+      break;
+    case kActionView_TimerMode:
+      m_selectedAction.timerMode = static_cast<JSON::TimerMode>(value.toInt());
+      buildActionModel(m_selectedAction);
+      break;
+    case kActionView_TimerInterval:
+      m_selectedAction.timerIntervalMs = value.toInt();
+      break;
+    default:
+      break;
   }
 
   // Replace action data
@@ -3244,47 +3242,47 @@ void JSON::ProjectModel::onProjectItemChanged(QStandardItem *item)
   // Update internal members of the class accordingly
   switch (static_cast<ProjectItem>(id.toInt()))
   {
-  case kProjectView_Title:
-    m_title = value.toString();
-    Q_EMIT titleChanged();
-    break;
-  case kProjectView_FrameEndSequence:
-    m_frameEndSequence = value.toString();
-    break;
-  case kProjectView_FrameStartSequence:
-    m_frameStartSequence = value.toString();
-    break;
-  case kProjectView_FrameDecoder:
-    m_frameDecoder = static_cast<SerialStudio::DecoderMethod>(value.toInt());
-    break;
-  case kProjectView_ChecksumFunction:
-    m_checksumAlgorithm = IO::availableChecksums()[value.toInt()];
-    break;
-  case kProjectView_HexadecimalSequence: {
-    bool changed = m_hexadecimalDelimiters != value.toBool();
-    m_hexadecimalDelimiters = value.toBool();
-    if (changed && m_hexadecimalDelimiters)
-    {
-      m_frameEndSequence = SerialStudio::stringToHex(m_frameEndSequence);
-      m_frameStartSequence = SerialStudio::stringToHex(m_frameEndSequence);
-    }
+    case kProjectView_Title:
+      m_title = value.toString();
+      Q_EMIT titleChanged();
+      break;
+    case kProjectView_FrameEndSequence:
+      m_frameEndSequence = value.toString();
+      break;
+    case kProjectView_FrameStartSequence:
+      m_frameStartSequence = value.toString();
+      break;
+    case kProjectView_FrameDecoder:
+      m_frameDecoder = static_cast<SerialStudio::DecoderMethod>(value.toInt());
+      break;
+    case kProjectView_ChecksumFunction:
+      m_checksumAlgorithm = IO::availableChecksums()[value.toInt()];
+      break;
+    case kProjectView_HexadecimalSequence: {
+      bool changed = m_hexadecimalDelimiters != value.toBool();
+      m_hexadecimalDelimiters = value.toBool();
+      if (changed && m_hexadecimalDelimiters)
+      {
+        m_frameEndSequence = SerialStudio::stringToHex(m_frameEndSequence);
+        m_frameStartSequence = SerialStudio::stringToHex(m_frameEndSequence);
+      }
 
-    else if (changed)
-    {
-      m_frameEndSequence = SerialStudio::hexToString(m_frameEndSequence);
-      m_frameStartSequence = SerialStudio::hexToString(m_frameEndSequence);
-    }
+      else if (changed)
+      {
+        m_frameEndSequence = SerialStudio::hexToString(m_frameEndSequence);
+        m_frameStartSequence = SerialStudio::hexToString(m_frameEndSequence);
+      }
 
-    buildProjectModel();
-  }
-  break;
-  case kProjectView_FrameDetection:
-    m_frameDetection = m_frameDetectionMethodsValues.at(value.toInt());
-    Q_EMIT frameDetectionChanged();
-    buildProjectModel();
+      buildProjectModel();
+    }
     break;
-  default:
-    break;
+    case kProjectView_FrameDetection:
+      m_frameDetection = m_frameDetectionMethodsValues.at(value.toInt());
+      Q_EMIT frameDetectionChanged();
+      buildProjectModel();
+      break;
+    default:
+      break;
   }
 
   // Mark document as modified
@@ -3330,61 +3328,61 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
   // Update dataset parameters accordingly
   switch (static_cast<DatasetItem>(id.toInt()))
   {
-  case kDatasetView_Title:
-    m_selectedDataset.title = value.toString();
-    break;
-  case kDatasetView_Index:
-    m_selectedDataset.index = value.toInt();
-    break;
-  case kDatasetView_Units:
-    m_selectedDataset.units = value.toString();
-    break;
-  case kDatasetView_Widget:
-    m_selectedDataset.widget = widgets.at(value.toInt());
-    buildDatasetModel(m_selectedDataset);
-    break;
-  case kDatasetView_FFT:
-    m_selectedDataset.fft = value.toBool();
-    buildDatasetModel(m_selectedDataset);
-    break;
-  case kDatasetView_LED:
-    m_selectedDataset.led = value.toBool();
-    buildDatasetModel(m_selectedDataset);
-    break;
-  case kDatasetView_LED_High:
-    m_selectedDataset.ledHigh = value.toDouble();
-    break;
-  case kDatasetView_Overview:
-    m_selectedDataset.overviewDisplay = value.toBool();
-    break;
-  case kDatasetView_Plot:
-    m_selectedDataset.plt = plotOptions.at(value.toInt()).first;
-    m_selectedDataset.log = plotOptions.at(value.toInt()).second;
-    buildDatasetModel(m_selectedDataset);
-    break;
-  case kDatasetView_xAxis:
-    m_selectedDataset.xAxisId = value.toInt();
-    break;
-  case kDatasetView_Min:
-    m_selectedDataset.min = value.toDouble();
-    break;
-  case kDatasetView_Max:
-    m_selectedDataset.max = value.toDouble();
-    break;
-  case kDatasetView_AlarmLow:
-    m_selectedDataset.alarmLow = value.toDouble();
-    break;
-  case kDatasetView_AlarmHigh:
-    m_selectedDataset.alarmHigh = value.toDouble();
-    break;
-  case kDatasetView_FFT_Samples:
-    m_selectedDataset.fftSamples = m_fftSamples.at(value.toInt()).toInt();
-    break;
-  case kDatasetView_FFT_SamplingRate:
-    m_selectedDataset.fftSamplingRate = value.toInt();
-    break;
-  default:
-    break;
+    case kDatasetView_Title:
+      m_selectedDataset.title = value.toString();
+      break;
+    case kDatasetView_Index:
+      m_selectedDataset.index = value.toInt();
+      break;
+    case kDatasetView_Units:
+      m_selectedDataset.units = value.toString();
+      break;
+    case kDatasetView_Widget:
+      m_selectedDataset.widget = widgets.at(value.toInt());
+      buildDatasetModel(m_selectedDataset);
+      break;
+    case kDatasetView_FFT:
+      m_selectedDataset.fft = value.toBool();
+      buildDatasetModel(m_selectedDataset);
+      break;
+    case kDatasetView_LED:
+      m_selectedDataset.led = value.toBool();
+      buildDatasetModel(m_selectedDataset);
+      break;
+    case kDatasetView_LED_High:
+      m_selectedDataset.ledHigh = value.toDouble();
+      break;
+    case kDatasetView_Overview:
+      m_selectedDataset.overviewDisplay = value.toBool();
+      break;
+    case kDatasetView_Plot:
+      m_selectedDataset.plt = plotOptions.at(value.toInt()).first;
+      m_selectedDataset.log = plotOptions.at(value.toInt()).second;
+      buildDatasetModel(m_selectedDataset);
+      break;
+    case kDatasetView_xAxis:
+      m_selectedDataset.xAxisId = value.toInt();
+      break;
+    case kDatasetView_Min:
+      m_selectedDataset.min = value.toDouble();
+      break;
+    case kDatasetView_Max:
+      m_selectedDataset.max = value.toDouble();
+      break;
+    case kDatasetView_AlarmLow:
+      m_selectedDataset.alarmLow = value.toDouble();
+      break;
+    case kDatasetView_AlarmHigh:
+      m_selectedDataset.alarmHigh = value.toDouble();
+      break;
+    case kDatasetView_FFT_Samples:
+      m_selectedDataset.fftSamples = m_fftSamples.at(value.toInt()).toInt();
+      break;
+    case kDatasetView_FFT_SamplingRate:
+      m_selectedDataset.fftSamplingRate = value.toInt();
+      break;
+    default:
+      break;
   }
 
   // Replace dataset in parent group
@@ -3572,7 +3570,6 @@ bool JSON::ProjectModel::finalizeProjectSave()
   JSON::FrameBuilder::instance().loadJsonMap(file.fileName());
   return true;
 }
-
 
 //------------------------------------------------------------------------------
 // Save & restore expanded items of project structure upon modification

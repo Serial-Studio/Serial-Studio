@@ -174,7 +174,7 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
       m_jsonMap.close();
       setJsonPathSetting("");
       Misc::Utilities::showMessageBox(
-        tr("JSON parse error"), error.errorString(), QMessageBox::Critical);
+          tr("JSON parse error"), error.errorString(), QMessageBox::Critical);
     }
 
     // JSON contains no errors, load compacted JSON document & save settings
@@ -209,9 +209,9 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
         m_jsonMap.close();
         setJsonPathSetting("");
         Misc::Utilities::showMessageBox(
-          tr("This file isn’t a valid project file"),
-          tr("Make sure it’s a properly formatted JSON project."),
-          QMessageBox::Warning);
+            tr("This file isn’t a valid project file"),
+            tr("Make sure it’s a properly formatted JSON project."),
+            QMessageBox::Warning);
       }
     }
 
@@ -224,8 +224,8 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
   {
     setJsonPathSetting("");
     Misc::Utilities::showMessageBox(
-      tr("Cannot read JSON file"),
-      tr("Please check file permissions & location"), QMessageBox::Critical);
+        tr("Cannot read JSON file"),
+        tr("Please check file permissions & location"), QMessageBox::Critical);
     m_jsonMap.close();
   }
 
@@ -256,30 +256,30 @@ void JSON::FrameBuilder::setFrameParser(JSON::FrameParser *parser)
  *               applications or for prototyping.
  */
 void JSON::FrameBuilder::setOperationMode(
-  const SerialStudio::OperationMode mode)
+    const SerialStudio::OperationMode mode)
 {
   m_opMode = mode;
 
   switch (mode)
   {
-  case SerialStudio::DeviceSendsJSON:
-    IO::Manager::instance().setStartSequence("");
-    IO::Manager::instance().setFinishSequence("");
-    IO::Manager::instance().setChecksumAlgorithm("");
-    break;
-  case SerialStudio::ProjectFile:
-    IO::Manager::instance().setStartSequence(m_frameStart);
-    IO::Manager::instance().setFinishSequence(m_frameFinish);
-    IO::Manager::instance().setChecksumAlgorithm(m_checksum);
-    break;
-  case SerialStudio::QuickPlot:
-    IO::Manager::instance().setStartSequence("");
-    IO::Manager::instance().setFinishSequence("");
-    IO::Manager::instance().setChecksumAlgorithm("");
-    break;
-  default:
-    qWarning() << "Invalid operation mode selected" << mode;
-    break;
+    case SerialStudio::DeviceSendsJSON:
+      IO::Manager::instance().setStartSequence("");
+      IO::Manager::instance().setFinishSequence("");
+      IO::Manager::instance().setChecksumAlgorithm("");
+      break;
+    case SerialStudio::ProjectFile:
+      IO::Manager::instance().setStartSequence(m_frameStart);
+      IO::Manager::instance().setFinishSequence(m_frameFinish);
+      IO::Manager::instance().setChecksumAlgorithm(m_checksum);
+      break;
+    case SerialStudio::QuickPlot:
+      IO::Manager::instance().setStartSequence("");
+      IO::Manager::instance().setFinishSequence("");
+      IO::Manager::instance().setChecksumAlgorithm("");
+      break;
+    default:
+      qWarning() << "Invalid operation mode selected" << mode;
+      break;
   }
 
   m_settings.setValue("operation_mode", mode);
@@ -307,16 +307,16 @@ void JSON::FrameBuilder::hotpathRxFrame(const QByteArray &data)
 {
   switch (operationMode())
   {
-  case SerialStudio::QuickPlot:
-    parseQuickPlotFrame(data);
-    break;
-  case SerialStudio::ProjectFile:
-    parseProjectFrame(data);
-    break;
-  case SerialStudio::DeviceSendsJSON:
-    if (read(m_rawFrame, QJsonDocument::fromJson(data).object()))
-      hotpathTxFrame(m_rawFrame);
-    break;
+    case SerialStudio::QuickPlot:
+      parseQuickPlotFrame(data);
+      break;
+    case SerialStudio::ProjectFile:
+      parseProjectFrame(data);
+      break;
+    case SerialStudio::DeviceSendsJSON:
+      if (read(m_rawFrame, QJsonDocument::fromJson(data).object()))
+        hotpathTxFrame(m_rawFrame);
+      break;
   }
 }
 
@@ -394,19 +394,19 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
   {
     switch (JSON::ProjectModel::instance().decoderMethod())
     {
-    case SerialStudio::Hexadecimal:
-      channels = m_frameParser->parse(QString::fromUtf8(data.toHex()));
-      break;
-    case SerialStudio::Base64:
-      channels = m_frameParser->parse(QString::fromUtf8(data.toBase64()));
-      break;
-    case SerialStudio::Binary:
-      channels = m_frameParser->parse(data);
-      break;
-    case SerialStudio::PlainText:
-    default:
-      channels = m_frameParser->parse(QString::fromUtf8(data));
-      break;
+      case SerialStudio::Hexadecimal:
+        channels = m_frameParser->parse(QString::fromUtf8(data.toHex()));
+        break;
+      case SerialStudio::Base64:
+        channels = m_frameParser->parse(QString::fromUtf8(data.toBase64()));
+        break;
+      case SerialStudio::Binary:
+        channels = m_frameParser->parse(data);
+        break;
+      case SerialStudio::PlainText:
+      default:
+        channels = m_frameParser->parse(QString::fromUtf8(data));
+        break;
     }
   }
 
@@ -554,28 +554,28 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
     double minValue = 0.0;
     switch (format)
     {
-    case ma_format_u8:
-      maxValue = 255;
-      minValue = 0;
-      break;
-    case ma_format_s16:
-      maxValue = 32767;
-      minValue = -32768;
-      break;
-    case ma_format_s24:
-      maxValue = 8388607;
-      minValue = -8388608;
-      break;
-    case ma_format_s32:
-      maxValue = 2147483647;
-      minValue = -2147483648;
-      break;
-    case ma_format_f32:
-      maxValue = 1.0;
-      minValue = -1.0;
-      break;
-    default:
-      break;
+      case ma_format_u8:
+        maxValue = 255;
+        minValue = 0;
+        break;
+      case ma_format_s16:
+        maxValue = 32767;
+        minValue = -32768;
+        break;
+      case ma_format_s24:
+        maxValue = 8388607;
+        minValue = -8388608;
+        break;
+      case ma_format_s32:
+        maxValue = 2147483647;
+        minValue = -2147483648;
+        break;
+      case ma_format_f32:
+        maxValue = 1.0;
+        minValue = -1.0;
+        break;
+      default:
+        break;
     }
 
     // Obtain microphone values for each channel
