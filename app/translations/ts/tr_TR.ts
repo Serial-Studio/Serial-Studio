@@ -1432,29 +1432,29 @@
         <translation>Lütfen dosya izinlerini ve konumunu kontrol edin</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="597"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="634"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="599"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="636"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="608"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="610"/>
         <source>Audio Input</source>
         <translation>Ses Girişi</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="663"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="665"/>
         <source>Multiple Plots</source>
         <translation>Birden Fazla Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="614"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="643"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="616"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="645"/>
         <source>Quick Plot</source>
         <translation>Hızlı Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="649"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="651"/>
         <source>Quick Plot Data</source>
         <translation>Hızlı Grafik Verisi</translation>
     </message>
@@ -1520,137 +1520,157 @@
 <context>
     <name>JSON::ProjectModel</name>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="284"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="286"/>
         <source>New Project</source>
         <translation>Yeni Proje</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="349"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="351"/>
         <source>Samples</source>
         <translation>Örnekler</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="690"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="692"/>
         <source>Do you want to save your changes?</source>
         <translation>Değişikliklerinizi kaydetmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="691"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="693"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Bu projede kaydedilmemiş değişiklikleriniz var!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="726"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="728"/>
         <source>Project error</source>
         <translation>Proje hatası</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="727"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="729"/>
         <source>Project title cannot be empty!</source>
         <translation>Proje başlığı boş olamaz!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="744"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="746"/>
         <source>Save Serial Studio Project</source>
         <translation>Serial Studio Projesini Kaydet</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2406"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2408"/>
         <source>Composite Widget</source>
         <translation>Bileşik Araç</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2408"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2410"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>Bu veri kümesi grubunun nasıl görselleştirileceğini seçin (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2655"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2657"/>
         <source>Dataset Title</source>
         <translation>Veri Kümesi Başlığı</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2657"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2659"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Etiketleme ve tanımlama için kullanılan veri kümesi adı</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2670"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2672"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Veri kümelerini zaman içinde hizalamak için kullanılan çerçeve konumu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2683"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2685"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Ölçü birimi, örneğin volt veya amper (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2694"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2696"/>
         <source>Plot Settings</source>
         <translation>Grafik Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2724"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2726"/>
         <source>Enable Plot Widget</source>
         <translation>Grafik Widget'ını Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2756"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2758"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
         <translation>Grafiklerde X-Ekseninde kullanılacak veri kümesini seçin</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2768"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2770"/>
         <source>Minimum Plot Value (optional)</source>
         <translation>Minimum Grafik Değeri (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2769"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2771"/>
         <source>Lower bound for plot display range</source>
         <translation>Grafik görüntüleme aralığı için alt sınır</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2781"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2783"/>
         <source>Maximum Plot Value (optional)</source>
         <translation>Maksimum Grafik Değeri (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2782"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2784"/>
         <source>Upper bound for plot display range</source>
         <translation>Grafik gösterim aralığı için üst sınır</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2793"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2795"/>
         <source>FFT Configuration</source>
         <translation>FFT Yapılandırması</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2806"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2808"/>
         <source>Enable FFT Analysis</source>
         <translation>FFT Analizini Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2807"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2809"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Veri kümesinin frekans-domeni analizini yap</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2827"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2829"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Her FFT hesaplama penceresi için kullanılan örnek sayısı</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2839"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2841"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>FFT Örnekleme Hızı (Hz, zorunlu)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2841"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2843"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>FFT için kullanılan örnekleme frekansı (Hz cinsinden)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2852"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2855"/>
+        <source>Minimum Value (recommended)</source>
+        <translation>Minimum Değer (önerilen)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2856"/>
+        <source>Lower bound for data normalization</source>
+        <translation>Veri normalizasyonu için alt sınır</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2868"/>
+        <source>Maximum Value (recommended)</source>
+        <translation>Maksimum Değer (önerilen)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2869"/>
+        <source>Upper bound for data normalization</source>
+        <translation>Veri normalizasyonu için üst sınır</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2880"/>
         <source>Widget Settings</source>
         <translation>Araç Ayarları</translation>
     </message>
@@ -1659,344 +1679,344 @@
         <translation type="vanished">Araç Gösterimi</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2883"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2911"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Bu veri kümesini görüntülemek için kullanılacak görsel bileşeni seçin</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2894"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2922"/>
         <source>Show in Overview</source>
         <translation>Genel Bakışta Göster</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2896"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2924"/>
         <source>Display this widget in the dashboard overview (if enabled)</source>
         <translation>Bu bileşeni kontrol paneli genel bakışında göster (etkinse)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2912"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2940"/>
         <source>Minimum Display Value (required)</source>
         <translation>Minimum Görüntüleme Değeri (gerekli)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2913"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2941"/>
         <source>Lower bound of the gauge or bar display range</source>
         <translation>Gösterge veya çubuk görüntüleme aralığının alt sınırı</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2925"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2953"/>
         <source>Maximum Display Value (required)</source>
         <translation>Maksimum Görüntüleme Değeri (gerekli)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2926"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2954"/>
         <source>Upper bound of the gauge or bar display range</source>
         <translation>Gösterge veya çubuk görüntüleme aralığının üst sınırı</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2938"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2966"/>
         <source>Alarm: Low Threshold (optional)</source>
         <translation>Alarm: Düşük Eşik (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2940"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2968"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
         <translation>Değer bu eşikten düştüğünde görsel alarm tetikler</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2952"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2980"/>
         <source>Alarm: High Threshold (optional)</source>
         <translation>Alarm: Yüksek Eşik (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2954"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2982"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
         <translation>Değer bu eşiği aştığında görsel bir alarm tetikler</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2993"/>
         <source>LED Display Settings</source>
         <translation>LED Ekran Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2979"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3007"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>LED ekran kullanarak görsel durum izlemeyi etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2991"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3019"/>
         <source>LED On Threshold (required)</source>
         <translation>LED Açık Eşiği (gerekli)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2993"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3021"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>Değer bu eşiğe ulaştığında veya aştığında LED yanar</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3116"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3144"/>
         <source>Yes</source>
         <translation>Evet</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3676"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3710"/>
         <source>File open error</source>
         <translation>Dosya açma hatası</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="844"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2220"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="846"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2222"/>
         <source>Untitled Project</source>
         <translation>İsimsiz Proje</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="746"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="748"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio Proje Dosyaları (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="886"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="888"/>
         <source>Select Project File</source>
         <translation>Proje Dosyasını Seç</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="887"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="889"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Proje Dosyaları (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1016"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1018"/>
         <source>Legacy frame parser function updated</source>
         <translation>Eski çerçeve ayrıştırıcı fonksiyonu güncellendi</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1017"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1019"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Projeniz, 'separator' argümanıyla eski bir çerçeve ayrıştırıcı fonksiyonu kullanıyordu. Yeni formata otomatik olarak geçirildi.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1049"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1051"/>
         <source>Switch Serial Studio to Project Mode?</source>
         <translation>Serial Studio'yu Proje Moduna Geçirmek İster misiniz?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1050"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1052"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
         <translation>Bu işlem modu, proje dosyalarından panoları yüklemek ve görüntülemek için gereklidir.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1078"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1080"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>"%1" grubunu silmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1079"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1120"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1158"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1081"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1122"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1160"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Bu işlem geri alınamaz. Devam etmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1119"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1121"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>"%1" eylemini silmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1157"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1159"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Veri kümesini silmek istiyor musunuz "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1209"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1254"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1289"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1211"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1256"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1291"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Kopya)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1328"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1390"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1330"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1392"/>
         <source>Group</source>
         <translation>Grup</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1418"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1420"/>
         <source>New Dataset</source>
         <translation>Yeni Veri Kümesi</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1421"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1423"/>
         <source>New Plot</source>
         <translation>Yeni Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1425"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1427"/>
         <source>New FFT Plot</source>
         <translation>Yeni FFT Grafiği</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1429"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1431"/>
         <source>New Level Indicator</source>
         <translation>Yeni Seviye Göstergesi</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1433"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1435"/>
         <source>New Gauge</source>
         <translation>Yeni Gösterge</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1437"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1439"/>
         <source>New Compass</source>
         <translation>Yeni Pusula</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1445"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1447"/>
         <source>New LED Indicator</source>
         <translation>Yeni LED Göstergesi</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1581"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1583"/>
         <source>New Action</source>
         <translation>Yeni Eylem</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1740"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1742"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Grup düzeyindeki widget'ı değiştirmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1741"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1743"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Bu grup için mevcut veri kümeleri silinecek</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1810"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1811"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1812"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1813"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1814"/>
         <source>Accelerometer %1</source>
         <translation>İvmeölçer %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1868"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1869"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1870"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1871"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1872"/>
         <source>Gyro %1</source>
         <translation>Jiroskop %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1923"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1925"/>
         <source>Latitude</source>
         <translation>Enlem</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1924"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1926"/>
         <source>Longitude</source>
         <translation>Boylam</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1925"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1927"/>
         <source>Altitude</source>
         <translation>Yükseklik</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1973"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1975"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1974"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1976"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1975"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1977"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2089"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2091"/>
         <source>Frame Parser Code</source>
         <translation>Çerçeve Ayrıştırıcı Kodu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2218"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2373"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2441"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2220"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2375"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2443"/>
         <source>Title</source>
         <translation>Başlık</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2221"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2223"/>
         <source>Project name/description</source>
         <translation>Proje adı/açıklaması</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2233"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2235"/>
         <source>Data Conversion Method</source>
         <translation>Veri Dönüştürme Yöntemi</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2235"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2237"/>
         <source>Input data format for frame parser</source>
         <translation>Çerçeve ayrıştırıcı için giriş veri formatı</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2249"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2251"/>
         <source>Frame Detection</source>
         <translation>Çerçeve Tespiti</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2251"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2253"/>
         <source>Strategy used for identifying frame data</source>
         <translation>Çerçeve verilerini tanımlamak için kullanılan strateji</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2269"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2271"/>
         <source>Frame Start Delimeter</source>
         <translation>Çerçeve Başlangıç Ayırıcı</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2272"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2274"/>
         <source>String marking the start of a frame</source>
         <translation>Bir çerçevenin başlangıcını işaretleyen dize</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2289"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2291"/>
         <source>Frame End Delimeter</source>
         <translation>Çerçeve Sonlandırıcı</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2292"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2294"/>
         <source>String marking the end of a frame</source>
         <translation>Bir çerçevenin sonunu belirten dize</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2307"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2309"/>
         <source>Hexadecimal Delimeters</source>
         <translation>Onaltılık Ayraçlar</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2309"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2311"/>
         <source>Use hexadecimal delimiters for data frames</source>
         <translation>Veri çerçeveleri için onaltılık ayraçlar kullan</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2324"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2326"/>
         <source>Checksum Algorithm</source>
         <translation>Checksum Algoritması</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2326"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2328"/>
         <source>Checksum algorithm used for frame validation</source>
         <translation>Çerçeve doğrulaması için kullanılan checksum algoritması</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2375"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2377"/>
         <source>Untitled Group</source>
         <translation>İsimsiz Grup</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2376"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2378"/>
         <source>Name or description of the group</source>
         <translation>Grubun adı veya açıklaması</translation>
     </message>
@@ -2005,7 +2025,7 @@
         <translation type="vanished">Görsel Araç</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2882"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2910"/>
         <source>Widget</source>
         <translation>Araç</translation>
     </message>
@@ -2014,110 +2034,110 @@
         <translation type="vanished">Grup görüntüleme aracı (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2443"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2445"/>
         <source>Untitled Action</source>
         <translation>İsimsiz Eylem</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2444"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2446"/>
         <source>Name or description of the action</source>
         <translation>Eylemin adı veya açıklaması</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2455"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2457"/>
         <source>Icon</source>
         <translation>Simge</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2457"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2459"/>
         <source>Default Icon</source>
         <translation>Varsayılan Simge</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2458"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2460"/>
         <source>Icon to display in the dashboard</source>
         <translation>Gösterge panelinde görüntülenecek simge</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2468"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2470"/>
         <source>Binary Data</source>
         <translation>İkili Veri</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2471"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2473"/>
         <source>Send binary data when the action is triggered.</source>
         <translation>Eylem tetiklendiğinde ikili veri gönder.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2485"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2487"/>
         <source>TX Data (Hex)</source>
         <translation>TX Verisi (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2487"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2505"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2489"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2507"/>
         <source>Command</source>
         <translation>Komut</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2488"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2506"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2490"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2508"/>
         <source>Data to transmit when the action is triggered.</source>
         <translation>Eylem tetiklendiğinde iletilecek veri.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2503"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2505"/>
         <source>TX Data</source>
         <translation>TX Verisi</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2536"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2538"/>
         <source>EOL Sequence</source>
         <translation>EOL Dizisi</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2538"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2540"/>
         <source>End-of-line (EOL) sequence to use</source>
         <translation>Kullanılacak satır sonu (EOL) dizisi</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2549"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2551"/>
         <source>Auto Execute on Connect</source>
         <translation>Bağlantıda Otomatik Çalıştır</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2553"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2555"/>
         <source>Trigger this action automatically when a device connects.</source>
         <translation>Bir cihaz bağlandığında bu işlemi otomatik olarak tetikleyin.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2566"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2568"/>
         <source>Timer Mode</source>
         <translation>Zamanlayıcı Modu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2568"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2570"/>
         <source>How and when the timer should activate.</source>
         <translation>Zamanlayıcının nasıl ve ne zaman etkinleşmesi gerektiği.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2582"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2584"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2586"/>
         <source>Timer Interval (ms)</source>
         <translation>Zamanlayıcı Aralığı (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2586"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2588"/>
         <source>Interval in milliseconds between each timer-triggered action.</source>
         <translation>Her zamanlayıcı tetiklemeli işlem arasındaki milisaniye cinsinden aralık.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2642"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2644"/>
         <source>General Information</source>
         <translation>Genel Bilgiler</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2654"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2656"/>
         <source>Untitled Dataset</source>
         <translation>İsimsiz Veri Kümesi</translation>
     </message>
@@ -2126,7 +2146,7 @@
         <translation type="vanished">Veri kümesinin adı veya açıklaması</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2669"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2671"/>
         <source>Frame Index</source>
         <translation>Çerçeve İndeksi</translation>
     </message>
@@ -2135,12 +2155,12 @@
         <translation type="vanished">Çerçevedeki Konum</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2681"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2683"/>
         <source>Measurement Unit</source>
         <translation>Ölçüm Birimi</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2682"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2684"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volt, Amper, vb.</translation>
     </message>
@@ -2165,7 +2185,7 @@
         <translation type="vanished">Osiloskop Grafiği</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2726"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2728"/>
         <source>Plot data in real-time</source>
         <translation>Gerçek zamanlı veri grafiği</translation>
     </message>
@@ -2178,7 +2198,7 @@
         <translation type="vanished">Frekans alanı verilerini grafiğe dök</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2978"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3006"/>
         <source>Show in LED Panel</source>
         <translation>LED Panelde Göster</translation>
     </message>
@@ -2187,7 +2207,7 @@
         <translation type="vanished">Hızlı durum izleme</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2755"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2757"/>
         <source>X-Axis Source</source>
         <translation>X-Ekseni Kaynağı</translation>
     </message>
@@ -2224,7 +2244,7 @@
         <translation type="vanished">Alarm Yüksek Değer</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2825"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2827"/>
         <source>FFT Window Size</source>
         <translation>FFT Pencere Boyutu</translation>
     </message>
@@ -2249,139 +2269,139 @@
         <translation type="vanished">LED açma eşiği</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3058"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3086"/>
         <source>Off</source>
         <translation>Kapalı</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3059"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3087"/>
         <source>Auto Start</source>
         <translation>Otomatik Başlat</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3060"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3088"/>
         <source>Start on Trigger</source>
         <translation>Tetikleyici ile Başlat</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3061"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3089"/>
         <source>Toggle on Trigger</source>
         <translation>Tetikleyici ile Geçiş</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3065"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3093"/>
         <source>Plain Text (UTF8)</source>
         <translation>Düz Metin (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3066"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3094"/>
         <source>Hexadecimal</source>
         <translation>Onaltılık</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3067"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3095"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3068"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3096"/>
         <source>Binary (Direct)</source>
         <translation>İkili (Doğrudan)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3075"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3103"/>
         <source>No Checksum</source>
         <translation>Checksum Yok</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3080"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3108"/>
         <source>End Delimiter Only</source>
         <translation>Sadece Son Ayraç</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3081"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3109"/>
         <source>Start Delimiter Only</source>
         <translation>Sadece Başlangıç Ayraç</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3082"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3110"/>
         <source>Start + End Delimiter</source>
         <translation>Başlangıç + Son Ayraç</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3083"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3111"/>
         <source>No Delimiters</source>
         <translation>Ayırıcı Yok</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3091"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3119"/>
         <source>Data Grid</source>
         <translation>Veri Tablosu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3092"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3120"/>
         <source>GPS Map</source>
         <translation>GPS Haritası</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3093"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3121"/>
         <source>Gyroscope</source>
         <translation>Jiroskop</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3094"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3122"/>
         <source>Multiple Plot</source>
         <translation>Çoklu Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3095"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3123"/>
         <source>Accelerometer</source>
         <translation>İvmeölçer</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3096"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3124"/>
         <source>3D Plot</source>
         <translation>3D Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3097"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3101"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3108"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3125"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3129"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3136"/>
         <source>None</source>
         <translation>Yok</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3102"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3130"/>
         <source>Bar</source>
         <translation>Çubuk</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3103"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3131"/>
         <source>Gauge</source>
         <translation>Gösterge</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3104"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3132"/>
         <source>Compass</source>
         <translation>Pusula</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3109"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3137"/>
         <source>New Line (\n)</source>
         <translation>Yeni Satır (</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3110"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3138"/>
         <source>Carriage Return (\r)</source>
         <translation>Satır Başı (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3111"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3139"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3115"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3143"/>
         <source>No</source>
         <translation>Hayır</translation>
     </message>
@@ -2390,17 +2410,17 @@
         <translation type="vanished">Doğrusal Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3157"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3185"/>
         <source>Save changes to frame parser code?</source>
         <translation>Çerçeve ayrıştırıcı kodundaki değişiklikleri kaydet?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3158"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3186"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
         <translation>Değişikliklerinizi korumak için 'Kaydet'i, kalıcı olarak kaybetmek için 'Vazgeç'i veya geri dönmek için 'İptal'i seçin.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3160"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3188"/>
         <source>Save Changes</source>
         <translation>Değişiklikleri Kaydet</translation>
     </message>

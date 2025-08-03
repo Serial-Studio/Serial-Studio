@@ -589,9 +589,11 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
       dataset.plt = true;
       dataset.groupId = 0;
       dataset.index = index;
-      dataset.max = maxValue;
-      dataset.min = minValue;
       dataset.value = channel;
+      dataset.pltMax = maxValue;
+      dataset.pltMin = minValue;
+      dataset.fftMax = maxValue;
+      dataset.fftMin = minValue;
       dataset.fftSamples = 2048;
       dataset.fftSamplingRate = sampleRate;
       dataset.title = tr("Channel %1").arg(index);

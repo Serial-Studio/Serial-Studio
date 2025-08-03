@@ -83,6 +83,8 @@ typedef enum
   kDatasetView_LED,              /**< LED panel checkbox item. */
   kDatasetView_LED_High,         /**< LED high (on) value item. */
   kDatasetView_Plot,             /**< Dataset plot mode item. */
+  kDatasetView_FFTMin,           /**< Dataset minimum FFT value item. */
+  kDatasetView_FFTMax,           /**< Dataset maximum FFT value item. */
   kDatasetView_PltMin,           /**< Dataset minimum plot value item. */
   kDatasetView_PltMax,           /**< Dataset maximum plot value item. */
   kDatasetView_WgtMin,           /**< Dataset minimum widget value item. */
@@ -2759,7 +2761,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
 
   // Add minimum value
   auto pltMin = new QStandardItem();
-  pltMin->setEditable(dataset.plt || dataset.fft);
+  pltMin->setEditable(dataset.plt);
   pltMin->setData(0, PlaceholderValue);
   pltMin->setData(FloatField, WidgetType);
   pltMin->setData(pltMin->isEditable(), Active);
@@ -2772,7 +2774,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
 
   // Add maximum value
   auto pltMax = new QStandardItem();
-  pltMax->setEditable(dataset.plt || dataset.fft);
+  pltMax->setEditable(dataset.plt);
   pltMax->setData(0, PlaceholderValue);
   pltMax->setData(FloatField, WidgetType);
   pltMax->setData(pltMax->isEditable(), Active);
@@ -2841,6 +2843,32 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   fftSamplingRate->setData(tr("Sampling frequency used for FFT (in Hz)"),
                            ParameterDescription);
   m_datasetModel->appendRow(fftSamplingRate);
+
+  // Add minimum value
+  auto fftMin = new QStandardItem();
+  fftMin->setEditable(dataset.fft);
+  fftMin->setData(0, PlaceholderValue);
+  fftMin->setData(FloatField, WidgetType);
+  fftMin->setData(fftMin->isEditable(), Active);
+  fftMin->setData(dataset.fftMin, EditableValue);
+  fftMin->setData(kDatasetView_FFTMin, ParameterType);
+  fftMin->setData(tr("Minimum Value (recommended)"), ParameterName);
+  fftMin->setData(tr("Lower bound for data normalization"),
+                  ParameterDescription);
+  m_datasetModel->appendRow(fftMin);
+
+  // Add maximum value
+  auto fftMax = new QStandardItem();
+  fftMax->setEditable(dataset.fft);
+  fftMax->setData(0, PlaceholderValue);
+  fftMax->setData(FloatField, WidgetType);
+  fftMax->setData(fftMax->isEditable(), Active);
+  fftMax->setData(dataset.fftMax, EditableValue);
+  fftMax->setData(kDatasetView_FFTMax, ParameterType);
+  fftMax->setData(tr("Maximum Value (recommended)"), ParameterName);
+  fftMax->setData(tr("Upper bound for data normalization"),
+                  ParameterDescription);
+  m_datasetModel->appendRow(fftMax);
 
   //----------------------------------------------------------------------------
   // Widget section
@@ -3505,6 +3533,12 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
       break;
     case kDatasetView_xAxis:
       m_selectedDataset.xAxisId = value.toInt();
+      break;
+    case kDatasetView_FFTMin:
+      m_selectedDataset.fftMin = value.toDouble();
+      break;
+    case kDatasetView_FFTMax:
+      m_selectedDataset.fftMax = value.toDouble();
       break;
     case kDatasetView_PltMin:
       m_selectedDataset.pltMin = value.toDouble();

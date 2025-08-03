@@ -51,6 +51,8 @@ inline constexpr auto Alarm = "alarm";
 inline constexpr auto Units = "units";
 inline constexpr auto Value = "value";
 inline constexpr auto Widget = "widget";
+inline constexpr auto FFTMin = "fftMin";
+inline constexpr auto FFTMax = "fftMax";
 inline constexpr auto PltMin = "plotMin";
 inline constexpr auto PltMax = "plotMax";
 inline constexpr auto LedHigh = "ledHigh";
@@ -139,6 +141,8 @@ struct alignas(8) Dataset
   bool plt = false;             ///< Enables plotting
   bool overviewDisplay = false; ///< Show in overview
   bool isNumeric = false;       ///< True if value was parsed as numeric
+  double fftMin = 0;            ///< Minimum value (for FFT)
+  double fftMax = 0;            ///< Maximum value (for FFT)
   double pltMin = 0;            ///< Minimum value (for plots)
   double pltMax = 0;            ///< Maximum value (for plots)
   double wgtMin = 0;            ///< Minimum value (for widgets)
@@ -360,6 +364,8 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
   obj.insert(Keys::Value, d.value.simplified());
   obj.insert(Keys::Units, d.units.simplified());
   obj.insert(Keys::Widget, d.widget.simplified());
+  obj.insert(Keys::FFTMin, qMin(d.fftMin, d.fftMax));
+  obj.insert(Keys::FFTMax, qMax(d.fftMin, d.fftMax));
   obj.insert(Keys::PltMin, qMin(d.pltMin, d.pltMax));
   obj.insert(Keys::PltMax, qMax(d.pltMin, d.pltMax));
   obj.insert(Keys::WgtMin, qMin(d.wgtMin, d.wgtMax));
@@ -527,6 +533,8 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
   d.log = ss_jsr(obj, Keys::Log, false).toBool();
   d.plt = ss_jsr(obj, Keys::Graph, false).toBool();
   d.xAxisId = ss_jsr(obj, Keys::XAxis, -1).toInt();
+  d.fftMin = ss_jsr(obj, Keys::FFTMin, 0).toDouble();
+  d.fftMax = ss_jsr(obj, Keys::FFTMax, 0).toDouble();
   d.pltMin = ss_jsr(obj, Keys::PltMin, 0).toDouble();
   d.pltMax = ss_jsr(obj, Keys::PltMax, 0).toDouble();
   d.wgtMin = ss_jsr(obj, Keys::WgtMin, 0).toDouble();
@@ -545,6 +553,12 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
     d.value = QStringLiteral("--.--");
   else
     d.numericValue = d.value.toDouble(&d.isNumeric);
+
+  if (!obj.contains(Keys::FFTMin) || !obj.contains(Keys::FFTMax))
+  {
+    d.fftMin = ss_jsr(obj, Keys::Min, 0).toDouble();
+    d.fftMax = ss_jsr(obj, Keys::Max, 0).toDouble();
+  }
 
   if (!obj.contains(Keys::PltMin) || !obj.contains(Keys::PltMax))
   {
@@ -567,6 +581,12 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
     }
   }
 
+  if (!std::isnan(d.fftMin) && !std::isnan(d.fftMax))
+  {
+    d.fftMin = qMin(d.fftMin, d.fftMax);
+    d.fftMax = qMax(d.fftMin, d.fftMax);
+  }
+
   if (!std::isnan(d.pltMin) && !std::isnan(d.pltMax))
   {
     d.pltMin = qMin(d.pltMin, d.pltMax);
@@ -575,8 +595,8 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
 
   if (!std::isnan(d.wgtMin) && !std::isnan(d.wgtMax))
   {
-    d.pltMin = qMin(d.wgtMin, d.wgtMax);
-    d.pltMax = qMax(d.wgtMin, d.wgtMax);
+    d.wgtMin = qMin(d.wgtMin, d.wgtMax);
+    d.wgtMax = qMax(d.wgtMin, d.wgtMax);
   }
 
   return true;
