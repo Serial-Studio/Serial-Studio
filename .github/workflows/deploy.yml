@@ -49,7 +49,7 @@ env:
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
   INSTALL_QT_MACOS: false
-  INSTALL_QT_WINDOWS: false
+  INSTALL_QT_WINDOWS: true
   INSTALL_QT_LINUX_INTEL: false
   INSTALL_QT_LINUX_ARM64: false
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
@@ -479,17 +479,18 @@ jobs:
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
 
 #-------------------------------------------------------------------------------
-# Windows build (MSVC 2022 x86_64)
+# Windows build (MinGW x86_64)
 #-------------------------------------------------------------------------------
-
+  
   build-windows-x86_64:
     runs-on: windows-latest
-    name: '🧊 Windows (x86_64)'
+    name: '🧊 Windows (x86_64, MinGW)'
     steps:
     - run: git config --global core.autocrlf input
+  
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
-
+  
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3
       if: env.INSTALL_QT_WINDOWS == 'false'
@@ -497,9 +498,9 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022_64
-
-    - name: '⚙️ Install Qt'
+        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-mingw_64
+  
+    - name: '⚙️ Install Qt (MinGW)'
       shell: pwsh
       if: env.INSTALL_QT_WINDOWS == 'true'
       env:
@@ -510,7 +511,7 @@ jobs:
         QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
       run: |
         ./scripts/install-qt.ps1
-
+  
     - name: '⚙️ Save Qt Cache'
       if: env.INSTALL_QT_WINDOWS == 'true'
       uses: actions/cache/save@v3
@@ -518,33 +519,31 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022_64
-
+        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-mingw_64
+  
     - name: '⚙️ Add Qt to PATH'
       shell: pwsh
       env:
         QT_VERSION: ${{env.QT_VERSION_WINDOWS}}
         QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
       run: |
-        $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\bin"
-        $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\libexec"
-        $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\lib\cmake"
-
+        $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\bin"
+        $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\libexec"
+        $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\lib\cmake"
+  
         Write-Output "$QT_BIN_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         Write-Output "$QT_LIBEXEC_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         Write-Output "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $env:GITHUB_ENV
-
+  
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
       with:
         useLocalCache: true
-
-    - name: '🛠 Setup MSVC Development Environment'
-      uses: TheMrMilchmann/setup-msvc-dev@v3
-      with:
-        arch: x64
-
-    - name: '🚧 Configure with CMake'
+  
+    - name: '🛠 Install MinGW'
+      run: choco install mingw -y
+  
+    - name: '🚧 Configure with CMake (MinGW)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
@@ -552,26 +551,30 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
-
-    - name: '🚧 Build application'
+        cmake ../ `
+          -G "MinGW Makefiles" `
+          -DCMAKE_C_COMPILER=gcc `
+          -DCMAKE_CXX_COMPILER=g++ `
+          -DPRODUCTION_OPTIMIZATION=ON `
+          -DCMAKE_BUILD_TYPE=Release `
+          -DBUILD_COMMERCIAL=ON `
+          -DBUILD_GPL3=OFF
+  
+    - name: '🚧 Build application (MinGW)'
       run: |
         cd build
-        cmake --build . --config Release -j 16
-
-    - name: '⚙️ Add msbuild to PATH'
-      uses: microsoft/setup-msbuild@v2
-
+        mingw32-make -j 4
+  
     - name: '⚙️ Install WiX'
       run: dotnet tool install --global wix
-
+  
     - name: '📦 Package application'
       run: |
         cd build
         cpack --verbose
         mv *.msi ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
         mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi ../
-
+  
     - name: '📤 Upload artifact: MSI installer'
       uses: actions/upload-artifact@v4
       with:
