@@ -468,7 +468,7 @@ install(
 
 set(deploy_tool_options_arg "")
 if(APPLE)
-  set(deploy_tool_options_arg "-hardened-runtime -appstore-compliant --no-translations")
+  set(deploy_tool_options_arg "-hardened-runtime -appstore-compliant")
 elseif(WIN32)
   set(deploy_tool_options_arg "-force-openssl --release --no-translations")
 endif()
