@@ -422,9 +422,19 @@ endif()
 #-------------------------------------------------------------------------------
 
 if(WIN32)
-  target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE Dwmapi.lib)
-  set_target_properties(
-    ${PROJECT_EXECUTABLE} PROPERTIES
+  if(MINGW)
+    target_link_libraries(${PROJECT_EXECUTABLE}
+      PRIVATE
+        mingw32
+        dwmapi
+        -static-libgcc
+        -static-libstdc++
+    )
+  else()
+    target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE Dwmapi.lib)
+  endif()
+
+  set_target_properties(${PROJECT_EXECUTABLE} PROPERTIES
     WIN32_EXECUTABLE TRUE
   )
 elseif(APPLE)
