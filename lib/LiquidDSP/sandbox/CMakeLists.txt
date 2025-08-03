@@ -1,0 +1,126 @@
+# build configuration for sandbox programs
+
+set(SANDBOX
+    am_demod_dsb_peak_detect_test
+    am_demod_dsb_pll_carrier_test
+    am_demod_dsb_pll_costas_test
+    am_demod_ssb_pll_carrier_test
+    bpresync_test
+    chromosome_test
+    count_ones_gentab
+    cpmodem_test
+    crc_gentab
+    ellip_func_test
+    ellip_test
+    eqlms_cccf_test
+    #fct_test
+    fec_g2412product_test
+    fec_golay2412_test
+    fec_golay_test
+    fec_hamming128_example
+    fec_hamming128_gentab
+    fec_hamming128_test
+    fec_hamming3126_example
+    fec_hamming74_gentab
+    fec_hamming84_gentab
+    fec_hamming_test
+    fec_ldpc_test
+    fec_rep3_test
+    fec_rep5_test
+    fec_secded2216_test
+    fec_secded3932_test
+    fec_secded7264_test
+    fec_secded_punctured_test
+    fec_spc2216_test
+    fec_sumproduct_test
+    fecsoft_ber_test
+    fecsoft_conv_test
+    fecsoft_hamming128_gentab
+    fecsoft_ldpc_test
+    fft_dual_radix_test
+    fft_mixed_radix_test
+    fft_r2r_test
+    fft_rader_prime_radix2_test
+    fft_rader_prime_test
+    fft_recursive_plan_test
+    fft_recursive_test
+    firdes_energy_test
+    firdes_fexp_test
+    firdes_gmskrx_test
+    firdes_group_delay_test
+    firdes_length_test
+    firdespm_halfband_test
+    firfarrow_rrrf_test
+    firfilt_dcblocker_test
+    firpfbch2_analysis_equivalence_test
+    firpfbch2_flatness_test
+    firpfbch2_test
+    firpfbch_analysis_alignment_test
+    firpfbch_analysis_equivalence_test
+    #firpfbch_analysis_test
+    firpfbch_synthesis_equivalence_test
+    fskcorr_test
+    fskmodem_test
+    gmskmodem_coherent_test
+    gmskmodem_equalizer_test
+    gmskmodem_psd_filter_compare_test
+    gmskmodem_test
+    householder_test
+    iirdes_gradsearch_test
+    iirdes_test
+    iirfilt_intdiff_test
+    levinson_test
+    matched_filter_cfo_test
+    matched_filter_test
+    math_cacosf_test
+    math_casinf_test
+    math_catanf_test
+    math_cexpf_test
+    math_clogf_test
+    math_csqrtf_test
+    math_lngamma_test
+    matrix_eig_test
+    matrix_test
+    #mdct_test
+    minsearch2_test
+    minsearch_test
+    modem_demodulate_arb_gentab
+    modem_demodulate_soft_gentab
+    modem_demodulate_soft_test
+    mskmodem_test
+    msresamp_crcf_test
+    #newbench_example
+    ofdm_ber_test
+    ofdmframe_papr_test
+    ofdmframesync_cfo_test
+    #ofdmoqam_firpfbch_cfo_test
+    ofdmoqam_firpfbch_test
+    #packetizer_persistent_ber_test
+    pll_3rd_order_test
+    pll_design_test
+    predemod_sync_test
+    quasinewton_test
+    recursive_qpsk_test
+    resamp2_crcf_filterbank_test
+    resamp2_crcf_interp_recreate_test
+    reverse_byte_gentab
+    rhamming_test
+    rkaiser2_test
+    shadowing_test
+    simplex_test
+    svd_test
+    symsync_crcf_test
+    symsync_eqlms_test
+    thiran_allpass_iir_test
+    throttle_test
+    vectorcf_test
+    )
+
+foreach(example IN LISTS SANDBOX)
+
+    add_executable(${example} ${example}.c)
+    target_include_directories(${example} PRIVATE ${INCLUDE})
+    target_link_libraries(${example} ${LIBNAME})
+
+endforeach()
+

@@ -363,8 +363,8 @@ target_link_libraries(
 
   ${QT_LIBS}
 
+  liquid
   QCodeEditor
-  QRealFourier
   QSimpleUpdater
 )
 

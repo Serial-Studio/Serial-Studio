@@ -24,7 +24,9 @@
 #include <QVector>
 #include <QQuickItem>
 #include <QLineSeries>
-#include <qfouriertransformer.h>
+
+#include <vector>
+#include <liquid.h>
 
 namespace Widgets
 {
@@ -45,8 +47,8 @@ public:
   explicit FFTPlot(const int index = -1, QQuickItem *parent = nullptr);
   ~FFTPlot()
   {
-    m_data.clear();
-    m_data.squeeze();
+    if (m_plan)
+      fft_destroy_plan(m_plan);
   }
 
   [[nodiscard]] double minX() const;
@@ -76,10 +78,10 @@ private:
   double m_halfRange;
   bool m_scaleIsValid;
 
-  QFourierTransformer m_transformer;
-
+  fftplan m_plan;
   QList<QPointF> m_data;
-  QScopedArrayPointer<float> m_fft;
-  QScopedArrayPointer<float> m_samples;
+  std::vector<float> m_window;
+  std::vector<liquid_float_complex> m_samples;
+  std::vector<liquid_float_complex> m_fftOutput;
 };
 } // namespace Widgets

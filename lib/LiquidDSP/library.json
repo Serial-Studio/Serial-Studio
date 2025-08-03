@@ -1,0 +1,50 @@
+{
+  "name": "liquid-dsp",
+  "version": "1.7.0",
+  "description": "Software-defined radio digital signal processing library",
+  "homepage": "https://liquidsdr.org",
+  "keywords":
+  [
+      "digital signal processing","DSP",
+      "software-defined radio", "SDR",
+      "Fourier transform,","FFT",
+      "filter","resample","interpolate","decimate",
+      "error correction","modulation"
+  ],
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/jgaeddert/liquid-dsp.git"
+  },
+  "authors":
+  {
+    "name": "Joseph D. Gaeddert",
+    "email": "joseph@liquidsdr.org",
+    "url": "https://liquidsdr.org/colophon",
+    "maintainer": true
+  },
+  "license": "MIT",
+  "build":
+  {
+    "extraScript": "scripts/generate_headers.py",
+    "flags":
+    [
+        "-I.",
+        "-Wno-deprecated-declarations"
+    ],
+    "srcFilter":
+    [
+        "+<*.c>",
+        "+<*/src/*.c>",
+        "-<.git/>",
+        "-<*/src/*.proto.c>",
+        "-<*/src/*.av.c>",
+        "-<*/src/*.neon.c>",
+        "-<*/src/*.sse.c>",
+        "-<*/src/*.avx.c>",
+        "-<*/src/*.avx512f.c>",
+        "-<*/src/*.x86.s>"
+    ]
+  },
+  "headers":"liquid.h"
+}

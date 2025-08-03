@@ -1,0 +1,57 @@
+name: Code Coverage CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
+      - cmake-dev
+      - coverage-dev
+      - release-dev
+
+jobs:
+  standard:
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on: [ubuntu-latest]
+
+    name: "💦 ${{ matrix.runs-on }}"
+    runs-on: ${{ matrix.runs-on }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup environment (macOS)
+      if: runner.os == 'macos'
+      run: |
+        brew update
+        brew install cmake virtualenv
+
+    - name: Setup environment (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get install -y --no-install-recommends build-essential virtualenv
+
+    #- name: Setup libfec
+    #  run: git clone https://github.com/jgaeddert/libfec.git && cd libfec && ./configure && make && sudo make install
+
+    - name: build
+      run: |
+        mkdir build
+        cd build
+        cmake -DBUILD_AUTOTESTS=ON -DCOVERAGE=ON -DBUILD_BENCHMARKS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_SANDBOX=OFF ..
+        make -j4
+
+    - name: check
+      run: |
+        cd build
+        ./xautotest -q -o autotest.json
+
+    - name: upload report to codecov with github action
+      uses: codecov/codecov-action@v4
+      with:
+        fail_ci_if_error: true
+        verbose: true
+        token: ${{ secrets.CODECOV_TOKEN }}

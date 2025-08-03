@@ -22,6 +22,8 @@
 #include "UI/Dashboard.h"
 #include "UI/Widgets/FFTPlot.h"
 
+#include <liquid.h>
+
 /**
  * @brief Constructs a new FFTPlot widget.
  * @param index The index of the FFT plot in the Dashboard.
@@ -39,37 +41,37 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
   , m_center(0)
   , m_halfRange(1)
   , m_scaleIsValid(false)
-  , m_transformer(0, QStringLiteral("Hann"))
+  , m_plan(nullptr)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index))
   {
     // Get FFT dataset
     const auto &dataset = GET_DATASET(SerialStudio::DashboardFFT, m_index);
 
-    // Set FFT window type
-    if (!dataset.fftWindow.isEmpty())
-      m_transformer.setWindowFunction(dataset.fftWindow);
-
-    // Initialize FFT size
-    int size = qMax(8, dataset.fftSamples);
-    while (m_transformer.setSize(size) != QFourierTransformer::FixedSize)
-      --size;
-
-    // Set the size
-    m_size = size;
+    // Initialize FFT size, force power of two for better performance
+    m_size = 1 << static_cast<int>(std::log2(qMax(8, dataset.fftSamples)));
 
     // Obtain sampling rate from dataset
     m_samplingRate = dataset.fftSamplingRate;
-
-    // Allocate FFT and sample arrays
-    m_fft.reset(new float[m_size]);
-    m_samples.reset(new float[m_size]);
 
     // Set axis ranges
     m_minX = 0;
     m_maxY = 0;
     m_minY = -100;
     m_maxX = m_samplingRate / 2;
+
+    // Allocate FFT and sample arrays
+    m_samples.resize(m_size);
+    m_fftOutput.resize(m_size);
+
+    // Create window function coefficients
+    m_window.resize(m_size);
+    for (unsigned int i = 0; i < static_cast<unsigned int>(m_size); ++i)
+      m_window[i] = liquid_blackmanharris(i, m_size);
+
+    // Create FFT plan
+    m_plan = fft_create_plan(m_size, m_samples.data(), m_fftOutput.data(),
+                             LIQUID_FFT_FORWARD, 0);
 
     // Obtain minimum and maximum values
     double minVal = dataset.min;
@@ -167,71 +169,90 @@ void Widgets::FFTPlot::updateData()
     return;
 
   // Only work with valid data
-  if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index))
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index))
+    return;
+
+  // Fetch time-domain data
+  const auto &data = UI::Dashboard::instance().fftData(m_index);
+
+  // Re-initialize FFT structures if data size changes
+  const int newSize = static_cast<int>(data.size());
+  if (newSize != m_size)
   {
-    // Fetch time-domain data
-    const auto &data = UI::Dashboard::instance().fftData(m_index);
-    m_size = static_cast<int>(data.size());
+    m_size = newSize;
 
-    // Access the internal buffer and state of the circular queue
-    const double *in = data.raw();
-    std::size_t idx = data.frontIndex();
-    const std::size_t cap = data.capacity();
+    m_samples.resize(m_size);
+    m_fftOutput.resize(m_size);
+    m_window.resize(m_size);
 
-    // Normalize time-domain input samples into [-1, 1] range
-    const double offset = m_scaleIsValid ? -m_center : 0.0;
-    const double scale = m_scaleIsValid ? (1.0 / m_halfRange) : 1.0;
-    for (int i = 0; i < m_size; ++i)
-    {
-      m_samples[i] = static_cast<float>((in[idx] + offset) * scale);
-      idx = (idx + 1) % cap;
-    }
+    for (unsigned int i = 0; i < static_cast<unsigned int>(m_size); ++i)
+      m_window[i] = liquid_blackmanharris(i, m_size);
 
-    // FFT processing
-    m_transformer.forwardTransform(m_samples.data(), m_fft.data());
-    m_transformer.rescale(m_fft.data());
+    if (m_plan)
+      fft_destroy_plan(m_plan);
 
-    // Constants
-    constexpr float floorDB = -100.0f;
-    constexpr int smoothingWindow = 3;
-    constexpr float eps_squared = 1e-24f;
-    constexpr int halfWindow = smoothingWindow / 2;
+    m_plan = fft_create_plan(m_size, m_samples.data(), m_fftOutput.data(),
+                             LIQUID_FFT_FORWARD, 0);
+  }
 
-    // Compute number of frequency bins (Nyquist rate)
-    const int spectrumSize = m_size / 2;
-    m_data.resize(spectrumSize);
+  // Access the internal buffer and state of the circular queue
+  const double *in = data.raw();
+  std::size_t idx = data.frontIndex();
+  const std::size_t cap = data.capacity();
 
-    // Allocate dB cache only if needed
-    const float *fft = m_fft.data();
-    static thread_local std::vector<float> dbCache;
-    if (dbCache.size() < static_cast<size_t>(spectrumSize))
-      dbCache.resize(spectrumSize);
+  // Normalize time-domain input samples into [-1, 1] range
+  const double offset = m_scaleIsValid ? -m_center : 0.0;
+  const double scale = m_scaleIsValid ? (1.0 / m_halfRange) : 1.0;
+  for (int i = 0; i < m_size; ++i)
+  {
+    const float v = static_cast<float>((in[idx] + offset) * scale);
+    m_samples[i].real = v * m_window[i];
+    m_samples[i].imag = 0.0f;
+    idx = (idx + 1) % cap;
+  }
 
-    // Precompute dB values
-    for (int i = 0; i < spectrumSize; ++i)
-    {
-      const float re = fft[i];
-      const float im = fft[i + spectrumSize];
-      const float power = re * re + im * im;
-      dbCache[i]
-          = std::max(10.0f * std::log10(std::max(power, eps_squared)), floorDB);
-    }
+  // Run FFT
+  fft_execute(m_plan);
 
-    // Smooth and output spectrum
-    QPointF *out = m_data.data();
-    for (int i = 0; i < spectrumSize; ++i)
-    {
-      const int minIdx = std::max(0, i - halfWindow);
-      const int maxIdx = std::min(spectrumSize - 1, i + halfWindow);
+  // Constants
+  constexpr float floorDB = -100.0f;
+  constexpr int smoothingWindow = 3;
+  constexpr float eps_squared = 1e-24f;
+  constexpr int halfWindow = smoothingWindow / 2;
 
-      float sum = 0.0f;
-      for (int k = minIdx; k <= maxIdx; ++k)
-        sum += dbCache[k];
+  // Compute number of frequency bins (Nyquist rate)
+  const int spectrumSize = m_size / 2;
+  m_data.resize(spectrumSize);
 
-      const float smoothedDB = sum / (maxIdx - minIdx + 1);
-      const float freq = static_cast<float>(i) * m_samplingRate / m_size;
-      out[i].setX(freq);
-      out[i].setY(smoothedDB);
-    }
+  // Allocate dB cache only if needed
+  static thread_local std::vector<float> dbCache;
+  if (dbCache.size() < static_cast<size_t>(spectrumSize))
+    dbCache.resize(spectrumSize);
+
+  // Precompute dB values
+  const float normFactor = static_cast<float>(m_size * m_size);
+  for (int i = 0; i < spectrumSize; ++i)
+  {
+    const float re = m_fftOutput[i].real;
+    const float im = m_fftOutput[i].imag;
+    const float power = std::max((re * re + im * im) / normFactor, eps_squared);
+    dbCache[i] = std::max(10.0f * std::log10(power), floorDB);
+  }
+
+  // Smoothing and XY point generation
+  QPointF *out = m_data.data();
+  for (int i = 0; i < spectrumSize; ++i)
+  {
+    const int minIdx = std::max(0, i - halfWindow);
+    const int maxIdx = std::min(spectrumSize - 1, i + halfWindow);
+
+    float sum = 0.0f;
+    for (int k = minIdx; k <= maxIdx; ++k)
+      sum += dbCache[k];
+
+    const float smoothedDB = sum / (maxIdx - minIdx + 1);
+    const float freq = static_cast<float>(i) * m_samplingRate / m_size;
+    out[i].setX(freq);
+    out[i].setY(smoothedDB);
   }
 }

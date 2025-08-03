@@ -1,0 +1,31 @@
+language: C
+
+matrix:
+    include:
+        - os: linux
+          compiler: gcc
+          env: BUILD_CXX=off
+        - os: osx
+          compiler: clang
+          env: BUILD_CXX=off
+
+script:
+    - git clone https://github.com/quiet/libcorrect.git
+    - cd libcorrect
+    - mkdir build
+    - cd build
+    - set -e
+    - cmake -DCMAKE_BUILD_TYPE=Release .. && make && make shim
+    - sudo make install
+    - set +e
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo ldconfig; fi
+    - cd ../..
+    - set -e
+    - ./bootstrap.sh
+    - ./configure
+    - make
+    - make examples
+    - make benchmark
+    - make xautotest
+    - ./xautotest -R 0 # execute with a specific random seed
+    - ./xautotest      # execute with a random seed based on time

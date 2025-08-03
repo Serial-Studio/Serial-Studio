@@ -1,0 +1,6 @@
+# ignore all temporary file
+*.m
+*.swp
+
+# ignore all program files
+*_test

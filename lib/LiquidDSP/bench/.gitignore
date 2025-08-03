@@ -1,0 +1,7 @@
+# git ignore file
+
+# ignore generator program
+benchmarkgen
+
+# ignore output header
+benchmark_include.h

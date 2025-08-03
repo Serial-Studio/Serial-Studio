@@ -1,0 +1,128 @@
+/*
+ * Copyright (c) 2007 - 2015 Joseph Gaeddert
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+//
+// autotest fft data for 48-point transform
+//
+
+#include <complex.h>
+
+float complex fft_test_x48[] = {
+   -1.408383409504 +   0.661990153106*_Complex_I,
+   -0.257850483647 +  -2.392863066952*_Complex_I,
+   -0.321563284081 +   1.408168751420*_Complex_I,
+   -1.963488918325 +  -0.315363008755*_Complex_I,
+    0.872572043811 +  -1.774358495756*_Complex_I,
+   -1.036243090405 +   0.085162186806*_Complex_I,
+   -0.810463329242 +   0.370726012575*_Complex_I,
+    0.814727688017 +  -0.148930236445*_Complex_I,
+   -0.482188504339 +  -0.888806074906*_Complex_I,
+    0.751010250272 +   0.610241893778*_Complex_I,
+    1.562853718365 +   0.338170177897*_Complex_I,
+    0.836367957185 +  -1.685869538958*_Complex_I,
+   -0.678836393610 +  -1.105381292997*_Complex_I,
+    1.313536222418 +  -1.604103598331*_Complex_I,
+    0.652309130012 +  -1.915192986159*_Complex_I,
+   -0.398123599463 +   1.372136473305*_Complex_I,
+    2.555137160099 +   0.715094591241*_Complex_I,
+    1.803926723963 +  -0.470162240275*_Complex_I,
+   -1.033969686967 +  -1.754083599107*_Complex_I,
+    0.345505105620 +   1.869665415226*_Complex_I,
+    0.917886037796 +   1.488788889124*_Complex_I,
+   -0.149819207787 +   0.641387132093*_Complex_I,
+    0.239135545455 +   0.491166352445*_Complex_I,
+    0.571741246274 +   0.056534896965*_Complex_I,
+   -0.131630105163 +  -1.508920032468*_Complex_I,
+    1.209119501276 +  -0.078706912158*_Complex_I,
+   -0.955610498388 +   1.044137820022*_Complex_I,
+    0.106457806412 +  -0.585542024212*_Complex_I,
+   -1.229933443664 +  -0.322249167809*_Complex_I,
+    0.278186189361 +   1.807684972303*_Complex_I,
+   -1.729784506112 +  -0.939519586014*_Complex_I,
+    0.927483189137 +   0.431322133098*_Complex_I,
+    0.141968377392 +  -0.120521833531*_Complex_I,
+    0.747436107175 +  -1.117297332586*_Complex_I,
+    0.321427506892 +   0.604553538042*_Complex_I,
+   -1.310259971951 +   0.301350874871*_Complex_I,
+    0.000616127451 +   1.395956853708*_Complex_I,
+    0.789283665376 +  -0.378417239374*_Complex_I,
+    1.626071060809 +  -0.838198796474*_Complex_I,
+   -0.502170615893 +  -0.371786828507*_Complex_I,
+    0.941560993676 +   0.083132997096*_Complex_I,
+    0.217335920952 +  -0.775367298569*_Complex_I,
+   -1.386726382455 +   1.228033537755*_Complex_I,
+    0.135305964480 +   1.010214926902*_Complex_I,
+   -0.769134001940 +  -1.642182708631*_Complex_I,
+    0.451443995268 +  -1.443277308466*_Complex_I,
+    0.315403114502 +   0.409584212993*_Complex_I,
+    0.777007938735 +   0.033642728423*_Complex_I};
+
+float complex fft_test_y48[] = {
+    5.666636855245 +  -5.718253686246*_Complex_I,
+   -9.318440723038 + -11.045628239935*_Complex_I,
+  -10.484391800934 +  10.258547835119*_Complex_I,
+    5.692975013010 +  -0.079178697546*_Complex_I,
+   -0.031494239726 +  -3.429117974659*_Complex_I,
+   -1.633492827483 +   6.955978741593*_Complex_I,
+    9.741303637543 +   2.061588265899*_Complex_I,
+    1.051018454307 +  11.180284489721*_Complex_I,
+   -8.006452512021 +   0.459314562290*_Complex_I,
+   -7.397134103296 +   6.198088361763*_Complex_I,
+    4.688329496623 +   1.626283668222*_Complex_I,
+   -8.380975402709 +  -3.715659857481*_Complex_I,
+   -4.832542130429 +  -9.241813561210*_Complex_I,
+   -5.444148048877 +  -5.774968307876*_Complex_I,
+   -2.557281197147 +  -8.013068178874*_Complex_I,
+   -2.508606838763 +   3.393130955025*_Complex_I,
+  -13.856615792482 +  -8.279988253172*_Complex_I,
+   -0.275213201833 +   9.234040467214*_Complex_I,
+  -10.548623142987 +   1.461152259705*_Complex_I,
+   -5.454201445127 +   5.015988800202*_Complex_I,
+    3.151148175752 +  16.404964892896*_Complex_I,
+   -2.628471739476 +  12.549705973202*_Complex_I,
+   -5.309278338161 +  -1.496205611507*_Complex_I,
+    8.327510797620 +   9.076602173656*_Complex_I,
+   -7.249202313653 +   0.578432313391*_Complex_I,
+    0.278119672993 +   6.335493150399*_Complex_I,
+   -4.400202487177 +   4.358641062270*_Complex_I,
+    1.825561215029 + -10.742991731336*_Complex_I,
+    2.059618967411 +   5.230483842207*_Complex_I,
+   -0.589368957248 +  -0.568413649725*_Complex_I,
+    5.846114680415 +   3.953722464016*_Complex_I,
+   -4.790203069855 +   5.357335572595*_Complex_I,
+  -16.219316666593 +   5.416145069047*_Complex_I,
+    4.053779640014 +  14.490156426037*_Complex_I,
+   10.343285976607 + -19.941466772140*_Complex_I,
+   -0.179745539698 +  -6.776924924303*_Complex_I,
+    9.333647116859 +   2.311810446775*_Complex_I,
+   -0.778589953827 +  -7.796695480692*_Complex_I,
+   -5.728518422011 +  -0.187241621271*_Complex_I,
+   15.554791252022 +   3.837751365144*_Complex_I,
+   -3.410115684107 +  -2.362837725953*_Complex_I,
+  -14.699080682437 +   4.704009521181*_Complex_I,
+    4.974381394298 +  -3.870880098021*_Complex_I,
+    4.347015481178 +   1.639590273798*_Complex_I,
+    6.775882853829 +  -8.045391749167*_Complex_I,
+   -6.905056488040 +  -1.077414483536*_Complex_I,
+   -6.906638779165 +  -3.861138554296*_Complex_I,
+   -0.790121808651 +  -0.288436445313*_Complex_I};
+

@@ -1,0 +1,58 @@
+# ignore all object files
+*.a
+*.ar
+*.d
+*.dylib
+*.dSYM
+*.gcda
+*.gcno
+*.o
+*.so
+*~
+build
+
+# ignore swap files for vim editing
+*.swp
+
+# build objects 
+autom4te.cache
+aclocal.m4
+
+# ignore all auto-generated targets
+autotest_include.h
+benchmark
+benchmark_include.h
+bench/fftbench
+configure
+config.h
+config.h.in
+config.h.in~
+config.log
+config.status
+makefile
+xautotest
+*.m
+autotest.json
+autotest/logs/*.bin
+autotest/logs/*.gnu
+readme.*
+liquid_linker_test
+
+# miscellany
+octave-core
+*.tar
+*.gz
+.DS_Store
+
+# gentab programs
+src/fec/gentab/*_gentab
+src/utility/gentab/*_gentab
+
+# gentab output sources
+src/fec/gentab/reverse_byte.c
+src/utility/gentab/count_ones.c
+
+# sandbox
+sandbox/*_test
+sandbox/*_example
+sandbox/*_gentab

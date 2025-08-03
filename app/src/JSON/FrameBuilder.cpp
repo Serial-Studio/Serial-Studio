@@ -593,7 +593,6 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
       dataset.min = minValue;
       dataset.value = channel;
       dataset.fftSamples = 2048;
-      dataset.fftWindow = "Hann";
       dataset.fftSamplingRate = sampleRate;
       dataset.title = tr("Channel %1").arg(index);
       dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);

@@ -54,7 +54,6 @@ inline constexpr auto Widget = "widget";
 inline constexpr auto LedHigh = "ledHigh";
 inline constexpr auto AlarmLow = "alarmLow";
 inline constexpr auto AlarmHigh = "alarmHigh";
-inline constexpr auto FFTWindow = "fftWindow";
 inline constexpr auto FFTSamples = "fftSamples";
 inline constexpr auto Overview = "overviewDisplay";
 inline constexpr auto FFTSamplingRate = "fftSamplingRate";
@@ -146,7 +145,6 @@ struct alignas(8) Dataset
   QString title;                ///< Human-readable title
   QString units;                ///< Measurement units (e.g., °C)
   QString widget;               ///< Widget type (bar, gauge, etc.)
-  QString fftWindow;            ///< FFT window function type
 };
 static_assert(sizeof(Dataset) % alignof(Dataset) == 0,
               "Unaligned Dataset struct");
@@ -533,7 +531,6 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
   d.alarmLow = ss_jsr(obj, Keys::AlarmLow, 0).toDouble();
   d.fftSamplingRate = ss_jsr(obj, Keys::FFTSamplingRate, -1).toInt();
   d.alarmHigh = ss_jsr(obj, Keys::AlarmHigh, 0).toDouble();
-  d.fftWindow = ss_jsr(obj, Keys::FFTWindow, "").toString().simplified();
   if (d.value.isEmpty())
     d.value = QStringLiteral("--.--");
   else
