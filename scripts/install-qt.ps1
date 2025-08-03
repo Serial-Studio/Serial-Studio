@@ -49,7 +49,7 @@ if (-not $QT_OUTPUT_DIR) {
     $QT_OUTPUT_DIR = "Qt-$QT_VERSION-$OS_TAG-$QT_ARCH"
 }
 
-$ALIAS_PACKAGE = "qt$QT_VERSION-msvc2022-full-dev"
+$ALIAS_PACKAGE = "qt$QT_VERSION-full-dev"
 
 #------------------------------------------------------------------------------
 # Installer setup
