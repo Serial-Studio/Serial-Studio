@@ -33,7 +33,7 @@ set(LIBNAME liquid)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-set(CMAKE_CXX_STANDARD 14 CACHE STRING "C++ version selection")  # or 11, 14, 17, 20
+set(CMAKE_CXX_STANDARD 20 CACHE STRING "C++ version selection")  # or 11, 14, 17, 20
 set(CMAKE_CXX_STANDARD_REQUIRED ON)  # optional, ensure standard is supported
 #set(CMAKE_CXX_EXTENSIONS OFF)  # optional, keep compiler extensions off
 
@@ -380,8 +380,6 @@ if(COVERAGE)
 endif(COVERAGE)
 
 target_link_libraries(${LIBNAME} c m)
-
-set_target_properties(${LIBNAME} PROPERTIES VERSION ${LIQUID_VERSION} SOVERSION 1)
 
 # ---------------------------------------- examples ----------------------------------------
 

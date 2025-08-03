@@ -177,7 +177,6 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-asynchronous-unwind-tables # Strip async. unwind tables
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
-         -msse4.2                        # Add support for SSE4
       )
       add_link_options(
          -Wl,--gc-sections               # Remove unused code/data at link time
@@ -201,7 +200,6 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-asynchronous-unwind-tables # Strip async. unwind tables
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
-         -msse4.2                        # Add support for SSE4
       )
       add_link_options(
          -Wl,--gc-sections               # Strip unused functions/data
@@ -221,7 +219,6 @@ if(PRODUCTION_OPTIMIZATION)
          /fp:precise                     # IEEE-accurate floating-point math
          /Qpar                           # Enable automatic parallelization of loops
          /Gw                             # Put functions/data into separate COMDATs
-         /arch:SSE
       )
       add_link_options(
          /OPT:REF                        # Remove unreferenced functions/data
@@ -271,7 +268,6 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-asynchronous-unwind-tables # Strip async. unwind tables
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
-         -msse4.2                        # Add support for SSE4
       )
       add_link_options(
          -Wl,--gc-sections               # Discard unused code sections at link time
@@ -295,7 +291,6 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-asynchronous-unwind-tables # Strip async. unwind tables
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
-         -msse4.2                        # Add support for SSE4
       )
       add_link_options(
          -Wl,--gc-sections               # Strip unused functions/data
@@ -309,13 +304,20 @@ else()
 endif()
 
 #-------------------------------------------------------------------------------
-# Enable platform-specific SIMD (SSE2 for x86_64 so far)
+# Enable platform-specific SIMD
 #-------------------------------------------------------------------------------
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64)$")
-  message(STATUS "Enabling SSE2 optimizations")
+  message(STATUS "Enabling SSE4.2 optimizations")
+  if(MSVC)
+    add_compile_options(/arch:SSE)
+  else()
+    add_compile_options(-msse4.2)
+  endif()
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)$")
+  message(STATUS "Enabling NEON optimizations")
   if(NOT MSVC)
-    add_compile_options(-msse2)
+    add_compile_options(-mfpu=neon)
   endif()
 endif()
 
