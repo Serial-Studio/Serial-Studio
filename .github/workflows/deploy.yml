@@ -546,7 +546,7 @@ jobs:
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
         QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/mingw_64/bin
-        QT_TOOLS_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/Tools/mingw1310_64/bin
+        QT_TOOLS_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/Tools/mingw1310_64/bin
       run: |
         $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
         mkdir build
