@@ -22,8 +22,6 @@
 #include "UI/Dashboard.h"
 #include "UI/Widgets/FFTPlot.h"
 
-#include <liquid.h>
-
 /**
  * @brief Constructs a new FFTPlot widget.
  * @param index The index of the FFT plot in the Dashboard.

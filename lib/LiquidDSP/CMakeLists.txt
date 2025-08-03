@@ -379,7 +379,7 @@ if(COVERAGE)
     target_link_options(${LIBNAME} PRIVATE -coverage)
 endif(COVERAGE)
 
-target_link_libraries(${LIBNAME} c m)
+target_link_libraries(${LIBNAME} m)
 
 # ---------------------------------------- examples ----------------------------------------
 
