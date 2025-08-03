@@ -423,13 +423,7 @@ endif()
 
 if(WIN32)
   if(MINGW)
-    target_link_libraries(${PROJECT_EXECUTABLE}
-      PRIVATE
-        mingw32
-        dwmapi
-        -static-libgcc
-        -static-libstdc++
-    )
+    target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE dwmapi)
   else()
     target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE Dwmapi.lib)
   endif()
@@ -494,36 +488,38 @@ install(SCRIPT ${deploy_script})
 # Packaging
 #-------------------------------------------------------------------------------
 
-set(CPACK_PACKAGE_NAME                  ${PROJECT_DISPNAME})
-set(CPACK_PACKAGE_VENDOR                ${PROJECT_VENDOR})
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY   ${PROJECT_DESCRIPTION_SUMMARY})
-set(CPACK_PACKAGE_VERSION_MAJOR         ${PROJECT_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR         ${PROJECT_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH         ${PROJECT_VERSION_PATCH})
-set(CPACK_PACKAGE_DESCRIPTION_FILE      ${PROJECT_DESCRIPTION_FILE})
-set(CPACK_PACKAGE_FILE_NAME             ${PROJECT_FILE_NAME})
-set(CPACK_RESOURCE_FILE_LICENSE         ${PROJECT_FILE_LICENSE})
-set(CPACK_PACKAGE_HOMEPAGE_URL          ${PROJECT_CONTACT})
+set(CPACK_PACKAGE_NAME                    ${PROJECT_DISPNAME})
+set(CPACK_PACKAGE_VENDOR                  ${PROJECT_VENDOR})
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY     ${PROJECT_DESCRIPTION_SUMMARY})
+set(CPACK_PACKAGE_VERSION_MAJOR           ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR           ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH           ${PROJECT_VERSION_PATCH})
+set(CPACK_PACKAGE_VERSION                 ${PROJECT_VERSION})
+set(CPACK_PACKAGE_DESCRIPTION_FILE        ${PROJECT_DESCRIPTION_FILE})
+set(CPACK_PACKAGE_FILE_NAME               ${PROJECT_FILE_NAME})
+set(CPACK_RESOURCE_FILE_LICENSE           ${PROJECT_FILE_LICENSE})
+set(CPACK_PACKAGE_HOMEPAGE_URL            ${PROJECT_CONTACT})
 
 set(CPACK_MONOLITHIC_INSTALL ON)
 
 if(WIN32)
-  set(CPACK_PACKAGE_ICON                "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\icon.ico")
-  set(CPACK_PACKAGE_INSTALL_DIRECTORY   "${CPACK_PACKAGE_NAME}")
+  set(CPACK_PACKAGE_ICON                 "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\icon.ico")
+  set(CPACK_PACKAGE_INSTALL_DIRECTORY    "${CPACK_PACKAGE_NAME}")
 else()
-  set(CPACK_PACKAGE_ICON                "${CMAKE_CURRENT_SOURCE_DIR}/deploy/PackageIcon.png")
-  set(CPACK_PACKAGE_INSTALL_DIRECTORY   "${CPACK_PACKAGE_NAME}")
+  set(CPACK_PACKAGE_ICON                 "${CMAKE_CURRENT_SOURCE_DIR}/deploy/PackageIcon.png")
+  set(CPACK_PACKAGE_INSTALL_DIRECTORY    "${CPACK_PACKAGE_NAME}")
 endif()
 
 if(NOT CPACK_GENERATOR)
   if(WIN32)
-    set(CPACK_GENERATOR "WIX")
+    set(CPACK_GENERATOR                  "WIX")
     set(CPACK_WIX_PRODUCT_ICON           "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\icon.ico")
     set(CPACK_WIX_UI_BANNER              "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\banner.bmp")
     set(CPACK_WIX_UI_DIALOG              "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\dialog.bmp")
     set(CPACK_WIX_LICENSE_RTF            "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\license.rtf")
     set(CPACK_WIX_PROPERTY_ARPHELPLINK   "${PROJECT_CONTACT}")
     set(CPACK_WIX_PROPERTY_ARPCONTACT    "${PROJECT_CONTACT}")
+    set(CPACK_WIX_PRODUCT_GUID           "ed110487-84c3-46f7-a084-7ea771a414fd")
     set(CPACK_WIX_UPGRADE_GUID           "a21bfa96-8805-4c47-8fa7-3b3daee6efce")
     set(CPACK_WIX_PROGRAM_MENU_FOLDER    ".")
     set(CPACK_WIX_ARCHITECTURE           "x64")
