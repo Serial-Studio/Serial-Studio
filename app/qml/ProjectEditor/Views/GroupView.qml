@@ -265,7 +265,12 @@ Widgets.Pane {
         TableDelegate {
           id: delegate
           width: parent.width
-          modelPointer: Cpp_JSON_ProjectModel.groupModel
+
+          Binding {
+            target: delegate
+            property: "modelPointer"
+            value: Cpp_JSON_ProjectModel.groupModel
+          }
         }
       }
     }

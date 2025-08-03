@@ -76,19 +76,19 @@ class ProjectModel : public QObject
   Q_PROPERTY(QString jsonFileName
              READ jsonFileName
              NOTIFY jsonFileChanged)
-  Q_PROPERTY(CustomModel* groupModel
+  Q_PROPERTY(QAbstractItemModel* groupModel
              READ groupModel
              NOTIFY groupModelChanged)
-  Q_PROPERTY(CustomModel* actionModel
+  Q_PROPERTY(QAbstractItemModel* actionModel
              READ actionModel
              NOTIFY actionModelChanged)
-  Q_PROPERTY(CustomModel* projectModel
+  Q_PROPERTY(QAbstractItemModel* projectModel
              READ projectModel
              NOTIFY projectModelChanged)
-  Q_PROPERTY(CustomModel* datasetModel
+  Q_PROPERTY(QAbstractItemModel* datasetModel
              READ datasetModel
              NOTIFY datasetModelChanged)
-  Q_PROPERTY(CustomModel* treeModel
+  Q_PROPERTY(QAbstractItemModel* treeModel
              READ treeModel
              NOTIFY treeModelChanged)
   Q_PROPERTY(QItemSelectionModel* selectionModel
@@ -180,7 +180,8 @@ public:
     FloatField,
     CheckBox,
     ComboBox,
-    IconPicker
+    IconPicker,
+    Separator,
   };
   Q_ENUM(EditorWidget)
 

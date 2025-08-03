@@ -236,83 +236,6 @@ if(BUILD_COMMERCIAL)
 endif()
 
 #-------------------------------------------------------------------------------
-# Import QML source code
-#-------------------------------------------------------------------------------
-
-# Specify required QML files for FOSS version
-set(QML_SRC
-  qml/Dialogs/About.qml
-  qml/Dialogs/Acknowledgements.qml
-  qml/Dialogs/CsvPlayer.qml
-  qml/Dialogs/Donate.qml
-  qml/Dialogs/IconPicker.qml
-  qml/Dialogs/FileTransmission.qml
-  qml/Dialogs/Settings.qml
-  qml/MainWindow/Panes/Dashboard/Taskbar.qml
-  qml/MainWindow/Panes/Dashboard/StartMenu.qml
-  qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml
-  qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml
-  qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml
-  qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml
-  qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml
-  qml/MainWindow/Panes/SetupPanes/Hardware.qml
-  qml/MainWindow/Panes/Console.qml
-  qml/MainWindow/Panes/Dashboard.qml
-  qml/MainWindow/Panes/Setup.qml
-  qml/MainWindow/Panes/Toolbar.qml
-  qml/MainWindow/MainWindow.qml
-  qml/ProjectEditor/Sections/ProjectStructure.qml
-  qml/ProjectEditor/Sections/ProjectToolbar.qml
-  qml/ProjectEditor/Views/ActionView.qml
-  qml/ProjectEditor/Views/DatasetView.qml
-  qml/ProjectEditor/Views/FrameParserView.qml
-  qml/ProjectEditor/Views/GroupView.qml
-  qml/ProjectEditor/Views/ProjectView.qml
-  qml/ProjectEditor/Views/TableDelegate.qml
-  qml/ProjectEditor/ProjectEditor.qml
-  qml/Widgets/Dashboard/Accelerometer.qml
-  qml/Widgets/Dashboard/Bar.qml
-  qml/Widgets/Dashboard/Compass.qml
-  qml/Widgets/Dashboard/DataGrid.qml
-  qml/Widgets/Dashboard/FFTPlot.qml
-  qml/Widgets/Dashboard/Gauge.qml
-  qml/Widgets/Dashboard/GPS.qml
-  qml/Widgets/Dashboard/Gyroscope.qml
-  qml/Widgets/Dashboard/LEDPanel.qml
-  qml/Widgets/Dashboard/MultiPlot.qml
-  qml/Widgets/Dashboard/Plot.qml
-  qml/Widgets/Dashboard/Terminal.qml
-  qml/Widgets/ProNotice.qml
-  qml/Widgets/JSONDropArea.qml
-  qml/Widgets/Pane.qml
-  qml/Widgets/TaskbarButton.qml
-  qml/Widgets/ToolbarButton.qml
-  qml/Widgets/MiniWindow.qml
-  qml/Widgets/PlotWidget.qml
-  qml/Widgets/SmartWindow.qml
-  qml/Widgets/VisualRange.qml
-  qml/Widgets/MenuButton.qml
-  qml/Widgets/SubMenuCombo.qml
-  qml/Widgets/InfoBullet.qml
-  qml/DialogLoader.qml
-  qml/main.qml
-)
-
-# Add extra QML files for commercial build
-if(BUILD_COMMERCIAL)
-  set(QML_SRC
-    ${QML_SRC}
-    qml/Widgets/Dashboard/Plot3D.qml
-    qml/Dialogs/Welcome.qml
-    qml/Dialogs/MQTTConfiguration.qml
-    qml/Dialogs/LicenseManagement.qml
-    qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml
-    qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml
-    qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml
-  )
-endif()
-
-#-------------------------------------------------------------------------------
 # Platform-specific configuration
 #-------------------------------------------------------------------------------
 
@@ -340,8 +263,9 @@ endif()
 # Add resources
 #-------------------------------------------------------------------------------
 
-qt_add_resources(RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
-qt_add_resources(TRANSLATIONS ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
+qt_add_resources(QML_RCC ${CMAKE_CURRENT_SOURCE_DIR}/qml/qml.qrc)
+qt_add_resources(RES_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
+qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
 
 #-------------------------------------------------------------------------------
 # Create executable
@@ -351,8 +275,9 @@ qt_add_executable(
   ${PROJECT_EXECUTABLE}
   ${SOURCES}
   ${HEADERS}
-  ${RCC}
-  ${TRANSLATIONS}
+  ${QML_RCC}
+  ${RES_RCC}
+  ${QTR_RCC}
   ${QT_RCC_TRANSLATIONS}
   ${APP_RCC_TRANSLATIONS}
   MANUAL_FINALIZATION
@@ -371,18 +296,6 @@ target_link_libraries(
 target_link_openssl(
   ${PROJECT_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/../lib/OpenSSL
-)
-
-#-------------------------------------------------------------------------------
-# Add QML files
-#-------------------------------------------------------------------------------
-
-qt_add_qml_module(
-  ${PROJECT_EXECUTABLE}
-  URI gui
-  VERSION 1.0
-  QML_FILES ${QML_SRC}
-  RESOURCE_PREFIX /serial-studio.com/
 )
 
 #-------------------------------------------------------------------------------

@@ -1555,7 +1555,6 @@ void JSON::ProjectModel::changeDatasetOption(
     {
       m_selectionModel->setCurrentIndex(i.key()->index(),
                                         QItemSelectionModel::ClearAndSelect);
-      buildDatasetModel(m_selectedDataset);
       break;
     }
   }
@@ -2056,10 +2055,9 @@ void JSON::ProjectModel::buildTreeModel()
   m_rootItems.insert(frameParsingCode, kFrameParser);
 
   // Iterare through the actions and add them to the model
-  for (size_t idx = 0; idx < m_actions.size(); ++idx)
+  for (const auto& action : m_actions)
   {
     // Create action item
-    const auto action = m_actions[idx];
     auto *actionItem = new QStandardItem(action.title);
 
     // Configure action item
@@ -2074,10 +2072,9 @@ void JSON::ProjectModel::buildTreeModel()
   }
 
   // Iterate through the groups and add them to the model
-  for (size_t idx = 0; idx < m_groups.size(); ++idx)
+  for (const auto& group : m_groups)
   {
-    // Create group item
-    const auto group = m_groups[idx];
+    // Get group item
     auto *groupItem = new QStandardItem(group.title);
 
     // Get which icon to use for the group
@@ -2090,10 +2087,9 @@ void JSON::ProjectModel::buildTreeModel()
     groupItem->setData(group.title, TreeViewText);
 
     // Iterate through the datasets within this group and add them as children
-    for (size_t dIndex = 0; dIndex < group.datasets.size(); ++dIndex)
+    for (const auto& dataset : group.datasets)
     {
       // Create dataset item
-      const auto dataset = group.datasets[dIndex];
       auto *datasetItem = new QStandardItem(dataset.title);
 
       // Get which icon to use for the DATASET
@@ -2561,14 +2557,12 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
 
   // Get which optional parameters should be displayed
   const bool showWidget = currentDatasetIsEditable();
-  const bool showFFTOptions = dataset.fft;
-  const bool showLedOptions = dataset.led;
-  const bool showMinMax
-      = dataset.plt || dataset.fft || dataset.widget == "gauge"
-        || dataset.widget == "bar" || m_selectedGroup.widget == "multiplot";
-  const bool showAlarm = dataset.led || dataset.widget == "gauge"
-                         || dataset.widget == "bar"
-                         || m_selectedGroup.widget == "datagrid";
+
+  // Add separator
+  auto* separator = new QStandardItem();
+  separator->setData(Separator, WidgetType);
+  separator->setData(tr("Basic Metadata"), PlaceholderValue);
+  m_datasetModel->appendRow(separator);
 
   // Add dataset title
   auto title = new QStandardItem();
@@ -2610,22 +2604,11 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
                  ParameterIcon);
   m_datasetModel->appendRow(units);
 
-  // Add show in overview method
-  bool hasWidget = showFFTOptions || showMinMax || !dataset.widget.isEmpty();
-  if (hasWidget && m_groups.size() > 1)
-  {
-    auto overview = new QStandardItem();
-    overview->setEditable(true);
-    overview->setData(CheckBox, WidgetType);
-    overview->setData(tr("Overview"), ParameterName);
-    overview->setData(dataset.overviewDisplay, EditableValue);
-    overview->setData(kDatasetView_Overview, ParameterType);
-    overview->setData(tr("Include widget in overview dashboard"),
-                      ParameterDescription);
-    overview->setData("qrc:/rcc/icons/project-editor/model/overview.svg",
-                      ParameterIcon);
-    m_datasetModel->appendRow(overview);
-  }
+  // Add separator
+  separator = new QStandardItem();
+  separator->setData(Separator, WidgetType);
+  separator->setData(tr("Dashboard Widget"), PlaceholderValue);
+  m_datasetModel->appendRow(separator);
 
   // Add widget combobox item
   if (showWidget)
@@ -2659,7 +2642,26 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     widget->setData("qrc:/rcc/icons/project-editor/model/widget.svg",
                     ParameterIcon);
     m_datasetModel->appendRow(widget);
+
+    // Add show in overview method
+    auto overview = new QStandardItem();
+    overview->setEditable(true);
+    overview->setData(CheckBox, WidgetType);
+    overview->setData(tr("Overview"), ParameterName);
+    overview->setData(dataset.overviewDisplay, EditableValue);
+    overview->setData(kDatasetView_Overview, ParameterType);
+    overview->setData(tr("Include widget in overview dashboard"),
+                      ParameterDescription);
+    overview->setData("qrc:/rcc/icons/project-editor/model/overview.svg",
+                      ParameterIcon);
+    m_datasetModel->appendRow(overview);
   }
+
+  // Add separator
+  separator = new QStandardItem();
+  separator->setData(Separator, WidgetType);
+  separator->setData(tr("Plotting"), PlaceholderValue);
+  m_datasetModel->appendRow(separator);
 
   // Get appropiate plotting mode index for current dataset
   int plotIndex = 0;
@@ -2691,6 +2693,69 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   plot->setData("qrc:/rcc/icons/project-editor/model/plot.svg", ParameterIcon);
   m_datasetModel->appendRow(plot);
 
+  // Ensure X-axis ID is reset to "Samples" when an invalid index is set
+  int xAxisIdx = 0;
+  for (const auto &group : std::as_const(m_groups))
+  {
+    for (const auto &d : group.datasets)
+    {
+      const auto idx = d.index;
+      if (idx == m_selectedDataset.xAxisId)
+      {
+        xAxisIdx = idx;
+        break;
+      }
+    }
+
+    if (xAxisIdx != 0)
+      break;
+  }
+
+  // Construct item
+  auto xAxis = new QStandardItem();
+  xAxis->setEditable(true);
+  xAxis->setData(ComboBox, WidgetType);
+  xAxis->setData(xAxisIdx, EditableValue);
+  xAxis->setData(xDataSources(), ComboBoxData);
+  xAxis->setData(kDatasetView_xAxis, ParameterType);
+  xAxis->setData(tr("X-Axis Source"), ParameterName);
+  xAxis->setData(tr("Data series for the X-Axis"), ParameterDescription);
+  xAxis->setData("qrc:/rcc/icons/project-editor/model/x-axis.svg",
+                 ParameterIcon);
+  m_datasetModel->appendRow(xAxis);
+
+  // Add minimum value
+  auto min = new QStandardItem();
+  min->setEditable(true);
+  min->setData(FloatField, WidgetType);
+  min->setData(dataset.min, EditableValue);
+  min->setData(tr("Minimum Value"), ParameterName);
+  min->setData(kDatasetView_Min, ParameterType);
+  min->setData(0, PlaceholderValue);
+  min->setData(tr("Required for range widgets, optional for plots"),
+               ParameterDescription);
+  min->setData("qrc:/rcc/icons/project-editor/model/min.svg", ParameterIcon);
+  m_datasetModel->appendRow(min);
+
+  // Add maximum value
+  auto max = new QStandardItem();
+  max->setEditable(true);
+  max->setData(FloatField, WidgetType);
+  max->setData(dataset.max, EditableValue);
+  max->setData(tr("Maximum Value"), ParameterName);
+  max->setData(kDatasetView_Max, ParameterType);
+  max->setData(0, PlaceholderValue);
+  max->setData(tr("Required for range widgets, optional for plots"),
+               ParameterDescription);
+  max->setData("qrc:/rcc/icons/project-editor/model/max.svg", ParameterIcon);
+  m_datasetModel->appendRow(max);
+
+  // Add separator
+  separator = new QStandardItem();
+  separator->setData(Separator, WidgetType);
+  separator->setData(tr("Frequency Analysis"), PlaceholderValue);
+  m_datasetModel->appendRow(separator);
+
   // Add FFT checkbox
   auto fft = new QStandardItem();
   fft->setEditable(true);
@@ -2702,6 +2767,46 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   fft->setData(tr("Plot frequency-domain data"), ParameterDescription);
   fft->setData("qrc:/rcc/icons/project-editor/model/fft.svg", ParameterIcon);
   m_datasetModel->appendRow(fft);
+
+  // Get FFT window size index
+  const auto windowSize = QString::number(dataset.fftSamples);
+  int windowIndex = m_fftSamples.indexOf(windowSize);
+  if (windowIndex < 0)
+    windowIndex = 7;
+
+  // Add FFT window size
+  auto fftWindow = new QStandardItem();
+  fftWindow->setEditable(true);
+  fftWindow->setData(ComboBox, WidgetType);
+  fftWindow->setData(m_fftSamples, ComboBoxData);
+  fftWindow->setData(windowIndex, EditableValue);
+  fftWindow->setData(tr("FFT Window Size"), ParameterName);
+  fftWindow->setData(kDatasetView_FFT_Samples, ParameterType);
+  fftWindow->setData(tr("Samples for FFT calculation"), ParameterDescription);
+  fftWindow->setData("qrc:/rcc/icons/project-editor/model/fft-samples.svg",
+                     ParameterIcon);
+  m_datasetModel->appendRow(fftWindow);
+
+  // Add FFT sampling rate
+  auto fftSamplingRate = new QStandardItem();
+  fftSamplingRate->setEditable(true);
+  fftSamplingRate->setData(IntField, WidgetType);
+  fftSamplingRate->setData(100, PlaceholderValue);
+  fftSamplingRate->setData(dataset.fftSamplingRate, EditableValue);
+  fftSamplingRate->setData(tr("FFT Sampling Rate"), ParameterName);
+  fftSamplingRate->setData(kDatasetView_FFT_SamplingRate, ParameterType);
+  fftSamplingRate->setData(tr("Sampling rate (Hz) for FFT calculation"),
+                           ParameterDescription);
+  fftSamplingRate->setData(
+    "qrc:/rcc/icons/project-editor/model/fft-sampling-rate.svg",
+    ParameterIcon);
+  m_datasetModel->appendRow(fftSamplingRate);
+
+  // Add separator
+  separator = new QStandardItem();
+  separator->setData(Separator, WidgetType);
+  separator->setData(tr("LED Indicator"), PlaceholderValue);
+  m_datasetModel->appendRow(separator);
 
   // Add LED panel checkbox
   auto led = new QStandardItem();
@@ -2715,154 +2820,52 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   led->setData("qrc:/rcc/icons/project-editor/model/led.svg", ParameterIcon);
   m_datasetModel->appendRow(led);
 
-  // Add X-axis selector
-  if (dataset.plt)
-  {
-    // Ensure X-axis ID is reset to "Samples" when an invalid index is set
-    int xAxisIdx = 0;
-    for (const auto &group : std::as_const(m_groups))
-    {
-      for (const auto &d : group.datasets)
-      {
-        const auto idx = d.index;
-        if (idx == m_selectedDataset.xAxisId)
-        {
-          xAxisIdx = idx;
-          break;
-        }
-      }
-
-      if (xAxisIdx != 0)
-        break;
-    }
-
-    // Construct item
-    auto xAxis = new QStandardItem();
-    xAxis->setEditable(true);
-    xAxis->setData(ComboBox, WidgetType);
-    xAxis->setData(xAxisIdx, EditableValue);
-    xAxis->setData(xDataSources(), ComboBoxData);
-    xAxis->setData(kDatasetView_xAxis, ParameterType);
-    xAxis->setData(tr("X-Axis Source"), ParameterName);
-    xAxis->setData(tr("Data series for the X-Axis"), ParameterDescription);
-    xAxis->setData("qrc:/rcc/icons/project-editor/model/x-axis.svg",
-                   ParameterIcon);
-    m_datasetModel->appendRow(xAxis);
-  }
-
-  // Add minimum/maximum values
-  if (showMinMax)
-  {
-    // Add minimum value
-    auto min = new QStandardItem();
-    min->setEditable(true);
-    min->setData(FloatField, WidgetType);
-    min->setData(dataset.min, EditableValue);
-    min->setData(tr("Minimum Value"), ParameterName);
-    min->setData(kDatasetView_Min, ParameterType);
-    min->setData(0, PlaceholderValue);
-    min->setData(tr("Required for range widgets, optional for plots"),
-                 ParameterDescription);
-    min->setData("qrc:/rcc/icons/project-editor/model/min.svg", ParameterIcon);
-    m_datasetModel->appendRow(min);
-
-    // Add maximum value
-    auto max = new QStandardItem();
-    max->setEditable(true);
-    max->setData(FloatField, WidgetType);
-    max->setData(dataset.max, EditableValue);
-    max->setData(tr("Maximum Value"), ParameterName);
-    max->setData(kDatasetView_Max, ParameterType);
-    max->setData(0, PlaceholderValue);
-    max->setData(tr("Required for range widgets, optional for plots"),
-                 ParameterDescription);
-    max->setData("qrc:/rcc/icons/project-editor/model/max.svg", ParameterIcon);
-    m_datasetModel->appendRow(max);
-  }
-
-  // Add alarm value
-  if (showAlarm)
-  {
-    auto alarmLow = new QStandardItem();
-    alarmLow->setEditable(true);
-    alarmLow->setData(FloatField, WidgetType);
-    alarmLow->setData(dataset.alarmLow, EditableValue);
-    alarmLow->setData(tr("Alarm Low Value"), ParameterName);
-    alarmLow->setData(kDatasetView_AlarmLow, ParameterType);
-    alarmLow->setData(0, PlaceholderValue);
-    alarmLow->setData(tr("Triggers alarm in bar widgets and LED panels"),
-                      ParameterDescription);
-    alarmLow->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
-                      ParameterIcon);
-    m_datasetModel->appendRow(alarmLow);
-
-    auto alarmHigh = new QStandardItem();
-    alarmHigh->setEditable(true);
-    alarmHigh->setData(FloatField, WidgetType);
-    alarmHigh->setData(dataset.alarmHigh, EditableValue);
-    alarmHigh->setData(tr("Alarm High Value"), ParameterName);
-    alarmHigh->setData(kDatasetView_AlarmHigh, ParameterType);
-    alarmHigh->setData(0, PlaceholderValue);
-    alarmHigh->setData(tr("Triggers alarm in bar widgets and LED panels"),
-                       ParameterDescription);
-    alarmHigh->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
-                       ParameterIcon);
-    m_datasetModel->appendRow(alarmHigh);
-  }
-
-  // FFT-specific options
-  if (showFFTOptions)
-  {
-    // Get FFT window size index
-    const auto windowSize = QString::number(dataset.fftSamples);
-    int windowIndex = m_fftSamples.indexOf(windowSize);
-    if (windowIndex < 0)
-      windowIndex = 7;
-
-    // Add FFT window size
-    auto fftWindow = new QStandardItem();
-    fftWindow->setEditable(true);
-    fftWindow->setData(ComboBox, WidgetType);
-    fftWindow->setData(m_fftSamples, ComboBoxData);
-    fftWindow->setData(windowIndex, EditableValue);
-    fftWindow->setData(tr("FFT Window Size"), ParameterName);
-    fftWindow->setData(kDatasetView_FFT_Samples, ParameterType);
-    fftWindow->setData(tr("Samples for FFT calculation"), ParameterDescription);
-    fftWindow->setData("qrc:/rcc/icons/project-editor/model/fft-samples.svg",
-                       ParameterIcon);
-    m_datasetModel->appendRow(fftWindow);
-
-    // Add FFT sampling rate
-    auto fftSamplingRate = new QStandardItem();
-    fftSamplingRate->setEditable(true);
-    fftSamplingRate->setData(IntField, WidgetType);
-    fftSamplingRate->setData(100, PlaceholderValue);
-    fftSamplingRate->setData(dataset.fftSamplingRate, EditableValue);
-    fftSamplingRate->setData(tr("FFT Sampling Rate"), ParameterName);
-    fftSamplingRate->setData(kDatasetView_FFT_SamplingRate, ParameterType);
-    fftSamplingRate->setData(tr("Sampling rate (Hz) for FFT calculation"),
-                             ParameterDescription);
-    fftSamplingRate->setData(
-        "qrc:/rcc/icons/project-editor/model/fft-sampling-rate.svg",
-        ParameterIcon);
-    m_datasetModel->appendRow(fftSamplingRate);
-  }
-
   // Add LED High value
-  if (showLedOptions)
-  {
-    auto ledHigh = new QStandardItem();
-    ledHigh->setEditable(true);
-    ledHigh->setData(FloatField, WidgetType);
-    ledHigh->setData(dataset.ledHigh, EditableValue);
-    ledHigh->setData(tr("LED High (On) Value"), ParameterName);
-    ledHigh->setData(kDatasetView_LED_High, ParameterType);
-    ledHigh->setData(0, PlaceholderValue);
-    ledHigh->setData(tr("Threshold for LED on"), ParameterDescription);
-    ledHigh->setData("qrc:/rcc/icons/project-editor/model/led-high.svg",
+  auto ledHigh = new QStandardItem();
+  ledHigh->setEditable(true);
+  ledHigh->setData(FloatField, WidgetType);
+  ledHigh->setData(dataset.ledHigh, EditableValue);
+  ledHigh->setData(tr("LED High (On) Value"), ParameterName);
+  ledHigh->setData(kDatasetView_LED_High, ParameterType);
+  ledHigh->setData(0, PlaceholderValue);
+  ledHigh->setData(tr("Threshold for LED on"), ParameterDescription);
+  ledHigh->setData("qrc:/rcc/icons/project-editor/model/led-high.svg",
+                   ParameterIcon);
+  m_datasetModel->appendRow(ledHigh);
+
+  // Add separator
+  separator = new QStandardItem();
+  separator->setData(Separator, WidgetType);
+  separator->setData(tr("Alarm Levels"), PlaceholderValue);
+  m_datasetModel->appendRow(separator);
+
+  // Add low alarm threshold
+  auto alarmLow = new QStandardItem();
+  alarmLow->setEditable(true);
+  alarmLow->setData(FloatField, WidgetType);
+  alarmLow->setData(dataset.alarmLow, EditableValue);
+  alarmLow->setData(tr("Alarm Low Threshold"), ParameterName);
+  alarmLow->setData(kDatasetView_AlarmLow, ParameterType);
+  alarmLow->setData(0, PlaceholderValue);
+  alarmLow->setData(tr("Triggers alarm in bar widgets and LED panels"),
+                    ParameterDescription);
+  alarmLow->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
+                    ParameterIcon);
+  m_datasetModel->appendRow(alarmLow);
+
+  // Add high alarm threshold
+  auto alarmHigh = new QStandardItem();
+  alarmHigh->setEditable(true);
+  alarmHigh->setData(FloatField, WidgetType);
+  alarmHigh->setData(dataset.alarmHigh, EditableValue);
+  alarmHigh->setData(tr("Alarm High Threshold"), ParameterName);
+  alarmHigh->setData(kDatasetView_AlarmHigh, ParameterType);
+  alarmHigh->setData(0, PlaceholderValue);
+  alarmHigh->setData(tr("Triggers alarm in bar widgets and LED panels"),
+                     ParameterDescription);
+  alarmHigh->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
                      ParameterIcon);
-    m_datasetModel->appendRow(ledHigh);
-  }
+  m_datasetModel->appendRow(alarmHigh);
 
   // Handle edits
   connect(m_datasetModel, &CustomModel::itemChanged, this,
@@ -3388,9 +3391,7 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
   // Replace dataset in parent group
   const auto groupId = m_selectedDataset.groupId;
   const auto datasetId = m_selectedDataset.datasetId;
-  auto &group = m_groups[groupId];
-  group.datasets[datasetId] = m_selectedDataset;
-  m_groups[groupId] = group;
+  m_groups[groupId].datasets[datasetId] = m_selectedDataset;
   buildTreeModel();
 
   // Mark document as modified

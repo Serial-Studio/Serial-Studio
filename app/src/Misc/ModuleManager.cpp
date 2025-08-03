@@ -391,7 +391,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
 
   // Load main.qml
-  const auto url = QStringLiteral("qrc:/serial-studio.com/gui/qml/main.qml");
+  const auto url = QStringLiteral("qrc:/qml/main.qml");
   m_engine.load(QUrl(url));
 
   // Setup singleton module interconnections

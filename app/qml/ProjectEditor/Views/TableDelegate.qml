@@ -33,6 +33,7 @@ ColumnLayout {
   //
   // Custom properties
   //
+  property bool headerVisible: true
   property var modelPointer: null
   property Component footerItem: null
   readonly property real tableHeight: header.height - view.height - 64
@@ -50,7 +51,7 @@ ColumnLayout {
   Rectangle {
     id: header
     Layout.fillWidth: true
-    visible: view.rows > 0
+    visible: view.rows > 0 && headerVisible
     implicitHeight: root.rowHeight
     gradient: Gradient {
       GradientStop {
@@ -159,8 +160,7 @@ ColumnLayout {
     interactive: false
     Layout.fillWidth: true
     model: root.modelPointer
-    Layout.minimumHeight: root.rowHeight * rows
-    Layout.maximumHeight: root.rowHeight * rows
+    implicitHeight: view.rows * root.rowHeight
 
     //
     // Table row delegate
@@ -201,6 +201,58 @@ ColumnLayout {
         anchors.fill: parent
 
         //
+        // Separator item
+        //
+        Loader {
+          Layout.fillWidth: true
+          Layout.alignment: Qt.AlignVCenter
+          active: model.widgetType === ProjectModel.Separator
+          visible: model.widgetType === ProjectModel.Separator
+
+          sourceComponent:  Item {
+            implicitHeight: root.rowHeight
+            Rectangle {
+              anchors.fill: parent
+              gradient: Gradient {
+                GradientStop {
+                  position: 0
+                  color: Cpp_ThemeManager.colors["table_bg_header_top"]
+                }
+
+                GradientStop {
+                  position: 1
+                  color: Cpp_ThemeManager.colors["table_bg_header_bottom"]
+                }
+              }
+
+              Rectangle {
+                implicitHeight: 1
+                color: Cpp_ThemeManager.colors["table_separator"]
+
+                anchors {
+                  left: parent.left
+                  right: parent.right
+                  bottom: parent.bottom
+                }
+              }
+            }
+
+            Label {
+              text: model.placeholderValue
+              horizontalAlignment: Label.AlignLeft
+              font: Cpp_Misc_CommonFonts.boldUiFont
+              color: Cpp_ThemeManager.colors["table_fg_header"]
+
+              anchors {
+                margins: 8
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+              }
+            }
+          }
+        }
+
+        //
         // Parameter icon
         //
         Item {
@@ -208,6 +260,7 @@ ColumnLayout {
           Layout.alignment: Qt.AlignVCenter
           Layout.minimumWidth: root.iconWidth
           Layout.maximumWidth: root.iconWidth
+          visible: model.widgetType !== ProjectModel.Separator
 
           Rectangle {
             anchors.fill: parent
@@ -241,7 +294,7 @@ ColumnLayout {
             sourceSize.height: 18
             visible: root.enabled
             anchors.centerIn: parent
-            source: model.parameterIcon
+            source: visible ? model.parameterIcon : ""
           }
 
           MultiEffect {
@@ -259,22 +312,25 @@ ColumnLayout {
           implicitWidth: 1
           Layout.fillHeight: true
           color: Cpp_ThemeManager.colors["table_separator"]
+          visible: model.widgetType !== ProjectModel.Separator
         } Item {
           implicitWidth: 8
+          visible: model.widgetType !== ProjectModel.Separator
         }
 
         //
         // Parameter name
         //
         Label {
-          text: model.parameterName
           Layout.alignment: Qt.AlignVCenter
           Layout.minimumWidth: root.parameterWidth
           Layout.maximumWidth: root.parameterWidth
+          text: visible ? model.parameterName : ""
           color: Cpp_ThemeManager.colors["table_text"]
 
           ToolTip.delay: 700
-          ToolTip.text: model.parameterDescription
+          visible: model.widgetType !== ProjectModel.Separator
+          ToolTip.text: visible ? model.parameterDescription : ""
           ToolTip.visible: _paramMouseArea.containsMouse && ToolTip.text !== ""
 
           MouseArea {
@@ -291,8 +347,10 @@ ColumnLayout {
           width: 1
           Layout.fillHeight: true
           color: Cpp_ThemeManager.colors["table_separator"]
+          visible: model.widgetType !== ProjectModel.Separator
         } Item {
           width: 8
+          visible: model.widgetType !== ProjectModel.Separator
         }
 
         //
@@ -595,6 +653,7 @@ ColumnLayout {
         //
         Item {
           implicitWidth: 8
+          visible: model.widgetType !== ProjectModel.Separator
         }
       }
     }
