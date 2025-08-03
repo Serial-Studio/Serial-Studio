@@ -308,16 +308,11 @@ endif()
 #-------------------------------------------------------------------------------
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64)$")
-  message(STATUS "Enabling SSE4.2 optimizations")
+  message(STATUS "Enabling SSE4.1 optimizations")
   if(MSVC)
     add_compile_options(/arch:SSE)
   else()
-    add_compile_options(-msse4.2)
-  endif()
-elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)$")
-  message(STATUS "Enabling NEON optimizations")
-  if(NOT MSVC)
-    add_compile_options(-mfpu=neon)
+    add_compile_options(-msse4.1)
   endif()
 endif()
 
