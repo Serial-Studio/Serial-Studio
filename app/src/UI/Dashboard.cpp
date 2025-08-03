@@ -987,12 +987,12 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
       else
       {
         auto prev = m_datasets.value(dataset.index);
-        double newMin = qMin(prev.min, dataset.min);
-        double newMax = qMax(prev.max, dataset.max);
+        double newMin = qMin(prev.pltMin, dataset.pltMin);
+        double newMax = qMax(prev.pltMax, dataset.pltMax);
 
         auto d = dataset;
-        d.min = newMin;
-        d.max = newMax;
+        d.pltMin = newMin;
+        d.pltMax = newMax;
         m_datasets.insert(dataset.index, d);
       }
 

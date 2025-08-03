@@ -265,18 +265,18 @@ inline QString FMT_VAL(double val, double min, double max)
  * on dataset range.
  *
  * Determines the number of decimal places to display based on the magnitude of
- * the dataset’s min and max. Useful for presenting values in UIs where
+ * the dataset’s pltMin and pltMax. Useful for presenting values in UIs where
  * consistent but meaningful precision is important.
  *
  * @param val The value to format.
- * @param dataset A dataset providing context (min/max) for determining
+ * @param dataset A dataset providing context (pltMin/pltMax) for determining
  *                required precision.
  *
  * @return QString Formatted number with appropriate decimal places.
  */
 inline QString FMT_VAL(double val, const JSON::Dataset &dataset)
 {
-  return FMT_VAL(val, dataset.min, dataset.max);
+  return FMT_VAL(val, dataset.pltMin, dataset.pltMax);
 }
 
 /**

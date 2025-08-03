@@ -26,7 +26,7 @@
  * @brief Constructs a Bar widget.
  *
  * Initializes the bar widget with data from the specified dataset index,
- * including value thresholds, units, and min/max limits. Connects the
+ * including value thresholds, units, and pltMin/pltMax limits. Connects the
  * Dashboard update signal to trigger value refreshes.
  *
  * @param index The index of the dataset in the dashboard.
@@ -52,8 +52,8 @@ Widgets::Bar::Bar(const int index, QQuickItem *parent,
     const auto &dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
 
     m_units = dataset.units;
-    m_minValue = qMin(dataset.min, dataset.max);
-    m_maxValue = qMax(dataset.min, dataset.max);
+    m_minValue = qMin(dataset.wgtMin, dataset.wgtMax);
+    m_maxValue = qMax(dataset.wgtMin, dataset.wgtMax);
     m_alarmLow = qMin(dataset.alarmLow, dataset.alarmHigh);
     m_alarmHigh = qMax(dataset.alarmLow, dataset.alarmHigh);
     m_alarmLow = qBound(m_minValue, m_alarmLow, m_maxValue);

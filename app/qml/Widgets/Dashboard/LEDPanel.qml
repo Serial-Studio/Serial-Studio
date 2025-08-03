@@ -35,8 +35,8 @@ Item {
   // Widget data inputs
   //
   required property color color
-  required property LEDPanelModel model
   required property var windowRoot
+  required property LEDPanelModel model
 
   //
   // Create scrollable grid view with LED states
@@ -86,8 +86,7 @@ Item {
 
             Rectangle {
               id: led
-              readonly property color ledColor: root.model.alarms[index] ? Cpp_ThemeManager.colors["alarm"] :
-                                                                           root.model.colors[index]
+              readonly property color ledColor: root.model.colors[index]
 
               border.width: 1
               implicitWidth: 18
@@ -112,8 +111,7 @@ Item {
               font: Cpp_Misc_CommonFonts.monoFont
               horizontalAlignment: Label.AlignLeft
               Layout.maximumWidth: layout.width - 4 - 24
-              color: root.model.alarms[index] ? Cpp_ThemeManager.colors["alarm"] :
-                                                Cpp_ThemeManager.colors["widget_text"]
+              color: Cpp_ThemeManager.colors["widget_text"]
 
               Behavior on color {ColorAnimation{}}
             }

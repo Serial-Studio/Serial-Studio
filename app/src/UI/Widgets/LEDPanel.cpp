@@ -38,23 +38,15 @@ Widgets::LEDPanel::LEDPanel(const int index, QQuickItem *parent)
     m_states.resize(group.datasets.size());
     m_titles.resize(group.datasets.size());
     m_colors.resize(group.datasets.size());
-    m_alarms.resize(group.datasets.size());
 
     for (size_t i = 0; i < group.datasets.size(); ++i)
     {
       m_states[i] = false;
-      m_alarms[i] = false;
       m_titles[i] = group.datasets[i].title;
     }
 
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
             &LEDPanel::updateData);
-
-    m_alarmTimer.setInterval(250);
-    m_alarmTimer.setTimerType(Qt::PreciseTimer);
-    connect(&m_alarmTimer, &QTimer::timeout, this,
-            &Widgets::LEDPanel::onAlarmTimeout);
-    m_alarmTimer.start();
 
     onThemeChanged();
     connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
@@ -69,15 +61,6 @@ Widgets::LEDPanel::LEDPanel(const int index, QQuickItem *parent)
 int Widgets::LEDPanel::count() const
 {
   return m_titles.count();
-}
-
-/**
- * @brief Returns the alarm states of the LEDs in the panel.
- * @return A vector of boolean values representing the alarm states of the LEDs.
- */
-const QList<bool> &Widgets::LEDPanel::alarms() const
-{
-  return m_alarms;
 }
 
 /**
@@ -128,23 +111,12 @@ void Widgets::LEDPanel::updateData()
       // Get the dataset and its values
       const auto &dataset = group.datasets[i];
       const auto value = dataset.numericValue;
-      const auto alarmLow = dataset.alarmLow;
-      const auto alarmHigh = dataset.alarmHigh;
 
       // Obtain the LED state
       const bool enabled = (value >= dataset.ledHigh);
-      const bool alarm = (!std::isnan(alarmLow) && value <= alarmLow)
-                         || (!std::isnan(alarmHigh) && value >= alarmHigh);
-
-      // Update the alarm state
-      if (m_alarms[i] != alarm)
-      {
-        changed = true;
-        m_alarms[i] = alarm;
-      }
 
       // Update the LED state
-      if (!alarm && m_states[i] != enabled)
+      if (m_states[i] != enabled)
       {
         changed = true;
         m_states[i] = enabled;
@@ -155,25 +127,6 @@ void Widgets::LEDPanel::updateData()
     if (changed)
       Q_EMIT updated();
   }
-}
-
-/**
- * @brief Toggles the LED enabled state when the alarm blinker timer expires
- */
-void Widgets::LEDPanel::onAlarmTimeout()
-{
-  bool changed = false;
-  for (int i = 0; i < m_alarms.count(); ++i)
-  {
-    if (m_alarms[i])
-    {
-      changed = true;
-      m_states[i] = !m_states[i];
-    }
-  }
-
-  if (changed)
-    Q_EMIT updated();
 }
 
 /**

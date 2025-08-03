@@ -21,8 +21,7 @@
 
 #pragma once
 
-#include <QList>
-#include <QTimer>
+#include <QVector>
 #include <QQuickItem>
 
 namespace Widgets
@@ -35,8 +34,7 @@ class LEDPanel : public QQuickItem
   Q_OBJECT
   Q_PROPERTY(int count READ count CONSTANT)
   Q_PROPERTY(QStringList titles READ titles CONSTANT)
-  Q_PROPERTY(QList<bool> states READ states NOTIFY updated)
-  Q_PROPERTY(QList<bool> alarms READ alarms NOTIFY updated)
+  Q_PROPERTY(QVector<bool> states READ states NOTIFY updated)
   Q_PROPERTY(QStringList colors READ colors NOTIFY themeChanged)
 
 signals:
@@ -47,21 +45,17 @@ public:
   explicit LEDPanel(const int index = -1, QQuickItem *parent = nullptr);
 
   [[nodiscard]] int count() const;
-  [[nodiscard]] const QList<bool> &alarms() const;
   [[nodiscard]] const QList<bool> &states() const;
   [[nodiscard]] const QStringList &colors() const;
   [[nodiscard]] const QStringList &titles() const;
 
 private slots:
   void updateData();
-  void onAlarmTimeout();
   void onThemeChanged();
 
 private:
   int m_index;
-  QTimer m_alarmTimer;
-  QList<bool> m_alarms;
-  QList<bool> m_states;
+  QVector<bool> m_states;
   QStringList m_titles;
   QStringList m_colors;
 };

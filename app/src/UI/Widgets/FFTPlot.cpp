@@ -72,8 +72,8 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
                              LIQUID_FFT_FORWARD, 0);
 
     // Obtain minimum and maximum values
-    double minVal = dataset.min;
-    double maxVal = dataset.max;
+    double minVal = dataset.pltMin;
+    double maxVal = dataset.pltMax;
 
     // Fix inverted limits
     if (maxVal < minVal)

@@ -171,6 +171,7 @@ ColumnLayout {
       implicitHeight: root.rowHeight
 
       required property int row
+      required property var model
       required property int column
       required property bool current
 
@@ -380,13 +381,18 @@ ColumnLayout {
           active: model.widgetType === ProjectModel.TextField
           visible: model.widgetType === ProjectModel.TextField
 
+          property var modelActive: model.active
+          property var editableValue: model.editableValue
+          property var modelPlaceholder: model.placeholderValue
+
           sourceComponent: Component {
             TextField {
-              enabled: model.active
-              opacity: enabled ? 1 : 0.5
-              text: model.editableValue
+              text: editableValue
+              enabled: modelActive
+              opacity: modelActive ? 1 : 0.5
+              placeholderText: placeholderValue
+
               font: Cpp_Misc_CommonFonts.monoFont
-              placeholderText: model.placeholderValue
               color: Cpp_ThemeManager.colors["table_text"]
               onTextEdited: {
                 root.modelPointer.setData(
@@ -409,9 +415,16 @@ ColumnLayout {
           active: model.widgetType === ProjectModel.IconPicker
           visible: model.widgetType === ProjectModel.IconPicker
 
+          property var modelActive: model.active
+          property var editableValue: model.editableValue
+          property var modelPlaceholder: model.placeholderValue
+
           sourceComponent: Component {
             RowLayout {
               id: layout
+
+              enabled: modelActive
+              opacity: modelActive ? 1 : 0.5
 
               Connections {
                 target: actionIconPicker
@@ -423,15 +436,15 @@ ColumnLayout {
               }
 
               TextField {
-                enabled: model.active
-                opacity: enabled ? 1 : 0.5
+                text: editableValue
+                enabled: modelActive
+                opacity: modelActive ? 1 : 0.5
+                placeholderText: placeholderValue
 
                 readOnly: true
                 Layout.fillWidth: true
-                text: model.editableValue
                 Layout.alignment: Qt.AlignVCenter
                 font: Cpp_Misc_CommonFonts.monoFont
-                placeholderText: model.placeholderValue
                 color: Cpp_ThemeManager.colors["table_text"]
                 background: Item {}
               }
@@ -441,8 +454,8 @@ ColumnLayout {
               }
 
               Button {
-                enabled: model.active
-                opacity: enabled ? 1 : 0.5
+                enabled: modelActive
+                opacity: modelActive ? 1 : 0.5
 
                 icon.width: 16
                 icon.height: 16
@@ -474,13 +487,18 @@ ColumnLayout {
           active: model.widgetType === ProjectModel.IntField
           visible: model.widgetType === ProjectModel.IntField
 
+          property var modelActive: model.active
+          property var editableValue: model.editableValue
+          property var modelPlaceholder: model.placeholderValue
+
           sourceComponent: Component {
             TextField {
-              enabled: model.active
-              opacity: enabled ? 1 : 0.5
-              text: model.editableValue
+              text: editableValue
+              enabled: modelActive
+              opacity: modelActive ? 1 : 0.5
+              placeholderText: placeholderValue
+
               font: Cpp_Misc_CommonFonts.monoFont
-              placeholderText: model.placeholderValue
               color: Cpp_ThemeManager.colors["table_text"]
 
               onTextEdited: {
@@ -512,13 +530,18 @@ ColumnLayout {
           active: model.widgetType === ProjectModel.FloatField
           visible: model.widgetType === ProjectModel.FloatField
 
+          property var modelActive: model.active
+          property var editableValue: model.editableValue
+          property var modelPlaceholder: model.placeholderValue
+
           sourceComponent: Component {
             TextField {
-              enabled: model.active
-              opacity: enabled ? 1 : 0.5
-              text: model.editableValue
+              text: editableValue
+              enabled: modelActive
+              opacity: modelActive ? 1 : 0.5
+              placeholderText: placeholderValue
+
               font: Cpp_Misc_CommonFonts.monoFont
-              placeholderText: model.placeholderValue
               color: Cpp_ThemeManager.colors["table_text"]
 
               onTextEdited: {
@@ -566,7 +589,7 @@ ColumnLayout {
               flat: true
               model: comboBoxData
               enabled: modelActive
-              opacity: enabled ? 1 : 0.5
+              opacity: modelActive ? 1 : 0.5
               currentIndex: editableValue
               font: Cpp_Misc_CommonFonts.monoFont
               onCurrentIndexChanged: {
@@ -598,7 +621,7 @@ ColumnLayout {
             ComboBox {
               flat: true
               enabled: modelActive
-              opacity: enabled ? 1 : 0.5
+              opacity: modelActive ? 1 : 0.5
               model: [qsTr("No"), qsTr("Yes")]
               currentIndex: editableValue ? 1 : 0
               font: Cpp_Misc_CommonFonts.monoFont
@@ -627,12 +650,13 @@ ColumnLayout {
 
           sourceComponent: Component {
             TextField {
+              text: editableValue
+              enabled: modelActive
+              opacity: modelActive ? 1 : 0.5
+              placeholderText: placeholderValue
+
               id: _hexComponent
-              enabled: model.active
-              text: model.editableValue
-              opacity: enabled ? 1 : 0.5
               font: Cpp_Misc_CommonFonts.monoFont
-              placeholderText: model.placeholderValue
               color: Cpp_ThemeManager.colors["table_text"]
 
               //

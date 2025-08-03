@@ -52,8 +52,8 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
       m_drawOrders.append(i);
       m_visibleCurves.append(true);
       m_labels.append(dataset.title);
-      m_minY = qMin(m_minY, qMin(dataset.min, dataset.max));
-      m_maxY = qMax(m_maxY, qMax(dataset.min, dataset.max));
+      m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
+      m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
     }
 
     // Obtain group title
@@ -338,11 +338,11 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     int index = 0;
     for (const auto &dataset : group.datasets)
     {
-      ok &= !qFuzzyCompare(dataset.min, dataset.max);
+      ok &= !qFuzzyCompare(dataset.pltMin, dataset.pltMax);
       if (ok && m_visibleCurves[index])
       {
-        m_minY = qMin(m_minY, qMin(dataset.min, dataset.max));
-        m_maxY = qMax(m_maxY, qMax(dataset.min, dataset.max));
+        m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
+        m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
       }
 
       else

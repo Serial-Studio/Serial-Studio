@@ -51,7 +51,11 @@ inline constexpr auto Alarm = "alarm";
 inline constexpr auto Units = "units";
 inline constexpr auto Value = "value";
 inline constexpr auto Widget = "widget";
+inline constexpr auto PltMin = "plotMin";
+inline constexpr auto PltMax = "plotMax";
 inline constexpr auto LedHigh = "ledHigh";
+inline constexpr auto WgtMin = "widgetMin";
+inline constexpr auto WgtMax = "widgetMax";
 inline constexpr auto AlarmLow = "alarmLow";
 inline constexpr auto AlarmHigh = "alarmHigh";
 inline constexpr auto FFTSamples = "fftSamples";
@@ -135,11 +139,13 @@ struct alignas(8) Dataset
   bool plt = false;             ///< Enables plotting
   bool overviewDisplay = false; ///< Show in overview
   bool isNumeric = false;       ///< True if value was parsed as numeric
-  double min = 0;               ///< Minimum value (for gauge/bar)
-  double max = 0;               ///< Maximum value
-  double ledHigh = 1;           ///< LED activation threshold
-  double alarmLow = 0;          ///< Low alarm threshold
-  double alarmHigh = 0;         ///< High alarm threshold
+  double pltMin = 0;            ///< Minimum value (for plots)
+  double pltMax = 0;            ///< Maximum value (for plots)
+  double wgtMin = 0;            ///< Minimum value (for widgets)
+  double wgtMax = 100;          ///< Maximum value (for widgets)
+  double ledHigh = 80;          ///< LED activation threshold
+  double alarmLow = 20;         ///< Low alarm threshold
+  double alarmHigh = 80;        ///< High alarm threshold
   double numericValue = 0;      ///< Parsed numeric value
   QString value;                ///< Raw string value
   QString title;                ///< Human-readable title
@@ -348,14 +354,16 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
   obj.insert(Keys::Index, d.index);
   obj.insert(Keys::XAxis, d.xAxisId);
   obj.insert(Keys::LedHigh, d.ledHigh);
-  obj.insert(Keys::Min, qMin(d.min, d.max));
-  obj.insert(Keys::Max, qMax(d.min, d.max));
   obj.insert(Keys::FFTSamples, d.fftSamples);
   obj.insert(Keys::Overview, d.overviewDisplay);
   obj.insert(Keys::Title, d.title.simplified());
   obj.insert(Keys::Value, d.value.simplified());
   obj.insert(Keys::Units, d.units.simplified());
   obj.insert(Keys::Widget, d.widget.simplified());
+  obj.insert(Keys::PltMin, qMin(d.pltMin, d.pltMax));
+  obj.insert(Keys::PltMax, qMax(d.pltMin, d.pltMax));
+  obj.insert(Keys::WgtMin, qMin(d.wgtMin, d.wgtMax));
+  obj.insert(Keys::WgtMax, qMax(d.wgtMin, d.wgtMax));
   obj.insert(Keys::FFTSamplingRate, d.fftSamplingRate);
   obj.insert(Keys::AlarmLow, qMin(d.alarmLow, d.alarmHigh));
   obj.insert(Keys::AlarmHigh, qMax(d.alarmLow, d.alarmHigh));
@@ -519,8 +527,10 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
   d.log = ss_jsr(obj, Keys::Log, false).toBool();
   d.plt = ss_jsr(obj, Keys::Graph, false).toBool();
   d.xAxisId = ss_jsr(obj, Keys::XAxis, -1).toInt();
-  d.min = ss_jsr(obj, Keys::Min, 0).toDouble();
-  d.max = ss_jsr(obj, Keys::Max, 0).toDouble();
+  d.pltMin = ss_jsr(obj, Keys::PltMin, 0).toDouble();
+  d.pltMax = ss_jsr(obj, Keys::PltMax, 0).toDouble();
+  d.wgtMin = ss_jsr(obj, Keys::WgtMin, 0).toDouble();
+  d.wgtMax = ss_jsr(obj, Keys::WgtMax, 0).toDouble();
   d.fftSamples = ss_jsr(obj, Keys::FFTSamples, -1).toInt();
   d.title = ss_jsr(obj, Keys::Title, "").toString().simplified();
   d.value = ss_jsr(obj, Keys::Value, "").toString().simplified();
@@ -536,6 +546,18 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
   else
     d.numericValue = d.value.toDouble(&d.isNumeric);
 
+  if (!obj.contains(Keys::PltMin) || !obj.contains(Keys::PltMax))
+  {
+    d.pltMin = ss_jsr(obj, Keys::Min, 0).toDouble();
+    d.pltMax = ss_jsr(obj, Keys::Max, 0).toDouble();
+  }
+
+  if (!obj.contains(Keys::WgtMin) || !obj.contains(Keys::WgtMax))
+  {
+    d.wgtMin = ss_jsr(obj, Keys::Min, 0).toDouble();
+    d.wgtMax = ss_jsr(obj, Keys::Max, 0).toDouble();
+  }
+
   if (obj.contains(Keys::Alarm))
   {
     if (std::isnan(d.alarmHigh) && std::isnan(d.alarmLow))
@@ -545,10 +567,16 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
     }
   }
 
-  if (!std::isnan(d.min) && !std::isnan(d.max))
+  if (!std::isnan(d.pltMin) && !std::isnan(d.pltMax))
   {
-    d.min = qMin(d.min, d.max);
-    d.max = qMax(d.min, d.max);
+    d.pltMin = qMin(d.pltMin, d.pltMax);
+    d.pltMax = qMax(d.pltMin, d.pltMax);
+  }
+
+  if (!std::isnan(d.wgtMin) && !std::isnan(d.wgtMax))
+  {
+    d.pltMin = qMin(d.wgtMin, d.wgtMax);
+    d.pltMax = qMax(d.wgtMin, d.wgtMax);
   }
 
   return true;

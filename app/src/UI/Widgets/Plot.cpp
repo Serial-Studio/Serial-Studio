@@ -39,8 +39,8 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
   {
     const auto &yDataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
 
-    m_minY = qMin(yDataset.min, yDataset.max);
-    m_maxY = qMax(yDataset.min, yDataset.max);
+    m_minY = qMin(yDataset.pltMin, yDataset.pltMax);
+    m_maxY = qMax(yDataset.pltMin, yDataset.pltMax);
 
     const auto xAxisId = SerialStudio::activated() ? yDataset.xAxisId : 0;
     if (UI::Dashboard::instance().datasets().contains(xAxisId))
@@ -212,8 +212,8 @@ void Widgets::Plot::updateRange()
     if (yD.xAxisId > 0)
     {
       const auto &xD = UI::Dashboard::instance().datasets()[yD.xAxisId];
-      m_minX = xD.min;
-      m_maxX = xD.max;
+      m_minX = xD.pltMin;
+      m_maxX = xD.pltMax;
     }
 
     else
@@ -294,8 +294,8 @@ void Widgets::Plot::calculateAutoScaleRange()
  * @tparam Extractor A callable object (e.g., lambda) used to extract values
  *                   from data points.
  *
- * @param min Reference to the variable storing the minimum value.
- * @param max Reference to the variable storing the maximum value.
+ * @param pltMin Reference to the variable storing the minimum value.
+ * @param pltMax Reference to the variable storing the maximum value.
  * @param dataset The dataset to compute the range from.
  * @param extractor A function used to extract axis-specific values (e.g.,
  *                  `p.y()` or `p.x()`).
@@ -327,11 +327,11 @@ bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
   // Obtain min/max values from datasets
   else
   {
-    ok &= !qFuzzyCompare(dataset.min, dataset.max);
+    ok &= !qFuzzyCompare(dataset.pltMin, dataset.pltMax);
     if (ok)
     {
-      min = qMin(dataset.min, dataset.max);
-      max = qMax(dataset.min, dataset.max);
+      min = qMin(dataset.pltMin, dataset.pltMax);
+      max = qMax(dataset.pltMin, dataset.pltMax);
     }
   }
 

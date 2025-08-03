@@ -42,8 +42,8 @@ Widgets::Gauge::Gauge(const int index, QQuickItem *parent)
     const auto &dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
 
     m_units = dataset.units;
-    m_minValue = qMin(dataset.min, dataset.max);
-    m_maxValue = qMax(dataset.min, dataset.max);
+    m_minValue = qMin(dataset.wgtMin, dataset.wgtMax);
+    m_maxValue = qMax(dataset.wgtMin, dataset.wgtMax);
     m_alarmLow = qMin(dataset.alarmLow, dataset.alarmHigh);
     m_alarmHigh = qMax(dataset.alarmLow, dataset.alarmHigh);
     m_alarmLow = qBound(m_minValue, m_alarmLow, m_maxValue);
