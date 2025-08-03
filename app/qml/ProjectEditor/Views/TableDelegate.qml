@@ -201,52 +201,68 @@ ColumnLayout {
         anchors.fill: parent
 
         //
-        // Separator item
+        // Section item
         //
         Loader {
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          active: model.widgetType === ProjectModel.Separator
-          visible: model.widgetType === ProjectModel.Separator
+          active: model.widgetType === ProjectModel.SectionHeader
+          visible: model.widgetType === ProjectModel.SectionHeader
 
-          sourceComponent:  Item {
+          sourceComponent: Rectangle {
             implicitHeight: root.rowHeight
-            Rectangle {
-              anchors.fill: parent
-              gradient: Gradient {
-                GradientStop {
-                  position: 0
-                  color: Cpp_ThemeManager.colors["table_bg_header_top"]
-                }
 
-                GradientStop {
-                  position: 1
-                  color: Cpp_ThemeManager.colors["table_bg_header_bottom"]
-                }
+            gradient: Gradient {
+              GradientStop {
+                position: 0
+                color: Cpp_ThemeManager.colors["table_bg_header_top"]
               }
 
-              Rectangle {
-                implicitHeight: 1
-                color: Cpp_ThemeManager.colors["table_separator"]
-
-                anchors {
-                  left: parent.left
-                  right: parent.right
-                  bottom: parent.bottom
-                }
+              GradientStop {
+                position: 1
+                color: Cpp_ThemeManager.colors["table_bg_header_bottom"]
               }
             }
 
-            Label {
-              text: model.placeholderValue
-              horizontalAlignment: Label.AlignLeft
-              font: Cpp_Misc_CommonFonts.boldUiFont
-              color: Cpp_ThemeManager.colors["table_fg_header"]
-
+            Rectangle {
+              height: 1
+              color: Cpp_ThemeManager.colors["table_border_header"]
               anchors {
-                margins: 8
                 left: parent.left
-                verticalCenter: parent.verticalCenter
+                right: parent.right
+                bottom: parent.bottom
+              }
+            }
+
+            RowLayout {
+              spacing: 0
+              anchors.fill: parent
+
+              Item {
+                implicitHeight: root.rowHeight
+                Layout.minimumWidth: root.iconWidth
+                Layout.maximumWidth: root.iconWidth
+
+                Image {
+                  sourceSize.width: 18
+                  sourceSize.height: 18
+                  anchors.centerIn: parent
+                  source: visible ? model.parameterIcon : ""
+                }
+              }
+
+              Label {
+                text: model.placeholderValue
+                Layout.alignment: Qt.AlignVCenter
+                horizontalAlignment: Label.AlignLeft
+                font: Cpp_Misc_CommonFonts.boldUiFont
+                Layout.minimumWidth: root.parameterWidth
+                Layout.maximumWidth: root.parameterWidth
+                color: Cpp_ThemeManager.colors["table_fg_header"]
+              }
+
+              Item {
+                Layout.fillWidth: true
               }
             }
           }
@@ -260,7 +276,8 @@ ColumnLayout {
           Layout.alignment: Qt.AlignVCenter
           Layout.minimumWidth: root.iconWidth
           Layout.maximumWidth: root.iconWidth
-          visible: model.widgetType !== ProjectModel.Separator
+          visible: model.parameterIcon !== undefined &&
+                   model.widgetType !== ProjectModel.SectionHeader
 
           Rectangle {
             anchors.fill: parent
@@ -312,16 +329,17 @@ ColumnLayout {
           implicitWidth: 1
           Layout.fillHeight: true
           color: Cpp_ThemeManager.colors["table_separator"]
-          visible: model.widgetType !== ProjectModel.Separator
+          visible: model.parameterIcon !== undefined &&
+                   model.widgetType !== ProjectModel.SectionHeader
         } Item {
           implicitWidth: 8
-          visible: model.widgetType !== ProjectModel.Separator
         }
 
         //
         // Parameter name
         //
         Label {
+          opacity: model.active ? 1 : 0.5
           Layout.alignment: Qt.AlignVCenter
           Layout.minimumWidth: root.parameterWidth
           Layout.maximumWidth: root.parameterWidth
@@ -329,7 +347,7 @@ ColumnLayout {
           color: Cpp_ThemeManager.colors["table_text"]
 
           ToolTip.delay: 700
-          visible: model.widgetType !== ProjectModel.Separator
+          visible: model.widgetType !== ProjectModel.SectionHeader
           ToolTip.text: visible ? model.parameterDescription : ""
           ToolTip.visible: _paramMouseArea.containsMouse && ToolTip.text !== ""
 
@@ -347,10 +365,10 @@ ColumnLayout {
           width: 1
           Layout.fillHeight: true
           color: Cpp_ThemeManager.colors["table_separator"]
-          visible: model.widgetType !== ProjectModel.Separator
+          visible: model.widgetType !== ProjectModel.SectionHeader
         } Item {
           width: 8
-          visible: model.widgetType !== ProjectModel.Separator
+          visible: model.widgetType !== ProjectModel.SectionHeader
         }
 
         //
@@ -364,6 +382,8 @@ ColumnLayout {
 
           sourceComponent: Component {
             TextField {
+              enabled: model.active
+              opacity: enabled ? 1 : 0.5
               text: model.editableValue
               font: Cpp_Misc_CommonFonts.monoFont
               placeholderText: model.placeholderValue
@@ -403,6 +423,9 @@ ColumnLayout {
               }
 
               TextField {
+                enabled: model.active
+                opacity: enabled ? 1 : 0.5
+
                 readOnly: true
                 Layout.fillWidth: true
                 text: model.editableValue
@@ -418,6 +441,9 @@ ColumnLayout {
               }
 
               Button {
+                enabled: model.active
+                opacity: enabled ? 1 : 0.5
+
                 icon.width: 16
                 icon.height: 16
                 Layout.maximumWidth: 32
@@ -450,6 +476,8 @@ ColumnLayout {
 
           sourceComponent: Component {
             TextField {
+              enabled: model.active
+              opacity: enabled ? 1 : 0.5
               text: model.editableValue
               font: Cpp_Misc_CommonFonts.monoFont
               placeholderText: model.placeholderValue
@@ -486,6 +514,8 @@ ColumnLayout {
 
           sourceComponent: Component {
             TextField {
+              enabled: model.active
+              opacity: enabled ? 1 : 0.5
               text: model.editableValue
               font: Cpp_Misc_CommonFonts.monoFont
               placeholderText: model.placeholderValue
@@ -527,6 +557,7 @@ ColumnLayout {
           active: model.widgetType === ProjectModel.ComboBox
           visible: model.widgetType === ProjectModel.ComboBox
 
+          property var modelActive: model.active
           property var comboBoxData: model.comboBoxData
           property var editableValue: model.editableValue
 
@@ -534,6 +565,8 @@ ColumnLayout {
             ComboBox {
               flat: true
               model: comboBoxData
+              enabled: modelActive
+              opacity: enabled ? 1 : 0.5
               currentIndex: editableValue
               font: Cpp_Misc_CommonFonts.monoFont
               onCurrentIndexChanged: {
@@ -557,12 +590,15 @@ ColumnLayout {
           active: model.widgetType === ProjectModel.CheckBox
           visible: model.widgetType === ProjectModel.CheckBox
 
+          property var modelActive: model.active
           property var comboBoxData: model.comboBoxData
           property var editableValue: model.editableValue
 
           sourceComponent: Component {
             ComboBox {
               flat: true
+              enabled: modelActive
+              opacity: enabled ? 1 : 0.5
               model: [qsTr("No"), qsTr("Yes")]
               currentIndex: editableValue ? 1 : 0
               font: Cpp_Misc_CommonFonts.monoFont
@@ -585,10 +621,16 @@ ColumnLayout {
           active: model.widgetType === ProjectModel.HexTextField
           visible: model.widgetType === ProjectModel.HexTextField
 
+          property var modelActive: model.active
+          property var editableValue: model.editableValue
+          property var modelPlaceholder: model.placeholderValue
+
           sourceComponent: Component {
             TextField {
               id: _hexComponent
+              enabled: model.active
               text: model.editableValue
+              opacity: enabled ? 1 : 0.5
               font: Cpp_Misc_CommonFonts.monoFont
               placeholderText: model.placeholderValue
               color: Cpp_ThemeManager.colors["table_text"]
@@ -653,7 +695,7 @@ ColumnLayout {
         //
         Item {
           implicitWidth: 8
-          visible: model.widgetType !== ProjectModel.Separator
+          visible: model.widgetType !== ProjectModel.SectionHeader
         }
       }
     }

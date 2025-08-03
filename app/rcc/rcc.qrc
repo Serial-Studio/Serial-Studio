@@ -239,33 +239,23 @@
         <file>icons/project-editor/actions/led.svg</file>
         <file>icons/project-editor/actions/plot.svg</file>
         <file>icons/project-editor/model/alarm.svg</file>
-        <file>icons/project-editor/model/api-key.svg</file>
         <file>icons/project-editor/model/auto-execute.svg</file>
         <file>icons/project-editor/model/binary-data.svg</file>
         <file>icons/project-editor/model/checksum.svg</file>
         <file>icons/project-editor/model/data-conversion.svg</file>
+        <file>icons/project-editor/model/dataset.svg</file>
         <file>icons/project-editor/model/end-delimiter.svg</file>
         <file>icons/project-editor/model/eol.svg</file>
-        <file>icons/project-editor/model/fft-samples.svg</file>
-        <file>icons/project-editor/model/fft-sampling-rate.svg</file>
         <file>icons/project-editor/model/fft.svg</file>
         <file>icons/project-editor/model/frame-detection.svg</file>
         <file>icons/project-editor/model/icon.svg</file>
-        <file>icons/project-editor/model/index.svg</file>
         <file>icons/project-editor/model/interval.svg</file>
-        <file>icons/project-editor/model/led-high.svg</file>
         <file>icons/project-editor/model/led.svg</file>
-        <file>icons/project-editor/model/max.svg</file>
-        <file>icons/project-editor/model/min.svg</file>
-        <file>icons/project-editor/model/overview.svg</file>
         <file>icons/project-editor/model/plot.svg</file>
         <file>icons/project-editor/model/start-delimiter.svg</file>
         <file>icons/project-editor/model/timer.svg</file>
-        <file>icons/project-editor/model/title.svg</file>
         <file>icons/project-editor/model/tx-data.svg</file>
-        <file>icons/project-editor/model/units.svg</file>
         <file>icons/project-editor/model/widget.svg</file>
-        <file>icons/project-editor/model/x-axis.svg</file>
         <file>icons/project-editor/toolbar/add-accelerometer.svg</file>
         <file>icons/project-editor/toolbar/add-action.svg</file>
         <file>icons/project-editor/toolbar/add-bar.svg</file>
@@ -417,5 +407,6 @@
         <file>themes/iron.json</file>
         <file>themes/light.json</file>
         <file>themes/midnight.json</file>
+        <file>icons/project-editor/model/title.svg</file>
     </qresource>
 </RCC>

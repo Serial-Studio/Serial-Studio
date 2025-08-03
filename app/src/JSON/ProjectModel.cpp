@@ -2055,7 +2055,7 @@ void JSON::ProjectModel::buildTreeModel()
   m_rootItems.insert(frameParsingCode, kFrameParser);
 
   // Iterare through the actions and add them to the model
-  for (const auto& action : m_actions)
+  for (const auto &action : m_actions)
   {
     // Create action item
     auto *actionItem = new QStandardItem(action.title);
@@ -2072,7 +2072,7 @@ void JSON::ProjectModel::buildTreeModel()
   }
 
   // Iterate through the groups and add them to the model
-  for (const auto& group : m_groups)
+  for (const auto &group : m_groups)
   {
     // Get group item
     auto *groupItem = new QStandardItem(group.title);
@@ -2087,7 +2087,7 @@ void JSON::ProjectModel::buildTreeModel()
     groupItem->setData(group.title, TreeViewText);
 
     // Iterate through the datasets within this group and add them as children
-    for (const auto& dataset : group.datasets)
+    for (const auto &dataset : group.datasets)
     {
       // Create dataset item
       auto *datasetItem = new QStandardItem(dataset.title);
@@ -2158,6 +2158,7 @@ void JSON::ProjectModel::buildProjectModel()
   // Add project title
   auto title = new QStandardItem();
   title->setEditable(true);
+  title->setData(true, Active);
   title->setData(TextField, WidgetType);
   title->setData(m_title, EditableValue);
   title->setData(tr("Title"), ParameterName);
@@ -2171,6 +2172,7 @@ void JSON::ProjectModel::buildProjectModel()
   // Add decoding
   auto decoding = new QStandardItem();
   decoding->setEditable(true);
+  decoding->setData(true, Active);
   decoding->setData(ComboBox, WidgetType);
   decoding->setData(m_decoderOptions, ComboBoxData);
   decoding->setData(m_frameDecoder, EditableValue);
@@ -2185,6 +2187,7 @@ void JSON::ProjectModel::buildProjectModel()
   // Add frame detection method
   auto frameDetection = new QStandardItem();
   frameDetection->setEditable(true);
+  frameDetection->setData(true, Active);
   frameDetection->setData(ComboBox, WidgetType);
   frameDetection->setData(m_frameDetectionMethods, ComboBoxData);
   frameDetection->setData(
@@ -2206,6 +2209,7 @@ void JSON::ProjectModel::buildProjectModel()
   {
     auto frameStart = new QStandardItem();
     frameStart->setEditable(true);
+    frameStart->setData(true, Active);
     frameStart->setData(delimWidget, WidgetType);
     frameStart->setData(m_frameStartSequence, EditableValue);
     frameStart->setData(tr("Frame Start Delimeter"), ParameterName);
@@ -2225,6 +2229,7 @@ void JSON::ProjectModel::buildProjectModel()
   {
     auto frameEnd = new QStandardItem();
     frameEnd->setEditable(true);
+    frameEnd->setData(true, Active);
     frameEnd->setData(delimWidget, WidgetType);
     frameEnd->setData(m_frameEndSequence, EditableValue);
     frameEnd->setData(tr("Frame End Delimeter"), ParameterName);
@@ -2242,6 +2247,7 @@ void JSON::ProjectModel::buildProjectModel()
   {
     auto sequence = new QStandardItem();
     sequence->setEditable(true);
+    sequence->setData(true, Active);
     sequence->setData(CheckBox, WidgetType);
     sequence->setData(m_hexadecimalDelimiters, EditableValue);
     sequence->setData(tr("Hexadecimal Delimeters"), ParameterName);
@@ -2257,6 +2263,7 @@ void JSON::ProjectModel::buildProjectModel()
   auto checksum = new QStandardItem();
   auto checksumAlgo = IO::availableChecksums().indexOf(m_checksumAlgorithm);
   checksum->setEditable(true);
+  checksum->setData(true, Active);
   checksum->setData(ComboBox, WidgetType);
   checksum->setData(checksumAlgo, EditableValue);
   checksum->setData(m_checksumMethods, ComboBoxData);
@@ -2306,6 +2313,7 @@ void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
   // Add group title
   auto title = new QStandardItem();
   title->setEditable(true);
+  title->setData(true, Active);
   title->setData(TextField, WidgetType);
   title->setData(group.title, EditableValue);
   title->setData(tr("Title"), ParameterName);
@@ -2336,6 +2344,7 @@ void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
   // Add widgets
   auto widget = new QStandardItem();
   widget->setEditable(true);
+  widget->setData(true, Active);
   widget->setData(ComboBox, WidgetType);
   widget->setData(m_groupWidgets.values(), ComboBoxData);
   widget->setData(index, EditableValue);
@@ -2370,6 +2379,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   // Add action title
   auto title = new QStandardItem();
   title->setEditable(true);
+  title->setData(true, Active);
   title->setData(TextField, WidgetType);
   title->setData(action.title, EditableValue);
   title->setData(tr("Title"), ParameterName);
@@ -2383,6 +2393,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   // Add action icon
   auto icon = new QStandardItem();
   icon->setEditable(true);
+  icon->setData(true, Active);
   icon->setData(IconPicker, WidgetType);
   icon->setData(action.icon, EditableValue);
   icon->setData(tr("Icon"), ParameterName);
@@ -2395,6 +2406,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   // Add binary selector checkbox
   auto binaryData = new QStandardItem();
   binaryData->setEditable(true);
+  binaryData->setData(true, Active);
   binaryData->setData(CheckBox, WidgetType);
   binaryData->setData(action.binaryData, EditableValue);
   binaryData->setData(tr("Binary Data"), ParameterName);
@@ -2411,6 +2423,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   {
     auto data = new QStandardItem();
     data->setEditable(true);
+    data->setData(true, Active);
     data->setData(HexTextField, WidgetType);
     data->setData(action.txData, EditableValue);
     data->setData(tr("TX Data (Hex)"), ParameterName);
@@ -2428,6 +2441,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   {
     auto data = new QStandardItem();
     data->setEditable(true);
+    data->setData(true, Active);
     data->setData(TextField, WidgetType);
     data->setData(action.txData, EditableValue);
     data->setData(tr("TX Data"), ParameterName);
@@ -2459,6 +2473,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
     // Add EOL combobox
     auto eol = new QStandardItem();
     eol->setEditable(true);
+    eol->setData(true, Active);
     eol->setData(ComboBox, WidgetType);
     eol->setData(m_eolSequences.values(), ComboBoxData);
     eol->setData(eolIndex, EditableValue);
@@ -2472,6 +2487,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   // Auto-execute on connect
   auto autoExecute = new QStandardItem();
   autoExecute->setEditable(true);
+  autoExecute->setData(true, Active);
   autoExecute->setData(CheckBox, WidgetType);
   autoExecute->setData(action.autoExecuteOnConnect, EditableValue);
   autoExecute->setData(tr("Auto Execute on Connect"), ParameterName);
@@ -2487,6 +2503,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   // Timer mode
   auto timerMode = new QStandardItem();
   timerMode->setEditable(true);
+  timerMode->setData(true, Active);
   timerMode->setData(ComboBox, WidgetType);
   timerMode->setData(m_timerModes, ComboBoxData);
   timerMode->setData(static_cast<int>(action.timerMode), EditableValue);
@@ -2503,6 +2520,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   {
     auto timerInterval = new QStandardItem();
     timerInterval->setEditable(true);
+    timerInterval->setData(true, Active);
     timerInterval->setData(IntField, WidgetType);
     timerInterval->setData(action.timerIntervalMs, EditableValue);
     timerInterval->setData(tr("Timer Interval (ms)"), ParameterName);
@@ -2558,15 +2576,18 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   // Get which optional parameters should be displayed
   const bool showWidget = currentDatasetIsEditable();
 
-  // Add separator
-  auto* separator = new QStandardItem();
-  separator->setData(Separator, WidgetType);
-  separator->setData(tr("Basic Metadata"), PlaceholderValue);
-  m_datasetModel->appendRow(separator);
+  // Add section header
+  auto *sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("General Information"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/dataset.svg",
+                      ParameterIcon);
+  m_datasetModel->appendRow(sectionHdr);
 
   // Add dataset title
   auto title = new QStandardItem();
   title->setEditable(true);
+  title->setData(true, Active);
   title->setData(TextField, WidgetType);
   title->setData(dataset.title, EditableValue);
   title->setData(tr("Title"), ParameterName);
@@ -2574,45 +2595,43 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   title->setData(tr("Untitled Dataset"), PlaceholderValue);
   title->setData(tr("Name or description of the dataset"),
                  ParameterDescription);
-  title->setData("qrc:/rcc/icons/project-editor/model/title.svg",
-                 ParameterIcon);
   m_datasetModel->appendRow(title);
 
   // Add dataset index
   auto index = new QStandardItem();
   index->setEditable(true);
+  index->setData(true, Active);
   index->setData(IntField, WidgetType);
   index->setData(dataset.index, EditableValue);
   index->setData(tr("Frame Index"), ParameterName);
   index->setData(kDatasetView_Index, ParameterType);
   index->setData(nextDatasetIndex(), PlaceholderValue);
   index->setData(tr("Position in the frame"), ParameterDescription);
-  index->setData("qrc:/rcc/icons/project-editor/model/index.svg",
-                 ParameterIcon);
   m_datasetModel->appendRow(index);
 
   // Add units
   auto units = new QStandardItem();
   units->setEditable(true);
+  units->setData(true, Active);
   units->setData(TextField, WidgetType);
   units->setData(dataset.units, EditableValue);
   units->setData(tr("Measurement Unit"), ParameterName);
   units->setData(kDatasetView_Units, ParameterType);
   units->setData(tr("Volts, Amps, etc."), PlaceholderValue);
   units->setData(tr("Unit of measurement (optional)"), ParameterDescription);
-  units->setData("qrc:/rcc/icons/project-editor/model/units.svg",
-                 ParameterIcon);
   m_datasetModel->appendRow(units);
-
-  // Add separator
-  separator = new QStandardItem();
-  separator->setData(Separator, WidgetType);
-  separator->setData(tr("Dashboard Widget"), PlaceholderValue);
-  m_datasetModel->appendRow(separator);
 
   // Add widget combobox item
   if (showWidget)
   {
+    // Add section header
+    sectionHdr = new QStandardItem();
+    sectionHdr->setData(SectionHeader, WidgetType);
+    sectionHdr->setData(tr("Widget Settings"), PlaceholderValue);
+    sectionHdr->setData("qrc:/rcc/icons/project-editor/model/widget.svg",
+                        ParameterIcon);
+    m_datasetModel->appendRow(sectionHdr);
+
     // Get appropiate widget index for current dataset
     int widgetIndex = 0;
     bool found = false;
@@ -2633,35 +2652,35 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     // Add widget combobox
     auto widget = new QStandardItem();
     widget->setEditable(true);
+    widget->setData(true, Active);
     widget->setData(ComboBox, WidgetType);
     widget->setData(m_datasetWidgets.values(), ComboBoxData);
     widget->setData(widgetIndex, EditableValue);
     widget->setData(tr("Widget"), ParameterName);
     widget->setData(kDatasetView_Widget, ParameterType);
     widget->setData(tr("Display widget (optional)"), ParameterDescription);
-    widget->setData("qrc:/rcc/icons/project-editor/model/widget.svg",
-                    ParameterIcon);
     m_datasetModel->appendRow(widget);
 
     // Add show in overview method
     auto overview = new QStandardItem();
-    overview->setEditable(true);
     overview->setData(CheckBox, WidgetType);
-    overview->setData(tr("Overview"), ParameterName);
+    overview->setEditable(m_groups.size() > 1);
+    overview->setData(overview->isEditable(), Active);
+    overview->setData(tr("Include in Overview"), ParameterName);
     overview->setData(dataset.overviewDisplay, EditableValue);
     overview->setData(kDatasetView_Overview, ParameterType);
     overview->setData(tr("Include widget in overview dashboard"),
                       ParameterDescription);
-    overview->setData("qrc:/rcc/icons/project-editor/model/overview.svg",
-                      ParameterIcon);
     m_datasetModel->appendRow(overview);
   }
 
-  // Add separator
-  separator = new QStandardItem();
-  separator->setData(Separator, WidgetType);
-  separator->setData(tr("Plotting"), PlaceholderValue);
-  m_datasetModel->appendRow(separator);
+  // Add section header
+  sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("Plot Settings"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/plot.svg",
+                      ParameterIcon);
+  m_datasetModel->appendRow(sectionHdr);
 
   // Get appropiate plotting mode index for current dataset
   int plotIndex = 0;
@@ -2685,12 +2704,12 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   auto plot = new QStandardItem();
   plot->setEditable(true);
   plot->setData(ComboBox, WidgetType);
+  plot->setData(plot->isEditable(), Active);
   plot->setData(m_plotOptions.values(), ComboBoxData);
   plot->setData(plotIndex, EditableValue);
-  plot->setData(tr("Oscilloscope Plot"), ParameterName);
+  plot->setData(tr("Enable Plot Widget"), ParameterName);
   plot->setData(kDatasetView_Plot, ParameterType);
   plot->setData(tr("Plot data in real-time"), ParameterDescription);
-  plot->setData("qrc:/rcc/icons/project-editor/model/plot.svg", ParameterIcon);
   m_datasetModel->appendRow(plot);
 
   // Ensure X-axis ID is reset to "Samples" when an invalid index is set
@@ -2713,20 +2732,21 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
 
   // Construct item
   auto xAxis = new QStandardItem();
-  xAxis->setEditable(true);
+  xAxis->setEditable(dataset.plt);
   xAxis->setData(ComboBox, WidgetType);
   xAxis->setData(xAxisIdx, EditableValue);
+  xAxis->setData(xAxis->isEditable(), Active);
   xAxis->setData(xDataSources(), ComboBoxData);
   xAxis->setData(kDatasetView_xAxis, ParameterType);
   xAxis->setData(tr("X-Axis Source"), ParameterName);
   xAxis->setData(tr("Data series for the X-Axis"), ParameterDescription);
-  xAxis->setData("qrc:/rcc/icons/project-editor/model/x-axis.svg",
-                 ParameterIcon);
   m_datasetModel->appendRow(xAxis);
 
   // Add minimum value
   auto min = new QStandardItem();
-  min->setEditable(true);
+  min->setEditable(dataset.plt || dataset.widget == "bar"
+                   || dataset.widget == "gauge" || dataset.fft);
+  min->setData(min->isEditable(), Active);
   min->setData(FloatField, WidgetType);
   min->setData(dataset.min, EditableValue);
   min->setData(tr("Minimum Value"), ParameterName);
@@ -2734,12 +2754,13 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   min->setData(0, PlaceholderValue);
   min->setData(tr("Required for range widgets, optional for plots"),
                ParameterDescription);
-  min->setData("qrc:/rcc/icons/project-editor/model/min.svg", ParameterIcon);
   m_datasetModel->appendRow(min);
 
   // Add maximum value
   auto max = new QStandardItem();
-  max->setEditable(true);
+  max->setEditable(dataset.plt || dataset.widget == "bar"
+                   || dataset.widget == "gauge" || dataset.fft);
+  max->setData(max->isEditable(), Active);
   max->setData(FloatField, WidgetType);
   max->setData(dataset.max, EditableValue);
   max->setData(tr("Maximum Value"), ParameterName);
@@ -2747,25 +2768,26 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   max->setData(0, PlaceholderValue);
   max->setData(tr("Required for range widgets, optional for plots"),
                ParameterDescription);
-  max->setData("qrc:/rcc/icons/project-editor/model/max.svg", ParameterIcon);
   m_datasetModel->appendRow(max);
 
-  // Add separator
-  separator = new QStandardItem();
-  separator->setData(Separator, WidgetType);
-  separator->setData(tr("Frequency Analysis"), PlaceholderValue);
-  m_datasetModel->appendRow(separator);
+  // Add section header
+  sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("FFT Configuration"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/fft.svg",
+                      ParameterIcon);
+  m_datasetModel->appendRow(sectionHdr);
 
   // Add FFT checkbox
   auto fft = new QStandardItem();
   fft->setEditable(true);
   fft->setData(CheckBox, WidgetType);
+  fft->setData(fft->isEditable(), Active);
   fft->setData(dataset.fft, EditableValue);
-  fft->setData(tr("FFT Plot"), ParameterName);
+  fft->setData(tr("Enable FFT Plot"), ParameterName);
   fft->setData(kDatasetView_FFT, ParameterType);
   fft->setData(0, PlaceholderValue);
   fft->setData(tr("Plot frequency-domain data"), ParameterDescription);
-  fft->setData("qrc:/rcc/icons/project-editor/model/fft.svg", ParameterIcon);
   m_datasetModel->appendRow(fft);
 
   // Get FFT window size index
@@ -2776,95 +2798,93 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
 
   // Add FFT window size
   auto fftWindow = new QStandardItem();
-  fftWindow->setEditable(true);
+  fftWindow->setEditable(dataset.fft);
   fftWindow->setData(ComboBox, WidgetType);
+  fftWindow->setData(fftWindow->isEditable(), Active);
   fftWindow->setData(m_fftSamples, ComboBoxData);
   fftWindow->setData(windowIndex, EditableValue);
-  fftWindow->setData(tr("FFT Window Size"), ParameterName);
+  fftWindow->setData(tr("Window Size"), ParameterName);
   fftWindow->setData(kDatasetView_FFT_Samples, ParameterType);
   fftWindow->setData(tr("Samples for FFT calculation"), ParameterDescription);
-  fftWindow->setData("qrc:/rcc/icons/project-editor/model/fft-samples.svg",
-                     ParameterIcon);
   m_datasetModel->appendRow(fftWindow);
 
   // Add FFT sampling rate
   auto fftSamplingRate = new QStandardItem();
-  fftSamplingRate->setEditable(true);
+  fftSamplingRate->setEditable(dataset.fft);
   fftSamplingRate->setData(IntField, WidgetType);
   fftSamplingRate->setData(100, PlaceholderValue);
+  fftSamplingRate->setData(fftSamplingRate->isEditable(), Active);
   fftSamplingRate->setData(dataset.fftSamplingRate, EditableValue);
-  fftSamplingRate->setData(tr("FFT Sampling Rate"), ParameterName);
+  fftSamplingRate->setData(tr("Sampling Rate"), ParameterName);
   fftSamplingRate->setData(kDatasetView_FFT_SamplingRate, ParameterType);
   fftSamplingRate->setData(tr("Sampling rate (Hz) for FFT calculation"),
                            ParameterDescription);
-  fftSamplingRate->setData(
-    "qrc:/rcc/icons/project-editor/model/fft-sampling-rate.svg",
-    ParameterIcon);
   m_datasetModel->appendRow(fftSamplingRate);
 
-  // Add separator
-  separator = new QStandardItem();
-  separator->setData(Separator, WidgetType);
-  separator->setData(tr("LED Indicator"), PlaceholderValue);
-  m_datasetModel->appendRow(separator);
+  // Add section header
+  sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("LED Indicator Settings"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/led.svg",
+                      ParameterIcon);
+  m_datasetModel->appendRow(sectionHdr);
 
   // Add LED panel checkbox
   auto led = new QStandardItem();
   led->setEditable(true);
   led->setData(CheckBox, WidgetType);
   led->setData(dataset.led, EditableValue);
-  led->setData(tr("Show in LED Panel"), ParameterName);
+  led->setData(led->isEditable(), Active);
+  led->setData(tr("Display in LED Panel"), ParameterName);
   led->setData(kDatasetView_LED, ParameterType);
   led->setData(0, PlaceholderValue);
   led->setData(tr("Quick status monitoring"), ParameterDescription);
-  led->setData("qrc:/rcc/icons/project-editor/model/led.svg", ParameterIcon);
   m_datasetModel->appendRow(led);
 
   // Add LED High value
   auto ledHigh = new QStandardItem();
-  ledHigh->setEditable(true);
+  ledHigh->setEditable(dataset.led);
   ledHigh->setData(FloatField, WidgetType);
   ledHigh->setData(dataset.ledHigh, EditableValue);
-  ledHigh->setData(tr("LED High (On) Value"), ParameterName);
+  ledHigh->setData(ledHigh->isEditable(), Active);
+  ledHigh->setData(tr("LED Activation Threshold"), ParameterName);
   ledHigh->setData(kDatasetView_LED_High, ParameterType);
   ledHigh->setData(0, PlaceholderValue);
   ledHigh->setData(tr("Threshold for LED on"), ParameterDescription);
-  ledHigh->setData("qrc:/rcc/icons/project-editor/model/led-high.svg",
-                   ParameterIcon);
   m_datasetModel->appendRow(ledHigh);
 
-  // Add separator
-  separator = new QStandardItem();
-  separator->setData(Separator, WidgetType);
-  separator->setData(tr("Alarm Levels"), PlaceholderValue);
-  m_datasetModel->appendRow(separator);
+  // Add section header
+  sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("Alarm Thresholds"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
+                      ParameterIcon);
+  m_datasetModel->appendRow(sectionHdr);
 
   // Add low alarm threshold
   auto alarmLow = new QStandardItem();
   alarmLow->setEditable(true);
   alarmLow->setData(FloatField, WidgetType);
+  alarmLow->setData(alarmLow->isEditable(), Active);
   alarmLow->setData(dataset.alarmLow, EditableValue);
-  alarmLow->setData(tr("Alarm Low Threshold"), ParameterName);
+  alarmLow->setData(tr("Low Threshold"), ParameterName);
   alarmLow->setData(kDatasetView_AlarmLow, ParameterType);
   alarmLow->setData(0, PlaceholderValue);
   alarmLow->setData(tr("Triggers alarm in bar widgets and LED panels"),
                     ParameterDescription);
-  alarmLow->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
-                    ParameterIcon);
   m_datasetModel->appendRow(alarmLow);
 
   // Add high alarm threshold
   auto alarmHigh = new QStandardItem();
   alarmHigh->setEditable(true);
   alarmHigh->setData(FloatField, WidgetType);
+  alarmHigh->setData(alarmHigh->isEditable(), Active);
   alarmHigh->setData(dataset.alarmHigh, EditableValue);
-  alarmHigh->setData(tr("Alarm High Threshold"), ParameterName);
+  alarmHigh->setData(tr("High Threshold"), ParameterName);
   alarmHigh->setData(kDatasetView_AlarmHigh, ParameterType);
   alarmHigh->setData(0, PlaceholderValue);
   alarmHigh->setData(tr("Triggers alarm in bar widgets and LED panels"),
                      ParameterDescription);
-  alarmHigh->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
-                     ParameterIcon);
   m_datasetModel->appendRow(alarmHigh);
 
   // Handle edits
@@ -2982,7 +3002,7 @@ void JSON::ProjectModel::generateComboBoxModels()
   // Initialize plot options
   m_plotOptions.clear();
   m_plotOptions.insert(qMakePair(false, false), tr("No"));
-  m_plotOptions.insert(qMakePair(true, false), tr("Linear Plot"));
+  m_plotOptions.insert(qMakePair(true, false), tr("Yes"));
   // m_plotOptions.insert(qMakePair(true, true), tr("Logarithmic Plot"));
 }
 

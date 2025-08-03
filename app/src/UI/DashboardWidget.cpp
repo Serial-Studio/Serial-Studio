@@ -172,18 +172,15 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
     {
       case SerialStudio::DashboardDataGrid:
         m_dbWidget = new Widgets::DataGrid(relativeIndex(), this);
-        m_qmlPath
-            = "qrc:/qml/Widgets/Dashboard/DataGrid.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/DataGrid.qml";
         break;
       case SerialStudio::DashboardMultiPlot:
         m_dbWidget = new Widgets::MultiPlot(relativeIndex(), this);
-        m_qmlPath
-            = "qrc:/qml/Widgets/Dashboard/MultiPlot.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/MultiPlot.qml";
         break;
       case SerialStudio::DashboardFFT:
         m_dbWidget = new Widgets::FFTPlot(relativeIndex(), this);
-        m_qmlPath
-            = "qrc:/qml/Widgets/Dashboard/FFTPlot.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/FFTPlot.qml";
         break;
       case SerialStudio::DashboardPlot:
         m_dbWidget = new Widgets::Plot(relativeIndex(), this);
@@ -195,18 +192,15 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
         break;
       case SerialStudio::DashboardGauge:
         m_dbWidget = new Widgets::Gauge(relativeIndex(), this);
-        m_qmlPath
-            = "qrc:/qml/Widgets/Dashboard/Gauge.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Gauge.qml";
         break;
       case SerialStudio::DashboardCompass:
         m_dbWidget = new Widgets::Compass(relativeIndex(), this);
-        m_qmlPath
-            = "qrc:/qml/Widgets/Dashboard/Compass.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Compass.qml";
         break;
       case SerialStudio::DashboardGyroscope:
         m_dbWidget = new Widgets::Gyroscope(relativeIndex(), this);
-        m_qmlPath
-            = "qrc:/qml/Widgets/Dashboard/Gyroscope.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Gyroscope.qml";
         break;
       case SerialStudio::DashboardAccelerometer:
         m_dbWidget = new Widgets::Accelerometer(relativeIndex(), this);
@@ -224,14 +218,12 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
         break;
       case SerialStudio::DashboardLED:
         m_dbWidget = new Widgets::LEDPanel(relativeIndex(), this);
-        m_qmlPath
-            = "qrc:/qml/Widgets/Dashboard/LEDPanel.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/LEDPanel.qml";
         break;
 #ifdef BUILD_COMMERCIAL
       case SerialStudio::DashboardPlot3D:
         m_dbWidget = new Widgets::Plot3D(relativeIndex(), this);
-        m_qmlPath
-            = "qrc:/qml/Widgets/Dashboard/Plot3D.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Plot3D.qml";
         break;
 #endif
 

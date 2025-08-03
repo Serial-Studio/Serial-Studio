@@ -181,7 +181,7 @@ public:
     CheckBox,
     ComboBox,
     IconPicker,
-    Separator,
+    SectionHeader,
   };
   Q_ENUM(EditorWidget)
 
@@ -191,20 +191,22 @@ public:
    */
   enum CustomRoles
   {
-    TreeViewIcon = 0x01,
-    TreeViewText = 0x02,
-    TreeViewExpanded = 0x03,
-    TreeViewFrameIndex = 0x04,
+    Active = Qt::UserRole,
 
-    ParameterName = 0x10,
-    EditableValue = 0x11,
-    ParameterType = 0x12,
-    PlaceholderValue = 0x13,
-    ParameterDescription = 0x14,
-    ParameterIcon = 0x15,
+    TreeViewIcon = Qt::UserRole + 1,
+    TreeViewText = Qt::UserRole + 2,
+    TreeViewExpanded = Qt::UserRole + 3,
+    TreeViewFrameIndex = Qt::UserRole + 4,
 
-    WidgetType = 0x20,
-    ComboBoxData = 0x21,
+    ParameterName = Qt::UserRole + 5,
+    EditableValue = Qt::UserRole + 6,
+    ParameterType = Qt::UserRole + 7,
+    PlaceholderValue = Qt::UserRole + 8,
+    ParameterDescription = Qt::UserRole + 9,
+    ParameterIcon = Qt::UserRole + 10,
+
+    WidgetType = Qt::UserRole + 11,
+    ComboBoxData = Qt::UserRole + 12,
   };
   Q_ENUM(CustomRoles)
 
@@ -382,6 +384,7 @@ public:
 
     // clang-format off
 #define BAL(x) QByteArrayLiteral(x)
+    names.insert(ProjectModel::Active, BAL("active"));
     names.insert(ProjectModel::WidgetType, BAL("widgetType"));
     names.insert(ProjectModel::TreeViewIcon, BAL("treeViewIcon"));
     names.insert(ProjectModel::TreeViewText, BAL("treeViewText"));
