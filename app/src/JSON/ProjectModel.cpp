@@ -2563,9 +2563,9 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   const bool showWidget = currentDatasetIsEditable();
   const bool showFFTOptions = dataset.fft;
   const bool showLedOptions = dataset.led;
-  const bool showMinMax = dataset.plt || dataset.widget == "gauge"
-                          || dataset.widget == "bar"
-                          || m_selectedGroup.widget == "multiplot";
+  const bool showMinMax
+      = dataset.plt || dataset.fft || dataset.widget == "gauge"
+        || dataset.widget == "bar" || m_selectedGroup.widget == "multiplot";
   const bool showAlarm = dataset.led || dataset.widget == "gauge"
                          || dataset.widget == "bar"
                          || m_selectedGroup.widget == "datagrid";
