@@ -468,9 +468,9 @@ install(
 
 set(deploy_tool_options_arg "")
 if(APPLE)
-  set(deploy_tool_options_arg -hardened-runtime -appstore-compliant)
+  set(deploy_tool_options_arg "-hardened-runtime -appstore-compliant --no-translations")
 elseif(WIN32)
-  set(deploy_tool_options_arg --no-compiler-runtime -force-openssl --release)
+  set(deploy_tool_options_arg "-force-openssl --release --no-translations")
 endif()
 
 qt_generate_deploy_qml_app_script(
