@@ -35,8 +35,8 @@
 Misc::WorkspaceManager::WorkspaceManager()
 {
   auto def = QString("%1/%2").arg(
-      QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-      APP_NAME);
+    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    APP_NAME);
   m_path = m_settings.value(QStringLiteral("Workspace"), def).toString();
 }
 
@@ -99,8 +99,8 @@ QString Misc::WorkspaceManager::path(const QString &subdirectory) const
 void Misc::WorkspaceManager::reset()
 {
   m_path = QString("%1/%2").arg(
-      QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-      APP_NAME);
+    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    APP_NAME);
   m_settings.setValue(QStringLiteral("Workspace"), m_path);
 
   Q_EMIT pathChanged();
@@ -113,14 +113,26 @@ void Misc::WorkspaceManager::reset()
  */
 void Misc::WorkspaceManager::selectPath()
 {
-  auto path = QFileDialog::getExistingDirectory(
-      nullptr, tr("Select Workspace Location"), m_path);
+  auto* dialog = new QFileDialog(nullptr,
+                                 tr("Select Workspace Location"),
+                                 m_path);
 
-  if (!path.isEmpty())
-  {
-    m_path = path;
-    m_settings.setValue(QStringLiteral("Workspace"), path);
+  dialog->setFileMode(QFileDialog::Directory);
+  dialog->setOption(QFileDialog::ShowDirsOnly, true);
+  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
-    Q_EMIT pathChanged();
-  }
+  connect(dialog, &QFileDialog::fileSelected, this,
+          [this, dialog](const QString& path) {
+            dialog->deleteLater();
+
+            if (path.isEmpty())
+              return;
+
+            m_path = path;
+            m_settings.setValue(QStringLiteral("Workspace"), path);
+
+            emit pathChanged();
+          });
+
+  dialog->open();
 }

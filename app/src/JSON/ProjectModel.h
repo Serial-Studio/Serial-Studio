@@ -297,6 +297,8 @@ private slots:
 
 private:
   int nextDatasetIndex();
+  bool finalizeProjectSave();
+
   void saveExpandedStateMap(QStandardItem *item, QHash<QString, bool> &map,
                             const QString &title);
   void restoreExpandedStateMap(QStandardItem *item, QHash<QString, bool> &map,

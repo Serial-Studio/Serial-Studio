@@ -42,11 +42,11 @@
  * the @a function.
  */
 #define DW_EXEC_EVENT(pointer, function, event)                                \
-  class PwnedWidget : public QCodeEditor                                       \
-  {                                                                            \
+class PwnedWidget : public QCodeEditor                                       \
+{                                                                            \
   public:                                                                      \
-    using QCodeEditor::function;                                               \
-  };                                                                           \
+  using QCodeEditor::function;                                               \
+};                                                                           \
   static_cast<PwnedWidget *>(pointer)->function(event);
 
 /**
@@ -242,9 +242,9 @@ bool JSON::FrameParser::save(const bool silent)
     // Show save messagebox
     if (!silent)
       Misc::Utilities::showMessageBox(
-          tr("Frame parser code updated successfully!"),
-          tr("No errors have been detected in the code."),
-          QMessageBox::Information);
+        tr("Frame parser code updated successfully!"),
+        tr("No errors have been detected in the code."),
+        QMessageBox::Information);
     else
       model.setModified(prevModif);
 
@@ -285,15 +285,15 @@ bool JSON::FrameParser::loadScript(const QString &script)
   if (fun.isNull() || !fun.isCallable())
   {
     Misc::Utilities::showMessageBox(
-        tr("Frame parser error!"),
-        tr("The 'parse' function is not declared or is not callable!"),
-        QMessageBox::Critical);
+      tr("Frame parser error!"),
+      tr("The 'parse' function is not declared or is not callable!"),
+      QMessageBox::Critical);
     return false;
   }
 
   // Check if the script contains a valid parse function declaratio
   static QRegularExpression functionRegex(
-      R"(\bfunction\s+parse\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*,\s*([a-zA-Z_$][a-zA-Z0-9_$]*))?\s*\))");
+    R"(\bfunction\s+parse\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*,\s*([a-zA-Z_$][a-zA-Z0-9_$]*))?\s*\))");
   auto match = functionRegex.match(script);
   if (match.hasMatch())
   {
@@ -305,9 +305,9 @@ bool JSON::FrameParser::loadScript(const QString &script)
     if (firstArg.isEmpty())
     {
       Misc::Utilities::showMessageBox(
-          tr("Frame parser error!"),
-          tr("No valid 'parse' function declaration found in the script!"),
-          QMessageBox::Critical);
+        tr("Frame parser error!"),
+        tr("No valid 'parse' function declaration found in the script!"),
+        QMessageBox::Critical);
       return false;
     }
 
@@ -315,12 +315,12 @@ bool JSON::FrameParser::loadScript(const QString &script)
     if (!secondArg.isEmpty())
     {
       Misc::Utilities::showMessageBox(
-          tr("Legacy frame parser function detected"),
-          tr("The 'parse' function has two arguments ('%1', '%2'), indicating "
-             "use of the old format. Please update it to the new format, which "
-             "only takes the frame data as an argument.")
-              .arg(firstArg, secondArg),
-          QMessageBox::Warning);
+        tr("Legacy frame parser function detected"),
+        tr("The 'parse' function has two arguments ('%1', '%2'), indicating "
+           "use of the old format. Please update it to the new format, which "
+           "only takes the frame data as an argument.")
+          .arg(firstArg, secondArg),
+        QMessageBox::Warning);
       return false;
     }
   }
@@ -329,9 +329,9 @@ bool JSON::FrameParser::loadScript(const QString &script)
   else
   {
     Misc::Utilities::showMessageBox(
-        tr("Frame parser error!"),
-        tr("No valid 'parse' function declaration found in the script!"),
-        QMessageBox::Critical);
+      tr("Frame parser error!"),
+      tr("No valid 'parse' function declaration found in the script!"),
+      QMessageBox::Critical);
     return false;
   }
 
@@ -423,9 +423,9 @@ void JSON::FrameParser::reload()
   if (isModified())
   {
     auto ret = Misc::Utilities::showMessageBox(
-        tr("The document has been modified!"),
-        tr("Are you sure you want to continue?"), QMessageBox::Question,
-        qAppName(), QMessageBox::Yes | QMessageBox::No);
+      tr("The document has been modified!"),
+      tr("Are you sure you want to continue?"), QMessageBox::Question,
+      qAppName(), QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::No)
       return;
   }
@@ -444,29 +444,39 @@ void JSON::FrameParser::import()
   if (isModified())
   {
     auto ret = Misc::Utilities::showMessageBox(
-        tr("The document has been modified!"),
-        tr("Are you sure you want to continue?"), QMessageBox::Question,
-        qAppName(), QMessageBox::Yes | QMessageBox::No);
+      tr("The document has been modified!"),
+      tr("Are you sure you want to continue?"), QMessageBox::Question,
+      qAppName(), QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::No)
       return;
   }
 
-  // Get file from system
-  auto path = QFileDialog::getOpenFileName(
-      nullptr, tr("Select Javascript file to import"), QDir::homePath(),
-      "*.js");
+  auto* dialog = new QFileDialog(
+    nullptr,
+    tr("Select Javascript file to import"),
+    QDir::homePath(),
+    "*.js");
 
-  // Load file into code editor
-  if (!path.isEmpty())
-  {
-    QFile file(path);
-    if (file.open(QFile::ReadOnly))
-    {
-      m_widget.setPlainText(QString::fromUtf8(file.readAll()));
-      file.close();
-      (void)save(true);
-    }
-  }
+  dialog->setFileMode(QFileDialog::ExistingFile);
+  dialog->setOption(QFileDialog::DontUseNativeDialog);
+  connect(dialog, &QFileDialog::fileSelected, this,
+          [this, dialog](const QString& path) {
+            if (path.isEmpty()) {
+              dialog->deleteLater();
+              return;
+            }
+
+            QFile file(path);
+            if (file.open(QFile::ReadOnly)) {
+              m_widget.setPlainText(QString::fromUtf8(file.readAll()));
+              file.close();
+              (void)save(true);
+            }
+
+            dialog->deleteLater();
+          });
+
+  dialog->open();
 }
 
 /**

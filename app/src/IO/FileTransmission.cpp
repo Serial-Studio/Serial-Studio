@@ -116,31 +116,35 @@ int IO::FileTransmission::lineTransmissionInterval() const
  */
 void IO::FileTransmission::openFile()
 {
-  // Let user select a file to open
-  auto path = QFileDialog::getOpenFileName(
-      Q_NULLPTR, tr("Select file to transmit"), QDir::homePath());
+  auto* dialog = new QFileDialog(nullptr,
+                                 tr("Select file to transmit"),
+                                 QDir::homePath());
 
-  // Filename is empty, abort
-  if (path.isEmpty())
-    return;
+  dialog->setFileMode(QFileDialog::ExistingFile);
+  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
-  // Close current file (if any)
-  if (fileOpen())
-    closeFile();
+  connect(dialog, &QFileDialog::fileSelected, this,
+          [this, dialog](const QString& path) {
+            dialog->deleteLater();
 
-  // Try to open the file as read-only
-  m_file.setFileName(path);
-  if (m_file.open(QFile::ReadOnly))
-  {
-    m_stream = new QTextStream(&m_file);
+            if (path.isEmpty())
+              return;
 
-    emit fileChanged();
-    emit transmissionProgressChanged();
-  }
+            if (fileOpen())
+              closeFile();
 
-  // Log open errors
-  else
-    qWarning() << "File open error" << m_file.errorString();
+            m_file.setFileName(path);
+            if (m_file.open(QFile::ReadOnly)) {
+              m_stream = new QTextStream(&m_file);
+
+              emit fileChanged();
+              emit transmissionProgressChanged();
+            } else {
+              qWarning() << "File open error:" << m_file.errorString();
+            }
+          });
+
+  dialog->open();
 }
 
 /**

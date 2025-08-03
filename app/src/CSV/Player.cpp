@@ -159,15 +159,23 @@ void CSV::Player::toggle()
  */
 void CSV::Player::openFile()
 {
-  // Get file name
-  auto file = QFileDialog::getOpenFileName(
-      nullptr, tr("Select CSV file"),
-      Misc::WorkspaceManager::instance().path("CSV"),
-      tr("CSV files") + QStringLiteral(" (*.csv)"));
+  auto* dialog = new QFileDialog(nullptr,
+                                 tr("Select CSV file"),
+                                 Misc::WorkspaceManager::instance().path("CSV"),
+                                 tr("CSV files (*.csv)"));
 
-  // Open CSV file
-  if (!file.isEmpty())
-    openFile(file);
+  dialog->setFileMode(QFileDialog::ExistingFile);
+  dialog->setOption(QFileDialog::DontUseNativeDialog);
+
+  connect(dialog, &QFileDialog::fileSelected, this,
+          [this, dialog](const QString& path) {
+            if (!path.isEmpty())
+              openFile(path);
+
+            dialog->deleteLater();
+          });
+
+  dialog->open();
 }
 
 /**
@@ -275,10 +283,10 @@ void CSV::Player::openFile(const QString &filePath)
   if (IO::Manager::instance().isConnected())
   {
     auto response = Misc::Utilities::showMessageBox(
-        tr("Device Connection Active"),
-        tr("To use this feature, you must disconnect from the device. "
-           "Do you want to proceed?"),
-        QMessageBox::Warning, qAppName(), QMessageBox::No | QMessageBox::Yes);
+      tr("Device Connection Active"),
+      tr("To use this feature, you must disconnect from the device. "
+         "Do you want to proceed?"),
+      QMessageBox::Warning, qAppName(), QMessageBox::No | QMessageBox::Yes);
     if (response == QMessageBox::Yes)
       IO::Manager::instance().disconnectDevice();
     else
@@ -305,9 +313,9 @@ void CSV::Player::openFile(const QString &filePath)
 
       // Filter out rows that are empty or contain only empty items
       bool isRowValid
-          = !row.isEmpty()
-            && std::any_of(row.cbegin(), row.cend(),
-                           [](const QString &item) { return !item.isEmpty(); });
+        = !row.isEmpty()
+          && std::any_of(row.cbegin(), row.cend(),
+                         [](const QString &item) { return !item.isEmpty(); });
 
       // Only register valid rows
       if (isRowValid)
@@ -340,10 +348,10 @@ void CSV::Player::openFile(const QString &filePath)
     else
     {
       Misc::Utilities::showMessageBox(
-          tr("Insufficient Data in CSV File"),
-          tr("The CSV file must contain at least two frames (data rows) to "
-             "proceed. Please check the file and try again."),
-          QMessageBox::Critical);
+        tr("Insufficient Data in CSV File"),
+        tr("The CSV file must contain at least two frames (data rows) to "
+           "proceed. Please check the file and try again."),
+        QMessageBox::Critical);
       closeFile();
     }
   }
@@ -352,8 +360,8 @@ void CSV::Player::openFile(const QString &filePath)
   else
   {
     Misc::Utilities::showMessageBox(
-        tr("Cannot read CSV file"),
-        tr("Please check file permissions & location"), QMessageBox::Critical);
+      tr("Cannot read CSV file"),
+      tr("Please check file permissions & location"), QMessageBox::Critical);
     closeFile();
   }
 }
@@ -510,9 +518,9 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
   if (m_csvData.isEmpty() || m_csvData.first().isEmpty())
   {
     Misc::Utilities::showMessageBox(
-        tr("Invalid CSV"),
-        tr("The CSV file does not contain any data or headers."),
-        QMessageBox::Critical);
+      tr("Invalid CSV"),
+      tr("The CSV file does not contain any data or headers."),
+      QMessageBox::Critical);
     return false;
   }
 
@@ -524,8 +532,8 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
   QStringList options;
   options << tr("Select a date/time column") << tr("Set interval manually");
   QString choice = QInputDialog::getItem(
-      nullptr, tr("CSV Date/Time Selection"),
-      tr("Choose how to handle the date/time data:"), options, 0, false, &ok);
+    nullptr, tr("CSV Date/Time Selection"),
+    tr("Choose how to handle the date/time data:"), options, 0, false, &ok);
 
   // Check if user cancelled
   if (!ok)
@@ -535,9 +543,9 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
   if (choice == tr("Set interval manually"))
   {
     const auto interval = QInputDialog::getInt(
-        nullptr, tr("Set Interval"),
-        tr("Please enter the interval between rows in milliseconds:"), 1000, 1,
-        1000000, 1, &ok);
+      nullptr, tr("Set Interval"),
+      tr("Please enter the interval between rows in milliseconds:"), 1000, 1,
+      1000000, 1, &ok);
 
     if (ok)
     {
@@ -550,9 +558,9 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
   else
   {
     const auto column = QInputDialog::getItem(
-        nullptr, tr("Select Date/Time Column"),
-        tr("Please select the column that contains the date/time data:"),
-        headerLabels, 0, false, &ok);
+      nullptr, tr("Select Date/Time Column"),
+      tr("Please select the column that contains the date/time data:"),
+      headerLabels, 0, false, &ok);
 
     if (ok)
     {
@@ -678,10 +686,10 @@ QDateTime CSV::Player::getDateTime(const QString &cell)
 
   // Create a list of available date/time formats
   static const QStringList formats
-      = {QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz"),
-         QStringLiteral("yyyy/MM/dd/ HH:mm:ss::zzz"),
-         QStringLiteral("yyyy/MM/dd HH:mm:ss"),
-         QStringLiteral("yyyy/MM/dd/ HH:mm:ss")};
+    = {QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz"),
+       QStringLiteral("yyyy/MM/dd/ HH:mm:ss::zzz"),
+       QStringLiteral("yyyy/MM/dd HH:mm:ss"),
+       QStringLiteral("yyyy/MM/dd/ HH:mm:ss")};
 
   // Try to obtain date/time string
   for (const auto &format : formats)
@@ -788,28 +796,28 @@ bool CSV::Player::handleKeyPress(QKeyEvent *keyEvent)
   bool handled;
   switch (keyEvent->key())
   {
-    case Qt::Key_Space:
-    case Qt::Key_MediaPlay:
-    case Qt::Key_MediaPause:
-    case Qt::Key_MediaTogglePlayPause:
-      toggle();
-      handled = true;
-      break;
-    case Qt::Key_Left:
-    case Qt::Key_Down:
-    case Qt::Key_MediaPrevious:
-      previousFrame();
-      handled = true;
-      break;
-    case Qt::Key_Right:
-    case Qt::Key_Up:
-    case Qt::Key_MediaNext:
-      nextFrame();
-      handled = true;
-      break;
-    default:
-      handled = false;
-      break;
+  case Qt::Key_Space:
+  case Qt::Key_MediaPlay:
+  case Qt::Key_MediaPause:
+  case Qt::Key_MediaTogglePlayPause:
+    toggle();
+    handled = true;
+    break;
+  case Qt::Key_Left:
+  case Qt::Key_Down:
+  case Qt::Key_MediaPrevious:
+    previousFrame();
+    handled = true;
+    break;
+  case Qt::Key_Right:
+  case Qt::Key_Up:
+  case Qt::Key_MediaNext:
+    nextFrame();
+    handled = true;
+    break;
+  default:
+    handled = false;
+    break;
   }
 
   return handled;

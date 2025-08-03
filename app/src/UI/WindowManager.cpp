@@ -371,13 +371,24 @@ void UI::WindowManager::clearBackgroundImage()
  */
 void UI::WindowManager::selectBackgroundImage()
 {
-  auto path = QFileDialog::getOpenFileName(
-      nullptr, tr("Select Background Image"),
-      QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
-      tr("Images (*.png *.jpg *.jpeg *.bmp)"));
+  auto* dialog = new QFileDialog(
+    nullptr,
+    tr("Select Background Image"),
+    QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
+    tr("Images (*.png *.jpg *.jpeg *.bmp)"));
 
-  if (!path.isEmpty())
-    setBackgroundImage(QUrl::fromLocalFile(path).toString());
+  dialog->setFileMode(QFileDialog::ExistingFile);
+  dialog->setOption(QFileDialog::DontUseNativeDialog);
+
+  connect(dialog, &QFileDialog::fileSelected, this,
+          [this, dialog](const QString& path) {
+            if (!path.isEmpty())
+              setBackgroundImage(QUrl::fromLocalFile(path).toString());
+
+            dialog->deleteLater();
+          });
+
+  dialog->open();
 }
 
 /**
@@ -812,7 +823,7 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
       else if (right >= screenW && bottom >= screenH)
       {
         m_snapIndicator
-            = QRect(screenW / 2, screenH / 2, screenW / 2, screenH / 2);
+          = QRect(screenW / 2, screenH / 2, screenW / 2, screenH / 2);
         snapped = true;
       }
 
@@ -865,55 +876,55 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
     const int minH = m_resizeWindow->implicitHeight();
     switch (m_resizeEdge)
     {
-      case ResizeEdge::Right:
-        geometry.setWidth(qMax(minW, m_initialGeometry.width() + delta.x()));
-        break;
-      case ResizeEdge::Bottom:
-        geometry.setHeight(qMax(minH, m_initialGeometry.height() + delta.y()));
-        break;
-      case ResizeEdge::Left: {
-        const int w = qMax(minW, m_initialGeometry.width() - delta.x());
-        geometry.setX(m_initialGeometry.right() - w);
-        geometry.setWidth(w);
-        break;
-      }
-      case ResizeEdge::Top: {
-        const int h = qMax(minH, m_initialGeometry.height() - delta.y());
-        geometry.setY(m_initialGeometry.bottom() - h);
-        geometry.setHeight(h);
-        break;
-      }
-      case ResizeEdge::TopLeft: {
-        const int w = qMax(minW, m_initialGeometry.width() - delta.x());
-        const int h = qMax(minH, m_initialGeometry.height() - delta.y());
-        geometry.setX(m_initialGeometry.right() - w);
-        geometry.setWidth(w);
-        geometry.setY(m_initialGeometry.bottom() - h);
-        geometry.setHeight(h);
-        break;
-      }
-      case ResizeEdge::TopRight: {
-        const int w = qMax(minW, m_initialGeometry.width() + delta.x());
-        const int h = qMax(minH, m_initialGeometry.height() - delta.y());
-        geometry.setY(m_initialGeometry.bottom() - h);
-        geometry.setHeight(h);
-        geometry.setWidth(w);
-        break;
-      }
-      case ResizeEdge::BottomLeft: {
-        const int w = qMax(minW, m_initialGeometry.width() - delta.x());
-        const int h = qMax(minH, m_initialGeometry.height() + delta.y());
-        geometry.setX(m_initialGeometry.right() - w);
-        geometry.setWidth(w);
-        geometry.setHeight(h);
-        break;
-      }
-      case ResizeEdge::BottomRight:
-        geometry.setWidth(qMax(minW, m_initialGeometry.width() + delta.x()));
-        geometry.setHeight(qMax(minH, m_initialGeometry.height() + delta.y()));
-        break;
-      case ResizeEdge::None:
-        break;
+    case ResizeEdge::Right:
+      geometry.setWidth(qMax(minW, m_initialGeometry.width() + delta.x()));
+      break;
+    case ResizeEdge::Bottom:
+      geometry.setHeight(qMax(minH, m_initialGeometry.height() + delta.y()));
+      break;
+    case ResizeEdge::Left: {
+      const int w = qMax(minW, m_initialGeometry.width() - delta.x());
+      geometry.setX(m_initialGeometry.right() - w);
+      geometry.setWidth(w);
+      break;
+    }
+    case ResizeEdge::Top: {
+      const int h = qMax(minH, m_initialGeometry.height() - delta.y());
+      geometry.setY(m_initialGeometry.bottom() - h);
+      geometry.setHeight(h);
+      break;
+    }
+    case ResizeEdge::TopLeft: {
+      const int w = qMax(minW, m_initialGeometry.width() - delta.x());
+      const int h = qMax(minH, m_initialGeometry.height() - delta.y());
+      geometry.setX(m_initialGeometry.right() - w);
+      geometry.setWidth(w);
+      geometry.setY(m_initialGeometry.bottom() - h);
+      geometry.setHeight(h);
+      break;
+    }
+    case ResizeEdge::TopRight: {
+      const int w = qMax(minW, m_initialGeometry.width() + delta.x());
+      const int h = qMax(minH, m_initialGeometry.height() - delta.y());
+      geometry.setY(m_initialGeometry.bottom() - h);
+      geometry.setHeight(h);
+      geometry.setWidth(w);
+      break;
+    }
+    case ResizeEdge::BottomLeft: {
+      const int w = qMax(minW, m_initialGeometry.width() - delta.x());
+      const int h = qMax(minH, m_initialGeometry.height() + delta.y());
+      geometry.setX(m_initialGeometry.right() - w);
+      geometry.setWidth(w);
+      geometry.setHeight(h);
+      break;
+    }
+    case ResizeEdge::BottomRight:
+      geometry.setWidth(qMax(minW, m_initialGeometry.width() + delta.x()));
+      geometry.setHeight(qMax(minH, m_initialGeometry.height() + delta.y()));
+      break;
+    case ResizeEdge::None:
+      break;
     }
 
     // Store unclamped geometry for comparison
@@ -1023,25 +1034,25 @@ void UI::WindowManager::mousePressEvent(QMouseEvent *event)
       grabMouse();
       switch (m_resizeEdge)
       {
-        case ResizeEdge::Left:
-        case ResizeEdge::Right:
-          setCursor(Qt::SizeHorCursor);
-          break;
-        case ResizeEdge::Top:
-        case ResizeEdge::Bottom:
-          setCursor(Qt::SizeVerCursor);
-          break;
-        case ResizeEdge::TopRight:
-        case ResizeEdge::BottomLeft:
-          setCursor(Qt::SizeBDiagCursor);
-          break;
-        case ResizeEdge::TopLeft:
-        case ResizeEdge::BottomRight:
-          setCursor(Qt::SizeFDiagCursor);
-          break;
-        default:
-          unsetCursor();
-          break;
+      case ResizeEdge::Left:
+      case ResizeEdge::Right:
+        setCursor(Qt::SizeHorCursor);
+        break;
+      case ResizeEdge::Top:
+      case ResizeEdge::Bottom:
+        setCursor(Qt::SizeVerCursor);
+        break;
+      case ResizeEdge::TopRight:
+      case ResizeEdge::BottomLeft:
+        setCursor(Qt::SizeBDiagCursor);
+        break;
+      case ResizeEdge::TopLeft:
+      case ResizeEdge::BottomRight:
+        setCursor(Qt::SizeFDiagCursor);
+        break;
+      default:
+        unsetCursor();
+        break;
       }
 
       m_resizeWindow = m_focusedWindow;

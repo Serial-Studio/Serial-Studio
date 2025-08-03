@@ -409,12 +409,12 @@ void MQTT::Client::openConnection()
   if (!SerialStudio::activated())
   {
     Misc::Utilities::showMessageBox(
-        tr("MQTT Feature Requires a Commercial License"),
-        tr("Connecting to MQTT brokers is only available with a valid Serial "
-           "Studio commercial license.\n\n"
-           "To unlock this feature, please activate your license or visit the "
-           "store."),
-        QMessageBox::Warning);
+      tr("MQTT Feature Requires a Commercial License"),
+      tr("Connecting to MQTT brokers is only available with a valid Serial "
+         "Studio commercial license.\n\n"
+         "To unlock this feature, please activate your license or visit the "
+         "store."),
+      QMessageBox::Warning);
     return;
   }
 
@@ -424,9 +424,9 @@ void MQTT::Client::openConnection()
     if (isPublisher())
     {
       Misc::Utilities::showMessageBox(
-          tr("Missing MQTT Topic"),
-          tr("You must specify a topic before connecting as a publisher."),
-          QMessageBox::Critical, tr("Configuration Error"));
+        tr("Missing MQTT Topic"),
+        tr("You must specify a topic before connecting as a publisher."),
+        QMessageBox::Critical, tr("Configuration Error"));
       Q_EMIT highlightMqttTopicControl();
       return;
     }
@@ -434,9 +434,9 @@ void MQTT::Client::openConnection()
     else
     {
       Misc::Utilities::showMessageBox(
-          tr("MQTT Topic Not Set"),
-          tr("You won't receive any messages until a topic is configured."),
-          QMessageBox::Warning, tr("Configuration Warning"));
+        tr("MQTT Topic Not Set"),
+        tr("You won't receive any messages until a topic is configured."),
+        QMessageBox::Warning, tr("Configuration Warning"));
       Q_EMIT highlightMqttTopicControl();
     }
   }
@@ -448,9 +448,9 @@ void MQTT::Client::openConnection()
     if (!m_topicName.isValid())
     {
       Misc::Utilities::showMessageBox(
-          tr("Invalid MQTT Topic"),
-          tr("The topic \"%1\" is not valid.").arg(m_topicFilter),
-          QMessageBox::Critical, tr("Configuration Error"));
+        tr("Invalid MQTT Topic"),
+        tr("The topic \"%1\" is not valid.").arg(m_topicFilter),
+        QMessageBox::Critical, tr("Configuration Error"));
       Q_EMIT highlightMqttTopicControl();
       return;
     }
@@ -673,12 +673,23 @@ void MQTT::Client::setMqttVersion(const quint8 version)
  */
 void MQTT::Client::addCaCertificates()
 {
-  auto path = QFileDialog::getExistingDirectory(
-      nullptr, tr("Select PEM Certificates Directory"),
-      QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+  auto* dialog = new QFileDialog(nullptr,
+                                 tr("Select PEM Certificates Directory"),
+                                 QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
 
-  if (!path.isEmpty())
-    m_sslConfiguration.addCaCertificates(path);
+  dialog->setFileMode(QFileDialog::Directory);
+  dialog->setOption(QFileDialog::ShowDirsOnly, true);
+  dialog->setOption(QFileDialog::DontUseNativeDialog);
+
+  connect(dialog, &QFileDialog::fileSelected, this,
+          [this, dialog](const QString& path) {
+            dialog->deleteLater();
+
+            if (!path.isEmpty())
+              m_sslConfiguration.addCaCertificates(path);
+          });
+
+  dialog->open();
 }
 
 /**
@@ -778,9 +789,9 @@ void MQTT::Client::onStateChanged(QMqttClient::ClientState state)
     if (!sub || sub->state() == QMqttSubscription::Error)
     {
       Misc::Utilities::showMessageBox(
-          tr("Subscription Error"),
-          tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter),
-          QMessageBox::Critical);
+        tr("Subscription Error"),
+        tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter),
+        QMessageBox::Critical);
     }
   }
 }
@@ -794,71 +805,71 @@ void MQTT::Client::onErrorChanged(QMqttClient::ClientError error)
   QString message;
   switch (error)
   {
-    case QMqttClient::NoError:
-      break;
+  case QMqttClient::NoError:
+    break;
 
-    case QMqttClient::InvalidProtocolVersion:
-      title = tr("Invalid MQTT Protocol Version");
-      message = tr("The MQTT broker rejected the connection due to an "
-                   "unsupported protocol version. Ensure that your client and "
-                   "broker support the same protocol version.");
-      break;
+  case QMqttClient::InvalidProtocolVersion:
+    title = tr("Invalid MQTT Protocol Version");
+    message = tr("The MQTT broker rejected the connection due to an "
+                 "unsupported protocol version. Ensure that your client and "
+                 "broker support the same protocol version.");
+    break;
 
-    case QMqttClient::IdRejected:
-      title = tr("Client ID Rejected");
-      message = tr("The broker rejected the client ID. It may be malformed, "
-                   "too long, or already in use. Try using a different client "
-                   "ID.");
-      break;
+  case QMqttClient::IdRejected:
+    title = tr("Client ID Rejected");
+    message = tr("The broker rejected the client ID. It may be malformed, "
+                 "too long, or already in use. Try using a different client "
+                 "ID.");
+    break;
 
-    case QMqttClient::ServerUnavailable:
-      title = tr("MQTT Server Unavailable");
-      message = tr("The network connection was established, but the broker is "
-                   "currently unavailable. Verify the broker status and try "
-                   "again later.");
-      break;
+  case QMqttClient::ServerUnavailable:
+    title = tr("MQTT Server Unavailable");
+    message = tr("The network connection was established, but the broker is "
+                 "currently unavailable. Verify the broker status and try "
+                 "again later.");
+    break;
 
-    case QMqttClient::BadUsernameOrPassword:
-      title = tr("Authentication Error");
-      message = tr("The username or password provided is incorrect or "
-                   "malformed. Double-check your credentials and try again.");
-      break;
+  case QMqttClient::BadUsernameOrPassword:
+    title = tr("Authentication Error");
+    message = tr("The username or password provided is incorrect or "
+                 "malformed. Double-check your credentials and try again.");
+    break;
 
-    case QMqttClient::NotAuthorized:
-      title = tr("Authorization Error");
-      message = tr("The MQTT broker denied the connection due to insufficient "
-                   "permissions. Ensure that your account has the necessary "
-                   "access rights.");
-      break;
+  case QMqttClient::NotAuthorized:
+    title = tr("Authorization Error");
+    message = tr("The MQTT broker denied the connection due to insufficient "
+                 "permissions. Ensure that your account has the necessary "
+                 "access rights.");
+    break;
 
-    case QMqttClient::TransportInvalid:
-      title = tr("Network or Transport Error");
-      message = tr("A network or transport layer issue occurred, causing an "
-                   "unexpected connection failure. "
-                   "Check your network connection and broker settings.");
-      break;
+  case QMqttClient::TransportInvalid:
+    title = tr("Network or Transport Error");
+    message = tr("A network or transport layer issue occurred, causing an "
+                 "unexpected connection failure. "
+                 "Check your network connection and broker settings.");
+    break;
 
-    case QMqttClient::ProtocolViolation:
-      title = tr("MQTT Protocol Violation");
-      message = tr("The client detected a violation of the MQTT protocol and "
-                   "closed the connection. Check your MQTT implementation for "
-                   "compliance.");
-      break;
+  case QMqttClient::ProtocolViolation:
+    title = tr("MQTT Protocol Violation");
+    message = tr("The client detected a violation of the MQTT protocol and "
+                 "closed the connection. Check your MQTT implementation for "
+                 "compliance.");
+    break;
 
-    case QMqttClient::UnknownError:
-      title = tr("Unknown Error");
-      message = tr("An unexpected error occurred. Check the logs for more "
-                   "details or restart the application.");
-      break;
+  case QMqttClient::UnknownError:
+    title = tr("Unknown Error");
+    message = tr("An unexpected error occurred. Check the logs for more "
+                 "details or restart the application.");
+    break;
 
-    case QMqttClient::Mqtt5SpecificError:
-      title = tr("MQTT 5 Error");
-      message = tr("An MQTT protocol level 5 error occurred. "
-                   "Check the broker logs or reason codes for more details.");
-      break;
+  case QMqttClient::Mqtt5SpecificError:
+    title = tr("MQTT 5 Error");
+    message = tr("An MQTT protocol level 5 error occurred. "
+                 "Check the broker logs or reason codes for more details.");
+    break;
 
-    default:
-      break;
+  default:
+    break;
   }
 
   if (!title.isEmpty() && !message.isEmpty())
@@ -869,14 +880,14 @@ void MQTT::Client::onErrorChanged(QMqttClient::ClientError error)
  * @brief Handles the result of an authentication attempt.
  */
 void MQTT::Client::onAuthenticationFinished(
-    const QMqttAuthenticationProperties &p)
+  const QMqttAuthenticationProperties &p)
 {
 
   if (!p.reason().isEmpty())
   {
     Misc::Utilities::showMessageBox(
-        tr("MQTT Authentication Failed"),
-        tr("Authentication failed: %.").arg(p.reason()), QMessageBox::Warning);
+      tr("MQTT Authentication Failed"),
+      tr("Authentication failed: %.").arg(p.reason()), QMessageBox::Warning);
   }
 }
 
@@ -884,7 +895,7 @@ void MQTT::Client::onAuthenticationFinished(
  * @brief Handles extended authentication requests from the broker.
  */
 void MQTT::Client::onAuthenticationRequested(
-    const QMqttAuthenticationProperties &p)
+  const QMqttAuthenticationProperties &p)
 {
   // Ensure MQTT 5.0 is used for extended authentication
   if (m_client.protocolVersion() != QMqttClient::MQTT_5_0)
@@ -903,24 +914,24 @@ void MQTT::Client::onAuthenticationRequested(
 
   // Alert user
   Misc::Utilities::showMessageBox(
-      tr("MQTT Authentication Required"),
-      tr("The MQTT broker requires authentication using method: \"%1\".\n\n"
-         "Please provide the necessary credentials.")
-          .arg(authMethod),
-      QMessageBox::Information);
+    tr("MQTT Authentication Required"),
+    tr("The MQTT broker requires authentication using method: \"%1\".\n\n"
+       "Please provide the necessary credentials.")
+      .arg(authMethod),
+    QMessageBox::Information);
 
   // Get user name
   bool ok;
   const auto username
-      = QInputDialog::getText(nullptr, tr("Enter MQTT Username"),
-                              tr("Username:"), QLineEdit::Normal, "", &ok);
+    = QInputDialog::getText(nullptr, tr("Enter MQTT Username"),
+                            tr("Username:"), QLineEdit::Normal, "", &ok);
   if (!ok || username.isEmpty())
     return;
 
   // Get password
   const auto password
-      = QInputDialog::getText(nullptr, tr("Enter MQTT Password"),
-                              tr("Password:"), QLineEdit::Password, "", &ok);
+    = QInputDialog::getText(nullptr, tr("Enter MQTT Password"),
+                            tr("Password:"), QLineEdit::Password, "", &ok);
   if (!ok || password.isEmpty())
     return;
 
@@ -928,7 +939,7 @@ void MQTT::Client::onAuthenticationRequested(
   QMqttAuthenticationProperties authProps;
   authProps.setAuthenticationMethod(authMethod);
   authProps.setAuthenticationData(
-      QString("%1:%2").arg(username, password).toUtf8().toBase64());
+    QString("%1:%2").arg(username, password).toUtf8().toBase64());
 
   // Try authentication again
   m_client.authenticate(authProps);
