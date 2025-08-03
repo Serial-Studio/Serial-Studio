@@ -223,103 +223,107 @@
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="164"/>
+        <location filename="../../src/CSV/Player.cpp" line="162"/>
         <source>Select CSV file</source>
         <translation>CSV 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="166"/>
         <source>CSV files</source>
-        <translation>CSV 파일</translation>
+        <translation type="vanished">CSV 파일</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="278"/>
+        <location filename="../../src/CSV/Player.cpp" line="164"/>
+        <source>CSV files (*.csv)</source>
+        <translation>CSV 파일 (*.csv)</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="285"/>
         <source>Device Connection Active</source>
         <translation>장치 연결 활성화</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="279"/>
+        <location filename="../../src/CSV/Player.cpp" line="286"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>이 기능을 사용하려면 장치 연결을 끊어야 합니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="343"/>
+        <location filename="../../src/CSV/Player.cpp" line="350"/>
         <source>Insufficient Data in CSV File</source>
         <translation>CSV 파일에 데이터가 부족합니다</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="344"/>
+        <location filename="../../src/CSV/Player.cpp" line="351"/>
         <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
         <translation>CSV 파일에는 최소한 두 개의 프레임(데이터 행)이 있어야 합니다. 파일을 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="355"/>
+        <location filename="../../src/CSV/Player.cpp" line="362"/>
         <source>Cannot read CSV file</source>
         <translation>CSV 파일을 읽을 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="356"/>
+        <location filename="../../src/CSV/Player.cpp" line="363"/>
         <source>Please check file permissions &amp; location</source>
         <translation>파일 권한 및 위치를 확인하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="513"/>
+        <location filename="../../src/CSV/Player.cpp" line="520"/>
         <source>Invalid CSV</source>
         <translation>잘못된 CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="514"/>
+        <location filename="../../src/CSV/Player.cpp" line="521"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV 파일에 데이터나 헤더가 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="525"/>
+        <location filename="../../src/CSV/Player.cpp" line="532"/>
         <source>Select a date/time column</source>
         <translation>날짜/시간 열을 선택하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="525"/>
-        <location filename="../../src/CSV/Player.cpp" line="535"/>
+        <location filename="../../src/CSV/Player.cpp" line="532"/>
+        <location filename="../../src/CSV/Player.cpp" line="542"/>
         <source>Set interval manually</source>
         <translation>간격 수동 설정</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="527"/>
+        <location filename="../../src/CSV/Player.cpp" line="534"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV 날짜/시간 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="528"/>
+        <location filename="../../src/CSV/Player.cpp" line="535"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>날짜/시간 데이터를 처리하는 방법 선택:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="538"/>
+        <location filename="../../src/CSV/Player.cpp" line="545"/>
         <source>Set Interval</source>
         <translation>간격 설정</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="539"/>
+        <location filename="../../src/CSV/Player.cpp" line="546"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>행 간 간격을 밀리초 단위로 입력하세요:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="553"/>
+        <location filename="../../src/CSV/Player.cpp" line="560"/>
         <source>Select Date/Time Column</source>
         <translation>날짜/시간 열 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="554"/>
+        <location filename="../../src/CSV/Player.cpp" line="561"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>날짜/시간 데이터를 포함하는 열을 선택하세요:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="563"/>
+        <location filename="../../src/CSV/Player.cpp" line="570"/>
         <source>Invalid Selection</source>
         <translation>잘못된 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="564"/>
+        <location filename="../../src/CSV/Player.cpp" line="571"/>
         <source>The selected column is not valid.</source>
         <translation>선택한 열이 유효하지 않습니다.</translation>
     </message>
@@ -1344,7 +1348,7 @@
         <translation>선택된 파일이 없습니다...</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="121"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="119"/>
         <source>Select file to transmit</source>
         <translation>전송할 파일 선택</translation>
     </message>
@@ -1428,29 +1432,29 @@
         <translation>파일 권한 및 위치를 확인하세요</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="590"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="626"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="597"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="634"/>
         <source>Channel %1</source>
         <translation>채널 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="600"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="608"/>
         <source>Audio Input</source>
         <translation>오디오 입력</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="653"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="663"/>
         <source>Multiple Plots</source>
         <translation>다중 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="606"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="635"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="614"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="643"/>
         <source>Quick Plot</source>
         <translation>빠른 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="640"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="649"/>
         <source>Quick Plot Data</source>
         <translation>빠른 플롯 데이터</translation>
     </message>
@@ -1458,57 +1462,57 @@
 <context>
     <name>JSON::FrameParser</name>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="243"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="245"/>
         <source>Frame parser code updated successfully!</source>
         <translation>프레임 파서 코드가 성공적으로 업데이트되었습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="244"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="246"/>
         <source>No errors have been detected in the code.</source>
         <translation>코드에서 오류가 감지되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="284"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="304"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="328"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="288"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="308"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="332"/>
         <source>Frame parser error!</source>
         <translation>프레임 파서 오류!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="285"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="289"/>
         <source>The 'parse' function is not declared or is not callable!</source>
         <translation>'parse' 함수가 선언되지 않았거나 호출할 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="305"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="329"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="309"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="333"/>
         <source>No valid 'parse' function declaration found in the script!</source>
         <translation>스크립트에서 유효한 'parse' 함수 선언을 찾을 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="314"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="318"/>
         <source>Legacy frame parser function detected</source>
         <translation>레거시 프레임 파서 함수가 감지되었습니다</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="315"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="319"/>
         <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
         <translation>'parse' 함수에 두 개의 인수('%1', '%2')가 있어 구형 포맷을 사용하고 있음을 나타냅니다. 프레임 데이터만 인수로 받는 새로운 포맷으로 업데이트하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="422"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="443"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="426"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="447"/>
         <source>The document has been modified!</source>
         <translation>문서가 수정되었습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="423"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="444"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="427"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="448"/>
         <source>Are you sure you want to continue?</source>
         <translation>계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="452"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="455"/>
         <source>Select Javascript file to import</source>
         <translation>가져올 Javascript 파일 선택</translation>
     </message>
@@ -1516,717 +1520,887 @@
 <context>
     <name>JSON::ProjectModel</name>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="282"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="284"/>
         <source>New Project</source>
         <translation>새 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="347"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="349"/>
         <source>Samples</source>
         <translation>샘플</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="688"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="690"/>
         <source>Do you want to save your changes?</source>
         <translation>변경 사항을 저장하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="689"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="691"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>이 프로젝트에 저장되지 않은 수정 사항이 있습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="724"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="726"/>
         <source>Project error</source>
         <translation>프로젝트 오류</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="725"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="727"/>
         <source>Project title cannot be empty!</source>
         <translation>프로젝트 제목은 비워둘 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="743"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="744"/>
         <source>Save Serial Studio Project</source>
         <translation>Serial Studio 프로젝트 저장</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="754"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2406"/>
+        <source>Composite Widget</source>
+        <translation>복합 위젯</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2408"/>
+        <source>Select how this group of datasets should be visualized (optional)</source>
+        <translation>이 데이터 세트 그룹을 어떻게 시각화할지 선택하십시오 (선택 사항)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2655"/>
+        <source>Dataset Title</source>
+        <translation>데이터셋 제목</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2657"/>
+        <source>Name of the dataset, used for labeling and identification</source>
+        <translation>레이블 및 식별에 사용되는 데이터셋 이름</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2670"/>
+        <source>Frame position used for aligning datasets in time</source>
+        <translation>시간 내 데이터셋 정렬에 사용되는 프레임 위치</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2683"/>
+        <source>Unit of measurement, such as volts or amps (optional)</source>
+        <translation>측정 단위, 예: 볼트 또는 암페어 (선택 사항)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2694"/>
+        <source>Plot Settings</source>
+        <translation>플롯 설정</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2724"/>
+        <source>Enable Plot Widget</source>
+        <translation>플롯 위젯 활성화</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2756"/>
+        <source>Choose which dataset to use for the X-Axis in plots</source>
+        <translation>플롯에서 X축에 사용할 데이터셋 선택</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2768"/>
+        <source>Minimum Plot Value (optional)</source>
+        <translation>최소 플롯 값 (선택 사항)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2769"/>
+        <source>Lower bound for plot display range</source>
+        <translation>플롯 표시 범위의 하한선</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2781"/>
+        <source>Maximum Plot Value (optional)</source>
+        <translation>최대 플롯 값 (선택 사항)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2782"/>
+        <source>Upper bound for plot display range</source>
+        <translation>플롯 표시 범위의 상한선</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2793"/>
+        <source>FFT Configuration</source>
+        <translation>FFT 구성</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2806"/>
+        <source>Enable FFT Analysis</source>
+        <translation>FFT 분석 활성화</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2807"/>
+        <source>Perform frequency-domain analysis of the dataset</source>
+        <translation>데이터셋의 주파수 영역 분석 수행</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2827"/>
+        <source>Number of samples used for each FFT calculation window</source>
+        <translation>각 FFT 계산 창에 사용되는 샘플 수</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2839"/>
+        <source>FFT Sampling Rate (Hz, required)</source>
+        <translation>FFT 샘플링 속도 (Hz, 필수)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2841"/>
+        <source>Sampling frequency used for FFT (in Hz)</source>
+        <translation>FFT에 사용되는 샘플링 주파수 (Hz 단위)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2852"/>
+        <source>Widget Settings</source>
+        <translation>위젯 설정</translation>
+    </message>
+    <message>
+        <source>Display Widget</source>
+        <translation type="vanished">위젯 표시</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2883"/>
+        <source>Select the visual widget used to display this dataset</source>
+        <translation>이 데이터셋을 표시할 시각적 위젯을 선택하세요</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2894"/>
+        <source>Show in Overview</source>
+        <translation>개요에 표시</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2896"/>
+        <source>Display this widget in the dashboard overview (if enabled)</source>
+        <translation>대시보드 개요에 이 위젯을 표시합니다 (활성화된 경우)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2912"/>
+        <source>Minimum Display Value (required)</source>
+        <translation>최소 표시 값 (필수)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2913"/>
+        <source>Lower bound of the gauge or bar display range</source>
+        <translation>게이지 또는 막대 표시 범위의 하한</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2925"/>
+        <source>Maximum Display Value (required)</source>
+        <translation>최대 표시 값 (필수)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2926"/>
+        <source>Upper bound of the gauge or bar display range</source>
+        <translation>게이지 또는 막대 표시 범위의 상한</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2938"/>
+        <source>Alarm: Low Threshold (optional)</source>
+        <translation>경고: 낮은 임계값 (선택 사항)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2940"/>
+        <source>Triggers a visual alarm when the value drops below this threshold</source>
+        <translation>값이 이 임계값 아래로 떨어지면 시각적 경고를 트리거합니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2952"/>
+        <source>Alarm: High Threshold (optional)</source>
+        <translation>경고: 높은 임계값 (선택 사항)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2954"/>
+        <source>Triggers a visual alarm when the value exceeds this threshold</source>
+        <translation>값이 이 임계값을 초과하면 시각적 경고가 발생합니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
+        <source>LED Display Settings</source>
+        <translation>LED 디스플레이 설정</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2979"/>
+        <source>Enable visual status monitoring using an LED display</source>
+        <translation>LED 디스플레이를 사용하여 시각적 상태 모니터링 활성화</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2991"/>
+        <source>LED On Threshold (required)</source>
+        <translation>LED 켜짐 임계값 (필수)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2993"/>
+        <source>LED lights up when value meets or exceeds this threshold</source>
+        <translation>값이 이 임계값에 도달하거나 초과하면 LED가 켜집니다</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3116"/>
+        <source>Yes</source>
+        <translation>예</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3676"/>
         <source>File open error</source>
         <translation>파일 열기 오류</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="871"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2193"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="844"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2220"/>
         <source>Untitled Project</source>
         <translation>제목 없음 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="914"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="746"/>
+        <source>Serial Studio Project Files (*.ssproj)</source>
+        <translation>Serial Studio 프로젝트 파일 (*.ssproj)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="886"/>
         <source>Select Project File</source>
         <translation>프로젝트 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="915"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="887"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>프로젝트 파일 (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1039"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1016"/>
         <source>Legacy frame parser function updated</source>
         <translation>레거시 프레임 파서 함수가 업데이트되었습니다</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1040"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1017"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>프로젝트에서 '구분자' 인수를 사용하는 레거시 프레임 파서 함수를 사용했습니다. 자동으로 새 형식으로 마이그레이션되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1072"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1049"/>
         <source>Switch Serial Studio to Project Mode?</source>
         <translation>Serial Studio를 프로젝트 모드로 전환하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1073"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1050"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
         <translation>이 작업 모드는 프로젝트 파일에서 대시보드를 로드하고 표시하는 데 필요합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1101"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1078"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>그룹 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1102"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1143"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1181"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1079"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1120"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1158"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>이 작업은 취소할 수 없습니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1142"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1119"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>작업 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1180"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1157"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>데이터셋 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1232"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1277"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1312"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1209"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1254"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1289"/>
         <source>%1 (Copy)</source>
         <translation>%1 (복사본)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1351"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1413"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1328"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1390"/>
         <source>Group</source>
         <translation>그룹</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1441"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1418"/>
         <source>New Dataset</source>
         <translation>새 데이터셋</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1444"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1421"/>
         <source>New Plot</source>
         <translation>새 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1448"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1425"/>
         <source>New FFT Plot</source>
         <translation>새 FFT 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1452"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1429"/>
         <source>New Level Indicator</source>
         <translation>새 레벨 표시기</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1456"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1433"/>
         <source>New Gauge</source>
         <translation>새 게이지</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1460"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1437"/>
         <source>New Compass</source>
         <translation>새 나침반</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1464"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1445"/>
         <source>New LED Indicator</source>
         <translation>새 LED 표시기</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1600"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1581"/>
         <source>New Action</source>
         <translation>새 작업</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1759"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1740"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>그룹 수준 위젯을 변경하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1760"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1741"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>이 그룹의 기존 데이터 세트가 삭제됩니다</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1817"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1818"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1819"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1810"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1811"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1812"/>
         <source>Accelerometer %1</source>
         <translation>가속도계 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1863"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1864"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1865"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1868"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1869"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1870"/>
         <source>Gyro %1</source>
         <translation>자이로 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1906"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1923"/>
         <source>Latitude</source>
         <translation>위도</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1907"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1924"/>
         <source>Longitude</source>
         <translation>경도</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1908"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1925"/>
         <source>Altitude</source>
         <translation>고도</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1944"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1973"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1945"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1974"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1946"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1975"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2060"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2089"/>
         <source>Frame Parser Code</source>
         <translation>프레임 파서 코드</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2191"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2339"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2403"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2602"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2218"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2373"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2441"/>
         <source>Title</source>
         <translation>제목</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2194"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2221"/>
         <source>Project name/description</source>
         <translation>프로젝트 이름/설명</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2205"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2233"/>
         <source>Data Conversion Method</source>
         <translation>데이터 변환 방법</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2207"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2235"/>
         <source>Input data format for frame parser</source>
         <translation>프레임 파서의 입력 데이터 형식</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2220"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2249"/>
         <source>Frame Detection</source>
         <translation>프레임 감지</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2222"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2251"/>
         <source>Strategy used for identifying frame data</source>
         <translation>프레임 데이터 식별에 사용되는 전략</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2239"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2269"/>
         <source>Frame Start Delimeter</source>
         <translation>프레임 시작 구분자</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2242"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2272"/>
         <source>String marking the start of a frame</source>
         <translation>프레임의 시작을 표시하는 문자열</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2258"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2289"/>
         <source>Frame End Delimeter</source>
         <translation>프레임 종료 구분자</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2261"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2292"/>
         <source>String marking the end of a frame</source>
         <translation>프레임의 끝을 표시하는 문자열</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2275"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2307"/>
         <source>Hexadecimal Delimeters</source>
         <translation>16진수 구분자</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2277"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2309"/>
         <source>Use hexadecimal delimiters for data frames</source>
         <translation>데이터 프레임에 16진수 구분자를 사용</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2291"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2324"/>
         <source>Checksum Algorithm</source>
         <translation>체크섬 알고리즘</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2293"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2326"/>
         <source>Checksum algorithm used for frame validation</source>
         <translation>프레임 검증에 사용되는 체크섬 알고리즘</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2341"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2375"/>
         <source>Untitled Group</source>
         <translation>제목 없는 그룹</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2342"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2376"/>
         <source>Name or description of the group</source>
         <translation>그룹의 이름 또는 설명</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2370"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2680"/>
+        <source>Visual Widget</source>
+        <translation type="vanished">시각적 위젯</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2882"/>
         <source>Widget</source>
         <translation>위젯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2372"/>
         <source>Group display widget (optional)</source>
-        <translation>그룹 표시 위젯 (선택 사항)</translation>
+        <translation type="vanished">그룹 표시 위젯 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2405"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2443"/>
         <source>Untitled Action</source>
         <translation>제목 없는 작업</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2406"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2444"/>
         <source>Name or description of the action</source>
         <translation>작업의 이름 또는 설명</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2416"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2455"/>
         <source>Icon</source>
         <translation>아이콘</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2418"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2457"/>
         <source>Default Icon</source>
         <translation>기본 아이콘</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2419"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2458"/>
         <source>Icon to display in the dashboard</source>
         <translation>대시보드에 표시할 아이콘</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2428"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2468"/>
         <source>Binary Data</source>
         <translation>이진 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2431"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2471"/>
         <source>Send binary data when the action is triggered.</source>
         <translation>작업이 실행될 때 이진 데이터를 전송합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2444"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2485"/>
         <source>TX Data (Hex)</source>
         <translation>TX 데이터 (16진수)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2446"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2463"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2487"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2505"/>
         <source>Command</source>
         <translation>명령</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2447"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2464"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2488"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2506"/>
         <source>Data to transmit when the action is triggered.</source>
         <translation>작업이 실행될 때 전송할 데이터.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2461"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2503"/>
         <source>TX Data</source>
         <translation>TX 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2493"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2536"/>
         <source>EOL Sequence</source>
         <translation>EOL 시퀀스</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2495"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2538"/>
         <source>End-of-line (EOL) sequence to use</source>
         <translation>사용할 줄 끝(EOL) 시퀀스</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2505"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2549"/>
         <source>Auto Execute on Connect</source>
         <translation>연결 시 자동 실행</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2509"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2553"/>
         <source>Trigger this action automatically when a device connects.</source>
         <translation>장치가 연결될 때 이 동작을 자동으로 트리거합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2521"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2566"/>
         <source>Timer Mode</source>
         <translation>타이머 모드</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2523"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2568"/>
         <source>How and when the timer should activate.</source>
         <translation>타이머가 어떻게 그리고 언제 활성화되어야 하는지.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2536"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2538"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2582"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2584"/>
         <source>Timer Interval (ms)</source>
         <translation>타이머 간격 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2540"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2586"/>
         <source>Interval in milliseconds between each timer-triggered action.</source>
         <translation>각 타이머 트리거 동작 사이의 간격(밀리초).</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2604"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2642"/>
+        <source>General Information</source>
+        <translation>일반 정보</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2654"/>
         <source>Untitled Dataset</source>
         <translation>제목 없는 데이터셋</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2605"/>
         <source>Name or description of the dataset</source>
-        <translation>데이터셋의 이름 또는 설명</translation>
+        <translation type="vanished">데이터셋의 이름 또는 설명</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2616"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2669"/>
         <source>Frame Index</source>
         <translation>프레임 인덱스</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2619"/>
         <source>Position in the frame</source>
-        <translation>프레임 내 위치</translation>
+        <translation type="vanished">프레임 내 위치</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2629"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2681"/>
         <source>Measurement Unit</source>
         <translation>측정 단위</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2631"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2682"/>
         <source>Volts, Amps, etc.</source>
         <translation>볼트, 암페어 등</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2632"/>
         <source>Unit of measurement (optional)</source>
-        <translation>측정 단위 (선택 사항)</translation>
+        <translation type="vanished">측정 단위 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2644"/>
         <source>Overview</source>
-        <translation>개요</translation>
+        <translation type="vanished">개요</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2647"/>
         <source>Include widget in overview dashboard</source>
-        <translation>개요 대시보드에 위젯 포함</translation>
+        <translation type="vanished">개요 대시보드에 위젯 포함</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2682"/>
         <source>Display widget (optional)</source>
-        <translation>표시 위젯 (선택 사항)</translation>
+        <translation type="vanished">표시 위젯 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2712"/>
         <source>Oscilloscope Plot</source>
-        <translation>오실로스코프 플롯</translation>
+        <translation type="vanished">오실로스코프 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2714"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2726"/>
         <source>Plot data in real-time</source>
         <translation>실시간으로 데이터 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2723"/>
         <source>FFT Plot</source>
-        <translation>FFT 플롯</translation>
+        <translation type="vanished">FFT 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2726"/>
         <source>Plot frequency-domain data</source>
-        <translation>주파수 도메인 데이터 플롯</translation>
+        <translation type="vanished">주파수 도메인 데이터 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2735"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2978"/>
         <source>Show in LED Panel</source>
         <translation>LED 패널에 표시</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2738"/>
         <source>Quick status monitoring</source>
-        <translation>빠른 상태 모니터링</translation>
+        <translation type="vanished">빠른 상태 모니터링</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2770"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2755"/>
         <source>X-Axis Source</source>
         <translation>X-축 소스</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2771"/>
         <source>Data series for the X-Axis</source>
-        <translation>X-축 데이터 시리즈</translation>
+        <translation type="vanished">X-축 데이터 시리즈</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2785"/>
         <source>Minimum Value</source>
-        <translation>최소값</translation>
+        <translation type="vanished">최소값</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2788"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2801"/>
         <source>Required for range widgets, optional for plots</source>
-        <translation>범위 위젯에 필요, 플롯에는 선택 사항</translation>
+        <translation type="vanished">범위 위젯에 필요, 플롯에는 선택 사항</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2798"/>
         <source>Maximum Value</source>
-        <translation>최대값</translation>
+        <translation type="vanished">최대값</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2814"/>
         <source>Alarm Low Value</source>
-        <translation>경고 낮은 값</translation>
+        <translation type="vanished">경고 낮은 값</translation>
     </message>
     <message>
         <source>Alarm Value</source>
         <translation type="vanished">경고 값</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2817"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2830"/>
         <source>Triggers alarm in bar widgets and LED panels</source>
-        <translation>바 위젯 및 LED 패널에서 경고를 트리거합니다</translation>
+        <translation type="vanished">바 위젯 및 LED 패널에서 경고를 트리거합니다</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2827"/>
         <source>Alarm High Value</source>
-        <translation>경고 높은 값</translation>
+        <translation type="vanished">경고 높은 값</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2852"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2825"/>
         <source>FFT Window Size</source>
         <translation>FFT 창 크기</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2854"/>
         <source>Samples for FFT calculation</source>
-        <translation>FFT 계산을 위한 샘플</translation>
+        <translation type="vanished">FFT 계산을 위한 샘플</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2865"/>
         <source>FFT Sampling Rate</source>
-        <translation>FFT 샘플링 속도</translation>
+        <translation type="vanished">FFT 샘플링 속도</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2867"/>
         <source>Sampling rate (Hz) for FFT calculation</source>
-        <translation>FFT 계산을 위한 샘플링 속도 (Hz)</translation>
+        <translation type="vanished">FFT 계산을 위한 샘플링 속도 (Hz)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2882"/>
         <source>LED High (On) Value</source>
-        <translation>LED 높은 (켜짐) 값</translation>
+        <translation type="vanished">LED 높은 (켜짐) 값</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2885"/>
         <source>Threshold for LED on</source>
-        <translation>LED 켜짐 임계값</translation>
+        <translation type="vanished">LED 켜짐 임계값</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2948"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3058"/>
         <source>Off</source>
         <translation>꺼짐</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2949"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3059"/>
         <source>Auto Start</source>
         <translation>자동 시작</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2950"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3060"/>
         <source>Start on Trigger</source>
         <translation>트리거 시 시작</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2951"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3061"/>
         <source>Toggle on Trigger</source>
         <translation>트리거 시 전환</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2955"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3065"/>
         <source>Plain Text (UTF8)</source>
         <translation>일반 텍스트 (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2956"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3066"/>
         <source>Hexadecimal</source>
         <translation>16진수</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2957"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3067"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2958"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3068"/>
         <source>Binary (Direct)</source>
         <translation>이진수 (직접)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3075"/>
         <source>No Checksum</source>
         <translation>체크섬 없음</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2970"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3080"/>
         <source>End Delimiter Only</source>
         <translation>종료 구분자만</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2971"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3081"/>
         <source>Start Delimiter Only</source>
         <translation>시작 구분자만</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2972"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3082"/>
         <source>Start + End Delimiter</source>
         <translation>시작 + 종료 구분자</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2973"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3083"/>
         <source>No Delimiters</source>
         <translation>구분 기호 없음</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2981"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3091"/>
         <source>Data Grid</source>
         <translation>데이터 그리드</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2982"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3092"/>
         <source>GPS Map</source>
         <translation>GPS 지도</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2983"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3093"/>
         <source>Gyroscope</source>
         <translation>자이로스코프</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2984"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3094"/>
         <source>Multiple Plot</source>
         <translation>다중 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2985"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3095"/>
         <source>Accelerometer</source>
         <translation>가속도계</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2986"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3096"/>
         <source>3D Plot</source>
         <translation>3D 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2987"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2991"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2998"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3097"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3101"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3108"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2992"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3102"/>
         <source>Bar</source>
         <translation>막대</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2993"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3103"/>
         <source>Gauge</source>
         <translation>게이지</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2994"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3104"/>
         <source>Compass</source>
         <translation>나침반</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2999"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3109"/>
         <source>New Line (\n)</source>
         <translation>새 줄 (</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3000"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3110"/>
         <source>Carriage Return (\r)</source>
         <translation>캐리지 리턴 (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3001"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3111"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3005"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3115"/>
         <source>No</source>
         <translation>아니요</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3006"/>
         <source>Linear Plot</source>
-        <translation>선형 플롯</translation>
+        <translation type="vanished">선형 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3047"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3157"/>
         <source>Save changes to frame parser code?</source>
         <translation>프레임 파서 코드의 변경 사항을 저장하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3048"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3158"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
         <translation>변경 사항을 유지하려면 '저장', 영구적으로 잃으려면 '삭제', 돌아가려면 '취소'를 선택하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3050"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3160"/>
         <source>Save Changes</source>
         <translation>변경 사항 저장</translation>
     </message>
@@ -2634,133 +2808,133 @@ To unlock this feature, please activate your license or visit the store.</source
         <translation>PEM 인증서 디렉토리 선택</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="781"/>
+        <location filename="../../src/MQTT/Client.cpp" line="792"/>
         <source>Subscription Error</source>
         <translation>구독 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="782"/>
+        <location filename="../../src/MQTT/Client.cpp" line="793"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>주제 "%1"에 구독하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="801"/>
+        <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>잘못된 MQTT 프로토콜 버전</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="802"/>
+        <location filename="../../src/MQTT/Client.cpp" line="813"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
         <translation>MQTT 브로커가 지원되지 않는 프로토콜 버전으로 인해 연결을 거부했습니다. 클라이언트와 브로커가 동일한 프로토콜 버전을 지원하는지 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="808"/>
+        <location filename="../../src/MQTT/Client.cpp" line="819"/>
         <source>Client ID Rejected</source>
         <translation>클라이언트 ID 거부됨</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="809"/>
+        <location filename="../../src/MQTT/Client.cpp" line="820"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
         <translation>브로커가 클라이언트 ID를 거부했습니다. 형식이 잘못되었거나 너무 길거나 이미 사용 중일 수 있습니다. 다른 클라이언트 ID를 사용해 보세요.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="815"/>
+        <location filename="../../src/MQTT/Client.cpp" line="826"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT 서버 사용 불가</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="816"/>
+        <location filename="../../src/MQTT/Client.cpp" line="827"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
         <translation>네트워크 연결은 설정되었지만 브로커가 현재 사용 불가능합니다. 브로커 상태를 확인하고 나중에 다시 시도하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="822"/>
-        <location filename="../../src/MQTT/Client.cpp" line="892"/>
+        <location filename="../../src/MQTT/Client.cpp" line="833"/>
+        <location filename="../../src/MQTT/Client.cpp" line="903"/>
         <source>Authentication Error</source>
         <translation>인증 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="823"/>
+        <location filename="../../src/MQTT/Client.cpp" line="834"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
         <translation>제공된 사용자 이름 또는 비밀번호가 잘못되었거나 형식이 잘못되었습니다. 자격 증명을 다시 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="828"/>
+        <location filename="../../src/MQTT/Client.cpp" line="839"/>
         <source>Authorization Error</source>
         <translation>권한 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="829"/>
+        <location filename="../../src/MQTT/Client.cpp" line="840"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
         <translation>MQTT 브로커가 권한 부족으로 연결을 거부했습니다. 계정에 필요한 접근 권한이 있는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="835"/>
+        <location filename="../../src/MQTT/Client.cpp" line="846"/>
         <source>Network or Transport Error</source>
         <translation>네트워크 또는 전송 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="836"/>
+        <location filename="../../src/MQTT/Client.cpp" line="847"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
         <translation>네트워크 또는 전송 계층 문제로 인해 예상치 못한 연결 실패가 발생했습니다. 네트워크 연결 및 브로커 설정을 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="842"/>
+        <location filename="../../src/MQTT/Client.cpp" line="853"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTT 프로토콜 위반</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="843"/>
+        <location filename="../../src/MQTT/Client.cpp" line="854"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
         <translation>클라이언트가 MQTT 프로토콜 위반을 감지하고 연결을 종료했습니다. MQTT 구현이 규정을 준수하는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="849"/>
+        <location filename="../../src/MQTT/Client.cpp" line="860"/>
         <source>Unknown Error</source>
         <translation>알 수 없는 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="850"/>
+        <location filename="../../src/MQTT/Client.cpp" line="861"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
         <translation>예기치 않은 오류가 발생했습니다. 자세한 내용은 로그를 확인하거나 애플리케이션을 다시 시작하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="855"/>
+        <location filename="../../src/MQTT/Client.cpp" line="866"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5 오류</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="856"/>
+        <location filename="../../src/MQTT/Client.cpp" line="867"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
         <translation>MQTT 프로토콜 레벨 5 오류가 발생했습니다. 자세한 내용은 브로커 로그 또는 이유 코드를 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="878"/>
+        <location filename="../../src/MQTT/Client.cpp" line="889"/>
         <source>MQTT Authentication Failed</source>
         <translation>MQTT 인증 실패</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="879"/>
+        <location filename="../../src/MQTT/Client.cpp" line="890"/>
         <source>Authentication failed: %.</source>
         <translation>인증 실패: %.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="893"/>
+        <location filename="../../src/MQTT/Client.cpp" line="904"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
         <translation>확장 인증이 필요하지만 MQTT 5.0이 활성화되어 있지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="902"/>
+        <location filename="../../src/MQTT/Client.cpp" line="913"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="906"/>
+        <location filename="../../src/MQTT/Client.cpp" line="917"/>
         <source>MQTT Authentication Required</source>
         <translation>MQTT 인증 필요</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="907"/>
+        <location filename="../../src/MQTT/Client.cpp" line="918"/>
         <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
@@ -2769,22 +2943,22 @@ Please provide the necessary credentials.</source>
 필요한 자격 증명을 제공하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="915"/>
+        <location filename="../../src/MQTT/Client.cpp" line="926"/>
         <source>Enter MQTT Username</source>
         <translation>MQTT 사용자 이름 입력</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="916"/>
+        <location filename="../../src/MQTT/Client.cpp" line="927"/>
         <source>Username:</source>
         <translation>사용자 이름:</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="922"/>
+        <location filename="../../src/MQTT/Client.cpp" line="933"/>
         <source>Enter MQTT Password</source>
         <translation>MQTT 비밀번호 입력</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="923"/>
+        <location filename="../../src/MQTT/Client.cpp" line="934"/>
         <source>Password:</source>
         <translation>비밀번호:</translation>
     </message>
@@ -3003,12 +3177,12 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Misc::ModuleManager</name>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="441"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="440"/>
         <source>To apply this change, %1 needs to restart.</source>
         <translation>이 변경 사항을 적용하려면 %1을(를) 다시 시작해야 합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="442"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="441"/>
         <source>Would you like to restart now?</source>
         <translation>지금 다시 시작하시겠습니까?</translation>
     </message>
@@ -3176,6 +3350,14 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="223"/>
         <source>Multicast</source>
         <translation>멀티캐스트</translation>
+    </message>
+</context>
+<context>
+    <name>PlotWidget</name>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="575"/>
+        <source>%1, %2</source>
+        <translation>%1, %2</translation>
     </message>
 </context>
 <context>
@@ -3826,22 +4008,22 @@ Please provide the necessary credentials.</source>
 <context>
     <name>TableDelegate</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="123"/>
         <source>Parameter</source>
         <translation>매개변수</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="142"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
         <source>Value</source>
         <translation>값</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="625"/>
         <source>No</source>
         <translation>아니요</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="625"/>
         <source>Yes</source>
         <translation>예</translation>
     </message>
@@ -4366,7 +4548,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1196"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1195"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>그리드 간격: %1 단위</translation>
     </message>

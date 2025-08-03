@@ -2402,9 +2402,11 @@ void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
   widget->setData(ComboBox, WidgetType);
   widget->setData(m_groupWidgets.values(), ComboBoxData);
   widget->setData(index, EditableValue);
-  widget->setData(tr("Widget"), ParameterName);
   widget->setData(kGroupView_Widget, ParameterType);
-  widget->setData(tr("Group display widget (optional)"), ParameterDescription);
+  widget->setData(tr("Composite Widget"), ParameterName);
+  widget->setData(
+      tr("Select how this group of datasets should be visualized (optional)"),
+      ParameterDescription);
   widget->setData("qrc:/rcc/icons/project-editor/model/widget.svg",
                   ParameterIcon);
   m_groupModel->appendRow(widget);
@@ -2877,7 +2879,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   widget->setData(widgetIndex, EditableValue);
   widget->setData(kDatasetView_Widget, ParameterType);
   widget->setData(m_datasetWidgets.values(), ComboBoxData);
-  widget->setData(tr("Display Widget"), ParameterName);
+  widget->setData(tr("Widget"), ParameterName);
   widget->setData(tr("Select the visual widget used to display this dataset"),
                   ParameterDescription);
   m_datasetModel->appendRow(widget);

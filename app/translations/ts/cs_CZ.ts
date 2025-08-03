@@ -223,103 +223,107 @@
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="164"/>
+        <location filename="../../src/CSV/Player.cpp" line="162"/>
         <source>Select CSV file</source>
         <translation>Vyberte CSV soubor</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="166"/>
         <source>CSV files</source>
-        <translation>CSV soubory</translation>
+        <translation type="vanished">CSV soubory</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="278"/>
+        <location filename="../../src/CSV/Player.cpp" line="164"/>
+        <source>CSV files (*.csv)</source>
+        <translation>CSV soubory (*.csv)</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="285"/>
         <source>Device Connection Active</source>
         <translation>Připojení zařízení aktivní</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="279"/>
+        <location filename="../../src/CSV/Player.cpp" line="286"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Pro použití této funkce se musíte odpojit od zařízení. Chcete pokračovat?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="343"/>
+        <location filename="../../src/CSV/Player.cpp" line="350"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Nedostatečná data v CSV souboru</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="344"/>
+        <location filename="../../src/CSV/Player.cpp" line="351"/>
         <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
         <translation>CSV soubor musí obsahovat alespoň dva snímky (řádky dat) pro pokračování. Zkontrolujte prosím soubor a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="355"/>
+        <location filename="../../src/CSV/Player.cpp" line="362"/>
         <source>Cannot read CSV file</source>
         <translation>Nelze číst CSV soubor</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="356"/>
+        <location filename="../../src/CSV/Player.cpp" line="363"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Zkontrolujte prosím oprávnění a umístění souboru</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="513"/>
+        <location filename="../../src/CSV/Player.cpp" line="520"/>
         <source>Invalid CSV</source>
         <translation>Neplatný CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="514"/>
+        <location filename="../../src/CSV/Player.cpp" line="521"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV soubor neobsahuje žádná data ani záhlaví.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="525"/>
+        <location filename="../../src/CSV/Player.cpp" line="532"/>
         <source>Select a date/time column</source>
         <translation>Vyberte sloupec s datem/časem</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="525"/>
-        <location filename="../../src/CSV/Player.cpp" line="535"/>
+        <location filename="../../src/CSV/Player.cpp" line="532"/>
+        <location filename="../../src/CSV/Player.cpp" line="542"/>
         <source>Set interval manually</source>
         <translation>Nastavit interval ručně</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="527"/>
+        <location filename="../../src/CSV/Player.cpp" line="534"/>
         <source>CSV Date/Time Selection</source>
         <translation>Výběr data/času CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="528"/>
+        <location filename="../../src/CSV/Player.cpp" line="535"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Zvolte, jak zpracovat data data/času:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="538"/>
+        <location filename="../../src/CSV/Player.cpp" line="545"/>
         <source>Set Interval</source>
         <translation>Nastavit interval</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="539"/>
+        <location filename="../../src/CSV/Player.cpp" line="546"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Zadejte prosím interval mezi řádky v milisekundách:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="553"/>
+        <location filename="../../src/CSV/Player.cpp" line="560"/>
         <source>Select Date/Time Column</source>
         <translation>Vyberte sloupec data/času</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="554"/>
+        <location filename="../../src/CSV/Player.cpp" line="561"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Vyberte prosím sloupec, který obsahuje data data/času:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="563"/>
+        <location filename="../../src/CSV/Player.cpp" line="570"/>
         <source>Invalid Selection</source>
         <translation>Neplatný výběr</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="564"/>
+        <location filename="../../src/CSV/Player.cpp" line="571"/>
         <source>The selected column is not valid.</source>
         <translation>Vybraný sloupec není platný.</translation>
     </message>
@@ -1344,7 +1348,7 @@
         <translation>Žádný soubor nebyl vybrán...</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="121"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="119"/>
         <source>Select file to transmit</source>
         <translation>Vyberte soubor k přenosu</translation>
     </message>
@@ -1428,29 +1432,29 @@
         <translation>Zkontrolujte oprávnění a umístění souboru</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="590"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="626"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="597"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="634"/>
         <source>Channel %1</source>
         <translation>Kanál %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="600"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="608"/>
         <source>Audio Input</source>
         <translation>Vstup zvuku</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="653"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="663"/>
         <source>Multiple Plots</source>
         <translation>Více grafů</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="606"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="635"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="614"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="643"/>
         <source>Quick Plot</source>
         <translation>Rychlý graf</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="640"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="649"/>
         <source>Quick Plot Data</source>
         <translation>Data pro rychlý graf</translation>
     </message>
@@ -1458,57 +1462,57 @@
 <context>
     <name>JSON::FrameParser</name>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="243"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="245"/>
         <source>Frame parser code updated successfully!</source>
         <translation>Kód analyzátoru rámců byl úspěšně aktualizován!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="244"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="246"/>
         <source>No errors have been detected in the code.</source>
         <translation>V kódu nebyly zjištěny žádné chyby.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="284"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="304"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="328"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="288"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="308"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="332"/>
         <source>Frame parser error!</source>
         <translation>Chyba analyzátoru rámců!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="285"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="289"/>
         <source>The 'parse' function is not declared or is not callable!</source>
         <translation>Funkce 'parse' není deklarována nebo není volatelná!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="305"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="329"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="309"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="333"/>
         <source>No valid 'parse' function declaration found in the script!</source>
         <translation>Ve skriptu nebylo nalezeno platné deklarování funkce 'parse'!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="314"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="318"/>
         <source>Legacy frame parser function detected</source>
         <translation>Detekována funkce starého analyzátoru rámců</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="315"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="319"/>
         <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
         <translation>Funkce 'parse' má dva argumenty ('%1', '%2'), což naznačuje použití starého formátu. Aktualizujte ji prosím na nový formát, který bere jako argument pouze data rámce.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="422"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="443"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="426"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="447"/>
         <source>The document has been modified!</source>
         <translation>Dokument byl změněn!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="423"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="444"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="427"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="448"/>
         <source>Are you sure you want to continue?</source>
         <translation>Jste si jisti, že chcete pokračovat?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="452"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="455"/>
         <source>Select Javascript file to import</source>
         <translation>Vyberte soubor Javascript k importu</translation>
     </message>
@@ -1516,717 +1520,887 @@
 <context>
     <name>JSON::ProjectModel</name>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="282"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="284"/>
         <source>New Project</source>
         <translation>Nový projekt</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="347"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="349"/>
         <source>Samples</source>
         <translation>Vzorky</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="688"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="690"/>
         <source>Do you want to save your changes?</source>
         <translation>Chcete uložit své změny?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="689"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="691"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Máte neuložené úpravy v tomto projektu!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="724"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="726"/>
         <source>Project error</source>
         <translation>Chyba projektu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="725"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="727"/>
         <source>Project title cannot be empty!</source>
         <translation>Název projektu nesmí být prázdný!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="743"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="744"/>
         <source>Save Serial Studio Project</source>
         <translation>Uložit projekt Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="754"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2406"/>
+        <source>Composite Widget</source>
+        <translation>Složený widget</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2408"/>
+        <source>Select how this group of datasets should be visualized (optional)</source>
+        <translation>Vyberte, jak by měla být tato skupina datových sad vizualizována (volitelné)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2655"/>
+        <source>Dataset Title</source>
+        <translation>Název datové sady</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2657"/>
+        <source>Name of the dataset, used for labeling and identification</source>
+        <translation>Název datové sady, použitý pro označení a identifikaci</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2670"/>
+        <source>Frame position used for aligning datasets in time</source>
+        <translation>Pozice snímku použitá pro časové zarovnání datových sad</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2683"/>
+        <source>Unit of measurement, such as volts or amps (optional)</source>
+        <translation>Jednotka měření, jako volty nebo ampéry (volitelné)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2694"/>
+        <source>Plot Settings</source>
+        <translation>Nastavení grafu</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2724"/>
+        <source>Enable Plot Widget</source>
+        <translation>Povolit widget grafu</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2756"/>
+        <source>Choose which dataset to use for the X-Axis in plots</source>
+        <translation>Vyberte, kterou datovou sadu použít pro osu X v grafech</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2768"/>
+        <source>Minimum Plot Value (optional)</source>
+        <translation>Minimální hodnota grafu (volitelné)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2769"/>
+        <source>Lower bound for plot display range</source>
+        <translation>Dolní hranice rozsahu zobrazení grafu</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2781"/>
+        <source>Maximum Plot Value (optional)</source>
+        <translation>Maximální hodnota grafu (volitelné)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2782"/>
+        <source>Upper bound for plot display range</source>
+        <translation>Horní mez pro rozsah zobrazení grafu</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2793"/>
+        <source>FFT Configuration</source>
+        <translation>Konfigurace FFT</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2806"/>
+        <source>Enable FFT Analysis</source>
+        <translation>Povolit analýzu FFT</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2807"/>
+        <source>Perform frequency-domain analysis of the dataset</source>
+        <translation>Provést analýzu dat v časové oblasti</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2827"/>
+        <source>Number of samples used for each FFT calculation window</source>
+        <translation>Počet vzorků použitých pro každé výpočetní okno FFT</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2839"/>
+        <source>FFT Sampling Rate (Hz, required)</source>
+        <translation>Vzorkovací frekvence FFT (Hz, povinné)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2841"/>
+        <source>Sampling frequency used for FFT (in Hz)</source>
+        <translation>Vzorkovací frekvence použitá pro FFT (v Hz)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2852"/>
+        <source>Widget Settings</source>
+        <translation>Nastavení widgetu</translation>
+    </message>
+    <message>
+        <source>Display Widget</source>
+        <translation type="vanished">Zobrazit widget</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2883"/>
+        <source>Select the visual widget used to display this dataset</source>
+        <translation>Vyberte vizuální widget použitý k zobrazení této datové sady</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2894"/>
+        <source>Show in Overview</source>
+        <translation>Zobrazit v přehledu</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2896"/>
+        <source>Display this widget in the dashboard overview (if enabled)</source>
+        <translation>Zobrazit tento widget v přehledu dashboardu (pokud je povoleno)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2912"/>
+        <source>Minimum Display Value (required)</source>
+        <translation>Minimální zobrazovaná hodnota (povinné)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2913"/>
+        <source>Lower bound of the gauge or bar display range</source>
+        <translation>Dolní hranice rozsahu zobrazení měřidla nebo sloupce</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2925"/>
+        <source>Maximum Display Value (required)</source>
+        <translation>Maximální zobrazovaná hodnota (povinné)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2926"/>
+        <source>Upper bound of the gauge or bar display range</source>
+        <translation>Horní hranice rozsahu zobrazení měřidla nebo sloupce</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2938"/>
+        <source>Alarm: Low Threshold (optional)</source>
+        <translation>Alarm: Nízký práh (volitelné)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2940"/>
+        <source>Triggers a visual alarm when the value drops below this threshold</source>
+        <translation>Spustí vizuální alarm, když hodnota klesne pod tento práh</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2952"/>
+        <source>Alarm: High Threshold (optional)</source>
+        <translation>Alarm: Vysoký práh (volitelné)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2954"/>
+        <source>Triggers a visual alarm when the value exceeds this threshold</source>
+        <translation>Spustí vizuální alarm, když hodnota překročí tento práh</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
+        <source>LED Display Settings</source>
+        <translation>Nastavení LED displeje</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2979"/>
+        <source>Enable visual status monitoring using an LED display</source>
+        <translation>Povolit vizuální sledování stavu pomocí LED displeje</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2991"/>
+        <source>LED On Threshold (required)</source>
+        <translation>Prahová hodnota pro zapnutí LED (povinné)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2993"/>
+        <source>LED lights up when value meets or exceeds this threshold</source>
+        <translation>LED se rozsvítí, když hodnota dosáhne nebo překročí tento práh</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3116"/>
+        <source>Yes</source>
+        <translation>Ano</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3676"/>
         <source>File open error</source>
         <translation>Chyba při otevírání souboru</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="871"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2193"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="844"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2220"/>
         <source>Untitled Project</source>
         <translation>Nepojmenovaný projekt</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="914"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="746"/>
+        <source>Serial Studio Project Files (*.ssproj)</source>
+        <translation>Soubory projektu Serial Studio (*.ssproj)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="886"/>
         <source>Select Project File</source>
         <translation>Vybrat soubor projektu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="915"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="887"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Soubor projektu (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1039"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1016"/>
         <source>Legacy frame parser function updated</source>
         <translation>Funkce parseru starého rámce byla aktualizována</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1040"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1017"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Váš projekt používal funkci parseru starého rámce s argumentem 'separator'. Byl automaticky převeden na nový formát.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1072"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1049"/>
         <source>Switch Serial Studio to Project Mode?</source>
         <translation>Přepnout Serial Studio do režimu projektu?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1073"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1050"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
         <translation>Tento režim je nutný pro načtení a zobrazení dashboardů ze souborů projektu.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1101"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1078"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Chcete smazat skupinu "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1102"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1143"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1181"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1079"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1120"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1158"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Tuto akci nelze vrátit zpět. Přejete si pokračovat?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1142"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1119"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Chcete smazat akci "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1180"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1157"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Chcete smazat datovou sadu "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1232"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1277"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1312"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1209"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1254"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1289"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Kopie)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1351"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1413"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1328"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1390"/>
         <source>Group</source>
         <translation>Skupina</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1441"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1418"/>
         <source>New Dataset</source>
         <translation>Nová datová sada</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1444"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1421"/>
         <source>New Plot</source>
         <translation>Nový graf</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1448"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1425"/>
         <source>New FFT Plot</source>
         <translation>Nový FFT graf</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1452"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1429"/>
         <source>New Level Indicator</source>
         <translation>Nový indikátor úrovně</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1456"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1433"/>
         <source>New Gauge</source>
         <translation>Nový ukazatel</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1460"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1437"/>
         <source>New Compass</source>
         <translation>Nový kompas</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1464"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1445"/>
         <source>New LED Indicator</source>
         <translation>Nový LED indikátor</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1600"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1581"/>
         <source>New Action</source>
         <translation>Nová akce</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1759"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1740"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Opravdu chcete změnit widget na úrovni skupiny?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1760"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1741"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Stávající datové sady pro tuto skupinu budou smazány</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1817"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1818"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1819"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1810"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1811"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1812"/>
         <source>Accelerometer %1</source>
         <translation>Akcelerometr %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1863"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1864"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1865"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1868"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1869"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1870"/>
         <source>Gyro %1</source>
         <translation>Gyroskop %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1906"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1923"/>
         <source>Latitude</source>
         <translation>Zeměpisná šířka</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1907"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1924"/>
         <source>Longitude</source>
         <translation>Zeměpisná délka</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1908"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1925"/>
         <source>Altitude</source>
         <translation>Nadmořská výška</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1944"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1973"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1945"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1974"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1946"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1975"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2060"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2089"/>
         <source>Frame Parser Code</source>
         <translation>Kód analyzátoru rámců</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2191"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2339"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2403"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2602"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2218"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2373"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2441"/>
         <source>Title</source>
         <translation>Název</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2194"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2221"/>
         <source>Project name/description</source>
         <translation>Název/projekt popis</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2205"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2233"/>
         <source>Data Conversion Method</source>
         <translation>Metoda převodu dat</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2207"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2235"/>
         <source>Input data format for frame parser</source>
         <translation>Vstupní formát dat pro analyzátor rámců</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2220"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2249"/>
         <source>Frame Detection</source>
         <translation>Detekce rámců</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2222"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2251"/>
         <source>Strategy used for identifying frame data</source>
         <translation>Strategie používaná k identifikaci dat rámce</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2239"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2269"/>
         <source>Frame Start Delimeter</source>
         <translation>Oddělovač začátku rámce</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2242"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2272"/>
         <source>String marking the start of a frame</source>
         <translation>Řetězec označující začátek rámce</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2258"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2289"/>
         <source>Frame End Delimeter</source>
         <translation>Konecní Delimetr Snímku</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2261"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2292"/>
         <source>String marking the end of a frame</source>
         <translation>Řetězec označující konec snímku</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2275"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2307"/>
         <source>Hexadecimal Delimeters</source>
         <translation>Hexadecimální Delimitery</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2277"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2309"/>
         <source>Use hexadecimal delimiters for data frames</source>
         <translation>Použijte hexadecimální delimitery pro datové snímky</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2291"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2324"/>
         <source>Checksum Algorithm</source>
         <translation>Algoritmus Kontrolního Součtu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2293"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2326"/>
         <source>Checksum algorithm used for frame validation</source>
         <translation>Algoritmus kontrolního součtu použitý pro ověření snímku</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2341"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2375"/>
         <source>Untitled Group</source>
         <translation>Nepojmenovaná Skupina</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2342"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2376"/>
         <source>Name or description of the group</source>
         <translation>Název nebo popis skupiny</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2370"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2680"/>
+        <source>Visual Widget</source>
+        <translation type="vanished">Vizuální widget</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2882"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2372"/>
         <source>Group display widget (optional)</source>
-        <translation>Zobrazovací widget skupiny (volitelně)</translation>
+        <translation type="vanished">Zobrazovací widget skupiny (volitelně)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2405"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2443"/>
         <source>Untitled Action</source>
         <translation>Nepojmenovaná akce</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2406"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2444"/>
         <source>Name or description of the action</source>
         <translation>Název nebo popis akce</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2416"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2455"/>
         <source>Icon</source>
         <translation>Ikona</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2418"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2457"/>
         <source>Default Icon</source>
         <translation>Výchozí ikona</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2419"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2458"/>
         <source>Icon to display in the dashboard</source>
         <translation>Ikona k zobrazení na panelu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2428"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2468"/>
         <source>Binary Data</source>
         <translation>Binární data</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2431"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2471"/>
         <source>Send binary data when the action is triggered.</source>
         <translation>Odeslat binární data při spuštění akce.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2444"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2485"/>
         <source>TX Data (Hex)</source>
         <translation>TX Data (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2446"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2463"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2487"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2505"/>
         <source>Command</source>
         <translation>Příkaz</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2447"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2464"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2488"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2506"/>
         <source>Data to transmit when the action is triggered.</source>
         <translation>Data k odeslání při spuštění akce.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2461"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2503"/>
         <source>TX Data</source>
         <translation>TX Data</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2493"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2536"/>
         <source>EOL Sequence</source>
         <translation>EOL Sekvence</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2495"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2538"/>
         <source>End-of-line (EOL) sequence to use</source>
         <translation>Sekvence konce řádku (EOL) k použití</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2505"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2549"/>
         <source>Auto Execute on Connect</source>
         <translation>Automatické spuštění při připojení</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2509"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2553"/>
         <source>Trigger this action automatically when a device connects.</source>
         <translation>Spusťte tuto akci automaticky, když se zařízení připojí.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2521"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2566"/>
         <source>Timer Mode</source>
         <translation>Režim časovače</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2523"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2568"/>
         <source>How and when the timer should activate.</source>
         <translation>Jak a kdy by měl časovač aktivovat.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2536"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2538"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2582"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2584"/>
         <source>Timer Interval (ms)</source>
         <translation>Interval časovače (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2540"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2586"/>
         <source>Interval in milliseconds between each timer-triggered action.</source>
         <translation>Interval v milisekundách mezi každou akcí spuštěnou časovačem.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2604"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2642"/>
+        <source>General Information</source>
+        <translation>Obecné informace</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2654"/>
         <source>Untitled Dataset</source>
         <translation>Nepojmenovaná datová sada</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2605"/>
         <source>Name or description of the dataset</source>
-        <translation>Název nebo popis datové sady</translation>
+        <translation type="vanished">Název nebo popis datové sady</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2616"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2669"/>
         <source>Frame Index</source>
         <translation>Index rámce</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2619"/>
         <source>Position in the frame</source>
-        <translation>Pozice v rámci</translation>
+        <translation type="vanished">Pozice v rámci</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2629"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2681"/>
         <source>Measurement Unit</source>
         <translation>Měrná jednotka</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2631"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2682"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volty, ampéry, atd.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2632"/>
         <source>Unit of measurement (optional)</source>
-        <translation>Jednotka měření (volitelné)</translation>
+        <translation type="vanished">Jednotka měření (volitelné)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2644"/>
         <source>Overview</source>
-        <translation>Přehled</translation>
+        <translation type="vanished">Přehled</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2647"/>
         <source>Include widget in overview dashboard</source>
-        <translation>Zahrnout widget do přehledového panelu</translation>
+        <translation type="vanished">Zahrnout widget do přehledového panelu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2682"/>
         <source>Display widget (optional)</source>
-        <translation>Zobrazit widget (volitelné)</translation>
+        <translation type="vanished">Zobrazit widget (volitelné)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2712"/>
         <source>Oscilloscope Plot</source>
-        <translation>Osciloskopický graf</translation>
+        <translation type="vanished">Osciloskopický graf</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2714"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2726"/>
         <source>Plot data in real-time</source>
         <translation>Zobrazit data v reálném čase</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2723"/>
         <source>FFT Plot</source>
-        <translation>FFT graf</translation>
+        <translation type="vanished">FFT graf</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2726"/>
         <source>Plot frequency-domain data</source>
-        <translation>Zobrazit data v kmitočtové oblasti</translation>
+        <translation type="vanished">Zobrazit data v kmitočtové oblasti</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2735"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2978"/>
         <source>Show in LED Panel</source>
         <translation>Zobrazit na LED panelu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2738"/>
         <source>Quick status monitoring</source>
-        <translation>Rychlé sledování stavu</translation>
+        <translation type="vanished">Rychlé sledování stavu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2770"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2755"/>
         <source>X-Axis Source</source>
         <translation>Zdroj osy X</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2771"/>
         <source>Data series for the X-Axis</source>
-        <translation>Datová řada pro osu X</translation>
+        <translation type="vanished">Datová řada pro osu X</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2785"/>
         <source>Minimum Value</source>
-        <translation>Minimální hodnota</translation>
+        <translation type="vanished">Minimální hodnota</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2788"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2801"/>
         <source>Required for range widgets, optional for plots</source>
-        <translation>Požadováno pro rozsahové widgety, volitelné pro grafy</translation>
+        <translation type="vanished">Požadováno pro rozsahové widgety, volitelné pro grafy</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2798"/>
         <source>Maximum Value</source>
-        <translation>Maximální hodnota</translation>
+        <translation type="vanished">Maximální hodnota</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2814"/>
         <source>Alarm Low Value</source>
-        <translation>Hodnota nízkého alarmu</translation>
+        <translation type="vanished">Hodnota nízkého alarmu</translation>
     </message>
     <message>
         <source>Alarm Value</source>
         <translation type="vanished">Hodnota alarmu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2817"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2830"/>
         <source>Triggers alarm in bar widgets and LED panels</source>
-        <translation>Spouští alarm v panelových widgetech a LED panelech</translation>
+        <translation type="vanished">Spouští alarm v panelových widgetech a LED panelech</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2827"/>
         <source>Alarm High Value</source>
-        <translation>Hodnota vysokého alarmu</translation>
+        <translation type="vanished">Hodnota vysokého alarmu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2852"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2825"/>
         <source>FFT Window Size</source>
         <translation>Velikost FFT okna</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2854"/>
         <source>Samples for FFT calculation</source>
-        <translation>Vzorky pro výpočet FFT</translation>
+        <translation type="vanished">Vzorky pro výpočet FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2865"/>
         <source>FFT Sampling Rate</source>
-        <translation>Vzorkovací frekvence FFT</translation>
+        <translation type="vanished">Vzorkovací frekvence FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2867"/>
         <source>Sampling rate (Hz) for FFT calculation</source>
-        <translation>Vzorkovací frekvence (Hz) pro výpočet FFT</translation>
+        <translation type="vanished">Vzorkovací frekvence (Hz) pro výpočet FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2882"/>
         <source>LED High (On) Value</source>
-        <translation>Hodnota LED vysoká (Zapnuto)</translation>
+        <translation type="vanished">Hodnota LED vysoká (Zapnuto)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2885"/>
         <source>Threshold for LED on</source>
-        <translation>Prahová hodnota pro zapnutí LED</translation>
+        <translation type="vanished">Prahová hodnota pro zapnutí LED</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2948"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3058"/>
         <source>Off</source>
         <translation>Vypnuto</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2949"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3059"/>
         <source>Auto Start</source>
         <translation>Automatický start</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2950"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3060"/>
         <source>Start on Trigger</source>
         <translation>Spustit na spouštěč</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2951"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3061"/>
         <source>Toggle on Trigger</source>
         <translation>Přepnout na spouštěč</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2955"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3065"/>
         <source>Plain Text (UTF8)</source>
         <translation>Prostý text (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2956"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3066"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimální</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2957"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3067"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2958"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3068"/>
         <source>Binary (Direct)</source>
         <translation>Binární (Přímé)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3075"/>
         <source>No Checksum</source>
         <translation>Bez kontrolního součtu</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2970"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3080"/>
         <source>End Delimiter Only</source>
         <translation>Pouze koncový oddělovač</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2971"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3081"/>
         <source>Start Delimiter Only</source>
         <translation>Pouze počáteční oddělovač</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2972"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3082"/>
         <source>Start + End Delimiter</source>
         <translation>Počáteční + koncový oddělovač</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2973"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3083"/>
         <source>No Delimiters</source>
         <translation>Žádné oddělovače</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2981"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3091"/>
         <source>Data Grid</source>
         <translation>Datová mřížka</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2982"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3092"/>
         <source>GPS Map</source>
         <translation>GPS mapa</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2983"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3093"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2984"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3094"/>
         <source>Multiple Plot</source>
         <translation>Vícenásobný graf</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2985"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3095"/>
         <source>Accelerometer</source>
         <translation>Akcelerometr</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2986"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3096"/>
         <source>3D Plot</source>
         <translation>3D graf</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2987"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2991"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2998"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3097"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3101"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3108"/>
         <source>None</source>
         <translation>Žádný</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2992"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3102"/>
         <source>Bar</source>
         <translation>Sloupec</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2993"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3103"/>
         <source>Gauge</source>
         <translation>Měřidlo</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2994"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3104"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2999"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3109"/>
         <source>New Line (\n)</source>
         <translation>Nový řádek (</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3000"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3110"/>
         <source>Carriage Return (\r)</source>
         <translation>Návrat vozíku (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3001"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3111"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3005"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3115"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3006"/>
         <source>Linear Plot</source>
-        <translation>Lineární graf</translation>
+        <translation type="vanished">Lineární graf</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3047"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3157"/>
         <source>Save changes to frame parser code?</source>
         <translation>Uložit změny do kódu analyzátoru rámců?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3048"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3158"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
         <translation>Vyberte 'Uložit' pro zachování změn, 'Zahodit' pro jejich trvalou ztrátu, nebo 'Zrušit' pro návrat.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3050"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3160"/>
         <source>Save Changes</source>
         <translation>Uložit změny</translation>
     </message>
@@ -2634,133 +2808,133 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
         <translation>Vyberte adresář certifikátů PEM</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="781"/>
+        <location filename="../../src/MQTT/Client.cpp" line="792"/>
         <source>Subscription Error</source>
         <translation>Chyba přihlášení</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="782"/>
+        <location filename="../../src/MQTT/Client.cpp" line="793"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Nepodařilo se přihlásit k tématu „%1“.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="801"/>
+        <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Neplatná verze protokolu MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="802"/>
+        <location filename="../../src/MQTT/Client.cpp" line="813"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
         <translation>MQTT broker odmítl připojení kvůli nepodporované verzi protokolu. Ujistěte se, že váš klient a broker podporují stejnou verzi protokolu.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="808"/>
+        <location filename="../../src/MQTT/Client.cpp" line="819"/>
         <source>Client ID Rejected</source>
         <translation>ID klienta odmítnuto</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="809"/>
+        <location filename="../../src/MQTT/Client.cpp" line="820"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
         <translation>Broker odmítl ID klienta. Může být poškozené, příliš dlouhé nebo již použité. Zkuste použít jiné ID klienta.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="815"/>
+        <location filename="../../src/MQTT/Client.cpp" line="826"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT server nedostupný</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="816"/>
+        <location filename="../../src/MQTT/Client.cpp" line="827"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
         <translation>Síťové připojení bylo navázáno, ale broker je momentálně nedostupný. Ověřte stav brokeru a zkuste to znovu později.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="822"/>
-        <location filename="../../src/MQTT/Client.cpp" line="892"/>
+        <location filename="../../src/MQTT/Client.cpp" line="833"/>
+        <location filename="../../src/MQTT/Client.cpp" line="903"/>
         <source>Authentication Error</source>
         <translation>Chyba ověření</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="823"/>
+        <location filename="../../src/MQTT/Client.cpp" line="834"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
         <translation>Poskytnuté uživatelské jméno nebo heslo je nesprávné nebo špatně formátované. Zkontrolujte své přihlašovací údaje a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="828"/>
+        <location filename="../../src/MQTT/Client.cpp" line="839"/>
         <source>Authorization Error</source>
         <translation>Chyba autorizace</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="829"/>
+        <location filename="../../src/MQTT/Client.cpp" line="840"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
         <translation>MQTT broker odmítl připojení kvůli nedostatečným oprávněním. Ujistěte se, že váš účet má potřebná přístupová práva.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="835"/>
+        <location filename="../../src/MQTT/Client.cpp" line="846"/>
         <source>Network or Transport Error</source>
         <translation>Chyba sítě nebo přenosu</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="836"/>
+        <location filename="../../src/MQTT/Client.cpp" line="847"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
         <translation>Došlo k problému na síťové nebo transportní vrstvě, což způsobilo neočekávané selhání připojení. Zkontrolujte své síťové připojení a nastavení brokeru.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="842"/>
+        <location filename="../../src/MQTT/Client.cpp" line="853"/>
         <source>MQTT Protocol Violation</source>
         <translation>Porušení protokolu MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="843"/>
+        <location filename="../../src/MQTT/Client.cpp" line="854"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
         <translation>Klient zjistil porušení protokolu MQTT a ukončil připojení. Zkontrolujte, zda vaše implementace MQTT odpovídá normám.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="849"/>
+        <location filename="../../src/MQTT/Client.cpp" line="860"/>
         <source>Unknown Error</source>
         <translation>Neznámá chyba</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="850"/>
+        <location filename="../../src/MQTT/Client.cpp" line="861"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
         <translation>Došlo k neočekávané chybě. Zkontrolujte protokoly pro více podrobností nebo restartujte aplikaci.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="855"/>
+        <location filename="../../src/MQTT/Client.cpp" line="866"/>
         <source>MQTT 5 Error</source>
         <translation>Chyba MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="856"/>
+        <location filename="../../src/MQTT/Client.cpp" line="867"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
         <translation>Došlo k chybě na úrovni protokolu MQTT 5. Zkontrolujte protokoly brokeru nebo kódy důvodů pro více podrobností.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="878"/>
+        <location filename="../../src/MQTT/Client.cpp" line="889"/>
         <source>MQTT Authentication Failed</source>
         <translation>Selhání ověření MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="879"/>
+        <location filename="../../src/MQTT/Client.cpp" line="890"/>
         <source>Authentication failed: %.</source>
         <translation>Ověření selhalo: %.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="893"/>
+        <location filename="../../src/MQTT/Client.cpp" line="904"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
         <translation>Je vyžadováno rozšířené ověření, ale MQTT 5.0 není povoleno.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="902"/>
+        <location filename="../../src/MQTT/Client.cpp" line="913"/>
         <source>Unknown</source>
         <translation>Neznámé</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="906"/>
+        <location filename="../../src/MQTT/Client.cpp" line="917"/>
         <source>MQTT Authentication Required</source>
         <translation>Vyžadováno ověření MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="907"/>
+        <location filename="../../src/MQTT/Client.cpp" line="918"/>
         <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
@@ -2769,22 +2943,22 @@ Please provide the necessary credentials.</source>
 Poskytněte prosím potřebné údaje.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="915"/>
+        <location filename="../../src/MQTT/Client.cpp" line="926"/>
         <source>Enter MQTT Username</source>
         <translation>Zadejte uživatelské jméno MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="916"/>
+        <location filename="../../src/MQTT/Client.cpp" line="927"/>
         <source>Username:</source>
         <translation>Uživatelské jméno:</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="922"/>
+        <location filename="../../src/MQTT/Client.cpp" line="933"/>
         <source>Enter MQTT Password</source>
         <translation>Zadejte MQTT heslo</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="923"/>
+        <location filename="../../src/MQTT/Client.cpp" line="934"/>
         <source>Password:</source>
         <translation>Heslo:</translation>
     </message>
@@ -3003,12 +3177,12 @@ Poskytněte prosím potřebné údaje.</translation>
 <context>
     <name>Misc::ModuleManager</name>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="441"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="440"/>
         <source>To apply this change, %1 needs to restart.</source>
         <translation>Pro aplikaci této změny je třeba, aby se %1 restartoval.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="442"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="441"/>
         <source>Would you like to restart now?</source>
         <translation>Chcete nyní restartovat?</translation>
     </message>
@@ -3176,6 +3350,14 @@ Poskytněte prosím potřebné údaje.</translation>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="223"/>
         <source>Multicast</source>
         <translation>Multicast</translation>
+    </message>
+</context>
+<context>
+    <name>PlotWidget</name>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="575"/>
+        <source>%1, %2</source>
+        <translation>%1, %2</translation>
     </message>
 </context>
 <context>
@@ -3826,22 +4008,22 @@ Poskytněte prosím potřebné údaje.</translation>
 <context>
     <name>TableDelegate</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="123"/>
         <source>Parameter</source>
         <translation>Parametr</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="142"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
         <source>Value</source>
         <translation>Hodnota</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="625"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="625"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
@@ -4366,7 +4548,7 @@ Poskytněte prosím potřebné údaje.</translation>
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1196"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1195"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Interval mřížky: %1 jednotka(y)</translation>
     </message>

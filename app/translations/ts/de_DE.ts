@@ -223,103 +223,107 @@
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="164"/>
+        <location filename="../../src/CSV/Player.cpp" line="162"/>
         <source>Select CSV file</source>
         <translation>CSV-Datei auswählen</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="166"/>
         <source>CSV files</source>
-        <translation>CSV-Dateien</translation>
+        <translation type="vanished">CSV-Dateien</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="278"/>
+        <location filename="../../src/CSV/Player.cpp" line="164"/>
+        <source>CSV files (*.csv)</source>
+        <translation>CSV-Dateien (*.csv)</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="285"/>
         <source>Device Connection Active</source>
         <translation>Geräteverbindung aktiv</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="279"/>
+        <location filename="../../src/CSV/Player.cpp" line="286"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Um diese Funktion zu nutzen, müssen Sie die Verbindung zum Gerät trennen. Möchten Sie fortfahren?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="343"/>
+        <location filename="../../src/CSV/Player.cpp" line="350"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Unzureichende Daten in der CSV-Datei</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="344"/>
+        <location filename="../../src/CSV/Player.cpp" line="351"/>
         <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
         <translation>Die CSV-Datei muss mindestens zwei Frames (Datenzeilen) enthalten, um fortzufahren. Bitte überprüfen Sie die Datei und versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="355"/>
+        <location filename="../../src/CSV/Player.cpp" line="362"/>
         <source>Cannot read CSV file</source>
         <translation>CSV-Datei kann nicht gelesen werden</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="356"/>
+        <location filename="../../src/CSV/Player.cpp" line="363"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Bitte überprüfen Sie die Dateiberechtigungen und den Speicherort</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="513"/>
+        <location filename="../../src/CSV/Player.cpp" line="520"/>
         <source>Invalid CSV</source>
         <translation>Ungültige CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="514"/>
+        <location filename="../../src/CSV/Player.cpp" line="521"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>Die CSV-Datei enthält keine Daten oder Kopfzeilen.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="525"/>
+        <location filename="../../src/CSV/Player.cpp" line="532"/>
         <source>Select a date/time column</source>
         <translation>Wählen Sie eine Datums-/Zeitspalte aus</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="525"/>
-        <location filename="../../src/CSV/Player.cpp" line="535"/>
+        <location filename="../../src/CSV/Player.cpp" line="532"/>
+        <location filename="../../src/CSV/Player.cpp" line="542"/>
         <source>Set interval manually</source>
         <translation>Intervall manuell festlegen</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="527"/>
+        <location filename="../../src/CSV/Player.cpp" line="534"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV Datum/Uhrzeit Auswahl</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="528"/>
+        <location filename="../../src/CSV/Player.cpp" line="535"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Wählen Sie, wie die Datum/Uhrzeit-Daten behandelt werden sollen:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="538"/>
+        <location filename="../../src/CSV/Player.cpp" line="545"/>
         <source>Set Interval</source>
         <translation>Intervall festlegen</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="539"/>
+        <location filename="../../src/CSV/Player.cpp" line="546"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Bitte geben Sie das Intervall zwischen den Zeilen in Millisekunden ein:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="553"/>
+        <location filename="../../src/CSV/Player.cpp" line="560"/>
         <source>Select Date/Time Column</source>
         <translation>Datum/Uhrzeit-Spalte auswählen</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="554"/>
+        <location filename="../../src/CSV/Player.cpp" line="561"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Bitte wählen Sie die Spalte, die die Datum/Uhrzeit-Daten enthält:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="563"/>
+        <location filename="../../src/CSV/Player.cpp" line="570"/>
         <source>Invalid Selection</source>
         <translation>Ungültige Auswahl</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="564"/>
+        <location filename="../../src/CSV/Player.cpp" line="571"/>
         <source>The selected column is not valid.</source>
         <translation>Die ausgewählte Spalte ist nicht gültig.</translation>
     </message>
@@ -1344,7 +1348,7 @@
         <translation>Keine Datei ausgewählt...</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="121"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="119"/>
         <source>Select file to transmit</source>
         <translation>Datei zum Übertragen auswählen</translation>
     </message>
@@ -1428,29 +1432,29 @@
         <translation>Bitte überprüfen Sie die Dateiberechtigungen und den Speicherort</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="590"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="626"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="597"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="634"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="600"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="608"/>
         <source>Audio Input</source>
         <translation>Audioeingang</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="653"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="663"/>
         <source>Multiple Plots</source>
         <translation>Mehrere Diagramme</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="606"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="635"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="614"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="643"/>
         <source>Quick Plot</source>
         <translation>Schnellplot</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="640"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="649"/>
         <source>Quick Plot Data</source>
         <translation>Schnellplot-Daten</translation>
     </message>
@@ -1458,57 +1462,57 @@
 <context>
     <name>JSON::FrameParser</name>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="243"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="245"/>
         <source>Frame parser code updated successfully!</source>
         <translation>Frame-Parser-Code erfolgreich aktualisiert!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="244"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="246"/>
         <source>No errors have been detected in the code.</source>
         <translation>Es wurden keine Fehler im Code erkannt.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="284"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="304"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="328"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="288"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="308"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="332"/>
         <source>Frame parser error!</source>
         <translation>Frame-Parser-Fehler!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="285"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="289"/>
         <source>The 'parse' function is not declared or is not callable!</source>
         <translation>Die 'parse'-Funktion ist nicht deklariert oder nicht aufrufbar!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="305"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="329"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="309"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="333"/>
         <source>No valid 'parse' function declaration found in the script!</source>
         <translation>Keine gültige 'parse'-Funktionsdeklaration im Skript gefunden!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="314"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="318"/>
         <source>Legacy frame parser function detected</source>
         <translation>Legacy-Frame-Parser-Funktion erkannt</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="315"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="319"/>
         <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
         <translation>Die 'parse'-Funktion hat zwei Argumente ('%1', '%2'), was auf die Verwendung des alten Formats hinweist. Bitte aktualisieren Sie es auf das neue Format, das nur die Frame-Daten als Argument nimmt.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="422"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="443"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="426"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="447"/>
         <source>The document has been modified!</source>
         <translation>Das Dokument wurde geändert!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="423"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="444"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="427"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="448"/>
         <source>Are you sure you want to continue?</source>
         <translation>Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="452"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="455"/>
         <source>Select Javascript file to import</source>
         <translation>Wählen Sie die Javascript-Datei zum Importieren aus</translation>
     </message>
@@ -1516,717 +1520,887 @@
 <context>
     <name>JSON::ProjectModel</name>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="282"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="284"/>
         <source>New Project</source>
         <translation>Neues Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="347"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="349"/>
         <source>Samples</source>
         <translation>Beispiele</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="688"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="690"/>
         <source>Do you want to save your changes?</source>
         <translation>Möchten Sie Ihre Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="689"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="691"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Sie haben ungespeicherte Änderungen in diesem Projekt!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="724"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="726"/>
         <source>Project error</source>
         <translation>Projektfehler</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="725"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="727"/>
         <source>Project title cannot be empty!</source>
         <translation>Projekttitel darf nicht leer sein!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="743"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="744"/>
         <source>Save Serial Studio Project</source>
         <translation>Serial Studio Projekt speichern</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="754"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2406"/>
+        <source>Composite Widget</source>
+        <translation>Komposit-Widget</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2408"/>
+        <source>Select how this group of datasets should be visualized (optional)</source>
+        <translation>Wählen Sie, wie diese Gruppe von Datensätzen visualisiert werden soll (optional)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2655"/>
+        <source>Dataset Title</source>
+        <translation>Datensatz-Titel</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2657"/>
+        <source>Name of the dataset, used for labeling and identification</source>
+        <translation>Name des Datensatzes, verwendet für Beschriftung und Identifikation</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2670"/>
+        <source>Frame position used for aligning datasets in time</source>
+        <translation>Rahmenposition zur zeitlichen Ausrichtung von Datensätzen</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2683"/>
+        <source>Unit of measurement, such as volts or amps (optional)</source>
+        <translation>Maßeinheit, wie Volt oder Ampere (optional)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2694"/>
+        <source>Plot Settings</source>
+        <translation>Diagrammeinstellungen</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2724"/>
+        <source>Enable Plot Widget</source>
+        <translation>Diagramm-Widget aktivieren</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2756"/>
+        <source>Choose which dataset to use for the X-Axis in plots</source>
+        <translation>Wählen Sie, welchen Datensatz für die X-Achse in Diagrammen verwendet werden soll</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2768"/>
+        <source>Minimum Plot Value (optional)</source>
+        <translation>Minimaler Diagrammwert (optional)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2769"/>
+        <source>Lower bound for plot display range</source>
+        <translation>Untere Grenze für den Anzeigebereich des Diagramms</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2781"/>
+        <source>Maximum Plot Value (optional)</source>
+        <translation>Maximaler Diagrammwert (optional)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2782"/>
+        <source>Upper bound for plot display range</source>
+        <translation>Obergrenze für den Anzeigebereich des Diagramms</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2793"/>
+        <source>FFT Configuration</source>
+        <translation>FFT-Konfiguration</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2806"/>
+        <source>Enable FFT Analysis</source>
+        <translation>FFT-Analyse aktivieren</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2807"/>
+        <source>Perform frequency-domain analysis of the dataset</source>
+        <translation>Frequenzbereichsanalyse des Datensatzes durchführen</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2827"/>
+        <source>Number of samples used for each FFT calculation window</source>
+        <translation>Anzahl der Proben für jedes FFT-Berechnungsfenster</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2839"/>
+        <source>FFT Sampling Rate (Hz, required)</source>
+        <translation>FFT-Abtastrate (Hz, erforderlich)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2841"/>
+        <source>Sampling frequency used for FFT (in Hz)</source>
+        <translation>Abtastfrequenz für FFT (in Hz)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2852"/>
+        <source>Widget Settings</source>
+        <translation>Widget-Einstellungen</translation>
+    </message>
+    <message>
+        <source>Display Widget</source>
+        <translation type="vanished">Widget anzeigen</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2883"/>
+        <source>Select the visual widget used to display this dataset</source>
+        <translation>Wählen Sie das visuelle Widget aus, das zur Anzeige dieses Datensatzes verwendet wird</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2894"/>
+        <source>Show in Overview</source>
+        <translation>In Übersicht anzeigen</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2896"/>
+        <source>Display this widget in the dashboard overview (if enabled)</source>
+        <translation>Dieses Widget in der Dashboard-Übersicht anzeigen (falls aktiviert)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2912"/>
+        <source>Minimum Display Value (required)</source>
+        <translation>Minimaler Anzeigewert (erforderlich)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2913"/>
+        <source>Lower bound of the gauge or bar display range</source>
+        <translation>Untere Grenze des Anzeigeumfangs für Messgerät oder Balken</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2925"/>
+        <source>Maximum Display Value (required)</source>
+        <translation>Maximaler Anzeigewert (erforderlich)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2926"/>
+        <source>Upper bound of the gauge or bar display range</source>
+        <translation>Obere Grenze des Anzeigeumfangs für Messgerät oder Balken</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2938"/>
+        <source>Alarm: Low Threshold (optional)</source>
+        <translation>Alarm: Niedrige Schwelle (optional)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2940"/>
+        <source>Triggers a visual alarm when the value drops below this threshold</source>
+        <translation>Löst einen visuellen Alarm aus, wenn der Wert unter diese Schwelle fällt</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2952"/>
+        <source>Alarm: High Threshold (optional)</source>
+        <translation>Alarm: Hohe Schwelle (optional)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2954"/>
+        <source>Triggers a visual alarm when the value exceeds this threshold</source>
+        <translation>Löst einen visuellen Alarm aus, wenn der Wert diesen Schwellenwert überschreitet</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
+        <source>LED Display Settings</source>
+        <translation>LED-Anzeigeeinstellungen</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2979"/>
+        <source>Enable visual status monitoring using an LED display</source>
+        <translation>Aktivieren Sie die visuelle Statusüberwachung mit einer LED-Anzeige</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2991"/>
+        <source>LED On Threshold (required)</source>
+        <translation>LED-Einschaltschwelle (erforderlich)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2993"/>
+        <source>LED lights up when value meets or exceeds this threshold</source>
+        <translation>LED leuchtet auf, wenn der Wert diesen Schwellenwert erreicht oder überschreitet</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3116"/>
+        <source>Yes</source>
+        <translation>Ja</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3676"/>
         <source>File open error</source>
         <translation>Dateiöffnungsfehler</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="871"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2193"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="844"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2220"/>
         <source>Untitled Project</source>
         <translation>Unbenanntes Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="914"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="746"/>
+        <source>Serial Studio Project Files (*.ssproj)</source>
+        <translation>Serial Studio Projektdateien (*.ssproj)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="886"/>
         <source>Select Project File</source>
         <translation>Projektdatei auswählen</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="915"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="887"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Projektdateien (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1039"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1016"/>
         <source>Legacy frame parser function updated</source>
         <translation>Legacy-Frame-Parser-Funktion aktualisiert</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1040"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1017"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Ihr Projekt verwendete eine Legacy-Frame-Parser-Funktion mit einem 'separator'-Argument. Es wurde automatisch in das neue Format migriert.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1072"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1049"/>
         <source>Switch Serial Studio to Project Mode?</source>
         <translation>Serial Studio in den Projektmodus wechseln?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1073"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1050"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
         <translation>Dieser Betriebsmodus ist erforderlich, um Dashboards aus Projektdateien zu laden und anzuzeigen.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1101"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1078"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Möchten Sie die Gruppe "%1" löschen?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1102"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1143"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1181"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1079"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1120"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1158"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Diese Aktion kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1142"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1119"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Möchten Sie die Aktion "%1" löschen?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1180"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1157"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Möchten Sie den Datensatz "%1" löschen?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1232"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1277"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1312"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1209"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1254"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1289"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Kopie)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1351"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1413"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1328"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1390"/>
         <source>Group</source>
         <translation>Gruppe</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1441"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1418"/>
         <source>New Dataset</source>
         <translation>Neuer Datensatz</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1444"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1421"/>
         <source>New Plot</source>
         <translation>Neues Diagramm</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1448"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1425"/>
         <source>New FFT Plot</source>
         <translation>Neues FFT-Diagramm</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1452"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1429"/>
         <source>New Level Indicator</source>
         <translation>Neuer Pegelanzeiger</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1456"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1433"/>
         <source>New Gauge</source>
         <translation>Neues Messgerät</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1460"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1437"/>
         <source>New Compass</source>
         <translation>Neuer Kompass</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1464"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1445"/>
         <source>New LED Indicator</source>
         <translation>Neuer LED-Anzeiger</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1600"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1581"/>
         <source>New Action</source>
         <translation>Neue Aktion</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1759"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1740"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Sind Sie sicher, dass Sie das Gruppen-Widget ändern möchten?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1760"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1741"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Vorhandene Datensätze für diese Gruppe werden gelöscht</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1817"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1818"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1819"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1810"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1811"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1812"/>
         <source>Accelerometer %1</source>
         <translation>Beschleunigungsmesser %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1863"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1864"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1865"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1868"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1869"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1870"/>
         <source>Gyro %1</source>
         <translation>Gyroskop %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1906"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1923"/>
         <source>Latitude</source>
         <translation>Breitengrad</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1907"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1924"/>
         <source>Longitude</source>
         <translation>Längengrad</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1908"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1925"/>
         <source>Altitude</source>
         <translation>Höhe</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1944"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1973"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1945"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1974"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1946"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1975"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2060"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2089"/>
         <source>Frame Parser Code</source>
         <translation>Frame-Parser-Code</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2191"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2339"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2403"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2602"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2218"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2373"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2441"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2194"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2221"/>
         <source>Project name/description</source>
         <translation>Projektname/Beschreibung</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2205"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2233"/>
         <source>Data Conversion Method</source>
         <translation>Datenumwandlungsmethode</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2207"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2235"/>
         <source>Input data format for frame parser</source>
         <translation>Eingabedatenformat für Frame-Parser</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2220"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2249"/>
         <source>Frame Detection</source>
         <translation>Rahmenerkennung</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2222"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2251"/>
         <source>Strategy used for identifying frame data</source>
         <translation>Strategie zur Identifizierung von Rahmendaten</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2239"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2269"/>
         <source>Frame Start Delimeter</source>
         <translation>Rahmenstart-Trennzeichen</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2242"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2272"/>
         <source>String marking the start of a frame</source>
         <translation>Zeichenfolge, die den Beginn eines Rahmens markiert</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2258"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2289"/>
         <source>Frame End Delimeter</source>
         <translation>Rahmenendbegrenzung</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2261"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2292"/>
         <source>String marking the end of a frame</source>
         <translation>Zeichenfolge, die das Ende eines Rahmens markiert</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2275"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2307"/>
         <source>Hexadecimal Delimeters</source>
         <translation>Hexadezimale Begrenzungen</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2277"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2309"/>
         <source>Use hexadecimal delimiters for data frames</source>
         <translation>Verwenden Sie hexadezimale Begrenzungen für Datenrahmen</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2291"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2324"/>
         <source>Checksum Algorithm</source>
         <translation>Prüfsummenalgorithmus</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2293"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2326"/>
         <source>Checksum algorithm used for frame validation</source>
         <translation>Prüfsummenalgorithmus zur Rahmenvalidierung</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2341"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2375"/>
         <source>Untitled Group</source>
         <translation>Unbenannte Gruppe</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2342"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2376"/>
         <source>Name or description of the group</source>
         <translation>Name oder Beschreibung der Gruppe</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2370"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2680"/>
+        <source>Visual Widget</source>
+        <translation type="vanished">Visuelles Widget</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2882"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2372"/>
         <source>Group display widget (optional)</source>
-        <translation>Gruppendarstellungs-Widget (optional)</translation>
+        <translation type="vanished">Gruppendarstellungs-Widget (optional)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2405"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2443"/>
         <source>Untitled Action</source>
         <translation>Unbenannte Aktion</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2406"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2444"/>
         <source>Name or description of the action</source>
         <translation>Name oder Beschreibung der Aktion</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2416"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2455"/>
         <source>Icon</source>
         <translation>Symbol</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2418"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2457"/>
         <source>Default Icon</source>
         <translation>Standardsymbol</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2419"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2458"/>
         <source>Icon to display in the dashboard</source>
         <translation>Symbol zur Anzeige im Dashboard</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2428"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2468"/>
         <source>Binary Data</source>
         <translation>Binärdaten</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2431"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2471"/>
         <source>Send binary data when the action is triggered.</source>
         <translation>Sende Binärdaten, wenn die Aktion ausgelöst wird.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2444"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2485"/>
         <source>TX Data (Hex)</source>
         <translation>TX-Daten (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2446"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2463"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2487"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2505"/>
         <source>Command</source>
         <translation>Befehl</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2447"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2464"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2488"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2506"/>
         <source>Data to transmit when the action is triggered.</source>
         <translation>Daten, die übertragen werden, wenn die Aktion ausgelöst wird.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2461"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2503"/>
         <source>TX Data</source>
         <translation>TX-Daten</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2493"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2536"/>
         <source>EOL Sequence</source>
         <translation>EOL-Sequenz</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2495"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2538"/>
         <source>End-of-line (EOL) sequence to use</source>
         <translation>Zu verwendende Zeilenendesequenz (EOL)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2505"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2549"/>
         <source>Auto Execute on Connect</source>
         <translation>Automatisch ausführen bei Verbindung</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2509"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2553"/>
         <source>Trigger this action automatically when a device connects.</source>
         <translation>Diese Aktion automatisch auslösen, wenn ein Gerät verbunden wird.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2521"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2566"/>
         <source>Timer Mode</source>
         <translation>Timer-Modus</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2523"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2568"/>
         <source>How and when the timer should activate.</source>
         <translation>Wie und wann der Timer aktiviert werden soll.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2536"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2538"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2582"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2584"/>
         <source>Timer Interval (ms)</source>
         <translation>Timer-Intervall (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2540"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2586"/>
         <source>Interval in milliseconds between each timer-triggered action.</source>
         <translation>Intervall in Millisekunden zwischen jeder Timer-aktion.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2604"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2642"/>
+        <source>General Information</source>
+        <translation>Allgemeine Informationen</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2654"/>
         <source>Untitled Dataset</source>
         <translation>Unbenanntes Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2605"/>
         <source>Name or description of the dataset</source>
-        <translation>Name oder Beschreibung des Datensatzes</translation>
+        <translation type="vanished">Name oder Beschreibung des Datensatzes</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2616"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2669"/>
         <source>Frame Index</source>
         <translation>Frame-Index</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2619"/>
         <source>Position in the frame</source>
-        <translation>Position im Frame</translation>
+        <translation type="vanished">Position im Frame</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2629"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2681"/>
         <source>Measurement Unit</source>
         <translation>Maßeinheit</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2631"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2682"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volt, Ampere, etc.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2632"/>
         <source>Unit of measurement (optional)</source>
-        <translation>Maßeinheit (optional)</translation>
+        <translation type="vanished">Maßeinheit (optional)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2644"/>
         <source>Overview</source>
-        <translation>Übersicht</translation>
+        <translation type="vanished">Übersicht</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2647"/>
         <source>Include widget in overview dashboard</source>
-        <translation>Widget im Übersichts-Dashboard einbeziehen</translation>
+        <translation type="vanished">Widget im Übersichts-Dashboard einbeziehen</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2682"/>
         <source>Display widget (optional)</source>
-        <translation>Anzeige-Widget (optional)</translation>
+        <translation type="vanished">Anzeige-Widget (optional)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2712"/>
         <source>Oscilloscope Plot</source>
-        <translation>Oszilloskop-Plot</translation>
+        <translation type="vanished">Oszilloskop-Plot</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2714"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2726"/>
         <source>Plot data in real-time</source>
         <translation>Plot-Daten in Echtzeit</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2723"/>
         <source>FFT Plot</source>
-        <translation>FFT-Diagramm</translation>
+        <translation type="vanished">FFT-Diagramm</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2726"/>
         <source>Plot frequency-domain data</source>
-        <translation>Frequenzbereich-Daten darstellen</translation>
+        <translation type="vanished">Frequenzbereich-Daten darstellen</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2735"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2978"/>
         <source>Show in LED Panel</source>
         <translation>Im LED-Panel anzeigen</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2738"/>
         <source>Quick status monitoring</source>
-        <translation>Schnelle Statusüberwachung</translation>
+        <translation type="vanished">Schnelle Statusüberwachung</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2770"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2755"/>
         <source>X-Axis Source</source>
         <translation>X-Achsen-Quelle</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2771"/>
         <source>Data series for the X-Axis</source>
-        <translation>Datenreihe für die X-Achse</translation>
+        <translation type="vanished">Datenreihe für die X-Achse</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2785"/>
         <source>Minimum Value</source>
-        <translation>Minimalwert</translation>
+        <translation type="vanished">Minimalwert</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2788"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2801"/>
         <source>Required for range widgets, optional for plots</source>
-        <translation>Erforderlich für Bereichs-Widgets, optional für Diagramme</translation>
+        <translation type="vanished">Erforderlich für Bereichs-Widgets, optional für Diagramme</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2798"/>
         <source>Maximum Value</source>
-        <translation>Maximalwert</translation>
+        <translation type="vanished">Maximalwert</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2814"/>
         <source>Alarm Low Value</source>
-        <translation>Alarm Niedriger Wert</translation>
+        <translation type="vanished">Alarm Niedriger Wert</translation>
     </message>
     <message>
         <source>Alarm Value</source>
         <translation type="vanished">Alarmwert</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2817"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2830"/>
         <source>Triggers alarm in bar widgets and LED panels</source>
-        <translation>Löst Alarm in Balken-Widgets und LED-Panels aus</translation>
+        <translation type="vanished">Löst Alarm in Balken-Widgets und LED-Panels aus</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2827"/>
         <source>Alarm High Value</source>
-        <translation>Alarm Hoher Wert</translation>
+        <translation type="vanished">Alarm Hoher Wert</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2852"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2825"/>
         <source>FFT Window Size</source>
         <translation>FFT-Fenstergröße</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2854"/>
         <source>Samples for FFT calculation</source>
-        <translation>Stichproben für FFT-Berechnung</translation>
+        <translation type="vanished">Stichproben für FFT-Berechnung</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2865"/>
         <source>FFT Sampling Rate</source>
-        <translation>FFT-Abtastrate</translation>
+        <translation type="vanished">FFT-Abtastrate</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2867"/>
         <source>Sampling rate (Hz) for FFT calculation</source>
-        <translation>Abtastrate (Hz) für FFT-Berechnung</translation>
+        <translation type="vanished">Abtastrate (Hz) für FFT-Berechnung</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2882"/>
         <source>LED High (On) Value</source>
-        <translation>LED-Hoch (Ein) Wert</translation>
+        <translation type="vanished">LED-Hoch (Ein) Wert</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2885"/>
         <source>Threshold for LED on</source>
-        <translation>Schwellenwert für LED ein</translation>
+        <translation type="vanished">Schwellenwert für LED ein</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2948"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3058"/>
         <source>Off</source>
         <translation>Aus</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2949"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3059"/>
         <source>Auto Start</source>
         <translation>Automatischer Start</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2950"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3060"/>
         <source>Start on Trigger</source>
         <translation>Start bei Trigger</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2951"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3061"/>
         <source>Toggle on Trigger</source>
         <translation>Umschalten bei Trigger</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2955"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3065"/>
         <source>Plain Text (UTF8)</source>
         <translation>Klartext (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2956"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3066"/>
         <source>Hexadecimal</source>
         <translation>Hexadezimal</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2957"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3067"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2958"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3068"/>
         <source>Binary (Direct)</source>
         <translation>Binär (Direkt)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3075"/>
         <source>No Checksum</source>
         <translation>Keine Prüfsumme</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2970"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3080"/>
         <source>End Delimiter Only</source>
         <translation>Nur Endbegrenzung</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2971"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3081"/>
         <source>Start Delimiter Only</source>
         <translation>Nur Startbegrenzung</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2972"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3082"/>
         <source>Start + End Delimiter</source>
         <translation>Start + Endbegrenzung</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2973"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3083"/>
         <source>No Delimiters</source>
         <translation>Keine Trennzeichen</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2981"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3091"/>
         <source>Data Grid</source>
         <translation>Datenraster</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2982"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3092"/>
         <source>GPS Map</source>
         <translation>GPS-Karte</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2983"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3093"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2984"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3094"/>
         <source>Multiple Plot</source>
         <translation>Mehrfachdiagramm</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2985"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3095"/>
         <source>Accelerometer</source>
         <translation>Beschleunigungsmesser</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2986"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3096"/>
         <source>3D Plot</source>
         <translation>3D-Diagramm</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2987"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2991"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2998"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3097"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3101"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3108"/>
         <source>None</source>
         <translation>Keine</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2992"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3102"/>
         <source>Bar</source>
         <translation>Balken</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2993"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3103"/>
         <source>Gauge</source>
         <translation>Messgerät</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2994"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3104"/>
         <source>Compass</source>
         <translation>Kompass</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2999"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3109"/>
         <source>New Line (\n)</source>
         <translation>Neue Zeile (</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3000"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3110"/>
         <source>Carriage Return (\r)</source>
         <translation>Wagenrücklauf (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3001"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3111"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3005"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3115"/>
         <source>No</source>
         <translation>Nein</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3006"/>
         <source>Linear Plot</source>
-        <translation>Lineares Diagramm</translation>
+        <translation type="vanished">Lineares Diagramm</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3047"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3157"/>
         <source>Save changes to frame parser code?</source>
         <translation>Änderungen am Frame-Parser-Code speichern?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3048"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3158"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
         <translation>Wählen Sie 'Speichern', um Ihre Änderungen zu behalten, 'Verwerfen', um sie dauerhaft zu verlieren, oder 'Abbrechen', um zurückzukehren.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3050"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3160"/>
         <source>Save Changes</source>
         <translation>Änderungen speichern</translation>
     </message>
@@ -2634,133 +2808,133 @@ Um diese Funktion freizuschalten, aktivieren Sie bitte Ihre Lizenz oder besuchen
         <translation>PEM-Zertifikatsverzeichnis auswählen</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="781"/>
+        <location filename="../../src/MQTT/Client.cpp" line="792"/>
         <source>Subscription Error</source>
         <translation>Abonnementfehler</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="782"/>
+        <location filename="../../src/MQTT/Client.cpp" line="793"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Anmeldung beim Thema "%1" fehlgeschlagen.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="801"/>
+        <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Ungültige MQTT-Protokollversion</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="802"/>
+        <location filename="../../src/MQTT/Client.cpp" line="813"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
         <translation>Der MQTT-Broker hat die Verbindung wegen einer nicht unterstützten Protokollversion abgelehnt. Stellen Sie sicher, dass Ihr Client und Broker dieselbe Protokollversion unterstützen.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="808"/>
+        <location filename="../../src/MQTT/Client.cpp" line="819"/>
         <source>Client ID Rejected</source>
         <translation>Client-ID abgelehnt</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="809"/>
+        <location filename="../../src/MQTT/Client.cpp" line="820"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
         <translation>Der Broker hat die Client-ID abgelehnt. Sie könnte fehlerhaft, zu lang oder bereits in Gebrauch sein. Versuchen Sie eine andere Client-ID.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="815"/>
+        <location filename="../../src/MQTT/Client.cpp" line="826"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT-Server nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="816"/>
+        <location filename="../../src/MQTT/Client.cpp" line="827"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
         <translation>Die Netzwerkverbindung wurde hergestellt, aber der Broker ist derzeit nicht verfügbar. Überprüfen Sie den Brokerstatus und versuchen Sie es später erneut.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="822"/>
-        <location filename="../../src/MQTT/Client.cpp" line="892"/>
+        <location filename="../../src/MQTT/Client.cpp" line="833"/>
+        <location filename="../../src/MQTT/Client.cpp" line="903"/>
         <source>Authentication Error</source>
         <translation>Authentifizierungsfehler</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="823"/>
+        <location filename="../../src/MQTT/Client.cpp" line="834"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
         <translation>Der angegebene Benutzername oder das Passwort ist falsch oder fehlerhaft. Überprüfen Sie Ihre Anmeldedaten und versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="828"/>
+        <location filename="../../src/MQTT/Client.cpp" line="839"/>
         <source>Authorization Error</source>
         <translation>Autorisierungsfehler</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="829"/>
+        <location filename="../../src/MQTT/Client.cpp" line="840"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
         <translation>Der MQTT-Broker hat die Verbindung aufgrund unzureichender Berechtigungen abgelehnt. Stellen Sie sicher, dass Ihr Konto die erforderlichen Zugriffsrechte hat.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="835"/>
+        <location filename="../../src/MQTT/Client.cpp" line="846"/>
         <source>Network or Transport Error</source>
         <translation>Netzwerk- oder Transportfehler</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="836"/>
+        <location filename="../../src/MQTT/Client.cpp" line="847"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
         <translation>Ein Problem in der Netzwerk- oder Transportschicht verursachte einen unerwarteten Verbindungsabbruch. Überprüfen Sie Ihre Netzwerkverbindung und Broker-Einstellungen.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="842"/>
+        <location filename="../../src/MQTT/Client.cpp" line="853"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTT-Protokollverletzung</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="843"/>
+        <location filename="../../src/MQTT/Client.cpp" line="854"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
         <translation>Der Client hat eine Verletzung des MQTT-Protokolls erkannt und die Verbindung geschlossen. Überprüfen Sie Ihre MQTT-Implementierung auf Konformität.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="849"/>
+        <location filename="../../src/MQTT/Client.cpp" line="860"/>
         <source>Unknown Error</source>
         <translation>Unbekannter Fehler</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="850"/>
+        <location filename="../../src/MQTT/Client.cpp" line="861"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
         <translation>Ein unerwarteter Fehler ist aufgetreten. Überprüfen Sie die Protokolle für weitere Details oder starten Sie die Anwendung neu.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="855"/>
+        <location filename="../../src/MQTT/Client.cpp" line="866"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5 Fehler</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="856"/>
+        <location filename="../../src/MQTT/Client.cpp" line="867"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
         <translation>Ein MQTT-Protokollfehler auf Ebene 5 ist aufgetreten. Überprüfen Sie die Broker-Protokolle oder die Fehlercodes für weitere Details.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="878"/>
+        <location filename="../../src/MQTT/Client.cpp" line="889"/>
         <source>MQTT Authentication Failed</source>
         <translation>MQTT-Authentifizierung fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="879"/>
+        <location filename="../../src/MQTT/Client.cpp" line="890"/>
         <source>Authentication failed: %.</source>
         <translation>Authentifizierung fehlgeschlagen: %.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="893"/>
+        <location filename="../../src/MQTT/Client.cpp" line="904"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
         <translation>Erweiterte Authentifizierung ist erforderlich, aber MQTT 5.0 ist nicht aktiviert.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="902"/>
+        <location filename="../../src/MQTT/Client.cpp" line="913"/>
         <source>Unknown</source>
         <translation>Unbekannt</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="906"/>
+        <location filename="../../src/MQTT/Client.cpp" line="917"/>
         <source>MQTT Authentication Required</source>
         <translation>MQTT-Authentifizierung erforderlich</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="907"/>
+        <location filename="../../src/MQTT/Client.cpp" line="918"/>
         <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
@@ -2769,22 +2943,22 @@ Please provide the necessary credentials.</source>
 Bitte geben Sie die erforderlichen Anmeldedaten ein.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="915"/>
+        <location filename="../../src/MQTT/Client.cpp" line="926"/>
         <source>Enter MQTT Username</source>
         <translation>MQTT-Benutzernamen eingeben</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="916"/>
+        <location filename="../../src/MQTT/Client.cpp" line="927"/>
         <source>Username:</source>
         <translation>Benutzername:</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="922"/>
+        <location filename="../../src/MQTT/Client.cpp" line="933"/>
         <source>Enter MQTT Password</source>
         <translation>MQTT-Passwort eingeben</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="923"/>
+        <location filename="../../src/MQTT/Client.cpp" line="934"/>
         <source>Password:</source>
         <translation>Passwort:</translation>
     </message>
@@ -3003,12 +3177,12 @@ Bitte geben Sie die erforderlichen Anmeldedaten ein.</translation>
 <context>
     <name>Misc::ModuleManager</name>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="441"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="440"/>
         <source>To apply this change, %1 needs to restart.</source>
         <translation>Um diese Änderung anzuwenden, muss %1 neu starten.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="442"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="441"/>
         <source>Would you like to restart now?</source>
         <translation>Möchten Sie jetzt neu starten?</translation>
     </message>
@@ -3176,6 +3350,14 @@ Bitte geben Sie die erforderlichen Anmeldedaten ein.</translation>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="223"/>
         <source>Multicast</source>
         <translation>Multicast</translation>
+    </message>
+</context>
+<context>
+    <name>PlotWidget</name>
+    <message>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="575"/>
+        <source>%1, %2</source>
+        <translation>%1, %2</translation>
     </message>
 </context>
 <context>
@@ -3826,22 +4008,22 @@ Bitte geben Sie die erforderlichen Anmeldedaten ein.</translation>
 <context>
     <name>TableDelegate</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="123"/>
         <source>Parameter</source>
         <translation>Parameter</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="142"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
         <source>Value</source>
         <translation>Wert</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="625"/>
         <source>No</source>
         <translation>Nein</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="508"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="625"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
@@ -4366,7 +4548,7 @@ Bitte geben Sie die erforderlichen Anmeldedaten ein.</translation>
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1196"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1195"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Rasterintervall: %1 Einheit(en)</translation>
     </message>
