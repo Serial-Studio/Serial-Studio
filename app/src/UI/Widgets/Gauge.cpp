@@ -48,8 +48,16 @@ Widgets::Gauge::Gauge(const int index, QQuickItem *parent)
     m_alarmHigh = qMax(dataset.alarmLow, dataset.alarmHigh);
     m_alarmLow = qBound(m_minValue, m_alarmLow, m_maxValue);
     m_alarmHigh = qBound(m_minValue, m_alarmHigh, m_maxValue);
-    m_alarmsDefined = (m_alarmLow > m_minValue)
-                      || (m_alarmHigh < m_maxValue && m_alarmHigh > m_minValue);
+
+    if (dataset.alarmEnabled)
+    {
+      if (m_alarmHigh == m_alarmLow)
+        m_alarmLow = m_minValue;
+
+      m_alarmsDefined
+          = (m_alarmLow > m_minValue && m_alarmLow < m_maxValue)
+            || (m_alarmHigh < m_maxValue && m_alarmHigh > m_minValue);
+    }
 
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
             &Gauge::updateData);

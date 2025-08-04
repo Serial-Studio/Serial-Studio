@@ -28,6 +28,10 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+//------------------------------------------------------------------------------
+// Standard keys for loading/offloading frame structures using JSON files
+//------------------------------------------------------------------------------
+
 namespace Keys
 {
 inline constexpr auto EOL = "eol";
@@ -62,6 +66,7 @@ inline constexpr auto AlarmLow = "alarmLow";
 inline constexpr auto AlarmHigh = "alarmHigh";
 inline constexpr auto FFTSamples = "fftSamples";
 inline constexpr auto Overview = "overviewDisplay";
+inline constexpr auto AlarmEnabled = "alarmEnabled";
 inline constexpr auto FFTSamplingRate = "fftSamplingRate";
 
 inline constexpr auto Groups = "groups";
@@ -139,6 +144,7 @@ struct alignas(8) Dataset
   bool led = false;             ///< Enables LED widget
   bool log = false;             ///< Enables logging
   bool plt = false;             ///< Enables plotting
+  bool alarmEnabled = false;    ///< Enable/disable alarm values
   bool overviewDisplay = false; ///< Show in overview
   bool isNumeric = false;       ///< True if value was parsed as numeric
   double fftMin = 0;            ///< Minimum value (for FFT)
@@ -363,6 +369,7 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
   obj.insert(Keys::Title, d.title.simplified());
   obj.insert(Keys::Value, d.value.simplified());
   obj.insert(Keys::Units, d.units.simplified());
+  obj.insert(Keys::AlarmEnabled, d.alarmEnabled);
   obj.insert(Keys::Widget, d.widget.simplified());
   obj.insert(Keys::FFTMin, qMin(d.fftMin, d.fftMax));
   obj.insert(Keys::FFTMax, qMax(d.fftMin, d.fftMax));
@@ -544,6 +551,7 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
   d.value = ss_jsr(obj, Keys::Value, "").toString().simplified();
   d.units = ss_jsr(obj, Keys::Units, "").toString().simplified();
   d.overviewDisplay = ss_jsr(obj, Keys::Overview, false).toBool();
+  d.alarmEnabled = ss_jsr(obj, Keys::AlarmEnabled, false).toBool();
   d.ledHigh = ss_jsr(obj, Keys::LedHigh, 0).toDouble();
   d.widget = ss_jsr(obj, Keys::Widget, "").toString().simplified();
   d.alarmLow = ss_jsr(obj, Keys::AlarmLow, 0).toDouble();

@@ -79,11 +79,11 @@ Item {
       property real startAngle: 135
       property real subTickLength: 4
       property color needleColor: root.color
-      property color alarmColor: Cpp_ThemeManager.colors["alarm"]
       property color tickColor: Cpp_ThemeManager.colors["widget_border"]
       property color borderColor: Cpp_ThemeManager.colors["widget_border"]
       property color backgroundColor: Cpp_ThemeManager.colors["widget_base"]
       property color minorTickColor: Cpp_ThemeManager.colors["widget_border"]
+      property color alarmColor: model.alarmsDefined ? Cpp_ThemeManager.colors["alarm"] : root.color
 
       function formatValue(val) {
         return Cpp_UI_Dashboard.formatValue(val, model.minValue, model.maxValue)

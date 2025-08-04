@@ -108,6 +108,7 @@ typedef enum
   kDatasetView_AlarmLow,         /**< Dataset alarm low value item. */
   kDatasetView_AlarmHigh,        /**< Dataset alarm high value item. */
   kDatasetView_FFT_Samples,      /**< FFT window size item. */
+  kDatasetView_AlarmEnabled,     /**< Alarm enabled status item. */
   kDatasetView_FFT_SamplingRate, /**< FFT sampling rate item. */
   kDatasetView_xAxis,            /**< Plot X axis item. */
   kDatasetView_Overview          /**< Display in Overview workspace. */
@@ -3047,15 +3048,41 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
                   ParameterDescription);
   m_datasetModel->appendRow(wgtMax);
 
+  //----------------------------------------------------------------------------
+  // Alarm section
+  //----------------------------------------------------------------------------
+
+  // Add section header
+  sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("Alarm Settings"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
+                      ParameterIcon);
+  m_datasetModel->appendRow(sectionHdr);
+
+  // Add low alarm threshold
+  auto alarmEnabled = new QStandardItem();
+  alarmEnabled->setEditable(rangeEnabled);
+  alarmEnabled->setData(0, PlaceholderValue);
+  alarmEnabled->setData(CheckBox, WidgetType);
+  alarmEnabled->setData(alarmEnabled->isEditable(), Active);
+  alarmEnabled->setData(dataset.alarmEnabled, EditableValue);
+  alarmEnabled->setData(kDatasetView_AlarmEnabled, ParameterType);
+  alarmEnabled->setData(tr("Enable Alarms"), ParameterName);
+  alarmEnabled->setData(
+      tr("Triggers a visual alarm when the value exceeds alarm thresholds"),
+      ParameterDescription);
+  m_datasetModel->appendRow(alarmEnabled);
+
   // Add low alarm threshold
   auto alarmLow = new QStandardItem();
-  alarmLow->setEditable(rangeEnabled);
+  alarmLow->setEditable(rangeEnabled && dataset.alarmEnabled);
   alarmLow->setData(0, PlaceholderValue);
   alarmLow->setData(FloatField, WidgetType);
   alarmLow->setData(alarmLow->isEditable(), Active);
   alarmLow->setData(dataset.alarmLow, EditableValue);
   alarmLow->setData(kDatasetView_AlarmLow, ParameterType);
-  alarmLow->setData(tr("Alarm: Low Threshold (optional)"), ParameterName);
+  alarmLow->setData(tr("Low Threshold"), ParameterName);
   alarmLow->setData(
       tr("Triggers a visual alarm when the value drops below this threshold"),
       ParameterDescription);
@@ -3063,13 +3090,13 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
 
   // Add high alarm threshold
   auto alarmHigh = new QStandardItem();
-  alarmHigh->setEditable(rangeEnabled);
+  alarmHigh->setEditable(rangeEnabled && dataset.alarmEnabled);
   alarmHigh->setData(0, PlaceholderValue);
   alarmHigh->setData(FloatField, WidgetType);
   alarmHigh->setData(alarmHigh->isEditable(), Active);
   alarmHigh->setData(dataset.alarmHigh, EditableValue);
   alarmHigh->setData(kDatasetView_AlarmHigh, ParameterType);
-  alarmHigh->setData(tr("Alarm: High Threshold (optional)"), ParameterName);
+  alarmHigh->setData(tr("High Threshold"), ParameterName);
   alarmHigh->setData(
       tr("Triggers a visual alarm when the value exceeds this threshold"),
       ParameterDescription);
@@ -3649,6 +3676,10 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
       break;
     case kDatasetView_AlarmHigh:
       m_selectedDataset.alarmHigh = value.toDouble();
+      break;
+    case kDatasetView_AlarmEnabled:
+      m_selectedDataset.alarmEnabled = value.toBool();
+      buildDatasetModel(m_selectedDataset);
       break;
     case kDatasetView_FFT_Samples:
       m_selectedDataset.fftSamples = m_fftSamples.at(value.toInt()).toInt();

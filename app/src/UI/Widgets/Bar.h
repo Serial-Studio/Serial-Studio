@@ -43,6 +43,7 @@ class Bar : public QQuickItem
   Q_PROPERTY(double maxValue READ maxValue CONSTANT)
   Q_PROPERTY(double alarmLow READ alarmLow CONSTANT)
   Q_PROPERTY(double alarmHigh READ alarmHigh CONSTANT)
+  Q_PROPERTY(bool alarmsDefined READ alarmsDefined CONSTANT)
   Q_PROPERTY(bool alarmTriggered READ alarmTriggered NOTIFY updated)
   Q_PROPERTY(double normalizedValue READ normalizedValue NOTIFY updated)
   Q_PROPERTY(double normalizedAlarmLow READ normalizedAlarmLow CONSTANT)
@@ -55,6 +56,7 @@ public:
   explicit Bar(const int index = -1, QQuickItem *parent = nullptr,
                bool autoInitFromBarDataset = true);
 
+  [[nodiscard]] bool alarmsDefined() const;
   [[nodiscard]] bool alarmTriggered() const;
   [[nodiscard]] const QString &units() const;
 
