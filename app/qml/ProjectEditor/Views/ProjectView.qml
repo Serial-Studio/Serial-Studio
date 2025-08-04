@@ -92,6 +92,7 @@ Widgets.Pane {
         TableDelegate {
           id: delegate
           width: parent.width
+          headerVisible: false
           parameterWidth: Math.min(delegate.width * 0.3, 256)
 
           Binding {

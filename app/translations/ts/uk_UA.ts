@@ -1555,122 +1555,312 @@
         <translation>Зберегти проект Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2408"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2221"/>
+        <source>Project Information</source>
+        <translation>Інформація про проєкт</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2233"/>
+        <source>Project Title</source>
+        <translation>Назва проєкту</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2235"/>
+        <source>Name or description of the project</source>
+        <translation>Назва або опис проєкту</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2260"/>
+        <source>Frame Detection Method</source>
+        <translation>Метод виявлення кадрів</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2261"/>
+        <source>Select how incoming data frames are identified</source>
+        <translation>Виберіть, як визначаються вхідні кадри даних</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2271"/>
+        <source>Hexadecimal Delimiters</source>
+        <translation>Шістнадцяткові роздільники</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2273"/>
+        <source>Use hex values to define frame boundaries</source>
+        <translation>Використовуйте шістнадцяткові значення для визначення меж кадру</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2288"/>
+        <source>Start Sequence</source>
+        <translation>Початкова послідовність</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2291"/>
+        <source>Marks the beginning of each data frame</source>
+        <translation>Позначає початок кожного кадру даних</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2302"/>
+        <source>End Sequence</source>
+        <translation>Кінцева послідовність</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2305"/>
+        <source>Marks the end of each data frame</source>
+        <translation>Позначає кінець кожного кадру даних</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2316"/>
+        <source>Payload Processing &amp; Validation</source>
+        <translation>Обробка та перевірка коректності даних</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2328"/>
+        <source>Data Format</source>
+        <translation>Формат даних</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2330"/>
+        <source>Format of raw data used for decoding each frame</source>
+        <translation>Формат необроблених даних, що використовується для декодування кожного кадру</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2344"/>
+        <source>Method used to validate frame integrity</source>
+        <translation>Метод перевірки цілісності кадру</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2390"/>
+        <source>Group Information</source>
+        <translation>Інформація про групу</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2402"/>
+        <source>Group Title</source>
+        <translation>Назва групи</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2404"/>
+        <source>Title or description of this dataset group</source>
+        <translation>Назва або опис цієї групи набору даних</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2433"/>
         <source>Composite Widget</source>
         <translation>Складений віджет</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2410"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2435"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>Виберіть, як ця група наборів даних має бути візуалізована (необов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2657"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2497"/>
+        <source>Action Title</source>
+        <translation>Назва дії</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2500"/>
+        <source>Name or description of this action</source>
+        <translation>Ім'я або опис цієї дії</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2511"/>
+        <source>Action Icon</source>
+        <translation>Значок дії</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2513"/>
+        <source>Icon displayed for this action in the dashboard</source>
+        <translation>Значок, що відображається для цієї дії на панелі</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2524"/>
+        <source>Data Payload</source>
+        <translation>Навантаження даних</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2537"/>
+        <source>Send as Binary</source>
+        <translation>Надіслати як бінарний</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2538"/>
+        <source>Send raw binary data when this action is triggered</source>
+        <translation>Надіслати необроблені бінарні дані при активації цієї дії</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2552"/>
+        <source>Transmit Data (Hex)</source>
+        <translation>Передача даних (Hex)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2554"/>
+        <source>Hexadecimal payload to send when the action is triggered</source>
+        <translation>Шістнадцяткове навантаження для відправки при активації дії</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2569"/>
+        <source>Transmit Data</source>
+        <translation>Передача даних</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2570"/>
+        <source>Text payload to send when the action is triggered</source>
+        <translation>Текстове навантаження для відправки при активації дії</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2600"/>
+        <source>End-of-Line Sequence</source>
+        <translation>Послідовність кінця рядка</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2601"/>
+        <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
+        <translation>Символи EOL для додавання до повідомлення (наприклад, </translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2612"/>
+        <source>Execution Behavior</source>
+        <translation>Поведінка виконання</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2625"/>
+        <source>Auto-Execute on Connect</source>
+        <translation>Автовиконання при підключенні</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2627"/>
+        <source>Automatically trigger this action when the device connects</source>
+        <translation>Автоматично запускати цю дію при підключенні пристрою</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2638"/>
+        <source>Timer Behavior</source>
+        <translation>Поведінка таймера</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2653"/>
+        <source>Choose when and how this action should repeat automatically</source>
+        <translation>Виберіть, коли і як ця дія повинна повторюватися автоматично</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2661"/>
+        <source>Interval (ms)</source>
+        <translation>Інтервал (мс)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2667"/>
+        <source>Milliseconds between each repeated trigger of this action</source>
+        <translation>Мілісекунди між кожним повторним запуском цієї дії</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2733"/>
         <source>Dataset Title</source>
         <translation>Назва набору даних</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2659"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2735"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Назва набору даних, використовується для маркування та ідентифікації</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2672"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2748"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Позиція кадру, використовується для вирівнювання наборів даних у часі</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2685"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2761"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Одиниця вимірювання, така як вольти або ампери (необов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2696"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2772"/>
         <source>Plot Settings</source>
         <translation>Налаштування графіка</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2726"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2802"/>
         <source>Enable Plot Widget</source>
         <translation>Увімкнути віджет графіка</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2758"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2834"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
         <translation>Виберіть, який набір даних використовувати для осі X на графіках</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2770"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2846"/>
         <source>Minimum Plot Value (optional)</source>
         <translation>Мінімальне значення графіка (необов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2771"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2847"/>
         <source>Lower bound for plot display range</source>
         <translation>Нижня межа для діапазону відображення графіка</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2783"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2859"/>
         <source>Maximum Plot Value (optional)</source>
         <translation>Максимальне значення графіка (необов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2784"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2860"/>
         <source>Upper bound for plot display range</source>
         <translation>Верхня межа діапазону відображення графіка</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2795"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2871"/>
         <source>FFT Configuration</source>
         <translation>Налаштування FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2808"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2884"/>
         <source>Enable FFT Analysis</source>
         <translation>Увімкнути аналіз FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2809"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2885"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Виконати аналіз у частотній області набору даних</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2829"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2905"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Кількість зразків, використаних для кожного вікна обчислення FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2841"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2917"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>Частота дискретизації FFT (Гц, обов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2843"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2919"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>Частота дискретизації, використана для FFT (в Гц)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2855"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2931"/>
         <source>Minimum Value (recommended)</source>
         <translation>Мінімальне значення (рекомендовано)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2856"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2932"/>
         <source>Lower bound for data normalization</source>
         <translation>Нижня межа для нормалізації даних</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2868"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2944"/>
         <source>Maximum Value (recommended)</source>
         <translation>Максимальне значення (рекомендовано)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2869"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2945"/>
         <source>Upper bound for data normalization</source>
         <translation>Верхня межа для нормалізації даних</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2880"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2956"/>
         <source>Widget Settings</source>
         <translation>Налаштування віджета</translation>
     </message>
@@ -1679,93 +1869,93 @@
         <translation type="vanished">Відображення віджета</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2911"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2987"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Виберіть візуальний віджет для відображення цього набору даних</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2922"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2998"/>
         <source>Show in Overview</source>
         <translation>Показати в Огляді</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2924"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3000"/>
         <source>Display this widget in the dashboard overview (if enabled)</source>
         <translation>Відображати цей віджет в огляді панелі (якщо увімкнено)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2940"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3016"/>
         <source>Minimum Display Value (required)</source>
         <translation>Мінімальне значення відображення (обов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2941"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3017"/>
         <source>Lower bound of the gauge or bar display range</source>
         <translation>Нижня межа діапазону відображення шкали або стовпця</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2953"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3029"/>
         <source>Maximum Display Value (required)</source>
         <translation>Максимальне значення відображення (обов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2954"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3030"/>
         <source>Upper bound of the gauge or bar display range</source>
         <translation>Верхня межа діапазону відображення шкали або стовпця</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2966"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3042"/>
         <source>Alarm: Low Threshold (optional)</source>
         <translation>Сигнал тривоги: Низький поріг (необов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2968"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3044"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
         <translation>Викликає візуальний сигнал тривоги, коли значення падає нижче цього порогу</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2980"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3056"/>
         <source>Alarm: High Threshold (optional)</source>
         <translation>Сигнал тривоги: Високий поріг (необов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2982"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3058"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
         <translation>Активує візуальну тривогу, коли значення перевищує цей поріг</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2993"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3069"/>
         <source>LED Display Settings</source>
         <translation>Налаштування світлодіодного дисплея</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3007"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3083"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Увімкнути моніторинг візуального стану за допомогою світлодіодного дисплея</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3019"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3095"/>
         <source>LED On Threshold (required)</source>
         <translation>Поріг увімкнення світлодіода (обов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3021"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3097"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>Світлодіод загоряється, коли значення досягає або перевищує цей поріг</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3144"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3220"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3710"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3786"/>
         <source>File open error</source>
         <translation>Помилка відкриття файлу</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="846"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2222"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2234"/>
         <source>Untitled Project</source>
         <translation>Проєкт без назви</translation>
     </message>
@@ -1939,93 +2129,78 @@
         <translation>Код парсера кадру</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2220"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2375"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2443"/>
         <source>Title</source>
-        <translation>Заголовок</translation>
+        <translation type="vanished">Заголовок</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2223"/>
         <source>Project name/description</source>
-        <translation>Назва/опис проєкту</translation>
+        <translation type="vanished">Назва/опис проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2235"/>
         <source>Data Conversion Method</source>
-        <translation>Метод перетворення даних</translation>
+        <translation type="vanished">Метод перетворення даних</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2237"/>
         <source>Input data format for frame parser</source>
-        <translation>Формат вхідних даних для парсера кадрів</translation>
+        <translation type="vanished">Формат вхідних даних для парсера кадрів</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2251"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2246"/>
         <source>Frame Detection</source>
         <translation>Виявлення кадру</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2253"/>
         <source>Strategy used for identifying frame data</source>
-        <translation>Стратегія, що використовується для ідентифікації даних кадру</translation>
+        <translation type="vanished">Стратегія, що використовується для ідентифікації даних кадру</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2271"/>
         <source>Frame Start Delimeter</source>
-        <translation>Роздільник початку кадру</translation>
+        <translation type="vanished">Роздільник початку кадру</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2274"/>
         <source>String marking the start of a frame</source>
-        <translation>Рядок, що позначає початок кадру</translation>
+        <translation type="vanished">Рядок, що позначає початок кадру</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2291"/>
         <source>Frame End Delimeter</source>
-        <translation>Роздільник кінця кадру</translation>
+        <translation type="vanished">Роздільник кінця кадру</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2294"/>
         <source>String marking the end of a frame</source>
-        <translation>Рядок, що позначає кінець кадру</translation>
+        <translation type="vanished">Рядок, що позначає кінець кадру</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2309"/>
         <source>Hexadecimal Delimeters</source>
-        <translation>Шістнадцяткові роздільники</translation>
+        <translation type="vanished">Шістнадцяткові роздільники</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2311"/>
         <source>Use hexadecimal delimiters for data frames</source>
-        <translation>Використовувати шістнадцяткові роздільники для кадрів даних</translation>
+        <translation type="vanished">Використовувати шістнадцяткові роздільники для кадрів даних</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2326"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2342"/>
         <source>Checksum Algorithm</source>
         <translation>Алгоритм контрольної суми</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2328"/>
         <source>Checksum algorithm used for frame validation</source>
-        <translation>Алгоритм контрольної суми, що використовується для перевірки кадру</translation>
+        <translation type="vanished">Алгоритм контрольної суми, що використовується для перевірки кадру</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2377"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2403"/>
         <source>Untitled Group</source>
         <translation>Безіменна група</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2378"/>
         <source>Name or description of the group</source>
-        <translation>Назва або опис групи</translation>
+        <translation type="vanished">Назва або опис групи</translation>
     </message>
     <message>
         <source>Visual Widget</source>
         <translation type="vanished">Візуальний віджет</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2910"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2986"/>
         <source>Widget</source>
         <translation>Віджет</translation>
     </message>
@@ -2034,110 +2209,95 @@
         <translation type="vanished">Віджет відображення групи (необов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2445"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2499"/>
         <source>Untitled Action</source>
         <translation>Безіменна дія</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2446"/>
         <source>Name or description of the action</source>
-        <translation>Назва або опис дії</translation>
+        <translation type="vanished">Назва або опис дії</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2457"/>
         <source>Icon</source>
-        <translation>Іконка</translation>
+        <translation type="vanished">Іконка</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2459"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2512"/>
         <source>Default Icon</source>
         <translation>Іконка за замовчуванням</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2460"/>
         <source>Icon to display in the dashboard</source>
-        <translation>Іконка для відображення на панелі</translation>
+        <translation type="vanished">Іконка для відображення на панелі</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2470"/>
         <source>Binary Data</source>
-        <translation>Двійкові дані</translation>
+        <translation type="vanished">Двійкові дані</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2473"/>
         <source>Send binary data when the action is triggered.</source>
-        <translation>Надіслати двійкові дані при активації дії.</translation>
+        <translation type="vanished">Надіслати двійкові дані при активації дії.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2487"/>
         <source>TX Data (Hex)</source>
-        <translation>Дані TX (Hex)</translation>
+        <translation type="vanished">Дані TX (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2489"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2507"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2551"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2568"/>
         <source>Command</source>
         <translation>Команда</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2490"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2508"/>
         <source>Data to transmit when the action is triggered.</source>
-        <translation>Дані для передачі при активації дії.</translation>
+        <translation type="vanished">Дані для передачі при активації дії.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2505"/>
         <source>TX Data</source>
-        <translation>Дані TX</translation>
+        <translation type="vanished">Дані TX</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2538"/>
         <source>EOL Sequence</source>
-        <translation>Послідовність EOL</translation>
+        <translation type="vanished">Послідовність EOL</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2540"/>
         <source>End-of-line (EOL) sequence to use</source>
-        <translation>Використовувати послідовність кінця рядка (EOL)</translation>
+        <translation type="vanished">Використовувати послідовність кінця рядка (EOL)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2551"/>
         <source>Auto Execute on Connect</source>
-        <translation>Автоматичне виконання при підключенні</translation>
+        <translation type="vanished">Автоматичне виконання при підключенні</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2555"/>
         <source>Trigger this action automatically when a device connects.</source>
-        <translation>Автоматично виконувати цю дію при підключенні пристрою.</translation>
+        <translation type="vanished">Автоматично виконувати цю дію при підключенні пристрою.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2568"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2649"/>
         <source>Timer Mode</source>
         <translation>Режим таймера</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2570"/>
         <source>How and when the timer should activate.</source>
-        <translation>Як і коли повинен активуватися таймер.</translation>
+        <translation type="vanished">Як і коли повинен активуватися таймер.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2584"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2586"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2665"/>
         <source>Timer Interval (ms)</source>
         <translation>Інтервал таймера (мс)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2588"/>
         <source>Interval in milliseconds between each timer-triggered action.</source>
-        <translation>Інтервал у мілісекундах між кожною дією, що запускається таймером.</translation>
+        <translation type="vanished">Інтервал у мілісекундах між кожною дією, що запускається таймером.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2644"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2486"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2720"/>
         <source>General Information</source>
         <translation>Загальна інформація</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2656"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2732"/>
         <source>Untitled Dataset</source>
         <translation>Неіменований набір даних</translation>
     </message>
@@ -2146,7 +2306,7 @@
         <translation type="vanished">Назва або опис набору даних</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2671"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2747"/>
         <source>Frame Index</source>
         <translation>Індекс кадру</translation>
     </message>
@@ -2155,12 +2315,12 @@
         <translation type="vanished">Позиція в кадрі</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2683"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2759"/>
         <source>Measurement Unit</source>
         <translation>Одиниця вимірювання</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2684"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2760"/>
         <source>Volts, Amps, etc.</source>
         <translation>Вольти, Ампери тощо.</translation>
     </message>
@@ -2185,7 +2345,7 @@
         <translation type="vanished">Осцилоскопічний графік</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2728"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2804"/>
         <source>Plot data in real-time</source>
         <translation>Відображення даних у реальному часі</translation>
     </message>
@@ -2198,7 +2358,7 @@
         <translation type="vanished">Відображення даних у частотній області</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3006"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3082"/>
         <source>Show in LED Panel</source>
         <translation>Показати на панелі світлодіодів</translation>
     </message>
@@ -2207,7 +2367,7 @@
         <translation type="vanished">Швидкий моніторинг статусу</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2757"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2833"/>
         <source>X-Axis Source</source>
         <translation>Джерело осі X</translation>
     </message>
@@ -2244,7 +2404,7 @@
         <translation type="vanished">Високе значення тривоги</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2827"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2903"/>
         <source>FFT Window Size</source>
         <translation>Розмір вікна FFT</translation>
     </message>
@@ -2269,139 +2429,139 @@
         <translation type="vanished">Поріг для увімкнення світлодіода</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3086"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3162"/>
         <source>Off</source>
         <translation>Вимкнено</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3087"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3163"/>
         <source>Auto Start</source>
         <translation>Автоматичний запуск</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3088"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3164"/>
         <source>Start on Trigger</source>
         <translation>Почати за Тригером</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3089"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3165"/>
         <source>Toggle on Trigger</source>
         <translation>Перемкнути за Тригером</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3093"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3169"/>
         <source>Plain Text (UTF8)</source>
         <translation>Звичайний текст (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3094"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3170"/>
         <source>Hexadecimal</source>
         <translation>Шістнадцятковий</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3095"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3171"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3096"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3172"/>
         <source>Binary (Direct)</source>
         <translation>Бінарний (Прямий)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3103"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3179"/>
         <source>No Checksum</source>
         <translation>Без контрольної суми</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3108"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3184"/>
         <source>End Delimiter Only</source>
         <translation>Лише кінцевий роздільник</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3109"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3185"/>
         <source>Start Delimiter Only</source>
         <translation>Лише початковий роздільник</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3110"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3186"/>
         <source>Start + End Delimiter</source>
         <translation>Початковий + кінцевий роздільник</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3111"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3187"/>
         <source>No Delimiters</source>
         <translation>Без роздільників</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3119"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3195"/>
         <source>Data Grid</source>
         <translation>Таблиця даних</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3120"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3196"/>
         <source>GPS Map</source>
         <translation>Карта GPS</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3121"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3197"/>
         <source>Gyroscope</source>
         <translation>Гіроскоп</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3122"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3198"/>
         <source>Multiple Plot</source>
         <translation>Багатоплановий графік</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3123"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3199"/>
         <source>Accelerometer</source>
         <translation>Акселерометр</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3124"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3200"/>
         <source>3D Plot</source>
         <translation>3D графік</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3125"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3129"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3136"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3201"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3205"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3212"/>
         <source>None</source>
         <translation>Немає</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3130"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3206"/>
         <source>Bar</source>
         <translation>Стовпчик</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3131"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3207"/>
         <source>Gauge</source>
         <translation>Вимірювач</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3132"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3208"/>
         <source>Compass</source>
         <translation>Компас</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3137"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3213"/>
         <source>New Line (\n)</source>
         <translation>Нова лінія (</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3138"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3214"/>
         <source>Carriage Return (\r)</source>
         <translation>Повернення каретки (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3139"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3215"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3143"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3219"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
@@ -2410,17 +2570,17 @@
         <translation type="vanished">Лінійний графік</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3185"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3261"/>
         <source>Save changes to frame parser code?</source>
         <translation>Зберегти зміни в коді парсера кадрів?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3186"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3262"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
         <translation>Виберіть "Зберегти", щоб зберегти зміни, "Відхилити", щоб втратити їх назавжди, або "Скасувати", щоб повернутися.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3188"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3264"/>
         <source>Save Changes</source>
         <translation>Зберегти зміни</translation>
     </message>
@@ -4038,12 +4198,12 @@ Please provide the necessary credentials.</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="625"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="625"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>

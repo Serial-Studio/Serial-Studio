@@ -39,6 +39,22 @@
 #include "JSON/FrameBuilder.h"
 
 //------------------------------------------------------------------------------
+// ProjectModel.cpp - Core data model for Serial Studio projects
+//
+// 4000+ lines of conditionally stable logic supporting project structures,
+// group hierarchies, dataset bindings, and action editing, all through the
+// reluctant and occasionally baffling magic of QStandardItemModel.
+//
+// It's purpose? (Hopefully) making project editing and generation less
+// painful for end users.
+//
+// Warning: The JSON::Frame structures and hotpaths are innocent.
+//          The QStandardItemModel is not. Every change risks unleashing UI
+//          behavior so cursed, even the debugger won't follow you in.
+//          Handle with precision, patience, and possibly a therapist.
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
 // Private enums to keep track of which item the user selected/modified
 //------------------------------------------------------------------------------
 
@@ -2211,112 +2227,128 @@ void JSON::ProjectModel::buildProjectModel()
   // Create a new model
   m_projectModel = new CustomModel(this);
 
+  //----------------------------------------------------------------------------
+  // General information section
+  //----------------------------------------------------------------------------
+
+  // Add section header
+  auto *sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("Project Information"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/project.svg",
+                      ParameterIcon);
+  m_projectModel->appendRow(sectionHdr);
+
   // Add project title
-  auto title = new QStandardItem();
+  auto *title = new QStandardItem();
   title->setEditable(true);
   title->setData(true, Active);
   title->setData(TextField, WidgetType);
   title->setData(m_title, EditableValue);
-  title->setData(tr("Title"), ParameterName);
   title->setData(kProjectView_Title, ParameterType);
+  title->setData(tr("Project Title"), ParameterName);
   title->setData(tr("Untitled Project"), PlaceholderValue);
-  title->setData(tr("Project name/description"), ParameterDescription);
-  title->setData("qrc:/rcc/icons/project-editor/model/title.svg",
-                 ParameterIcon);
+  title->setData(tr("Name or description of the project"),
+                 ParameterDescription);
   m_projectModel->appendRow(title);
 
-  // Add decoding
-  auto decoding = new QStandardItem();
-  decoding->setEditable(true);
-  decoding->setData(true, Active);
-  decoding->setData(ComboBox, WidgetType);
-  decoding->setData(m_decoderOptions, ComboBoxData);
-  decoding->setData(m_frameDecoder, EditableValue);
-  decoding->setData(tr("Data Conversion Method"), ParameterName);
-  decoding->setData(kProjectView_FrameDecoder, ParameterType);
-  decoding->setData(tr("Input data format for frame parser"),
-                    ParameterDescription);
-  decoding->setData("qrc:/rcc/icons/project-editor/model/data-conversion.svg",
-                    ParameterIcon);
-  m_projectModel->appendRow(decoding);
+  //----------------------------------------------------------------------------
+  // Frame detection
+  //----------------------------------------------------------------------------
+
+  // Add section header
+  sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("Frame Detection"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/frame-detection.svg",
+                      ParameterIcon);
+  m_projectModel->appendRow(sectionHdr);
 
   // Add frame detection method
-  auto frameDetection = new QStandardItem();
+  auto *frameDetection = new QStandardItem();
   frameDetection->setEditable(true);
   frameDetection->setData(true, Active);
   frameDetection->setData(ComboBox, WidgetType);
   frameDetection->setData(m_frameDetectionMethods, ComboBoxData);
   frameDetection->setData(
       m_frameDetectionMethodsValues.indexOf(m_frameDetection), EditableValue);
-  frameDetection->setData(tr("Frame Detection"), ParameterName);
   frameDetection->setData(kProjectView_FrameDetection, ParameterType);
-  frameDetection->setData(tr("Strategy used for identifying frame data"),
+  frameDetection->setData(tr("Frame Detection Method"), ParameterName);
+  frameDetection->setData(tr("Select how incoming data frames are identified"),
                           ParameterDescription);
-  frameDetection->setData(
-      "qrc:/rcc/icons/project-editor/model/frame-detection.svg", ParameterIcon);
   m_projectModel->appendRow(frameDetection);
+
+  // Add hexadecimal frame sequence
+  auto *sequence = new QStandardItem();
+  sequence->setEditable(m_frameDetection != SerialStudio::NoDelimiters);
+  sequence->setData(sequence->isEditable(), Active);
+  sequence->setData(CheckBox, WidgetType);
+  sequence->setData(m_hexadecimalDelimiters, EditableValue);
+  sequence->setData(tr("Hexadecimal Delimiters"), ParameterName);
+  sequence->setData(kProjectView_HexadecimalSequence, ParameterType);
+  sequence->setData(tr("Use hex values to define frame boundaries"),
+                    ParameterDescription);
+  m_projectModel->appendRow(sequence);
 
   // Get frame type data
   auto delimWidget = m_hexadecimalDelimiters ? HexTextField : TextField;
 
   // Add frame start sequence
-  if (m_frameDetection == SerialStudio::StartAndEndDelimiter
-      || m_frameDetection == SerialStudio::StartDelimiterOnly)
-  {
-    auto frameStart = new QStandardItem();
-    frameStart->setEditable(true);
-    frameStart->setData(true, Active);
-    frameStart->setData(delimWidget, WidgetType);
-    frameStart->setData(m_frameStartSequence, EditableValue);
-    frameStart->setData(tr("Frame Start Delimeter"), ParameterName);
-    frameStart->setData(kProjectView_FrameStartSequence, ParameterType);
-    frameStart->setData(QStringLiteral("/*"), PlaceholderValue);
-    frameStart->setData(tr("String marking the start of a frame"),
-                        ParameterDescription);
-    frameStart->setData(
-        "qrc:/rcc/icons/project-editor/model/start-delimiter.svg",
-        ParameterIcon);
-    m_projectModel->appendRow(frameStart);
-  }
+  auto *frameStart = new QStandardItem();
+  frameStart->setEditable(m_frameDetection == SerialStudio::StartAndEndDelimiter
+                          || m_frameDetection
+                                 == SerialStudio::StartDelimiterOnly);
+  frameStart->setData(frameStart->isEditable(), Active);
+  frameStart->setData(delimWidget, WidgetType);
+  frameStart->setData(m_frameStartSequence, EditableValue);
+  frameStart->setData(tr("Start Sequence"), ParameterName);
+  frameStart->setData(QStringLiteral("/*"), PlaceholderValue);
+  frameStart->setData(kProjectView_FrameStartSequence, ParameterType);
+  frameStart->setData(tr("Marks the beginning of each data frame"),
+                      ParameterDescription);
+  m_projectModel->appendRow(frameStart);
 
   // Add frame end sequence
-  if (m_frameDetection == SerialStudio::StartAndEndDelimiter
-      || m_frameDetection == SerialStudio::EndDelimiterOnly)
-  {
-    auto frameEnd = new QStandardItem();
-    frameEnd->setEditable(true);
-    frameEnd->setData(true, Active);
-    frameEnd->setData(delimWidget, WidgetType);
-    frameEnd->setData(m_frameEndSequence, EditableValue);
-    frameEnd->setData(tr("Frame End Delimeter"), ParameterName);
-    frameEnd->setData(kProjectView_FrameEndSequence, ParameterType);
-    frameEnd->setData(QStringLiteral("*/"), PlaceholderValue);
-    frameEnd->setData(tr("String marking the end of a frame"),
-                      ParameterDescription);
-    frameEnd->setData("qrc:/rcc/icons/project-editor/model/end-delimiter.svg",
-                      ParameterIcon);
-    m_projectModel->appendRow(frameEnd);
-  }
+  auto *frameEnd = new QStandardItem();
+  frameEnd->setEditable(m_frameDetection == SerialStudio::StartAndEndDelimiter
+                        || m_frameDetection == SerialStudio::EndDelimiterOnly);
+  frameEnd->setData(frameEnd->isEditable(), Active);
+  frameEnd->setData(delimWidget, WidgetType);
+  frameEnd->setData(m_frameEndSequence, EditableValue);
+  frameEnd->setData(tr("End Sequence"), ParameterName);
+  frameEnd->setData(QStringLiteral("*/"), PlaceholderValue);
+  frameEnd->setData(kProjectView_FrameEndSequence, ParameterType);
+  frameEnd->setData(tr("Marks the end of each data frame"),
+                    ParameterDescription);
+  m_projectModel->appendRow(frameEnd);
 
-  // Add hexadecimal frame sequence
-  if (m_frameDetection != SerialStudio::NoDelimiters)
-  {
-    auto sequence = new QStandardItem();
-    sequence->setEditable(true);
-    sequence->setData(true, Active);
-    sequence->setData(CheckBox, WidgetType);
-    sequence->setData(m_hexadecimalDelimiters, EditableValue);
-    sequence->setData(tr("Hexadecimal Delimeters"), ParameterName);
-    sequence->setData(kProjectView_HexadecimalSequence, ParameterType);
-    sequence->setData(tr("Use hexadecimal delimiters for data frames"),
-                      ParameterDescription);
-    sequence->setData("qrc:/rcc/icons/project-editor/model/binary-data.svg",
+  //----------------------------------------------------------------------------
+  // Data conversion & integrity checks
+  //----------------------------------------------------------------------------
+
+  // Add section header
+  sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("Payload Processing & Validation"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/data-conversion.svg",
                       ParameterIcon);
-    m_projectModel->appendRow(sequence);
-  }
+  m_projectModel->appendRow(sectionHdr);
+
+  // Add decoding
+  auto *decoding = new QStandardItem();
+  decoding->setEditable(true);
+  decoding->setData(true, Active);
+  decoding->setData(ComboBox, WidgetType);
+  decoding->setData(m_frameDecoder, EditableValue);
+  decoding->setData(m_decoderOptions, ComboBoxData);
+  decoding->setData(tr("Data Format"), ParameterName);
+  decoding->setData(kProjectView_FrameDecoder, ParameterType);
+  decoding->setData(tr("Format of raw data used for decoding each frame"),
+                    ParameterDescription);
+  m_projectModel->appendRow(decoding);
 
   // Add checksum
-  auto checksum = new QStandardItem();
+  auto *checksum = new QStandardItem();
   auto checksumAlgo = IO::availableChecksums().indexOf(m_checksumAlgorithm);
   checksum->setEditable(true);
   checksum->setData(true, Active);
@@ -2325,11 +2357,13 @@ void JSON::ProjectModel::buildProjectModel()
   checksum->setData(m_checksumMethods, ComboBoxData);
   checksum->setData(tr("Checksum Algorithm"), ParameterName);
   checksum->setData(kProjectView_ChecksumFunction, ParameterType);
-  checksum->setData(tr("Checksum algorithm used for frame validation"),
+  checksum->setData(tr("Method used to validate frame integrity"),
                     ParameterDescription);
-  checksum->setData("qrc:/rcc/icons/project-editor/model/checksum.svg",
-                    ParameterIcon);
   m_projectModel->appendRow(checksum);
+
+  //----------------------------------------------------------------------------
+  // Signals/slots finalization
+  //----------------------------------------------------------------------------
 
   // Handle edits
   connect(m_projectModel, &CustomModel::itemChanged, this,
@@ -2366,18 +2400,25 @@ void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
   m_selectedGroup = group;
   m_groupModel = new CustomModel(this);
 
+  // Add section header
+  auto *sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("Group Information"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/group.svg",
+                      ParameterIcon);
+  m_groupModel->appendRow(sectionHdr);
+
   // Add group title
   auto title = new QStandardItem();
   title->setEditable(true);
   title->setData(true, Active);
   title->setData(TextField, WidgetType);
   title->setData(group.title, EditableValue);
-  title->setData(tr("Title"), ParameterName);
   title->setData(kGroupView_Title, ParameterType);
+  title->setData(tr("Group Title"), ParameterName);
   title->setData(tr("Untitled Group"), PlaceholderValue);
-  title->setData(tr("Name or description of the group"), ParameterDescription);
-  title->setData("qrc:/rcc/icons/project-editor/model/title.svg",
-                 ParameterIcon);
+  title->setData(tr("Title or description of this dataset group"),
+                 ParameterDescription);
   m_groupModel->appendRow(title);
 
   // Get appropiate widget index for current group
@@ -2409,8 +2450,6 @@ void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
   widget->setData(
       tr("Select how this group of datasets should be visualized (optional)"),
       ParameterDescription);
-  widget->setData("qrc:/rcc/icons/project-editor/model/widget.svg",
-                  ParameterIcon);
   m_groupModel->appendRow(widget);
 
   // Handle edits
@@ -2421,6 +2460,25 @@ void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
   emit groupModelChanged();
 }
 
+/**
+ * @brief Builds the UI model for editing an action configuration.
+ *
+ * This method initializes and populates the `m_actionModel` with editable
+ * UI fields representing a single action in the project. Actions define
+ * user-triggered commands that can transmit data through the serial interface,
+ * optionally using timers or automatic triggers.
+ *
+ * The model includes the following configuration sections:
+ * - General Information: title and icon
+ * - Data Payload: binary/text data and optional EOL sequences
+ * - Execution Behavior: automatic execution on device connection
+ * - Timer Behavior: optional timer-based repetition of the action
+ *
+ * The populated model is connected to change tracking and triggers
+ * `actionModelChanged()` when edits are made.
+ *
+ * @param action The Action object whose data will populate the editing model.
+ */
 void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
 {
   // Clear the existing model
@@ -2434,18 +2492,29 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   m_selectedAction = action;
   m_actionModel = new CustomModel(this);
 
+  //----------------------------------------------------------------------------
+  // General information section
+  //----------------------------------------------------------------------------
+
+  // Add section header
+  auto *sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("General Information"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/action.svg",
+                      ParameterIcon);
+  m_actionModel->appendRow(sectionHdr);
+
   // Add action title
   auto title = new QStandardItem();
   title->setEditable(true);
   title->setData(true, Active);
   title->setData(TextField, WidgetType);
   title->setData(action.title, EditableValue);
-  title->setData(tr("Title"), ParameterName);
+  title->setData(tr("Action Title"), ParameterName);
   title->setData(kActionView_Title, ParameterType);
   title->setData(tr("Untitled Action"), PlaceholderValue);
-  title->setData(tr("Name or description of the action"), ParameterDescription);
-  title->setData("qrc:/rcc/icons/project-editor/model/title.svg",
-                 ParameterIcon);
+  title->setData(tr("Name or description of this action"),
+                 ParameterDescription);
   m_actionModel->appendRow(title);
 
   // Add action icon
@@ -2454,26 +2523,36 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   icon->setData(true, Active);
   icon->setData(IconPicker, WidgetType);
   icon->setData(action.icon, EditableValue);
-  icon->setData(tr("Icon"), ParameterName);
   icon->setData(kActionView_Icon, ParameterType);
+  icon->setData(tr("Action Icon"), ParameterName);
   icon->setData(tr("Default Icon"), PlaceholderValue);
-  icon->setData(tr("Icon to display in the dashboard"), ParameterDescription);
-  icon->setData("qrc:/rcc/icons/project-editor/model/icon.svg", ParameterIcon);
+  icon->setData(tr("Icon displayed for this action in the dashboard"),
+                ParameterDescription);
   m_actionModel->appendRow(icon);
+
+  //----------------------------------------------------------------------------
+  // Data format
+  //----------------------------------------------------------------------------
+
+  // Add section header
+  sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("Data Payload"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/tx-data.svg",
+                      ParameterIcon);
+  m_actionModel->appendRow(sectionHdr);
 
   // Add binary selector checkbox
   auto binaryData = new QStandardItem();
   binaryData->setEditable(true);
   binaryData->setData(true, Active);
   binaryData->setData(CheckBox, WidgetType);
-  binaryData->setData(action.binaryData, EditableValue);
-  binaryData->setData(tr("Binary Data"), ParameterName);
-  binaryData->setData(kActionView_Binary, ParameterType);
   binaryData->setData(0, PlaceholderValue);
-  binaryData->setData(tr("Send binary data when the action is triggered."),
+  binaryData->setData(action.binaryData, EditableValue);
+  binaryData->setData(kActionView_Binary, ParameterType);
+  binaryData->setData(tr("Send as Binary"), ParameterName);
+  binaryData->setData(tr("Send raw binary data when this action is triggered"),
                       ParameterDescription);
-  binaryData->setData("qrc:/rcc/icons/project-editor/model/binary-data.svg",
-                      ParameterIcon);
   m_actionModel->appendRow(binaryData);
 
   // Add binary action data
@@ -2484,13 +2563,12 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
     data->setData(true, Active);
     data->setData(HexTextField, WidgetType);
     data->setData(action.txData, EditableValue);
-    data->setData(tr("TX Data (Hex)"), ParameterName);
     data->setData(kActionView_Data, ParameterType);
     data->setData(tr("Command"), PlaceholderValue);
-    data->setData(tr("Data to transmit when the action is triggered."),
-                  ParameterDescription);
-    data->setData("qrc:/rcc/icons/project-editor/model/tx-data.svg",
-                  ParameterIcon);
+    data->setData(tr("Transmit Data (Hex)"), ParameterName);
+    data->setData(
+        tr("Hexadecimal payload to send when the action is triggered"),
+        ParameterDescription);
     m_actionModel->appendRow(data);
   }
 
@@ -2502,61 +2580,81 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
     data->setData(true, Active);
     data->setData(TextField, WidgetType);
     data->setData(action.txData, EditableValue);
-    data->setData(tr("TX Data"), ParameterName);
     data->setData(kActionView_Data, ParameterType);
     data->setData(tr("Command"), PlaceholderValue);
-    data->setData(tr("Data to transmit when the action is triggered."),
+    data->setData(tr("Transmit Data"), ParameterName);
+    data->setData(tr("Text payload to send when the action is triggered"),
                   ParameterDescription);
-    data->setData("qrc:/rcc/icons/project-editor/model/tx-data.svg",
-                  ParameterIcon);
     m_actionModel->appendRow(data);
-
-    // Get appropiate end of line index for current action
-    int eolIndex = 0;
-    bool found = false;
-    for (auto it = m_eolSequences.begin(); it != m_eolSequences.end();
-         ++it, ++eolIndex)
-    {
-      if (it.key() == action.eolSequence)
-      {
-        found = true;
-        break;
-      }
-    }
-
-    // If not found, reset the index to 0
-    if (!found)
-      eolIndex = 0;
-
-    // Add EOL combobox
-    auto eol = new QStandardItem();
-    eol->setEditable(true);
-    eol->setData(true, Active);
-    eol->setData(ComboBox, WidgetType);
-    eol->setData(m_eolSequences.values(), ComboBoxData);
-    eol->setData(eolIndex, EditableValue);
-    eol->setData(tr("EOL Sequence"), ParameterName);
-    eol->setData(kActionView_EOL, ParameterType);
-    eol->setData(tr("End-of-line (EOL) sequence to use"), ParameterDescription);
-    eol->setData("qrc:/rcc/icons/project-editor/model/eol.svg", ParameterIcon);
-    m_actionModel->appendRow(eol);
   }
+
+  // Get appropiate end of line index for current action
+  int eolIndex = 0;
+  bool found = false;
+  for (auto it = m_eolSequences.begin(); it != m_eolSequences.end();
+       ++it, ++eolIndex)
+  {
+    if (it.key() == action.eolSequence)
+    {
+      found = true;
+      break;
+    }
+  }
+
+  // If not found, reset the index to 0
+  if (!found)
+    eolIndex = 0;
+
+  // Add EOL combobox
+  auto eol = new QStandardItem();
+  eol->setData(ComboBox, WidgetType);
+  eol->setEditable(!action.binaryData);
+  eol->setData(eolIndex, EditableValue);
+  eol->setData(!action.binaryData, Active);
+  eol->setData(kActionView_EOL, ParameterType);
+  eol->setData(m_eolSequences.values(), ComboBoxData);
+  eol->setData(tr("End-of-Line Sequence"), ParameterName);
+  eol->setData(tr("EOL characters to append to the message (e.g. \\n, \\r\\n)"),
+               ParameterDescription);
+  m_actionModel->appendRow(eol);
+
+  //----------------------------------------------------------------------------
+  // Action behavior
+  //----------------------------------------------------------------------------
+
+  // Add section header
+  sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("Execution Behavior"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/action-behavior.svg",
+                      ParameterIcon);
+  m_actionModel->appendRow(sectionHdr);
 
   // Auto-execute on connect
   auto autoExecute = new QStandardItem();
   autoExecute->setEditable(true);
   autoExecute->setData(true, Active);
-  autoExecute->setData(CheckBox, WidgetType);
-  autoExecute->setData(action.autoExecuteOnConnect, EditableValue);
-  autoExecute->setData(tr("Auto Execute on Connect"), ParameterName);
-  autoExecute->setData(kActionView_AutoExecute, ParameterType);
   autoExecute->setData(0, PlaceholderValue);
+  autoExecute->setData(CheckBox, WidgetType);
+  autoExecute->setData(kActionView_AutoExecute, ParameterType);
+  autoExecute->setData(action.autoExecuteOnConnect, EditableValue);
+  autoExecute->setData(tr("Auto-Execute on Connect"), ParameterName);
   autoExecute->setData(
-      tr("Trigger this action automatically when a device connects."),
+      tr("Automatically trigger this action when the device connects"),
       ParameterDescription);
-  autoExecute->setData("qrc:/rcc/icons/project-editor/model/auto-execute.svg",
-                       ParameterIcon);
   m_actionModel->appendRow(autoExecute);
+
+  //----------------------------------------------------------------------------
+  // Action timers
+  //----------------------------------------------------------------------------
+
+  // Add section header
+  sectionHdr = new QStandardItem();
+  sectionHdr->setData(SectionHeader, WidgetType);
+  sectionHdr->setData(tr("Timer Behavior"), PlaceholderValue);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/timer.svg",
+                      ParameterIcon);
+  m_actionModel->appendRow(sectionHdr);
 
   // Timer mode
   auto timerMode = new QStandardItem();
@@ -2564,33 +2662,27 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   timerMode->setData(true, Active);
   timerMode->setData(ComboBox, WidgetType);
   timerMode->setData(m_timerModes, ComboBoxData);
-  timerMode->setData(static_cast<int>(action.timerMode), EditableValue);
   timerMode->setData(tr("Timer Mode"), ParameterName);
   timerMode->setData(kActionView_TimerMode, ParameterType);
-  timerMode->setData(tr("How and when the timer should activate."),
-                     ParameterDescription);
-  timerMode->setData("qrc:/rcc/icons/project-editor/model/timer.svg",
-                     ParameterIcon);
+  timerMode->setData(static_cast<int>(action.timerMode), EditableValue);
+  timerMode->setData(
+      tr("Choose when and how this action should repeat automatically"),
+      ParameterDescription);
   m_actionModel->appendRow(timerMode);
 
   // Timer interval
-  if (action.timerMode != JSON::TimerMode::Off)
-  {
-    auto timerInterval = new QStandardItem();
-    timerInterval->setEditable(true);
-    timerInterval->setData(true, Active);
-    timerInterval->setData(IntField, WidgetType);
-    timerInterval->setData(action.timerIntervalMs, EditableValue);
-    timerInterval->setData(tr("Timer Interval (ms)"), ParameterName);
-    timerInterval->setData(kActionView_TimerInterval, ParameterType);
-    timerInterval->setData(tr("Timer Interval (ms)"), PlaceholderValue);
-    timerInterval->setData(
-        tr("Interval in milliseconds between each timer-triggered action."),
-        ParameterDescription);
-    timerInterval->setData("qrc:/rcc/icons/project-editor/model/interval.svg",
-                           ParameterIcon);
-    m_actionModel->appendRow(timerInterval);
-  }
+  auto timerInterval = new QStandardItem();
+  timerInterval->setData(IntField, WidgetType);
+  timerInterval->setEditable(action.timerMode != JSON::TimerMode::Off);
+  timerInterval->setData(tr("Interval (ms)"), ParameterName);
+  timerInterval->setData(timerInterval->isEditable(), Active);
+  timerInterval->setData(action.timerIntervalMs, EditableValue);
+  timerInterval->setData(kActionView_TimerInterval, ParameterType);
+  timerInterval->setData(tr("Timer Interval (ms)"), PlaceholderValue);
+  timerInterval->setData(
+      tr("Milliseconds between each repeated trigger of this action"),
+      ParameterDescription);
+  m_actionModel->appendRow(timerInterval);
 
   // Handle edits
   connect(m_actionModel, &CustomModel::itemChanged, this,

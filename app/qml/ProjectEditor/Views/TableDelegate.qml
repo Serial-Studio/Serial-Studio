@@ -206,6 +206,7 @@ ColumnLayout {
         //
         Loader {
           Layout.fillWidth: true
+          Layout.rightMargin: -32
           Layout.alignment: Qt.AlignVCenter
           active: model.widgetType === ProjectModel.SectionHeader
           visible: model.widgetType === ProjectModel.SectionHeader
