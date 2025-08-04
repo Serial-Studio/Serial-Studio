@@ -140,17 +140,17 @@
         "plot3d_background_outer": "#181a1b",
 
         "widget_colors": [
-            "#4b6cb7",
-            "#98c379",
-            "#e06c75",
-            "#d19a66",
-            "#c678dd",
-            "#ffcc00",
-            "#ff2d55",
-            "#7a7c80",
-            "#8e8e93",
-            "#b16286",
-            "#56b6c2"
+            "#4A90E2",
+            "#50FA7B",
+            "#FF5555",
+            "#FFB86C",
+            "#BD93F9",
+            "#F1FA8C",
+            "#FF79C6",
+            "#8BE9FD",
+            "#CFCFCF",
+            "#FF6E6E",
+            "#5AF78E"
         ]
     }
 }
