@@ -496,41 +496,83 @@ const QMap<int, JSON::Dataset> &UI::Dashboard::datasets() const
 }
 
 /**
- * @brief Provides access to a specific group widget based on widget type and
- *        relative index.
+ * @brief Retrieves a group widget by type and index.
  *
- * @param widget The type of widget requested.
- * @param index The index of the widget within its type.
- * @return A reference to the JSON::Group representing the specified widget.
- * @throws An assertion failure if the index is out of bounds.
+ * This function returns a constant reference to a @c JSON::Group object
+ * corresponding to the specified widget type and index.
+ *
+ * If the widget type does not exist or the index is out of bounds, a
+ * default-constructed (empty) group is returned and a warning is logged.
+ *
+ * @param widget The type of dashboard widget.
+ * @param index  The index of the widget within its group type.
+ * @return Reference to the requested @c JSON::Group, or an empty group if not
+ *         found.
+ *
+ * @note This function is production-safe and will not crash if invalid
+ *       arguments are provided. It logs warnings for missing widget types or
+ *       out-of-bounds indices.
  */
 const JSON::Group &
 UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
                               const int index) const
 {
+  static const JSON::Group emptyGroup;
   const auto it = m_widgetGroups.constFind(widget);
-  Q_ASSERT(it != m_widgetGroups.cend());
-  Q_ASSERT(index >= 0 && index < it->size());
+
+  if (it == m_widgetGroups.cend())
+  {
+    qWarning() << "getGroupWidget: widget type not found:" << widget;
+    return emptyGroup;
+  }
+
+  if (index < 0 || index >= it->size())
+  {
+    qWarning() << "getGroupWidget: index out of bounds:" << index
+               << "for widget" << widget;
+    return emptyGroup;
+  }
 
   return it->at(index);
 }
 
 /**
- * @brief Provides access to a specific dataset widget based on widget type and
- *        relative index.
+ * @brief Retrieves a dataset widget by type and index.
  *
- * @param widget The type of widget requested.
- * @param index The index of the widget within its type.
- * @return A reference to the JSON::Dataset representing the specified widget.
- * @throws An assertion failure if the index is out of bounds.
+ * This function returns a constant reference to a @c JSON::Dataset object
+ * corresponding to the specified widget type and index.
+ *
+ * If the widget type does not exist or the index is out of bounds, a
+ * default-constructed (empty) dataset is returned and a warning is logged.
+ *
+ * @param widget The type of dashboard widget.
+ * @param index  The index of the dataset within its widget type.
+ * @return Reference to the requested @c JSON::Dataset, or an empty dataset if
+ *         not found.
+ *
+ * @note This function is production-safe and will not crash if invalid
+ *       arguments are provided. It logs warnings for missing widget types or
+ *       out-of-bounds indices.
  */
 const JSON::Dataset &
 UI::Dashboard::getDatasetWidget(const SerialStudio::DashboardWidget widget,
                                 const int index) const
 {
+  static const JSON::Dataset emptyDataset;
   const auto it = m_widgetDatasets.constFind(widget);
-  Q_ASSERT(it != m_widgetDatasets.cend());
-  Q_ASSERT(index >= 0 && index < it->size());
+
+  if (it == m_widgetDatasets.cend())
+  {
+    qWarning() << "getDatasetWidget: widget type not found:" << widget;
+    return emptyDataset;
+  }
+
+  if (index < 0 || index >= it->size())
+  {
+    qWarning() << "getDatasetWidget: index out of bounds:" << index
+               << "for widget" << widget;
+    return emptyDataset;
+  }
 
   return it->at(index);
 }
@@ -786,7 +828,10 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 {
   // Validate index
   if (index < 0 || index >= m_actions.count())
+  {
+    qWarning() << "Invalid action index:" << index;
     return;
+  }
 
   // Obtain action data
   const auto &action = m_actions[index];
