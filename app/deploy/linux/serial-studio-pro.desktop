@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Serial Studio Pro
+Comment=Flexible data visualization software for embedded devices and projects
+Exec=serial-studio-pro
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Electronics;Engineering;Science;
+Icon=serial-studio-pro
+X-AppImage-Name=Serial Studio
+X-AppImage-Version=3.1.7

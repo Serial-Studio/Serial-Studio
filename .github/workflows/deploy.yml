@@ -50,8 +50,7 @@ env:
   PUBLISHER: "Alex Spataru"
   INSTALL_QT_MACOS: false
   INSTALL_QT_WINDOWS: false
-  INSTALL_QT_LINUX: false
-  INSTALL_QT_LINUX_ARM64: false
+  INSTALL_QT_LINUX: true
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"
 
@@ -231,7 +230,7 @@ jobs:
             chmod +x linuxdeploy-x86_64.AppImage
             chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
             export QML_SOURCES_PATHS="${{env.QML_DIR}}"
-            ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
+            ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}}-pro -i ../../app/deploy/linux/${{env.UNIXNAME}}-pro.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}-pro.desktop --plugin qt --output appimage
             rm linuxdeploy-x86_64.AppImage
             rm linuxdeploy-plugin-qt-x86_64.AppImage
           else
@@ -368,12 +367,12 @@ jobs:
         npm install --global create-dmg
         rm LICENSE.md
         create-dmg "${{env.APPLICATION}} Pro.app" --dmg-title="${{env.APPLICATION}} Pro"
-        mv "${{env.APPLICATION}} Pro ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-macOS-Universal.dmg"
+        mv "${{env.APPLICATION}} Pro ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-macOS.dmg"
 
     - name: "📋 Notarize"
       shell: bash
       env:
-        PRODUCT_PATH: ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-macOS-Universal.dmg
+        PRODUCT_PATH: ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-macOS.dmg
         APPLE_ID: ${{secrets.APPLE_NOTARIZATION_USERNAME}}
         APP_PASSWORD: ${{secrets.APPLE_NOTARIZATION_PASSWORD}}
         TEAM_ID: ${{secrets.APPLE_NOTARIZATION_TEAMID}}
@@ -389,15 +388,15 @@ jobs:
     - name: "📌 Staple"
       shell: bash
       run: |
-        PRODUCT="${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-macOS-Universal.dmg"
+        PRODUCT="${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-macOS.dmg"
         echo "Stapling $PRODUCT..."
         xcrun stapler staple "$PRODUCT"
 
     - name: "📤 Upload artifact: DMG"
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-macOS-Universal.dmg
-        path: ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-macOS-Universal.dmg
+        name: ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-macOS.dmg
+        path: ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-macOS.dmg
 
 #-------------------------------------------------------------------------------
 # Windows build (MinGW x86_64)
@@ -499,14 +498,14 @@ jobs:
         $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
         cd build
         cpack --verbose
-        mv *.msi ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-Windows-x86_64.msi
-        mv ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-Windows-x86_64.msi ../
+        mv *.msi ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-Windows.msi
+        mv ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-Windows.msi ../
   
     - name: "📤 Upload artifact: MSI installer"
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-Windows-x86_64.msi
-        path: ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-Windows-x86_64.msi
+        name: ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-Windows.msi
+        path: ${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-Windows.msi
 
 #-------------------------------------------------------------------------------
 # Create release

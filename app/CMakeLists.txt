@@ -352,19 +352,32 @@ elseif(APPLE)
     MACOSX_BUNDLE_INFO_PLIST ${INFO_MACOSX}
   )
 elseif(UNIX)
-  install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION bin)
-  install(
-    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.svg
-    DESTINATION share/pixmaps
-  )
-  install(
-    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.metainfo.xml
-    DESTINATION share/metainfo
-  )
-  install(
-    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.desktop
-    DESTINATION share/applications
-  )
+  if(BUILD_COMMERCIAL)
+    install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION bin)
+    install(
+      FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio-pro.svg
+      DESTINATION share/pixmaps
+    )
+    install(
+      FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio-pro.desktop
+      DESTINATION share/applications
+    )
+  else()
+    install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION bin)
+    install(
+      FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.svg
+      DESTINATION share/pixmaps
+    )
+    install(
+      FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.metainfo.xml
+      DESTINATION share/metainfo
+    )
+    install(
+      FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.desktop
+      DESTINATION share/applications
+    )
+  endif()
+
 endif()
 
 #-------------------------------------------------------------------------------

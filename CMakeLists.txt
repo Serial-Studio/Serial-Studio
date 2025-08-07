@@ -145,7 +145,11 @@ message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
 #-------------------------------------------------------------------------------
 
 if (UNIX AND NOT APPLE)
-   set(PROJECT_EXECUTABLE "serial-studio")
+   if(BUILD_COMMERCIAL)
+      set(PROJECT_EXECUTABLE "serial-studio")
+   else()
+      set(PROJECT_EXECUTABLE "serial-studio-pro")
+   endif()
    set(CMAKE_C_COMPILER_AR "/usr/bin/ar")
    set(CMAKE_CXX_COMPILER_AR "/usr/bin/ar")
    set(CMAKE_C_COMPILER_RANLIB "/usr/bin/ranlib")
