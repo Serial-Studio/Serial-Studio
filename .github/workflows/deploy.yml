@@ -180,7 +180,7 @@ jobs:
 
       - name: "⚙️ Install Open Source Qt"
         if: matrix.edition == 'gpl3'
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
           version: ${{env.QT_VERSION_LINUX}}
           target: desktop
@@ -368,7 +368,7 @@ jobs:
         npm install --global create-dmg
         rm LICENSE.md
         create-dmg "${{env.APPLICATION}} Pro.app" --dmg-title="${{env.APPLICATION}} Pro"
-        mv "${{env.APPLICATION}} Pro ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-macOS.dmg"
+        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-Pro-${{env.VERSION}}-macOS.dmg"
 
     - name: "📋 Notarize"
       shell: bash
