@@ -70,17 +70,17 @@ jobs:
     strategy:
       matrix:
         edition: [ 'commercial', 'gpl3' ]
-    name: '🐧 Linux (x86_64) - ${{ matrix.edition }}'
+    name: "🐧 Linux (x86_64) - ${{ matrix.edition == 'commercial' && 'Pro' || 'GPL3' }}"
     steps:
     
     #---------------------------------------------------------------------------
     # Common steps for all Linux builds
     #---------------------------------------------------------------------------
 
-    - name: '🧰 Checkout'
+    - name: "🧰 Checkout"
       uses: actions/checkout@v4
 
-    - name: '⚙️ Install dependencies'
+    - name: "⚙️ Install dependencies"
       run: |
         sudo apt-get update
         sudo apt-get install -y \
@@ -119,7 +119,7 @@ jobs:
           libxkbcommon-x11-0 \
           libxkbcommon-x11-dev
 
-    - name: '⚙️ Install CMake'
+    - name: "⚙️ Install CMake"
       uses: lukka/get-cmake@latest
       with:
         useLocalCache: true
@@ -128,7 +128,7 @@ jobs:
     # Qt installation for commercial builds
     #---------------------------------------------------------------------------
 
-    - name: '⚙️ Restore Commercial Qt Cache'
+    - name: "⚙️ Restore Commercial Qt Cache"
       uses: actions/cache/restore@v3
       if: matrix.edition == 'commercial' && env.INSTALL_QT_LINUX_INTEL == 'false'
       with:
@@ -178,20 +178,20 @@ jobs:
     # Qt installation for GPLv3 builds
     #---------------------------------------------------------------------------
 
-    - name: '⚙️ Install Open Source Qt'
+    - name: "⚙️ Install Open Source Qt"
       if: matrix.edition == 'gpl3'
       uses: jurplel/install-qt-action@v3
       with:
         version: ${{env.QT_VERSION_LINUX}}
         target: desktop
-        modules: qtbase qtgraphs qtserialport qtconnectivity qtshadertools qtsvg
+        modules: qtgraphs qtserialport qtconnectivity qtshadertools
         cache: true
 
     #---------------------------------------------------------------------------
     # Commercial build configuration
     #---------------------------------------------------------------------------
 
-    - name: '🚧 Configure Commercial Build with CMake'
+    - name: "🚧 Configure Commercial Build with CMake"
       if: matrix.edition == 'commercial'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -206,7 +206,7 @@ jobs:
     # GPLv3 build configuration
     #---------------------------------------------------------------------------
 
-    - name: '🚧 Configure GPLv3 Build with CMake'
+    - name: "🚧 Configure GPLv3 Build with CMake"
       if: matrix.edition == 'gpl3'
       run: |
         mkdir build
@@ -217,7 +217,7 @@ jobs:
     # Build application
     #---------------------------------------------------------------------------
 
-    - name: '🚧 Build application'
+    - name: "🚧 Build application"
       run: |
         cd build
         cmake --build . --config Release --parallel 16
@@ -226,7 +226,7 @@ jobs:
     # AppImage creation
     #---------------------------------------------------------------------------
 
-    - name: '📦 Create AppImage'
+    - name: "📦 Create AppImage"
       env:
         EXEC_NAME: ${{env.EXECUTABLE}}-${{ matrix.edition == 'commercial' && 'Pro' || 'GPL3' }}-${{env.VERSION}}-Linux-x86_64
       run: |
@@ -250,7 +250,7 @@ jobs:
     # Artifact upload
     #---------------------------------------------------------------------------
 
-    - name: '📤 Upload artifact: AppImage'
+    - name: "📤 Upload artifact: AppImage"
       uses: actions/upload-artifact@v4
       with:
         name: ${{env.EXECUTABLE}}-${{ matrix.edition == 'commercial' && 'Pro' || 'GPL3' }}-${{env.VERSION}}-Linux-x86_64
@@ -262,12 +262,12 @@ jobs:
 
   build-linux-aarch64:
     runs-on: ubuntu-24.04-arm
-    name: '🐧 Linux (aarch64)'
+    name: "🐧 Linux (aarch64) - Pro"
     steps:
-    - name: '🧰 Checkout'
+    - name: "🧰 Checkout"
       uses: actions/checkout@v4
 
-    - name: '⚙️ Install dependencies'
+    - name: "⚙️ Install dependencies"
       run: |
         sudo apt-get update
         sudo apt-get install -y \
@@ -306,7 +306,7 @@ jobs:
           libxkbcommon-x11-0 \
           libxkbcommon-x11-dev
 
-    - name: '⚙️ Restore Qt Cache'
+    - name: "⚙️ Restore Qt Cache"
       uses: actions/cache/restore@v3
       if: env.INSTALL_QT_LINUX_ARM64 == 'false'
       with:
@@ -314,7 +314,7 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64
 
-    - name: '⚙️ Install Qt'
+    - name: "⚙️ Install Qt"
       shell: bash
       if: env.INSTALL_QT_LINUX_ARM64 == 'true'
       env:
@@ -327,7 +327,7 @@ jobs:
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
 
-    - name: '⚙️ Save Qt Cache'
+    - name: "⚙️ Save Qt Cache"
       uses: actions/cache/save@v3
       if: env.INSTALL_QT_LINUX_ARM64 == 'true'
       with:
@@ -335,7 +335,7 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64
 
-    - name: '⚙️ Add Qt to PATH'
+    - name: "⚙️ Add Qt to PATH"
       shell: bash
       env:
         QT_VERSION: ${{env.QT_VERSION_LINUX}}
@@ -349,12 +349,12 @@ jobs:
         echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
         echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
 
-    - name: '⚙️ Install CMake'
+    - name: "⚙️ Install CMake"
       uses: lukka/get-cmake@latest
       with:
         useLocalCache: true
 
-    - name: '🚧 Configure with CMake'
+    - name: "🚧 Configure with CMake"
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
@@ -364,12 +364,12 @@ jobs:
         cd build
         cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
 
-    - name: '🚧 Build application'
+    - name: "🚧 Build application"
       run: |
         cd build
         cmake --build . --config Release --parallel 16
 
-    - name: '📦 Create AppImage'
+    - name: "📦 Create AppImage"
       run: |
         cd "build/app"
         wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-aarch64.AppImage
@@ -387,7 +387,7 @@ jobs:
 
         mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
 
-    - name: '📤 Upload artifact: AppImage'
+    - name: "📤 Upload artifact: AppImage"
       uses: actions/upload-artifact@v4
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
@@ -399,7 +399,7 @@ jobs:
 
   build-mac-universal:
     runs-on: macos-latest
-    name: '🍎 macOS (Universal)'
+    name: '🍎 macOS (Universal) - Pro'
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
@@ -540,7 +540,7 @@ jobs:
   
   build-windows-x86_64:
     runs-on: windows-latest
-    name: '🧊 Windows (x86_64, MinGW)'
+    name: '🧊 Windows (x86_64, MinGW) - Pro'
     steps:
     - run: git config --global core.autocrlf input
   
