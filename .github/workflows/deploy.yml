@@ -130,8 +130,7 @@ jobs:
 
     - name: '⚙️ Restore Commercial Qt Cache'
       uses: actions/cache/restore@v3
-      if: matrix.edition == 'commercial'
-      if: env.INSTALL_QT_LINUX_INTEL == 'false'
+      if: matrix.edition == 'commercial' && env.INSTALL_QT_LINUX_INTEL == 'false'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
@@ -139,9 +138,8 @@ jobs:
         key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
 
     - name: '⚙️ Install Commercial Qt'
-      if: matrix.edition == 'commercial'
+      if: matrix.edition == 'commercial' && env.INSTALL_QT_LINUX_INTEL == 'true'
       shell: bash
-      if: env.INSTALL_QT_LINUX_INTEL == 'true'
       env:
         QT_VERSION: ${{env.QT_VERSION_LINUX}}
         QT_ARCH: x64
@@ -153,8 +151,7 @@ jobs:
         ./scripts/install-qt.sh
 
     - name: '⚙️ Save Commercial Qt Cache'
-      if: matrix.edition == 'commercial'
-      if: env.INSTALL_QT_LINUX_INTEL == 'true'
+      if: matrix.edition == 'commercial' && env.INSTALL_QT_LINUX_INTEL == 'true'
       uses: actions/cache/save@v3
       with:
         path: |
@@ -186,10 +183,8 @@ jobs:
       uses: jurplel/install-qt-action@v3
       with:
         version: ${{env.QT_VERSION_LINUX}}
-        host: linux
         target: desktop
-        arch: x64
-        modules: qtbase qtdeclarative qtquickcontrols2 qttools
+        modules: qtbase qtgraphs qtserialport qtconnectivity qtshadertools qtsvg
         cache: true
 
     #---------------------------------------------------------------------------
