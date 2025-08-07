@@ -390,6 +390,7 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
 {
   // Real-time data, parse data & perform conversion
   QStringList channels;
+  channels.reserve(64);
   if (!CSV::Player::instance().isOpen() && m_frameParser) [[likely]]
   {
     switch (JSON::ProjectModel::instance().decoderMethod())
@@ -418,6 +419,7 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
   if (!channels.isEmpty())
   {
     // Replace data in frame
+    auto *channelData = channels.data();
     const int channelCount = channels.size();
     for (size_t g = 0; g < m_frame.groups.size(); ++g)
     {
@@ -428,7 +430,8 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
         const int idx = dataset.index;
         if (idx > 0 && idx <= channelCount) [[likely]]
         {
-          dataset.value = channels[idx - 1];
+          QString &value = channelData[idx - 1];
+          dataset.value = std::move(value);
           dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
         }
       }
@@ -455,7 +458,7 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
 void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
 {
   // Create a vector of channels
-  QVector<QStringView> channels;
+  QStringList channels;
   if (m_quickPlotChannels > 0) [[likely]]
     channels.reserve(m_quickPlotChannels);
   else
@@ -464,44 +467,41 @@ void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
   // Split the string into commas
   int start = 0;
   const auto str = QString::fromUtf8(data);
-  QStringView view(str);
-  const int dataLength = view.size();
-  for (int i = 0; i <= dataLength; ++i)
+  const int dataLength = str.size();
+  for (int i = 0; i <= str.size(); ++i)
   {
-    if (i == dataLength || view[i] == ',')
+    if (i == dataLength || str[i] == ',')
     {
-      channels.append(view.mid(start, i - start).trimmed());
+      channels.append(str.mid(start, i - start).trimmed());
       start = i + 1;
     }
   }
 
   // Process data
-  const int channelCount = channels.count();
+  const int channelCount = channels.size();
   if (channelCount > 0)
   {
-    // Regenerate the quick plot frame if needed
+    // Rebuild frame if channel count changed
     if (channelCount != m_quickPlotChannels) [[unlikely]]
     {
-      QStringList channelStrs;
-      channelStrs.reserve(channelCount);
-      for (const auto &v : channels)
-        channelStrs.append(v.toString());
-
-      buildQuickPlotFrame(channelStrs);
+      buildQuickPlotFrame(channels);
       m_quickPlotChannels = channelCount;
     }
 
-    // Update the values of the quick plot frame
+    // Replace data in frame
+    auto *channelData = channels.data();
+    const int channelCount = channels.size();
     for (size_t g = 0; g < m_quickPlotFrame.groups.size(); ++g)
     {
       auto &group = m_quickPlotFrame.groups[g];
       for (size_t d = 0; d < group.datasets.size(); ++d)
       {
         auto &dataset = group.datasets[d];
-        const int index = dataset.index;
-        if (index > 0 && index <= channelCount) [[likely]]
+        const int idx = dataset.index;
+        if (idx > 0 && idx <= channelCount) [[likely]]
         {
-          dataset.value = channels[index - 1].toString();
+          QString &value = channelData[idx - 1];
+          dataset.value = std::move(value);
           dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
         }
       }

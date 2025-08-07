@@ -520,13 +520,13 @@ UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
   static const JSON::Group emptyGroup;
   const auto it = m_widgetGroups.constFind(widget);
 
-  if (it == m_widgetGroups.cend())
+  if (it == m_widgetGroups.cend()) [[unlikely]]
   {
     qWarning() << "getGroupWidget: widget type not found:" << widget;
     return emptyGroup;
   }
 
-  if (index < 0 || index >= it->size())
+  if (index < 0 || index >= it->size()) [[unlikely]]
   {
     qWarning() << "getGroupWidget: index out of bounds:" << index
                << "for widget" << widget;
@@ -561,13 +561,13 @@ UI::Dashboard::getDatasetWidget(const SerialStudio::DashboardWidget widget,
   static const JSON::Dataset emptyDataset;
   const auto it = m_widgetDatasets.constFind(widget);
 
-  if (it == m_widgetDatasets.cend())
+  if (it == m_widgetDatasets.cend()) [[unlikely]]
   {
     qWarning() << "getDatasetWidget: widget type not found:" << widget;
     return emptyDataset;
   }
 
-  if (index < 0 || index >= it->size())
+  if (index < 0 || index >= it->size()) [[unlikely]]
   {
     qWarning() << "getDatasetWidget: index out of bounds:" << index
                << "for widget" << widget;
