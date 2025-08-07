@@ -64,7 +64,7 @@ jobs:
 # GNU/Linux build (x86_64 and arm64)
 #-------------------------------------------------------------------------------
 
-  - build-linux:
+  build-linux:
     strategy:
       matrix:
         include:
