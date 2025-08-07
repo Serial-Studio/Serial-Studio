@@ -185,8 +185,8 @@ jobs:
         with:
           version: ${{env.QT_VERSION_LINUX}}
           target: desktop
-          arch: ${{ matrix.arch == 'x64' && 'linux_gcc_64' || 'linux_arm64' }}
-          modules: qtbase qtgraphs qtserialport qtconnectivity qtshadertools qtsvg
+          arch: ${{ matrix.arch == 'x64' && 'linux_gcc_64' || 'linux_gcc_arm64' }}
+          modules: qt3d qtquick3d qtdatavis3d qtgraphs qtserialport qtconnectivity qtshadertools
           cache: true
 
       #---------------------------------------------------------------------------
