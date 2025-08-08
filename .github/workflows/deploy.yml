@@ -146,6 +146,14 @@ jobs:
         with:
           useLocalCache: true
 
+      - name: "🛠️ Install MinGW Libraries"
+        if: matrix.os == 'windows-latest'
+        id: mingw
+        uses: bwoodsend/setup-winlibs-action@v1
+        with:
+          with_clang: true
+          add_to_path: true
+
       #-------------------------------------------------------------------------
       # Install dependencies
       #-------------------------------------------------------------------------
@@ -394,6 +402,8 @@ jobs:
           mkdir build
           cd build
           cmake ../ `
+            -DCMAKE_C_COMPILER="${{ steps.mingw.outputs.bin }}/clang.exe" `
+            -DCMAKE_CXX_COMPILER="${{ steps.mingw.outputs.bin }}/clang++.exe" `
             -DPRODUCTION_OPTIMIZATION=ON `
             -DCMAKE_BUILD_TYPE=Release `
 
