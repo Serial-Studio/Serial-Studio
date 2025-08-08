@@ -193,8 +193,8 @@ if(PRODUCTION_OPTIMIZATION)
    # Print status
    message("Enabling production optimization flags...")
 
-   # MinGW on Windows
-   if(WIN32 AND MINGW)
+   # LLVM (MinGW) on Windows
+   if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND MINGW)
       add_compile_options(
          -O2                             # Optimize for speed
          -ftree-vectorize                # Enable automatic vectorization
@@ -208,8 +208,27 @@ if(PRODUCTION_OPTIMIZATION)
          -fdata-sections                 # Place each data item in its own section
       )
       add_link_options(
-         -Wl,-dead_strip                 # Remove unused functions/data from final binary
+         -Wl,--gc-sections               # Remove unused functions/data from final binary
          -flto                           # Enable Link-Time Optimization
+      )
+   
+   # GCC (MinGW) on Windows
+   elseif(WIN32 AND MINGW)
+      add_compile_options(
+         -O2                             # Optimize for speed
+         -ftree-vectorize                # Enable automatic vectorization
+         -funroll-loops                  # Improve loop performance by unrolling
+         -fomit-frame-pointer            # Optimize function call overhead
+         -frename-registers              # Better instruction scheduling
+         -fno-fast-math                  # IEEE-compliant floating point
+         -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
+         -fstack-reuse=all               # Reuse stack slots
+         -finline-functions              # Inline functions where possible
+         -ffunction-sections             # Place each function in its own section
+         -fdata-sections                 # Place each data item in its own section
+      )
+      add_link_options(
+         -Wl,--gc-sections               # Remove unused code/data at link time
       )
 
    # MSVC (Visual Studio)
