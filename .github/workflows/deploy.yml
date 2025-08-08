@@ -39,7 +39,7 @@ on:
 #-------------------------------------------------------------------------------
 
 env:
-  INSTALL_QT: false                           # Enable/disable Qt installation
+  INSTALL_QT: true                            # Enable/disable Qt installation
   QT_VERSION: 6.9.1                           # Version of Qt to install
   APP_VERSION: "3.1.7"                        # Application version
   QML_DIR: "../../app/qml"                    # Path to QML sources
@@ -226,7 +226,7 @@ jobs:
       #-------------------------------------------------------------------------  
 
       - name: "Save Commercial Qt Cache"
-        if: matrix.edition == 'commercial' && env.QT_VERSION == 'true'
+        if: matrix.edition == 'commercial' && env.INSTALL_QT == 'true'
         uses: actions/cache/save@v3
         with:
           path: |
