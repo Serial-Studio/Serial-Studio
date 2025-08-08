@@ -54,7 +54,6 @@ set(SERIAL_STUDIO_INSTANCE_ID $ENV{SERIAL_STUDIO_INSTANCE_ID} CACHE STRING "Inst
 #-------------------------------------------------------------------------------
 
 set(PROJECT_DISPNAME            "Serial Studio")
-set(PROJECT_EXECUTABLE          "Serial-Studio")
 set(PROJECT_VENDOR              "Alex Spataru")
 set(PROJECT_CONTACT             "serial-studio.github.io")
 set(PROJECT_DESCRIPTION_SUMMARY "Flexible data visualization software for embedded devices and projects")
@@ -141,15 +140,28 @@ endif()
 message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
 
 #-------------------------------------------------------------------------------
+# Set project executable name depending on version
+#-------------------------------------------------------------------------------
+
+if(BUILD_COMMERCIAL)
+   if (UNIX AND NOT APPLE)
+      set(PROJECT_EXECUTABLE "serial-studio-pro")
+   else()
+      set(PROJECT_EXECUTABLE "Serial-Studio-Pro")
+   endif()
+else()
+   if (UNIX AND NOT APPLE)
+      set(PROJECT_EXECUTABLE "serial-studio")
+   else()
+      set(PROJECT_EXECUTABLE "Serial-Studio")
+   endif()
+endif()
+
+#-------------------------------------------------------------------------------
 # Set UNIX friendly name for app & fix OpenSUSE builds
 #-------------------------------------------------------------------------------
 
 if (UNIX AND NOT APPLE)
-   if(BUILD_COMMERCIAL)
-      set(PROJECT_EXECUTABLE "serial-studio")
-   else()
-      set(PROJECT_EXECUTABLE "serial-studio-pro")
-   endif()
    set(CMAKE_C_COMPILER_AR "/usr/bin/ar")
    set(CMAKE_CXX_COMPILER_AR "/usr/bin/ar")
    set(CMAKE_C_COMPILER_RANLIB "/usr/bin/ranlib")

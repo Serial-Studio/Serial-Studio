@@ -243,9 +243,15 @@ if(WIN32)
   set(WIN_RC "${CMAKE_CURRENT_SOURCE_DIR}/deploy/windows/info.rc")
   set(SOURCES ${SOURCES} ${WIN_RC} "src/Platform/NativeWindow_Windows.cpp")
 elseif(APPLE)
-  set(INFO_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/info.plist")
+  if(BUILD_COMMERCIAL)
+    set(INFO_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/info-pro.plist")
+  else()
+    set(INFO_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/info-gpl3.plist")
+  endif()
+
   set(ICON_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/AppIcon.icns")
   set(ASSETS_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/Assets.car")
+
   set_source_files_properties(
     ${ICON_MACOSX}
     ${ASSETS_MACOSX}
@@ -352,32 +358,19 @@ elseif(APPLE)
     MACOSX_BUNDLE_INFO_PLIST ${INFO_MACOSX}
   )
 elseif(UNIX)
-  if(BUILD_COMMERCIAL)
-    install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION bin)
-    install(
-      FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio-pro.svg
-      DESTINATION share/pixmaps
-    )
-    install(
-      FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio-pro.desktop
-      DESTINATION share/applications
-    )
-  else()
-    install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION bin)
-    install(
-      FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.svg
-      DESTINATION share/pixmaps
-    )
-    install(
-      FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.metainfo.xml
-      DESTINATION share/metainfo
-    )
-    install(
-      FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.desktop
-      DESTINATION share/applications
-    )
-  endif()
-
+  install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION bin)
+  install(
+    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/${PROJECT_EXECUTABLE}.svg
+    DESTINATION share/pixmaps
+  )
+  install(
+    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.metainfo.xml
+    DESTINATION share/metainfo
+  )
+  install(
+    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/${PROJECT_EXECUTABLE}.desktop
+    DESTINATION share/applications
+  )
 endif()
 
 #-------------------------------------------------------------------------------
