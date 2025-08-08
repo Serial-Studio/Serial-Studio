@@ -39,7 +39,7 @@ on:
 #-------------------------------------------------------------------------------
 
 env:
-  INSTALL_QT: true                            # Enable/disable Qt installation
+  INSTALL_QT: false                           # Re-install Commercial Qt
   QT_VERSION: 6.9.1                           # Version of Qt to install
   APP_VERSION: "3.1.7"                        # Application version
   QML_DIR: "../../app/qml"                    # Path to QML sources
@@ -83,12 +83,26 @@ jobs:
             appExecutable: "Serial-Studio-Pro"      # Executable name
             unixName:      "serial-studio-pro"      # UNIX name (for packaging)
 
+          - edition:       gpl3                     # GPLv3 edition   
+            arch:          x64                      # Produces Universal binary
+            os:            macos-latest             # macOS 13.0+
+            appName:       "Serial Studio GPL3"     # Application name
+            appExecutable: "Serial-Studio-GPL3"     # Executable name
+            unixName:      "serial-studio-gpl3"     # UNIX name (for packaging)
+
           - edition:       commercial               # Commercial edition   
             arch:          x64                      # Produces Universal binary
             os:            macos-latest             # macOS 13.0+
             appName:       "Serial Studio Pro"      # Application name
             appExecutable: "Serial-Studio-Pro"      # Executable name
             unixName:      "serial-studio-pro"      # UNIX name (for packaging)
+
+          - edition:       gpl3                     # GPLv3 edition   
+            arch:          x64                      # Intel x64 architecture
+            os:            windows-latest           # Windows 10/11
+            appName:       "Serial Studio GPL3"     # Application name
+            appExecutable: "Serial-Studio-GPL3"     # Executable name
+            unixName:      "serial-studio-gpl3"     # UNIX name (for packaging)
 
           - edition:       commercial               # Commercial edition   
             arch:          x64                      # Intel x64 architecture
@@ -174,9 +188,27 @@ jobs:
         with:
           version: ${{env.QT_VERSION}}
           target: desktop
-          host: ${{ matrix.arch == 'x64' && 'linux' || 'linux_arm64' }}
-          arch: ${{ matrix.arch == 'x64' && 'linux_gcc_64' || 'linux_gcc_arm64' }}
-          modules: qt3d qtquick3d qtdatavis3d qtgraphs qtserialport qtconnectivity qtshadertools
+          host: ${{ 
+            matrix.os == 'macos-latest' && 'mac' || 
+            (matrix.os == 'windows-latest' && (
+              matrix.arch == 'x64' && 'windows' || 
+              'windows_arm64'
+            )) || 
+            (matrix.arch == 'x64' && 'linux' || 'linux_arm64') 
+          }}
+          arch: ${{ 
+                matrix.os == 'macos-latest' && 'clang_64' || 
+                (matrix.os == 'windows-latest' && 'win32_mingw53') || 
+                (matrix.arch == 'x64' && 'linux_gcc_64' || 'linux_gcc_arm64') 
+                }}  
+          modules: 
+            - qt3d
+            - qtquick3d
+            - qtdatavis3d
+            - qtgraphs
+            - qtserialport
+            - qtconnectivity
+            - qtshadertools  
           cache: true
 
       #-------------------------------------------------------------------------
@@ -321,7 +353,24 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
+          cmake ../ \
+            -DPRODUCTION_OPTIMIZATION=ON \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
+            -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+            -DBUILD_COMMERCIAL=ON \
+            -DBUILD_GPL3=OFF
+
+      - name: "Configure with CMake (macOS, GPL3)"
+        if: matrix.edition == 'gpl3' && matrix.os == 'macos-latest'
+        run: |
+          mkdir build
+          cd build
+          cmake ../ \
+            -DPRODUCTION_OPTIMIZATION=ON \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
+            -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" 
 
       - name: "Configure with CMake (Windows, Commercial)"
         if: matrix.edition == 'commercial' && matrix.os == 'windows-latest'
@@ -343,6 +392,22 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release `
             -DBUILD_COMMERCIAL=ON `
             -DBUILD_GPL3=OFF
+
+      - name: "Configure with CMake (Windows, GPL3)"
+        if: matrix.edition == 'gpl3' && matrix.os == 'windows-latest'
+        env:
+          QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/${{env.QT_VERSION}}/mingw_64/bin
+          QT_TOOLS_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/Tools/mingw1310_64/bin
+        run: |
+          $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
+          mkdir build
+          cd build
+          cmake ../ `
+            -G "MinGW Makefiles" `
+            -DCMAKE_C_COMPILER="${env:QT_TOOLS_PATH}\\gcc.exe" `
+            -DCMAKE_CXX_COMPILER="${env:QT_TOOLS_PATH}\\c++.exe" `
+            -DPRODUCTION_OPTIMIZATION=ON `
+            -DCMAKE_BUILD_TYPE=Release `
 
       #-------------------------------------------------------------------------
       # Build application
