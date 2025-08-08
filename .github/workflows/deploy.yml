@@ -395,7 +395,7 @@ jobs:
           cmake ../ `
             -G "MinGW Makefiles"
             -DPRODUCTION_OPTIMIZATION=ON `
-            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_BUILD_TYPE=Release 
 
       #-------------------------------------------------------------------------
       # Build application
