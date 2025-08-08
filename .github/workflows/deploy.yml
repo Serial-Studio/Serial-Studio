@@ -39,7 +39,7 @@ on:
 #-------------------------------------------------------------------------------
 
 env:
-  INSTALL_QT: true                            # Enable/disable Qt installation
+  INSTALL_QT: false                           # Enable/disable Qt installation
   QT_VERSION: 6.9.1                           # Version of Qt to install
   APP_VERSION: "3.1.7"                        # Application version
   QML_DIR: "../../app/qml"                    # Path to QML sources
@@ -58,9 +58,9 @@ jobs:
           - edition:       gpl3                     # GPLv3 edition
             arch:          x64                      # Intel x64 architecture
             os:            ubuntu-22.04             # Ubuntu 22.04
-            appName:       "Serial Studio"          # Application name
-            appExecutable: "Serial-Studio"          # Executable name
-            unixName:      "serial-studio"          # UNIX name (for packaging)
+            appName:       "Serial Studio GPL3"     # Application name
+            appExecutable: "Serial-Studio-GPL3"     # Executable name
+            unixName:      "serial-studio-gpl3"     # UNIX name (for packaging)
 
           - edition:       commercial               # Commercial edition    
             arch:          x64                      # Intel x64 architecture
@@ -72,9 +72,9 @@ jobs:
           - edition:       gpl3                     # GPLv3 edition
             arch:          arm64                    # ARM 64-bit architecture
             os:            ubuntu-24.04-arm         # Ubuntu 24.04 ARM
-            appName:       "Serial Studio"          # Application name
-            appExecutable: "Serial-Studio"          # Executable name
-            unixName:      "serial-studio"          # UNIX name (for packaging)
+            appName:       "Serial Studio GPL3"     # Application name
+            appExecutable: "Serial-Studio-GPL3"     # Executable name
+            unixName:      "serial-studio-gpl3"     # UNIX name (for packaging)
 
           - edition:       commercial               # Commercial edition    
             arch:          arm64                    # ARM 64-bit architecture
@@ -399,8 +399,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: startsWith(matrix.os, 'ubuntu')
         with:
-          name: ${{matrix.appExecutable}}-Linux-${{matrix.arch}}.AppImage
-          path: ${{matrix.appExecutable}}-Linux-${{matrix.arch}}.AppImage
+          name: ${{matrix.appExecutable}}-${{env.APP_VERSION}}-Linux-${{matrix.arch}}.AppImage
+          path: ${{matrix.appExecutable}}-${{env.APP_VERSION}}-Linux-${{matrix.arch}}.AppImage
 
       #-------------------------------------------------------------------------
       # macOS packaging & notarization

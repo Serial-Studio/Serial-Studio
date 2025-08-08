@@ -1,11 +1,11 @@
 [Desktop Entry]
-Name=Serial Studio
+Name=Serial Studio (GPLv3)
 Comment=Flexible data visualization software for embedded devices and projects
-Exec=serial-studio
+Exec=serial-studio-gpl3
 Terminal=false
 Type=Application
 StartupNotify=true
 Categories=Electronics;Engineering;Science;
-Icon=serial-studio
-X-AppImage-Name=Serial Studio
+Icon=serial-studio-gpl3
+X-AppImage-Name=Serial Studio (GPLv3)
 X-AppImage-Version=3.1.7
