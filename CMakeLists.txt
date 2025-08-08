@@ -202,14 +202,12 @@ if(PRODUCTION_OPTIMIZATION)
          -fomit-frame-pointer            # Optimize function call overhead
          -fno-fast-math                  # IEEE-compliant floating point
          -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -flto                           # Enable Link-Time optimization
          -finline-functions              # Inline functions where possible
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
       )
       add_link_options(
          -Wl,--gc-sections               # Remove unused functions/data from final binary
-         -flto                           # Enable Link-Time Optimization
       )
    
    # GCC (MinGW) on Windows
