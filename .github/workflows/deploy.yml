@@ -111,7 +111,7 @@ jobs:
             arch:          x64                      # Intel x64 architecture
             os:            windows-latest           # Windows 10/11
             qtHost:        windows                  # Use Windows Qt binaries
-            qtArch:        win32_mingw53            # Use MinGW/GCC Qt libs
+            qtArch:        win64_llvm_mingw         # Use LLVM/MinGW Qt libs
             appName:       "Serial Studio GPL3"     # Application name
             appExecutable: "Serial-Studio-GPL3"     # Executable name
             unixName:      "serial-studio-gpl3"     # UNIX name (for packaging)
