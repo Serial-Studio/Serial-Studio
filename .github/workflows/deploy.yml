@@ -204,9 +204,9 @@ jobs:
 
       - name: "🗄️ Save Commercial Qt Cache"
         if: matrix.edition == 'commercial' && env.INSTALL_QT == 'true'
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
         with:
-          key: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}-${{github.job}}
+          key: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}
           path: |
             ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
             ${{env.USERPROFILE}}/.qt-license
@@ -216,10 +216,10 @@ jobs:
       #-------------------------------------------------------------------------
 
       - name: "🗃️ Restore Commercial Qt Cache"
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         if: matrix.edition == 'commercial' && env.INSTALL_QT == 'false'
         with:
-          key: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}-${{github.job}}
+          key: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}
           path: |
             ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
             ${{env.USERPROFILE}}/.qt-license
