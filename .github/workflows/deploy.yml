@@ -381,16 +381,14 @@ jobs:
           ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
           SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
           SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
-          QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/${{env.QT_VERSION}}/mingw_64/bin
-          QT_TOOLS_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/Tools/mingw1310_64/bin
+          QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/${{env.QT_VERSION}}/llvm-mingw_64/bin
         run: |
           $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
           mkdir build
           cd build
           cmake ../ `
-            -G "MinGW Makefiles" `
-            -DCMAKE_C_COMPILER="${env:QT_TOOLS_PATH}\\gcc.exe" `
-            -DCMAKE_CXX_COMPILER="${env:QT_TOOLS_PATH}\\c++.exe" `
+            -DCMAKE_C_COMPILER="${{steps.mingw.outputs.bin}}/clang.exe" `
+            -DCMAKE_CXX_COMPILER="${{steps.mingw.outputs.bin}}/clang++.exe" `
             -DPRODUCTION_OPTIMIZATION=ON `
             -DCMAKE_BUILD_TYPE=Release `
             -DBUILD_COMMERCIAL=ON `

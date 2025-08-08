@@ -193,23 +193,23 @@ if(PRODUCTION_OPTIMIZATION)
    # Print status
    message("Enabling production optimization flags...")
 
-   # GCC (MinGW) on Windows
+   # MinGW on Windows
    if(WIN32 AND MINGW)
       add_compile_options(
          -O2                             # Optimize for speed
          -ftree-vectorize                # Enable automatic vectorization
          -funroll-loops                  # Improve loop performance by unrolling
          -fomit-frame-pointer            # Optimize function call overhead
-         -frename-registers              # Better instruction scheduling
          -fno-fast-math                  # IEEE-compliant floating point
          -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -fstack-reuse=all               # Reuse stack slots
+         -flto                           # Enable Link-Time optimization
          -finline-functions              # Inline functions where possible
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
       )
       add_link_options(
-         -Wl,--gc-sections               # Remove unused code/data at link time
+         -Wl,-dead_strip                 # Remove unused functions/data from final binary
+         -flto                           # Enable Link-Time Optimization
       )
 
    # MSVC (Visual Studio)
