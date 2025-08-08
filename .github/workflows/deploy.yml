@@ -61,24 +61,35 @@ jobs:
             appName:       "Serial Studio"
             appExecutable: "Serial-Studio"
             unixName:      "serial-studio"
+            
           - edition:       commercial                  
             arch:          x64
             os:            ubuntu-22.04
             appName:       "Serial Studio Pro"
             appExecutable: "Serial-Studio-Pro"
             unixName:      "serial-studio-pro"
+
           - edition:       gpl3                  
             arch:          arm64
             os:            ubuntu-24.04-arm
             appName:       "Serial Studio"
             appExecutable: "Serial-Studio"
             unixName:      "serial-studio"
+
+          - edition:       commercial                  
+            arch:          arm64
+            os:            ubuntu-24.04-arm
+            appName:       "Serial Studio Pro"
+            appExecutable: "Serial-Studio-Pro"
+            unixName:      "serial-studio-pro"
+
           - edition:       commercial                  
             arch:          Universal
             os:            macos-latest
             appName:       "Serial Studio Pro"
             appExecutable: "Serial-Studio-Pro"
             unixName:      "serial-studio-pro"
+
           - edition:       commercial                  
             arch:          x64
             os:            windows-latest
