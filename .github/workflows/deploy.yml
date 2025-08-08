@@ -55,47 +55,47 @@ jobs:
     strategy:
       matrix:
         include:
-          - edition:       gpl3                  
-            arch:          x64
-            os:            ubuntu-22.04
-            appName:       "Serial Studio"
-            appExecutable: "Serial-Studio"
-            unixName:      "serial-studio"
-            
-          - edition:       commercial                  
-            arch:          x64
-            os:            ubuntu-22.04
-            appName:       "Serial Studio Pro"
-            appExecutable: "Serial-Studio-Pro"
-            unixName:      "serial-studio-pro"
+          - edition:       gpl3                     # GPLv3 edition
+            arch:          x64                      # Intel x64 architecture
+            os:            ubuntu-22.04             # Ubuntu 22.04
+            appName:       "Serial Studio"          # Application name
+            appExecutable: "Serial-Studio"          # Executable name
+            unixName:      "serial-studio"          # UNIX name (for packaging)
 
-          - edition:       gpl3                  
-            arch:          arm64
-            os:            ubuntu-24.04-arm
-            appName:       "Serial Studio"
-            appExecutable: "Serial-Studio"
-            unixName:      "serial-studio"
+          - edition:       commercial               # Commercial edition    
+            arch:          x64                      # Intel x64 architecture
+            os:            ubuntu-22.04             # Ubuntu 22.04
+            appName:       "Serial Studio Pro"      # Application name
+            appExecutable: "Serial-Studio-Pro"      # Executable name
+            unixName:      "serial-studio-pro"      # UNIX name (for packaging)
 
-          - edition:       commercial                  
-            arch:          arm64
-            os:            ubuntu-24.04-arm
-            appName:       "Serial Studio Pro"
-            appExecutable: "Serial-Studio-Pro"
-            unixName:      "serial-studio-pro"
+          - edition:       gpl3                     # GPLv3 edition
+            arch:          arm64                    # ARM 64-bit architecture
+            os:            ubuntu-24.04-arm         # Ubuntu 24.04 ARM
+            appName:       "Serial Studio"          # Application name
+            appExecutable: "Serial-Studio"          # Executable name
+            unixName:      "serial-studio"          # UNIX name (for packaging)
 
-          - edition:       commercial                  
-            arch:          Universal
-            os:            macos-latest
-            appName:       "Serial Studio Pro"
-            appExecutable: "Serial-Studio-Pro"
-            unixName:      "serial-studio-pro"
+          - edition:       commercial               # Commercial edition    
+            arch:          arm64                    # ARM 64-bit architecture
+            os:            ubuntu-24.04-arm         # Ubuntu 24.04 ARM
+            appName:       "Serial Studio Pro"      # Application name
+            appExecutable: "Serial-Studio-Pro"      # Executable name
+            unixName:      "serial-studio-pro"      # UNIX name (for packaging)
 
-          - edition:       commercial                  
-            arch:          x64
-            os:            windows-latest
-            appName:       "Serial Studio Pro"
-            appExecutable: "Serial-Studio-Pro"
-            unixName:      "serial-studio-pro"
+          - edition:       commercial               # Commercial edition   
+            arch:          x64                      # Produces Universal binary
+            os:            macos-latest             # macOS 13.0+
+            appName:       "Serial Studio Pro"      # Application name
+            appExecutable: "Serial-Studio-Pro"      # Executable name
+            unixName:      "serial-studio-pro"      # UNIX name (for packaging)
+
+          - edition:       commercial               # Commercial edition   
+            arch:          x64                      # Intel x64 architecture
+            os:            windows-latest           # Windows 10/11
+            appName:       "Serial Studio Pro"      # Application name
+            appExecutable: "Serial-Studio-Pro"      # Executable name
+            unixName:      "serial-studio-pro"      # UNIX name (for packaging)
 
     #
     # Configure action name & operating system
@@ -214,7 +214,7 @@ jobs:
         if: matrix.edition == 'commercial' && env.INSTALL_QT == 'true' && matrix.os == 'windows-latest'
         env:
           QT_VERSION: ${{env.QT_VERSION}}
-          QT_ARCH: x64
+          QT_ARCH: ${{matrix.arch}}
           QT_USERNAME: ${{secrets.QT_USERNAME}}
           QT_PASSWORD: ${{secrets.QT_PASSWORD}}
           QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
@@ -245,15 +245,10 @@ jobs:
           QT_VERSION: ${{env.QT_VERSION}}
           QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
         run: |
-          if [ "${{matrix.arch}}" = "x64" ]; then
-            export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
-            export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
-            export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
-          else
-            export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/bin"
-            export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/libexec"
-            export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/lib/cmake"
-          fi
+          export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_${{matrix.arch}}/bin"
+          export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_${{matrix.arch}}/libexec"
+          export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_${{matrix.arch}}/lib/cmake"
+
           echo "$QT_BIN_PATH" >> $GITHUB_PATH
           echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
           echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
@@ -369,26 +364,28 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: |
           cd "build/app"
+
+          arch_suffix=""
           if [ "${{matrix.arch}}" = "x64" ]; then
-            wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-x86_64.AppImage
-            wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
-            chmod +x linuxdeploy-x86_64.AppImage
-            chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
-            export QML_SOURCES_PATHS="${{env.QML_DIR}}"
-            ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{matrix.unixName}} -i ../../app/deploy/linux/${{matrix.unixName}}.svg -d ../../app/deploy/linux/${{matrix.unixName}}.desktop --plugin qt --output appimage
-            rm linuxdeploy-x86_64.AppImage
-            rm linuxdeploy-plugin-qt-x86_64.AppImage
+            arch_suffix="x86_64"
           else
-            wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-aarch64.AppImage
-            wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-aarch64.AppImage
-            chmod +x linuxdeploy-aarch64.AppImage
-            chmod +x linuxdeploy-plugin-qt-aarch64.AppImage
-            export QML_SOURCES_PATHS="${{env.QML_DIR}}"
-            ./linuxdeploy-aarch64.AppImage --appdir AppDir -e ${{matrix.unixName}} -i ../../app/deploy/linux/${{matrix.unixName}}.svg -d ../../app/deploy/linux/${{matrix.unixName}}.desktop --plugin qt --output appimage
-            rm linuxdeploy-aarch64.AppImage
-            rm linuxdeploy-plugin-qt-aarch64.AppImage
+            arch_suffix="aarch64"
           fi
-          
+
+          LINUXDEPLOY_URL="https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-${arch_suffix}.AppImage"
+          PLUGIN_QT_URL="https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-${arch_suffix}.AppImage"
+
+          wget "$LINUXDEPLOY_URL"
+          wget "$PLUGIN_QT_URL"
+          chmod +x linuxdeploy-${arch_suffix}.AppImage
+          chmod +x linuxdeploy-plugin-qt-${arch_suffix}.AppImage
+
+          export QML_SOURCES_PATHS="${{env.QML_DIR}}"
+          ./linuxdeploy-${arch_suffix}.AppImage --appdir AppDir -e ${{matrix.unixName}} -i ../../app/deploy/linux/${{matrix.unixName}}.svg -d ../../app/deploy/linux/${{matrix.unixName}}.desktop --plugin qt --output appimage
+        
+          rm linuxdeploy-${arch_suffix}.AppImage
+          rm linuxdeploy-plugin-qt-${arch_suffix}.AppImage
+
           mv *.AppImage ../../${{matrix.appExecutable}}-Linux-${{matrix.arch}}.AppImage
 
       - name: "Upload artifact: AppImage"
