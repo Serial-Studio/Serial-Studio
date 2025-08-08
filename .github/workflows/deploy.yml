@@ -379,7 +379,7 @@ jobs:
           mkdir build
           cd build
           cmake ../ `
-            -G "MinGW Makefiles"
+            -G "MinGW Makefiles" `
             -DCMAKE_C_COMPILER="${env:QT_TOOLS_PATH}\\clang.exe" `
             -DCMAKE_CXX_COMPILER="${env:QT_TOOLS_PATH}\\clang++.exe" `
             -DPRODUCTION_OPTIMIZATION=ON `
@@ -393,7 +393,7 @@ jobs:
           mkdir build
           cd build
           cmake ../ `
-            -G "MinGW Makefiles"
+            -G "MinGW Makefiles" `
             -DPRODUCTION_OPTIMIZATION=ON `
             -DCMAKE_BUILD_TYPE=Release 
 
