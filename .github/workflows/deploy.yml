@@ -43,7 +43,7 @@ on:
 #-------------------------------------------------------------------------------
 
 env:
-  INSTALL_QT: "false"                               # Re-install Commercial Qt
+  INSTALL_QT: "true"                                # Re-install Commercial Qt
   QT_VERSION: "6.9.1"                               # Version of Qt to install
   APP_VERSION: "3.1.7"                              # Application version
   QML_DIR: "../../app/qml"                          # Path to QML sources
@@ -242,8 +242,7 @@ jobs:
         if: matrix.edition == 'commercial' && env.INSTALL_QT == 'true'
         uses: actions/cache/save@v3
         with:
-          key: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}-${{github.job}}
-          restore-keys: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}
+          key: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}
           path: |
             ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
             ${{env.USERPROFILE}}/.qt-license
