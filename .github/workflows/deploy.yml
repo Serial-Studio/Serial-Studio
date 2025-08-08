@@ -209,7 +209,7 @@ jobs:
           chmod +x ./scripts/install-qt.sh
           ./scripts/install-qt.sh
 
-      - name: "⚙️ Install Commercial Qt (Windows)"
+      - name: "Install Commercial Qt (Windows)"
         shell: pwsh
         if: matrix.edition == 'commercial' && env.INSTALL_QT == 'true' && matrix.os == 'windows-latest'
         env:
@@ -245,9 +245,16 @@ jobs:
           QT_VERSION: ${{env.QT_VERSION}}
           QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
         run: |
-          export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_${{matrix.arch}}/bin"
-          export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_${{matrix.arch}}/libexec"
-          export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_${{matrix.arch}}/lib/cmake"
+          gcc_path=""
+          if [ "${{matrix.arch}}" = "x64" ]; then
+            gcc_path="gcc_64"
+          else
+            gcc_path="gcc_arm64"
+          fi
+
+          export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/${gcc_path}/bin"
+          export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/${gcc_path}/libexec"
+          export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/${gcc_path}/lib/cmake"
 
           echo "$QT_BIN_PATH" >> $GITHUB_PATH
           echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
@@ -348,7 +355,7 @@ jobs:
           cmake --build . --config Release --parallel 16
 
       - name: "Build application (Windows)"
-        if: matrix.commercial && matrix.os == 'windows-latest'
+        if: matrix.edition == 'commercial' && matrix.os == 'windows-latest'
         env:
           QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/${{env.QT_VERSION}}/mingw_64/bin
         run: |
