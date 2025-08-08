@@ -59,15 +59,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - edition:       gpl3                     # GPLv3 edition
-            arch:          x64                      # Intel x64 architecture
-            os:            ubuntu-22.04             # Ubuntu 22.04
-            qtHost:        linux                    # Use x86_64 Qt binaries
-            qtArch:        linux_gcc_64             # Use x86_64 GCC Qt libs
-            appName:       "Serial Studio GPL3"     # Application name
-            appExecutable: "Serial-Studio-GPL3"     # Executable name
-            unixName:      "serial-studio-gpl3"     # UNIX name (for packaging)
-
           - edition:       commercial               # Commercial edition    
             arch:          x64                      # Intel x64 architecture
             os:            ubuntu-22.04             # Ubuntu 22.04
@@ -75,30 +66,12 @@ jobs:
             appExecutable: "Serial-Studio-Pro"      # Executable name
             unixName:      "serial-studio-pro"      # UNIX name (for packaging)
 
-          - edition:       gpl3                     # GPLv3 edition
-            arch:          arm64                    # ARM 64-bit architecture
-            os:            ubuntu-24.04-arm         # Ubuntu 24.04 ARM
-            qtHost:        linux_arm64              # Use ARM 64-bit Qt binaries
-            qtArch:        linux_gcc_arm64          # Use ARM 64-bit GCC Qt libs
-            appName:       "Serial Studio GPL3"     # Application name
-            appExecutable: "Serial-Studio-GPL3"     # Executable name
-            unixName:      "serial-studio-gpl3"     # UNIX name (for packaging)
-
           - edition:       commercial               # Commercial edition    
             arch:          arm64                    # ARM 64-bit architecture
             os:            ubuntu-24.04-arm         # Ubuntu 24.04 ARM
             appName:       "Serial Studio Pro"      # Application name
             appExecutable: "Serial-Studio-Pro"      # Executable name
             unixName:      "serial-studio-pro"      # UNIX name (for packaging)
-
-          - edition:       gpl3                     # GPLv3 edition   
-            arch:          x64                      # Produces Universal binary
-            os:            macos-latest             # macOS 13.0+
-            qtHost:        mac                      # Use macOS Qt binaries
-            qtArch:        clang_64                 # Use Clang 64-bit Qt libs
-            appName:       "Serial Studio GPL3"     # Application name
-            appExecutable: "Serial-Studio-GPL3"     # Executable name
-            unixName:      "serial-studio-gpl3"     # UNIX name (for packaging)
 
           - edition:       commercial               # Commercial edition   
             arch:          x64                      # Produces Universal binary
@@ -106,15 +79,6 @@ jobs:
             appName:       "Serial Studio Pro"      # Application name
             appExecutable: "Serial-Studio-Pro"      # Executable name
             unixName:      "serial-studio-pro"      # UNIX name (for packaging)
-
-          - edition:       gpl3                     # GPLv3 edition   
-            arch:          x64                      # Intel x64 architecture
-            os:            windows-latest           # Windows 10/11
-            qtHost:        windows                  # Use Windows Qt binaries
-            qtArch:        win64_llvm_mingw         # Use LLVM/MinGW Qt libs
-            appName:       "Serial Studio GPL3"     # Application name
-            appExecutable: "Serial-Studio-GPL3"     # Executable name
-            unixName:      "serial-studio-gpl3"     # UNIX name (for packaging)
 
           - edition:       commercial               # Commercial edition   
             arch:          x64                      # Intel x64 architecture
@@ -145,14 +109,6 @@ jobs:
         uses: lukka/get-cmake@latest
         with:
           useLocalCache: true
-
-      - name: "🛠️ Install MinGW Libraries"
-        if: matrix.os == 'windows-latest'
-        id: mingw
-        uses: bwoodsend/setup-winlibs-action@v1
-        with:
-          with_clang: true
-          add_to_path: true
 
       #-------------------------------------------------------------------------
       # Install dependencies
@@ -382,13 +338,14 @@ jobs:
           SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
           SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
           QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/${{env.QT_VERSION}}/llvm-mingw_64/bin
+          QT_TOOLS_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/Tools/llvm-mingw1706_64/bin
         run: |
           $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
           mkdir build
           cd build
           cmake ../ `
-            -DCMAKE_C_COMPILER="${{steps.mingw.outputs.bin}}/clang.exe" `
-            -DCMAKE_CXX_COMPILER="${{steps.mingw.outputs.bin}}/clang++.exe" `
+            -DCMAKE_C_COMPILER="${env:QT_TOOLS_PATH}\\clang.exe" `
+            -DCMAKE_CXX_COMPILER="${env:QT_TOOLS_PATH}\\clang++.exe" `
             -DPRODUCTION_OPTIMIZATION=ON `
             -DCMAKE_BUILD_TYPE=Release `
             -DBUILD_COMMERCIAL=ON `
