@@ -127,7 +127,7 @@ jobs:
     # Configure action name & operating system
     # 
     runs-on: ${{ matrix.os }}
-    name: "${{ matrix.os }} (${{ matrix.arch }}) - ${{ matrix.appName }}"
+    name: "🛠️ ${{ matrix.os }} (${{ matrix.arch }}) - ${{ matrix.appName }}"
 
     steps:
       #-------------------------------------------------------------------------
@@ -203,14 +203,7 @@ jobs:
           cache: true
           host: matrix.qtHost
           arch: matrix.qtArch
-          modules: 
-            - qt3d
-            - qtquick3d
-            - qtdatavis3d
-            - qtgraphs
-            - qtserialport
-            - qtconnectivity
-            - qtshadertools  
+          modules: qt3d qtquick3d qtdatavis3d qtgraphs qtserialport qtconnectivity qtshadertools  
 
       #-------------------------------------------------------------------------
       # Qt installation for commercial builds
