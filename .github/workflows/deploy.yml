@@ -43,7 +43,7 @@ on:
 #-------------------------------------------------------------------------------
 
 env:
-  INSTALL_QT: "false"                               # Re-install Commercial Qt
+  INSTALL_QT: "true"                                # Re-install Commercial Qt
   QT_VERSION: "6.9.1"                               # Version of Qt to install
   APP_VERSION: "3.1.7"                              # Application version
   QML_DIR: "../../app/qml"                          # Path to QML sources
@@ -94,8 +94,8 @@ jobs:
           - edition:       gpl3                     # GPLv3 edition   
             arch:          x64                      # Produces Universal binary
             os:            macos-latest             # macOS 13.0+
-            qtHost:        macos                    # Use macOS Qt binaries
-            qtArch:        macos_clang_64           # Use Clang 64-bit Qt libs
+            qtHost:        mac                      # Use macOS Qt binaries
+            qtArch:        clang_64                 # Use Clang 64-bit Qt libs
             appName:       "Serial Studio GPL3"     # Application name
             appExecutable: "Serial-Studio-GPL3"     # Executable name
             unixName:      "serial-studio-gpl3"     # UNIX name (for packaging)
@@ -198,12 +198,12 @@ jobs:
         if: matrix.edition == 'gpl3'
         uses: jurplel/install-qt-action@v4
         with:
-          version: ${{env.QT_VERSION}}
-          target: desktop
           cache: true
+          target: desktop
           host: matrix.qtHost
           arch: matrix.qtArch
-          modules: qt3d qtquick3d qtdatavis3d qtgraphs qtserialport qtconnectivity qtshadertools  
+          version: ${{env.QT_VERSION}}
+          modules: "qt3d qtquick3d qtdatavis3d qtgraphs qtserialport qtconnectivity qtshadertools"
 
       #-------------------------------------------------------------------------
       # Qt installation for commercial builds
@@ -235,6 +235,20 @@ jobs:
           ./scripts/install-qt.ps1
 
       #-------------------------------------------------------------------------
+      # Save Commercial installation to cache
+      #-------------------------------------------------------------------------  
+
+      - name: "🗄️ Save Commercial Qt Cache"
+        if: matrix.edition == 'commercial' && env.INSTALL_QT == 'true'
+        uses: actions/cache/save@v3
+        with:
+          key: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}-${{github.job}}
+          restore-keys: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}
+          path: |
+            ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
+            ${{env.USERPROFILE}}/.qt-license
+
+      #-------------------------------------------------------------------------
       # Restore previous cached Qt installation
       #-------------------------------------------------------------------------
 
@@ -246,19 +260,6 @@ jobs:
           path: |
             ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
             ${{env.USERPROFILE}}/.qt-license
-
-      #-------------------------------------------------------------------------
-      # Save Commercial installation to cache
-      #-------------------------------------------------------------------------  
-
-      - name: "🗄️ Save Commercial Qt Cache"
-        if: matrix.edition == 'commercial' && env.INSTALL_QT == 'true'
-        uses: actions/cache/save@v3
-        with:
-          path: |
-            ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
-            ${{env.USERPROFILE}}/.qt-license
-          key: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}
 
       #-------------------------------------------------------------------------
       # Add Commercial Qt to PATH
