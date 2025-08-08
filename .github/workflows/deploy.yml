@@ -80,6 +80,8 @@ jobs:
           - edition: gpl3
             arch: arm64
             runs-on: ubuntu-22.04-arm
+
+    runs-on: ${{ matrix.runs-on }}
     name: "🐧 Linux (${{ matrix.arch }}) - ${{ matrix.edition == 'commercial' && 'Pro' || 'GPL3' }}"
     steps:
       - name: "🧰 Checkout"
