@@ -200,8 +200,8 @@ jobs:
         with:
           cache: true
           target: desktop
-          host: matrix.qtHost
-          arch: matrix.qtArch
+          host: ${{matrix.qtHost}}
+          arch: ${{matrix.qtArch}}
           version: ${{env.QT_VERSION}}
           modules: "qt3d qtquick3d qtdatavis3d qtgraphs qtserialport qtconnectivity qtshadertools"
 
