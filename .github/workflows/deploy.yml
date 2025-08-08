@@ -390,17 +390,10 @@ jobs:
 
       - name: "⚙️ Configure with CMake (Windows, GPL3)"
         if: matrix.edition == 'gpl3' && matrix.os == 'windows-latest'
-        env:
-          QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/${{env.QT_VERSION}}/mingw_64/bin
-          QT_TOOLS_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/Tools/mingw1310_64/bin
         run: |
-          $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
           mkdir build
           cd build
           cmake ../ `
-            -G "MinGW Makefiles" `
-            -DCMAKE_C_COMPILER="${env:QT_TOOLS_PATH}\\gcc.exe" `
-            -DCMAKE_CXX_COMPILER="${env:QT_TOOLS_PATH}\\c++.exe" `
             -DPRODUCTION_OPTIMIZATION=ON `
             -DCMAKE_BUILD_TYPE=Release `
 
@@ -414,7 +407,13 @@ jobs:
           cd build
           cmake --build . --config Release --parallel 16
 
-      - name: "🔨 Build application (Windows)"
+      - name: "🔨 Build application (Windows, GPL3)"
+        if: matrix.edition == 'gpl3' && matrix.os == 'windows-latest'
+        run: |
+          cd build
+          cmake --build . --config Release --parallel 16
+
+      - name: "🔨 Build application (Windows, Commercial)"
         if: matrix.edition == 'commercial' && matrix.os == 'windows-latest'
         env:
           QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/${{env.QT_VERSION}}/mingw_64/bin
