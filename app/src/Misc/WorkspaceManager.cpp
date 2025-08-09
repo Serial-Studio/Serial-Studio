@@ -19,7 +19,6 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "AppInfo.h"
 #include "WorkspaceManager.h"
 
 #include <QDir>
