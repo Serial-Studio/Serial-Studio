@@ -66,27 +66,6 @@ jobs:
             appExecutable: "Serial-Studio-Pro"      # Executable name
             unixName:      "serial-studio-pro"      # UNIX name (for packaging)
 
-          - edition:       commercial               # Commercial edition    
-            arch:          arm64                    # ARM 64-bit architecture
-            os:            ubuntu-24.04-arm         # Ubuntu 24.04 ARM
-            appName:       "Serial Studio Pro"      # Application name
-            appExecutable: "Serial-Studio-Pro"      # Executable name
-            unixName:      "serial-studio-pro"      # UNIX name (for packaging)
-
-          - edition:       commercial               # Commercial edition   
-            arch:          x64                      # Produces Universal binary
-            os:            macos-latest             # macOS 13.0+
-            appName:       "Serial Studio Pro"      # Application name
-            appExecutable: "Serial-Studio-Pro"      # Executable name
-            unixName:      "serial-studio-pro"      # UNIX name (for packaging)
-
-          - edition:       commercial               # Commercial edition   
-            arch:          x64                      # Intel x64 architecture
-            os:            windows-latest           # Windows 10/11
-            appName:       "Serial Studio Pro"      # Application name
-            appExecutable: "Serial-Studio-Pro"      # Executable name
-            unixName:      "serial-studio-pro"      # UNIX name (for packaging)
-
     #
     # Configure action name & operating system
     # 
@@ -212,7 +191,7 @@ jobs:
       #-------------------------------------------------------------------------
 
       - name: "🗃️ Restore Commercial Qt Cache"
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         if: matrix.edition == 'commercial' && env.INSTALL_QT == 'false'
         with:
           key: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}
@@ -528,13 +507,14 @@ jobs:
     steps:
       - name: "⬇️ Download Qt artifact (x86_64 Linux)"
         uses: actions/download-artifact@v4
-        if: ${{env.INSTALL_QT}}
+        if: env.INSTALL_QT == 'true'
         with:
           name: qt-ubuntu-22.04-${{ env.QT_VERSION }}-x64
           path: ${{ github.workspace }}/Qt-ubuntu-22.04-x64
 
       - name: "🗃️ Cache Commercial Qt (x86_64 Linux)"
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
+        if: env.INSTALL_QT == 'true'
         with:
           key: qt-ubuntu-22.04-${{ env.QT_VERSION }}-x64
           path: |
@@ -543,12 +523,14 @@ jobs:
 
       - name: "⬇️ Download Qt artifact (arm64 Linux)"
         uses: actions/download-artifact@v4
+        if: env.INSTALL_QT == 'true'
         with:
           name: qt-ubuntu-24.04-arm-${{ env.QT_VERSION }}-arm64
           path: ${{ github.workspace }}/Qt-ubuntu-24.04-arm-arm64
 
       - name: "🗃️ Cache Commercial Qt (arm64 Linux)"
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
+        if: env.INSTALL_QT == 'true'
         with:
           key: qt-ubuntu-24.04-arm-${{ env.QT_VERSION }}-arm64
           path: |
@@ -557,12 +539,14 @@ jobs:
 
       - name: "⬇️ Download Qt artifact (macOS)"
         uses: actions/download-artifact@v4
+        if: env.INSTALL_QT == 'true'
         with:
           name: qt-macos-latest-${{ env.QT_VERSION }}-x64
           path: ${{ github.workspace }}/Qt-macos-latest-x64
 
       - name: "🗃️ Cache Commercial Qt (macOS)"
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
+        if: env.INSTALL_QT == 'true'
         with:
           key: qt-macos-latest-${{ env.QT_VERSION }}-x64
           path: |
@@ -571,12 +555,14 @@ jobs:
 
       - name: "⬇️ Download Qt artifact (Windows)"
         uses: actions/download-artifact@v4
+        if: env.INSTALL_QT == 'true'
         with:
           name: qt-windows-latest-${{ env.QT_VERSION }}-x64
           path: ${{ github.workspace }}/Qt-windows-latest-x64
 
       - name: "🗃️ Cache Commercial Qt (Windows)"
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
+        if: env.INSTALL_QT == 'true'
         with:
           key: qt-windows-latest-${{ env.QT_VERSION }}-x64
           path: |
@@ -588,6 +574,7 @@ jobs:
 #-------------------------------------------------------------------------------
 
   upload:
+    if: env.INSTALL_QT == 'false'
     name: "🚀 Create release and upload artifacts"
     needs:
       - build
