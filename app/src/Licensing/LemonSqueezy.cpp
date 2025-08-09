@@ -673,7 +673,7 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
     if (list.first().simplified() != "Pro")
       m_appName = tr("%1 %2").arg(APP_NAME, list.first().simplified());
     else
-      m_appName = tr("%1 %2").arg(APP_NAME, list.last().simplified());
+      m_appName = tr("%1 (%2)").arg(APP_NAME, list.last().simplified());
   }
 
   // Default to APP_NAME otherwise

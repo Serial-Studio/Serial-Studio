@@ -30,13 +30,13 @@
  * @brief Constructs the WorkspaceManager and initializes the workspace path.
  *
  * Loads the saved workspace path from settings, or defaults to
- * <Documents>/<APP_NAME> if none is set.
+ * <Documents>/Serial Studio if none is set.
  */
 Misc::WorkspaceManager::WorkspaceManager()
 {
   auto def = QString("%1/%2").arg(
       QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-      APP_NAME);
+      QStringLiteral("Serial Studio"));
   m_path = m_settings.value(QStringLiteral("Workspace"), def).toString();
 }
 
@@ -93,14 +93,14 @@ QString Misc::WorkspaceManager::path(const QString &subdirectory) const
 /**
  * @brief Resets the workspace path to the default location.
  *
- * Sets the path to <Documents>/<APP_NAME>, updates settings,
+ * Sets the path to <Documents>/Serial Studio, updates settings,
  * and emits pathChanged().
  */
 void Misc::WorkspaceManager::reset()
 {
   m_path = QString("%1/%2").arg(
       QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-      APP_NAME);
+      QStringLiteral("Serial Studio"));
   m_settings.setValue(QStringLiteral("Workspace"), m_path);
 
   Q_EMIT pathChanged();
