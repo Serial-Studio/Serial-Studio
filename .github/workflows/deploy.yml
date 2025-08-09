@@ -90,7 +90,7 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get install -y 
+          sudo apt-get install -y \
             libxcb1 \
             libxcb-cursor0 \
             libxcb-cursor-dev \
@@ -162,7 +162,7 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get install -y 
+          sudo apt-get install -y \
             libxcb1 \
             libxcb-cursor0 \
             libxcb-cursor-dev \
