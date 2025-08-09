@@ -89,6 +89,7 @@ jobs:
         if: steps.qt-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
+          sudo apt-get install -y libxcb1 libx11-xcb1 libfontconfig1 libfreetype6 libxrender1 libxi6 libgl1-mesa-glx libxcb-xinerama0
           chmod +x ./scripts/install-qt.sh
           ./scripts/install-qt.sh
 
@@ -135,6 +136,7 @@ jobs:
         if: steps.qt-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
+          sudo apt-get install -y libxcb1 libx11-xcb1 libfontconfig1 libfreetype6 libxrender1 libxi6 libgl1-mesa-glx libxcb-xinerama0
           chmod +x ./scripts/install-qt.sh
           ./scripts/install-qt.sh
 
