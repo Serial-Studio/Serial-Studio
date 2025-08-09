@@ -64,7 +64,7 @@ jobs:
             os:            ubuntu-22.04             # Ubuntu 22.04
             appName:       "Serial Studio Pro"      # Application name
             appExecutable: "Serial-Studio-Pro"      # Executable name
-            unixName:      "serial-studio-pro"      # UNIX name (for packaging)
+            unixName:      "serial-studio-pro"      # UNIX name (for packaging)g
 
     #
     # Configure action name & operating system
@@ -485,7 +485,8 @@ jobs:
           $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
           cd build
           cpack --verbose
-          mv *.msi ../${{matrix.appExecutable}}-${{env.APP_VERSION}}-Windows.msi
+          mv *.msi ${{matrix.appExecutable}}-${{env.APP_VERSION}}-Windows.msi
+          mv ${{matrix.appExecutable}}-${{env.APP_VERSION}}-Windows.msi ../
 
       - name: "⬆️ Upload artifact: MSI installer"
         if: matrix.os == 'windows-latest'
