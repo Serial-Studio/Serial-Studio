@@ -53,7 +53,26 @@ set(SERIAL_STUDIO_INSTANCE_ID $ENV{SERIAL_STUDIO_INSTANCE_ID} CACHE STRING "Inst
 # Project information
 #-------------------------------------------------------------------------------
 
-set(PROJECT_DISPNAME            "Serial Studio")
+set(PROJECT_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
+
+if(BUILD_COMMERCIAL)
+   set(PROJECT_DISPNAME "Serial Studio Pro")
+   set(PROJECT_FILE_LICENSE "${PROJECT_ROOT_DIR}/LICENSES/LicenseRef-SerialStudio-Commercial.txt")
+   if (UNIX AND NOT APPLE)
+      set(PROJECT_EXECUTABLE "serial-studio-pro")
+   else()
+      set(PROJECT_EXECUTABLE "Serial-Studio-Pro")
+   endif()
+else()
+   set(PROJECT_DISPNAME "Serial Studio GPLv3")
+   set(PROJECT_FILE_LICENSE "${PROJECT_ROOT_DIR}/LICENSES/GPL-3.0-only.txt")
+   if (UNIX AND NOT APPLE)
+      set(PROJECT_EXECUTABLE "serial-studio-gpl3")
+   else()
+      set(PROJECT_EXECUTABLE "Serial-Studio-GPL3")
+   endif()
+endif()
+
 set(PROJECT_VENDOR              "Alex Spataru")
 set(PROJECT_CONTACT             "serial-studio.github.io")
 set(PROJECT_DESCRIPTION_SUMMARY "Flexible data visualization software for embedded devices and projects")
@@ -62,11 +81,8 @@ set(PROJECT_VERSION_MINOR       "1")
 set(PROJECT_VERSION_PATCH       "7")
 set(PROJECT_VERSION             "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 set(PROJECT_APPCAST             "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/updates.json")
-
-set(PROJECT_ROOT_DIR            ${CMAKE_CURRENT_LIST_DIR})
 set(PROJECT_DESCRIPTION_FILE    "${PROJECT_ROOT_DIR}/README.md")
 set(PROJECT_FILE_NAME           "${PROJECT_EXECUTABLE}-v${PROJECT_VERSION}")
-set(PROJECT_FILE_LICENSE        "${PROJECT_ROOT_DIR}/LICENSE.md")
 
 #-------------------------------------------------------------------------------
 # Allow source code to access project information
@@ -138,24 +154,6 @@ endif()
 #-------------------------------------------------------------------------------
 
 message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
-
-#-------------------------------------------------------------------------------
-# Set project executable name depending on version
-#-------------------------------------------------------------------------------
-
-if(BUILD_COMMERCIAL)
-   if (UNIX AND NOT APPLE)
-      set(PROJECT_EXECUTABLE "serial-studio-pro")
-   else()
-      set(PROJECT_EXECUTABLE "Serial-Studio-Pro")
-   endif()
-else()
-   if (UNIX AND NOT APPLE)
-      set(PROJECT_EXECUTABLE "serial-studio-gpl3")
-   else()
-      set(PROJECT_EXECUTABLE "Serial-Studio-GPL3")
-   endif()
-endif()
 
 #-------------------------------------------------------------------------------
 # Set UNIX friendly name for app & fix OpenSUSE builds

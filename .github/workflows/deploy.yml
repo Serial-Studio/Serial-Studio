@@ -43,7 +43,6 @@ on:
 #-------------------------------------------------------------------------------
 
 env:
-  INSTALL_QT: "true"                                # Re-install Commercial Qt
   QT_VERSION: "6.9.1"                               # Version of Qt to install
   APP_VERSION: "3.1.7"                              # Application version
   QML_DIR: "../../app/qml"                          # Path to QML sources
@@ -51,11 +50,189 @@ env:
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"          # Bypass Qt license check
 
 #-------------------------------------------------------------------------------
-# CI build matrix
+# Workflow jobs, including installation, build and release publishing
 #-------------------------------------------------------------------------------
 
 jobs:
+
+#-------------------------------------------------------------------------------
+# Install Qt commercial on Linux x64
+#-------------------------------------------------------------------------------
+
+  install_qt_commercial_linux_x64:
+    runs-on: ubuntu-22.04
+    name: "📚 Install Commercial Qt (Linux x64)"
+    env:
+      QT_VERSION: ${{env.QT_VERSION}}
+      QT_ARCH: x64
+      QT_USERNAME: ${{secrets.QT_USERNAME}}
+      QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+      CACHE_KEY: qt-${{ runner.os}}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}
+      QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{ env.QT_ARCH }}
+    steps:
+      - name: "🗃️ Check if Commercial Qt Cache Exists"
+        id: qt-cache
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ env.CACHE_KEY }}
+          lookup-only: true
+          path: |
+            ${{ env.QT_OUTPUT_DIR }}
+            ${{ env.QT_OUTPUT_DIR }}/.qt-license
+
+      - name: "📚 Install Commercial Qt"
+        if: steps.qt-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          chmod +x ./scripts/install-qt.sh
+          ./scripts/install-qt.sh
+
+      - name: "🗃️ Cache Commercial Qt"
+        uses: actions/cache/save@v4
+        if: steps.qt-cache.outputs.cache-hit != 'true'
+        with:
+          key: ${{ env.CACHE_KEY }}
+          path: |
+            ${{ env.QT_OUTPUT_DIR }}
+            ${{ env.QT_OUTPUT_DIR }}/.qt-license
+
+#-------------------------------------------------------------------------------
+# Install Qt commercial on Linux arm64
+#-------------------------------------------------------------------------------
+
+  install_qt_commercial_linux_arm64:
+    runs-on: ubuntu-24.04-arm
+    name: "📚 Install Commercial Qt (Linux arm64)"
+    env:
+      QT_VERSION: ${{env.QT_VERSION}}
+      QT_ARCH: arm64
+      QT_USERNAME: ${{secrets.QT_USERNAME}}
+      QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+      CACHE_KEY: qt-${{ runner.os}}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}
+      QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{ env.QT_ARCH }}
+    steps:
+      - name: "🗃️ Check if Commercial Qt Cache Exists"
+        id: qt-cache
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ env.CACHE_KEY }}
+          lookup-only: true
+          path: |
+            ${{ env.QT_OUTPUT_DIR }}
+            ${{ env.QT_OUTPUT_DIR }}/.qt-license
+
+      - name: "📚 Install Commercial Qt"
+        if: steps.qt-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          chmod +x ./scripts/install-qt.sh
+          ./scripts/install-qt.sh
+
+      - name: "🗃️ Cache Commercial Qt"
+        uses: actions/cache/save@v4
+        if: steps.qt-cache.outputs.cache-hit != 'true'
+        with:
+          key: ${{ env.CACHE_KEY }}
+          path: |
+            ${{ env.QT_OUTPUT_DIR }}
+            ${{ env.QT_OUTPUT_DIR }}/.qt-license
+
+#-------------------------------------------------------------------------------
+# Install Qt commercial on macOS Universal (both x64 and arm64)
+#-------------------------------------------------------------------------------
+
+  install_qt_commercial_macos:
+    runs-on: macos-latest
+    name: "📚 Install Commercial Qt (macOS Universal)"
+    env:
+      QT_VERSION: ${{env.QT_VERSION}}
+      QT_ARCH: x64
+      QT_USERNAME: ${{secrets.QT_USERNAME}}
+      QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+      CACHE_KEY: qt-${{ runner.os}}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}
+      QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{ env.QT_ARCH }}
+    steps:
+      - name: "🗃️ Check if Commercial Qt Cache Exists"
+        id: qt-cache
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ env.CACHE_KEY }}
+          lookup-only: true
+          path: |
+            ${{ env.QT_OUTPUT_DIR }}
+            ${{ env.QT_OUTPUT_DIR }}/.qt-license
+
+      - name: "📚 Install Commercial Qt"
+        if: steps.qt-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          chmod +x ./scripts/install-qt.sh
+          ./scripts/install-qt.sh
+
+      - name: "🗃️ Cache Commercial Qt"
+        uses: actions/cache/save@v4
+        if: steps.qt-cache.outputs.cache-hit != 'true'
+        with:
+          key: ${{ env.CACHE_KEY }}
+          path: |
+            ${{ env.QT_OUTPUT_DIR }}
+            ${{ env.QT_OUTPUT_DIR }}/.qt-license
+
+#-------------------------------------------------------------------------------
+# Install Qt commercial on Windows x64
+#-------------------------------------------------------------------------------
+
+  install_qt_commercial_windows:
+    runs-on: windows-latest
+    name: "📚 Install Commercial Qt (Windows x64)"
+    env:
+      QT_VERSION: ${{env.QT_VERSION}}
+      QT_ARCH: x64
+      QT_USERNAME: ${{secrets.QT_USERNAME}}
+      QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+      CACHE_KEY: qt-${{ runner.os}}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}
+      QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{ env.QT_ARCH }}
+    steps:
+      - name: "🗃️ Check if Commercial Qt Cache Exists"
+        id: qt-cache
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ env.CACHE_KEY }}
+          lookup-only: true
+          path: |
+            ${{ env.QT_OUTPUT_DIR }}
+            ${{ env.QT_OUTPUT_DIR }}/.qt-license
+
+      - name: "📚 Install Commercial Qt"
+        shell: pwsh
+        if: steps.qt-cache.outputs.cache-hit != 'true'
+        run: |
+          ./scripts/install-qt.ps1
+
+      - name: "🗃️ Save Commercial Qt Cache"
+        uses: actions/cache/save@v4
+        if: steps.qt-cache.outputs.cache-hit != 'true'
+        with:
+          key: ${{ env.CACHE_KEY }}
+          path: |
+            ${{ env.QT_OUTPUT_DIR }}
+            ${{ env.QT_OUTPUT_DIR }}/.qt-license
+
+#-------------------------------------------------------------------------------
+# Start the build job
+#-------------------------------------------------------------------------------
+
   build:
+    needs:
+      - install_qt_commercial_linux_x64
+      - install_qt_commercial_linux_arm64
+      - install_qt_commercial_macos
+      - install_qt_commercial_windows
+
+#-------------------------------------------------------------------------------
+# Build matrix
+#-------------------------------------------------------------------------------
+
     strategy:
       matrix:
         include:
@@ -66,32 +243,55 @@ jobs:
             appExecutable: "Serial-Studio-Pro"      # Executable name
             unixName:      "serial-studio-pro"      # UNIX name (for packaging)
 
-    #
-    # Configure action name & operating system
-    # 
+          - edition:       commercial               # Commercial edition    
+            arch:          arm64                    # ARM 64-bit architecture
+            os:            ubuntu-24.04-arm         # Ubuntu 24.04 ARM
+            appName:       "Serial Studio Pro"      # Application name
+            appExecutable: "Serial-Studio-Pro"      # Executable name
+            unixName:      "serial-studio-pro"      # UNIX name (for packaging)
+
+          - edition:       commercial               # Commercial edition   
+            arch:          x64                      # Produces Universal binary
+            os:            macos-latest             # macOS 13.0+
+            appName:       "Serial Studio Pro"      # Application name
+            appExecutable: "Serial-Studio-Pro"      # Executable name
+            unixName:      "serial-studio-pro"      # UNIX name (for packaging)
+
+          - edition:       commercial               # Commercial edition   
+            arch:          x64                      # Intel x64 architecture
+            os:            windows-latest           # Windows 10/11
+            appName:       "Serial Studio Pro"      # Application name
+            appExecutable: "Serial-Studio-Pro"      # Executable name
+            unixName:      "serial-studio-pro"      # UNIX name (for packaging))
+
+#-------------------------------------------------------------------------------
+# Configure build action names
+#-------------------------------------------------------------------------------
+
     runs-on: ${{ matrix.os }}
     name: "🛠️ ${{ matrix.os }} (${{ matrix.arch }}) - ${{ matrix.appName }}"
 
     steps:
-      #-------------------------------------------------------------------------
-      # Checkout the source code
-      #-------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Checkout the source code
+#-------------------------------------------------------------------------------
 
       - name: "🔍 Checkout"       
         uses: actions/checkout@v4
 
-      #-------------------------------------------------------------------------
-      # Install CMake
-      #-------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# Install CMake
+#-------------------------------------------------------------------------------
 
       - name: "🛠️ Install CMake" 
         uses: lukka/get-cmake@latest
         with:
           useLocalCache: true
 
-      #-------------------------------------------------------------------------
-      # Install dependencies
-      #-------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# Install dependencies (Linux only)
+#-------------------------------------------------------------------------------
 
       - name: "📦 Install dependencies (Linux)"
         if: startsWith(matrix.os, 'ubuntu')
@@ -133,9 +333,9 @@ jobs:
             libxkbcommon-x11-0 \
             libxkbcommon-x11-dev
 
-      #-------------------------------------------------------------------------
-      # Qt installation for GPLv3 builds
-      #-------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# Qt installation for GPLv3 builds
+#-------------------------------------------------------------------------------
 
       - name: "📚 Install Open Source Qt"
         if: matrix.edition == 'gpl3'
@@ -148,60 +348,22 @@ jobs:
           version: ${{env.QT_VERSION}}
           modules: "qt3d qtquick3d qtdatavis3d qtgraphs qtserialport qtconnectivity qtshadertools"
 
-      #-------------------------------------------------------------------------
-      # Qt installation for commercial builds
-      #-------------------------------------------------------------------------
-  
-      - name: "📚 Install Commercial Qt (UNIX)"
-        if: matrix.edition == 'commercial' && env.INSTALL_QT == 'true' && matrix.os != 'windows-latest'
-        shell: bash
-        env:
-          QT_VERSION: ${{env.QT_VERSION}}
-          QT_ARCH: ${{matrix.arch}}
-          QT_USERNAME: ${{secrets.QT_USERNAME}}
-          QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-          QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
-        run: |
-          chmod +x ./scripts/install-qt.sh
-          ./scripts/install-qt.sh
-
-      - name: "📚 Install Commercial Qt (Windows)"
-        shell: pwsh
-        if: matrix.edition == 'commercial' && env.INSTALL_QT == 'true' && matrix.os == 'windows-latest'
-        env:
-          QT_VERSION: ${{env.QT_VERSION}}
-          QT_ARCH: ${{matrix.arch}}
-          QT_USERNAME: ${{secrets.QT_USERNAME}}
-          QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-          QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
-        run: |
-          ./scripts/install-qt.ps1
-
-      - name: "⬆️ Upload Qt directory for caching"
-        if: matrix.edition == 'commercial' && env.INSTALL_QT == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: qt-${{ matrix.os }}-${{ env.QT_VERSION }}-${{ matrix.arch }}
-          path: |
-            ${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ matrix.arch }}
-            ${{ env.USERPROFILE }}/.qt-license
-
-      #-------------------------------------------------------------------------
-      # Restore previous cached Qt installation
-      #-------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# Restore previous cached Qt installation
+#-------------------------------------------------------------------------------
 
       - name: "🗃️ Restore Commercial Qt Cache"
         uses: actions/cache/restore@v4
-        if: matrix.edition == 'commercial' && env.INSTALL_QT == 'false'
+        if: matrix.edition == 'commercial'
         with:
           key: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}
           path: |
             ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
             ${{env.USERPROFILE}}/.qt-license
 
-      #-------------------------------------------------------------------------
-      # Add Commercial Qt to PATH
-      #-------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# Add Commercial Qt to PATH
+#-------------------------------------------------------------------------------
 
       - name: "🔗 Add Commercial Qt to PATH (Linux)"
         if: matrix.edition == 'commercial' && startsWith(matrix.os, 'ubuntu')
@@ -255,9 +417,9 @@ jobs:
           Write-Output "$QT_LIBEXEC_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           Write-Output "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $env:GITHUB_ENV
 
-      #-------------------------------------------------------------------------
-      # CMake configuration and build
-      #-------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# CMake configuration
+#-------------------------------------------------------------------------------
 
       - name: "⚙️ Configure with CMake (Linux, Commercial)"
         if: matrix.edition == 'commercial' && startsWith(matrix.os, 'ubuntu')
@@ -336,9 +498,9 @@ jobs:
             -DPRODUCTION_OPTIMIZATION=ON `
             -DCMAKE_BUILD_TYPE=Release 
 
-      #-------------------------------------------------------------------------
-      # Build application
-      #-------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# Build application
+#-------------------------------------------------------------------------------
 
       - name: "🔨 Build application (UNIX)"
         if: matrix.os != 'windows-latest'
@@ -361,9 +523,9 @@ jobs:
           cd build
           cmake --build . --config Release --parallel 16
 
-      #-------------------------------------------------------------------------
-      # Linux packaging
-      #-------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# Linux packaging
+#-------------------------------------------------------------------------------
 
       - name: "📦 Create AppImage"
         if: startsWith(matrix.os, 'ubuntu')
@@ -400,9 +562,9 @@ jobs:
           name: ${{matrix.appExecutable}}-${{env.APP_VERSION}}-Linux-${{matrix.arch}}.AppImage
           path: ${{matrix.appExecutable}}-${{env.APP_VERSION}}-Linux-${{matrix.arch}}.AppImage
 
-      #-------------------------------------------------------------------------
-      # macOS packaging & notarization
-      #-------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# macOS packaging & notarization (ugh)
+#-------------------------------------------------------------------------------
 
       - name: "📦 Package with CPack (macOS)"
         if: matrix.os == 'macos-latest'
@@ -473,9 +635,9 @@ jobs:
           name: ${{matrix.appExecutable}}-${{env.APP_VERSION}}-macOS.dmg
           path: ${{matrix.appExecutable}}-${{env.APP_VERSION}}-macOS.dmg
 
-      #-------------------------------------------------------------------------
-      # Windows packaging
-      #-------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# Windows packaging
+#-------------------------------------------------------------------------------
 
       - name: "📦 Package with CPack (Windows)"
         if: matrix.os == 'windows-latest'
@@ -496,80 +658,6 @@ jobs:
           path: ${{matrix.appExecutable}}-${{env.APP_VERSION}}-Windows.msi
 
 #-------------------------------------------------------------------------------
-# Cache jobs
-#-------------------------------------------------------------------------------
-
-  cache:
-    name: "🗃️ Cache Commercial Qt"
-    needs:
-      - build
-    runs-on: ubuntu-latest
-    steps:
-      - name: "⬇️ Download Qt artifact (x86_64 Linux)"
-        uses: actions/download-artifact@v4
-        if: env.INSTALL_QT == 'true'
-        with:
-          name: qt-ubuntu-22.04-${{ env.QT_VERSION }}-x64
-          path: ${{ github.workspace }}/Qt-ubuntu-22.04-x64
-
-      - name: "🗃️ Cache Commercial Qt (x86_64 Linux)"
-        uses: actions/cache/save@v4
-        if: env.INSTALL_QT == 'true'
-        with:
-          key: qt-ubuntu-22.04-${{ env.QT_VERSION }}-x64
-          path: |
-            ${{ github.workspace }}/Qt-ubuntu-22.04-x64
-            ${{ github.workspace }}/Qt-ubuntu-22.04-x64/.qt-license
-
-      - name: "⬇️ Download Qt artifact (arm64 Linux)"
-        uses: actions/download-artifact@v4
-        if: env.INSTALL_QT == 'true'
-        with:
-          name: qt-ubuntu-24.04-arm-${{ env.QT_VERSION }}-arm64
-          path: ${{ github.workspace }}/Qt-ubuntu-24.04-arm-arm64
-
-      - name: "🗃️ Cache Commercial Qt (arm64 Linux)"
-        uses: actions/cache/save@v4
-        if: env.INSTALL_QT == 'true'
-        with:
-          key: qt-ubuntu-24.04-arm-${{ env.QT_VERSION }}-arm64
-          path: |
-            ${{ github.workspace }}/Qt-ubuntu-24.04-arm-arm64
-            ${{ github.workspace }}/Qt-ubuntu-24.04-arm-arm64/.qt-license
-
-      - name: "⬇️ Download Qt artifact (macOS)"
-        uses: actions/download-artifact@v4
-        if: env.INSTALL_QT == 'true'
-        with:
-          name: qt-macos-latest-${{ env.QT_VERSION }}-x64
-          path: ${{ github.workspace }}/Qt-macos-latest-x64
-
-      - name: "🗃️ Cache Commercial Qt (macOS)"
-        uses: actions/cache/save@v4
-        if: env.INSTALL_QT == 'true'
-        with:
-          key: qt-macos-latest-${{ env.QT_VERSION }}-x64
-          path: |
-            ${{ github.workspace }}/Qt-macos-latest-x64
-            ${{ github.workspace }}/Qt-macos-latest-x64/.qt-license
-
-      - name: "⬇️ Download Qt artifact (Windows)"
-        uses: actions/download-artifact@v4
-        if: env.INSTALL_QT == 'true'
-        with:
-          name: qt-windows-latest-${{ env.QT_VERSION }}-x64
-          path: ${{ github.workspace }}/Qt-windows-latest-x64
-
-      - name: "🗃️ Cache Commercial Qt (Windows)"
-        uses: actions/cache/save@v4
-        if: env.INSTALL_QT == 'true'
-        with:
-          key: qt-windows-latest-${{ env.QT_VERSION }}-x64
-          path: |
-            ${{ github.workspace }}/Qt-windows-latest-x64
-            ${{ github.workspace }}/Qt-windows-latest-x64/.qt-license
-
-#-------------------------------------------------------------------------------
 # Create release
 #-------------------------------------------------------------------------------
 
@@ -584,14 +672,12 @@ jobs:
 
     steps:
       - name: "⬇️ Download artifacts"
-        if: env.INSTALL_QT == 'false'
         uses: actions/download-artifact@v4
         with:
           path: ./artifacts
           merge-multiple: true
 
       - name: "🗑️ Delete previous release and tag if exists"
-        if: env.INSTALL_QT == 'false'
         run: |
           if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" &>/dev/null; then
             echo "Release '$RELEASE_TAG' exists. Deleting..."
@@ -603,7 +689,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "🔢 Generate SHA256 checksums with sizes"
-        if: env.INSTALL_QT == 'false'
         run: |
           echo "| File | SHA256 Checksum |" > release-body.md
           echo "|------|-----------------|" >> release-body.md
@@ -616,7 +701,6 @@ jobs:
 
       - name: "🚀 Create Release"
         uses: ncipollo/release-action@v1
-        if: env.INSTALL_QT == 'false'
         with:
           tag: ${{ env.RELEASE_TAG }}
           prerelease: true
