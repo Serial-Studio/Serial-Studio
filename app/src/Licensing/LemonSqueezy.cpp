@@ -666,12 +666,19 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
   m_customerEmail = customerEmail;
   m_activationDate = activationDate;
 
-  // Set application name
+  // Set application name if variant name is present
   auto list = variantName.split("-");
-  if (list.count() >= 1)
-    m_appName = tr("%1 %2").arg(APP_NAME, list.first().simplified());
+  if (list.count() >= 2)
+  {
+    if (list.first().simplified() != "Pro")
+      m_appName = tr("%1 %2").arg(APP_NAME, list.first().simplified());
+    else
+      m_appName = tr("%1 %2").arg(APP_NAME, list.last().simplified());
+  }
+
+  // Default to APP_NAME otherwise
   else
-    m_appName = tr("%1 Pro").arg(APP_NAME);
+    m_appName = APP_NAME;
 
   // Update QtApp display name
   qApp->setApplicationDisplayName(appName());
