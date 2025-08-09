@@ -89,6 +89,7 @@ jobs:
         if: steps.qt-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
+          sudo apt-get update
           sudo apt-get install -y 
             libxcb1 \
             libxcb-cursor0 \
@@ -113,7 +114,7 @@ jobs:
             libxkbcommon-dev \
             libxkbcommon-x11-0 \
             libxkbcommon-x11-dev
-            
+
           chmod +x ./scripts/install-qt.sh
           ./scripts/install-qt.sh
 
@@ -160,6 +161,7 @@ jobs:
         if: steps.qt-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
+          sudo apt-get update
           sudo apt-get install -y 
             libxcb1 \
             libxcb-cursor0 \
