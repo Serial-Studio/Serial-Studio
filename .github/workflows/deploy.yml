@@ -64,7 +64,7 @@ jobs:
             os:            ubuntu-22.04             # Ubuntu 22.04
             appName:       "Serial Studio Pro"      # Application name
             appExecutable: "Serial-Studio-Pro"      # Executable name
-            unixName:      "serial-studio-pro"      # UNIX name (for packaging)g
+            unixName:      "serial-studio-pro"      # UNIX name (for packaging)
 
     #
     # Configure action name & operating system
@@ -574,7 +574,6 @@ jobs:
 #-------------------------------------------------------------------------------
 
   upload:
-    if: env.INSTALL_QT == 'false'
     name: "🚀 Create release and upload artifacts"
     needs:
       - build
@@ -585,12 +584,14 @@ jobs:
 
     steps:
       - name: "⬇️ Download artifacts"
+        if: env.INSTALL_QT == 'false'
         uses: actions/download-artifact@v4
         with:
           path: ./artifacts
           merge-multiple: true
 
       - name: "🗑️ Delete previous release and tag if exists"
+        if: env.INSTALL_QT == 'false'
         run: |
           if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" &>/dev/null; then
             echo "Release '$RELEASE_TAG' exists. Deleting..."
@@ -602,6 +603,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "🔢 Generate SHA256 checksums with sizes"
+        if: env.INSTALL_QT == 'false'
         run: |
           echo "| File | SHA256 Checksum |" > release-body.md
           echo "|------|-----------------|" >> release-body.md
@@ -614,6 +616,7 @@ jobs:
 
       - name: "🚀 Create Release"
         uses: ncipollo/release-action@v1
+        if: env.INSTALL_QT == 'false'
         with:
           tag: ${{ env.RELEASE_TAG }}
           prerelease: true
