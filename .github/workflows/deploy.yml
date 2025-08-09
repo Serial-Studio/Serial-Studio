@@ -89,7 +89,31 @@ jobs:
         if: steps.qt-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
-          sudo apt-get install -y libxcb1 libx11-xcb1 libfontconfig1 libfreetype6 libxrender1 libxi6 libgl1-mesa-glx libxcb-xinerama0
+          sudo apt-get install -y 
+            libxcb1 \
+            libxcb-cursor0 \
+            libxcb-cursor-dev \
+            libxcb-glx0 \
+            libxcb-icccm4 \
+            libxcb-image0 \
+            libxcb-image0-dev \
+            libxcb-keysyms1 \
+            libxcb-randr0 \
+            libxcb-render0 \
+            libxcb-render-util0 \
+            libxcb-shape0 \
+            libxcb-shm0 \
+            libxcb-sync1 \
+            libxcb-util0-dev \
+            libxcb-util1 \
+            libxcb-xfixes0 \
+            libxcb-xinerama0 \
+            libxcb-xkb-dev \
+            libxcb-xtest0 \
+            libxkbcommon-dev \
+            libxkbcommon-x11-0 \
+            libxkbcommon-x11-dev
+            
           chmod +x ./scripts/install-qt.sh
           ./scripts/install-qt.sh
 
@@ -136,7 +160,31 @@ jobs:
         if: steps.qt-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
-          sudo apt-get install -y libxcb1 libx11-xcb1 libfontconfig1 libfreetype6 libxrender1 libxi6 libgl1-mesa-glx libxcb-xinerama0
+          sudo apt-get install -y 
+            libxcb1 \
+            libxcb-cursor0 \
+            libxcb-cursor-dev \
+            libxcb-glx0 \
+            libxcb-icccm4 \
+            libxcb-image0 \
+            libxcb-image0-dev \
+            libxcb-keysyms1 \
+            libxcb-randr0 \
+            libxcb-render0 \
+            libxcb-render-util0 \
+            libxcb-shape0 \
+            libxcb-shm0 \
+            libxcb-sync1 \
+            libxcb-util0-dev \
+            libxcb-util1 \
+            libxcb-xfixes0 \
+            libxcb-xinerama0 \
+            libxcb-xkb-dev \
+            libxcb-xtest0 \
+            libxkbcommon-dev \
+            libxkbcommon-x11-0 \
+            libxkbcommon-x11-dev
+
           chmod +x ./scripts/install-qt.sh
           ./scripts/install-qt.sh
 
