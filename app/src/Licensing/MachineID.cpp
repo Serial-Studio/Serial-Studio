@@ -77,6 +77,22 @@ const QString &Licensing::MachineID::machineId() const
 }
 
 /**
+ * @brief Returns the hashed, base64-encoded application version machine
+ *        identifier.
+ *
+ * This value is generated based on the application name, version, and the
+ * machine ID, then hashed and encoded to avoid leaking identifiable
+ * information. It provides a consistent application version machine ID across
+ * sessions for licensing, caching, or other per-device logic.
+ *
+ * @return A reference to the app-version machine ID string (Base64-encoded).
+ */
+const QString &Licensing::MachineID::appVerMachineId() const
+{
+  return m_appVerMachineId;
+}
+
+/**
  * @brief Returns the machine-specific encryption key.
  *
  * This 64-bit key is derived from the same input used to generate the machine
@@ -213,4 +229,12 @@ void Licensing::MachineID::readInformation()
   // Obtain the machine ID and encryption key as a base64 string
   m_machineId = QString::fromUtf8(hash.toBase64());
   m_machineSpecificKey = qFromBigEndian<quint64>(hash.left(8));
+
+  // Generate application version machine ID
+  auto appVerData
+      = QString("%1_%2@%3:%4")
+            .arg(qApp->applicationName(), qApp->applicationVersion(), id, os);
+  auto appVerHash = QCryptographicHash::hash(appVerData.toUtf8(),
+                                             QCryptographicHash::Blake2s_128);
+  m_appVerMachineId = QString::fromUtf8(appVerHash.toBase64());
 }

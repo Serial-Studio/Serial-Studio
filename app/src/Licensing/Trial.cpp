@@ -223,7 +223,7 @@ void Licensing::Trial::fetchTrialState()
 
   // Create JSON payload
   QJsonObject payload;
-  payload["machine_id"] = MachineID::instance().machineId();
+  payload["machine_id"] = MachineID::instance().appVerMachineId();
   payload["timestamp"] = QString::number(timestamp);
   payload["nonce"] = nonce;
 

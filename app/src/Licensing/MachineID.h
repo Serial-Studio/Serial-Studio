@@ -65,6 +65,8 @@ private:
 public:
   [[nodiscard]] static MachineID &instance();
   [[nodiscard]] const QString &machineId() const;
+  [[nodiscard]] const QString &appVerMachineId() const;
+
   [[nodiscard]] quint64 machineSpecificKey() const;
 
 private:
@@ -72,6 +74,7 @@ private:
 
 private:
   QString m_machineId;
+  QString m_appVerMachineId;
   quint64 m_machineSpecificKey;
 };
 } // namespace Licensing

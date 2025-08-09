@@ -67,9 +67,6 @@ jobs:
       QT_USERNAME: ${{secrets.QT_USERNAME}}
       QT_PASSWORD: ${{secrets.QT_PASSWORD}}
     steps:
-      - name: "🔍 Checkout"       
-        uses: actions/checkout@v4
-
       - name: "⚙️ Set environment variables"
         run: |
           echo "CACHE_KEY=qt-${{ runner.os }}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
@@ -84,6 +81,10 @@ jobs:
           path: |
             ${{ env.QT_OUTPUT_DIR }}
             ${{ env.QT_OUTPUT_DIR }}/.qt-license
+
+      - name: "🔍 Checkout"   
+        if: steps.qt-cache.outputs.cache-hit != 'true'    
+        uses: actions/checkout@v4
 
       - name: "📚 Install Commercial Qt"
         if: steps.qt-cache.outputs.cache-hit != 'true'
@@ -139,9 +140,6 @@ jobs:
       QT_USERNAME: ${{secrets.QT_USERNAME}}
       QT_PASSWORD: ${{secrets.QT_PASSWORD}}
     steps:
-      - name: "🔍 Checkout"       
-        uses: actions/checkout@v4
-
       - name: "⚙️ Set environment variables"
         run: |
           echo "CACHE_KEY=qt-${{ runner.os }}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
@@ -156,6 +154,10 @@ jobs:
           path: |
             ${{ env.QT_OUTPUT_DIR }}
             ${{ env.QT_OUTPUT_DIR }}/.qt-license
+
+      - name: "🔍 Checkout"   
+        if: steps.qt-cache.outputs.cache-hit != 'true'    
+        uses: actions/checkout@v4
 
       - name: "📚 Install Commercial Qt"
         if: steps.qt-cache.outputs.cache-hit != 'true'
@@ -211,9 +213,6 @@ jobs:
       QT_USERNAME: ${{secrets.QT_USERNAME}}
       QT_PASSWORD: ${{secrets.QT_PASSWORD}}
     steps:
-      - name: "🔍 Checkout"       
-        uses: actions/checkout@v4
-
       - name: "⚙️ Set environment variables"
         run: |
           echo "CACHE_KEY=qt-${{ runner.os }}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
@@ -228,6 +227,10 @@ jobs:
           path: |
             ${{ env.QT_OUTPUT_DIR }}
             ${{ env.QT_OUTPUT_DIR }}/.qt-license
+
+      - name: "🔍 Checkout"   
+        if: steps.qt-cache.outputs.cache-hit != 'true'    
+        uses: actions/checkout@v4
 
       - name: "📚 Install Commercial Qt"
         if: steps.qt-cache.outputs.cache-hit != 'true'
@@ -257,9 +260,6 @@ jobs:
       QT_USERNAME: ${{secrets.QT_USERNAME}}
       QT_PASSWORD: ${{secrets.QT_PASSWORD}}
     steps:
-      - name: "🔍 Checkout"       
-        uses: actions/checkout@v4
-
       - name: "⚙️ Set environment variables"
         shell: pwsh
         run: |
@@ -278,6 +278,10 @@ jobs:
           path: |
             ${{ env.QT_OUTPUT_DIR }}
             ${{ env.QT_OUTPUT_DIR }}/.qt-license
+
+      - name: "🔍 Checkout"   
+        if: steps.qt-cache.outputs.cache-hit != 'true'    
+        uses: actions/checkout@v4
 
       - name: "📚 Install Commercial Qt"
         shell: pwsh
