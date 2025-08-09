@@ -485,15 +485,14 @@ jobs:
           $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
           cd build
           cpack --verbose
-          mv *.msi ${{matrix.appExecutable}}-${{env.APP_VERSION}}-Windows.msi
-          mv ${{matrix.appExecutable}}-${{env.APP_VERSION}}-Windows.msi ../
+          mv *.msi ../${{matrix.appExecutable}}-${{env.APP_VERSION}}-Windows.msi
 
       - name: "⬆️ Upload artifact: MSI installer"
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: ${{matrix.appExecutable}}-${{env.APP_VERSION}}-Windows.msi
-          path: ../${{matrix.appExecutable}}-${{env.APP_VERSION}}-Windows.msi
+          path: ${{matrix.appExecutable}}-${{env.APP_VERSION}}-Windows.msi
 
 #-------------------------------------------------------------------------------
 # Cache jobs
