@@ -70,10 +70,10 @@ jobs:
       QT_ARCH: x64
       QT_USERNAME: ${{secrets.QT_USERNAME}}
       QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-      CACHE_KEY: ${{env.CACHE_UUID_LINUX_X64}}
     steps:
       - name: "⚙️ Set environment variables"
         run: |
+          echo "CACHE_KEY=${{env.CACHE_UUID_LINUX_X64}}" >> $GITHUB_ENV
           echo "QT_OUTPUT_DIR=${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
 
       - name: "🗃️ Check if Commercial Qt Cache Exists"
@@ -143,10 +143,10 @@ jobs:
       QT_ARCH: arm64
       QT_USERNAME: ${{secrets.QT_USERNAME}}
       QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-      CACHE_KEY: ${{env.CACHE_UUID_LINUX_ARM64}}
     steps:
       - name: "⚙️ Set environment variables"
         run: |
+          echo "CACHE_KEY=${{env.CACHE_UUID_LINUX_ARM64}}" >> $GITHUB_ENV
           echo "QT_OUTPUT_DIR=${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
 
       - name: "🗃️ Check if Commercial Qt Cache Exists"
@@ -217,10 +217,10 @@ jobs:
       QT_ARCH: x64
       QT_USERNAME: ${{secrets.QT_USERNAME}}
       QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-      CACHE_KEY: ${{env.CACHE_UUID_MACOS_X64}}
     steps:
       - name: "⚙️ Set environment variables"
         run: |
+          echo "CACHE_KEY=${{env.CACHE_UUID_MACOS_X64}}" >> $GITHUB_ENV
           echo "QT_OUTPUT_DIR=${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
 
       - name: "🗃️ Check if Commercial Qt Cache Exists"
@@ -265,12 +265,14 @@ jobs:
       QT_ARCH: x64
       QT_USERNAME: ${{secrets.QT_USERNAME}}
       QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-      CACHE_KEY: ${{env.CACHE_UUID_MSWIN_X64}}
     steps:
       - name: "⚙️ Set environment variables"
         shell: pwsh
         run: |
+          $qtCacheKey = "${{env.CACHE_UUID_MSWIN_X64}}"
           $qtOutputDir = "${{ github.workspace }}\Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}"
+
+          Add-Content -Path $env:GITHUB_ENV -Value "QT_OUTPUT_DIR=$qtCacheKey"
           Add-Content -Path $env:GITHUB_ENV -Value "QT_OUTPUT_DIR=$qtOutputDir"
 
       - name: "🗃️ Check if Commercial Qt Cache Exists"
