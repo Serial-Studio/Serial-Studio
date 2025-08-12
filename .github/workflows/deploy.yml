@@ -48,6 +48,14 @@ env:
   QML_DIR: "../../app/qml"                          # Path to QML sources
   PUBLISHER: "Alex Spataru"                         # Application publisher
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"          # Bypass Qt license check
+
+  KEY_ID: "60fa42d9-d11f-4957-9f70-1e4bc8eaa5bc"    # UUID for cache, change when
+                                                    # cache system fails horribly
+                                                    
+  ENABLE_LINUX_ARM: "true"                          # Enable Linux arm64 jobs
+  ENABLE_LINUX_X64: "false"                         # Enable Linux x64 jobs
+  ENABLE_MACOS_X64: "false"                         # Enable macOS jobs
+  ENABLE_MSWIN_X64: "false"                         # Enable Windows jobs
   
   INSTALL_QT_LINUX_ARM: "true"                      # Install Qt on Linux arm64
   INSTALL_QT_LINUX_X64: "false"                     # Install Qt on Linux x64
@@ -66,6 +74,7 @@ jobs:
 
   install_qt_commercial_linux_x64:
     runs-on: ubuntu-22.04
+    if: env.ENABLE_LINUX_X64 == 'true'
     name: "📚 Install Commercial Qt (Linux x64)"
     env:
       QT_ARCH: x64
@@ -74,7 +83,7 @@ jobs:
     steps:
       - name: "⚙️ Set environment variables"
         run: |
-          echo "CACHE_KEY=qt-${{ runner.os }}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
+          echo "CACHE_KEY=qt-${{ env.KEY_ID }}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
           echo "QT_OUTPUT_DIR=${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
 
       - name: "🗃️ Check if Commercial Qt Cache Exists"
@@ -139,6 +148,7 @@ jobs:
 
   install_qt_commercial_linux_arm64:
     runs-on: ubuntu-24.04-arm
+    if: env.ENABLE_LINUX_ARM == 'true'
     name: "📚 Install Commercial Qt (Linux arm64)"
     env:
       QT_ARCH: arm64
@@ -147,7 +157,7 @@ jobs:
     steps:
       - name: "⚙️ Set environment variables"
         run: |
-          echo "CACHE_KEY=qt-${{ runner.os }}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
+          echo "CACHE_KEY=qt-${{ env.KEY_ID }}-${{ runner.os }}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
           echo "QT_OUTPUT_DIR=${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
 
       - name: "🗃️ Check if Commercial Qt Cache Exists"
@@ -212,6 +222,7 @@ jobs:
 
   install_qt_commercial_macos:
     runs-on: macos-latest
+    if: env.ENABLE_MACOS_X64 == 'true'
     name: "📚 Install Commercial Qt (macOS Universal)"
     env:
       QT_ARCH: x64
@@ -220,7 +231,7 @@ jobs:
     steps:
       - name: "⚙️ Set environment variables"
         run: |
-          echo "CACHE_KEY=qt-${{ runner.os }}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
+          echo "CACHE_KEY=qt-${{ env.KEY_ID }}-${{ runner.os }}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
           echo "QT_OUTPUT_DIR=${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
 
       - name: "🗃️ Check if Commercial Qt Cache Exists"
@@ -259,6 +270,7 @@ jobs:
 
   install_qt_commercial_windows:
     runs-on: windows-latest
+    if: env.ENABLE_MSWIN_X64 == 'true'
     name: "📚 Install Commercial Qt (Windows x64)"
     env:
       QT_ARCH: x64
@@ -268,7 +280,7 @@ jobs:
       - name: "⚙️ Set environment variables"
         shell: pwsh
         run: |
-          $cacheKey = "qt-${{ runner.os }}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}"
+          $cacheKey = "qt-${{ env.KEY_ID }}-${{ runner.os }}-${{ env.QT_VERSION }}-${{ env.QT_ARCH }}"
           $qtOutputDir = "${{ github.workspace }}\Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}"
 
           Add-Content -Path $env:GITHUB_ENV -Value "CACHE_KEY=$cacheKey"
@@ -441,7 +453,7 @@ jobs:
         uses: actions/cache/restore@v4
         if: matrix.edition == 'commercial'
         with:
-          key: qt-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}
+          key: qt-${{env.KEY_ID}}-${{runner.os}}-${{env.QT_VERSION}}-${{matrix.arch}}
           path: |
             ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
             ${{env.USERPROFILE}}/.qt-license
