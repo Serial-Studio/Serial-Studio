@@ -48,10 +48,10 @@ env:
   QML_DIR: "../../app/qml"                                     # Path to QML sources
   PUBLISHER: "Alex Spataru"                                    # Application publisher
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"                     # Bypass Qt license check
-  CACHE_UUID_LINUX_X64: "f7b0a1d6-1f4c-4db2-b29f-34f8a6b4c57a" # Cache key for Qt Linux x64 install
-  CACHE_UUID_LINUX_ARM: "51c5f54a-c17f-4565-b884-32090e947145" # Cache key for Qt Linux arm64 install
-  CACHE_UUID_MACOS_X64: "73a19b64-2c4c-4e43-a3f0-87dbd6dfad7a" # Cache key for Qt macOS install
-  CACHE_UUID_MSWIN_X64: "0a0fbd36-334a-4dcb-8727-d7a18406f2d5" # Cache key for Qt Windows install
+  CACHE_UUID_LINUX_X64: "2b1c6f90-8274-42b2-9a13-bb79cd2d17b6" # Cache key for Qt Linux x64 install
+  CACHE_UUID_LINUX_ARM: "c8a4b25f-7a92-4c8f-a08b-99a9b97b7ef1" # Cache key for Qt Linux arm64 install
+  CACHE_UUID_MACOS_X64: "fdc5bb4b-3da8-4e85-8759-782b2c5a2d23" # Cache key for Qt macOS install
+  CACHE_UUID_MSWIN_X64: "13c58b76-7ef5-44c8-b68f-3b3dcbde888e" # Cache key for Qt Windows install
 
 #---------------------------------------------------------------------------------------------------
 # Workflow jobs
@@ -235,6 +235,7 @@ jobs:
           QT_ARCH: ${{matrix.arch}}
           QT_USERNAME: ${{secrets.QT_USERNAME}}
           QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+          QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
         shell: bash
         run: |
           chmod +x ./scripts/install-qt.sh
@@ -246,6 +247,7 @@ jobs:
           QT_ARCH: ${{matrix.arch}}
           QT_USERNAME: ${{secrets.QT_USERNAME}}
           QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+          QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
         shell: pwsh
         run: |
           ./scripts/install-qt.ps1
@@ -253,6 +255,8 @@ jobs:
       - name: "🗃️ Save Commercial Qt Cache"
         uses: actions/cache/save@v4
         if: matrix.edition == 'commercial' && steps.qt-cache.outputs.cache-hit != 'true'
+        env:
+          QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
         with:
           key: ${{ env.CACHE_KEY }}
           path: |
