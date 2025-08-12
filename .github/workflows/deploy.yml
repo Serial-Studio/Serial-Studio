@@ -48,15 +48,11 @@ env:
   QML_DIR: "../../app/qml"                          # Path to QML sources
   PUBLISHER: "Alex Spataru"                         # Application publisher
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"          # Bypass Qt license check
-
-  KEY_ID: "60fa42d9-d11f-4957-9f70-1e4bc8eaa5bc"    # UUID for cache, change when
-                                                    # cache system fails horribly
-                                                    
+  KEY_ID: "60fa42d9-d11f-4957-9f70-1e4bc8eaa5bc"    # UUID for cache                                            
   ENABLE_LINUX_ARM: "true"                          # Enable Linux arm64 jobs
   ENABLE_LINUX_X64: "false"                         # Enable Linux x64 jobs
   ENABLE_MACOS_X64: "false"                         # Enable macOS jobs
   ENABLE_MSWIN_X64: "false"                         # Enable Windows jobs
-  
   INSTALL_QT_LINUX_ARM: "true"                      # Install Qt on Linux arm64
   INSTALL_QT_LINUX_X64: "false"                     # Install Qt on Linux x64
   INSTALL_QT_MACOS_X64: "false"                     # Install Qt on macOS
@@ -74,7 +70,7 @@ jobs:
 
   install_qt_commercial_linux_x64:
     runs-on: ubuntu-22.04
-    if: ${{env.ENABLE_LINUX_X64 == 'true'}}
+    if: env.ENABLE_LINUX_X64 == 'true'
     name: "📚 Install Commercial Qt (Linux x64)"
     env:
       QT_ARCH: x64
@@ -97,11 +93,11 @@ jobs:
             ${{ env.QT_OUTPUT_DIR }}/.qt-license
 
       - name: "🔍 Checkout"   
-        if: steps.qt-cache.outputs.cache-hit != 'true' || ${{env.INSTALL_QT_LINUX_X64}} == 'true'    
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.INSTALL_QT_LINUX_X64 == 'true'    
         uses: actions/checkout@v4
 
       - name: "📚 Install Commercial Qt"
-        if: steps.qt-cache.outputs.cache-hit != 'true' || ${{env.INSTALL_QT_LINUX_X64}} == 'true' 
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.INSTALL_QT_LINUX_X64 == 'true' 
         shell: bash
         run: |
           sudo apt-get update
@@ -148,7 +144,7 @@ jobs:
 
   install_qt_commercial_linux_arm64:
     runs-on: ubuntu-24.04-arm
-    if: ${{env.ENABLE_LINUX_ARM == 'true'}}
+    if: env.ENABLE_LINUX_ARM == 'true'
     name: "📚 Install Commercial Qt (Linux arm64)"
     env:
       QT_ARCH: arm64
@@ -222,7 +218,7 @@ jobs:
 
   install_qt_commercial_macos:
     runs-on: macos-latest
-    if: ${{env.ENABLE_MACOS_X64 == 'true'}}
+    if: env.ENABLE_MACOS_X64 == 'true'
     name: "📚 Install Commercial Qt (macOS Universal)"
     env:
       QT_ARCH: x64
@@ -270,7 +266,7 @@ jobs:
 
   install_qt_commercial_windows:
     runs-on: windows-latest
-    if: ${{env.ENABLE_MSWIN_X64 == 'true'}}
+    if: env.ENABLE_MSWIN_X64 == 'true'
     name: "📚 Install Commercial Qt (Windows x64)"
     env:
       QT_ARCH: x64
