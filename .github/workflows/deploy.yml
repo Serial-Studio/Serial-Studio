@@ -48,6 +48,7 @@ env:
   QML_DIR: "../../app/qml"                          # Path to QML sources
   PUBLISHER: "Alex Spataru"                         # Application publisher
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"          # Bypass Qt license check
+  FORCE_QT_REINSTALL: "true"                        # Re-install Qt
 
 #-------------------------------------------------------------------------------
 # Workflow jobs, including installation, build and release publishing
@@ -83,11 +84,11 @@ jobs:
             ${{ env.QT_OUTPUT_DIR }}/.qt-license
 
       - name: "🔍 Checkout"   
-        if: steps.qt-cache.outputs.cache-hit != 'true'    
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.FORCE_QT_REINSTALL == 'true'    
         uses: actions/checkout@v4
 
       - name: "📚 Install Commercial Qt"
-        if: steps.qt-cache.outputs.cache-hit != 'true'
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.FORCE_QT_REINSTALL == 'true' 
         shell: bash
         run: |
           sudo apt-get update
@@ -121,7 +122,7 @@ jobs:
 
       - name: "🗃️ Cache Commercial Qt"
         uses: actions/cache/save@v4
-        if: steps.qt-cache.outputs.cache-hit != 'true'
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.FORCE_QT_REINSTALL == 'true' 
         with:
           key: ${{ env.CACHE_KEY }}
           path: |
@@ -156,11 +157,11 @@ jobs:
             ${{ env.QT_OUTPUT_DIR }}/.qt-license
 
       - name: "🔍 Checkout"   
-        if: steps.qt-cache.outputs.cache-hit != 'true'    
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.FORCE_QT_REINSTALL == 'true'  
         uses: actions/checkout@v4
 
       - name: "📚 Install Commercial Qt"
-        if: steps.qt-cache.outputs.cache-hit != 'true'
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.FORCE_QT_REINSTALL == 'true' 
         shell: bash
         run: |
           sudo apt-get update
@@ -194,7 +195,7 @@ jobs:
 
       - name: "🗃️ Cache Commercial Qt"
         uses: actions/cache/save@v4
-        if: steps.qt-cache.outputs.cache-hit != 'true'
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.FORCE_QT_REINSTALL == 'true' 
         with:
           key: ${{ env.CACHE_KEY }}
           path: |
@@ -229,11 +230,11 @@ jobs:
             ${{ env.QT_OUTPUT_DIR }}/.qt-license
 
       - name: "🔍 Checkout"   
-        if: steps.qt-cache.outputs.cache-hit != 'true'    
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.FORCE_QT_REINSTALL == 'true'  
         uses: actions/checkout@v4
 
       - name: "📚 Install Commercial Qt"
-        if: steps.qt-cache.outputs.cache-hit != 'true'
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.FORCE_QT_REINSTALL == 'true' 
         shell: bash
         run: |
           chmod +x ./scripts/install-qt.sh
@@ -241,7 +242,7 @@ jobs:
 
       - name: "🗃️ Cache Commercial Qt"
         uses: actions/cache/save@v4
-        if: steps.qt-cache.outputs.cache-hit != 'true'
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.FORCE_QT_REINSTALL == 'true' 
         with:
           key: ${{ env.CACHE_KEY }}
           path: |
@@ -280,18 +281,18 @@ jobs:
             ${{ env.QT_OUTPUT_DIR }}/.qt-license
 
       - name: "🔍 Checkout"   
-        if: steps.qt-cache.outputs.cache-hit != 'true'    
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.FORCE_QT_REINSTALL == 'true'     
         uses: actions/checkout@v4
 
       - name: "📚 Install Commercial Qt"
         shell: pwsh
-        if: steps.qt-cache.outputs.cache-hit != 'true'
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.FORCE_QT_REINSTALL == 'true' 
         run: |
           ./scripts/install-qt.ps1
 
       - name: "🗃️ Save Commercial Qt Cache"
         uses: actions/cache/save@v4
-        if: steps.qt-cache.outputs.cache-hit != 'true'
+        if: steps.qt-cache.outputs.cache-hit != 'true' || env.FORCE_QT_REINSTALL == 'true' 
         with:
           key: ${{ env.CACHE_KEY }}
           path: |
