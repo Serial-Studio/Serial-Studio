@@ -481,7 +481,7 @@ jobs:
         uses: actions/cache/restore@v4
         if: matrix.edition == 'commercial'
         with:
-          key: ${{matrix.qtCacheKey}}
+          key: ${{env.CACHE_KEY}}
           path: |
             ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
             ${{env.USERPROFILE}}/.qt-license
