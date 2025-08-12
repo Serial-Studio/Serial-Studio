@@ -229,16 +229,24 @@ jobs:
             ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
             ${{env.USERPROFILE}}/.qt-license
 
-      - name: "📚 Install Commercial Qt"
+      - name: "📚 Install Commercial Qt (UNIX)"
         if: matrix.edition == 'commercial' && steps.qt-cache.outputs.cache-hit != 'true' && matrix.os != 'windows-latest'
+        env:
+          QT_ARCH: ${{matrix.arch}}
+          QT_USERNAME: ${{secrets.QT_USERNAME}}
+          QT_PASSWORD: ${{secrets.QT_PASSWORD}}
         shell: bash
         run: |
           chmod +x ./scripts/install-qt.sh
           ./scripts/install-qt.sh
 
-      - name: "📚 Install Commercial Qt"
-        shell: pwsh
+      - name: "📚 Install Commercial Qt (Windows)"
         if: matrix.edition == 'commercial' && steps.qt-cache.outputs.cache-hit != 'true' && matrix.os == 'windows-latest'
+        env:
+          QT_ARCH: ${{matrix.arch}}
+          QT_USERNAME: ${{secrets.QT_USERNAME}}
+          QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+        shell: pwsh
         run: |
           ./scripts/install-qt.ps1
 
