@@ -54,269 +54,11 @@ env:
   CACHE_UUID_MSWIN_X64: "0a0fbd36-334a-4dcb-8727-d7a18406f2d5" # Cache key for Qt Windows install
 
 #---------------------------------------------------------------------------------------------------
-# Workflow jobs, including installation, build and release publishing
+# Workflow jobs
 #---------------------------------------------------------------------------------------------------
 
 jobs:
-
-#---------------------------------------------------------------------------------------------------
-# Install Qt commercial on Linux x64
-#---------------------------------------------------------------------------------------------------
-
-  install_qt_commercial_linux_x64:
-    runs-on: ubuntu-22.04
-    name: "📚 Install Commercial Qt (Linux x64)"
-    env:
-      QT_ARCH: x64
-      QT_USERNAME: ${{secrets.QT_USERNAME}}
-      QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-    steps:
-      - name: "⚙️ Set environment variables"
-        run: |
-          echo "CACHE_KEY=${{env.CACHE_UUID_LINUX_X64}}" >> $GITHUB_ENV
-          echo "QT_OUTPUT_DIR=${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
-
-      - name: "🗃️ Check if Commercial Qt Cache Exists"
-        id: qt-cache
-        uses: actions/cache/restore@v4
-        with:
-          key: ${{ env.CACHE_KEY }}
-          lookup-only: true
-          path: |
-            ${{ env.QT_OUTPUT_DIR }}
-            ${{ env.QT_OUTPUT_DIR }}/.qt-license
-
-      - name: "🔍 Checkout"   
-        if: steps.qt-cache.outputs.cache-hit != 'true'   
-        uses: actions/checkout@v4
-
-      - name: "📚 Install Commercial Qt"
-        if: steps.qt-cache.outputs.cache-hit != 'true' 
-        shell: bash
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libxcb1 \
-            libxcb-cursor0 \
-            libxcb-cursor-dev \
-            libxcb-glx0 \
-            libxcb-icccm4 \
-            libxcb-image0 \
-            libxcb-image0-dev \
-            libxcb-keysyms1 \
-            libxcb-randr0 \
-            libxcb-render0 \
-            libxcb-render-util0 \
-            libxcb-shape0 \
-            libxcb-shm0 \
-            libxcb-sync1 \
-            libxcb-util0-dev \
-            libxcb-util1 \
-            libxcb-xfixes0 \
-            libxcb-xinerama0 \
-            libxcb-xkb-dev \
-            libxcb-xtest0 \
-            libxkbcommon-dev \
-            libxkbcommon-x11-0 \
-            libxkbcommon-x11-dev
-
-          chmod +x ./scripts/install-qt.sh
-          ./scripts/install-qt.sh
-
-      - name: "🗃️ Cache Commercial Qt"
-        uses: actions/cache/save@v4
-        if: steps.qt-cache.outputs.cache-hit != 'true' 
-        with:
-          key: ${{ env.CACHE_KEY }}
-          path: |
-            ${{ env.QT_OUTPUT_DIR }}
-            ${{ env.QT_OUTPUT_DIR }}/.qt-license
-
-#---------------------------------------------------------------------------------------------------
-# Install Qt commercial on Linux arm64
-#---------------------------------------------------------------------------------------------------
-
-  install_qt_commercial_linux_arm64:
-    runs-on: ubuntu-24.04-arm
-    name: "📚 Install Commercial Qt (Linux arm64)"
-    env:
-      QT_ARCH: arm64
-      QT_USERNAME: ${{secrets.QT_USERNAME}}
-      QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-    steps:
-      - name: "⚙️ Set environment variables"
-        run: |
-          echo "CACHE_KEY=${{env.CACHE_UUID_LINUX_ARM}}" >> $GITHUB_ENV
-          echo "QT_OUTPUT_DIR=${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
-
-      - name: "🗃️ Check if Commercial Qt Cache Exists"
-        id: qt-cache
-        uses: actions/cache/restore@v4
-        with:
-          key: ${{ env.CACHE_KEY }}
-          lookup-only: true
-          path: |
-            ${{ env.QT_OUTPUT_DIR }}
-            ${{ env.QT_OUTPUT_DIR }}/.qt-license
-
-      - name: "🔍 Checkout"   
-        if: steps.qt-cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v4
-
-      - name: "📚 Install Commercial Qt"
-        if: steps.qt-cache.outputs.cache-hit != 'true'
-        shell: bash
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libxcb1 \
-            libxcb-cursor0 \
-            libxcb-cursor-dev \
-            libxcb-glx0 \
-            libxcb-icccm4 \
-            libxcb-image0 \
-            libxcb-image0-dev \
-            libxcb-keysyms1 \
-            libxcb-randr0 \
-            libxcb-render0 \
-            libxcb-render-util0 \
-            libxcb-shape0 \
-            libxcb-shm0 \
-            libxcb-sync1 \
-            libxcb-util0-dev \
-            libxcb-util1 \
-            libxcb-xfixes0 \
-            libxcb-xinerama0 \
-            libxcb-xkb-dev \
-            libxcb-xtest0 \
-            libxkbcommon-dev \
-            libxkbcommon-x11-0 \
-            libxkbcommon-x11-dev
-
-          chmod +x ./scripts/install-qt.sh
-          ./scripts/install-qt.sh
-
-      - name: "🗃️ Cache Commercial Qt"
-        uses: actions/cache/save@v4
-        if: steps.qt-cache.outputs.cache-hit != 'true'
-        with:
-          key: ${{ env.CACHE_KEY }}
-          path: |
-            ${{ env.QT_OUTPUT_DIR }}
-            ${{ env.QT_OUTPUT_DIR }}/.qt-license
-
-#---------------------------------------------------------------------------------------------------
-# Install Qt commercial on macOS Universal (both x64 and arm64)
-#---------------------------------------------------------------------------------------------------
-
-  install_qt_commercial_macos:
-    runs-on: macos-latest
-    name: "📚 Install Commercial Qt (macOS Universal)"
-    env:
-      QT_ARCH: x64
-      QT_USERNAME: ${{secrets.QT_USERNAME}}
-      QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-    steps:
-      - name: "⚙️ Set environment variables"
-        run: |
-          echo "CACHE_KEY=${{env.CACHE_UUID_MACOS_X64}}" >> $GITHUB_ENV
-          echo "QT_OUTPUT_DIR=${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
-
-      - name: "🗃️ Check if Commercial Qt Cache Exists"
-        id: qt-cache
-        uses: actions/cache/restore@v4
-        with:
-          key: ${{ env.CACHE_KEY }}
-          lookup-only: true
-          path: |
-            ${{ env.QT_OUTPUT_DIR }}
-            ${{ env.QT_OUTPUT_DIR }}/.qt-license
-
-      - name: "🔍 Checkout"   
-        if: steps.qt-cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v4
-
-      - name: "📚 Install Commercial Qt"
-        if: steps.qt-cache.outputs.cache-hit != 'true'
-        shell: bash
-        run: |
-          chmod +x ./scripts/install-qt.sh
-          ./scripts/install-qt.sh
-
-      - name: "🗃️ Cache Commercial Qt"
-        uses: actions/cache/save@v4
-        if: steps.qt-cache.outputs.cache-hit != 'true'
-        with:
-          key: ${{ env.CACHE_KEY }}
-          path: |
-            ${{ env.QT_OUTPUT_DIR }}
-            ${{ env.QT_OUTPUT_DIR }}/.qt-license
-
-#---------------------------------------------------------------------------------------------------
-# Install Qt commercial on Windows x64
-#---------------------------------------------------------------------------------------------------
-
-  install_qt_commercial_windows:
-    runs-on: windows-latest
-    name: "📚 Install Commercial Qt (Windows x64)"
-    env:
-      QT_ARCH: x64
-      QT_USERNAME: ${{secrets.QT_USERNAME}}
-      QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-    steps:
-      - name: "⚙️ Set environment variables"
-        shell: pwsh
-        run: |
-          $qtCacheKey = "${{env.CACHE_UUID_MSWIN_X64}}"
-          $qtOutputDir = "${{ github.workspace }}\Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}"
-
-          Add-Content -Path $env:GITHUB_ENV -Value "CACHE_KEY=$qtCacheKey"
-          Add-Content -Path $env:GITHUB_ENV -Value "QT_OUTPUT_DIR=$qtOutputDir"
-
-      - name: "🗃️ Check if Commercial Qt Cache Exists"
-        id: qt-cache
-        uses: actions/cache/restore@v4
-        with:
-          key: ${{ env.CACHE_KEY }}
-          lookup-only: true
-          path: |
-            ${{ env.QT_OUTPUT_DIR }}
-            ${{ env.QT_OUTPUT_DIR }}/.qt-license
-
-      - name: "🔍 Checkout"   
-        if: steps.qt-cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v4
-
-      - name: "📚 Install Commercial Qt"
-        shell: pwsh
-        if: steps.qt-cache.outputs.cache-hit != 'true'
-        run: |
-          ./scripts/install-qt.ps1
-
-      - name: "🗃️ Save Commercial Qt Cache"
-        uses: actions/cache/save@v4
-        if: steps.qt-cache.outputs.cache-hit != 'true'
-        with:
-          key: ${{ env.CACHE_KEY }}
-          path: |
-            ${{ env.QT_OUTPUT_DIR }}
-            ${{ env.QT_OUTPUT_DIR }}/.qt-license
-
-#---------------------------------------------------------------------------------------------------
-# Start the build job
-#---------------------------------------------------------------------------------------------------
-
   build:
-    needs:
-      - install_qt_commercial_linux_x64
-      - install_qt_commercial_linux_arm64
-      - install_qt_commercial_macos
-      - install_qt_commercial_windows
-
-#---------------------------------------------------------------------------------------------------
-# Build matrix
-#---------------------------------------------------------------------------------------------------
-
     strategy:
       matrix:
         include:
@@ -474,10 +216,11 @@ jobs:
           modules: "qt3d qtquick3d qtdatavis3d qtgraphs qtserialport qtconnectivity qtshadertools"
 
 #---------------------------------------------------------------------------------------------------
-# Restore previous cached Qt installation
+# Qt installation for commercial builds
 #---------------------------------------------------------------------------------------------------
 
       - name: "🗃️ Restore Commercial Qt Cache"
+        id: qt-cache
         uses: actions/cache/restore@v4
         if: matrix.edition == 'commercial'
         with:
@@ -485,6 +228,28 @@ jobs:
           path: |
             ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
             ${{env.USERPROFILE}}/.qt-license
+
+      - name: "📚 Install Commercial Qt"
+        if: matrix.edition == 'commercial' && steps.qt-cache.outputs.cache-hit != 'true' && matrix.os != 'windows-latest'
+        shell: bash
+        run: |
+          chmod +x ./scripts/install-qt.sh
+          ./scripts/install-qt.sh
+
+      - name: "📚 Install Commercial Qt"
+        shell: pwsh
+        if: matrix.edition == 'commercial' && steps.qt-cache.outputs.cache-hit != 'true' && matrix.os == 'windows-latest'
+        run: |
+          ./scripts/install-qt.ps1
+
+      - name: "🗃️ Save Commercial Qt Cache"
+        uses: actions/cache/save@v4
+        if: matrix.edition == 'commercial' && steps.qt-cache.outputs.cache-hit != 'true'
+        with:
+          key: ${{ env.CACHE_KEY }}
+          path: |
+            ${{ env.QT_OUTPUT_DIR }}
+            ${{ env.QT_OUTPUT_DIR }}/.qt-license
 
 #---------------------------------------------------------------------------------------------------
 # Add Commercial Qt to PATH
