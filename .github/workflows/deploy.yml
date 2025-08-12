@@ -146,7 +146,7 @@ jobs:
     steps:
       - name: "⚙️ Set environment variables"
         run: |
-          echo "CACHE_KEY=${{env.CACHE_UUID_LINUX_ARM64}}" >> $GITHUB_ENV
+          echo "CACHE_KEY=${{env.CACHE_UUID_LINUX_ARM}}" >> $GITHUB_ENV
           echo "QT_OUTPUT_DIR=${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
 
       - name: "🗃️ Check if Commercial Qt Cache Exists"
@@ -270,7 +270,7 @@ jobs:
           $qtCacheKey = "${{env.CACHE_UUID_MSWIN_X64}}"
           $qtOutputDir = "${{ github.workspace }}\Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}"
 
-          Add-Content -Path $env:GITHUB_ENV -Value "QT_OUTPUT_DIR=$qtCacheKey"
+          Add-Content -Path $env:GITHUB_ENV -Value "CACHE_KEY=$qtCacheKey"
           Add-Content -Path $env:GITHUB_ENV -Value "QT_OUTPUT_DIR=$qtOutputDir"
 
       - name: "🗃️ Check if Commercial Qt Cache Exists"
