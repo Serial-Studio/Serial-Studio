@@ -96,8 +96,8 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   // Obtain group information
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot3D, m_index))
   {
-    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz,
-            this, [=, this] {
+    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this,
+            [=, this] {
               if (isVisible() && dirty())
                 update();
             });

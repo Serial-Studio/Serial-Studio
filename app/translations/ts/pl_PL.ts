@@ -2744,39 +2744,39 @@ Plany obejmują opcje miesięczne, roczne i dożywotnie.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="896"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="780"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="903"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>Klucz licencyjny, który podałeś, nie należy do Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="774"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="897"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="781"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="904"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Proszę sprawdzić, czy licencja została zakupiona w oficjalnym sklepie Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="786"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="793"/>
         <source>This license key was activated on a different device.</source>
         <translation>Ten klucz licencyjny został aktywowany na innym urządzeniu.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="787"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="794"/>
         <source>Please deactivate it there first or contact support for help.</source>
         <translation>Proszę najpierw go tam dezaktywować lub skontaktować się z pomocą techniczną.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="800"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="807"/>
         <source>This license is not currently active.</source>
         <translation>Ta licencja nie jest obecnie aktywna.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="627"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="801"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="808"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Mogła wygasnąć lub zostać dezaktywowana (status: %1).</translation>
     </message>
@@ -2787,7 +2787,7 @@ Plany obejmują opcje miesięczne, roczne i dożywotnie.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="640"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="814"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="821"/>
         <source>No activation ID was returned.</source>
         <translation>Nie zwrócono identyfikatora aktywacji.</translation>
     </message>
@@ -2798,65 +2798,69 @@ Plany obejmują opcje miesięczne, roczne i dożywotnie.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="652"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="826"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="910"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="833"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="917"/>
         <source>Please try again later.</source>
         <translation>Spróbuj ponownie później.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="672"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="674"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="674"/>
-        <source>%1 Pro</source>
-        <translation>%1 Pro</translation>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="676"/>
+        <source>%1 (%2)</source>
+        <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="699"/>
+        <source>%1 Pro</source>
+        <translation type="vanished">%1 Pro</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="706"/>
         <source>Your license has been successfully activated.</source>
         <translation>Twoja licencja została pomyślnie aktywowana.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="700"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="707"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Dziękujemy za wsparcie Serial Studio!
 Masz teraz dostęp do wszystkich funkcji premium.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="762"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="769"/>
         <source>There was an issue activating your license.</source>
         <translation>Wystąpił problem z aktywacją Twojej licencji.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="813"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="820"/>
         <source>Something went wrong on the server...</source>
         <translation>Coś poszło nie tak na serwerze...</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="825"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="832"/>
         <source>Could not activate your license at this time.</source>
         <translation>Nie można teraz aktywować Twojej licencji.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="885"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Wystąpił problem z dezaktywacją licencji.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="909"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="916"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Nie można teraz dezaktywować licencji.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="919"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="926"/>
         <source>Your license has been deactivated.</source>
         <translation>Twoja licencja została dezaktywowana.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="920"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="927"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Dostęp do funkcji Pro został usunięty.
@@ -3504,7 +3508,7 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
 <context>
     <name>Misc::WorkspaceManager</name>
     <message>
-        <location filename="../../src/Misc/WorkspaceManager.cpp" line="117"/>
+        <location filename="../../src/Misc/WorkspaceManager.cpp" line="116"/>
         <source>Select Workspace Location</source>
         <translation>Wybierz lokalizację przestrzeni roboczej</translation>
     </message>
@@ -3971,57 +3975,62 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
         <translation>Preferencje</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="101"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="100"/>
         <source>General</source>
         <translation>Ogólne</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="125"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="124"/>
         <source>Language</source>
         <translation>Język</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="145"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="144"/>
         <source>Theme</source>
         <translation>Motyw</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="164"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="163"/>
         <source>Workspace Folder</source>
         <translation>Folder roboczy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="207"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="206"/>
         <source>Miscellaneous</source>
         <translation>Różne</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="232"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
         <source>Enable TCP Plugins (Port 7777)</source>
         <translation>Włącz wtyczki TCP (Port 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="250"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="249"/>
         <source>Force Software Rendering</source>
         <translation>Wymuś renderowanie programowe</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="267"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="266"/>
         <source>Automatically Check for Updates</source>
         <translation>Automatycznie sprawdzaj aktualizacje</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="292"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="291"/>
         <source>Dashboard</source>
         <translation>Pulpit nawigacyjny</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="316"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="315"/>
         <source>Point Count</source>
         <translation>Liczba punktów</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="354"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
+        <source>UI Refresh Rate (Hz)</source>
+        <translation>Częstotliwość odświeżania interfejsu (Hz)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="371"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Zawsze pokazuj przyciski na pasku zadań</translation>
     </message>
@@ -4034,7 +4043,7 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
         <translation type="vanished">Tryb wielowątkowy (lepszy dla danych o wysokiej częstotliwości)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="336"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="353"/>
         <source>Show Actions Panel</source>
         <translation>Pokaż panel akcji</translation>
     </message>
@@ -4043,27 +4052,27 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
         <translation type="vanished">Zawsze pokazuj przyciski paska zadań</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="372"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="389"/>
         <source>Enable Console Widget</source>
         <translation>Włącz widżet konsoli</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="393"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="410"/>
         <source>Use Separate Thread for Frame Extraction</source>
         <translation>Użyj osobnego wątku do ekstrakcji ramek</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="433"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="450"/>
         <source>Reset</source>
         <translation>Resetuj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="459"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="478"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="469"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="488"/>
         <source>Apply</source>
         <translation>Zastosuj</translation>
     </message>
@@ -4447,17 +4456,17 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="934"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="979"/>
         <source>Console</source>
         <translation>Konsola</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="953"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="998"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Zapasowy)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1016"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1061"/>
         <source>LED Panel (%1)</source>
         <translation>Panel LED (%1)</translation>
     </message>
@@ -4543,13 +4552,13 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="204"/>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="362"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="382"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
         <translation>Kupując wersję Pro, bezpośrednio wspierasz autora i pomagasz finansować przyszły rozwój.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="212"/>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="370"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="390"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
         <translation>Samodzielne budowanie wersji GPLv3 pomaga rozwijać społeczność i zachęca do technicznych wkładów.</translation>
     </message>
@@ -4584,47 +4593,54 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
         <translation>Aby zobaczyć dostępne plany subskrypcji, kliknij poniżej "Ulepsz teraz".</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="332"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="323"/>
+        <source>Don't nag me about the trial.
+I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
+        <translation>Nie przypominaj mi o wersji próbnej.
+Rozumiem, że gdy się skończy, będę musiał kupić licencję lub zbudować wersję GPLv3.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="352"/>
         <source>Your %1 trial has expired.</source>
         <translation>Twój okres próbny %1 wygasł.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="342"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="362"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
         <translation>Twój okres próbny dobiegł końca. Aby kontynuować korzystanie z %1 ze wszystkimi funkcjami Pro, prosimy o uaktualnienie do płatnego planu.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="353"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="373"/>
         <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
         <translation>Jeśli wolisz, możesz również skompilować wersję open-source na licencji GPLv3.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="381"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="401"/>
         <source>Thank you for trying %1!</source>
         <translation>Dziękujemy za wypróbowanie %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="425"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="445"/>
         <source>Upgrade Now</source>
         <translation>Uaktualnij teraz</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="437"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="457"/>
         <source>Activate</source>
         <translation>Aktywuj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="476"/>
         <source>Open in Limited Mode</source>
         <translation>Otwórz w trybie ograniczonym</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="476"/>
         <source>Continue</source>
         <translation>Kontynuuj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="476"/>
         <source>Start Trial</source>
         <translation>Rozpocznij okres próbny</translation>
     </message>

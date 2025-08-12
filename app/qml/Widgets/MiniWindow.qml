@@ -35,6 +35,7 @@ Item {
   property string icon: ""
   property string title: ""
   property bool headerVisible: true
+  property bool shadowEnabled: true
   readonly property int defaultRadius: 0
 
   //
@@ -265,8 +266,8 @@ Item {
     shadowColor: Cpp_ThemeManager.colors["shadow"]
 
     // Only enabled when using RHI
-    enabled: !Cpp_Misc_ModuleManager.softwareRendering
-    visible: !Cpp_Misc_ModuleManager.softwareRendering
+    enabled: !Cpp_Misc_ModuleManager.softwareRendering && root.shadowEnabled
+    visible: !Cpp_Misc_ModuleManager.softwareRendering && root.shadowEnabled
   }
 
   //

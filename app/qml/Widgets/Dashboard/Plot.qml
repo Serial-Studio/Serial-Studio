@@ -79,7 +79,7 @@ Item {
   Connections {
     target: Cpp_Misc_TimerEvents
 
-    function onTimeout24Hz() {
+    function onUiTimeout() {
       if (root.visible && root.model && root.running) {
         if (root.interpolate) {
           root.model.draw(upperSeries)

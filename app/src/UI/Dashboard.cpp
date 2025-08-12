@@ -72,7 +72,7 @@ UI::Dashboard::Dashboard()
 #endif
 
   // Update the dashboard widgets at 24 Hz
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this,
           [=, this] {
             if (m_updateRequired)
             {

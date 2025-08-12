@@ -2744,39 +2744,39 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="896"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="780"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="903"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>您提供的许可证密钥不属于 Serial Studio。</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="774"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="897"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="781"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="904"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>请仔细检查您是否从官方 Serial Studio 商店购买了许可证。</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="786"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="793"/>
         <source>This license key was activated on a different device.</source>
         <translation>此许可证密钥已在其他设备上激活。</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="787"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="794"/>
         <source>Please deactivate it there first or contact support for help.</source>
         <translation>请先在该设备上停用或联系支持以获取帮助。</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="800"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="807"/>
         <source>This license is not currently active.</source>
         <translation>此许可证当前未激活。</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="627"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="801"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="808"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>它可能已过期或被停用（状态：%1）。</translation>
     </message>
@@ -2787,7 +2787,7 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="640"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="814"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="821"/>
         <source>No activation ID was returned.</source>
         <translation>未返回激活 ID。</translation>
     </message>
@@ -2798,65 +2798,69 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="652"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="826"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="910"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="833"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="917"/>
         <source>Please try again later.</source>
         <translation>请稍后再试。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="672"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="674"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="674"/>
-        <source>%1 Pro</source>
-        <translation>%1 Pro</translation>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="676"/>
+        <source>%1 (%2)</source>
+        <translation>%1（%2）</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="699"/>
+        <source>%1 Pro</source>
+        <translation type="vanished">%1 Pro</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="706"/>
         <source>Your license has been successfully activated.</source>
         <translation>您的许可证已成功激活。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="700"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="707"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>感谢您支持 Serial Studio！
 您现在可以访问所有高级功能。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="762"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="769"/>
         <source>There was an issue activating your license.</source>
         <translation>激活您的许可证时出现问题。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="813"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="820"/>
         <source>Something went wrong on the server...</source>
         <translation>服务器出现问题...</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="825"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="832"/>
         <source>Could not activate your license at this time.</source>
         <translation>目前无法激活您的许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="885"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
         <source>There was an issue deactivating your license.</source>
         <translation>无法停用您的许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="909"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="916"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>目前无法停用您的许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="919"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="926"/>
         <source>Your license has been deactivated.</source>
         <translation>您的许可证已停用。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="920"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="927"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>专业功能访问已被移除。
@@ -3504,7 +3508,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Misc::WorkspaceManager</name>
     <message>
-        <location filename="../../src/Misc/WorkspaceManager.cpp" line="117"/>
+        <location filename="../../src/Misc/WorkspaceManager.cpp" line="116"/>
         <source>Select Workspace Location</source>
         <translation>选择工作区位置</translation>
     </message>
@@ -3971,57 +3975,62 @@ Please provide the necessary credentials.</source>
         <translation>首选项</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="101"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="100"/>
         <source>General</source>
         <translation>常规</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="125"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="124"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="145"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="144"/>
         <source>Theme</source>
         <translation>主题</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="164"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="163"/>
         <source>Workspace Folder</source>
         <translation>工作区文件夹</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="207"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="206"/>
         <source>Miscellaneous</source>
         <translation>杂项</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="232"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
         <source>Enable TCP Plugins (Port 7777)</source>
         <translation>启用 TCP 插件（端口 7777）</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="250"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="249"/>
         <source>Force Software Rendering</source>
         <translation>强制软件渲染</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="267"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="266"/>
         <source>Automatically Check for Updates</source>
         <translation>自动检查更新</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="292"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="291"/>
         <source>Dashboard</source>
         <translation>仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="316"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="315"/>
         <source>Point Count</source>
         <translation>点数</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="354"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
+        <source>UI Refresh Rate (Hz)</source>
+        <translation>UI刷新率 (Hz)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="371"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>始终显示任务栏按钮</translation>
     </message>
@@ -4034,7 +4043,7 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">线程模式（更适合高频数据）</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="336"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="353"/>
         <source>Show Actions Panel</source>
         <translation>显示操作面板</translation>
     </message>
@@ -4043,27 +4052,27 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">始终显示任务栏按钮</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="372"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="389"/>
         <source>Enable Console Widget</source>
         <translation>启用控制台小部件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="393"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="410"/>
         <source>Use Separate Thread for Frame Extraction</source>
         <translation>使用单独线程进行帧提取</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="433"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="450"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="459"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="478"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="469"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="488"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
@@ -4447,17 +4456,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="934"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="979"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="953"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="998"/>
         <source>%1 (Fallback)</source>
         <translation>%1（备用）</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1016"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1061"/>
         <source>LED Panel (%1)</source>
         <translation>LED面板（%1）</translation>
     </message>
@@ -4543,13 +4552,13 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="204"/>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="362"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="382"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
         <translation>购买专业版直接支持作者，并有助于资助未来的开发。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="212"/>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="370"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="390"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
         <translation>自行构建GPLv3版本有助于社区成长，并鼓励技术贡献。</translation>
     </message>
@@ -4584,47 +4593,54 @@ Please provide the necessary credentials.</source>
         <translation>要查看可用的订阅计划，请点击下面的“立即升级”。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="332"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="323"/>
+        <source>Don't nag me about the trial.
+I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
+        <translation>不要提醒我试用期。
+我明白结束后，我需要购买许可证或构建GPLv3版本。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="352"/>
         <source>Your %1 trial has expired.</source>
         <translation>您的 %1 试用已过期。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="342"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="362"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
         <translation>您的试用期已结束。要继续使用 %1 的所有专业功能，请升级到付费计划。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="353"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="373"/>
         <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
         <translation>如果您愿意，也可以在 GPLv3 许可证下编译开源版本。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="381"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="401"/>
         <source>Thank you for trying %1!</source>
         <translation>感谢您试用 %1！</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="425"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="445"/>
         <source>Upgrade Now</source>
         <translation>立即升级</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="437"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="457"/>
         <source>Activate</source>
         <translation>激活</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="476"/>
         <source>Open in Limited Mode</source>
         <translation>在限制模式下打开</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="476"/>
         <source>Continue</source>
         <translation>继续</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
+        <location filename="../../qml/Dialogs/Welcome.qml" line="476"/>
         <source>Start Trial</source>
         <translation>开始试用</translation>
     </message>

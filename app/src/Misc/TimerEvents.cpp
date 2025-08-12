@@ -23,7 +23,22 @@
 #include "Misc/TimerEvents.h"
 
 /**
- * Returns a pointer to the only instance of the class
+ * @brief Constructs the TimerEvents singleton instance.
+ *
+ * Initializes the UI timer frequency from application settings.
+ * The value is read from the key "uiTimerHz" with a default of 24 Hz.
+ * The frequency is clamped between 1 and 240 Hz.
+ */
+Misc::TimerEvents::TimerEvents()
+  : m_uiTimerHz(24)
+{
+  m_uiTimerHz = m_settings.value("uiTimerHz", 24).toInt();
+  m_uiTimerHz = qBound(1, m_uiTimerHz, 240);
+}
+
+/**
+ * @brief Returns a reference to the singleton instance.
+ * @return Reference to the only instance of TimerEvents.
  */
 Misc::TimerEvents &Misc::TimerEvents::instance()
 {
@@ -32,18 +47,38 @@ Misc::TimerEvents &Misc::TimerEvents::instance()
 }
 
 /**
- * Stops all the timers of this module
+ * @brief Gets the current UI timer frequency.
+ * @return The UI timer frequency in Hz.
  */
-void Misc::TimerEvents::stopTimers()
+int Misc::TimerEvents::fps() const
 {
-  m_timer1Hz.stop();
-  m_timer10Hz.stop();
-  m_timer20Hz.stop();
-  m_timer24Hz.stop();
+  return m_uiTimerHz;
 }
 
 /**
- * Emits the @c timeout signal when the basic timer expires
+ * @brief Stops all timers managed by this class.
+ *
+ * This includes:
+ * - UI timer
+ * - 1 Hz timer
+ * - 10 Hz timer
+ * - 20 Hz timer
+ */
+void Misc::TimerEvents::stopTimers()
+{
+  m_uiTimer.stop();
+  m_timer1Hz.stop();
+  m_timer10Hz.stop();
+  m_timer20Hz.stop();
+}
+
+/**
+ * @brief Handles QBasicTimer expiration events.
+ *
+ * Identifies which timer triggered the event and emits the corresponding
+ * timeout signal.
+ *
+ * @param event Pointer to the timer event.
  */
 void Misc::TimerEvents::timerEvent(QTimerEvent *event)
 {
@@ -56,17 +91,52 @@ void Misc::TimerEvents::timerEvent(QTimerEvent *event)
   else if (event->timerId() == m_timer20Hz.timerId())
     Q_EMIT timeout20Hz();
 
-  else if (event->timerId() == m_timer24Hz.timerId())
-    Q_EMIT timeout24Hz();
+  else if (event->timerId() == m_uiTimer.timerId())
+    Q_EMIT uiTimeout();
 }
 
 /**
- * Starts all the timer of the module
+ * @brief Starts all timers managed by this class.
+ *
+ * The UI timer is started with the currently configured frequency.
+ * Other timers are started at fixed rates:
+ * - 1 Hz
+ * - 10 Hz
+ * - 20 Hz
  */
 void Misc::TimerEvents::startTimers()
 {
+  m_uiTimer.start(1000 / m_uiTimerHz, Qt::PreciseTimer, this);
+
   m_timer1Hz.start(1000, Qt::PreciseTimer, this);
   m_timer20Hz.start(1000 / 20, Qt::PreciseTimer, this);
-  m_timer24Hz.start(1000 / 24, Qt::PreciseTimer, this);
   m_timer10Hz.start(1000 / 10, Qt::PreciseTimer, this);
+}
+
+/**
+ * @brief Sets the UI timer frequency in Hz.
+ *
+ * The value is clamped between 1 and 240 Hz and stored in the settings
+ * under the key "uiTimerHz". If the timer is active, it will be restarted
+ * immediately with the new frequency.
+ *
+ * @param hz New UI timer frequency in Hz.
+ */
+void Misc::TimerEvents::setFPS(int hz)
+{
+  hz = qBound(1, hz, 240);
+
+  if (m_uiTimerHz != hz)
+  {
+    m_uiTimerHz = hz;
+    m_settings.setValue("uiTimerHz", hz);
+
+    if (m_uiTimer.isActive())
+    {
+      m_uiTimer.stop();
+      m_uiTimer.start(1000 / m_uiTimerHz, Qt::PreciseTimer, this);
+    }
+
+    Q_EMIT fpsChanged();
+  }
 }

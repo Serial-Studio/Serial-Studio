@@ -34,8 +34,14 @@ Item {
 
   //
   // Define application name
-  // 
+  //
+  property bool dontNag: false
   readonly property bool proVersion: Cpp_CommercialBuild ? Cpp_Licensing_LemonSqueezy.isActivated || Cpp_Licensing_Trial.trialEnabled : false
+
+  Settings {
+    category: "App"
+    property alias hideWelcomeDialog: app.dontNag
+  }
 
   //
   // Check for updates (non-silent mode)
@@ -156,7 +162,12 @@ Item {
     if (Cpp_CommercialBuild)
       mqttConfiguration.activate()
   } function showWelcomeDialog() {
-    if (Cpp_CommercialBuild)
-      welcomeDialog.activate()
+    if (Cpp_CommercialBuild) {
+      if (!Cpp_Licensing_Trial.trialExpired && Cpp_Licensing_Trial.trialEnabled && app.dontNag && Cpp_Licensing_Trial.daysRemaining > 1)
+        showMainWindow()
+
+      else
+        welcomeDialog.activate()
+    }
   }
 }

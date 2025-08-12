@@ -329,6 +329,24 @@ Window {
           }
 
           //
+          // Refresh rate
+          //
+          Label {
+            text: qsTr("UI Refresh Rate (Hz)")
+          } SpinBox {
+            id: _refreshRate
+            from: 1
+            to: 240
+            editable: true
+            Layout.fillWidth: true
+            value: Cpp_Misc_TimerEvents.fps
+            onValueChanged: {
+              if (value !== Cpp_Misc_TimerEvents.fps)
+                Cpp_Misc_TimerEvents.fps = value
+            }
+          }
+
+          //
           // Console
           //
           Label {
@@ -437,11 +455,13 @@ Window {
           onClicked: {
             Cpp_ThemeManager.theme = 0
             Cpp_UI_Dashboard.points = 100
+            Cpp_Misc_TimerEvents.fps = 24
             Cpp_UI_Dashboard.precision = 2
             Cpp_Plugins_Bridge.enabled = false
             mainWindow.automaticUpdates  = true
             Cpp_UI_Dashboard.terminalEnabled = false
             Cpp_IO_Manager.threadedFrameExtraction = false
+            Cpp_UI_Dashboard.showTaskbarButtons = false
             Cpp_Misc_ModuleManager.softwareRendering = false
           }
         }

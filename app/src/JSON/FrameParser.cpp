@@ -119,7 +119,7 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
           &m_engine, &QJSEngine::collectGarbage);
 
   // Configure render loop
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this,
           &JSON::FrameParser::renderWidget);
 }
 

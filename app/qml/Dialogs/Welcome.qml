@@ -305,6 +305,26 @@ Window {
             }
 
             Item {
+              implicitHeight: 24
+            }
+
+            RowLayout {
+              Layout.fillWidth: true
+
+              Switch {
+                id: dontNagMe
+                Layout.leftMargin: -6
+              }
+
+              Label {
+                Layout.fillWidth: true
+                wrapMode: Label.WordWrap
+                visible: Cpp_Licensing_Trial.daysRemaining > 1
+                text: qsTr("Don't nag me about the trial.\nI understand that when it ends, I'll need to buy a license or build the GPLv3 version.")
+              }
+            }
+
+            Item {
               Layout.fillHeight: true
             }
           }
@@ -464,6 +484,8 @@ Window {
                 Cpp_Licensing_Trial.enableTrial()
 
               else {
+                app.dontNag = dontNagMe.checked
+
                 app.showMainWindow()
                 root.close()
               }

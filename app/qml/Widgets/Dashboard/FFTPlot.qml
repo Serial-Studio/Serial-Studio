@@ -76,7 +76,7 @@ Item {
   Connections {
     target: Cpp_Misc_TimerEvents
 
-    function onTimeout24Hz() {
+    function onUiTimeout() {
       if (root.visible && root.model && root.running) {
         root.model.draw(upperSeries)
         lowerSeries.clear()

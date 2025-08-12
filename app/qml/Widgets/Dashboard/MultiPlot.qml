@@ -78,7 +78,7 @@ Item {
   Connections {
     target: Cpp_Misc_TimerEvents
 
-    function onTimeout24Hz() {
+    function onUiTimeout() {
       if (root.visible && root.running) {
         root.model.updateData()
 
