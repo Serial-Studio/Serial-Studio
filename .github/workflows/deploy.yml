@@ -211,7 +211,6 @@ jobs:
 
   install_qt_commercial_macos:
     runs-on: macos-latest
-    if: false
     name: "📚 Install Commercial Qt (macOS Universal)"
     env:
       QT_ARCH: x64
@@ -259,7 +258,6 @@ jobs:
 
   install_qt_commercial_windows:
     runs-on: windows-latest
-    if: false
     name: "📚 Install Commercial Qt (Windows x64)"
     env:
       QT_ARCH: x64
