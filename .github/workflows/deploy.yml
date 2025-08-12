@@ -358,45 +358,45 @@ jobs:
     steps:
 
 #---------------------------------------------------------------------------------------------------
-# Set env. variables
+# Obtain correct cache key for Qt installation
 #---------------------------------------------------------------------------------------------------
 
-    - name: "⚙️ Set environment variables"
-      if: ${{ matrix.os }} != 'windows-latest'
-      run: |
-        case "${{ matrix.os }}" in
-          ubuntu-22.04)
-            qtCacheKey="${{ env.CACHE_UUID_LINUX_X64 }}"
-            ;;
-          ubuntu-24.04-arm)
-            qtCacheKey="${{ env.CACHE_UUID_LINUX_ARM }}"
-            ;;
-          macos-latest)
-            qtCacheKey="${{ env.CACHE_UUID_MACOS_X64 }}"
-            ;;
-          *)
-            echo "Unknown OS: ${{ matrix.os }}" && exit 1
-            ;;
-        esac
-    
-        echo "CACHE_KEY=$qtCacheKey" >> $GITHUB_ENV
-        echo "QT_OUTPUT_DIR=${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
+      - name: "⚙️ Set environment variables"
+        if: ${{ matrix.os }} != 'windows-latest'
+        run: |
+          case "${{ matrix.os }}" in
+            ubuntu-22.04)
+              qtCacheKey="${{ env.CACHE_UUID_LINUX_X64 }}"
+              ;;
+            ubuntu-24.04-arm)
+              qtCacheKey="${{ env.CACHE_UUID_LINUX_ARM }}"
+              ;;
+            macos-latest)
+              qtCacheKey="${{ env.CACHE_UUID_MACOS_X64 }}"
+              ;;
+            *)
+              echo "Unknown OS: ${{ matrix.os }}" && exit 1
+              ;;
+          esac
+      
+          echo "CACHE_KEY=$qtCacheKey" >> $GITHUB_ENV
+          echo "QT_OUTPUT_DIR=${{ github.workspace }}/Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}" >> $GITHUB_ENV
 
-    - name: "⚙️ Set environment variables"
-      shell: pwsh
-      if: ${{ matrix.os }} == 'windows-latest'
-      run: |
-        $qtCacheKey = ""
-    
-        switch ("${{ matrix.os }}") {
-          "windows-latest" { $qtCacheKey = "${{ env.CACHE_UUID_MSWIN_X64 }}" }
-          default { Write-Error "Unknown OS: ${{ matrix.os }}" ; exit 1 }
-        }
-    
-        $qtOutputDir = "${{ github.workspace }}\Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}"
-    
-        Add-Content -Path $env:GITHUB_ENV -Value "CACHE_KEY=$qtCacheKey"
-        Add-Content -Path $env:GITHUB_ENV -Value "QT_OUTPUT_DIR=$qtOutputDir"
+      - name: "⚙️ Set environment variables"
+        shell: pwsh
+        if: ${{ matrix.os }} == 'windows-latest'
+        run: |
+          $qtCacheKey = ""
+      
+          switch ("${{ matrix.os }}") {
+            "windows-latest" { $qtCacheKey = "${{ env.CACHE_UUID_MSWIN_X64 }}" }
+            default { Write-Error "Unknown OS: ${{ matrix.os }}" ; exit 1 }
+          }
+      
+          $qtOutputDir = "${{ github.workspace }}\Qt-${{ env.QT_VERSION }}-${{ runner.os }}-${{ env.QT_ARCH }}"
+      
+          Add-Content -Path $env:GITHUB_ENV -Value "CACHE_KEY=$qtCacheKey"
+          Add-Content -Path $env:GITHUB_ENV -Value "QT_OUTPUT_DIR=$qtOutputDir"
 
 #---------------------------------------------------------------------------------------------------
 # Checkout the source code
