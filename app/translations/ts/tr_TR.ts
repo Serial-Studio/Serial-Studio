@@ -4456,17 +4456,17 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="979"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1011"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="998"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1030"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Yedek)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1061"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1093"/>
         <source>LED Panel (%1)</source>
         <translation>LED Paneli (%1)</translation>
     </message>

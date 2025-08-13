@@ -8,4 +8,4 @@ StartupNotify=true
 Categories=Electronics;Engineering;Science;
 Icon=serial-studio-gpl3
 X-AppImage-Name=Serial Studio (GPLv3)
-X-AppImage-Version=3.1.7
+X-AppImage-Version=3.1.8
