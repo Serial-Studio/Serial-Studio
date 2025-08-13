@@ -37,7 +37,7 @@ The recommended way to install Serial Studio on Linux is via the official pre-bu
 
 ```bash
 chmod +x SerialStudio-Pro-3.1.8-Linux-x64.AppImage
-./SerialStudio-3.1.8-Linux-x86_64.AppImage
+./SerialStudio-Pro-3.1.8-Linux-x64.AppImage
 ```
 
 If the AppImage fails to launch, your system may be missing `libfuse2`:
