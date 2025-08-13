@@ -14,5 +14,5 @@
  *       for storing settings or keeping state between calls.
  */
 function parse(frame) {
-    return frame.split(',');
+    return frame.split(",");
 }
