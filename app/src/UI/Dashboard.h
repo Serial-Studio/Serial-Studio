@@ -158,6 +158,8 @@ private:
   bool m_terminalEnabled;    // Whether terminal group is enabled
   bool m_showTaskbarButtons; // Always show taskbar buttons, regardless of state
 
+  bool m_updateRetryInProgress; // Used to avoid recursion when frame changes
+
   PlotDataX m_pltXAxis;      // Default X-axis data for line plots
   PlotDataX m_multipltXAxis; // Default X-axis data for multi-line plots
 
@@ -178,7 +180,7 @@ private:
   QMap<int, JSON::Dataset> m_datasets; // Raw input datasets (by dataset index)
 
   // Maps unique dataset ID to all dataset refs for value updates
-  QMap<quint32, QVector<JSON::Dataset *>> m_datasetReferences;
+  QMap<int, QVector<JSON::Dataset *>> m_datasetReferences;
 
   // Groups by widgets type
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Group>> m_widgetGroups;

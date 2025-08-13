@@ -733,6 +733,7 @@ void UI::Dashboard::resetData(const bool notify)
   // Reset frame data
   m_rawFrame = JSON::Frame();
   m_lastFrame = JSON::Frame();
+  m_updateRetryInProgress = false;
 
   // Configure actions
   auto *frameBuilder = &JSON::FrameBuilder::instance();
@@ -893,7 +894,8 @@ void UI::Dashboard::hotpathRxFrame(const JSON::Frame &frame)
     return;
 
   // Regenerate dashboard model if frame structure changed
-  if (!JSON::compare_frames(frame, m_rawFrame)) [[unlikely]]
+  if (!JSON::compare_frames(frame, m_rawFrame) || m_datasetReferences.isEmpty())
+      [[unlikely]]
   {
     const bool hadProFeatures = m_rawFrame.containsCommercialFeatures;
     reconfigureDashboard(frame);
@@ -922,19 +924,38 @@ void UI::Dashboard::hotpathRxFrame(const JSON::Frame &frame)
  */
 void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
 {
+  // Update all datasets of the frame
   for (const auto &group : frame.groups)
   {
     for (const auto &dataset : group.datasets)
     {
+      // Get the unique ID of the dataset
       const auto uid = dataset.uniqueId;
       const auto it = m_datasetReferences.find(uid);
+
+      // Cannot find dataset UID
       if (it == m_datasetReferences.end()) [[unlikely]]
       {
-        resetData(false);
-        hotpathRxFrame(frame);
+        // Break recursion
+        if (m_updateRetryInProgress)
+        {
+          qWarning() << "Failed to build dashboard widget model";
+          IO::Manager::instance().disconnectDevice();
+          return;
+        }
+
+        // Re-generate dashboard model
+        reconfigureDashboard(frame);
+
+        // Try running the update again
+        m_updateRetryInProgress = true;
+        updateDashboardData(frame);
+        m_updateRetryInProgress = false;
+
         return;
       }
 
+      // Update all datasets for the given UID
       const auto &datasets = it.value();
       for (auto *ptr : datasets)
       {
@@ -945,6 +966,7 @@ void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
     }
   }
 
+  // Update plots & time-series widgets
   updateDataSeries();
 }
 
@@ -1098,9 +1120,30 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
       m_datasetReferences[dataset.uniqueId].append(&dataset);
   }
 
-  // Transverse all plot datasets
+  // Transverse all datasets
   for (auto &dataset : m_datasets)
     m_datasetReferences[dataset.uniqueId].append(&dataset);
+
+  // For edge cases, register any dataset that has not been added
+  for (auto &group : m_lastFrame.groups)
+  {
+    for (auto &dataset : group.datasets)
+    {
+      bool registered = false;
+      auto &list = m_datasetReferences[dataset.uniqueId];
+      for (auto &d : list)
+      {
+        if (d == &dataset)
+        {
+          registered = true;
+          break;
+        }
+      }
+
+      if (!registered)
+        m_datasetReferences[dataset.uniqueId].append(&dataset);
+    }
+  }
 
   // Initialize data series & update actions
   updateDataSeries();
