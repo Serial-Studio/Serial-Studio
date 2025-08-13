@@ -940,7 +940,17 @@ void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
         if (m_updateRetryInProgress)
         {
           qWarning() << "Failed to build dashboard widget model";
-          IO::Manager::instance().disconnectDevice();
+
+          // Disconnect from data source
+          if (IO::Manager::instance().isConnected())
+            IO::Manager::instance().disconnectDevice();
+          else if (CSV::Player::instance().isOpen())
+            CSV::Player::instance().closeFile();
+#ifdef BUILD_COMMERCIAL
+          else if (MQTT::Client::instance().isConnected())
+            MQTT::Client::instance().closeConnection();
+#endif
+
           return;
         }
 

@@ -52,7 +52,7 @@ QT_OUTPUT_DIR="${QT_OUTPUT_DIR:-Qt-${QT_VERSION}-${OS_TAG}-${QT_ARCH}}"
 # Build alias package name
 #------------------------------------------------------------------------------
 
-ALIAS_PACKAGE="qt${QT_VERSION}-full-dev"
+ALIAS_PACKAGE="qt${QT_VERSION}-full"
 
 #------------------------------------------------------------------------------
 # Setup installer URLs
