@@ -1101,7 +1101,7 @@ void Widgets::Plot3D::drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
     const bool exceedPAx = std::abs(pA.x() - halfW) > xLimit;
     const bool exceedPBx = std::abs(pB.x() - halfW) > xLimit;
     const bool exceedPAy = std::abs(pA.y() - halfH) > yLimit;
-    const bool exceedPBy = std::abs(pA.y() - halfH) > yLimit;
+    const bool exceedPBy = std::abs(pB.y() - halfH) > yLimit;
     if (exceedPAx || exceedPBx || exceedPAy || exceedPBy)
       continue;
 
