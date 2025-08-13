@@ -68,7 +68,7 @@ Make sure your system meets these requirements before running the AppImage.
 #### Core Capabilities:
 - **Cross-platform:** Runs on Windows, macOS, and Linux.
 - **CSV export:** Save received data for offline analysis or processing.
-- **Multiple data sources:** Supports serial ports, MQTT, BLE, and network sockets (TCP/UDP).
+- **Multiple data sources:** Supports serial ports, MQTT, BLE, audio devices and network sockets (TCP/UDP).
 - **Customizable visualization:** Build dashboards using various widgets via the integrated project editor.
 - **Advanced frame decoding:** Use a custom JavaScript function to preprocess raw data or handle complex binary formats.
 - **MQTT support:** Publish and receive data over the internet for remote visualization.
