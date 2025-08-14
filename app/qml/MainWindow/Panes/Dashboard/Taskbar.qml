@@ -348,7 +348,7 @@ Item {
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/buttons/auto-layout.svg"
       icon.color: taskBar.windowManager.autoLayoutEnabled ?
-                    Cpp_ThemeManager.colors["tasbkar_highlight"] :
+                    Cpp_ThemeManager.colors["taskbar_highlight"] :
                     Cpp_ThemeManager.colors["taskbar_text"]
       onClicked: {
         taskBar.activeWindow = null
