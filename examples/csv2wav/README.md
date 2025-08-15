@@ -97,13 +97,13 @@ pip install numpy
 ## **Command Line Usage**
 
 ```bash
-python3 csv2wav.py input.csv [output.wav] [--rate <hz>] [--format <type>]
+python3 csv2wav.py input.csv [output.wav] [--rate <hz>] [--in_format <type>]
 ```
 
 - `input.csv`: CSV file exported from Serial Studio
 - `output.wav`: Optional name for output WAV file
 - `--rate`: Optional sample rate in Hz (default: 44100)
-- `--format`: Output format (`float32`, `int16`, `int24`, `int32`, `uint8`)
+- `--in_format`: Input format (`float32`, `int16`, `int24`, `int32`, `uint8`)
 
 ## **Tips**
 
