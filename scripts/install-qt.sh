@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #
 # Serial Studio - https://github.com/alex-spataru/serial-studio
 #
@@ -19,7 +21,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-#!/bin/bash
 set -e
 
 #------------------------------------------------------------------------------

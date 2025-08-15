@@ -154,7 +154,7 @@ jobs:
       - name: "🛠️ Install CMake" 
         uses: lukka/get-cmake@latest
         with:
-          useLocalCache: true
+          useLocalCache: false
 
       - name: '🛠 Setup MSVC Development Environment'
         uses: TheMrMilchmann/setup-msvc-dev@v3
@@ -231,6 +231,7 @@ jobs:
         if: matrix.edition == 'commercial'
         with:
           key: ${{env.CACHE_KEY}}
+          enableCrossOsArchive: true
           path: |
             ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
             ${{env.USERPROFILE}}/.qt-license
@@ -265,6 +266,7 @@ jobs:
           QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
         with:
           key: ${{ env.CACHE_KEY }}
+          enableCrossOsArchive: true
           path: |
             ${{ env.QT_OUTPUT_DIR }}
             ${{ env.QT_OUTPUT_DIR }}/.qt-license
