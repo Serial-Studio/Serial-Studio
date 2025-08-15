@@ -26,7 +26,7 @@ set -e
 # Config
 #------------------------------------------------------------------------------
 
-QT_VERSION="${QT_VERSION:-6.9.0}"
+QT_VERSION="${QT_VERSION:-6.9.1}"
 QT_ARCH="${QT_ARCH:-x64}"
 QT_USERNAME="${QT_USERNAME:?Must provide QT_USERNAME}"
 QT_PASSWORD="${QT_PASSWORD:?Must provide QT_PASSWORD}"

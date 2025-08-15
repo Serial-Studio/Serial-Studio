@@ -44,7 +44,7 @@ on:
 
 env:
   QT_VERSION: "6.9.1"                                          # Version of Qt to install
-  APP_VERSION: "3.1.8"                                         # Application version
+  APP_VERSION: "3.1.9"                                         # Application version
   QML_DIR: "../../app/qml"                                     # Path to QML sources
   PUBLISHER: "Alex Spataru"                                    # Application publisher
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"                     # Bypass Qt license check
@@ -148,13 +148,19 @@ jobs:
         uses: actions/checkout@v4
 
 #---------------------------------------------------------------------------------------------------
-# Install CMake
+# Install build tools
 #---------------------------------------------------------------------------------------------------
 
       - name: "🛠️ Install CMake" 
         uses: lukka/get-cmake@latest
         with:
           useLocalCache: true
+
+      - name: '🛠 Setup MSVC Development Environment'
+        uses: TheMrMilchmann/setup-msvc-dev@v3
+        if: matrix.os == 'windows-latest'
+        with:
+          arch: x64
 
 #---------------------------------------------------------------------------------------------------
 # Install dependencies (Linux only)
@@ -311,9 +317,9 @@ jobs:
           QT_VERSION: ${{env.QT_VERSION}}
           QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}
         run: |
-          $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\bin"
-          $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\libexec"
-          $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\mingw_64\lib\cmake"
+          $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\bin"
+          $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\libexec"
+          $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\lib\cmake"
     
           Write-Output "$QT_BIN_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           Write-Output "$QT_LIBEXEC_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
@@ -375,16 +381,12 @@ jobs:
           ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
           SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
           SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
-          QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/${{env.QT_VERSION}}/mingw_64/bin
-          QT_TOOLS_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/Tools/mingw1310_64/bin
         run: |
-          $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
           mkdir build
           cd build
           cmake ../ `
-            -G "MinGW Makefiles" `
-            -DCMAKE_C_COMPILER="${env:QT_TOOLS_PATH}\\gcc.exe" `
-            -DCMAKE_CXX_COMPILER="${env:QT_TOOLS_PATH}\\c++.exe" `
+            -DCMAKE_CXX_COMPILER=cl `
+            -DCMAKE_C_COMPILER=cl `
             -DPRODUCTION_OPTIMIZATION=ON `
             -DCMAKE_BUILD_TYPE=Release `
             -DBUILD_COMMERCIAL=ON `
@@ -396,7 +398,8 @@ jobs:
           mkdir build
           cd build
           cmake ../ `
-            -G "MinGW Makefiles" `
+            -DCMAKE_CXX_COMPILER=cl `
+            -DCMAKE_C_COMPILER=cl `
             -DPRODUCTION_OPTIMIZATION=ON `
             -DCMAKE_BUILD_TYPE=Release 
 
@@ -418,10 +421,7 @@ jobs:
 
       - name: "🔨 Build application (Windows, Commercial)"
         if: matrix.edition == 'commercial' && matrix.os == 'windows-latest'
-        env:
-          QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/${{env.QT_VERSION}}/mingw_64/bin
         run: |
-          $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
           cd build
           cmake --build . --config Release --parallel 16
 
@@ -541,10 +541,18 @@ jobs:
 # Windows packaging
 #---------------------------------------------------------------------------------------------------
 
+      - name: '⚙️ Add msbuild to PATH'
+        if: matrix.os == 'windows-latest'
+        uses: microsoft/setup-msbuild@v2
+
+      - name: '⚙️ Install WiX'
+        if: matrix.os == 'windows-latest'
+        run: dotnet tool install --global wix
+
       - name: "📦 Package with CPack (Windows)"
         if: matrix.os == 'windows-latest'
         env:
-          QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/${{env.QT_VERSION}}/mingw_64/bin
+          QT_BIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION}}-${{runner.os}}-${{matrix.arch}}/${{env.QT_VERSION}}/msvc2022_64/bin
         run: |
           $env:PATH = "$env:QT_BIN_PATH;$env:PATH"
           cd build

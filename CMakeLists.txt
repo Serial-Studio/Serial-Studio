@@ -78,7 +78,7 @@ set(PROJECT_CONTACT             "serial-studio.github.io")
 set(PROJECT_DESCRIPTION_SUMMARY "Flexible data visualization software for embedded devices and projects")
 set(PROJECT_VERSION_MAJOR       "3")
 set(PROJECT_VERSION_MINOR       "1")
-set(PROJECT_VERSION_PATCH       "8")
+set(PROJECT_VERSION_PATCH       "9")
 set(PROJECT_VERSION             "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 set(PROJECT_APPCAST             "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/updates.json")
 set(PROJECT_DESCRIPTION_FILE    "${PROJECT_ROOT_DIR}/README.md")
@@ -174,12 +174,8 @@ if(NOT MSVC)
   add_compile_options(
     -Wall                          # Enable common warning messages
     -Wextra                        # Enable extra warnings
-    -Wno-deprecated                # Ignore warnings about deprecated features
-    -Wno-deprecated-declarations   # Ignore warnings over deprecated declarations
-    -Wno-unused-variable           # Ignore unused variables
-    -Wno-unused-function           # Ignore unused functions
-    -Wno-unused-parameter          # Ignore unused parameters
-    -Wno-sign-compare              # Silence signed/unsigned comparison
+    -Wno-unused-function           # Silence miniaudio warnings
+    -Wno-cast-align                # Silence KISS FFT warnings
   )
 endif()
 

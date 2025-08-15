@@ -26,7 +26,7 @@ $ErrorActionPreference = "Stop"
 #------------------------------------------------------------------------------
 
 $QT_VERSION = $env:QT_VERSION
-if (-not $QT_VERSION) { $QT_VERSION = "6.9.0" }
+if (-not $QT_VERSION) { $QT_VERSION = "6.9.1" }
 
 $QT_ARCH = $env:QT_ARCH
 if (-not $QT_ARCH) { $QT_ARCH = "x64" }
@@ -49,7 +49,7 @@ if (-not $QT_OUTPUT_DIR) {
     $QT_OUTPUT_DIR = "Qt-$QT_VERSION-$OS_TAG-$QT_ARCH"
 }
 
-$ALIAS_PACKAGE = "qt$QT_VERSION-full"
+$ALIAS_PACKAGE = "qt$QT_VERSION-msvc2022-full"
 
 #------------------------------------------------------------------------------
 # Installer setup

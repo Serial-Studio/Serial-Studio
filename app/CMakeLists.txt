@@ -294,7 +294,7 @@ target_link_libraries(
 
   ${QT_LIBS}
 
-  liquid
+  kissfft
   QCodeEditor
   QSimpleUpdater
 )

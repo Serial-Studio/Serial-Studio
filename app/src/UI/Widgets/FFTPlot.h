@@ -26,7 +26,7 @@
 #include <QLineSeries>
 
 #include <vector>
-#include <liquid.h>
+#include <kiss_fft.h>
 
 namespace Widgets
 {
@@ -48,7 +48,10 @@ public:
   ~FFTPlot()
   {
     if (m_plan)
-      fft_destroy_plan(m_plan);
+    {
+      kiss_fft_free(m_plan);
+      m_plan = nullptr;
+    }
   }
 
   [[nodiscard]] double minX() const;
@@ -78,10 +81,11 @@ private:
   double m_halfRange;
   bool m_scaleIsValid;
 
-  fftplan m_plan;
   QList<QPointF> m_data;
   std::vector<float> m_window;
-  std::vector<liquid_float_complex> m_samples;
-  std::vector<liquid_float_complex> m_fftOutput;
+
+  kiss_fft_cfg m_plan;
+  std::vector<kiss_fft_cpx> m_samples;
+  std::vector<kiss_fft_cpx> m_fftOutput;
 };
 } // namespace Widgets

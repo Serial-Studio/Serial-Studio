@@ -680,9 +680,6 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray &data,
   else
     m_appName = APP_NAME;
 
-  // Update QtApp display name
-  qApp->setApplicationDisplayName(appName());
-
   // Update user interface
   m_busy = false;
   Q_EMIT busyChanged();

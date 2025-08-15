@@ -23,6 +23,46 @@
 #include "UI/Widgets/FFTPlot.h"
 
 /**
+ * @brief Computes a single coefficient of the 4-term Blackman-Harris window.
+ *
+ * This function implements the 4-term Blackman-Harris window formula:
+ * \f[
+ * w[n] = a_0 - a_1 \cos\left(\frac{2\pi n}{N-1}\right)
+ *        + a_2 \cos\left(\frac{4\pi n}{N-1}\right)
+ *        - a_3 \cos\left(\frac{6\pi n}{N-1}\right)
+ * \f]
+ *
+ * where the coefficients are:
+ * - a₀ = 0.35875
+ * - a₁ = 0.48829
+ * - a₂ = 0.14128
+ * - a₃ = 0.01168
+ *
+ * @param i Index of the coefficient (0 ≤ i < N).
+ * @param N Total number of points in the window.
+ * @return The computed window coefficient for index @p i.
+ *
+ * @note If N ≤ 1, the function returns 1.0f.
+ */
+inline float blackman_harris_coeff(unsigned int i, unsigned int N)
+{
+  if (N <= 1)
+    return 1.0f;
+
+  constexpr float a0 = 0.35875f;
+  constexpr float a1 = 0.48829f;
+  constexpr float a2 = 0.14128f;
+  constexpr float a3 = 0.01168f;
+
+  const float two_pi = 6.28318530717958647692f;
+  const float k = two_pi / static_cast<float>(N - 1);
+  const float x = k * static_cast<float>(i);
+
+  return a0 - a1 * std::cos(x) + a2 * std::cos(2.0f * x)
+         - a3 * std::cos(3.0f * x);
+}
+
+/**
  * @brief Constructs a new FFTPlot widget.
  * @param index The index of the FFT plot in the Dashboard.
  * @param parent The parent QQuickItem.
@@ -64,12 +104,12 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
 
     // Create window function coefficients
     m_window.resize(m_size);
-    for (unsigned int i = 0; i < static_cast<unsigned int>(m_size); ++i)
-      m_window[i] = liquid_blackmanharris(i, m_size);
+    const auto windowSize = static_cast<unsigned int>(m_size);
+    for (unsigned int i = 0; i < windowSize; ++i)
+      m_window[i] = blackman_harris_coeff(i, windowSize);
 
     // Create FFT plan
-    m_plan = fft_create_plan(m_size, m_samples.data(), m_fftOutput.data(),
-                             LIQUID_FFT_FORWARD, 0);
+    m_plan = kiss_fft_alloc(m_size, 0, nullptr, nullptr);
 
     // Obtain minimum and maximum values
     double minVal = dataset.fftMin;
@@ -179,18 +219,21 @@ void Widgets::FFTPlot::updateData()
   {
     m_size = newSize;
 
+    m_window.resize(m_size);
     m_samples.resize(m_size);
     m_fftOutput.resize(m_size);
-    m_window.resize(m_size);
 
-    for (unsigned int i = 0; i < static_cast<unsigned int>(m_size); ++i)
-      m_window[i] = liquid_blackmanharris(i, m_size);
+    const auto windowSize = static_cast<unsigned int>(m_size);
+    for (unsigned int i = 0; i < windowSize; ++i)
+      m_window[i] = blackman_harris_coeff(i, windowSize);
 
     if (m_plan)
-      fft_destroy_plan(m_plan);
+    {
+      kiss_fft_free(m_plan);
+      m_plan = nullptr;
+    }
 
-    m_plan = fft_create_plan(m_size, m_samples.data(), m_fftOutput.data(),
-                             LIQUID_FFT_FORWARD, 0);
+    m_plan = kiss_fft_alloc(m_size, 0, nullptr, nullptr);
   }
 
   // Access the internal buffer and state of the circular queue
@@ -204,13 +247,13 @@ void Widgets::FFTPlot::updateData()
   for (int i = 0; i < m_size; ++i)
   {
     const float v = static_cast<float>((in[idx] + offset) * scale);
-    m_samples[i].real = v * m_window[i];
-    m_samples[i].imag = 0.0f;
+    m_samples[i].r = v * m_window[i];
+    m_samples[i].i = 0.0f;
     idx = (idx + 1) % cap;
   }
 
   // Run FFT
-  fft_execute(m_plan);
+  kiss_fft(m_plan, m_samples.data(), m_fftOutput.data());
 
   // Constants
   constexpr float floorDB = -100.0f;
@@ -231,8 +274,8 @@ void Widgets::FFTPlot::updateData()
   const float normFactor = static_cast<float>(m_size * m_size);
   for (int i = 0; i < spectrumSize; ++i)
   {
-    const float re = m_fftOutput[i].real;
-    const float im = m_fftOutput[i].imag;
+    const float re = m_fftOutput[i].r;
+    const float im = m_fftOutput[i].i;
     const float power = std::max((re * re + im * im) / normFactor, eps_squared);
     dbCache[i] = std::max(10.0f * std::log10(power), floorDB);
   }

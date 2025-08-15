@@ -1,8 +1,0 @@
-//
-
-const char * version        = "@PROJECT_VERSION@";
-unsigned int version_major  = @PROJECT_VERSION_MAJOR@;
-unsigned int version_minor  = @PROJECT_VERSION_MINOR@+0;
-unsigned int version_patch  = @PROJECT_VERSION_PATCH@+0;
-unsigned int version_tweak  = @PROJECT_VERSION_TWEAK@+0;
-
