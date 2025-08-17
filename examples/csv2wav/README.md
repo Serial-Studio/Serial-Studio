@@ -105,11 +105,8 @@ python3 csv2wav.py input.csv [output.wav] [--rate <hz>] [--in_format <type>]
 - `--rate`: Optional sample rate in Hz (default: 44100)
 - `--in_format`: Input format (`float32`, `int16`, `int24`, `int32`, `uint8`)
 
-## **Tips**
-
-- Ensure Serial Studio logs **float samples**, generally normalized between -1.0 and 1.0 by the operating system.
-- Use `--format int16` or `--format float32` for best compatibility
-- If your audio is too quiet or distorted, check normalization and input gain levels
+> [!TIP]  
+> For advanced resampling, route audio through a loopback audio driver and set the target frequency with [Serial Studio](https://github.com/Serial-Studio/Serial-Studio). Then run `csv2wav.py` to export at the new frequency. This trick often delivers some of the cleanest downsampling results you'll hear, perfect for a slowed & reverb style mixes.  
 
 ## **Troubleshooting**
 
