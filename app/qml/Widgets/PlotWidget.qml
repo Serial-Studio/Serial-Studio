@@ -149,7 +149,12 @@ Item {
     const visibleRangeAfter = fullRange / clampedZoom
     const newVisibleStart = worldUnderCursor - cursorRatio * visibleRangeAfter
     const newCenter = newVisibleStart + visibleRangeAfter / 2
-    const newPan = newCenter - worldCenter
+    let newPan = newCenter - worldCenter
+
+    // Clamp the pan so the view doesn't go beyond the axis bounds
+    const maxPan = (axis.max - (axis.min + visibleRangeAfter)) / 2
+    const minPan = (axis.min - (axis.max - visibleRangeAfter)) / 2
+    newPan = Math.min(Math.max(newPan, minPan), maxPan)
 
     // Update pan to match new center
     axis.pan = newPan
