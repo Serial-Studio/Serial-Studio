@@ -31,6 +31,8 @@
 Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
   : QQuickItem(parent)
   , m_index(index)
+  , m_dataW(0)
+  , m_dataH(0)
   , m_minX(0)
   , m_maxX(0)
   , m_minY(0)
