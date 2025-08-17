@@ -22,11 +22,16 @@
 #pragma once
 
 #include "JSON/Frame.h"
+#include "IO/FixedQueue.h"
+
+#include <QList>
+#include <QPointF>
 #include <QObject>
 #include <QVector>
 
-#include "JSON/Frame.h"
-#include "IO/FixedQueue.h"
+#include <vector>
+#include <limits>
+#include <cstddef>
 
 /**
  * @typedef PlotDataX
@@ -113,6 +118,241 @@ typedef struct
   IO::FixedQueue<double> longitudes; ///< Longitude values (degrees)
   IO::FixedQueue<double> altitudes;  ///< Altitude values (meters)
 } GpsSeries;
+
+namespace SS_Utils
+{
+/**
+ * @brief Downsample a X/Y series and write into a QList of QPointF.
+ *
+ * Strategy:
+ * - Use min and max per horizontal pixel column.
+ * - Keep at most two points per column.
+ * - Always keep first and last sample.
+ * - Preserve input order.
+ *
+ * Preconditions
+ * - X and Y are non null and have the same size.
+ * - X values are monotonically nondecreasing in logical order of the queues.
+ *
+ * Complexity
+ * - O(n + width) time and O(width) extra memory.
+ *
+ * Ownership
+ * - Writes into out.
+ * - Does not allocate any persistent memory other than resizing out.
+ *
+ * @param X      Input X data series
+ * @param Y      Input Y data series
+ * @param width  Plot width in pixels
+ * @param height Plot height in pixels
+ * @param out    Destination point array to populate
+ *
+ * @return true on success, false if input is invalid
+ */
+inline bool downsampleToPoints(const PlotDataX &X, const PlotDataY &Y,
+                               int width, int height, QList<QPointF> &out)
+{
+  // Validate dimensions
+  if (width <= 0 || height <= 0)
+    return false;
+
+  const std::size_t n = std::min<std::size_t>(X.size(), Y.size());
+  if (n == 0)
+  {
+    out.clear();
+    return true;
+  }
+
+  // Direct fast path when already small enough
+  if (n <= static_cast<std::size_t>(width * 2))
+  {
+    out.resize(static_cast<qsizetype>(n));
+
+    const double *xr = X.raw();
+    const double *yr = Y.raw();
+    std::size_t xi = X.frontIndex();
+    std::size_t yi = Y.frontIndex();
+    const std::size_t xcap = X.capacity();
+    const std::size_t ycap = Y.capacity();
+
+    for (qsizetype k = 0; k < static_cast<qsizetype>(n); ++k)
+    {
+      out[k].setX(xr[xi]);
+      out[k].setY(yr[yi]);
+      xi = (xi + 1) % xcap;
+      yi = (yi + 1) % ycap;
+    }
+    return true;
+  }
+
+  // Helpers to access logical i in the ring buffers without queue ops
+  const double *xr = X.raw();
+  const double *yr = Y.raw();
+  const std::size_t xcap = X.capacity();
+  const std::size_t ycap = Y.capacity();
+  const std::size_t x0 = X.frontIndex();
+  const std::size_t y0 = Y.frontIndex();
+
+  auto x_at = [&](std::size_t i) -> double { return xr[(x0 + i) % xcap]; };
+  auto y_at = [&](std::size_t i) -> double { return yr[(y0 + i) % ycap]; };
+
+  // Compute X span from logical first and last
+  const double xmin = x_at(0);
+  const double xmax = x_at(n - 1);
+  const double xspan = std::max(1e-12, xmax - xmin);
+
+  const std::size_t C = static_cast<std::size_t>(width);
+  std::vector<unsigned int> cnt(C, 0);
+  std::vector<double> minY(C, std::numeric_limits<double>::infinity());
+  std::vector<double> maxY(C, -std::numeric_limits<double>::infinity());
+  std::vector<std::size_t> minI(C, 0);
+  std::vector<std::size_t> maxI(C, 0);
+  std::vector<std::size_t> firstI(C, 0);
+
+  // Track global Y range while scanning once
+  double gmin = std::numeric_limits<double>::infinity();
+  double gmax = -std::numeric_limits<double>::infinity();
+
+  // Column mapper from X to [0, width minus 1]
+  auto col_from_x = [&](double x) -> std::size_t {
+    const double t = (x - xmin) / xspan;
+    long c = static_cast<long>(t * static_cast<double>(width - 1));
+    if (c < 0)
+      c = 0;
+    if (c >= width)
+      c = width - 1;
+    return static_cast<std::size_t>(c);
+  };
+
+  // Single pass binning over logical order
+  for (std::size_t i = 0; i < n; ++i)
+  {
+    const double xi = x_at(i);
+    const double yi = y_at(i);
+
+    if (yi < gmin)
+      gmin = yi;
+    if (yi > gmax)
+      gmax = yi;
+
+    const std::size_t c = col_from_x(xi);
+    if (cnt[c] == 0u)
+    {
+      firstI[c] = i;
+      minY[c] = maxY[c] = yi;
+      minI[c] = maxI[c] = i;
+      cnt[c] = 1u;
+    }
+
+    else
+    {
+      if (yi < minY[c])
+      {
+        minY[c] = yi;
+        minI[c] = i;
+      }
+
+      if (yi > maxY[c])
+      {
+        maxY[c] = yi;
+        maxI[c] = i;
+      }
+
+      ++cnt[c];
+    }
+  }
+
+  // Convert vertical span to pixels to decide if a column is effectively flat
+  const double yspan = std::max(1e-12, gmax - gmin);
+  const double y_to_px = static_cast<double>(height) / yspan;
+
+  // Reserve output with tight upper bound capacity two per column plus endpoint
+  out.clear();
+  out.reserve(static_cast<int>(width * 2 + 2));
+
+  // Always keep first logical sample
+  out.append(QPointF(x_at(0), y_at(0)));
+  std::size_t last_out_i = 0;
+
+  // Emit per column in logical order
+  for (std::size_t c = 0; c < C; ++c)
+  {
+    if (cnt[c] == 0u)
+      continue;
+
+    const double vspan_px = (maxY[c] - minY[c]) * y_to_px;
+
+    if (vspan_px < 1.0)
+    {
+      const std::size_t i0 = firstI[c];
+      if (i0 != last_out_i)
+      {
+        out.append(QPointF(x_at(i0), y_at(i0)));
+        last_out_i = i0;
+      }
+    }
+
+    else
+    {
+      std::size_t a = minI[c];
+      std::size_t b = maxI[c];
+      if (b < a)
+        std::swap(a, b);
+
+      if (a != last_out_i)
+      {
+        out.append(QPointF(x_at(a), y_at(a)));
+        last_out_i = a;
+      }
+
+      if (b != last_out_i)
+      {
+        out.append(QPointF(x_at(b), y_at(b)));
+        last_out_i = b;
+      }
+    }
+  }
+
+  // Always keep last logical sample
+  if (last_out_i != n - 1)
+    out.append(QPointF(x_at(n - 1), y_at(n - 1)));
+
+  return true;
+}
+
+/**
+ * @brief Downsample a LineSeries and write into a QList of QPointF.
+ *
+ * Strategy:
+ * - Use min and max per horizontal pixel column.
+ * - Keep at most two points per column.
+ * - Always keep first and last sample.
+ * - Preserve input order.
+ *
+ * Preconditions
+ * - in.x and in.y are non null and have the same size.
+ *  - X values are monotonically nondecreasing in logical order of the queues.
+ *
+ * Complexity
+ * - O(n + width) time and O(width) extra memory.
+ *
+ * Ownership
+ * - Writes into out.
+ * - Does not allocate any persistent memory other than resizing out.
+ *
+ * @param in     Input series with ring buffer backed X and Y
+ * @param width  Plot width in pixels
+ * @param height Plot height in pixels
+ * @param out    Destination point array to populate
+ *
+ * @return true on success, false if input is invalid
+ */
+inline bool downsampleToPoints(const LineSeries &in, int width, int height,
+                               QVector<QPointF> &out)
+{
+  return downsampleToPoints(*in.x, *in.y, width, height, out);
+}
+} // namespace SS_Utils
 
 /**
  * @class SerialStudio

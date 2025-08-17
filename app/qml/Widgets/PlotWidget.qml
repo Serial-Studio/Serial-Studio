@@ -39,6 +39,7 @@ Item {
   property alias xMax: _axisX.max
   property alias yMin: _axisY.min
   property alias yMax: _axisY.max
+  property alias zoom: _axisX.zoom
   property alias yLabel: _yLabel.text
   property alias xLabel: _xLabel.text
   property alias plotArea: _graph.plotArea

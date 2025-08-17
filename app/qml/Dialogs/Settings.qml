@@ -318,7 +318,7 @@ Window {
             id: _points
 
             from: 2
-            to: 20000
+            to: 100e3
             editable: true
             Layout.fillWidth: true
             value: Cpp_UI_Dashboard.points

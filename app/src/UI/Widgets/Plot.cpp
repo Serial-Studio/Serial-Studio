@@ -30,6 +30,8 @@
 Widgets::Plot::Plot(const int index, QQuickItem *parent)
   : QQuickItem(parent)
   , m_index(index)
+  , m_dataW(0)
+  , m_dataH(0)
   , m_minX(0)
   , m_maxX(0)
   , m_minY(0)
@@ -64,6 +66,24 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
     calculateAutoScaleRange();
     updateRange();
   }
+}
+
+/**
+ * @brief Returns the size of the down-sampled X axis data.
+ * @return Size of down-sampled X axis data.
+ */
+int Widgets::Plot::dataW() const
+{
+  return m_dataW;
+}
+
+/**
+ * @brief Returns the size of the down-sampled Y axis data.
+ * @return Size of down-sampled Y axis data.
+ */
+int Widgets::Plot::dataH() const
+{
+  return m_dataH;
 }
 
 /**
@@ -154,6 +174,32 @@ void Widgets::Plot::draw(QXYSeries *series)
 }
 
 /**
+ * @brief Updates the size of the down-sampled X axis data.
+ * @param width The new size of the down-sampled axis data.
+ */
+void Widgets::Plot::setDataW(const int width)
+{
+  if (m_dataW != width)
+  {
+    m_dataW = width;
+    Q_EMIT dataSizeChanged();
+  }
+}
+
+/**
+ * @brief Updates the size of the down-sampled Y axis data.
+ * @param height The new size of the down-sampled axis data.
+ */
+void Widgets::Plot::setDataH(const int height)
+{
+  if (m_dataH != height)
+  {
+    m_dataH = height;
+    Q_EMIT dataSizeChanged();
+  }
+}
+
+/**
  * @brief Updates the plot data from the Dashboard.
  */
 void Widgets::Plot::updateData()
@@ -165,33 +211,8 @@ void Widgets::Plot::updateData()
   // Only obtain data if widget data is still valid
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
   {
-    // Get plotting data
     const auto &plotData = UI::Dashboard::instance().plotData(m_index);
-    const auto &X = *plotData.x;
-    const auto &Y = *plotData.y;
-
-    // Resize series array if needed
-    const qsizetype count = std::min(X.size(), Y.size());
-    if (m_data.size() != count)
-      m_data.resize(count);
-
-    // Obtain raw pointers
-    QPointF *out = m_data.data();
-    const auto *xData = X.raw();
-    const auto *yData = Y.raw();
-
-    // Get queue states for faster iteration
-    std::size_t xIdx = X.frontIndex();
-    std::size_t yIdx = Y.frontIndex();
-
-    // Update plot data points, avoid queue operations overhead
-    for (qsizetype i = 0; i < count; ++i)
-    {
-      out[i].setX(xData[xIdx]);
-      out[i].setY(yData[yIdx]);
-      xIdx = (xIdx + 1) % X.capacity();
-      yIdx = (yIdx + 1) % Y.capacity();
-    }
+    SS_Utils::downsampleToPoints(plotData, m_dataW, m_dataH, m_data);
   }
 }
 
@@ -200,11 +221,6 @@ void Widgets::Plot::updateData()
  */
 void Widgets::Plot::updateRange()
 {
-  // Clear memory
-  m_data.clear();
-  m_data.squeeze();
-  m_data.resize(UI::Dashboard::instance().points() + 1);
-
   // Obtain dataset information
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
   {

@@ -41,6 +41,8 @@ class MultiPlot : public QQuickItem
   Q_PROPERTY(double minY READ minY NOTIFY rangeChanged)
   Q_PROPERTY(double maxY READ maxY NOTIFY rangeChanged)
   Q_PROPERTY(QStringList colors READ colors NOTIFY themeChanged)
+  Q_PROPERTY(int dataW READ dataW WRITE setDataW NOTIFY dataSizeChanged)
+  Q_PROPERTY(int dataH READ dataH WRITE setDataH NOTIFY dataSizeChanged)
   Q_PROPERTY(double xTickInterval READ xTickInterval NOTIFY rangeChanged)
   Q_PROPERTY(double yTickInterval READ yTickInterval NOTIFY rangeChanged)
   Q_PROPERTY(QList<bool> visibleCurves READ visibleCurves NOTIFY curvesChanged)
@@ -49,6 +51,7 @@ signals:
   void rangeChanged();
   void themeChanged();
   void curvesChanged();
+  void dataSizeChanged();
 
 public:
   explicit MultiPlot(const int index = -1, QQuickItem *parent = nullptr);
@@ -65,6 +68,8 @@ public:
   }
 
   [[nodiscard]] int count() const;
+  [[nodiscard]] int dataW() const;
+  [[nodiscard]] int dataH() const;
   [[nodiscard]] double minX() const;
   [[nodiscard]] double maxX() const;
   [[nodiscard]] double minY() const;
@@ -78,6 +83,8 @@ public:
 
 public slots:
   void draw(QXYSeries *series, const int index);
+  void setDataW(const int width);
+  void setDataH(const int height);
 
   void updateData();
   void updateRange();
@@ -89,6 +96,8 @@ private slots:
 
 private:
   int m_index;
+  int m_dataW;
+  int m_dataH;
   double m_minX;
   double m_maxX;
   double m_minY;
@@ -98,6 +107,6 @@ private:
   QStringList m_labels;
   QList<int> m_drawOrders;
   QList<bool> m_visibleCurves;
-  QVector<QVector<QPointF>> m_data;
+  QList<QList<QPointF>> m_data;
 };
 } // namespace Widgets

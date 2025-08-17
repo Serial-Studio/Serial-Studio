@@ -53,6 +53,21 @@ Item {
   property bool showAreaUnderPlot: false
 
   //
+  // Set downsample size based on widget size & zoom factor
+  //
+  function setDownsampleFactor()
+  {
+    const z = plot.zoom
+    model.dataW = plot.plotArea.width * z
+    model.dataH = plot.plotArea.height * z
+  }
+
+  //
+  // Sync model width/height with widget
+  //
+  Component.onCompleted: root.setDownsampleFactor()
+
+  //
   // Save settings
   //
   QtCore.Settings {
@@ -248,6 +263,10 @@ Item {
     mouseAreaEnabled: windowRoot.focused
     xAxis.tickInterval: root.model.xTickInterval
     yAxis.tickInterval: root.model.yTickInterval
+
+    onZoomChanged: root.setDownsampleFactor()
+    onWidthChanged: root.setDownsampleFactor()
+    onHeightChanged: root.setDownsampleFactor()
 
     Connections {
       target: root.windowRoot

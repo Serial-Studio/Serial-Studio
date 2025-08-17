@@ -28,6 +28,8 @@
 #include <vector>
 #include <kiss_fft.h>
 
+#include "SerialStudio.h"
+
 namespace Widgets
 {
 /**
@@ -42,6 +44,11 @@ class FFTPlot : public QQuickItem
   Q_PROPERTY(double maxY READ maxY CONSTANT)
   Q_PROPERTY(double xTickInterval READ xTickInterval CONSTANT)
   Q_PROPERTY(double yTickInterval READ yTickInterval CONSTANT)
+  Q_PROPERTY(int dataW READ dataW WRITE setDataW NOTIFY dataSizeChanged)
+  Q_PROPERTY(int dataH READ dataH WRITE setDataH NOTIFY dataSizeChanged)
+
+signals:
+  void dataSizeChanged();
 
 public:
   explicit FFTPlot(const int index = -1, QQuickItem *parent = nullptr);
@@ -54,6 +61,8 @@ public:
     }
   }
 
+  [[nodiscard]] int dataW() const;
+  [[nodiscard]] int dataH() const;
   [[nodiscard]] double minX() const;
   [[nodiscard]] double maxX() const;
   [[nodiscard]] double minY() const;
@@ -63,6 +72,8 @@ public:
 
 public slots:
   void draw(QLineSeries *series);
+  void setDataW(const int width);
+  void setDataH(const int height);
 
 private slots:
   void updateData();
@@ -71,6 +82,9 @@ private:
   int m_size;
   int m_index;
   int m_samplingRate;
+
+  int m_dataW;
+  int m_dataH;
 
   double m_minX;
   double m_maxX;
@@ -81,6 +95,8 @@ private:
   double m_halfRange;
   bool m_scaleIsValid;
 
+  PlotDataX m_xData;
+  PlotDataY m_yData;
   QList<QPointF> m_data;
   std::vector<float> m_window;
 

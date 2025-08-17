@@ -106,7 +106,7 @@ public:
    */
   [[nodiscard]] const T &operator[](std::size_t index) const
   {
-    if (index >= m_size)
+    if (index >= m_capacity)
       throw std::out_of_range("FixedQueue index out of bounds");
 
     return m_data[wrappedIndex(index)];
@@ -121,7 +121,7 @@ public:
    */
   [[nodiscard]] T &operator[](std::size_t index)
   {
-    if (index >= m_size)
+    if (index >= m_capacity)
       throw std::out_of_range("FixedQueue index out of bounds");
 
     return m_data[wrappedIndex(index)];
@@ -169,7 +169,7 @@ public:
    */
   [[nodiscard]] const T &at(std::size_t index) const
   {
-    if (index >= m_size)
+    if (index >= m_capacity)
       throw std::out_of_range("FixedQueue index out of bounds");
 
     return m_data[wrappedIndex(index)];

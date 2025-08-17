@@ -72,6 +72,8 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
   , m_size(0)
   , m_index(index)
   , m_samplingRate(0)
+  , m_dataW(0)
+  , m_dataH(0)
   , m_minX(0)
   , m_maxX(0)
   , m_minY(0)
@@ -127,6 +129,24 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
       m_halfRange = qMax(1e-12, (maxVal - minVal) * 0.5);
     }
   }
+}
+
+/**
+ * @brief Returns the size of the down-sampled X axis data.
+ * @return Size of down-sampled X axis data.
+ */
+int Widgets::FFTPlot::dataW() const
+{
+  return m_dataW;
+}
+
+/**
+ * @brief Returns the size of the down-sampled Y axis data.
+ * @return Size of down-sampled Y axis data.
+ */
+int Widgets::FFTPlot::dataH() const
+{
+  return m_dataH;
 }
 
 /**
@@ -198,6 +218,32 @@ void Widgets::FFTPlot::draw(QLineSeries *series)
 }
 
 /**
+ * @brief Updates the size of the down-sampled X axis data.
+ * @param width The new size of the down-sampled axis data.
+ */
+void Widgets::FFTPlot::setDataW(const int width)
+{
+  if (m_dataW != width)
+  {
+    m_dataW = width;
+    Q_EMIT dataSizeChanged();
+  }
+}
+
+/**
+ * @brief Updates the size of the down-sampled Y axis data.
+ * @param height The new size of the down-sampled axis data.
+ */
+void Widgets::FFTPlot::setDataH(const int height)
+{
+  if (m_dataH != height)
+  {
+    m_dataH = height;
+    Q_EMIT dataSizeChanged();
+  }
+}
+
+/**
  * @brief Updates the FFT data.
  */
 void Widgets::FFTPlot::updateData()
@@ -262,8 +308,7 @@ void Widgets::FFTPlot::updateData()
   constexpr int halfWindow = smoothingWindow / 2;
 
   // Compute number of frequency bins (Nyquist rate)
-  const int spectrumSize = m_size / 2;
-  m_data.resize(spectrumSize);
+  const int spectrumSize = static_cast<size_t>(m_size) / 2;
 
   // Allocate dB cache only if needed
   static thread_local std::vector<float> dbCache;
@@ -280,8 +325,21 @@ void Widgets::FFTPlot::updateData()
     dbCache[i] = std::max(10.0f * std::log10(power), floorDB);
   }
 
+  // Resize X buffer if needed
+  if (m_xData.size() != static_cast<size_t>(spectrumSize))
+  {
+    m_xData.resize(spectrumSize);
+    m_xData.clear();
+  }
+
+  // Resize Y buffer if needed
+  if (m_yData.size() != static_cast<size_t>(spectrumSize))
+  {
+    m_yData.resize(spectrumSize);
+    m_yData.clear();
+  }
+
   // Smoothing and XY point generation
-  QPointF *out = m_data.data();
   for (int i = 0; i < spectrumSize; ++i)
   {
     const int minIdx = std::max(0, i - halfWindow);
@@ -293,7 +351,11 @@ void Widgets::FFTPlot::updateData()
 
     const float smoothedDB = sum / (maxIdx - minIdx + 1);
     const float freq = static_cast<float>(i) * m_samplingRate / m_size;
-    out[i].setX(freq);
-    out[i].setY(smoothedDB);
+
+    m_xData.push(freq);
+    m_yData.push(smoothedDB);
   }
+
+  // Downsample data
+  SS_Utils::downsampleToPoints(m_xData, m_yData, m_dataW, m_dataH, m_data);
 }

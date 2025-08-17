@@ -61,8 +61,6 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
 
     // Resize data container to fit curves
     m_data.resize(group.datasets.size());
-    for (size_t i = 0; i < group.datasets.size(); ++i)
-      m_data[i].resize(UI::Dashboard::instance().points());
 
     // Connect to the dashboard signals
     connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this,
@@ -86,6 +84,24 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
 int Widgets::MultiPlot::count() const
 {
   return m_data.count();
+}
+
+/**
+ * @brief Returns the size of the down-sampled X axis data.
+ * @return Size of down-sampled X axis data.
+ */
+int Widgets::MultiPlot::dataW() const
+{
+  return m_dataW;
+}
+
+/**
+ * @brief Returns the size of the down-sampled Y axis data.
+ * @return Size of down-sampled Y axis data.
+ */
+int Widgets::MultiPlot::dataH() const
+{
+  return m_dataH;
 }
 
 /**
@@ -204,6 +220,32 @@ void Widgets::MultiPlot::draw(QXYSeries *series, const int index)
 }
 
 /**
+ * @brief Updates the size of the down-sampled X axis data.
+ * @param width The new size of the down-sampled axis data.
+ */
+void Widgets::MultiPlot::setDataW(const int width)
+{
+  if (m_dataW != width)
+  {
+    m_dataW = width;
+    Q_EMIT dataSizeChanged();
+  }
+}
+
+/**
+ * @brief Updates the size of the down-sampled Y axis data.
+ * @param height The new size of the down-sampled axis data.
+ */
+void Widgets::MultiPlot::setDataH(const int height)
+{
+  if (m_dataH != height)
+  {
+    m_dataH = height;
+    Q_EMIT dataSizeChanged();
+  }
+}
+
+/**
  * @brief Updates the data of the multiplot.
  */
 void Widgets::MultiPlot::updateData()
@@ -221,12 +263,12 @@ void Widgets::MultiPlot::updateData()
 
     // Ensure output container has one QVector<QPointF> per series
     const qsizetype plotCount = data.y.size();
-    m_data.resize(plotCount);
-
-    // Get raw X pointer and state
-    const double *xData = X.raw();
-    std::size_t xIdx = X.frontIndex();
-    const std::size_t xCap = X.capacity();
+    if (m_data.size() != plotCount)
+    {
+      m_data.clear();
+      m_data.squeeze();
+      m_data.resize(plotCount);
+    }
 
     // Populate data for each plot
     for (qsizetype i = 0; i < plotCount; ++i)
@@ -235,35 +277,8 @@ void Widgets::MultiPlot::updateData()
       if (!m_visibleCurves[i])
         continue;
 
-      // Get raw pointer to dashboard data
-      const auto &Y = data.y[i];
-      const double *yData = Y.raw();
-
-      // Get queue states for faster iteration
-      std::size_t yIdx = Y.frontIndex();
-      const std::size_t yCap = Y.capacity();
-
-      // Obtain the length of the shortest axis
-      const qsizetype count = std::min(X.size(), Y.size());
-
-      // Resize plot data if needed
-      QVector<QPointF> &outSeries = m_data[i];
-      if (outSeries.size() != count)
-        outSeries.resize(count);
-
-      // Keep local copies to avoid resetting each plot
-      std::size_t xi = xIdx;
-      std::size_t yi = yIdx;
-
-      // Update plot data points, avoid queue operations overhead
-      QPointF *dst = outSeries.data();
-      for (qsizetype j = 0; j < count; ++j)
-      {
-        dst[j].setX(xData[xi]);
-        dst[j].setY(yData[yi]);
-        xi = (xi + 1) % xCap;
-        yi = (yi + 1) % yCap;
-      }
+      // Update data
+      SS_Utils::downsampleToPoints(X, data.y[i], m_dataW, m_dataH, m_data[i]);
     }
 
     // Calculate auto scale range
@@ -280,27 +295,13 @@ void Widgets::MultiPlot::updateRange()
   if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
     return;
 
-  // Clear dataset curves
-  for (auto &dataset : m_data)
-  {
-    dataset.clear();
-    dataset.squeeze();
-  }
+  // Get the multiplot data
+  const auto &data = UI::Dashboard::instance().multiplotData(m_index);
 
-  // Clear the data
+  // Resize the container structure
   m_data.clear();
   m_data.squeeze();
-
-  // Get data
-  auto data = UI::Dashboard::instance().multiplotData(m_index);
-
-  // Get the multiplot group and loop through each dataset
-  const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
-  for (size_t i = 0; i < group.datasets.size(); ++i)
-  {
-    m_data.append(QVector<QPointF>());
-    m_data.last().resize(UI::Dashboard::instance().points() + 1);
-  }
+  m_data.resize(data.y.size());
 
   // Update X-axis range
   m_minX = 0;
