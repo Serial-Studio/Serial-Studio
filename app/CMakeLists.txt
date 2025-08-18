@@ -188,7 +188,6 @@ set(HEADERS
   src/IO/HAL_Driver.h
   src/IO/Checksum.h
   src/IO/ConsoleExport.h
-  src/IO/FixedQueue.h
   src/IO/CircularBuffer.h
   src/IO/FileTransmission.h
   src/IO/FrameReader.h
@@ -202,6 +201,7 @@ set(HEADERS
   src/ThirdParty/readerwriterqueue.h
   src/ThirdParty/readerwritercircularbuffer.h
   src/AppInfo.h
+  src/DSP.h
   src/SerialStudio.h
 )
 

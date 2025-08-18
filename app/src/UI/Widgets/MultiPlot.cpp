@@ -143,6 +143,15 @@ double Widgets::MultiPlot::maxY() const
 }
 
 /**
+ * @brief Checks whether plot data updates are currently active.
+ * @return @c true if updating is not paused, otherwise @c false.
+ */
+bool Widgets::MultiPlot::running() const
+{
+  return UI::Dashboard::instance().multiplotRunning(m_index);
+}
+
+/**
  * @brief Returns the X-axis tick interval.
  * @return The X-axis tick interval.
  */
@@ -230,6 +239,8 @@ void Widgets::MultiPlot::setDataW(const int width)
   if (m_dataW != width)
   {
     m_dataW = width;
+    updateData();
+
     Q_EMIT dataSizeChanged();
   }
 }
@@ -243,8 +254,20 @@ void Widgets::MultiPlot::setDataH(const int height)
   if (m_dataH != height)
   {
     m_dataH = height;
+    updateData();
+
     Q_EMIT dataSizeChanged();
   }
+}
+
+/**
+ * @brief Enables or disables plot data updates.
+ * @param enabled Set to @c true to allow updates, or @c false to pause them.
+ */
+void Widgets::MultiPlot::setRunning(const bool enabled)
+{
+  UI::Dashboard::instance().setMultiplotRunning(m_index, enabled);
+  Q_EMIT runningChanged();
 }
 
 /**
@@ -252,6 +275,9 @@ void Widgets::MultiPlot::setDataH(const int height)
  */
 void Widgets::MultiPlot::updateData()
 {
+  // Share workspace data
+  static thread_local DSP::DownsampleWorkspace ws;
+
   // Stop if widget is disabled
   if (!isEnabled())
     return;
@@ -280,7 +306,7 @@ void Widgets::MultiPlot::updateData()
         continue;
 
       // Update data
-      SS_Utils::downsampleToPoints(X, data.y[i], m_dataW, m_dataH, m_data[i]);
+      DSP::downsampleMonotonic(X, data.y[i], m_dataW, m_dataH, m_data[i], &ws);
     }
 
     // Calculate auto scale range

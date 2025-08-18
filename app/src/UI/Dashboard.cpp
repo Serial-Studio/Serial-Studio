@@ -610,9 +610,9 @@ const JSON::Frame &UI::Dashboard::processedFrame()
  * @brief Returns the FFT plot data currently displayed on the dashboard.
  *
  * @param index The widget index for the FFT plot.
- * @return Reference to the corresponding PlotDataY buffer.
+ * @return Reference to the corresponding AxisData buffer.
  */
-const PlotDataY &UI::Dashboard::fftData(const int index) const
+const DSP::AxisData &UI::Dashboard::fftData(const int index) const
 {
   return m_fftValues[index];
 }
@@ -623,7 +623,7 @@ const PlotDataY &UI::Dashboard::fftData(const int index) const
  * @param index The widget index for the GPS display.
  * @return Reference to the corresponding GpsSeries structure.
  */
-const GpsSeries &UI::Dashboard::gpsSeries(const int index) const
+const DSP::GpsSeries &UI::Dashboard::gpsSeries(const int index) const
 {
   return m_gpsValues[index];
 }
@@ -634,7 +634,7 @@ const GpsSeries &UI::Dashboard::gpsSeries(const int index) const
  * @param index The widget index for the linear plot.
  * @return Reference to the corresponding LineSeries buffer.
  */
-const LineSeries &UI::Dashboard::plotData(const int index) const
+const DSP::LineSeries &UI::Dashboard::plotData(const int index) const
 {
   return m_pltValues[index];
 }
@@ -645,7 +645,7 @@ const LineSeries &UI::Dashboard::plotData(const int index) const
  * @param index The widget index for the multiplot.
  * @return Reference to the corresponding MultiLineSeries container.
  */
-const MultiLineSeries &UI::Dashboard::multiplotData(const int index) const
+const DSP::MultiLineSeries &UI::Dashboard::multiplotData(const int index) const
 {
   return m_multipltValues[index];
 }
@@ -655,13 +655,62 @@ const MultiLineSeries &UI::Dashboard::multiplotData(const int index) const
  * @brief Returns the 3D trajectory data for a 3D plot widget.
  *
  * @param index The widget index for the 3D plot.
- * @return Reference to the corresponding PlotData3D buffer.
+ * @return Reference to the corresponding LineSeries3D buffer.
  */
-const PlotData3D &UI::Dashboard::plotData3D(const int index) const
+const DSP::LineSeries3D &UI::Dashboard::plotData3D(const int index) const
 {
   return m_plotData3D[index];
 }
 #endif
+
+//------------------------------------------------------------------------------
+// Plot active status getters
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Checks whether a plot is currently active.
+ *
+ * @param index Plot index to query.
+ * @return @c true if the plot is running, otherwise @c false.
+ *         Returns @c false if the index is not registered.
+ */
+bool UI::Dashboard::plotRunning(const int index)
+{
+  if (m_activePlots.contains(index))
+    return m_activePlots[index];
+
+  return false;
+}
+
+/**
+ * @brief Checks whether an FFT plot is currently active.
+ *
+ * @param index FFT plot index to query.
+ * @return @c true if the FFT plot is running, otherwise @c false.
+ *         Returns @c false if the index is not registered.
+ */
+bool UI::Dashboard::fftPlotRunning(const int index)
+{
+  if (m_activeFFTPlots.contains(index))
+    return m_activeFFTPlots[index];
+
+  return false;
+}
+
+/**
+ * @brief Checks whether a multiplot is currently active.
+ *
+ * @param index Multiplot index to query.
+ * @return @c true if the multiplot is running, otherwise @c false.
+ *         Returns @c false if the index is not registered.
+ */
+bool UI::Dashboard::multiplotRunning(const int index)
+{
+  if (m_activeMultiplots.contains(index))
+    return m_activeMultiplots[index];
+
+  return false;
+}
 
 //------------------------------------------------------------------------------
 // Setter functions
@@ -729,6 +778,11 @@ void UI::Dashboard::resetData(const bool notify)
   m_widgetGroups.clear();
   m_widgetDatasets.clear();
   m_datasetReferences.clear();
+
+  // Clear activity status flags for plot widgets
+  m_activePlots.clear();
+  m_activeFFTPlots.clear();
+  m_activeMultiplots.clear();
 
   // Reset frame data
   m_rawFrame = JSON::Frame();
@@ -871,6 +925,52 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 
   // Update action model
   Q_EMIT actionStatusChanged();
+}
+
+//------------------------------------------------------------------------------
+// Plot activation status setters
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Sets the active state of a plot.
+ *
+ * @param index Plot index to update.
+ * @param enabled Set to @c true to mark running, or @c false to pause.
+ *
+ * Has no effect if @p index is not registered.
+ */
+void UI::Dashboard::setPlotRunning(const int index, const bool enabled)
+{
+  if (m_activePlots.contains(index))
+    m_activePlots[index] = enabled;
+}
+
+/**
+ * @brief Sets the active state of an FFT plot.
+ *
+ * @param index FFT plot index to update.
+ * @param enabled Set to @c true to mark running, or @c false to pause.
+ *
+ * Has no effect if @p index is not registered.
+ */
+void UI::Dashboard::setFFTPlotRunning(const int index, const bool enabled)
+{
+  if (m_activeFFTPlots.contains(index))
+    m_activeFFTPlots[index] = enabled;
+}
+
+/**
+ * @brief Sets the active state of a multiplot.
+ *
+ * @param index Multiplot index to update.
+ * @param enabled Set to @c true to mark running, or @c false to pause.
+ *
+ * Has no effect if @p index is not registered.
+ */
+void UI::Dashboard::setMultiplotRunning(const int index, const bool enabled)
+{
+  if (m_activeMultiplots.contains(index))
+    m_activeMultiplots[index] = enabled;
 }
 
 //------------------------------------------------------------------------------
@@ -1241,6 +1341,9 @@ void UI::Dashboard::updateDataSeries()
   // Update FFT plots
   for (int i = 0; i < fftCount; ++i)
   {
+    if (!m_activeFFTPlots[i])
+      continue;
+
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
     m_fftValues[i].push(dataset.numericValue);
   }
@@ -1250,6 +1353,10 @@ void UI::Dashboard::updateDataSeries()
   QSet<int> yAxesMoved;
   for (int i = 0; i < plotCount; ++i)
   {
+    // Stop if plot widget is not enabled
+    if (!m_activePlots[i])
+      continue;
+
     // Shift Y-axis points
     const auto &yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
     if (!yAxesMoved.contains(yDataset.index))
@@ -1271,6 +1378,9 @@ void UI::Dashboard::updateDataSeries()
   // Update Multi-plots
   for (int i = 0; i < multiCount; ++i)
   {
+    if (!m_activeMultiplots[i])
+      continue;
+
     const auto &group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
     auto &multiSeries = m_multipltValues[i];
     for (size_t j = 0; j < group.datasets.size(); ++j)
@@ -1327,9 +1437,9 @@ void UI::Dashboard::configureGpsSeries()
   // Construct GPS data structure
   for (int i = 0; i < widgetCount(SerialStudio::DashboardGPS); ++i)
   {
-    GpsSeries series;
+    DSP::GpsSeries series;
     const auto &group = getGroupWidget(SerialStudio::DashboardGPS, i);
-    const QMap<QString, IO::FixedQueue<double> *> fieldMap
+    const QMap<QString, DSP::FixedQueue<double> *> fieldMap
         = {{"lat", &series.latitudes},
            {"lon", &series.longitudes},
            {"alt", &series.altitudes}};
@@ -1364,12 +1474,14 @@ void UI::Dashboard::configureFftSeries()
   // Clear memory
   m_fftValues.clear();
   m_fftValues.squeeze();
+  m_activeFFTPlots.clear();
 
   // Construct FFT plot data structure
   for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i)
   {
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
-    m_fftValues.append(PlotDataY(dataset.fftSamples));
+    m_fftValues.append(DSP::AxisData(dataset.fftSamples));
+    m_activeFFTPlots.insert(i, true);
   }
 }
 
@@ -1394,9 +1506,10 @@ void UI::Dashboard::configureLineSeries()
   m_yAxisData.clear();
   m_pltValues.clear();
   m_pltValues.squeeze();
+  m_activePlots.clear();
 
   // Reset default X-axis data
-  m_pltXAxis = PlotDataX(points() + 1);
+  m_pltXAxis = DSP::AxisData(points() + 1);
   m_pltXAxis.fillRange(0, 1);
 
   // Construct X/Y axis data arrays
@@ -1411,7 +1524,7 @@ void UI::Dashboard::configureLineSeries()
       if (d->plt)
       {
         // Register Y-axis
-        PlotDataY yAxis(points() + 1);
+        DSP::AxisData yAxis(points() + 1);
         m_yAxisData.insert(d->index, yAxis);
         m_yAxisData[d->index].fill(0);
 
@@ -1421,7 +1534,7 @@ void UI::Dashboard::configureLineSeries()
           int xSource = d->xAxisId;
           if (!m_xAxisData.contains(xSource))
           {
-            PlotDataX xAxis(points() + 1);
+            DSP::AxisData xAxis(points() + 1);
             if (m_datasets.contains(xSource))
             {
               m_xAxisData.insert(xSource, xAxis);
@@ -1443,7 +1556,7 @@ void UI::Dashboard::configureLineSeries()
     if (m_datasets.contains(yDataset.xAxisId) && SerialStudio::activated())
     {
       const auto &xDataset = m_datasets[yDataset.xAxisId];
-      LineSeries series;
+      DSP::LineSeries series;
       series.x = &m_xAxisData[xDataset.index];
       series.y = &m_yAxisData[yDataset.index];
       m_pltValues.append(series);
@@ -1452,11 +1565,14 @@ void UI::Dashboard::configureLineSeries()
     // Only use Y-axis data, use samples/points as X-axis
     else
     {
-      LineSeries series;
+      DSP::LineSeries series;
       series.x = &m_pltXAxis;
       series.y = &m_yAxisData[yDataset.index];
       m_pltValues.append(series);
     }
+
+    // Enable real-time updates for the plot
+    m_activePlots.insert(i, true);
   }
 }
 
@@ -1492,7 +1608,7 @@ void UI::Dashboard::configurePlot3DSeries()
  *
  * This function initializes the data structure used for multi-plot widgets.
  * It assigns the default X-axis to all multi-line series and creates a
- * `PlotDataY` vector for each dataset in the group, initializing it with zeros.
+ * `AxisData` vector for each dataset in the group, initializing it with zeros.
  *
  * @note Typically called during dashboard setup or reset to prepare multi-plot
  *       widgets for rendering.
@@ -1502,9 +1618,10 @@ void UI::Dashboard::configureMultiLineSeries()
   // Clear data
   m_multipltValues.clear();
   m_multipltValues.squeeze();
+  m_activeMultiplots.clear();
 
   // Reset default X-axis data
-  m_multipltXAxis = PlotDataX(points() + 1);
+  m_multipltXAxis = DSP::AxisData(points() + 1);
   m_multipltXAxis.fillRange(0, 1);
 
   // Construct multi-plot values structure
@@ -1512,15 +1629,16 @@ void UI::Dashboard::configureMultiLineSeries()
   {
     const auto &group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
 
-    MultiLineSeries series;
+    DSP::MultiLineSeries series;
     series.x = &m_multipltXAxis;
     for (size_t j = 0; j < group.datasets.size(); ++j)
     {
-      series.y.push_back(PlotDataY(points() + 1));
+      series.y.push_back(DSP::AxisData(points() + 1));
       series.y.back().fill(0);
     }
 
     m_multipltValues.append(series);
+    m_activeMultiplots.insert(i, true);
   }
 }
 

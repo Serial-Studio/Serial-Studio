@@ -45,12 +45,14 @@ class MultiPlot : public QQuickItem
   Q_PROPERTY(int dataH READ dataH WRITE setDataH NOTIFY dataSizeChanged)
   Q_PROPERTY(double xTickInterval READ xTickInterval NOTIFY rangeChanged)
   Q_PROPERTY(double yTickInterval READ yTickInterval NOTIFY rangeChanged)
+  Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
   Q_PROPERTY(QList<bool> visibleCurves READ visibleCurves NOTIFY curvesChanged)
 
 signals:
   void rangeChanged();
   void themeChanged();
   void curvesChanged();
+  void runningChanged();
   void dataSizeChanged();
 
 public:
@@ -74,6 +76,7 @@ public:
   [[nodiscard]] double maxX() const;
   [[nodiscard]] double minY() const;
   [[nodiscard]] double maxY() const;
+  [[nodiscard]] bool running() const;
   [[nodiscard]] double xTickInterval() const;
   [[nodiscard]] double yTickInterval() const;
   [[nodiscard]] const QString &yLabel() const;
@@ -83,8 +86,10 @@ public:
 
 public slots:
   void draw(QXYSeries *series, const int index);
+
   void setDataW(const int width);
   void setDataH(const int height);
+  void setRunning(const bool enabled);
 
   void updateData();
   void updateRange();

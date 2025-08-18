@@ -186,6 +186,15 @@ double Widgets::FFTPlot::maxY() const
 }
 
 /**
+ * @brief Checks whether plot data updates are currently active.
+ * @return @c true if updating is not paused, otherwise @c false.
+ */
+bool Widgets::FFTPlot::running() const
+{
+  return UI::Dashboard::instance().fftPlotRunning(m_index);
+}
+
+/**
  * @brief Returns the X-axis tick interval.
  * @return The X-axis tick interval.
  */
@@ -226,6 +235,8 @@ void Widgets::FFTPlot::setDataW(const int width)
   if (m_dataW != width)
   {
     m_dataW = width;
+    updateData();
+
     Q_EMIT dataSizeChanged();
   }
 }
@@ -239,8 +250,20 @@ void Widgets::FFTPlot::setDataH(const int height)
   if (m_dataH != height)
   {
     m_dataH = height;
+    updateData();
+
     Q_EMIT dataSizeChanged();
   }
+}
+
+/**
+ * @brief Enables or disables plot data updates.
+ * @param enabled Set to @c true to allow updates, or @c false to pause them.
+ */
+void Widgets::FFTPlot::setRunning(const bool enabled)
+{
+  UI::Dashboard::instance().setFFTPlotRunning(m_index, enabled);
+  Q_EMIT runningChanged();
 }
 
 /**
@@ -248,6 +271,9 @@ void Widgets::FFTPlot::setDataH(const int height)
  */
 void Widgets::FFTPlot::updateData()
 {
+  // Share workspace data
+  static thread_local DSP::DownsampleWorkspace ws;
+
   // Skip if widget is disabled
   if (!isEnabled())
     return;
@@ -357,5 +383,5 @@ void Widgets::FFTPlot::updateData()
   }
 
   // Downsample data
-  SS_Utils::downsampleToPoints(m_xData, m_yData, m_dataW, m_dataH, m_data);
+  DSP::downsampleMonotonic(m_xData, m_yData, m_dataW, m_dataH, m_data, &ws);
 }

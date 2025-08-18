@@ -27,7 +27,7 @@
 #include <QMatrix4x4>
 #include <QQuickPaintedItem>
 
-#include "SerialStudio.h"
+#include "DSP.h"
 
 namespace Widgets
 {
@@ -162,7 +162,7 @@ private:
 
 private:
   double gridStep(const double scale = -1) const;
-  std::vector<QPointF> screenProjection(const PlotData3D &points,
+  std::vector<QPointF> screenProjection(const DSP::LineSeries3D &points,
                                         const QMatrix4x4 &matrix);
   void drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
                   const QVector3D &p1, const QVector3D &p2, QColor color,
@@ -170,7 +170,7 @@ private:
 
   QImage renderGrid(const QMatrix4x4 &matrix);
   QImage renderCameraIndicator(const QMatrix4x4 &matrix);
-  QImage renderData(const QMatrix4x4 &matrix, const PlotData3D &data);
+  QImage renderData(const QMatrix4x4 &matrix, const DSP::LineSeries3D &data);
   QPair<QMatrix4x4, QMatrix4x4> eyeTransformations(const QMatrix4x4 &matrix);
 
 protected:

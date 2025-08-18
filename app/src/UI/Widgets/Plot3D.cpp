@@ -1010,8 +1010,9 @@ double Widgets::Plot3D::gridStep(const double scale) const
  * @param matrix The combined MVP matrix.
  * @return Vector of 2D QPointF in screen coordinates.
  */
-std::vector<QPointF> Widgets::Plot3D::screenProjection(const PlotData3D &points,
-                                                       const QMatrix4x4 &matrix)
+std::vector<QPointF>
+Widgets::Plot3D::screenProjection(const DSP::LineSeries3D &points,
+                                  const QMatrix4x4 &matrix)
 {
   std::vector<QPointF> projected;
   projected.reserve(points.size());
@@ -1314,7 +1315,7 @@ QImage Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
  * @return Rendered foreground pixmap.
  */
 QImage Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
-                                   const PlotData3D &data)
+                                   const DSP::LineSeries3D &data)
 {
   // Create the pixmap and initialize it to the widget's size
   QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);

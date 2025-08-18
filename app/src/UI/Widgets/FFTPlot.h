@@ -25,10 +25,9 @@
 #include <QQuickItem>
 #include <QLineSeries>
 
-#include <vector>
 #include <kiss_fft.h>
 
-#include "SerialStudio.h"
+#include "DSP.h"
 
 namespace Widgets
 {
@@ -46,8 +45,10 @@ class FFTPlot : public QQuickItem
   Q_PROPERTY(double yTickInterval READ yTickInterval CONSTANT)
   Q_PROPERTY(int dataW READ dataW WRITE setDataW NOTIFY dataSizeChanged)
   Q_PROPERTY(int dataH READ dataH WRITE setDataH NOTIFY dataSizeChanged)
+  Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
 
 signals:
+  void runningChanged();
   void dataSizeChanged();
 
 public:
@@ -67,6 +68,7 @@ public:
   [[nodiscard]] double maxX() const;
   [[nodiscard]] double minY() const;
   [[nodiscard]] double maxY() const;
+  [[nodiscard]] bool running() const;
   [[nodiscard]] double xTickInterval() const;
   [[nodiscard]] double yTickInterval() const;
 
@@ -74,6 +76,7 @@ public slots:
   void draw(QLineSeries *series);
   void setDataW(const int width);
   void setDataH(const int height);
+  void setRunning(const bool enabled);
 
 private slots:
   void updateData();
@@ -95,9 +98,9 @@ private:
   double m_halfRange;
   bool m_scaleIsValid;
 
-  PlotDataX m_xData;
-  PlotDataY m_yData;
   QList<QPointF> m_data;
+  DSP::AxisData m_xData;
+  DSP::AxisData m_yData;
   std::vector<float> m_window;
 
   kiss_fft_cfg m_plan;

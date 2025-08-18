@@ -48,7 +48,6 @@ Item {
   //
   // Custom properties
   //
-  property bool running: true
   property bool interpolate: true
   property bool showAreaUnderPlot: false
 
@@ -95,7 +94,7 @@ Item {
     target: Cpp_Misc_TimerEvents
 
     function onUiTimeout() {
-      if (root.visible && root.model && root.running) {
+      if (root.visible && root.model) {
         if (root.interpolate) {
           root.model.draw(upperSeries)
 
@@ -209,10 +208,10 @@ Item {
       height: 24
       icon.width: 18
       icon.height: 18
-      checked: !root.running
+      checked: !model.running
       icon.color: "transparent"
-      onClicked: root.running = !root.running
-      icon.source: root.running?
+      onClicked: model.running = !model.running
+      icon.source: model.running?
                      "qrc:/rcc/icons/dashboard-buttons/pause.svg" :
                      "qrc:/rcc/icons/dashboard-buttons/resume.svg"
     }

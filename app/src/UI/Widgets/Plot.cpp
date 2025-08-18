@@ -36,6 +36,7 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
   , m_maxX(0)
   , m_minY(0)
   , m_maxY(0)
+  , m_monotonicData(true)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
   {
@@ -47,6 +48,7 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
     const auto xAxisId = SerialStudio::activated() ? yDataset.xAxisId : 0;
     if (UI::Dashboard::instance().datasets().contains(xAxisId))
     {
+      m_monotonicData = false;
       const auto &xDataset = UI::Dashboard::instance().datasets()[xAxisId];
       m_xLabel = xDataset.title;
       if (!xDataset.units.isEmpty())
@@ -54,7 +56,10 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
     }
 
     else
+    {
+      m_monotonicData = true;
       m_xLabel = tr("Samples");
+    }
 
     m_yLabel = yDataset.title;
     if (!yDataset.units.isEmpty())
@@ -123,6 +128,15 @@ double Widgets::Plot::maxY() const
 }
 
 /**
+ * @brief Checks whether plot data updates are currently active.
+ * @return @c true if updating is not paused, otherwise @c false.
+ */
+bool Widgets::Plot::running() const
+{
+  return UI::Dashboard::instance().plotRunning(m_index);
+}
+
+/**
  * @brief Returns the X-axis tick interval.
  * @return The X-axis tick interval.
  */
@@ -182,6 +196,8 @@ void Widgets::Plot::setDataW(const int width)
   if (m_dataW != width)
   {
     m_dataW = width;
+    updateData();
+
     Q_EMIT dataSizeChanged();
   }
 }
@@ -195,8 +211,20 @@ void Widgets::Plot::setDataH(const int height)
   if (m_dataH != height)
   {
     m_dataH = height;
+    updateData();
+
     Q_EMIT dataSizeChanged();
   }
+}
+
+/**
+ * @brief Enables or disables plot data updates.
+ * @param enabled Set to @c true to allow updates, or @c false to pause them.
+ */
+void Widgets::Plot::setRunning(const bool enabled)
+{
+  UI::Dashboard::instance().setPlotRunning(m_index, enabled);
+  Q_EMIT runningChanged();
 }
 
 /**
@@ -204,6 +232,9 @@ void Widgets::Plot::setDataH(const int height)
  */
 void Widgets::Plot::updateData()
 {
+  // Share workspace data
+  static thread_local DSP::DownsampleWorkspace ws;
+
   // Stop if widget is disabled
   if (!isEnabled())
     return;
@@ -211,8 +242,43 @@ void Widgets::Plot::updateData()
   // Only obtain data if widget data is still valid
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
   {
+    // Obtain plot data
     const auto &plotData = UI::Dashboard::instance().plotData(m_index);
-    SS_Utils::downsampleToPoints(plotData, m_dataW, m_dataH, m_data);
+
+    // Downsample data that only has one Y point per X point
+    if (m_monotonicData)
+      DSP::downsampleMonotonic(plotData, m_dataW, m_dataH, m_data, &ws);
+
+    // Draw directly on complex plots (such as Lorenz Attractor)
+    else
+    {
+      // Get X/Y axis
+      const auto &X = *plotData.x;
+      const auto &Y = *plotData.y;
+
+      // Resize series array if needed
+      const qsizetype count = std::min(X.size(), Y.size());
+      if (m_data.size() != count)
+        m_data.resize(count);
+
+      // Obtain raw pointers
+      QPointF *out = m_data.data();
+      const auto *xData = X.raw();
+      const auto *yData = Y.raw();
+
+      // Get queue states for faster iteration
+      std::size_t xIdx = X.frontIndex();
+      std::size_t yIdx = Y.frontIndex();
+
+      // Update plot data points, avoid queue operations overhead
+      for (qsizetype i = 0; i < count; ++i)
+      {
+        out[i].setX(xData[xIdx]);
+        out[i].setY(yData[yIdx]);
+        xIdx = (xIdx + 1) % X.capacity();
+        yIdx = (yIdx + 1) % Y.capacity();
+      }
+    }
   }
 }
 

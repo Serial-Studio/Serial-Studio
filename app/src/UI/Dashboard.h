@@ -24,7 +24,7 @@
 #include <QFont>
 #include <QObject>
 
-#include "JSON/Frame.h"
+#include "DSP.h"
 #include "SerialStudio.h"
 
 namespace UI
@@ -119,14 +119,19 @@ public:
 
   [[nodiscard]] const JSON::Frame &rawFrame();
   [[nodiscard]] const JSON::Frame &processedFrame();
-  [[nodiscard]] const PlotDataY &fftData(const int index) const;
-  [[nodiscard]] const GpsSeries &gpsSeries(const int index) const;
-  [[nodiscard]] const LineSeries &plotData(const int index) const;
-  [[nodiscard]] const MultiLineSeries &multiplotData(const int index) const;
+  [[nodiscard]] const DSP::AxisData &fftData(const int index) const;
+  [[nodiscard]] const DSP::GpsSeries &gpsSeries(const int index) const;
+  [[nodiscard]] const DSP::LineSeries &plotData(const int index) const;
+  [[nodiscard]] const DSP::MultiLineSeries &
+  multiplotData(const int index) const;
 
 #ifdef BUILD_COMMERCIAL
-  [[nodiscard]] const PlotData3D &plotData3D(const int index) const;
+  [[nodiscard]] const DSP::LineSeries3D &plotData3D(const int index) const;
 #endif
+
+  [[nodiscard]] bool plotRunning(const int index);
+  [[nodiscard]] bool fftPlotRunning(const int index);
+  [[nodiscard]] bool multiplotRunning(const int index);
 
 public slots:
   void setPoints(const int points);
@@ -135,6 +140,10 @@ public slots:
   void setTerminalEnabled(const bool enabled);
   void setShowTaskbarButtons(const bool enabled);
   void activateAction(const int index, const bool guiTrigger = false);
+
+  void setPlotRunning(const int index, const bool enabled);
+  void setFFTPlotRunning(const int index, const bool enabled);
+  void setMultiplotRunning(const int index, const bool enabled);
 
   void hotpathRxFrame(const JSON::Frame &frame);
 
@@ -160,18 +169,22 @@ private:
 
   bool m_updateRetryInProgress; // Used to avoid recursion when frame changes
 
-  PlotDataX m_pltXAxis;      // Default X-axis data for line plots
-  PlotDataX m_multipltXAxis; // Default X-axis data for multi-line plots
+  DSP::AxisData m_pltXAxis;      // Default X-axis data for line plots
+  DSP::AxisData m_multipltXAxis; // Default X-axis data for multi-line plots
 
-  QMap<int, PlotDataX> m_xAxisData; // X-axis data per dataset index
-  QMap<int, PlotDataY> m_yAxisData; // Y-axis data per dataset index
+  QMap<int, DSP::AxisData> m_xAxisData; // X-axis data per dataset index
+  QMap<int, DSP::AxisData> m_yAxisData; // Y-axis data per dataset index
 
-  QVector<GpsSeries> m_gpsValues;            // GPS data per GPS widget
-  QVector<PlotDataY> m_fftValues;            // FFT data per dataset
-  QVector<LineSeries> m_pltValues;           // Line plot data
-  QVector<MultiLineSeries> m_multipltValues; // Multi-line plot data
+  QMap<int, bool> m_activePlots;      // Active state per plot index
+  QMap<int, bool> m_activeFFTPlots;   // Active state per FFT plot index
+  QMap<int, bool> m_activeMultiplots; // Active state per multiplot index
+
+  QVector<DSP::GpsSeries> m_gpsValues;            // GPS data per GPS widget
+  QVector<DSP::AxisData> m_fftValues;             // FFT data per dataset
+  QVector<DSP::LineSeries> m_pltValues;           // Line plot data
+  QVector<DSP::MultiLineSeries> m_multipltValues; // Multi-line plot data
 #ifdef BUILD_COMMERCIAL
-  QVector<PlotData3D> m_plotData3D; // 3D plot data (commercial only)
+  QVector<DSP::LineSeries3D> m_plotData3D; // 3D plot data (commercial only)
 #endif
 
   QMap<int, QTimer *> m_timers;        // Timers for dashboard actions
