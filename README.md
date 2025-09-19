@@ -84,7 +84,7 @@ Refer to the [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki) for com
 
 ## Building Serial Studio
 
-The only required dependency to build Serial Studio from source is [Qt](https://www.qt.io/download-open-source/), preferably with all modules and plugins installed. The project is built using **Qt 6.9.1**.
+The only required dependency to build Serial Studio from source is [Qt](https://www.qt.io/download-open-source/), preferably with all modules and plugins installed. The project is built using **Qt 6.9.2**.
 
 #### Additional Requirements for Linux
 

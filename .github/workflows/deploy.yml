@@ -43,7 +43,7 @@ on:
 #---------------------------------------------------------------------------------------------------
 
 env:
-  QT_VERSION: "6.9.1"                                          # Version of Qt to install
+  QT_VERSION: "6.9.2"                                          # Version of Qt to install
   APP_VERSION: "3.1.10"                                        # Application version
   QML_DIR: "../../app/qml"                                     # Path to QML sources
   PUBLISHER: "Alex Spataru"                                    # Application publisher
