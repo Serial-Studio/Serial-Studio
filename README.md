@@ -36,8 +36,8 @@ brew install --cask serial-studio
 The recommended way to install Serial Studio on Linux is via the official pre-built [AppImage](https://appimage.org/). Make it executable and run it:
 
 ```bash
-chmod +x SerialStudio-Pro-3.1.9-Linux-x64.AppImage
-./SerialStudio-Pro-3.1.9-Linux-x64.AppImage
+chmod +x SerialStudio-Pro-3.1.10-Linux-x64.AppImage
+./SerialStudio-Pro-3.1.10-Linux-x64.AppImage
 ```
 
 If the AppImage fails to launch, your system may be missing `libfuse2`:
