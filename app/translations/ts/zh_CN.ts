@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN" sourcelanguage="en_US">
 <context>
@@ -44,7 +44,7 @@
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="261"/>
-        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>本软件按“原样”提供，不提供任何明示或暗示的保证，包括但不限于适销性或特定用途适用性的保证。在任何情况下，作者均不对因使用本软件而产生的任何损害负责。</translation>
     </message>
     <message>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="195"/>
-        <source>Sorry, this system is not supported yet. We'll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
+        <source>Sorry, this system is not supported yet. We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
         <translation>抱歉，该系统尚不支持。一旦 Qt 官方支持此操作系统，我们将更新 Serial Studio 以配合使用。</translation>
     </message>
 </context>
@@ -486,7 +486,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
-        <translation>切换二进制或阈值的LED指示灯</translation>
+        <translation>切换二进制或阈值的 LED 指示灯</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
@@ -514,17 +514,17 @@
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
         <source>Support Serial Studio</source>
-        <translation>支持Serial Studio</translation>
+        <translation>支持 Serial Studio</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="139"/>
         <source>Support the development of %1!</source>
-        <translation>支持%1的开发！</translation>
+        <translation>支持 %1 的开发！</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="150"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
-        <translation>Serial Studio是由志愿者支持的免费开源软件。请考虑捐赠或获取专业版许可证以支持开发工作 :)</translation>
+        <translation>Serial Studio 是由志愿者支持的免费开源软件。请考虑捐赠或获取专业版许可证以支持开发工作 :)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="163"/>
@@ -598,7 +598,7 @@
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="219"/>
-        <source>Click "OK" to begin installing the update</source>
+        <source>Click &quot;OK&quot; to begin installing the update</source>
         <translation>点击“确定”开始安装更新</translation>
     </message>
     <message>
@@ -613,7 +613,7 @@
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="245"/>
-        <source>Click the "Open" button to apply the update</source>
+        <source>Click the &quot;Open&quot; button to apply the update</source>
         <translation>点击“打开”按钮应用更新</translation>
     </message>
     <message>
@@ -703,12 +703,12 @@
 <context>
     <name>FFTPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="217"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
         <source>Magnitude (dB)</source>
         <translation>幅度 (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="218"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
         <source>Frequency (Hz)</source>
         <translation>频率 (Hz)</translation>
     </message>
@@ -826,7 +826,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="216"/>
         <source>Import a JavaScript file for data parsing</source>
-        <translation>导入用于数据解析的JavaScript文件</translation>
+        <translation>导入用于数据解析的 JavaScript 文件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="225"/>
@@ -871,7 +871,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="343"/>
         <source>Open help documentation for JavaScript data parsing</source>
-        <translation>打开JavaScript数据解析的帮助文档</translation>
+        <translation>打开 JavaScript 数据解析的帮助文档</translation>
     </message>
 </context>
 <context>
@@ -912,17 +912,17 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="135"/>
         <source>Add a 2D plot to visualize numeric data</source>
-        <translation>添加2D图表以可视化数值数据</translation>
+        <translation>添加 2D 图表以可视化数值数据</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="144"/>
         <source>FFT Plot</source>
-        <translation>FFT图表</translation>
+        <translation>FFT 图表</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="149"/>
         <source>Add an FFT plot for frequency domain visualization</source>
-        <translation>添加FFT图表以进行频域可视化</translation>
+        <translation>添加 FFT 图表以进行频域可视化</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="158"/>
@@ -962,7 +962,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <source>Add an LED indicator for binary status signals</source>
-        <translation>为二进制状态信号添加一个LED指示器</translation>
+        <translation>为二进制状态信号添加一个 LED 指示器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="221"/>
@@ -1089,32 +1089,32 @@
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1012"/>
         <source> channels</source>
-        <translation>通道</translation>
+        <translation> 通道</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1191"/>
         <source>Unsigned 8-bit</source>
-        <translation>无符号8位</translation>
+        <translation>无符号 8 位</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1192"/>
         <source>Signed 16-bit</source>
-        <translation>有符号16位</translation>
+        <translation>有符号 16 位</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1193"/>
         <source>Signed 24-bit</source>
-        <translation>有符号24位</translation>
+        <translation>有符号 24 位</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1194"/>
         <source>Signed 32-bit</source>
-        <translation>有符号32位</translation>
+        <translation>有符号 32 位</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1195"/>
         <source>Float 32-bit</source>
-        <translation>浮点32位</translation>
+        <translation>浮点 32 位</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1196"/>
@@ -1271,8 +1271,8 @@
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="600"/>
-        <source>"%1" is not a valid path</source>
-        <translation>“%1”不是有效路径</translation>
+        <source>&quot;%1&quot; is not a valid path</source>
+        <translation>“%1” 不是有效路径</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="601"/>
@@ -1409,7 +1409,7 @@
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="177"/>
         <source>JSON parse error</source>
-        <translation>JSON解析错误</translation>
+        <translation>JSON 解析错误</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="212"/>
@@ -1419,12 +1419,12 @@
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="213"/>
         <source>Make sure it’s a properly formatted JSON project.</source>
-        <translation>请确保它是格式正确的JSON项目。</translation>
+        <translation>请确保它是格式正确的 JSON 项目。</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="227"/>
         <source>Cannot read JSON file</source>
-        <translation>无法读取JSON文件</translation>
+        <translation>无法读取 JSON 文件</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameBuilder.cpp" line="228"/>
@@ -1480,14 +1480,14 @@
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="289"/>
-        <source>The 'parse' function is not declared or is not callable!</source>
-        <translation>'parse' 函数未声明或不可调用！</translation>
+        <source>The &apos;parse&apos; function is not declared or is not callable!</source>
+        <translation>&apos;parse&apos; 函数未声明或不可调用！</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="309"/>
         <location filename="../../src/JSON/FrameParser.cpp" line="333"/>
-        <source>No valid 'parse' function declaration found in the script!</source>
-        <translation>脚本中未找到有效的 'parse' 函数声明！</translation>
+        <source>No valid &apos;parse&apos; function declaration found in the script!</source>
+        <translation>脚本中未找到有效的 &apos;parse&apos; 函数声明！</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="318"/>
@@ -1496,8 +1496,8 @@
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="319"/>
-        <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
-        <translation>'parse' 函数有两个参数 ('%1', '%2')，表明使用旧格式。请更新为仅使用帧数据作为参数的新格式。</translation>
+        <source>The &apos;parse&apos; function has two arguments (&apos;%1&apos;, &apos;%2&apos;), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
+        <translation>&apos;parse&apos; 函数有两个参数 (&apos;%1&apos;, &apos;%2&apos;)，表明使用旧格式。请更新为仅使用帧数据作为参数的新格式。</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="426"/>
@@ -1514,7 +1514,7 @@
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="455"/>
         <source>Select Javascript file to import</source>
-        <translation>选择要导入的Javascript文件</translation>
+        <translation>选择要导入的 Javascript 文件</translation>
     </message>
 </context>
 <context>
@@ -1552,7 +1552,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="763"/>
         <source>Save Serial Studio Project</source>
-        <translation>保存Serial Studio项目</translation>
+        <translation>保存 Serial Studio 项目</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2238"/>
@@ -1717,7 +1717,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2618"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
-        <translation>消息要附加的EOL字符（例如 </translation>
+        <translation>消息要附加的 EOL 字符（例如 \n, \r\n）</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2629"/>
@@ -1812,12 +1812,12 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2888"/>
         <source>FFT Configuration</source>
-        <translation>FFT配置</translation>
+        <translation>FFT 配置</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2901"/>
         <source>Enable FFT Analysis</source>
-        <translation>启用FFT分析</translation>
+        <translation>启用 FFT 分析</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2902"/>
@@ -1827,17 +1827,17 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2922"/>
         <source>Number of samples used for each FFT calculation window</source>
-        <translation>每个FFT计算窗口使用的样本数量</translation>
+        <translation>每个 FFT 计算窗口使用的样本数量</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2934"/>
         <source>FFT Sampling Rate (Hz, required)</source>
-        <translation>FFT采样率（Hz，必需）</translation>
+        <translation>FFT 采样率（Hz，必需）</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2936"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
-        <translation>FFT使用的采样频率（单位：Hz）</translation>
+        <translation>FFT 使用的采样频率（单位：Hz）</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2948"/>
@@ -2004,7 +2004,7 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1036"/>
-        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
+        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
         <translation>您的项目使用了带有“分隔符”参数的旧版帧解析函数。它已自动迁移到新格式。</translation>
     </message>
     <message>
@@ -2019,7 +2019,7 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1097"/>
-        <source>Do you want to delete group "%1"?</source>
+        <source>Do you want to delete group &quot;%1&quot;?</source>
         <translation>您要删除组“%1”吗？</translation>
     </message>
     <message>
@@ -2031,12 +2031,12 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1138"/>
-        <source>Do you want to delete action "%1"?</source>
+        <source>Do you want to delete action &quot;%1&quot;?</source>
         <translation>您要删除操作“%1”吗？</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1176"/>
-        <source>Do you want to delete dataset "%1"?</source>
+        <source>Do you want to delete dataset &quot;%1&quot;?</source>
         <translation>您想删除数据集“%1”吗？</translation>
     </message>
     <message>
@@ -2065,7 +2065,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1444"/>
         <source>New FFT Plot</source>
-        <translation>新建FFT图表</translation>
+        <translation>新建 FFT 图表</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1448"/>
@@ -2085,7 +2085,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1464"/>
         <source>New LED Indicator</source>
-        <translation>新建LED指示器</translation>
+        <translation>新建 LED 指示器</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1600"/>
@@ -2524,7 +2524,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3239"/>
         <source>GPS Map</source>
-        <translation>GPS地图</translation>
+        <translation>GPS 地图</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3240"/>
@@ -2544,7 +2544,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3243"/>
         <source>3D Plot</source>
-        <translation>3D图表</translation>
+        <translation>3D 图表</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3244"/>
@@ -2571,7 +2571,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3256"/>
         <source>New Line (\n)</source>
-        <translation>新行 (</translation>
+        <translation>新行 (\n)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3257"/>
@@ -2581,7 +2581,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3258"/>
         <source>CRLF (\r\n)</source>
-        <translation>CRLF (\r</translation>
+        <translation>CRLF (\r\n)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3262"/>
@@ -2599,7 +2599,7 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3305"/>
-        <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
+        <source>Select &apos;Save&apos; to keep your changes, &apos;Discard&apos; to lose them permanently, or &apos;Cancel&apos; to return.</source>
         <translation>选择“保存”以保留更改，“放弃”以永久丢失更改，或“取消”以返回。</translation>
     </message>
     <message>
@@ -2613,7 +2613,7 @@
     <message>
         <location filename="../../qml/Widgets/JSONDropArea.qml" line="116"/>
         <source>Drop Projects and CSV files here</source>
-        <translation>将项目和CSV文件拖放到此处</translation>
+        <translation>将项目和 CSV 文件拖放到此处</translation>
     </message>
 </context>
 <context>
@@ -2744,39 +2744,39 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="780"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="903"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="777"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="900"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>您提供的许可证密钥不属于 Serial Studio。</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="781"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="904"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="778"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="901"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>请仔细检查您是否从官方 Serial Studio 商店购买了许可证。</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="793"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="790"/>
         <source>This license key was activated on a different device.</source>
         <translation>此许可证密钥已在其他设备上激活。</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="794"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
         <source>Please deactivate it there first or contact support for help.</source>
         <translation>请先在该设备上停用或联系支持以获取帮助。</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="807"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="804"/>
         <source>This license is not currently active.</source>
         <translation>此许可证当前未激活。</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="627"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="808"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="805"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>它可能已过期或被停用（状态：%1）。</translation>
     </message>
@@ -2787,7 +2787,7 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="640"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="821"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="818"/>
         <source>No activation ID was returned.</source>
         <translation>未返回激活 ID。</translation>
     </message>
@@ -2798,8 +2798,8 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="652"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="833"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="917"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="914"/>
         <source>Please try again later.</source>
         <translation>请稍后再试。</translation>
     </message>
@@ -2818,53 +2818,53 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
         <translation type="vanished">%1 Pro</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="706"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="703"/>
         <source>Your license has been successfully activated.</source>
         <translation>您的许可证已成功激活。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="707"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="704"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>感谢您支持 Serial Studio！
 您现在可以访问所有高级功能。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="769"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="766"/>
         <source>There was an issue activating your license.</source>
         <translation>激活您的许可证时出现问题。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="820"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="817"/>
         <source>Something went wrong on the server...</source>
         <translation>服务器出现问题...</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="832"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="829"/>
         <source>Could not activate your license at this time.</source>
         <translation>目前无法激活您的许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
         <source>There was an issue deactivating your license.</source>
         <translation>无法停用您的许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="916"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="913"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>目前无法停用您的许可证。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="926"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="923"/>
         <source>Your license has been deactivated.</source>
         <translation>您的许可证已停用。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="927"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="924"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>专业功能访问已被移除。
-再次感谢您支持Serial Studio！</translation>
+再次感谢您支持 Serial Studio！</translation>
     </message>
 </context>
 <context>
@@ -2947,7 +2947,7 @@ Thank you again for supporting Serial Studio!</source>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="346"/>
         <source>MQTT Subscriber</source>
-        <translation>MQTT订阅者</translation>
+        <translation>MQTT 订阅者</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="347"/>
@@ -2991,7 +2991,7 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="438"/>
-        <source>You won't receive any messages until a topic is configured.</source>
+        <source>You won&apos;t receive any messages until a topic is configured.</source>
         <translation>在配置主题之前，您不会收到任何消息。</translation>
     </message>
     <message>
@@ -3006,13 +3006,13 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="452"/>
-        <source>The topic "%1" is not valid.</source>
+        <source>The topic &quot;%1&quot; is not valid.</source>
         <translation>主题“%1”无效。</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="677"/>
         <source>Select PEM Certificates Directory</source>
-        <translation>选择PEM证书目录</translation>
+        <translation>选择 PEM 证书目录</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="792"/>
@@ -3021,33 +3021,33 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="793"/>
-        <source>Failed to subscribe to topic "%1".</source>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
         <translation>无法订阅主题“%1”。</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>Invalid MQTT Protocol Version</source>
-        <translation>无效的MQTT协议版本</translation>
+        <translation>无效的 MQTT 协议版本</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="813"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
-        <translation>MQTT代理因不支持的协议版本拒绝连接。确保您的客户端和代理支持相同的协议版本。</translation>
+        <translation>MQTT 代理因不支持的协议版本拒绝连接。确保您的客户端和代理支持相同的协议版本。</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="819"/>
         <source>Client ID Rejected</source>
-        <translation>客户端ID被拒绝</translation>
+        <translation>客户端 ID 被拒绝</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="820"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
-        <translation>代理拒绝了客户端ID。可能格式错误、过长或已被使用。尝试使用不同的客户端ID。</translation>
+        <translation>代理拒绝了客户端 ID。可能格式错误、过长或已被使用。尝试使用不同的客户端 ID。</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="826"/>
         <source>MQTT Server Unavailable</source>
-        <translation>MQTT服务器不可用</translation>
+        <translation>MQTT 服务器不可用</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="827"/>
@@ -3073,7 +3073,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="840"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
-        <translation>由于权限不足，MQTT代理拒绝了连接。确保您的账户具有必要的访问权限。</translation>
+        <translation>由于权限不足，MQTT 代理拒绝了连接。确保您的账户具有必要的访问权限。</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="846"/>
@@ -3088,12 +3088,12 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="853"/>
         <source>MQTT Protocol Violation</source>
-        <translation>MQTT协议违规</translation>
+        <translation>MQTT 协议违规</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="854"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
-        <translation>客户端检测到MQTT协议违规并关闭了连接。请检查您的MQTT实现是否符合规范。</translation>
+        <translation>客户端检测到 MQTT 协议违规并关闭了连接。请检查您的 MQTT 实现是否符合规范。</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="860"/>
@@ -3142,7 +3142,7 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="918"/>
-        <source>The MQTT broker requires authentication using method: "%1".
+        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
 
 Please provide the necessary credentials.</source>
         <translation>MQTT 代理需要使用方法：“%1”进行认证。
@@ -3220,7 +3220,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="307"/>
         <source>Client ID</source>
-        <translation>客户端ID</translation>
+        <translation>客户端 ID</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="319"/>
@@ -3240,7 +3240,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="386"/>
         <source>MQTT Username</source>
-        <translation>MQTT用户名</translation>
+        <translation>MQTT 用户名</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="393"/>
@@ -3250,7 +3250,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="403"/>
         <source>MQTT Password</source>
-        <translation>MQTT密码</translation>
+        <translation>MQTT 密码</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="460"/>
@@ -3411,7 +3411,7 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="89"/>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
         <translation>%1 应该自动检查更新吗？您可以随时从“关于”对话框手动检查更新</translation>
     </message>
     <message>
@@ -3516,7 +3516,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="251"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
         <source>Samples</source>
         <translation>样本</translation>
     </message>
@@ -3562,7 +3562,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="575"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="581"/>
         <source>%1, %2</source>
         <translation>%1, %2</translation>
     </message>
@@ -3634,7 +3634,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="137"/>
         <source>Create a new JSON project</source>
-        <translation>创建一个新的JSON项目</translation>
+        <translation>创建一个新的 JSON 项目</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="153"/>
@@ -3644,7 +3644,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="157"/>
         <source>Open an existing JSON project</source>
-        <translation>打开一个现有的JSON项目</translation>
+        <translation>打开一个现有的 JSON 项目</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="163"/>
@@ -3784,7 +3784,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
         <source>Add a 2D plot with multiple signals</source>
-        <translation>添加具有多个信号的2D绘图</translation>
+        <translation>添加具有多个信号的 2D 绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="356"/>
@@ -3795,12 +3795,12 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="360"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="367"/>
         <source>3D Plot</source>
-        <translation>3D绘图</translation>
+        <translation>3D 绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <source>Add a 3D plot visualization</source>
-        <translation>添加3D绘图可视化</translation>
+        <translation>添加 3D 绘图可视化</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="371"/>
@@ -3828,12 +3828,12 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="393"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="400"/>
         <source>GPS Map</source>
-        <translation>GPS地图</translation>
+        <translation>GPS 地图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
         <source>Add a map widget for GPS data</source>
-        <translation>为GPS数据添加一个地图小部件</translation>
+        <translation>为 GPS 数据添加一个地图小部件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="419"/>
@@ -3972,7 +3972,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="36"/>
         <source>Preferences</source>
-        <translation>首选项</translation>
+        <translation>偏好设置</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="100"/>
@@ -4027,7 +4027,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
         <source>UI Refresh Rate (Hz)</source>
-        <translation>UI刷新率 (Hz)</translation>
+        <translation>UI 刷新率 (Hz)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="371"/>
@@ -4186,7 +4186,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="308"/>
         <source>Preferences</source>
-        <translation>首选项</translation>
+        <translation>偏好设置</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="318"/>
@@ -4331,7 +4331,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="201"/>
         <source>Open application settings and preferences</source>
-        <translation>打开应用程序设置和偏好</translation>
+        <translation>打开应用程序设置和偏好设置</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="223"/>
@@ -4371,7 +4371,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="275"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
-        <translation>查看详细文档并在DeepWiki上提问</translation>
+        <translation>查看详细文档并在 DeepWiki 上提问</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="283"/>
@@ -4397,7 +4397,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect or disconnect from device or MQTT broker</source>
-        <translation>连接或断开设备或MQTT代理</translation>
+        <translation>连接或断开设备或 MQTT 代理</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="353"/>
@@ -4415,7 +4415,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="78"/>
         <source>COM Port</source>
-        <translation>COM端口</translation>
+        <translation>COM 端口</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="106"/>
@@ -4450,25 +4450,25 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="257"/>
         <source>Send DTR Signal</source>
-        <translation>发送DTR信号</translation>
+        <translation>发送 DTR 信号</translation>
     </message>
 </context>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1011"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1111"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1030"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1130"/>
         <source>%1 (Fallback)</source>
         <translation>%1（备用）</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1093"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1193"/>
         <source>LED Panel (%1)</source>
-        <translation>LED面板（%1）</translation>
+        <translation>LED 面板（%1）</translation>
     </message>
 </context>
 <context>
@@ -4548,7 +4548,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="194"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
-        <translation>您可以开始一个功能齐全的14天试用，通过您的许可证密钥激活，或自行下载和编译GPLv3源代码。</translation>
+        <translation>您可以开始一个功能齐全的 14 天试用，通过您的许可证密钥激活，或自行下载和编译 GPLv3 源代码。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="204"/>
@@ -4560,7 +4560,7 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/Dialogs/Welcome.qml" line="212"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="390"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
-        <translation>自行构建GPLv3版本有助于社区成长，并鼓励技术贡献。</translation>
+        <translation>自行构建 GPLv3 版本有助于社区成长，并鼓励技术贡献。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="233"/>
@@ -4585,19 +4585,19 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="296"/>
         <source>Or, compile the GPLv3 source code to use it for free.</source>
-        <translation>或者，编译GPLv3源代码以免费使用。</translation>
+        <translation>或者，编译 GPLv3 源代码以免费使用。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="304"/>
-        <source>To see available subscription plans, click "Upgrade Now" below.</source>
+        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
         <translation>要查看可用的订阅计划，请点击下面的“立即升级”。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="323"/>
-        <source>Don't nag me about the trial.
-I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
+        <source>Don&apos;t nag me about the trial.
+I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
         <translation>不要提醒我试用期。
-我明白结束后，我需要购买许可证或构建GPLv3版本。</translation>
+我明白结束后，我需要购买许可证或构建 GPLv3 版本。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="352"/>
@@ -4752,14 +4752,14 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="394"/>
-        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
-        <translation>我们无法提供无限制访问，因为ArcGIS API密钥会产生实际费用。</translation>
+        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <translation>我们无法提供无限制访问，因为 ArcGIS API 密钥会产生实际费用。</translation>
     </message>
 </context>
 <context>
     <name>Widgets::Plot</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="55"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="61"/>
         <source>Samples</source>
         <translation>样本</translation>
     </message>
@@ -4767,7 +4767,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1195"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1196"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>网格间隔：%1 单位</translation>
     </message>

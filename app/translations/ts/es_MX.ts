@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="es_MX" sourcelanguage="en_US">
 <context>
@@ -44,8 +44,8 @@
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="261"/>
-        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Este software se proporciona 'tal cual' sin garantía de ningún tipo, expresa o implícita, incluidas, entre otras, las garantías de comerciabilidad o idoneidad para un propósito particular. En ningún caso el autor será responsable de ningún daño derivado del uso de este software.</translation>
+        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <translation>Este software se proporciona &apos;tal cual&apos; sin garantía de ningún tipo, expresa o implícita, incluidas, entre otras, las garantías de comerciabilidad o idoneidad para un propósito particular. En ningún caso el autor será responsable de ningún daño derivado del uso de este software.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="281"/>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="195"/>
-        <source>Sorry, this system is not supported yet. We'll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
+        <source>Sorry, this system is not supported yet. We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
         <translation>Lo sentimos, este sistema aún no es compatible. Actualizaremos Serial Studio para trabajar con este sistema operativo tan pronto como Qt lo soporte oficialmente.</translation>
     </message>
 </context>
@@ -598,8 +598,8 @@
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="219"/>
-        <source>Click "OK" to begin installing the update</source>
-        <translation>Haz clic en "OK" para comenzar a instalar la actualización</translation>
+        <source>Click &quot;OK&quot; to begin installing the update</source>
+        <translation>Haz clic en &quot;OK&quot; para comenzar a instalar la actualización</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="221"/>
@@ -613,8 +613,8 @@
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="245"/>
-        <source>Click the "Open" button to apply the update</source>
-        <translation>Haz clic en el botón "Abrir" para aplicar la actualización</translation>
+        <source>Click the &quot;Open&quot; button to apply the update</source>
+        <translation>Haz clic en el botón &quot;Abrir&quot; para aplicar la actualización</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
@@ -703,12 +703,12 @@
 <context>
     <name>FFTPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="217"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
         <source>Magnitude (dB)</source>
         <translation>Magnitud (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="218"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
         <source>Frequency (Hz)</source>
         <translation>Frecuencia (Hz)</translation>
     </message>
@@ -1271,8 +1271,8 @@
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="600"/>
-        <source>"%1" is not a valid path</source>
-        <translation>"%1" no es una ruta válida</translation>
+        <source>&quot;%1&quot; is not a valid path</source>
+        <translation>&quot;%1&quot; no es una ruta válida</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="601"/>
@@ -1480,14 +1480,14 @@
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="289"/>
-        <source>The 'parse' function is not declared or is not callable!</source>
-        <translation>¡La función 'parse' no está declarada o no es invocable!</translation>
+        <source>The &apos;parse&apos; function is not declared or is not callable!</source>
+        <translation>¡La función &apos;parse&apos; no está declarada o no es invocable!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="309"/>
         <location filename="../../src/JSON/FrameParser.cpp" line="333"/>
-        <source>No valid 'parse' function declaration found in the script!</source>
-        <translation>¡No se encontró una declaración válida de la función 'parse' en el script!</translation>
+        <source>No valid &apos;parse&apos; function declaration found in the script!</source>
+        <translation>¡No se encontró una declaración válida de la función &apos;parse&apos; en el script!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="318"/>
@@ -1496,8 +1496,8 @@
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="319"/>
-        <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
-        <translation>La función 'parse' tiene dos argumentos ('%1', '%2'), indicando el uso del formato antiguo. Por favor, actualícelo al nuevo formato, que solo toma los datos de la trama como argumento.</translation>
+        <source>The &apos;parse&apos; function has two arguments (&apos;%1&apos;, &apos;%2&apos;), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
+        <translation>La función &apos;parse&apos; tiene dos argumentos (&apos;%1&apos;, &apos;%2&apos;), indicando el uso del formato antiguo. Por favor, actualícelo al nuevo formato, que solo toma los datos de la trama como argumento.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="426"/>
@@ -2004,8 +2004,8 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1036"/>
-        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>Su proyecto usaba una función de análisis de tramas heredada con un argumento 'separator'. Se ha migrado automáticamente al nuevo formato.</translation>
+        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
+        <translation>Su proyecto usaba una función de análisis de tramas heredada con un argumento &apos;separator&apos;. Se ha migrado automáticamente al nuevo formato.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1068"/>
@@ -2019,8 +2019,8 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1097"/>
-        <source>Do you want to delete group "%1"?</source>
-        <translation>¿Desea eliminar el grupo "%1"?</translation>
+        <source>Do you want to delete group &quot;%1&quot;?</source>
+        <translation>¿Desea eliminar el grupo &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1098"/>
@@ -2031,13 +2031,13 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1138"/>
-        <source>Do you want to delete action "%1"?</source>
-        <translation>¿Desea eliminar la acción "%1"?</translation>
+        <source>Do you want to delete action &quot;%1&quot;?</source>
+        <translation>¿Desea eliminar la acción &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1176"/>
-        <source>Do you want to delete dataset "%1"?</source>
-        <translation>¿Deseas eliminar el conjunto de datos "%1"?</translation>
+        <source>Do you want to delete dataset &quot;%1&quot;?</source>
+        <translation>¿Deseas eliminar el conjunto de datos &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1228"/>
@@ -2599,8 +2599,8 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3305"/>
-        <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation>Seleccione 'Guardar' para mantener sus cambios, 'Descartar' para perderlos permanentemente, o 'Cancelar' para regresar.</translation>
+        <source>Select &apos;Save&apos; to keep your changes, &apos;Discard&apos; to lose them permanently, or &apos;Cancel&apos; to return.</source>
+        <translation>Seleccione &apos;Guardar&apos; para mantener sus cambios, &apos;Descartar&apos; para perderlos permanentemente, o &apos;Cancelar&apos; para regresar.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3307"/>
@@ -2744,39 +2744,39 @@ Los planes incluyen opciones Mensual, Anual y de Por Vida.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="780"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="903"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="777"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="900"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>La clave de licencia que proporcionaste no pertenece a Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="781"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="904"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="778"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="901"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Por favor verifica que compraste tu licencia en la tienda oficial de Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="793"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="790"/>
         <source>This license key was activated on a different device.</source>
         <translation>Esta clave de licencia fue activada en otro dispositivo.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="794"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
         <source>Please deactivate it there first or contact support for help.</source>
         <translation>Por favor desactívala allí primero o contacta al soporte para ayuda.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="807"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="804"/>
         <source>This license is not currently active.</source>
         <translation>Esta licencia no está activa actualmente.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="627"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="808"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="805"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Puede haber expirado o sido desactivada (estado: %1).</translation>
     </message>
@@ -2787,7 +2787,7 @@ Los planes incluyen opciones Mensual, Anual y de Por Vida.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="640"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="821"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="818"/>
         <source>No activation ID was returned.</source>
         <translation>No se devolvió ninguna ID de activación.</translation>
     </message>
@@ -2798,8 +2798,8 @@ Los planes incluyen opciones Mensual, Anual y de Por Vida.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="652"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="833"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="917"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="914"/>
         <source>Please try again later.</source>
         <translation>Por favor, intenta de nuevo más tarde.</translation>
     </message>
@@ -2818,49 +2818,49 @@ Los planes incluyen opciones Mensual, Anual y de Por Vida.</translation>
         <translation type="vanished">%1 Pro</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="706"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="703"/>
         <source>Your license has been successfully activated.</source>
         <translation>Tu licencia ha sido activada con éxito.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="707"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="704"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>¡Gracias por apoyar Serial Studio!
 Ahora tienes acceso a todas las funciones premium.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="769"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="766"/>
         <source>There was an issue activating your license.</source>
         <translation>Hubo un problema al activar tu licencia.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="820"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="817"/>
         <source>Something went wrong on the server...</source>
         <translation>Algo salió mal en el servidor...</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="832"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="829"/>
         <source>Could not activate your license at this time.</source>
         <translation>No se pudo activar tu licencia en este momento.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Hubo un problema al desactivar su licencia.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="916"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="913"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>No se pudo desactivar su licencia en este momento.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="926"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="923"/>
         <source>Your license has been deactivated.</source>
         <translation>Su licencia ha sido desactivada.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="927"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="924"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>El acceso a las funciones Pro ha sido removido.
@@ -2991,7 +2991,7 @@ Para desbloquear esta función, por favor active su licencia o visite la tienda.
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="438"/>
-        <source>You won't receive any messages until a topic is configured.</source>
+        <source>You won&apos;t receive any messages until a topic is configured.</source>
         <translation>No recibirá ningún mensaje hasta que se configure un tema.</translation>
     </message>
     <message>
@@ -3006,8 +3006,8 @@ Para desbloquear esta función, por favor active su licencia o visite la tienda.
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="452"/>
-        <source>The topic "%1" is not valid.</source>
-        <translation>El tema "%1" no es válido.</translation>
+        <source>The topic &quot;%1&quot; is not valid.</source>
+        <translation>El tema &quot;%1&quot; no es válido.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="677"/>
@@ -3021,8 +3021,8 @@ Para desbloquear esta función, por favor active su licencia o visite la tienda.
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="793"/>
-        <source>Failed to subscribe to topic "%1".</source>
-        <translation>No se pudo suscribir al tema "%1".</translation>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
+        <translation>No se pudo suscribir al tema &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="812"/>
@@ -3142,10 +3142,10 @@ Para desbloquear esta función, por favor active su licencia o visite la tienda.
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="918"/>
-        <source>The MQTT broker requires authentication using method: "%1".
+        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
 
 Please provide the necessary credentials.</source>
-        <translation>El broker MQTT requiere autenticación usando el método: "%1".
+        <translation>El broker MQTT requiere autenticación usando el método: &quot;%1&quot;.
 
 Por favor, proporciona las credenciales necesarias.</translation>
     </message>
@@ -3411,8 +3411,8 @@ Por favor, proporciona las credenciales necesarias.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="89"/>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation>¿Debería %1 buscar actualizaciones automáticamente? Siempre puedes buscar actualizaciones manualmente desde el diálogo "Acerca de"</translation>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <translation>¿Debería %1 buscar actualizaciones automáticamente? Siempre puedes buscar actualizaciones manualmente desde el diálogo &quot;Acerca de&quot;</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="154"/>
@@ -3516,7 +3516,7 @@ Por favor, proporciona las credenciales necesarias.</translation>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="251"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
         <source>Samples</source>
         <translation>Muestras</translation>
     </message>
@@ -3562,7 +3562,7 @@ Por favor, proporciona las credenciales necesarias.</translation>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="575"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="581"/>
         <source>%1, %2</source>
         <translation>%1, %2</translation>
     </message>
@@ -4456,17 +4456,17 @@ Por favor, proporciona las credenciales necesarias.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1011"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1111"/>
         <source>Console</source>
         <translation>Consola</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1030"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1130"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Alternativa)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1093"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1193"/>
         <source>LED Panel (%1)</source>
         <translation>Panel LED (%1)</translation>
     </message>
@@ -4589,13 +4589,13 @@ Por favor, proporciona las credenciales necesarias.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="304"/>
-        <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>Para ver los planes de suscripción disponibles, haz clic en "Actualizar ahora" abajo.</translation>
+        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
+        <translation>Para ver los planes de suscripción disponibles, haz clic en &quot;Actualizar ahora&quot; abajo.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="323"/>
-        <source>Don't nag me about the trial.
-I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
+        <source>Don&apos;t nag me about the trial.
+I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
         <translation>No me molestes sobre la prueba.
 Entiendo que cuando termine, necesitaré comprar una licencia o construir la versión GPLv3.</translation>
     </message>
@@ -4752,14 +4752,14 @@ Entiendo que cuando termine, necesitaré comprar una licencia o construir la ver
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="394"/>
-        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>No podemos ofrecer acceso sin restricciones porque la clave API de ArcGIS genera costos reales.</translation>
     </message>
 </context>
 <context>
     <name>Widgets::Plot</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="55"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="61"/>
         <source>Samples</source>
         <translation>Muestras</translation>
     </message>
@@ -4767,7 +4767,7 @@ Entiendo que cuando termine, necesitaré comprar una licencia o construir la ver
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1195"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1196"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Intervalo de cuadrícula: %1 unidad(es)</translation>
     </message>

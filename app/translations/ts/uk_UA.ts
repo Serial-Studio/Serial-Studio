@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="uk_UA" sourcelanguage="en_US">
 <context>
@@ -44,8 +44,8 @@
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="261"/>
-        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Це програмне забезпечення надається "як є" без будь-яких гарантій, явних або неявних, включаючи, але не обмежуючись, гарантіями придатності для продажу або придатності для певної мети. Автор ні за яких обставин не несе відповідальності за будь-які збитки, що виникають внаслідок використання цього програмного забезпечення.</translation>
+        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <translation>Це програмне забезпечення надається &quot;як є&quot; без будь-яких гарантій, явних або неявних, включаючи, але не обмежуючись, гарантіями придатності для продажу або придатності для певної мети. Автор ні за яких обставин не несе відповідальності за будь-які збитки, що виникають внаслідок використання цього програмного забезпечення.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="281"/>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="195"/>
-        <source>Sorry, this system is not supported yet. We'll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
+        <source>Sorry, this system is not supported yet. We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
         <translation>Вибачте, ця система поки що не підтримується. Ми оновимо Serial Studio для роботи з цією операційною системою, як тільки Qt офіційно її підтримає.</translation>
     </message>
 </context>
@@ -441,12 +441,12 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
         <source>FFT Plot</source>
-        <translation>Графік Фур'є</translation>
+        <translation>Графік Фур&apos;є</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <source>Toggle FFT plot to visualize frequency content</source>
-        <translation>Перемкнути графік Фур'є для візуалізації частотного вмісту</translation>
+        <translation>Перемкнути графік Фур&apos;є для візуалізації частотного вмісту</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
@@ -598,8 +598,8 @@
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="219"/>
-        <source>Click "OK" to begin installing the update</source>
-        <translation>Натисніть "OK", щоб почати встановлення оновлення</translation>
+        <source>Click &quot;OK&quot; to begin installing the update</source>
+        <translation>Натисніть &quot;OK&quot;, щоб почати встановлення оновлення</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="221"/>
@@ -609,12 +609,12 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="225"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application</source>
-        <translation>Щоб встановити оновлення, можливо, потрібно вийти з програми. Це обов'язкове оновлення, вихід зараз закриє програму</translation>
+        <translation>Щоб встановити оновлення, можливо, потрібно вийти з програми. Це обов&apos;язкове оновлення, вихід зараз закриє програму</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="245"/>
-        <source>Click the "Open" button to apply the update</source>
-        <translation>Натисніть кнопку "Відкрити", щоб застосувати оновлення</translation>
+        <source>Click the &quot;Open&quot; button to apply the update</source>
+        <translation>Натисніть кнопку &quot;Відкрити&quot;, щоб застосувати оновлення</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
@@ -629,7 +629,7 @@
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="267"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
-        <translation>Ви впевнені, що хочете скасувати завантаження? Це обов'язкове оновлення, вихід зараз закриє програму</translation>
+        <translation>Ви впевнені, що хочете скасувати завантаження? Це обов&apos;язкове оновлення, вихід зараз закриє програму</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="327"/>
@@ -703,12 +703,12 @@
 <context>
     <name>FFTPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="217"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
         <source>Magnitude (dB)</source>
         <translation>Амплітуда (дБ)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="218"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
         <source>Frequency (Hz)</source>
         <translation>Частота (Гц)</translation>
     </message>
@@ -1271,8 +1271,8 @@
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="600"/>
-        <source>"%1" is not a valid path</source>
-        <translation>"%1" не є дійсним шляхом</translation>
+        <source>&quot;%1&quot; is not a valid path</source>
+        <translation>&quot;%1&quot; не є дійсним шляхом</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="601"/>
@@ -1480,14 +1480,14 @@
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="289"/>
-        <source>The 'parse' function is not declared or is not callable!</source>
-        <translation>Функція 'parse' не оголошена або не викликається!</translation>
+        <source>The &apos;parse&apos; function is not declared or is not callable!</source>
+        <translation>Функція &apos;parse&apos; не оголошена або не викликається!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="309"/>
         <location filename="../../src/JSON/FrameParser.cpp" line="333"/>
-        <source>No valid 'parse' function declaration found in the script!</source>
-        <translation>Не знайдено дійсного оголошення функції 'parse' у скрипті!</translation>
+        <source>No valid &apos;parse&apos; function declaration found in the script!</source>
+        <translation>Не знайдено дійсного оголошення функції &apos;parse&apos; у скрипті!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="318"/>
@@ -1496,8 +1496,8 @@
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="319"/>
-        <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
-        <translation>Функція 'parse' має два аргументи ('%1', '%2'), що вказує на використання старого формату. Будь ласка, оновіть її до нового формату, який приймає лише дані кадру як аргумент.</translation>
+        <source>The &apos;parse&apos; function has two arguments (&apos;%1&apos;, &apos;%2&apos;), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
+        <translation>Функція &apos;parse&apos; має два аргументи (&apos;%1&apos;, &apos;%2&apos;), що вказує на використання старого формату. Будь ласка, оновіть її до нового формату, який приймає лише дані кадру як аргумент.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="426"/>
@@ -1652,7 +1652,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2452"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
-        <translation>Виберіть, як ця група наборів даних має бути візуалізована (необов'язково)</translation>
+        <translation>Виберіть, як ця група наборів даних має бути візуалізована (необов&apos;язково)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2514"/>
@@ -1662,7 +1662,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2517"/>
         <source>Name or description of this action</source>
-        <translation>Ім'я або опис цієї дії</translation>
+        <translation>Ім&apos;я або опис цієї дії</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2528"/>
@@ -1772,7 +1772,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2778"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
-        <translation>Одиниця вимірювання, така як вольти або ампери (необов'язково)</translation>
+        <translation>Одиниця вимірювання, така як вольти або ампери (необов&apos;язково)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2789"/>
@@ -1792,7 +1792,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2863"/>
         <source>Minimum Plot Value (optional)</source>
-        <translation>Мінімальне значення графіка (необов'язково)</translation>
+        <translation>Мінімальне значення графіка (необов&apos;язково)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2864"/>
@@ -1802,7 +1802,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2876"/>
         <source>Maximum Plot Value (optional)</source>
-        <translation>Максимальне значення графіка (необов'язково)</translation>
+        <translation>Максимальне значення графіка (необов&apos;язково)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2877"/>
@@ -1832,7 +1832,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2934"/>
         <source>FFT Sampling Rate (Hz, required)</source>
-        <translation>Частота дискретизації FFT (Гц, обов'язково)</translation>
+        <translation>Частота дискретизації FFT (Гц, обов&apos;язково)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2936"/>
@@ -1911,7 +1911,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3033"/>
         <source>Minimum Display Value (required)</source>
-        <translation>Мінімальне значення відображення (обов'язково)</translation>
+        <translation>Мінімальне значення відображення (обов&apos;язково)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3034"/>
@@ -1921,7 +1921,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3046"/>
         <source>Maximum Display Value (required)</source>
-        <translation>Максимальне значення відображення (обов'язково)</translation>
+        <translation>Максимальне значення відображення (обов&apos;язково)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3047"/>
@@ -1930,7 +1930,7 @@
     </message>
     <message>
         <source>Alarm: Low Threshold (optional)</source>
-        <translation type="vanished">Сигнал тривоги: Низький поріг (необов'язково)</translation>
+        <translation type="vanished">Сигнал тривоги: Низький поріг (необов&apos;язково)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3087"/>
@@ -1939,7 +1939,7 @@
     </message>
     <message>
         <source>Alarm: High Threshold (optional)</source>
-        <translation type="vanished">Сигнал тривоги: Високий поріг (необов'язково)</translation>
+        <translation type="vanished">Сигнал тривоги: Високий поріг (необов&apos;язково)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3101"/>
@@ -1959,7 +1959,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3138"/>
         <source>LED On Threshold (required)</source>
-        <translation>Поріг увімкнення світлодіода (обов'язково)</translation>
+        <translation>Поріг увімкнення світлодіода (обов&apos;язково)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3140"/>
@@ -2004,8 +2004,8 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1036"/>
-        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>Ваш проєкт використовував застарілу функцію парсера кадрів з аргументом 'separator'. Вона була автоматично мігрувана до нового формату.</translation>
+        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
+        <translation>Ваш проєкт використовував застарілу функцію парсера кадрів з аргументом &apos;separator&apos;. Вона була автоматично мігрувана до нового формату.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1068"/>
@@ -2019,8 +2019,8 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1097"/>
-        <source>Do you want to delete group "%1"?</source>
-        <translation>Ви хочете видалити групу "%1"?</translation>
+        <source>Do you want to delete group &quot;%1&quot;?</source>
+        <translation>Ви хочете видалити групу &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1098"/>
@@ -2031,13 +2031,13 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1138"/>
-        <source>Do you want to delete action "%1"?</source>
-        <translation>Ви хочете видалити дію "%1"?</translation>
+        <source>Do you want to delete action &quot;%1&quot;?</source>
+        <translation>Ви хочете видалити дію &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1176"/>
-        <source>Do you want to delete dataset "%1"?</source>
-        <translation>Ви хочете видалити набір даних "%1"?</translation>
+        <source>Do you want to delete dataset &quot;%1&quot;?</source>
+        <translation>Ви хочете видалити набір даних &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1228"/>
@@ -2229,7 +2229,7 @@
     </message>
     <message>
         <source>Group display widget (optional)</source>
-        <translation type="vanished">Віджет відображення групи (необов'язково)</translation>
+        <translation type="vanished">Віджет відображення групи (необов&apos;язково)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2516"/>
@@ -2349,7 +2349,7 @@
     </message>
     <message>
         <source>Unit of measurement (optional)</source>
-        <translation type="vanished">Одиниця вимірювання (необов'язково)</translation>
+        <translation type="vanished">Одиниця вимірювання (необов&apos;язково)</translation>
     </message>
     <message>
         <source>Overview</source>
@@ -2361,7 +2361,7 @@
     </message>
     <message>
         <source>Display widget (optional)</source>
-        <translation type="vanished">Відображення віджета (необов'язково)</translation>
+        <translation type="vanished">Відображення віджета (необов&apos;язково)</translation>
     </message>
     <message>
         <source>Oscilloscope Plot</source>
@@ -2374,7 +2374,7 @@
     </message>
     <message>
         <source>FFT Plot</source>
-        <translation type="vanished">Графік Фур'є</translation>
+        <translation type="vanished">Графік Фур&apos;є</translation>
     </message>
     <message>
         <source>Plot frequency-domain data</source>
@@ -2404,7 +2404,7 @@
     </message>
     <message>
         <source>Required for range widgets, optional for plots</source>
-        <translation type="vanished">Необхідно для віджетів діапазону, необов'язково для графіків</translation>
+        <translation type="vanished">Необхідно для віджетів діапазону, необов&apos;язково для графіків</translation>
     </message>
     <message>
         <source>Maximum Value</source>
@@ -2599,8 +2599,8 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3305"/>
-        <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation>Виберіть "Зберегти", щоб зберегти зміни, "Відхилити", щоб втратити їх назавжди, або "Скасувати", щоб повернутися.</translation>
+        <source>Select &apos;Save&apos; to keep your changes, &apos;Discard&apos; to lose them permanently, or &apos;Cancel&apos; to return.</source>
+        <translation>Виберіть &quot;Зберегти&quot;, щоб зберегти зміни, &quot;Відхилити&quot;, щоб втратити їх назавжди, або &quot;Скасувати&quot;, щоб повернутися.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3307"/>
@@ -2744,39 +2744,39 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="780"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="903"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="777"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="900"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>Наданий вами ліцензійний ключ не належить Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="781"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="904"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="778"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="901"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Будь ласка, перевірте, що ви придбали ліцензію в офіційному магазині Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="793"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="790"/>
         <source>This license key was activated on a different device.</source>
         <translation>Цей ліцензійний ключ був активований на іншому пристрої.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="794"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
         <source>Please deactivate it there first or contact support for help.</source>
         <translation>Будь ласка, спочатку деактивуйте його там або зверніться за допомогою до підтримки.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="807"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="804"/>
         <source>This license is not currently active.</source>
         <translation>Ця ліцензія наразі не активна.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="627"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="808"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="805"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Вона могла закінчитися або бути деактивованою (статус: %1).</translation>
     </message>
@@ -2787,7 +2787,7 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="640"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="821"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="818"/>
         <source>No activation ID was returned.</source>
         <translation>Жоден ідентифікатор активації не було повернуто.</translation>
     </message>
@@ -2798,8 +2798,8 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="652"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="833"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="917"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="914"/>
         <source>Please try again later.</source>
         <translation>Будь ласка, спробуйте пізніше.</translation>
     </message>
@@ -2818,49 +2818,49 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
         <translation type="vanished">%1 Pro</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="706"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="703"/>
         <source>Your license has been successfully activated.</source>
         <translation>Ваша ліцензія була успішно активована.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="707"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="704"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Дякуємо за підтримку Serial Studio!
 Тепер у вас є доступ до всіх преміум-функцій.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="769"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="766"/>
         <source>There was an issue activating your license.</source>
         <translation>Виникла проблема з активацією вашої ліцензії.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="820"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="817"/>
         <source>Something went wrong on the server...</source>
         <translation>Щось пішло не так на сервері...</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="832"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="829"/>
         <source>Could not activate your license at this time.</source>
         <translation>Наразі не вдалося активувати вашу ліцензію.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Виникла проблема з деактивацією вашої ліцензії.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="916"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="913"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Не вдалося деактивувати вашу ліцензію в цей час.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="926"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="923"/>
         <source>Your license has been deactivated.</source>
         <translation>Ваша ліцензія була деактивована.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="927"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="924"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Доступ до функцій Pro було видалено.
@@ -2991,7 +2991,7 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="438"/>
-        <source>You won't receive any messages until a topic is configured.</source>
+        <source>You won&apos;t receive any messages until a topic is configured.</source>
         <translation>Ви не отримаєте жодних повідомлень, доки не буде налаштована тема.</translation>
     </message>
     <message>
@@ -3006,8 +3006,8 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="452"/>
-        <source>The topic "%1" is not valid.</source>
-        <translation>Тема "%1" є недійсною.</translation>
+        <source>The topic &quot;%1&quot; is not valid.</source>
+        <translation>Тема &quot;%1&quot; є недійсною.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="677"/>
@@ -3021,8 +3021,8 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="793"/>
-        <source>Failed to subscribe to topic "%1".</source>
-        <translation>Не вдалося підписатися на тему "%1".</translation>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
+        <translation>Не вдалося підписатися на тему &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="812"/>
@@ -3032,7 +3032,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="813"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
-        <translation>Брокер MQTT відхилив з'єднання через непідтримувану версію протоколу. Переконайтеся, що ваш клієнт і брокер підтримують ту саму версію протоколу.</translation>
+        <translation>Брокер MQTT відхилив з&apos;єднання через непідтримувану версію протоколу. Переконайтеся, що ваш клієнт і брокер підтримують ту саму версію протоколу.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="819"/>
@@ -3052,7 +3052,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="827"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
-        <translation>Мережеве з'єднання встановлено, але брокер наразі недоступний. Перевірте статус брокера і спробуйте пізніше.</translation>
+        <translation>Мережеве з&apos;єднання встановлено, але брокер наразі недоступний. Перевірте статус брокера і спробуйте пізніше.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="833"/>
@@ -3063,7 +3063,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="834"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
-        <translation>Вказане ім'я користувача або пароль є неправильним або пошкодженим. Перевірте свої облікові дані та спробуйте знову.</translation>
+        <translation>Вказане ім&apos;я користувача або пароль є неправильним або пошкодженим. Перевірте свої облікові дані та спробуйте знову.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="839"/>
@@ -3083,7 +3083,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="847"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
-        <translation>Виникла проблема на рівні мережі або транспорту, що спричинила несподіване розірвання з'єднання. Перевірте своє мережеве підключення та налаштування брокера.</translation>
+        <translation>Виникла проблема на рівні мережі або транспорту, що спричинила несподіване розірвання з&apos;єднання. Перевірте своє мережеве підключення та налаштування брокера.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="853"/>
@@ -3093,7 +3093,7 @@ To unlock this feature, please activate your license or visit the store.</source
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="854"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
-        <translation>Клієнт виявив порушення протоколу MQTT і закрив з'єднання. Перевірте вашу реалізацію MQTT на відповідність.</translation>
+        <translation>Клієнт виявив порушення протоколу MQTT і закрив з&apos;єднання. Перевірте вашу реалізацію MQTT на відповідність.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="860"/>
@@ -3142,22 +3142,22 @@ To unlock this feature, please activate your license or visit the store.</source
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="918"/>
-        <source>The MQTT broker requires authentication using method: "%1".
+        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
 
 Please provide the necessary credentials.</source>
-        <translation>Брокер MQTT вимагає автентифікацію за допомогою методу: "%1".
+        <translation>Брокер MQTT вимагає автентифікацію за допомогою методу: &quot;%1&quot;.
 
 Будь ласка, надайте необхідні облікові дані.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="926"/>
         <source>Enter MQTT Username</source>
-        <translation>Введіть ім'я користувача MQTT</translation>
+        <translation>Введіть ім&apos;я користувача MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="927"/>
         <source>Username:</source>
-        <translation>Ім'я користувача:</translation>
+        <translation>Ім&apos;я користувача:</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="933"/>
@@ -3235,12 +3235,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="381"/>
         <source>Username</source>
-        <translation>Ім'я користувача</translation>
+        <translation>Ім&apos;я користувача</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="386"/>
         <source>MQTT Username</source>
-        <translation>Ім'я користувача MQTT</translation>
+        <translation>Ім&apos;я користувача MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="393"/>
@@ -3411,8 +3411,8 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="89"/>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation>Чи повинен %1 автоматично перевіряти оновлення? Ви завжди можете перевірити оновлення вручну з діалогу "Про програму"</translation>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <translation>Чи повинен %1 автоматично перевіряти оновлення? Ви завжди можете перевірити оновлення вручну з діалогу &quot;Про програму&quot;</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="154"/>
@@ -3516,7 +3516,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="251"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
         <source>Samples</source>
         <translation>Зразки</translation>
     </message>
@@ -3562,7 +3562,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="575"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="581"/>
         <source>%1, %2</source>
         <translation>%1, %2</translation>
     </message>
@@ -3582,7 +3582,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="233"/>
         <source>Invalid pending connection</source>
-        <translation>Неприпустиме очікуване з'єднання</translation>
+        <translation>Неприпустиме очікуване з&apos;єднання</translation>
     </message>
 </context>
 <context>
@@ -3664,7 +3664,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="178"/>
         <source>Save the current project under a new name</source>
-        <translation>Зберегти поточний проект під новим ім'ям</translation>
+        <translation>Зберегти поточний проект під новим ім&apos;ям</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="199"/>
@@ -3704,7 +3704,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
         <source>Add a Fast Fourier Transform plot</source>
-        <translation>Додати графік швидкого перетворення Фур'є</translation>
+        <translation>Додати графік швидкого перетворення Фур&apos;є</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="261"/>
@@ -4456,17 +4456,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1011"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1111"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1030"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1130"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Резервний)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1093"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1193"/>
         <source>LED Panel (%1)</source>
         <translation>Панель LED (%1)</translation>
     </message>
@@ -4515,7 +4515,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="441"/>
         <source>Would you like to download the update now? This is a mandatory update, exiting now will close the application</source>
-        <translation>Бажаєте завантажити оновлення зараз? Це обов'язкове оновлення, вихід зараз закриє програму</translation>
+        <translation>Бажаєте завантажити оновлення зараз? Це обов&apos;язкове оновлення, вихід зараз закриє програму</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="447"/>
@@ -4589,13 +4589,13 @@ Please provide the necessary credentials.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="304"/>
-        <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>Щоб переглянути доступні плани підписки, натисніть "Оновити зараз" нижче.</translation>
+        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
+        <translation>Щоб переглянути доступні плани підписки, натисніть &quot;Оновити зараз&quot; нижче.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="323"/>
-        <source>Don't nag me about the trial.
-I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
+        <source>Don&apos;t nag me about the trial.
+I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
         <translation>Не нагадуйте мені про пробну версію.
 Я розумію, що після її завершення мені потрібно буде придбати ліцензію або зібрати версію GPLv3.</translation>
     </message>
@@ -4752,14 +4752,14 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="394"/>
-        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>Ми не можемо запропонувати необмежений доступ, оскільки ключ API ArcGIS має реальні витрати.</translation>
     </message>
 </context>
 <context>
     <name>Widgets::Plot</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="55"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="61"/>
         <source>Samples</source>
         <translation>Зразки</translation>
     </message>
@@ -4767,7 +4767,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1195"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1196"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Інтервал сітки: %1 одиниця(і)</translation>
     </message>

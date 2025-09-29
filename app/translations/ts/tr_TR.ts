@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="tr_TR" sourcelanguage="en_US">
 <context>
@@ -28,9 +28,9 @@
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
-        <translation>%1 özgür bir yazılımdır: GNU Genel Kamu Lisansı'nın Free Software Foundation tarafından yayımlanan ya 3. sürümü ya da (tercihinize bağlı olarak) daha sonraki bir sürümü altında yeniden dağıtabilir ve/veya değiştirebilirsiniz.
+        <translation>%1 özgür bir yazılımdır: GNU Genel Kamu Lisansı&apos;nın Free Software Foundation tarafından yayımlanan ya 3. sürümü ya da (tercihinize bağlı olarak) daha sonraki bir sürümü altında yeniden dağıtabilir ve/veya değiştirebilirsiniz.
 
-%1, yararlı olacağı umuduyla dağıtılmaktadır, ancak TİCARİ ELVERİŞLİLİK veya BELİRLİ BİR AMACA UYGUNLUK garantisi olmaksızın. Daha fazla bilgi için GNU Genel Kamu Lisansı'na bakın.</translation>
+%1, yararlı olacağı umuduyla dağıtılmaktadır, ancak TİCARİ ELVERİŞLİLİK veya BELİRLİ BİR AMACA UYGUNLUK garantisi olmaksızın. Daha fazla bilgi için GNU Genel Kamu Lisansı&apos;na bakın.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="233"/>
@@ -44,8 +44,8 @@
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="261"/>
-        <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Bu yazılım, açık veya zımni herhangi bir garanti olmaksızın 'olduğu gibi' sağlanmaktadır, bunlarla sınırlı olmamak üzere, ticari elverişlilik veya belirli bir amaca uygunluk garantileri dahil. Yazar, bu yazılımın kullanımından kaynaklanan herhangi bir zarardan sorumlu tutulamaz.</translation>
+        <source>This software is provided &apos;as is&apos; without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
+        <translation>Bu yazılım, açık veya zımni herhangi bir garanti olmaksızın &apos;olduğu gibi&apos; sağlanmaktadır, bunlarla sınırlı olmamak üzere, ticari elverişlilik veya belirli bir amaca uygunluk garantileri dahil. Yazar, bu yazılımın kullanımından kaynaklanan herhangi bir zarardan sorumlu tutulamaz.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="281"/>
@@ -203,8 +203,8 @@
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="195"/>
-        <source>Sorry, this system is not supported yet. We'll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
-        <translation>Üzgünüz, bu sistem henüz desteklenmiyor. Qt resmi olarak desteklediğinde, Serial Studio'yu bu işletim sistemiyle çalışacak şekilde güncelleyeceğiz.</translation>
+        <source>Sorry, this system is not supported yet. We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
+        <translation>Üzgünüz, bu sistem henüz desteklenmiyor. Qt resmi olarak desteklediğinde, Serial Studio&apos;yu bu işletim sistemiyle çalışacak şekilde güncelleyeceğiz.</translation>
     </message>
 </context>
 <context>
@@ -348,7 +348,7 @@
     </message>
     <message>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
-        <translation type="vanished">Yedek widget'lar aktif. Tam işlevsellik için lisans satın alın.</translation>
+        <translation type="vanished">Yedek widget&apos;lar aktif. Tam işlevsellik için lisans satın alın.</translation>
     </message>
 </context>
 <context>
@@ -400,7 +400,7 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="85"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
-        <translation>Yedek widget'lar aktif. Tam işlevsellik için lisans satın alın.</translation>
+        <translation>Yedek widget&apos;lar aktif. Tam işlevsellik için lisans satın alın.</translation>
     </message>
 </context>
 <context>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>Yedek widget'lar kullanılacak. Tüm işlevselliği açmak için bir lisans satın alın.</translation>
+        <translation>Yedek widget&apos;lar kullanılacak. Tüm işlevselliği açmak için bir lisans satın alın.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
@@ -466,7 +466,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <source>Toggle gauge widget for analog-style display</source>
-        <translation>Analog tarzı gösterim için gösterge widget'ını değiştir</translation>
+        <translation>Analog tarzı gösterim için gösterge widget&apos;ını değiştir</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
@@ -476,7 +476,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <source>Toggle compass widget for directional data</source>
-        <translation>Yön verileri için pusula widget'ını değiştir</translation>
+        <translation>Yön verileri için pusula widget&apos;ını değiştir</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
@@ -514,12 +514,12 @@
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
         <source>Support Serial Studio</source>
-        <translation>Serial Studio'yu Destekle</translation>
+        <translation>Serial Studio&apos;yu Destekle</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="139"/>
         <source>Support the development of %1!</source>
-        <translation>%1'in gelişimini destekleyin!</translation>
+        <translation>%1&apos;in gelişimini destekleyin!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="150"/>
@@ -544,7 +544,7 @@
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="211"/>
         <source>Get Serial Studio Pro</source>
-        <translation>Serial Studio Pro'yu Al</translation>
+        <translation>Serial Studio Pro&apos;yu Al</translation>
     </message>
 </context>
 <context>
@@ -598,8 +598,8 @@
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="219"/>
-        <source>Click "OK" to begin installing the update</source>
-        <translation>Güncellemeyi yüklemek için "Tamam"a tıklayın</translation>
+        <source>Click &quot;OK&quot; to begin installing the update</source>
+        <translation>Güncellemeyi yüklemek için &quot;Tamam&quot;a tıklayın</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="221"/>
@@ -613,8 +613,8 @@
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="245"/>
-        <source>Click the "Open" button to apply the update</source>
-        <translation>Güncellemeyi uygulamak için "Aç" düğmesine tıklayın</translation>
+        <source>Click the &quot;Open&quot; button to apply the update</source>
+        <translation>Güncellemeyi uygulamak için &quot;Aç&quot; düğmesine tıklayın</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
@@ -703,12 +703,12 @@
 <context>
     <name>FFTPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="217"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
         <source>Magnitude (dB)</source>
         <translation>Büyüklük (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="218"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
         <source>Frequency (Hz)</source>
         <translation>Frekans (Hz)</translation>
     </message>
@@ -892,7 +892,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>Yedek widget'lar kullanılacak. Tam işlevselliği açmak için lisans satın alın.</translation>
+        <translation>Yedek widget&apos;lar kullanılacak. Tam işlevselliği açmak için lisans satın alın.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="116"/>
@@ -1271,8 +1271,8 @@
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="600"/>
-        <source>"%1" is not a valid path</source>
-        <translation>"%1" geçerli bir yol değil</translation>
+        <source>&quot;%1&quot; is not a valid path</source>
+        <translation>&quot;%1&quot; geçerli bir yol değil</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="601"/>
@@ -1383,7 +1383,7 @@
     <message>
         <location filename="../../src/IO/Manager.cpp" line="363"/>
         <source>To continue using Serial Studio, please activate your license.</source>
-        <translation>Serial Studio'yu kullanmaya devam etmek için lütfen lisansınızı etkinleştirin.</translation>
+        <translation>Serial Studio&apos;yu kullanmaya devam etmek için lütfen lisansınızı etkinleştirin.</translation>
     </message>
 </context>
 <context>
@@ -1480,14 +1480,14 @@
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="289"/>
-        <source>The 'parse' function is not declared or is not callable!</source>
-        <translation>'parse' fonksiyonu tanımlanmamış veya çağrılamıyor!</translation>
+        <source>The &apos;parse&apos; function is not declared or is not callable!</source>
+        <translation>&apos;parse&apos; fonksiyonu tanımlanmamış veya çağrılamıyor!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="309"/>
         <location filename="../../src/JSON/FrameParser.cpp" line="333"/>
-        <source>No valid 'parse' function declaration found in the script!</source>
-        <translation>Scripte geçerli bir 'parse' fonksiyonu tanımı bulunamadı!</translation>
+        <source>No valid &apos;parse&apos; function declaration found in the script!</source>
+        <translation>Scripte geçerli bir &apos;parse&apos; fonksiyonu tanımı bulunamadı!</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="318"/>
@@ -1496,8 +1496,8 @@
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="319"/>
-        <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
-        <translation>'parse' fonksiyonu iki argüman ('%1', '%2') alıyor, bu da eski formatın kullanıldığını gösteriyor. Lütfen yalnızca çerçeve verisini argüman olarak alan yeni formata güncelleyin.</translation>
+        <source>The &apos;parse&apos; function has two arguments (&apos;%1&apos;, &apos;%2&apos;), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
+        <translation>&apos;parse&apos; fonksiyonu iki argüman (&apos;%1&apos;, &apos;%2&apos;) alıyor, bu da eski formatın kullanıldığını gösteriyor. Lütfen yalnızca çerçeve verisini argüman olarak alan yeni formata güncelleyin.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="426"/>
@@ -1782,7 +1782,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2819"/>
         <source>Enable Plot Widget</source>
-        <translation>Grafik Widget'ını Etkinleştir</translation>
+        <translation>Grafik Widget&apos;ını Etkinleştir</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2851"/>
@@ -2004,13 +2004,13 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1036"/>
-        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>Projeniz, 'separator' argümanıyla eski bir çerçeve ayrıştırıcı fonksiyonu kullanıyordu. Yeni formata otomatik olarak geçirildi.</translation>
+        <source>Your project used a legacy frame parser function with a &apos;separator&apos; argument. It has been automatically migrated to the new format.</source>
+        <translation>Projeniz, &apos;separator&apos; argümanıyla eski bir çerçeve ayrıştırıcı fonksiyonu kullanıyordu. Yeni formata otomatik olarak geçirildi.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1068"/>
         <source>Switch Serial Studio to Project Mode?</source>
-        <translation>Serial Studio'yu Proje Moduna Geçirmek İster misiniz?</translation>
+        <translation>Serial Studio&apos;yu Proje Moduna Geçirmek İster misiniz?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1069"/>
@@ -2019,8 +2019,8 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1097"/>
-        <source>Do you want to delete group "%1"?</source>
-        <translation>"%1" grubunu silmek istiyor musunuz?</translation>
+        <source>Do you want to delete group &quot;%1&quot;?</source>
+        <translation>&quot;%1&quot; grubunu silmek istiyor musunuz?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1098"/>
@@ -2031,13 +2031,13 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1138"/>
-        <source>Do you want to delete action "%1"?</source>
-        <translation>"%1" eylemini silmek istiyor musunuz?</translation>
+        <source>Do you want to delete action &quot;%1&quot;?</source>
+        <translation>&quot;%1&quot; eylemini silmek istiyor musunuz?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1176"/>
-        <source>Do you want to delete dataset "%1"?</source>
-        <translation>Veri kümesini silmek istiyor musunuz "%1"?</translation>
+        <source>Do you want to delete dataset &quot;%1&quot;?</source>
+        <translation>Veri kümesini silmek istiyor musunuz &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1228"/>
@@ -2095,7 +2095,7 @@
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1759"/>
         <source>Are you sure you want to change the group-level widget?</source>
-        <translation>Grup düzeyindeki widget'ı değiştirmek istediğinizden emin misiniz?</translation>
+        <translation>Grup düzeyindeki widget&apos;ı değiştirmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1760"/>
@@ -2404,7 +2404,7 @@
     </message>
     <message>
         <source>Required for range widgets, optional for plots</source>
-        <translation type="vanished">Aralık widget'ları için gerekli, grafikler için isteğe bağlı</translation>
+        <translation type="vanished">Aralık widget&apos;ları için gerekli, grafikler için isteğe bağlı</translation>
     </message>
     <message>
         <source>Maximum Value</source>
@@ -2420,7 +2420,7 @@
     </message>
     <message>
         <source>Triggers alarm in bar widgets and LED panels</source>
-        <translation type="vanished">Çubuk widget'larında ve LED panellerinde alarmı tetikler</translation>
+        <translation type="vanished">Çubuk widget&apos;larında ve LED panellerinde alarmı tetikler</translation>
     </message>
     <message>
         <source>Alarm High Value</source>
@@ -2599,8 +2599,8 @@
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3305"/>
-        <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation>Değişikliklerinizi korumak için 'Kaydet'i, kalıcı olarak kaybetmek için 'Vazgeç'i veya geri dönmek için 'İptal'i seçin.</translation>
+        <source>Select &apos;Save&apos; to keep your changes, &apos;Discard&apos; to lose them permanently, or &apos;Cancel&apos; to return.</source>
+        <translation>Değişikliklerinizi korumak için &apos;Kaydet&apos;i, kalıcı olarak kaybetmek için &apos;Vazgeç&apos;i veya geri dönmek için &apos;İptal&apos;i seçin.</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="3307"/>
@@ -2631,7 +2631,7 @@
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="241"/>
         <source>Activate Serial Studio Pro</source>
-        <translation>Serial Studio Pro'yu Etkinleştir</translation>
+        <translation>Serial Studio Pro&apos;yu Etkinleştir</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="251"/>
@@ -2744,39 +2744,39 @@ Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="780"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="903"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="777"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="900"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
-        <translation>Sağladığınız lisans anahtarı Serial Studio'ya ait değil.</translation>
+        <translation>Sağladığınız lisans anahtarı Serial Studio&apos;ya ait değil.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="781"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="904"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="778"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="901"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Lütfen lisansınızı resmi Serial Studio mağazasından satın aldığınızdan emin olun.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="793"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="790"/>
         <source>This license key was activated on a different device.</source>
         <translation>Bu lisans anahtarı farklı bir cihazda etkinleştirildi.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="794"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
         <source>Please deactivate it there first or contact support for help.</source>
         <translation>Lütfen önce orada devre dışı bırakın veya yardım için destekle iletişime geçin.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="807"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="804"/>
         <source>This license is not currently active.</source>
         <translation>Bu lisans şu anda etkin değil.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="627"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="808"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="805"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Süresi dolmuş veya devre dışı bırakılmış olabilir (durum: %1).</translation>
     </message>
@@ -2787,7 +2787,7 @@ Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="640"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="821"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="818"/>
         <source>No activation ID was returned.</source>
         <translation>Aktivasyon kimliği döndürülmedi.</translation>
     </message>
@@ -2798,8 +2798,8 @@ Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="652"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="833"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="917"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="914"/>
         <source>Please try again later.</source>
         <translation>Lütfen daha sonra tekrar deneyin.</translation>
     </message>
@@ -2818,53 +2818,53 @@ Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
         <translation type="vanished">%1 Pro</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="706"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="703"/>
         <source>Your license has been successfully activated.</source>
         <translation>Lisansınız başarıyla etkinleştirildi.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="707"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="704"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
-        <translation>Serial Studio'yu desteklediğiniz için teşekkür ederiz!
+        <translation>Serial Studio&apos;yu desteklediğiniz için teşekkür ederiz!
 Artık tüm premium özelliklere erişiminiz var.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="769"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="766"/>
         <source>There was an issue activating your license.</source>
         <translation>Lisansınızı etkinleştirirken bir sorun oluştu.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="820"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="817"/>
         <source>Something went wrong on the server...</source>
         <translation>Sunucuda bir şeyler ters gitti...</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="832"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="829"/>
         <source>Could not activate your license at this time.</source>
         <translation>Lisansınız şu anda etkinleştirilemedi.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Lisansınızı devre dışı bırakırken bir sorun oluştu.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="916"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="913"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Şu anda lisansınızı devre dışı bırakamadık.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="926"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="923"/>
         <source>Your license has been deactivated.</source>
         <translation>Lisansınız devre dışı bırakıldı.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="927"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="924"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Pro özelliklere erişim kaldırıldı.
-Serial Studio'yu desteklediğiniz için tekrar teşekkürler!</translation>
+Serial Studio&apos;yu desteklediğiniz için tekrar teşekkürler!</translation>
     </message>
 </context>
 <context>
@@ -2991,7 +2991,7 @@ Bu özelliği açmak için lütfen lisansınızı etkinleştirin veya mağazayı
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="438"/>
-        <source>You won't receive any messages until a topic is configured.</source>
+        <source>You won&apos;t receive any messages until a topic is configured.</source>
         <translation>Bir konu yapılandırılmadıkça herhangi bir mesaj almayacaksınız.</translation>
     </message>
     <message>
@@ -3006,8 +3006,8 @@ Bu özelliği açmak için lütfen lisansınızı etkinleştirin veya mağazayı
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="452"/>
-        <source>The topic "%1" is not valid.</source>
-        <translation>Konu "%1" geçerli değil.</translation>
+        <source>The topic &quot;%1&quot; is not valid.</source>
+        <translation>Konu &quot;%1&quot; geçerli değil.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="677"/>
@@ -3021,8 +3021,8 @@ Bu özelliği açmak için lütfen lisansınızı etkinleştirin veya mağazayı
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="793"/>
-        <source>Failed to subscribe to topic "%1".</source>
-        <translation>"%1" konusuna abone olunamadı.</translation>
+        <source>Failed to subscribe to topic &quot;%1&quot;.</source>
+        <translation>&quot;%1&quot; konusuna abone olunamadı.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="812"/>
@@ -3142,10 +3142,10 @@ Bu özelliği açmak için lütfen lisansınızı etkinleştirin veya mağazayı
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="918"/>
-        <source>The MQTT broker requires authentication using method: "%1".
+        <source>The MQTT broker requires authentication using method: &quot;%1&quot;.
 
 Please provide the necessary credentials.</source>
-        <translation>MQTT broker, "%1" yöntemiyle kimlik doğrulama gerektiriyor.
+        <translation>MQTT broker, &quot;%1&quot; yöntemiyle kimlik doğrulama gerektiriyor.
 
 Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     </message>
@@ -3305,7 +3305,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Enable SSL</source>
-        <translation>SSL'i Etkinleştir</translation>
+        <translation>SSL&apos;i Etkinleştir</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="592"/>
@@ -3386,7 +3386,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/Misc/ModuleManager.cpp" line="440"/>
         <source>To apply this change, %1 needs to restart.</source>
-        <translation>Bu değişikliği uygulamak için %1'in yeniden başlatılması gerekiyor.</translation>
+        <translation>Bu değişikliği uygulamak için %1&apos;in yeniden başlatılması gerekiyor.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ModuleManager.cpp" line="441"/>
@@ -3411,8 +3411,8 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="89"/>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation>%1 güncellemeleri otomatik kontrol etsin mi? "Hakkında" penceresinden her zaman manuel olarak kontrol edebilirsiniz.</translation>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <translation>%1 güncellemeleri otomatik kontrol etsin mi? &quot;Hakkında&quot; penceresinden her zaman manuel olarak kontrol edebilirsiniz.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="154"/>
@@ -3516,7 +3516,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="251"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
         <source>Samples</source>
         <translation>Örnekler</translation>
     </message>
@@ -3562,7 +3562,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="575"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="581"/>
         <source>%1, %2</source>
         <translation>%1, %2</translation>
     </message>
@@ -3714,7 +3714,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <source>Add a gauge widget for numeric data</source>
-        <translation>Sayısal veri için bir gösterge widget'ı ekle</translation>
+        <translation>Sayısal veri için bir gösterge widget&apos;ı ekle</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="272"/>
@@ -3734,7 +3734,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <source>Add a compass widget for directional data</source>
-        <translation>Yön verileri için bir pusula widget'ı ekle</translation>
+        <translation>Yön verileri için bir pusula widget&apos;ı ekle</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="294"/>
@@ -4351,7 +4351,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="253"/>
         <source>Browse example projects on GitHub</source>
-        <translation>GitHub'da örnek projelere göz at</translation>
+        <translation>GitHub&apos;da örnek projelere göz at</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="261"/>
@@ -4371,7 +4371,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="275"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
-        <translation>Ayrıntılı belgeleri görüntüleyin ve DeepWiki'de sorular sorun</translation>
+        <translation>Ayrıntılı belgeleri görüntüleyin ve DeepWiki&apos;de sorular sorun</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="283"/>
@@ -4397,7 +4397,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect or disconnect from device or MQTT broker</source>
-        <translation>Cihaza veya MQTT broker'a bağlanın veya bağlantıyı kesin</translation>
+        <translation>Cihaza veya MQTT broker&apos;a bağlanın veya bağlantıyı kesin</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="353"/>
@@ -4456,17 +4456,17 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1011"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1111"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1030"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1130"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Yedek)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1093"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1193"/>
         <source>LED Panel (%1)</source>
         <translation>LED Paneli (%1)</translation>
     </message>
@@ -4520,7 +4520,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="447"/>
         <source>Version %1 of %2 has been released!</source>
-        <translation>%2'nin %1 sürümü yayınlandı!</translation>
+        <translation>%2&apos;nin %1 sürümü yayınlandı!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="485"/>
@@ -4530,7 +4530,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="487"/>
         <source>Congratulations! You are running the latest version of %1</source>
-        <translation>Tebrikler! %1'in en son sürümünü kullanıyorsunuz</translation>
+        <translation>Tebrikler! %1&apos;in en son sürümünü kullanıyorsunuz</translation>
     </message>
 </context>
 <context>
@@ -4538,12 +4538,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="172"/>
         <source>Welcome to %1!</source>
-        <translation>%1'e Hoş Geldiniz!</translation>
+        <translation>%1&apos;e Hoş Geldiniz!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="183"/>
         <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
-        <translation>Serial Studio, mühendisler, öğrenciler ve maker'lar için geliştirilmiş güçlü bir gerçek zamanlı görselleştirme aracıdır.</translation>
+        <translation>Serial Studio, mühendisler, öğrenciler ve maker&apos;lar için geliştirilmiş güçlü bir gerçek zamanlı görselleştirme aracıdır.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="194"/>
@@ -4575,12 +4575,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="277"/>
         <source>You’re currently using the fully-featured trial of %1 Pro. It’s valid for 14 days of personal, non-commercial use.</source>
-        <translation>Şu anda %1 Pro'nun tam özellikli deneme sürümünü kullanıyorsunuz. Kişisel, ticari olmayan kullanım için 14 gün geçerlidir.</translation>
+        <translation>Şu anda %1 Pro&apos;nun tam özellikli deneme sürümünü kullanıyorsunuz. Kişisel, ticari olmayan kullanım için 14 gün geçerlidir.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="288"/>
         <source>Upgrade to a paid plan to keep using Serial Studio Pro.</source>
-        <translation>Serial Studio Pro'yu kullanmaya devam etmek için ücretli bir plana yükseltin.</translation>
+        <translation>Serial Studio Pro&apos;yu kullanmaya devam etmek için ücretli bir plana yükseltin.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="296"/>
@@ -4589,13 +4589,13 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="304"/>
-        <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>Mevcut abonelik planlarını görmek için aşağıdaki "Şimdi Yükselt"e tıklayın.</translation>
+        <source>To see available subscription plans, click &quot;Upgrade Now&quot; below.</source>
+        <translation>Mevcut abonelik planlarını görmek için aşağıdaki &quot;Şimdi Yükselt&quot;e tıklayın.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="323"/>
-        <source>Don't nag me about the trial.
-I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
+        <source>Don&apos;t nag me about the trial.
+I understand that when it ends, I&apos;ll need to buy a license or build the GPLv3 version.</source>
         <translation>Deneme hakkında beni rahatsız etme.
 Bittiğinde bir lisans almam veya GPLv3 sürümünü oluşturmam gerektiğini anlıyorum.</translation>
     </message>
@@ -4607,7 +4607,7 @@ Bittiğinde bir lisans almam veya GPLv3 sürümünü oluşturmam gerektiğini an
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="362"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
-        <translation>Deneme süreniz sona erdi. %1'i tüm Pro özellikleriyle kullanmaya devam etmek için lütfen ücretli bir plana yükseltin.</translation>
+        <translation>Deneme süreniz sona erdi. %1&apos;i tüm Pro özellikleriyle kullanmaya devam etmek için lütfen ücretli bir plana yükseltin.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="373"/>
@@ -4617,7 +4617,7 @@ Bittiğinde bir lisans almam veya GPLv3 sürümünü oluşturmam gerektiğini an
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="401"/>
         <source>Thank you for trying %1!</source>
-        <translation>%1'i denediğiniz için teşekkür ederiz!</translation>
+        <translation>%1&apos;i denediğiniz için teşekkür ederiz!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="445"/>
@@ -4752,14 +4752,14 @@ Bittiğinde bir lisans almam veya GPLv3 sürümünü oluşturmam gerektiğini an
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="394"/>
-        <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
+        <source>We can&apos;t offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>ArcGIS API anahtarı gerçek maliyetler getirdiği için sınırsız erişim sunamıyoruz.</translation>
     </message>
 </context>
 <context>
     <name>Widgets::Plot</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="55"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="61"/>
         <source>Samples</source>
         <translation>Örnekler</translation>
     </message>
@@ -4767,7 +4767,7 @@ Bittiğinde bir lisans almam veya GPLv3 sürümünü oluşturmam gerektiğini an
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1195"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1196"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Izgara Aralığı: %1 birim</translation>
     </message>
