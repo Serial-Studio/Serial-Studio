@@ -43,13 +43,13 @@ env:
   QT_VERSION_LINUX: 6.9.3
   QT_VERSION_MACOS: 6.9.3
   QT_VERSION_WINDOWS: 6.9.3
-  EXECUTABLE: "Serial-Studio"
-  APPLICATION: "Serial Studio"
+  EXECUTABLE: "Serial-Studio-Pro"
+  APPLICATION: "Serial Studio Pro"
   UNIXNAME: "serial-studio"
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
   INSTALL_QT_MACOS: true
-  INSTALL_QT_WINDOWS: true
+  INSTALL_QT_WINDOWS: false
   INSTALL_QT_LINUX_INTEL: true
   INSTALL_QT_LINUX_ARM64: true
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
@@ -67,7 +67,7 @@ jobs:
 
   build-linux:
     runs-on: ubuntu-22.04
-    name: '🐧 Linux (x86_64)'
+    name: '🐧 Linux'
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
@@ -82,11 +82,7 @@ jobs:
           libegl1 \
           libfuse2 \
           libgl1-mesa-dev \
-          libgstreamer1.0-0 \
-          libgstreamer-plugins-base1.0-0 \
-          libgstreamer-plugins-good1.0-0 \
-          libgstreamer-gl1.0-0 \
-          libpulse-dev \
+          libasound2-dev \
           libssl-dev \
           libudev-dev \
           libzstd-dev \
@@ -210,7 +206,7 @@ jobs:
 
   build-linux-arm64:
     runs-on: ubuntu-24.04-arm
-    name: '🐧 Linux (aarch64)'
+    name: '🐧 Linux (arm64)'
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
@@ -225,8 +221,7 @@ jobs:
           libegl1 \
           libfuse2 \
           libgl1-mesa-dev \
-          libpulse-dev \
-          pulseaudio \
+          libasound2-dev \
           libssl-dev \
           libudev-dev \
           libzstd-dev \
@@ -253,22 +248,7 @@ jobs:
           libxcb-xtest0 \
           libxkbcommon-dev \
           libxkbcommon-x11-0 \
-          libxkbcommon-x11-dev \
-          libgstreamer1.0-dev \
-          libgstreamer-plugins-bad1.0-dev \
-          libgstreamer-plugins-base1.0-dev \
-          libgstreamer-plugins-good1.0-dev \
-          libgstreamer-gl1.0-0 \
-          gstreamer1.0-plugins-bad \
-          gstreamer1.0-plugins-base \
-          gstreamer1.0-plugins-good \
-          gstreamer1.0-plugins-ugly \
-          gstreamer1.0-plugins-rtp \
-          gstreamer1.0-gl \
-          gstreamer1.0-libav \
-          gstreamer1.0-rtsp \
-          gstreamer1.0-x \
-          gstreamer1.0-qt6
+          libxkbcommon-x11-dev
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3
@@ -363,7 +343,7 @@ jobs:
 
   build-macos:
     runs-on: macos-latest
-    name: '🍎 macOS (Universal)'
+    name: '🍎 macOS'
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
@@ -504,7 +484,7 @@ jobs:
 
   build-windows:
     runs-on: windows-latest
-    name: '🧊 Windows (x86_64)'
+    name: '🧊 Windows'
     steps:
     - run: git config --global core.autocrlf input
     - name: '🧰 Checkout'
