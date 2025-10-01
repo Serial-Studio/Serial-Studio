@@ -45,13 +45,13 @@ env:
   QT_VERSION_WINDOWS: 6.9.3
   EXECUTABLE: "Serial-Studio-Pro"
   APPLICATION: "Serial Studio Pro"
-  UNIXNAME: "serial-studio"
+  UNIXNAME: "serial-studio-pro"
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
   INSTALL_QT_MACOS: false
   INSTALL_QT_WINDOWS: false
   INSTALL_QT_LINUX_INTEL: false
-  INSTALL_QT_LINUX_ARM64: false
+  INSTALL_QT_LINUX_ARM64: true
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"
 
