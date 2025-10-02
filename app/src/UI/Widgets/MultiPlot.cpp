@@ -219,13 +219,6 @@ void Widgets::MultiPlot::draw(QXYSeries *series, const int index)
   if (series && index >= 0 && index < count() && m_visibleCurves[index])
   {
     series->replace(m_data[index]);
-
-#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
-    const int drawOrder = m_drawOrders.indexOf(index);
-    if (series->drawOrder() != drawOrder)
-      series->setDrawOrder(drawOrder);
-#endif
-
     Q_EMIT series->update();
   }
 }

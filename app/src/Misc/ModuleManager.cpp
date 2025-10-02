@@ -345,6 +345,21 @@ void Misc::ModuleManager::initializeQmlInterface()
   const auto buildDate = QStringLiteral(__DATE__);
   const auto buildTime = QStringLiteral(__TIME__);
 
+  // Construct a QML-friendly list of available screens
+  QVariantList screenList;
+  for (int i = 0; i < qApp->screens().count(); ++i)
+  {
+    QVariantMap map;
+    map["name"] = qApp->screens()[i]->name();
+    map["geometry"] = QVariant::fromValue(qApp->screens()[i]->geometry());
+    screenList.append(map);
+  }
+
+  // Get primary screen
+  QVariantMap primaryScreen;
+  primaryScreen["name"] = qApp->primaryScreen()->name();
+  primaryScreen["geometry"] = qApp->primaryScreen()->geometry();
+
   // Register C++ modules with QML
   const auto c = m_engine.rootContext();
   c->setContextProperty("Cpp_Updater", updater);
@@ -380,14 +395,15 @@ void Misc::ModuleManager::initializeQmlInterface()
 #endif
 
   // Register app info with QML
+  c->setContextProperty("Cpp_AppName", APP_NAME);
   c->setContextProperty("Cpp_BuildDate", buildDate);
   c->setContextProperty("Cpp_BuildTime", buildTime);
-  c->setContextProperty("Cpp_AppName", APP_NAME);
+  c->setContextProperty("Cpp_ScreenList", screenList);
   c->setContextProperty("Cpp_AppVersion", APP_VERSION);
+  c->setContextProperty("Cpp_PrimaryScreen", primaryScreen);
   c->setContextProperty("Cpp_AppUpdaterUrl", APP_UPDATER_URL);
   c->setContextProperty("Cpp_AppOrganization", APP_DEVELOPER);
   c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
-  c->setContextProperty("Cpp_PrimaryScreen", qApp->primaryScreen());
   c->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
 
   // Load main.qml

@@ -565,18 +565,51 @@ jobs:
     - name: '⚙️ Install WiX'
       run: dotnet tool install --global wix
 
-    - name: '📦 Package application'
+    - name: '📦 Create MSI installer'
       run: |
         cd build
         cpack --verbose
         mv *.msi ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi
         mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi ../
 
+    - name: '📦 Create portable TGZ'
+      run: |
+        cd build
+        cpack -G TGZ
+        mv *.tar.gz ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tgz
+
+    - name: '🔗 Create Windows Shortcut in ZIP root'
+      shell: pwsh
+      run: |
+        $WshShell = New-Object -ComObject WScript.Shell
+        $lnkPath = "build/${env.APPLICATION}.lnk"
+        $Shortcut = $WshShell.CreateShortcut($lnkPath)
+        $Shortcut.TargetPath = "bin\\${env:EXECUTABLE}.exe"
+        $Shortcut.WorkingDirectory = "bin"
+        $Shortcut.Save()
+
+    - name: '📦 Convert TGZ to ZIP'
+      run: |
+        cd build
+        7z x ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tgz
+        7z x ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar
+        DIRNAME=$(tar -tf ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar | head -1 | cut -f1 -d"/")
+        7z a ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip "${env.APPLICATION}.lnk" $DIRNAME/*
+        rm -rf $DIRNAME
+        rm ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar
+        mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip ..
+
     - name: '📤 Upload artifact: MSI installer'
       uses: actions/upload-artifact@v4
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi
+
+    - name: '📤 Upload artifact: Portable ZIP'
+         uses: actions/upload-artifact@v4
+         with:
+           name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip
+           path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip
 
 #-------------------------------------------------------------------------------
 # Create release
