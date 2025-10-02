@@ -589,15 +589,17 @@ jobs:
         $Shortcut.Save()
 
     - name: '📦 Convert TGZ to ZIP'
+      shell: bash
       run: |
         cd build
         7z x ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tgz
         7z x ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar
-        cp ../app/deploy/windows/license.rtf ./License.rtf
         DIRNAME=$(tar -tf ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar | head -1 | cut -f1 -d"/")
-        7z a ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip "${env.APPLICATION}.lnk" License.rtf $DIRNAME/*
+        cp ../app/deploy/windows/license.rtf ./License.rtf
+        7z a ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip "${{env.APPLICATION_NAME}}.lnk" License.rtf $DIRNAME/*
         rm -rf $DIRNAME
         rm ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar
+        rm License.rtf
         mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip ..
 
     - name: '📤 Upload artifact: MSI installer'
