@@ -593,8 +593,9 @@ jobs:
         cd build
         7z x ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tgz
         7z x ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar
+        cp ../app/deploy/windows/license.rtf ./License.rtf
         DIRNAME=$(tar -tf ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar | head -1 | cut -f1 -d"/")
-        7z a ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip "${env.APPLICATION}.lnk" $DIRNAME/*
+        7z a ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip "${env.APPLICATION}.lnk" License.rtf $DIRNAME/*
         rm -rf $DIRNAME
         rm ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar
         mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip ..
@@ -606,10 +607,10 @@ jobs:
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi
 
     - name: '📤 Upload artifact: Portable ZIP'
-         uses: actions/upload-artifact@v4
-         with:
-           name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip
-           path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip
+      uses: actions/upload-artifact@v4
+      with:
+       name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip
+       path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip
 
 #-------------------------------------------------------------------------------
 # Create release
