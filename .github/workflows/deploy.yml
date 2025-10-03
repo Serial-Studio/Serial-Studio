@@ -602,10 +602,6 @@ jobs:
         cd build
         DIRNAME=$(cat dirname.txt)
         7z a ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip "${{env.APPLICATION}}.bat" License.rtf $DIRNAME/*
-        rm -rf $DIRNAME
-        rm ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar
-        rm License.rtf
-        rm dirname.txt
         mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip ..
 
     - name: '📤 Upload artifact: MSI installer'
