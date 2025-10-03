@@ -576,30 +576,42 @@ jobs:
       run: |
         cd build
         cpack -G TGZ
-        mv *.tar.gz ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tgz
+        mv *.tar.gz ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.tgz
+
+    - name: '📦 Extract TGZ contents'
+      shell: bash
+      run: |
+        cd build
+        7z x ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.tgz
+        7z x ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.tar
+        DIRNAME=$(tar -tf ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.tar | head -1 | cut -f1 -d"/")
+        echo $DIRNAME > dirname.txt
+        cp ../app/deploy/windows/license.rtf ./License.rtf
 
     - name: '🔗 Create Windows Shortcut in ZIP root'
       shell: pwsh
       run: |
+        cd build
+        $dirName = Get-Content dirname.txt
+        $lnkPath = "${{env.APPLICATION}}.lnk"
+        $exePath = "$dirName\bin\${{env.EXECUTABLE}}.exe"
+        $workDir = "$dirName\bin"
         $WshShell = New-Object -ComObject WScript.Shell
-        $lnkPath = "build/${env.APPLICATION}.lnk"
         $Shortcut = $WshShell.CreateShortcut($lnkPath)
-        $Shortcut.TargetPath = "bin\\${env:EXECUTABLE}.exe"
-        $Shortcut.WorkingDirectory = "bin"
+        $Shortcut.TargetPath = $exePath
+        $Shortcut.WorkingDirectory = $workDir
         $Shortcut.Save()
 
-    - name: '📦 Convert TGZ to ZIP'
+    - name: '📦 Add files to ZIP'
       shell: bash
       run: |
         cd build
-        7z x ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tgz
-        7z x ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar
-        DIRNAME=$(tar -tf ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar | head -1 | cut -f1 -d"/")
-        cp ../app/deploy/windows/license.rtf ./License.rtf
-        7z a ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip "${{env.APPLICATION_NAME}}.lnk" License.rtf $DIRNAME/*
+        DIRNAME=$(cat dirname.txt)
+        7z a ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip "${{env.APPLICATION}}.lnk" License.rtf $DIRNAME/*
         rm -rf $DIRNAME
         rm ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar
         rm License.rtf
+        rm dirname.txt
         mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip ..
 
     - name: '📤 Upload artifact: MSI installer'
@@ -611,7 +623,7 @@ jobs:
     - name: '📤 Upload artifact: Portable ZIP'
       uses: actions/upload-artifact@v4
       with:
-       name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip
+       name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable
        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip
 
 #-------------------------------------------------------------------------------
@@ -660,3 +672,4 @@ jobs:
             artifacts/*.AppImage
             artifacts/*.dmg
             artifacts/*.msi
+            artifacts/*.zip
