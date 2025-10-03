@@ -588,26 +588,20 @@ jobs:
         echo $DIRNAME > dirname.txt
         cp ../app/deploy/windows/license.rtf ./License.rtf
 
-    - name: '🔗 Create Windows Shortcut in ZIP root'
-      shell: pwsh
+    - name: '📝 Create Windows batch launcher'
+      shell: bash
       run: |
         cd build
-        $dirName = Get-Content dirname.txt
-        $lnkPath = "${{env.APPLICATION}}.lnk"
-        $exePath = "$dirName\bin\${{env.EXECUTABLE}}.exe"
-        $workDir = "$dirName\bin"
-        $WshShell = New-Object -ComObject WScript.Shell
-        $Shortcut = $WshShell.CreateShortcut($lnkPath)
-        $Shortcut.TargetPath = $exePath
-        $Shortcut.WorkingDirectory = $workDir
-        $Shortcut.Save()
+        DIRNAME=$(cat dirname.txt)
+        echo "@echo off" > "${{env.APPLICATION}}.bat"
+        echo "start \"\" \"%~dp0${DIRNAME}\\bin\\${{env.EXECUTABLE}}.exe\"" >> "${{env.APPLICATION}}.bat"
 
     - name: '📦 Add files to ZIP'
       shell: bash
       run: |
         cd build
         DIRNAME=$(cat dirname.txt)
-        7z a ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip "${{env.APPLICATION}}.lnk" License.rtf $DIRNAME/*
+        7z a ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip "${{env.APPLICATION}}.bat" License.rtf $DIRNAME/*
         rm -rf $DIRNAME
         rm ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.tar
         rm License.rtf
