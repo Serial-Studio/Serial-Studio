@@ -26,13 +26,13 @@
  * @brief Constructs the TimerEvents singleton instance.
  *
  * Initializes the UI timer frequency from application settings.
- * The value is read from the key "uiTimerHz" with a default of 24 Hz.
+ * The value is read from the key "uiRefreshRate" with a default of 60 Hz.
  * The frequency is clamped between 1 and 240 Hz.
  */
 Misc::TimerEvents::TimerEvents()
-  : m_uiTimerHz(24)
+  : m_uiTimerHz(60)
 {
-  m_uiTimerHz = m_settings.value("uiTimerHz", 24).toInt();
+  m_uiTimerHz = m_settings.value("uiRefreshRate", 60).toInt();
   m_uiTimerHz = qBound(1, m_uiTimerHz, 240);
 }
 

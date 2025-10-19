@@ -56,7 +56,7 @@ Item {
   property bool checkable: false
 
   //
-  // Layout preferences
+  // Layout properties
   //
   Layout.minimumWidth: implicitWidth
   Layout.maximumWidth: maxButtonWidth
@@ -66,8 +66,8 @@ Item {
   implicitWidth: Math.min(
                    maxButtonWidth,
                    horizontalLayout
-                   ? root.iconSize + Math.ceil(metrics.width + 16)
-                   : Math.max(Math.ceil(metrics.width + 16), icon.width / 32 * 72)
+                   ? root.iconSize + Math.ceil(_metrics.width + 16)
+                   : Math.max(Math.ceil(_metrics.width + 16), icon.width / 32 * 72)
                    )
 
   //
@@ -77,17 +77,16 @@ Item {
   ToolTip.visible: _mouseArea.containsMouse && ToolTip.text !== ""
 
   //
-  // Animations
+  // Enabled/disabled opacity effect
   //
   opacity: enabled ? 1 : 0.5
   Behavior on opacity { NumberAnimation {} }
 
   //
-  // Checked background (toolbar)
+  // Checked toolbar button background
   //
   Rectangle {
     id: _background
-
     radius: 3
     border.width: 1
     anchors.fill: parent
@@ -97,12 +96,11 @@ Item {
     opacity: (root.checked || _mouseArea.pressed)
              ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"]
              : 0.0
-
     Behavior on opacity { NumberAnimation {} }
   }
 
   //
-  // Checked background (non-toolbar)
+  // Non-toolbar button background
   //
   ToolButton {
     checked: true
@@ -113,72 +111,87 @@ Item {
   }
 
   //
-  // Button layout
+  // Icon & text, add in scalable container for button press effect
   //
-  GridLayout {
-    id: _layout
+  Item {
+    id: _scaleContainer
     anchors.fill: parent
-    flow: GridLayout.LeftToRight
-    rows: horizontalLayout ? 1 : 2
-    columns: horizontalLayout ? 2 : 1
-    rowSpacing: horizontalLayout ? 0 : 4
-    columnSpacing: horizontalLayout ? 4 : 0
-    anchors.leftMargin: horizontalLayout ? 8 : 0
-    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-    Item {
-      id: _iconContainer
-      Layout.row: 0
-      Layout.column: 0
-      implicitWidth: root.iconSize
-      implicitHeight: root.iconSize
-      Layout.alignment: horizontalLayout ? Qt.AlignLeft | Qt.AlignVCenter : Qt.AlignCenter
-
-      Image {
-        id: _icon
-        anchors.fill: parent
-        sourceSize.width: root.iconSize
-        sourceSize.height: root.iconSize
-        visible: Cpp_Misc_ModuleManager.softwareRendering
-      }
-
-      MultiEffect {
-        source: _icon
-        anchors.fill: _icon
-        enabled: !Cpp_Misc_ModuleManager.softwareRendering
-        visible: !Cpp_Misc_ModuleManager.softwareRendering
-        saturation: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
-        brightness: _mouseArea.containsMouse && root.enabled ?
-                      (_mouseArea.containsPress ? -0.07 : 0.07) : 0
-      }
+    transform: Scale {
+      id: _pressScale
+      origin.x: _scaleContainer.width / 2
+      origin.y: _scaleContainer.height / 2
+      xScale: _mouseArea.pressed ? 0.95 : 1.0
+      yScale: _mouseArea.pressed ? 0.95 : 1.0
+    }
+    Behavior on transform {
+      NumberAnimation { properties: "xScale,yScale"; duration: 100; easing.type: Easing.OutQuad }
     }
 
-    Label {
-      id: _label
-      elide: Qt.ElideRight
-      Layout.fillWidth: horizontalLayout
-      Layout.row: horizontalLayout ? 0 : 1
-      Layout.column: horizontalLayout ? 1 : 0
-      Layout.maximumWidth: root.maxButtonWidth - (horizontalLayout ? root.iconSize + 4 : 0)
-      Layout.alignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignCenter
-      horizontalAlignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignHCenter
-      color: root.toolbarButton
-             ? Cpp_ThemeManager.colors["toolbar_text"]
-             : Cpp_ThemeManager.colors["button_text"]
+    GridLayout {
+      id: _layout
+      anchors.fill: parent
+      flow: GridLayout.LeftToRight
+      rows: horizontalLayout ? 1 : 2
+      columns: horizontalLayout ? 2 : 1
+      rowSpacing: horizontalLayout ? 0 : 4
+      columnSpacing: horizontalLayout ? 4 : 0
+      anchors.leftMargin: horizontalLayout ? 8 : 0
+      Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+      Item {
+        id: _iconContainer
+        Layout.row: 0
+        Layout.column: 0
+        implicitWidth: root.iconSize
+        implicitHeight: root.iconSize
+        Layout.alignment: horizontalLayout ? Qt.AlignLeft | Qt.AlignVCenter : Qt.AlignCenter
+
+        Image {
+          id: _icon
+          anchors.fill: parent
+          sourceSize.width: root.iconSize
+          sourceSize.height: root.iconSize
+          visible: Cpp_Misc_ModuleManager.softwareRendering
+        }
+
+        MultiEffect {
+          source: _icon
+          anchors.fill: _icon
+          enabled: !Cpp_Misc_ModuleManager.softwareRendering
+          visible: !Cpp_Misc_ModuleManager.softwareRendering
+          saturation: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
+          brightness: _mouseArea.containsMouse && root.enabled ?
+                        (_mouseArea.containsPress ? -0.07 : 0.07) : 0
+        }
+      }
+
+      Label {
+        id: _label
+        elide: Qt.ElideRight
+        Layout.fillWidth: horizontalLayout
+        Layout.row: horizontalLayout ? 0 : 1
+        Layout.column: horizontalLayout ? 1 : 0
+        Layout.maximumWidth: root.maxButtonWidth - (horizontalLayout ? root.iconSize + 4 : 0)
+        Layout.alignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignCenter
+        horizontalAlignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignHCenter
+        color: root.toolbarButton
+               ? Cpp_ThemeManager.colors["toolbar_text"]
+               : Cpp_ThemeManager.colors["button_text"]
+      }
     }
   }
 
   //
-  // Width calculation for layout
+  // Text metrics for calculating button width
   //
   TextMetrics {
-    id: metrics
+    id: _metrics
     font: _label.font
     text: " " + root.text + " "
   }
 
   //
-  // Mouse interaction
+  // Mouse area for detecting clicks
   //
   MouseArea {
     id: _mouseArea
@@ -192,3 +205,4 @@ Item {
     }
   }
 }
+
