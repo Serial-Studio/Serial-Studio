@@ -324,8 +324,34 @@ Popup {
       }
     }
 
-    Item {
-      Layout.fillHeight: true
+    Loader {
+      Layout.fillWidth: true
+      active: Cpp_CommercialBuild
+      sourceComponent: Rectangle {
+        opacity: 0.5
+        implicitHeight: 1
+        color: Cpp_ThemeManager.colors["start_menu_text"]
+      }
+    }
+
+    Loader {
+      Layout.fillWidth: true
+      active: Cpp_CommercialBuild
+      sourceComponent: Component {
+        Widgets.MenuButton {
+          expandable: false
+          text: qsTr("MQTT")
+          icon.source: Cpp_MQTT_Client.isConnected ?
+                         (Cpp_MQTT_Client.isSubscriber ?
+                            "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
+                            "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
+                         "qrc:/rcc/icons/toolbar/mqtt.svg"
+          onClicked: {
+            root.close()
+            app.showMqttConfiguration()
+          }
+        }
+      }
     }
 
     Rectangle {
