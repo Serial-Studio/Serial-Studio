@@ -23,6 +23,10 @@
 
 #include <cstdint>
 
+//------------------------------------------------------------------------------
+// Endianess detection
+//------------------------------------------------------------------------------
+
 #if defined(_MSC_VER)
 #  include <stdlib.h>
 #  define IS_LITTLE_ENDIAN 1
@@ -36,6 +40,7 @@
 //------------------------------------------------------------------------------
 // Endian-correct memory utilities for checksum formatting
 //------------------------------------------------------------------------------
+
 //
 // These helpers write multibyte checksum values (e.g., CRCs, Adler, Fletcher)
 // into output buffers with a defined byte order, regardless of the host CPU's

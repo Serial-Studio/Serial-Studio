@@ -26,6 +26,10 @@
 #include <QSettings>
 #include <QJsonObject>
 
+//------------------------------------------------------------------------------
+// Qt Stylesheet utilties...not used on Serial Studio, but useful reference...
+//------------------------------------------------------------------------------
+
 /**
  * @brief Generates a styled QString using a format string and a variable number
  *        of QColor arguments.
@@ -64,6 +68,10 @@ inline QString QSS(const QString &style, const Colors &...colors)
 
   return result;
 }
+
+//------------------------------------------------------------------------------
+// ThemeManager class declaration
+//------------------------------------------------------------------------------
 
 /**
  * @class ThemeManager

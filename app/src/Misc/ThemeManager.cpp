@@ -30,6 +30,20 @@
 
 #include "Misc/Translator.h"
 
+//------------------------------------------------------------------------------
+// Utility functions
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Converts a QJsonObject to a QVariantMap.
+ *
+ * Iterates over all key-value pairs in the input QJsonObject and
+ * inserts them into a QVariantMap.
+ *
+ * @param obj The QJsonObject to convert.
+ * @return A QVariantMap with the same keys as the input object and
+ *         QVariant-converted values.
+ */
 static QVariantMap jsonObjectToVariantMap(const QJsonObject &obj)
 {
   QVariantMap map;
@@ -39,6 +53,16 @@ static QVariantMap jsonObjectToVariantMap(const QJsonObject &obj)
   return map;
 }
 
+/**
+ * @brief Extracts a vector of QColor objects from a JSON object.
+ *
+ * Reads the array at the "widget_colors" key from the input QJsonObject.
+ * For each string in the array, constructs a QColor and adds it to the
+ * result vector. Non-string entries are ignored.
+ *
+ * @return QVector<QColor> containing a QColor for each valid string in
+ *                         the "widget_colors" array.
+ */
 static QVector<QColor> extractWidgetColors(const QJsonObject &colorsObject)
 {
   QVector<QColor> result;
@@ -53,6 +77,10 @@ static QVector<QColor> extractWidgetColors(const QJsonObject &colorsObject)
 
   return result;
 }
+
+//------------------------------------------------------------------------------
+// Constructor & singleton access
+//------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the ThemeManager object and initializes theme loading.
@@ -116,6 +144,10 @@ Misc::ThemeManager &Misc::ThemeManager::instance()
   static ThemeManager instance;
   return instance;
 }
+
+//------------------------------------------------------------------------------
+// Class member access functions
+//------------------------------------------------------------------------------
 
 /**
  * @brief Retrieves the current theme index.
@@ -199,6 +231,10 @@ QColor Misc::ThemeManager::getColor(const QString &name) const
   return QColor(qRgb(0xff, 0x00, 0xff));
 }
 
+//------------------------------------------------------------------------------
+// Theme loading
+//------------------------------------------------------------------------------
+
 /**
  * @brief Sets the current theme to the theme at the specified index.
  *
@@ -248,6 +284,10 @@ void Misc::ThemeManager::setTheme(const int index)
       Qt::QueuedConnection);
 }
 
+//------------------------------------------------------------------------------
+// Automatic theme detection based on system theme
+//------------------------------------------------------------------------------
+
 /**
  * @brief Applies the system-resolved theme (Light or Dark) without changing
  * the selected theme index.
@@ -295,6 +335,10 @@ void Misc::ThemeManager::loadSystemTheme()
   QMetaObject::invokeMethod(
       this, [this]() { Q_EMIT themeChanged(); }, Qt::QueuedConnection);
 }
+
+//------------------------------------------------------------------------------
+// i18n utilities
+//------------------------------------------------------------------------------
 
 /**
  * @brief Updates the localized names of available themes based on current UI
@@ -388,6 +432,10 @@ void Misc::ThemeManager::updateLocalizedThemeNames()
 
   Q_EMIT languageChanged();
 }
+
+//------------------------------------------------------------------------------
+// Event filter for detecting OS theme changes
+//------------------------------------------------------------------------------
 
 /**
  * @brief Event filter to intercept application-wide events.
