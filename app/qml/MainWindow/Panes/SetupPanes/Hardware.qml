@@ -99,7 +99,7 @@ Rectangle {
       Layout.fillWidth: true
       Layout.fillHeight: true
       active: Cpp_CommercialBuild
-      source: "qrc:/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml"
+      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml"
 
       onLoaded: {
         if (item)
@@ -112,7 +112,7 @@ Rectangle {
       Layout.fillWidth: true
       Layout.fillHeight: true
       active: Cpp_CommercialBuild
-      source: "qrc:/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml"
+      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml"
 
       onLoaded: {
         if (item)
@@ -125,7 +125,7 @@ Rectangle {
       Layout.fillWidth: true
       Layout.fillHeight: true
       active: Cpp_CommercialBuild
-      source: "qrc:/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml"
+      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml"
 
       onLoaded: {
         if (item)

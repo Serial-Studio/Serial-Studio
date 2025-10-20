@@ -94,22 +94,22 @@ Item {
 
     DialogLoader {
       id: mqttConfiguration
-      source: "qrc:/qml/Dialogs/MQTTConfiguration.qml"
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/MQTTConfiguration.qml"
     }
 
     DialogLoader {
       id: aboutDialog
-      source: "qrc:/qml/Dialogs/About.qml"
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/About.qml"
     }
 
     DialogLoader {
       id: acknowledgementsDialog
-      source: "qrc:/qml/Dialogs/Acknowledgements.qml"
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/Acknowledgements.qml"
     }
 
     DialogLoader {
       id: fileTransmissionDialog
-      source: "qrc:/qml/Dialogs/FileTransmission.qml"
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/FileTransmission.qml"
     }
   }
 
@@ -125,7 +125,7 @@ Item {
   //
   DialogLoader {
     id: licenseDialog
-    source: "qrc:/qml/Dialogs/LicenseManagement.qml"
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/LicenseManagement.qml"
   }
 
   //
@@ -133,7 +133,7 @@ Item {
   //
   DialogLoader {
     id: welcomeDialog
-    source: "qrc:/qml/Dialogs/Welcome.qml"
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/Welcome.qml"
   }
 
   //

@@ -341,6 +341,18 @@ void Misc::ModuleManager::initializeQmlInterface()
   connect(miscTranslator, &Misc::Translator::languageChanged, &m_engine,
           &QQmlApplicationEngine::retranslate);
 
+  // Setup singleton module interconnections
+  ioSerial->setupExternalConnections();
+  csvExport->setupExternalConnections();
+  ioConsole->setupExternalConnections();
+  ioManager->setupExternalConnections();
+  projectModel->setupExternalConnections();
+  frameBuilder->setupExternalConnections();
+  ioConsoleExport->setupExternalConnections();
+
+  // Install custom message handler to redirect qDebug output to console
+  qInstallMessageHandler(MessageHandler);
+
   // Obtain build date/time
   const auto buildDate = QStringLiteral(__DATE__);
   const auto buildTime = QStringLiteral(__TIME__);
@@ -407,20 +419,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
 
   // Load main.qml
-  const auto url = QStringLiteral("qrc:/qml/main.qml");
-  m_engine.load(QUrl(url));
-
-  // Setup singleton module interconnections
-  ioSerial->setupExternalConnections();
-  csvExport->setupExternalConnections();
-  ioConsole->setupExternalConnections();
-  ioManager->setupExternalConnections();
-  projectModel->setupExternalConnections();
-  frameBuilder->setupExternalConnections();
-  ioConsoleExport->setupExternalConnections();
-
-  // Install custom message handler to redirect qDebug output to console
-  qInstallMessageHandler(MessageHandler);
+  m_engine.load(QUrl("qrc:/serial-studio.com/gui/qml/main.qml"));
 
   // Try to contact activation server to validate license
 #ifdef BUILD_COMMERCIAL
