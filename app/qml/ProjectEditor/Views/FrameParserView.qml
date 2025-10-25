@@ -174,7 +174,7 @@ Widgets.Pane {
         Layout.fillWidth: true
         Layout.maximumHeight: Layout.minimumHeight
         Layout.minimumHeight: layout.implicitHeight + 12
-        color: Cpp_ThemeManager.colors["window_toolbar_background"]
+        color: Cpp_ThemeManager.colors["groupbox_background"]
 
         //
         // Buttons

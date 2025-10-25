@@ -30,6 +30,7 @@ Controls.GroupBox {
 
   property string icon: ""
   property bool headerVisible: true
+  property alias backgroundColor: _bg.color
 
   property Component actionComponent
 
@@ -114,6 +115,7 @@ Controls.GroupBox {
   }
 
   background: Rectangle {
+    id: _bg
     color: Cpp_ThemeManager.colors["pane_background"]
 
     anchors {

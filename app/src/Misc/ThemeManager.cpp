@@ -101,6 +101,9 @@ Misc::ThemeManager::ThemeManager()
       QStringLiteral("light"),
       QStringLiteral("dark"),
       QStringLiteral("iron"),
+      QStringLiteral("rust"),
+      QStringLiteral("gunmetal"),
+      QStringLiteral("midday"),
       QStringLiteral("midnight"),
   };
   // clang-format on

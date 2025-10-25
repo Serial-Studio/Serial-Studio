@@ -91,7 +91,7 @@ Widgets.Pane {
         id: header
         Layout.fillWidth: true
         height: layout.implicitHeight + 12
-        color: Cpp_ThemeManager.colors["window_toolbar_background"]
+        color: Cpp_ThemeManager.colors["groupbox_background"]
 
         //
         // Buttons
