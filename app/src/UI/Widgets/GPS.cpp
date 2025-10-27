@@ -86,13 +86,9 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
              << tr("National Geographic");
 
   // Set URL/tile server map type IDs
-  m_mapIDs << "World_Imagery"
-           << "World_Imagery"
-           << "World_Street_Map"
-           << "World_Topo_Map"
-           << "World_Terrain_Base"
-           << "Canvas/World_Light_Gray_Base"
-           << "Canvas/World_Dark_Gray_Base"
+  m_mapIDs << "World_Imagery" << "World_Imagery" << "World_Street_Map"
+           << "World_Topo_Map" << "World_Terrain_Base"
+           << "Canvas/World_Light_Gray_Base" << "Canvas/World_Dark_Gray_Base"
            << "NatGeo_World_Map";
 
   // Set max zoom for each map type

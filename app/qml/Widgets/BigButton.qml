@@ -63,6 +63,11 @@ Item {
   Behavior on opacity {NumberAnimation{}}
 
   //
+  // Enable tab focus
+  //
+  activeFocusOnTab: true
+
+  //
   // Checked background (toolbar)
   //
   Rectangle {
