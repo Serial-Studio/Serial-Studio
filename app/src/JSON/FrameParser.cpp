@@ -32,6 +32,7 @@
 #include <QtGui/qshortcut.h>
 
 #include "Misc/Utilities.h"
+#include "Misc/Translator.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/ThemeManager.h"
@@ -54,6 +55,7 @@
  */
 JSON::FrameParser::FrameParser(QQuickItem *parent)
   : QQuickPaintedItem(parent)
+  , m_testDialog(this, nullptr)
 {
   // Disable mipmap & antialiasing, we don't need them
   setMipmap(false);
@@ -83,13 +85,16 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
   m_engine.installExtensions(QJSEngine::ConsoleExtension
                              | QJSEngine::GarbageCollectionExtension);
 
-  // Load template code
-  reload();
-
-  // Set widget palettez
+  // Set widget palette
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
           this, &JSON::FrameParser::onThemeChanged);
+
+  // Load template names
+  loadTemplateNames();
+  loadDefaultTemplate();
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, &JSON::FrameParser::loadTemplateNames);
 
   // Connect modification check signals
   connect(&m_widget, &QCodeEditor::textChanged, this,
@@ -121,26 +126,9 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
   // Configure render loop
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this,
           &JSON::FrameParser::renderWidget);
-}
 
-/**
- * @brief Returns a string with the default frame parser function code.
- * @return
- */
-const QString &JSON::FrameParser::defaultCode()
-{
-  static QString code;
-  if (code.isEmpty())
-  {
-    QFile file(":/rcc/scripts/frame-parser.js");
-    if (file.open(QFile::ReadOnly))
-    {
-      code = QString::fromUtf8(file.readAll());
-      file.close();
-    }
-  }
-
-  return code;
+  // Load template code
+  reload();
 }
 
 /**
@@ -201,6 +189,54 @@ QStringList JSON::FrameParser::parse(const QByteArray &frame)
 }
 
 /**
+ * @brief Gets the current template index.
+ * @return The current template index.
+ */
+int JSON::FrameParser::templateIdx() const
+{
+  return m_templateIdx;
+}
+
+/**
+ * @brief Retrieves the JavaScript code for the currently selected template
+ *
+ * Loads and returns the JavaScript parser code from the template file
+ * corresponding to the current template index.
+ *
+ * The template files are stored in the application's resource system under
+ * ":/rcc/scripts/".
+ *
+ * The function constructs the file path using the template filename, reads
+ * the entire file contents, and returns it as a QString.
+ *
+ * @return QString containing the JavaScript parser code from the selected
+ *         template file.
+ */
+QString JSON::FrameParser::templateCode() const
+{
+  QString code;
+  auto path = QString(":/rcc/scripts/%1").arg(m_templateFiles[m_templateIdx]);
+
+  QFile file(path);
+  if (file.open(QFile::ReadOnly))
+  {
+    code = QString::fromUtf8(file.readAll());
+    file.close();
+  }
+
+  return code;
+}
+
+/**
+ * @brief Gets the list of available frame parser code templates.
+ * @return A list of available template names.
+ */
+QStringList JSON::FrameParser::templateNames() const
+{
+  return m_templateNames;
+}
+
+/**
  * @brief Returns @c true whenever if there are any actions that can be undone.
  */
 bool JSON::FrameParser::undoAvailable() const
@@ -258,85 +294,162 @@ bool JSON::FrameParser::save(const bool silent)
 }
 
 /**
- * @brief Generates a callable JS function given the script code.
+ * @brief Validates and loads the JavaScript frame parser code
  *
- * This function validates that the given @a script data does not contain any
- * syntax errors and that it can be executed by the JavaScript Engine.
+ * Performs comprehensive validation of the JavaScript parser code to ensure it:
+ * - Contains no syntax exceptionStackTrace
+ * - Declares a callable 'parse' function
+ * - Uses the correct function signature (single parameter)
+ * - Can be executed by the JavaScript engine
  *
- * If the conditions required to execute the frame parser code are met, this
- * function proceeds to generate a callable JS function that can be used
- * by the rest of the application modules.
+ * The validation process checks for:
+ * 1. JavaScript syntax exceptionStackTrace during compilation
+ * 2. Existence of the 'parse' function in global scope
+ * 3. Correct function signature (parse(frame) not parse(frame, separator))
+ * 4. Function callability
  *
- * @param script JavaScript code
+ * If validation succeeds, stores the parse function for later use.
+ * If validation fails, displays an appropriate error message to the user.
  *
- * @return @a true if the JS code is valid and contains to errors
+ * @param script The JavaScript parser code to validate and load
+ *
+ * @return true if the code is valid and the parse function is ready to use,
+ *         false if validation failed
+ *
+ * @note Legacy two-parameter parse functions (parse(frame, separator)) are
+ *       no longer supported and will trigger a warning
+ *
+ * @see evaluate()
+ * @see m_parseFunction
  */
 bool JSON::FrameParser::loadScript(const QString &script)
 {
+  // Reset any previously loaded function
+  m_parseFunction = QJSValue();
+
   // Ensure that engine is configured correctly
   m_engine.installExtensions(QJSEngine::AllExtensions);
 
-  // Check if there are no general JS errors
-  QStringList errors;
-  m_engine.evaluate(script, "", 1, &errors);
-
-  // Check if the 'parse' function exists and is callable
-  auto fun = m_engine.globalObject().property("parse");
-  if (fun.isNull() || !fun.isCallable())
+  // Check for JavaScript syntax errors
+  QStringList exceptionStackTrace;
+  auto result = m_engine.evaluate(script, "parser.js", 1, &exceptionStackTrace);
+  if (result.isError())
   {
+    QString errorMsg = result.property("message").toString();
+    int lineNumber = result.property("lineNumber").toInt();
     Misc::Utilities::showMessageBox(
-        tr("Frame parser error!"),
-        tr("The 'parse' function is not declared or is not callable!"),
+        tr("JavaScript Syntax Error"),
+        tr("The parser code contains a syntax error at line %1:\n\n%2")
+            .arg(lineNumber)
+            .arg(errorMsg),
         QMessageBox::Critical);
     return false;
   }
 
-  // Check if the script contains a valid parse function declaratio
+  // Get list of exceptions
+  if (!exceptionStackTrace.isEmpty())
+  {
+    Misc::Utilities::showMessageBox(
+        tr("JavaScript Exception Occurred"),
+        tr("The parser code triggered the following exceptions:\n\n%1")
+            .arg(exceptionStackTrace.join("\n")),
+        QMessageBox::Critical);
+    return false;
+  }
+
+  // Verify that the 'parse' function exists
+  auto parseFunction = m_engine.globalObject().property("parse");
+  if (parseFunction.isNull())
+  {
+    Misc::Utilities::showMessageBox(
+        tr("Missing Parse Function"),
+        tr("The 'parse' function is not defined in the script.\n\n"
+           "Please ensure your code includes:\n"
+           "function parse(frame) { ... }"),
+        QMessageBox::Critical);
+    return false;
+  }
+
+  // Verify that the 'parse' function is callable
+  if (!parseFunction.isCallable())
+  {
+    Misc::Utilities::showMessageBox(
+        tr("Invalid Parse Function"),
+        tr("The 'parse' property exists but is not a callable function.\n\n"
+           "Please ensure 'parse' is declared as a function."),
+        QMessageBox::Critical);
+    return false;
+  }
+
+  // Validate function signature using regex
   static QRegularExpression functionRegex(
       R"(\bfunction\s+parse\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*,\s*([a-zA-Z_$][a-zA-Z0-9_$]*))?\s*\))");
   auto match = functionRegex.match(script);
-  if (match.hasMatch())
-  {
-    // Extract argument names
-    QString firstArg = match.captured(1);
-    QString secondArg = match.captured(3);
-
-    // Warn about empty first argument
-    if (firstArg.isEmpty())
-    {
-      Misc::Utilities::showMessageBox(
-          tr("Frame parser error!"),
-          tr("No valid 'parse' function declaration found in the script!"),
-          QMessageBox::Critical);
-      return false;
-    }
-
-    // Warn about deprecated second argument
-    if (!secondArg.isEmpty())
-    {
-      Misc::Utilities::showMessageBox(
-          tr("Legacy frame parser function detected"),
-          tr("The 'parse' function has two arguments ('%1', '%2'), indicating "
-             "use of the old format. Please update it to the new format, which "
-             "only takes the frame data as an argument.")
-              .arg(firstArg, secondArg),
-          QMessageBox::Warning);
-      return false;
-    }
-  }
-
-  // Function doesn't match the expected declaration
-  else
+  if (!match.hasMatch())
   {
     Misc::Utilities::showMessageBox(
-        tr("Frame parser error!"),
-        tr("No valid 'parse' function declaration found in the script!"),
+        tr("Invalid Function Declaration"),
+        tr("No valid 'parse' function declaration found.\n\n"
+           "Expected format:\n"
+           "function parse(frame) { ... }"),
         QMessageBox::Critical);
     return false;
   }
 
-  // We have reached this point without any errors, set function caller
-  m_parseFunction = fun;
+  // Extract function parameters
+  QString firstArg = match.captured(1);
+  QString secondArg = match.captured(3);
+
+  // Check for empty or invalid first argument
+  if (firstArg.isEmpty())
+  {
+    Misc::Utilities::showMessageBox(
+        tr("Invalid Function Parameter"),
+        tr("The 'parse' function must have at least one parameter.\n\n"
+           "Expected format:\n"
+           "function parse(frame) { ... }"),
+        QMessageBox::Critical);
+    return false;
+  }
+
+  // Check for deprecated two-parameter format
+  if (!secondArg.isEmpty())
+  {
+    Misc::Utilities::showMessageBox(
+        tr("Deprecated Function Signature"),
+        tr("The 'parse' function uses the old two-parameter format: parse(%1, "
+           "%2)\n\n"
+           "This format is no longer supported. Please update to the new "
+           "single-parameter format:\n"
+           "function parse(%1) { ... }\n\n"
+           "The separator parameter is no longer needed.")
+            .arg(firstArg, secondArg),
+        QMessageBox::Warning);
+    return false;
+  }
+
+  // Test execute the parse function with sample data to catch runtime errors
+  QJSValueList args;
+  args << QJSValue("");
+  auto testResult = parseFunction.call(args);
+  if (testResult.isError())
+  {
+    QString errorMsg = testResult.property("message").toString();
+    int lineNumber = testResult.property("lineNumber").toInt();
+
+    Misc::Utilities::showMessageBox(
+        tr("Parse Function Runtime Error"),
+        tr("The parse function contains an error at line %1:\n\n%2\n\n"
+           "Please fix the error in the function body.")
+            .arg(lineNumber)
+            .arg(errorMsg),
+        QMessageBox::Critical);
+
+    return false;
+  }
+
+  // All validations passed, store the function for use
+  m_parseFunction = parseFunction;
   return true;
 }
 
@@ -397,7 +510,7 @@ void JSON::FrameParser::paste()
  */
 void JSON::FrameParser::apply()
 {
-  if (save(false))
+  if (save(true))
   {
     auto &model = JSON::ProjectModel::instance();
     if (!model.jsonFilePath().isEmpty())
@@ -431,8 +544,7 @@ void JSON::FrameParser::reload()
   }
 
   // Load default template
-  m_widget.setPlainText(defaultCode());
-  (void)save(true);
+  loadDefaultTemplate();
 }
 
 /**
@@ -480,6 +592,35 @@ void JSON::FrameParser::import()
 }
 
 /**
+ * @brief Evaluates the JavaScript parser code for syntax errors
+ *
+ * Attempts to load and compile the current JavaScript parser code to detect
+ * any syntax errors before the code is used for actual frame parsing.
+ * If successful, displays a confirmation message to the user.
+ *
+ * This validation step helps users identify coding mistakes early, preventing
+ * runtime errors when processing incoming data frames.
+ *
+ * @note This only validates JavaScript syntax, not logical correctness or
+ *       runtime behavior. The parser may still fail during actual use if
+ *       the logic is incorrect. Use the @c testWithSampleData() function
+ *       to validate logic.
+ *
+ * @see loadScript()
+ * @see text()
+ */
+void JSON::FrameParser::evaluate()
+{
+  if (loadScript(text()))
+  {
+    Misc::Utilities::showMessageBox(
+        tr("Code Validation Successful"),
+        tr("No syntax errors detected in the parser code."),
+        QMessageBox::Information);
+  }
+}
+
+/**
  * @brief Loads the code stored in the project file into the code editor.
  */
 void JSON::FrameParser::readCode()
@@ -502,6 +643,83 @@ void JSON::FrameParser::readCode()
 void JSON::FrameParser::selectAll()
 {
   m_widget.selectAll();
+}
+
+void JSON::FrameParser::testWithSampleData()
+{
+  if (loadScript(text()))
+  {
+    m_testDialog.clear();
+    m_testDialog.showNormal();
+  }
+}
+
+/**
+ * @brief Loads the default comma-separated values (CSV) template
+ *
+ * Sets the current template to the comma-separated parser by finding its index
+ * in the template files list and updating the template index accordingly.
+ *
+ * This is typically called during initialization or when resetting the parser
+ * to default settings.
+ *
+ * The CSV template is chosen as the default because it's one of the most common
+ * and simple data formats for serial communication.
+ *
+ * @note If "comma_separated.js" is not found in m_templateFiles, the index will
+ *       be -1, which may result in undefined behavior. Ensure loadTemplates()
+ *       is called before this function.
+ *
+ * @see setTemplateIdx()
+ * @see loadTemplates()
+ */
+void JSON::FrameParser::loadDefaultTemplate()
+{
+  const auto idx = m_templateFiles.indexOf("comma_separated.js");
+  setTemplateIdx(idx);
+}
+
+/**
+ * @brief Sets the frame template index, prompting user confirmation if
+ *        the document is modified.
+ *
+ * @param idx The template index to set.
+ */
+void JSON::FrameParser::setTemplateIdx(const int idx)
+{
+  // Don't do anything if the template index is the same
+  if (idx == m_templateIdx)
+    return;
+
+  // Get current code and template code
+  auto code = m_widget.toPlainText().simplified();
+  auto currentTemplateCode = templateCode().simplified();
+
+  // Document has been modified, ask user if he/she wants to continue
+  if (isModified() || (!code.isEmpty() && code != currentTemplateCode))
+  {
+    auto ret = Misc::Utilities::showMessageBox(
+        tr("The document has been modified!"),
+        tr("Are you sure you want to continue?"), QMessageBox::Question,
+        qAppName(), QMessageBox::Yes | QMessageBox::No);
+
+    if (ret == QMessageBox::No)
+    {
+      Q_EMIT templateIdxChanged();
+      return;
+    }
+  }
+
+  // Load template code
+  m_templateIdx = idx;
+  m_widget.setPlainText(templateCode());
+  (void)save(true);
+
+  // Mark the project file as modified
+  JSON::ProjectModel::instance().setModified(true);
+
+  // Update user interface
+  Q_EMIT templateIdxChanged();
 }
 
 /**
@@ -546,6 +764,89 @@ void JSON::FrameParser::resizeWidget()
     m_widget.setFixedSize(width(), height());
     renderWidget();
   }
+}
+
+/**
+ * @brief Loads the available JavaScript frame parser templates
+ *
+ * Initializes the list of template files and their corresponding user-friendly
+ * display names. The templates provide pre-written JavaScript code for parsing
+ * various serial communication protocols and data formats.
+ *
+ * The template files are loaded from the application resources and include
+ * parsers for common protocols like NMEA, Modbus, CAN bus, MAVLink, as well
+ * as generic formats like CSV, JSON, XML, and various binary encodings.
+ *
+ * Template files and display names are stored in parallel arrays with matching
+ * indices, allowing UI components to display localized names while referencing
+ * the correct template file.
+ *
+ * @note Template names are marked for translation using tr() to support
+ *       internationalization
+ *
+ * @note The order of m_templateFiles and m_templateNames must be kept in sync
+ */
+void JSON::FrameParser::loadTemplateNames()
+{
+  m_templateFiles.clear();
+  m_templateFiles = {"at_commands.js",
+                     "base64_encoded.js",
+                     "binary_tlv.js",
+                     "can_bus.js",
+                     "cobs_encoded.js",
+                     "comma_separated.js",
+                     "fixed_width_fields.js",
+                     "hexadecimal_bytes.js",
+                     "ini_config.js",
+                     "json_data.js",
+                     "key_value_pairs.js",
+                     "mavlink.js",
+                     "messagepack.js",
+                     "modbus_ascii.js",
+                     "modbus_rtu.js",
+                     "nmea_0183.js",
+                     "nmea_2000.js",
+                     "pipe_delimited.js",
+                     "raw_bytes.js",
+                     "rtcm_corrections.js",
+                     "semicolon_separated.js",
+                     "sirf_binary.js",
+                     "slip_encoded.js",
+                     "tab_separated.js",
+                     "ubx_ublox.js",
+                     "url_encoded.js",
+                     "xml_data.js",
+                     "yaml_data.js"};
+
+  m_templateNames.clear();
+  m_templateNames = {tr("AT command responses"),
+                     tr("Base64-encoded data"),
+                     tr("Binary TLV (Tag-Length-Value)"),
+                     tr("CAN bus frames"),
+                     tr("COBS-encoded frames"),
+                     tr("Comma-separated data"),
+                     tr("Fixed-width fields"),
+                     tr("Hexadecimal bytes"),
+                     tr("INI/config format"),
+                     tr("JSON data"),
+                     tr("Key-value pairs"),
+                     tr("MAVLink messages"),
+                     tr("MessagePack data"),
+                     tr("Modbus ASCII frames"),
+                     tr("Modbus RTU frames"),
+                     tr("NMEA 0183 sentences"),
+                     tr("NMEA 2000 messages"),
+                     tr("Pipe-delimited data"),
+                     tr("Raw bytes"),
+                     tr("RTCM corrections"),
+                     tr("Semicolon-separated data"),
+                     tr("SiRF binary protocol"),
+                     tr("SLIP-encoded frames"),
+                     tr("Tab-separated data"),
+                     tr("UBX protocol (u-blox)"),
+                     tr("URL-encoded data"),
+                     tr("XML data"),
+                     tr("YAML data")};
 }
 
 /**

@@ -861,7 +861,6 @@ void JSON::ProjectModel::newJsonFile()
   m_frameStartSequence = "$";
   m_hexadecimalDelimiters = false;
   m_title = tr("Untitled Project");
-  m_frameParserCode = JSON::FrameParser::defaultCode();
 
   // Load frame parser code into code editor
   if (JSON::FrameBuilder::instance().frameParser())

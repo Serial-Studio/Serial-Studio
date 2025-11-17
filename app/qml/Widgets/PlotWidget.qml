@@ -54,6 +54,103 @@ Item {
   property bool mouseAreaEnabled: true
 
   //
+  // Cursor color properties
+  //
+  property color cursorAColor: "#00FF00"
+  property color cursorBColor: "#FF6600"
+  property color cursorATextColor: Cpp_ThemeManager.colors["widget_base"]
+  property color cursorBTextColor: Cpp_ThemeManager.colors["widget_base"]
+
+  //
+  // Cursor properties (internal - managed by showCrosshairs)
+  //
+  property bool cursorAVisible: false
+  property bool cursorBVisible: false
+  property real cursorAX: 0  // World coordinates
+  property real cursorAY: 0
+  property real cursorBX: 0
+  property real cursorBY: 0
+
+  //
+  // Cursor mode replaces crosshairs when enabled
+  //
+  readonly property bool cursorMode: showCrosshairs
+
+  //
+  // Cursor delta values
+  //
+  readonly property real deltaX: cursorBX - cursorAX
+  readonly property real deltaY: cursorBY - cursorAY
+
+  //
+  // Functions to manage cursors
+  //
+  function setCursorA(worldX, worldY) {
+    cursorAX = worldX
+    cursorAY = worldY
+    cursorAVisible = true
+  }
+
+  function setCursorB(worldX, worldY) {
+    cursorBX = worldX
+    cursorBY = worldY
+    cursorBVisible = true
+  }
+
+  function clearCursorA() {
+    cursorAVisible = false
+  }
+
+  function clearCursorB() {
+    cursorBVisible = false
+  }
+
+  function clearAllCursors() {
+    cursorAVisible = false
+    cursorBVisible = false
+  }
+
+  //
+  // Convert world coordinates to pixel coordinates
+  //
+  function worldToPixelX(worldX) {
+    const xFullRange = _axisX.max - _axisX.min
+    const xWorldCenter = _axisX.min + xFullRange / 2
+    const xVisibleRange = xFullRange / _axisX.zoom
+    const xViewStart = xWorldCenter + _axisX.pan - xVisibleRange / 2
+    const normalizedX = (worldX - xViewStart) / xVisibleRange
+    return normalizedX * _graph.plotArea.width
+  }
+
+  function worldToPixelY(worldY) {
+    const yFullRange = _axisY.max - _axisY.min
+    const yWorldCenter = _axisY.min + yFullRange / 2
+    const yVisibleRange = yFullRange / _axisY.zoom
+    const yViewStart = yWorldCenter + _axisY.pan - yVisibleRange / 2
+    const normalizedY = (worldY - yViewStart) / yVisibleRange
+    return (1 - normalizedY) * _graph.plotArea.height
+  }
+
+  //
+  // Convert pixel coordinates to world coordinates
+  //
+  function pixelToWorldX(pixelX) {
+    const xFullRange = _axisX.max - _axisX.min
+    const xWorldCenter = _axisX.min + xFullRange / 2
+    const xVisibleRange = xFullRange / _axisX.zoom
+    const xViewStart = xWorldCenter + _axisX.pan - xVisibleRange / 2
+    return xViewStart + xVisibleRange * (pixelX / _graph.plotArea.width)
+  }
+
+  function pixelToWorldY(pixelY) {
+    const yFullRange = _axisY.max - _axisY.min
+    const yWorldCenter = _axisY.min + yFullRange / 2
+    const yVisibleRange = yFullRange / _axisY.zoom
+    const yViewStart = yWorldCenter + _axisY.pan - yVisibleRange / 2
+    return yViewStart + yVisibleRange * (1 - (pixelY / _graph.plotArea.height))
+  }
+
+  //
   // Updates the X and Y value labels to reflect the world coordinates under
   // the mouse cursor.
   //
@@ -62,19 +159,8 @@ Item {
     if (!_overlayMouse.containsMouse)
       return
 
-    // X axis calculation
-    const xFullRange = _axisX.max - _axisX.min
-    const xWorldCenter = _axisX.min + xFullRange / 2
-    const xVisibleRange = xFullRange / _axisX.zoom
-    const xViewStart = xWorldCenter + _axisX.pan - xVisibleRange / 2
-    const x = xViewStart + xVisibleRange * (mouseX / _graph.plotArea.width)
-
-    // Y axis calculation
-    const yFullRange = _axisY.max - _axisY.min
-    const yWorldCenter = _axisY.min + yFullRange / 2
-    const yVisibleRange = yFullRange / _axisY.zoom
-    const yViewStart = yWorldCenter + _axisY.pan - yVisibleRange / 2
-    const y = yViewStart + yVisibleRange * (1 - (mouseY / _graph.plotArea.height))
+    const x = pixelToWorldX(mouseX)
+    const y = pixelToWorldY(mouseY)
 
     // Update labels
     _xPosLabel.text = x.toFixed(2)
@@ -268,7 +354,7 @@ Item {
   }
 
   //
-  // Interactive Overlay: handles crosshairs and CAD-like zooming
+  // Interactive Overlay: handles crosshairs, cursors, and CAD-like zooming
   //
   Item {
     width: _graph.plotArea.width
@@ -279,231 +365,490 @@ Item {
     //
     // MouseArea for interactive graph navigation and inspection
     //
-    // Responsibilities:
-    // - Tracks mouse position to update crosshair lines and value labels
-    // - Flips label anchors to prevent overlap with cursor
-    // - Responds to scroll wheel to perform zooming centered on cursor position
-    // - Uses `applyCursorZoom` to adjust zoom and pan on both X and Y axes
-    // - Uses `updateCrosshairLabels` to reflect current world under cursor
-    // - Shows a crosshair cursor when hovering the graph
-    //
     MouseArea {
       id: _overlayMouse
 
       anchors.fill: parent
       preventStealing: true
       propagateComposedEvents: true
-      acceptedButtons: Qt.LeftButton
+      acceptedButtons: Qt.LeftButton | Qt.RightButton
 
       visible: root.mouseAreaEnabled
       enabled: root.mouseAreaEnabled
       hoverEnabled: root.mouseAreaEnabled
 
-      cursorShape: dragging ? Qt.ClosedHandCursor : Qt.CrossCursor
+      cursorShape: dragging ? Qt.ClosedHandCursor :
+                   (draggedCursor !== null ? Qt.SizeAllCursor :
+                   (root.cursorMode ? Qt.CrossCursor : Qt.ArrowCursor))
 
       //
       // Custom properties for drag handling
       //
       property real _lastX: 0
       property real _lastY: 0
-      readonly property bool dragging: containsPress && _axisX.zoom > 1
+      property var draggedCursor: null  // null, "A", or "B"
+      readonly property bool dragging: containsPress && _axisX.zoom > 1 && draggedCursor === null
+
+      //
+      // Check if mouse is near a cursor (within 10 pixels)
+      //
+      function getNearestCursor(mouseX, mouseY) {
+        const threshold = 10
+
+        if (root.cursorAVisible) {
+          const aPixelX = root.worldToPixelX(root.cursorAX)
+          const aPixelY = root.worldToPixelY(root.cursorAY)
+          const distA = Math.sqrt(Math.pow(mouseX - aPixelX, 2) + Math.pow(mouseY - aPixelY, 2))
+          if (distA < threshold)
+            return "A"
+        }
+
+        if (root.cursorBVisible) {
+          const bPixelX = root.worldToPixelX(root.cursorBX)
+          const bPixelY = root.worldToPixelY(root.cursorBY)
+          const distB = Math.sqrt(Math.pow(mouseX - bPixelX, 2) + Math.pow(mouseY - bPixelY, 2))
+          if (distB < threshold)
+            return "B"
+        }
+
+        return null
+      }
 
       //
       // Drag state handling
       //
-      onContainsPressChanged: {
-        _lastX = _overlayMouse.mouseX
-        _lastY = _overlayMouse.mouseY
+      onPressed: (mouse) => {
+        // Only handle cursor interactions when in cursor mode
+        if (!root.cursorMode) {
+          mouse.accepted = false
+          return
+        }
+
+        _lastX = mouse.x
+        _lastY = mouse.y
+
+        // Check if clicking near a cursor
+        draggedCursor = getNearestCursor(mouse.x, mouse.y)
+
+        // Left click to place cursors
+        if (mouse.button === Qt.LeftButton && draggedCursor === null) {
+          const worldX = root.pixelToWorldX(mouse.x)
+          const worldY = root.pixelToWorldY(mouse.y)
+
+          // Place cursor A if not visible, otherwise place cursor B
+          if (!root.cursorAVisible) {
+            root.setCursorA(worldX, worldY)
+          } else if (!root.cursorBVisible) {
+            root.setCursorB(worldX, worldY)
+          } else {
+            // Both cursors exist, replace the nearest one
+            const nearestCursor = getNearestCursor(mouse.x, mouse.y)
+            if (nearestCursor === "A" || nearestCursor === null) {
+              root.setCursorA(worldX, worldY)
+            } else {
+              root.setCursorB(worldX, worldY)
+            }
+          }
+          mouse.accepted = true
+        }
+        // Right click to clear cursors
+        else if (mouse.button === Qt.RightButton) {
+          if (draggedCursor === "A") {
+            root.clearCursorA()
+          } else if (draggedCursor === "B") {
+            root.clearCursorB()
+          } else {
+            // Clear both if not clicking on a specific cursor
+            root.clearAllCursors()
+          }
+          mouse.accepted = true
+        }
+      }
+
+      onReleased: {
+        draggedCursor = null
       }
 
       //
-      // Handle mouse wheel zoom interaction:
-      // - Compute mouse position relative to plot area
-      // - Determine zoom direction (in/out) based on wheel delta
-      // - Apply exponential zoom factor to both X and Y axes
-      // - Use cursor position to focus zoom toward the mouse location
-      // - Update crosshair value labels to reflect new view
-      // - Mark the wheel event as handled to prevent propagation
+      // Handle mouse wheel zoom interaction
       //
       onWheel: (wheel) => {
-                 // Abort if not mouse is not in plot
-                 if (!containsMouse || !root.mouseAreaEnabled) {
-                   wheel.accepted = false
-                   return
-                 }
+        // Abort if not mouse is not in plot
+        if (!containsMouse || !root.mouseAreaEnabled) {
+          wheel.accepted = false
+          return
+        }
 
-                 // Obtain X/Y position relative to graph
-                 const localX = mouseX - _graph.plotArea.x
-                 const localY = mouseY - _graph.plotArea.y
+        // Obtain X/Y position relative to graph
+        const localX = mouseX - _graph.plotArea.x
+        const localY = mouseY - _graph.plotArea.y
 
-                 // Calculate new zoom factor
-                 const zoomFactor = 1.15
-                 const delta = -wheel.angleDelta.y / 120
-                 const factor = Math.pow(zoomFactor, -delta)
+        // Calculate new zoom factor
+        const zoomFactor = 1.15
+        const delta = -wheel.angleDelta.y / 120
+        const factor = Math.pow(zoomFactor, -delta)
 
-                 // Calculate new zoom values for both axes
-                 const newZoomX = _axisX.zoom * factor
-                 const newZoomY = _axisY.zoom * factor
+        // Calculate new zoom values for both axes
+        const newZoomX = _axisX.zoom * factor
+        const newZoomY = _axisY.zoom * factor
 
-                 // Zoom & navigate through the graph
-                 root.applyCursorZoom(_axisX, _axisX.zoom, newZoomX, localX, _graph.plotArea.width, false)
-                 root.applyCursorZoom(_axisY, _axisY.zoom, newZoomY, localY, _graph.plotArea.height, true)
+        // Zoom & navigate through the graph
+        root.applyCursorZoom(_axisX, _axisX.zoom, newZoomX, localX, _graph.plotArea.width, false)
+        root.applyCursorZoom(_axisY, _axisY.zoom, newZoomY, localY, _graph.plotArea.height, true)
 
-                 // Update crosshair labels to reflect new view window
-                 root.updateCrosshairLabels(localX, localY)
-                 wheel.accepted = true
-               }
+        // Update crosshair labels to reflect new view window
+        root.updateCrosshairLabels(localX, localY)
+        wheel.accepted = true
+      }
 
       //
-      // Handle mouse movement over the plot area:
-      // - Ignore updates if mouse is not within bounds
-      // - Update vertical and horizontal crosshair positions
-      // - Repaint crosshair canvases to reflect new position
-      // - Dynamically flip label anchors to avoid overlapping the cursor:
-      //     - Y label flips left if near the right edge
-      //     - X label flips to bottom if near the top edge
-      // - Update value labels to reflect current cursor world coordinates
+      // Handle mouse movement
       //
       onPositionChanged: (mouse) => {
-                           // Abort if not mouse is not in plot
-                           if (!containsMouse) {
-                             mouse.accepted = false
-                             return
-                           }
+        // Abort if not mouse is not in plot
+        if (!containsMouse) {
+          mouse.accepted = false
+          return
+        }
 
-                           // Obtain graph size
-                           const graphW = _graph.plotArea.width
-                           const graphH = _graph.plotArea.height
+        // Handle cursor dragging
+        if (draggedCursor !== null && containsPress && root.cursorMode) {
+          const worldX = root.pixelToWorldX(mouse.x)
+          const worldY = root.pixelToWorldY(mouse.y)
 
-                           // Crosshair position
-                           _verCrosshair.x = mouse.x
-                           _horCrosshair.y = mouse.y
-                           _verCrosshair.requestPaint()
-                           _horCrosshair.requestPaint()
+          if (draggedCursor === "A") {
+            root.cursorAX = worldX
+            root.cursorAY = worldY
+          } else if (draggedCursor === "B") {
+            root.cursorBX = worldX
+            root.cursorBY = worldY
+          }
+        }
+        // Micro-pan when dragging the plot (only when not in cursor mode)
+        else if (_overlayMouse.dragging && !root.cursorMode) {
+          // Obtain drag distance
+          const dx = mouse.x - _lastX
+          const dy = mouse.y - _lastY
 
-                           // Update values
-                           updateCrosshairLabels(mouse.x, mouse.y)
+          // Update pan
+          root.adjustAxisPan(_axisX, _graph.plotArea.width, mouse.x, dx, true)
+          root.adjustAxisPan(_axisY, _graph.plotArea.height, mouse.y, dy, false)
 
-                           // Micro-pan when dragging
-                           if (_overlayMouse.dragging) {
-                             // Obtain drag distance
-                             const dx = mouse.x - _lastX
-                             const dy = mouse.y - _lastY
-
-                             // Update pan
-                             root.adjustAxisPan(_axisX, _graph.plotArea.width, mouse.x, dx, true)
-                             root.adjustAxisPan(_axisY, _graph.plotArea.height, mouse.y, dy, false)
-
-                             // Update drag start point
-                             _lastX = mouse.x
-                             _lastY = mouse.y
-
-                             // Update crosshair values again
-                             root.updateCrosshairLabels(mouse.x, mouse.y)
-                           }
-                         }
+          // Update drag start point
+          _lastX = mouse.x
+          _lastY = mouse.y
+        }
+      }
     }
 
     //
-    // Vertical crosshair line
+    // Cursor A (only visible in cursor mode)
     //
-    Canvas {
-      id: _verCrosshair
-      width: 2
-      visible: root.showCrosshairs && _overlayMouse.containsMouse
+    Item {
+      id: _cursorA
+      visible: root.cursorMode && root.cursorAVisible
+      x: root.worldToPixelX(root.cursorAX)
+      y: root.worldToPixelY(root.cursorAY)
 
-      onPaint: {
-        var ctx = getContext("2d")
-        ctx.clearRect(0, 0, width, height)
-        ctx.strokeStyle = Cpp_ThemeManager.colors["polar_indicator"]
-        ctx.setLineDash([4, 4])
-        ctx.lineDashOffset = 0
+      // Vertical line with dash-dot pattern (full height)
+      Canvas {
+        id: _cursorAVertical
+        width: 2
+        height: parent.parent.height
+        x: 0
+        y: -parent.y
 
-        ctx.beginPath()
-        ctx.moveTo(0.5, 0)
-        ctx.lineTo(0.5, height)
-        ctx.moveTo(1.5, 0)
-        ctx.lineTo(1.5, height)
-        ctx.stroke()
+        onPaint: {
+          var ctx = getContext("2d")
+          ctx.clearRect(0, 0, width, height)
+          ctx.strokeStyle = root.cursorAColor
+          ctx.lineWidth = 2
+          ctx.setLineDash([8, 4, 2, 4])
+          ctx.lineDashOffset = 0
+
+          ctx.beginPath()
+          ctx.moveTo(1, 0)
+          ctx.lineTo(1, height)
+          ctx.stroke()
+        }
       }
 
+      // Horizontal line with dash-dot pattern (full width)
+      Canvas {
+        id: _cursorAHorizontal
+        width: parent.parent.width
+        height: 2
+        x: -parent.x
+        y: 0
+
+        onPaint: {
+          var ctx = getContext("2d")
+          ctx.clearRect(0, 0, width, height)
+          ctx.strokeStyle = root.cursorAColor
+          ctx.lineWidth = 2
+          ctx.setLineDash([8, 4, 2, 4])
+          ctx.lineDashOffset = 0
+
+          ctx.beginPath()
+          ctx.moveTo(0, 1)
+          ctx.lineTo(width, 1)
+          ctx.stroke()
+        }
+      }
+
+      // Center marker
+      Rectangle {
+        width: 10
+        height: 10
+        radius: 5
+        color: root.cursorAColor
+        border.width: 2
+        border.color: Cpp_ThemeManager.colors["widget_base"]
+        anchors.centerIn: parent
+      }
+
+      // Cursor A identifier label
+      Label {
+        text: "A"
+        color: root.cursorATextColor
+        font: Cpp_Misc_CommonFonts.customMonoFont(0.9, true)
+        padding: 4
+        background: Rectangle {
+          color: root.cursorAColor
+          opacity: 0.9
+          radius: 3
+        }
+        anchors {
+          left: parent.right
+          top: parent.bottom
+          leftMargin: 5
+          topMargin: 5
+        }
+      }
+
+      // Trigger repaint when cursor moves
+      onXChanged: {
+        _cursorAVertical.requestPaint()
+        _cursorAHorizontal.requestPaint()
+      }
+      onYChanged: {
+        _cursorAVertical.requestPaint()
+        _cursorAHorizontal.requestPaint()
+      }
+    }
+
+    //
+    // Cursor B (only visible in cursor mode)
+    //
+    Item {
+      id: _cursorB
+      visible: root.cursorMode && root.cursorBVisible
+      x: root.worldToPixelX(root.cursorBX)
+      y: root.worldToPixelY(root.cursorBY)
+
+      // Vertical line with dash-dot pattern (full height)
+      Canvas {
+        id: _cursorBVertical
+        width: 2
+        height: parent.parent.height
+        x: 0
+        y: -parent.y
+
+        onPaint: {
+          var ctx = getContext("2d")
+          ctx.clearRect(0, 0, width, height)
+          ctx.strokeStyle = root.cursorBColor
+          ctx.lineWidth = 2
+          ctx.setLineDash([8, 4, 2, 4])
+          ctx.lineDashOffset = 0
+
+          ctx.beginPath()
+          ctx.moveTo(1, 0)
+          ctx.lineTo(1, height)
+          ctx.stroke()
+        }
+      }
+
+      // Horizontal line with dash-dot pattern (full width)
+      Canvas {
+        id: _cursorBHorizontal
+        width: parent.parent.width
+        height: 2
+        x: -parent.x
+        y: 0
+
+        onPaint: {
+          var ctx = getContext("2d")
+          ctx.clearRect(0, 0, width, height)
+          ctx.strokeStyle = root.cursorBColor
+          ctx.lineWidth = 2
+          ctx.setLineDash([8, 4, 2, 4])
+          ctx.lineDashOffset = 0
+
+          ctx.beginPath()
+          ctx.moveTo(0, 1)
+          ctx.lineTo(width, 1)
+          ctx.stroke()
+        }
+      }
+
+      // Center marker
+      Rectangle {
+        width: 10
+        height: 10
+        radius: 5
+        color: root.cursorBColor
+        border.width: 2
+        border.color: Cpp_ThemeManager.colors["widget_base"]
+        anchors.centerIn: parent
+      }
+
+      // Cursor B identifier label
+      Label {
+        text: "B"
+        color: root.cursorBTextColor
+        font: Cpp_Misc_CommonFonts.customMonoFont(0.9, true)
+        padding: 4
+        background: Rectangle {
+          color: root.cursorBColor
+          opacity: 0.9
+          radius: 3
+        }
+        anchors {
+          left: parent.right
+          top: parent.bottom
+          leftMargin: 5
+          topMargin: 5
+        }
+      }
+
+      // Trigger repaint when cursor moves
+      onXChanged: {
+        _cursorBVertical.requestPaint()
+        _cursorBHorizontal.requestPaint()
+      }
+      onYChanged: {
+        _cursorBVertical.requestPaint()
+        _cursorBHorizontal.requestPaint()
+      }
+    }
+
+    //
+    // X position label for Cursor A (on X-axis)
+    //
+    Label {
+      id: _cursorAXPosLabel
+      text: root.cursorAX.toFixed(2)
+      padding: 4
+      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      color: root.cursorATextColor
+      visible: root.cursorMode && root.cursorAVisible
+
+      background: Rectangle {
+        opacity: 0.9
+        color: root.cursorAColor
+        radius: 3
+      }
+
+      x: Math.max(0, Math.min(parent.width - width, root.worldToPixelX(root.cursorAX) - width / 2))
       anchors {
-        top: parent.top
-        bottom: parent.bottom
+        top: parent.bottom
+        topMargin: 2
       }
     }
 
     //
-    // Horizontal crosshair line
+    // Y position label for Cursor A (on Y-axis)
     //
-    Canvas {
-      id: _horCrosshair
-      visible: root.showCrosshairs && _overlayMouse.containsMouse
+    Label {
+      id: _cursorAYPosLabel
+      text: root.cursorAY.toFixed(2)
+      padding: 4
+      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      color: root.cursorATextColor
+      visible: root.cursorMode && root.cursorAVisible
 
-      height: 2
-      onPaint: {
-        var ctx = getContext("2d")
-        ctx.clearRect(0, 0, width, height)
-        ctx.strokeStyle = Cpp_ThemeManager.colors["polar_indicator"]
-        ctx.setLineDash([4, 4])
-        ctx.lineDashOffset = 0
-
-        ctx.beginPath()
-        ctx.moveTo(0, 0.5)
-        ctx.lineTo(width, 0.5)
-        ctx.moveTo(0, 1.5)
-        ctx.lineTo(width, 1.5)
-        ctx.stroke()
+      background: Rectangle {
+        opacity: 0.9
+        color: root.cursorAColor
+        radius: 3
       }
 
+      y: Math.max(0, Math.min(parent.height - height, root.worldToPixelY(root.cursorAY) - height / 2))
       anchors {
-        left: parent.left
-        right: parent.right
+        right: parent.left
+        rightMargin: 2
       }
     }
 
     //
-    // X position label
+    // X position label for Cursor B (on X-axis)
+    //
+    Label {
+      id: _cursorBXPosLabel
+      text: root.cursorBX.toFixed(2)
+      padding: 4
+      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      color: root.cursorBTextColor
+      visible: root.cursorMode && root.cursorBVisible
+
+      background: Rectangle {
+        opacity: 0.9
+        color: root.cursorBColor
+        radius: 3
+      }
+
+      x: Math.max(0, Math.min(parent.width - width, root.worldToPixelX(root.cursorBX) - width / 2))
+      anchors {
+        top: parent.bottom
+        topMargin: 2
+      }
+    }
+
+    //
+    // Y position label for Cursor B (on Y-axis)
+    //
+    Label {
+      id: _cursorBYPosLabel
+      text: root.cursorBY.toFixed(2)
+      padding: 4
+      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      color: root.cursorBTextColor
+      visible: root.cursorMode && root.cursorBVisible
+
+      background: Rectangle {
+        opacity: 0.9
+        color: root.cursorBColor
+        radius: 3
+      }
+
+      y: Math.max(0, Math.min(parent.height - height, root.worldToPixelY(root.cursorBY) - height / 2))
+      anchors {
+        right: parent.left
+        rightMargin: 2
+      }
+    }
+
+    //
+    // X position label (removed - not needed in cursor mode)
     //
     Label {
       id: _xPosLabel
-
+      visible: false
       padding: 4
       font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
       color: Cpp_ThemeManager.colors["widget_base"]
-      visible: root.showCrosshairs && _overlayMouse.containsMouse
-
-      background: Rectangle {
-        opacity: 0.8
-        color: Cpp_ThemeManager.colors["polar_indicator"]
-      }
-
-      anchors {
-        top: parent.bottom
-        horizontalCenter: _verCrosshair.horizontalCenter
-      }
     }
 
     //
-    // Y position label
+    // Y position label (removed - not needed in cursor mode)
     //
     Label {
       id: _yPosLabel
-
+      visible: false
       padding: 4
       font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
       color: Cpp_ThemeManager.colors["widget_base"]
-      visible: root.showCrosshairs && _overlayMouse.containsMouse
-
-      background: Rectangle {
-        opacity: 0.8
-        color: Cpp_ThemeManager.colors["polar_indicator"]
-      }
-
-      anchors {
-        right: parent.left
-        verticalCenter: _horCrosshair.verticalCenter
-      }
     }
   }
 
@@ -536,7 +881,7 @@ Item {
   }
 
   //
-  // X-axis label + real time mouse position
+  // X-axis label + real time mouse position + cursor delta
   //
   Item {
     id: _xLabelContainer
@@ -568,25 +913,42 @@ Item {
 
       Item {
         implicitHeight: 2
-        visible: _xLabel.visible && _posLabel.visible
+        visible: _xLabel.visible && (_posLabel.visible || _deltaLabel.visible)
       }
 
       Label {
         id: _posLabel
+        visible: false  // Not needed in cursor mode
         elide: Qt.ElideRight
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
         color: Cpp_ThemeManager.colors["widget_text"]
         font: Cpp_Misc_CommonFonts.customMonoFont(0.91, false)
         text: qsTr("%1, %2").arg(_xPosLabel.text).arg(_yPosLabel.text)
-        opacity: (root.mouseAreaEnabled && _xPosLabel.text.length > 0 && _yPosLabel.text.length) > 0 ? 1 : 0
+        opacity: 0
 
         Behavior on opacity {NumberAnimation{}}
       }
 
       Item {
+        implicitHeight: 2
+        visible: _posLabel.visible && _deltaLabel.visible
+      }
+
+      Label {
+        id: _deltaLabel
+        elide: Qt.ElideRight
+        Layout.alignment: Qt.AlignHCenter
+        horizontalAlignment: Qt.AlignHCenter
+        color: Cpp_ThemeManager.colors["widget_text"]
+        font: Cpp_Misc_CommonFonts.customMonoFont(0.85, false)
+        visible: root.cursorMode && root.cursorAVisible && root.cursorBVisible
+        text: qsTr("ΔX: %1  ΔY: %2").arg(root.deltaX.toFixed(2)).arg(root.deltaY.toFixed(2))
+      }
+
+      Item {
         implicitHeight: 4
-        visible: _posLabel.visible
+        visible: _posLabel.visible || _deltaLabel.visible
       }
     }
   }

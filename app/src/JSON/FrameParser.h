@@ -29,6 +29,8 @@
 #include <QSyntaxStyle>
 #include <QQuickPaintedItem>
 
+#include "JSON/FrameParserTestDialog.h"
+
 namespace JSON
 {
 class FrameParser : public QQuickPaintedItem
@@ -38,21 +40,29 @@ class FrameParser : public QQuickPaintedItem
   Q_PROPERTY(bool isModified READ isModified NOTIFY modifiedChanged)
   Q_PROPERTY(bool undoAvailable READ undoAvailable NOTIFY modifiedChanged)
   Q_PROPERTY(bool redoAvailable READ redoAvailable NOTIFY modifiedChanged)
+  Q_PROPERTY(
+      QStringList templateNames READ templateNames NOTIFY templatesChanged)
+  Q_PROPERTY(int templateIdx READ templateIdx WRITE setTemplateIdx NOTIFY
+                 templateIdxChanged)
 
 signals:
   void textChanged();
   void modifiedChanged();
+  void templatesChanged();
+  void templateIdxChanged();
 
 public:
   FrameParser(QQuickItem *parent = 0);
-
-  static const QString &defaultCode();
 
   [[nodiscard]] QString text() const;
   [[nodiscard]] bool isModified() const;
 
   [[nodiscard]] QStringList parse(const QString &frame);
   [[nodiscard]] QStringList parse(const QByteArray &frame);
+
+  [[nodiscard]] int templateIdx() const;
+  [[nodiscard]] QString templateCode() const;
+  [[nodiscard]] QStringList templateNames() const;
 
   [[nodiscard]] bool undoAvailable() const;
   [[nodiscard]] bool redoAvailable() const;
@@ -69,8 +79,12 @@ public slots:
   void apply();
   void reload();
   void import();
+  void evaluate();
   void readCode();
   void selectAll();
+  void testWithSampleData();
+  void loadDefaultTemplate();
+  void setTemplateIdx(const int idx);
 
 private slots:
   void onThemeChanged();
@@ -78,6 +92,7 @@ private slots:
 private slots:
   void renderWidget();
   void resizeWidget();
+  void loadTemplateNames();
 
 private:
   virtual void paint(QPainter *painter) override;
@@ -97,10 +112,16 @@ private:
   virtual void dropEvent(QDropEvent *event) override;
 
 private:
+  int m_templateIdx;
+
   QPixmap m_pixmap;
   QJSEngine m_engine;
   QSyntaxStyle m_style;
   QCodeEditor m_widget;
   QJSValue m_parseFunction;
+  QStringList m_templateFiles;
+  QStringList m_templateNames;
+
+  FrameParserTestDialog m_testDialog;
 };
 } // namespace JSON

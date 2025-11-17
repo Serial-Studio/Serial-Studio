@@ -145,6 +145,7 @@ set(SOURCES
   src/JSON/ProjectModel.cpp
   src/JSON/FrameBuilder.cpp
   src/JSON/Frame.cpp
+  src/JSON/FrameParserTestDialog.cpp
   src/CSV/Player.cpp
   src/CSV/Export.cpp
   src/main.cpp
@@ -195,6 +196,7 @@ set(HEADERS
   src/JSON/ProjectModel.h
   src/JSON/Frame.h
   src/JSON/FrameBuilder.h
+  src/JSON/FrameParserTestDialog.h
   src/CSV/Export.h
   src/CSV/Player.h
   src/ThirdParty/atomicops.h

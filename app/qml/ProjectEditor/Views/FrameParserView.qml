@@ -158,7 +158,7 @@ Widgets.Pane {
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     ColumnLayout {
-      spacing: -1
+      spacing: 0
       anchors.margins: 0
       anchors.fill: parent
       anchors.topMargin: -16
@@ -170,17 +170,16 @@ Widgets.Pane {
       // Group actions panel
       //
       Rectangle {
-        z: 2
         Layout.fillWidth: true
         Layout.maximumHeight: Layout.minimumHeight
-        Layout.minimumHeight: layout.implicitHeight + 12
+        Layout.minimumHeight: toolbarLayout.implicitHeight + 12
         color: Cpp_ThemeManager.colors["groupbox_background"]
 
         //
         // Buttons
         //
         RowLayout {
-          id: layout
+          id: toolbarLayout
           spacing: 4
 
           anchors {
@@ -208,11 +207,11 @@ Widgets.Pane {
           //
           Widgets.ToolbarButton {
             iconSize: 24
-            text: qsTr("Import")
+            text: qsTr("Open")
             toolbarButton: false
             onClicked: frameParser.import()
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/code-editor/import.svg"
+            icon.source: "qrc:/rcc/icons/code-editor/open.svg"
             ToolTip.text: qsTr("Import a JavaScript file for data parsing")
           }
 
@@ -221,12 +220,12 @@ Widgets.Pane {
           //
           Widgets.ToolbarButton {
             iconSize: 24
+            text: qsTr("Save")
             toolbarButton: false
-            text: qsTr("Validate \& Save")
             onClicked: frameParser.apply()
             enabled: frameParser.isModified
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/code-editor/apply.svg"
+            icon.source: "qrc:/rcc/icons/code-editor/save.svg"
             ToolTip.text: qsTr("Validate syntax and apply parsing changes")
           }
 
@@ -350,17 +349,87 @@ Widgets.Pane {
             Layout.fillWidth: true
           }
         }
+      }
 
-        //
-        // Bottom border
-        //
-        Rectangle {
-          height: 1
-          anchors.left: parent.left
-          anchors.right: parent.right
-          anchors.bottom: parent.bottom
-          color: Cpp_ThemeManager.colors["groupbox_border"]
+      //
+      // Border
+      //
+      Rectangle {
+        implicitHeight: 1
+        Layout.fillWidth: true
+        color: Cpp_ThemeManager.colors["groupbox_border"]
+      }
+
+      //
+      // Template selector
+      //
+      Rectangle {
+        implicitHeight: 32
+        Layout.fillWidth: true
+        Layout.minimumHeight: templateLayout.implicitHeight + 12
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+
+        RowLayout {
+          id: templateLayout
+          spacing: 4
+
+          anchors {
+            margins: 8
+            left: parent.left
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+          }
+
+          ComboBox {
+            Layout.minimumWidth: 320
+            model: frameParser.templateNames
+            Layout.alignment: Qt.AlignVCenter
+            currentIndex: frameParser.templateIdx
+            displayText: qsTr("Template: %1").arg(currentText)
+            onCurrentIndexChanged: {
+              if (currentIndex !== frameParser.templateIdx)
+                frameParser.templateIdx = currentIndex
+            }
+          }
+
+          Item {
+            Layout.fillWidth: true
+          }
+
+          Button {
+            icon.width: 18
+            icon.height: 18
+            leftPadding: 12
+            rightPadding: 12
+            Layout.alignment: Qt.AlignVCenter
+            text: qsTr("Test With Sample Data") + " "
+            onClicked: frameParser.testWithSampleData()
+            icon.source: "qrc:/rcc/icons/buttons/test.svg"
+            icon.color: Cpp_ThemeManager.colors["button_text"]
+          }
+
+          Button {
+            icon.width: 18
+            icon.height: 18
+            leftPadding: 12
+            rightPadding: 12
+            text: qsTr("Evaluate") + " "
+            onClicked: frameParser.evaluate()
+            Layout.alignment: Qt.AlignVCenter
+            icon.source: "qrc:/rcc/icons/buttons/media-play.svg"
+            icon.color: Cpp_ThemeManager.colors["button_text"]
+          }
         }
+      }
+
+      //
+      // Border
+      //
+      Rectangle {
+        z: 2
+        implicitHeight: 1
+        Layout.fillWidth: true
+        color: Cpp_ThemeManager.colors["groupbox_border"]
       }
 
       //
@@ -370,6 +439,7 @@ Widgets.Pane {
         id: frameParser
         Layout.fillWidth: true
         Layout.fillHeight: true
+        Layout.topMargin: -1
 
         MouseArea {
           id: mouseArea

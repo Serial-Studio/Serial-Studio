@@ -141,11 +141,11 @@
         <file>icons/buttons/send.svg</file>
         <file>icons/buttons/visible.svg</file>
         <file>icons/buttons/website.svg</file>
-        <file>icons/code-editor/apply.svg</file>
+        <file>icons/code-editor/save.svg</file>
         <file>icons/code-editor/copy.svg</file>
         <file>icons/code-editor/cut.svg</file>
         <file>icons/code-editor/help.svg</file>
-        <file>icons/code-editor/import.svg</file>
+        <file>icons/code-editor/open.svg</file>
         <file>icons/code-editor/paste.svg</file>
         <file>icons/code-editor/redo.svg</file>
         <file>icons/code-editor/reload.svg</file>
@@ -392,22 +392,51 @@
         <file>messages/trial/Welcome_UK.txt</file>
         <file>messages/trial/Welcome_ZH.txt</file>
         <file>messages/Acknowledgements.txt</file>
-        <file>scripts/frame-parser.js</file>
+        <file>scripts/at_commands.js</file>
+        <file>scripts/base64_encoded.js</file>
+        <file>scripts/binary_tlv.js</file>
+        <file>scripts/can_bus.js</file>
+        <file>scripts/cobs_encoded.js</file>
+        <file>scripts/comma_separated.js</file>
+        <file>scripts/fixed_width_fields.js</file>
+        <file>scripts/hexadecimal_bytes.js</file>
+        <file>scripts/ini_config.js</file>
+        <file>scripts/json_data.js</file>
+        <file>scripts/key_value_pairs.js</file>
+        <file>scripts/mavlink.js</file>
+        <file>scripts/messagepack.js</file>
+        <file>scripts/modbus_ascii.js</file>
+        <file>scripts/modbus_rtu.js</file>
+        <file>scripts/nmea_0183.js</file>
+        <file>scripts/nmea_2000.js</file>
+        <file>scripts/pipe_delimited.js</file>
+        <file>scripts/raw_bytes.js</file>
+        <file>scripts/rtcm_corrections.js</file>
+        <file>scripts/semicolon_separated.js</file>
+        <file>scripts/sirf_binary.js</file>
+        <file>scripts/slip_encoded.js</file>
+        <file>scripts/tab_separated.js</file>
+        <file>scripts/ubx_ublox.js</file>
+        <file>scripts/url_encoded.js</file>
+        <file>scripts/xml_data.js</file>
+        <file>scripts/yaml_data.js</file>
         <file>themes/code-editor/dark.xml</file>
         <file>themes/code-editor/default.xml</file>
+        <file>themes/code-editor/gunmetal.xml</file>
         <file>themes/code-editor/iron.xml</file>
         <file>themes/code-editor/light.xml</file>
+        <file>themes/code-editor/midday.xml</file>
         <file>themes/code-editor/midnight.xml</file>
+        <file>themes/code-editor/rust.xml</file>
         <file>themes/dark.json</file>
         <file>themes/default.json</file>
+        <file>themes/gunmetal.json</file>
         <file>themes/iron.json</file>
         <file>themes/light.json</file>
-        <file>themes/midnight.json</file>
-        <file>themes/gunmetal.json</file>
-        <file>themes/code-editor/gunmetal.xml</file>
-        <file>themes/code-editor/rust.xml</file>
-        <file>themes/rust.json</file>
-        <file>themes/code-editor/midday.xml</file>
         <file>themes/midday.json</file>
+        <file>themes/midnight.json</file>
+        <file>themes/rust.json</file>
+        <file>icons/code-editor/template.svg</file>
+        <file>icons/buttons/test.svg</file>
     </qresource>
 </RCC>
