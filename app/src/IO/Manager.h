@@ -157,7 +157,7 @@ private:
 private:
   bool m_paused;
   bool m_writeEnabled;
-  bool m_threadedFrameExtraction;
+  bool m_thrFrameExtr;
   SerialStudio::BusType m_busType;
 
   HAL_Driver *m_driver;

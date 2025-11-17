@@ -111,7 +111,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
   else
     message = msg;
 
-  // Filter out unfixable Windows warnings...I tried, Qt won
+    // Filter out unfixable Windows warnings...I tried, Qt won
 #ifdef Q_OS_WIN
   if (type == QtWarningMsg)
   {

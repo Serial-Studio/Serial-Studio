@@ -54,7 +54,7 @@
 IO::Manager::Manager()
   : m_paused(false)
   , m_writeEnabled(true)
-  , m_threadedFrameExtraction(false)
+  , m_thrFrameExtr(false)
   , m_driver(nullptr)
   , m_workerThread(nullptr)
   , m_frameReader(nullptr)
@@ -62,8 +62,7 @@ IO::Manager::Manager()
   , m_finishSequence(QByteArray("*/"))
 {
   m_frame.reserve(4096);
-  m_threadedFrameExtraction
-      = m_settings.value("threadedFrameExtraction", true).toBool();
+  m_thrFrameExtr = m_settings.value("thrFrameExtr", false).toBool();
 
   setBusType(SerialStudio::BusType::UART);
   connect(this, &IO::Manager::busTypeChanged, this,
@@ -197,7 +196,7 @@ bool IO::Manager::configurationOk()
  */
 bool IO::Manager::threadedFrameExtraction()
 {
-  return m_threadedFrameExtraction;
+  return m_thrFrameExtr;
 }
 
 /**
@@ -577,8 +576,8 @@ void IO::Manager::setThreadedFrameExtraction(const bool enabled)
 {
   if (!isConnected())
   {
-    m_threadedFrameExtraction = enabled;
-    m_settings.setValue("threadedFrameExtraction", enabled);
+    m_thrFrameExtr = enabled;
+    m_settings.setValue("thrFrameExtr", enabled);
 
     Q_EMIT threadedFrameExtractionChanged();
   }
@@ -743,7 +742,7 @@ void IO::Manager::startFrameReader()
   }
 
   // Move to the worker thread
-  if (m_threadedFrameExtraction)
+  if (m_thrFrameExtr)
     m_frameReader->moveToThread(&m_workerThread);
 
   // Configure initial state for the frame reader
@@ -755,7 +754,7 @@ void IO::Manager::startFrameReader()
           &IO::Manager::onReadyRead);
 
   // Start the worker thread
-  if (m_threadedFrameExtraction)
+  if (m_thrFrameExtr)
   {
     if (!m_workerThread.isRunning())
       m_workerThread.start();
