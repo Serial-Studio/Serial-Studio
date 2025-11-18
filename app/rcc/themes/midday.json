@@ -139,6 +139,9 @@
     "plot3d_background_inner": "#F5F6F7",
     "plot3d_background_outer": "#ECEDEF",
 
+    "plot_cursor_a":"#E8A63A",
+    "plot_cursor_b":"#D9534F",
+
     "widget_colors": [
       "#2D6CCA",
       "#E8A63A",

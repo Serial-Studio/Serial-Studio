@@ -56,20 +56,20 @@ Item {
   //
   // Cursor color properties
   //
-  property color cursorAColor: "#00FF00"
-  property color cursorBColor: "#FF6600"
+  property color cursorAColor: Cpp_ThemeManager.colors["plot_cursor_a"]
+  property color cursorBColor: Cpp_ThemeManager.colors["plot_cursor_b"]
   property color cursorATextColor: Cpp_ThemeManager.colors["widget_base"]
   property color cursorBTextColor: Cpp_ThemeManager.colors["widget_base"]
 
   //
   // Cursor properties (internal - managed by showCrosshairs)
   //
-  property bool cursorAVisible: false
-  property bool cursorBVisible: false
-  property real cursorAX: 0  // World coordinates
+  property real cursorAX: 0
   property real cursorAY: 0
   property real cursorBX: 0
   property real cursorBY: 0
+  property bool cursorAVisible: false
+  property bool cursorBVisible: false
 
   //
   // Cursor mode replaces crosshairs when enabled
