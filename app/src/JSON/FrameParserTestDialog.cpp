@@ -83,7 +83,6 @@ JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
   m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
   m_table->setSelectionBehavior(QAbstractItemView::SelectRows);
   m_table->horizontalHeader()->setFont(commonFonts->boldUiFont());
-  m_table->setHorizontalHeaderLabels({tr("Dataset Index"), tr("Value")});
   m_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
   m_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
@@ -229,6 +228,7 @@ void JSON::FrameParserTestDialog::onLanguageChanged()
   m_inputTitle->setText(tr("Frame Data Input"));
   m_outputTitle->setText(tr("Frame Parser Results"));
   m_userInput->setPlaceholderText(tr("Enter frame data here..."));
+  m_table->setHorizontalHeaderLabels({tr("Dataset Index"), tr("Value")});
   m_inputDisplay->setPlaceholderText(
       tr("Enter frame data above, enable HEX mode if needed, then click "
          "\"Evaluate\" to run the frame parser.\n\n"
@@ -454,7 +454,7 @@ void JSON::FrameParserTestDialog::displayOutput(const QString &input,
         m_table->setItem(row, 0, inputItem);
       }
 
-      m_table->setItem(row, 0, new QTableWidgetItem(QString::number(i)));
+      m_table->setItem(row, 0, new QTableWidgetItem(QString::number(i + 1)));
       m_table->setItem(row, 1, new QTableWidgetItem(output[i]));
     }
   }
