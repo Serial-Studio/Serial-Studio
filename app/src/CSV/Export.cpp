@@ -205,7 +205,7 @@ void CSV::Export::hotpathTxFrame(const JSON::Frame &frame)
   if (!exportEnabled() || CSV::Player::instance().isOpen())
     return;
 
-    // Skip if not connected to a device
+  // Skip if not connected to a device
 #ifdef BUILD_COMMERCIAL
   if (!IO::Manager::instance().isConnected()
       && !(MQTT::Client::instance().isConnected()

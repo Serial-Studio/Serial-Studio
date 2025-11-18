@@ -24,9 +24,15 @@
 #include <QMessageBox>
 
 #include "SerialStudio.h"
+#include "Misc/Translator.h"
 #include "Misc/CommonFonts.h"
 #include "JSON/FrameParser.h"
+#include "Misc/ThemeManager.h"
 #include "JSON/FrameParserTestDialog.h"
+
+//------------------------------------------------------------------------------
+// Constructor function
+//------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the frame parser test dialog
@@ -39,18 +45,29 @@ JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
   : QDialog(parent)
   , m_parser(parser)
 {
-  // Get fonts object
+  // Set window geometry and title
+  resize(640, 480);
+  setMinimumSize(640, 480);
+
+  // Get pointer to fonts module
   auto *commonFonts = &Misc::CommonFonts::instance();
 
-  // Create main group boxes
-  auto *inputGroup = new QGroupBox(tr("Frame Data Input"), this);
-  auto *outputGroup = new QGroupBox(tr("Frame Parser Results"), this);
-
-  // Create and configure input controls
+  // Initialize widgets
+  m_inputTitle = new QLabel(this);
+  m_outputTitle = new QLabel(this);
+  m_table = new QTableWidget(this);
   m_userInput = new QLineEdit(this);
-  m_hexCheckBox = new QCheckBox(tr("HEX"), this);
-  m_clearButton = new QPushButton(tr("Clear"), this);
-  m_parseButton = new QPushButton(tr("Evaluate"), this);
+  m_inputGroup = new QGroupBox(this);
+  m_outputGroup = new QGroupBox(this);
+  m_hexCheckBox = new QCheckBox(this);
+  m_clearButton = new QPushButton(this);
+  m_parseButton = new QPushButton(this);
+  m_inputDisplay = new QPlainTextEdit(this);
+
+  // Create layout objects
+  auto *mainLayout = new QVBoxLayout(this);
+  auto *inputLayout = new QHBoxLayout(m_inputGroup);
+  auto *outputLayout = new QVBoxLayout(m_outputGroup);
 
   // Set button icons
   m_clearButton->setIcon(QIcon(":/rcc/icons/buttons/clear.svg"));
@@ -59,10 +76,8 @@ JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
   // Input field with hex mode checkbox
   m_parseButton->setDefault(true);
   m_userInput->setFont(commonFonts->monoFont());
-  m_userInput->setPlaceholderText(tr("Enter frame data here..."));
 
-  // Create & configure table widget
-  m_table = new QTableWidget(this);
+  // Configure table widget
   m_table->setColumnCount(2);
   m_table->verticalHeader()->hide();
   m_table->setAlternatingRowColors(true);
@@ -75,21 +90,15 @@ JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
   m_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
   m_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
-  // Create and configure input text edit
-  m_inputDisplay = new QPlainTextEdit(this);
+  // Configure input text edit
   m_inputDisplay->setReadOnly(true);
   m_inputDisplay->setFont(commonFonts->monoFont());
-  m_inputDisplay->setPlaceholderText(
-      tr("Enter frame data above, enable HEX mode if needed, then click "
-         "\"Evaluate\" to run the frame parser.\n\n"
-         "Example (Text): a,b,c,d,e,f\n"
-         "Example (HEX):  48 65 6C 6C 6F"));
-  ;
 
-  // Create layout objects
-  auto *mainLayout = new QVBoxLayout(this);
-  auto *inputLayout = new QHBoxLayout(inputGroup);
-  auto *outputLayout = new QVBoxLayout(outputGroup);
+  // Configure titles
+  auto titleFont = commonFonts->customUiFont(0.8, true);
+  titleFont.setCapitalization(QFont::AllUppercase);
+  m_inputTitle->setFont(titleFont);
+  m_outputTitle->setFont(titleFont);
 
   // Configure layouts
   inputLayout->addWidget(m_userInput);
@@ -104,8 +113,12 @@ JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
   outputLayout->setStretch(1, 2);
 
   // Set main layout
-  mainLayout->addWidget(inputGroup);
-  mainLayout->addWidget(outputGroup);
+  mainLayout->setSpacing(4);
+  mainLayout->addWidget(m_inputTitle);
+  mainLayout->addWidget(m_inputGroup);
+  mainLayout->addSpacing(4);
+  mainLayout->addWidget(m_outputTitle);
+  mainLayout->addWidget(m_outputGroup);
 
   // Connect signals
   connect(m_parseButton, &QPushButton::clicked, this,
@@ -121,11 +134,20 @@ JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
   connect(m_userInput, &QLineEdit::textChanged, this,
           &FrameParserTestDialog::onInputDataChanged);
 
-  // Set window geometry and title
-  resize(640, 480);
-  setMinimumSize(640, 480);
-  setWindowTitle(tr("Test Frame Parser"));
+  // Singleton module connections
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &FrameParserTestDialog::onThemeChanged);
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, &FrameParserTestDialog::onLanguageChanged);
+
+  // Load theme & translations
+  onThemeChanged();
+  onLanguageChanged();
 }
+
+//------------------------------------------------------------------------------
+// Button actions
+//------------------------------------------------------------------------------
 
 /**
  * @brief Clears all results from the table
@@ -165,6 +187,95 @@ void JSON::FrameParserTestDialog::parseData()
   displayOutput(input, result);
   m_userInput->clear();
   m_userInput->setFocus();
+}
+
+//------------------------------------------------------------------------------
+// Singleton module slot functions
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Updates the dialog palette when the application theme changes.
+ */
+void JSON::FrameParserTestDialog::onThemeChanged()
+{
+  // Load theme colors
+  setPalette(Misc::ThemeManager::instance().palette());
+  onInputModeChanged(m_hexCheckBox->checkState());
+
+  // Define QSS for groupboxes
+  const auto *tm = &Misc::ThemeManager::instance();
+  const auto groupBoxStyle
+      = QStringLiteral("QGroupBox {"
+                       "  border: 1px solid %1;"
+                       "  border-radius: 2px;"
+                       "  background-color: %2;"
+                       "}")
+            .arg(tm->getColor("groupbox_border").name())
+            .arg(tm->getColor("groupbox_background").name());
+
+  // Set groupbox style
+  m_inputGroup->setStyleSheet(groupBoxStyle);
+  m_outputGroup->setStyleSheet(groupBoxStyle);
+}
+
+/**
+ * @brief Retranslates all UI text when the application language changes.
+ *
+ * Updates all labels, tooltips, placeholders, and re-parses existing data
+ * to reflect the new language.
+ */
+void JSON::FrameParserTestDialog::onLanguageChanged()
+{
+  m_hexCheckBox->setText(tr("HEX"));
+  m_clearButton->setText(tr("Clear"));
+  m_parseButton->setText(tr("Evaluate"));
+  m_inputTitle->setText(tr("Frame Data Input"));
+  m_outputTitle->setText(tr("Frame Parser Results"));
+  m_userInput->setPlaceholderText(tr("Enter frame data here..."));
+  m_inputDisplay->setPlaceholderText(
+      tr("Enter frame data above, enable HEX mode if needed, then click "
+         "\"Evaluate\" to run the frame parser.\n\n"
+         "Example (Text): a,b,c,d,e,f\n"
+         "Example (HEX):  48 65 6C 6C 6F"));
+
+  onInputModeChanged(m_hexCheckBox->checkState());
+  if (m_table->rowCount() > 0)
+    parseData();
+
+  setWindowTitle(tr("Test Frame Parser"));
+}
+
+//------------------------------------------------------------------------------
+// Widget slot functions
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Handles hex mode checkbox state changes, updating placeholder text
+ *        and formatting.
+ *
+ * When hex mode is enabled, sets hex-specific placeholder text and formats
+ * existing input as hex. When disabled, restores default placeholder and
+ * palette.
+ *
+ * @param state The new checkbox state (Qt::Checked or Qt::Unchecked)
+ */
+void JSON::FrameParserTestDialog::onInputModeChanged(Qt::CheckState state)
+{
+  if (state == Qt::Checked)
+  {
+    m_userInput->setPlaceholderText(tr("Enter hex bytes (e.g., 01 A2 FF)"));
+    if (!m_userInput->text().isEmpty())
+    {
+      QString formatted = formatHexInput(m_userInput->text());
+      m_userInput->setText(formatted);
+    }
+  }
+
+  else
+  {
+    m_userInput->setPlaceholderText(tr("Enter frame data here..."));
+    m_userInput->setPalette(QPalette());
+  }
 }
 
 /**
@@ -214,34 +325,9 @@ void JSON::FrameParserTestDialog::onInputDataChanged(const QString &t)
     m_userInput->setPalette(QPalette());
 }
 
-/**
- * @brief Handles hex mode checkbox state changes, updating placeholder text
- *        and formatting.
- *
- * When hex mode is enabled, sets hex-specific placeholder text and formats
- * existing input as hex. When disabled, restores default placeholder and
- * palette.
- *
- * @param state The new checkbox state (Qt::Checked or Qt::Unchecked)
- */
-void JSON::FrameParserTestDialog::onInputModeChanged(Qt::CheckState state)
-{
-  if (state == Qt::Checked)
-  {
-    m_userInput->setPlaceholderText(tr("Enter hex bytes (e.g., 01 A2 FF)"));
-    if (!m_userInput->text().isEmpty())
-    {
-      QString formatted = formatHexInput(m_userInput->text());
-      m_userInput->setText(formatted);
-    }
-  }
-
-  else
-  {
-    m_userInput->setPlaceholderText(tr("Enter frame data here..."));
-    m_userInput->setPalette(QPalette());
-  }
-}
+//------------------------------------------------------------------------------
+// HEX string validation & formatting functions
+//------------------------------------------------------------------------------
 
 /**
  * @brief Formats user input text into properly spaced hexadecimal byte pairs
@@ -329,6 +415,10 @@ bool JSON::FrameParserTestDialog::validateHexInput(const QString &text)
 
   return cleaned.length() % 2 == 0;
 }
+
+//------------------------------------------------------------------------------
+// Script output display function
+//------------------------------------------------------------------------------
 
 /**
  * @brief Adds a result row to the results table

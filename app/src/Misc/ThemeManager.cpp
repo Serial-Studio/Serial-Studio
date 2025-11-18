@@ -271,6 +271,30 @@ void Misc::ThemeManager::setTheme(const int index)
   m_widgetColors = extractWidgetColors(data.value("colors").toObject());
   m_parameters = jsonObjectToVariantMap(data.value("parameters").toObject());
 
+  // Set application palette
+  m_palette.setColor(QPalette::Mid, getColor("mid"));
+  m_palette.setColor(QPalette::Dark, getColor("dark"));
+  m_palette.setColor(QPalette::Text, getColor("text"));
+  m_palette.setColor(QPalette::Base, getColor("base"));
+  m_palette.setColor(QPalette::Link, getColor("link"));
+  m_palette.setColor(QPalette::Light, getColor("light"));
+  m_palette.setColor(QPalette::Window, getColor("window"));
+  m_palette.setColor(QPalette::Shadow, getColor("shadow"));
+  m_palette.setColor(QPalette::Accent, getColor("accent"));
+  m_palette.setColor(QPalette::Button, getColor("button"));
+  m_palette.setColor(QPalette::Midlight, getColor("midlight"));
+  m_palette.setColor(QPalette::Highlight, getColor("highlight"));
+  m_palette.setColor(QPalette::WindowText, getColor("window_text"));
+  m_palette.setColor(QPalette::BrightText, getColor("bright_text"));
+  m_palette.setColor(QPalette::ButtonText, getColor("button_text"));
+  m_palette.setColor(QPalette::ToolTipBase, getColor("tooltip_base"));
+  m_palette.setColor(QPalette::ToolTipText, getColor("tooltip_text"));
+  m_palette.setColor(QPalette::LinkVisited, getColor("link_visited"));
+  m_palette.setColor(QPalette::AlternateBase, getColor("alternate_base"));
+  m_palette.setColor(QPalette::PlaceholderText, getColor("placeholder_text"));
+  m_palette.setColor(QPalette::HighlightedText, getColor("highlighted_text"));
+  qApp->setPalette(m_palette);
+
   // Hint Qt about the effective color scheme and update user interface
   QMetaObject::invokeMethod(
       this,
@@ -312,6 +336,7 @@ void Misc::ThemeManager::setTheme(const int index)
 void Misc::ThemeManager::loadSystemTheme()
 {
   // Get system color scheme
+  qApp->setPalette(QPalette());
   qApp->styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
   const auto scheme = qApp->styleHints()->colorScheme();
 

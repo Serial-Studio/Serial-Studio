@@ -438,5 +438,6 @@
         <file>themes/rust.json</file>
         <file>icons/code-editor/template.svg</file>
         <file>icons/buttons/test.svg</file>
+        <file>icons/buttons/code.svg</file>
     </qresource>
 </RCC>

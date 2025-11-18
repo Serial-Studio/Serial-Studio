@@ -22,6 +22,7 @@
 #include <QFile>
 #include <QJSEngine>
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QLineNumberArea>
 #include <QDesktopServices>
 #include <QRegularExpression>
@@ -189,15 +190,6 @@ QStringList JSON::FrameParser::parse(const QByteArray &frame)
 }
 
 /**
- * @brief Gets the current template index.
- * @return The current template index.
- */
-int JSON::FrameParser::templateIdx() const
-{
-  return m_templateIdx;
-}
-
-/**
  * @brief Retrieves the JavaScript code for the currently selected template
  *
  * Loads and returns the JavaScript parser code from the template file
@@ -225,15 +217,6 @@ QString JSON::FrameParser::templateCode() const
   }
 
   return code;
-}
-
-/**
- * @brief Gets the list of available frame parser code templates.
- * @return A list of available template names.
- */
-QStringList JSON::FrameParser::templateNames() const
-{
-  return m_templateNames;
 }
 
 /**
@@ -536,7 +519,7 @@ void JSON::FrameParser::reload()
   if (isModified())
   {
     auto ret = Misc::Utilities::showMessageBox(
-        tr("The document has been modified!"),
+        tr("The document has been modified."),
         tr("Are you sure you want to continue?"), QMessageBox::Question,
         qAppName(), QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::No)
@@ -645,6 +628,38 @@ void JSON::FrameParser::selectAll()
   m_widget.selectAll();
 }
 
+/**
+ * @brief Sets the frame template index, prompting user confirmation if
+ *        the document is modified.
+ */
+void JSON::FrameParser::selectTemplate()
+{
+  // Show combobox dialog to get template selection
+  bool ok;
+  auto name
+      = QInputDialog::getItem(Q_NULLPTR, tr("Select Frame Parser Template"),
+                              tr("Choose a template to load:"), m_templateNames,
+                              m_templateIdx, false, &ok);
+
+  // User cancelled the dialog
+  if (!ok)
+    return;
+
+  // Get the selected index
+  int idx = m_templateNames.indexOf(name);
+  if (idx < 0)
+    return;
+
+  // Load template
+  setTemplateIdx(idx);
+}
+
+/**
+ * @brief Opens the frame parser test dialog with the current script.
+ *
+ * Loads the current script text and displays the test dialog if loading
+ * succeeds. Clears any previous test results before showing.
+ */
 void JSON::FrameParser::testWithSampleData()
 {
   if (loadScript(text()))
@@ -677,49 +692,6 @@ void JSON::FrameParser::loadDefaultTemplate()
 {
   const auto idx = m_templateFiles.indexOf("comma_separated.js");
   setTemplateIdx(idx);
-}
-
-/**
- * @brief Sets the frame template index, prompting user confirmation if
- *        the document is modified.
- *
- * @param idx The template index to set.
- */
-void JSON::FrameParser::setTemplateIdx(const int idx)
-{
-  // Don't do anything if the template index is the same
-  if (idx == m_templateIdx)
-    return;
-
-  // Get current code and template code
-  auto code = m_widget.toPlainText().simplified();
-  auto currentTemplateCode = templateCode().simplified();
-
-  // Document has been modified, ask user if he/she wants to continue
-  if (isModified() || (!code.isEmpty() && code != currentTemplateCode))
-  {
-    auto ret = Misc::Utilities::showMessageBox(
-        tr("The document has been modified!"),
-        tr("Are you sure you want to continue?"), QMessageBox::Question,
-        qAppName(), QMessageBox::Yes | QMessageBox::No);
-
-    if (ret == QMessageBox::No)
-    {
-      Q_EMIT templateIdxChanged();
-      return;
-    }
-  }
-
-  // Load template code
-  m_templateIdx = idx;
-  m_widget.setPlainText(templateCode());
-  (void)save(true);
-
-  // Mark the project file as modified
-  JSON::ProjectModel::instance().setModified(true);
-
-  // Update user interface
-  Q_EMIT templateIdxChanged();
 }
 
 /**
@@ -847,6 +819,46 @@ void JSON::FrameParser::loadTemplateNames()
                      tr("URL-encoded data"),
                      tr("XML data"),
                      tr("YAML data")};
+}
+
+/**
+ * @brief Sets the frame template index, prompting user confirmation if
+ *        modified.
+ *
+ * If the current document has been modified, prompts the user before switching
+ * templates. Loads the new template code and saves it automatically.
+ *
+ * @param idx The template index to set
+ */
+void JSON::FrameParser::setTemplateIdx(const int idx)
+{
+  // Get current code and template code
+  auto code = m_widget.toPlainText().simplified();
+  auto currentTemplateCode = templateCode().simplified();
+
+  // Don't do anything if the template index is the same
+  if (idx == m_templateIdx && code == currentTemplateCode)
+    return;
+
+  // Document has been modified, ask user if he/she wants to continue
+  if (isModified() || (!code.isEmpty() && code != currentTemplateCode))
+  {
+    auto ret = Misc::Utilities::showMessageBox(
+        tr("Loading a template will replace your current code."),
+        tr("Are you sure you want to continue?"), QMessageBox::Question,
+        qAppName(), QMessageBox::Yes | QMessageBox::No);
+
+    if (ret == QMessageBox::No)
+      return;
+  }
+
+  // Load template code
+  m_templateIdx = idx;
+  m_widget.setPlainText(templateCode());
+  (void)save(true);
+
+  // Mark the project file as modified
+  JSON::ProjectModel::instance().setModified(true);
 }
 
 /**

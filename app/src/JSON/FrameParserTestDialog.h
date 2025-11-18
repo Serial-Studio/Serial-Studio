@@ -25,11 +25,12 @@
 #include <QDialog>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QGroupBox>
 #include <QStringList>
-#include <QTableWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QTableWidget>
 #include <QPlainTextEdit>
 
 namespace JSON
@@ -58,6 +59,8 @@ public slots:
   void parseData();
 
 private slots:
+  void onThemeChanged();
+  void onLanguageChanged();
   void onInputModeChanged(Qt::CheckState state);
   void onInputDataChanged(const QString &text);
 
@@ -67,12 +70,16 @@ private:
   void displayOutput(const QString &input, const QStringList &output);
 
 private:
+  QLabel *m_inputTitle;
+  QLabel *m_outputTitle;
   FrameParser *m_parser;
   QTableWidget *m_table;
   QLineEdit *m_userInput;
+  QGroupBox *m_inputGroup;
+  QGroupBox *m_outputGroup;
+  QCheckBox *m_hexCheckBox;
   QPushButton *m_parseButton;
   QPushButton *m_clearButton;
-  QCheckBox *m_hexCheckBox;
   QPlainTextEdit *m_inputDisplay;
 };
 

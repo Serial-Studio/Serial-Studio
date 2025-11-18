@@ -1,5 +1,5 @@
 /**
- * CAN Bus Frames Parser
+ * CAN Bus Frame Parser
  *
  * Parses CAN bus data frames into an array of values.
  *

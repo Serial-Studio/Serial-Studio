@@ -1,5 +1,5 @@
 /**
- * Modbus RTU Frames Parser
+ * Modbus RTU Frame Parser
  *
  * Parses Modbus RTU protocol frames into an array of values.
  *

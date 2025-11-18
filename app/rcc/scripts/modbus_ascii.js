@@ -1,5 +1,5 @@
 /**
- * Modbus ASCII Frames Parser
+ * Modbus ASCII Frame Parser
  *
  * Parses Modbus ASCII protocol frames into an array of values.
  *

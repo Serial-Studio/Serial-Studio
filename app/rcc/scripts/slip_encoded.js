@@ -1,5 +1,5 @@
 /**
- * SLIP-Encoded Frames Parser
+ * SLIP-Encoded Frame Parser
  *
  * Parses SLIP (Serial Line Internet Protocol) encoded binary data.
  *

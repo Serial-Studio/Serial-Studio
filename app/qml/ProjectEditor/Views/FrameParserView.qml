@@ -380,16 +380,16 @@ Widgets.Pane {
             verticalCenter: parent.verticalCenter
           }
 
-          ComboBox {
-            Layout.minimumWidth: 320
-            model: frameParser.templateNames
+          Button {
+            icon.width: 18
+            icon.height: 18
+            leftPadding: 12
+            rightPadding: 12
+            text: qsTr("Select Template...")
             Layout.alignment: Qt.AlignVCenter
-            currentIndex: frameParser.templateIdx
-            displayText: qsTr("Template: %1").arg(currentText)
-            onCurrentIndexChanged: {
-              if (currentIndex !== frameParser.templateIdx)
-                frameParser.templateIdx = currentIndex
-            }
+            onClicked: frameParser.selectTemplate()
+            icon.source: "qrc:/rcc/icons/buttons/code.svg"
+            icon.color: Cpp_ThemeManager.colors["button_text"]
           }
 
           Item {
@@ -402,7 +402,7 @@ Widgets.Pane {
             leftPadding: 12
             rightPadding: 12
             Layout.alignment: Qt.AlignVCenter
-            text: qsTr("Test With Sample Data") + " "
+            text: qsTr("Test With Sample Data")
             onClicked: frameParser.testWithSampleData()
             icon.source: "qrc:/rcc/icons/buttons/test.svg"
             icon.color: Cpp_ThemeManager.colors["button_text"]
@@ -413,7 +413,7 @@ Widgets.Pane {
             icon.height: 18
             leftPadding: 12
             rightPadding: 12
-            text: qsTr("Evaluate") + " "
+            text: qsTr("Evaluate")
             onClicked: frameParser.evaluate()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/buttons/media-play.svg"

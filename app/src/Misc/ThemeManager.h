@@ -23,6 +23,7 @@
 
 #include <QColor>
 #include <QObject>
+#include <QPalette>
 #include <QSettings>
 #include <QJsonObject>
 
@@ -142,6 +143,8 @@ public:
   [[nodiscard]] const QStringList &availableThemes() const;
   [[nodiscard]] QColor getColor(const QString &name) const;
 
+  [[nodiscard]] const QPalette &palette() const { return m_palette; }
+
 public slots:
   void setTheme(int index);
 
@@ -154,6 +157,7 @@ protected:
 
 private:
   int m_theme;
+  QPalette m_palette;
   QString m_themeName;
   QSettings m_settings;
   QVariantMap m_colors;

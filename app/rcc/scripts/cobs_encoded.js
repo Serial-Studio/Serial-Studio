@@ -1,5 +1,5 @@
 /**
- * COBS-Encoded Frames Parser
+ * COBS-Encoded Frame Parser
  *
  * Parses COBS-encoded binary data into an array of byte values.
  *
