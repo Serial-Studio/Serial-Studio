@@ -69,13 +69,10 @@ JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
   auto *inputLayout = new QHBoxLayout(m_inputGroup);
   auto *outputLayout = new QVBoxLayout(m_outputGroup);
 
-  // Set button icons
+  // Configure buttons
+  m_parseButton->setDefault(true);
   m_clearButton->setIcon(QIcon(":/rcc/icons/buttons/clear.svg"));
   m_parseButton->setIcon(QIcon(":/rcc/icons/buttons/media-play.svg"));
-
-  // Input field with hex mode checkbox
-  m_parseButton->setDefault(true);
-  m_userInput->setFont(commonFonts->monoFont());
 
   // Configure table widget
   m_table->setColumnCount(2);
@@ -92,8 +89,7 @@ JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
 
   // Configure input text edit
   m_inputDisplay->setReadOnly(true);
-  m_inputDisplay->setFont(commonFonts->monoFont());
-
+  
   // Configure titles
   auto titleFont = commonFonts->customUiFont(0.8, true);
   titleFont.setCapitalization(QFont::AllUppercase);
@@ -157,6 +153,7 @@ void JSON::FrameParserTestDialog::clear()
   m_table->setRowCount(0);
   m_inputDisplay->clear();
   m_userInput->clear();
+  m_inputDisplay->setFont(Misc::CommonFonts::instance().uiFont());
 }
 
 /**
@@ -431,6 +428,10 @@ void JSON::FrameParserTestDialog::displayOutput(const QString &input,
 {
   m_table->setRowCount(0);
   m_inputDisplay->setPlainText(input);
+  if (input.isEmpty())
+    m_inputDisplay->setFont(Misc::CommonFonts::instance().uiFont());
+  else
+    m_inputDisplay->setFont(Misc::CommonFonts::instance().monoFont());
 
   if (output.isEmpty())
   {
