@@ -88,7 +88,7 @@ JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
 
   // Configure input text edit
   m_inputDisplay->setReadOnly(true);
-  
+
   // Configure titles
   auto titleFont = commonFonts->customUiFont(0.8, true);
   titleFont.setCapitalization(QFont::AllUppercase);
@@ -138,6 +138,9 @@ JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
   // Load theme & translations
   onThemeChanged();
   onLanguageChanged();
+
+  // Make window stay on top
+  setWindowFlag(Qt::WindowStaysOnTopHint, true);
 }
 
 //------------------------------------------------------------------------------
