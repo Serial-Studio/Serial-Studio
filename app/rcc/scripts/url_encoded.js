@@ -22,7 +22,7 @@
  * Total number of values in the output array.
  * This should match the number of datasets you've configured in Serial Studio.
  */
-const numItems = 8;
+const numItems = 6;
 
 /**
  * Maps URL parameter names to array indices.

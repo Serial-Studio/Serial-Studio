@@ -7,6 +7,7 @@
  * OUTPUT ARRAY: ["12:05", 48, 4.0, 87]
  *
  * Note: Frame delimiters are automatically removed by Serial Studio.
+ *       Values persist between frames unless updated by new data.
  */
 
 //------------------------------------------------------------------------------
@@ -14,10 +15,27 @@
 //------------------------------------------------------------------------------
 
 /**
- * Fields to extract from the JSON object.
- * Customize this array to match your JSON structure and desired output order.
+ * Total number of values in the output array.
+ * This should match the number of datasets you've configured in Serial Studio.
  */
-const fields = ["time", "speed", "angle", "distance"];
+const numItems = 4;
+
+/**
+ * Maps JSON field names to array indices.
+ * Customize this object to match your JSON structure and desired output order.
+ */
+const fieldToIndexMap = {
+  "time": 0,
+  "speed": 1,
+  "angle": 2,
+  "distance": 3
+};
+
+/**
+ * Array to hold all parsed values.
+ * Values persist between frames unless updated by new data.
+ */
+const parsedValues = new Array(numItems).fill(0);
 
 //------------------------------------------------------------------------------
 // Frame Parser Function
@@ -27,20 +45,28 @@ const fields = ["time", "speed", "angle", "distance"];
  * Parses a JSON frame into an array of values.
  *
  * @param {string} frame - The JSON data from the data source
- * @returns {array} Array of values extracted from the JSON object
+ * @returns {array} Array of values mapped according to fieldToIndexMap
  */
 function parse(frame) {
   if (frame.length === 0) {
-    return [];
+    return parsedValues;
   }
 
   try {
-    let data = JSON.parse(frame);
-    return fields.map(field => data[field]);
-  }
+    var data = JSON.parse(frame);
 
+    // Update only the fields present in this JSON packet
+    for (var field in fieldToIndexMap) {
+      if (fieldToIndexMap.hasOwnProperty(field) && data.hasOwnProperty(field)) {
+        var index = fieldToIndexMap[field];
+        parsedValues[index] = data[field];
+      }
+    }
+
+    return parsedValues;
+  }
   catch (e) {
     console.error("JSON parse error:", e.message);
-    return [];
+    return parsedValues;
   }
 }
