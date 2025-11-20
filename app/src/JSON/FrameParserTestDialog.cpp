@@ -152,9 +152,10 @@ JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
  */
 void JSON::FrameParserTestDialog::clear()
 {
+  m_userInput->clear();
   m_table->setRowCount(0);
   m_inputDisplay->clear();
-  m_userInput->clear();
+  m_parser->clearContext();
   m_inputDisplay->setFont(Misc::CommonFonts::instance().uiFont());
 }
 

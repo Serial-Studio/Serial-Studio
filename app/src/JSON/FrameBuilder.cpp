@@ -352,6 +352,10 @@ void JSON::FrameBuilder::onConnectedChanged()
   if (m_opMode != SerialStudio::ProjectFile)
     return;
 
+  // Reset the frame parser execution context
+  if (m_frameParser)
+    m_frameParser->readCode();
+
   // Auto-execute actions if required
   const auto &actions = m_frame.actions;
   for (const auto &action : actions)

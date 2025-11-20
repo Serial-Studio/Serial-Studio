@@ -629,6 +629,14 @@ void JSON::FrameParser::selectAll()
 }
 
 /**
+ * @brief Resets the JS context used for testing the frame parser code.
+ */
+void JSON::FrameParser::clearContext()
+{
+  (void) loadScript(text());
+}
+
+/**
  * @brief Sets the frame template index, prompting user confirmation if
  *        the document is modified.
  */

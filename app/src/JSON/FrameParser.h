@@ -73,6 +73,7 @@ public slots:
   void evaluate();
   void readCode();
   void selectAll();
+  void clearContext();
   void selectTemplate();
   void testWithSampleData();
   void loadDefaultTemplate();
