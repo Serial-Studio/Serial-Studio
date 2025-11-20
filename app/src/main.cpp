@@ -25,8 +25,12 @@
 #include <QQuickStyle>
 #include <QApplication>
 #include <QStyleFactory>
+#include <QCommandLineParser>
 
 #include "AppInfo.h"
+#include "IO/Manager.h"
+#include "IO/Drivers/UART.h"
+#include "JSON/ProjectModel.h"
 #include "Misc/ModuleManager.h"
 
 #ifdef Q_OS_WIN
@@ -108,25 +112,48 @@ int main(int argc, char **argv)
   app.setStyle(QStyleFactory::create("Fusion"));
   QQuickStyle::setStyle("Fusion");
 
-  // Read arguments
-  QString arguments;
-  if (app.arguments().count() >= 2)
-    arguments = app.arguments().at(1);
+  // Setup command line parser
+  QCommandLineParser parser;
+  parser.setApplicationDescription("Multi-platform dashboard for embedded systems");
+  parser.addHelpOption();
 
-  // There are some CLI arguments, read them
-  if (!arguments.isEmpty() && arguments.startsWith("-"))
+  // Add CLI options
+  QCommandLineOption versionOption(
+      QStringList() << "v"
+                    << "version",
+      "Show application version");
+  QCommandLineOption resetOption(
+      QStringList() << "r"
+                    << "reset",
+      "Reset application settings");
+  QCommandLineOption deviceOption("device",
+                                  "Serial device to connect (e.g., /dev/ttyUSB0)",
+                                  "device");
+  QCommandLineOption baudOption("baud", "Baud rate for serial connection (e.g., 115200)",
+                                "baudrate");
+  QCommandLineOption projectOption("project", "Project file to load", "file");
+
+  parser.addOption(versionOption);
+  parser.addOption(resetOption);
+  parser.addOption(deviceOption);
+  parser.addOption(baudOption);
+  parser.addOption(projectOption);
+
+  // Process arguments
+  parser.process(app);
+
+  // Handle version option
+  if (parser.isSet(versionOption))
   {
-    if (arguments == "-v" || arguments == "--version")
-    {
-      cliShowVersion();
-      return EXIT_SUCCESS;
-    }
+    cliShowVersion();
+    return EXIT_SUCCESS;
+  }
 
-    else if (arguments == "-r" || arguments == "--reset")
-    {
-      cliResetSettings();
-      return EXIT_SUCCESS;
-    }
+  // Handle reset option
+  if (parser.isSet(resetOption))
+  {
+    cliResetSettings();
+    return EXIT_SUCCESS;
   }
 
   // Ensure resources are loaded
@@ -144,6 +171,41 @@ int main(int argc, char **argv)
   {
     qCritical() << "Critical QML error";
     return EXIT_FAILURE;
+  }
+
+  // Handle project file option
+  if (parser.isSet(projectOption))
+  {
+    QString projectPath = parser.value(projectOption);
+    JSON::ProjectModel::instance().openJsonFile(projectPath);
+  }
+
+  // Handle device and baud rate options
+  if (parser.isSet(deviceOption) || parser.isSet(baudOption))
+  {
+    // Set bus type to UART
+    IO::Manager::instance().setBusType(SerialStudio::BusType::UART);
+
+    // Set device if provided
+    if (parser.isSet(deviceOption))
+    {
+      QString device = parser.value(deviceOption);
+      IO::Drivers::UART::instance().registerDevice(device);
+    }
+
+    // Set baud rate if provided
+    if (parser.isSet(baudOption))
+    {
+      bool ok;
+      qint32 baudRate = parser.value(baudOption).toInt(&ok);
+      if (ok)
+        IO::Drivers::UART::instance().setBaudRate(baudRate);
+      else
+        qWarning() << "Invalid baud rate:" << parser.value(baudOption);
+    }
+
+    // Connect to device
+    IO::Manager::instance().connectDevice();
   }
 
   // Enter application event loop
