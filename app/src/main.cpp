@@ -22,6 +22,7 @@
 #include <QThread>
 #include <QSysInfo>
 #include <QSettings>
+#include <QQmlContext>
 #include <QQuickStyle>
 #include <QApplication>
 #include <QStyleFactory>
@@ -30,7 +31,9 @@
 #include "AppInfo.h"
 #include "IO/Manager.h"
 #include "IO/Drivers/UART.h"
+#include "IO/Drivers/Network.h"
 #include "JSON/ProjectModel.h"
+#include "JSON/FrameBuilder.h"
 #include "Misc/ModuleManager.h"
 
 #ifdef Q_OS_WIN
@@ -51,6 +54,8 @@
 
 static void cliShowVersion();
 static void cliResetSettings();
+
+static void handleCliArguments(const QCommandLineParser &parser);
 
 #ifdef Q_OS_LINUX
 static void setupAppImageIcon(const QString &appExecutableName,
@@ -114,41 +119,54 @@ int main(int argc, char **argv)
 
   // Setup command line parser
   QCommandLineParser parser;
-  parser.setApplicationDescription(
-      "Multi-platform dashboard for embedded systems");
+  parser.setApplicationDescription(PROJECT_DESCRIPTION_SUMMARY);
   parser.addHelpOption();
 
-  // Add CLI options
-  QCommandLineOption versionOption(QStringList() << "v"
-                                                 << "version",
-                                   "Show application version");
-  QCommandLineOption resetOption(QStringList() << "r"
-                                               << "reset",
-                                 "Reset application settings");
-  QCommandLineOption deviceOption(
-      "device", "Serial device to connect (e.g., /dev/ttyUSB0)", "device");
-  QCommandLineOption baudOption(
-      "baud", "Baud rate for serial connection (e.g., 115200)", "baudrate");
-  QCommandLineOption projectOption("project", "Project file to load", "file");
+  // Define CLI options
+  // clang-format off
+  typedef QCommandLineOption QCLO;
 
-  parser.addOption(versionOption);
-  parser.addOption(resetOption);
-  parser.addOption(deviceOption);
-  parser.addOption(baudOption);
-  parser.addOption(projectOption);
+  // General options
+  QCLO vOpt({"v", "version"}, "Show application version");
+  QCLO rOpt({"r", "reset"}, "Reset application settings");
+  QCLO fOpt({"f", "fullscreen"}, "Start application in fullscreen mode");
+  QCLO pOpt({"p", "project"}, "Load project file on startup", "file");
 
-  // Process arguments
+  // UART/Serial port options
+  QCLO uartOpt("uart", "Connect to serial device (e.g., /dev/ttyUSB0 or COM3)", "device");
+  QCLO baudOpt("baud", "Set baud rate for serial connection (default: 9600)", "rate");
+
+  // TCP client options
+  QCLO tcpOpt("tcp", "Connect to TCP server (e.g., 192.168.1.100:8080)", "host:port");
+
+  // UDP options
+  QCLO udpOpt("udp", "Listen on UDP local port (e.g., 8080)", "port");
+  QCLO udpRemoteOpt("udp-remote", "Send UDP data to remote host (e.g., 192.168.1.100:8080)", "host:port");
+  QCLO udpMltcstOpt("udp-multicast", "Enable UDP multicast mode");
+  // clang-format on
+
+  // Add CLI options & process arguments
+  parser.addOption(vOpt);
+  parser.addOption(rOpt);
+  parser.addOption(fOpt);
+  parser.addOption(pOpt);
+  parser.addOption(uartOpt);
+  parser.addOption(baudOpt);
+  parser.addOption(tcpOpt);
+  parser.addOption(udpOpt);
+  parser.addOption(udpRemoteOpt);
+  parser.addOption(udpMltcstOpt);
   parser.process(app);
 
   // Handle version option
-  if (parser.isSet(versionOption))
+  if (parser.isSet(vOpt))
   {
     cliShowVersion();
     return EXIT_SUCCESS;
   }
 
   // Handle reset option
-  if (parser.isSet(resetOption))
+  if (parser.isSet(rOpt))
   {
     cliResetSettings();
     return EXIT_SUCCESS;
@@ -172,38 +190,117 @@ int main(int argc, char **argv)
   }
 
   // Handle project file option
-  if (parser.isSet(projectOption))
+  if (parser.isSet(pOpt))
   {
-    QString projectPath = parser.value(projectOption);
+    QString projectPath = parser.value(pOpt);
     JSON::ProjectModel::instance().openJsonFile(projectPath);
+    JSON::FrameBuilder::instance().setOperationMode(SerialStudio::ProjectFile);
   }
 
-  // Handle device and baud rate options
-  if (parser.isSet(deviceOption) || parser.isSet(baudOption))
+  // Handle fullscreen option
+  const auto ctx = moduleManager.engine().rootContext();
+  ctx->setContextProperty("CLI_START_FULLSCREEN", parser.isSet(fOpt));
+
+  // Handle UART device and baud rate options
+  if (parser.isSet(uartOpt) || parser.isSet(baudOpt))
   {
     // Set bus type to UART
     IO::Manager::instance().setBusType(SerialStudio::BusType::UART);
 
     // Set device if provided
-    if (parser.isSet(deviceOption))
+    if (parser.isSet(uartOpt))
     {
-      QString device = parser.value(deviceOption);
+      QString device = parser.value(uartOpt);
       IO::Drivers::UART::instance().registerDevice(device);
     }
 
     // Set baud rate if provided
-    if (parser.isSet(baudOption))
+    if (parser.isSet(baudOpt))
     {
       bool ok;
-      qint32 baudRate = parser.value(baudOption).toInt(&ok);
+      qint32 baudRate = parser.value(baudOpt).toInt(&ok);
       if (ok)
         IO::Drivers::UART::instance().setBaudRate(baudRate);
       else
-        qWarning() << "Invalid baud rate:" << parser.value(baudOption);
+        qWarning() << "Invalid baud rate:" << parser.value(baudOpt);
     }
 
     // Connect to device
     IO::Manager::instance().connectDevice();
+  }
+
+  // Handle TCP connection option
+  else if (parser.isSet(tcpOpt))
+  {
+    QString tcpAddress = parser.value(tcpOpt);
+    QStringList parts = tcpAddress.split(':');
+
+    if (parts.size() == 2)
+    {
+      bool ok;
+      quint16 port = parts[1].toUInt(&ok);
+
+      if (ok && port > 0)
+      {
+        IO::Manager::instance().setBusType(SerialStudio::BusType::Network);
+        IO::Drivers::Network::instance().setTcpSocket();
+        IO::Drivers::Network::instance().setRemoteAddress(parts[0]);
+        IO::Drivers::Network::instance().setTcpPort(port);
+        IO::Manager::instance().connectDevice();
+      }
+
+      else
+        qWarning() << "Invalid TCP port:" << parts[1];
+    }
+
+    else
+      qWarning() << "Invalid TCP address format. Expected: host:port";
+  }
+
+  // Handle UDP connection options
+  else if (parser.isSet(udpOpt))
+  {
+    bool ok;
+    quint16 localPort = parser.value(udpOpt).toUInt(&ok);
+
+    if (ok && localPort > 0)
+    {
+      IO::Manager::instance().setBusType(SerialStudio::BusType::Network);
+      IO::Drivers::Network::instance().setUdpSocket();
+      IO::Drivers::Network::instance().setUdpLocalPort(localPort);
+
+      if (parser.isSet(udpMltcstOpt))
+        IO::Drivers::Network::instance().setUdpMulticast(true);
+
+      if (parser.isSet(udpRemoteOpt))
+      {
+        QString udpRemote = parser.value(udpRemoteOpt);
+        QStringList parts = udpRemote.split(':');
+
+        if (parts.size() == 2)
+        {
+          bool portOk;
+          quint16 remotePort = parts[1].toUInt(&portOk);
+
+          if (portOk && remotePort > 0)
+          {
+            IO::Drivers::Network::instance().setRemoteAddress(parts[0]);
+            IO::Drivers::Network::instance().setUdpRemotePort(remotePort);
+          }
+
+          else
+            qWarning() << "Invalid UDP remote port:" << parts[1];
+        }
+
+        else
+          qWarning() << "Invalid UDP address format. Expected: host:port";
+      }
+
+      IO::Manager::instance().connectDevice();
+    }
+
+    else
+      qWarning() << "Invalid UDP local port:" << parser.value(udpOpt);
   }
 
   // Enter application event loop

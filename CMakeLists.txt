@@ -93,6 +93,7 @@ add_definitions(-DPROJECT_CONTACT="${PROJECT_CONTACT}")
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 add_definitions(-DPROJECT_APPCAST="${PROJECT_APPCAST}")
 add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
+add_definitions(-DPROJECT_DESCRIPTION_SUMMARY="${PROJECT_DESCRIPTION_SUMMARY}")
 
 #-------------------------------------------------------------------------------
 # Licensing and validation

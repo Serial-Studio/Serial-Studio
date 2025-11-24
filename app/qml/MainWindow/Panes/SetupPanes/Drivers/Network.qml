@@ -99,63 +99,7 @@ Item {
       }
 
       //
-      // Address
-      //
-      Label {
-        opacity: enabled ? 1 : 0.5
-        enabled: !Cpp_IO_Manager.isConnected
-        text: qsTr("Remote Address") + ":"
-      } TextField {
-        id: _address
-        Layout.fillWidth: true
-        opacity: enabled ? 1 : 0.5
-        enabled: !Cpp_IO_Manager.isConnected
-        placeholderText: Cpp_IO_Network.defaultAddress
-        Component.onCompleted: text = Cpp_IO_Network.remoteAddress
-        onTextChanged: {
-          if (Cpp_IO_Network.remoteAddress !== text && text.length > 0)
-            Cpp_IO_Network.remoteAddress = text
-
-          if (text.length === 0)
-            Cpp_IO_Network.remoteAddress = Cpp_IO_Network.defaultAddress
-        }
-      }
-
-      //
-      // TCP port
-      //
-      Label {
-        text: qsTr("Port") + ":"
-        opacity: enabled ? 1 : 0.5
-        enabled: !Cpp_IO_Manager.isConnected
-        visible: Cpp_IO_Network.socketTypeIndex === 0
-      } TextField {
-        id: _tcpPort
-        Layout.fillWidth: true
-        opacity: enabled ? 1 : 0.5
-        enabled: !Cpp_IO_Manager.isConnected
-        placeholderText: Cpp_IO_Network.defaultTcpPort
-        Component.onCompleted: text = Cpp_IO_Network.tcpPort
-        onTextChanged: {
-          if (Cpp_IO_Network.tcpPort !== text && text.length > 0)
-            Cpp_IO_Network.tcpPort = text
-
-          if (text.length === 0)
-            Cpp_IO_Network.port = Cpp_IO_Network.defaultTcpPort
-        }
-
-        validator: IntValidator {
-          bottom: 0
-          top: 65535
-        }
-
-
-        visible: Cpp_IO_Network.socketTypeIndex === 0
-      }
-
-
-      //
-      // TCP port
+      // UDP port
       //
       Label {
         opacity: enabled ? 1 : 0.5
@@ -183,6 +127,61 @@ Item {
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
         visible: Cpp_IO_Network.socketTypeIndex === 1
+      }
+
+      //
+      // Address
+      //
+      Label {
+        opacity: enabled ? 1 : 0.5
+        enabled: !Cpp_IO_Manager.isConnected
+        text: qsTr("Remote Address") + ":"
+      } TextField {
+        id: _address
+        Layout.fillWidth: true
+        opacity: enabled ? 1 : 0.5
+        enabled: !Cpp_IO_Manager.isConnected
+        placeholderText: Cpp_IO_Network.defaultAddress
+        Component.onCompleted: text = Cpp_IO_Network.remoteAddress
+        onTextChanged: {
+          if (Cpp_IO_Network.remoteAddress !== text && text.length > 0)
+            Cpp_IO_Network.remoteAddress = text
+
+          if (text.length === 0)
+            Cpp_IO_Network.remoteAddress = Cpp_IO_Network.defaultAddress
+        }
+      }
+
+      //
+      // TCP port
+      //
+      Label {
+        text: qsTr("Remote Port") + ":"
+        opacity: enabled ? 1 : 0.5
+        enabled: !Cpp_IO_Manager.isConnected
+        visible: Cpp_IO_Network.socketTypeIndex === 0
+      } TextField {
+        id: _tcpPort
+        Layout.fillWidth: true
+        opacity: enabled ? 1 : 0.5
+        enabled: !Cpp_IO_Manager.isConnected
+        placeholderText: Cpp_IO_Network.defaultTcpPort
+        Component.onCompleted: text = Cpp_IO_Network.tcpPort
+        onTextChanged: {
+          if (Cpp_IO_Network.tcpPort !== text && text.length > 0)
+            Cpp_IO_Network.tcpPort = text
+
+          if (text.length === 0)
+            Cpp_IO_Network.port = Cpp_IO_Network.defaultTcpPort
+        }
+
+        validator: IntValidator {
+          bottom: 0
+          top: 65535
+        }
+
+
+        visible: Cpp_IO_Network.socketTypeIndex === 0
       }
 
       //

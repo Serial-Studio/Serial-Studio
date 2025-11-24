@@ -137,6 +137,9 @@ Widgets.SmartWindow {
         if (stack.currentItem != dashboard) {
           stack.push(dashboard)
           dashboard.loadLayout()
+
+          if (CLI_START_FULLSCREEN)
+            mainWindow.toolbarVisible = false
         }
       }
 
