@@ -64,7 +64,12 @@ IO::Manager::Manager()
   m_frame.reserve(4096);
   m_thrFrameExtr = m_settings.value("thrFrameExtr", false).toBool();
 
-  setBusType(SerialStudio::BusType::UART);
+  auto busType = m_settings.value("IOManager/busType", 0).toInt();
+  if (busType < 0 || busType >= availableBuses().count())
+    busType = 0;
+
+  setBusType(static_cast<SerialStudio::BusType>(busType));
+
   connect(this, &IO::Manager::busTypeChanged, this,
           &IO::Manager::configurationChanged);
   connect(this, &IO::Manager::configurationChanged, this,
@@ -633,13 +638,14 @@ void IO::Manager::setDriver(HAL_Driver *driver)
  *
  * @param driver The new bus type as a `SerialStudio::BusType` enum.
  */
-void IO::Manager::setBusType(const SerialStudio::BusType &driver)
+void IO::Manager::setBusType(const SerialStudio::BusType driver)
 {
   // Disconnect current driver
   disconnectDevice();
 
   // Change data source
   m_busType = driver;
+  m_settings.setValue("IOManager/busType", static_cast<int>(driver));
 
   // Try to open a serial port connection
   if (busType() == SerialStudio::BusType::UART)

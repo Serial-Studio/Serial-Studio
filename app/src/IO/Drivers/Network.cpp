@@ -36,12 +36,23 @@ IO::Drivers::Network::Network()
   , m_udpMulticast(false)
   , m_lookupActive(false)
 {
-  // Set initial configuration
-  setRemoteAddress("");
-  setTcpPort(defaultTcpPort());
-  setUdpLocalPort(defaultUdpLocalPort());
-  setUdpRemotePort(defaultUdpRemotePort());
-  setSocketType(QAbstractSocket::TcpSocket);
+  // Read settings
+  // clang-format off
+  auto socketType = m_settings.value("NetworkDriver/socketType", 0).toInt();
+  auto remoteAddress = m_settings.value("NetworkDriver/address", "").toString();
+  auto tcpPort = m_settings.value("NetworkDriver/tcpPort", defaultTcpPort()).toInt();
+  auto udpMulticastEnabled = m_settings.value("NetworkDriver/udpMulticastEnabled", false).toBool();
+  auto udpLocalPort = m_settings.value("NetworkDriver/udpLocalPort", defaultUdpLocalPort()).toInt();
+  auto udpRemotePort = m_settings.value("NetworkDriver/udpRemotePort", defaultUdpRemotePort()).toInt();
+  // clang-format on
+
+  // Apply saved settings
+  setTcpPort(tcpPort);
+  setUdpLocalPort(udpLocalPort);
+  setUdpRemotePort(udpRemotePort);
+  setRemoteAddress(remoteAddress);
+  setUdpMulticast(udpMulticastEnabled);
+  setSocketType(static_cast<QAbstractSocket::SocketType>(socketType));
 
   // Update connect button status when the configuration is changed
   connect(this, &IO::Drivers::Network::addressChanged, this,
@@ -369,6 +380,7 @@ void IO::Drivers::Network::setUdpSocket()
 void IO::Drivers::Network::setTcpPort(const quint16 port)
 {
   m_tcpPort = port;
+  m_settings.setValue("NetworkDriver/tcpPort", port);
   Q_EMIT portChanged();
 }
 
@@ -378,6 +390,7 @@ void IO::Drivers::Network::setTcpPort(const quint16 port)
 void IO::Drivers::Network::setUdpLocalPort(const quint16 port)
 {
   m_udpLocalPort = port;
+  m_settings.setValue("NetworkDriver/udpLocalPort", port);
   Q_EMIT portChanged();
 }
 
@@ -387,6 +400,7 @@ void IO::Drivers::Network::setUdpLocalPort(const quint16 port)
 void IO::Drivers::Network::setUdpRemotePort(const quint16 port)
 {
   m_udpRemotePort = port;
+  m_settings.setValue("NetworkDriver/udpRemotePort", port);
   Q_EMIT portChanged();
 }
 
@@ -408,6 +422,7 @@ void IO::Drivers::Network::setRemoteAddress(const QString &address)
 
   // Change host
   m_address = address;
+  m_settings.setValue("NetworkDriver/address", address);
   Q_EMIT addressChanged();
 }
 
@@ -428,6 +443,7 @@ void IO::Drivers::Network::lookup(const QString &host)
 void IO::Drivers::Network::setUdpMulticast(const bool enabled)
 {
   m_udpMulticast = enabled;
+  m_settings.setValue("NetworkDriver/udpMulticastEnabled", enabled);
   Q_EMIT udpMulticastChanged();
 }
 
@@ -460,6 +476,7 @@ void IO::Drivers::Network::setSocketTypeIndex(const int index)
 void IO::Drivers::Network::setSocketType(const QAbstractSocket::SocketType type)
 {
   m_socketType = type;
+  m_settings.setValue("NetworkDriver/socketType", static_cast<int>(type));
   Q_EMIT socketTypeChanged();
 }
 

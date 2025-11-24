@@ -30,10 +30,12 @@
 
 #include "AppInfo.h"
 #include "IO/Manager.h"
+#include "UI/Dashboard.h"
 #include "IO/Drivers/UART.h"
-#include "IO/Drivers/Network.h"
+#include "Misc/TimerEvents.h"
 #include "JSON/ProjectModel.h"
 #include "JSON/FrameBuilder.h"
+#include "IO/Drivers/Network.h"
 #include "Misc/ModuleManager.h"
 
 #ifdef Q_OS_WIN
@@ -117,39 +119,47 @@ int main(int argc, char **argv)
   app.setStyle(QStyleFactory::create("Fusion"));
   QQuickStyle::setStyle("Fusion");
 
-  // Setup command line parser
-  QCommandLineParser parser;
-  parser.setApplicationDescription(PROJECT_DESCRIPTION_SUMMARY);
-  parser.addHelpOption();
-
   // Define CLI options
   // clang-format off
   typedef QCommandLineOption QCLO;
 
   // General options
-  QCLO vOpt({"v", "version"}, "Show application version");
-  QCLO rOpt({"r", "reset"}, "Reset application settings");
-  QCLO fOpt({"f", "fullscreen"}, "Start application in fullscreen mode");
-  QCLO pOpt({"p", "project"}, "Load project file on startup", "file");
+  QCLO vOpt({"v", "version"}, "Display application version");
+  QCLO rOpt({"r", "reset"}, "Reset all application settings");
+  QCLO fOpt({"f", "fullscreen"}, "Launch dashboard in fullscreen mode");
+  QCLO pOpt({"p", "project"}, "Load project file at startup", "file");
+  QCLO qOpt({"q", "quick-plot"}, "Enable quick plot mode (auto-detect CSV data)");
+  QCLO jOpt({"j", "device-sends-json"}, "Expect pre-formatted JSON from device");
+
+  // Dashboard options
+  QCLO fpsOpt({"r", "fps"}, "Set visualization refresh rate", "Hz");
+  QCLO pointsOpt({"n", "points"}, "Set data points per plot", "count");
 
   // UART/Serial port options
-  QCLO uartOpt("uart", "Connect to serial device (e.g., /dev/ttyUSB0 or COM3)", "device");
-  QCLO baudOpt("baud", "Set baud rate for serial connection (default: 9600)", "rate");
+  QCLO uartOpt("uart", "Serial port to use (e.g., /dev/ttyUSB0, COM3)", "port");
+  QCLO baudOpt("baud", "Serial baud rate (default: 9600)", "rate");
 
   // TCP client options
-  QCLO tcpOpt("tcp", "Connect to TCP server (e.g., 192.168.1.100:8080)", "host:port");
+  QCLO tcpOpt("tcp", "TCP server address (e.g., 192.168.1.100:8080)", "host:port");
 
   // UDP options
-  QCLO udpOpt("udp", "Listen on UDP local port (e.g., 8080)", "port");
-  QCLO udpRemoteOpt("udp-remote", "Send UDP data to remote host (e.g., 192.168.1.100:8080)", "host:port");
-  QCLO udpMltcstOpt("udp-multicast", "Enable UDP multicast mode");
+  QCLO udpOpt("udp", "UDP local port to bind (e.g., 8080)", "port");
+  QCLO udpRemoteOpt("udp-remote", "UDP remote target (e.g., 192.168.1.100:8080)", "host:port");
+  QCLO udpMltcstOpt("udp-multicast", "Enable multicast mode for UDP");
   // clang-format on
 
-  // Add CLI options & process arguments
+  // Setup command line parser
+  QCommandLineParser parser;
+  parser.setApplicationDescription(PROJECT_DESCRIPTION_SUMMARY);
+  parser.addHelpOption();
   parser.addOption(vOpt);
   parser.addOption(rOpt);
   parser.addOption(fOpt);
   parser.addOption(pOpt);
+  parser.addOption(qOpt);
+  parser.addOption(jOpt);
+  parser.addOption(fpsOpt);
+  parser.addOption(pointsOpt);
   parser.addOption(uartOpt);
   parser.addOption(baudOpt);
   parser.addOption(tcpOpt);
@@ -197,9 +207,36 @@ int main(int argc, char **argv)
     JSON::FrameBuilder::instance().setOperationMode(SerialStudio::ProjectFile);
   }
 
+  // Enable quick plot mode
+  else if (parser.isSet(qOpt))
+    JSON::FrameBuilder::instance().setOperationMode(SerialStudio::QuickPlot);
+
+  // Disable frame processing
+  else if (parser.isSet(jOpt))
+    JSON::FrameBuilder::instance().setOperationMode(
+        SerialStudio::DeviceSendsJSON);
+
   // Handle fullscreen option
   const auto ctx = moduleManager.engine().rootContext();
   ctx->setContextProperty("CLI_START_FULLSCREEN", parser.isSet(fOpt));
+
+  // Set FPS
+  if (parser.isSet(fpsOpt))
+  {
+    bool ok;
+    auto fps = parser.value(fpsOpt).toUInt(&ok);
+    if (ok)
+      Misc::TimerEvents::instance().setFPS(fps);
+  }
+
+  // Set plot point count
+  if (parser.isSet(pointsOpt))
+  {
+    bool ok;
+    auto points = parser.value(pointsOpt).toUInt(&ok);
+    if (ok)
+      UI::Dashboard::instance().setPoints(points);
+  }
 
   // Handle UART device and baud rate options
   if (parser.isSet(uartOpt) || parser.isSet(baudOpt))
@@ -304,6 +341,7 @@ int main(int argc, char **argv)
   }
 
   // Enter application event loop
+  app.processEvents();
   const auto status = app.exec();
 
   // Free dynamically-generated argv on Windows

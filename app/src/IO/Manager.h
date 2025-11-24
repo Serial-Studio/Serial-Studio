@@ -145,7 +145,7 @@ public slots:
   void setFinishSequence(const QByteArray &sequence);
   void setChecksumAlgorithm(const QString &algorithm);
   void setThreadedFrameExtraction(const bool enabled);
-  void setBusType(const SerialStudio::BusType &driver);
+  void setBusType(const SerialStudio::BusType driver);
 
 private:
   void killFrameReader();

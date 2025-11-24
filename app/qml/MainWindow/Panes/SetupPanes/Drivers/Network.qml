@@ -29,19 +29,6 @@ Item {
   implicitHeight: layout.implicitHeight
 
   //
-  // Save settings
-  //
-  Settings {
-    category: "NetworkDriver"
-    property alias address: _address.text
-    property alias tcpPort: _tcpPort.text
-    property alias udpLocalPort: _udpLocalPort.text
-    property alias udpRemotePort: _udpRemotePort.text
-    property alias socketType: _typeCombo.currentIndex
-    property alias udpMulticastEnabled: _udpMulticast.checked
-  }
-
-  //
   // React to network manager events
   //
   Connections {

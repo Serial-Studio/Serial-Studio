@@ -67,7 +67,6 @@ Widgets.Pane {
   Settings {
     category: "SetupPanel"
     property alias csvExport: csvLogging.checked
-    property alias selectedDriver: driverCombo.currentIndex
   }
 
   //
@@ -242,14 +241,11 @@ Widgets.Pane {
         color: Cpp_ThemeManager.colors["pane_section_label"]
         Component.onCompleted: font.capitalization = Font.AllUppercase
       } ComboBox {
-        id: driverCombo
         Layout.fillWidth: true
         model: Cpp_IO_Manager.availableBuses
+        currentIndex: Cpp_IO_Manager.busType
         displayText: qsTr("I/O Interface: %1").arg(currentText)
         onCurrentIndexChanged: {
-          if (currentIndex < 0 || count <= currentIndex)
-            currentIndex = 0
-
           if (Cpp_IO_Manager.busType !== currentIndex)
             Cpp_IO_Manager.busType = currentIndex
         }

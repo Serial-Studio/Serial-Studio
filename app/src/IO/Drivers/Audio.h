@@ -32,6 +32,7 @@
 #include <QThread>
 #include <QVector>
 #include <QObject>
+#include <QSettings>
 
 #include <QBuffer>
 #include <QTextStream>
@@ -217,6 +218,7 @@ private:
   QVector<ma_device_info> m_inputDevices;
   QVector<ma_device_info> m_outputDevices;
 
+  QSettings m_settings;
   QMutex m_inputBufferLock;
   QByteArray m_rawInput;
 

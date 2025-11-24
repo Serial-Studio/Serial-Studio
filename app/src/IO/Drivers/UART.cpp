@@ -70,16 +70,25 @@ IO::Drivers::UART::UART()
   , m_lastSerialDeviceIndex(0)
   , m_portIndex(0)
 {
-  m_baudRate = m_settings.value("IO_Serial_Baud_Rate", 9600).toInt();
-
   // Populate error list
   populateErrors();
 
-  // Init serial port configuration variables
-  setParity(parityList().indexOf(tr("None")));
-  setFlowControl(flowControlList().indexOf(tr("None")));
-  setDataBits(dataBitsList().indexOf(QStringLiteral("8")));
-  setStopBits(stopBitsList().indexOf(QStringLiteral("1")));
+  // Read saved baud rate value
+  m_baudRate = m_settings.value("IO_Serial_Baud_Rate", 9600).toInt();
+
+  // Get default indexes for port parameters
+  int defParity = parityList().indexOf(tr("None"));
+  int defFlow = flowControlList().indexOf(tr("None"));
+  int defDataBits = dataBitsList().indexOf(QStringLiteral("8"));
+  int defStopBits = stopBitsList().indexOf(QStringLiteral("1"));
+
+  // Read settings
+  setDtrEnabled(m_settings.value("UartDriver/dtr", 1).toBool());
+  setParity(m_settings.value("UartDriver/parity", defParity).toInt());
+  setDataBits(m_settings.value("UartDriver/dataBits", defDataBits).toInt());
+  setStopBits(m_settings.value("UartDriver/stopBits", defStopBits).toInt());
+  setAutoReconnect(m_settings.value("UartDriver/autoReconnect", 0).toBool());
+  setFlowControl(m_settings.value("UartDriver/flowControl", defFlow).toInt());
 
   // Update connect button status when user selects a serial device
   connect(this, &IO::Drivers::UART::portIndexChanged, this,
@@ -543,6 +552,7 @@ void IO::Drivers::UART::setBaudRate(const qint32 rate)
 void IO::Drivers::UART::setDtrEnabled(const bool enabled)
 {
   m_dtrEnabled = enabled;
+  m_settings.setValue("UartDriver/dtr", enabled);
 
   if (port() && port()->isOpen())
     port()->setDataTerminalReady(enabled);
@@ -613,6 +623,7 @@ void IO::Drivers::UART::setParity(const quint8 parityIndex)
 
   // Update current index
   m_parityIndex = parityIndex;
+  m_settings.setValue("UartDriver/parity", parityIndex);
 
   // Set parity based on current index
   switch (parityIndex)
@@ -655,6 +666,7 @@ void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
 
   // Update current index
   m_dataBitsIndex = dataBitsIndex;
+  m_settings.setValue("UartDriver/dataBits", dataBitsIndex);
 
   // Obtain data bits value from current index
   switch (dataBitsIndex)
@@ -694,6 +706,7 @@ void IO::Drivers::UART::setStopBits(const quint8 stopBitsIndex)
 
   // Update current index
   m_stopBitsIndex = stopBitsIndex;
+  m_settings.setValue("UartDriver/stopBits", stopBitsIndex);
 
   // Obtain stop bits value from current index
   switch (stopBitsIndex)
@@ -723,6 +736,7 @@ void IO::Drivers::UART::setStopBits(const quint8 stopBitsIndex)
 void IO::Drivers::UART::setAutoReconnect(const bool autoreconnect)
 {
   m_autoReconnect = autoreconnect;
+  m_settings.setValue("UartDriver/autoReconnect", autoreconnect);
   Q_EMIT autoReconnectChanged();
 }
 
@@ -739,6 +753,7 @@ void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
 
   // Update current index
   m_flowControlIndex = flowControlIndex;
+  m_settings.setValue("UartDriver/flowControl", flowControlIndex);
 
   // Obtain flow control value from current index
   switch (flowControlIndex)

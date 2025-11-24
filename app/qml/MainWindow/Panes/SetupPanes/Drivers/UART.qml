@@ -29,20 +29,6 @@ Item {
   implicitHeight: layout.implicitHeight
 
   //
-  // Save settings
-  //
-  Settings {
-    category: "UartDriver"
-    property alias dtr: _dtr.checked
-    property alias port: _portCombo.currentIndex
-    property alias dataBits: _dataCombo.currentIndex
-    property alias parity: _parityCombo.currentIndex
-    property alias flowControl: _flowCombo.currentIndex
-    property alias stopBits: _stopBitsCombo.currentIndex
-    property alias autoReconnect: _autoreconnect.checked
-  }
-
-  //
   // Update listbox models when translation is changed
   //
   Connections {

@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <QSettings>
 #include <QHostInfo>
 #include <QTcpSocket>
 #include <QUdpSocket>
@@ -159,6 +160,8 @@ private slots:
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:
+  QSettings m_settings;
+
   QString m_address;
   quint16 m_tcpPort;
   bool m_hostExists;
