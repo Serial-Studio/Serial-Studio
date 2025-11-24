@@ -114,23 +114,21 @@ int main(int argc, char **argv)
 
   // Setup command line parser
   QCommandLineParser parser;
-  parser.setApplicationDescription("Multi-platform dashboard for embedded systems");
+  parser.setApplicationDescription(
+      "Multi-platform dashboard for embedded systems");
   parser.addHelpOption();
 
   // Add CLI options
-  QCommandLineOption versionOption(
-      QStringList() << "v"
-                    << "version",
-      "Show application version");
-  QCommandLineOption resetOption(
-      QStringList() << "r"
-                    << "reset",
-      "Reset application settings");
-  QCommandLineOption deviceOption("device",
-                                  "Serial device to connect (e.g., /dev/ttyUSB0)",
-                                  "device");
-  QCommandLineOption baudOption("baud", "Baud rate for serial connection (e.g., 115200)",
-                                "baudrate");
+  QCommandLineOption versionOption(QStringList() << "v"
+                                                 << "version",
+                                   "Show application version");
+  QCommandLineOption resetOption(QStringList() << "r"
+                                               << "reset",
+                                 "Reset application settings");
+  QCommandLineOption deviceOption(
+      "device", "Serial device to connect (e.g., /dev/ttyUSB0)", "device");
+  QCommandLineOption baudOption(
+      "baud", "Baud rate for serial connection (e.g., 115200)", "baudrate");
   QCommandLineOption projectOption("project", "Project file to load", "file");
 
   parser.addOption(versionOption);

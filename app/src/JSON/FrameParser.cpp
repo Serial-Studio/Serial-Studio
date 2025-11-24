@@ -633,7 +633,7 @@ void JSON::FrameParser::selectAll()
  */
 void JSON::FrameParser::clearContext()
 {
-  (void) loadScript(text());
+  (void)loadScript(text());
 }
 
 /**
