@@ -132,7 +132,7 @@ int main(int argc, char **argv)
   QCLO jOpt({"j", "device-sends-json"}, "Expect pre-formatted JSON from device");
 
   // Dashboard options
-  QCLO fpsOpt({"r", "fps"}, "Set visualization refresh rate", "Hz");
+  QCLO fpsOpt({"t", "fps"}, "Set visualization refresh rate", "Hz");
   QCLO pointsOpt({"n", "points"}, "Set data points per plot", "count");
 
   // UART/Serial port options
