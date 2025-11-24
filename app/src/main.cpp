@@ -122,30 +122,29 @@ int main(int argc, char **argv)
   // Define CLI options
   // clang-format off
   typedef QCommandLineOption QCLO;
-
   // General options
-  QCLO vOpt({"v", "version"}, "Display application version");
-  QCLO rOpt({"r", "reset"}, "Reset all application settings");
-  QCLO fOpt({"f", "fullscreen"}, "Launch dashboard in fullscreen mode");
-  QCLO pOpt({"p", "project"}, "Load project file at startup", "file");
-  QCLO qOpt({"q", "quick-plot"}, "Enable quick plot mode (auto-detect CSV data)");
-  QCLO jOpt({"j", "device-sends-json"}, "Expect pre-formatted JSON from device");
+  QCLO vOpt({"v", "version"}, "Displays application version");
+  QCLO rOpt({"r", "reset"}, "Resets all application settings");
+  QCLO fOpt({"f", "fullscreen"}, "Launches dashboard in fullscreen mode");
+  QCLO pOpt({"p", "project"}, "Loads the specified project file", "file");
+  QCLO qOpt({"q", "quick-plot"}, "Enables quick plot mode (auto-detect CSV data)");
+  QCLO jOpt({"j", "device-sends-json"}, "Expects pre-formatted JSON from device");
 
   // Dashboard options
-  QCLO fpsOpt({"t", "fps"}, "Set visualization refresh rate", "Hz");
-  QCLO pointsOpt({"n", "points"}, "Set data points per plot", "count");
+  QCLO fpsOpt({"t", "fps"}, "Sets visualization refresh rate", "Hz");
+  QCLO pointsOpt({"n", "points"}, "Sets data points per plot", "count");
 
   // UART/Serial port options
-  QCLO uartOpt("uart", "Serial port to use (e.g., /dev/ttyUSB0, COM3)", "port");
-  QCLO baudOpt("baud", "Serial baud rate (default: 9600)", "rate");
+  QCLO uartOpt("uart", "Specifies serial port (e.g., /dev/ttyUSB0, COM3)", "port");
+  QCLO baudOpt("baud", "Sets serial baud rate (default: 9600)", "rate");
 
   // TCP client options
-  QCLO tcpOpt("tcp", "TCP server address (e.g., 192.168.1.100:8080)", "host:port");
+  QCLO tcpOpt("tcp", "Connects to TCP server (e.g., 192.168.1.100:8080)", "host:port");
 
   // UDP options
-  QCLO udpOpt("udp", "UDP local port to bind (e.g., 8080)", "port");
-  QCLO udpRemoteOpt("udp-remote", "UDP remote target (e.g., 192.168.1.100:8080)", "host:port");
-  QCLO udpMltcstOpt("udp-multicast", "Enable multicast mode for UDP");
+  QCLO udpOpt("udp", "Binds to UDP local port (e.g., 8080)", "port");
+  QCLO udpRemoteOpt("udp-remote", "Specifies UDP remote target (e.g., 192.168.1.100:8080)", "host:port");
+  QCLO udpMltcstOpt("udp-multicast", "Enables multicast mode for UDP");
   // clang-format on
 
   // Setup command line parser
