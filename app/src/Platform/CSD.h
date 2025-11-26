@@ -65,19 +65,12 @@ public:
   [[nodiscard]] QString title() const;
   [[nodiscard]] bool windowActive() const;
   [[nodiscard]] QColor backgroundColor() const;
+  [[nodiscard]] QColor foregroundColor() const;
 
 public slots:
   void setWindowActive(bool active);
   void setTitle(const QString &title);
   void setBackgroundColor(const QColor &color);
-
-protected:
-  void mouseMoveEvent(QMouseEvent *event) override;
-  void hoverMoveEvent(QHoverEvent *event) override;
-  void hoverLeaveEvent(QHoverEvent *event) override;
-  void mousePressEvent(QMouseEvent *event) override;
-  void mouseReleaseEvent(QMouseEvent *event) override;
-  void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
   enum class Button
@@ -88,14 +81,21 @@ private:
     Close
   };
 
-  [[nodiscard]] QColor foregroundColor() const;
   [[nodiscard]] QRectF buttonRect(Button button) const;
   [[nodiscard]] Button buttonAt(const QPointF &pos) const;
 
-  void drawButton(QPainter *painter, Button button, const QString &symbol,
-                  const QColor &hoverBg);
+  void drawButton(QPainter *painter, Button button, const QString &svgPath);
+
+protected:
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void hoverMoveEvent(QHoverEvent *event) override;
+  void hoverLeaveEvent(QHoverEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
+  QPixmap m_icon;
   QString m_title;
   bool m_dragging;
   bool m_windowActive;

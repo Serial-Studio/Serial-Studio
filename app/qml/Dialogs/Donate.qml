@@ -136,7 +136,7 @@ Window {
             id: title
             Layout.fillWidth: true
             font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
-            text: qsTr("Support the development of %1!").arg(Cpp_AppName)
+            text: qsTr("Support the development of %1!").arg("Serial Studio")
           }
 
           Item {

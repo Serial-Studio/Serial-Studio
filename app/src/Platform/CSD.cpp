@@ -20,6 +20,7 @@
  */
 
 #include "CSD.h"
+#include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 
 #include <QCursor>
@@ -28,20 +29,23 @@
 #include <QPainter>
 #include <QQuickWindow>
 #include <QScreen>
+#include <QSvgRenderer>
 
 //------------------------------------------------------------------------------
 // Constants
 //------------------------------------------------------------------------------
 
+static constexpr int kIconSize = 18;
 static constexpr int kButtonSize = 28;
-static constexpr int kButtonMargin = 8;
-static constexpr int kButtonSpacing = 4;
+static constexpr int kIconMargin = 10;
 static constexpr int kResizeMargin = 8;
+static constexpr int kButtonMargin = 4;
+static constexpr int kButtonSpacing = 4;
 static constexpr int kDefaultTitleBarHeight = 32;
 static constexpr int kMaximizedTitleBarHeight = 28;
 
 //------------------------------------------------------------------------------
-// TitleBarItem Implementation
+// CSD_Titlebar Implementation
 //------------------------------------------------------------------------------
 
 /**
@@ -64,44 +68,48 @@ CSD_Titlebar::CSD_Titlebar(QQuickItem *parent)
 {
   setAcceptedMouseButtons(Qt::LeftButton);
   setAcceptHoverEvents(true);
+  m_icon = QGuiApplication::windowIcon().pixmap(kIconSize, kIconSize);
 }
 
 /**
- * @brief Paints the title bar including background, title text, and window
- *        control buttons.
+ * @brief Paints the title bar including background, icon, title text, and
+ *        window control buttons.
  * @param painter The QPainter used for rendering.
  *
  * Renders the title bar with:
- * - A solid background color (dimmed when window is inactive)
- * - Centered or left-aligned title text
+ * - A solid background color
+ * - Application icon on the left
+ * - Centered title text
  * - Minimize, maximize, and close buttons with hover/press states
  */
 void CSD_Titlebar::paint(QPainter *painter)
 {
   painter->setRenderHint(QPainter::Antialiasing);
+  painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
   // Draw background
   painter->fillRect(boundingRect(), m_backgroundColor);
 
-  // Configure text rendering
+  // Draw application icon
+  const qreal iconY = (height() - kIconSize) / 2.0;
+  if (!m_icon.isNull())
+    painter->drawPixmap(QPointF(kIconMargin, iconY), m_icon);
+
+  // Draw centered title text
   const QColor fgColor = foregroundColor();
   painter->setPen(m_windowActive ? fgColor : fgColor.darker(130));
-  painter->setFont(QFont(painter->font().family(), 11));
+  painter->setFont(Misc::CommonFonts::instance().boldUiFont());
+  painter->drawText(boundingRect(), Qt::AlignCenter, m_title);
 
-  // Calculate text area (leave space for buttons)
-  const qreal buttonsWidth = 3 * (kButtonSize + kButtonSpacing) + kButtonMargin;
-  const QRectF textRect(kButtonMargin, 0,
-                        width() - buttonsWidth - kButtonMargin, height());
-  painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, m_title);
-
-  // Draw window control buttons
-  drawButton(painter, Button::Minimize, "─", QColor("#80808060"));
+  // Draw window control buttons with SVG icons
+  drawButton(painter, Button::Minimize,
+             QStringLiteral(":/rcc/icons/miniwindow/minimize.svg"));
   drawButton(painter, Button::Maximize,
              (window() && (window()->windowStates() & Qt::WindowMaximized))
-                 ? "❐"
-                 : "□",
-             QColor("#80808060"));
-  drawButton(painter, Button::Close, "✕", QColor("#e81123"));
+                 ? QStringLiteral(":/rcc/icons/miniwindow/restore.svg")
+                 : QStringLiteral(":/rcc/icons/miniwindow/maximize.svg"));
+  drawButton(painter, Button::Close,
+             QStringLiteral(":/rcc/icons/miniwindow/close.svg"));
 }
 
 /**
@@ -129,6 +137,42 @@ bool CSD_Titlebar::windowActive() const
 QColor CSD_Titlebar::backgroundColor() const
 {
   return m_backgroundColor;
+}
+
+/**
+ * @brief Calculates the appropriate foreground color based on background.
+ * @return The color to use for text and icons.
+ *
+ * If the background color matches the theme's toolbar_top color, returns
+ * the titlebar_text color from the theme. Otherwise, calculates whether
+ * to use white or black based on the background's relative luminance
+ * using the W3C contrast algorithm.
+ */
+QColor CSD_Titlebar::foregroundColor() const
+{
+  const auto &theme = Misc::ThemeManager::instance();
+  const QColor toolbarTop = theme.getColor("toolbar_top");
+
+  // If background matches toolbar_top, use theme's titlebar_text
+  if (m_backgroundColor == toolbarTop)
+    return theme.getColor("titlebar_text");
+
+  // Otherwise calculate optimal contrast color using relative luminance
+  // Formula: L = 0.2126 * R + 0.7152 * G + 0.0722 * B (sRGB)
+  const qreal r = m_backgroundColor.redF();
+  const qreal g = m_backgroundColor.greenF();
+  const qreal b = m_backgroundColor.blueF();
+
+  // Apply gamma correction for sRGB
+  auto linearize = [](qreal c) {
+    return c <= 0.03928 ? c / 12.92 : qPow((c + 0.055) / 1.055, 2.4);
+  };
+  const qreal luminance
+      = 0.2126 * linearize(r) + 0.7152 * linearize(g) + 0.0722 * linearize(b);
+
+  // Use white text on dark backgrounds, black on light
+  // Threshold of 0.179 provides ~4.5:1 contrast ratio (WCAG AA)
+  return luminance > 0.179 ? QColor("#000000") : QColor("#ffffff");
 }
 
 /**
@@ -174,6 +218,110 @@ void CSD_Titlebar::setBackgroundColor(const QColor &color)
     Q_EMIT backgroundColorChanged();
     update();
   }
+}
+
+/**
+ * @brief Calculates the bounding rectangle for a window control button.
+ * @param button The button to get the rectangle for.
+ * @return The button's bounding rectangle in item coordinates.
+ */
+QRectF CSD_Titlebar::buttonRect(Button button) const
+{
+  const qreal y = (height() - kButtonSize) / 2.0;
+  const qreal closeX = width() - kButtonMargin - kButtonSize;
+
+  switch (button)
+  {
+    case Button::Close:
+      return QRectF(closeX, y, kButtonSize, kButtonSize);
+    case Button::Maximize:
+      return QRectF(closeX - kButtonSize - kButtonSpacing, y, kButtonSize,
+                    kButtonSize);
+    case Button::Minimize:
+      return QRectF(closeX - 2 * (kButtonSize + kButtonSpacing), y, kButtonSize,
+                    kButtonSize);
+    default:
+      return QRectF();
+  }
+}
+
+/**
+ * @brief Determines which button (if any) is at the given position.
+ * @param pos The position to test in item coordinates.
+ * @return The button at the position, or Button::None if no button.
+ */
+CSD_Titlebar::Button CSD_Titlebar::buttonAt(const QPointF &pos) const
+{
+  if (buttonRect(Button::Close).contains(pos))
+    return Button::Close;
+  if (buttonRect(Button::Maximize).contains(pos))
+    return Button::Maximize;
+  if (buttonRect(Button::Minimize).contains(pos))
+    return Button::Minimize;
+
+  return Button::None;
+}
+
+/**
+ * @brief Helper function to draw a window control button with an SVG icon.
+ * @param painter The painter to use.
+ * @param button The button type to draw.
+ * @param svgPath The resource path to the SVG icon.
+ *
+ * Renders the button with a rounded rectangle background on hover/press,
+ * and draws the SVG icon centered within the button bounds. The icon
+ * color is determined by the current foreground color.
+ */
+void CSD_Titlebar::drawButton(QPainter *painter, Button button,
+                              const QString &svgPath)
+{
+  // Get button location & state
+  const QRectF rect = buttonRect(button);
+  const bool hovered = (m_hoveredButton == button);
+  const bool pressed = (m_pressedButton == button);
+
+  // Determine icon color
+  QColor iconColor = foregroundColor();
+  if (!m_windowActive)
+    iconColor = iconColor.darker(130);
+  else if (hovered || pressed)
+  {
+    iconColor = Misc::ThemeManager::instance().getColor("highlight");
+    if (pressed)
+      iconColor = iconColor.darker(80);
+  }
+
+  // Load and render SVG with color replacement
+  QSvgRenderer renderer(svgPath);
+  if (!renderer.isValid())
+    return;
+
+  // Calculate icon bounds (centered within button, slightly smaller)
+  const qreal iconSize = kButtonSize * 0.5;
+  const QRectF iconRect(rect.center().x() - iconSize / 2,
+                        rect.center().y() - iconSize / 2, iconSize, iconSize);
+
+  // Render SVG to a pixmap so we can colorize it
+  const qreal dpr = painter->device()->devicePixelRatio();
+  QPixmap pixmap(QSize(iconSize * dpr, iconSize * dpr));
+  pixmap.setDevicePixelRatio(dpr);
+  pixmap.fill(Qt::transparent);
+  QPainter svgPainter(&pixmap);
+  renderer.render(&svgPainter, QRectF(0, 0, iconSize, iconSize));
+  svgPainter.end();
+
+  // Apply color by compositing
+  QPixmap colorized(pixmap.size());
+  colorized.setDevicePixelRatio(dpr);
+  colorized.fill(Qt::transparent);
+  QPainter colorPainter(&colorized);
+  colorPainter.drawPixmap(0, 0, pixmap);
+  colorPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+  colorPainter.fillRect(colorized.rect(), iconColor);
+  colorPainter.end();
+
+  // Draw the colorized icon
+  painter->drawPixmap(iconRect.topLeft(), colorized);
 }
 
 /**
@@ -296,6 +444,7 @@ void CSD_Titlebar::mouseReleaseEvent(QMouseEvent *event)
     }
   }
 
+  m_hoveredButton = Button::None;
   m_pressedButton = Button::None;
   m_dragging = false;
   update();
@@ -315,87 +464,6 @@ void CSD_Titlebar::mouseDoubleClickEvent(QMouseEvent *event)
     Q_EMIT maximizeClicked();
 
   event->accept();
-}
-
-/**
- * @brief Calculates the appropriate foreground color based on background
- *        luminance.
- * @return White for dark backgrounds, black for light backgrounds.
- */
-QColor CSD_Titlebar::foregroundColor() const
-{
-  return Misc::ThemeManager::instance().getColor("toolbar_text");
-}
-
-/**
- * @brief Calculates the bounding rectangle for a window control button.
- * @param button The button to get the rectangle for.
- * @return The button's bounding rectangle in item coordinates.
- */
-QRectF CSD_Titlebar::buttonRect(Button button) const
-{
-  const qreal y = (height() - kButtonSize) / 2.0;
-  const qreal closeX = width() - kButtonMargin - kButtonSize;
-
-  switch (button)
-  {
-    case Button::Close:
-      return QRectF(closeX, y, kButtonSize, kButtonSize);
-    case Button::Maximize:
-      return QRectF(closeX - kButtonSize - kButtonSpacing, y, kButtonSize,
-                    kButtonSize);
-    case Button::Minimize:
-      return QRectF(closeX - 2 * (kButtonSize + kButtonSpacing), y, kButtonSize,
-                    kButtonSize);
-    default:
-      return QRectF();
-  }
-}
-
-/**
- * @brief Determines which button (if any) is at the given position.
- * @param pos The position to test in item coordinates.
- * @return The button at the position, or Button::None if no button.
- */
-CSD_Titlebar::Button CSD_Titlebar::buttonAt(const QPointF &pos) const
-{
-  if (buttonRect(Button::Close).contains(pos))
-    return Button::Close;
-  if (buttonRect(Button::Maximize).contains(pos))
-    return Button::Maximize;
-  if (buttonRect(Button::Minimize).contains(pos))
-    return Button::Minimize;
-
-  return Button::None;
-}
-
-/**
- * @brief Helper function to draw a window control button.
- * @param painter The painter to use.
- * @param button The button type to draw.
- * @param symbol The text symbol to display.
- * @param hoverBg The background color when hovered.
- */
-void CSD_Titlebar::drawButton(QPainter *painter, Button button,
-                              const QString &symbol, const QColor &hoverBg)
-{
-  const QRectF rect = buttonRect(button);
-  const bool hovered = (m_hoveredButton == button);
-  const bool pressed = (m_pressedButton == button);
-
-  // Draw button background on hover/press
-  if (hovered || pressed)
-  {
-    painter->setBrush(pressed ? hoverBg.darker(120) : hoverBg);
-    painter->setPen(Qt::NoPen);
-    painter->drawRoundedRect(rect, 4, 4);
-  }
-
-  // Draw button symbol
-  const QColor fgColor = foregroundColor();
-  painter->setPen(hovered && button == Button::Close ? Qt::white : fgColor);
-  painter->setFont(QFont(painter->font().family(), 12));
-  painter->drawText(rect, Qt::AlignCenter, symbol);
 }
 
 //------------------------------------------------------------------------------
@@ -704,13 +772,9 @@ bool CSD_Window::eventFilter(QObject *watched, QEvent *event)
         if (m_resizeEdge != ResizeEdge::None)
         {
           m_resizing = true;
-
-          // Use Qt's built-in system resize (Qt 5.15+)
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
           m_window->startSystemResize(qtEdgesFromResizeEdge(m_resizeEdge));
           m_resizing = false;
           return true;
-#endif
         }
       }
 
