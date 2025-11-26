@@ -20,6 +20,12 @@
 # Usage:
 #   ./sanitize-commit.sh
 
+# Ensure we're running in bash, not sh/dash or zsh
+if [ -z "$BASH_VERSION" ]; then
+    echo "Error: This script requires bash. Run it with './sanitize-commit.sh' or 'bash sanitize-commit.sh'" >&2
+    exit 1
+fi
+
 # Fail fast on errors, undefined vars, or broken pipelines
 set -euo pipefail
 
