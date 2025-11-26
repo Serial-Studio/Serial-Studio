@@ -66,17 +66,34 @@ Rectangle {
   }
 
   //
+  // Top toolbar section
+  //
+  Rectangle {
+    height: root.titlebarHeight
+    color: Cpp_ThemeManager.colors["toolbar_top"]
+    anchors {
+      top: parent.top
+      left: parent.left
+      right: parent.right
+    }
+  }
+
+  //
   // Toolbar background
   //
-  gradient: Gradient {
-    GradientStop {
-      position: 0
-      color: Cpp_ThemeManager.colors["toolbar_top"]
-    }
+  Rectangle {
+    anchors.fill: parent
+    anchors.topMargin: root.titlebarHeight
+    gradient: Gradient {
+      GradientStop {
+        position: 0
+        color: Cpp_ThemeManager.colors["toolbar_top"]
+      }
 
-    GradientStop {
-      position: 1
-      color: Cpp_ThemeManager.colors["toolbar_bottom"]
+      GradientStop {
+        position: 1
+        color: Cpp_ThemeManager.colors["toolbar_bottom"]
+      }
     }
   }
 
