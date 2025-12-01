@@ -134,7 +134,7 @@ public slots:
 
 private:
   void regenerateShadow();
-  QImage generateShadowCorner(int size, int radius);
+  QImage generateShadowCorner(int size);
 
 private:
   int m_shadowRadius;

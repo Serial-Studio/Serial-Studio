@@ -245,7 +245,12 @@ if(WIN32)
   set(SOURCES
     ${SOURCES}
     "deploy/windows/info.rc"
+    "src/Platform/CSD.cpp"
     "src/Platform/NativeWindow_Windows.cpp"
+  )
+  set(HEADERS
+    ${HEADERS}
+    "src/Platform/CSD.h"
   )
 elseif(APPLE)
   if(BUILD_COMMERCIAL)

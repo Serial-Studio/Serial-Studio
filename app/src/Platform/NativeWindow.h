@@ -50,8 +50,8 @@ public:
   Q_INVOKABLE int titlebarHeight(QObject *window);
 
 public slots:
-  void addWindow(QObject *window, const QString &color = "");
   void removeWindow(QObject *window);
+  void addWindow(QObject *window, const QString &color = "");
 
 private slots:
   void onThemeChanged();

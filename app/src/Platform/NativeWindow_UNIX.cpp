@@ -20,8 +20,8 @@
  */
 
 #include "CSD.h"
-#include "Misc/ThemeManager.h"
 #include "NativeWindow.h"
+#include "Misc/ThemeManager.h"
 
 //------------------------------------------------------------------------------
 // Static storage for window decorators

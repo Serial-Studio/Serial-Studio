@@ -34,7 +34,7 @@ Widgets.SmartWindow {
   title: documentTitle
   category: "MainWindow"
   minimumWidth: layout.implicitWidth
-  minimumHeight: layout.implicitHeight
+  minimumHeight: layout.implicitHeight + 128
 
   //
   // Custom properties
