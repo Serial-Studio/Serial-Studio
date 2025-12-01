@@ -56,6 +56,22 @@ int NativeWindow::titlebarHeight(QObject *window)
 }
 
 /**
+ * @brief Removes a window to the management list of NativeWindow.
+ * @param window Pointer to the window object to be managed.
+ */
+void NativeWindow::removeWindow(QObject *window)
+{
+  auto *win = qobject_cast<QWindow *>(window);
+  auto index = m_windows.indexOf(win);
+  if (index != -1 && index >= 0)
+  {
+    m_windows.removeAt(index);
+    if (m_colors.contains(win))
+      m_colors.remove(win);
+  }
+}
+
+/**
  * @brief Adds a window to the management list of NativeWindow.
  * @param window Pointer to the window object to be managed.
  *

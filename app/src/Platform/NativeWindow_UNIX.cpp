@@ -20,14 +20,14 @@
  */
 
 #include "CSD.h"
-#include "NativeWindow.h"
 #include "Misc/ThemeManager.h"
+#include "NativeWindow.h"
 
 //------------------------------------------------------------------------------
 // Static storage for window decorators
 //------------------------------------------------------------------------------
 
-static QHash<QWindow *, CSD_Window *> s_decorators;
+static QHash<QWindow *, CSD::Window *> s_decorators;
 
 //------------------------------------------------------------------------------
 // NativeWindow Implementation
@@ -48,25 +48,25 @@ NativeWindow::NativeWindow(QObject *parent)
 }
 
 /**
- * @brief Retrieves the height of the title bar for the given window.
- * @param window The window to query.
- * @return The title bar height in pixels, or 0 if no decorator exists.
- *
- * On UNIX systems with CSD, returns the actual title bar height so that
- * QML content can be properly offset. Returns 0 if the window is not
- * managed by a decorator.
+ * @brief Returns the height of the title bar.
+ * @param window The window for which the title bar height is queried.
+ * @return Height of the title bar in pixels. Always returns 0 in this
+ *         implementation, since the client does not need to move the window
+ *         elements (e.g. the caption/titlebar is not transparent, as in macOS).
  */
 int NativeWindow::titlebarHeight(QObject *window)
 {
-  auto *w = qobject_cast<QWindow *>(window);
-  if (!w)
-    return 0;
-
-  auto *decorator = s_decorators.value(w, nullptr);
-  if (decorator)
-    return decorator->titleBarHeight();
-
+  (void)window;
   return 0;
+}
+
+/**
+ * @brief Removes a window to the management list of NativeWindow.
+ * @param window Pointer to the window object to be managed.
+ */
+void NativeWindow::removeWindow(QObject *window)
+{
+  (void)window;
 }
 
 /**
@@ -93,11 +93,21 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
   m_colors.insert(w, color);
 
   // Create decorator for this window
-  auto *decorator = new CSD_Window(w, color, this);
+  auto *decorator = new CSD::Window(w, color, this);
   s_decorators.insert(w, decorator);
 
   // Clean up decorator when window is destroyed
-  connect(w, &QObject::destroyed, this, [w]() { s_decorators.remove(w); });
+  connect(w, &QObject::destroyed, this, [this, w]() {
+    s_decorators.remove(w);
+    auto *win = qobject_cast<QWindow *>(w);
+    auto index = m_windows.indexOf(win);
+    if (index != -1 && index >= 0)
+    {
+      m_windows.removeAt(index);
+      if (m_colors.contains(win))
+        m_colors.remove(win);
+    }
+  });
 
   // Connect active state changes
   connect(w, &QWindow::activeChanged, this, &NativeWindow::onActiveChanged);

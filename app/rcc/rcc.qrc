@@ -439,5 +439,9 @@
         <file>icons/code-editor/template.svg</file>
         <file>icons/buttons/test.svg</file>
         <file>icons/buttons/code.svg</file>
+        <file>icons/csd/close.svg</file>
+        <file>icons/csd/maximize.svg</file>
+        <file>icons/csd/minimize.svg</file>
+        <file>icons/csd/restore.svg</file>
     </qresource>
 </RCC>

@@ -20,183 +20,176 @@
  */
 
 #include "CSD.h"
-#include "Misc/CommonFonts.h"
-#include "Misc/ThemeManager.h"
 
+#include <QChildEvent>
 #include <QCursor>
 #include <QGuiApplication>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QQuickWindow>
-#include <QScreen>
+#include <QSurfaceFormat>
 #include <QSvgRenderer>
+#include <QTimer>
+#include <QtMath>
+
+#include "Misc/CommonFonts.h"
+#include "Misc/ThemeManager.h"
+
+namespace CSD
+{
 
 //------------------------------------------------------------------------------
 // Constants
 //------------------------------------------------------------------------------
 
-static constexpr int kIconSize = 18;
-static constexpr int kButtonSize = 28;
-static constexpr int kIconMargin = 10;
-static constexpr int kResizeMargin = 8;
-static constexpr int kButtonMargin = 4;
-static constexpr int kButtonSpacing = 4;
-static constexpr int kDefaultTitleBarHeight = 32;
-static constexpr int kMaximizedTitleBarHeight = 28;
+constexpr int IconSize = 18;
+constexpr int IconMargin = 10;
+constexpr int ButtonSize = 28;
+constexpr int ResizeMargin = 8;
+constexpr int ButtonMargin = 4;
+constexpr int CornerRadius = 10;
+constexpr int ShadowRadius = 24;
+constexpr int ButtonSpacing = 4;
+constexpr int TitleBarHeight = 32;
+constexpr int TitleBarHeightMaximized = 28;
+
+constexpr qreal ShadowOpacity = 0.15;
 
 //------------------------------------------------------------------------------
-// CSD_Titlebar Implementation
+// Titlebar
 //------------------------------------------------------------------------------
 
 /**
- * @brief Constructs a CSD_Titlebar.
+ * @brief Constructs a Titlebar.
  * @param parent The parent QQuickItem.
- *
- * Initializes member variables to default values and configures the item
- * to accept left mouse button events and hover events for interactive
- * window controls.
  */
-CSD_Titlebar::CSD_Titlebar(QQuickItem *parent)
+Titlebar::Titlebar(QQuickItem *parent)
   : QQuickPaintedItem(parent)
   , m_title()
   , m_dragging(false)
   , m_windowActive(true)
   , m_hoveredButton(Button::None)
   , m_pressedButton(Button::None)
-  , m_dragStartPos()
-  , m_backgroundColor("#2d2d2d")
+  , m_backgroundColor(QStringLiteral("#2d2d2d"))
 {
   setAcceptedMouseButtons(Qt::LeftButton);
   setAcceptHoverEvents(true);
-  m_icon = QGuiApplication::windowIcon().pixmap(kIconSize, kIconSize);
+  setFillColor(Qt::transparent);
+  setOpaquePainting(false);
+
+  // Load application icon from rcc:/logo/icon.svg
+  const auto &icon = QGuiApplication::windowIcon();
+  if (!icon.isNull())
+    m_icon = icon.pixmap(CSD::IconSize, CSD::IconSize);
 }
 
-/**
- * @brief Paints the title bar including background, icon, title text, and
- *        window control buttons.
- * @param painter The QPainter used for rendering.
- *
- * Renders the title bar with:
- * - A solid background color
- * - Application icon on the left
- * - Centered title text
- * - Minimize, maximize, and close buttons with hover/press states
- */
-void CSD_Titlebar::paint(QPainter *painter)
+void Titlebar::paint(QPainter *painter)
 {
   painter->setRenderHint(QPainter::Antialiasing);
   painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
+  const bool maximized
+      = window() && (window()->windowStates() & Qt::WindowMaximized);
+  const qreal radius = maximized ? 0 : CSD::CornerRadius;
+  const QRectF rect = boundingRect();
+
   // Draw background
-  painter->fillRect(boundingRect(), m_backgroundColor);
+  if (radius > 0)
+  {
+    // Rounded top corners only
+    QPainterPath path;
+    path.setFillRule(Qt::WindingFill);
 
-  // Draw application icon
-  const qreal iconY = (height() - kIconSize) / 2.0;
+    // Start at bottom-left, go clockwise
+    path.moveTo(rect.left(), rect.bottom());
+    path.lineTo(rect.left(), rect.top() + radius);
+    path.arcTo(QRectF(rect.left(), rect.top(), radius * 2, radius * 2), 180,
+               -90);
+    path.lineTo(rect.right() - radius, rect.top());
+    path.arcTo(
+        QRectF(rect.right() - radius * 2, rect.top(), radius * 2, radius * 2),
+        90, -90);
+    path.lineTo(rect.right(), rect.bottom());
+    path.closeSubpath();
+
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(m_backgroundColor);
+    painter->drawPath(path);
+  }
+  else
+  {
+    painter->fillRect(rect, m_backgroundColor);
+  }
+
+  // Application icon
   if (!m_icon.isNull())
-    painter->drawPixmap(QPointF(kIconMargin, iconY), m_icon);
+  {
+    const qreal y = (height() - CSD::IconSize) / 2.0;
+    painter->drawPixmap(QPointF(CSD::IconMargin, y), m_icon);
+  }
 
-  // Draw centered title text
-  const QColor fgColor = foregroundColor();
-  painter->setPen(m_windowActive ? fgColor : fgColor.darker(130));
+  // Title text (centered)
+  const QColor fg
+      = m_windowActive ? foregroundColor() : foregroundColor().darker(130);
+  painter->setPen(fg);
   painter->setFont(Misc::CommonFonts::instance().boldUiFont());
-  painter->drawText(boundingRect(), Qt::AlignCenter, m_title);
+  painter->drawText(rect, Qt::AlignCenter, m_title);
 
-  // Draw window control buttons with SVG icons
-  drawButton(painter, Button::Minimize,
-             QStringLiteral(":/rcc/icons/miniwindow/minimize.svg"));
-  drawButton(painter, Button::Maximize,
-             (window() && (window()->windowStates() & Qt::WindowMaximized))
-                 ? QStringLiteral(":/rcc/icons/miniwindow/restore.svg")
-                 : QStringLiteral(":/rcc/icons/miniwindow/maximize.svg"));
-  drawButton(painter, Button::Close,
-             QStringLiteral(":/rcc/icons/miniwindow/close.svg"));
+  // Window control buttons
+  const QString minimizeSvg = QStringLiteral(":/rcc/icons/csd/minimize.svg");
+  const QString maximizeSvg
+      = maximized ? QStringLiteral(":/rcc/icons/csd/restore.svg")
+                  : QStringLiteral(":/rcc/icons/csd/maximize.svg");
+  const QString closeSvg = QStringLiteral(":/rcc/icons/csd/close.svg");
+
+  drawButton(painter, Button::Minimize, minimizeSvg);
+  drawButton(painter, Button::Maximize, maximizeSvg);
+  drawButton(painter, Button::Close, closeSvg);
 }
 
-/**
- * @brief Returns the window title text.
- * @return The current title string.
- */
-QString CSD_Titlebar::title() const
+QString Titlebar::title() const
 {
   return m_title;
 }
 
-/**
- * @brief Returns whether the parent window is currently active.
- * @return True if the window is active, false otherwise.
- */
-bool CSD_Titlebar::windowActive() const
+bool Titlebar::windowActive() const
 {
   return m_windowActive;
 }
 
-/**
- * @brief Returns the title bar background color.
- * @return The current background color.
- */
-QColor CSD_Titlebar::backgroundColor() const
+QColor Titlebar::backgroundColor() const
 {
   return m_backgroundColor;
 }
 
 /**
- * @brief Calculates the appropriate foreground color based on background.
- * @return The color to use for text and icons.
- *
- * If the background color matches the theme's toolbar_top color, returns
- * the titlebar_text color from the theme. Otherwise, calculates whether
- * to use white or black based on the background's relative luminance
- * using the W3C contrast algorithm.
+ * @brief Calculates the foreground color based on background luminance.
+ * @return Appropriate text color for readability.
  */
-QColor CSD_Titlebar::foregroundColor() const
+QColor Titlebar::foregroundColor() const
 {
   const auto &theme = Misc::ThemeManager::instance();
-  const QColor toolbarTop = theme.getColor("toolbar_top");
+  const QColor toolbarTop = theme.getColor(QStringLiteral("toolbar_top"));
 
-  // If background matches toolbar_top, use theme's titlebar_text
+  // Use theme color if background matches toolbar
   if (m_backgroundColor == toolbarTop)
-    return theme.getColor("titlebar_text");
+    return theme.getColor(QStringLiteral("titlebar_text"));
 
-  // Otherwise calculate optimal contrast color using relative luminance
-  // Formula: L = 0.2126 * R + 0.7152 * G + 0.0722 * B (sRGB)
-  const qreal r = m_backgroundColor.redF();
-  const qreal g = m_backgroundColor.greenF();
-  const qreal b = m_backgroundColor.blueF();
-
-  // Apply gamma correction for sRGB
+  // Calculate relative luminance (W3C formula)
   auto linearize = [](qreal c) {
     return c <= 0.03928 ? c / 12.92 : qPow((c + 0.055) / 1.055, 2.4);
   };
-  const qreal luminance
-      = 0.2126 * linearize(r) + 0.7152 * linearize(g) + 0.0722 * linearize(b);
 
-  // Use white text on dark backgrounds, black on light
-  // Threshold of 0.179 provides ~4.5:1 contrast ratio (WCAG AA)
-  return luminance > 0.179 ? QColor("#000000") : QColor("#ffffff");
+  const qreal luminance = 0.2126 * linearize(m_backgroundColor.redF())
+                          + 0.7152 * linearize(m_backgroundColor.greenF())
+                          + 0.0722 * linearize(m_backgroundColor.blueF());
+
+  // WCAG AA contrast threshold
+  return luminance > 0.179 ? QColor(Qt::black) : QColor(Qt::white);
 }
 
-/**
- * @brief Sets the window active state and triggers a repaint.
- * @param active The new active state.
- *
- * When the window becomes inactive, the title bar is rendered with
- * dimmed colors to provide visual feedback.
- */
-void CSD_Titlebar::setWindowActive(bool active)
-{
-  if (m_windowActive != active)
-  {
-    m_windowActive = active;
-    Q_EMIT windowActiveChanged();
-    update();
-  }
-}
-
-/**
- * @brief Sets the title bar text.
- * @param title The new title string.
- */
-void CSD_Titlebar::setTitle(const QString &title)
+void Titlebar::setTitle(const QString &title)
 {
   if (m_title != title)
   {
@@ -206,11 +199,17 @@ void CSD_Titlebar::setTitle(const QString &title)
   }
 }
 
-/**
- * @brief Sets the title bar background color.
- * @param color The new background color.
- */
-void CSD_Titlebar::setBackgroundColor(const QColor &color)
+void Titlebar::setWindowActive(bool active)
+{
+  if (m_windowActive != active)
+  {
+    m_windowActive = active;
+    Q_EMIT windowActiveChanged();
+    update();
+  }
+}
+
+void Titlebar::setBackgroundColor(const QColor &color)
 {
   if (m_backgroundColor != color)
   {
@@ -220,37 +219,27 @@ void CSD_Titlebar::setBackgroundColor(const QColor &color)
   }
 }
 
-/**
- * @brief Calculates the bounding rectangle for a window control button.
- * @param button The button to get the rectangle for.
- * @return The button's bounding rectangle in item coordinates.
- */
-QRectF CSD_Titlebar::buttonRect(Button button) const
+QRectF Titlebar::buttonRect(Button button) const
 {
-  const qreal y = (height() - kButtonSize) / 2.0;
-  const qreal closeX = width() - kButtonMargin - kButtonSize;
+  const qreal y = (height() - CSD::ButtonSize) / 2.0;
+  const qreal closeX = width() - CSD::ButtonMargin - CSD::ButtonSize;
 
   switch (button)
   {
     case Button::Close:
-      return QRectF(closeX, y, kButtonSize, kButtonSize);
+      return {closeX, y, CSD::ButtonSize, CSD::ButtonSize};
     case Button::Maximize:
-      return QRectF(closeX - kButtonSize - kButtonSpacing, y, kButtonSize,
-                    kButtonSize);
+      return {closeX - CSD::ButtonSize - CSD::ButtonSpacing, y, CSD::ButtonSize,
+              CSD::ButtonSize};
     case Button::Minimize:
-      return QRectF(closeX - 2 * (kButtonSize + kButtonSpacing), y, kButtonSize,
-                    kButtonSize);
+      return {closeX - 2 * (CSD::ButtonSize + CSD::ButtonSpacing), y,
+              CSD::ButtonSize, CSD::ButtonSize};
     default:
-      return QRectF();
+      return {};
   }
 }
 
-/**
- * @brief Determines which button (if any) is at the given position.
- * @param pos The position to test in item coordinates.
- * @return The button at the position, or Button::None if no button.
- */
-CSD_Titlebar::Button CSD_Titlebar::buttonAt(const QPointF &pos) const
+Titlebar::Button Titlebar::buttonAt(const QPointF &pos) const
 {
   if (buttonRect(Button::Close).contains(pos))
     return Button::Close;
@@ -258,24 +247,18 @@ CSD_Titlebar::Button CSD_Titlebar::buttonAt(const QPointF &pos) const
     return Button::Maximize;
   if (buttonRect(Button::Minimize).contains(pos))
     return Button::Minimize;
-
   return Button::None;
 }
 
 /**
- * @brief Helper function to draw a window control button with an SVG icon.
+ * @brief Draws a window control button with SVG icon.
  * @param painter The painter to use.
- * @param button The button type to draw.
- * @param svgPath The resource path to the SVG icon.
- *
- * Renders the button with a rounded rectangle background on hover/press,
- * and draws the SVG icon centered within the button bounds. The icon
- * color is determined by the current foreground color.
+ * @param button The button type.
+ * @param svgPath Path to the SVG icon resource.
  */
-void CSD_Titlebar::drawButton(QPainter *painter, Button button,
-                              const QString &svgPath)
+void Titlebar::drawButton(QPainter *painter, Button button,
+                          const QString &svgPath)
 {
-  // Get button location & state
   const QRectF rect = buttonRect(button);
   const bool hovered = (m_hoveredButton == button);
   const bool pressed = (m_pressedButton == button);
@@ -286,120 +269,56 @@ void CSD_Titlebar::drawButton(QPainter *painter, Button button,
     iconColor = iconColor.darker(130);
   else if (hovered || pressed)
   {
-    iconColor = Misc::ThemeManager::instance().getColor("highlight");
+    iconColor
+        = Misc::ThemeManager::instance().getColor(QStringLiteral("highlight"));
     if (pressed)
-      iconColor = iconColor.darker(80);
+      iconColor = iconColor.darker(120);
   }
 
-  // Load and render SVG with color replacement
+  // Load SVG
   QSvgRenderer renderer(svgPath);
   if (!renderer.isValid())
     return;
 
-  // Calculate icon bounds (centered within button, slightly smaller)
-  const qreal iconSize = kButtonSize * 0.5;
+  // Render and colorize
+  const qreal iconSize = CSD::ButtonSize * 0.5;
   const QRectF iconRect(rect.center().x() - iconSize / 2,
                         rect.center().y() - iconSize / 2, iconSize, iconSize);
 
-  // Render SVG to a pixmap so we can colorize it
   const qreal dpr = painter->device()->devicePixelRatio();
-  QPixmap pixmap(QSize(iconSize * dpr, iconSize * dpr));
+  const QSize pixelSize(qRound(iconSize * dpr), qRound(iconSize * dpr));
+
+  QPixmap pixmap(pixelSize);
   pixmap.setDevicePixelRatio(dpr);
   pixmap.fill(Qt::transparent);
+
   QPainter svgPainter(&pixmap);
   renderer.render(&svgPainter, QRectF(0, 0, iconSize, iconSize));
   svgPainter.end();
 
-  // Apply color by compositing
-  QPixmap colorized(pixmap.size());
+  // Apply color
+  QPixmap colorized(pixelSize);
   colorized.setDevicePixelRatio(dpr);
   colorized.fill(Qt::transparent);
+
   QPainter colorPainter(&colorized);
   colorPainter.drawPixmap(0, 0, pixmap);
   colorPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
   colorPainter.fillRect(colorized.rect(), iconColor);
   colorPainter.end();
 
-  // Draw the colorized icon
   painter->drawPixmap(iconRect.topLeft(), colorized);
 }
 
-/**
- * @brief Handles mouse move events for window dragging.
- * @param event The mouse event.
- *
- * When dragging is active, moves the parent window to follow the cursor.
- * If the window is maximized, it will be restored to normal state before
- * dragging begins, with the cursor position maintained relative to the
- * window width.
- */
-void CSD_Titlebar::mouseMoveEvent(QMouseEvent *event)
+void Titlebar::mouseUngrabEvent()
 {
-  if (m_dragging && window())
-  {
-    auto *win = window();
-
-    if (win->windowStates() & Qt::WindowMaximized)
-    {
-      const qreal relativeX = event->position().x() / width();
-      win->showNormal();
-      const QPointF globalPos = event->globalPosition();
-      win->setX(static_cast<int>(globalPos.x() - win->width() * relativeX));
-      win->setY(static_cast<int>(globalPos.y() - height() / 2));
-      m_dragStartPos = globalPos;
-    }
-
-    else
-    {
-      const QPointF delta = event->globalPosition() - m_dragStartPos;
-      win->setX(static_cast<int>(win->x() + delta.x()));
-      win->setY(static_cast<int>(win->y() + delta.y()));
-      m_dragStartPos = event->globalPosition();
-    }
-  }
-
-  event->accept();
+  m_hoveredButton = Button::None;
+  m_pressedButton = Button::None;
+  m_dragging = false;
+  update();
 }
 
-/**
- * @brief Handles hover move events to update button hover states.
- * @param event The hover event.
- *
- * Updates the currently hovered button and triggers a repaint if
- * the hover state changes.
- */
-void CSD_Titlebar::hoverMoveEvent(QHoverEvent *event)
-{
-  const Button newHovered = buttonAt(event->position());
-  if (newHovered != m_hoveredButton)
-  {
-    m_hoveredButton = newHovered;
-    update();
-  }
-}
-
-/**
- * @brief Handles hover leave events to clear button hover states.
- * @param event The hover event.
- */
-void CSD_Titlebar::hoverLeaveEvent(QHoverEvent *event)
-{
-  Q_UNUSED(event)
-  if (m_hoveredButton != Button::None)
-  {
-    m_hoveredButton = Button::None;
-    update();
-  }
-}
-
-/**
- * @brief Handles mouse press events for button clicks and drag initiation.
- * @param event The mouse event.
- *
- * If a button is pressed, records the pressed state. Otherwise, initiates
- * window dragging by recording the start position.
- */
-void CSD_Titlebar::mousePressEvent(QMouseEvent *event)
+void Titlebar::mousePressEvent(QMouseEvent *event)
 {
   m_pressedButton = buttonAt(event->position());
 
@@ -410,19 +329,12 @@ void CSD_Titlebar::mousePressEvent(QMouseEvent *event)
     return;
   }
 
-  m_dragStartPos = event->globalPosition();
+  // Mark as potential drag, actual move starts in mouseMoveEvent
   m_dragging = true;
   event->accept();
 }
 
-/**
- * @brief Handles mouse release events to complete button clicks or dragging.
- * @param event The mouse event.
- *
- * If a button was pressed and released on the same button, emits the
- * corresponding signal (minimizeClicked, maximizeClicked, or closeClicked).
- */
-void CSD_Titlebar::mouseReleaseEvent(QMouseEvent *event)
+void Titlebar::mouseReleaseEvent(QMouseEvent *event)
 {
   const Button releasedOn = buttonAt(event->position());
 
@@ -444,255 +356,648 @@ void CSD_Titlebar::mouseReleaseEvent(QMouseEvent *event)
     }
   }
 
-  m_hoveredButton = Button::None;
   m_pressedButton = Button::None;
   m_dragging = false;
+  m_hoveredButton = releasedOn;
   update();
   event->accept();
 }
 
-/**
- * @brief Handles double-click events to toggle window maximized state.
- * @param event The mouse event.
- *
- * Double-clicking on the title bar (not on a button) toggles the window
- * between maximized and normal states.
- */
-void CSD_Titlebar::mouseDoubleClickEvent(QMouseEvent *event)
+void Titlebar::mouseMoveEvent(QMouseEvent *event)
 {
-  if (buttonAt(event->position()) == Button::None)
-    Q_EMIT maximizeClicked();
+  if (!m_dragging || !window())
+  {
+    event->accept();
+    return;
+  }
+
+  auto *win = window();
+  m_dragging = false;
+
+  // Handle dragging from maximized state
+  if (win->windowStates() & Qt::WindowMaximized)
+  {
+    const qreal relativeX = event->position().x() / width();
+    const QPointF globalPos = event->globalPosition();
+
+    win->showNormal();
+    win->setPosition(qRound(globalPos.x() - win->width() * relativeX),
+                     qRound(globalPos.y() - height() / 2));
+  }
+
+  // Hand off to native system move
+  win->startSystemMove();
+  event->accept();
+}
+
+void Titlebar::mouseDoubleClickEvent(QMouseEvent *event)
+{
+  if (buttonAt(event->position()) == Button::None && window())
+  {
+    m_dragging = false;
+    m_pressedButton = Button::None;
+    m_hoveredButton = Button::None;
+
+    if (window()->windowStates() & Qt::WindowMaximized)
+      window()->showNormal();
+    else
+      window()->showMaximized();
+
+    update();
+  }
 
   event->accept();
 }
 
+void Titlebar::hoverMoveEvent(QHoverEvent *event)
+{
+  const Button newHovered = buttonAt(event->position());
+  if (newHovered != m_hoveredButton)
+  {
+    m_hoveredButton = newHovered;
+    update();
+  }
+}
+
+void Titlebar::hoverLeaveEvent(QHoverEvent *event)
+{
+  Q_UNUSED(event)
+  if (m_hoveredButton != Button::None)
+  {
+    m_hoveredButton = Button::None;
+    update();
+  }
+}
+
 //------------------------------------------------------------------------------
-// UnixWindowDecorator Implementation
+// Frame
 //------------------------------------------------------------------------------
 
 /**
- * @brief Constructs a CSD_Window for the given window.
- * @param window The QWindow to decorate.
- * @param color Optional initial color for the title bar.
- * @param parent The parent QObject.
- *
- * Makes the window frameless, installs an event filter for resize handling,
- * creates the title bar item, and connects to theme change signals.
+ * @brief Constructs a Frame.
+ * @param parent The parent QQuickItem.
  */
-CSD_Window::CSD_Window(QWindow *window, const QString &color, QObject *parent)
+Frame::Frame(QQuickItem *parent)
+  : QQuickPaintedItem(parent)
+  , m_shadowRadius(CSD::ShadowRadius)
+  , m_shadowEnabled(true)
+{
+  setFillColor(Qt::transparent);
+  setOpaquePainting(false);
+  regenerateShadow();
+}
+
+void Frame::paint(QPainter *painter)
+{
+  painter->setRenderHint(QPainter::Antialiasing);
+  painter->setRenderHint(QPainter::SmoothPixmapTransform);
+
+  const int r = m_shadowEnabled ? m_shadowRadius : 0;
+  const int cr = CSD::CornerRadius;
+  const int cornerTileSize = r + cr;
+  const QRectF content(r, r, width() - 2 * r, height() - 2 * r);
+
+  // Draw shadow
+  if (m_shadowEnabled && !m_shadowCorner.isNull() && r > 0)
+  {
+    // Four corner tiles (each tile is shadowRadius + cornerRadius in size)
+    // Top-left
+    painter->drawImage(0, 0, m_shadowCorner);
+
+    // Top-right
+    painter->drawImage(QPointF(width() - cornerTileSize, 0),
+                       m_shadowCorner.flipped(Qt::Horizontal));
+
+    // Bottom-left
+    painter->drawImage(QPointF(0, height() - cornerTileSize),
+                       m_shadowCorner.flipped(Qt::Vertical));
+
+    // Bottom-right
+    painter->drawImage(
+        QPointF(width() - cornerTileSize, height() - cornerTileSize),
+        m_shadowCorner.flipped(Qt::Horizontal | Qt::Vertical));
+
+    // Four edge strips (between corner tiles)
+    if (!m_shadowEdge.isNull())
+    {
+      const qreal hEdgeLen = width() - 2 * cornerTileSize;
+      const qreal vEdgeLen = height() - 2 * cornerTileSize;
+
+      // Top and bottom edges
+      if (hEdgeLen > 0)
+      {
+        // Top edge
+        painter->drawImage(QRectF(cornerTileSize, 0, hEdgeLen, r), m_shadowEdge,
+                           QRectF(0, 0, 1, r));
+
+        // Bottom edge
+        painter->drawImage(QRectF(cornerTileSize, height() - r, hEdgeLen, r),
+                           m_shadowEdge.flipped(Qt::Vertical),
+                           QRectF(0, 0, 1, r));
+      }
+
+      // Left and right edges
+      if (vEdgeLen > 0)
+      {
+        // Create horizontal gradient for side edges
+        QImage hEdge(r, 1, QImage::Format_ARGB32_Premultiplied);
+        hEdge.fill(Qt::transparent);
+        for (int i = 0; i < r; ++i)
+        {
+          const qreal dist = static_cast<qreal>(i) / r;
+          qreal alpha = 1.0 - dist;
+          alpha = alpha * alpha * (3.0 - 2.0 * alpha);
+          alpha *= CSD::ShadowOpacity;
+          hEdge.setPixelColor(i, 0, QColor(0, 0, 0, qRound(alpha * 255)));
+        }
+
+        // Left edge (gradient goes right-to-left, so flip)
+        painter->drawImage(QRectF(0, cornerTileSize, r, vEdgeLen),
+                           hEdge.flipped(Qt::Horizontal), QRectF(0, 0, r, 1));
+
+        // Right edge (gradient goes left-to-right)
+        painter->drawImage(QRectF(width() - r, cornerTileSize, r, vEdgeLen),
+                           hEdge, QRectF(0, 0, r, 1));
+      }
+    }
+  }
+
+  // Draw content background with rounded corners
+  if (content.width() > 0 && content.height() > 0)
+  {
+    const auto &theme = Misc::ThemeManager::instance();
+    const QColor bgColor = theme.getColor(QStringLiteral("toolbar_top"));
+    const QColor borderColor = theme.getColor(QStringLiteral("border"));
+    const qreal radius = m_shadowEnabled ? cr : 0;
+
+    // Fill background
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(bgColor);
+    if (radius > 0)
+      painter->drawRoundedRect(content, radius, radius);
+    else
+      painter->fillRect(content, bgColor);
+
+    // Draw border
+    painter->setPen(QPen(borderColor, 1));
+    painter->setBrush(Qt::NoBrush);
+    if (radius > 0)
+      painter->drawRoundedRect(content.adjusted(0.5, 0.5, -0.5, -0.5), radius,
+                               radius);
+    else
+      painter->drawRect(content.adjusted(0.5, 0.5, -0.5, -0.5));
+  }
+}
+
+int Frame::shadowRadius() const
+{
+  return m_shadowRadius;
+}
+
+bool Frame::shadowEnabled() const
+{
+  return m_shadowEnabled;
+}
+
+void Frame::setShadowRadius(int radius)
+{
+  if (m_shadowRadius != radius)
+  {
+    m_shadowRadius = radius;
+    regenerateShadow();
+    Q_EMIT shadowRadiusChanged();
+    update();
+  }
+}
+
+void Frame::setShadowEnabled(bool enabled)
+{
+  if (m_shadowEnabled != enabled)
+  {
+    m_shadowEnabled = enabled;
+    Q_EMIT shadowEnabledChanged();
+    update();
+  }
+}
+
+/**
+ * @brief Regenerates shadow tile images.
+ */
+void Frame::regenerateShadow()
+{
+  if (m_shadowRadius <= 0)
+  {
+    m_shadowCorner = QImage();
+    m_shadowEdge = QImage();
+    return;
+  }
+
+  m_shadowCorner = generateShadowCorner(m_shadowRadius, m_shadowRadius);
+
+  // Edge tile (1px wide)
+  m_shadowEdge = QImage(1, m_shadowRadius, QImage::Format_ARGB32_Premultiplied);
+  m_shadowEdge.fill(Qt::transparent);
+
+  for (int y = 0; y < m_shadowRadius; ++y)
+  {
+    const qreal dist
+        = static_cast<qreal>(m_shadowRadius - y - 1) / m_shadowRadius;
+    qreal alpha = 1.0 - dist;
+    alpha = alpha * alpha * (3.0 - 2.0 * alpha);
+    alpha *= CSD::ShadowOpacity;
+    m_shadowEdge.setPixelColor(0, y, QColor(0, 0, 0, qRound(alpha * 255)));
+  }
+}
+
+QImage Frame::generateShadowCorner(int shadowSize, int radius)
+{
+  Q_UNUSED(radius)
+
+  const int cr = CSD::CornerRadius;
+  const int tileSize = shadowSize + cr;
+
+  QImage tile(tileSize, tileSize, QImage::Format_ARGB32_Premultiplied);
+  tile.fill(Qt::transparent);
+
+  // The content's rounded corner arc is centered at (tileSize, tileSize)
+  // which is the bottom-right corner of this tile (for top-left window corner)
+  const qreal arcCenterX = static_cast<qreal>(tileSize);
+  const qreal arcCenterY = static_cast<qreal>(tileSize);
+
+  for (int y = 0; y < tileSize; ++y)
+  {
+    for (int x = 0; x < tileSize; ++x)
+    {
+      // Distance from this pixel to the arc center
+      const qreal dx = arcCenterX - x - 0.5;
+      const qreal dy = arcCenterY - y - 0.5;
+      const qreal distFromArcCenter = qSqrt(dx * dx + dy * dy);
+
+      // Distance to the content edge (the arc)
+      // Positive = outside content (in shadow region)
+      // Negative or zero = inside content (no shadow)
+      const qreal distToContent = distFromArcCenter - cr;
+
+      if (distToContent > 0)
+      {
+        // Normalize distance: 0 at content edge, 1 at outer shadow edge
+        const qreal normalizedDist
+            = qMin(distToContent / static_cast<qreal>(shadowSize), 1.0);
+
+        // Smoothstep falloff for natural shadow appearance
+        qreal alpha = 1.0 - normalizedDist;
+        alpha = alpha * alpha * (3.0 - 2.0 * alpha);
+        alpha *= CSD::ShadowOpacity;
+
+        tile.setPixelColor(x, y, QColor(0, 0, 0, qRound(alpha * 255)));
+      }
+    }
+  }
+
+  return tile;
+}
+//------------------------------------------------------------------------------
+// Window
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Constructs a Window decorator.
+ * @param window The QWindow to decorate.
+ * @param color Optional custom title bar color.
+ * @param parent Parent QObject.
+ */
+Window::Window(QWindow *window, const QString &color, QObject *parent)
   : QObject(parent)
   , m_resizing(false)
+  , m_frame(nullptr)
   , m_color(color)
-  , m_resizeEdge(ResizeEdge::None)
   , m_titleBar(nullptr)
+  , m_resizeEdge(ResizeEdge::None)
+  , m_contentMinimumSize(0, 0)
   , m_window(window)
+  , m_contentContainer(nullptr)
 {
   if (!m_window)
     return;
 
-  // Make window frameless for CSD
-  m_window->setFlags(m_window->flags() | Qt::FramelessWindowHint);
+  // Store original minimum size before we modify it
+  m_contentMinimumSize = m_window->minimumSize();
 
-  // Install event filter for resize edge detection
+  // Configure window for CSD
+  m_window->setFlags(m_window->flags() | Qt::FramelessWindowHint);
   m_window->installEventFilter(this);
 
-  // Create and setup title bar
+  // Setup components in order: frame -> container -> titlebar
+  setupFrame();
+  setupContentContainer();
   setupTitleBar();
 
-  // Update geometry when window state changes
+  // Handle window state changes
   connect(m_window, &QWindow::windowStateChanged, this, [this]() {
+    const bool maximized = m_window->windowStates() & Qt::WindowMaximized;
+    if (m_frame)
+      m_frame->setShadowEnabled(!maximized);
+    updateFrameGeometry();
+    updateContentContainerGeometry();
     updateTitleBarGeometry();
+    updateMinimumSize();
     if (m_titleBar)
       m_titleBar->update();
   });
 
-  // Connect to theme manager for automatic theme updates
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &CSD_Window::updateTheme);
+  // Track minimum size changes from QML/user
+  connect(m_window, &QWindow::minimumWidthChanged, this, [this]() {
+    // Only update if it's a user change, not our own adjustment
+    const int expected = m_contentMinimumSize.width() + 2 * shadowMargin();
+    if (m_window->minimumWidth() != expected)
+    {
+      m_contentMinimumSize.setWidth(m_window->minimumWidth()
+                                    - 2 * shadowMargin());
+      updateMinimumSize();
+    }
+  });
 
-  // Apply initial theme
+  connect(m_window, &QWindow::minimumHeightChanged, this, [this]() {
+    const int expected
+        = m_contentMinimumSize.height() + 2 * shadowMargin() + titleBarHeight();
+    if (m_window->minimumHeight() != expected)
+    {
+      m_contentMinimumSize.setHeight(m_window->minimumHeight()
+                                     - 2 * shadowMargin() - titleBarHeight());
+      updateMinimumSize();
+    }
+  });
+
+  // Theme updates
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Window::updateTheme);
   updateTheme();
+
+  // Apply initial minimum size
+  updateMinimumSize();
 }
 
-/**
- * @brief Destructor. Removes the event filter from the window.
- */
-CSD_Window::~CSD_Window()
+Window::~Window()
 {
   if (m_window)
+  {
     m_window->removeEventFilter(this);
+    if (auto *quickWindow = qobject_cast<QQuickWindow *>(m_window.data()))
+      quickWindow->contentItem()->removeEventFilter(this);
+  }
 }
 
-/**
- * @brief Returns the decorated window.
- * @return Pointer to the QWindow being decorated.
- */
-QWindow *CSD_Window::window() const
+QWindow *Window::window() const
 {
   return m_window;
 }
 
-/**
- * @brief Returns the current title bar height.
- * @return The height in pixels, adjusted for maximized state.
- *
- * Returns a smaller height when the window is maximized, following
- * common desktop environment conventions.
- */
-int CSD_Window::titleBarHeight() const
+Frame *Window::frame() const
 {
-  if (!m_window)
-    return kDefaultTitleBarHeight;
-
-  if (m_window->windowStates() & Qt::WindowMaximized)
-    return kMaximizedTitleBarHeight;
-
-  return kDefaultTitleBarHeight;
+  return m_frame;
 }
 
-/**
- * @brief Returns the title bar item.
- * @return Pointer to the CSD_Titlebar used for rendering.
- */
-CSD_Titlebar *CSD_Window::titleBar() const
+Titlebar *Window::titleBar() const
 {
   return m_titleBar;
 }
 
-/**
- * @brief Updates the title bar color from theme or custom color.
- *
- * If a custom color was set via setColor(), uses that color.
- * Otherwise, retrieves the toolbar_top color from the ThemeManager.
- */
-void CSD_Window::updateTheme()
+int Window::shadowMargin() const
 {
-  if (!m_titleBar)
-    return;
+  if (!m_window || (m_window->windowStates() & Qt::WindowMaximized))
+    return 0;
 
-  QString color = m_color;
-  if (color.isEmpty())
-  {
-    const auto &colors = Misc::ThemeManager::instance().colors();
-    color = colors.value("toolbar_top").toString();
-  }
-
-  m_titleBar->setBackgroundColor(QColor(color));
+  return CSD::ShadowRadius;
 }
 
-/**
- * @brief Sets a custom color for the title bar.
- * @param color The color as a hex string (e.g., "#2d2d2d").
- *
- * Setting an empty string will cause the title bar to use the
- * theme manager's toolbar_top color.
- */
-void CSD_Window::setColor(const QString &color)
+int Window::titleBarHeight() const
+{
+  if (!m_window)
+    return CSD::TitleBarHeight;
+
+  return (m_window->windowStates() & Qt::WindowMaximized)
+             ? CSD::TitleBarHeightMaximized
+             : CSD::TitleBarHeight;
+}
+
+void Window::setColor(const QString &color)
 {
   m_color = color;
   updateTheme();
 }
 
-/**
- * @brief Creates and configures the CSD_Titlebar.
- *
- * Creates the title bar as a child of the window's content item,
- * connects button signals to window actions, and sets up tracking
- * for window active state and title changes.
- */
-void CSD_Window::setupTitleBar()
+void Window::setupFrame()
 {
   auto *quickWindow = qobject_cast<QQuickWindow *>(m_window.data());
   if (!quickWindow)
     return;
 
-  // Create title bar as child of content item
-  m_titleBar = new CSD_Titlebar(quickWindow->contentItem());
+  QSurfaceFormat format = quickWindow->format();
+  if (format.alphaBufferSize() < 8)
+  {
+    format.setAlphaBufferSize(8);
+    quickWindow->setFormat(format);
+  }
+  quickWindow->setColor(Qt::transparent);
+
+  m_frame = new Frame(quickWindow->contentItem());
+  m_frame->setZ(-1);
+
+  connect(quickWindow, &QQuickWindow::widthChanged, this,
+          &Window::updateFrameGeometry);
+  connect(quickWindow, &QQuickWindow::heightChanged, this,
+          &Window::updateFrameGeometry);
+
+  updateFrameGeometry();
+}
+
+void Window::setupTitleBar()
+{
+  auto *quickWindow = qobject_cast<QQuickWindow *>(m_window.data());
+  if (!quickWindow)
+    return;
+
+  m_titleBar = new Titlebar(quickWindow->contentItem());
   m_titleBar->setZ(999999);
 
-  // Connect window control buttons
-  connect(m_titleBar, &CSD_Titlebar::minimizeClicked, this,
+  // Window controls
+  connect(m_titleBar, &Titlebar::minimizeClicked, this,
           [this]() { m_window->showMinimized(); });
-  connect(m_titleBar, &CSD_Titlebar::maximizeClicked, this, [this]() {
+  connect(m_titleBar, &Titlebar::maximizeClicked, this, [this]() {
     if (m_window->windowStates() & Qt::WindowMaximized)
       m_window->showNormal();
     else
       m_window->showMaximized();
   });
-  connect(m_titleBar, &CSD_Titlebar::closeClicked, this,
+  connect(m_titleBar, &Titlebar::closeClicked, this,
           [this]() { m_window->close(); });
 
-  // Track window active state
+  // Track state
   connect(m_window, &QWindow::activeChanged, this,
           [this]() { m_titleBar->setWindowActive(m_window->isActive()); });
 
-  // Track window title changes
   m_titleBar->setTitle(m_window->title());
   connect(m_window, &QWindow::windowTitleChanged, m_titleBar,
-          &CSD_Titlebar::setTitle);
+          &Titlebar::setTitle);
 
-  // Update geometry when window resizes
   connect(quickWindow, &QQuickWindow::widthChanged, this,
-          &CSD_Window::updateTitleBarGeometry);
+          &Window::updateTitleBarGeometry);
 
-  // Set initial geometry
   updateTitleBarGeometry();
 }
 
 /**
- * @brief Updates the title bar position and size to match the window.
+ * @brief Updates the window minimum size to account for CSD decorations.
  *
- * Positions the title bar at the top of the window and stretches it
- * to fill the window width.
+ * Adds shadow margins and title bar height to the content minimum size
+ * to ensure the content area never becomes smaller than intended.
  */
-void CSD_Window::updateTitleBarGeometry()
+void Window::updateMinimumSize()
+{
+  if (!m_window)
+    return;
+
+  const int margin = shadowMargin();
+  const int tbHeight = titleBarHeight();
+
+  // Calculate minimum window size from content minimum size
+  const int minWidth = qMax(0, m_contentMinimumSize.width()) + 2 * margin;
+  const int minHeight
+      = qMax(0, m_contentMinimumSize.height()) + 2 * margin + tbHeight;
+
+  // Ensure minimum size can at least fit the title bar buttons
+  const int minTitleBarWidth = 3 * (CSD::ButtonSize + CSD::ButtonSpacing)
+                               + 2 * CSD::ButtonMargin + CSD::IconSize
+                               + 2 * CSD::IconMargin;
+
+  m_window->setMinimumSize(QSize(qMax(minWidth, minTitleBarWidth + 2 * margin),
+                                 qMax(minHeight, tbHeight + 2 * margin)));
+}
+
+void Window::updateFrameGeometry()
+{
+  if (!m_frame || !m_window)
+    return;
+
+  m_frame->setPosition(QPointF(0, 0));
+  m_frame->setSize(QSizeF(m_window->width(), m_window->height()));
+}
+
+/**
+ * @brief Creates content container and reparents QML content.
+ */
+void Window::setupContentContainer()
+{
+  auto *quickWindow = qobject_cast<QQuickWindow *>(m_window.data());
+  if (!quickWindow)
+    return;
+
+  QQuickItem *root = quickWindow->contentItem();
+
+  m_contentContainer = new QQuickItem(root);
+  m_contentContainer->setZ(0);
+  m_contentContainer->setClip(true);
+
+  // Reparent existing children
+  const auto children = root->childItems();
+  for (QQuickItem *child : children)
+    reparentChildToContainer(child);
+
+  // Watch for new children
+  root->installEventFilter(this);
+
+  connect(quickWindow, &QQuickWindow::widthChanged, this,
+          &Window::updateContentContainerGeometry);
+  connect(quickWindow, &QQuickWindow::heightChanged, this,
+          &Window::updateContentContainerGeometry);
+
+  updateContentContainerGeometry();
+}
+
+void Window::updateTitleBarGeometry()
 {
   if (!m_titleBar || !m_window)
     return;
 
-  m_titleBar->setX(0);
-  m_titleBar->setY(0);
-  m_titleBar->setWidth(m_window->width());
-  m_titleBar->setHeight(titleBarHeight());
+  const int margin = shadowMargin();
+  m_titleBar->setPosition(QPointF(margin, margin));
+  m_titleBar->setSize(QSizeF(m_window->width() - 2 * margin, titleBarHeight()));
+}
+
+void Window::updateContentContainerGeometry()
+{
+  if (!m_contentContainer || !m_window)
+    return;
+
+  const int margin = shadowMargin();
+  const int tbHeight = titleBarHeight();
+
+  m_contentContainer->setPosition(QPointF(margin, margin + tbHeight));
+  m_contentContainer->setSize(
+      QSizeF(m_window->width() - 2 * margin,
+             m_window->height() - 2 * margin - tbHeight));
+}
+
+void Window::updateTheme()
+{
+  const auto &theme = Misc::ThemeManager::instance();
+
+  if (m_titleBar)
+  {
+    const QString color
+        = m_color.isEmpty()
+              ? theme.getColor(QStringLiteral("toolbar_top")).name()
+              : m_color;
+    m_titleBar->setBackgroundColor(QColor(color));
+  }
 }
 
 /**
- * @brief Determines the resize edge at the given position.
- * @param pos The position in window coordinates.
- * @return The ResizeEdge flags indicating which edges are under the cursor.
- *
- * Returns ResizeEdge::None if the window is maximized or the position
- * is not within the resize margin of any edge.
+ * @brief Reparents a child item to the content container.
+ * @param child The item to reparent.
  */
-CSD_Window::ResizeEdge CSD_Window::edgeAt(const QPointF &pos) const
+void Window::reparentChildToContainer(QQuickItem *child)
+{
+  if (!child || !m_contentContainer)
+    return;
+
+  // Skip our own items
+  if (child == m_frame || child == m_titleBar || child == m_contentContainer)
+    return;
+
+  // Skip if already in container
+  if (child->parentItem() == m_contentContainer)
+    return;
+
+  child->setParentItem(m_contentContainer);
+}
+
+Window::ResizeEdge Window::edgeAt(const QPointF &pos) const
 {
   if (!m_window || (m_window->windowStates() & Qt::WindowMaximized))
     return ResizeEdge::None;
 
+  const int margin = shadowMargin();
   const int w = m_window->width();
   const int h = m_window->height();
+  const int area = margin + CSD::ResizeMargin;
 
   int edge = static_cast<int>(ResizeEdge::None);
 
-  if (pos.x() < kResizeMargin)
+  if (pos.x() < area)
     edge |= static_cast<int>(ResizeEdge::Left);
-  else if (pos.x() >= w - kResizeMargin)
+  else if (pos.x() >= w - area)
     edge |= static_cast<int>(ResizeEdge::Right);
 
-  if (pos.y() < kResizeMargin)
+  if (pos.y() < area)
     edge |= static_cast<int>(ResizeEdge::Top);
-  else if (pos.y() >= h - kResizeMargin)
+  else if (pos.y() >= h - area)
     edge |= static_cast<int>(ResizeEdge::Bottom);
 
   return static_cast<ResizeEdge>(edge);
 }
 
-/**
- * @brief Returns the appropriate cursor shape for a resize edge.
- * @param edge The resize edge.
- * @return The Qt::CursorShape to display.
- */
-Qt::CursorShape CSD_Window::cursorForEdge(ResizeEdge edge) const
+Qt::CursorShape Window::cursorForEdge(ResizeEdge edge) const
 {
   switch (edge)
   {
@@ -713,16 +1018,11 @@ Qt::CursorShape CSD_Window::cursorForEdge(ResizeEdge edge) const
   }
 }
 
-/**
- * @brief Converts internal ResizeEdge to Qt::Edges flags.
- * @param edge The internal resize edge value.
- * @return The equivalent Qt::Edges flags for use with startSystemResize().
- */
-Qt::Edges CSD_Window::qtEdgesFromResizeEdge(ResizeEdge edge) const
+Qt::Edges Window::qtEdgesFromResizeEdge(ResizeEdge edge) const
 {
   Qt::Edges edges;
-
   const int e = static_cast<int>(edge);
+
   if (e & static_cast<int>(ResizeEdge::Left))
     edges |= Qt::LeftEdge;
   if (e & static_cast<int>(ResizeEdge::Right))
@@ -736,39 +1036,44 @@ Qt::Edges CSD_Window::qtEdgesFromResizeEdge(ResizeEdge edge) const
 }
 
 /**
- * @brief Event filter for handling window resize interactions.
- * @param watched The object being watched (the window).
- * @param event The event to process.
- * @return True if the event was handled, false otherwise.
- *
- * Handles:
- * - MouseMove: Updates cursor shape based on edge proximity
- * - MouseButtonPress: Initiates system resize when clicking on edges
- * - MouseButtonRelease: Resets resize state
- * - Leave: Resets cursor when mouse leaves window
+ * @brief Event filter for window resize and content reparenting.
  */
-bool CSD_Window::eventFilter(QObject *watched, QEvent *event)
+bool Window::eventFilter(QObject *watched, QEvent *event)
 {
+  // Handle new children added to content item
+  if (auto *quickWindow = qobject_cast<QQuickWindow *>(m_window.data()))
+  {
+    if (watched == quickWindow->contentItem()
+        && event->type() == QEvent::ChildAdded)
+    {
+      auto *childEvent = static_cast<QChildEvent *>(event);
+      if (auto *child = qobject_cast<QQuickItem *>(childEvent->child()))
+      {
+        QTimer::singleShot(
+            0, this, [this, child]() { reparentChildToContainer(child); });
+      }
+      return false;
+    }
+  }
+
+  // Handle window events
   if (watched != m_window)
     return false;
 
   switch (event->type())
   {
     case QEvent::MouseMove: {
-      auto *mouseEvent = static_cast<QMouseEvent *>(event);
-      const ResizeEdge edge = edgeAt(mouseEvent->position());
-
+      auto *me = static_cast<QMouseEvent *>(event);
       if (!m_resizing)
-        m_window->setCursor(cursorForEdge(edge));
-
+        m_window->setCursor(cursorForEdge(edgeAt(me->position())));
       break;
     }
 
     case QEvent::MouseButtonPress: {
-      auto *mouseEvent = static_cast<QMouseEvent *>(event);
-      if (mouseEvent->button() == Qt::LeftButton)
+      auto *me = static_cast<QMouseEvent *>(event);
+      if (me->button() == Qt::LeftButton)
       {
-        m_resizeEdge = edgeAt(mouseEvent->position());
+        m_resizeEdge = edgeAt(me->position());
         if (m_resizeEdge != ResizeEdge::None)
         {
           m_resizing = true;
@@ -777,22 +1082,18 @@ bool CSD_Window::eventFilter(QObject *watched, QEvent *event)
           return true;
         }
       }
-
       break;
     }
 
-    case QEvent::MouseButtonRelease: {
+    case QEvent::MouseButtonRelease:
       m_resizing = false;
       m_resizeEdge = ResizeEdge::None;
       break;
-    }
 
-    case QEvent::Leave: {
+    case QEvent::Leave:
       if (!m_resizing)
         m_window->setCursor(Qt::ArrowCursor);
-
       break;
-    }
 
     default:
       break;
@@ -800,3 +1101,4 @@ bool CSD_Window::eventFilter(QObject *watched, QEvent *event)
 
   return false;
 }
+} // namespace CSD

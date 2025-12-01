@@ -57,13 +57,6 @@
 static void cliShowVersion();
 static void cliResetSettings();
 
-static void handleCliArguments(const QCommandLineParser &parser);
-
-#ifdef Q_OS_LINUX
-static void setupAppImageIcon(const QString &appExecutableName,
-                              const QString &iconResourcePath);
-#endif
-
 #ifdef Q_OS_WINDOWS
 static void attachToConsole();
 static char **adjustArgumentsForFreeType(int &argc, char **argv);
@@ -94,15 +87,9 @@ int main(int argc, char **argv)
   QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
 
   // Windows specific initialization code
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
   attachToConsole();
   argv = adjustArgumentsForFreeType(argc, argv);
-#endif
-
-  // Linux specific initialization code
-#ifdef Q_OS_LINUX
-  setupAppImageIcon(APP_EXECUTABLE,
-                    QStringLiteral(":/rcc/logo/desktop-icon.png"));
 #endif
 
   // Avoid 200% scaling on 150% scaling...
@@ -111,6 +98,13 @@ int main(int argc, char **argv)
 
   // Initialize application
   QApplication app(argc, argv);
+
+  // Set window icon, skip on macOS as AppBundle already does this for us
+#if !defined(Q_OS_MAC)
+  QIcon appIcon(QStringLiteral(":/rcc/logo/icon.svg"));
+  if (!appIcon.isNull())
+    app.setWindowIcon(appIcon);
+#endif
 
   // Set thread priority
   QThread::currentThread()->setPriority(QThread::HighestPriority);
@@ -376,59 +370,6 @@ static void cliResetSettings()
   QSettings(APP_SUPPORT_URL, APP_NAME).clear();
   qDebug() << APP_NAME << "settings cleared!";
 }
-
-//------------------------------------------------------------------------------
-// Linux-specific initialization code
-//------------------------------------------------------------------------------
-
-#ifdef Q_OS_LINUX
-/**
- * @brief Ensures the application icon is set correctly for AppImage deployments
- *        on GNU/Linux.
- *
- * This function copies the application icon from the resource file to the
- * appropriate icon directory on GNU/Linux systems.
- *
- * If the icon file does not already exist in the local user's icons directory,
- * it is copied from the application’s resources to ensure proper display in the
- * desktop environment, even when running the application as an AppImage.
- *
- * The function creates any necessary directories if they do not exist, and
- * performs file checks to prevent redundant copying.
- *
- * @param appExecutableName The name of the application executable, used to name
- *                          the icon file.
- * @param iconResourcePath The path to the icon in the application's resources
- *                         (e.g., `:/rcc/images/icon@2x.png`).
- */
-static void setupAppImageIcon(const QString &appExecutableName,
-                              const QString &iconResourcePath)
-{
-  // clang-format off
-  const QString pixmapPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/icons/hicolor/256x256/apps/";
-  const QString pixmapFile = pixmapPath + appExecutableName + ".png";
-  // clang-format on
-
-  // Ensure the directory exists; create it if it doesn't
-  QDir dir;
-  if (!dir.exists(pixmapPath) && !dir.mkpath(pixmapPath))
-    return;
-
-  // Copy the icon from resources to the destination
-  QFile resourceFile(iconResourcePath);
-  if (resourceFile.open(QIODevice::ReadOnly))
-  {
-    QFile localFile(pixmapFile);
-    if (localFile.open(QIODevice::WriteOnly))
-    {
-      localFile.write(resourceFile.readAll());
-      localFile.close();
-    }
-
-    resourceFile.close();
-  }
-}
-#endif
 
 //------------------------------------------------------------------------------
 // Windows-specific initialization code

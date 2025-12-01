@@ -35,67 +35,13 @@ Window {
   title: qsTr("CSV Player")
   minimumWidth: column.implicitWidth + 32
   maximumWidth: column.implicitWidth + 32
-  minimumHeight: column.implicitHeight + root.titlebarHeight + 32
-  maximumHeight: column.implicitHeight + root.titlebarHeight + 32
+  minimumHeight: column.implicitHeight + 32
+  maximumHeight: column.implicitHeight + 32
   Component.onCompleted: {
     root.flags = Qt.Dialog |
         Qt.WindowTitleHint |
         Qt.WindowStaysOnTopHint |
         Qt.WindowCloseButtonHint
-  }
-
-  //
-  // Native window registration
-  //
-  property real titlebarHeight: 0
-  onVisibleChanged: {
-    if (visible) {
-      Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["base"])
-      root.titlebarHeight = Cpp_NativeWindow.titlebarHeight(root)
-    }
-
-    else {
-      root.titlebarHeight = 0
-      Cpp_NativeWindow.removeWindow(root)
-    }
-
-    if (!visible && Cpp_CSV_Player.isOpen)
-      Cpp_CSV_Player.closeFile()
-  }
-
-  //
-  // Background + window title on macOS
-  //
-  Rectangle {
-    anchors.fill: parent
-    color: Cpp_ThemeManager.colors["window"]
-
-    //
-    // Drag the window anywhere
-    //
-    DragHandler {
-      target: null
-      onActiveChanged: {
-        if (active)
-          root.startSystemMove()
-      }
-    }
-
-    //
-    // Titlebar text
-    //
-    Label {
-      text: root.title
-      visible: root.titlebarHeight > 0
-      color: Cpp_ThemeManager.colors["text"]
-      font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
-
-      anchors {
-        topMargin: 6
-        top: parent.top
-        horizontalCenter: parent.horizontalCenter
-      }
-    }
   }
 
   //
@@ -124,7 +70,6 @@ Window {
   //
   Page {
     anchors.fill: parent
-    anchors.topMargin: root.titlebarHeight
     palette.mid: Cpp_ThemeManager.colors["mid"]
     palette.dark: Cpp_ThemeManager.colors["dark"]
     palette.text: Cpp_ThemeManager.colors["text"]

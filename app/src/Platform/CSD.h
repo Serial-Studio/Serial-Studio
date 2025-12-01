@@ -21,33 +21,29 @@
 
 #pragma once
 
+#include <QImage>
+#include <QWindow>
 #include <QObject>
 #include <QPointer>
 #include <QQuickItem>
 #include <QQuickPaintedItem>
-#include <QWindow>
 
-/**
- * @class CSD_Titlebar
- * @brief A QQuickPaintedItem that renders the window title bar and handles
- *        mouse interactions for window management.
- */
-class CSD_Titlebar : public QQuickPaintedItem
+namespace CSD
 {
-  // clang-format off
+/**
+ * @class Titlebar
+ * @brief Custom title bar widget with window controls for CSD windows.
+ *
+ * Provides a painted title bar with:
+ * - Application icon
+ * - Centered window title
+ * - Minimize, maximize, and close buttons
+ * - Window dragging support
+ * - Double-click to maximize/restore
+ */
+class Titlebar : public QQuickPaintedItem
+{
   Q_OBJECT
-  Q_PROPERTY(QColor backgroundColor
-             READ backgroundColor
-             WRITE setBackgroundColor
-             NOTIFY backgroundColorChanged)
-  Q_PROPERTY(QString title
-             READ title
-             WRITE setTitle
-             NOTIFY titleChanged)
-  Q_PROPERTY(bool windowActive
-             READ windowActive
-             NOTIFY windowActiveChanged)
-  // clang-format on
 
 signals:
   void titleChanged();
@@ -58,19 +54,27 @@ signals:
   void backgroundColorChanged();
 
 public:
-  explicit CSD_Titlebar(QQuickItem *parent = nullptr);
+  explicit Titlebar(QQuickItem *parent = nullptr);
 
   void paint(QPainter *painter) override;
 
   [[nodiscard]] QString title() const;
   [[nodiscard]] bool windowActive() const;
   [[nodiscard]] QColor backgroundColor() const;
-  [[nodiscard]] QColor foregroundColor() const;
 
 public slots:
-  void setWindowActive(bool active);
   void setTitle(const QString &title);
+  void setWindowActive(bool active);
   void setBackgroundColor(const QColor &color);
+
+protected:
+  void mouseUngrabEvent() override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void hoverMoveEvent(QHoverEvent *event) override;
+  void hoverLeaveEvent(QHoverEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
   enum class Button
@@ -81,60 +85,112 @@ private:
     Close
   };
 
+  [[nodiscard]] QColor foregroundColor() const;
   [[nodiscard]] QRectF buttonRect(Button button) const;
   [[nodiscard]] Button buttonAt(const QPointF &pos) const;
 
   void drawButton(QPainter *painter, Button button, const QString &svgPath);
 
-protected:
-  void mouseMoveEvent(QMouseEvent *event) override;
-  void hoverMoveEvent(QHoverEvent *event) override;
-  void hoverLeaveEvent(QHoverEvent *event) override;
-  void mousePressEvent(QMouseEvent *event) override;
-  void mouseReleaseEvent(QMouseEvent *event) override;
-  void mouseDoubleClickEvent(QMouseEvent *event) override;
-
 private:
-  QPixmap m_icon;
   QString m_title;
+  QPixmap m_icon;
   bool m_dragging;
   bool m_windowActive;
   Button m_hoveredButton;
   Button m_pressedButton;
-  QPointF m_dragStartPos;
   QColor m_backgroundColor;
 };
 
 /**
- * @class CSD_Window
- * @brief Manages client-side decorations for a QWindow on Unix systems.
+ * @class Frame
+ * @brief Draws window shadow and border for CSD windows.
  *
- * This class wraps a QWindow and provides:
- * - Custom title bar rendering via TitleBarItem
- * - Window dragging and resizing
- * - Minimize/maximize/close button handling
- * - Theme-aware coloring
+ * Renders:
+ * - Soft drop shadow around the content area
+ * - Thin border around the content area
+ *
+ * Shadow is automatically disabled when window is maximized.
  */
-class CSD_Window : public QObject
+class Frame : public QQuickPaintedItem
+{
+  Q_OBJECT
+
+signals:
+  void borderColorChanged();
+  void shadowRadiusChanged();
+  void shadowEnabledChanged();
+
+public:
+  explicit Frame(QQuickItem *parent = nullptr);
+
+  void paint(QPainter *painter) override;
+
+  [[nodiscard]] int shadowRadius() const;
+  [[nodiscard]] bool shadowEnabled() const;
+
+public slots:
+  void setShadowRadius(int radius);
+  void setShadowEnabled(bool enabled);
+
+private:
+  void regenerateShadow();
+  QImage generateShadowCorner(int size, int radius);
+
+private:
+  int m_shadowRadius;
+  bool m_shadowEnabled;
+
+  QImage m_shadowEdge;
+  QImage m_shadowCorner;
+};
+
+/**
+ * @class Window
+ * @brief Manages client-side decorations for a QQuickWindow.
+ *
+ * Provides complete CSD functionality:
+ * - Frameless window with custom title bar
+ * - Window shadow and border
+ * - Content container with automatic margins
+ * - Window dragging and edge resizing
+ * - Theme integration
+ *
+ * Usage:
+ * @code
+ * auto *decorator = new Window(quickWindow);
+ * @endcode
+ *
+ * QML content is automatically reparented into a container that
+ * respects shadow margins and title bar height.
+ */
+class Window : public QObject
 {
   Q_OBJECT
 
 public:
-  explicit CSD_Window(QWindow *window, const QString &color = "",
-                      QObject *parent = nullptr);
-  ~CSD_Window() override;
+  explicit Window(QWindow *window, const QString &color = QString(),
+                  QObject *parent = nullptr);
+  ~Window() override;
 
   [[nodiscard]] QWindow *window() const;
+  [[nodiscard]] Frame *frame() const;
+  [[nodiscard]] Titlebar *titleBar() const;
+
+  [[nodiscard]] int shadowMargin() const;
   [[nodiscard]] int titleBarHeight() const;
-  [[nodiscard]] CSD_Titlebar *titleBar() const;
 
 public slots:
   void updateTheme();
   void setColor(const QString &color);
 
 private slots:
+  void setupFrame();
   void setupTitleBar();
+  void updateMinimumSize();
+  void updateFrameGeometry();
+  void setupContentContainer();
   void updateTitleBarGeometry();
+  void updateContentContainerGeometry();
 
 private:
   enum class ResizeEdge
@@ -150,17 +206,23 @@ private:
     BottomRight = Bottom | Right
   };
 
-  ResizeEdge edgeAt(const QPointF &pos) const;
-  Qt::CursorShape cursorForEdge(ResizeEdge edge) const;
-  Qt::Edges qtEdgesFromResizeEdge(ResizeEdge edge) const;
+  [[nodiscard]] ResizeEdge edgeAt(const QPointF &pos) const;
+  [[nodiscard]] Qt::CursorShape cursorForEdge(ResizeEdge edge) const;
+  [[nodiscard]] Qt::Edges qtEdgesFromResizeEdge(ResizeEdge edge) const;
+
+  void reparentChildToContainer(QQuickItem *child);
 
 protected:
   bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
   bool m_resizing;
+  Frame *m_frame;
   QString m_color;
+  Titlebar *m_titleBar;
   ResizeEdge m_resizeEdge;
-  CSD_Titlebar *m_titleBar;
+  QSize m_contentMinimumSize;
   QPointer<QWindow> m_window;
+  QQuickItem *m_contentContainer;
 };
+} // namespace CSD

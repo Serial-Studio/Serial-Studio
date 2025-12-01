@@ -81,7 +81,6 @@ Window {
   //
   Page {
     anchors.fill: parent
-    anchors.topMargin: root.titlebarHeight
     palette.mid: Cpp_ThemeManager.colors["mid"]
     palette.dark: Cpp_ThemeManager.colors["dark"]
     palette.text: Cpp_ThemeManager.colors["text"]
