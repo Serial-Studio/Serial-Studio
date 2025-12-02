@@ -33,6 +33,15 @@
 #include <QTimer>
 
 //------------------------------------------------------------------------------
+// Constants
+//------------------------------------------------------------------------------
+
+namespace {
+constexpr int kDefaultPlotPoints = 100;
+constexpr int kDashboardUpdateHz = 24;
+}
+
+//------------------------------------------------------------------------------
 // Constructor & singleton access
 //------------------------------------------------------------------------------
 
@@ -42,14 +51,14 @@
  *        processing.
  */
 UI::Dashboard::Dashboard()
-  : m_points(100)
+  : m_points(kDefaultPlotPoints)
   , m_widgetCount(0)
   , m_updateRequired(false)
   , m_showActionPanel(true)
   , m_terminalEnabled(false)
   , m_showTaskbarButtons(false)
-  , m_pltXAxis(100)
-  , m_multipltXAxis(100)
+  , m_pltXAxis(kDefaultPlotPoints)
+  , m_multipltXAxis(kDefaultPlotPoints)
 {
   // clang-format off
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=, this] { resetData(true); });
@@ -71,7 +80,7 @@ UI::Dashboard::Dashboard()
           });
 #endif
 
-  // Update the dashboard widgets at 24 Hz
+  // Update the dashboard widgets at defined refresh rate
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this,
           [=, this] {
             if (m_updateRequired)

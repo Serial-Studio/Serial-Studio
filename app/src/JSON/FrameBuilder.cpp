@@ -37,6 +37,14 @@
 #include "UI/Dashboard.h"
 #include "Plugins/Server.h"
 
+//------------------------------------------------------------------------------
+// Constants
+//------------------------------------------------------------------------------
+
+namespace {
+constexpr int kDefaultFftSamples = 2048;
+}
+
 /**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
@@ -598,7 +606,7 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
       dataset.pltMin = minValue;
       dataset.fftMax = maxValue;
       dataset.fftMin = minValue;
-      dataset.fftSamples = 2048;
+      dataset.fftSamples = kDefaultFftSamples;
       dataset.fftSamplingRate = sampleRate;
       dataset.title = tr("Channel %1").arg(index);
       dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
