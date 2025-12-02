@@ -406,7 +406,8 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
   channels.reserve(64);
   if (!CSV::Player::instance().isOpen() && m_frameParser) [[likely]]
   {
-    switch (JSON::ProjectModel::instance().decoderMethod())
+    const auto decoderMethod = JSON::ProjectModel::instance().decoderMethod();
+    switch (decoderMethod)
     {
       case SerialStudio::Hexadecimal:
         channels = m_frameParser->parse(QString::fromUtf8(data.toHex()));
@@ -426,7 +427,9 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
 
   // CSV data, no need to perform conversions or use frame parser
   else
+  {
     channels = QString::fromUtf8(data).split(',', Qt::SkipEmptyParts);
+  }
 
   // Process data
   if (!channels.isEmpty())
@@ -434,10 +437,12 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
     // Replace data in frame
     auto *channelData = channels.data();
     const int channelCount = channels.size();
-    for (size_t g = 0; g < m_frame.groups.size(); ++g)
+    const size_t groupCount = m_frame.groups.size();
+    for (size_t g = 0; g < groupCount; ++g)
     {
       auto &group = m_frame.groups[g];
-      for (size_t d = 0; d < group.datasets.size(); ++d)
+      const size_t datasetCount = group.datasets.size();
+      for (size_t d = 0; d < datasetCount; ++d)
       {
         auto &dataset = group.datasets[d];
         const int idx = dataset.index;
@@ -470,22 +475,25 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
  */
 void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
 {
-  // Create a vector of channels
+  // Parse comma-separated values
+  int start = 0;
   QStringList channels;
+  const auto str = QString::fromUtf8(data);
+  const int dataLength = str.size();
+
   if (m_quickPlotChannels > 0) [[likely]]
     channels.reserve(m_quickPlotChannels);
   else
     channels.reserve(64);
 
-  // Split the string into commas
-  int start = 0;
-  const auto str = QString::fromUtf8(data);
-  const int dataLength = str.size();    // Cache size to avoid repeated calls
-  for (int i = 0; i <= dataLength; ++i) // Use cached size instead of str.size()
+  for (int i = 0; i <= dataLength; ++i)
   {
     if (i == dataLength || str[i] == ',')
     {
-      channels.append(str.mid(start, i - start).trimmed());
+      const auto channel = str.mid(start, i - start).trimmed();
+      if (!channel.isEmpty())
+        channels.append(channel);
+
       start = i + 1;
     }
   }
@@ -503,11 +511,12 @@ void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
 
     // Replace data in frame
     auto *channelData = channels.data();
-    const int channelCount = channels.size();
-    for (size_t g = 0; g < m_quickPlotFrame.groups.size(); ++g)
+    const size_t groupCount = m_quickPlotFrame.groups.size();
+    for (size_t g = 0; g < groupCount; ++g)
     {
       auto &group = m_quickPlotFrame.groups[g];
-      for (size_t d = 0; d < group.datasets.size(); ++d)
+      const size_t datasetCount = group.datasets.size();
+      for (size_t d = 0; d < datasetCount; ++d)
       {
         auto &dataset = group.datasets[d];
         const int idx = dataset.index;
