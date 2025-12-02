@@ -424,7 +424,7 @@ Detailed feature comparison across all tools:
 | **Custom parsing** | ✅ JS | ❌ | ✅ | ✅ | ✅ | ✅ | ⚠️ |
 | **Cross-platform** | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ | ✅ |
 | **Open source** | ✅ GPL | ✅ | ✅ | ❌ | ✅ | ❌ | ✅ |
-| **Price (single user)** | $0-99 | Free | Free | $2,150+/yr | Free | $3,000+ | Free + Cloud |
+| **Price (single user)** | $119.88/yr | Free | Free | $2,150+/yr | Free | $3,000+ | Free + Cloud |
 | **Learning curve** | Minutes | Minutes | Hours | Days | Hours | Weeks | Hours |
 
 ---
@@ -505,7 +505,7 @@ With Serial Studio:
 | Tool | Initial Cost | Annual Cost | Total (Year 1) |
 |------|--------------|-------------|----------------|
 | **Serial Studio GPL** | $0 | $0 | $0 |
-| **Serial Studio Pro** | $495 (5 licenses) | $0 | $495 |
+| **Serial Studio Pro** | $9.99 (5 licenses) | $0 | $119.88 |
 | Arduino Serial Plotter | $0 | $0 | $0 |
 | Processing | $0 | $0 | $0 |
 | MATLAB | $10,750 | $10,750/yr | $10,750+ |
