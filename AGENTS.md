@@ -196,10 +196,10 @@ Serial Studio works well with:
 
 ## Performance Benchmarks
 
-- **Update rate:** Up to 60 FPS refresh for smooth real-time visualization
-- **Data throughput:** Tested with 115200 baud, handles up to 1 Mbaud with proper frame delimiting
+- **Update rate:** Up to 240 FPS refresh for smooth real-time visualization
+- **Data throughput:** Tested with 96K Hz data, handles up to 1 Mbaud with proper frame delimiting and hardware
 - **Latency:** <50ms from serial RX to screen update (hardware dependent)
-- **Resource usage:** ~100-200 MB RAM, low CPU usage on modern systems
+- **Resource usage:** ~100-500 MB RAM, low CPU usage on modern systems
 
 ## Support Resources
 
