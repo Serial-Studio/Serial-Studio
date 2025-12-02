@@ -87,6 +87,44 @@ Naming conventions (from .clang-tidy):
 - Constants/constexpr: `kCamelCase`
 - Macros: `UPPER_CASE`
 
+### Comments Policy
+
+**IMPORTANT:** Inline end-of-line comments are prohibited in this codebase.
+
+❌ **DO NOT** add comments like this:
+```cpp
+doSomething();  // Do x y and z
+calculateValue(x, y);  // Calculate the result
+```
+
+✅ **DO** use these alternatives instead:
+- **Self-documenting code:** Use clear variable and function names
+- **Block comments:** Place explanatory comments on their own lines above the code
+- **Function documentation:** Use proper Doxygen-style comments for functions
+- **Code structure:** Organize code into well-named functions
+
+**Examples of acceptable commenting:**
+
+```cpp
+// Good: Block comment explaining why
+// We need to process data in chunks to avoid memory spikes
+for (const auto &chunk : data)
+  processChunk(chunk);
+
+// Good: Doxygen function documentation
+/**
+ * @brief Calculates the checksum for the given data.
+ *
+ * Uses CRC16 algorithm to validate data integrity.
+ *
+ * @param data The data to checksum
+ * @return The calculated checksum value
+ */
+uint16_t calculateChecksum(const QByteArray &data);
+```
+
+The rationale: Inline comments clutter the code and often become outdated. Well-structured code with meaningful names and block comments where necessary is more maintainable.
+
 ## Dual Licensing
 
 Source files use SPDX headers indicating license:
