@@ -1,85 +1,113 @@
 # Serial Studio Examples
 
-This directory contains various examples demonstrating how to use Serial Studio to visualize data from sensors connected to a microcontroller or another program. Each example includes an Arduino implementation (if required for the project), a README file with setup instructions, and screenshots. 
+This directory contains various examples demonstrating how to use Serial Studio to visualize data from sensors, microcontrollers, and external programs. Each example includes complete source code, Serial Studio project files (`*.json` or `*.ssproj`), setup instructions, and screenshots.
 
-Some examples also include Serial Studio project files (`*.json`) to simplify the visualization setup.
+**Legend:**
+- 🟢 **Beginner:** Simple setup, minimal hardware
+- 🟡 **Intermediate:** Requires specific hardware or moderate configuration
+- 🔴 **Advanced:** Complex setup, multiple components, or mathematical concepts
 
 ## Examples Overview
 
 ### 1. HexadecimalADC
-- **Description**: This example reads analog input data from an ADC and transmits it over serial in hexadecimal format.
-- **Contents**:
-  - **HexadecimalADC.ino**: Arduino code for reading and transmitting ADC data.
-  - **HexadecimalADC.json**: Serial Studio project file for visualizing the ADC output in hexadecimal format.
-  - **README.md**: Setup and usage instructions.
-  - **Screenshot**: Example view in Serial Studio.
+**Difficulty:** 🟢 Beginner | **Time:** ~10 minutes | **License:** GPL / Pro
+
+Reads analog input data from an ADC and transmits it over serial in hexadecimal format.
+
+**Contents:**
+  - **HexadecimalADC.ino**: Arduino code for reading and transmitting ADC data
+  - **HexadecimalADC.json**: Serial Studio project file for hexadecimal visualization
+  - **README.md**: Setup and usage instructions
+  - **Screenshot**: Example view in Serial Studio
   
 ### 2. LTE modem
-- **Description**: This example reads data of signal quality from LTE modem and transmits it over Virtual Serial Port, MQTT or UDP Socket.
-- **Contents**:
-  - **lte.json**: Serial Studio project file for visualizing data of signal quality from LTE modem.
-  - **lte_mqtt.py**: Python script for parsing data and send it over MQTT.
-  - **lte_serial.py**: Python script for parsing data and send it over Virtual Serial Port.
-  - **lte_udp.py**: Python script for parsing data and send it over UDP Socket.
-  - **README.md**: Setup and usage instructions.
-  - **Screenshot**: Example view in Serial Studio.
+**Difficulty:** 🟡 Intermediate | **Time:** ~20 minutes | **License:** GPL (Serial/UDP), Pro (MQTT)
+
+Reads signal quality data from an LTE modem and transmits it over Virtual Serial Port, MQTT, or UDP Socket.
+
+**Contents:**
+  - **lte.json**: Serial Studio project file for LTE signal quality visualization
+  - **lte_mqtt.py**: Python script for parsing data and sending over MQTT
+  - **lte_serial.py**: Python script for parsing data and sending over Virtual Serial Port
+  - **lte_udp.py**: Python script for parsing data and sending over UDP Socket
+  - **README.md**: Setup and usage instructions
+  - **Screenshot**: Example view in Serial Studio
  
 ### 3. Lorenz Attractor
-- **Description**: This example simulates the Lorenz attractor, a set of chaotic differential equations, and transmits its $x$, $y$, and $z$ values over serial. Serial Studio visualizes these values in real-time, producing the iconic butterfly-shaped Lorenz attractor.
-- **Contents**:
-  - **LorenzAttractor.ino**: Arduino code for simulating and transmitting Lorenz attractor data.
-  - **LorenzAttractor.json**: Serial Studio project file for configuring plots with $x$, $y$, and $z$ datasets.
-  - **README.md**: Comprehensive setup guide for running the simulation and visualizing it in Serial Studio.
-  - **Screenshots**: Includes references to `project-setup.png` and `lorenz-example.png` for visual guidance on project setup and attractor visualization.
+**Difficulty:** 🔴 Advanced | **Time:** ~25 minutes | **License:** Pro (XY Plot required)
+
+Simulates the Lorenz attractor (chaotic differential equations) and transmits x, y, z values over serial. Serial Studio visualizes these in real-time, producing the iconic butterfly-shaped pattern.
+
+**Contents:**
+  - **LorenzAttractor.ino**: Arduino code for simulating and transmitting Lorenz data
+  - **LorenzAttractor.json**: Serial Studio project file with XY plot configuration
+  - **README.md**: Comprehensive setup guide with mathematical background
+  - **Screenshots**: Project setup and attractor visualization examples
 
 ### 4. MPU6050
-- **Description**: This example captures motion and orientation data from an MPU6050 accelerometer and gyroscope. Processed data is sent to Serial Studio for real-time visualization on widgets like a g-meter or attitude indicator.
-- **Contents**:
-  - **MPU6050.ino**: Arduino code for capturing and transmitting MPU6050 data.
-  - **MPU6050.json**: Serial Studio project file for visualizing accelerometer, gyroscope and temperature data from the MPU6050 module.
-  - **README.md**: Detailed setup instructions, including Serial Studio configuration.
-  - **Screenshots**: `project-setup.png` and `screenshot.png` provide visual references for Serial Studio setup and data visualization.
+**Difficulty:** 🟡 Intermediate | **Time:** ~20 minutes | **License:** GPL / Pro
+
+Captures motion and orientation data from an MPU6050 accelerometer and gyroscope. Visualized using widgets like g-meter, gyroscope display, and attitude indicators.
+
+**Contents:**
+  - **MPU6050.ino**: Arduino code for capturing and transmitting MPU6050 data
+  - **MPU6050.json**: Serial Studio project file for accelerometer, gyroscope, and temperature visualization
+  - **README.md**: Detailed setup instructions with wiring diagrams
+  - **Screenshots**: Project setup and data visualization examples
 
 ### 5. PulseSensor
-- **Description**: This example filters and smooths pulse data from a heart rate sensor and visualizes it in Serial Studio using **quick plot mode**. The filtered pulse signal is transmitted for live monitoring and CSV logging.
-- **Contents**:
-  - **PulseSensor.ino**: Arduino code for filtering and transmitting pulse data.
-  - **README.md**: Step-by-step guide for setup and visualization in Serial Studio.
-  - **Screenshots**: `csv.png` and `screenshot.png` for reference in CSV logging and Serial Studio visualization.
+**Difficulty:** 🟢 Beginner | **Time:** ~10 minutes | **License:** GPL / Pro
+
+Filters and smooths pulse data from a heart rate sensor using Quick Plot mode. Demonstrates signal filtering and CSV data logging.
+
+**Contents:**
+  - **PulseSensor.ino**: Arduino code for filtering and transmitting pulse data
+  - **README.md**: Step-by-step setup and visualization guide
+  - **Screenshots**: CSV logging and real-time visualization examples
 
 ### 6. TinyGPS
-- **Description**: This example reads GPS data (latitude, longitude, and altitude) from a GPS module and visualizes it on a map in Serial Studio.
-- **Contents**:
-  - **TinyGPS.ino**: Arduino code for capturing and transmitting GPS data.
-  - **TinyGPS.json**: Serial Studio project file to visualize GPS data on a map.
-  - **README.md**: Comprehensive setup instructions for GPS configuration, including Serial Studio setup.
-  - **Screenshots**: `project-setup.png` and `screenshot.png` for guidance on map visualization in Serial Studio.
+**Difficulty:** 🟡 Intermediate | **Time:** ~20 minutes | **License:** GPL / Pro
+
+Reads GPS data (latitude, longitude, altitude) from a GPS module and visualizes it on an interactive map in Serial Studio.
+
+**Contents:**
+  - **TinyGPS.ino**: Arduino code for capturing and transmitting GPS data
+  - **TinyGPS.json**: Serial Studio project file with map widget configuration
+  - **README.md**: Comprehensive setup instructions for GPS module configuration
+  - **Screenshots**: Map visualization and project setup examples
 
 ### 7. UDP Function Generator
-- **Description**: This example generates real-time waveforms (sine, triangle, sawtooth, and square) and transmits them over an UDP socket locally. It is designed to generate data that can be visualized in **Serial Studio**, where you can observe and analyze the generated signals in real-time. The program is versatile and can also be used to stress-test Serial Studio's performance under continuous, high-frequency data streams.
-- **Contents**:
-  - **udp_function_generator.c**: The main C program that generates waveforms and sends them via UDP.
-  - **README.md**: Detailed setup and usage instructions for configuring and running the program with Serial Studio.
-  - **Screenshot**: Example view in Serial Studio.
-- **Key Features**:
-  - Generates multiple waveform types: sine, triangle, sawtooth, and square.
-  - Configurable waveform properties: frequency, phase, and transmission interval.
-  - Sends waveform data over UDP, making it ideal for network-based signal processing.
-  - Option to print generated data for debugging and analysis.
-  - Warns about high frequencies that may cause aliasing or distortion.
+**Difficulty:** 🟡 Intermediate | **Time:** ~15 minutes | **License:** GPL / Pro
+
+Generates real-time waveforms (sine, triangle, sawtooth, square) and transmits them over UDP socket. Ideal for signal analysis and stress-testing Serial Studio's performance with high-frequency data streams.
+
+**Contents:**
+  - **udp_function_generator.c**: C program for waveform generation and UDP transmission
+  - **README.md**: Setup and usage instructions with configuration options
+  - **Screenshot**: Example waveform visualization
+
+**Key Features:**
+  - Multiple waveform types with configurable frequency, phase, and interval
+  - Network-based signal processing via UDP
+  - Debug output and aliasing warnings
+  - Performance testing capabilities
 
 ### 8. ISS Tracker
-- **Description**: This example fetches real-time position and velocity data of the International Space Station (ISS) from a public API and transmits it over a local UDP socket. Serial Studio visualizes the data on a live map, bar graph, and gauge.
-- **Contents**:
-  - **iss.py**: Python script that pulls telemetry from the API and sends it over UDP.
-  - **iss-tracker.ssproj**: Serial Studio project file preconfigured for map, altitude, and speed widgets.
-  - **README.md**: Setup guide for running the tracker and configuring Serial Studio.
-  - **Screenshot**: `screenshot.png` showing the ISS telemetry in Serial Studio.
-- **Features**:
-  - Real-time position tracking using latitude and longitude.
-  - Altitude monitoring with unit conversion and alarm thresholds.
-  - Orbital velocity gauge with color-coded ranges.
-  - No microcontroller or external hardware required.
+**Difficulty:** 🟢 Beginner | **Time:** ~10 minutes | **License:** GPL / Pro
+
+Fetches real-time International Space Station position and velocity data from a public API and transmits it over UDP. No hardware required!
+
+**Contents:**
+  - **iss-tracker.py**: Python script that pulls telemetry from API and sends over UDP
+  - **iss-tracker.ssproj**: Serial Studio project file with map, altitude, and speed widgets
+  - **README.md**: Setup guide for running the tracker
+  - **Screenshot**: ISS telemetry visualization example
+
+**Features:**
+  - Real-time position tracking on interactive map
+  - Altitude monitoring with alarms
+  - Orbital velocity gauge with color-coded ranges
+  - Software-only example (no microcontroller needed)
 
 ## Getting Started
 

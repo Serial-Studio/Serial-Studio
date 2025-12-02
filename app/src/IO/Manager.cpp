@@ -40,6 +40,14 @@
 #endif
 
 //------------------------------------------------------------------------------
+// Constants
+//------------------------------------------------------------------------------
+
+namespace {
+constexpr int kFrameBufferSize = 4096;
+}
+
+//------------------------------------------------------------------------------
 // Constructor, destructor & singleton access functions
 //------------------------------------------------------------------------------
 
@@ -61,7 +69,7 @@ IO::Manager::Manager()
   , m_startSequence(QByteArray("/*"))
   , m_finishSequence(QByteArray("*/"))
 {
-  m_frame.reserve(4096);
+  m_frame.reserve(kFrameBufferSize);
   m_thrFrameExtr = m_settings.value("thrFrameExtr", false).toBool();
 
   auto busType = m_settings.value("IOManager/busType", 0).toInt();
