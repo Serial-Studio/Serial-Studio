@@ -85,6 +85,14 @@ IO::Manager::Manager()
  */
 IO::Manager::~Manager()
 {
+  // Stop the worker thread first to prevent race conditions
+  if (m_workerThread.isRunning())
+  {
+    m_workerThread.quit();
+    m_workerThread.wait();
+  }
+
+  // Now safely clean up the frame reader
   if (m_frameReader)
   {
     m_frameReader->disconnect();
@@ -97,12 +105,6 @@ IO::Manager::~Manager()
     QMetaObject::invokeMethod(m_frameReader, "deleteLater",
                               Qt::QueuedConnection);
     m_frameReader.clear();
-  }
-
-  if (m_workerThread.isRunning())
-  {
-    m_workerThread.quit();
-    m_workerThread.wait();
   }
 }
 
@@ -701,7 +703,14 @@ void IO::Manager::setBusType(const SerialStudio::BusType driver)
  */
 void IO::Manager::killFrameReader()
 {
-  // Disconnect all signals from the frame reader & delete it
+  // Stop the worker thread first to prevent race conditions
+  if (m_workerThread.isRunning())
+  {
+    m_workerThread.quit();
+    m_workerThread.wait();
+  }
+
+  // Now safely clean up the frame reader
   if (m_frameReader)
   {
     m_frameReader->disconnect();
@@ -714,13 +723,6 @@ void IO::Manager::killFrameReader()
     QMetaObject::invokeMethod(m_frameReader, &QObject::deleteLater,
                               Qt::QueuedConnection);
     m_frameReader.clear();
-  }
-
-  // Stop the worker thread
-  if (m_workerThread.isRunning())
-  {
-    m_workerThread.quit();
-    m_workerThread.wait();
   }
 }
 
