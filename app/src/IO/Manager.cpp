@@ -43,7 +43,8 @@
 // Constants
 //------------------------------------------------------------------------------
 
-namespace {
+namespace
+{
 constexpr int kFrameBufferSize = 4096;
 }
 
@@ -106,8 +107,8 @@ IO::Manager::~Manager()
     m_frameReader->disconnect();
     if (driver())
     {
-      QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
-                          &IO::FrameReader::processData);
+      QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived,
+                          m_frameReader, &IO::FrameReader::processData);
     }
 
     QMetaObject::invokeMethod(m_frameReader, "deleteLater",
@@ -724,8 +725,8 @@ void IO::Manager::killFrameReader()
     m_frameReader->disconnect();
     if (driver())
     {
-      QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
-                          &IO::FrameReader::processData);
+      QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived,
+                          m_frameReader, &IO::FrameReader::processData);
     }
 
     QMetaObject::invokeMethod(m_frameReader, &QObject::deleteLater,

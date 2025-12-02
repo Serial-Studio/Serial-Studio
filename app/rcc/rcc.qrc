@@ -120,6 +120,7 @@
         <file>icons/buttons/center.svg</file>
         <file>icons/buttons/clear.svg</file>
         <file>icons/buttons/close.svg</file>
+        <file>icons/buttons/code.svg</file>
         <file>icons/buttons/connected.svg</file>
         <file>icons/buttons/deactivate.svg</file>
         <file>icons/buttons/disconnected.svg</file>
@@ -139,9 +140,9 @@
         <file>icons/buttons/refresh.svg</file>
         <file>icons/buttons/save.svg</file>
         <file>icons/buttons/send.svg</file>
+        <file>icons/buttons/test.svg</file>
         <file>icons/buttons/visible.svg</file>
         <file>icons/buttons/website.svg</file>
-        <file>icons/code-editor/save.svg</file>
         <file>icons/code-editor/copy.svg</file>
         <file>icons/code-editor/cut.svg</file>
         <file>icons/code-editor/help.svg</file>
@@ -149,7 +150,13 @@
         <file>icons/code-editor/paste.svg</file>
         <file>icons/code-editor/redo.svg</file>
         <file>icons/code-editor/reload.svg</file>
+        <file>icons/code-editor/save.svg</file>
+        <file>icons/code-editor/template.svg</file>
         <file>icons/code-editor/undo.svg</file>
+        <file>icons/csd/close.svg</file>
+        <file>icons/csd/maximize.svg</file>
+        <file>icons/csd/minimize.svg</file>
+        <file>icons/csd/restore.svg</file>
         <file>icons/dashboard-buttons/abscissa.svg</file>
         <file>icons/dashboard-buttons/anaglyph.svg</file>
         <file>icons/dashboard-buttons/area.svg</file>
@@ -270,6 +277,7 @@
         <file>icons/project-editor/toolbar/help.svg</file>
         <file>icons/project-editor/toolbar/new.svg</file>
         <file>icons/project-editor/toolbar/open.svg</file>
+        <file>icons/project-editor/toolbar/Opened Folder Office M.svg</file>
         <file>icons/project-editor/toolbar/save-as.svg</file>
         <file>icons/project-editor/toolbar/save.svg</file>
         <file>icons/project-editor/treeview/accelerometer.svg</file>
@@ -314,6 +322,12 @@
         <file>icons/taskbar/console.svg</file>
         <file>icons/taskbar/pause.svg</file>
         <file>icons/taskbar/resume.svg</file>
+        <file>icons/toolbar/drivers/audio.svg</file>
+        <file>icons/toolbar/drivers/bluetooth.svg</file>
+        <file>icons/toolbar/drivers/canbus.svg</file>
+        <file>icons/toolbar/drivers/modbus.svg</file>
+        <file>icons/toolbar/drivers/network.svg</file>
+        <file>icons/toolbar/drivers/uart.svg</file>
         <file>icons/toolbar/about.svg</file>
         <file>icons/toolbar/activate.svg</file>
         <file>icons/toolbar/connect.svg</file>
@@ -326,6 +340,7 @@
         <file>icons/toolbar/mqtt-publisher.svg</file>
         <file>icons/toolbar/mqtt-subscriber.svg</file>
         <file>icons/toolbar/mqtt.svg</file>
+        <file>icons/toolbar/open-project.svg</file>
         <file>icons/toolbar/project-setup.svg</file>
         <file>icons/toolbar/settings.svg</file>
         <file>images/banner.png</file>
@@ -436,12 +451,5 @@
         <file>themes/midday.json</file>
         <file>themes/midnight.json</file>
         <file>themes/rust.json</file>
-        <file>icons/code-editor/template.svg</file>
-        <file>icons/buttons/test.svg</file>
-        <file>icons/buttons/code.svg</file>
-        <file>icons/csd/close.svg</file>
-        <file>icons/csd/maximize.svg</file>
-        <file>icons/csd/minimize.svg</file>
-        <file>icons/csd/restore.svg</file>
     </qresource>
 </RCC>

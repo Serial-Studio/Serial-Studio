@@ -41,7 +41,8 @@
 // Constants
 //------------------------------------------------------------------------------
 
-namespace {
+namespace
+{
 constexpr int kDefaultFftSamples = 2048;
 }
 
@@ -479,7 +480,7 @@ void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
   // Split the string into commas
   int start = 0;
   const auto str = QString::fromUtf8(data);
-  const int dataLength = str.size(); // Cache size to avoid repeated calls
+  const int dataLength = str.size();    // Cache size to avoid repeated calls
   for (int i = 0; i <= dataLength; ++i) // Use cached size instead of str.size()
   {
     if (i == dataLength || str[i] == ',')

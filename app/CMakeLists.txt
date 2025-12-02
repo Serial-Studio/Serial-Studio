@@ -244,7 +244,7 @@ endif()
 if(WIN32)
   set(SOURCES
     ${SOURCES}
-    "deploy/windows/info.rc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/deploy/windows/info.rc"
     "src/Platform/CSD.cpp"
     "src/Platform/NativeWindow_Windows.cpp"
   )
@@ -254,25 +254,27 @@ if(WIN32)
   )
 elseif(APPLE)
   if(BUILD_COMMERCIAL)
-    set(INFO_MACOSX "deploy/macOS/info-pro.plist")
+    set(INFO_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/info-pro.plist")
   else()
-    set(INFO_MACOSX "deploy/macOS/info-gpl3.plist")
+    set(INFO_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/info-gpl3.plist")
   endif()
 
-  set(ICON_MACOSX "deploy/macOS/AppIcon.icns")
-  set(ASSETS_MACOSX "Deploy/macOS/Assets.car")
+  set(ICON_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/AppIcon.icns")
+  set(ASSETS_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/Assets.car")
 
   set_source_files_properties(
     ${ICON_MACOSX}
     ${ASSETS_MACOSX}
     PROPERTIES MACOSX_PACKAGE_LOCATION "Resources"
   )
+
   set(SOURCES
     ${SOURCES}
     ${ICON_MACOSX}
     ${ASSETS_MACOSX}
     "src/Platform/NativeWindow_macOS.mm"
   )
+
   set_source_files_properties("src/Platform/NativeWindow_macOS.mm" 
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
   )

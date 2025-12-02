@@ -172,50 +172,45 @@ Rectangle {
     }
 
     //
-    // CSV Player
+    // Resource buttons
     //
-    Widgets.ToolbarButton {
-      text: qsTr("CSV Player")
+    GridLayout {
+      rows: 3
+      columns: 1
+      rowSpacing: 4
+      columnSpacing: 4
       Layout.alignment: Qt.AlignVCenter
-      onClicked: Cpp_CSV_Player.openFile()
-      icon.source: "qrc:/rcc/icons/toolbar/csv.svg"
-      enabled: !Cpp_CSV_Player.isOpen && !Cpp_IO_Manager.isConnected
-      ToolTip.text: qsTr("Play a CSV file as if it were live sensor data")
-    }
 
-    //
-    // Separator
-    //
-    Rectangle {
-      implicitWidth: 1
-      Layout.fillHeight: true
-      Layout.maximumHeight: 64
-      Layout.alignment: Qt.AlignVCenter
-      visible: Cpp_CommercialBuild
-      color: Cpp_ThemeManager.colors["toolbar_separator"]
-    }
+      Widgets.ToolbarButton {
+        iconSize: 16
+        horizontalLayout: true
+        text: qsTr("Open Project")
+        Layout.alignment: Qt.AlignLeft
+        onClicked: Cpp_JSON_ProjectModel.openJsonFile()
+        ToolTip.text: qsTr("Open an existing JSON project")
+        icon.source: "qrc:/rcc/icons/toolbar/open-project.svg"
+      }
 
-    //
-    // Setup
-    //
-    Widgets.ToolbarButton {
-      id: setupBt
-      text: qsTr("Devices")
-      onClicked: root.setupClicked()
-      Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/toolbar/device-setup.svg"
-      ToolTip.text: qsTr("Configure device connection via Serial, BLE, or network socket")
-    }
+      Widgets.ToolbarButton {
+        iconSize: 16
+        text: qsTr("Load CSV")
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        onClicked: Cpp_CSV_Player.openFile()
+        icon.source: "qrc:/rcc/icons/toolbar/csv.svg"
+        enabled: !Cpp_CSV_Player.isOpen && !Cpp_IO_Manager.isConnected
+        ToolTip.text: qsTr("Play a CSV file as if it were live sensor data")
+      }
 
-    //
-    // Settings
-    //
-    Widgets.ToolbarButton {
-      text: qsTr("Preferences")
-      Layout.alignment: Qt.AlignVCenter
-      onClicked: app.showSettingsDialog()
-      icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
-      ToolTip.text: qsTr("Open application settings and preferences")
+      Widgets.ToolbarButton {
+        iconSize: 16
+        text: qsTr("Preferences")
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        onClicked: app.showSettingsDialog()
+        icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
+        ToolTip.text: qsTr("Open application settings and preferences")
+      }
     }
 
     //
@@ -261,47 +256,175 @@ Rectangle {
     }
 
     //
-    // Examples
+    // Setup
     //
     Widgets.ToolbarButton {
-      text: qsTr("Examples")
+      id: setupBt
+      text: qsTr("Setup")
+      onClicked: root.setupClicked()
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/toolbar/examples.svg"
-      ToolTip.text: qsTr("Browse example projects on GitHub")
-      onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/tree/master/examples")
+      icon.source: "qrc:/rcc/icons/toolbar/device-setup.svg"
+      ToolTip.text: qsTr("Configure device connection settings")
     }
 
     //
-    // Help
+    // Driver selection group
     //
-    Widgets.ToolbarButton {
-      text: qsTr("Help")
+    GridLayout {
+      rows: 3
+      rowSpacing: 4
+      columnSpacing: 4
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/toolbar/help.svg"
-      ToolTip.text: qsTr("Open the online documentation for help and guidance")
-      onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
+      columns: Cpp_CommercialBuild ? 2 : 1
+
+      Widgets.ToolbarButton {
+        iconSize: 16
+        text: qsTr("UART")
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        font.bold: Cpp_IO_Manager.busType === SerialStudio.UART
+        onClicked: Cpp_IO_Manager.busType = SerialStudio.UART
+        ToolTip.text: qsTr("Select Serial port (UART) communication")
+        icon.source: "qrc:/rcc/icons/toolbar/drivers/uart.svg"
+      }
+
+      Loader {
+        active: Cpp_CommercialBuild
+        Layout.alignment: Qt.AlignLeft
+        sourceComponent: Component {
+          Widgets.ToolbarButton {
+            iconSize: 16
+            text: qsTr("Audio")
+            horizontalLayout: true
+            Layout.alignment: Qt.AlignLeft
+            font.bold: Cpp_IO_Manager.busType === SerialStudio.Audio
+            onClicked: Cpp_IO_Manager.busType = SerialStudio.Audio
+            ToolTip.text: qsTr("Select audio input device (Pro)")
+            icon.source: "qrc:/rcc/icons/toolbar/drivers/audio.svg"
+          }
+        }
+      }
+
+      Widgets.ToolbarButton {
+        iconSize: 16
+        text: qsTr("Network")
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        font.bold: Cpp_IO_Manager.busType === SerialStudio.Network
+        onClicked: Cpp_IO_Manager.busType = SerialStudio.Network
+        ToolTip.text: qsTr("Select TCP/UDP network communication")
+        icon.source: "qrc:/rcc/icons/toolbar/drivers/network.svg"
+      }
+
+      Loader {
+        active: Cpp_CommercialBuild
+        Layout.alignment: Qt.AlignLeft
+        sourceComponent: Component {
+          Widgets.ToolbarButton {
+            iconSize: 16
+            enabled: false
+            text: qsTr("ModBus")
+            horizontalLayout: true
+            Layout.alignment: Qt.AlignLeft
+            font.bold: Cpp_IO_Manager.busType === SerialStudio.ModBus
+            onClicked: Cpp_IO_Manager.busType = SerialStudio.ModBus
+            ToolTip.text: qsTr("Select MODBUS communication (Pro)")
+            icon.source: "qrc:/rcc/icons/toolbar/drivers/modbus.svg"
+          }
+        }
+      }
+
+      Widgets.ToolbarButton {
+        iconSize: 16
+        text: qsTr("Bluetooth")
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        font.bold: Cpp_IO_Manager.busType === SerialStudio.BluetoothLE
+        onClicked: Cpp_IO_Manager.busType = SerialStudio.BluetoothLE
+        ToolTip.text: qsTr("Select Bluetooth Low Energy communication")
+        icon.source: "qrc:/rcc/icons/toolbar/drivers/bluetooth.svg"
+      }
+
+      Loader {
+        active: Cpp_CommercialBuild
+        Layout.alignment: Qt.AlignLeft
+        sourceComponent: Component {
+          Widgets.ToolbarButton {
+            iconSize: 16
+            enabled: false
+            text: qsTr("CAN Bus")
+            horizontalLayout: true
+            Layout.alignment: Qt.AlignLeft
+            font.bold: Cpp_IO_Manager.busType === SerialStudio.CanBus
+            onClicked: Cpp_IO_Manager.busType = SerialStudio.CanBus
+            ToolTip.text: qsTr("Select CAN Bus communication (Pro)")
+            icon.source: "qrc:/rcc/icons/toolbar/drivers/canbus.svg"
+          }
+        }
+      }
     }
 
     //
-    // DeepWiki
+    // Separator
     //
-    Widgets.ToolbarButton {
-      text: qsTr("AI Help")
+    Rectangle {
+      implicitWidth: 1
+      Layout.fillHeight: true
+      Layout.maximumHeight: 64
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/toolbar/deepwiki.svg"
-      ToolTip.text: qsTr("View detailed documentation and ask questions on DeepWiki")
-      onClicked: Qt.openUrlExternally("https://deepwiki.com/Serial-Studio/Serial-Studio")
+      color: Cpp_ThemeManager.colors["toolbar_separator"]
     }
 
     //
-    // About
+    // About button
     //
     Widgets.ToolbarButton {
       text: qsTr("About")
       onClicked: app.showAboutDialog()
-      Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/toolbar/about.svg"
+      Layout.alignment: Qt.AlignLeft
       ToolTip.text: qsTr("Show application info and license details")
+      icon.source: "qrc:/rcc/icons/toolbar/about.svg"
+    }
+
+    //
+    // Resource buttons
+    //
+    GridLayout {
+      rows: 3
+      columns: 1
+      rowSpacing: 4
+      columnSpacing: 4
+      Layout.alignment: Qt.AlignVCenter
+
+      Widgets.ToolbarButton {
+        iconSize: 16
+        text: qsTr("Examples")
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        ToolTip.text: qsTr("Browse example projects on GitHub")
+        icon.source: "qrc:/rcc/icons/toolbar/examples.svg"
+        onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/tree/master/examples")
+      }
+
+      Widgets.ToolbarButton {
+        iconSize: 16
+        text: qsTr("Help")
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        ToolTip.text: qsTr("Open the online documentation for help and guidance")
+        icon.source: "qrc:/rcc/icons/toolbar/help.svg"
+        onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
+      }
+
+      Widgets.ToolbarButton {
+        iconSize: 16
+        text: qsTr("AI Help")
+        horizontalLayout: true
+        Layout.alignment: Qt.AlignLeft
+        ToolTip.text: qsTr("View detailed documentation and ask questions on DeepWiki")
+        icon.source: "qrc:/rcc/icons/toolbar/deepwiki.svg"
+        onClicked: Qt.openUrlExternally("https://deepwiki.com/Serial-Studio/Serial-Studio")
+      }
     }
 
     //
@@ -310,6 +433,18 @@ Rectangle {
     Item {
       implicitWidth: 1
       Layout.fillWidth: true
+    }
+
+    //
+    // License activation (Pro only)
+    //
+    Widgets.ToolbarButton {
+      text: qsTr("Activate")
+      onClicked: app.showLicenseDialog()
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/rcc/icons/toolbar/activate.svg"
+      ToolTip.text: qsTr("Manage license and activate Serial Studio Pro")
+      visible: Cpp_CommercialBuild ? Cpp_Licensing_Trial.trialExpired && !Cpp_Licensing_LemonSqueezy.isActivated : false
     }
 
     //
@@ -328,24 +463,12 @@ Rectangle {
                              "qrc:/rcc/icons/toolbar/disconnect.svg"
       ToolTip.text: qsTr("Connect or disconnect from device or MQTT broker")
 
-      //
-      // Hide button when trial expires
-      //
       visible: Cpp_CommercialBuild ? (Cpp_Licensing_Trial.trialExpired && !Cpp_Licensing_LemonSqueezy.isActivated ? false : true) : true
 
-      //
-      // Get MQTT status
-      //
       readonly property bool mqttSubscriber: Cpp_CommercialBuild ? (Cpp_MQTT_Client.isConnected && Cpp_MQTT_Client.isSubscriber) : false
 
-      //
-      // Enable/disable the connect button
-      //
       enabled: (Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen) || mqttSubscriber
 
-      //
-      // Connect/disconnect device when button is clicked
-      //
       onClicked: {
         if (mqttSubscriber)
           Cpp_MQTT_Client.toggleConnection()
@@ -353,26 +476,11 @@ Rectangle {
           Cpp_IO_Manager.toggleConnection()
       }
 
-      //
-      // Obtain maximum width of the button
-      //
       TextMetrics {
         id: metrics
         text: " " + qsTr("Disconnect") + " "
         font: Cpp_Misc_CommonFonts.boldUiFont
       }
-    }
-
-    //
-    // Activate button
-    //
-    Widgets.ToolbarButton {
-      text: qsTr("Activate")
-      onClicked: app.showLicenseDialog()
-      Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/toolbar/activate.svg"
-      ToolTip.text: qsTr("Manage license and activate the application")
-      visible: Cpp_CommercialBuild ? Cpp_Licensing_Trial.trialExpired && !Cpp_Licensing_LemonSqueezy.isActivated : false
     }
 
     //
