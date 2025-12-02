@@ -471,8 +471,8 @@ void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
   // Split the string into commas
   int start = 0;
   const auto str = QString::fromUtf8(data);
-  const int dataLength = str.size();
-  for (int i = 0; i <= str.size(); ++i)
+  const int dataLength = str.size(); // Cache size to avoid repeated calls
+  for (int i = 0; i <= dataLength; ++i) // Use cached size instead of str.size()
   {
     if (i == dataLength || str[i] == ',')
     {
