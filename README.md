@@ -73,28 +73,68 @@ Make sure your system meets these requirements before running the AppImage.
 - **Advanced frame decoding:** Use a custom JavaScript function to preprocess raw data or handle complex binary formats.
 - **MQTT support:** Publish and receive data over the internet for remote visualization.
 
+## Quick Start
+
+Get started with Serial Studio in under 5 minutes:
+
+1. **Download and Install**
+   - Download the latest release for your platform (see [Download](#download) section)
+   - Install the application following platform-specific instructions
+
+2. **Connect Your Device**
+   - Launch Serial Studio
+   - Connect your serial device, or use Quick Plot mode for testing
+   - Configure connection settings (baud rate, port, etc.)
+
+3. **Visualize Data**
+   - **Quick Plot Mode:** Send comma-separated values and see them plotted automatically
+   - **Project Mode:** Use the integrated Project Editor to create custom dashboards
+   - **Examples:** Explore the `/examples` folder for ready-to-use projects
+
+**First-time users:** Start with **Quick Plot Mode** to verify your device connection, then explore the Project Editor for custom dashboards.
+
+📚 **Learn More:** Check out the [examples folder](./examples) for Arduino sketches, Python scripts, and sample project files.
+
 ## Documentation
 
 Refer to the [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki) for complete guides and examples:
 
-- **Installation:** Instructions for Windows, macOS, and Linux.
-- **Quick Start:** Connect a device and visualize data in minutes.
-- **Advanced Usage:** Learn about data flow, frame parsing, and dashboard customization.
-- **Examples:** Sample code and projects to accelerate learning.
+- **Installation:** Instructions for Windows, macOS, and Linux
+- **Quick Start:** Connect a device and visualize data in minutes
+- **Advanced Usage:** Learn about data flow, frame parsing, and dashboard customization
+- **Examples:** Sample code and projects to accelerate learning
 
 ## Building Serial Studio
 
-The only required dependency to build Serial Studio from source is [Qt](https://www.qt.io/download-open-source/), preferably with all modules and plugins installed. The project is built using **Qt 6.9.2**.
+### System Requirements
 
-#### Additional Requirements for Linux
+**Minimum Requirements:**
+- **Qt:** Version 6.7 or later (6.9.2 recommended)
+  - Required modules: QtCore, QtGui, QtWidgets, QtSerialPort, QtNetwork, QtCharts, QtSvg
+  - Optional modules: QtBluetooth (for BLE support), QtMultimedia (for audio input)
+- **C++ Compiler:** C++20 compatible
+  - GCC 10+ (Linux)
+  - Clang 12+ (macOS)
+  - MSVC 2019+ (Windows)
+- **CMake:** Version 3.16 or later
+- **Build Tools:** Platform-specific toolchain (see below)
 
-If you’re compiling on Linux, install the following packages:
+**Platform-Specific Requirements:**
 
+#### Linux
 ```bash
 sudo apt install libgl1-mesa-dev build-essential
 ```
 
-#### Build Instructions
+#### macOS
+- Xcode Command Line Tools: `xcode-select --install`
+- Qt can be installed via Homebrew: `brew install qt@6`
+
+#### Windows
+- Visual Studio 2019 or later with C++ development tools
+- Qt installed via the official installer
+
+### Build Instructions
 
 Once Qt is installed, you can compile the project by opening `CMakeLists.txt` in your preferred IDE or using the terminal:
 
@@ -153,3 +193,27 @@ The table below outlines licensing, feature access, and obligations across each 
 | **Best For**                | OSS devs, students, contributors         | Hobbyists, personal evaluation        | Businesses, teams, commercial products       |
 
 **Reminder:** Pro features and official binaries are proprietary and require a commercial license for any use beyond personal evaluation. Visibility of source code does **not** imply GPL rights unless explicitly licensed.
+
+## Contributing
+
+Contributions are welcome! Whether you're fixing bugs, adding features, or improving documentation, your help is appreciated.
+
+**Before contributing:**
+- Check existing [issues](https://github.com/Serial-Studio/Serial-Studio/issues) and [pull requests](https://github.com/Serial-Studio/Serial-Studio/pulls)
+- Review the [CLAUDE.md](CLAUDE.md) file for code style guidelines
+- Focus on GPL-licensed code (avoid modifying commercial modules)
+
+**Code Style:**
+- Follow the project's clang-format configuration (LLVM base style)
+- Use meaningful names for variables and functions
+- Avoid inline end-of-line comments (see [CLAUDE.md](CLAUDE.md#comments-policy))
+- Add Doxygen documentation for new public APIs
+
+**Submitting Changes:**
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes with descriptive messages
+4. Push to your fork and submit a pull request
+5. Ensure CI checks pass
+
+For major changes, please open an issue first to discuss your proposal.
