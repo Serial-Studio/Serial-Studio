@@ -62,7 +62,7 @@ Window {
   //
   onVisibilityChanged: {
     if (!visible && Cpp_CSV_Player.isOpen)
-          Cpp_CSV_Player.closeFile()
+      Cpp_CSV_Player.closeFile()
   }
 
   //
