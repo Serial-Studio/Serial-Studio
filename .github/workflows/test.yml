@@ -64,10 +64,10 @@ jobs:
             xvfb
 
       - name: 📦 Install Qt ${{ env.QT_VERSION }}
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
-          modules: 'qt5compat qtserialport qtconnectivity qtgraphs'
+          modules: 'qt5compat qtserialport qtconnectivity qtquick3d qtgraphs'
           cache: true
 
       - name: 🔨 Configure CMake
