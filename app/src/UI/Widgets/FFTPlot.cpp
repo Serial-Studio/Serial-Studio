@@ -342,7 +342,7 @@ void Widgets::FFTPlot::updateData()
     dbCache.resize(spectrumSize);
 
   // Precompute dB values
-  const float normFactor = static_cast<float>(m_size * m_size);
+  const float normFactor = static_cast<float>(m_size) * static_cast<float>(m_size);
   for (int i = 0; i < spectrumSize; ++i)
   {
     const float re = m_fftOutput[i].r;
