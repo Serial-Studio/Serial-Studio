@@ -112,6 +112,11 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
 
     // Create FFT plan
     m_plan = kiss_fft_alloc(m_size, 0, nullptr, nullptr);
+    if (!m_plan)
+    {
+      qWarning() << "FFT plan allocation failed for size:" << m_size;
+      return;
+    }
 
     // Obtain minimum and maximum values
     double minVal = dataset.fftMin;
@@ -306,6 +311,11 @@ void Widgets::FFTPlot::updateData()
     }
 
     m_plan = kiss_fft_alloc(m_size, 0, nullptr, nullptr);
+    if (!m_plan)
+    {
+      qWarning() << "FFT plan allocation failed for size:" << m_size;
+      return;
+    }
   }
 
   // Access the internal buffer and state of the circular queue
