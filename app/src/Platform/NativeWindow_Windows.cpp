@@ -45,14 +45,14 @@ static QHash<QWindow *, CSD::Window *> s_decorators;
 static bool isWindows11OrLater()
 {
   constexpr DWORD kWin11BuildNum = 22000;
-  using RtlGetVersionPtr = NTSTATUS(WINAPI*)(PRTL_OSVERSIONINFOW);
+  using RtlGetVersionPtr = NTSTATUS(WINAPI *)(PRTL_OSVERSIONINFOW);
 
   const HMODULE ntdll = GetModuleHandleW(L"ntdll.dll");
   if (!ntdll)
     return false;
 
   const auto rtlGetVersion = reinterpret_cast<RtlGetVersionPtr>(
-    GetProcAddress(ntdll, "RtlGetVersion"));
+      GetProcAddress(ntdll, "RtlGetVersion"));
   if (!rtlGetVersion)
     return false;
 
