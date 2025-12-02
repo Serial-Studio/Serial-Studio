@@ -283,11 +283,16 @@ void Widgets::MultiPlot::updateData()
     const auto &X = *data.x;
 
     // Ensure output container has one QVector<QPointF> per series
+    // Only reallocate if size significantly different to avoid thrashing
     const qsizetype plotCount = data.y.size();
     if (m_data.size() != plotCount)
     {
-      m_data.clear();
-      m_data.squeeze();
+      // Only squeeze if we're shrinking significantly (>20% waste)
+      if (m_data.size() > plotCount && m_data.size() > plotCount * 1.2)
+      {
+        m_data.clear();
+        m_data.squeeze();
+      }
       m_data.resize(plotCount);
     }
 

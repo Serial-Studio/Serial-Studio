@@ -79,16 +79,21 @@ IO::FrameReader::FrameReader(QObject *parent)
  */
 void IO::FrameReader::processData(const QByteArray &data)
 {
+  bool framesEnqueued = false;
+
   // Parse frames immediately
   if (m_operationMode == SerialStudio::ProjectFile
       && m_frameDetectionMode == SerialStudio::NoDelimiters)
-    m_queue.try_enqueue(data);
+    framesEnqueued = m_queue.try_enqueue(data);
 
   // Parse frames using a circular buffer
   else
   {
     // Append to circular buffer
     m_circularBuffer.append(data);
+
+    // Track initial queue size to detect if frames were added
+    const auto initialSize = m_queue.size_approx();
 
     // Extract frames based on current mode
     switch (m_operationMode)
@@ -118,10 +123,14 @@ void IO::FrameReader::processData(const QByteArray &data)
       default:
         break;
     }
+
+    // Check if frames were added
+    framesEnqueued = (m_queue.size_approx() > initialSize);
   }
 
-  // Update user interface
-  Q_EMIT readyRead();
+  // Only emit signal if frames were actually enqueued
+  if (framesEnqueued)
+    Q_EMIT readyRead();
 }
 
 //------------------------------------------------------------------------------

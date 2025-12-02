@@ -792,7 +792,7 @@ void IO::Drivers::UART::refreshSerialDevices()
 
   // Search for available ports and add them to the lsit
   auto validPortList = validPorts();
-  Q_FOREACH (QSerialPortInfo info, validPortList)
+  for (const auto &info : std::as_const(validPortList))
   {
     if (!info.isNull())
     {
