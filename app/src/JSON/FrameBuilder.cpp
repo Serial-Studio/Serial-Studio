@@ -428,14 +428,7 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
   // CSV data, no need to perform conversions or use frame parser
   else
   {
-    const auto parts = data.split(',');
-    channels.reserve(parts.size());
-    for (const auto &part : parts)
-    {
-      const auto trimmed = part.trimmed();
-      if (!trimmed.isEmpty())
-        channels.append(QString::fromUtf8(trimmed));
-    }
+    channels = QString::fromUtf8(data).split(',', Qt::SkipEmptyParts);
   }
 
   // Process data
@@ -482,20 +475,27 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
  */
 void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
 {
-  // Create a vector of channels
+  // Parse comma-separated values
+  int start = 0;
   QStringList channels;
+  const auto str = QString::fromUtf8(data);
+  const int dataLength = str.size();
+
   if (m_quickPlotChannels > 0) [[likely]]
     channels.reserve(m_quickPlotChannels);
   else
     channels.reserve(64);
 
-  // Use QByteArray::split for better performance
-  const auto parts = data.split(',');
-  for (const auto &part : parts)
+  for (int i = 0; i <= dataLength; ++i)
   {
-    const auto trimmed = part.trimmed();
-    if (!trimmed.isEmpty())
-      channels.append(QString::fromUtf8(trimmed));
+    if (i == dataLength || str[i] == ',')
+    {
+      const auto channel = str.mid(start, i - start).trimmed();
+      if (!channel.isEmpty())
+        channels.append(channel);
+
+      start = i + 1;
+    }
   }
 
   // Process data

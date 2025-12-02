@@ -247,7 +247,7 @@ if(PRODUCTION_OPTIMIZATION)
          /fp:precise                     # IEEE-accurate floating-point math
          /Qpar                           # Enable automatic parallelization of loops
          /Gw                             # Put functions/data into separate COMDATs
-         /arch:SSE2                      # Use SSE2 instructions (2012+ compatible)
+         /arch:AVX                       # Use AVX instructions (2011+ compatible, closer to x86-64-v2)
          /DNDEBUG                        # Disable assertions
       )
       add_link_options(
@@ -260,7 +260,6 @@ if(PRODUCTION_OPTIMIZATION)
    elseif(APPLE)
       add_compile_options(
          -O3                             # Aggressive optimization
-         -march=x86-64-v2                # Target modern CPUs (2012+) with SSE4.2
          -ftree-vectorize                # Enable automatic vectorization
          -funroll-loops                  # Improve loop performance by unrolling
          -fomit-frame-pointer            # Optimize function call overhead
@@ -275,6 +274,13 @@ if(PRODUCTION_OPTIMIZATION)
          -Wl,-dead_strip                 # Remove unused functions/data from final binary
          -flto=auto                      # Enable Link-Time Optimization
       )
+
+      # Platform-specific march flags
+      if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
+         add_compile_options(-march=x86-64-v2)  # Target modern x86-64 CPUs (2012+)
+      elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$")
+         add_compile_options(-march=armv8-a)    # ARMv8-A for Apple Silicon
+      endif()
 
    # Intel LLVM Compiler (Linux or Windows)
    elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")

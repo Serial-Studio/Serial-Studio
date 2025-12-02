@@ -29,6 +29,8 @@ class TestFrameBuilder : public QObject
 private slots:
   void testSingleton();
   void testOperationMode();
+  void testCsvParsing();
+  void testCsvParsingEdgeCases();
 };
 
 void TestFrameBuilder::testSingleton()
@@ -41,6 +43,16 @@ void TestFrameBuilder::testSingleton()
 void TestFrameBuilder::testOperationMode()
 {
   QSKIP("FrameBuilder requires full application context");
+}
+
+void TestFrameBuilder::testCsvParsing()
+{
+  QSKIP("CSV parsing requires full application context for frame processing");
+}
+
+void TestFrameBuilder::testCsvParsingEdgeCases()
+{
+  QSKIP("CSV edge case testing requires full application context");
 }
 
 QTEST_MAIN(TestFrameBuilder)
