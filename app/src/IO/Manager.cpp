@@ -88,8 +88,11 @@ IO::Manager::~Manager()
   if (m_frameReader)
   {
     m_frameReader->disconnect();
-    QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
-                        &IO::FrameReader::processData);
+    if (driver())
+    {
+      QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
+                          &IO::FrameReader::processData);
+    }
 
     QMetaObject::invokeMethod(m_frameReader, "deleteLater",
                               Qt::QueuedConnection);
@@ -702,8 +705,11 @@ void IO::Manager::killFrameReader()
   if (m_frameReader)
   {
     m_frameReader->disconnect();
-    QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
-                        &IO::FrameReader::processData);
+    if (driver())
+    {
+      QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
+                          &IO::FrameReader::processData);
+    }
 
     QMetaObject::invokeMethod(m_frameReader, &QObject::deleteLater,
                               Qt::QueuedConnection);

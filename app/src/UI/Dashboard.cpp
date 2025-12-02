@@ -159,7 +159,7 @@ double UI::Dashboard::smartInterval(const double min, const double max,
 
   // Ensure the interval divides the range
   const double remainder = std::fmod(range, step);
-  if (remainder != 0.0)
+  if (step > 0.0 && remainder != 0.0)
     step = range / std::ceil(range / step);
 
   // Return obtained step size

@@ -271,12 +271,17 @@ void Widgets::Plot::updateData()
       std::size_t yIdx = Y.frontIndex();
 
       // Update plot data points, avoid queue operations overhead
-      for (qsizetype i = 0; i < count; ++i)
+      const auto xCapacity = X.capacity();
+      const auto yCapacity = Y.capacity();
+      if (xCapacity > 0 && yCapacity > 0)
       {
-        out[i].setX(xData[xIdx]);
-        out[i].setY(yData[yIdx]);
-        xIdx = (xIdx + 1) % X.capacity();
-        yIdx = (yIdx + 1) % Y.capacity();
+        for (qsizetype i = 0; i < count; ++i)
+        {
+          out[i].setX(xData[xIdx]);
+          out[i].setY(yData[yIdx]);
+          xIdx = (xIdx + 1) % xCapacity;
+          yIdx = (yIdx + 1) % yCapacity;
+        }
       }
     }
   }
