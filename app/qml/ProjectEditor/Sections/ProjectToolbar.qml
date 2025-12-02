@@ -50,6 +50,19 @@ Rectangle {
   Layout.maximumHeight: titlebarHeight + 64 + 16
 
   //
+  // Top toolbar section
+  //
+  Rectangle {
+    height: root.titlebarHeight
+    color: Cpp_ThemeManager.colors["toolbar_top"]
+    anchors {
+      top: parent.top
+      left: parent.left
+      right: parent.right
+    }
+  }
+
+  //
   // Titlebar text
   //
   Label {
@@ -62,19 +75,6 @@ Rectangle {
       topMargin: 6
       top: parent.top
       horizontalCenter: parent.horizontalCenter
-    }
-  }
-
-  //
-  // Top toolbar section
-  //
-  Rectangle {
-    height: root.titlebarHeight
-    color: Cpp_ThemeManager.colors["toolbar_top"]
-    anchors {
-      top: parent.top
-      left: parent.left
-      right: parent.right
     }
   }
 

@@ -14,6 +14,9 @@
 .AppleDesktop
 .apdisk
 
+# AI stuff
+.claude
+
 # General caches
 .cache
 
