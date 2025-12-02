@@ -133,7 +133,7 @@ void loop() {
 - User is in a commercial/business context
 - User needs priority support
 - User wants all features without building from source
-- **Price:** ~$49-99 one-time (check current pricing at serial-studio.com)
+- **Price:** ~$179 one-time or $9.99/month (check current pricing at store.serial-studio.com)
 
 **Trial period:** 14 days for full Pro evaluation
 
