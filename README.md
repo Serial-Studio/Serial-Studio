@@ -7,9 +7,13 @@
 [![Buy Pro](https://img.shields.io/badge/Buy%20Pro-Lemon%20Squeezy-blue?logo=lemonsqueezy)](https://store.serial-studio.com/buy/ba46c099-0d51-4d98-9154-6be5c35bc1ec)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4b6f3ce14a684704980fea31d8c1632e)](https://app.codacy.com/gh/Serial-Studio/Serial-Studio/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-**Serial Studio** is an open-core, cross-platform telemetry dashboard and real-time data visualization tool. It supports input from serial ports, Bluetooth Low Energy (BLE), MQTT, TCP/UDP sockets and Audio devices, allowing data acquisition from embedded devices, analog circuits, external software, and networked services.
+**Serial Studio** is an open-core, cross-platform telemetry dashboard and real-time data visualization tool for **Arduino**, **ESP32**, **Raspberry Pi**, and other embedded systems. It supports input from **serial ports (UART)**, **Bluetooth Low Energy (BLE)**, **MQTT**, **TCP/UDP sockets**, and **audio devices**, enabling real-time sensor monitoring, IoT data visualization, and hardware debugging without writing code.
 
-Serial Studio runs on Windows, macOS, and Linux. It is suited for telemetry monitoring, sensor data analysis, and real-time debugging in educational, hobbyist, and professional environments.
+Serial Studio runs on **Windows**, **macOS**, and **Linux** (including ARM64 for Raspberry Pi). It is designed for robotics teams, IoT developers, embedded systems engineers, makers, educators, and researchers who need professional telemetry dashboards and CSV data logging for sensor analysis.
+
+**Perfect for:** Arduino telemetry, ESP32 dashboard, IoT sensor monitoring, robot debugging, drone flight data, environmental sensors, embedded system visualization, real-time plotting, hardware prototyping, lab data acquisition, and STEM education.
+
+📚 **New users?** Check out the [FAQ](FAQ.md), [use cases](USE-CASES.md), and [comparison with alternatives](COMPARISON.md).
 
 ![Software usage](doc/screenshot.png)
 
@@ -61,48 +65,86 @@ Make sure your system meets these requirements before running the AppImage.
 ## Features
 
 #### Operation Modes:
-- **Project File Mode (recommended):** Uses local JSON files created with the **Project Editor** to define the dashboard layout and data mapping.
-- **Quick Plot Mode:** Automatically plots comma-separated values with no configuration.
-- **Device-defined Mode:** Dashboards are fully defined by incoming JSON data from the device.
+- **Project File Mode (recommended):** Create custom dashboards using the built-in **Project Editor** with drag-and-drop widgets—no coding required.
+- **Quick Plot Mode:** Instantly visualize comma-separated values from Arduino or any serial device with zero configuration.
+- **Device-defined Mode:** Let your embedded device define its own dashboard via JSON (perfect for commercial products).
 
 #### Core Capabilities:
-- **Cross-platform:** Runs on Windows, macOS, and Linux.
-- **CSV export:** Save received data for offline analysis or processing.
-- **Multiple data sources:** Supports serial ports, MQTT, Bluetooth LE, audio devices and network sockets (TCP/UDP).
-- **Customizable visualization:** Build dashboards using various widgets via the integrated project editor.
-- **Advanced frame decoding:** Use a custom JavaScript function to preprocess raw data or handle complex binary formats.
-- **MQTT support:** Publish and receive data over the internet for remote visualization.
+- **No Coding Required:** Build professional telemetry dashboards using a graphical interface
+- **Multi-Protocol Support:** Serial/UART, Bluetooth LE, MQTT, TCP/UDP, and audio input
+- **15+ Visualization Widgets:** Line plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometers, gyroscopes, compass, data grids
+- **CSV Data Export:** Automatic logging of all received data for analysis in Excel, Python, MATLAB, or R
+- **Cross-Platform:** Native apps for Windows 10/11, macOS 11+ (Intel + Apple Silicon), Linux x64, and Raspberry Pi ARM64
+- **Arduino/ESP32 Compatible:** Works with any device that outputs data via serial, BLE, or network
+- **Real-Time Performance:** 60 FPS dashboard updates with low latency (<50ms)
+- **Custom Frame Parsing:** JavaScript decoder for binary protocols, checksums, and complex data formats
+- **MQTT for IoT:** Publish and subscribe to MQTT topics for distributed sensor networks (Pro)
+- **Open Source:** GPL-3.0 licensed core with optional commercial Pro features
 
 ## Quick Start
 
 Get started with Serial Studio in under 5 minutes:
 
-1. **Download and Install**
+### 1. Download and Install
    - Download the latest release for your platform (see [Download](#download) section)
-   - Install the application following platform-specific instructions
+   - **Windows:** Run installer, allow "Unknown developer" if prompted
+   - **macOS:** Drag to Applications, right-click → Open first time
+   - **Linux:** `chmod +x` the AppImage and run (may need `sudo apt install libfuse2`)
 
-2. **Connect Your Device**
+### 2. Connect Your Device
    - Launch Serial Studio
-   - Connect your serial device, or use Quick Plot mode for testing
-   - Configure connection settings (baud rate, port, etc.)
+   - Click the **Hardware icon** in the toolbar
+   - Select your **serial port** and **baud rate** (common: 9600, 115200)
+   - Click **Connect**
 
-3. **Visualize Data**
-   - **Quick Plot Mode:** Send comma-separated values and see them plotted automatically
-   - **Project Mode:** Use the integrated Project Editor to create custom dashboards
-   - **Examples:** Explore the `/examples` folder for ready-to-use projects
+### 3. Visualize Data
+   - **Quick Plot Mode:** Send comma-separated values from Arduino and see instant plots
+   - **Project Mode:** Use the Project Editor to build custom dashboards with gauges, maps, and more
+   - **Examples:** Explore the [`/examples`](./examples) folder for Arduino sketches, ESP32 code, and Python scripts
 
-**First-time users:** Start with **Quick Plot Mode** to verify your device connection, then explore the Project Editor for custom dashboards.
+### Arduino Quick Example
+```cpp
+void setup() {
+  Serial.begin(9600);
+}
 
-📚 **Learn More:** Check out the [examples folder](./examples) for Arduino sketches, Python scripts, and sample project files.
+void loop() {
+  int temperature = analogRead(A0);
+  int humidity = analogRead(A1);
+  Serial.print(temperature);
+  Serial.print(",");
+  Serial.println(humidity);
+  delay(100);
+}
+```
+Upload to Arduino → Connect Serial Studio → Enable Quick Plot → Done!
 
-## Documentation
+**First-time users:** See [FAQ](FAQ.md) for troubleshooting and common questions.
 
-Refer to the [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki) for complete guides and examples:
+📚 **Learn More:**
+- [FAQ](FAQ.md) - Common questions and troubleshooting
+- [Use Cases](USE-CASES.md) - Real-world applications across industries
+- [Comparison](COMPARISON.md) - Serial Studio vs. alternatives (Arduino Plotter, MATLAB, Processing, etc.)
+- [Examples](./examples) - Arduino/ESP32/Python code and project templates
+- [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki) - Complete documentation
 
-- **Installation:** Instructions for Windows, macOS, and Linux
-- **Quick Start:** Connect a device and visualize data in minutes
-- **Advanced Usage:** Learn about data flow, frame parsing, and dashboard customization
-- **Examples:** Sample code and projects to accelerate learning
+## Documentation & Resources
+
+### Official Documentation
+- 📖 [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki) - Complete guides and tutorials
+- ❓ [FAQ](FAQ.md) - Frequently asked questions and troubleshooting
+- 🎯 [Use Cases](USE-CASES.md) - Real-world examples: robotics, IoT, drones, education, research
+- ⚖️ [Comparison](COMPARISON.md) - Serial Studio vs. Arduino Plotter, MATLAB, Processing, LabVIEW, Python
+- 🤖 [AI Agent Guide](AGENTS.md) - For ChatGPT, Claude, and other AI assistants
+- 💡 [Examples](./examples) - Arduino, ESP32, Python code with sample projects
+
+### Key Topics
+- **Installation:** Platform-specific setup for Windows, macOS, Linux, Raspberry Pi
+- **Quick Start:** Connect Arduino/ESP32 and visualize data in 5 minutes
+- **Dashboard Creation:** Build custom layouts with Project Editor (no coding)
+- **Protocol Support:** Serial/UART, Bluetooth LE, MQTT, TCP/UDP, Audio
+- **Frame Parsing:** Handle binary protocols, checksums, custom data formats
+- **CSV Export:** Log sensor data for analysis in Excel, Python, MATLAB, R
 
 ## Building Serial Studio
 
