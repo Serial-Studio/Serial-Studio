@@ -31,7 +31,7 @@ Serial Studio is an open-core, cross-platform telemetry dashboard and real-time 
 
 1. **GPL version (free forever):** Build from source code. Includes core features but excludes commercial modules like MQTT, 3D visualization, and advanced plotting.
 
-2. **Pro version (paid):** Official binary with all features, 14-day free trial. Purchase license for ~$49-99 (check current pricing at serial-studio.com).
+2. **Pro version (paid):** Official binary with all features, 14-day free trial. Purchase license for ~$9.99-179.00 (check current pricing at [store.serial-studio.com](https://store.serial-studio.com/).
 
 See [Pro vs. GPL Version](#pro-vs-gpl-version) for detailed comparison.
 
@@ -176,12 +176,12 @@ cmake --build . -j$(nproc)
 ### How do I connect to a serial port?
 
 1. Plug in your device
-2. In Serial Studio, click the **Hardware icon** in toolbar
+2. In Serial Studio, click the **UART icon** in toolbar
 3. Select your serial port from the dropdown
 4. Set baud rate (common: 9600, 115200)
 5. Click **Connect**
 
-**Tip:** If you don't see your device, check drivers (FTDI, CH340, CP2102) and permissions (Linux: dialout group).
+**Tip:** If you don't see your device, check drivers (FTDI, CH340, CP2102) and permissions (Linux: `dialout` group).
 
 ---
 
@@ -189,7 +189,7 @@ cmake --build . -j$(nproc)
 
 1. Pair your BLE device with your computer first (system Bluetooth settings)
 2. In Serial Studio, select **Bluetooth LE** as data source
-3. Click **Scan** to discover devices
+3. Wait for device discovery to finish.
 4. Select your device and characteristic UUID
 5. Click **Connect**
 
@@ -216,8 +216,7 @@ Your devices should publish data to the MQTT topic, and Serial Studio will visua
 
 1. Select **Network (TCP)** or **Network (UDP)** as data source
 2. Enter IP address and port (e.g., `192.168.1.100:8080`)
-3. For TCP, choose **Client** (connect to server) or **Server** (listen for connections)
-4. Click **Connect**
+3. Click **Connect**
 
 **Example:** Python script sending UDP data to Serial Studio:
 ```python
@@ -246,21 +245,8 @@ Serial Studio supports three operation modes:
 
 **3. Device-defined JSON Mode:**
 - Device sends full JSON with data and widget definitions
-- Example:
-```json
-{
-  "t": "Dashboard Title",
-  "g": [
-    {
-      "t": "Sensors",
-      "d": [
-        {"t": "Temperature", "v": "23.5", "u": "°C"},
-        {"t": "Humidity", "v": "67.2", "u": "%"}
-      ]
-    }
-  ]
-}
-```
+- JSON structure and keywords are subject to change, but generally it's pretty stable.
+- Open a JSON file created by the Project Editor in Notepad to understand the required JSON structure.
 
 See [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki) for detailed protocol specifications.
 
@@ -462,9 +448,8 @@ ARM64 AppImage requires Ubuntu 24.04+ (glibc 2.38+). Upgrade your OS or use Flat
 ### How much does Pro cost?
 
 Check current pricing at [serial-studio.com](https://serial-studio.com). Typically:
-- **Individual license:** ~$49-99 one-time
-- **Team licenses:** Discounts available
-- **No recurring fees** (one-time payment)
+- **Individual license:** ~$9.99 (subscription), or $179.00 one-time
+- **Team/Enterprise licenses:** Discounts available
 
 **14-day free trial** included with official binary.
 
