@@ -1057,9 +1057,11 @@ void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
         // Re-generate dashboard model
         reconfigureDashboard(frame);
 
-        // Try running the update again
+        // Try running the update again with a copy to avoid use-after-free
+        // if reconfigureDashboard invalidated the frame reference
         m_updateRetryInProgress = true;
-        updateDashboardData(frame);
+        const JSON::Frame frameCopy = frame;
+        updateDashboardData(frameCopy);
         m_updateRetryInProgress = false;
 
         return;
