@@ -58,6 +58,14 @@ Window {
   }
 
   //
+  // Automatically close CSV file when dialog is hidden
+  //
+  onVisibilityChanged: {
+    if (!visible && Cpp_CSV_Player.isOpen)
+          Cpp_CSV_Player.closeFile()
+  }
+
+  //
   // Close shortcut
   //
   Shortcut {

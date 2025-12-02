@@ -39,7 +39,6 @@
 namespace
 {
 constexpr int kDefaultPlotPoints = 100;
-constexpr int kDashboardUpdateHz = 24;
 } // namespace
 
 //------------------------------------------------------------------------------
