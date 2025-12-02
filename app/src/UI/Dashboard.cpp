@@ -1682,13 +1682,15 @@ void UI::Dashboard::configureActions(const JSON::Frame &frame)
   m_actions.squeeze();
 
   // Stop and delete all timers
+  // Delete immediately instead of using deleteLater() to prevent memory leaks
+  // when the map is cleared before the event loop processes pending deletions
   for (auto it = m_timers.begin(); it != m_timers.end(); ++it)
   {
     if (it.value())
     {
       disconnect(it.value());
       it.value()->stop();
-      it.value()->deleteLater();
+      delete it.value(); // Immediate deletion
     }
   }
 
