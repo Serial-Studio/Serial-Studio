@@ -340,6 +340,18 @@ if(DEBUG_SANITIZER)
 endif()
 
 #-------------------------------------------------------------------------------
+# Testing support
+#-------------------------------------------------------------------------------
+
+option(BUILD_TESTS "Build unit tests" OFF)
+
+if(BUILD_TESTS)
+   message(STATUS "BUILD_TESTS=ON — enabling test suite")
+   enable_testing()
+   add_subdirectory(tests)
+endif()
+
+#-------------------------------------------------------------------------------
 # Add subdirectories
 #-------------------------------------------------------------------------------
 
