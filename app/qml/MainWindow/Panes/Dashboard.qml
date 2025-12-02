@@ -78,6 +78,7 @@ Widgets.Pane {
   //
   ColumnLayout {
     spacing: -1
+    implicitHeight: 0
     anchors.fill: parent
     anchors.topMargin: -16
     anchors.leftMargin: -9

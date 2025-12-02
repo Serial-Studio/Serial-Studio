@@ -748,6 +748,24 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
     return false;
   }
 
+  // Validate group count
+  if (groupCount() <= 0)
+  {
+    Misc::Utilities::showMessageBox(tr("Project error"),
+                                    tr("You need to add at least one group!"),
+                                    QMessageBox::Warning);
+    return false;
+  }
+
+  // Validate dataset count
+  if (datasetCount() <= 0)
+  {
+    Misc::Utilities::showMessageBox(tr("Project error"),
+                                    tr("You need to add at least one dataset!"),
+                                    QMessageBox::Warning);
+    return false;
+  }
+
   // Save and validate javascript code
   auto *parser = JSON::FrameBuilder::instance().frameParser();
   if (parser && parser->isModified())

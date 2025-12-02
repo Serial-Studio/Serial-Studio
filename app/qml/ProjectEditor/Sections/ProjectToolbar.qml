@@ -180,10 +180,10 @@ Rectangle {
         text: qsTr("Save")
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
+        enabled: Cpp_JSON_ProjectModel.modified
         ToolTip.text: qsTr("Save the current project")
         onClicked: Cpp_JSON_ProjectModel.saveJsonFile(false)
         icon.source: "qrc:/rcc/icons/project-editor/toolbar/save.svg"
-        enabled: Cpp_JSON_ProjectModel.modified && Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
       }
 
       Widgets.ToolbarButton {
@@ -194,7 +194,6 @@ Rectangle {
         onClicked: Cpp_JSON_ProjectModel.saveJsonFile(true)
         ToolTip.text: qsTr("Save the current project under a new name")
         icon.source: "qrc:/rcc/icons/project-editor/toolbar/save-as.svg"
-        enabled: Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
       }
     }
 

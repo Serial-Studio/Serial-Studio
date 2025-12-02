@@ -35,6 +35,12 @@ Widgets.SmartWindow {
   id: root
 
   //
+  // Aliases for tracking minimum content size on native/CSD windows
+  //
+  property alias preferredWidth: layout.implicitWidth
+  property alias preferredHeight: layout.implicitHeight
+
+  //
   // Window options
   //
   category: "ProjectEditor"

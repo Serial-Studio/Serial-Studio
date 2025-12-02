@@ -43,14 +43,14 @@ namespace CSD
 // Constants
 //------------------------------------------------------------------------------
 
-constexpr int IconSize = 18;
-constexpr int IconMargin = 10;
+constexpr int IconSize = 16;
+constexpr int IconMargin = 8;
 constexpr int ButtonSize = 28;
 constexpr int ResizeMargin = 8;
-constexpr int ButtonMargin = 4;
+constexpr int ButtonMargin = 8;
 constexpr int CornerRadius = 10;
 constexpr int ShadowRadius = 24;
-constexpr int ButtonSpacing = 4;
+constexpr int ButtonSpacing = 18;
 constexpr int TitleBarHeight = 32;
 constexpr int TitleBarHeightMaximized = 28;
 
@@ -109,7 +109,7 @@ void Titlebar::paint(QPainter *painter)
   painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
   // Get window area & state
-  const QRectF rect = boundingRect();
+  QRectF rect = boundingRect();
   const bool maximized = window()->windowStates() & Qt::WindowMaximized;
   const qreal radius = maximized ? 0 : CSD::CornerRadius;
 
@@ -151,8 +151,14 @@ void Titlebar::paint(QPainter *painter)
     painter->setPen(foregroundColor().darker(130));
 
   // Draw window title
+#if defined(Q_OS_WIN)
+  rect.setX(CSD::IconSize + CSD::IconMargin * 2);
+  painter->setFont(Misc::CommonFonts::instance().uiFont());
+  painter->drawText(rect, Qt::AlignVCenter | Qt::AlignLeft, title());
+#else
   painter->setFont(Misc::CommonFonts::instance().boldUiFont());
   painter->drawText(rect, Qt::AlignCenter, title());
+#endif
 
   // Set path for window button icons
   // clang-format off
@@ -174,7 +180,11 @@ void Titlebar::paint(QPainter *painter)
  */
 QString Titlebar::title() const
 {
+#if defined(Q_OS_WIN)
+  return m_title + " - Serial Studio";
+#else
   return m_title + " — Serial Studio";
+#endif
 }
 
 /**
@@ -287,16 +297,16 @@ QRectF Titlebar::buttonRect(Button button) const
 
   switch (button)
   {
-    case Button::Close:
-      return {closeX, y, CSD::ButtonSize, CSD::ButtonSize};
-    case Button::Maximize:
-      return {closeX - CSD::ButtonSize - CSD::ButtonSpacing, y, CSD::ButtonSize,
-              CSD::ButtonSize};
-    case Button::Minimize:
-      return {closeX - 2 * (CSD::ButtonSize + CSD::ButtonSpacing), y,
-              CSD::ButtonSize, CSD::ButtonSize};
-    default:
-      return {};
+  case Button::Close:
+    return {closeX, y, CSD::ButtonSize, CSD::ButtonSize};
+  case Button::Maximize:
+    return {closeX - CSD::ButtonSize - CSD::ButtonSpacing, y, CSD::ButtonSize,
+            CSD::ButtonSize};
+  case Button::Minimize:
+    return {closeX - 2 * (CSD::ButtonSize + CSD::ButtonSpacing), y,
+            CSD::ButtonSize, CSD::ButtonSize};
+  default:
+    return {};
   }
 }
 
@@ -344,8 +354,7 @@ void Titlebar::drawButton(QPainter *painter, Button button,
   // Highlight the button if it is hovered or pressed
   else if (hovered || pressed)
   {
-    iconColor
-        = Misc::ThemeManager::instance().getColor(QStringLiteral("highlight"));
+    iconColor = Misc::ThemeManager::instance().getColor("highlight");
     if (pressed)
       iconColor = iconColor.darker(120);
   }
@@ -443,17 +452,17 @@ void Titlebar::mouseReleaseEvent(QMouseEvent *event)
   {
     switch (m_pressedButton)
     {
-      case Button::Minimize:
-        Q_EMIT minimizeClicked();
-        break;
-      case Button::Maximize:
-        Q_EMIT maximizeClicked();
-        break;
-      case Button::Close:
-        Q_EMIT closeClicked();
-        break;
-      default:
-        break;
+    case Button::Minimize:
+      Q_EMIT minimizeClicked();
+      break;
+    case Button::Maximize:
+      Q_EMIT maximizeClicked();
+      break;
+    case Button::Close:
+      Q_EMIT closeClicked();
+      break;
+    default:
+      break;
     }
   }
 
@@ -611,8 +620,8 @@ void Frame::paint(QPainter *painter)
     painter->drawImage(QPointF(0, height() - cornerTileSize),
                        m_shadowCorner.flipped(Qt::Vertical));
     painter->drawImage(
-        QPointF(width() - cornerTileSize, height() - cornerTileSize),
-        m_shadowCorner.flipped(Qt::Horizontal | Qt::Vertical));
+      QPointF(width() - cornerTileSize, height() - cornerTileSize),
+      m_shadowCorner.flipped(Qt::Horizontal | Qt::Vertical));
 
     if (!m_shadowEdge.isNull())
     {
@@ -754,7 +763,7 @@ void Frame::regenerateShadow()
   for (int y = 0; y < m_shadowRadius; ++y)
   {
     const qreal dist
-        = static_cast<qreal>(m_shadowRadius - y - 1) / m_shadowRadius;
+      = static_cast<qreal>(m_shadowRadius - y - 1) / m_shadowRadius;
     qreal alpha = 1.0 - dist;
     alpha = alpha * alpha * (3.0 - 2.0 * alpha);
     alpha *= CSD::ShadowOpacity;
@@ -834,16 +843,13 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
   , m_color(color)
   , m_titleBar(nullptr)
   , m_resizeEdge(ResizeEdge::None)
-  , m_contentMinimumSize(0, 0)
+  , m_minSize(0, 0)
   , m_window(window)
   , m_contentContainer(nullptr)
 {
   // Stop if window pointer is invalid
   if (!m_window)
     return;
-
-  // Store original minimum size before we modify it
-  m_contentMinimumSize = m_window->minimumSize();
 
   // Configure window for CSD
   m_window->setFlags(m_window->flags() | Qt::FramelessWindowHint);
@@ -870,26 +876,8 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
   });
 
   // Track minimum size changes from QML/user
-  connect(m_window, &QWindow::minimumWidthChanged, this, [this]() {
-    const int expected = m_contentMinimumSize.width() + 2 * shadowMargin();
-    if (m_window->minimumWidth() != expected)
-    {
-      m_contentMinimumSize.setWidth(m_window->minimumWidth()
-                                    - 2 * shadowMargin());
-      updateMinimumSize();
-    }
-  });
-
-  connect(m_window, &QWindow::minimumHeightChanged, this, [this]() {
-    const int expected
-        = m_contentMinimumSize.height() + 2 * shadowMargin() + titleBarHeight();
-    if (m_window->minimumHeight() != expected)
-    {
-      m_contentMinimumSize.setHeight(m_window->minimumHeight()
-                                     - 2 * shadowMargin() - titleBarHeight());
-      updateMinimumSize();
-    }
-  });
+  connect(m_window, &QWindow::minimumWidthChanged, this, &Window::onMinimumSizeChanged);
+  connect(m_window, &QWindow::minimumHeightChanged, this, &Window::onMinimumSizeChanged);
 
   // Theme updates
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
@@ -917,21 +905,21 @@ Window::~Window()
 }
 
 /**
- * @brief Returns the decorated window.
- * @return Pointer to the QWindow being decorated, or nullptr if invalid.
- */
-QWindow *Window::window() const
-{
-  return m_window;
-}
-
-/**
  * @brief Returns the shadow frame component.
  * @return Pointer to the Frame used for shadow and border rendering.
  */
 Frame *Window::frame() const
 {
   return m_frame;
+}
+
+/**
+ * @brief Returns the decorated window.
+ * @return Pointer to the QWindow being decorated, or nullptr if invalid.
+ */
+QWindow *Window::window() const
+{
+  return m_window;
 }
 
 /**
@@ -971,8 +959,8 @@ int Window::titleBarHeight() const
     return CSD::TitleBarHeight;
 
   return (m_window->windowStates() & Qt::WindowMaximized)
-             ? CSD::TitleBarHeightMaximized
-             : CSD::TitleBarHeight;
+           ? CSD::TitleBarHeightMaximized
+           : CSD::TitleBarHeight;
 }
 
 /**
@@ -1073,11 +1061,11 @@ void Window::updateMinimumSize()
   if (!m_window)
     return;
 
+  m_minSize = preferredSize();
   const int margin = shadowMargin();
   const int tbHeight = titleBarHeight();
-  const int minWidth = qMax(0, m_contentMinimumSize.width()) + 2 * margin;
-  const int minHeight
-      = qMax(0, m_contentMinimumSize.height()) + 2 * margin + tbHeight;
+  const int minWidth = qMax(0, m_minSize.width()) + 2 * margin;
+  const int minHeight = qMax(0, m_minSize.height()) + 2 * margin + tbHeight;
   const int minTitleBarWidth = 3 * (CSD::ButtonSize + CSD::ButtonSpacing)
                                + 2 * CSD::ButtonMargin + CSD::IconSize
                                + 2 * CSD::IconMargin;
@@ -1099,6 +1087,32 @@ void Window::updateFrameGeometry()
 
   m_frame->setPosition(QPointF(0, 0));
   m_frame->setSize(QSizeF(m_window->width(), m_window->height()));
+}
+
+/**
+ * @brief Re-calculates minimum window size (considering titlebar & shadows)
+ *        when the QML user interface changes it's minimum size requirements.
+ */
+void Window::onMinimumSizeChanged() {
+  const auto size = preferredSize();
+  const int expW = m_minSize.width() + 2 * shadowMargin();
+  const int expH = m_minSize.height() + 2 * shadowMargin() + titleBarHeight();
+
+  bool changed = false;
+  if (size.width() != expW)
+  {
+    changed = true;
+    m_minSize.setWidth(size.width() - 2 * shadowMargin());
+  }
+
+  if (size.height() != expH)
+  {
+    changed = true;
+    m_minSize.setHeight(size.height() - 2 * shadowMargin() - titleBarHeight());
+  }
+
+  if (changed)
+    updateMinimumSize();
 }
 
 /**
@@ -1165,8 +1179,43 @@ void Window::updateContentContainerGeometry()
 
   m_contentContainer->setPosition(QPointF(margin, margin + tbHeight));
   m_contentContainer->setSize(
-      QSizeF(m_window->width() - 2 * margin,
-             m_window->height() - 2 * margin - tbHeight));
+    QSizeF(m_window->width() - 2 * margin,
+           m_window->height() - 2 * margin - tbHeight));
+}
+
+/**
+ * @brief Retrieves the preferred size of the window
+ *
+ * Determines the preferred dimensions for the window by first using the
+ * minimum size as a baseline. For QQuickWindow instances, this can be
+ * overridden by custom QML properties @c preferredWidth and @c preferredHeight.
+ *
+ * @note If the underlying window is null, returns a zero size (0x0).
+ *
+ * @return QSize The preferred window dimensions, determined by:
+ *         - Custom QML properties if available and valid (for QQuickWindow)
+ *         - Minimum window size otherwise
+ *
+ * @see QWindow::minimumSize()
+ * @see QQuickWindow
+ */
+QSize Window::preferredSize() const {
+  if (!m_window)
+    return QSize(0, 0);
+
+  auto preferredSize = m_window->minimumSize();
+  auto *quickWindow = qobject_cast<QQuickWindow *>(m_window.data());
+  if (!quickWindow)
+    return preferredSize;
+
+  auto pWidth = quickWindow->property("preferredWidth");
+  auto pHeight = quickWindow->property("preferredHeight");
+  if (!pWidth.isNull() && pWidth.isValid())
+    preferredSize.setWidth(pWidth.toInt());
+  if (!pHeight.isNull() && pHeight.isValid())
+    preferredSize.setHeight(pHeight.toInt());
+
+  return preferredSize;
 }
 
 /**
@@ -1182,9 +1231,9 @@ void Window::updateTheme()
   if (m_titleBar)
   {
     const QString color
-        = m_color.isEmpty()
-              ? theme.getColor(QStringLiteral("toolbar_top")).name()
-              : m_color;
+      = m_color.isEmpty()
+          ? theme.getColor(QStringLiteral("toolbar_top")).name()
+          : m_color;
     m_titleBar->setBackgroundColor(QColor(color));
   }
 }
@@ -1252,20 +1301,20 @@ Qt::CursorShape Window::cursorForEdge(ResizeEdge edge) const
 {
   switch (edge)
   {
-    case ResizeEdge::Left:
-    case ResizeEdge::Right:
-      return Qt::SizeHorCursor;
-    case ResizeEdge::Top:
-    case ResizeEdge::Bottom:
-      return Qt::SizeVerCursor;
-    case ResizeEdge::TopLeft:
-    case ResizeEdge::BottomRight:
-      return Qt::SizeFDiagCursor;
-    case ResizeEdge::TopRight:
-    case ResizeEdge::BottomLeft:
-      return Qt::SizeBDiagCursor;
-    default:
-      return Qt::ArrowCursor;
+  case ResizeEdge::Left:
+  case ResizeEdge::Right:
+    return Qt::SizeHorCursor;
+  case ResizeEdge::Top:
+  case ResizeEdge::Bottom:
+    return Qt::SizeVerCursor;
+  case ResizeEdge::TopLeft:
+  case ResizeEdge::BottomRight:
+    return Qt::SizeFDiagCursor;
+  case ResizeEdge::TopRight:
+  case ResizeEdge::BottomLeft:
+    return Qt::SizeBDiagCursor;
+  default:
+    return Qt::ArrowCursor;
   }
 }
 
@@ -1314,7 +1363,7 @@ bool Window::eventFilter(QObject *watched, QEvent *event)
       if (auto *child = qobject_cast<QQuickItem *>(childEvent->child()))
       {
         QTimer::singleShot(
-            0, this, [this, child]() { reparentChildToContainer(child); });
+          0, this, [this, child]() { reparentChildToContainer(child); });
       }
 
       return false;
@@ -1326,41 +1375,41 @@ bool Window::eventFilter(QObject *watched, QEvent *event)
 
   switch (event->type())
   {
-    case QEvent::MouseMove: {
-      auto *me = static_cast<QMouseEvent *>(event);
-      if (!m_resizing)
-        m_window->setCursor(cursorForEdge(edgeAt(me->position())));
-      break;
-    }
+  case QEvent::MouseMove: {
+    auto *me = static_cast<QMouseEvent *>(event);
+    if (!m_resizing)
+      m_window->setCursor(cursorForEdge(edgeAt(me->position())));
+    break;
+  }
 
-    case QEvent::MouseButtonPress: {
-      auto *me = static_cast<QMouseEvent *>(event);
-      if (me->button() == Qt::LeftButton)
+  case QEvent::MouseButtonPress: {
+    auto *me = static_cast<QMouseEvent *>(event);
+    if (me->button() == Qt::LeftButton)
+    {
+      m_resizeEdge = edgeAt(me->position());
+      if (m_resizeEdge != ResizeEdge::None)
       {
-        m_resizeEdge = edgeAt(me->position());
-        if (m_resizeEdge != ResizeEdge::None)
-        {
-          m_resizing = true;
-          m_window->startSystemResize(qtEdgesFromResizeEdge(m_resizeEdge));
-          m_resizing = false;
-          return true;
-        }
+        m_resizing = true;
+        m_window->startSystemResize(qtEdgesFromResizeEdge(m_resizeEdge));
+        m_resizing = false;
+        return true;
       }
-      break;
     }
+    break;
+  }
 
-    case QEvent::MouseButtonRelease:
-      m_resizing = false;
-      m_resizeEdge = ResizeEdge::None;
-      break;
+  case QEvent::MouseButtonRelease:
+    m_resizing = false;
+    m_resizeEdge = ResizeEdge::None;
+    break;
 
-    case QEvent::Leave:
-      if (!m_resizing)
-        m_window->setCursor(Qt::ArrowCursor);
-      break;
+  case QEvent::Leave:
+    if (!m_resizing)
+      m_window->setCursor(Qt::ArrowCursor);
+    break;
 
-    default:
-      break;
+  default:
+    break;
   }
 
   return false;

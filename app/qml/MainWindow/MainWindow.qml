@@ -34,7 +34,13 @@ Widgets.SmartWindow {
   title: documentTitle
   category: "MainWindow"
   minimumWidth: layout.implicitWidth
-  minimumHeight: layout.implicitHeight + 128
+  minimumHeight: layout.implicitHeight
+
+  //
+  // Aliases for tracking minimum content size on native/CSD windows
+  //
+  property alias preferredWidth: layout.implicitWidth
+  property alias preferredHeight: layout.implicitHeight
 
   //
   // Custom properties
@@ -287,13 +293,12 @@ Widgets.SmartWindow {
           initialItem: terminal
           Layout.fillWidth: true
           Layout.fillHeight: true
-          Layout.minimumHeight: Math.max(dashboard.implicitHeight, terminal.implicitHeight, setup.implicitHeight)
-          Layout.minimumWidth: Math.max(dashboard.implicitWidth, terminal.implicitWidth) + (setup.visible ? 0 : setup.displayedWidth + 1)
+          Layout.minimumHeight: Math.max(terminal.implicitHeight, setup.implicitHeight)
+          Layout.minimumWidth: terminal.implicitWidth + (setup.visible ? 0 : setup.displayedWidth + 1)
 
           data: [
             Panes.Console {
               id: terminal
-              visible: false
               width: parent.width
               height: parent.height
             },

@@ -19,15 +19,14 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include <dwmapi.h>
-
-#include <QColor>
-#include <QSysInfo>
-#include <QWindow>
-
 #include "CSD.h"
 #include "NativeWindow.h"
 #include "Misc/ThemeManager.h"
+
+#include <QColor>
+#include <QWindow>
+#include <dwmapi.h>
+#include <Windows.h>
 
 //------------------------------------------------------------------------------
 // Static storage for window decorators (used on Windows 10)
@@ -40,13 +39,33 @@ static QHash<QWindow *, CSD::Window *> s_decorators;
 //------------------------------------------------------------------------------
 
 /**
- * @brief Indicates whenever application is running on Windows 11
+ * @brief Indicates whether the application is running on Windows 11 or later
  * @return @c true if the operating system is Windows 11 or later
  */
 static bool isWindows11OrLater()
 {
-  const QString version = QSysInfo::productVersion();
-  return version.contains("11");
+  constexpr DWORD kWin11BuildNum = 22000;
+  using RtlGetVersionPtr = NTSTATUS(WINAPI*)(PRTL_OSVERSIONINFOW);
+
+  const HMODULE ntdll = GetModuleHandleW(L"ntdll.dll");
+  if (!ntdll)
+    return false;
+
+  const auto rtlGetVersion = reinterpret_cast<RtlGetVersionPtr>(
+    GetProcAddress(ntdll, "RtlGetVersion"));
+  if (!rtlGetVersion)
+    return false;
+
+  RTL_OSVERSIONINFOW osvi{};
+  osvi.dwOSVersionInfoSize = sizeof(osvi);
+
+  if (rtlGetVersion(&osvi) != 0)
+    return false;
+
+  if (osvi.dwMajorVersion > 10)
+    return true;
+
+  return (osvi.dwMajorVersion == 10 && osvi.dwBuildNumber >= kWin11BuildNum);
 }
 
 /**
@@ -56,13 +75,12 @@ static bool isWindows11OrLater()
  * Uses DWMWA_CAPTION_COLOR to set the exact title bar color matching
  * the application theme.
  */
-static void updateWindowCaptionColor(QWindow *window)
+static void updateWindowCaptionColor(QWindow *window, QString color)
 {
   if (!window)
     return;
 
   // Get color from color list or theme
-  QString color = m_colors.value(window);
   if (color.isEmpty())
   {
     const auto &colors = Misc::ThemeManager::instance().colors();
@@ -109,14 +127,6 @@ NativeWindow::NativeWindow(QObject *parent)
  */
 int NativeWindow::titlebarHeight(QObject *window)
 {
-  if (isWindows11OrLater())
-    return 0;
-
-  auto *w = qobject_cast<QWindow *>(window);
-  auto *decorator = s_decorators.value(w, nullptr);
-  if (decorator)
-    return decorator->shadowMargin() + decorator->titleBarHeight();
-
   return 0;
 }
 
@@ -166,7 +176,7 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
 
   // Windows 11: Use native DWM caption color
   if (isWindows11OrLater())
-    updateWindowCaptionColor(w);
+    updateWindowCaptionColor(w, color);
 
   // Windows 10: Use CSD for custom title bar
   else
@@ -191,13 +201,13 @@ void NativeWindow::onThemeChanged()
 {
   if (isWindows11OrLater())
   {
-    for (auto *window : m_windows)
-      updateWindowCaptionColor(window);
+    for (auto *window : std::as_const(m_windows))
+      updateWindowCaptionColor(window, m_colors[window]);
   }
 
   else
   {
-    for (auto *window : m_windows)
+    for (auto *window : std::as_const(m_windows))
     {
       auto *decorator = s_decorators.value(window, nullptr);
       if (decorator)
@@ -209,15 +219,11 @@ void NativeWindow::onThemeChanged()
 /**
  * @brief Handles the active state change of a window.
  *
- * On Windows 11, updates the DWM caption color.
- * On Windows 10, the CSD decorator handles active state internally.
+ * On Windows, it is not needed to update any DWM configuration, so this
+ * method serves as an extension point for additional behavior if needed.
  */
 void NativeWindow::onActiveChanged()
 {
-  if (!isWindows11OrLater())
-    return;
-
-  auto *window = qobject_cast<QWindow *>(sender());
-  if (window && m_windows.contains(window))
-    updateWindowCaptionColor(window);
+  // This slot is available for any additional behavior that may
+  // be needed in the future.
 }

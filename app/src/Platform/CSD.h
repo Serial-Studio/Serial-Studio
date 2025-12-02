@@ -172,8 +172,8 @@ public:
                   QObject *parent = nullptr);
   ~Window() override;
 
-  [[nodiscard]] QWindow *window() const;
   [[nodiscard]] Frame *frame() const;
+  [[nodiscard]] QWindow *window() const;
   [[nodiscard]] Titlebar *titleBar() const;
 
   [[nodiscard]] int shadowMargin() const;
@@ -188,9 +188,13 @@ private slots:
   void setupTitleBar();
   void updateMinimumSize();
   void updateFrameGeometry();
+  void onMinimumSizeChanged();
   void setupContentContainer();
   void updateTitleBarGeometry();
   void updateContentContainerGeometry();
+
+private:
+  QSize preferredSize() const;
 
 private:
   enum class ResizeEdge
@@ -221,7 +225,7 @@ private:
   QString m_color;
   Titlebar *m_titleBar;
   ResizeEdge m_resizeEdge;
-  QSize m_contentMinimumSize;
+  QSize m_minSize;
   QPointer<QWindow> m_window;
   QQuickItem *m_contentContainer;
 };

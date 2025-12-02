@@ -44,11 +44,11 @@
  * the @a function.
  */
 #define DW_EXEC_EVENT(pointer, function, event)                                \
-  class PwnedWidget : public QCodeEditor                                       \
-  {                                                                            \
+class PwnedWidget : public QCodeEditor                                       \
+{                                                                            \
   public:                                                                      \
-    using QCodeEditor::function;                                               \
-  };                                                                           \
+  using QCodeEditor::function;                                               \
+};                                                                           \
   static_cast<PwnedWidget *>(pointer)->function(event);
 
 /**
@@ -261,9 +261,9 @@ bool JSON::FrameParser::save(const bool silent)
     // Show save messagebox
     if (!silent)
       Misc::Utilities::showMessageBox(
-          tr("Frame parser code updated successfully!"),
-          tr("No errors have been detected in the code."),
-          QMessageBox::Information);
+        tr("Frame parser code updated successfully!"),
+        tr("No errors have been detected in the code."),
+        QMessageBox::Information);
     else
       model.setModified(prevModif);
 
@@ -321,11 +321,11 @@ bool JSON::FrameParser::loadScript(const QString &script)
     QString errorMsg = result.property("message").toString();
     int lineNumber = result.property("lineNumber").toInt();
     Misc::Utilities::showMessageBox(
-        tr("JavaScript Syntax Error"),
-        tr("The parser code contains a syntax error at line %1:\n\n%2")
-            .arg(lineNumber)
-            .arg(errorMsg),
-        QMessageBox::Critical);
+      tr("JavaScript Syntax Error"),
+      tr("The parser code contains a syntax error at line %1:\n\n%2")
+        .arg(lineNumber)
+        .arg(errorMsg),
+      QMessageBox::Critical);
     return false;
   }
 
@@ -333,10 +333,10 @@ bool JSON::FrameParser::loadScript(const QString &script)
   if (!exceptionStackTrace.isEmpty())
   {
     Misc::Utilities::showMessageBox(
-        tr("JavaScript Exception Occurred"),
-        tr("The parser code triggered the following exceptions:\n\n%1")
-            .arg(exceptionStackTrace.join("\n")),
-        QMessageBox::Critical);
+      tr("JavaScript Exception Occurred"),
+      tr("The parser code triggered the following exceptions:\n\n%1")
+        .arg(exceptionStackTrace.join("\n")),
+      QMessageBox::Critical);
     return false;
   }
 
@@ -345,11 +345,11 @@ bool JSON::FrameParser::loadScript(const QString &script)
   if (parseFunction.isNull())
   {
     Misc::Utilities::showMessageBox(
-        tr("Missing Parse Function"),
-        tr("The 'parse' function is not defined in the script.\n\n"
-           "Please ensure your code includes:\n"
-           "function parse(frame) { ... }"),
-        QMessageBox::Critical);
+      tr("Missing Parse Function"),
+      tr("The 'parse' function is not defined in the script.\n\n"
+         "Please ensure your code includes:\n"
+         "function parse(frame) { ... }"),
+      QMessageBox::Critical);
     return false;
   }
 
@@ -357,25 +357,25 @@ bool JSON::FrameParser::loadScript(const QString &script)
   if (!parseFunction.isCallable())
   {
     Misc::Utilities::showMessageBox(
-        tr("Invalid Parse Function"),
-        tr("The 'parse' property exists but is not a callable function.\n\n"
-           "Please ensure 'parse' is declared as a function."),
-        QMessageBox::Critical);
+      tr("Invalid Parse Function"),
+      tr("The 'parse' property exists but is not a callable function.\n\n"
+         "Please ensure 'parse' is declared as a function."),
+      QMessageBox::Critical);
     return false;
   }
 
   // Validate function signature using regex
   static QRegularExpression functionRegex(
-      R"(\bfunction\s+parse\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*,\s*([a-zA-Z_$][a-zA-Z0-9_$]*))?\s*\))");
+    R"(\bfunction\s+parse\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*,\s*([a-zA-Z_$][a-zA-Z0-9_$]*))?\s*\))");
   auto match = functionRegex.match(script);
   if (!match.hasMatch())
   {
     Misc::Utilities::showMessageBox(
-        tr("Invalid Function Declaration"),
-        tr("No valid 'parse' function declaration found.\n\n"
-           "Expected format:\n"
-           "function parse(frame) { ... }"),
-        QMessageBox::Critical);
+      tr("Invalid Function Declaration"),
+      tr("No valid 'parse' function declaration found.\n\n"
+         "Expected format:\n"
+         "function parse(frame) { ... }"),
+      QMessageBox::Critical);
     return false;
   }
 
@@ -387,11 +387,11 @@ bool JSON::FrameParser::loadScript(const QString &script)
   if (firstArg.isEmpty())
   {
     Misc::Utilities::showMessageBox(
-        tr("Invalid Function Parameter"),
-        tr("The 'parse' function must have at least one parameter.\n\n"
-           "Expected format:\n"
-           "function parse(frame) { ... }"),
-        QMessageBox::Critical);
+      tr("Invalid Function Parameter"),
+      tr("The 'parse' function must have at least one parameter.\n\n"
+         "Expected format:\n"
+         "function parse(frame) { ... }"),
+      QMessageBox::Critical);
     return false;
   }
 
@@ -399,15 +399,15 @@ bool JSON::FrameParser::loadScript(const QString &script)
   if (!secondArg.isEmpty())
   {
     Misc::Utilities::showMessageBox(
-        tr("Deprecated Function Signature"),
-        tr("The 'parse' function uses the old two-parameter format: parse(%1, "
-           "%2)\n\n"
-           "This format is no longer supported. Please update to the new "
-           "single-parameter format:\n"
-           "function parse(%1) { ... }\n\n"
-           "The separator parameter is no longer needed.")
-            .arg(firstArg, secondArg),
-        QMessageBox::Warning);
+      tr("Deprecated Function Signature"),
+      tr("The 'parse' function uses the old two-parameter format: parse(%1, "
+         "%2)\n\n"
+         "This format is no longer supported. Please update to the new "
+         "single-parameter format:\n"
+         "function parse(%1) { ... }\n\n"
+         "The separator parameter is no longer needed.")
+        .arg(firstArg, secondArg),
+      QMessageBox::Warning);
     return false;
   }
 
@@ -421,12 +421,12 @@ bool JSON::FrameParser::loadScript(const QString &script)
     int lineNumber = testResult.property("lineNumber").toInt();
 
     Misc::Utilities::showMessageBox(
-        tr("Parse Function Runtime Error"),
-        tr("The parse function contains an error at line %1:\n\n%2\n\n"
-           "Please fix the error in the function body.")
-            .arg(lineNumber)
-            .arg(errorMsg),
-        QMessageBox::Critical);
+      tr("Parse Function Runtime Error"),
+      tr("The parse function contains an error at line %1:\n\n%2\n\n"
+         "Please fix the error in the function body.")
+        .arg(lineNumber)
+        .arg(errorMsg),
+      QMessageBox::Critical);
 
     return false;
   }
@@ -519,9 +519,9 @@ void JSON::FrameParser::reload()
   if (isModified())
   {
     auto ret = Misc::Utilities::showMessageBox(
-        tr("The document has been modified."),
-        tr("Are you sure you want to continue?"), QMessageBox::Question,
-        qAppName(), QMessageBox::Yes | QMessageBox::No);
+      tr("The document has been modified."),
+      tr("Are you sure you want to continue?"), QMessageBox::Question,
+      qAppName(), QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::No)
       return;
   }
@@ -539,16 +539,16 @@ void JSON::FrameParser::import()
   if (isModified())
   {
     auto ret = Misc::Utilities::showMessageBox(
-        tr("The document has been modified!"),
-        tr("Are you sure you want to continue?"), QMessageBox::Question,
-        qAppName(), QMessageBox::Yes | QMessageBox::No);
+      tr("The document has been modified!"),
+      tr("Are you sure you want to continue?"), QMessageBox::Question,
+      qAppName(), QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::No)
       return;
   }
 
   auto *dialog
-      = new QFileDialog(nullptr, tr("Select Javascript file to import"),
-                        QDir::homePath(), "*.js");
+    = new QFileDialog(nullptr, tr("Select Javascript file to import"),
+                      QDir::homePath(), "*.js");
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setOption(QFileDialog::DontUseNativeDialog);
@@ -597,9 +597,9 @@ void JSON::FrameParser::evaluate()
   if (loadScript(text()))
   {
     Misc::Utilities::showMessageBox(
-        tr("Code Validation Successful"),
-        tr("No syntax errors detected in the parser code."),
-        QMessageBox::Information);
+      tr("Code Validation Successful"),
+      tr("No syntax errors detected in the parser code."),
+      QMessageBox::Information);
   }
 }
 
@@ -609,15 +609,13 @@ void JSON::FrameParser::evaluate()
 void JSON::FrameParser::readCode()
 {
   const auto code = ProjectModel::instance().frameParserCode();
-  if (text() != code)
-  {
-    m_widget.setPlainText(code);
-    m_widget.document()->setModified(false);
-    m_widget.document()->clearUndoRedoStacks();
 
-    (void)loadScript(code);
-    Q_EMIT modifiedChanged();
-  }
+  (void)loadScript(code);
+  m_widget.setPlainText(code);
+  m_widget.document()->clearUndoRedoStacks();
+  m_widget.document()->setModified(false);
+
+  Q_EMIT modifiedChanged();
 }
 
 /**
@@ -645,9 +643,9 @@ void JSON::FrameParser::selectTemplate()
   // Show combobox dialog to get template selection
   bool ok;
   auto name
-      = QInputDialog::getItem(Q_NULLPTR, tr("Select Frame Parser Template"),
-                              tr("Choose a template to load:"), m_templateNames,
-                              m_templateIdx, false, &ok);
+    = QInputDialog::getItem(Q_NULLPTR, tr("Select Frame Parser Template"),
+                            tr("Choose a template to load:"), m_templateNames,
+                            m_templateIdx, false, &ok);
 
   // User cancelled the dialog
   if (!ok)
@@ -700,6 +698,7 @@ void JSON::FrameParser::loadDefaultTemplate()
 {
   const auto idx = m_templateFiles.indexOf("comma_separated.js");
   setTemplateIdx(idx);
+  JSON::ProjectModel::instance().setModified(false);
 }
 
 /**
@@ -852,9 +851,9 @@ void JSON::FrameParser::setTemplateIdx(const int idx)
   if (isModified() || (!code.isEmpty() && code != currentTemplateCode))
   {
     auto ret = Misc::Utilities::showMessageBox(
-        tr("Loading a template will replace your current code."),
-        tr("Are you sure you want to continue?"), QMessageBox::Question,
-        qAppName(), QMessageBox::Yes | QMessageBox::No);
+      tr("Loading a template will replace your current code."),
+      tr("Are you sure you want to continue?"), QMessageBox::Question,
+      qAppName(), QMessageBox::Yes | QMessageBox::No);
 
     if (ret == QMessageBox::No)
       return;
@@ -866,6 +865,7 @@ void JSON::FrameParser::setTemplateIdx(const int idx)
   (void)save(true);
 
   // Mark the project file as modified
+  JSON::ProjectModel::instance().setFrameParserCode(templateCode());
   JSON::ProjectModel::instance().setModified(true);
 }
 

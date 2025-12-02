@@ -132,7 +132,7 @@ void NativeWindow::onThemeChanged()
 /**
  * @brief Handles the active state change of a window.
  *
- * The UnixWindowDecorator handles active state changes internally via
+ * The CSD window class handles active state changes internally via
  * its connection to QWindow::activeChanged, so this method serves as
  * an extension point for additional behavior if needed.
  */
