@@ -186,12 +186,16 @@ endif()
 
 if(PRODUCTION_OPTIMIZATION)
    # Print status
-   message("Enabling production optimization flags...")
+   message("Enabling production optimization flags for modern hardware (2012+)...")
+
+   # Add NDEBUG definition for all configurations
+   add_compile_definitions(NDEBUG)
 
    # LLVM (MinGW) on Windows
    if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND MINGW)
       add_compile_options(
-         -O2                             # Optimize for speed
+         -O3                             # Aggressive optimization
+         -march=x86-64-v2                # Target modern CPUs (2012+) with SSE4.2
          -ftree-vectorize                # Enable automatic vectorization
          -funroll-loops                  # Improve loop performance by unrolling
          -fomit-frame-pointer            # Optimize function call overhead
@@ -200,15 +204,18 @@ if(PRODUCTION_OPTIMIZATION)
          -finline-functions              # Inline functions where possible
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
+         -flto=auto                      # Link-time optimization with parallelization
       )
       add_link_options(
          -Wl,--gc-sections               # Remove unused functions/data from final binary
+         -flto=auto                      # Enable LTO at link time
       )
    
    # GCC (MinGW) on Windows
    elseif(WIN32 AND MINGW)
       add_compile_options(
-         -O2                             # Optimize for speed
+         -O3                             # Aggressive optimization
+         -march=x86-64-v2                # Target modern CPUs (2012+) with SSE4.2
          -ftree-vectorize                # Enable automatic vectorization
          -funroll-loops                  # Improve loop performance by unrolling
          -fomit-frame-pointer            # Optimize function call overhead
@@ -219,9 +226,11 @@ if(PRODUCTION_OPTIMIZATION)
          -finline-functions              # Inline functions where possible
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
+         -flto=auto                      # Link-time optimization with parallelization
       )
       add_link_options(
          -Wl,--gc-sections               # Remove unused code/data at link time
+         -flto=auto                      # Enable LTO at link time
       )
 
    # MSVC (Visual Studio)
@@ -232,11 +241,14 @@ if(PRODUCTION_OPTIMIZATION)
          /Zc:preprocessor                # Standards-compliant preprocessor
          /MP                             # Enable multi-core compilation
          /O2                             # Optimize for speed
+         /Ot                             # Favor fast code over small code
          /W4                             # High warning level
          /GL                             # Enable whole program optimization
          /fp:precise                     # IEEE-accurate floating-point math
          /Qpar                           # Enable automatic parallelization of loops
          /Gw                             # Put functions/data into separate COMDATs
+         /arch:SSE2                      # Use SSE2 instructions (2012+ compatible)
+         /DNDEBUG                        # Disable assertions
       )
       add_link_options(
          /OPT:REF                        # Remove unreferenced functions/data
@@ -247,26 +259,28 @@ if(PRODUCTION_OPTIMIZATION)
    # macOS (Clang/AppleClang)
    elseif(APPLE)
       add_compile_options(
-         -O2                             # Optimize for speed
+         -O3                             # Aggressive optimization
+         -march=x86-64-v2                # Target modern CPUs (2012+) with SSE4.2
          -ftree-vectorize                # Enable automatic vectorization
          -funroll-loops                  # Improve loop performance by unrolling
          -fomit-frame-pointer            # Optimize function call overhead
          -fno-fast-math                  # IEEE-compliant floating point
          -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -flto                           # Enable Link-Time optimization
+         -flto=auto                      # Link-time optimization with parallelization
          -finline-functions              # Inline functions where possible
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
       )
       add_link_options(
          -Wl,-dead_strip                 # Remove unused functions/data from final binary
-         -flto                           # Enable Link-Time Optimization
+         -flto=auto                      # Enable Link-Time Optimization
       )
 
    # Intel LLVM Compiler (Linux or Windows)
    elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
       add_compile_options(
-         -O2                             # Optimize for speed
+         -O3                             # Aggressive optimization
+         -march=x86-64-v2                # Target modern CPUs (2012+) with SSE4.2
          -static                         # Include Intel dependencies
          -ftree-vectorize                # Enable automatic vectorization
          -funroll-loops                  # Improve loop performance by unrolling
@@ -278,15 +292,17 @@ if(PRODUCTION_OPTIMIZATION)
          -finline-functions              # Inline functions where possible
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
+         -flto=auto                      # Link-time optimization with parallelization
       )
       add_link_options(
          -Wl,--gc-sections               # Discard unused code sections at link time
+         -flto=auto                      # Enable LTO at link time
       )
 
    # Generic Linux (GCC or Clang)
    elseif(UNIX)
       add_compile_options(
-         -O2                             # Optimize for speed
+         -O3                             # Aggressive optimization
          -ftree-vectorize                # Enable automatic vectorization
          -funroll-loops                  # Improve loop performance by unrolling
          -fomit-frame-pointer            # Optimize function call overhead
@@ -297,12 +313,21 @@ if(PRODUCTION_OPTIMIZATION)
          -finline-functions              # Inline functions where possible
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
+         -flto=auto                      # Link-time optimization with parallelization
       )
       add_link_options(
          -Wl,--gc-sections               # Strip unused functions/data
+         -flto=auto                      # Enable LTO at link time
       )
-      if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
-         add_link_options(-latomic)      # Required for MiniAudio
+
+      if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
+         add_compile_options(-march=x86-64-v2)   # Target modern x86-64 CPUs (2012+)
+      elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+         add_compile_options(-march=armv8-a)     # ARMv8-A with NEON
+         add_link_options(-latomic)              # Required for MiniAudio
+      elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
+         add_compile_options(-march=armv7-a -mfpu=neon)  # ARMv7-A with NEON
+         add_link_options(-latomic)              # Required for MiniAudio
       endif()
    endif()
 else()

@@ -406,7 +406,8 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
   channels.reserve(64);
   if (!CSV::Player::instance().isOpen() && m_frameParser) [[likely]]
   {
-    switch (JSON::ProjectModel::instance().decoderMethod())
+    const auto decoderMethod = JSON::ProjectModel::instance().decoderMethod();
+    switch (decoderMethod)
     {
       case SerialStudio::Hexadecimal:
         channels = m_frameParser->parse(QString::fromUtf8(data.toHex()));
@@ -426,7 +427,16 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
 
   // CSV data, no need to perform conversions or use frame parser
   else
-    channels = QString::fromUtf8(data).split(',', Qt::SkipEmptyParts);
+  {
+    const auto parts = data.split(',');
+    channels.reserve(parts.size());
+    for (const auto &part : parts)
+    {
+      const auto trimmed = part.trimmed();
+      if (!trimmed.isEmpty())
+        channels.append(QString::fromUtf8(trimmed));
+    }
+  }
 
   // Process data
   if (!channels.isEmpty())
@@ -434,10 +444,12 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
     // Replace data in frame
     auto *channelData = channels.data();
     const int channelCount = channels.size();
-    for (size_t g = 0; g < m_frame.groups.size(); ++g)
+    const size_t groupCount = m_frame.groups.size();
+    for (size_t g = 0; g < groupCount; ++g)
     {
       auto &group = m_frame.groups[g];
-      for (size_t d = 0; d < group.datasets.size(); ++d)
+      const size_t datasetCount = group.datasets.size();
+      for (size_t d = 0; d < datasetCount; ++d)
       {
         auto &dataset = group.datasets[d];
         const int idx = dataset.index;
@@ -477,17 +489,13 @@ void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
   else
     channels.reserve(64);
 
-  // Split the string into commas
-  int start = 0;
-  const auto str = QString::fromUtf8(data);
-  const int dataLength = str.size();    // Cache size to avoid repeated calls
-  for (int i = 0; i <= dataLength; ++i) // Use cached size instead of str.size()
+  // Use QByteArray::split for better performance
+  const auto parts = data.split(',');
+  for (const auto &part : parts)
   {
-    if (i == dataLength || str[i] == ',')
-    {
-      channels.append(str.mid(start, i - start).trimmed());
-      start = i + 1;
-    }
+    const auto trimmed = part.trimmed();
+    if (!trimmed.isEmpty())
+      channels.append(QString::fromUtf8(trimmed));
   }
 
   // Process data
@@ -503,11 +511,12 @@ void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
 
     // Replace data in frame
     auto *channelData = channels.data();
-    const int channelCount = channels.size();
-    for (size_t g = 0; g < m_quickPlotFrame.groups.size(); ++g)
+    const size_t groupCount = m_quickPlotFrame.groups.size();
+    for (size_t g = 0; g < groupCount; ++g)
     {
       auto &group = m_quickPlotFrame.groups[g];
-      for (size_t d = 0; d < group.datasets.size(); ++d)
+      const size_t datasetCount = group.datasets.size();
+      for (size_t d = 0; d < datasetCount; ++d)
       {
         auto &dataset = group.datasets[d];
         const int idx = dataset.index;
