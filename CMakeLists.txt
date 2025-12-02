@@ -275,11 +275,8 @@ if(PRODUCTION_OPTIMIZATION)
          -flto=auto                      # Enable Link-Time Optimization
       )
 
-      # Platform-specific march flags
       if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
-         add_compile_options(-march=x86-64-v2)  # Target modern x86-64 CPUs (2012+)
-      elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$")
-         add_compile_options(-march=armv8-a)    # ARMv8-A for Apple Silicon
+         add_compile_options(-march=x86-64-v2)
       endif()
 
    # Intel LLVM Compiler (Linux or Windows)
@@ -327,13 +324,13 @@ if(PRODUCTION_OPTIMIZATION)
       )
 
       if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
-         add_compile_options(-march=x86-64-v2)   # Target modern x86-64 CPUs (2012+)
+         add_compile_options(-march=x86-64-v2)
       elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-         add_compile_options(-march=armv8-a)     # ARMv8-A with NEON
-         add_link_options(-latomic)              # Required for MiniAudio
+         add_compile_options(-march=armv8-a)
+         add_link_options(-latomic)
       elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
-         add_compile_options(-march=armv7-a -mfpu=neon)  # ARMv7-A with NEON
-         add_link_options(-latomic)              # Required for MiniAudio
+         add_compile_options(-march=armv7-a -mfpu=neon)
+         add_link_options(-latomic)
       endif()
    endif()
 else()
