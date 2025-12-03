@@ -23,6 +23,7 @@ import QtCore
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 import "Widgets" as Widgets
 import "Dialogs" as Dialogs
