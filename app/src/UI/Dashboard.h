@@ -162,12 +162,12 @@ private:
   void configureActions(const JSON::Frame &frame);
 
 private:
-  int m_points;              // Number of plot points to retain
-  int m_widgetCount;         // Total number of active widgets
-  bool m_updateRequired;     // Flag to trigger plot/UI update
-  bool m_showActionPanel;    // Whenever the UI shall display an action panel
-  bool m_terminalEnabled;       // Whether terminal group is enabled
-  WidgetID m_terminalWidgetId;  // Registry ID for terminal widget
+  int m_points;                // Number of plot points to retain
+  int m_widgetCount;           // Total number of active widgets
+  bool m_updateRequired;       // Flag to trigger plot/UI update
+  bool m_showActionPanel;      // Whenever the UI shall display an action panel
+  bool m_terminalEnabled;      // Whether terminal group is enabled
+  WidgetID m_terminalWidgetId; // Registry ID for terminal widget
   bool m_showTaskbarButtons; // Always show taskbar buttons, regardless of state
 
   bool m_updateRetryInProgress; // Used to avoid recursion when frame changes

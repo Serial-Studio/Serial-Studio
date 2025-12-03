@@ -25,7 +25,7 @@ namespace UI
 {
 
 WidgetRegistry::WidgetRegistry()
-    : QObject(nullptr)
+  : QObject(nullptr)
 {
 }
 
@@ -36,10 +36,8 @@ WidgetRegistry &WidgetRegistry::instance()
 }
 
 WidgetID WidgetRegistry::createWidget(SerialStudio::DashboardWidget type,
-                                      const QString &title,
-                                      int groupId,
-                                      int datasetIndex,
-                                      bool isGroupWidget)
+                                      const QString &title, int groupId,
+                                      int datasetIndex, bool isGroupWidget)
 {
   WidgetInfo info;
   info.id = m_nextId++;
@@ -76,10 +74,8 @@ bool WidgetRegistry::destroyWidget(WidgetID id)
   return true;
 }
 
-bool WidgetRegistry::updateWidget(WidgetID id,
-                                  const QString &title,
-                                  const QString &icon,
-                                  const QVariant &userData)
+bool WidgetRegistry::updateWidget(WidgetID id, const QString &title,
+                                  const QString &icon, const QVariant &userData)
 {
   if (!m_widgets.contains(id))
     return false;
@@ -152,8 +148,9 @@ QVector<WidgetID> WidgetRegistry::widgetIdsByGroup(int groupId) const
   return result;
 }
 
-WidgetID WidgetRegistry::widgetIdByTypeAndIndex(
-    SerialStudio::DashboardWidget type, int relativeIndex) const
+WidgetID
+WidgetRegistry::widgetIdByTypeAndIndex(SerialStudio::DashboardWidget type,
+                                       int relativeIndex) const
 {
   auto ids = widgetIdsByType(type);
   if (relativeIndex >= 0 && relativeIndex < ids.size())

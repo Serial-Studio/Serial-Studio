@@ -91,7 +91,8 @@ private:
   [[nodiscard]] Button buttonAt(const QPointF &pos) const;
   [[nodiscard]] QRectF buttonBackgroundRect(Button button) const;
 
-  [[nodiscard]] inline bool isMaximized() const {
+  [[nodiscard]] inline bool isMaximized() const
+  {
     if (!window())
       return false;
 

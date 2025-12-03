@@ -941,7 +941,8 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
       m_border->setVisible(!fillScreen);
 
     if (m_clippedWrapper)
-      m_clippedWrapper->setProperty("maskRadius", fillScreen ? 0 : CSD::CornerRadius);
+      m_clippedWrapper->setProperty("maskRadius",
+                                    fillScreen ? 0 : CSD::CornerRadius);
 
     updateFrameGeometry();
     updateBorderGeometry();

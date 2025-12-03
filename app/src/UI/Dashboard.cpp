@@ -824,7 +824,8 @@ void UI::Dashboard::resetData(const bool notify)
 }
 
 /**
- * @brief Clears only the time-series plot data without rebuilding the dashboard.
+ * @brief Clears only the time-series plot data without rebuilding the
+ * dashboard.
  *
  * This is an optimized method for CSV scrollback operations where we need to
  * clear plot history and reload data from a different position, but don't need
@@ -914,9 +915,9 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
         m_widgetGroups[SerialStudio::DashboardTerminal].append(terminal);
 
         // Register in widget registry and widget map
-        m_terminalWidgetId = registry.createWidget(
-            SerialStudio::DashboardTerminal, terminal.title, terminal.groupId,
-            -1, true);
+        m_terminalWidgetId
+            = registry.createWidget(SerialStudio::DashboardTerminal,
+                                    terminal.title, terminal.groupId, -1, true);
         m_widgetMap.insert(m_widgetCount++,
                            qMakePair(SerialStudio::DashboardTerminal, 0));
 
@@ -1364,8 +1365,8 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
     for (int j = 0; j < count; ++j)
     {
       const auto &dataset = i.value().at(j);
-      registry.createWidget(key, dataset.title, dataset.groupId,
-                            dataset.index, false);
+      registry.createWidget(key, dataset.title, dataset.groupId, dataset.index,
+                            false);
       m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
     }
   }

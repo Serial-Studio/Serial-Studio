@@ -86,10 +86,9 @@ class ExportWorker : public QObject
   Q_OBJECT
 
 public:
-  explicit ExportWorker(
-      moodycamel::ReaderWriterQueue<TimestampFrame> *queue,
-      std::atomic<bool> *exportEnabled,
-      std::atomic<size_t> *queueSize);
+  explicit ExportWorker(moodycamel::ReaderWriterQueue<TimestampFrame> *queue,
+                        std::atomic<bool> *exportEnabled,
+                        std::atomic<size_t> *queueSize);
   ~ExportWorker();
 
   [[nodiscard]] bool isOpen() const;

@@ -156,16 +156,16 @@ public:
    *
    * @param type The widget type (from SerialStudio::DashboardWidget).
    * @param title Display title for the widget.
-   * @param groupId The parent group ID (-1 for standalone widgets like terminal).
-   * @param datasetIndex Dataset index for dataset widgets (-1 for group widgets).
+   * @param groupId The parent group ID (-1 for standalone widgets like
+   * terminal).
+   * @param datasetIndex Dataset index for dataset widgets (-1 for group
+   * widgets).
    * @param isGroupWidget True if this is a group-level widget.
    * @return The newly assigned widget ID.
    */
   WidgetID createWidget(SerialStudio::DashboardWidget type,
-                        const QString &title,
-                        int groupId = -1,
-                        int datasetIndex = -1,
-                        bool isGroupWidget = true);
+                        const QString &title, int groupId = -1,
+                        int datasetIndex = -1, bool isGroupWidget = true);
 
   /**
    * @brief Destroys a widget and removes it from the registry.
@@ -186,8 +186,7 @@ public:
    * @param userData Optional user data to associate with widget.
    * @return True if the widget exists and was updated.
    */
-  bool updateWidget(WidgetID id,
-                    const QString &title = QString(),
+  bool updateWidget(WidgetID id, const QString &title = QString(),
                     const QString &icon = QString(),
                     const QVariant &userData = QVariant());
 
@@ -232,8 +231,9 @@ public:
    * @param relativeIndex The index among widgets of this type.
    * @return The widget ID, or kInvalidWidgetId if not found.
    */
-  [[nodiscard]] WidgetID widgetIdByTypeAndIndex(
-      SerialStudio::DashboardWidget type, int relativeIndex) const;
+  [[nodiscard]] WidgetID
+  widgetIdByTypeAndIndex(SerialStudio::DashboardWidget type,
+                         int relativeIndex) const;
 
   /**
    * @brief Gets the total number of registered widgets.

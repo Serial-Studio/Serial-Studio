@@ -46,8 +46,7 @@
  */
 CSV::ExportWorker::ExportWorker(
     moodycamel::ReaderWriterQueue<TimestampFrame> *queue,
-    std::atomic<bool> *exportEnabled,
-    std::atomic<size_t> *queueSize)
+    std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize)
   : m_pendingFrames(queue)
   , m_exportEnabled(exportEnabled)
   , m_queueSize(queueSize)
@@ -227,8 +226,7 @@ CSV::Export::Export()
   , m_queueSize(0)
   , m_worker(nullptr)
 {
-  m_worker =
-      new ExportWorker(&m_pendingFrames, &m_exportEnabled, &m_queueSize);
+  m_worker = new ExportWorker(&m_pendingFrames, &m_exportEnabled, &m_queueSize);
   m_worker->moveToThread(&m_workerThread);
 
   connect(&m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
@@ -253,7 +251,8 @@ CSV::Export::Export()
  */
 CSV::Export::~Export()
 {
-  QMetaObject::invokeMethod(m_worker, "closeFile", Qt::BlockingQueuedConnection);
+  QMetaObject::invokeMethod(m_worker, "closeFile",
+                            Qt::BlockingQueuedConnection);
   m_workerThread.quit();
   m_workerThread.wait();
 }
@@ -327,11 +326,10 @@ void CSV::Export::setupExternalConnections()
 {
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &Export::closeFile);
-  connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this,
-          [this] {
-            if (IO::Manager::instance().paused())
-              closeFile();
-          });
+  connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this, [this] {
+    if (IO::Manager::instance().paused())
+      closeFile();
+  });
 }
 
 /**

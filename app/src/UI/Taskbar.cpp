@@ -119,9 +119,8 @@ UI::Taskbar::Taskbar(QQuickItem *parent)
   auto *pm = &JSON::ProjectModel::instance();
   connect(pm, &JSON::ProjectModel::dashboardLayoutChanged, this,
           &UI::Taskbar::onDashboardLayoutChanged);
-  connect(pm, &JSON::ProjectModel::activeGroupIdChanged, this, [this, pm] {
-    setActiveGroupId(pm->activeGroupId());
-  });
+  connect(pm, &JSON::ProjectModel::activeGroupIdChanged, this,
+          [this, pm] { setActiveGroupId(pm->activeGroupId()); });
 
   connect(qApp, &QGuiApplication::aboutToQuit, this, &UI::Taskbar::saveLayout);
 
@@ -891,8 +890,8 @@ void UI::Taskbar::rebuildModel()
         child->setData(false, TaskbarModel::OverviewRole);
 
         // Map widget ID to window ID
-        auto wid = registry.widgetIdByTypeAndIndex(widgetTypes[i],
-                                                   relativeIds[i]);
+        auto wid
+            = registry.widgetIdByTypeAndIndex(widgetTypes[i], relativeIds[i]);
         if (wid != kInvalidWidgetId)
         {
           m_widgetIdToWindowId.insert(wid, windowIds[i]);
@@ -908,8 +907,8 @@ void UI::Taskbar::rebuildModel()
         child->setData(dbDataset.overviewDisplay, TaskbarModel::OverviewRole);
 
         // Map widget ID to window ID
-        auto wid = registry.widgetIdByTypeAndIndex(widgetTypes[i],
-                                                   relativeIds[i]);
+        auto wid
+            = registry.widgetIdByTypeAndIndex(widgetTypes[i], relativeIds[i]);
         if (wid != kInvalidWidgetId)
         {
           m_widgetIdToWindowId.insert(wid, windowIds[i]);
@@ -1125,9 +1124,7 @@ void UI::Taskbar::onRegistryCleared()
  * a batch operation (like reconfigureDashboard). This is where we can
  * trigger expensive operations like layout recalculation.
  */
-void UI::Taskbar::onBatchUpdateCompleted()
-{
-}
+void UI::Taskbar::onBatchUpdateCompleted() {}
 
 /**
  * @brief Handles dashboard layout changes from the ProjectModel.
