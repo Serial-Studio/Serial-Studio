@@ -52,6 +52,7 @@ set(QT_MODULES
   Widgets
   Bluetooth
   SerialPort
+  Core5Compat
   LinguistTools
   QuickControls2
 )
@@ -68,6 +69,7 @@ set(QT_LIBS
   Qt6::Widgets
   Qt6::Bluetooth
   Qt6::SerialPort
+  Qt6::Core5Compat
   Qt6::QuickControls2
 )
 
