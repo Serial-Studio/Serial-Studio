@@ -219,6 +219,7 @@ private slots:
   void onMinimumSizeChanged();
   void setupContentContainer();
   void updateTitleBarGeometry();
+  void updateClippedWrapperGeometry();
   void updateContentContainerGeometry();
 
 private:
@@ -256,6 +257,8 @@ private:
   ResizeEdge m_resizeEdge;
   QSize m_minSize;
   QPointer<QWindow> m_window;
+  QQuickItem *m_clippedWrapper;
+  QQuickItem *m_contentSource;
   QQuickItem *m_contentContainer;
 };
 } // namespace CSD

@@ -27,6 +27,8 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
+#include <QQmlComponent>
+#include <QQmlEngine>
 #include <QQuickWindow>
 #include <QSurfaceFormat>
 #include <QSvgRenderer>
@@ -40,12 +42,14 @@ namespace CSD
 {
 
 //------------------------------------------------------------------------------
-// Constants
+// Platform-specific constants
 //------------------------------------------------------------------------------
 
+#if defined(Q_OS_WIN)
 constexpr int IconSize = 16;
 constexpr int IconMargin = 8;
 constexpr int ButtonSize = 28;
+constexpr int ButtonWidth = 46;
 constexpr int ResizeMargin = 8;
 constexpr int ButtonMargin = 8;
 constexpr int CornerRadius = 10;
@@ -53,8 +57,21 @@ constexpr int ShadowRadius = 24;
 constexpr int ButtonSpacing = 18;
 constexpr int TitleBarHeight = 32;
 constexpr int TitleBarHeightMaximized = 28;
-
 constexpr qreal ShadowOpacity = 0.10;
+#else
+constexpr int IconSize = 16;
+constexpr int IconMargin = 10;
+constexpr int ButtonSize = 28;
+constexpr int ButtonWidth = 32;
+constexpr int ResizeMargin = 8;
+constexpr int ButtonMargin = 12;
+constexpr int CornerRadius = 16;
+constexpr int ShadowRadius = 24;
+constexpr int ButtonSpacing = 0;
+constexpr int TitleBarHeight = 32;
+constexpr int TitleBarHeightMaximized = 28;
+constexpr qreal ShadowOpacity = 0.10;
+#endif
 
 //------------------------------------------------------------------------------
 // Titlebar
@@ -100,42 +117,13 @@ Titlebar::Titlebar(QQuickItem *parent)
  */
 void Titlebar::paint(QPainter *painter)
 {
-  // Stop if window pointer is invalid
   if (!window())
     return;
 
-  // Set render hinds
-  painter->setRenderHint(QPainter::Antialiasing);
   painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
-  // Get window area & state
   QRectF rect = boundingRect();
-  const bool maximized = isMaximized();
-  const qreal radius = maximized ? 0 : CSD::CornerRadius;
-
-  // Draw rounded titlebar if window is not maximized
-  if (radius > 0)
-  {
-    // clang-format off
-    QPainterPath path;
-    path.setFillRule(Qt::WindingFill);
-    path.moveTo(rect.left(), rect.bottom());
-    path.lineTo(rect.left(), rect.top() + radius);
-    path.arcTo(QRectF(rect.left(), rect.top(), radius * 2, radius * 2), 180, -90);
-    path.lineTo(rect.right() - radius, rect.top());
-    path.arcTo(QRectF(rect.right() - radius * 2, rect.top(), radius * 2, radius * 2),90, -90);
-    path.lineTo(rect.right(), rect.bottom());
-    path.closeSubpath();
-    // clang-format on
-
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(m_backgroundColor);
-    painter->drawPath(path);
-  }
-
-  // Draw a simple rectangle if window is maximized
-  else
-    painter->fillRect(rect, m_backgroundColor);
+  painter->fillRect(rect, m_backgroundColor);
 
   // Draw application icon
   if (!m_icon.isNull())
@@ -160,12 +148,11 @@ void Titlebar::paint(QPainter *painter)
   painter->drawText(rect, Qt::AlignCenter, title());
 #endif
 
-  // Set path for window button icons
   // clang-format off
   const QString closeSvg = QStringLiteral(":/rcc/icons/csd/close.svg");
   const QString minimizeSvg = QStringLiteral(":/rcc/icons/csd/minimize.svg");
-  const QString maximizeSvg = maximized ? QStringLiteral(":/rcc/icons/csd/restore.svg")
-                                        : QStringLiteral(":/rcc/icons/csd/maximize.svg");
+  const QString maximizeSvg = isMaximized() ? QStringLiteral(":/rcc/icons/csd/restore.svg")
+                                            : QStringLiteral(":/rcc/icons/csd/maximize.svg");
   // clang-format on
 
   // Draw window buttons
@@ -330,17 +317,16 @@ Titlebar::Button Titlebar::buttonAt(const QPointF &pos) const
  */
 QRectF Titlebar::buttonBackgroundRect(Button button) const
 {
-  constexpr qreal buttonWidth = 46.0;
   const qreal h = height();
 
   switch (button)
   {
     case Button::Close:
-      return {width() - buttonWidth, 0, buttonWidth, h};
+      return {width() - ButtonWidth, 0, ButtonWidth, h};
     case Button::Maximize:
-      return {width() - buttonWidth * 2, 0, buttonWidth, h};
+      return {width() - ButtonWidth * 2, 0, ButtonWidth, h};
     case Button::Minimize:
-      return {width() - buttonWidth * 3, 0, buttonWidth, h};
+      return {width() - ButtonWidth * 3, 0, ButtonWidth, h};
     default:
       return {};
   }
@@ -358,23 +344,21 @@ QRectF Titlebar::buttonBackgroundRect(Button button) const
 void Titlebar::drawButton(QPainter *painter, Button button,
                           const QString &svgPath)
 {
-  // Get button position & state
-  const QRectF bgRect = buttonBackgroundRect(button);
   const QRectF iconRect = buttonRect(button);
   const bool hovered = (m_hoveredButton == button);
   const bool pressed = (m_pressedButton == button);
 
-  // Determine if we're using a dark theme (based on background luminance)
+  QColor iconColor;
+
+#if defined(Q_OS_WIN)
   const auto bg = m_backgroundColor;
   const auto fg = foregroundColor();
   const bool isDarkTheme = fg.lightness() > bg.lightness();
 
-  // Draw button background for hover/pressed states
   if (hovered || pressed)
   {
     QColor bgColor;
 
-    // Close button colors
     if (button == Button::Close)
     {
       if (pressed)
@@ -382,103 +366,73 @@ void Titlebar::drawButton(QPainter *painter, Button button,
       else
         bgColor = QColor(0xC4, 0x2B, 0x1C);
     }
-
-    // Minimize/Maximize buttons
     else
     {
       if (isDarkTheme)
-      {
-        if (pressed)
-          bgColor = QColor(255, 255, 255, 11);
-        else
-          bgColor = QColor(255, 255, 255, 20);
-      }
+        bgColor = QColor(255, 255, 255, pressed ? 11 : 20);
       else
-      {
-        if (pressed)
-          bgColor = QColor(0, 0, 0, 6);
-        else
-          bgColor = QColor(0, 0, 0, 10);
-      }
+        bgColor = QColor(0, 0, 0, pressed ? 6 : 10);
     }
 
-    // Draw button background
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(bgColor);
-
-    // Close button needs rounded top-right corner when window is not maximized
-    const bool maximized = isMaximized();
-    if (button == Button::Close && !maximized)
-    {
-      const qreal radius = CSD::CornerRadius;
-      QPainterPath path;
-      path.setFillRule(Qt::WindingFill);
-      path.moveTo(bgRect.left(), bgRect.top());
-      path.lineTo(bgRect.right() - radius, bgRect.top());
-      path.arcTo(QRectF(bgRect.right() - radius * 2, bgRect.top(), radius * 2,
-                        radius * 2),
-                 90, -90);
-      path.lineTo(bgRect.right(), bgRect.bottom());
-      path.lineTo(bgRect.left(), bgRect.bottom());
-      path.closeSubpath();
-      painter->drawPath(path);
-    }
-    else
-    {
-      painter->drawRect(bgRect);
-    }
+    painter->fillRect(buttonBackgroundRect(button), bgColor);
   }
 
-  // Determine icon color
-  QColor iconColor;
-
-  // Close button icon is always white when hovered/pressed
   if (button == Button::Close && (hovered || pressed))
     iconColor = Qt::white;
 
-  // Dimmed when inactive
   else if (!m_windowActive)
   {
     iconColor = foregroundColor();
     iconColor.setAlpha(128);
   }
+
   else
     iconColor = foregroundColor();
+#else
+  const auto &theme = Misc::ThemeManager::instance();
 
-  // Load SVG
+  if (pressed)
+    iconColor = theme.getColor(QStringLiteral("highlight")).darker(120);
+  else if (hovered)
+    iconColor = theme.getColor(QStringLiteral("highlight"));
+
+  else if (!m_windowActive)
+  {
+    iconColor = foregroundColor();
+    iconColor.setAlpha(128);
+  }
+
+  else
+    iconColor = foregroundColor();
+#endif
+
   QSvgRenderer renderer(svgPath);
   if (!renderer.isValid())
     return;
 
-  // Set pixel size
   const qreal dpr = painter->device()->devicePixelRatio();
   const QSize pixelSize(qRound(iconRect.width() * dpr),
                         qRound(iconRect.height() * dpr));
 
-  // Initialize target pixmap for button icon
   QPixmap pixmap(pixelSize);
   pixmap.setDevicePixelRatio(dpr);
   pixmap.fill(Qt::transparent);
 
-  // Paint the SVG icon into the pixmap
   QPainter svgPainter(&pixmap);
   renderer.render(&svgPainter,
                   QRectF(0, 0, iconRect.width(), iconRect.height()));
   svgPainter.end();
 
-  // Initialize target pixmap for colorized button
   QPixmap colorized(pixelSize);
   colorized.setDevicePixelRatio(dpr);
   colorized.fill(Qt::transparent);
 
-  // Colorize the button
   QPainter colorPainter(&colorized);
   colorPainter.drawPixmap(0, 0, pixmap);
   colorPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
   colorPainter.fillRect(colorized.rect(), iconColor);
   colorPainter.end();
 
-  // Draw the final pixmap
   painter->drawPixmap(iconRect.topLeft(), colorized);
 }
 
@@ -956,6 +910,8 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
   , m_resizeEdge(ResizeEdge::None)
   , m_minSize(0, 0)
   , m_window(window)
+  , m_clippedWrapper(nullptr)
+  , m_contentSource(nullptr)
   , m_contentContainer(nullptr)
 {
   // Stop if window pointer is invalid
@@ -975,7 +931,8 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
   // Handle window state changes
   connect(m_window, &QWindow::windowStateChanged, this, [this]() {
     const auto state = m_window->windowStates();
-    const bool fillScreen = state & (Qt::WindowMaximized | Qt::WindowFullScreen);
+    const bool fillScreen
+        = state & (Qt::WindowMaximized | Qt::WindowFullScreen);
 
     if (m_frame)
       m_frame->setShadowEnabled(!fillScreen);
@@ -983,8 +940,12 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
     if (m_border)
       m_border->setVisible(!fillScreen);
 
+    if (m_clippedWrapper)
+      m_clippedWrapper->setProperty("maskRadius", fillScreen ? 0 : CSD::CornerRadius);
+
     updateFrameGeometry();
     updateBorderGeometry();
+    updateClippedWrapperGeometry();
     updateContentContainerGeometry();
     updateTitleBarGeometry();
     updateMinimumSize();
@@ -1165,8 +1126,8 @@ void Window::setupBorder()
  *
  * Creates the Titlebar component, connects window control signals
  * (minimize, maximize, close), and sets up tracking for window
- * title and active state changes. The title bar is placed at
- * high z-index to render above all content.
+ * title and active state changes. The title bar is parented to
+ * contentSource so it gets clipped by the OpacityMask.
  */
 void Window::setupTitleBar()
 {
@@ -1174,7 +1135,9 @@ void Window::setupTitleBar()
   if (!quickWindow)
     return;
 
-  m_titleBar = new Titlebar(quickWindow->contentItem());
+  QQuickItem *parent
+      = m_contentSource ? m_contentSource : quickWindow->contentItem();
+  m_titleBar = new Titlebar(parent);
   m_titleBar->setZ(999999);
 
   // Window controls
@@ -1286,10 +1249,17 @@ void Window::onMinimumSizeChanged()
 }
 
 /**
- * @brief Creates content container and reparents QML content.
+ * @brief Creates content container with rounded corner clipping via
+ * OpacityMask.
  *
- * Creates an intermediate container item that holds all QML content,
- * automatically applying shadow margins and title bar offset.
+ * Creates a QML structure for true rounded corner clipping:
+ * - m_clippedWrapper: Parent item positioned at shadow margins
+ * - m_contentSource: Hidden item containing titlebar + content (source for
+ * mask)
+ * - m_contentContainer: Child of contentSource, holds QML content
+ * - maskSource: Hidden rounded rectangle (mask shape)
+ * - OpacityMask: Renders contentSource through maskSource
+ *
  * Installs an event filter to reparent any newly added children.
  */
 void Window::setupContentContainer()
@@ -1299,29 +1269,113 @@ void Window::setupContentContainer()
     return;
 
   QQuickItem *root = quickWindow->contentItem();
+  QQmlEngine *engine = qmlEngine(quickWindow);
+  if (!engine)
+    return;
 
-  m_contentContainer = new QQuickItem(root);
-  m_contentContainer->setZ(0);
-  m_contentContainer->setClip(true);
+  // clang-format off
+  static const char *qmlCode = R"(
+    import QtQuick
+    import Qt5Compat.GraphicalEffects
 
-  const auto children = root->childItems();
-  for (QQuickItem *child : children)
-    reparentChildToContainer(child);
+    Item {
+      id: wrapper
+      property alias contentSource: contentSource
+      property alias contentContainer: contentContainer
+      property alias maskRadius: maskRect.radius
 
-  root->installEventFilter(this);
+      Item {
+        id: contentSource
+        x: 0
+        y: 0
+        opacity: 0
+        width: wrapper.width
+        height: wrapper.height
+
+        Item {
+          id: contentContainer
+        }
+      }
+
+      Item {
+        id: maskSource
+        x: 0
+        y: 0
+        visible: false
+        width: wrapper.width
+        height: wrapper.height
+
+        Rectangle {
+          id: maskRect
+          x: 0
+          y: 0
+          width: parent.width
+          height: parent.height
+          radius: %1
+        }
+      }
+
+      OpacityMask {
+        id: mask
+        x: 0
+        y: 0
+        width: wrapper.width
+        height: wrapper.height
+        source: contentSource
+        maskSource: maskSource
+      }
+    }
+  )";
+  // clang-format on
+
+  const QString code = QString(qmlCode).arg(CSD::CornerRadius);
+  QQmlComponent component(engine);
+  component.setData(code.toUtf8(), QUrl());
+
+  if (component.isError())
+  {
+    for (const auto &error : component.errors())
+      qWarning() << "CSD QML error:" << error.toString();
+    return;
+  }
+
+  m_clippedWrapper = qobject_cast<QQuickItem *>(component.create());
+  if (!m_clippedWrapper)
+    return;
+
+  m_clippedWrapper->setParentItem(root);
+  m_clippedWrapper->setZ(0);
+
+  m_contentSource
+      = m_clippedWrapper->property("contentSource").value<QQuickItem *>();
+  m_contentContainer
+      = m_clippedWrapper->property("contentContainer").value<QQuickItem *>();
+
+  if (!m_contentSource || !m_contentContainer)
+    return;
+
+  connect(quickWindow, &QQuickWindow::widthChanged, this,
+          &Window::updateClippedWrapperGeometry);
+  connect(quickWindow, &QQuickWindow::heightChanged, this,
+          &Window::updateClippedWrapperGeometry);
   connect(quickWindow, &QQuickWindow::widthChanged, this,
           &Window::updateContentContainerGeometry);
   connect(quickWindow, &QQuickWindow::heightChanged, this,
           &Window::updateContentContainerGeometry);
 
+  updateClippedWrapperGeometry();
   updateContentContainerGeometry();
+
+  const auto children = root->childItems();
+  for (QQuickItem *child : children)
+    reparentChildToContainer(child);
 }
 
 /**
  * @brief Updates the title bar position and size.
  *
- * Positions the title bar at the top of the content area,
- * accounting for shadow margins.
+ * Positions the title bar at the top of the clipped wrapper.
+ * When using OpacityMask, position is relative to contentSource.
  */
 void Window::updateTitleBarGeometry()
 {
@@ -1329,15 +1383,44 @@ void Window::updateTitleBarGeometry()
     return;
 
   const int margin = shadowMargin();
-  m_titleBar->setPosition(QPointF(margin, margin));
-  m_titleBar->setSize(QSizeF(m_window->width() - 2 * margin, titleBarHeight()));
+  const qreal w = m_window->width() - 2 * margin;
+
+  if (m_contentSource)
+  {
+    m_titleBar->setPosition(QPointF(0, 0));
+    m_titleBar->setSize(QSizeF(w, titleBarHeight()));
+  }
+  else
+  {
+    m_titleBar->setPosition(QPointF(margin, margin));
+    m_titleBar->setSize(QSizeF(w, titleBarHeight()));
+  }
+}
+
+/**
+ * @brief Updates the clipped wrapper position and size.
+ *
+ * Positions the wrapper at shadow margins, covering the entire
+ * visible content area including the title bar.
+ */
+void Window::updateClippedWrapperGeometry()
+{
+  if (!m_clippedWrapper || !m_window)
+    return;
+
+  const int margin = shadowMargin();
+  const qreal w = m_window->width() - 2 * margin;
+  const qreal h = m_window->height() - 2 * margin;
+
+  m_clippedWrapper->setPosition(QPointF(margin, margin));
+  m_clippedWrapper->setSize(QSizeF(w, h));
 }
 
 /**
  * @brief Updates the content container position and size.
  *
- * Positions the container below the title bar, inset by shadow
- * margins on all sides.
+ * Positions the container below the title bar within contentSource.
+ * Also updates the size of all children to match the container.
  */
 void Window::updateContentContainerGeometry()
 {
@@ -1346,11 +1429,18 @@ void Window::updateContentContainerGeometry()
 
   const int margin = shadowMargin();
   const int tbHeight = titleBarHeight();
+  const qreal w = m_window->width() - 2 * margin;
+  const qreal h = m_window->height() - 2 * margin - tbHeight;
 
-  m_contentContainer->setPosition(QPointF(margin, margin + tbHeight));
-  m_contentContainer->setSize(
-      QSizeF(m_window->width() - 2 * margin,
-             m_window->height() - 2 * margin - tbHeight));
+  m_contentContainer->setPosition(QPointF(0, tbHeight));
+  m_contentContainer->setSize(QSizeF(w, h));
+
+  const auto children = m_contentContainer->childItems();
+  for (QQuickItem *child : children)
+  {
+    child->setPosition(QPointF(0, 0));
+    child->setSize(QSizeF(w, h));
+  }
 }
 
 /**
@@ -1413,21 +1503,32 @@ void Window::updateTheme()
  * @brief Reparents a child item to the content container.
  * @param child The item to reparent.
  *
- * Skips CSD components (frame, border, title bar, container) and items
- * already in the container. This ensures all user QML content
+ * Skips CSD components (frame, border, title bar, containers, wrapper)
+ * and items already in the container. This ensures all user QML content
  * respects the CSD margins automatically.
  */
 void Window::reparentChildToContainer(QQuickItem *child)
 {
   if (!child || !m_contentContainer)
     return;
-  else if (child == m_frame || child == m_border || child == m_titleBar
-           || child == m_contentContainer)
+
+  if (child == m_frame || child == m_border || child == m_titleBar
+      || child == m_contentContainer || child == m_contentSource
+      || child == m_clippedWrapper)
     return;
-  else if (child->parentItem() == m_contentContainer)
+
+  if (child->parentItem() == m_contentContainer)
+    return;
+
+  if (m_contentSource && child->parentItem() == m_contentSource)
+    return;
+
+  if (m_clippedWrapper && child->parentItem() == m_clippedWrapper)
     return;
 
   child->setParentItem(m_contentContainer);
+  child->setPosition(QPointF(0, 0));
+  child->setSize(m_contentContainer->size());
 }
 
 /**
