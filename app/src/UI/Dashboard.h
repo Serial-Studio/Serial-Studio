@@ -136,6 +136,7 @@ public:
 public slots:
   void setPoints(const int points);
   void resetData(const bool notify = true);
+  void clearPlotData();
   void setShowActionPanel(const bool enabled);
   void setTerminalEnabled(const bool enabled);
   void setShowTaskbarButtons(const bool enabled);

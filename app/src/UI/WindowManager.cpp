@@ -457,6 +457,10 @@ void UI::WindowManager::registerWindow(const int id, QQuickItem *item)
 
 /**
  * @brief Unregisters a window, removing its z-order and geometry tracking.
+ *
+ * After unregistering, triggers a layout update if auto-layout is enabled
+ * to redistribute the remaining windows.
+ *
  * @param item Pointer to the QQuickItem to remove.
  */
 void UI::WindowManager::unregisterWindow(QQuickItem *item)
@@ -471,6 +475,9 @@ void UI::WindowManager::unregisterWindow(QQuickItem *item)
       break;
     }
   }
+
+  // Trigger layout update to redistribute remaining windows
+  triggerLayoutUpdate();
 }
 
 /**

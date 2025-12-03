@@ -129,6 +129,10 @@ void CSV::Player::play()
   if (m_framePos >= frameCount() - 1)
     m_framePos = 0;
 
+  // Initialize elapsed timer and record the starting CSV timestamp
+  m_startTimestamp = getDateTime(m_framePos);
+  m_elapsedTimer.start();
+
   m_playing = true;
   Q_EMIT playerStateChanged();
 }
@@ -199,8 +203,8 @@ void CSV::Player::closeFile()
  * @brief Reads & processes the next CSV row, capped at the last row.
  *
  * Moves the frame position forward by one, up to the last frame in the CSV.
- * Resets and repopulates the dashboard with the appropriate frames for
- * synchronized display.
+ * Clears plot data and repopulates the dashboard with the appropriate frames
+ * for synchronized display.
  */
 void CSV::Player::nextFrame()
 {
@@ -209,12 +213,13 @@ void CSV::Player::nextFrame()
     // Increase the frame position
     ++m_framePos;
 
+    // Clear only plot data (preserves widget layout)
+    UI::Dashboard::instance().clearPlotData();
+
     // Populate the dashboard with a range of frames up to the new position
-    UI::Dashboard::instance().resetData(false);
     int framesToLoad = UI::Dashboard::instance().points();
     int startFrame = std::max(1, m_framePos - framesToLoad);
-    for (int i = startFrame; i <= m_framePos; ++i)
-      IO::Manager::instance().processPayload(getFrame(i));
+    processFrameBatch(startFrame, m_framePos);
 
     // Keep timestamp and data in sync
     updateData();
@@ -225,8 +230,8 @@ void CSV::Player::nextFrame()
  * @brief Reads & processes the previous CSV row, capped at the first row.
  *
  * Moves the frame position backward by one, down to the first frame in the CSV.
- * Resets and repopulates the dashboard with the appropriate frames for
- * synchronized display.
+ * Clears plot data and repopulates the dashboard with the appropriate frames
+ * for synchronized display.
  */
 void CSV::Player::previousFrame()
 {
@@ -235,12 +240,13 @@ void CSV::Player::previousFrame()
     // Decrease the frame position
     --m_framePos;
 
+    // Clear only plot data (preserves widget layout)
+    UI::Dashboard::instance().clearPlotData();
+
     // Populate the dashboard with a range of frames up to the new position
-    UI::Dashboard::instance().resetData(false);
     int framesToLoad = UI::Dashboard::instance().points();
     int startFrame = std::max(1, m_framePos - framesToLoad);
-    for (int i = startFrame; i <= m_framePos; ++i)
-      IO::Manager::instance().processPayload(getFrame(i));
+    processFrameBatch(startFrame, m_framePos);
 
     // Keep timestamp and data in sync
     updateData();
@@ -415,9 +421,11 @@ void CSV::Player::setProgress(const double progress)
   // Only process if position changes
   if (newFramePos != m_framePos)
   {
-    // Update frame position and reset dashboard data silently
+    // Update frame position
     m_framePos = newFramePos;
-    UI::Dashboard::instance().resetData(false);
+
+    // Clear only plot data (preserves widget layout)
+    UI::Dashboard::instance().clearPlotData();
 
     // Calculate frames to load around the new frame position
     int framesToLoad = UI::Dashboard::instance().points();
@@ -425,8 +433,7 @@ void CSV::Player::setProgress(const double progress)
     int endFrame = std::min(frameCount() - 1, m_framePos);
 
     // Populate dashboard with frames within capped range
-    for (int i = startFrame; i <= endFrame; ++i)
-      IO::Manager::instance().processPayload(getFrame(i));
+    processFrameBatch(startFrame, endFrame);
 
     // Update with current data
     updateData();
@@ -437,9 +444,9 @@ void CSV::Player::setProgress(const double progress)
  * Generates a JSON data frame by combining the values of the current CSV
  * row & the structure of the JSON map file loaded in the @c JsonParser class.
  *
- * If playback is enabled, this function calculates the difference in
- * milliseconds between the current row and the next row & schedules a re-call
- * of this function using a timer.
+ * If playback is enabled, uses elapsed time tracking to maintain real-time
+ * playback. When playback falls behind (due to timer overhead), multiple
+ * frames are processed in a batch to catch up.
  */
 void CSV::Player::updateData()
 {
@@ -461,42 +468,101 @@ void CSV::Player::updateData()
   // frame and the next frame & schedule an automated update
   if (!error && isPlaying())
   {
-    // Get first frame
-    if (framePosition() < frameCount() - 1)
+    // Check if we've reached the end
+    if (framePosition() >= frameCount() - 1)
     {
-      // Obtain time for current & next frame
-      auto currTime = getDateTime(framePosition());
-      auto nextTime = getDateTime(framePosition() + 1);
+      pause();
+      return;
+    }
 
-      // No error, calculate difference & schedule update
-      if (currTime.isValid() && nextTime.isValid())
+    // Calculate where we should be based on elapsed real time
+    const qint64 elapsedMs = m_elapsedTimer.elapsed();
+    const QDateTime targetTime = m_startTimestamp.addMSecs(elapsedMs);
+
+    // Get timestamp of next frame
+    auto nextTime = getDateTime(framePosition() + 1);
+    if (!nextTime.isValid())
+    {
+      pause();
+      qWarning() << "Error getting next frame timestamp";
+      return;
+    }
+
+    // Check if we're behind schedule - if so, catch up by processing
+    // frames until we reach the target time
+    if (nextTime <= targetTime)
+    {
+      // Process frames until we catch up (with a reasonable limit per batch)
+      constexpr int kMaxBatchSize = 100;
+      int processed = 0;
+
+      while (m_framePos < frameCount() - 1 && processed < kMaxBatchSize)
       {
-        // Obtain millis between the two frames
-        const auto msecsToNextF = abs(currTime.msecsTo(nextTime));
+        ++m_framePos;
+        IO::Manager::instance().processPayload(getFrame(m_framePos));
+        ++processed;
 
-        // Jump to next frame
-        QTimer::singleShot(msecsToNextF, Qt::PreciseTimer, this, [=, this] {
-          if (isOpen() && isPlaying() && framePosition() < frameCount())
-          {
-            ++m_framePos;
-            updateData();
-          }
-        });
+        // Check if we've caught up
+        if (m_framePos >= frameCount() - 1)
+          break;
+
+        auto frameTime = getDateTime(m_framePos);
+        if (frameTime.isValid() && frameTime > targetTime)
+          break;
       }
 
-      // Error - pause playback
+      // Update timestamp display
+      bool err = true;
+      auto ts = getCellValue(m_framePos, 0, err);
+      if (!err)
+      {
+        m_timestamp = ts;
+        Q_EMIT timestampChanged();
+      }
+
+      // Schedule immediate continuation if still behind or more to process
+      if (m_framePos < frameCount() - 1)
+      {
+        QTimer::singleShot(0, this, [this] {
+          if (isOpen() && isPlaying())
+            updateData();
+        });
+      }
       else
       {
         pause();
-        qWarning() << "Error getting timestamp difference" << currTime
-                   << nextTime;
       }
     }
-
-    // Pause at end of CSV
     else
-      pause();
+    {
+      // We're ahead of schedule - wait until the next frame is due
+      const qint64 msUntilNext = targetTime.msecsTo(nextTime);
+
+      QTimer::singleShot(msUntilNext, Qt::PreciseTimer, this, [this] {
+        if (isOpen() && isPlaying() && framePosition() < frameCount())
+        {
+          ++m_framePos;
+          updateData();
+        }
+      });
+    }
   }
+}
+
+/**
+ * @brief Processes a batch of frames synchronously for efficient scrollback.
+ *
+ * This function processes frames from startFrame to endFrame (inclusive)
+ * without using timers, which is more efficient for scrollback operations
+ * where we need to rebuild plot history.
+ *
+ * @param startFrame The first frame index to process.
+ * @param endFrame The last frame index to process (inclusive).
+ */
+void CSV::Player::processFrameBatch(int startFrame, int endFrame)
+{
+  for (int i = startFrame; i <= endFrame; ++i)
+    IO::Manager::instance().processPayload(getFrame(i));
 }
 
 /**

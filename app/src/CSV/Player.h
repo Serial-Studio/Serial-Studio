@@ -25,6 +25,8 @@
 #include <QObject>
 #include <QVector>
 #include <QKeyEvent>
+#include <QDateTime>
+#include <QElapsedTimer>
 
 namespace CSV
 {
@@ -97,6 +99,9 @@ private slots:
   void updateData();
 
 private:
+  void processFrameBatch(int startFrame, int endFrame);
+
+private:
   bool promptUserForDateTimeOrInterval();
   void generateDateTimeForRows(int interval);
   void convertColumnToDateTime(int columnIndex);
@@ -118,5 +123,8 @@ private:
   QFile m_csvFile;
   QString m_timestamp;
   QList<QStringList> m_csvData;
+
+  QElapsedTimer m_elapsedTimer;
+  QDateTime m_startTimestamp;
 };
 } // namespace CSV

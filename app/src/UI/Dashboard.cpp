@@ -816,6 +816,55 @@ void UI::Dashboard::resetData(const bool notify)
 }
 
 /**
+ * @brief Clears only the time-series plot data without rebuilding the dashboard.
+ *
+ * This is an optimized method for CSV scrollback operations where we need to
+ * clear plot history and reload data from a different position, but don't need
+ * to rebuild the entire widget structure.
+ *
+ * Unlike resetData(), this method:
+ * - Preserves the widget layout and configuration
+ * - Preserves dataset references
+ * - Only clears the circular buffer contents
+ * - Does not emit any signals (to avoid triggering taskbar/window rebuilds)
+ */
+void UI::Dashboard::clearPlotData()
+{
+  // Clear FFT plot data
+  for (auto &fft : m_fftValues)
+    fft.clear();
+
+  // Clear line plot Y-axis data
+  for (auto it = m_yAxisData.begin(); it != m_yAxisData.end(); ++it)
+    it.value().clear();
+
+  // Clear custom X-axis data (preserve default X-axis)
+  for (auto it = m_xAxisData.begin(); it != m_xAxisData.end(); ++it)
+    it.value().clear();
+
+  // Clear multiplot Y-axis data
+  for (auto &multiSeries : m_multipltValues)
+  {
+    for (auto &yAxis : multiSeries.y)
+      yAxis.clear();
+  }
+
+  // Clear GPS trajectory data
+  for (auto &gps : m_gpsValues)
+  {
+    gps.latitudes.clear();
+    gps.longitudes.clear();
+    gps.altitudes.clear();
+  }
+
+#ifdef BUILD_COMMERCIAL
+  // Clear 3D plot data
+  for (auto &plot3d : m_plotData3D)
+    plot3d.clear();
+#endif
+}
+
+/**
  * @brief Enables/disables the action panel.
  */
 void UI::Dashboard::setShowActionPanel(const bool enabled)
@@ -829,15 +878,22 @@ void UI::Dashboard::setShowActionPanel(const bool enabled)
 
 /**
  * @brief Enables/disables adding a terminal widget.
+ *
+ * This triggers a reconfiguration of the dashboard to add or remove
+ * the terminal widget. Plot data is preserved during this operation.
  */
 void UI::Dashboard::setTerminalEnabled(const bool enabled)
 {
   if (m_terminalEnabled != enabled)
   {
     m_terminalEnabled = enabled;
-    const auto frame = m_rawFrame;
-    resetData(false);
-    hotpathRxFrame(frame);
+
+    // If we have an active frame, reconfigure to add/remove terminal
+    if (m_rawFrame.groups.size() > 0)
+    {
+      const auto frame = m_rawFrame;
+      reconfigureDashboard(frame);
+    }
   }
 
   Q_EMIT terminalEnabledChanged();
