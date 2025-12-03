@@ -21,8 +21,9 @@
 
 #pragma once
 
+#include <atomic>
+
 #include <QFile>
-#include <QMutex>
 #include <QTimer>
 #include <QThread>
 #include <QVector>
@@ -34,6 +35,9 @@
 
 namespace CSV
 {
+static constexpr size_t kQueueCapacity = 8192;
+static constexpr size_t kFlushThreshold = 1024;
+
 /**
  * @brief Represents a single timestamped frame for CSV export.
  *
@@ -67,6 +71,47 @@ struct TimestampFrame
   TimestampFrame(const TimestampFrame &) = delete;
   TimestampFrame &operator=(TimestampFrame &&) = default;
   TimestampFrame &operator=(const TimestampFrame &) = delete;
+};
+
+class Export;
+
+/**
+ * @brief Worker object that performs CSV file I/O on a background thread.
+ *
+ * This class owns all file-related resources and performs disk writes
+ * entirely on a dedicated worker thread to avoid blocking the main UI thread.
+ */
+class ExportWorker : public QObject
+{
+  Q_OBJECT
+
+public:
+  explicit ExportWorker(
+      moodycamel::ReaderWriterQueue<TimestampFrame> *queue,
+      std::atomic<bool> *exportEnabled,
+      std::atomic<size_t> *queueSize);
+  ~ExportWorker();
+
+  [[nodiscard]] bool isOpen() const;
+
+signals:
+  void openChanged();
+
+public slots:
+  void writeValues();
+  void closeFile();
+
+private:
+  QVector<QPair<int, QString>> createCsvFile(const JSON::Frame &frame);
+
+private:
+  QFile m_csvFile;
+  QTextStream m_textStream;
+  std::vector<TimestampFrame> m_writeBuffer;
+  QVector<QPair<int, QString>> m_indexHeaderPairs;
+  moodycamel::ReaderWriterQueue<TimestampFrame> *m_pendingFrames;
+  std::atomic<bool> *m_exportEnabled;
+  std::atomic<size_t> *m_queueSize;
 };
 
 /**
@@ -120,20 +165,14 @@ public slots:
   void hotpathTxFrame(const JSON::Frame &frame);
 
 private slots:
-  void writeValues();
+  void onWorkerOpenChanged();
 
 private:
-  QVector<QPair<int, QString>> createCsvFile(const JSON::Frame &frame);
-
-private:
-  QFile m_csvFile;
-  QMutex m_queueLock;
-  bool m_exportEnabled;
-  QTimer *m_workerTimer;
+  std::atomic<bool> m_exportEnabled;
+  std::atomic<bool> m_isOpen;
+  std::atomic<size_t> m_queueSize;
   QThread m_workerThread;
-  QTextStream m_textStream;
-  std::vector<TimestampFrame> m_writeBuffer;
-  QVector<QPair<int, QString>> m_indexHeaderPairs;
-  moodycamel::ReaderWriterQueue<TimestampFrame> m_pendingFrames{8128};
+  ExportWorker *m_worker;
+  moodycamel::ReaderWriterQueue<TimestampFrame> m_pendingFrames{kQueueCapacity};
 };
 } // namespace CSV

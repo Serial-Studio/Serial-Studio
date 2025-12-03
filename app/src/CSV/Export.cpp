@@ -34,59 +34,226 @@
 #include <QDateTime>
 
 //------------------------------------------------------------------------------
-// Constructor, destructor & singleton access functions
+// ExportWorker implementation
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Constructs the CSV export worker.
+ *
+ * @param queue Pointer to the lock-free queue shared with Export.
+ * @param exportEnabled Pointer to atomic flag indicating export state.
+ * @param queueSize Pointer to atomic counter tracking queue size.
+ */
+CSV::ExportWorker::ExportWorker(
+    moodycamel::ReaderWriterQueue<TimestampFrame> *queue,
+    std::atomic<bool> *exportEnabled,
+    std::atomic<size_t> *queueSize)
+  : m_pendingFrames(queue)
+  , m_exportEnabled(exportEnabled)
+  , m_queueSize(queueSize)
+{
+  m_writeBuffer.reserve(kFlushThreshold * 2);
+}
+
+/**
+ * @brief Destructor for the export worker.
+ */
+CSV::ExportWorker::~ExportWorker()
+{
+  closeFile();
+}
+
+/**
+ * @brief Checks whether a CSV file is currently open.
+ *
+ * @return true if file is open, false otherwise.
+ */
+bool CSV::ExportWorker::isOpen() const
+{
+  return m_csvFile.isOpen();
+}
+
+/**
+ * @brief Closes the currently open CSV file.
+ *
+ * Flushes any buffered data to disk, clears headers, and resets output.
+ */
+void CSV::ExportWorker::closeFile()
+{
+  if (!m_csvFile.isOpen())
+    return;
+
+  writeValues();
+  m_csvFile.close();
+  m_indexHeaderPairs.clear();
+  m_textStream.setDevice(nullptr);
+  Q_EMIT openChanged();
+}
+
+/**
+ * @brief Writes all queued frames to the CSV file.
+ *
+ * Flushes data in the pending queue to disk using the output stream.
+ * If no file is open, a new file is created before writing.
+ */
+void CSV::ExportWorker::writeValues()
+{
+  if (!m_exportEnabled->load(std::memory_order_relaxed))
+    return;
+
+  m_writeBuffer.clear();
+
+  TimestampFrame frame;
+  while (m_pendingFrames->try_dequeue(frame))
+    m_writeBuffer.push_back(std::move(frame));
+
+  const auto count = m_writeBuffer.size();
+  if (count == 0)
+    return;
+
+  m_queueSize->fetch_sub(count, std::memory_order_relaxed);
+
+  if (!m_csvFile.isOpen())
+  {
+    m_indexHeaderPairs = createCsvFile(m_writeBuffer.begin()->data);
+    if (m_indexHeaderPairs.isEmpty())
+      return;
+  }
+
+  for (const auto &i : m_writeBuffer)
+  {
+    const auto format = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
+    m_textStream << i.rxDateTime.toString(format) << QStringLiteral(",");
+
+    QMap<int, QString> fieldValues;
+    for (const auto &g : i.data.groups)
+    {
+      for (const auto &d : g.datasets)
+        fieldValues[d.index] = d.value.simplified();
+    }
+
+    for (int j = 0; j < m_indexHeaderPairs.count(); ++j)
+    {
+      m_textStream << fieldValues.value(m_indexHeaderPairs[j].first, "");
+      m_textStream << (j < m_indexHeaderPairs.count() - 1 ? "," : "\n");
+    }
+  }
+
+  m_textStream.flush();
+}
+
+/**
+ * @brief Creates a new CSV file and writes the header.
+ *
+ * Builds a sorted header based on dataset indices and opens the file
+ * in the appropriate location.
+ *
+ * @param frame The frame used to extract header information.
+ * @return List of index-title pairs for each dataset.
+ */
+QVector<QPair<int, QString>>
+CSV::ExportWorker::createCsvFile(const JSON::Frame &frame)
+{
+  const auto dt = QDateTime::currentDateTime();
+  const auto fileName = dt.toString("yyyy-MM-dd_HH-mm-ss") + ".csv";
+
+  const auto subdir = Misc::WorkspaceManager::instance().path("CSV");
+  const QString path = QString("%1/%2/").arg(subdir, frame.title);
+
+  QDir dir(path);
+  if (!dir.exists() && !dir.mkpath("."))
+  {
+    qWarning() << "Failed to create directory:" << path;
+    return {};
+  }
+
+  m_csvFile.setFileName(dir.filePath(fileName));
+  if (!m_csvFile.open(QIODevice::WriteOnly | QIODevice::Text))
+  {
+    qWarning() << "Cannot open CSV file for writing:" << dir.filePath(fileName);
+    return {};
+  }
+
+  m_textStream.setDevice(&m_csvFile);
+  m_textStream.setGenerateByteOrderMark(true);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  m_textStream.setCodec("UTF-8");
+#else
+  m_textStream.setEncoding(QStringConverter::Utf8);
+#endif
+
+  QSet<int> seenIndexes;
+  QVector<QPair<int, QString>> pairs;
+  for (const auto &g : frame.groups)
+  {
+    for (const auto &d : g.datasets)
+    {
+      const int idx = d.index;
+      if (seenIndexes.contains(idx))
+        continue;
+
+      seenIndexes.insert(idx);
+      auto header = QString("%1/%2").arg(g.title, d.title).simplified();
+      pairs.append(qMakePair(idx, header));
+    }
+  }
+
+  std::sort(pairs.begin(), pairs.end(),
+            [](const auto &a, const auto &b) { return a.first < b.first; });
+
+  m_textStream << "RX Date/Time";
+  for (const auto &pair : pairs)
+    m_textStream << ',' << pair.second;
+
+  m_textStream << '\n';
+
+  Q_EMIT openChanged();
+  return pairs;
+}
+
+//------------------------------------------------------------------------------
+// Export constructor, destructor & singleton access functions
 //------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the CSV export manager.
  *
- * Initializes the write buffer, sets up the background worker thread
- * and starts a timer for periodic data export.
+ * Initializes the worker object on a background thread with a timer
+ * for periodic data export.
  */
 CSV::Export::Export()
   : m_exportEnabled(true)
-  , m_workerTimer(new QTimer())
+  , m_isOpen(false)
+  , m_queueSize(0)
+  , m_worker(nullptr)
 {
-  // Pre-allocate memory for the write buffer
-  m_writeBuffer.reserve(m_pendingFrames.max_capacity());
+  m_worker =
+      new ExportWorker(&m_pendingFrames, &m_exportEnabled, &m_queueSize);
+  m_worker->moveToThread(&m_workerThread);
 
-  // Configure the data write timer
-  m_workerTimer->setInterval(1000);
-  m_workerTimer->setTimerType(Qt::PreciseTimer);
-  m_workerTimer->moveToThread(&m_workerThread);
-  connect(m_workerTimer, &QTimer::timeout, this, &Export::writeValues,
-          Qt::QueuedConnection);
+  connect(&m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
+  connect(m_worker, &ExportWorker::openChanged, this,
+          &Export::onWorkerOpenChanged, Qt::QueuedConnection);
 
-  // Start the data writting thread
   m_workerThread.start();
-  connect(&m_workerThread, &QThread::finished, m_workerTimer,
-          &QObject::deleteLater);
 
-  // Start the data writting timer
-  QMetaObject::invokeMethod(m_workerTimer, "start", Qt::QueuedConnection);
+  auto *timer = new QTimer();
+  timer->setInterval(1000);
+  timer->setTimerType(Qt::PreciseTimer);
+  timer->moveToThread(&m_workerThread);
+  connect(timer, &QTimer::timeout, m_worker, &ExportWorker::writeValues);
+  connect(&m_workerThread, &QThread::finished, timer, &QObject::deleteLater);
+  QMetaObject::invokeMethod(timer, "start", Qt::QueuedConnection);
 }
 
 /**
  * @brief Destructor for the export manager.
  *
- * Ensures all data is flushed to disk, stops the background thread
- * and cleans up the timer.
+ * Ensures all data is flushed to disk and stops the background thread.
  */
 CSV::Export::~Export()
 {
-  // Close the file
-  closeFile();
-
-  // Stop the worker thread
-  if (m_workerTimer)
-  {
-    QMetaObject::invokeMethod(m_workerTimer, "stop", Qt::QueuedConnection);
-    QMetaObject::invokeMethod(m_workerTimer, "deleteLater",
-                              Qt::QueuedConnection);
-    m_workerTimer = nullptr;
-  }
-
-  // Wait for the worker thread to finish before quitting
+  QMetaObject::invokeMethod(m_worker, "closeFile", Qt::BlockingQueuedConnection);
   m_workerThread.quit();
   m_workerThread.wait();
 }
@@ -113,7 +280,7 @@ CSV::Export &CSV::Export::instance()
  */
 bool CSV::Export::isOpen() const
 {
-  return m_csvFile.isOpen();
+  return m_isOpen.load(std::memory_order_relaxed);
 }
 
 /**
@@ -123,7 +290,7 @@ bool CSV::Export::isOpen() const
  */
 bool CSV::Export::exportEnabled() const
 {
-  return m_exportEnabled;
+  return m_exportEnabled.load(std::memory_order_relaxed);
 }
 
 //------------------------------------------------------------------------------
@@ -133,23 +300,21 @@ bool CSV::Export::exportEnabled() const
 /**
  * @brief Closes the currently open CSV file.
  *
- * Flushes any buffered data to disk, clears headers, and resets output.
+ * Delegates to the worker thread to ensure thread-safe file operations.
  */
 void CSV::Export::closeFile()
 {
-  // No point in closing a file that is not open...
-  if (!isOpen())
-    return;
+  QMetaObject::invokeMethod(m_worker, "closeFile", Qt::QueuedConnection);
+}
 
-  // Write pending data to disk
-  writeValues();
-
-  // Close the file & reset the status
-  m_csvFile.close();
-  m_indexHeaderPairs.clear();
-  m_textStream.setDevice(nullptr);
-
-  // Update UI
+/**
+ * @brief Called when the worker's open state changes.
+ *
+ * Updates the cached state and emits the signal on the main thread.
+ */
+void CSV::Export::onWorkerOpenChanged()
+{
+  m_isOpen.store(m_worker->isOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();
 }
 
@@ -163,7 +328,7 @@ void CSV::Export::setupExternalConnections()
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &Export::closeFile);
   connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this,
-          [=, this] {
+          [this] {
             if (IO::Manager::instance().paused())
               closeFile();
           });
@@ -178,12 +343,10 @@ void CSV::Export::setupExternalConnections()
  */
 void CSV::Export::setExportEnabled(const bool enabled)
 {
-  // Write all pending data to disk & close file
   if (!enabled && isOpen())
     closeFile();
 
-  // Update the enabled status
-  m_exportEnabled = enabled;
+  m_exportEnabled.store(enabled, std::memory_order_relaxed);
   Q_EMIT enabledChanged();
 }
 
@@ -195,17 +358,16 @@ void CSV::Export::setExportEnabled(const bool enabled)
  * @brief Registers a new data frame for export.
  *
  * Pushes the frame into the pending queue for async export if conditions are
- * met.
+ * met. Triggers an early flush when the queue exceeds the threshold to prevent
+ * unbounded memory growth during high-frequency data reception.
  *
  * @param frame The data frame to export.
  */
 void CSV::Export::hotpathTxFrame(const JSON::Frame &frame)
 {
-  // Skip if export is disabled, frame is invalid or user is playing a CSV file
   if (!exportEnabled() || CSV::Player::instance().isOpen())
     return;
 
-  // Skip if not connected to a device
 #ifdef BUILD_COMMERCIAL
   if (!IO::Manager::instance().isConnected()
       && !(MQTT::Client::instance().isConnected()
@@ -216,152 +378,13 @@ void CSV::Export::hotpathTxFrame(const JSON::Frame &frame)
     return;
 #endif
 
-  // Add frame to pending frame queue
   if (!m_pendingFrames.enqueue(TimestampFrame(JSON::Frame(frame))))
+  {
     qWarning() << "CSV Export: Dropping frame (queue full)";
-}
-
-//------------------------------------------------------------------------------
-// CSV data processing
-//------------------------------------------------------------------------------
-
-/**
- * @brief Writes all queued frames to the CSV file.
- *
- * Flushes data in `m_pendingFrames` to disk using the output stream.
- * If no file is open, a new file is created before writing.
- */
-void CSV::Export::writeValues()
-{
-  // Export disabled, abort
-  if (!exportEnabled())
     return;
-
-  // Reset the write buffer
-  m_writeBuffer.clear();
-
-  // Read frames in queue
-  TimestampFrame frame;
-  while (m_pendingFrames.try_dequeue(frame))
-    m_writeBuffer.push_back(std::move(frame));
-
-  // Nothing to write, abort
-  if (m_writeBuffer.size() <= 0)
-    return;
-
-  // File deleted, create new file
-  if (!isOpen())
-  {
-    m_indexHeaderPairs = createCsvFile(m_writeBuffer.begin()->data);
-    if (m_indexHeaderPairs.isEmpty())
-      return;
   }
 
-  // Write every frame to the CSV file
-  for (const auto &i : m_writeBuffer)
-  {
-    // Write RX date/time
-    const auto format = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
-    m_textStream << i.rxDateTime.toString(format) << QStringLiteral(",");
-
-    // Obtain a set of unique dataset values (based on dataset index)
-    QMap<int, QString> fieldValues;
-    for (const auto &g : i.data.groups)
-    {
-      for (const auto &d : g.datasets)
-        fieldValues[d.index] = d.value.simplified();
-    }
-
-    // Write data to output stream
-    for (int j = 0; j < m_indexHeaderPairs.count(); ++j)
-    {
-      m_textStream << fieldValues.value(m_indexHeaderPairs[j].first, "");
-      m_textStream << (j < m_indexHeaderPairs.count() - 1 ? "," : "\n");
-    }
-  }
-
-  // Flush the output stream to the disk
-  m_textStream.flush();
-}
-
-/**
- * @brief Creates a new CSV file and writes the header.
- *
- * Builds a sorted header based on dataset indices and opens the file
- * in the appropriate location.
- *
- * @param frame The frame used to extract header information.
- * @return List of index-title pairs for each dataset.
- */
-QVector<QPair<int, QString>>
-CSV::Export::createCsvFile(const JSON::Frame &frame)
-{
-  // Get filename based on date time
-  const auto dt = QDateTime::currentDateTime();
-  const auto fileName = dt.toString("yyyy-MM-dd_HH-mm-ss") + ".csv";
-
-  // Get file path
-  const auto subdir = Misc::WorkspaceManager::instance().path("CSV");
-  const QString path = QString("%1/%2/").arg(subdir, frame.title);
-
-  // Create the CSVs directory if needed
-  QDir dir(path);
-  if (!dir.exists() && !dir.mkpath("."))
-  {
-    qWarning() << "Failed to create directory:" << path;
-    return {};
-  }
-
-  // Open the CSV file for writting
-  m_csvFile.setFileName(dir.filePath(fileName));
-  if (!m_csvFile.open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    Misc::Utilities::showMessageBox(tr("CSV File Error"),
-                                    tr("Cannot open CSV file for writing!"),
-                                    QMessageBox::Critical);
-    closeFile();
-    return {};
-  }
-
-  // Configure the output stream to use the file, and set data mode to UTF-8
-  m_textStream.setDevice(&m_csvFile);
-  m_textStream.setGenerateByteOrderMark(true);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-  m_textStream.setCodec("UTF-8");
-#else
-  m_textStream.setEncoding(QStringConverter::Utf8);
-#endif
-
-  // Create a list of pairs that relate dataset indexes to header titles
-  QSet<int> seenIndexes;
-  QVector<QPair<int, QString>> pairs;
-  for (const auto &g : frame.groups)
-  {
-    for (const auto &d : g.datasets)
-    {
-      const int idx = d.index;
-      if (seenIndexes.contains(idx))
-        continue;
-
-      seenIndexes.insert(idx);
-      auto header = QString("%1/%2").arg(g.title, d.title).simplified();
-      pairs.append(qMakePair(idx, header));
-    }
-  }
-
-  // Sort the pairs by their dataset index
-  std::sort(pairs.begin(), pairs.end(),
-            [](const auto &a, const auto &b) { return a.first < b.first; });
-
-  // Write CSV header
-  m_textStream << "RX Date/Time";
-  for (const auto &pair : pairs)
-    m_textStream << ',' << pair.second;
-
-  // Add EOL to header line
-  m_textStream << '\n';
-
-  // Update user interface & return the data model
-  Q_EMIT openChanged();
-  return pairs;
+  const auto size = m_queueSize.fetch_add(1, std::memory_order_relaxed) + 1;
+  if (size >= kFlushThreshold)
+    QMetaObject::invokeMethod(m_worker, "writeValues", Qt::QueuedConnection);
 }
