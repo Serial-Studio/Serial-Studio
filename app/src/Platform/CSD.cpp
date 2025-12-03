@@ -677,7 +677,6 @@ Frame::Frame(QQuickItem *parent)
  * - Corner shadow tiles at each corner (accounting for rounded content)
  * - Edge shadow strips between corners
  * - Rounded background fill matching the theme
- * - Border stroke around the content area
  *
  * When shadows are disabled (e.g., window maximized), only the background
  * and border are drawn without rounded corners.
@@ -746,25 +745,14 @@ void Frame::paint(QPainter *painter)
   {
     const auto &theme = Misc::ThemeManager::instance();
     const QColor bgColor = theme.getColor(QStringLiteral("toolbar_top"));
-    const QColor borderColor = theme.getColor(QStringLiteral("border"));
     const qreal radius = m_shadowEnabled ? cr : 0;
 
-    // Fill background
     painter->setPen(Qt::NoPen);
     painter->setBrush(bgColor);
     if (radius > 0)
       painter->drawRoundedRect(content, radius, radius);
     else
       painter->fillRect(content, bgColor);
-
-    // Draw border
-    painter->setPen(QPen(borderColor, 1));
-    painter->setBrush(Qt::NoBrush);
-    if (radius > 0)
-      painter->drawRoundedRect(content.adjusted(0.5, 0.5, -0.5, -0.5), radius,
-                               radius);
-    else
-      painter->drawRect(content.adjusted(0.5, 0.5, -0.5, -0.5));
   }
 }
 
@@ -902,6 +890,45 @@ QImage Frame::generateShadowCorner(int size)
 }
 
 //------------------------------------------------------------------------------
+// Border
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Constructs a Border.
+ * @param parent The parent QQuickItem.
+ *
+ * Initializes the border overlay with transparency and configures
+ * the render target for proper alpha blending.
+ */
+Border::Border(QQuickItem *parent)
+  : QQuickPaintedItem(parent)
+{
+  setFillColor(Qt::transparent);
+  setOpaquePainting(false);
+  setRenderTarget(QQuickPaintedItem::FramebufferObject);
+  setAntialiasing(true);
+}
+
+/**
+ * @brief Paints the window border.
+ * @param painter The QPainter used for rendering.
+ *
+ * Draws a 1px rounded border around the entire window area using the
+ * theme's border color. The border is drawn with antialiasing for
+ * smooth rounded corners.
+ */
+void Border::paint(QPainter *painter)
+{
+  painter->setRenderHint(QPainter::Antialiasing);
+  const QColor borderColor = QColor(102, 102, 102, 115);
+
+  painter->setPen(QPen(borderColor, 1));
+  painter->setBrush(Qt::NoBrush);
+  painter->drawRoundedRect(QRectF(0.5, 0.5, width() - 1, height() - 1),
+                           CSD::CornerRadius, CSD::CornerRadius);
+}
+
+//------------------------------------------------------------------------------
 // Window
 //------------------------------------------------------------------------------
 
@@ -923,6 +950,7 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
   : QObject(parent)
   , m_resizing(false)
   , m_frame(nullptr)
+  , m_border(nullptr)
   , m_color(color)
   , m_titleBar(nullptr)
   , m_resizeEdge(ResizeEdge::None)
@@ -938,18 +966,25 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
   m_window->setFlags(m_window->flags() | Qt::FramelessWindowHint);
   m_window->installEventFilter(this);
 
-  // Setup components in order: frame -> container -> titlebar
+  // Setup components in order: frame -> container -> titlebar -> border
   setupFrame();
   setupContentContainer();
   setupTitleBar();
+  setupBorder();
 
   // Handle window state changes
   connect(m_window, &QWindow::windowStateChanged, this, [this]() {
-    const bool maximized = m_window->windowStates() & Qt::WindowMaximized;
+    const auto state = m_window->windowStates();
+    const bool fillScreen = state & (Qt::WindowMaximized | Qt::WindowFullScreen);
+
     if (m_frame)
-      m_frame->setShadowEnabled(!maximized);
+      m_frame->setShadowEnabled(!fillScreen);
+
+    if (m_border)
+      m_border->setVisible(!fillScreen);
 
     updateFrameGeometry();
+    updateBorderGeometry();
     updateContentContainerGeometry();
     updateTitleBarGeometry();
     updateMinimumSize();
@@ -1018,14 +1053,18 @@ Titlebar *Window::titleBar() const
 
 /**
  * @brief Returns the current shadow margin.
- * @return Shadow radius in pixels, or 0 if window is maximized.
+ * @return Shadow radius in pixels, or 0 if window is maximized/fullscreen.
  *
  * The shadow margin determines the offset between the window edge
  * and the visible content area.
  */
 int Window::shadowMargin() const
 {
-  if (!m_window || (m_window->windowStates() & Qt::WindowMaximized))
+  if (!m_window)
+    return 0;
+
+  const auto state = m_window->windowStates();
+  if (state & (Qt::WindowMaximized | Qt::WindowFullScreen))
     return 0;
 
   return CSD::ShadowRadius;
@@ -1033,19 +1072,24 @@ int Window::shadowMargin() const
 
 /**
  * @brief Returns the current title bar height.
- * @return Height in pixels, adjusted for maximized state.
+ * @return Height in pixels, adjusted for maximized/fullscreen state.
  *
- * Returns a smaller height when maximized, following common
- * desktop environment conventions.
+ * Returns a smaller height when maximized, and 0 when fullscreen,
+ * following common desktop environment conventions.
  */
 int Window::titleBarHeight() const
 {
   if (!m_window)
     return CSD::TitleBarHeight;
 
-  return (m_window->windowStates() & Qt::WindowMaximized)
-             ? CSD::TitleBarHeightMaximized
-             : CSD::TitleBarHeight;
+  const auto state = m_window->windowStates();
+  if (state & Qt::WindowFullScreen)
+    return 0;
+
+  if (state & Qt::WindowMaximized)
+    return CSD::TitleBarHeightMaximized;
+
+  return CSD::TitleBarHeight;
 }
 
 /**
@@ -1091,6 +1135,29 @@ void Window::setupFrame()
           &Window::updateFrameGeometry);
 
   updateFrameGeometry();
+}
+
+/**
+ * @brief Creates and configures the border overlay.
+ *
+ * Creates the Border component on top of all other content.
+ * The border is hidden when the window is maximized or fullscreen.
+ */
+void Window::setupBorder()
+{
+  auto *quickWindow = qobject_cast<QQuickWindow *>(m_window.data());
+  if (!quickWindow)
+    return;
+
+  m_border = new Border(quickWindow->contentItem());
+  m_border->setZ(1000000);
+
+  connect(quickWindow, &QQuickWindow::widthChanged, this,
+          &Window::updateBorderGeometry);
+  connect(quickWindow, &QQuickWindow::heightChanged, this,
+          &Window::updateBorderGeometry);
+
+  updateBorderGeometry();
 }
 
 /**
@@ -1172,6 +1239,23 @@ void Window::updateFrameGeometry()
 
   m_frame->setPosition(QPointF(0, 0));
   m_frame->setSize(QSizeF(m_window->width(), m_window->height()));
+}
+
+/**
+ * @brief Updates the border position and size.
+ *
+ * Positions the border to cover the visible content area
+ * (excluding the shadow margin).
+ */
+void Window::updateBorderGeometry()
+{
+  if (!m_border || !m_window)
+    return;
+
+  const int margin = shadowMargin();
+  m_border->setPosition(QPointF(margin, margin));
+  m_border->setSize(
+      QSizeF(m_window->width() - 2 * margin, m_window->height() - 2 * margin));
 }
 
 /**
@@ -1329,7 +1413,7 @@ void Window::updateTheme()
  * @brief Reparents a child item to the content container.
  * @param child The item to reparent.
  *
- * Skips CSD components (frame, title bar, container) and items
+ * Skips CSD components (frame, border, title bar, container) and items
  * already in the container. This ensures all user QML content
  * respects the CSD margins automatically.
  */
@@ -1337,7 +1421,7 @@ void Window::reparentChildToContainer(QQuickItem *child)
 {
   if (!child || !m_contentContainer)
     return;
-  else if (child == m_frame || child == m_titleBar
+  else if (child == m_frame || child == m_border || child == m_titleBar
            || child == m_contentContainer)
     return;
   else if (child->parentItem() == m_contentContainer)

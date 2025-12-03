@@ -113,14 +113,29 @@ private:
 };
 
 /**
+ * @class Border
+ * @brief Draws a 1px border around the entire CSD window.
+ *
+ * Renders a thin border on top of all content, including the titlebar.
+ * Hidden when window is maximized or fullscreen.
+ */
+class Border : public QQuickPaintedItem
+{
+  Q_OBJECT
+
+public:
+  explicit Border(QQuickItem *parent = nullptr);
+  void paint(QPainter *painter) override;
+};
+
+/**
  * @class Frame
- * @brief Draws window shadow and border for CSD windows.
+ * @brief Draws window shadow for CSD windows.
  *
  * Renders:
  * - Soft drop shadow around the content area
- * - Thin border around the content area
  *
- * Shadow is automatically disabled when window is maximized.
+ * Shadow is automatically disabled when window is maximized or fullscreen.
  */
 class Frame : public QQuickPaintedItem
 {
@@ -196,9 +211,11 @@ public slots:
 
 private slots:
   void setupFrame();
+  void setupBorder();
   void setupTitleBar();
   void updateMinimumSize();
   void updateFrameGeometry();
+  void updateBorderGeometry();
   void onMinimumSizeChanged();
   void setupContentContainer();
   void updateTitleBarGeometry();
@@ -233,6 +250,7 @@ protected:
 private:
   bool m_resizing;
   Frame *m_frame;
+  Border *m_border;
   QString m_color;
   Titlebar *m_titleBar;
   ResizeEdge m_resizeEdge;
