@@ -74,7 +74,7 @@ void NativeWindow::removeWindow(QObject *window)
  * @param window The window to customize.
  * @param color Optional color for the title bar (hex string).
  *
- * Creates a UnixWindowDecorator for the window, which provides:
+ * Creates a CSD::Window for the window, which provides:
  * - Frameless window with custom title bar
  * - Window dragging and resizing
  * - Minimize, maximize, and close buttons
@@ -121,7 +121,7 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
  */
 void NativeWindow::onThemeChanged()
 {
-  for (auto *window : m_windows)
+  for (auto *window : std::as_const(m_windows))
   {
     auto *decorator = s_decorators.value(window, nullptr);
     if (decorator)

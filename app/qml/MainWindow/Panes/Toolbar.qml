@@ -336,8 +336,8 @@ Rectangle {
 
       Widgets.ToolbarButton {
         iconSize: 16
-        text: qsTr("Bluetooth")
         horizontalLayout: true
+        text: qsTr("Bluetooth")
         Layout.alignment: Qt.AlignLeft
         font.bold: Cpp_IO_Manager.busType === SerialStudio.BluetoothLE
         onClicked: Cpp_IO_Manager.busType = SerialStudio.BluetoothLE
@@ -380,10 +380,10 @@ Rectangle {
     //
     Widgets.ToolbarButton {
       text: qsTr("About")
-      onClicked: app.showAboutDialog()
       Layout.alignment: Qt.AlignLeft
-      ToolTip.text: qsTr("Show application info and license details")
+      onClicked: app.showAboutDialog()
       icon.source: "qrc:/rcc/icons/toolbar/about.svg"
+      ToolTip.text: qsTr("Show application info and license details")
     }
 
     //
@@ -401,28 +401,28 @@ Rectangle {
         text: qsTr("Examples")
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
-        ToolTip.text: qsTr("Browse example projects on GitHub")
         icon.source: "qrc:/rcc/icons/toolbar/examples.svg"
+        ToolTip.text: qsTr("Browse example projects on GitHub")
         onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/tree/master/examples")
       }
 
       Widgets.ToolbarButton {
         iconSize: 16
-        text: qsTr("Help")
         horizontalLayout: true
+        text: qsTr("Getting Started")
         Layout.alignment: Qt.AlignLeft
-        ToolTip.text: qsTr("Open the online documentation for help and guidance")
         icon.source: "qrc:/rcc/icons/toolbar/help.svg"
-        onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
+        ToolTip.text: qsTr("Open the online documentation for help and guidance")
+        onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/blob/master/DISCOVER.md")
       }
 
       Widgets.ToolbarButton {
         iconSize: 16
-        text: qsTr("AI Help")
         horizontalLayout: true
+        text: qsTr("AI Wiki & Chat")
         Layout.alignment: Qt.AlignLeft
-        ToolTip.text: qsTr("View detailed documentation and ask questions on DeepWiki")
         icon.source: "qrc:/rcc/icons/toolbar/deepwiki.svg"
+        ToolTip.text: qsTr("View detailed documentation and ask questions on DeepWiki")
         onClicked: Qt.openUrlExternally("https://deepwiki.com/Serial-Studio/Serial-Studio")
       }
     }

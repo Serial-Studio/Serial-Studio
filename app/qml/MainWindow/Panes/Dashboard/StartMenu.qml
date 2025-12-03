@@ -306,7 +306,7 @@ Popup {
       expandable: false
       Layout.fillWidth: true
       text: qsTr("Preferences")
-      icon.source: "qrc:/rcc/icons/start/adjust.svg"
+      icon.source: "qrc:/rcc/icons/start/settings.svg"
       onClicked: {
         root.close()
         app.showSettingsDialog()

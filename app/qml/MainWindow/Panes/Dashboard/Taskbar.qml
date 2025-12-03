@@ -98,7 +98,7 @@ Item {
     //
     Widgets.TaskbarButton {
       forceVisible: true
-      icon.source: "qrc:/rcc/icons/taskbar/adjust.svg"
+      icon.source: "qrc:/rcc/icons/taskbar/settings.svg"
       onClicked: {
         app.showSettingsDialog()
         taskBar.activeWindow = null

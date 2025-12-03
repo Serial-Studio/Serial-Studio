@@ -246,7 +246,7 @@ if(WIN32)
     ${SOURCES}
     "${CMAKE_CURRENT_SOURCE_DIR}/deploy/windows/info.rc"
     "src/Platform/CSD.cpp"
-    "src/Platform/NativeWindow_Windows.cpp"
+    "src/Platform/NativeWindow_CSD.cpp"
   )
   set(HEADERS
     ${HEADERS}
@@ -281,8 +281,8 @@ elseif(APPLE)
 elseif(UNIX)
   set(SOURCES
     ${SOURCES}
-    "src/Platform/NativeWindow_UNIX.cpp"
     "src/Platform/CSD.cpp"
+    "src/Platform/NativeWindow_CSD.cpp"
   )
   set(HEADERS
     ${HEADERS}
@@ -443,12 +443,6 @@ endif()
 #-------------------------------------------------------------------------------
 
 if(WIN32)
-  if(MINGW)
-    target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE dwmapi)
-  else()
-    target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE Dwmapi.lib)
-  endif()
-
   set_target_properties(${PROJECT_EXECUTABLE} PROPERTIES
     WIN32_EXECUTABLE TRUE
   )

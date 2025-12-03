@@ -304,7 +304,6 @@
         <file>icons/project-editor/windows/project-structure.svg</file>
         <file>icons/project-editor/open.svg</file>
         <file>icons/start/actions.svg</file>
-        <file>icons/start/adjust.svg</file>
         <file>icons/start/auto-layout.svg</file>
         <file>icons/start/clear.svg</file>
         <file>icons/start/console-log.svg</file>
@@ -318,10 +317,11 @@
         <file>icons/start/normal-screen.svg</file>
         <file>icons/start/pause.svg</file>
         <file>icons/start/resume.svg</file>
-        <file>icons/taskbar/adjust.svg</file>
+        <file>icons/start/settings.svg</file>
         <file>icons/taskbar/console.svg</file>
         <file>icons/taskbar/pause.svg</file>
         <file>icons/taskbar/resume.svg</file>
+        <file>icons/taskbar/settings.svg</file>
         <file>icons/toolbar/drivers/audio.svg</file>
         <file>icons/toolbar/drivers/bluetooth.svg</file>
         <file>icons/toolbar/drivers/canbus.svg</file>

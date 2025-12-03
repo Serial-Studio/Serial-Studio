@@ -54,7 +54,7 @@ constexpr int ButtonSpacing = 18;
 constexpr int TitleBarHeight = 32;
 constexpr int TitleBarHeightMaximized = 28;
 
-constexpr qreal ShadowOpacity = 0.15;
+constexpr qreal ShadowOpacity = 0.10;
 
 //------------------------------------------------------------------------------
 // Titlebar
@@ -110,7 +110,7 @@ void Titlebar::paint(QPainter *painter)
 
   // Get window area & state
   QRectF rect = boundingRect();
-  const bool maximized = window()->windowStates() & Qt::WindowMaximized;
+  const bool maximized = isMaximized();
   const qreal radius = maximized ? 0 : CSD::CornerRadius;
 
   // Draw rounded titlebar if window is not maximized
@@ -292,22 +292,11 @@ void Titlebar::setBackgroundColor(const QColor &color)
  */
 QRectF Titlebar::buttonRect(Button button) const
 {
-  const qreal y = (height() - CSD::ButtonSize) / 2.0;
-  const qreal closeX = width() - CSD::ButtonMargin - CSD::ButtonSize;
+  const QRectF bgRect = buttonBackgroundRect(button);
+  const qreal iconSize = CSD::ButtonSize * 0.5;
 
-  switch (button)
-  {
-    case Button::Close:
-      return {closeX, y, CSD::ButtonSize, CSD::ButtonSize};
-    case Button::Maximize:
-      return {closeX - CSD::ButtonSize - CSD::ButtonSpacing, y, CSD::ButtonSize,
-              CSD::ButtonSize};
-    case Button::Minimize:
-      return {closeX - 2 * (CSD::ButtonSize + CSD::ButtonSpacing), y,
-              CSD::ButtonSize, CSD::ButtonSize};
-    default:
-      return {};
-  }
+  return {bgRect.center().x() - iconSize / 2,
+          bgRect.center().y() - iconSize / 2, iconSize, iconSize};
 }
 
 /**
@@ -317,16 +306,44 @@ QRectF Titlebar::buttonRect(Button button) const
  */
 Titlebar::Button Titlebar::buttonAt(const QPointF &pos) const
 {
-  if (buttonRect(Button::Close).contains(pos))
+  if (buttonBackgroundRect(Button::Close).contains(pos))
     return Button::Close;
 
-  else if (buttonRect(Button::Maximize).contains(pos))
+  else if (buttonBackgroundRect(Button::Maximize).contains(pos))
     return Button::Maximize;
 
-  else if (buttonRect(Button::Minimize).contains(pos))
+  else if (buttonBackgroundRect(Button::Minimize).contains(pos))
     return Button::Minimize;
 
   return Button::None;
+}
+
+/**
+ * @brief Calculates the background rectangle for drawing button hover/press
+ *        states.
+ *
+ * @param button The button type to get the rectangle for.
+ * @return The button's background rectangle.
+ *
+ * Windows 11 style: buttons span full titlebar height with ~46px width.
+ * Close button extends to window edge.
+ */
+QRectF Titlebar::buttonBackgroundRect(Button button) const
+{
+  constexpr qreal buttonWidth = 46.0;
+  const qreal h = height();
+
+  switch (button)
+  {
+    case Button::Close:
+      return {width() - buttonWidth, 0, buttonWidth, h};
+    case Button::Maximize:
+      return {width() - buttonWidth * 2, 0, buttonWidth, h};
+    case Button::Minimize:
+      return {width() - buttonWidth * 3, 0, buttonWidth, h};
+    default:
+      return {};
+  }
 }
 
 /**
@@ -342,36 +359,101 @@ void Titlebar::drawButton(QPainter *painter, Button button,
                           const QString &svgPath)
 {
   // Get button position & state
-  const QRectF rect = buttonRect(button);
+  const QRectF bgRect = buttonBackgroundRect(button);
+  const QRectF iconRect = buttonRect(button);
   const bool hovered = (m_hoveredButton == button);
   const bool pressed = (m_pressedButton == button);
 
-  // Determine button color
-  QColor iconColor = foregroundColor();
-  if (!m_windowActive)
-    iconColor = iconColor.darker(130);
+  // Determine if we're using a dark theme (based on background luminance)
+  const auto bg = m_backgroundColor;
+  const auto fg = foregroundColor();
+  const bool isDarkTheme = fg.lightness() > bg.lightness();
 
-  // Highlight the button if it is hovered or pressed
-  else if (hovered || pressed)
+  // Draw button background for hover/pressed states
+  if (hovered || pressed)
   {
-    iconColor = Misc::ThemeManager::instance().getColor("highlight");
-    if (pressed)
-      iconColor = iconColor.darker(120);
+    QColor bgColor;
+
+    // Close button colors
+    if (button == Button::Close)
+    {
+      if (pressed)
+        bgColor = QColor(0xB4, 0x27, 0x1A);
+      else
+        bgColor = QColor(0xC4, 0x2B, 0x1C);
+    }
+
+    // Minimize/Maximize buttons
+    else
+    {
+      if (isDarkTheme)
+      {
+        if (pressed)
+          bgColor = QColor(255, 255, 255, 11);
+        else
+          bgColor = QColor(255, 255, 255, 20);
+      }
+      else
+      {
+        if (pressed)
+          bgColor = QColor(0, 0, 0, 6);
+        else
+          bgColor = QColor(0, 0, 0, 10);
+      }
+    }
+
+    // Draw button background
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(bgColor);
+
+    // Close button needs rounded top-right corner when window is not maximized
+    const bool maximized = isMaximized();
+    if (button == Button::Close && !maximized)
+    {
+      const qreal radius = CSD::CornerRadius;
+      QPainterPath path;
+      path.setFillRule(Qt::WindingFill);
+      path.moveTo(bgRect.left(), bgRect.top());
+      path.lineTo(bgRect.right() - radius, bgRect.top());
+      path.arcTo(QRectF(bgRect.right() - radius * 2, bgRect.top(), radius * 2,
+                        radius * 2),
+                 90, -90);
+      path.lineTo(bgRect.right(), bgRect.bottom());
+      path.lineTo(bgRect.left(), bgRect.bottom());
+      path.closeSubpath();
+      painter->drawPath(path);
+    }
+    else
+    {
+      painter->drawRect(bgRect);
+    }
   }
+
+  // Determine icon color
+  QColor iconColor;
+
+  // Close button icon is always white when hovered/pressed
+  if (button == Button::Close && (hovered || pressed))
+    iconColor = Qt::white;
+
+  // Dimmed when inactive
+  else if (!m_windowActive)
+  {
+    iconColor = foregroundColor();
+    iconColor.setAlpha(128);
+  }
+  else
+    iconColor = foregroundColor();
 
   // Load SVG
   QSvgRenderer renderer(svgPath);
   if (!renderer.isValid())
     return;
 
-  // Obtain icon size for the button
-  const qreal iconSize = CSD::ButtonSize * 0.5;
-  const QRectF iconRect(rect.center().x() - iconSize / 2,
-                        rect.center().y() - iconSize / 2, iconSize, iconSize);
-
   // Set pixel size
   const qreal dpr = painter->device()->devicePixelRatio();
-  const QSize pixelSize(qRound(iconSize * dpr), qRound(iconSize * dpr));
+  const QSize pixelSize(qRound(iconRect.width() * dpr),
+                        qRound(iconRect.height() * dpr));
 
   // Initialize target pixmap for button icon
   QPixmap pixmap(pixelSize);
@@ -380,7 +462,8 @@ void Titlebar::drawButton(QPainter *painter, Button button,
 
   // Paint the SVG icon into the pixmap
   QPainter svgPainter(&pixmap);
-  renderer.render(&svgPainter, QRectF(0, 0, iconSize, iconSize));
+  renderer.render(&svgPainter,
+                  QRectF(0, 0, iconRect.width(), iconRect.height()));
   svgPainter.end();
 
   // Initialize target pixmap for colorized button
@@ -492,7 +575,7 @@ void Titlebar::mouseMoveEvent(QMouseEvent *event)
   auto *win = window();
   m_dragging = false;
 
-  if (win->windowStates() & Qt::WindowMaximized)
+  if (isMaximized())
   {
     const qreal relativeX = event->position().x() / width();
     const QPointF globalPos = event->globalPosition();
@@ -521,7 +604,7 @@ void Titlebar::mouseDoubleClickEvent(QMouseEvent *event)
     m_pressedButton = Button::None;
     m_hoveredButton = Button::None;
 
-    if (window()->windowStates() & Qt::WindowMaximized)
+    if (isMaximized())
       window()->showNormal();
     else
       window()->showMaximized();

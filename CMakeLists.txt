@@ -107,13 +107,13 @@ if(BUILD_GPL3)
    endif()
 
    set(BUILD_COMMERCIAL OFF CACHE BOOL "Commercial features disabled due to GPLv3 build mode" FORCE)
-   message(STATUS "BUILD_GPL3=ON — enforcing BUILD_COMMERCIAL=OFF for license compliance")
+   message(STATUS "BUILD_GPL3=ON, enforcing BUILD_COMMERCIAL=OFF for license compliance")
 endif()
 
 if(BUILD_COMMERCIAL)
     add_compile_definitions(BUILD_COMMERCIAL)
     add_definitions(-DARCGIS_API_KEY="${ARCGIS_API_KEY}")
-    message(STATUS "BUILD_COMMERCIAL=ON — validating license with Lemon Squeezy")
+    message(STATUS "BUILD_COMMERCIAL=ON, validating license with Lemon Squeezy")
 
     if(NOT SERIAL_STUDIO_LICENSE_KEY OR NOT SERIAL_STUDIO_INSTANCE_ID)
         message(FATAL_ERROR
@@ -123,7 +123,7 @@ if(BUILD_COMMERCIAL)
 
     find_program(CURL_EXECUTABLE curl)
     if(NOT CURL_EXECUTABLE)
-        message(FATAL_ERROR "curl not found in PATH — required to validate license.")
+        message(FATAL_ERROR "curl not found in PATH, required to validate license.")
     endif()
 
     execute_process(
@@ -147,7 +147,7 @@ if(BUILD_COMMERCIAL)
             "Response: ${LS_RESPONSE}")
     endif()
 
-    message(STATUS "License validation succeeded — building with commercial features")
+    message(STATUS "License validation succeeded, building with commercial features")
 endif()
 
 #-------------------------------------------------------------------------------
@@ -374,7 +374,7 @@ endif()
 option(BUILD_TESTS "Build unit tests" OFF)
 
 if(BUILD_TESTS)
-   message(STATUS "BUILD_TESTS=ON — enabling test suite")
+   message(STATUS "BUILD_TESTS=ON, enabling test suite")
    enable_testing()
    add_subdirectory(tests)
 endif()

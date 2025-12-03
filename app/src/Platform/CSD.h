@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QPointer>
 #include <QQuickItem>
+#include <QQuickWindow>
 #include <QQuickPaintedItem>
 
 namespace CSD
@@ -88,6 +89,16 @@ private:
   [[nodiscard]] QColor foregroundColor() const;
   [[nodiscard]] QRectF buttonRect(Button button) const;
   [[nodiscard]] Button buttonAt(const QPointF &pos) const;
+  [[nodiscard]] QRectF buttonBackgroundRect(Button button) const;
+
+  [[nodiscard]] inline bool isMaximized() const {
+    if (!window())
+      return false;
+
+    bool m = window()->windowStates() & Qt::WindowMaximized;
+    bool f = window()->windowStates() & Qt::WindowFullScreen;
+    return m || f;
+  }
 
   void drawButton(QPainter *painter, Button button, const QString &svgPath);
 
