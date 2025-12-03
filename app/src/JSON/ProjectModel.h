@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QObject>
+#include <QJsonObject>
 #include <QStandardItemModel>
 #include <QItemSelectionModel>
 
@@ -143,6 +144,8 @@ signals:
   void frameDetectionChanged();
   void editableOptionsChanged();
   void frameParserCodeChanged();
+  void dashboardLayoutChanged();
+  void activeGroupIdChanged();
 
 private:
   explicit ProjectModel();
@@ -230,6 +233,9 @@ public:
   [[nodiscard]] const QString &jsonFilePath() const;
   [[nodiscard]] const QString &frameParserCode() const;
 
+  [[nodiscard]] int activeGroupId() const;
+  [[nodiscard]] const QJsonObject &dashboardLayout() const;
+
   [[nodiscard]] bool currentGroupIsEditable() const;
   [[nodiscard]] bool currentDatasetIsEditable() const;
   [[nodiscard]] bool containsCommercialFeatures() const;
@@ -278,6 +284,8 @@ public slots:
 
   void setModified(const bool modified);
   void setFrameParserCode(const QString &code);
+  void setActiveGroupId(const int groupId);
+  void setDashboardLayout(const QJsonObject &layout);
 
   void displayFrameParserView();
 
@@ -353,6 +361,9 @@ private:
   JSON::Group m_selectedGroup;
   JSON::Action m_selectedAction;
   JSON::Dataset m_selectedDataset;
+
+  int m_activeGroupId;
+  QJsonObject m_dashboardLayout;
 };
 
 /**

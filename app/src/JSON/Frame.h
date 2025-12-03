@@ -72,6 +72,9 @@ inline constexpr auto FFTSamplingRate = "fftSamplingRate";
 inline constexpr auto Groups = "groups";
 inline constexpr auto Actions = "actions";
 inline constexpr auto Datasets = "datasets";
+
+inline constexpr auto DashboardLayout = "dashboardLayout";
+inline constexpr auto ActiveGroupId = "activeGroupId";
 } // namespace Keys
 
 namespace JSON

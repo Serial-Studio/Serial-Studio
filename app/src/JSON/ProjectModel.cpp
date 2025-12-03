@@ -173,6 +173,7 @@ JSON::ProjectModel::ProjectModel()
   , m_groupModel(nullptr)
   , m_projectModel(nullptr)
   , m_datasetModel(nullptr)
+  , m_activeGroupId(-1)
 {
   // Generate data sources for project model
   generateComboBoxModels();
@@ -459,6 +460,33 @@ const QString &JSON::ProjectModel::jsonFilePath() const
 const QString &JSON::ProjectModel::frameParserCode() const
 {
   return m_frameParserCode;
+}
+
+/**
+ * @brief Returns the active group ID for the dashboard.
+ *
+ * The active group ID determines which group/tab is selected in the
+ * dashboard taskbar.
+ *
+ * @return The active group ID, or -1 if none is set.
+ */
+int JSON::ProjectModel::activeGroupId() const
+{
+  return m_activeGroupId;
+}
+
+/**
+ * @brief Returns the stored dashboard layout configuration.
+ *
+ * The dashboard layout includes window positions, sizes, and order
+ * for the current project. This is used to restore the user's
+ * preferred window arrangement when reopening a project.
+ *
+ * @return A reference to the dashboard layout JSON object.
+ */
+const QJsonObject &JSON::ProjectModel::dashboardLayout() const
+{
+  return m_dashboardLayout;
 }
 
 /**
@@ -880,6 +908,10 @@ void JSON::ProjectModel::newJsonFile()
   m_hexadecimalDelimiters = false;
   m_title = tr("Untitled Project");
 
+  // Reset dashboard layout metadata
+  m_activeGroupId = -1;
+  m_dashboardLayout = QJsonObject();
+
   // Load frame parser code into code editor
   if (JSON::FrameBuilder::instance().frameParser())
     JSON::FrameBuilder::instance().frameParser()->readCode();
@@ -1010,6 +1042,10 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
       m_actions.push_back(action);
   }
 
+  // Read dashboard layout metadata (if available)
+  m_activeGroupId = json.value(Keys::ActiveGroupId).toInt(-1);
+  m_dashboardLayout = json.value(Keys::DashboardLayout).toObject();
+
   // Regenerate the tree model
   buildProjectModel();
   buildTreeModel();
@@ -1068,6 +1104,12 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   Q_EMIT jsonFileChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
+
+  // Notify dashboard about layout metadata
+  if (!m_dashboardLayout.isEmpty())
+    Q_EMIT dashboardLayoutChanged();
+  if (m_activeGroupId >= 0)
+    Q_EMIT activeGroupIdChanged();
 }
 
 /**
@@ -2044,6 +2086,41 @@ void JSON::ProjectModel::setFrameParserCode(const QString &code)
     setModified(true);
 
     Q_EMIT frameParserCodeChanged();
+  }
+}
+
+/**
+ * @brief Sets the active group ID for the dashboard.
+ *
+ * This is saved to the project file so the user's selected tab
+ * is restored when reopening the project.
+ *
+ * @param groupId The group ID to set as active.
+ */
+void JSON::ProjectModel::setActiveGroupId(const int groupId)
+{
+  if (m_activeGroupId != groupId)
+  {
+    m_activeGroupId = groupId;
+    Q_EMIT activeGroupIdChanged();
+  }
+}
+
+/**
+ * @brief Sets the dashboard layout configuration.
+ *
+ * This stores the window positions, sizes, and order for the dashboard.
+ * The layout is saved to the project file so the user's window
+ * arrangement is restored when reopening the project.
+ *
+ * @param layout The JSON object containing the layout configuration.
+ */
+void JSON::ProjectModel::setDashboardLayout(const QJsonObject &layout)
+{
+  if (m_dashboardLayout != layout)
+  {
+    m_dashboardLayout = layout;
+    Q_EMIT dashboardLayoutChanged();
   }
 }
 
@@ -3878,6 +3955,12 @@ bool JSON::ProjectModel::finalizeProjectSave()
 
   // Insert actions array to JSON
   json.insert("actions", actionsArray);
+
+  // Insert dashboard layout metadata (if available)
+  if (!m_dashboardLayout.isEmpty())
+    json.insert(Keys::DashboardLayout, m_dashboardLayout);
+  if (m_activeGroupId >= 0)
+    json.insert(Keys::ActiveGroupId, m_activeGroupId);
 
   // Write JSON data to file
   file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));

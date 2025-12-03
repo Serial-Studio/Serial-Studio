@@ -27,6 +27,7 @@
 #include <QStandardItemModel>
 
 #include "UI/WindowManager.h"
+#include "UI/WidgetRegistry.h"
 
 namespace UI
 {
@@ -168,6 +169,7 @@ public:
   Q_INVOKABLE TaskbarModel::WindowState windowState(QQuickItem *window) const;
 
 public slots:
+  void saveLayout();
   void setActiveGroupId(int groupId);
   void setActiveGroupIndex(int index);
   void showWindow(QQuickItem *window);
@@ -179,16 +181,32 @@ public slots:
   void registerWindow(const int id, QQuickItem *window);
   void setWindowState(const int id, const TaskbarModel::WindowState state);
 
+private slots:
+  void onRegistryCleared();
+  void onBatchUpdateCompleted();
+  void onDashboardLayoutChanged();
+  void onWidgetCreated(UI::WidgetID id, const UI::WidgetInfo &info);
+  void onWidgetDestroyed(UI::WidgetID id);
+
 private:
   void rebuildModel();
+  void connectToRegistry();
   QStandardItem *findItemByWindowId(int windowId,
                                     QStandardItem *parentItem = nullptr) const;
+  QStandardItem *findItemByWidgetId(UI::WidgetID widgetId,
+                                    QStandardItem *parentItem = nullptr) const;
+  QStandardItem *findGroupItemByGroupId(int groupId) const;
+  QStandardItem *createItemFromWidgetInfo(const UI::WidgetInfo &info);
 
   int m_activeGroupId = -1;
+  bool m_batchUpdateInProgress = false;
 
   QQuickItem *m_activeWindow;
   UI::WindowManager *m_windowManager;
   QMap<QQuickItem *, int> m_windowIDs;
+
+  QMap<UI::WidgetID, int> m_widgetIdToWindowId;
+  QMap<int, UI::WidgetID> m_windowIdToWidgetId;
 
   TaskbarModel *m_fullModel;
   TaskbarModel *m_taskbarButtons;

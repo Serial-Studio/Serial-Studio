@@ -117,6 +117,7 @@ set(SOURCES
   src/UI/Dashboard.cpp
   src/UI/Taskbar.cpp
   src/UI/WindowManager.cpp
+  src/UI/WidgetRegistry.cpp
   src/UI/Widgets/LEDPanel.cpp
   src/UI/Widgets/Gauge.cpp
   src/UI/Widgets/Plot.cpp
@@ -165,6 +166,7 @@ set(HEADERS
   src/UI/DashboardWidget.h
   src/UI/Taskbar.h
   src/UI/WindowManager.h
+  src/UI/WidgetRegistry.h
   src/UI/Widgets/GPS.h
   src/UI/Widgets/MultiPlot.h
   src/UI/Widgets/Gauge.h

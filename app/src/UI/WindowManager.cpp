@@ -22,6 +22,8 @@
 #include "WindowManager.h"
 #include "UI/Taskbar.h"
 
+#include <QtMath>
+
 #include <QUrl>
 #include <QFile>
 #include <QFileDialog>
@@ -128,6 +130,129 @@ int UI::WindowManager::zOrder(QQuickItem *item) const
 }
 
 /**
+ * @brief Serializes the current window layout to a JSON object.
+ *
+ * The serialized layout includes:
+ * - Layout mode (auto or manual)
+ * - Window order (list of window IDs in display order)
+ * - Window geometries (position and size for each window in manual mode)
+ *
+ * This can be saved to a project file and later restored with restoreLayout().
+ *
+ * @return QJsonObject containing the complete layout state.
+ */
+QJsonObject UI::WindowManager::serializeLayout() const
+{
+  QJsonObject layout;
+  if (!m_autoLayoutEnabled)
+  {
+    QJsonArray geometries;
+    for (int id : m_windowOrder)
+    {
+      auto *win = m_windows.value(id);
+      if (!win)
+        continue;
+
+      QJsonObject winGeom;
+      winGeom["id"] = id;
+      winGeom["x"] = win->x();
+      winGeom["y"] = win->y();
+      winGeom["width"] = win->width();
+      winGeom["height"] = win->height();
+      winGeom["state"] = win->state();
+      geometries.append(winGeom);
+    }
+
+    layout["geometries"] = geometries;
+  }
+
+  QJsonArray orderArray;
+  for (int id : m_windowOrder)
+    orderArray.append(id);
+
+  layout["windowOrder"] = orderArray;
+  layout["autoLayout"] = m_autoLayoutEnabled;
+
+  return layout;
+}
+
+/**
+ * @brief Restores a previously serialized window layout.
+ *
+ * This function applies the layout configuration from a JSON object:
+ * - Sets the layout mode (auto or manual)
+ * - Reorders windows according to the saved order
+ * - Restores window geometries in manual mode
+ *
+ * Windows that exist in the saved layout but not in the current session
+ * are skipped. Windows that exist in the current session but not in the
+ * saved layout retain their current position.
+ *
+ * @param layout The JSON object containing the layout state.
+ * @return True if the layout was successfully restored, false otherwise.
+ */
+bool UI::WindowManager::restoreLayout(const QJsonObject &layout)
+{
+  if (layout.isEmpty())
+    return false;
+
+  bool autoLayout = layout["autoLayout"].toBool(true);
+
+  if (layout.contains("windowOrder"))
+  {
+    QJsonArray orderArray = layout["windowOrder"].toArray();
+    QVector<int> newOrder;
+
+    for (const auto &val : orderArray)
+    {
+      int id = val.toInt(-1);
+      if (id >= 0 && m_windows.contains(id))
+        newOrder.append(id);
+    }
+
+    for (int id : m_windowOrder)
+    {
+      if (!newOrder.contains(id))
+        newOrder.append(id);
+    }
+
+    m_windowOrder = newOrder;
+  }
+
+  if (!autoLayout && layout.contains("geometries"))
+  {
+    QJsonArray geometries = layout["geometries"].toArray();
+    for (const auto &val : geometries)
+    {
+      QJsonObject winGeom = val.toObject();
+      int id = winGeom["id"].toInt(-1);
+
+      auto *win = m_windows.value(id);
+      if (!win)
+        continue;
+
+      double x = winGeom["x"].toDouble(0);
+      double y = winGeom["y"].toDouble(0);
+      double w = winGeom["width"].toDouble(200);
+      double h = winGeom["height"].toDouble(150);
+
+      win->setX(x);
+      win->setY(y);
+      win->setWidth(w);
+      win->setHeight(h);
+
+      Q_EMIT geometryChanged(win);
+    }
+
+    constrainWindows();
+  }
+
+  setAutoLayoutEnabled(autoLayout);
+
+  return true;
+}
+
+/**
  * @brief Clears all tracked windows, z-order, and geometry.
  *        Resets the z-order counter.
  */
@@ -166,103 +291,244 @@ void UI::WindowManager::loadLayout()
 }
 
 /**
- * @brief Automatically tiles visible windows into the available screen space.
+ * @brief Automatically tiles visible windows using a smart grid-based layout.
  *
- * Arranges all visible QQuickItem windows using a recursive, split-based
- * layout. The layout alternates between vertical and horizontal splits based
- * on the area shape.
+ * This layout algorithm creates visually balanced arrangements:
  *
- * Each window is resized and positioned to fit cleanly with spacing and
- * margins. Emits geometryChanged() for each updated window.
+ * - 1 window:  Fills the entire canvas (maximized feel)
+ * - 2 windows: Side-by-side (landscape) or stacked (portrait)
+ * - 3 windows: Master-stack layout (one large + two stacked)
+ * - 4 windows: 2x2 grid
+ * - 5 windows: 2 on top row, 3 on bottom (or vice versa based on aspect)
+ * - 6 windows: 2x3 or 3x2 grid based on canvas aspect ratio
+ * - 7+ windows: Optimal grid with balanced distribution
  *
- * Call this after adding, removing, or changing window visibility or size.
+ * The algorithm prioritizes:
+ * - Balanced window sizes (avoids tiny windows)
+ * - Aspect ratio awareness (uses canvas shape to decide layout)
+ * - Consistent spacing and margins
+ * - Master-stack pattern for 3 windows (common productivity layout)
  */
 void UI::WindowManager::autoLayout()
 {
-  // Set function constants
-  const int margin = 4;
-  const int spacing = 4;
+  const double margin = 4;
+  const double spacing = 4;
 
-  // Collect all currently visible and valid QQuickItems (windows)
-  QList<QQuickItem *> visibleWindows;
+  const double canvasW = width();
+  const double canvasH = height();
+
+  if (canvasW <= 0 || canvasH <= 0)
+    return;
+
+  QList<QQuickItem *> windows;
   for (int id : std::as_const(m_windowOrder))
   {
     auto *win = m_windows.value(id);
     if (win && win->state() == "normal")
-      visibleWindows.append(win);
+      windows.append(win);
   }
 
-  // If there are no visible windows, there's nothing to layout
-  if (visibleWindows.isEmpty())
+  if (windows.isEmpty())
     return;
 
-  // Define the initial available space (dashboard area minus margin)
-  QRect rootArea(margin, margin, width() - 2 * margin, height() - 2 * margin);
+  const int n = windows.size();
+  const double availW = canvasW - 2 * margin;
+  const double availH = canvasH - 2 * margin;
+  const bool isLandscape = availW >= availH;
 
-  // Recursive lambda to tile the given list of windows into the given area
-  auto tileRecursive = [&](auto &&self, const QRect &area,
-                           const QList<QQuickItem *> &windows) -> void {
-    // No available windows, nothing to do
-    if (windows.isEmpty())
-      return;
+  auto placeWindow
+      = [&](QQuickItem *win, double x, double y, double w, double h) {
+          win->setX(x);
+          win->setY(y);
+          win->setWidth(w);
+          win->setHeight(h);
+          Q_EMIT geometryChanged(win);
+        };
 
-    // Single window, fill the entire area
-    if (windows.size() == 1)
+  if (n == 1)
+    placeWindow(windows[0], margin, margin, availW, availH);
+
+  else if (n == 2)
+  {
+    if (isLandscape)
     {
-      QQuickItem *win = windows.first();
-      QRect windowArea;
-      if (win->state() == "normal")
-        windowArea = area;
-      else
-        windowArea = QRect(x(), y(), width(), height());
-
-      win->setX(windowArea.x());
-      win->setY(windowArea.y());
-      win->setWidth(windowArea.width());
-      win->setHeight(windowArea.height());
-      Q_EMIT geometryChanged(win);
-
-      return;
+      double w = (availW - spacing) / 2.0;
+      placeWindow(windows[0], margin, margin, w, availH);
+      placeWindow(windows[1], margin + w + spacing, margin, w, availH);
     }
-
-    // Decide split direction based on current area's aspect ratio
-    bool splitVertically = area.width() > area.height();
-
-    // Split the window list into two halves
-    int mid = windows.size() / 2;
-    QList<QQuickItem *> firstHalf = windows.mid(0, mid);
-    QList<QQuickItem *> secondHalf = windows.mid(mid);
-    QRect firstArea, secondArea;
-
-    // Vertical split, divide the area into left/right panels
-    if (splitVertically)
-    {
-      double splitX = area.x() + area.width() / 2.0 - spacing / 2.0;
-      firstArea = QRect(area.x(), area.y(), area.width() / 2.0 - spacing / 2.0,
-                        area.height());
-      secondArea = QRect(splitX + spacing, area.y(),
-                         area.width() / 2.0 - spacing / 2.0, area.height());
-    }
-
-    // Horizontal split, divide the area into top/bottom panels
     else
     {
-      double splitY = area.y() + area.height() / 2.0 - spacing / 2.0;
-      firstArea = QRect(area.x(), area.y(), area.width(),
-                        area.height() / 2.0 - spacing / 2.0);
-      secondArea = QRect(area.x(), splitY + spacing, area.width(),
-                         area.height() / 2.0 - spacing / 2.0);
+      double h = (availH - spacing) / 2.0;
+      placeWindow(windows[0], margin, margin, availW, h);
+      placeWindow(windows[1], margin, margin + h + spacing, availW, h);
+    }
+  }
+
+  else if (n == 3)
+  {
+    if (isLandscape)
+    {
+      double masterW = availW * 0.5;
+      double stackW = availW - masterW - spacing;
+      double stackH = (availH - spacing) / 2.0;
+
+      placeWindow(windows[0], margin, margin, masterW, availH);
+      placeWindow(windows[1], margin + masterW + spacing, margin, stackW,
+                  stackH);
+      placeWindow(windows[2], margin + masterW + spacing,
+                  margin + stackH + spacing, stackW, stackH);
+    }
+    else
+    {
+      double masterH = availH * 0.5;
+      double stackH = availH - masterH - spacing;
+      double stackW = (availW - spacing) / 2.0;
+
+      placeWindow(windows[0], margin, margin, availW, masterH);
+      placeWindow(windows[1], margin, margin + masterH + spacing, stackW,
+                  stackH);
+      placeWindow(windows[2], margin + stackW + spacing,
+                  margin + masterH + spacing, stackW, stackH);
+    }
+  }
+
+  else if (n == 4)
+  {
+    double w = (availW - spacing) / 2.0;
+    double h = (availH - spacing) / 2.0;
+
+    placeWindow(windows[0], margin, margin, w, h);
+    placeWindow(windows[1], margin + w + spacing, margin, w, h);
+    placeWindow(windows[2], margin, margin + h + spacing, w, h);
+    placeWindow(windows[3], margin + w + spacing, margin + h + spacing, w, h);
+  }
+
+  else if (n == 5)
+  {
+    if (isLandscape)
+    {
+      double topW = (availW - spacing) / 2.0;
+      double botW = (availW - 2 * spacing) / 3.0;
+      double h = (availH - spacing) / 2.0;
+
+      placeWindow(windows[0], margin, margin, topW, h);
+      placeWindow(windows[1], margin + topW + spacing, margin, topW, h);
+      placeWindow(windows[2], margin, margin + h + spacing, botW, h);
+      placeWindow(windows[3], margin + botW + spacing, margin + h + spacing,
+                  botW, h);
+      placeWindow(windows[4], margin + 2 * (botW + spacing),
+                  margin + h + spacing, botW, h);
+    }
+    else
+    {
+      double leftH = (availH - spacing) / 2.0;
+      double rightH = (availH - 2 * spacing) / 3.0;
+      double w = (availW - spacing) / 2.0;
+
+      placeWindow(windows[0], margin, margin, w, leftH);
+      placeWindow(windows[1], margin, margin + leftH + spacing, w, leftH);
+      placeWindow(windows[2], margin + w + spacing, margin, w, rightH);
+      placeWindow(windows[3], margin + w + spacing, margin + rightH + spacing,
+                  w, rightH);
+      placeWindow(windows[4], margin + w + spacing,
+                  margin + 2 * (rightH + spacing), w, rightH);
+    }
+  }
+
+  else if (n == 6)
+  {
+    if (isLandscape)
+    {
+      double w = (availW - 2 * spacing) / 3.0;
+      double h = (availH - spacing) / 2.0;
+
+      for (int i = 0; i < 6; ++i)
+      {
+        int col = i % 3;
+        int row = i / 3;
+        placeWindow(windows[i], margin + col * (w + spacing),
+                    margin + row * (h + spacing), w, h);
+      }
+    }
+    else
+    {
+      double w = (availW - spacing) / 2.0;
+      double h = (availH - 2 * spacing) / 3.0;
+
+      for (int i = 0; i < 6; ++i)
+      {
+        int col = i % 2;
+        int row = i / 2;
+        placeWindow(windows[i], margin + col * (w + spacing),
+                    margin + row * (h + spacing), w, h);
+      }
+    }
+  }
+
+  else
+  {
+    int cols, rows;
+    if (isLandscape)
+    {
+      cols = qCeil(qSqrt(static_cast<double>(n) * availW / availH));
+      rows = qCeil(static_cast<double>(n) / cols);
+    }
+    else
+    {
+      rows = qCeil(qSqrt(static_cast<double>(n) * availH / availW));
+      cols = qCeil(static_cast<double>(n) / rows);
     }
 
-    // Recursively lay out each half of the window list in the sub-area
-    self(self, firstArea, firstHalf);
-    self(self, secondArea, secondHalf);
-  };
+    while (cols * rows < n)
+    {
+      if (isLandscape)
+        cols++;
+      else
+        rows++;
+    }
 
-  // Kick off the recursive tiling process
-  tileRecursive(tileRecursive, rootArea, visibleWindows);
+    double cellW = (availW - (cols - 1) * spacing) / cols;
+    double cellH = (availH - (rows - 1) * spacing) / rows;
 
-  // Ensure all windows are visible
+    int lastRowStart = (rows - 1) * cols;
+    int windowsInLastRow = n - lastRowStart;
+    double lastRowCellW = cellW;
+    double lastRowOffsetX = 0;
+
+    if (windowsInLastRow < cols && windowsInLastRow > 0)
+    {
+      double lastRowTotalW = availW;
+      lastRowCellW = (lastRowTotalW - (windowsInLastRow - 1) * spacing)
+                     / windowsInLastRow;
+      lastRowOffsetX = 0;
+    }
+
+    for (int i = 0; i < n; ++i)
+    {
+      int row = i / cols;
+      int col = i % cols;
+
+      double x, y, w, h;
+
+      if (row == rows - 1 && windowsInLastRow < cols)
+      {
+        int lastRowCol = i - lastRowStart;
+        x = margin + lastRowOffsetX + lastRowCol * (lastRowCellW + spacing);
+        w = lastRowCellW;
+      }
+      else
+      {
+        x = margin + col * (cellW + spacing);
+        w = cellW;
+      }
+
+      y = margin + row * (cellH + spacing);
+      h = cellH;
+
+      placeWindow(windows[i], x, y, w, h);
+    }
+  }
+
   for (auto *win : std::as_const(m_windows))
   {
     if (win && !win->isVisible())
@@ -274,80 +540,115 @@ void UI::WindowManager::autoLayout()
 }
 
 /**
- * @brief Cascades visible windows from top-left, offsetting each one.
+ * @brief Arranges windows using a macOS-inspired smart cascade layout.
  *
- * Starts cascading from the top-left corner and offsets each window diagonally.
- * If the cascade hits screen edges, starts a new cascade column.
+ * This layout algorithm positions windows in a visually appealing way:
+ *
+ * 1. Windows are sized to approximately 60% of canvas dimensions, respecting
+ *    minimum sizes from implicitWidth/implicitHeight.
+ *
+ * 2. The first window is centered in the canvas.
+ *
+ * 3. Subsequent windows are offset diagonally (down-right) with a fixed step.
+ *
+ * 4. When a window would exceed the bottom-right bounds, the cascade wraps
+ *    back to the top with a horizontal offset, similar to macOS behavior.
+ *
+ * 5. If horizontal space is exhausted, cascading restarts from the origin
+ *    with a smaller offset to layer windows visibly.
+ *
+ * This approach ensures windows remain accessible and visually organized,
+ * even with many windows open.
  */
 void UI::WindowManager::cascadeLayout()
 {
-  // Set function constants
-  const int margin = 8;
-  const int offsetStep = 32;
+  const double canvasW = width();
+  const double canvasH = height();
 
-  // Collect all currently visible and valid QQuickItems (windows)
+  if (canvasW <= 0 || canvasH <= 0)
+    return;
+
   QList<QQuickItem *> visibleWindows;
-  for (auto *win : std::as_const(m_windows))
+  for (int id : std::as_const(m_windowOrder))
   {
+    auto *win = m_windows.value(id);
     if (win && win->state() == "normal")
       visibleWindows.append(win);
   }
 
-  // If there are no visible windows, there's nothing to layout
   if (visibleWindows.isEmpty())
     return;
 
-  // Set start and end points
-  int startX = margin;
-  int startY = margin;
-  int maxRight = width() - margin;
-  int maxBottom = height() - margin;
+  const double margin = 8;
+  const double cascadeOffsetX = 26;
+  const double cascadeOffsetY = 26;
 
-  // Initialize position trackers
-  int x = startX;
-  int y = startY;
+  const double targetWidthRatio = 0.55;
+  const double targetHeightRatio = 0.60;
 
-  // Initialize cascade counter
-  int cascadeCount = 0;
+  const double availableW = canvasW - 2 * margin;
+  const double availableH = canvasH - 2 * margin;
 
-  // Cascade all the windows
-  for (auto *win : visibleWindows)
+  for (int i = 0; i < visibleWindows.size(); ++i)
   {
-    // Validate pointer
+    QQuickItem *win = visibleWindows[i];
     if (!win)
       continue;
 
-    // Obtain minimum recommended window sizes
-    double minWidth = win->property("implicitWidth").toReal();
-    double minHeight = win->property("implicitHeight").toReal();
+    double minW = qMax(win->implicitWidth(), 200.0);
+    double minH = qMax(win->implicitHeight(), 150.0);
 
-    // Fallback to sane defaults if minimum sizes aren't set
-    if (minWidth <= 0)
-      minWidth = 200;
-    if (minHeight <= 0)
-      minHeight = 150;
+    double winW = qMax(minW, availableW * targetWidthRatio);
+    double winH = qMax(minH, availableH * targetHeightRatio);
 
-    // If the next cascade step goes off screen, start a new cascade
-    if (x + minWidth > maxRight || y + minHeight > maxBottom)
+    winW = qMin(winW, availableW);
+    winH = qMin(winH, availableH);
+
+    double baseX = margin + (availableW - winW) / 2.0;
+    double baseY = margin + (availableH - winH) / 2.0;
+
+    double offsetX = i * cascadeOffsetX;
+    double offsetY = i * cascadeOffsetY;
+
+    int wrapCount = 0;
+    while (baseY + offsetY + winH > canvasH - margin && wrapCount < 10)
     {
-      cascadeCount++;
-      x = startX + cascadeCount * offsetStep;
-      y = startY;
+      offsetY -= (availableH - winH);
+      offsetX += cascadeOffsetX * 2;
+      wrapCount++;
     }
 
-    // Update window geometry
-    win->setX(x);
-    win->setY(y);
-    win->setWidth(minWidth);
-    win->setHeight(minHeight);
-    Q_EMIT geometryChanged(win);
+    while (baseX + offsetX + winW > canvasW - margin && wrapCount < 20)
+    {
+      offsetX -= (availableW - winW);
+      wrapCount++;
+    }
 
-    // Update position counters
-    x += offsetStep;
-    y += offsetStep;
+    double winX = baseX + offsetX;
+    double winY = baseY + offsetY;
+
+    winX = qBound(margin, winX, canvasW - winW - margin);
+    winY = qBound(margin, winY, canvasH - winH - margin);
+
+    if (winW > availableW)
+    {
+      winW = availableW;
+      winX = margin;
+    }
+
+    if (winH > availableH)
+    {
+      winH = availableH;
+      winY = margin;
+    }
+
+    win->setX(winX);
+    win->setY(winY);
+    win->setWidth(winW);
+    win->setHeight(winH);
+    Q_EMIT geometryChanged(win);
   }
 
-  // Ensure all windows are visible
   for (auto *win : std::as_const(m_windows))
   {
     if (win && !win->isVisible())
@@ -523,15 +824,127 @@ void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)
 }
 
 /**
+ * @brief Constrains all windows to fit within the current canvas bounds.
+ *
+ * This function ensures that no window is positioned outside the visible
+ * canvas area and resizes windows if they exceed the available space.
+ * It maintains a minimum visible portion of each window to prevent
+ * windows from becoming completely inaccessible.
+ *
+ * The function handles:
+ * - Windows positioned beyond the right/bottom edges
+ * - Windows larger than the canvas (resized to fit)
+ * - Windows with negative positions (clamped to 0)
+ */
+void UI::WindowManager::constrainWindows()
+{
+  const double canvasW = width();
+  const double canvasH = height();
+
+  if (canvasW <= 0 || canvasH <= 0)
+    return;
+
+  for (auto *win : std::as_const(m_windows))
+  {
+    if (!win)
+      continue;
+
+    if (win->state() != "normal")
+      continue;
+
+    double winX = win->x();
+    double winY = win->y();
+    double winW = win->width();
+    double winH = win->height();
+
+    const double minW = qMax(win->implicitWidth(), 100.0);
+    const double minH = qMax(win->implicitHeight(), 80.0);
+
+    bool changed = false;
+
+    if (winW > canvasW)
+    {
+      winW = canvasW;
+      changed = true;
+    }
+
+    if (winH > canvasH)
+    {
+      winH = canvasH;
+      changed = true;
+    }
+
+    if (winW < minW && canvasW >= minW)
+    {
+      winW = minW;
+      changed = true;
+    }
+
+    if (winH < minH && canvasH >= minH)
+    {
+      winH = minH;
+      changed = true;
+    }
+
+    if (winX < 0)
+    {
+      winX = 0;
+      changed = true;
+    }
+
+    if (winY < 0)
+    {
+      winY = 0;
+      changed = true;
+    }
+
+    if (winX + winW > canvasW)
+    {
+      winX = canvasW - winW;
+      if (winX < 0)
+      {
+        winX = 0;
+        winW = canvasW;
+      }
+      changed = true;
+    }
+
+    if (winY + winH > canvasH)
+    {
+      winY = canvasH - winH;
+      if (winY < 0)
+      {
+        winY = 0;
+        winH = canvasH;
+      }
+      changed = true;
+    }
+
+    if (changed)
+    {
+      win->setX(winX);
+      win->setY(winY);
+      win->setWidth(winW);
+      win->setHeight(winH);
+      Q_EMIT geometryChanged(win);
+    }
+  }
+}
+
+/**
  * @brief Reacts to changes in the desktop or available layout area.
  *
  * If auto-layout is enabled, this triggers a re-arrangement of all
- * visible windows to adapt to the new geometry.
+ * visible windows to adapt to the new geometry. If auto-layout is
+ * disabled (manual layout), it constrains windows to ensure they
+ * remain visible and properly sized within the canvas.
  */
 void UI::WindowManager::triggerLayoutUpdate()
 {
   if (autoLayoutEnabled())
     autoLayout();
+  else
+    constrainWindows();
 }
 
 /**

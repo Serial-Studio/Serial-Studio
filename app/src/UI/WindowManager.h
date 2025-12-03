@@ -24,6 +24,8 @@
 #include <QObject>
 #include <QSettings>
 #include <QQuickItem>
+#include <QJsonObject>
+#include <QJsonArray>
 
 namespace UI
 {
@@ -82,6 +84,8 @@ public:
   [[nodiscard]] const QRect &snapIndicator() const;
 
   Q_INVOKABLE int zOrder(QQuickItem *item) const;
+  Q_INVOKABLE QJsonObject serializeLayout() const;
+  Q_INVOKABLE bool restoreLayout(const QJsonObject &layout);
 
   enum class ResizeEdge
   {
@@ -101,6 +105,7 @@ public slots:
   void loadLayout();
   void autoLayout();
   void cascadeLayout();
+  void constrainWindows();
   void triggerLayoutUpdate();
   void clearBackgroundImage();
   void selectBackgroundImage();

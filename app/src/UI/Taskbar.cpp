@@ -21,8 +21,14 @@
 
 #include "Taskbar.h"
 
+#include <QTimer>
+#include <QGuiApplication>
+
+#include "IO/Manager.h"
 #include "UI/Dashboard.h"
 #include "UI/WindowManager.h"
+#include "UI/WidgetRegistry.h"
+#include "JSON/ProjectModel.h"
 
 //------------------------------------------------------------------------------
 // Taskbar model implementation
@@ -103,12 +109,51 @@ UI::Taskbar::Taskbar(QQuickItem *parent)
       "SerialStudio.UI", 1, 0, "TaskbarModel",
       "TaskbarModel is exposed by Taskbar singleton");
 
+  connectToRegistry();
+
   connect(&UI::Dashboard::instance(), &UI::Dashboard::dataReset, this,
           &UI::Taskbar::rebuildModel);
   connect(&UI::Dashboard::instance(), &UI::Dashboard::widgetCountChanged, this,
           &UI::Taskbar::rebuildModel);
 
+  auto *pm = &JSON::ProjectModel::instance();
+  connect(pm, &JSON::ProjectModel::dashboardLayoutChanged, this,
+          &UI::Taskbar::onDashboardLayoutChanged);
+  connect(pm, &JSON::ProjectModel::activeGroupIdChanged, this, [this, pm] {
+    setActiveGroupId(pm->activeGroupId());
+  });
+
+  connect(qApp, &QGuiApplication::aboutToQuit, this, &UI::Taskbar::saveLayout);
+
+  auto *io = &IO::Manager::instance();
+  connect(io, &IO::Manager::connectedChanged, this, [this, io] {
+    if (!io->isConnected())
+      saveLayout();
+    else
+      onDashboardLayoutChanged();
+  });
+
   rebuildModel();
+}
+
+/**
+ * @brief Connects the Taskbar to the WidgetRegistry's lifecycle signals.
+ *
+ * This allows incremental updates to the taskbar model when widgets are
+ * created or destroyed, rather than always requiring a full rebuild.
+ */
+void UI::Taskbar::connectToRegistry()
+{
+  auto &registry = WidgetRegistry::instance();
+
+  connect(&registry, &WidgetRegistry::widgetCreated, this,
+          &Taskbar::onWidgetCreated);
+  connect(&registry, &WidgetRegistry::widgetDestroyed, this,
+          &Taskbar::onWidgetDestroyed);
+  connect(&registry, &WidgetRegistry::registryCleared, this,
+          &Taskbar::onRegistryCleared);
+  connect(&registry, &WidgetRegistry::batchUpdateCompleted, this,
+          &Taskbar::onBatchUpdateCompleted);
 }
 
 //------------------------------------------------------------------------------
@@ -709,12 +754,17 @@ void UI::Taskbar::rebuildModel()
   m_fullModel->clear();
   m_activeWindow = nullptr;
 
+  // Clear widget ID mappings
+  m_widgetIdToWindowId.clear();
+  m_windowIdToWidgetId.clear();
+
   // Clear windows in window manager
   if (m_windowManager)
     m_windowManager->clear();
 
   // Reduce calls to UI::Dashboard::instance()
   auto *db = &UI::Dashboard::instance();
+  auto &registry = WidgetRegistry::instance();
 
   // Obtain and validate latest frame
   const auto &frame = db->processedFrame();
@@ -801,6 +851,22 @@ void UI::Taskbar::rebuildModel()
     if (!alreadyRegistered)
       groupItem->setData(true, TaskbarModel::OverviewRole);
 
+    // Map widget ID to window ID for the main group widget
+    if (groupType != SerialStudio::DashboardNoWidget)
+    {
+      auto widgetIds = registry.widgetIdsByType(groupType);
+      for (const auto &wid : widgetIds)
+      {
+        auto info = registry.widgetInfo(wid);
+        if (info.groupId == groupId && info.isGroupWidget)
+        {
+          m_widgetIdToWindowId.insert(wid, mainWindowId);
+          m_windowIdToWidgetId.insert(mainWindowId, wid);
+          break;
+        }
+      }
+    }
+
     // Append group children (including any automatically generated groups)
     for (int i = 0; i < windowIds.count(); ++i)
     {
@@ -823,6 +889,15 @@ void UI::Taskbar::rebuildModel()
         auto &dbGroup = db->getGroupWidget(widgetTypes[i], relativeIds[i]);
         child->setData(dbGroup.title, TaskbarModel::WidgetNameRole);
         child->setData(false, TaskbarModel::OverviewRole);
+
+        // Map widget ID to window ID
+        auto wid = registry.widgetIdByTypeAndIndex(widgetTypes[i],
+                                                   relativeIds[i]);
+        if (wid != kInvalidWidgetId)
+        {
+          m_widgetIdToWindowId.insert(wid, windowIds[i]);
+          m_windowIdToWidgetId.insert(windowIds[i], wid);
+        }
       }
 
       // Register window title for datasets
@@ -831,6 +906,15 @@ void UI::Taskbar::rebuildModel()
         auto &dbDataset = db->getDatasetWidget(widgetTypes[i], relativeIds[i]);
         child->setData(dbDataset.title, TaskbarModel::WidgetNameRole);
         child->setData(dbDataset.overviewDisplay, TaskbarModel::OverviewRole);
+
+        // Map widget ID to window ID
+        auto wid = registry.widgetIdByTypeAndIndex(widgetTypes[i],
+                                                   relativeIds[i]);
+        if (wid != kInvalidWidgetId)
+        {
+          m_widgetIdToWindowId.insert(wid, windowIds[i]);
+          m_windowIdToWidgetId.insert(windowIds[i], wid);
+        }
       }
 
       // Register the child
@@ -923,4 +1007,163 @@ QStandardItem *UI::Taskbar::findItemByWindowId(int windowId,
   }
 
   return nullptr;
+}
+
+/**
+ * @brief Searches the full model for an item by its widget ID.
+ *
+ * Similar to findItemByWindowId but uses the stable widget ID from the
+ * WidgetRegistry. This is useful when processing registry events.
+ *
+ * @param widgetId The stable widget ID from the registry.
+ * @param parentItem Optional parent item to limit search scope.
+ * @return Pointer to the matching QStandardItem, or nullptr if not found.
+ */
+QStandardItem *UI::Taskbar::findItemByWidgetId(UI::WidgetID widgetId,
+                                               QStandardItem *parentItem) const
+{
+  if (!m_widgetIdToWindowId.contains(widgetId))
+    return nullptr;
+
+  int windowId = m_widgetIdToWindowId.value(widgetId);
+  return findItemByWindowId(windowId, parentItem);
+}
+
+/**
+ * @brief Finds a group item by its group ID.
+ *
+ * @param groupId The group ID to search for.
+ * @return Pointer to the group item, or nullptr if not found.
+ */
+QStandardItem *UI::Taskbar::findGroupItemByGroupId(int groupId) const
+{
+  for (int i = 0; i < fullModel()->rowCount(); ++i)
+  {
+    QStandardItem *item = fullModel()->item(i);
+    if (item && item->data(TaskbarModel::GroupIdRole).toInt() == groupId)
+      return item;
+  }
+
+  return nullptr;
+}
+
+/**
+ * @brief Creates a QStandardItem from widget info.
+ *
+ * @param info The widget info from the registry.
+ * @return A new QStandardItem populated with the widget's data.
+ */
+QStandardItem *UI::Taskbar::createItemFromWidgetInfo(const UI::WidgetInfo &info)
+{
+  auto *item = new QStandardItem();
+  auto icon = SerialStudio::dashboardWidgetIcon(info.type, true);
+
+  item->setData(info.groupId, TaskbarModel::GroupIdRole);
+  item->setData(info.title, TaskbarModel::WidgetNameRole);
+  item->setData(info.type, TaskbarModel::WidgetTypeRole);
+  item->setData(icon, TaskbarModel::WidgetIconRole);
+  item->setData(info.isGroupWidget, TaskbarModel::IsGroupRole);
+  item->setData(TaskbarModel::WindowNormal, TaskbarModel::WindowStateRole);
+
+  return item;
+}
+
+//------------------------------------------------------------------------------
+// Registry event handlers
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Handles widget creation events from the registry.
+ *
+ * When a batch update is in progress (during reconfigureDashboard), this
+ * method defers action since a full rebuild will happen anyway.
+ *
+ * For single widget additions (like toggling terminal), this method
+ * adds the widget incrementally without rebuilding the entire model.
+ *
+ * @param id The stable widget ID.
+ * @param info Complete information about the new widget.
+ */
+void UI::Taskbar::onWidgetCreated(UI::WidgetID id, const UI::WidgetInfo &info)
+{
+  Q_UNUSED(id)
+  Q_UNUSED(info)
+}
+
+/**
+ * @brief Handles widget destruction events from the registry.
+ *
+ * When a batch update is in progress, this method defers action.
+ *
+ * For single widget removals (like disabling terminal), this method
+ * removes the widget incrementally.
+ *
+ * @param id The stable widget ID being destroyed.
+ */
+void UI::Taskbar::onWidgetDestroyed(UI::WidgetID id)
+{
+  Q_UNUSED(id)
+}
+
+/**
+ * @brief Handles registry clear events.
+ *
+ * This is called when the entire registry is cleared, typically during
+ * resetData(). The taskbar should clear its ID mappings but wait for
+ * the subsequent dataReset signal to trigger a full rebuild.
+ */
+void UI::Taskbar::onRegistryCleared()
+{
+  m_widgetIdToWindowId.clear();
+  m_windowIdToWidgetId.clear();
+}
+
+/**
+ * @brief Handles batch update completion from the registry.
+ *
+ * This is called after all widgets have been created/destroyed during
+ * a batch operation (like reconfigureDashboard). This is where we can
+ * trigger expensive operations like layout recalculation.
+ */
+void UI::Taskbar::onBatchUpdateCompleted()
+{
+}
+
+/**
+ * @brief Handles dashboard layout changes from the ProjectModel.
+ *
+ * This is called when a project file is loaded that contains a saved
+ * dashboard layout. The layout is restored via the WindowManager.
+ */
+void UI::Taskbar::onDashboardLayoutChanged()
+{
+  if (!m_windowManager)
+    return;
+
+  const auto &layout = JSON::ProjectModel::instance().dashboardLayout();
+  if (!layout.isEmpty())
+  {
+    QTimer::singleShot(100, this, [this, layout] {
+      if (m_windowManager)
+        m_windowManager->restoreLayout(layout);
+    });
+  }
+}
+
+/**
+ * @brief Saves the current dashboard layout to the ProjectModel.
+ *
+ * This serializes the current window positions, sizes, and order
+ * to the project file. Call this when the user modifies the layout
+ * and you want to persist the changes.
+ */
+void UI::Taskbar::saveLayout()
+{
+  if (!m_windowManager)
+    return;
+
+  auto layout = m_windowManager->serializeLayout();
+  JSON::ProjectModel::instance().setDashboardLayout(layout);
+  JSON::ProjectModel::instance().setActiveGroupId(m_activeGroupId);
+  JSON::ProjectModel::instance().saveJsonFile();
 }

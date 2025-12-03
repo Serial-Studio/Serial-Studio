@@ -26,6 +26,7 @@
 
 #include "DSP.h"
 #include "SerialStudio.h"
+#include "UI/WidgetRegistry.h"
 
 namespace UI
 {
@@ -165,7 +166,8 @@ private:
   int m_widgetCount;         // Total number of active widgets
   bool m_updateRequired;     // Flag to trigger plot/UI update
   bool m_showActionPanel;    // Whenever the UI shall display an action panel
-  bool m_terminalEnabled;    // Whether terminal group is enabled
+  bool m_terminalEnabled;       // Whether terminal group is enabled
+  WidgetID m_terminalWidgetId;  // Registry ID for terminal widget
   bool m_showTaskbarButtons; // Always show taskbar buttons, regardless of state
 
   bool m_updateRetryInProgress; // Used to avoid recursion when frame changes

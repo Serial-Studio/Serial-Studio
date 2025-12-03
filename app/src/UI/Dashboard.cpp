@@ -20,6 +20,7 @@
  */
 
 #include "UI/Dashboard.h"
+#include "UI/WidgetRegistry.h"
 
 #include "IO/Manager.h"
 #include "CSV/Player.h"
@@ -56,6 +57,7 @@ UI::Dashboard::Dashboard()
   , m_updateRequired(false)
   , m_showActionPanel(true)
   , m_terminalEnabled(false)
+  , m_terminalWidgetId(kInvalidWidgetId)
   , m_showTaskbarButtons(false)
   , m_pltXAxis(kDefaultPlotPoints)
   , m_multipltXAxis(kDefaultPlotPoints)
@@ -757,6 +759,12 @@ void UI::Dashboard::setPoints(const int points)
  */
 void UI::Dashboard::resetData(const bool notify)
 {
+  // Clear the widget registry (emits widgetDestroyed for each widget)
+  WidgetRegistry::instance().clear();
+
+  // Reset terminal widget ID
+  m_terminalWidgetId = kInvalidWidgetId;
+
   // Clear plotting data
   m_fftValues.clear();
   m_pltValues.clear();
@@ -877,22 +885,82 @@ void UI::Dashboard::setShowActionPanel(const bool enabled)
 }
 
 /**
- * @brief Enables/disables adding a terminal widget.
+ * @brief Enables/disables the terminal widget.
  *
- * This triggers a reconfiguration of the dashboard to add or remove
- * the terminal widget. Plot data is preserved during this operation.
+ * Uses incremental registry updates when possible to avoid a full dashboard
+ * rebuild. This preserves window positions and plot data while toggling the
+ * terminal.
  */
 void UI::Dashboard::setTerminalEnabled(const bool enabled)
 {
   if (m_terminalEnabled != enabled)
   {
     m_terminalEnabled = enabled;
+    auto &registry = WidgetRegistry::instance();
 
-    // If we have an active frame, reconfigure to add/remove terminal
-    if (m_rawFrame.groups.size() > 0)
+    // Use incremental update if we have an active dashboard with widgets
+    if (m_rawFrame.groups.size() > 0 && m_widgetCount > 0)
     {
-      const auto frame = m_rawFrame;
-      reconfigureDashboard(frame);
+      if (enabled)
+      {
+        // Create terminal group and add to internal structures
+        JSON::Group terminal;
+        terminal.widget = "terminal";
+        terminal.title = tr("Console");
+        terminal.groupId = static_cast<int>(m_lastFrame.groups.size());
+
+        // Add to processed frame and widget groups
+        m_lastFrame.groups.push_back(terminal);
+        m_widgetGroups[SerialStudio::DashboardTerminal].append(terminal);
+
+        // Register in widget registry and widget map
+        m_terminalWidgetId = registry.createWidget(
+            SerialStudio::DashboardTerminal, terminal.title, terminal.groupId,
+            -1, true);
+        m_widgetMap.insert(m_widgetCount++,
+                           qMakePair(SerialStudio::DashboardTerminal, 0));
+
+        Q_EMIT widgetCountChanged();
+      }
+      else
+      {
+        // Remove terminal from registry
+        if (m_terminalWidgetId != kInvalidWidgetId)
+        {
+          registry.destroyWidget(m_terminalWidgetId);
+          m_terminalWidgetId = kInvalidWidgetId;
+        }
+
+        // Remove from internal structures
+        m_widgetGroups.remove(SerialStudio::DashboardTerminal);
+
+        // Remove terminal from processed frame
+        auto &groups = m_lastFrame.groups;
+        groups.erase(std::remove_if(groups.begin(), groups.end(),
+                                    [](const JSON::Group &g) {
+                                      return g.widget == "terminal";
+                                    }),
+                     groups.end());
+
+        // Rebuild widget map without terminal
+        m_widgetMap.clear();
+        m_widgetCount = 0;
+        for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i)
+        {
+          const auto count = widgetCount(i.key());
+          for (int j = 0; j < count; ++j)
+            m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
+        }
+        for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end();
+             ++i)
+        {
+          const auto count = widgetCount(i.key());
+          for (int j = 0; j < count; ++j)
+            m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
+        }
+
+        Q_EMIT widgetCountChanged();
+      }
     }
   }
 
@@ -1262,23 +1330,48 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
     }
   }
 
-  // Generate group model map
+  // Begin batch update on the registry (defers batchUpdateCompleted signal)
+  auto &registry = WidgetRegistry::instance();
+  registry.beginBatchUpdate();
+
+  // Reset terminal widget ID
+  m_terminalWidgetId = kInvalidWidgetId;
+
+  // Generate group model map and register widgets
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i)
   {
     const auto key = i.key();
     const auto count = widgetCount(key);
     for (int j = 0; j < count; ++j)
+    {
+      const auto &group = i.value().at(j);
+      auto widgetId
+          = registry.createWidget(key, group.title, group.groupId, -1, true);
+
+      // Store terminal widget ID for incremental updates
+      if (key == SerialStudio::DashboardTerminal)
+        m_terminalWidgetId = widgetId;
+
       m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
+    }
   }
 
-  // Generate dataset model map
+  // Generate dataset model map and register widgets
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
   {
     const auto key = i.key();
     const auto count = widgetCount(key);
     for (int j = 0; j < count; ++j)
+    {
+      const auto &dataset = i.value().at(j);
+      registry.createWidget(key, dataset.title, dataset.groupId,
+                            dataset.index, false);
       m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
+    }
   }
+
+  // End batch update (emits batchUpdateCompleted if changes occurred)
+  registry.endBatchUpdate();
 
   // Traverse all group-level datasets
   for (auto &groupList : m_widgetGroups)
