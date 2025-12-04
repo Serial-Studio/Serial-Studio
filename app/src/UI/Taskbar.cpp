@@ -29,6 +29,7 @@
 #include "UI/WindowManager.h"
 #include "UI/WidgetRegistry.h"
 #include "JSON/ProjectModel.h"
+#include "JSON/FrameBuilder.h"
 
 //------------------------------------------------------------------------------
 // Taskbar model implementation
@@ -854,7 +855,7 @@ void UI::Taskbar::rebuildModel()
     if (groupType != SerialStudio::DashboardNoWidget)
     {
       auto widgetIds = registry.widgetIdsByType(groupType);
-      for (const auto &wid : widgetIds)
+      for (const auto &wid : std::as_const(widgetIds))
       {
         auto info = registry.widgetInfo(wid);
         if (info.groupId == groupId && info.isGroupWidget)
@@ -1137,13 +1138,21 @@ void UI::Taskbar::onDashboardLayoutChanged()
   if (!m_windowManager)
     return;
 
-  const auto &layout = JSON::ProjectModel::instance().dashboardLayout();
-  if (!layout.isEmpty())
+  const auto opMode = JSON::FrameBuilder::instance().operationMode();
+  if (opMode == SerialStudio::ProjectFile)
   {
-    QTimer::singleShot(100, this, [this, layout] {
-      if (m_windowManager)
-        m_windowManager->restoreLayout(layout);
-    });
+    auto *model = &JSON::ProjectModel::instance();
+    if (!model->jsonFilePath().isEmpty())
+    {
+      const auto &layout = model->dashboardLayout();
+      if (!layout.isEmpty())
+      {
+        QTimer::singleShot(100, this, [this, layout] {
+          if (m_windowManager)
+            m_windowManager->restoreLayout(layout);
+        });
+      }
+    }
   }
 }
 
@@ -1159,8 +1168,16 @@ void UI::Taskbar::saveLayout()
   if (!m_windowManager)
     return;
 
-  auto layout = m_windowManager->serializeLayout();
-  JSON::ProjectModel::instance().setDashboardLayout(layout);
-  JSON::ProjectModel::instance().setActiveGroupId(m_activeGroupId);
-  JSON::ProjectModel::instance().saveJsonFile();
+  const auto opMode = JSON::FrameBuilder::instance().operationMode();
+  if (opMode == SerialStudio::ProjectFile)
+  {
+    auto *model = &JSON::ProjectModel::instance();
+    if (!model->jsonFilePath().isEmpty())
+    {
+      auto layout = m_windowManager->serializeLayout();
+      model->setDashboardLayout(layout);
+      model->setActiveGroupId(m_activeGroupId);
+      model->saveJsonFile();
+    }
+  }
 }
