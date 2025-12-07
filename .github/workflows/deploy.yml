@@ -343,6 +343,7 @@ jobs:
 
   build-macos:
     runs-on: macos-latest
+    if: false
     name: '🍎 macOS'
     steps:
     - name: '🧰 Checkout'
@@ -623,7 +624,7 @@ jobs:
   upload:
     name: '🗂 Create release and upload artifacts'
     needs:
-      - build-macos
+      #- build-macos
       - build-linux
       - build-windows
       - build-linux-arm64
