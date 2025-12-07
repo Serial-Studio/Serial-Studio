@@ -750,8 +750,11 @@ void IO::Manager::killFrameReader()
  */
 void IO::Manager::startFrameReader()
 {
-  // Ensure driver is set and driver is open
-  Q_ASSERT(driver() != nullptr);
+  if (!driver())
+  {
+    qCritical() << "Cannot start frame reader: no driver set";
+    return;
+  }
 
   // Stop the frame reader thread if needed
   killFrameReader();
@@ -769,8 +772,11 @@ void IO::Manager::startFrameReader()
     m_frameReader->moveToThread(&m_workerThread);
 
   // Configure initial state for the frame reader
+  // Use Qt::QueuedConnection when threading is enabled for thread safety
+  auto connectionType
+      = m_thrFrameExtr ? Qt::QueuedConnection : Qt::AutoConnection;
   QObject::connect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
-                   &IO::FrameReader::processData);
+                   &IO::FrameReader::processData, connectionType);
 
   // Connect frame reader events to IO::Manager
   connect(m_frameReader, &IO::FrameReader::readyRead, this,

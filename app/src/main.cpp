@@ -106,8 +106,9 @@ int main(int argc, char **argv)
     app.setWindowIcon(appIcon);
 #endif
 
-  // Set thread priority
-  QThread::currentThread()->setPriority(QThread::HighestPriority);
+  // Set thread priority (HighPriority instead of Highest to avoid starving
+  // workers)
+  QThread::currentThread()->setPriority(QThread::HighPriority);
 
   // Set application style
   app.setStyle(QStyleFactory::create("Fusion"));
@@ -334,7 +335,6 @@ int main(int argc, char **argv)
   }
 
   // Enter application event loop
-  app.processEvents();
   const auto status = app.exec();
 
   // Free dynamically-generated argv on Windows

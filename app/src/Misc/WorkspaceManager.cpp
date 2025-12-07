@@ -37,6 +37,15 @@ Misc::WorkspaceManager::WorkspaceManager()
       QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
       QStringLiteral("Serial Studio"));
   m_path = m_settings.value(QStringLiteral("Workspace"), def).toString();
+
+  QDir dir(m_path);
+  if (!dir.exists() && !dir.mkpath("."))
+  {
+    qWarning() << "Failed to create workspace directory:" << m_path;
+    m_path = QStandardPaths::writableLocation(QStandardPaths::TempLocation)
+             + "/Serial Studio";
+    qWarning() << "Using fallback workspace:" << m_path;
+  }
 }
 
 /**
@@ -84,7 +93,10 @@ QString Misc::WorkspaceManager::path(const QString &subdirectory) const
 
   QDir dir(path);
   if (!dir.exists())
-    dir.mkpath(".");
+  {
+    if (!dir.mkpath("."))
+      qCritical() << "Failed to create workspace subdirectory:" << path;
+  }
 
   return path;
 }

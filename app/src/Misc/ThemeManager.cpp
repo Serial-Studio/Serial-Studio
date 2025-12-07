@@ -114,20 +114,48 @@ Misc::ThemeManager::ThemeManager()
     QFile file(QStringLiteral(":/rcc/themes/%1.json").arg(theme));
     if (file.open(QFile::ReadOnly))
     {
-      const auto document = QJsonDocument::fromJson(file.readAll());
-      const auto title = document.object().value("title").toString();
-      m_themes.insert(title, document.object());
-      m_availableThemes.append(title);
+      QJsonParseError parseError;
+      const auto document
+          = QJsonDocument::fromJson(file.readAll(), &parseError);
+
+      if (parseError.error == QJsonParseError::NoError && !document.isNull())
+      {
+        const auto title = document.object().value("title").toString();
+        if (!title.isEmpty())
+        {
+          m_themes.insert(title, document.object());
+          m_availableThemes.append(title);
+        }
+        else
+          qWarning() << "Theme" << theme << "has no title, skipping";
+      }
+      else
+        qWarning() << "Failed to parse theme" << theme << ":"
+                   << parseError.errorString();
 
       file.close();
     }
+    else
+      qWarning() << "Failed to open theme resource:" << theme;
+  }
+
+  if (m_availableThemes.isEmpty())
+  {
+    qCritical() << "No themes loaded! Adding fallback";
+    m_availableThemes.append("Fallback");
   }
 
   // Append "System" theme as last option
   m_availableThemes.append(QStringLiteral("System"));
 
-  // Set application theme
-  setTheme(m_settings.value("ApplicationTheme", 0).toInt());
+  int themeIndex = m_settings.value("ApplicationTheme", 0).toInt();
+  if (themeIndex < 0 || themeIndex >= m_availableThemes.count())
+  {
+    qWarning() << "Invalid theme index" << themeIndex << ", using 0";
+    themeIndex = 0;
+  }
+
+  setTheme(themeIndex);
 
   // Load localized theme names
   updateLocalizedThemeNames();

@@ -42,6 +42,7 @@ UI::WindowManager::WindowManager(QQuickItem *parent)
   , m_targetWindow(nullptr)
   , m_resizeWindow(nullptr)
   , m_focusedWindow(nullptr)
+  , m_resizeEdge(ResizeEdge::None)
 {
   setEnabled(true);
   setAcceptHoverEvents(false);

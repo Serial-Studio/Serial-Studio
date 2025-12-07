@@ -55,6 +55,7 @@ UI::Dashboard::Dashboard()
   : m_points(kDefaultPlotPoints)
   , m_widgetCount(0)
   , m_updateRequired(false)
+  , m_updateRetryInProgress(false)
   , m_showActionPanel(true)
   , m_terminalEnabled(false)
   , m_terminalWidgetId(kInvalidWidgetId)
@@ -63,23 +64,24 @@ UI::Dashboard::Dashboard()
   , m_multipltXAxis(kDefaultPlotPoints)
 {
   // clang-format off
-  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=, this] { resetData(true); });
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=, this] { resetData(true); });
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=, this] { resetData(); });
+  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=, this] { resetData(); }, Qt::QueuedConnection);
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
 #ifdef BUILD_COMMERCIAL
-  connect(&MQTT::Client::instance(), &MQTT::Client::connectedChanged, this,
-          [=, this] {
-            const bool subscribed = MQTT::Client::instance().isSubscriber();
-            const bool wasSubscribed
-                = !MQTT::Client::instance().isConnected()
-                  && MQTT::Client::instance().isSubscriber();
+  connect(
+      &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this,
+      [=, this] {
+        const bool subscribed = MQTT::Client::instance().isSubscriber();
+        const bool wasSubscribed = !MQTT::Client::instance().isConnected()
+                                   && MQTT::Client::instance().isSubscriber();
 
-            if (subscribed || wasSubscribed)
-              resetData(true);
-          });
+        if (subscribed || wasSubscribed)
+          resetData(true);
+      },
+      Qt::QueuedConnection);
 #endif
 
   // Update the dashboard widgets at defined refresh rate

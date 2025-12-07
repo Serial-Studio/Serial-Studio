@@ -57,7 +57,16 @@ JSON::FrameBuilder::FrameBuilder()
   // Read JSON map location
   auto path = m_settings.value("json_map_location", "").toString();
   if (!path.isEmpty())
-    loadJsonMap(path);
+  {
+    QFileInfo fileInfo(path);
+    if (fileInfo.exists() && fileInfo.isFile())
+      loadJsonMap(path);
+    else
+    {
+      qWarning() << "Saved JSON map path does not exist:" << path;
+      m_settings.setValue("json_map_location", "");
+    }
+  }
 
   // Obtain operation mode from settings
   auto m = m_settings.value("operation_mode", SerialStudio::QuickPlot).toInt();
