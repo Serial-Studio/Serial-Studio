@@ -105,6 +105,8 @@ Misc::ThemeManager::ThemeManager()
       QStringLiteral("gunmetal"),
       QStringLiteral("midday"),
       QStringLiteral("midnight"),
+      QStringLiteral("fluent-light"),
+      QStringLiteral("fluent-dark")
   };
   // clang-format on
 

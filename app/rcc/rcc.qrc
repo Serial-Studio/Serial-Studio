@@ -451,5 +451,9 @@
         <file>themes/midday.json</file>
         <file>themes/midnight.json</file>
         <file>themes/rust.json</file>
+        <file>themes/fluent-dark.json</file>
+        <file>themes/fluent-light.json</file>
+        <file>themes/code-editor/fluent-dark.xml</file>
+        <file>themes/code-editor/fluent-light.xml</file>
     </qresource>
 </RCC>
