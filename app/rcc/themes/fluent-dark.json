@@ -73,10 +73,10 @@
     "placeholder_text": "#808080",
     "highlighted_text": "#FFFFFF",
 
-    "console_text": "#98C379",
-    "console_base": "#151515",
-    "console_border": "#323232",
-    "console_highlight": "#60CDFF",
+    "console_text":"#98c379",
+    "console_base":"#202326",
+    "console_border":"#3a3d42",
+    "console_highlight":"#4b6cb7",
 
     "widget_text": "#D0D0D0",
     "widget_base": "#262626",
@@ -143,8 +143,8 @@
     "plot3d_background_inner": "#1A1A1A",
     "plot3d_background_outer": "#151515",
 
-    "plot_cursor_a": "#FFA657",
-    "plot_cursor_b": "#F85149",
+    "plot_cursor_a":"#4b6cb7",
+    "plot_cursor_b":"#e06c75",
 
     "widget_colors": [
       "#4B6CB7",

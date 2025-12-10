@@ -268,8 +268,8 @@ Item {
       yLabel: root.model.yLabel
       curveColors: root.model.colors
       mouseAreaEnabled: windowRoot.focused
-      xAxis.tickInterval: root.model.xTickInterval
-      yAxis.tickInterval: root.model.yTickInterval
+      xAxis.tickInterval: plot.xTickInterval
+      yAxis.tickInterval: plot.yTickInterval
 
       onZoomChanged: root.setDownsampleFactor()
       onWidthChanged: root.setDownsampleFactor()

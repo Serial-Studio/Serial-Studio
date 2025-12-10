@@ -231,8 +231,8 @@ Item {
     yLabel: qsTr("Magnitude (dB)")
     xLabel: qsTr("Frequency (Hz)")
     mouseAreaEnabled: windowRoot.focused
-    xAxis.tickInterval: root.model.xTickInterval
-    yAxis.tickInterval: root.model.yTickInterval
+    xAxis.tickInterval: plot.xTickInterval
+    yAxis.tickInterval: plot.yTickInterval
 
     onZoomChanged: root.setDownsampleFactor()
     onWidthChanged: root.setDownsampleFactor()

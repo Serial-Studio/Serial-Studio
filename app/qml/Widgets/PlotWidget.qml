@@ -24,8 +24,6 @@ import QtGraphs
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import SerialStudio
-
 Item {
   id: root
 
@@ -44,6 +42,47 @@ Item {
   property alias xLabel: _xLabel.text
   property alias plotArea: _graph.plotArea
   property alias curveColors: _theme.seriesColors
+
+  //
+  // Calculate tick intervals based on visible range (adjusts with zoom)
+  //
+  function smartInterval(min, max) {
+    const range = max - min
+    if (range <= 0)
+      return 1.0
+
+    const roughInterval = range / 10.0
+    const magnitude = Math.pow(10, Math.floor(Math.log10(roughInterval)))
+    const normalized = roughInterval / magnitude
+
+    let niceInterval
+    if (normalized <= 1.0)
+      niceInterval = 1.0
+    else if (normalized <= 2.0)
+      niceInterval = 2.0
+    else if (normalized <= 5.0)
+      niceInterval = 5.0
+    else
+      niceInterval = 10.0
+
+    return niceInterval * magnitude
+  }
+
+  //
+  // Visible range calculations for dynamic tick intervals
+  //
+  readonly property real xVisibleRange: (xMax - xMin) / _axisX.zoom
+  readonly property real yVisibleRange: (yMax - yMin) / _axisY.zoom
+  readonly property real xVisibleMin: xMin + (xMax - xMin) / 2 + _axisX.pan - xVisibleRange / 2
+  readonly property real xVisibleMax: xVisibleMin + xVisibleRange
+  readonly property real yVisibleMin: yMin + (yMax - yMin) / 2 + _axisY.pan - yVisibleRange / 2
+  readonly property real yVisibleMax: yVisibleMin + yVisibleRange
+
+  //
+  // Dynamic tick intervals based on visible range
+  //
+  readonly property real xTickInterval: smartInterval(xVisibleMin, xVisibleMax)
+  readonly property real yTickInterval: smartInterval(yVisibleMin, yVisibleMax)
 
   //
   // Custom properties
@@ -89,23 +128,15 @@ Item {
     cursorAX = worldX
     cursorAY = worldY
     cursorAVisible = true
-  }
-
-  function setCursorB(worldX, worldY) {
+  } function setCursorB(worldX, worldY) {
     cursorBX = worldX
     cursorBY = worldY
     cursorBVisible = true
-  }
-
-  function clearCursorA() {
+  } function clearCursorA() {
     cursorAVisible = false
-  }
-
-  function clearCursorB() {
+  } function clearCursorB() {
     cursorBVisible = false
-  }
-
-  function clearAllCursors() {
+  } function clearAllCursors() {
     cursorAVisible = false
     cursorBVisible = false
   }
@@ -292,7 +323,7 @@ Item {
       plotAreaBackgroundVisible: true
       theme: GraphsTheme.Theme.UserDefined
       borderColors: [Cpp_ThemeManager.colors["widget_border"]]
-      backgroundColor: Cpp_ThemeManager.colors["widget_window"]
+      backgroundColor: Cpp_ThemeManager.colors["pane_background"]
       plotAreaBackgroundColor: Cpp_ThemeManager.colors["widget_base"]
 
       // Axis and grid colors
@@ -309,8 +340,8 @@ Item {
 
       // Axis label fonts and colors
       labelTextColor: Cpp_ThemeManager.colors["widget_text"]
-      axisXLabelFont: Cpp_Misc_CommonFonts.customMonoFont(0.83)
-      axisYLabelFont: Cpp_Misc_CommonFonts.customMonoFont(0.83)
+      axisXLabelFont: Cpp_CommonFonts.customMonoFont(0.83)
+      axisYLabelFont: Cpp_CommonFonts.customMonoFont(0.83)
 
       // Grid settings
       grid.subWidth: 1
@@ -418,51 +449,48 @@ Item {
       // Drag state handling
       //
       onPressed: (mouse) => {
-        // Only handle cursor interactions when in cursor mode
-        if (!root.cursorMode) {
-          mouse.accepted = false
-          return
-        }
-
         _lastX = mouse.x
         _lastY = mouse.y
 
-        // Check if clicking near a cursor
-        draggedCursor = getNearestCursor(mouse.x, mouse.y)
+        // Handle cursor interactions when in cursor mode
+        if (root.cursorMode) {
+          // Check if clicking near a cursor
+          draggedCursor = getNearestCursor(mouse.x, mouse.y)
 
-        // Left click to place cursors
-        if (mouse.button === Qt.LeftButton && draggedCursor === null) {
-          const worldX = root.pixelToWorldX(mouse.x)
-          const worldY = root.pixelToWorldY(mouse.y)
+          // Left click to place cursors
+          if (mouse.button === Qt.LeftButton && draggedCursor === null) {
+            const worldX = root.pixelToWorldX(mouse.x)
+            const worldY = root.pixelToWorldY(mouse.y)
 
-          // Place cursor A if not visible, otherwise place cursor B
-          if (!root.cursorAVisible) {
-            root.setCursorA(worldX, worldY)
-          } else if (!root.cursorBVisible) {
-            root.setCursorB(worldX, worldY)
-          } else {
-            // Both cursors exist, replace the nearest one
-            const nearestCursor = getNearestCursor(mouse.x, mouse.y)
-            if (nearestCursor === "A" || nearestCursor === null) {
+            // Place cursor A if not visible, otherwise place cursor B
+            if (!root.cursorAVisible) {
               root.setCursorA(worldX, worldY)
-            } else {
+            } else if (!root.cursorBVisible) {
               root.setCursorB(worldX, worldY)
+            } else {
+              // Both cursors exist, replace the nearest one
+              const nearestCursor = getNearestCursor(mouse.x, mouse.y)
+              if (nearestCursor === "A" || nearestCursor === null) {
+                root.setCursorA(worldX, worldY)
+              } else {
+                root.setCursorB(worldX, worldY)
+              }
             }
           }
-          mouse.accepted = true
-        }
-        // Right click to clear cursors
-        else if (mouse.button === Qt.RightButton) {
-          if (draggedCursor === "A") {
-            root.clearCursorA()
-          } else if (draggedCursor === "B") {
-            root.clearCursorB()
-          } else {
-            // Clear both if not clicking on a specific cursor
-            root.clearAllCursors()
+          // Right click to clear cursors
+          else if (mouse.button === Qt.RightButton) {
+            if (draggedCursor === "A") {
+              root.clearCursorA()
+            } else if (draggedCursor === "B") {
+              root.clearCursorB()
+            } else {
+              // Clear both if not clicking on a specific cursor
+              root.clearAllCursors()
+            }
           }
-          mouse.accepted = true
         }
+
+        mouse.accepted = true
       }
 
       onReleased: {
@@ -524,8 +552,8 @@ Item {
             root.cursorBY = worldY
           }
         }
-        // Micro-pan when dragging the plot (only when not in cursor mode)
-        else if (_overlayMouse.dragging && !root.cursorMode) {
+        // Micro-pan when dragging the plot (when not dragging a cursor)
+        else if (_overlayMouse.dragging) {
           // Obtain drag distance
           const dx = mouse.x - _lastX
           const dy = mouse.y - _lastY
@@ -611,7 +639,7 @@ Item {
       Label {
         text: "A"
         color: root.cursorATextColor
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.9, true)
+        font: Cpp_CommonFonts.customMonoFont(0.9, true)
         padding: 4
         background: Rectangle {
           color: root.cursorAColor
@@ -707,7 +735,7 @@ Item {
       Label {
         text: "B"
         color: root.cursorBTextColor
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.9, true)
+        font: Cpp_CommonFonts.customMonoFont(0.9, true)
         padding: 4
         background: Rectangle {
           color: root.cursorBColor
@@ -740,7 +768,7 @@ Item {
       id: _cursorAXPosLabel
       text: root.cursorAX.toFixed(2)
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: Cpp_CommonFonts.customMonoFont(0.8)
       color: root.cursorATextColor
       visible: root.cursorMode && root.cursorAVisible
 
@@ -764,7 +792,7 @@ Item {
       id: _cursorAYPosLabel
       text: root.cursorAY.toFixed(2)
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: Cpp_CommonFonts.customMonoFont(0.8)
       color: root.cursorATextColor
       visible: root.cursorMode && root.cursorAVisible
 
@@ -788,7 +816,7 @@ Item {
       id: _cursorBXPosLabel
       text: root.cursorBX.toFixed(2)
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: Cpp_CommonFonts.customMonoFont(0.8)
       color: root.cursorBTextColor
       visible: root.cursorMode && root.cursorBVisible
 
@@ -812,7 +840,7 @@ Item {
       id: _cursorBYPosLabel
       text: root.cursorBY.toFixed(2)
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: Cpp_CommonFonts.customMonoFont(0.8)
       color: root.cursorBTextColor
       visible: root.cursorMode && root.cursorBVisible
 
@@ -836,7 +864,7 @@ Item {
       id: _xPosLabel
       visible: false
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: Cpp_CommonFonts.customMonoFont(0.8)
       color: Cpp_ThemeManager.colors["widget_base"]
     }
 
@@ -847,7 +875,7 @@ Item {
       id: _yPosLabel
       visible: false
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: Cpp_CommonFonts.customMonoFont(0.8)
       color: Cpp_ThemeManager.colors["widget_base"]
     }
   }
@@ -874,7 +902,7 @@ Item {
       anchors.centerIn: parent
       horizontalAlignment: Qt.AlignHCenter
       color: Cpp_ThemeManager.colors["widget_text"]
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.91, true)
+      font: Cpp_CommonFonts.customMonoFont(0.91, true)
       anchors.verticalCenterOffset: root.xLabelVisible && _yLabel.implicitWidth <= _graph.height ?
                                       -1 * Math.abs(_graph.marginBottom - _graph.marginTop) : 0
     }
@@ -908,7 +936,7 @@ Item {
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
         color: Cpp_ThemeManager.colors["widget_text"]
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.91, true)
+        font: Cpp_CommonFonts.customMonoFont(0.91, true)
       }
 
       Item {
@@ -923,7 +951,7 @@ Item {
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
         color: Cpp_ThemeManager.colors["widget_text"]
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.91, false)
+        font: Cpp_CommonFonts.customMonoFont(0.91, false)
         text: qsTr("%1, %2").arg(_xPosLabel.text).arg(_yPosLabel.text)
         opacity: 0
 
@@ -941,7 +969,7 @@ Item {
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
         color: Cpp_ThemeManager.colors["widget_text"]
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.85, false)
+        font: Cpp_CommonFonts.customMonoFont(0.85, false)
         visible: root.cursorMode && root.cursorAVisible && root.cursorBVisible
         text: qsTr("ΔX: %1  ΔY: %2").arg(root.deltaX.toFixed(2)).arg(root.deltaY.toFixed(2))
       }
