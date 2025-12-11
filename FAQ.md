@@ -99,7 +99,7 @@ Or use the DOI if available (check GitHub repository).
 1. Download `SerialStudio-Pro-3.x.x-macOS-Universal.dmg` from [GitHub releases](https://github.com/Serial-Studio/Serial-Studio/releases)
 2. Open the DMG file
 3. Drag Serial Studio to Applications folder
-4. Right-click → Open (first time only, to bypass Gatekeeper)
+4. Open Serial Studio via Spotlight or Finder.
 
 **Option 2: Homebrew (community-maintained)**
 ```bash
@@ -122,7 +122,7 @@ If it fails to launch, install `libfuse2`:
 sudo apt install libfuse2
 ```
 
-**Alternative: Flatpak**
+**Alternative: Flatpak (GPLv3)**
 ```bash
 flatpak install flathub com.serial_studio.Serial-Studio
 flatpak run com.serial_studio.Serial-Studio
@@ -187,13 +187,10 @@ cmake --build . -j$(nproc)
 
 ### How do I connect via Bluetooth Low Energy?
 
-1. Pair your BLE device with your computer first (system Bluetooth settings)
-2. In Serial Studio, select **Bluetooth LE** as data source
-3. Wait for device discovery to finish.
-4. Select your device and characteristic UUID
-5. Click **Connect**
-
-**Note:** Your BLE device must expose a UART-like characteristic (often uses Nordic UART Service UUID `6E400001-B5A3-F393-E0A9-E50E24DCCA9E`).
+1. In Serial Studio, select **Bluetooth LE** as data source
+2. Wait for device discovery to finish.
+3. Select your device and characteristic UUID
+4. Click **Connect**
 
 ---
 
@@ -267,7 +264,7 @@ See [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki) for detailed pro
 8. Load project in Serial Studio
 
 **Method 2: Edit JSON manually**
-Open an example project from `/examples` folder and modify it.
+Not recommended, but useful if you need to write project files using automation tools.
 
 ---
 
@@ -281,12 +278,12 @@ Open an example project from `/examples` folder and modify it.
 - Data grids and tables
 - Accelerometer (3-axis)
 - Gyroscope (3-axis)
+- FFT spectrum analyzer
 - GPS maps (OpenStreetMap)
 
 **Pro only:**
 - XY plots (parametric plots)
 - 3D visualizations
-- FFT spectrum analyzer
 - Advanced plotting features
 
 ---
@@ -307,21 +304,9 @@ Timestamp,Group/Dataset 1,Group/Dataset 2,...
 
 ---
 
-### How do I create multiple dashboard windows?
+### Can I change the appliction theme?
 
-Click **Window → New Dashboard Window** to open additional windows. Each can display different subsets of data or the same data with different widget types.
-
-**Use case:** One window for engineer (all data), another for presentation (simplified view on projector).
-
----
-
-### Can I change the dashboard theme?
-
-Yes! Click **View → Theme** and choose:
-- Light theme
-- Dark theme
-- High contrast
-- Custom themes (if available)
+Yes! Click **Preferences → Theme** and choose your preffered theme.
 
 ---
 
@@ -358,14 +343,14 @@ Yes! Click **View → Theme** and choose:
 ### My plots look incorrect or don't update
 
 **Quick Plot mode issues:**
-- Ensure you're sending **comma-separated values**: `val1,val2,val3\n`
-- Each line should have the **same number of values**
-- End each frame with **newline** character (`\n`)
+- Ensure you're sending **comma-separated values**: `val1,val2,val3\n`.
+- Each line should have the **same number of values**.
+- End each frame with a **newline** character (`\n`) or a **carret line** character (`\r`).
 
 **Project File mode issues:**
 - Verify project file matches data format
 - Check frame start/end sequences in project settings
-- Use **Frame viewer** (Console panel) to see raw received data
+- Verify the frame parser code.
 
 ---
 
@@ -373,7 +358,7 @@ Yes! Click **View → Theme** and choose:
 
 Use **JavaScript frame parser**:
 
-1. In Project Editor, click **Custom Frame Parser**
+1. In Project Editor, click on the **Frame Parser** icon in the project tree.
 2. Write JavaScript function to parse raw data:
 
 ```javascript
@@ -395,13 +380,6 @@ See [examples folder](./examples) for sample parsers.
 ---
 
 ### Serial Studio crashes or freezes
-
-**High data rate:** If your device sends data faster than 60 FPS, Serial Studio may struggle. Try:
-- Reduce update rate on device side
-- Increase frame delimiter interval
-- Use fewer simultaneous widgets
-
-**Large CSV files:** CSV export with thousands of lines may slow down. Close and start new CSV file periodically.
 
 **Bug report:** If crashes persist, open a GitHub issue with:
 - OS and Serial Studio version
@@ -478,7 +456,7 @@ Educational discounts are considered on a case-by-case basis.
 
 ### Can I use Pro features in open-source projects?
 
-If you have a Pro license, yes—you can use all features for your open-source work.
+If you have a Pro license, yes, you can use all features for your open-source work.
 
 However, if you want to distribute your project under GPL and your users build Serial Studio from source, they won't have access to Pro features (MQTT, 3D, etc.) unless they purchase licenses.
 
@@ -627,35 +605,13 @@ In Serial Studio, use JavaScript frame parser to validate checksum and extract d
 
 ### Can Serial Studio control my Arduino (send data back)?
 
-Not directly in current version. Serial Studio is primarily for **receiving and visualizing data**, not for sending commands.
+Not directly in current version. Right now, Serial Studio is primarily for **receiving and visualizing data**, not for sending commands.
 
 **Workarounds:**
-- Use separate serial terminal (TeraTerm, PuTTY) to send commands
+- Write a [plugin application](https://github.com/Serial-Studio/Serial-Studio/blob/master/app/src/Plugins/Server.h#L45) in your preffered language/framework that shares the device with Serial Studio.
 - Use MQTT (Pro): Serial Studio can publish commands to MQTT topics that your device subscribes to
 - **Feature request:** Bidirectional communication is planned for future versions
-
----
-
-## Advanced Topics
-
-### How do I synchronize multiple data sources?
-
-If you have multiple devices sending data:
-
-**Option 1: Timestamps**
-- Each device includes timestamp in data
-- Serial Studio displays data, CSV export includes timestamps
-- Post-process CSV to align data
-
-**Option 2: MQTT (Pro)**
-- All devices publish to MQTT broker with timestamps
-- Serial Studio subscribes to all topics
-- Dashboard shows synchronized data
-
-**Option 3: Single aggregator**
-- One master device (e.g., Raspberry Pi) collects data from all sensors
-- Master device sends combined data to Serial Studio
-
+- 
 ---
 
 ### Can I integrate Serial Studio with my CI/CD pipeline?
@@ -724,11 +680,6 @@ Upvote relevant GitHub issues if you need this feature.
 
 **Alternative:** Use Raspberry Pi as data aggregator (collect sensor data, forward to Serial Studio running on desktop computer).
 
----
-
-### How do I enable dark mode?
-
-Click **View → Theme → Dark** (or use system theme).
 
 ---
 
@@ -799,6 +750,7 @@ Yes! Serial Studio is a **desktop application** that runs entirely offline. No i
 - MQTT (if broker is on internet)
 - GPS map tiles (cached after first load)
 - Update checks (can be disabled)
+- License verification every 30 days.
 
 ---
 
