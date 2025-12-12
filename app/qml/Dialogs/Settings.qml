@@ -242,23 +242,6 @@ Window {
           }
 
           //
-          // Software rendering
-          //
-          Label {
-            color: Cpp_ThemeManager.colors["text"]
-            text: qsTr("Force Software Rendering")
-          } Switch {
-            Layout.rightMargin: -8
-            Layout.alignment: Qt.AlignRight
-            checked: Cpp_Misc_ModuleManager.softwareRendering
-            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
-            onCheckedChanged: {
-              if (Cpp_Misc_ModuleManager.softwareRendering !== checked)
-                Cpp_Misc_ModuleManager.softwareRendering = checked
-            }
-          }
-
-          //
           // Auto-updater
           //
           Label {
@@ -462,7 +445,6 @@ Window {
             Cpp_UI_Dashboard.terminalEnabled = false
             Cpp_IO_Manager.threadedFrameExtraction = false
             Cpp_UI_Dashboard.showTaskbarButtons = false
-            Cpp_Misc_ModuleManager.softwareRendering = false
           }
         }
 

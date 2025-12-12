@@ -40,16 +40,12 @@
     "toolbar_border": "#454545",
     "toolbar_separator": "#4A4A4A",
     "toolbar_checked_button_opacity": 0.7,
-    "toolbar_checked_button_border": "#0078D4",
-    "toolbar_checked_button_background": "#0078D4",
+    "toolbar_checked_button_border": "#242628",
+    "toolbar_checked_button_background": "#141414",
 
     "error": "#FF6B6B",
     "alarm": "#FF5252",
     "dashboard_background": "#141414",
-
-    "notebox_text": "#F0F0F0",
-    "notebox_border": "#6B9F5A",
-    "notebox_background": "#1E3D1E",
 
     "mid": "#4A4A4A",
     "dark": "#303030",

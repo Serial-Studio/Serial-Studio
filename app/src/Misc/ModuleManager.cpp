@@ -21,7 +21,6 @@
 
 #include <iostream>
 #include <QQmlContext>
-#include <QQuickWindow>
 #include <QSimpleUpdater.h>
 
 #include "AppInfo.h"
@@ -165,11 +164,6 @@ Misc::ModuleManager::ModuleManager()
   // Init translator
   (void)Misc::Translator::instance();
 
-  // Read software rendering settings
-  m_softwareRendering = m_settings.value("SoftwareRendering", false).toBool();
-  if (m_softwareRendering)
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
-
   // Stop modules when application is about to quit
   connect(&m_engine, &QQmlApplicationEngine::quit, this,
           &Misc::ModuleManager::onQuit);
@@ -181,21 +175,6 @@ Misc::ModuleManager::ModuleManager()
 const QQmlApplicationEngine &Misc::ModuleManager::engine() const
 {
   return m_engine;
-}
-
-/**
- * @brief Returns whether software rendering is currently enabled.
- *
- * This reflects the user's preference for using Qt's software-based
- * scene graph renderer instead of the default hardware-accelerated backend.
- *
- * @return @c true if software rendering is enabled, @c false otherwise.
- *
- * @see QQuickWindow::setGraphicsApi()
- */
-bool Misc::ModuleManager::softwareRendering() const
-{
-  return m_softwareRendering;
 }
 
 /**
@@ -426,37 +405,4 @@ void Misc::ModuleManager::initializeQmlInterface()
   if (!lemonSqueezy->licensingData().isEmpty())
     QMetaObject::invokeMethod(lemonSqueezy, &Licensing::LemonSqueezy::validate);
 #endif
-}
-
-/**
- * @brief Enables or disables software rendering for the QML scene graph.
- *
- * This function updates the internal setting that controls whether Qt's
- * software renderer should be used. If the new value differs from the current
- * one, the setting is saved to persistent storage and the user is prompted
- * to restart the application in order for the change to take effect.
- *
- * If the user agrees, the application will attempt to restart automatically.
- *
- * @param enabled Set to @c true to enable software rendering, @c false to use
- *        the default (hardware-accelerated) renderer.
- *
- * @see QQuickWindow::setGraphicsApi()
- * @see Misc::Utilities::rebootApplication()
- */
-void Misc::ModuleManager::setSoftwareRendering(const bool enabled)
-{
-  if (m_softwareRendering != enabled)
-  {
-    m_softwareRendering = enabled;
-    m_settings.setValue("SoftwareRendering", enabled);
-
-    auto ans = Misc::Utilities::showMessageBox(
-        tr("To apply this change, %1 needs to restart.").arg(APP_NAME),
-        tr("Would you like to restart now?"), QMessageBox::Question, APP_NAME,
-        QMessageBox::Yes | QMessageBox::No);
-
-    if (ans == QMessageBox::Yes)
-      Misc::Utilities::rebootApplication();
-  }
 }
