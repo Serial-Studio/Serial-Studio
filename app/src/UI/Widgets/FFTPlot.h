@@ -41,8 +41,6 @@ class FFTPlot : public QQuickItem
   Q_PROPERTY(double maxX READ maxX CONSTANT)
   Q_PROPERTY(double minY READ minY CONSTANT)
   Q_PROPERTY(double maxY READ maxY CONSTANT)
-  Q_PROPERTY(double xTickInterval READ xTickInterval CONSTANT)
-  Q_PROPERTY(double yTickInterval READ yTickInterval CONSTANT)
   Q_PROPERTY(int dataW READ dataW WRITE setDataW NOTIFY dataSizeChanged)
   Q_PROPERTY(int dataH READ dataH WRITE setDataH NOTIFY dataSizeChanged)
   Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
@@ -69,8 +67,6 @@ public:
   [[nodiscard]] double minY() const;
   [[nodiscard]] double maxY() const;
   [[nodiscard]] bool running() const;
-  [[nodiscard]] double xTickInterval() const;
-  [[nodiscard]] double yTickInterval() const;
 
 public slots:
   void draw(QLineSeries *series);

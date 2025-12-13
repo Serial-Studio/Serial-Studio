@@ -86,8 +86,6 @@ private:
 
 public:
   static Dashboard &instance();
-  static double smartInterval(const double min, const double max,
-                              const double multiplier = 0.2);
 
   [[nodiscard]] bool available() const;
   [[nodiscard]] bool showActionPanel() const;

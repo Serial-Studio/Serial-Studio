@@ -148,17 +148,15 @@ Item {
 
         Image {
           id: _icon
+          visible: false
           anchors.fill: parent
           sourceSize.width: root.iconSize
           sourceSize.height: root.iconSize
-          visible: Cpp_Misc_ModuleManager.softwareRendering
         }
 
         MultiEffect {
           source: _icon
           anchors.fill: _icon
-          enabled: !Cpp_Misc_ModuleManager.softwareRendering
-          visible: !Cpp_Misc_ModuleManager.softwareRendering
           saturation: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
           brightness: _mouseArea.containsMouse && root.enabled ?
                         (_mouseArea.containsPress ? -0.07 : 0.07) : 0

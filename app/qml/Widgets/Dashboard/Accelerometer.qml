@@ -81,14 +81,11 @@ Item {
 
         MultiEffect {
           source: bg
-          anchors.fill: bg
-          enabled: !Cpp_Misc_ModuleManager.softwareRendering
-          visible: !Cpp_Misc_ModuleManager.softwareRendering
-
           blur: 1
           blurMax: 64
           brightness: 0.6
           saturation: 0.2
+          anchors.fill: bg
           blurEnabled: true
         }
       }
@@ -189,32 +186,26 @@ Item {
       // Make indicator glow
       //
       MultiEffect {
-        source: indicator
-        anchors.fill: indicator
-        enabled: !Cpp_Misc_ModuleManager.softwareRendering
-        visible: !Cpp_Misc_ModuleManager.softwareRendering
-
         blur: 1
         blurMax: 128
         brightness: 0.2
         saturation: 0.2
         blurEnabled: true
+        source: indicator
+        anchors.fill: indicator
       }
 
       //
       // Make indicator glow (x2)
       //
       MultiEffect {
-        source: indicator
-        anchors.fill: indicator
-        enabled: !Cpp_Misc_ModuleManager.softwareRendering
-        visible: !Cpp_Misc_ModuleManager.softwareRendering
-
         blur: 0.3
         blurMax: 64
         brightness: 0.2
         saturation: 0.2
         blurEnabled: true
+        source: indicator
+        anchors.fill: indicator
       }
     }
 

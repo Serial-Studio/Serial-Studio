@@ -152,24 +152,6 @@ bool Widgets::MultiPlot::running() const
 }
 
 /**
- * @brief Returns the X-axis tick interval.
- * @return The X-axis tick interval.
- */
-double Widgets::MultiPlot::xTickInterval() const
-{
-  return UI::Dashboard::smartInterval(m_minX, m_maxX);
-}
-
-/**
- * @brief Returns the Y-axis tick interval with human-readable values.
- * @return The Y-axis tick interval.
- */
-double Widgets::MultiPlot::yTickInterval() const
-{
-  return UI::Dashboard::smartInterval(m_minY, m_maxY);
-}
-
-/**
  * @brief Returns the Y-axis label.
  * @return The Y-axis label.
  */

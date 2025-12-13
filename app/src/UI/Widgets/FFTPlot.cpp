@@ -200,24 +200,6 @@ bool Widgets::FFTPlot::running() const
 }
 
 /**
- * @brief Returns the X-axis tick interval.
- * @return The X-axis tick interval.
- */
-double Widgets::FFTPlot::xTickInterval() const
-{
-  return UI::Dashboard::smartInterval(m_minX, m_maxX);
-}
-
-/**
- * @brief Returns the Y-axis tick interval.
- * @return The Y-axis tick interval.
- */
-double Widgets::FFTPlot::yTickInterval() const
-{
-  return UI::Dashboard::smartInterval(m_minY, m_maxY);
-}
-
-/**
  * @brief Draws the FFT data on the given QLineSeries.
  * @param series The QLineSeries to draw the data on.
  */

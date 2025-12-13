@@ -266,8 +266,8 @@ Item {
     shadowColor: Cpp_ThemeManager.colors["shadow"]
 
     // Only enabled when using RHI
-    enabled: !Cpp_Misc_ModuleManager.softwareRendering && root.shadowEnabled
-    visible: !Cpp_Misc_ModuleManager.softwareRendering && root.shadowEnabled
+    enabled: root.shadowEnabled
+    visible: root.shadowEnabled
   }
 
   //

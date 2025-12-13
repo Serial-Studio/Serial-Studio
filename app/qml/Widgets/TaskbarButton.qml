@@ -134,14 +134,12 @@ Item {
   Rectangle {
     id: _background
     anchors.fill: parent
-    visible: Cpp_Misc_ModuleManager.softwareRendering
+    visible: false
     border.width: root.focused || _mouseArea.containsMouse ? 1 : 0
     border.color: Cpp_ThemeManager.colors["taskbar_checked_button_border"]
 
     property real baseVisibility: root.startMenu ? 0 : (root.enabled ? 1 : 0.5)
     property real hoverStateOpacity: root.focused ? root.focusedOpacity : (_mouseArea.containsMouse ? root.hoverOpacity : 0)
-
-    opacity: Cpp_Misc_ModuleManager.softwareRendering ? baseVisibility * hoverStateOpacity : 1
 
     gradient: Gradient {
       GradientStop {
@@ -161,15 +159,11 @@ Item {
   MultiEffect {
     source: _background
     anchors.fill: _background
-
-    enabled: !Cpp_Misc_ModuleManager.softwareRendering
-    visible: !Cpp_Misc_ModuleManager.softwareRendering
+    opacity: baseVisibility * hoverStateOpacity
+    brightness: root.enabled && _mouseArea.containsMouse ? (_mouseArea.containsPress ? -0.07 : 0.07) : 0
 
     property real baseVisibility: root.startMenu ? 0 : (root.enabled ? 1 : 0.5)
     property real hoverStateOpacity: root.focused ? root.focusedOpacity : (_mouseArea.containsMouse ? root.hoverOpacity : 0)
-
-    opacity: baseVisibility * hoverStateOpacity
-    brightness: root.enabled && _mouseArea.containsMouse ? (_mouseArea.containsPress ? -0.07 : 0.07) : 0
   }
 
   //
@@ -190,10 +184,10 @@ Item {
 
       Image {
         id: _icon
+        visible: false
         anchors.fill: parent
         sourceSize.width: root.iconSize
         sourceSize.height: root.iconSize
-        visible: Cpp_Misc_ModuleManager.softwareRendering
       }
 
       MultiEffect {
@@ -202,9 +196,6 @@ Item {
         anchors.fill: _icon
         saturation: !root.open ? -1 : (_mouseArea.containsMouse && root.enabled ? 0.07 : 0)
         brightness: _mouseArea.containsMouse && root.enabled ? (_mouseArea.containsPress ? -0.07 : 0.07) : 0
-
-        enabled: !Cpp_Misc_ModuleManager.softwareRendering
-        visible: !Cpp_Misc_ModuleManager.softwareRendering
       }
     }
 
