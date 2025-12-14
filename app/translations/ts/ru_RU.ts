@@ -247,22 +247,47 @@
     </message>
 </context>
 <context>
-    <name>CSV::Export</name>
+    <name>CANBus</name>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="319"/>
-        <source>CSV File Error</source>
-        <translation>Ошибка файла CSV</translation>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="45"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="45"/>
+        <source>CAN Plugin</source>
+        <translation>CAN Плагин</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="67"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="67"/>
+        <source>Interface</source>
+        <translation>Интерфейс</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="100"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="100"/>
+        <source>Bitrate</source>
+        <translation>Скорость передачи</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="147"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="147"/>
+        <source>CAN FD</source>
+        <translation>CAN FD</translation>
+    </message>
+</context>
+<context>
+    <name>CSV::Export</name>
+    <message>
+        <source>CSV File Error</source>
+        <translation type="vanished">Ошибка файла CSV</translation>
+    </message>
+    <message>
         <source>Cannot open CSV file for writing!</source>
-        <translation>Невозможно открыть файл CSV для записи!</translation>
+        <translation type="vanished">Невозможно открыть файл CSV для записи!</translation>
     </message>
 </context>
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="162"/>
+        <location filename="../../src/CSV/Player.cpp" line="166"/>
         <source>Select CSV file</source>
         <translation>Выберите файл CSV</translation>
     </message>
@@ -271,98 +296,98 @@
         <translation type="vanished">CSV файлы</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="164"/>
+        <location filename="../../src/CSV/Player.cpp" line="168"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV файлы (*.csv)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="285"/>
+        <location filename="../../src/CSV/Player.cpp" line="291"/>
         <source>Device Connection Active</source>
         <translation>Подключение устройства активно</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="286"/>
+        <location filename="../../src/CSV/Player.cpp" line="292"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Чтобы использовать эту функцию, необходимо отключиться от устройства. Вы хотите продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="350"/>
+        <location filename="../../src/CSV/Player.cpp" line="356"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Недостаточно данных в CSV файле</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="351"/>
+        <location filename="../../src/CSV/Player.cpp" line="357"/>
         <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
         <translation>CSV файл должен содержать как минимум два кадра (строки данных) для продолжения. Пожалуйста, проверьте файл и попробуйте снова.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="362"/>
+        <location filename="../../src/CSV/Player.cpp" line="368"/>
         <source>Cannot read CSV file</source>
         <translation>Не удается прочитать CSV файл</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="363"/>
+        <location filename="../../src/CSV/Player.cpp" line="369"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Пожалуйста, проверьте разрешения и расположение файла</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="520"/>
+        <location filename="../../src/CSV/Player.cpp" line="586"/>
         <source>Invalid CSV</source>
         <translation>Неверный CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="521"/>
+        <location filename="../../src/CSV/Player.cpp" line="587"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV файл не содержит данных или заголовков.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="532"/>
+        <location filename="../../src/CSV/Player.cpp" line="598"/>
         <source>Select a date/time column</source>
         <translation>Выберите столбец с датой/временем</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="532"/>
-        <location filename="../../src/CSV/Player.cpp" line="542"/>
+        <location filename="../../src/CSV/Player.cpp" line="598"/>
+        <location filename="../../src/CSV/Player.cpp" line="608"/>
         <source>Set interval manually</source>
         <translation>Установить интервал вручную</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="534"/>
+        <location filename="../../src/CSV/Player.cpp" line="600"/>
         <source>CSV Date/Time Selection</source>
         <translation>Выбор даты/времени CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="535"/>
+        <location filename="../../src/CSV/Player.cpp" line="601"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Выберите способ обработки данных даты/времени:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="545"/>
+        <location filename="../../src/CSV/Player.cpp" line="611"/>
         <source>Set Interval</source>
         <translation>Установить интервал</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="546"/>
+        <location filename="../../src/CSV/Player.cpp" line="612"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Пожалуйста, введите интервал между строками в миллисекундах:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="560"/>
+        <location filename="../../src/CSV/Player.cpp" line="626"/>
         <source>Select Date/Time Column</source>
         <translation>Выберите столбец даты/времени</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="561"/>
+        <location filename="../../src/CSV/Player.cpp" line="627"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Пожалуйста, выберите столбец, содержащий данные даты/времени:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="570"/>
+        <location filename="../../src/CSV/Player.cpp" line="636"/>
         <source>Invalid Selection</source>
         <translation>Неверный выбор</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="571"/>
+        <location filename="../../src/CSV/Player.cpp" line="637"/>
         <source>The selected column is not valid.</source>
         <translation>Выбранный столбец недействителен.</translation>
     </message>
@@ -1325,64 +1350,250 @@
         <translation>Выберите характеристику</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="430"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="434"/>
         <source>Error while configuring BLE service</source>
         <translation>Ошибка при настройке BLE сервиса</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="569"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="574"/>
         <source>Operation error</source>
         <translation>Ошибка операции</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="572"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="577"/>
         <source>Characteristic write error</source>
         <translation>Ошибка записи характеристики</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="575"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="580"/>
         <source>Descriptor write error</source>
         <translation>Ошибка записи дескриптора</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="578"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="583"/>
         <source>Unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="581"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="586"/>
         <source>Characteristic read error</source>
         <translation>Ошибка чтения характеристики</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="584"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="589"/>
         <source>Descriptor read error</source>
         <translation>Ошибка чтения дескриптора</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="601"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="606"/>
         <source>Bluetooth adapter is off!</source>
         <translation>Адаптер Bluetooth выключен!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="604"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="609"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>Неверный адаптер Bluetooth!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="607"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="612"/>
         <source>Unsuported platform or operating system</source>
         <translation>Неподдерживаемая платформа или операционная система</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="610"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="615"/>
         <source>Unsupported discovery method</source>
         <translation>Неподдерживаемый метод обнаружения</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="613"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="618"/>
         <source>General I/O error</source>
         <translation>Общая ошибка ввода/вывода</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Drivers::CANBus</name>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="267"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="273"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="279"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="285"/>
+        <source>CAN Bus Not Available</source>
+        <translation>CAN Шина недоступна</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="268"/>
+        <source>No CAN bus plugins found on this system.
+
+On Linux, please ensure SocketCAN kernel modules are loaded.</source>
+        <translation>CAN шина не найдена в этой системе.
+
+На Linux, пожалуйста, убедитесь, что модули ядра SocketCAN загружены.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="274"/>
+        <source>No CAN bus plugins found on this system.
+
+On Windows, please install CAN hardware drivers (PEAK, Vector, etc.).</source>
+        <translation>CAN шина не найдена в этой системе.
+
+На Windows, пожалуйста, установите драйверы оборудования CAN (PEAK, Vector и т.д.).</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="280"/>
+        <source>No CAN bus plugins found on this system.
+
+CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
+        <translation>CAN шина не найдена в этой системе.
+
+Поддержка CAN шины на macOS ограничена и может требовать драйверы стороннего оборудования.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="286"/>
+        <source>No CAN bus plugins are available on this platform.</source>
+        <translation>CAN шина недоступна на этой платформе.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="295"/>
+        <source>Invalid CAN Configuration</source>
+        <translation>Неверная конфигурация CAN</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="296"/>
+        <source>The CAN bus configuration is incomplete. Please select a valid plugin and interface.</source>
+        <translation>Конфигурация CAN-шины неполная. Пожалуйста, выберите действительный плагин и интерфейс.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="306"/>
+        <source>Invalid Selection</source>
+        <translation>Неверный выбор</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="307"/>
+        <source>The selected plugin or interface is no longer available. Please refresh the lists and try again.</source>
+        <translation>Выбранный плагин или интерфейс больше недоступен. Пожалуйста, обновите списки и попробуйте снова.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="316"/>
+        <source>No Devices Available</source>
+        <translation>Устройства недоступны</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="317"/>
+        <source>The plugin or interface list is empty. Please refresh the lists and ensure your CAN hardware is connected.</source>
+        <translation>Список плагинов или интерфейсов пуст. Пожалуйста, обновите списки и убедитесь, что ваше CAN-оборудование подключено.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="332"/>
+        <source>CAN Device Creation Failed</source>
+        <translation>Ошибка создания устройства CAN</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="333"/>
+        <source>Unable to create CAN bus device. Please check your hardware and drivers.</source>
+        <translation>Не удалось создать устройство CAN-шины. Пожалуйста, проверьте ваше оборудование и драйверы.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="357"/>
+        <source>CAN Connection Failed</source>
+        <translation>Ошибка подключения CAN</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="359"/>
+        <source>Unable to connect to CAN bus device. Please check your hardware connection and settings.</source>
+        <translation>Не удалось подключиться к устройству CAN-шины. Пожалуйста, проверьте подключение оборудования и настройки.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="639"/>
+        <source>CAN Bus Error</source>
+        <translation>Ошибка CAN-шины</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="640"/>
+        <source>An error occurred but the CAN device is no longer available.</source>
+        <translation>Произошла ошибка, но устройство CAN больше недоступно.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="647"/>
+        <source>Error code: %1</source>
+        <translation>Код ошибки: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="649"/>
+        <source>CAN Bus Communication Error</source>
+        <translation>Ошибка связи CAN-шины</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Drivers::Modbus</name>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="311"/>
+        <source>Invalid Serial Port</source>
+        <translation>Недействительный последовательный порт</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="312"/>
+        <source>The selected serial port is no longer available. Please refresh the port list and try again.</source>
+        <translation>Выбранный последовательный порт больше недоступен. Обновите список портов и попробуйте снова.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="373"/>
+        <source>Modbus Initialization Failed</source>
+        <translation>Ошибка инициализации Modbus</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="374"/>
+        <source>Unable to create Modbus device. Please check your system configuration and try again.</source>
+        <translation>Не удалось создать устройство Modbus. Проверьте конфигурацию системы и попробуйте снова.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="394"/>
+        <source>Modbus Connection Failed</source>
+        <translation>Ошибка подключения Modbus</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="395"/>
+        <source>Unable to connect to the Modbus device. Please check your connection settings.</source>
+        <translation>Не удалось подключиться к устройству Modbus. Проверьте настройки подключения.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="536"/>
+        <source>None</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="537"/>
+        <source>Even</source>
+        <translation>Чётный</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="538"/>
+        <source>Odd</source>
+        <translation>Нечётный</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="539"/>
+        <source>Space</source>
+        <translation>Пробел</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="540"/>
+        <source>Mark</source>
+        <translation>Метка</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="941"/>
+        <source>Error code: %1</source>
+        <translation>Код ошибки: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="943"/>
+        <source>Modbus Communication Error</source>
+        <translation>Ошибка связи Modbus</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="967"/>
+        <source>Select Port</source>
+        <translation>Выберите порт</translation>
     </message>
 </context>
 <context>
@@ -1455,62 +1666,62 @@
         <translation>Пожалуйста, введите другой путь для регистрации пользовательского последовательного устройства</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="900"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="898"/>
         <source>Critical serial port error</source>
         <translation>Критическая ошибка последовательного порта</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="926"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="924"/>
         <source>No error occurred.</source>
         <translation>Ошибок не произошло.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="927"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="925"/>
         <source>The specified device could not be found. Please check the connection and try again.</source>
         <translation>Указанное устройство не найдено. Пожалуйста, проверьте подключение и попробуйте снова.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="928"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="926"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Доступ запрещен. Убедитесь, что у приложения есть необходимые права доступа к устройству.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="929"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="927"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Не удалось открыть устройство. Возможно, оно уже используется или недоступно.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="930"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="928"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Произошла ошибка при записи данных на устройство.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="931"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="929"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Произошла ошибка при чтении данных с устройства.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="932"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="930"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>Произошла критическая ошибка ресурса. Устройство могло быть отключено или больше недоступно.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="933"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="931"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>Запрашиваемая операция не поддерживается на этом устройстве.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="934"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="932"/>
         <source>An unknown error occurred. Please check the device and try again.</source>
         <translation>Произошла неизвестная ошибка. Пожалуйста, проверьте устройство и попробуйте снова.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="935"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="933"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>Операция завершилась по тайм-ауту. Устройство может не отвечать.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="936"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="934"/>
         <source>The device is not open. Please open the device before attempting this operation.</source>
         <translation>Устройство не открыто. Пожалуйста, откройте устройство перед выполнением этой операции.</translation>
     </message>
@@ -1531,32 +1742,42 @@
 <context>
     <name>IO::Manager</name>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="300"/>
+        <location filename="../../src/IO/Manager.cpp" line="302"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="301"/>
+        <location filename="../../src/IO/Manager.cpp" line="303"/>
         <source>Network Socket</source>
         <translation>Сетевой сокет</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="302"/>
+        <location filename="../../src/IO/Manager.cpp" line="304"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="304"/>
+        <location filename="../../src/IO/Manager.cpp" line="306"/>
         <source>Audio Stream</source>
         <translation>Аудиопоток</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="380"/>
+        <location filename="../../src/IO/Manager.cpp" line="307"/>
+        <source>Modbus</source>
+        <translation>Modbus</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Manager.cpp" line="308"/>
+        <source>CAN Bus</source>
+        <translation>CAN-шина</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Manager.cpp" line="381"/>
         <source>Your trial period has ended.</source>
         <translation>Ваш пробный период закончился.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="381"/>
+        <location filename="../../src/IO/Manager.cpp" line="382"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Чтобы продолжить использование Serial Studio, пожалуйста, активируйте вашу лицензию.</translation>
     </message>
@@ -1585,54 +1806,54 @@
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="186"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="195"/>
         <source>JSON parse error</source>
         <translation>Ошибка разбора JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="221"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="230"/>
         <source>This file isn’t a valid project file</source>
         <translation>Этот файл не является допустимым файлом проекта</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="222"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="231"/>
         <source>Make sure it’s a properly formatted JSON project.</source>
         <translation>Убедитесь, что это правильно отформатированный JSON проект.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="236"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="245"/>
         <source>Cannot read JSON file</source>
         <translation>Невозможно прочитать JSON файл</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="237"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="246"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Пожалуйста, проверьте разрешения и расположение файла</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="612"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="649"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="630"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="667"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="623"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="641"/>
         <source>Audio Input</source>
         <translation>Аудио вход</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="678"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="696"/>
         <source>Multiple Plots</source>
         <translation>Несколько графиков</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="629"/>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="658"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="647"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="676"/>
         <source>Quick Plot</source>
         <translation>Быстрый график</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="664"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="682"/>
         <source>Quick Plot Data</source>
         <translation>Данные быстрого графика</translation>
     </message>
@@ -2077,384 +2298,384 @@ Example (HEX):  48 65 6C 6C 6F</source>
 <context>
     <name>JSON::ProjectModel</name>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="303"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="304"/>
         <source>New Project</source>
         <translation>Новый проект</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="368"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="369"/>
         <source>Samples</source>
         <translation>Образцы</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="709"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="737"/>
         <source>Do you want to save your changes?</source>
         <translation>Хотите сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="710"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="738"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>У вас есть несохраненные изменения в этом проекте!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="745"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="754"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="763"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="773"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="782"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="791"/>
         <source>Project error</source>
         <translation>Ошибка проекта</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="746"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="774"/>
         <source>Project title cannot be empty!</source>
         <translation>Заголовок проекта не может быть пустым!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="755"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="783"/>
         <source>You need to add at least one group!</source>
         <translation>Вам нужно добавить хотя бы одну группу!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="764"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="792"/>
         <source>You need to add at least one dataset!</source>
         <translation>Вам нужно добавить хотя бы один набор данных!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="781"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="809"/>
         <source>Save Serial Studio Project</source>
         <translation>Сохранить проект Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2255"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2332"/>
         <source>Project Information</source>
         <translation>Информация о проекте</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2267"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2344"/>
         <source>Project Title</source>
         <translation>Название проекта</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2269"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2346"/>
         <source>Name or description of the project</source>
         <translation>Имя или описание проекта</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2294"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2371"/>
         <source>Frame Detection Method</source>
         <translation>Метод обнаружения кадров</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2295"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2372"/>
         <source>Select how incoming data frames are identified</source>
         <translation>Выберите, как идентифицируются входящие кадры данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2305"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2382"/>
         <source>Hexadecimal Delimiters</source>
         <translation>Шестнадцатеричные разделители</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2307"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2384"/>
         <source>Use hex values to define frame boundaries</source>
         <translation>Используйте шестнадцатеричные значения для определения границ кадров</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2322"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2399"/>
         <source>Start Sequence</source>
         <translation>Начальная последовательность</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2325"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2402"/>
         <source>Marks the beginning of each data frame</source>
         <translation>Обозначает начало каждого кадра данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2336"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2413"/>
         <source>End Sequence</source>
         <translation>Конечная последовательность</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2339"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2416"/>
         <source>Marks the end of each data frame</source>
         <translation>Отмечает конец каждого кадра данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2350"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2427"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>Обработка и проверка полезной нагрузки</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2362"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2439"/>
         <source>Data Format</source>
         <translation>Формат данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2364"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2441"/>
         <source>Format of raw data used for decoding each frame</source>
         <translation>Формат необработанных данных, используемых для декодирования каждого кадра</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2378"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2455"/>
         <source>Method used to validate frame integrity</source>
         <translation>Метод, используемый для проверки целостности кадра</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2424"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2501"/>
         <source>Group Information</source>
         <translation>Информация о группе</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2436"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2513"/>
         <source>Group Title</source>
         <translation>Название группы</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2438"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2515"/>
         <source>Title or description of this dataset group</source>
         <translation>Название или описание этой группы данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2467"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2544"/>
         <source>Composite Widget</source>
         <translation>Составной виджет</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2469"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2546"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>Выберите, как должна быть визуализирована эта группа наборов данных (необязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2531"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2608"/>
         <source>Action Title</source>
         <translation>Название действия</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2534"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2611"/>
         <source>Name or description of this action</source>
         <translation>Имя или описание этого действия</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2545"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2622"/>
         <source>Action Icon</source>
         <translation>Значок действия</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2547"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2624"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>Значок, отображаемый для этого действия на панели управления</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2558"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2635"/>
         <source>Data Payload</source>
         <translation>Полезная нагрузка данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2571"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2648"/>
         <source>Send as Binary</source>
         <translation>Отправить как двоичный</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2572"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2649"/>
         <source>Send raw binary data when this action is triggered</source>
         <translation>Отправить необработанные двоичные данные, когда это действие активировано</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2586"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2663"/>
         <source>Transmit Data (Hex)</source>
         <translation>Передача данных (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2588"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2665"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>Шестнадцатеричная полезная нагрузка для отправки при активации действия</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2603"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2680"/>
         <source>Transmit Data</source>
         <translation>Передача данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2604"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2681"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>Текстовая полезная нагрузка для отправки при активации действия</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2634"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2711"/>
         <source>End-of-Line Sequence</source>
         <translation>Последовательность конца строки</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2635"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2712"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>Символы конца строки для добавления к сообщению (например, </translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2646"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2723"/>
         <source>Execution Behavior</source>
         <translation>Поведение выполнения</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2659"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2736"/>
         <source>Auto-Execute on Connect</source>
         <translation>Авто-выполнение при подключении</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2661"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2738"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>Автоматически запускать это действие при подключении устройства</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2672"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2749"/>
         <source>Timer Behavior</source>
         <translation>Поведение таймера</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2687"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2764"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>Выберите, когда и как это действие должно повторяться автоматически</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2695"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2772"/>
         <source>Interval (ms)</source>
         <translation>Интервал (мс)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2701"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2778"/>
         <source>Milliseconds between each repeated trigger of this action</source>
         <translation>Миллисекунды между каждым повторным запуском этого действия</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2767"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2844"/>
         <source>Dataset Title</source>
         <translation>Название набора данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2769"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2846"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Имя набора данных, используется для маркировки и идентификации</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2782"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2859"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Позиция кадра, используемая для выравнивания наборов данных по времени</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2795"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2872"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Единица измерения, такая как вольты или амперы (необязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2806"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2883"/>
         <source>Plot Settings</source>
         <translation>Настройки графика</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2836"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2913"/>
         <source>Enable Plot Widget</source>
         <translation>Включить виджет графика</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2868"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2945"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
         <translation>Выберите, какой набор данных использовать для оси X на графиках</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2880"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2957"/>
         <source>Minimum Plot Value (optional)</source>
         <translation>Минимальное значение графика (необязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2881"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2958"/>
         <source>Lower bound for plot display range</source>
         <translation>Нижняя граница диапазона отображения графика</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2893"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2970"/>
         <source>Maximum Plot Value (optional)</source>
         <translation>Максимальное значение графика (необязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2894"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2971"/>
         <source>Upper bound for plot display range</source>
         <translation>Верхняя граница диапазона отображения графика</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2905"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2982"/>
         <source>FFT Configuration</source>
         <translation>Настройка FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2918"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2995"/>
         <source>Enable FFT Analysis</source>
         <translation>Включить анализ FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2919"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2996"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Выполнить анализ набора данных в частотной области</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2939"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3016"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Количество образцов для каждого окна расчета FFT</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2951"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3028"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>Частота дискретизации FFT (Гц, обязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2953"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3030"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>Частота дискретизации для FFT (в Гц)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2965"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3042"/>
         <source>Minimum Value (recommended)</source>
         <translation>Минимальное значение (рекомендуется)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2966"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3043"/>
         <source>Lower bound for data normalization</source>
         <translation>Нижняя граница для нормализации данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2978"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3055"/>
         <source>Maximum Value (recommended)</source>
         <translation>Максимальное значение (рекомендуется)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2979"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3056"/>
         <source>Upper bound for data normalization</source>
         <translation>Верхняя граница для нормализации данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2990"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3067"/>
         <source>Widget Settings</source>
         <translation>Настройки виджета</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3075"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3152"/>
         <source>Alarm Settings</source>
         <translation>Настройки тревоги</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3088"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3165"/>
         <source>Enable Alarms</source>
         <translation>Включить тревоги</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3090"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3167"/>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
         <translation>Вызывает визуальную тревогу, когда значение превышает пороги тревоги</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3102"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3179"/>
         <source>Low Threshold</source>
         <translation>Нижний порог</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3116"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3193"/>
         <source>High Threshold</source>
         <translation>Верхний порог</translation>
     </message>
@@ -2463,37 +2684,37 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Отображение виджета</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3021"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3098"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Выберите визуальный виджет для отображения этого набора данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3032"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3109"/>
         <source>Show in Overview</source>
         <translation>Показать в обзоре</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3034"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3111"/>
         <source>Display this widget in the dashboard overview (if enabled)</source>
         <translation>Отобразить этот виджет в обзоре панели управления (если включено)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3050"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3127"/>
         <source>Minimum Display Value (required)</source>
         <translation>Минимальное отображаемое значение (обязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3051"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3128"/>
         <source>Lower bound of the gauge or bar display range</source>
         <translation>Нижняя граница диапазона отображения шкалы или полосы</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3063"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3140"/>
         <source>Maximum Display Value (required)</source>
         <translation>Максимальное отображаемое значение (обязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3064"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3141"/>
         <source>Upper bound of the gauge or bar display range</source>
         <translation>Верхняя граница диапазона отображения шкалы или полосы</translation>
     </message>
@@ -2502,7 +2723,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Сигнализация: Нижний порог (необязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3104"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3181"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
         <translation>Вызывает визуальную сигнализацию, когда значение падает ниже этого порога</translation>
     </message>
@@ -2511,212 +2732,212 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Сигнализация: Верхний порог (необязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3118"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3195"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
         <translation>Вызывает визуальную тревогу, когда значение превышает этот порог</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3129"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3206"/>
         <source>LED Display Settings</source>
         <translation>Настройки светодиодного дисплея</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3143"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3220"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Включить визуальный мониторинг состояния с использованием светодиодного дисплея</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3155"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3232"/>
         <source>LED On Threshold (required)</source>
         <translation>Порог включения светодиода (обязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3157"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3234"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>Светодиод загорается, когда значение достигает или превышает этот порог</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3280"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3357"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3850"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3927"/>
         <source>File open error</source>
         <translation>Ошибка открытия файла</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="881"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2268"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="909"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2345"/>
         <source>Untitled Project</source>
         <translation>Безымянный проект</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="783"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="811"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Файлы проектов Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="922"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="954"/>
         <source>Select Project File</source>
         <translation>Выберите файл проекта</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="923"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="955"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Файлы проектов (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1052"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1088"/>
         <source>Legacy frame parser function updated</source>
         <translation>Обновлена функция парсера устаревших кадров</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1053"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1089"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Ваш проект использовал устаревшую функцию парсера кадров с аргументом 'separator'. Она была автоматически преобразована в новый формат.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1085"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1127"/>
         <source>Switch Serial Studio to Project Mode?</source>
         <translation>Переключить Serial Studio в режим проекта?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1086"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1128"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
         <translation>Этот режим необходим для загрузки и отображения панелей управления из файлов проектов.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1114"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1156"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Вы хотите удалить группу "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1115"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1156"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1194"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1157"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1198"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1236"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Это действие нельзя отменить. Вы хотите продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1155"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1197"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Вы хотите удалить действие "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1193"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1235"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Вы хотите удалить набор данных "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1245"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1290"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1325"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1287"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1332"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1367"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Копия)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1364"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1426"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1406"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1468"/>
         <source>Group</source>
         <translation>Группа</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1454"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1496"/>
         <source>New Dataset</source>
         <translation>Новый набор данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1457"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1499"/>
         <source>New Plot</source>
         <translation>Новый график</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1461"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1503"/>
         <source>New FFT Plot</source>
         <translation>Новый график БПФ</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1465"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1507"/>
         <source>New Level Indicator</source>
         <translation>Новый индикатор уровня</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1469"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1511"/>
         <source>New Gauge</source>
         <translation>Новый датчик</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1473"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1515"/>
         <source>New Compass</source>
         <translation>Новый компас</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1481"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1523"/>
         <source>New LED Indicator</source>
         <translation>Новый светодиодный индикатор</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1617"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1659"/>
         <source>New Action</source>
         <translation>Новое действие</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1776"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1818"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Вы уверены, что хотите изменить виджет уровня группы?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1777"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1819"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Существующие наборы данных для этой группы будут удалены</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1846"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1847"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1848"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1888"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1889"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1890"/>
         <source>Accelerometer %1</source>
         <translation>Акселерометр %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1904"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1905"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1906"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1946"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1947"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1948"/>
         <source>Gyro %1</source>
         <translation>Гироскоп %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1959"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2001"/>
         <source>Latitude</source>
         <translation>Широта</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1960"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2002"/>
         <source>Longitude</source>
         <translation>Долгота</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1961"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2003"/>
         <source>Altitude</source>
         <translation>Высота</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2009"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2051"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2010"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2052"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2011"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2053"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2125"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2202"/>
         <source>Frame Parser Code</source>
         <translation>Код парсера фреймов</translation>
     </message>
@@ -2737,7 +2958,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Формат входных данных для парсера фреймов</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2280"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2357"/>
         <source>Frame Detection</source>
         <translation>Обнаружение фреймов</translation>
     </message>
@@ -2770,7 +2991,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Использовать шестнадцатеричные разделители для кадров данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2376"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2453"/>
         <source>Checksum Algorithm</source>
         <translation>Алгоритм контрольной суммы</translation>
     </message>
@@ -2779,7 +3000,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Алгоритм контрольной суммы, используемый для проверки кадра</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2437"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2514"/>
         <source>Untitled Group</source>
         <translation>Безымянная группа</translation>
     </message>
@@ -2792,7 +3013,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Визуальный виджет</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3020"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3097"/>
         <source>Widget</source>
         <translation>Виджет</translation>
     </message>
@@ -2801,7 +3022,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Виджет отображения группы (необязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2533"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2610"/>
         <source>Untitled Action</source>
         <translation>Безымянное действие</translation>
     </message>
@@ -2814,7 +3035,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Значок</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2546"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2623"/>
         <source>Default Icon</source>
         <translation>Значок по умолчанию</translation>
     </message>
@@ -2835,8 +3056,8 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Данные TX (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2585"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2602"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2662"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2679"/>
         <source>Command</source>
         <translation>Команда</translation>
     </message>
@@ -2865,7 +3086,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Выполнить это действие автоматически при подключении устройства.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2683"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2760"/>
         <source>Timer Mode</source>
         <translation>Режим таймера</translation>
     </message>
@@ -2874,7 +3095,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Как и когда должен активироваться таймер.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2699"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2776"/>
         <source>Timer Interval (ms)</source>
         <translation>Интервал таймера (мс)</translation>
     </message>
@@ -2883,13 +3104,13 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Интервал в миллисекундах между каждым действием, вызванным таймером.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2520"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2754"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2597"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2831"/>
         <source>General Information</source>
         <translation>Общая информация</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2766"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2843"/>
         <source>Untitled Dataset</source>
         <translation>Неозаглавленный набор данных</translation>
     </message>
@@ -2898,7 +3119,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Имя или описание набора данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2781"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2858"/>
         <source>Frame Index</source>
         <translation>Индекс кадра</translation>
     </message>
@@ -2907,12 +3128,12 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Позиция в кадре</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2793"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2870"/>
         <source>Measurement Unit</source>
         <translation>Единица измерения</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2794"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2871"/>
         <source>Volts, Amps, etc.</source>
         <translation>Вольты, амперы и т.д.</translation>
     </message>
@@ -2937,7 +3158,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Осциллографический график</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2838"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2915"/>
         <source>Plot data in real-time</source>
         <translation>Отображение данных в реальном времени</translation>
     </message>
@@ -2950,7 +3171,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Отображение данных в частотной области</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3142"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3219"/>
         <source>Show in LED Panel</source>
         <translation>Показать на панели светодиодов</translation>
     </message>
@@ -2959,7 +3180,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Быстрый мониторинг состояния</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2867"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2944"/>
         <source>X-Axis Source</source>
         <translation>Источник оси X</translation>
     </message>
@@ -2996,7 +3217,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Верхнее значение тревоги</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2937"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3014"/>
         <source>FFT Window Size</source>
         <translation>Размер окна БПФ</translation>
     </message>
@@ -3021,139 +3242,139 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Порог для включения светодиода</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3222"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3299"/>
         <source>Off</source>
         <translation>Выкл</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3223"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3300"/>
         <source>Auto Start</source>
         <translation>Автозапуск</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3224"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3301"/>
         <source>Start on Trigger</source>
         <translation>Запуск по триггеру</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3225"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3302"/>
         <source>Toggle on Trigger</source>
         <translation>Переключение по триггеру</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3229"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3306"/>
         <source>Plain Text (UTF8)</source>
         <translation>Обычный текст (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3230"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3307"/>
         <source>Hexadecimal</source>
         <translation>Шестнадцатеричный</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3231"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3308"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3232"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3309"/>
         <source>Binary (Direct)</source>
         <translation>Двоичный (прямой)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3239"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3316"/>
         <source>No Checksum</source>
         <translation>Без контрольной суммы</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3244"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3321"/>
         <source>End Delimiter Only</source>
         <translation>Только конечный разделитель</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3245"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3322"/>
         <source>Start Delimiter Only</source>
         <translation>Только начальный разделитель</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3246"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3323"/>
         <source>Start + End Delimiter</source>
         <translation>Начальный + конечный разделитель</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3247"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3324"/>
         <source>No Delimiters</source>
         <translation>Без разделителей</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3255"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3332"/>
         <source>Data Grid</source>
         <translation>Таблица данных</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3256"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3333"/>
         <source>GPS Map</source>
         <translation>Карта GPS</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3257"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3334"/>
         <source>Gyroscope</source>
         <translation>Гироскоп</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3258"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3335"/>
         <source>Multiple Plot</source>
         <translation>Множественный график</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3259"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3336"/>
         <source>Accelerometer</source>
         <translation>Акселерометр</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3260"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3337"/>
         <source>3D Plot</source>
         <translation>3D график</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3261"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3265"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3272"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3338"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3342"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3349"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3266"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3343"/>
         <source>Bar</source>
         <translation>Гистограмма</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3267"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3344"/>
         <source>Gauge</source>
         <translation>Индикатор</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3268"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3345"/>
         <source>Compass</source>
         <translation>Компас</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3273"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3350"/>
         <source>New Line (\n)</source>
         <translation>Новая строка (</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3274"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3351"/>
         <source>Carriage Return (\r)</source>
         <translation>Возврат каретки (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3275"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3352"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3279"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3356"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
@@ -3162,17 +3383,17 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Линейный график</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3321"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3398"/>
         <source>Save changes to frame parser code?</source>
         <translation>Сохранить изменения в коде парсера фреймов?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3322"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3399"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
         <translation>Выберите «Сохранить», чтобы сохранить изменения, «Отменить», чтобы потерять их навсегда, или «Отмена», чтобы вернуться.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="3324"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="3401"/>
         <source>Save Changes</source>
         <translation>Сохранить изменения</translation>
     </message>
@@ -4016,20 +4237,18 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Misc::ModuleManager</name>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="455"/>
         <source>To apply this change, %1 needs to restart.</source>
-        <translation>Чтобы применить это изменение, %1 нужно перезапустить.</translation>
+        <translation type="vanished">Чтобы применить это изменение, %1 нужно перезапустить.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="456"/>
         <source>Would you like to restart now?</source>
-        <translation>Хотите перезапустить сейчас?</translation>
+        <translation type="vanished">Хотите перезапустить сейчас?</translation>
     </message>
 </context>
 <context>
     <name>Misc::ThemeManager</name>
     <message>
-        <location filename="../../src/Misc/ThemeManager.cpp" line="400"/>
+        <location filename="../../src/Misc/ThemeManager.cpp" line="430"/>
         <source>System</source>
         <translation>Система</translation>
     </message>
@@ -4140,9 +4359,120 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Misc::WorkspaceManager</name>
     <message>
-        <location filename="../../src/Misc/WorkspaceManager.cpp" line="116"/>
+        <location filename="../../src/Misc/WorkspaceManager.cpp" line="128"/>
         <source>Select Workspace Location</source>
         <translation>Выберите расположение рабочей области</translation>
+    </message>
+</context>
+<context>
+    <name>Modbus</name>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="45"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="45"/>
+        <source>Protocol</source>
+        <translation>Протокол</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="67"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="67"/>
+        <source>Serial Port</source>
+        <translation>Последовательный порт</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="91"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="91"/>
+        <source>Baud Rate</source>
+        <translation>Скорость передачи</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="143"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="143"/>
+        <source>Parity</source>
+        <translation>Четность</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="166"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="166"/>
+        <source>Data Bits</source>
+        <translation>Биты данных</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="189"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="189"/>
+        <source>Stop Bits</source>
+        <translation>Стоповые биты</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="212"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="212"/>
+        <source>Host</source>
+        <translation>Хост</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="221"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="221"/>
+        <source>IP Address</source>
+        <translation>IP-адрес</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="235"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="235"/>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="244"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="244"/>
+        <source>TCP Port</source>
+        <translation>TCP-порт</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="270"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="270"/>
+        <source>Slave Address</source>
+        <translation>Адрес ведомого</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="274"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="274"/>
+        <source>1-247</source>
+        <translation>1-247</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="289"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="289"/>
+        <source>Start Address</source>
+        <translation>Начальный адрес</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="293"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="293"/>
+        <source>Register address</source>
+        <translation>Адрес регистра</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="308"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="308"/>
+        <source>Register Count</source>
+        <translation>Количество регистров</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="312"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="312"/>
+        <source>Number of registers</source>
+        <translation>Число регистров</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="327"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="327"/>
+        <source>Poll Interval (ms)</source>
+        <translation>Интервал опроса (мс)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="331"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="331"/>
+        <source>Polling interval</source>
+        <translation>Интервал опроса</translation>
     </message>
 </context>
 <context>
@@ -4202,14 +4532,14 @@ Please provide the necessary credentials.</source>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="927"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="927"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="955"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="955"/>
         <source>%1, %2</source>
         <translation>%1, %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="946"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="946"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="974"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="974"/>
         <source>ΔX: %1  ΔY: %2</source>
         <translation>ΔX: %1  ΔY: %2</translation>
     </message>
@@ -4714,38 +5044,36 @@ Please provide the necessary credentials.</source>
         <translation>Включить TCP плагины (порт 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="249"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="249"/>
         <source>Force Software Rendering</source>
-        <translation>Принудительное программное рендеринг</translation>
+        <translation type="vanished">Принудительное программное рендеринг</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="266"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="266"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="249"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="249"/>
         <source>Automatically Check for Updates</source>
         <translation>Автоматически проверять обновления</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="291"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="291"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="274"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="274"/>
         <source>Dashboard</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="315"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="315"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="298"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="298"/>
         <source>Point Count</source>
         <translation>Количество точек</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="335"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="318"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="318"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Частота обновления интерфейса (Гц)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="371"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="371"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="354"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="354"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Всегда показывать кнопки на панели задач</translation>
     </message>
@@ -4758,8 +5086,8 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">Потоковый режим (лучше для высокоскоростных данных)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="353"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="353"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="336"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="336"/>
         <source>Show Actions Panel</source>
         <translation>Показать панель действий</translation>
     </message>
@@ -4768,32 +5096,32 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">Всегда показывать кнопки панели задач</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="389"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="389"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="372"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="372"/>
         <source>Enable Console Widget</source>
         <translation>Включить консольный виджет</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="410"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="410"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="393"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="393"/>
         <source>Use Separate Thread for Frame Extraction</source>
         <translation>Использовать отдельный поток для извлечения кадров</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="450"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="450"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="433"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="433"/>
         <source>Reset</source>
         <translation>Сброс</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="478"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="478"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="460"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="460"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="488"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="488"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="470"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="470"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
@@ -5163,14 +5491,14 @@ Please provide the necessary credentials.</source>
         <translation>Выберите сетевое соединение TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="326"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="326"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="325"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="325"/>
         <source>ModBus</source>
         <translation>ModBus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="331"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="331"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="330"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="330"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Выберите соединение MODBUS (Pro)</translation>
     </message>
@@ -5181,62 +5509,58 @@ Please provide the necessary credentials.</source>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="343"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="343"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Выберите соединение Bluetooth Low Energy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="355"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="355"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="353"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="353"/>
         <source>CAN Bus</source>
         <translation>CAN-шина</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="360"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="360"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="358"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="358"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Выберите соединение CAN-шины (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="401"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="401"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="399"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="399"/>
         <source>Examples</source>
         <translation>Примеры</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="404"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="404"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="403"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="403"/>
         <source>Browse example projects on GitHub</source>
         <translation>Просмотр примеров проектов на GitHub</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="411"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="411"/>
         <source>Help</source>
-        <translation>Помощь</translation>
+        <translation type="vanished">Помощь</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="414"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="414"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="413"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="413"/>
         <source>Open the online documentation for help and guidance</source>
         <translation>Открыть онлайн-документацию для помощи и руководства</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="421"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="421"/>
         <source>AI Help</source>
-        <translation>Помощь ИИ</translation>
+        <translation type="vanished">Помощь ИИ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="424"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="424"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="423"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="423"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Просмотр подробной документации и задавайте вопросы на DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="382"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="382"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="380"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="380"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
@@ -5259,40 +5583,52 @@ Please provide the necessary credentials.</source>
         <translation>Загрузить CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="385"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="385"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="384"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="384"/>
         <source>Show application info and license details</source>
         <translation>Показать информацию о приложении и детали лицензии</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="446"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="446"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="410"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="410"/>
+        <source>Getting Started</source>
+        <translation>Начало работы</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="420"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="420"/>
+        <source>AI Wiki &amp; Chat</source>
+        <translation>AI Вики и Чат</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="444"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="444"/>
         <source>Manage license and activate Serial Studio Pro</source>
         <translation>Управление лицензией и активация Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="461"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="481"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="461"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="481"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="459"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="479"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="459"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="479"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="461"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="461"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="459"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="459"/>
         <source>Connect</source>
         <translation>Подключить</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="464"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="464"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="462"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="462"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>Подключение или отключение от устройства или брокера MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="442"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="442"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="440"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="440"/>
         <source>Activate</source>
         <translation>Активировать</translation>
     </message>
@@ -5355,17 +5691,18 @@ Please provide the necessary credentials.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1122"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="842"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1179"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1141"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1198"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (резервный)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1204"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1261"/>
         <source>LED Panel (%1)</source>
         <translation>Панель LED (%1)</translation>
     </message>
@@ -5381,12 +5718,12 @@ Please provide the necessary credentials.</source>
 <context>
     <name>UI::Taskbar</name>
     <message>
-        <location filename="../../src/UI/Taskbar.cpp" line="200"/>
+        <location filename="../../src/UI/Taskbar.cpp" line="245"/>
         <source>Overview</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Taskbar.cpp" line="210"/>
+        <location filename="../../src/UI/Taskbar.cpp" line="255"/>
         <source>All Data</source>
         <translation>Все данные</translation>
     </message>
@@ -5394,12 +5731,12 @@ Please provide the necessary credentials.</source>
 <context>
     <name>UI::WindowManager</name>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="375"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="677"/>
         <source>Select Background Image</source>
         <translation>Выберите фоновое изображение</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="377"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="679"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
         <translation>Изображения (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
