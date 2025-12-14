@@ -27,7 +27,29 @@
 namespace Widgets
 {
 /**
- * @brief A widget that displays the gyroscope data on an attitude indicator.
+ * @class Widgets::Gyroscope
+ * @brief Attitude indicator widget for visualizing 3-axis gyroscope data.
+ *
+ * The Gyroscope class provides a visual representation of angular orientation
+ * using yaw, pitch, and roll values. It supports both direct angle display and
+ * integration of angular velocity data to compute orientation over time.
+ *
+ * Key Features:
+ * - **Three-Axis Display**: Visualizes yaw, pitch, and roll simultaneously
+ * - **Integration Mode**: Can integrate angular velocity (degrees/second) to
+ *   compute absolute orientation
+ * - **Real-time Updates**: Smooth visualization of changing orientation data
+ * - **Time-based Integration**: Uses elapsed time for accurate velocity
+ *   integration
+ *
+ * Integration Mode:
+ * When enabled, the widget interprets incoming data as angular velocities
+ * (degrees per second) and numerically integrates them over time to compute
+ * the current attitude. This is useful when receiving rate gyroscope data
+ * rather than absolute orientation.
+ *
+ * @note The widget uses QElapsedTimer for precise time-based integration when
+ *       in integration mode.
  */
 class Gyroscope : public QQuickItem
 {

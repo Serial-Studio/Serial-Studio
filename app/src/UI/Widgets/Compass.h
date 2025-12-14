@@ -26,7 +26,27 @@
 namespace Widgets
 {
 /**
- * @brief A widget that displays a compass.
+ * @class Widgets::Compass
+ * @brief Compass widget for visualizing heading/bearing data.
+ *
+ * The Compass class provides a visual compass display showing directional
+ * heading data. It displays both the numeric heading value and a corresponding
+ * cardinal/intercardinal direction text (N, NE, E, SE, S, SW, W, NW).
+ *
+ * Key Features:
+ * - **Heading Display**: Shows numeric heading in degrees (0-360°)
+ * - **Cardinal Directions**: Automatically displays compass direction labels
+ * - **Real-time Updates**: Smooth tracking of heading changes
+ * - **Intuitive Visualization**: Traditional compass rose presentation
+ *
+ * The widget automatically converts numeric heading values to appropriate
+ * cardinal or intercardinal direction labels for easy interpretation.
+ *
+ * Typical Use Cases:
+ * - GPS navigation displays
+ * - Magnetometer/compass sensor visualization
+ * - Vehicle/robot heading indication
+ * - Directional antenna alignment
  */
 class Compass : public QQuickItem
 {

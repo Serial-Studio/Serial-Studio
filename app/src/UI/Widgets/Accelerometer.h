@@ -26,7 +26,28 @@
 namespace Widgets
 {
 /**
- * @brief A widget that displays the accelerometer data.
+ * @class Widgets::Accelerometer
+ * @brief Visual widget for displaying 2D acceleration vector data.
+ *
+ * The Accelerometer class visualizes acceleration data as a 2D vector defined
+ * by magnitude and angle (theta). This representation is ideal for tilt
+ * sensors, inclinometers, or any acceleration measurement where direction and
+ * intensity are important.
+ *
+ * Key Features:
+ * - **Polar Representation**: Displays acceleration as magnitude and direction
+ * - **Visual Feedback**: Provides intuitive visualization of tilt/acceleration
+ * - **Real-time Updates**: Smoothly tracks changes in acceleration vector
+ *
+ * The widget expects data in polar coordinates where:
+ * - **Theta**: Angular direction of the acceleration vector (degrees)
+ * - **Magnitude**: Intensity of acceleration (typically in m/s² or g-forces)
+ *
+ * Typical Use Cases:
+ * - Device orientation/tilt monitoring
+ * - Vibration analysis
+ * - Motion sensing applications
+ * - Inclinometer displays
  */
 class Accelerometer : public QQuickItem
 {

@@ -26,6 +26,37 @@
 
 #include "DeclarativeWidget.h"
 
+/**
+ * @class StaticTable
+ * @brief QML-embeddable table widget for displaying structured data in rows and
+ *        columns.
+ *
+ * The StaticTable class extends DeclarativeWidget to provide a QTableWidget
+ * that can be rendered within QML. It displays two-dimensional data (rows and
+ * columns) with customizable fonts for both content and headers, and
+ * automatically adapts to theme changes.
+ *
+ * Key Features:
+ * - **Table Display**: Shows data in a traditional row/column grid format
+ * - **Font Customization**: Separate font configuration for headers and content
+ * - **Theme Awareness**: Automatically updates colors when theme changes
+ * - **Dynamic Data**: Data can be updated at runtime via setData()
+ * - **QML Integration**: Renders QTableWidget content within QML via
+ *   DeclarativeWidget
+ *
+ * Data Format:
+ * Data is provided as a list of string lists, where each inner list represents
+ * a row in the table. The first row is typically used as headers.
+ *
+ * Typical Use Cases:
+ * - Displaying tabular sensor data
+ * - Configuration parameter tables
+ * - Multi-field telemetry displays
+ * - Structured log/event tables
+ *
+ * @note This class uses DeclarativeWidget's image-based rendering to bridge
+ *       QWidget (QTableWidget) into the QML scene graph.
+ */
 class StaticTable : public DeclarativeWidget
 {
   // clang-format off

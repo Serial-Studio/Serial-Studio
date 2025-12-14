@@ -30,7 +30,29 @@
 namespace Widgets
 {
 /**
- * @brief A widget that displays a real-time plot of data points.
+ * @class Widgets::Plot
+ * @brief Real-time 2D plotting widget for visualizing time-series data.
+ *
+ * The Plot class provides a high-performance real-time plotting widget that
+ * visualizes data from a single dataset. It automatically manages axis ranges,
+ * supports both fixed and auto-scaling modes, and maintains a configurable
+ * data buffer for smooth visualization.
+ *
+ * Key Features:
+ * - **Auto-scaling**: Automatically adjusts Y-axis range based on data values
+ * - **Configurable Buffer**: Adjustable width (data points) and height
+ *   (resolution)
+ * - **Pause/Resume**: Can freeze the plot while data continues to be received
+ * - **Monotonic Detection**: Optimizes rendering for time-series data
+ * - **QML Integration**: Designed for seamless integration with QtCharts
+ *   QXYSeries
+ *
+ * The widget maintains a circular buffer of data points and automatically
+ * updates the plot visualization when new data arrives from the associated
+ * dataset.
+ *
+ * @note This widget is designed to work with JSON::Dataset objects from the
+ *       Serial Studio data frame system.
  */
 class Plot : public QQuickItem
 {

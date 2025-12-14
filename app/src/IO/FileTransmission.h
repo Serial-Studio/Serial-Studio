@@ -28,6 +28,36 @@
 
 namespace IO
 {
+/**
+ * @class FileTransmission
+ * @brief Manages line-by-line file transmission through the active I/O device.
+ *
+ * The FileTransmission class is a singleton that handles the sequential
+ * transmission of text files through the currently connected I/O device (serial
+ * port, network socket, etc.). Files are sent line-by-line at a configurable
+ * interval, making it ideal for script execution, command sequences, or data
+ * replay.
+ *
+ * Key Features:
+ * - **Line-by-Line Transmission**: Sends file content one line at a time with
+ *   configurable delays
+ * - **Progress Tracking**: Provides real-time progress updates (0-100%)
+ * - **Pause/Resume**: Transmission can be started and stopped on demand
+ * - **Configurable Interval**: Adjustable delay between line transmissions
+ *   (default: 100ms)
+ * - **Device Integration**: Automatically uses the currently connected I/O
+ *   device from IO::Manager
+ *
+ * Typical Use Cases:
+ * - Sending initialization scripts to embedded devices
+ * - Replaying captured command sequences
+ * - Automated testing with predefined command sets
+ * - Configuration file upload to target devices
+ *
+ * @note Transmission requires an active connection through IO::Manager.
+ *       The file selection and transmission state are exposed as Qt properties
+ *       for easy QML integration.
+ */
 class FileTransmission : public QObject
 {
   // clang-format off

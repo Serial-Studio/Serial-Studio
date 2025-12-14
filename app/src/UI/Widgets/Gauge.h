@@ -25,6 +25,26 @@
 
 namespace Widgets
 {
+/**
+ * @class Widgets::Gauge
+ * @brief Circular gauge widget for displaying normalized value data.
+ *
+ * The Gauge class provides a circular/arc-style gauge display, inheriting all
+ * functionality from the Bar widget but presenting the data in a traditional
+ * gauge visualization rather than a linear bar.
+ *
+ * This widget shares all features of the Bar class including:
+ * - Value range normalization
+ * - Alarm threshold visualization
+ * - Unit display
+ * - Alarm state indication
+ *
+ * The only difference from Bar is the visual presentation style, making it
+ * suitable for dashboards where circular gauges are preferred over linear
+ * bars.
+ *
+ * @see Widgets::Bar for detailed functionality documentation
+ */
 class Gauge : public Bar
 {
   Q_OBJECT

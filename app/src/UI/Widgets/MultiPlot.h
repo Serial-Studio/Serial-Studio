@@ -28,7 +28,33 @@
 namespace Widgets
 {
 /**
- * @brief A widget that displays multiple plots on a single chart.
+ * @class Widgets::MultiPlot
+ * @brief Multi-curve plotting widget for visualizing multiple datasets on a
+ *        shared chart.
+ *
+ * The MultiPlot class extends the basic plotting functionality to support
+ * multiple data series (curves) displayed simultaneously on a single chart.
+ * Each curve can be individually toggled, has its own color, and shares common
+ * X/Y axis ranges for easy comparison.
+ *
+ * Key Features:
+ * - **Multiple Curves**: Display multiple related datasets on one chart
+ * - **Individual Control**: Toggle visibility of each curve independently
+ * - **Shared Scaling**: All curves use common axis ranges for direct
+ *   comparison
+ * - **Color Management**: Automatic theme-aware color assignment for each
+ *   curve
+ * - **Performance**: Efficient rendering of multiple data series
+ *   simultaneously
+ * - **Dynamic Labels**: Each curve has an associated label for identification
+ *
+ * Typical Use Cases:
+ * - Multi-sensor comparisons (e.g., temperature from multiple sources)
+ * - Multi-axis data (X, Y, Z accelerometer readings)
+ * - Related measurements with shared time bases
+ *
+ * @note The curve count is determined by the associated dataset group and
+ *       cannot be changed after initialization.
  */
 class MultiPlot : public QQuickItem
 {

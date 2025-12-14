@@ -32,7 +32,34 @@
 namespace Widgets
 {
 /**
- * @brief A widget that plots the FFT of a dataset.
+ * @class Widgets::FFTPlot
+ * @brief Fast Fourier Transform visualization widget for frequency analysis.
+ *
+ * The FFTPlot class performs real-time Fast Fourier Transform (FFT) analysis
+ * on incoming time-domain data and visualizes the resulting frequency spectrum.
+ * It uses the KissFFT library for efficient FFT computation and applies window
+ * functions for improved spectral analysis.
+ *
+ * Key Features:
+ * - **Real-time FFT**: Performs FFT computation on live data streams
+ * - **Windowing**: Applies window functions to reduce spectral leakage
+ * - **Configurable Resolution**: Adjustable FFT size and display resolution
+ * - **Auto-scaling**: Automatically adjusts frequency and magnitude ranges
+ * - **Pause/Resume**: Can freeze the display while continuing data collection
+ * - **Frequency Axis**: Displays frequency in Hz based on sampling rate
+ *
+ * The widget automatically detects the sampling rate from the dataset
+ * configuration and computes the appropriate frequency axis scaling.
+ *
+ * Typical Use Cases:
+ * - Audio spectrum analysis
+ * - Vibration frequency analysis
+ * - Signal harmonic detection
+ * - Noise characterization
+ * - Periodic signal analysis
+ *
+ * @note Requires KissFFT library for FFT computation. The FFT size is
+ *       automatically determined from the dataset configuration.
  */
 class FFTPlot : public QQuickItem
 {

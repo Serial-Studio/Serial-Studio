@@ -27,7 +27,31 @@
 namespace Widgets
 {
 /**
- * @brief A widget that displays a panel of LEDs.
+ * @class Widgets::LEDPanel
+ * @brief Multi-LED status indicator panel widget.
+ *
+ * The LEDPanel class provides a visual panel of multiple LED indicators, each
+ * with its own state (on/off), color, and title. This is ideal for displaying
+ * multiple boolean status indicators or binary flags in a compact,
+ * easy-to-read format.
+ *
+ * Key Features:
+ * - **Multiple Indicators**: Display many LED states simultaneously
+ * - **Individual Titles**: Each LED has an associated descriptive label
+ * - **Theme-Aware Colors**: LED colors automatically adapt to the current
+ *   theme
+ * - **State Tracking**: Each LED maintains an independent on/off state
+ * - **Compact Display**: Efficiently presents many binary indicators
+ *
+ * Typical Use Cases:
+ * - System status indicators (errors, warnings, ready states)
+ * - Digital I/O pin visualization
+ * - Multi-channel sensor threshold indicators
+ * - Relay/actuator state monitoring
+ * - Binary flag/bit field visualization
+ *
+ * @note The number of LEDs is determined by the associated dataset group and
+ *       is fixed after initialization.
  */
 class LEDPanel : public QQuickItem
 {

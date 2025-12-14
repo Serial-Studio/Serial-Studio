@@ -26,6 +26,30 @@
 
 namespace Widgets
 {
+/**
+ * @class Widgets::DataGrid
+ * @brief Tabular data display widget for structured dataset visualization.
+ *
+ * The DataGrid class provides a table-based visualization of dataset
+ * information, displaying data in rows and columns with optional pause
+ * functionality. It extends the StaticTable widget to provide dynamic data
+ * updates from Serial Studio data frames.
+ *
+ * Key Features:
+ * - **Tabular Layout**: Presents data in an organized table format
+ * - **Pause/Resume**: Can freeze the display while data continues to arrive
+ * - **Auto-Update**: Automatically refreshes when new data frames are received
+ * - **Structured Display**: Ideal for datasets with multiple fields
+ *
+ * Typical Use Cases:
+ * - Multi-field sensor data display
+ * - Structured telemetry visualization
+ * - Configuration parameter monitoring
+ * - Multi-variable system state display
+ *
+ * @note This widget inherits table rendering capabilities from StaticTable
+ *       and adds data frame integration.
+ */
 class DataGrid : public StaticTable
 {
   Q_OBJECT

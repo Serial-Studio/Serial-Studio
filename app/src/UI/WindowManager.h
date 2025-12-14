@@ -31,14 +31,39 @@ namespace UI
 {
 /**
  * @class WindowManager
- * @brief Manages the layout, geometry, and z-order of QML-based floating
- *        windows.
+ * @brief Manages layout, geometry, z-ordering, and interactive manipulation of
+ *        floating dashboard windows.
  *
- * This class tracks registered QQuickItems representing windows, handles their
- * automatic layout, manages stacking order (z-index), and maintains their
- * geometry within a defined container.
+ * The WindowManager class provides comprehensive window management capabilities
+ * for the dashboard's floating window system. It handles window registration,
+ * tracks geometry and z-order, provides automatic layout algorithms, and
+ * manages user interactions like dragging, resizing, and snapping.
  *
- * It also supports background image configuration for the window canvas.
+ * Key Features:
+ * - **Window Registration**: Tracks QML window items with unique IDs
+ * - **Z-Order Management**: Maintains window stacking order with
+ *   bring-to-front functionality
+ * - **Layout Algorithms**: Automatic grid layout and cascade layout modes
+ * - **Drag & Drop**: Interactive window repositioning with visual feedback
+ * - **Window Resizing**: Edge and corner-based window resizing
+ * - **Snap Indicators**: Visual guides for window docking/alignment
+ * - **Layout Persistence**: Serialization/deserialization of window layouts
+ * - **Background Images**: Optional background image for the workspace
+ * - **Constraint Enforcement**: Keeps windows within container bounds
+ *
+ * Layout Modes:
+ * - **Auto Layout**: Intelligent grid-based arrangement that optimizes space
+ *   usage
+ * - **Cascade Layout**: Traditional cascading window arrangement
+ * - **Manual Layout**: Free-form positioning with optional snap guides
+ *
+ * The WindowManager coordinates with the Taskbar for window visibility state
+ * management and provides real-time geometry change notifications for layout
+ * persistence.
+ *
+ * @note This class extends QQuickItem to receive mouse events for window
+ *       manipulation. It should be used as the root container for all dashboard
+ *       windows.
  */
 class Taskbar;
 class WindowManager : public QQuickItem

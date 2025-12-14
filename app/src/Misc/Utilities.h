@@ -30,11 +30,34 @@ typedef QMap<QMessageBox::StandardButton, QString> ButtonTextMap;
 namespace Misc
 {
 /**
- * @brief The Utilities class
+ * @class Misc::Utilities
+ * @brief Application-wide utility functions for common UI and system
+ * operations.
  *
- * The @c Utilitities module provides commonly used functionality to the rest of
- * the application. For example, showing a messagebox with a nice format or
- * revealing files in the operating system's preferred file manager.
+ * The Utilities class provides a collection of static helper functions for
+ * operations that are used throughout the application. It centralizes common
+ * functionality to ensure consistent behavior and reduce code duplication.
+ *
+ * Key Features:
+ * - **Message Dialogs**: Standardized, well-formatted message boxes with
+ *   custom button text support
+ * - **File Revelation**: Cross-platform file manager integration to reveal
+ *   files in Explorer/Finder/File Manager
+ * - **HiDPI Support**: Automatic pixel-density-aware image loading
+ * - **Application Reboot**: Clean application restart functionality
+ * - **Qt About Dialog**: Shows Qt framework information
+ * - **Auto-Update Prompts**: User consent dialogs for automatic updates
+ *
+ * Platform Support:
+ * - **Windows**: Uses Explorer for file revelation
+ * - **macOS**: Uses Finder for file revelation
+ * - **Linux**: Uses xdg-open or fallback file managers
+ *
+ * All functions are static and can be called without instantiating the class.
+ * The singleton instance() method exists primarily for QML property exposure.
+ *
+ * @note Most methods are static utilities; instance() is provided for QML
+ *       integration purposes.
  */
 class Utilities : public QObject
 {
