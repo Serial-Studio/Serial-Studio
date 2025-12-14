@@ -69,10 +69,10 @@
     "placeholder_text": "#9A9A9A",
     "highlighted_text": "#FFFFFF",
 
-    "console_text":"#98C379",
-    "console_base":"#1E2127",
-    "console_border":"#454545",
-    "console_highlight":"#0078D4",
+    "console_text":"#98c379",
+    "console_base":"#202020",
+    "console_border":"#4A4A4A",
+    "console_highlight":"#4b6cb7",
 
     "widget_text": "#E0E0E0",
     "widget_base": "#2D2D2D",

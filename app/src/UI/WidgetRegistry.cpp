@@ -21,6 +21,9 @@
 
 #include "UI/WidgetRegistry.h"
 
+/**
+ * @brief Constructor function
+ */
 UI::WidgetRegistry::WidgetRegistry()
   : QObject(nullptr)
   , m_nextId(1)
@@ -29,10 +32,58 @@ UI::WidgetRegistry::WidgetRegistry()
 {
 }
 
+/**
+ * @brief Retrieves the singleton instance of the WidgetRegistry.
+ * @return Reference to the singleton WidgetRegistry instance.
+ */
 UI::WidgetRegistry &UI::WidgetRegistry::instance()
 {
   static WidgetRegistry instance;
   return instance;
+}
+
+/**
+ * @brief Begins a batch update operation.
+ *
+ * During batch mode, individual widgetCreated/widgetDestroyed signals
+ * are still emitted immediately, but batchUpdateCompleted() is deferred
+ * until endBatchUpdate() is called.
+ *
+ * This allows subscribers to defer expensive operations (like layout
+ * recalculation) until all changes are complete.
+ *
+ * Batch operations can be nested; only the outermost endBatchUpdate()
+ * will emit batchUpdateCompleted().
+ */
+void UI::WidgetRegistry::beginBatchUpdate()
+{
+  ++m_batchDepth;
+}
+
+/**
+ * @brief Ends a batch update operation.
+ *
+ * Emits batchUpdateCompleted() if this is the outermost batch and
+ * any widgets were added or removed during the batch.
+ */
+void UI::WidgetRegistry::endBatchUpdate()
+{
+  if (m_batchDepth > 0)
+    --m_batchDepth;
+
+  if (m_batchDepth == 0 && m_batchHadChanges)
+  {
+    m_batchHadChanges = false;
+    Q_EMIT batchUpdateCompleted();
+  }
+}
+
+/**
+ * @brief Checks if currently in a batch update.
+ */
+bool UI::WidgetRegistry::isInBatchUpdate() const
+{
+  return m_batchDepth > 0;
 }
 
 /**
@@ -70,74 +121,6 @@ UI::WidgetRegistry::createWidget(SerialStudio::DashboardWidget type,
   Q_EMIT widgetCreated(info.id, info);
 
   return info.id;
-}
-
-/**
- * @brief Destroys a widget and removes it from the registry.
- *
- * Note: The ID will NOT be reused during this session to prevent
- * dangling references.
- *
- * @param id The widget ID to destroy.
- * @return True if the widget existed and was destroyed.
- */
-bool UI::WidgetRegistry::destroyWidget(UI::WidgetID id)
-{
-  if (!m_widgets.contains(id))
-    return false;
-
-  Q_EMIT widgetDestroyed(id);
-
-  m_widgets.remove(id);
-  m_widgetOrder.removeOne(id);
-
-  if (m_batchDepth > 0)
-    m_batchHadChanges = true;
-
-  return true;
-}
-
-/**
- * @brief Updates widget metadata.
- * @param id The widget ID to update.
- * @param title New title (empty string keeps current title).
- * @param icon New icon path (empty string keeps current icon).
- * @param userData Optional user data to associate with widget.
- * @return True if the widget exists and was updated.
- */
-bool UI::WidgetRegistry::updateWidget(UI::WidgetID id, const QString &title,
-                                      const QString &icon,
-                                      const QVariant &userData)
-{
-  if (!m_widgets.contains(id))
-    return false;
-
-  WidgetInfo &info = m_widgets[id];
-
-  bool changed = false;
-
-  if (!title.isEmpty() && info.title != title)
-  {
-    info.title = title;
-    changed = true;
-  }
-
-  if (!icon.isEmpty() && info.icon != icon)
-  {
-    info.icon = icon;
-    changed = true;
-  }
-
-  if (userData.isValid())
-  {
-    info.userData = userData;
-    changed = true;
-  }
-
-  if (changed)
-    Q_EMIT widgetUpdated(id, info);
-
-  return true;
 }
 
 /**
@@ -252,45 +235,66 @@ void UI::WidgetRegistry::clear()
 }
 
 /**
- * @brief Begins a batch update operation.
+ * @brief Destroys a widget and removes it from the registry.
  *
- * During batch mode, individual widgetCreated/widgetDestroyed signals
- * are still emitted immediately, but batchUpdateCompleted() is deferred
- * until endBatchUpdate() is called.
+ * Note: The ID will NOT be reused during this session to prevent
+ * dangling references.
  *
- * This allows subscribers to defer expensive operations (like layout
- * recalculation) until all changes are complete.
- *
- * Batch operations can be nested; only the outermost endBatchUpdate()
- * will emit batchUpdateCompleted().
+ * @param id The widget ID to destroy.
+ * @return True if the widget existed and was destroyed.
  */
-void UI::WidgetRegistry::beginBatchUpdate()
+void UI::WidgetRegistry::destroyWidget(UI::WidgetID id)
 {
-  ++m_batchDepth;
-}
+  if (!m_widgets.contains(id))
+    return;
 
-/**
- * @brief Ends a batch update operation.
- *
- * Emits batchUpdateCompleted() if this is the outermost batch and
- * any widgets were added or removed during the batch.
- */
-void UI::WidgetRegistry::endBatchUpdate()
-{
+  Q_EMIT widgetDestroyed(id);
+
+  m_widgets.remove(id);
+  m_widgetOrder.removeOne(id);
+
   if (m_batchDepth > 0)
-    --m_batchDepth;
-
-  if (m_batchDepth == 0 && m_batchHadChanges)
-  {
-    m_batchHadChanges = false;
-    Q_EMIT batchUpdateCompleted();
-  }
+    m_batchHadChanges = true;
 }
 
 /**
- * @brief Checks if currently in a batch update.
+ * @brief Updates widget metadata.
+ * @param id The widget ID to update.
+ * @param title New title (empty string keeps current title).
+ * @param icon New icon path (empty string keeps current icon).
+ * @param userData Optional user data to associate with widget.
  */
-bool UI::WidgetRegistry::isInBatchUpdate() const
+void UI::WidgetRegistry::updateWidget(UI::WidgetID id, const QString &title,
+                                      const QString &icon,
+                                      const QVariant &userData)
 {
-  return m_batchDepth > 0;
+  if (!m_widgets.contains(id))
+    return;
+
+  WidgetInfo &info = m_widgets[id];
+
+  bool changed = false;
+
+  if (!title.isEmpty() && info.title != title)
+  {
+    info.title = title;
+    changed = true;
+  }
+
+  if (!icon.isEmpty() && info.icon != icon)
+  {
+    info.icon = icon;
+    changed = true;
+  }
+
+  if (userData.isValid())
+  {
+    info.userData = userData;
+    changed = true;
+  }
+
+  if (changed)
+    Q_EMIT widgetUpdated(id, info);
+
+  return;
 }

@@ -1297,8 +1297,8 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
     for (int j = 0; j < count; ++j)
     {
       const auto &dataset = i.value().at(j);
-      registry.createWidget(key, dataset.title, dataset.groupId, dataset.index,
-                            false);
+      (void)registry.createWidget(key, dataset.title, dataset.groupId,
+                                  dataset.index, false);
       m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
     }
   }

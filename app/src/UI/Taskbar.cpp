@@ -702,7 +702,7 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem *window)
  * @param state Desired window state.
  */
 void UI::Taskbar::setWindowState(const int id,
-                                 const TaskbarModel::WindowState state)
+                                 const UI::TaskbarModel::WindowState state)
 {
   // Validate that the item exists
   QStandardItem *item = findItemByWindowId(id);

@@ -36,13 +36,13 @@ UI::WindowManager::WindowManager(QQuickItem *parent)
   : QQuickItem(parent)
   , m_zCounter(1)
   , m_autoLayoutEnabled(true)
+  , m_resizeEdge(ResizeEdge::None)
   , m_snapIndicatorVisible(false)
   , m_taskbar(nullptr)
   , m_dragWindow(nullptr)
   , m_targetWindow(nullptr)
   , m_resizeWindow(nullptr)
   , m_focusedWindow(nullptr)
-  , m_resizeEdge(ResizeEdge::None)
 {
   setEnabled(true);
   setAcceptHoverEvents(false);
@@ -204,14 +204,14 @@ bool UI::WindowManager::restoreLayout(const QJsonObject &layout)
     QJsonArray orderArray = layout["windowOrder"].toArray();
     QVector<int> newOrder;
 
-    for (const auto &val : orderArray)
+    for (const auto &val : std::as_const(orderArray))
     {
       int id = val.toInt(-1);
       if (id >= 0 && m_windows.contains(id))
         newOrder.append(id);
     }
 
-    for (int id : m_windowOrder)
+    for (int id : std::as_const(m_windowOrder))
     {
       if (!newOrder.contains(id))
         newOrder.append(id);
@@ -223,7 +223,7 @@ bool UI::WindowManager::restoreLayout(const QJsonObject &layout)
   if (!autoLayout && layout.contains("geometries"))
   {
     QJsonArray geometries = layout["geometries"].toArray();
-    for (const auto &val : geometries)
+    for (const auto &val : std::as_const(geometries))
     {
       QJsonObject winGeom = val.toObject();
       int id = winGeom["id"].toInt(-1);

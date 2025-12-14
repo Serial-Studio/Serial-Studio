@@ -179,7 +179,7 @@ public slots:
   void unregisterWindow(QQuickItem *window);
   void setWindowManager(UI::WindowManager *manager);
   void registerWindow(const int id, QQuickItem *window);
-  void setWindowState(const int id, const UI::TaskbarModel::WindowState state);
+  void setWindowState(const int id, const TaskbarModel::WindowState state);
 
 private slots:
   void onRegistryCleared();
