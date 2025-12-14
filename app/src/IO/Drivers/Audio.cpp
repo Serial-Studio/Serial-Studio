@@ -20,9 +20,9 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
+#include "IO/Manager.h"
 #include "IO/Drivers/Audio.h"
 
-#include "IO/Manager.h"
 #include "Misc/Translator.h"
 #include "Misc/TimerEvents.h"
 

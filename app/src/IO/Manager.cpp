@@ -36,6 +36,8 @@
 #  include "Misc/Utilities.h"
 #  include "Licensing/Trial.h"
 #  include "IO/Drivers/Audio.h"
+#  include "IO/Drivers/CANBus.h"
+#  include "IO/Drivers/Modbus.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
@@ -302,9 +304,8 @@ QStringList IO::Manager::availableBuses() const
   list.append(tr("Bluetooth LE"));
 #ifdef BUILD_COMMERCIAL
   list.append(tr("Audio Stream"));
-  // Comment these ports for the future
-  // list.append(tr("Modbus"));
-  // list.append(tr("CAN Bus"));
+  list.append(tr("Modbus"));
+  list.append(tr("CAN Bus"));
 #endif
   return list;
 }
@@ -687,6 +688,14 @@ void IO::Manager::setBusType(const SerialStudio::BusType driver)
   // Try to open an Audio connection
   else if (busType() == SerialStudio::BusType::Audio)
     setDriver(static_cast<HAL_Driver *>(&(Drivers::Audio::instance())));
+
+  // Try to open a Modbus connection
+  else if (busType() == SerialStudio::BusType::ModBus)
+    setDriver(static_cast<HAL_Driver *>(&(Drivers::Modbus::instance())));
+
+  // Try to open a CAN Bus connection
+  else if (busType() == SerialStudio::BusType::CanBus)
+    setDriver(static_cast<HAL_Driver *>(&(Drivers::CANBus::instance())));
 #endif
 
   // Invalid driver
@@ -811,12 +820,14 @@ void IO::Manager::onReadyRead()
   static auto &mqtt = MQTT::Client::instance();
 #endif
 
-  auto reader = m_frameReader;
-  if (!m_paused && reader) [[likely]]
+  if (!m_paused && m_frameReader) [[likely]]
   {
-    auto &queue = reader->queue();
+    auto &queue = m_frameReader->queue();
     while (queue.try_dequeue(m_frame))
     {
+      if (!m_frameReader)
+        break;
+
       frameBuilder.hotpathRxFrame(m_frame);
 #ifdef BUILD_COMMERCIAL
       mqtt.hotpathTxFrame(m_frame);

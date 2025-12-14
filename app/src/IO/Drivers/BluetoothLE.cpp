@@ -405,6 +405,10 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
   // Ensure that index is valid
   if (index >= 1 && index <= m_serviceNames.count())
   {
+    // Additional bounds check against actual services list
+    if (!m_controller || index - 1 >= m_controller->services().count())
+      return;
+
     // Generate service handler & connect signals/slots
     auto serviceUuid = m_controller->services().at(index - 1);
     m_service = m_controller->createServiceObject(serviceUuid, this);
@@ -455,7 +459,8 @@ void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
     m_selectedCharacteristic = -1;
 
   // Query characteristic for information
-  if (m_selectedCharacteristic >= 0)
+  if (m_selectedCharacteristic >= 0
+      && m_selectedCharacteristic < m_characteristics.count())
   {
     // Obtain the characteristic
     const auto &c = m_characteristics.at(m_selectedCharacteristic);

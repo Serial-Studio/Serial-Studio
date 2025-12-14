@@ -322,7 +322,6 @@ Rectangle {
         sourceComponent: Component {
           Widgets.ToolbarButton {
             iconSize: 16
-            enabled: false
             text: qsTr("ModBus")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
@@ -351,7 +350,6 @@ Rectangle {
         sourceComponent: Component {
           Widgets.ToolbarButton {
             iconSize: 16
-            enabled: false
             text: qsTr("CAN Bus")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft

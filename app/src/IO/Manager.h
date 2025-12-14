@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <QThread>
 #include <QObject>
 #include <QSettings>
@@ -155,7 +156,7 @@ private:
   void onDataReceived(const QByteArray &data);
 
 private:
-  bool m_paused;
+  std::atomic<bool> m_paused;
   bool m_writeEnabled;
   bool m_thrFrameExtr;
   SerialStudio::BusType m_busType;

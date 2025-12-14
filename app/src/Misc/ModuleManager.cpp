@@ -75,6 +75,8 @@
 #  include "MQTT/Client.h"
 #  include "Licensing/Trial.h"
 #  include "IO/Drivers/Audio.h"
+#  include "IO/Drivers/CANBus.h"
+#  include "IO/Drivers/Modbus.h"
 #  include "UI/Widgets/Plot3D.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
@@ -306,6 +308,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   const bool qtCommercialAvailable = true;
   auto mqttClient = &MQTT::Client::instance();
   auto audioDriver = &IO::Drivers::Audio::instance();
+  auto canBusDriver = &IO::Drivers::CANBus::instance();
+  auto modbusDriver = &IO::Drivers::Modbus::instance();
 #else
   const bool qtCommercialAvailable = false;
 #endif
@@ -328,6 +332,11 @@ void Misc::ModuleManager::initializeQmlInterface()
   projectModel->setupExternalConnections();
   frameBuilder->setupExternalConnections();
   ioConsoleExport->setupExternalConnections();
+
+#ifdef BUILD_COMMERCIAL
+  modbusDriver->setupExternalConnections();
+  canBusDriver->setupExternalConnections();
+#endif
 
   // Install custom message handler to redirect qDebug output to console
   qInstallMessageHandler(MessageHandler);
@@ -380,6 +389,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   // Register commercial C++ modules with QML
 #ifdef BUILD_COMMERCIAL
   c->setContextProperty("Cpp_IO_Audio", audioDriver);
+  c->setContextProperty("Cpp_IO_CANBus", canBusDriver);
+  c->setContextProperty("Cpp_IO_Modbus", modbusDriver);
   c->setContextProperty("Cpp_Licensing_Trial", trial);
   c->setContextProperty("Cpp_MQTT_Client", mqttClient);
   c->setContextProperty("Cpp_Licensing_LemonSqueezy", lemonSqueezy);

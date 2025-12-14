@@ -870,12 +870,10 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
   // Ensure that this function is only called once
   QMutexLocker locker(&m_errorHandlerMutex);
 
-  // Ignore if port is not open
-  if (port())
-  {
-    if (!port()->isOpen())
-      return;
-  }
+  // Ignore if port is not open (capture pointer once to avoid TOCTOU)
+  auto serialPort = port();
+  if (serialPort && !serialPort->isOpen())
+    return;
 
   // No need to show error if device was disconnected from previous error
   if (!Manager::instance().isConnected())
