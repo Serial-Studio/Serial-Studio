@@ -50,7 +50,7 @@ IO::Drivers::Modbus::Modbus()
   , m_startAddress(0)
   , m_registerCount(10)
   , m_pollInterval(1000)
-  , m_port(502)
+  , m_port(5020)
   , m_host("127.0.0.1")
   , m_baudRate(9600)
   , m_serialPortIndex(0)
@@ -63,7 +63,7 @@ IO::Drivers::Modbus::Modbus()
   m_startAddress = m_settings.value("ModbusDriver/startAddress", 0).toUInt();
   m_registerCount = m_settings.value("ModbusDriver/registerCount", 10).toUInt();
   m_pollInterval = m_settings.value("ModbusDriver/pollInterval", 1000).toUInt();
-  m_port = m_settings.value("ModbusDriver/port", 502).toUInt();
+  m_port = m_settings.value("ModbusDriver/port", 5020).toUInt();
   m_host = m_settings.value("ModbusDriver/host", "127.0.0.1").toString();
 
   m_baudRate = m_settings.value("ModbusDriver/baudRate", 9600).toInt();

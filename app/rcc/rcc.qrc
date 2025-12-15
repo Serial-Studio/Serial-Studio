@@ -420,8 +420,7 @@
         <file>scripts/key_value_pairs.js</file>
         <file>scripts/mavlink.js</file>
         <file>scripts/messagepack.js</file>
-        <file>scripts/modbus_ascii.js</file>
-        <file>scripts/modbus_rtu.js</file>
+        <file>scripts/modbus.js</file>
         <file>scripts/nmea_0183.js</file>
         <file>scripts/nmea_2000.js</file>
         <file>scripts/pipe_delimited.js</file>
