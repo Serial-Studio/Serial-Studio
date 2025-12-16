@@ -109,26 +109,10 @@ class Modbus : public HAL_Driver
              READ slaveAddress
              WRITE setSlaveAddress
              NOTIFY slaveAddressChanged)
-  Q_PROPERTY(quint16 startAddress
-             READ startAddress
-             WRITE setStartAddress
-             NOTIFY startAddressChanged)
-  Q_PROPERTY(quint16 registerCount
-             READ registerCount
-             WRITE setRegisterCount
-             NOTIFY registerCountChanged)
   Q_PROPERTY(quint16 pollInterval
              READ pollInterval
              WRITE setPollInterval
              NOTIFY pollIntervalChanged)
-  Q_PROPERTY(quint8 registerTypeIndex
-             READ registerTypeIndex
-             WRITE setRegisterTypeIndex
-             NOTIFY registerTypeIndexChanged)
-  Q_PROPERTY(bool multiGroupMode
-             READ multiGroupMode
-             WRITE setMultiGroupMode
-             NOTIFY multiGroupModeChanged)
   Q_PROPERTY(QString host
              READ host
              WRITE setHost
@@ -192,11 +176,7 @@ signals:
   void stopBitsIndexChanged();
   void protocolIndexChanged();
   void slaveAddressChanged();
-  void startAddressChanged();
-  void registerCountChanged();
   void pollIntervalChanged();
-  void registerTypeIndexChanged();
-  void multiGroupModeChanged();
   void serialPortIndexChanged();
   void availableSerialPortsChanged();
   void registerGroupsChanged();
@@ -226,11 +206,7 @@ public:
 
   [[nodiscard]] quint8 protocolIndex() const;
   [[nodiscard]] quint8 slaveAddress() const;
-  [[nodiscard]] quint16 startAddress() const;
-  [[nodiscard]] quint16 registerCount() const;
   [[nodiscard]] quint16 pollInterval() const;
-  [[nodiscard]] quint8 registerTypeIndex() const;
-  [[nodiscard]] bool multiGroupMode() const;
   [[nodiscard]] quint16 port() const;
   [[nodiscard]] QString host() const;
 
@@ -256,11 +232,7 @@ public slots:
   void setBaudRate(const qint32 rate);
   void setProtocolIndex(const quint8 index);
   void setSlaveAddress(const quint8 address);
-  void setStartAddress(const quint16 address);
-  void setRegisterCount(const quint16 count);
   void setPollInterval(const quint16 interval);
-  void setRegisterTypeIndex(const quint8 index);
-  void setMultiGroupMode(const bool enabled);
   void setSerialPortIndex(const quint8 index);
 
   Q_INVOKABLE void addRegisterGroup(const quint8 type, const quint16 start,
@@ -287,11 +259,7 @@ private:
 
   quint8 m_protocolIndex;
   quint8 m_slaveAddress;
-  quint16 m_startAddress;
-  quint16 m_registerCount;
   quint16 m_pollInterval;
-  quint8 m_registerTypeIndex;
-  bool m_multiGroupMode;
   int m_currentGroupIndex;
   QVector<ModbusRegisterGroup> m_registerGroups;
   quint16 m_port;

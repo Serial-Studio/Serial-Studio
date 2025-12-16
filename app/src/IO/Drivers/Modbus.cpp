@@ -47,11 +47,7 @@ IO::Drivers::Modbus::Modbus()
   , m_pollTimer(new QTimer(this))
   , m_protocolIndex(0)
   , m_slaveAddress(1)
-  , m_startAddress(0)
-  , m_registerCount(10)
   , m_pollInterval(100)
-  , m_registerTypeIndex(0)
-  , m_multiGroupMode(false)
   , m_currentGroupIndex(0)
   , m_port(5020)
   , m_host("127.0.0.1")
@@ -64,11 +60,7 @@ IO::Drivers::Modbus::Modbus()
   // clang-format off
   m_protocolIndex = m_settings.value("ModbusDriver/protocolIndex", 0).toUInt();
   m_slaveAddress = m_settings.value("ModbusDriver/slaveAddress", 1).toUInt();
-  m_startAddress = m_settings.value("ModbusDriver/startAddress", 0).toUInt();
-  m_registerCount = m_settings.value("ModbusDriver/registerCount", 10).toUInt();
   m_pollInterval = m_settings.value("ModbusDriver/pollInterval", 100).toUInt();
-  m_registerTypeIndex = m_settings.value("ModbusDriver/registerTypeIndex", 0).toUInt();
-  m_multiGroupMode = m_settings.value("ModbusDriver/multiGroupMode", false).toBool();
   m_port = m_settings.value("ModbusDriver/port", 5020).toUInt();
   m_host = m_settings.value("ModbusDriver/host", "127.0.0.1").toString();
   // clang-format on
@@ -449,43 +441,11 @@ quint8 IO::Drivers::Modbus::slaveAddress() const
 }
 
 /**
- * @brief Returns the starting register address
- */
-quint16 IO::Drivers::Modbus::startAddress() const
-{
-  return m_startAddress;
-}
-
-/**
- * @brief Returns the number of registers to read
- */
-quint16 IO::Drivers::Modbus::registerCount() const
-{
-  return m_registerCount;
-}
-
-/**
  * @brief Returns the polling interval in milliseconds
  */
 quint16 IO::Drivers::Modbus::pollInterval() const
 {
   return m_pollInterval;
-}
-
-/**
- * @brief Returns the register type index
- */
-quint8 IO::Drivers::Modbus::registerTypeIndex() const
-{
-  return m_registerTypeIndex;
-}
-
-/**
- * @brief Returns whether multi-group mode is enabled
- */
-bool IO::Drivers::Modbus::multiGroupMode() const
-{
-  return m_multiGroupMode;
 }
 
 /**
@@ -680,26 +640,6 @@ void IO::Drivers::Modbus::setSlaveAddress(const quint8 address)
 }
 
 /**
- * @brief Sets the starting register address
- */
-void IO::Drivers::Modbus::setStartAddress(const quint16 address)
-{
-  m_startAddress = address;
-  m_settings.setValue("ModbusDriver/startAddress", address);
-  Q_EMIT startAddressChanged();
-}
-
-/**
- * @brief Sets the number of registers to read
- */
-void IO::Drivers::Modbus::setRegisterCount(const quint16 count)
-{
-  m_registerCount = count;
-  m_settings.setValue("ModbusDriver/registerCount", count);
-  Q_EMIT registerCountChanged();
-}
-
-/**
  * @brief Sets the polling interval in milliseconds
  */
 void IO::Drivers::Modbus::setPollInterval(const quint16 interval)
@@ -717,34 +657,7 @@ void IO::Drivers::Modbus::setPollInterval(const quint16 interval)
 }
 
 /**
- * @brief Sets the register type index
- *
- * @param index Register type:
- *   0 = Holding Registers (0x03)
- *   1 = Input Registers (0x04)
- *   2 = Coils (0x01)
- *   3 = Discrete Inputs (0x02)
- */
-void IO::Drivers::Modbus::setRegisterTypeIndex(const quint8 index)
-{
-  m_registerTypeIndex = index;
-  m_settings.setValue("ModbusDriver/registerTypeIndex", index);
-  Q_EMIT registerTypeIndexChanged();
-}
-
-/**
- * @brief Enables or disables multi-group polling mode
- */
-void IO::Drivers::Modbus::setMultiGroupMode(const bool enabled)
-{
-  m_multiGroupMode = enabled;
-  m_currentGroupIndex = 0;
-  m_settings.setValue("ModbusDriver/multiGroupMode", enabled);
-  Q_EMIT multiGroupModeChanged();
-}
-
-/**
- * @brief Adds a register group to poll in multi-group mode
+ * @brief Adds a register group to poll
  */
 void IO::Drivers::Modbus::addRegisterGroup(const quint8 type,
                                            const quint16 start,
@@ -951,51 +864,11 @@ void IO::Drivers::Modbus::pollRegisters()
   if (m_lastReply && !m_lastReply->isFinished())
     return;
 
-  if (m_multiGroupMode)
-  {
-    if (m_registerGroups.isEmpty())
-      return;
+  if (m_registerGroups.isEmpty())
+    return;
 
-    m_currentGroupIndex = 0;
-    pollNextGroup();
-  }
-
-  else
-  {
-    if (m_registerCount == 0 || m_registerCount > 125)
-      return;
-
-    QModbusDataUnit::RegisterType registerType;
-    switch (m_registerTypeIndex)
-    {
-      case 0:
-        registerType = QModbusDataUnit::HoldingRegisters;
-        break;
-      case 1:
-        registerType = QModbusDataUnit::InputRegisters;
-        break;
-      case 2:
-        registerType = QModbusDataUnit::Coils;
-        break;
-      case 3:
-        registerType = QModbusDataUnit::DiscreteInputs;
-        break;
-      default:
-        registerType = QModbusDataUnit::HoldingRegisters;
-        break;
-    }
-
-    QModbusDataUnit read_unit(registerType, m_startAddress, m_registerCount);
-
-    auto *reply = m_device->sendReadRequest(read_unit, m_slaveAddress);
-    if (!reply)
-      return;
-
-    m_lastReply = reply;
-
-    connect(reply, &QModbusReply::finished, this,
-            &IO::Drivers::Modbus::onReadReady, Qt::UniqueConnection);
-  }
+  m_currentGroupIndex = 0;
+  pollNextGroup();
 }
 
 /**
@@ -1173,12 +1046,9 @@ void IO::Drivers::Modbus::onReadReady()
 
   reply->deleteLater();
 
-  if (m_multiGroupMode)
-  {
-    ++m_currentGroupIndex;
-    if (m_currentGroupIndex < m_registerGroups.count())
-      pollNextGroup();
-  }
+  ++m_currentGroupIndex;
+  if (m_currentGroupIndex < m_registerGroups.count())
+    pollNextGroup();
 }
 
 /**

@@ -302,85 +302,9 @@ Item {
     }
 
     //
-    // Multi-group mode toggle
-    //
-    Label {
-      text: qsTr("Multi-Group Mode") + ":"
-    } Switch {
-      id: _multiGroupSwitch
-      Layout.leftMargin: -8
-      Layout.alignment: Qt.AlignLeft
-      checked: Cpp_IO_Modbus.multiGroupMode
-      onCheckedChanged: {
-        if (Cpp_IO_Modbus.multiGroupMode !== checked)
-          Cpp_IO_Modbus.multiGroupMode = checked
-      }
-    }
-
-    //
-    // Single mode fields (visible when multi-group is OFF)
-    //
-    Label {
-      opacity: enabled ? 1 : 0.5
-      text: qsTr("Register Type") + ":"
-      visible: !Cpp_IO_Modbus.multiGroupMode
-      enabled: !Cpp_IO_Manager.isConnected
-    } ComboBox {
-      Layout.fillWidth: true
-      opacity: enabled ? 1 : 0.5
-      visible: !Cpp_IO_Modbus.multiGroupMode
-      enabled: !Cpp_IO_Manager.isConnected
-      model: Cpp_IO_Modbus.registerTypeList
-      currentIndex: Cpp_IO_Modbus.registerTypeIndex
-      onCurrentIndexChanged: {
-        if (enabled) {
-          if (currentIndex !== Cpp_IO_Modbus.registerTypeIndex)
-            Cpp_IO_Modbus.registerTypeIndex = currentIndex
-        }
-      }
-    }
-
-    Label {
-      text: qsTr("Start Address") + ":"
-      visible: !Cpp_IO_Modbus.multiGroupMode
-    } TextField {
-      id: _startField
-      Layout.fillWidth: true
-      visible: !Cpp_IO_Modbus.multiGroupMode
-      placeholderText: qsTr("Register address")
-      validator: IntValidator { bottom: 0; top: 65535 }
-      Component.onCompleted: text = Cpp_IO_Modbus.startAddress
-
-      onEditingFinished: {
-        const value = parseInt(text)
-        if (!isNaN(value) && Cpp_IO_Modbus.startAddress !== value)
-          Cpp_IO_Modbus.startAddress = value
-      }
-    }
-
-    Label {
-      text: qsTr("Register Count") + ":"
-      visible: !Cpp_IO_Modbus.multiGroupMode
-    } TextField {
-      id: _countField
-      Layout.fillWidth: true
-      visible: !Cpp_IO_Modbus.multiGroupMode
-      placeholderText: qsTr("Number of registers")
-      validator: IntValidator { bottom: 1; top: 125 }
-      Component.onCompleted: text = Cpp_IO_Modbus.registerCount
-
-      onEditingFinished: {
-        const value = parseInt(text)
-        if (!isNaN(value) && Cpp_IO_Modbus.registerCount !== value)
-          Cpp_IO_Modbus.registerCount = value
-      }
-    }
-
-    //
-    // Multi-group mode button (visible when multi-group is ON)
+    // Register groups configuration button
     //
     Item {
-      visible: Cpp_IO_Modbus.multiGroupMode
       Layout.columnSpan: 2
       Layout.fillWidth: true
       Layout.topMargin: 16
