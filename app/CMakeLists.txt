@@ -515,6 +515,7 @@ install(SCRIPT ${deploy_script})
 # Packaging
 #-------------------------------------------------------------------------------
 
+set(CPACK_MONOLITHIC_INSTALL              ON)
 set(CPACK_PACKAGE_NAME                    ${PROJECT_DISPNAME})
 set(CPACK_PACKAGE_VENDOR                  ${PROJECT_VENDOR})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY     ${PROJECT_DESCRIPTION_SUMMARY})
@@ -526,8 +527,6 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE        ${PROJECT_DESCRIPTION_FILE})
 set(CPACK_PACKAGE_FILE_NAME               ${PROJECT_FILE_NAME})
 set(CPACK_RESOURCE_FILE_LICENSE           ${PROJECT_FILE_LICENSE})
 set(CPACK_PACKAGE_HOMEPAGE_URL            ${PROJECT_CONTACT})
-
-set(CPACK_MONOLITHIC_INSTALL ON)
 
 if(WIN32)
   set(CPACK_PACKAGE_ICON                 "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\icon.ico")
@@ -550,7 +549,6 @@ if(NOT CPACK_GENERATOR)
     set(CPACK_WIX_PROGRAM_MENU_FOLDER    ".")
     set(CPACK_WIX_ARCHITECTURE           "x64")
     set(CPACK_PACKAGE_EXECUTABLES        ${PROJECT_EXECUTABLE} "${PROJECT_DISPNAME}")
-
   elseif(APPLE)
     set(CPACK_GENERATOR                  "DragNDrop")
   else()
