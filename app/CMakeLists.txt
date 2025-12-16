@@ -343,18 +343,13 @@ set(QML_SOURCES
   qml/Dialogs/Donate.qml
   qml/Dialogs/FileTransmission.qml
   qml/Dialogs/IconPicker.qml
-  qml/Dialogs/LicenseManagement.qml
-  qml/Dialogs/MQTTConfiguration.qml
   qml/Dialogs/Settings.qml
   qml/Dialogs/Welcome.qml
   qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml
   qml/MainWindow/Panes/Dashboard/StartMenu.qml
   qml/MainWindow/Panes/Dashboard/Taskbar.qml
   qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml
-  qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml
   qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml
-  qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml
-  qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml
   qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml
   qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml
   qml/MainWindow/Panes/SetupPanes/Hardware.qml
@@ -383,7 +378,6 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/LEDPanel.qml
   qml/Widgets/Dashboard/MultiPlot.qml
   qml/Widgets/Dashboard/Plot.qml
-  qml/Widgets/Dashboard/Plot3D.qml
   qml/Widgets/Dashboard/Terminal.qml
   qml/Widgets/BigButton.qml
   qml/Widgets/InfoBullet.qml
@@ -401,6 +395,20 @@ set(QML_SOURCES
   qml/DialogLoader.qml
   qml/main.qml
 )
+
+# Add QML files for commercial build
+if(BUILD_COMMERCIAL)
+  set(QML_SOURCES
+    ${QML_SOURCES}
+    qml/Dialogs/LicenseManagement.qml
+    qml/Dialogs/MQTTConfiguration.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml
+    qml/Widgets/Dashboard/Plot3D.qml
+  )
+endif()
 
 qt_add_qml_module(
   ${PROJECT_EXECUTABLE}

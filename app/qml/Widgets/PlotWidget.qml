@@ -44,14 +44,20 @@ Item {
   property alias curveColors: _theme.seriesColors
 
   //
-  // Calculate tick intervals based on visible range (adjusts with zoom)
+  // Calculate tick intervals based on visible range and available space
   //
-  function smartInterval(min, max) {
+  function smartInterval(min, max, isXAxis) {
     const range = max - min
     if (range <= 0)
       return 1.0
 
-    const roughInterval = range / 10.0
+    const plotSize = isXAxis ? _graph.plotArea.width : _graph.plotArea.height
+    const minTickSpacing = isXAxis ? 60 : 40
+
+    const maxTicks = Math.max(3, Math.floor(plotSize / minTickSpacing))
+    const targetTicks = Math.min(10, maxTicks)
+
+    const roughInterval = range / targetTicks
     const magnitude = Math.pow(10, Math.floor(Math.log10(roughInterval)))
     const normalized = roughInterval / magnitude
 
@@ -79,10 +85,10 @@ Item {
   readonly property real yVisibleMax: yVisibleMin + yVisibleRange
 
   //
-  // Dynamic tick intervals based on visible range
+  // Dynamic tick intervals based on visible range and plot size
   //
-  readonly property real xTickInterval: smartInterval(xVisibleMin, xVisibleMax)
-  readonly property real yTickInterval: smartInterval(yVisibleMin, yVisibleMax)
+  readonly property real xTickInterval: smartInterval(xVisibleMin, xVisibleMax, true)
+  readonly property real yTickInterval: smartInterval(yVisibleMin, yVisibleMax, false)
 
   //
   // Custom properties

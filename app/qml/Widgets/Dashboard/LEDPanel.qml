@@ -55,12 +55,17 @@ Item {
 
     GridLayout {
       id: grid
-      columns: 2
       rowSpacing: 4
       columnSpacing: 4
       width: parent.width - 8
       anchors.centerIn: parent
       anchors.horizontalCenterOffset: -4
+      columns: {
+        const itemHeight = 32 + 4
+        const availableHeight = root.height - 16
+        const itemsPerColumn = Math.floor(availableHeight / itemHeight)
+        return (root.model.count <= itemsPerColumn) ? 1 : 2
+      }
 
       Repeater {
         model: root.model.count

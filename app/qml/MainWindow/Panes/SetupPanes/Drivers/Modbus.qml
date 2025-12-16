@@ -283,13 +283,70 @@ Item {
     }
 
     //
-    // Start Address
+    // Poll Interval
     //
     Label {
+      text: qsTr("Poll Interval (ms)") + ":"
+    } TextField {
+      id: _intervalField
+      Layout.fillWidth: true
+      placeholderText: qsTr("Polling interval")
+      validator: IntValidator { bottom: 50; top: 60000 }
+      Component.onCompleted: text = Cpp_IO_Modbus.pollInterval
+
+      onEditingFinished: {
+        const value = parseInt(text)
+        if (!isNaN(value) && Cpp_IO_Modbus.pollInterval !== value)
+          Cpp_IO_Modbus.pollInterval = value
+      }
+    }
+
+    //
+    // Multi-group mode toggle
+    //
+    Label {
+      text: qsTr("Multi-Group Mode") + ":"
+    } Switch {
+      id: _multiGroupSwitch
+      Layout.leftMargin: -8
+      Layout.alignment: Qt.AlignLeft
+      checked: Cpp_IO_Modbus.multiGroupMode
+      onCheckedChanged: {
+        if (Cpp_IO_Modbus.multiGroupMode !== checked)
+          Cpp_IO_Modbus.multiGroupMode = checked
+      }
+    }
+
+    //
+    // Single mode fields (visible when multi-group is OFF)
+    //
+    Label {
+      opacity: enabled ? 1 : 0.5
+      text: qsTr("Register Type") + ":"
+      visible: !Cpp_IO_Modbus.multiGroupMode
+      enabled: !Cpp_IO_Manager.isConnected
+    } ComboBox {
+      Layout.fillWidth: true
+      opacity: enabled ? 1 : 0.5
+      visible: !Cpp_IO_Modbus.multiGroupMode
+      enabled: !Cpp_IO_Manager.isConnected
+      model: Cpp_IO_Modbus.registerTypeList
+      currentIndex: Cpp_IO_Modbus.registerTypeIndex
+      onCurrentIndexChanged: {
+        if (enabled) {
+          if (currentIndex !== Cpp_IO_Modbus.registerTypeIndex)
+            Cpp_IO_Modbus.registerTypeIndex = currentIndex
+        }
+      }
+    }
+
+    Label {
       text: qsTr("Start Address") + ":"
+      visible: !Cpp_IO_Modbus.multiGroupMode
     } TextField {
       id: _startField
       Layout.fillWidth: true
+      visible: !Cpp_IO_Modbus.multiGroupMode
       placeholderText: qsTr("Register address")
       validator: IntValidator { bottom: 0; top: 65535 }
       Component.onCompleted: text = Cpp_IO_Modbus.startAddress
@@ -301,14 +358,13 @@ Item {
       }
     }
 
-    //
-    // Register Count
-    //
     Label {
       text: qsTr("Register Count") + ":"
+      visible: !Cpp_IO_Modbus.multiGroupMode
     } TextField {
       id: _countField
       Layout.fillWidth: true
+      visible: !Cpp_IO_Modbus.multiGroupMode
       placeholderText: qsTr("Number of registers")
       validator: IntValidator { bottom: 1; top: 125 }
       Component.onCompleted: text = Cpp_IO_Modbus.registerCount
@@ -321,22 +377,41 @@ Item {
     }
 
     //
-    // Poll Interval
+    // Multi-group mode button (visible when multi-group is ON)
     //
-    Label {
-      text: qsTr("Poll Interval (ms)") + ":"
-    } TextField {
-      id: _intervalField
+    Item {
+      visible: Cpp_IO_Modbus.multiGroupMode
+      Layout.columnSpan: 2
       Layout.fillWidth: true
-      placeholderText: qsTr("Polling interval")
-      validator: IntValidator { bottom: 100; top: 60000 }
-      Component.onCompleted: text = Cpp_IO_Modbus.pollInterval
+      implicitHeight: _groupButton.height + _groupStatus.height + 4
 
-      onEditingFinished: {
-        const value = parseInt(text)
-        if (!isNaN(value) && Cpp_IO_Modbus.pollInterval !== value)
-          Cpp_IO_Modbus.pollInterval = value
+      Button {
+        id: _groupButton
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        text: qsTr("Configure Register Groups...")
+        onClicked: _groupsDialog.show()
       }
+
+      Label {
+        id: _groupStatus
+        anchors.top: _groupButton.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.topMargin: 4
+        text: Cpp_IO_Modbus.registerGroupCount > 0 ?
+                qsTr("%1 group(s) configured").arg(Cpp_IO_Modbus.registerGroupCount) :
+                qsTr("No groups configured")
+        opacity: 0.5
+        font.italic: true
+        font.pixelSize: 11
+        horizontalAlignment: Text.AlignHCenter
+      }
+    }
+
+    ModbusGroupsDialog {
+      id: _groupsDialog
     }
 
     //

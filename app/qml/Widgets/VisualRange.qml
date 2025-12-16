@@ -143,7 +143,10 @@ ColumnLayout {
 
     // Calculate max text width
     readonly property string paddedMaxText: root.getPaddedText(root.maxValue) + " " + root.units
-    readonly property int labelWidth: fontMetrics.boundingRect(paddedMaxText).width + 32
+    readonly property int labelWidth: Math.min(
+      fontMetrics.boundingRect(paddedMaxText).width + 32,
+      root.maximumWidth
+    )
 
     Layout.minimumWidth: labelWidth
     Layout.maximumWidth: labelWidth

@@ -34,7 +34,7 @@ Widgets.MiniWindow {
   implicitWidth: minimumWidth
   implicitHeight: minimumHeight
   focused: taskBar.activeWindow === root
-  shadowEnabled: root.state === "normal"
+  shadowEnabled: root.state === "normal" && !windowManager.autoLayoutEnabled
 
   //
   // Input properties

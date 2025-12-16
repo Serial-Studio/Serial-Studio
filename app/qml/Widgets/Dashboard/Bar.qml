@@ -83,13 +83,32 @@ Item {
 
 
       property color normalColor: root.color
-      property real labelPadding: labelMetrics.width + 10
       property color alarmColor: Cpp_ThemeManager.colors["alarm"]
       readonly property bool isHorizontal: root.width > 1.5 * root.height
 
       function formatValue(val) {
         return Cpp_UI_Dashboard.formatValue(val, model.minValue, model.maxValue)
       }
+
+      function getScaledFontSize() {
+        const minSize = Math.min(root.width, root.height)
+        const baseFontSize = Math.max(8, Math.min(12, minSize / 25))
+        return baseFontSize
+      }
+
+      function getStepCount() {
+        if (isHorizontal) {
+          const availableWidth = root.width - 100
+          const labelWidth = labelMetrics.width
+          return Math.max(3, Math.min(7, Math.floor(availableWidth / (labelWidth * 2))))
+        } else {
+          const availableHeight = root.height - 100
+          const labelHeight = labelMetrics.height
+          return Math.max(3, Math.min(7, Math.floor(availableHeight / (labelHeight * 3))))
+        }
+      }
+
+      property real labelPadding: labelMetrics.width + Math.max(8, root.width * 0.02)
 
       Connections {
         target: Cpp_ThemeManager
@@ -100,7 +119,8 @@ Item {
 
       TextMetrics {
         id: labelMetrics
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.91, false)
+        font.pixelSize: control.getScaledFontSize()
+        font.family: Cpp_Misc_CommonFonts.monoFont.family
         text: {
           const a = control.formatValue(model.minValue)
           const b = control.formatValue(model.maxValue)
@@ -119,7 +139,7 @@ Item {
         const bw = 2
         const w = width
         const h = height
-        const steps = 5
+        const steps = control.getStepCount()
         const value = root.value
         const min = model.minValue
         const max = model.maxValue
@@ -130,6 +150,7 @@ Item {
         const widgetBase = Cpp_ThemeManager.colors["widget_base"]
         const widgetText = Cpp_ThemeManager.colors["widget_text"]
         const widgetBorder = Cpp_ThemeManager.colors["widget_border"]
+        const minDimension = Math.min(w, h)
 
         // Draw a vertical bar
         if (!control.isHorizontal) {
@@ -152,6 +173,8 @@ Item {
           ctx.strokeStyle = widgetBorder
           ctx.fillStyle = widgetText
           ctx.textAlign = "right"
+          ctx.textBaseline = "middle"
+          const showLabels = minDimension > 80 && labelPadding < w * 0.5
           for (let i = 0; i <= steps; i++) {
             const frac = i / steps
             const valAtTick = min + frac * (max - min)
@@ -163,9 +186,11 @@ Item {
             ctx.lineTo(barX, yLine)
             ctx.stroke()
 
-            ctx.fillText(formatValue(valAtTick),
-                         barX - 8,
-                         yLine - labelMetrics.height / 2)
+            if (showLabels) {
+              ctx.fillText(formatValue(valAtTick),
+                           barX - 8,
+                           yLine)
+            }
           }
 
           // Border
@@ -176,8 +201,9 @@ Item {
 
         // Draw horizontal bar
         else {
-          const barY = Math.round(labelMetrics.height)
-          const barH = Math.round(h - 2 * bw - (2 * labelMetrics.height))
+          const labelSpaceBottom = labelMetrics.height + 16
+          const barH = Math.max(20, Math.round((h - labelSpaceBottom) * 0.6))
+          const barY = Math.round((h - labelSpaceBottom - barH) / 2)
           const barX = Math.round(bw + labelMetrics.width)
           const barW = Math.round(w - 2 * barX)
           const fillW = Math.round(normVal * barW)
@@ -195,6 +221,7 @@ Item {
           ctx.fillStyle = widgetText
           ctx.textAlign = "center"
           ctx.textBaseline = "top"
+          const showLabels = minDimension > 80 && (labelMetrics.width * (steps + 1) * 1.5) < barW
           for (let i = 0; i <= steps; i++) {
             const frac = i / steps
             const valAtTick = min + frac * (max - min)
@@ -205,9 +232,11 @@ Item {
             ctx.lineTo(xLine, barY + barH + 6)
             ctx.stroke()
 
-            ctx.fillText(formatValue(valAtTick),
-                         xLine,
-                         barY + barH + 8)
+            if (showLabels) {
+              ctx.fillText(formatValue(valAtTick),
+                           xLine,
+                           barY + barH + 8)
+            }
           }
 
           // Border
@@ -236,7 +265,7 @@ Item {
       maxValue: model.maxValue
       minValue: model.minValue
       alarm: model.alarmTriggered
-      maximumWidth: root.width * 0.3
+      maximumWidth: Math.min(root.width * 0.5, 200)
       Layout.alignment: Qt.AlignHCenter
       Layout.minimumWidth: implicitWidth
       Layout.leftMargin: control.labelPadding

@@ -50,6 +50,9 @@ IO::Drivers::Modbus::Modbus()
   , m_startAddress(0)
   , m_registerCount(10)
   , m_pollInterval(1000)
+  , m_registerTypeIndex(0)
+  , m_multiGroupMode(false)
+  , m_currentGroupIndex(0)
   , m_port(5020)
   , m_host("127.0.0.1")
   , m_baudRate(9600)
@@ -63,6 +66,10 @@ IO::Drivers::Modbus::Modbus()
   m_startAddress = m_settings.value("ModbusDriver/startAddress", 0).toUInt();
   m_registerCount = m_settings.value("ModbusDriver/registerCount", 10).toUInt();
   m_pollInterval = m_settings.value("ModbusDriver/pollInterval", 1000).toUInt();
+  m_registerTypeIndex
+      = m_settings.value("ModbusDriver/registerTypeIndex", 0).toUInt();
+  m_multiGroupMode
+      = m_settings.value("ModbusDriver/multiGroupMode", false).toBool();
   m_port = m_settings.value("ModbusDriver/port", 5020).toUInt();
   m_host = m_settings.value("ModbusDriver/host", "127.0.0.1").toString();
 
@@ -72,6 +79,20 @@ IO::Drivers::Modbus::Modbus()
   m_parityIndex = m_settings.value("ModbusDriver/parityIndex", 0).toUInt();
   m_dataBitsIndex = m_settings.value("ModbusDriver/dataBitsIndex", 3).toUInt();
   m_stopBitsIndex = m_settings.value("ModbusDriver/stopBitsIndex", 0).toUInt();
+
+  const int groupCount
+      = m_settings.beginReadArray("ModbusDriver/registerGroups");
+  for (int i = 0; i < groupCount; ++i)
+  {
+    m_settings.setArrayIndex(i);
+    ModbusRegisterGroup group;
+    group.registerType = m_settings.value("type", 0).toUInt();
+    group.startAddress = m_settings.value("start", 0).toUInt();
+    group.count = m_settings.value("count", 0).toUInt();
+    if (group.count > 0 && group.count <= 125)
+      m_registerGroups.append(group);
+  }
+  m_settings.endArray();
 
   connect(m_pollTimer, &QTimer::timeout, this,
           &IO::Drivers::Modbus::pollRegisters);
@@ -453,6 +474,22 @@ quint16 IO::Drivers::Modbus::pollInterval() const
 }
 
 /**
+ * @brief Returns the register type index
+ */
+quint8 IO::Drivers::Modbus::registerTypeIndex() const
+{
+  return m_registerTypeIndex;
+}
+
+/**
+ * @brief Returns whether multi-group mode is enabled
+ */
+bool IO::Drivers::Modbus::multiGroupMode() const
+{
+  return m_multiGroupMode;
+}
+
+/**
  * @brief Returns the TCP port (for Modbus TCP)
  */
 quint16 IO::Drivers::Modbus::port() const
@@ -583,6 +620,19 @@ QStringList IO::Drivers::Modbus::baudRateList() const
   return list;
 }
 
+/**
+ * @brief Returns the list of supported Modbus register types
+ */
+QStringList IO::Drivers::Modbus::registerTypeList() const
+{
+  QStringList list;
+  list << tr("Holding Registers (0x03)");
+  list << tr("Input Registers (0x04)");
+  list << tr("Coils (0x01)");
+  list << tr("Discrete Inputs (0x02)");
+  return list;
+}
+
 //------------------------------------------------------------------------------
 // Property setters
 //------------------------------------------------------------------------------
@@ -665,6 +715,134 @@ void IO::Drivers::Modbus::setPollInterval(const quint16 interval)
   }
 
   Q_EMIT pollIntervalChanged();
+}
+
+/**
+ * @brief Sets the register type index
+ *
+ * @param index Register type:
+ *   0 = Holding Registers (0x03)
+ *   1 = Input Registers (0x04)
+ *   2 = Coils (0x01)
+ *   3 = Discrete Inputs (0x02)
+ */
+void IO::Drivers::Modbus::setRegisterTypeIndex(const quint8 index)
+{
+  m_registerTypeIndex = index;
+  m_settings.setValue("ModbusDriver/registerTypeIndex", index);
+  Q_EMIT registerTypeIndexChanged();
+}
+
+/**
+ * @brief Enables or disables multi-group polling mode
+ */
+void IO::Drivers::Modbus::setMultiGroupMode(const bool enabled)
+{
+  m_multiGroupMode = enabled;
+  m_currentGroupIndex = 0;
+  m_settings.setValue("ModbusDriver/multiGroupMode", enabled);
+  Q_EMIT multiGroupModeChanged();
+}
+
+/**
+ * @brief Adds a register group to poll in multi-group mode
+ */
+void IO::Drivers::Modbus::addRegisterGroup(const quint8 type,
+                                           const quint16 start,
+                                           const quint16 count)
+{
+  if (count > 0 && count <= 125)
+  {
+    for (const auto &group : m_registerGroups)
+    {
+      if (group.registerType == type && group.startAddress == start
+          && group.count == count)
+      {
+        return;
+      }
+    }
+
+    m_registerGroups.append(ModbusRegisterGroup(type, start, count));
+
+    m_settings.beginWriteArray("ModbusDriver/registerGroups");
+    for (int i = 0; i < m_registerGroups.size(); ++i)
+    {
+      m_settings.setArrayIndex(i);
+      m_settings.setValue("type", m_registerGroups[i].registerType);
+      m_settings.setValue("start", m_registerGroups[i].startAddress);
+      m_settings.setValue("count", m_registerGroups[i].count);
+    }
+    m_settings.endArray();
+
+    Q_EMIT registerGroupsChanged();
+  }
+}
+
+/**
+ * @brief Removes a register group at the specified index
+ */
+void IO::Drivers::Modbus::removeRegisterGroup(const int index)
+{
+  if (index >= 0 && index < m_registerGroups.count())
+  {
+    m_registerGroups.removeAt(index);
+    if (m_currentGroupIndex >= m_registerGroups.count())
+      m_currentGroupIndex = 0;
+
+    m_settings.beginWriteArray("ModbusDriver/registerGroups");
+    for (int i = 0; i < m_registerGroups.size(); ++i)
+    {
+      m_settings.setArrayIndex(i);
+      m_settings.setValue("type", m_registerGroups[i].registerType);
+      m_settings.setValue("start", m_registerGroups[i].startAddress);
+      m_settings.setValue("count", m_registerGroups[i].count);
+    }
+    m_settings.endArray();
+
+    Q_EMIT registerGroupsChanged();
+  }
+}
+
+/**
+ * @brief Clears all register groups
+ */
+void IO::Drivers::Modbus::clearRegisterGroups()
+{
+  m_registerGroups.clear();
+  m_currentGroupIndex = 0;
+
+  m_settings.beginWriteArray("ModbusDriver/registerGroups");
+  m_settings.endArray();
+
+  Q_EMIT registerGroupsChanged();
+}
+
+/**
+ * @brief Returns the number of configured register groups
+ */
+int IO::Drivers::Modbus::registerGroupCount() const
+{
+  return m_registerGroups.count();
+}
+
+/**
+ * @brief Returns information about a register group
+ */
+QString IO::Drivers::Modbus::registerGroupInfo(const int index) const
+{
+  if (index < 0 || index >= m_registerGroups.count())
+    return QString();
+
+  const auto &group = m_registerGroups[index];
+  const QStringList types = registerTypeList();
+  const QString typeName
+      = (group.registerType < types.count()) ? types[group.registerType] : "";
+
+  return QString("%1: %2 @ %3 (count: %4)")
+      .arg(index + 1)
+      .arg(typeName)
+      .arg(group.startAddress)
+      .arg(group.count);
 }
 
 /**
@@ -773,11 +951,89 @@ void IO::Drivers::Modbus::pollRegisters()
   if (m_lastReply && !m_lastReply->isFinished())
     return;
 
-  if (m_registerCount == 0 || m_registerCount > 125)
+  if (m_multiGroupMode)
+  {
+    if (m_registerGroups.isEmpty())
+      return;
+
+    m_currentGroupIndex = 0;
+    pollNextGroup();
+  }
+  else
+  {
+    if (m_registerCount == 0 || m_registerCount > 125)
+      return;
+
+    QModbusDataUnit::RegisterType registerType;
+    switch (m_registerTypeIndex)
+    {
+      case 0:
+        registerType = QModbusDataUnit::HoldingRegisters;
+        break;
+      case 1:
+        registerType = QModbusDataUnit::InputRegisters;
+        break;
+      case 2:
+        registerType = QModbusDataUnit::Coils;
+        break;
+      case 3:
+        registerType = QModbusDataUnit::DiscreteInputs;
+        break;
+      default:
+        registerType = QModbusDataUnit::HoldingRegisters;
+        break;
+    }
+
+    QModbusDataUnit read_unit(registerType, m_startAddress, m_registerCount);
+
+    auto *reply = m_device->sendReadRequest(read_unit, m_slaveAddress);
+    if (!reply)
+      return;
+
+    m_lastReply = reply;
+
+    connect(reply, &QModbusReply::finished, this,
+            &IO::Drivers::Modbus::onReadReady, Qt::UniqueConnection);
+  }
+}
+
+/**
+ * @brief Polls the next register group in multi-group mode
+ */
+void IO::Drivers::Modbus::pollNextGroup()
+{
+  if (!m_device || !isOpen())
     return;
 
-  QModbusDataUnit read_unit(QModbusDataUnit::HoldingRegisters, m_startAddress,
-                            m_registerCount);
+  if (m_lastReply && !m_lastReply->isFinished())
+    return;
+
+  if (m_currentGroupIndex >= m_registerGroups.count())
+    return;
+
+  const auto &group = m_registerGroups[m_currentGroupIndex];
+
+  QModbusDataUnit::RegisterType registerType;
+  switch (group.registerType)
+  {
+    case 0:
+      registerType = QModbusDataUnit::HoldingRegisters;
+      break;
+    case 1:
+      registerType = QModbusDataUnit::InputRegisters;
+      break;
+    case 2:
+      registerType = QModbusDataUnit::Coils;
+      break;
+    case 3:
+      registerType = QModbusDataUnit::DiscreteInputs;
+      break;
+    default:
+      registerType = QModbusDataUnit::HoldingRegisters;
+      break;
+  }
+
+  QModbusDataUnit read_unit(registerType, group.startAddress, group.count);
 
   auto *reply = m_device->sendReadRequest(read_unit, m_slaveAddress);
   if (!reply)
@@ -842,18 +1098,68 @@ void IO::Drivers::Modbus::onReadReady()
 
   try
   {
-    QByteArray data;
-    data.reserve(3 + unit.valueCount() * 2);
+    const QModbusDataUnit::RegisterType registerType = unit.registerType();
 
-    data.append(static_cast<char>(m_slaveAddress));
-    data.append(static_cast<char>(0x03));
-    data.append(static_cast<char>(unit.valueCount() * 2));
+    quint8 functionCode;
+    bool isRegisterType = false;
 
-    for (int i = 0; i < unit.valueCount(); ++i)
+    switch (registerType)
     {
-      quint16 value = unit.value(i);
-      data.append(static_cast<char>((value >> 8) & 0xFF));
-      data.append(static_cast<char>(value & 0xFF));
+      case QModbusDataUnit::HoldingRegisters:
+        functionCode = 0x03;
+        isRegisterType = true;
+        break;
+      case QModbusDataUnit::InputRegisters:
+        functionCode = 0x04;
+        isRegisterType = true;
+        break;
+      case QModbusDataUnit::Coils:
+        functionCode = 0x01;
+        isRegisterType = false;
+        break;
+      case QModbusDataUnit::DiscreteInputs:
+        functionCode = 0x02;
+        isRegisterType = false;
+        break;
+      default:
+        functionCode = 0x03;
+        isRegisterType = true;
+        break;
+    }
+
+    QByteArray data;
+    if (isRegisterType)
+    {
+      data.reserve(3 + unit.valueCount() * 2);
+      data.append(static_cast<char>(m_slaveAddress));
+      data.append(static_cast<char>(functionCode));
+      data.append(static_cast<char>(unit.valueCount() * 2));
+
+      for (int i = 0; i < unit.valueCount(); ++i)
+      {
+        quint16 value = unit.value(i);
+        data.append(static_cast<char>((value >> 8) & 0xFF));
+        data.append(static_cast<char>(value & 0xFF));
+      }
+    }
+    else
+    {
+      const int byteCount = (unit.valueCount() + 7) / 8;
+      data.reserve(3 + byteCount);
+      data.append(static_cast<char>(m_slaveAddress));
+      data.append(static_cast<char>(functionCode));
+      data.append(static_cast<char>(byteCount));
+
+      for (int i = 0; i < byteCount; ++i)
+      {
+        quint8 byte = 0;
+        for (int bit = 0; bit < 8 && (i * 8 + bit) < unit.valueCount(); ++bit)
+        {
+          if (unit.value(i * 8 + bit))
+            byte |= (1 << bit);
+        }
+        data.append(static_cast<char>(byte));
+      }
     }
 
     Q_EMIT dataReceived(data);
@@ -863,6 +1169,13 @@ void IO::Drivers::Modbus::onReadReady()
   }
 
   reply->deleteLater();
+
+  if (m_multiGroupMode)
+  {
+    ++m_currentGroupIndex;
+    if (m_currentGroupIndex < m_registerGroups.count())
+      pollNextGroup();
+  }
 }
 
 /**

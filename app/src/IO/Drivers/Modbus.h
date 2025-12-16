@@ -38,6 +38,31 @@ namespace IO
 namespace Drivers
 {
 /**
+ * @struct ModbusRegisterGroup
+ * @brief Defines a group of registers to poll
+ */
+struct ModbusRegisterGroup
+{
+  quint8 registerType;
+  quint16 startAddress;
+  quint16 count;
+
+  ModbusRegisterGroup()
+    : registerType(0)
+    , startAddress(0)
+    , count(0)
+  {
+  }
+
+  ModbusRegisterGroup(quint8 type, quint16 start, quint16 cnt)
+    : registerType(type)
+    , startAddress(start)
+    , count(cnt)
+  {
+  }
+};
+
+/**
  * @class Modbus
  * @brief Serial Studio driver for Modbus RTU and Modbus TCP communication
  *
@@ -96,6 +121,14 @@ class Modbus : public HAL_Driver
              READ pollInterval
              WRITE setPollInterval
              NOTIFY pollIntervalChanged)
+  Q_PROPERTY(quint8 registerTypeIndex
+             READ registerTypeIndex
+             WRITE setRegisterTypeIndex
+             NOTIFY registerTypeIndexChanged)
+  Q_PROPERTY(bool multiGroupMode
+             READ multiGroupMode
+             WRITE setMultiGroupMode
+             NOTIFY multiGroupModeChanged)
   Q_PROPERTY(QString host
              READ host
              WRITE setHost
@@ -142,6 +175,12 @@ class Modbus : public HAL_Driver
   Q_PROPERTY(QStringList baudRateList
              READ baudRateList
              CONSTANT)
+  Q_PROPERTY(QStringList registerTypeList
+             READ registerTypeList
+             CONSTANT)
+  Q_PROPERTY(int registerGroupCount
+             READ registerGroupCount
+             NOTIFY registerGroupsChanged)
   // clang-format on
 
 signals:
@@ -156,8 +195,11 @@ signals:
   void startAddressChanged();
   void registerCountChanged();
   void pollIntervalChanged();
+  void registerTypeIndexChanged();
+  void multiGroupModeChanged();
   void serialPortIndexChanged();
   void availableSerialPortsChanged();
+  void registerGroupsChanged();
   void connectionError(const QString &error);
 
 private:
@@ -186,6 +228,8 @@ public:
   [[nodiscard]] quint16 startAddress() const;
   [[nodiscard]] quint16 registerCount() const;
   [[nodiscard]] quint16 pollInterval() const;
+  [[nodiscard]] quint8 registerTypeIndex() const;
+  [[nodiscard]] bool multiGroupMode() const;
   [[nodiscard]] quint16 port() const;
   [[nodiscard]] QString host() const;
 
@@ -201,6 +245,8 @@ public:
   [[nodiscard]] QStringList dataBitsList() const;
   [[nodiscard]] QStringList stopBitsList() const;
   [[nodiscard]] QStringList baudRateList() const;
+  [[nodiscard]] QStringList registerTypeList() const;
+  [[nodiscard]] int registerGroupCount() const;
 
 public slots:
   void setupExternalConnections();
@@ -212,13 +258,22 @@ public slots:
   void setStartAddress(const quint16 address);
   void setRegisterCount(const quint16 count);
   void setPollInterval(const quint16 interval);
+  void setRegisterTypeIndex(const quint8 index);
+  void setMultiGroupMode(const bool enabled);
   void setSerialPortIndex(const quint8 index);
+
+  Q_INVOKABLE void addRegisterGroup(const quint8 type, const quint16 start,
+                                    const quint16 count);
+  Q_INVOKABLE void removeRegisterGroup(const int index);
+  Q_INVOKABLE void clearRegisterGroups();
+  Q_INVOKABLE QString registerGroupInfo(const int index) const;
   void setParityIndex(const quint8 index);
   void setDataBitsIndex(const quint8 index);
   void setStopBitsIndex(const quint8 index);
 
 private slots:
   void pollRegisters();
+  void pollNextGroup();
   void onReadReady();
   void refreshSerialPorts();
   void onStateChanged(QModbusDevice::State state);
@@ -234,6 +289,10 @@ private:
   quint16 m_startAddress;
   quint16 m_registerCount;
   quint16 m_pollInterval;
+  quint8 m_registerTypeIndex;
+  bool m_multiGroupMode;
+  int m_currentGroupIndex;
+  QVector<ModbusRegisterGroup> m_registerGroups;
   quint16 m_port;
   QString m_host;
 

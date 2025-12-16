@@ -312,8 +312,8 @@ void UI::WindowManager::loadLayout()
  */
 void UI::WindowManager::autoLayout()
 {
-  const double margin = 4;
-  const double spacing = 4;
+  const double margin = m_autoLayoutEnabled ? -1 : 4;
+  const double spacing = m_autoLayoutEnabled ? -1 : 4;
 
   const double canvasW = width();
   const double canvasH = height();

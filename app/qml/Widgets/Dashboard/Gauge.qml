@@ -72,12 +72,8 @@ Item {
       Layout.fillHeight: true
 
       property int subSteps: 4
-      property real arcWidth: 10
       property real endAngle: 45
-      property real tickLength: 8
-      property real needleWidth: 3
       property real startAngle: 135
-      property real subTickLength: 4
       property color needleColor: root.color
       property color tickColor: Cpp_ThemeManager.colors["widget_border"]
       property color borderColor: Cpp_ThemeManager.colors["widget_border"]
@@ -87,6 +83,12 @@ Item {
 
       function formatValue(val) {
         return Cpp_UI_Dashboard.formatValue(val, model.minValue, model.maxValue)
+      }
+
+      function getScaledFontSize() {
+        const minSize = Math.min(width, height)
+        const baseFontSize = Math.max(8, Math.min(14, minSize / 20))
+        return baseFontSize
       }
 
       Connections {
@@ -99,7 +101,8 @@ Item {
       TextMetrics {
         id: labelMetrics
         text: model.maxValue.toFixed(0)
-        font: Cpp_Misc_CommonFonts.customMonoFont(1, true)
+        font.pixelSize: control.getScaledFontSize()
+        font.family: Cpp_Misc_CommonFonts.monoFont.family
       }
 
       onPaint: {
@@ -166,6 +169,12 @@ Item {
         const cx = w / 2
         const cy = h / 2 + labelMetrics.height * 0.5
 
+        // Scaled properties based on radius
+        const arcWidthPx = Math.max(4, Math.min(12, radius / 10))
+        const tickLength = Math.max(4, Math.min(8, radius / 15))
+        const subTickLength = tickLength / 2
+        const needleWidth = Math.max(2, Math.min(4, radius / 40))
+
         // Angles
         const startRad = startAngle * Math.PI / 180
         const endRad = endAngle * Math.PI / 180
@@ -175,18 +184,17 @@ Item {
         const normVal = root.normalizedValue
         const needleAngle = startRad + angleSpan * normVal
 
-        const alarmLowNorm = isNaN(model.alarmLow) ? -1 : model.normalizedAlarmLow
-        const alarmHighNorm = isNaN(model.alarmHigh) ? 2 : model.normalizedAlarmHigh
-
-        const arcStart = radius
-        const arcWidthPx = arcWidth
+        const alarmsDefined = model.alarmsDefined
+        const alarmLowNorm = alarmsDefined && !isNaN(model.alarmLow) ? model.normalizedAlarmLow : -1
+        const alarmHighNorm = alarmsDefined && !isNaN(model.alarmHigh) ? model.normalizedAlarmHigh : 2
 
         // Size dependent calculations
         const availableArcLength = angleSpan * radius
-        const approxSpacingPerStep = availableArcLength / 5
         const maxLabelWidth = ctx.measureText(formatLabel(max)).width
-        const steps = Math.max(3, Math.floor(availableArcLength / (3 * maxLabelWidth)))
-        const labelsVisible = 2 * maxLabelWidth < radius
+        const minSteps = radius < 60 ? 3 : 4
+        const maxSteps = radius < 80 ? 5 : 8
+        const steps = Math.max(minSteps, Math.min(maxSteps, Math.floor(availableArcLength / (3 * maxLabelWidth))))
+        const labelsVisible = radius > 40 && (2 * maxLabelWidth < radius)
 
         // Enable shadows
         ctx.shadowColor = Cpp_ThemeManager.colors["shadow"]
@@ -198,37 +206,44 @@ Item {
         ctx.fillStyle = backgroundColor
         ctx.fill()
 
-        // Draw safe arc segment
-        const safeStart = Math.max(startRad + angleSpan * alarmLowNorm, startRad)
-        const safeEnd = Math.min(startRad + angleSpan * alarmHighNorm, endRad)
+        // Draw background arc
         ctx.beginPath()
-        ctx.arc(cx, cy, radius, safeStart, safeEnd)
-        ctx.strokeStyle = Cpp_ThemeManager.colors["widget_highlight"]
+        ctx.arc(cx, cy, radius, startRad, endRad)
+        ctx.strokeStyle = Cpp_ThemeManager.colors["widget_border"]
         ctx.lineWidth = arcWidthPx
         ctx.stroke()
 
-        // Draw alarm zones (red gradients)
-        const gradient = ctx.createLinearGradient(cx - radius, cy, cx + radius, cy)
-        gradient.addColorStop(0, alarmColor)
-        gradient.addColorStop(1, alarmColor)
-        if (alarmLowNorm >= 0 && alarmLowNorm < 1) {
-          const aStart = startRad
-          const aEnd = startRad + angleSpan * alarmLowNorm
-          ctx.beginPath()
-          ctx.arc(cx, cy, radius, aStart, aEnd)
-          ctx.strokeStyle = gradient
-          ctx.lineWidth = arcWidthPx
-          ctx.stroke()
+        // Draw alarm zones if defined
+        if (alarmsDefined) {
+          const gradient = ctx.createLinearGradient(cx - radius, cy, cx + radius, cy)
+          gradient.addColorStop(0, alarmColor)
+          gradient.addColorStop(1, alarmColor)
+          if (alarmLowNorm >= 0 && alarmLowNorm < 1) {
+            const aStart = startRad
+            const aEnd = startRad + angleSpan * alarmLowNorm
+            ctx.beginPath()
+            ctx.arc(cx, cy, radius, aStart, aEnd)
+            ctx.strokeStyle = gradient
+            ctx.lineWidth = arcWidthPx
+            ctx.stroke()
+          }
+          if (alarmHighNorm > 0 && alarmHighNorm <= 1) {
+            const aStart = startRad + angleSpan * alarmHighNorm
+            const aEnd = endRad
+            ctx.beginPath()
+            ctx.arc(cx, cy, radius, aStart, aEnd)
+            ctx.strokeStyle = gradient
+            ctx.lineWidth = arcWidthPx
+            ctx.stroke()
+          }
         }
-        if (alarmHighNorm > 0 && alarmHighNorm <= 1) {
-          const aStart = startRad + angleSpan * alarmHighNorm
-          const aEnd = endRad
-          ctx.beginPath()
-          ctx.arc(cx, cy, radius, aStart, aEnd)
-          ctx.strokeStyle = gradient
-          ctx.lineWidth = arcWidthPx
-          ctx.stroke()
-        }
+
+        // Draw current value arc segment
+        ctx.beginPath()
+        ctx.arc(cx, cy, radius, startRad, needleAngle)
+        ctx.strokeStyle = root.color
+        ctx.lineWidth = arcWidthPx
+        ctx.stroke()
 
         // Arc border
         ctx.beginPath()
@@ -337,14 +352,16 @@ Item {
         ctx.fill()
 
         // Multiplier/suffix note
-        if (labelsVisible) {
+        if (labelsVisible && radius > 60) {
           ctx.fillStyle = root.color
           const suffixY = cy + radius - arcWidthPx * 3
+          const suffixText = model.units.length > 0 ? model.units + " " + suffix : suffix
 
-          if (model.units.length > 0)
-            ctx.fillText(model.units + " " + suffix, cx, suffixY)
-          else
-            ctx.fillText(suffix, cx, suffixY)
+          if (suffixText.length > 0) {
+            const suffixWidth = ctx.measureText(suffixText).width
+            if (suffixWidth < radius * 1.5)
+              ctx.fillText(suffixText, cx, suffixY)
+          }
         }
       }
     }
@@ -367,9 +384,9 @@ Item {
       maxValue: model.maxValue
       minValue: model.minValue
       alarm: model.alarmTriggered
+      maximumWidth: Math.min(root.width * 0.7, 250)
       Layout.alignment: Qt.AlignHCenter
       Layout.minimumWidth: implicitWidth
-      Layout.leftMargin: control.labelPadding
     }
 
     //
