@@ -312,11 +312,11 @@ void UI::WindowManager::loadLayout()
  */
 void UI::WindowManager::autoLayout()
 {
-  const double margin = 4;
-  const double spacing = 4;
+  const int margin = 4;
+  const int spacing = 4;
 
-  const double canvasW = width();
-  const double canvasH = height();
+  const int canvasW = static_cast<int>(width());
+  const int canvasH = static_cast<int>(height());
 
   if (canvasW <= 0 || canvasH <= 0)
     return;
@@ -333,18 +333,17 @@ void UI::WindowManager::autoLayout()
     return;
 
   const int n = windows.size();
-  const double availW = canvasW - 2 * margin;
-  const double availH = canvasH - 2 * margin;
+  const int availW = canvasW - 2 * margin;
+  const int availH = canvasH - 2 * margin;
   const bool isLandscape = availW >= availH;
 
-  auto placeWindow
-      = [&](QQuickItem *win, double x, double y, double w, double h) {
-          win->setX(x);
-          win->setY(y);
-          win->setWidth(w);
-          win->setHeight(h);
-          Q_EMIT geometryChanged(win);
-        };
+  auto placeWindow = [&](QQuickItem *win, int x, int y, int w, int h) {
+    win->setX(x);
+    win->setY(y);
+    win->setWidth(w);
+    win->setHeight(h);
+    Q_EMIT geometryChanged(win);
+  };
 
   if (n == 1)
     placeWindow(windows[0], margin, margin, availW, availH);
@@ -353,13 +352,13 @@ void UI::WindowManager::autoLayout()
   {
     if (isLandscape)
     {
-      double w = (availW - spacing) / 2.0;
+      int w = (availW - spacing) / 2;
       placeWindow(windows[0], margin, margin, w, availH);
       placeWindow(windows[1], margin + w + spacing, margin, w, availH);
     }
     else
     {
-      double h = (availH - spacing) / 2.0;
+      int h = (availH - spacing) / 2;
       placeWindow(windows[0], margin, margin, availW, h);
       placeWindow(windows[1], margin, margin + h + spacing, availW, h);
     }
@@ -369,9 +368,9 @@ void UI::WindowManager::autoLayout()
   {
     if (isLandscape)
     {
-      double masterW = availW * 0.5;
-      double stackW = availW - masterW - spacing;
-      double stackH = (availH - spacing) / 2.0;
+      int masterW = availW / 2;
+      int stackW = availW - masterW - spacing;
+      int stackH = (availH - spacing) / 2;
 
       placeWindow(windows[0], margin, margin, masterW, availH);
       placeWindow(windows[1], margin + masterW + spacing, margin, stackW,
@@ -381,9 +380,9 @@ void UI::WindowManager::autoLayout()
     }
     else
     {
-      double masterH = availH * 0.5;
-      double stackH = availH - masterH - spacing;
-      double stackW = (availW - spacing) / 2.0;
+      int masterH = availH / 2;
+      int stackH = availH - masterH - spacing;
+      int stackW = (availW - spacing) / 2;
 
       placeWindow(windows[0], margin, margin, availW, masterH);
       placeWindow(windows[1], margin, margin + masterH + spacing, stackW,
@@ -395,8 +394,8 @@ void UI::WindowManager::autoLayout()
 
   else if (n == 4)
   {
-    double w = (availW - spacing) / 2.0;
-    double h = (availH - spacing) / 2.0;
+    int w = (availW - spacing) / 2;
+    int h = (availH - spacing) / 2;
 
     placeWindow(windows[0], margin, margin, w, h);
     placeWindow(windows[1], margin + w + spacing, margin, w, h);
@@ -408,9 +407,9 @@ void UI::WindowManager::autoLayout()
   {
     if (isLandscape)
     {
-      double topW = (availW - spacing) / 2.0;
-      double botW = (availW - 2 * spacing) / 3.0;
-      double h = (availH - spacing) / 2.0;
+      int topW = (availW - spacing) / 2;
+      int botW = (availW - 2 * spacing) / 3;
+      int h = (availH - spacing) / 2;
 
       placeWindow(windows[0], margin, margin, topW, h);
       placeWindow(windows[1], margin + topW + spacing, margin, topW, h);
@@ -422,9 +421,9 @@ void UI::WindowManager::autoLayout()
     }
     else
     {
-      double leftH = (availH - spacing) / 2.0;
-      double rightH = (availH - 2 * spacing) / 3.0;
-      double w = (availW - spacing) / 2.0;
+      int leftH = (availH - spacing) / 2;
+      int rightH = (availH - 2 * spacing) / 3;
+      int w = (availW - spacing) / 2;
 
       placeWindow(windows[0], margin, margin, w, leftH);
       placeWindow(windows[1], margin, margin + leftH + spacing, w, leftH);
@@ -440,8 +439,8 @@ void UI::WindowManager::autoLayout()
   {
     if (isLandscape)
     {
-      double w = (availW - 2 * spacing) / 3.0;
-      double h = (availH - spacing) / 2.0;
+      int w = (availW - 2 * spacing) / 3;
+      int h = (availH - spacing) / 2;
 
       for (int i = 0; i < 6; ++i)
       {
@@ -453,8 +452,8 @@ void UI::WindowManager::autoLayout()
     }
     else
     {
-      double w = (availW - spacing) / 2.0;
-      double h = (availH - 2 * spacing) / 3.0;
+      int w = (availW - spacing) / 2;
+      int h = (availH - 2 * spacing) / 3;
 
       for (int i = 0; i < 6; ++i)
       {
@@ -488,19 +487,19 @@ void UI::WindowManager::autoLayout()
         rows++;
     }
 
-    double cellW = (availW - (cols - 1) * spacing) / cols;
-    double cellH = (availH - (rows - 1) * spacing) / rows;
+    int cellW = (availW - (cols - 1) * spacing) / cols;
+    int cellH = (availH - (rows - 1) * spacing) / rows;
 
     int lastRowStart = (rows - 1) * cols;
     int windowsInLastRow = n - lastRowStart;
-    double lastRowCellW = cellW;
-    double lastRowOffsetX = 0;
+    int lastRowCellW = cellW;
+    int lastRowOffsetX = 0;
 
     if (windowsInLastRow < cols && windowsInLastRow > 0)
     {
-      double lastRowTotalW = availW;
-      lastRowCellW = (lastRowTotalW - (windowsInLastRow - 1) * spacing)
-                     / windowsInLastRow;
+      int lastRowTotalW = availW;
+      lastRowCellW
+          = (lastRowTotalW - (windowsInLastRow - 1) * spacing) / windowsInLastRow;
       lastRowOffsetX = 0;
     }
 
@@ -509,7 +508,7 @@ void UI::WindowManager::autoLayout()
       int row = i / cols;
       int col = i % cols;
 
-      double x, y, w, h;
+      int x, y, w, h;
 
       if (row == rows - 1 && windowsInLastRow < cols)
       {
@@ -563,8 +562,8 @@ void UI::WindowManager::autoLayout()
  */
 void UI::WindowManager::cascadeLayout()
 {
-  const double canvasW = width();
-  const double canvasH = height();
+  const int canvasW = static_cast<int>(width());
+  const int canvasH = static_cast<int>(height());
 
   if (canvasW <= 0 || canvasH <= 0)
     return;
@@ -580,15 +579,12 @@ void UI::WindowManager::cascadeLayout()
   if (visibleWindows.isEmpty())
     return;
 
-  const double margin = 8;
-  const double cascadeOffsetX = 26;
-  const double cascadeOffsetY = 26;
+  const int margin = 8;
+  const int cascadeOffsetX = 26;
+  const int cascadeOffsetY = 26;
 
-  const double targetWidthRatio = 0.55;
-  const double targetHeightRatio = 0.60;
-
-  const double availableW = canvasW - 2 * margin;
-  const double availableH = canvasH - 2 * margin;
+  const int availableW = canvasW - 2 * margin;
+  const int availableH = canvasH - 2 * margin;
 
   for (int i = 0; i < visibleWindows.size(); ++i)
   {
@@ -596,20 +592,20 @@ void UI::WindowManager::cascadeLayout()
     if (!win)
       continue;
 
-    double minW = qMax(win->implicitWidth(), 200.0);
-    double minH = qMax(win->implicitHeight(), 150.0);
+    int minW = qMax(static_cast<int>(win->implicitWidth()), 200);
+    int minH = qMax(static_cast<int>(win->implicitHeight()), 150);
 
-    double winW = qMax(minW, availableW * targetWidthRatio);
-    double winH = qMax(minH, availableH * targetHeightRatio);
+    int winW = qMax(minW, availableW * 55 / 100);
+    int winH = qMax(minH, availableH * 60 / 100);
 
     winW = qMin(winW, availableW);
     winH = qMin(winH, availableH);
 
-    double baseX = margin + (availableW - winW) / 2.0;
-    double baseY = margin + (availableH - winH) / 2.0;
+    int baseX = margin + (availableW - winW) / 2;
+    int baseY = margin + (availableH - winH) / 2;
 
-    double offsetX = i * cascadeOffsetX;
-    double offsetY = i * cascadeOffsetY;
+    int offsetX = i * cascadeOffsetX;
+    int offsetY = i * cascadeOffsetY;
 
     int wrapCount = 0;
     while (baseY + offsetY + winH > canvasH - margin && wrapCount < 10)
@@ -625,8 +621,8 @@ void UI::WindowManager::cascadeLayout()
       wrapCount++;
     }
 
-    double winX = baseX + offsetX;
-    double winY = baseY + offsetY;
+    int winX = baseX + offsetX;
+    int winY = baseY + offsetY;
 
     winX = qBound(margin, winX, canvasW - winW - margin);
     winY = qBound(margin, winY, canvasH - winH - margin);
@@ -839,8 +835,8 @@ void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)
  */
 void UI::WindowManager::constrainWindows()
 {
-  const double canvasW = width();
-  const double canvasH = height();
+  const int canvasW = static_cast<int>(width());
+  const int canvasH = static_cast<int>(height());
 
   if (canvasW <= 0 || canvasH <= 0)
     return;
@@ -853,13 +849,13 @@ void UI::WindowManager::constrainWindows()
     if (win->state() != "normal")
       continue;
 
-    double winX = win->x();
-    double winY = win->y();
-    double winW = win->width();
-    double winH = win->height();
+    int winX = static_cast<int>(win->x());
+    int winY = static_cast<int>(win->y());
+    int winW = static_cast<int>(win->width());
+    int winH = static_cast<int>(win->height());
 
-    const double minW = qMax(win->implicitWidth(), 100.0);
-    const double minH = qMax(win->implicitHeight(), 80.0);
+    const int minW = qMax(static_cast<int>(win->implicitWidth()), 100);
+    const int minH = qMax(static_cast<int>(win->implicitHeight()), 80);
 
     bool changed = false;
 
@@ -1030,10 +1026,10 @@ UI::WindowManager::detectResizeEdge(QQuickItem *target) const
   {
     const int kResizeMargin = 8;
     QPointF localPos = target->mapFromItem(this, m_initialMousePos);
-    const double x = localPos.x();
-    const double y = localPos.y();
-    const double w = target->width();
-    const double h = target->height();
+    const int x = static_cast<int>(localPos.x());
+    const int y = static_cast<int>(localPos.y());
+    const int w = static_cast<int>(target->width());
+    const int h = static_cast<int>(target->height());
 
     const bool nearLeft = x <= kResizeMargin;
     const bool nearRight = x >= w - kResizeMargin;
@@ -1133,25 +1129,29 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
   if (m_dragWindow && dragDistance >= 20)
   {
     // Obtain new X/Y position
-    double newX = m_initialGeometry.x() + delta.x();
-    double newY = m_initialGeometry.y() + delta.y();
+    int newX = m_initialGeometry.x() + delta.x();
+    int newY = m_initialGeometry.y() + delta.y();
 
     // Obtain window size
-    double w = m_dragWindow->width();
-    double h = m_dragWindow->height();
+    int w = static_cast<int>(m_dragWindow->width());
+    int h = static_cast<int>(m_dragWindow->height());
+
+    // Obtain canvas dimensions
+    const int canvasW = static_cast<int>(width());
+    const int canvasH = static_cast<int>(height());
 
     // Restore window size if needed
-    if ((w >= width() - 20 || h >= height() - 20) && !autoLayoutEnabled())
+    if ((w >= canvasW - 20 || h >= canvasH - 20) && !autoLayoutEnabled())
     {
-      w = m_dragWindow->implicitWidth();
-      h = m_dragWindow->implicitHeight();
-      m_dragWindow->setWidth(m_dragWindow->implicitWidth());
-      m_dragWindow->setHeight(m_dragWindow->implicitHeight());
+      w = static_cast<int>(m_dragWindow->implicitWidth());
+      h = static_cast<int>(m_dragWindow->implicitHeight());
+      m_dragWindow->setWidth(w);
+      m_dragWindow->setHeight(h);
     }
 
     // Bound X/Y position
-    newX = qBound(0.0, newX, width() - w);
-    newY = qBound(0.0, newY, height() - h);
+    newX = qBound(0, newX, canvasW - w);
+    newY = qBound(0, newY, canvasH - h);
 
     // Apply X/Y position
     m_dragWindow->setX(newX);
@@ -1175,9 +1175,9 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
         if (m_targetWindow && m_targetWindow != m_dragWindow)
         {
           // Resize drag window if needed
-          auto nW = qMin(m_dragWindow->width(), m_targetWindow->width());
-          auto nH = qMin(m_dragWindow->height(), m_targetWindow->height());
-          if (m_dragWindow->width() != nW || m_dragWindow->height() != nH)
+          int nW = qMin(w, static_cast<int>(m_targetWindow->width()));
+          int nH = qMin(h, static_cast<int>(m_targetWindow->height()));
+          if (w != nW || h != nH)
           {
             m_dragWindow->setWidth(nW);
             m_dragWindow->setHeight(nH);
@@ -1205,66 +1205,62 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
     // No auto layout, show snap indicator on desktop edges
     else
     {
-      // Get screen size
-      const double screenW = width();
-      const double screenH = height();
-
       // Set window rect
-      const double top = newY;
-      const double left = newX;
-      const double right = newX + w;
-      const double bottom = newY + h;
+      const int top = newY;
+      const int left = newX;
+      const int right = newX + w;
+      const int bottom = newY + h;
 
       // Initialize snapped flag
       bool snapped = false;
 
       // Top-left corner
-      if (left <= 0.0 && top <= 0.0)
+      if (left <= 0 && top <= 0)
       {
-        m_snapIndicator = QRect(0, 0, screenW / 2, screenH / 2);
+        m_snapIndicator = QRect(0, 0, canvasW / 2, canvasH / 2);
         snapped = true;
       }
 
       // Top-right corner
-      else if (right >= screenW && top <= 0.0)
+      else if (right >= canvasW && top <= 0)
       {
-        m_snapIndicator = QRect(screenW / 2, 0, screenW / 2, screenH / 2);
+        m_snapIndicator = QRect(canvasW / 2, 0, canvasW / 2, canvasH / 2);
         snapped = true;
       }
 
       // Bottom-left corner
-      else if (left <= 0.0 && bottom >= screenH)
+      else if (left <= 0 && bottom >= canvasH)
       {
-        m_snapIndicator = QRect(0, screenH / 2, screenW / 2, screenH / 2);
+        m_snapIndicator = QRect(0, canvasH / 2, canvasW / 2, canvasH / 2);
         snapped = true;
       }
 
       // Bottom-right corner
-      else if (right >= screenW && bottom >= screenH)
+      else if (right >= canvasW && bottom >= canvasH)
       {
         m_snapIndicator
-            = QRect(screenW / 2, screenH / 2, screenW / 2, screenH / 2);
+            = QRect(canvasW / 2, canvasH / 2, canvasW / 2, canvasH / 2);
         snapped = true;
       }
 
       // Top edge = maximize
-      else if (top <= 0.0)
+      else if (top <= 0)
       {
-        m_snapIndicator = QRect(0, 0, screenW, screenH);
+        m_snapIndicator = QRect(0, 0, canvasW, canvasH);
         snapped = true;
       }
 
       // Left edge = left half
-      else if (left <= 0.0)
+      else if (left <= 0)
       {
-        m_snapIndicator = QRect(0, 0, screenW / 2, screenH);
+        m_snapIndicator = QRect(0, 0, canvasW / 2, canvasH);
         snapped = true;
       }
 
       // Right edge = right half
-      else if (right >= screenW)
+      else if (right >= canvasW)
       {
-        m_snapIndicator = QRect(screenW / 2, 0, screenW / 2, screenH);
+        m_snapIndicator = QRect(canvasW / 2, 0, canvasW / 2, canvasH);
         snapped = true;
       }
 

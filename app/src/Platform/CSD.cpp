@@ -99,10 +99,14 @@ Titlebar::Titlebar(QQuickItem *parent)
   setFillColor(Qt::transparent);
   setAcceptedMouseButtons(Qt::LeftButton);
 
-  // Load application icon if possible
+  // Load application icon if possible (at appropriate DPI scale)
   const auto &icon = QGuiApplication::windowIcon();
   if (!icon.isNull())
-    m_icon = icon.pixmap(CSD::IconSize, CSD::IconSize);
+  {
+    const qreal dpr = qGuiApp->devicePixelRatio();
+    m_icon = icon.pixmap(QSize(CSD::IconSize, CSD::IconSize) * dpr);
+    m_icon.setDevicePixelRatio(dpr);
+  }
 }
 
 /**
@@ -413,14 +417,16 @@ void Titlebar::drawButton(QPainter *painter, Button button,
   const qreal dpr = painter->device()->devicePixelRatio();
   const QSize pixelSize(qRound(iconRect.width() * dpr),
                         qRound(iconRect.height() * dpr));
+  const QRectF logicalRect(0, 0, iconRect.width(), iconRect.height());
 
   QPixmap pixmap(pixelSize);
   pixmap.setDevicePixelRatio(dpr);
   pixmap.fill(Qt::transparent);
 
   QPainter svgPainter(&pixmap);
-  renderer.render(&svgPainter,
-                  QRectF(0, 0, iconRect.width(), iconRect.height()));
+  svgPainter.setRenderHint(QPainter::Antialiasing);
+  svgPainter.setRenderHint(QPainter::SmoothPixmapTransform);
+  renderer.render(&svgPainter, logicalRect);
   svgPainter.end();
 
   QPixmap colorized(pixelSize);
@@ -430,7 +436,7 @@ void Titlebar::drawButton(QPainter *painter, Button button,
   QPainter colorPainter(&colorized);
   colorPainter.drawPixmap(0, 0, pixmap);
   colorPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-  colorPainter.fillRect(colorized.rect(), iconColor);
+  colorPainter.fillRect(logicalRect, iconColor);
   colorPainter.end();
 
   painter->drawPixmap(iconRect.topLeft(), colorized);
