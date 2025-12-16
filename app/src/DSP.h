@@ -663,7 +663,8 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
   if (firstFinite == n)
     return false;
 
-  // If X axis is not monotonic, fallback to index sampling
+  // Fallback to index-based sampling when X range is zero or invalid
+  // (e.g., all X values are identical)
   if (!(xmin < xmax))
   {
     // Calculate step size

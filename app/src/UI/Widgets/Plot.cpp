@@ -453,10 +453,6 @@ bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
     }
   }
 
-  // Update user interface if required
-  if (qFuzzyCompare(prevMinY, min) || qFuzzyCompare(prevMaxY, max))
-    return true;
-
-  // Data not changed
-  return false;
+  // Return true if range changed, false otherwise
+  return !qFuzzyCompare(prevMinY, min) || !qFuzzyCompare(prevMaxY, max);
 }
