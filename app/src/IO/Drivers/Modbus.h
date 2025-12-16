@@ -165,7 +165,7 @@ class Modbus : public HAL_Driver
              NOTIFY availableSerialPortsChanged)
   Q_PROPERTY(QStringList parityList
              READ parityList
-             CONSTANT)
+             NOTIFY languageChanged)
   Q_PROPERTY(QStringList dataBitsList
              READ dataBitsList
              CONSTANT)
@@ -177,7 +177,7 @@ class Modbus : public HAL_Driver
              CONSTANT)
   Q_PROPERTY(QStringList registerTypeList
              READ registerTypeList
-             CONSTANT)
+             NOTIFY languageChanged)
   Q_PROPERTY(int registerGroupCount
              READ registerGroupCount
              NOTIFY registerGroupsChanged)
@@ -200,6 +200,7 @@ signals:
   void serialPortIndexChanged();
   void availableSerialPortsChanged();
   void registerGroupsChanged();
+  void languageChanged();
   void connectionError(const QString &error);
 
 private:

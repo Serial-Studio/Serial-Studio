@@ -49,7 +49,7 @@ IO::Drivers::Modbus::Modbus()
   , m_slaveAddress(1)
   , m_startAddress(0)
   , m_registerCount(10)
-  , m_pollInterval(1000)
+  , m_pollInterval(100)
   , m_registerTypeIndex(0)
   , m_multiGroupMode(false)
   , m_currentGroupIndex(0)
@@ -61,24 +61,25 @@ IO::Drivers::Modbus::Modbus()
   , m_dataBitsIndex(3)
   , m_stopBitsIndex(0)
 {
+  // clang-format off
   m_protocolIndex = m_settings.value("ModbusDriver/protocolIndex", 0).toUInt();
   m_slaveAddress = m_settings.value("ModbusDriver/slaveAddress", 1).toUInt();
   m_startAddress = m_settings.value("ModbusDriver/startAddress", 0).toUInt();
   m_registerCount = m_settings.value("ModbusDriver/registerCount", 10).toUInt();
-  m_pollInterval = m_settings.value("ModbusDriver/pollInterval", 1000).toUInt();
-  m_registerTypeIndex
-      = m_settings.value("ModbusDriver/registerTypeIndex", 0).toUInt();
-  m_multiGroupMode
-      = m_settings.value("ModbusDriver/multiGroupMode", false).toBool();
+  m_pollInterval = m_settings.value("ModbusDriver/pollInterval", 100).toUInt();
+  m_registerTypeIndex = m_settings.value("ModbusDriver/registerTypeIndex", 0).toUInt();
+  m_multiGroupMode = m_settings.value("ModbusDriver/multiGroupMode", false).toBool();
   m_port = m_settings.value("ModbusDriver/port", 5020).toUInt();
   m_host = m_settings.value("ModbusDriver/host", "127.0.0.1").toString();
+  // clang-format on
 
+  // clang-format off
   m_baudRate = m_settings.value("ModbusDriver/baudRate", 9600).toInt();
-  m_serialPortIndex
-      = m_settings.value("ModbusDriver/serialPortIndex", 0).toUInt();
+  m_serialPortIndex = m_settings.value("ModbusDriver/serialPortIndex", 0).toUInt();
   m_parityIndex = m_settings.value("ModbusDriver/parityIndex", 0).toUInt();
   m_dataBitsIndex = m_settings.value("ModbusDriver/dataBitsIndex", 3).toUInt();
   m_stopBitsIndex = m_settings.value("ModbusDriver/stopBitsIndex", 0).toUInt();
+  // clang-format on
 
   const int groupCount
       = m_settings.beginReadArray("ModbusDriver/registerGroups");
@@ -421,9 +422,7 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
   }
 
   if (m_device->state() == QModbusDevice::ConnectedState)
-  {
     m_pollTimer->start(m_pollInterval);
-  }
 
   Q_EMIT configurationChanged();
   return true;
@@ -753,7 +752,7 @@ void IO::Drivers::Modbus::addRegisterGroup(const quint8 type,
 {
   if (count > 0 && count <= 125)
   {
-    for (const auto &group : m_registerGroups)
+    for (const auto &group : std::as_const(m_registerGroups))
     {
       if (group.registerType == type && group.startAddress == start
           && group.count == count)
@@ -833,10 +832,11 @@ QString IO::Drivers::Modbus::registerGroupInfo(const int index) const
   if (index < 0 || index >= m_registerGroups.count())
     return QString();
 
+  // clang-format off
   const auto &group = m_registerGroups[index];
   const QStringList types = registerTypeList();
-  const QString typeName
-      = (group.registerType < types.count()) ? types[group.registerType] : "";
+  const QString typeName = (group.registerType < types.count()) ? types[group.registerType] : "";
+  // clang-format on
 
   return QString("%1: %2 @ %3 (count: %4)")
       .arg(index + 1)
@@ -919,7 +919,7 @@ void IO::Drivers::Modbus::setupExternalConnections()
           &IO::Drivers::Modbus::refreshSerialPorts);
 
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &IO::Drivers::Modbus::parityIndexChanged);
+          this, &IO::Drivers::Modbus::languageChanged);
 }
 
 //------------------------------------------------------------------------------
@@ -959,6 +959,7 @@ void IO::Drivers::Modbus::pollRegisters()
     m_currentGroupIndex = 0;
     pollNextGroup();
   }
+
   else
   {
     if (m_registerCount == 0 || m_registerCount > 125)
@@ -1142,6 +1143,7 @@ void IO::Drivers::Modbus::onReadReady()
         data.append(static_cast<char>(value & 0xFF));
       }
     }
+
     else
     {
       const int byteCount = (unit.valueCount() + 7) / 8;
@@ -1164,6 +1166,7 @@ void IO::Drivers::Modbus::onReadReady()
 
     Q_EMIT dataReceived(data);
   }
+
   catch (...)
   {
   }
@@ -1215,6 +1218,7 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
     if (m_pollTimer && !m_pollTimer->isActive())
       m_pollTimer->start(m_pollInterval);
   }
+
   else if (state == QModbusDevice::UnconnectedState)
   {
     if (m_pollTimer)

@@ -383,6 +383,7 @@ Item {
       visible: Cpp_IO_Modbus.multiGroupMode
       Layout.columnSpan: 2
       Layout.fillWidth: true
+      Layout.topMargin: 16
       implicitHeight: _groupButton.height + _groupStatus.height + 4
 
       Button {
