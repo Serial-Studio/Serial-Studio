@@ -1,7 +1,19 @@
 {
     "actions": [
     ],
+    "activeGroupId": 0,
     "checksum": "",
+    "dashboardLayout": {
+        "autoLayout": true,
+        "windowOrder": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+        ]
+    },
     "decoder": 3,
     "frameDetection": 2,
     "frameEnd": "\\n",

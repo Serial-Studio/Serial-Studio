@@ -109,6 +109,25 @@ Fetches real-time International Space Station position and velocity data from a 
   - Orbital velocity gauge with color-coded ranges
   - Software-only example (no microcontroller needed)
 
+### 9. Modbus PLC Simulator
+**Difficulty:** 🟡 Intermediate | **Time:** ~15 minutes | **License:** Pro (Modbus required)
+
+Physics-based hydraulic test stand simulator acting as a Modbus TCP server. Demonstrates Serial Studio's industrial protocol support with realistic telemetry, automatic failure modes, and recovery sequences.
+
+**Contents:**
+  - **plc_simulator.py**: Hydraulic power unit simulator with Modbus TCP server
+  - **Modbus PLC Simulator.ssproj**: Serial Studio project file with industrial dashboard
+  - **README.md**: Comprehensive setup and configuration guide
+  - **Screenshot**: Industrial dashboard visualization example
+
+**Features:**
+  - 50HP motor with VFD soft-start and PID pressure control
+  - 9 Modbus holding registers (temperature, pressure, RPM, flow, vibration)
+  - Realistic physics (thermodynamics, pump dynamics, ISO 10816 vibration)
+  - Automatic test sequences (startup, running, pressure test, failure, shutdown)
+  - Custom JavaScript frame parser for Modbus protocol
+  - Software-only example (no hardware needed)
+
 ## Getting Started
 
 To use these examples:
