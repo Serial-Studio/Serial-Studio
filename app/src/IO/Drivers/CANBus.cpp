@@ -733,23 +733,27 @@ void IO::Drivers::CANBus::refreshInterfaces()
       m_interfaceError = tr("Set up a virtual CAN interface first");
     else
       m_interfaceError = tr("No interfaces found for %1").arg(driverName);
+    
 #elif defined(Q_OS_WIN)
-    if (plugin == "peakcan")
+    if (plugin == "peakcan") {
       m_interfaceError = tr(
           "Install <a href='https://www.peak-system.com/Drivers.523.0.html?"
           "&L=1'>PEAK CAN drivers</a>");
-    else if (plugin == "vectorcan")
+    }
+    else if (plugin == "vectorcan") {
       m_interfaceError = tr(
           "Install <a "
-          "href='https://www.vector.com/int/en/products/products-a-z/software/"
-          "xl-driver-library/'>Vector CAN drivers</a>");
-    else if (plugin == "systeccan")
+          "href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'>Vector CAN drivers</a>");
+    }
+    else if (plugin == "systeccan") {
       m_interfaceError
           = tr("Install <a "
-               "href='https://www.systec-electronic.com/en/products/usb-can/'>"
+               "href='https://www.systec-electronic.com/en/company/support/driver'>"
                "SysTec CAN drivers</a>");
+    }
     else
       m_interfaceError = tr("Install %1 drivers").arg(driverName);
+    
 #elif defined(Q_OS_MAC)
     m_interfaceError = tr("Install %1 drivers for macOS").arg(driverName);
 #else
