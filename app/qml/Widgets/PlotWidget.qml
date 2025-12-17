@@ -44,20 +44,14 @@ Item {
   property alias curveColors: _theme.seriesColors
 
   //
-  // Calculate tick intervals based on visible range and available space
+  // Calculate tick intervals based on visible range (adjusts with zoom)
   //
-  function smartInterval(min, max, isXAxis) {
+  function smartInterval(min, max) {
     const range = max - min
     if (range <= 0)
       return 1.0
 
-    const plotSize = isXAxis ? _graph.plotArea.width : _graph.plotArea.height
-    const minTickSpacing = isXAxis ? 60 : 40
-
-    const maxTicks = Math.max(3, Math.floor(plotSize / minTickSpacing))
-    const targetTicks = Math.min(10, maxTicks)
-
-    const roughInterval = range / targetTicks
+    const roughInterval = range / 10.0
     const magnitude = Math.pow(10, Math.floor(Math.log10(roughInterval)))
     const normalized = roughInterval / magnitude
 
@@ -75,6 +69,31 @@ Item {
   }
 
   //
+  // Calculate appropriate decimal places based on visible range
+  //
+  function smartPrecision(visibleRange) {
+    if (visibleRange <= 0)
+      return 2
+
+    // Calculate magnitude of the visible range
+    const magnitude = Math.floor(Math.log10(visibleRange))
+
+    // For small ranges (high zoom), we need more decimal places
+    // For large ranges (low zoom), we need fewer decimal places
+    // We want roughly 3-4 significant digits in the displayed value
+    const precision = Math.max(0, 2 - magnitude)
+    return Math.min(precision, 6)  // Cap at 6 decimal places
+  }
+
+  //
+  // Check if a point (in world coordinates) is within the visible area
+  //
+  function isPointVisible(worldX, worldY) {
+    return worldX >= xVisibleMin && worldX <= xVisibleMax &&
+           worldY >= yVisibleMin && worldY <= yVisibleMax
+  }
+
+  //
   // Visible range calculations for dynamic tick intervals
   //
   readonly property real xVisibleRange: (xMax - xMin) / _axisX.zoom
@@ -85,10 +104,10 @@ Item {
   readonly property real yVisibleMax: yVisibleMin + yVisibleRange
 
   //
-  // Dynamic tick intervals based on visible range and plot size
+  // Dynamic tick intervals based on visible range
   //
-  readonly property real xTickInterval: smartInterval(xVisibleMin, xVisibleMax, true)
-  readonly property real yTickInterval: smartInterval(yVisibleMin, yVisibleMax, false)
+  readonly property real xTickInterval: smartInterval(xVisibleMin, xVisibleMax)
+  readonly property real yTickInterval: smartInterval(yVisibleMin, yVisibleMax)
 
   //
   // Custom properties
@@ -122,10 +141,35 @@ Item {
   readonly property bool cursorMode: showCrosshairs
 
   //
+  // Reset cursor states when cursor mode is toggled off
+  //
+  onCursorModeChanged: {
+    if (!cursorMode) {
+      clearAllCursors()
+    }
+  }
+
+  //
   // Cursor delta values
   //
   readonly property real deltaX: cursorBX - cursorAX
   readonly property real deltaY: cursorBY - cursorAY
+
+  //
+  // Dynamic precision based on visible range
+  //
+  readonly property int xPrecision: smartPrecision(xVisibleRange)
+  readonly property int yPrecision: smartPrecision(yVisibleRange)
+
+  //
+  // Check if cursors are within visible area (full and partial)
+  //
+  readonly property bool cursorAInView: isPointVisible(cursorAX, cursorAY)
+  readonly property bool cursorBInView: isPointVisible(cursorBX, cursorBY)
+  readonly property bool cursorAXInRange: cursorAX >= xVisibleMin && cursorAX <= xVisibleMax
+  readonly property bool cursorAYInRange: cursorAY >= yVisibleMin && cursorAY <= yVisibleMax
+  readonly property bool cursorBXInRange: cursorBX >= xVisibleMin && cursorBX <= xVisibleMax
+  readonly property bool cursorBYInRange: cursorBY >= yVisibleMin && cursorBY <= yVisibleMax
 
   //
   // Functions to manage cursors
@@ -329,7 +373,7 @@ Item {
       plotAreaBackgroundVisible: true
       theme: GraphsTheme.Theme.UserDefined
       borderColors: [Cpp_ThemeManager.colors["widget_border"]]
-      backgroundColor: Cpp_ThemeManager.colors["widget_window"]
+      backgroundColor: Cpp_ThemeManager.colors["pane_background"]
       plotAreaBackgroundColor: Cpp_ThemeManager.colors["widget_base"]
 
       // Axis and grid colors
@@ -346,8 +390,8 @@ Item {
 
       // Axis label fonts and colors
       labelTextColor: Cpp_ThemeManager.colors["widget_text"]
-      axisXLabelFont: Cpp_Misc_CommonFonts.customMonoFont(0.83)
-      axisYLabelFont: Cpp_Misc_CommonFonts.customMonoFont(0.83)
+      axisXLabelFont: Cpp_MiscCommonFonts.customMonoFont(0.83)
+      axisYLabelFont: Cpp_MiscCommonFonts.customMonoFont(0.83)
 
       // Grid settings
       grid.subWidth: 1
@@ -423,6 +467,10 @@ Item {
       //
       property real _lastX: 0
       property real _lastY: 0
+      property real _startX: 0
+      property real _startY: 0
+      property bool _didDrag: false
+      property int _pressedButton: Qt.NoButton
       property var draggedCursor: null  // null, "A", or "B"
       readonly property bool dragging: containsPress && _axisX.zoom > 1 && draggedCursor === null
 
@@ -457,34 +505,18 @@ Item {
       onPressed: (mouse) => {
         _lastX = mouse.x
         _lastY = mouse.y
+        _startX = mouse.x
+        _startY = mouse.y
+        _didDrag = false
+        _pressedButton = mouse.button
 
         // Handle cursor interactions when in cursor mode
         if (root.cursorMode) {
-          // Check if clicking near a cursor
+          // Check if clicking near a cursor (for dragging)
           draggedCursor = getNearestCursor(mouse.x, mouse.y)
 
-          // Left click to place cursors
-          if (mouse.button === Qt.LeftButton && draggedCursor === null) {
-            const worldX = root.pixelToWorldX(mouse.x)
-            const worldY = root.pixelToWorldY(mouse.y)
-
-            // Place cursor A if not visible, otherwise place cursor B
-            if (!root.cursorAVisible) {
-              root.setCursorA(worldX, worldY)
-            } else if (!root.cursorBVisible) {
-              root.setCursorB(worldX, worldY)
-            } else {
-              // Both cursors exist, replace the nearest one
-              const nearestCursor = getNearestCursor(mouse.x, mouse.y)
-              if (nearestCursor === "A" || nearestCursor === null) {
-                root.setCursorA(worldX, worldY)
-              } else {
-                root.setCursorB(worldX, worldY)
-              }
-            }
-          }
-          // Right click to clear cursors
-          else if (mouse.button === Qt.RightButton) {
+          // Right click to clear cursors (immediate action)
+          if (mouse.button === Qt.RightButton) {
             if (draggedCursor === "A") {
               root.clearCursorA()
             } else if (draggedCursor === "B") {
@@ -494,13 +526,34 @@ Item {
               root.clearAllCursors()
             }
           }
+          // Left click cursor placement is deferred to onReleased
+          // to allow panning when dragging
         }
 
         mouse.accepted = true
       }
 
-      onReleased: {
+      onReleased: (mouse) => {
+        // Handle cursor placement on release (only if no drag occurred)
+        if (root.cursorMode && _pressedButton === Qt.LeftButton && !_didDrag && draggedCursor === null) {
+          const worldX = root.pixelToWorldX(mouse.x)
+          const worldY = root.pixelToWorldY(mouse.y)
+
+          // Place cursor A if not visible, otherwise place cursor B
+          if (!root.cursorAVisible) {
+            root.setCursorA(worldX, worldY)
+          } else if (!root.cursorBVisible) {
+            root.setCursorB(worldX, worldY)
+          } else {
+            // Both cursors exist, replace cursor A
+            root.setCursorA(worldX, worldY)
+          }
+        }
+
+        // Reset state
         draggedCursor = null
+        _pressedButton = Qt.NoButton
+        _didDrag = false
       }
 
       //
@@ -545,6 +598,15 @@ Item {
           return
         }
 
+        // Calculate drag distance from start position
+        const dragDistSq = Math.pow(mouse.x - _startX, 2) + Math.pow(mouse.y - _startY, 2)
+        const dragThreshold = 5  // Pixels - consider it a drag after moving 5 pixels
+
+        // Mark as drag if we've moved significantly
+        if (containsPress && dragDistSq > dragThreshold * dragThreshold) {
+          _didDrag = true
+        }
+
         // Handle cursor dragging
         if (draggedCursor !== null && containsPress && root.cursorMode) {
           const worldX = root.pixelToWorldX(mouse.x)
@@ -576,17 +638,18 @@ Item {
     }
 
     //
-    // Cursor A (only visible in cursor mode)
+    // Cursor A (visible when in cursor mode and any part is in view)
     //
     Item {
       id: _cursorA
-      visible: root.cursorMode && root.cursorAVisible
+      visible: root.cursorMode && root.cursorAVisible && (root.cursorAXInRange || root.cursorAYInRange)
       x: root.worldToPixelX(root.cursorAX)
       y: root.worldToPixelY(root.cursorAY)
 
-      // Vertical line with dash-dot pattern (full height)
+      // Vertical line with dash-dot pattern (full height) - visible when X is in range
       Canvas {
         id: _cursorAVertical
+        visible: root.cursorAXInRange
         width: 2
         height: parent.parent.height
         x: 0
@@ -607,9 +670,10 @@ Item {
         }
       }
 
-      // Horizontal line with dash-dot pattern (full width)
+      // Horizontal line with dash-dot pattern (full width) - visible when Y is in range
       Canvas {
         id: _cursorAHorizontal
+        visible: root.cursorAYInRange
         width: parent.parent.width
         height: 2
         x: -parent.x
@@ -630,8 +694,9 @@ Item {
         }
       }
 
-      // Center marker
+      // Center marker - only visible when fully in view
       Rectangle {
+        visible: root.cursorAInView
         width: 10
         height: 10
         radius: 5
@@ -641,11 +706,12 @@ Item {
         anchors.centerIn: parent
       }
 
-      // Cursor A identifier label
+      // Cursor A identifier label - only visible when fully in view
       Label {
+        visible: root.cursorAInView
         text: "A"
         color: root.cursorATextColor
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.9, true)
+        font: Cpp_MiscCommonFonts.customMonoFont(0.9, true)
         padding: 4
         background: Rectangle {
           color: root.cursorAColor
@@ -672,17 +738,18 @@ Item {
     }
 
     //
-    // Cursor B (only visible in cursor mode)
+    // Cursor B (visible when in cursor mode and any part is in view)
     //
     Item {
       id: _cursorB
-      visible: root.cursorMode && root.cursorBVisible
+      visible: root.cursorMode && root.cursorBVisible && (root.cursorBXInRange || root.cursorBYInRange)
       x: root.worldToPixelX(root.cursorBX)
       y: root.worldToPixelY(root.cursorBY)
 
-      // Vertical line with dash-dot pattern (full height)
+      // Vertical line with dash-dot pattern (full height) - visible when X is in range
       Canvas {
         id: _cursorBVertical
+        visible: root.cursorBXInRange
         width: 2
         height: parent.parent.height
         x: 0
@@ -703,9 +770,10 @@ Item {
         }
       }
 
-      // Horizontal line with dash-dot pattern (full width)
+      // Horizontal line with dash-dot pattern (full width) - visible when Y is in range
       Canvas {
         id: _cursorBHorizontal
+        visible: root.cursorBYInRange
         width: parent.parent.width
         height: 2
         x: -parent.x
@@ -726,8 +794,9 @@ Item {
         }
       }
 
-      // Center marker
+      // Center marker - only visible when fully in view
       Rectangle {
+        visible: root.cursorBInView
         width: 10
         height: 10
         radius: 5
@@ -737,11 +806,12 @@ Item {
         anchors.centerIn: parent
       }
 
-      // Cursor B identifier label
+      // Cursor B identifier label - only visible when fully in view
       Label {
+        visible: root.cursorBInView
         text: "B"
         color: root.cursorBTextColor
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.9, true)
+        font: Cpp_MiscCommonFonts.customMonoFont(0.9, true)
         padding: 4
         background: Rectangle {
           color: root.cursorBColor
@@ -768,15 +838,15 @@ Item {
     }
 
     //
-    // X position label for Cursor A (on X-axis)
+    // X position label for Cursor A (on X-axis) - visible when X is in range
     //
     Label {
       id: _cursorAXPosLabel
-      text: root.cursorAX.toFixed(2)
+      text: root.cursorAX.toFixed(root.xPrecision)
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: Cpp_MiscCommonFonts.customMonoFont(0.8)
       color: root.cursorATextColor
-      visible: root.cursorMode && root.cursorAVisible
+      visible: root.cursorMode && root.cursorAVisible && root.cursorAXInRange
 
       background: Rectangle {
         opacity: 0.9
@@ -792,15 +862,15 @@ Item {
     }
 
     //
-    // Y position label for Cursor A (on Y-axis)
+    // Y position label for Cursor A (on Y-axis) - visible when Y is in range
     //
     Label {
       id: _cursorAYPosLabel
-      text: root.cursorAY.toFixed(2)
+      text: root.cursorAY.toFixed(root.yPrecision)
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: Cpp_MiscCommonFonts.customMonoFont(0.8)
       color: root.cursorATextColor
-      visible: root.cursorMode && root.cursorAVisible
+      visible: root.cursorMode && root.cursorAVisible && root.cursorAYInRange
 
       background: Rectangle {
         opacity: 0.9
@@ -816,15 +886,15 @@ Item {
     }
 
     //
-    // X position label for Cursor B (on X-axis)
+    // X position label for Cursor B (on X-axis) - visible when X is in range
     //
     Label {
       id: _cursorBXPosLabel
-      text: root.cursorBX.toFixed(2)
+      text: root.cursorBX.toFixed(root.xPrecision)
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: Cpp_MiscCommonFonts.customMonoFont(0.8)
       color: root.cursorBTextColor
-      visible: root.cursorMode && root.cursorBVisible
+      visible: root.cursorMode && root.cursorBVisible && root.cursorBXInRange
 
       background: Rectangle {
         opacity: 0.9
@@ -840,15 +910,15 @@ Item {
     }
 
     //
-    // Y position label for Cursor B (on Y-axis)
+    // Y position label for Cursor B (on Y-axis) - visible when Y is in range
     //
     Label {
       id: _cursorBYPosLabel
-      text: root.cursorBY.toFixed(2)
+      text: root.cursorBY.toFixed(root.yPrecision)
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: Cpp_MiscCommonFonts.customMonoFont(0.8)
       color: root.cursorBTextColor
-      visible: root.cursorMode && root.cursorBVisible
+      visible: root.cursorMode && root.cursorBVisible && root.cursorBYInRange
 
       background: Rectangle {
         opacity: 0.9
@@ -870,7 +940,7 @@ Item {
       id: _xPosLabel
       visible: false
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: Cpp_MiscCommonFonts.customMonoFont(0.8)
       color: Cpp_ThemeManager.colors["widget_base"]
     }
 
@@ -881,7 +951,7 @@ Item {
       id: _yPosLabel
       visible: false
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: Cpp_MiscCommonFonts.customMonoFont(0.8)
       color: Cpp_ThemeManager.colors["widget_base"]
     }
   }
@@ -908,7 +978,7 @@ Item {
       anchors.centerIn: parent
       horizontalAlignment: Qt.AlignHCenter
       color: Cpp_ThemeManager.colors["widget_text"]
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.91, true)
+      font: Cpp_MiscCommonFonts.customMonoFont(0.91, true)
       anchors.verticalCenterOffset: root.xLabelVisible && _yLabel.implicitWidth <= _graph.height ?
                                       -1 * Math.abs(_graph.marginBottom - _graph.marginTop) : 0
     }
@@ -942,7 +1012,7 @@ Item {
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
         color: Cpp_ThemeManager.colors["widget_text"]
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.91, true)
+        font: Cpp_MiscCommonFonts.customMonoFont(0.91, true)
       }
 
       Item {
@@ -957,7 +1027,7 @@ Item {
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
         color: Cpp_ThemeManager.colors["widget_text"]
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.91, false)
+        font: Cpp_MiscCommonFonts.customMonoFont(0.91, false)
         text: qsTr("%1, %2").arg(_xPosLabel.text).arg(_yPosLabel.text)
         opacity: 0
 
@@ -975,9 +1045,19 @@ Item {
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
         color: Cpp_ThemeManager.colors["widget_text"]
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.85, false)
-        visible: root.cursorMode && root.cursorAVisible && root.cursorBVisible
-        text: qsTr("ΔX: %1  ΔY: %2").arg(root.deltaX.toFixed(2)).arg(root.deltaY.toFixed(2))
+        font: Cpp_MiscCommonFonts.customMonoFont(0.85, false)
+        visible: root.cursorMode
+        text: {
+          // Show deltas when both cursors are visible
+          if (root.cursorAVisible && root.cursorBVisible)
+            return qsTr("ΔX: %1  ΔY: %2  —  Drag to move, right-click to clear").arg(root.deltaX.toFixed(root.xPrecision)).arg(root.deltaY.toFixed(root.yPrecision))
+          // Show instructions when no cursors
+          else if (!root.cursorAVisible)
+            return qsTr("Click to place cursor")
+          // Show instruction when only cursor A is visible
+          else
+            return qsTr("Click to place second cursor  —  Drag to move")
+        }
       }
 
       Item {
