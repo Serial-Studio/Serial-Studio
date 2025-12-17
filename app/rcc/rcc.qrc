@@ -454,5 +454,6 @@
         <file>themes/fluent-light.json</file>
         <file>themes/code-editor/fluent-dark.xml</file>
         <file>themes/code-editor/fluent-light.xml</file>
+        <file>images/driver.svg</file>
     </qresource>
 </RCC>
