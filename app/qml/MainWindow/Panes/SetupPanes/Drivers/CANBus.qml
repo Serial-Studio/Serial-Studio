@@ -243,7 +243,7 @@ Item {
       visible: Cpp_IO_CANBus.interfaceList.length === 0
 
       Item {
-        implicitHeight: 16
+        implicitHeight: 8
       }
 
       Image {
@@ -275,6 +275,10 @@ Item {
         horizontalAlignment: Label.AlignHCenter
         onLinkActivated: Qt.openUrlExternally(link)
         font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
+      }
+
+      Item {
+        implicitHeight: 8
       }
     }
 
