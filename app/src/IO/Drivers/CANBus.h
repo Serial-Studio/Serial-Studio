@@ -113,6 +113,9 @@ class CANBus : public HAL_Driver
   Q_PROPERTY(QStringList bitrateList
              READ bitrateList
              CONSTANT)
+  Q_PROPERTY(QString interfaceError
+             READ interfaceError
+             NOTIFY interfaceErrorChanged)
   // clang-format on
 
 signals:
@@ -122,6 +125,7 @@ signals:
   void interfaceIndexChanged();
   void availablePluginsChanged();
   void availableInterfacesChanged();
+  void interfaceErrorChanged();
   void connectionError(const QString &error);
 
 private:
@@ -153,6 +157,9 @@ public:
   [[nodiscard]] QStringList pluginList() const;
   [[nodiscard]] QStringList interfaceList() const;
   [[nodiscard]] QStringList bitrateList() const;
+  [[nodiscard]] QString interfaceError() const;
+
+  Q_INVOKABLE QString pluginDisplayName(const QString &plugin) const;
 
 public slots:
   void setupExternalConnections();
@@ -180,6 +187,7 @@ private:
   quint32 m_bitrate;
 
   QSettings m_settings;
+  QString m_interfaceError;
   QStringList m_pluginList;
   QStringList m_interfaceList;
 };

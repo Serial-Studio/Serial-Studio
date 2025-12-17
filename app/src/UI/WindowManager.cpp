@@ -498,8 +498,8 @@ void UI::WindowManager::autoLayout()
     if (windowsInLastRow < cols && windowsInLastRow > 0)
     {
       int lastRowTotalW = availW;
-      lastRowCellW
-          = (lastRowTotalW - (windowsInLastRow - 1) * spacing) / windowsInLastRow;
+      lastRowCellW = (lastRowTotalW - (windowsInLastRow - 1) * spacing)
+                     / windowsInLastRow;
       lastRowOffsetX = 0;
     }
 

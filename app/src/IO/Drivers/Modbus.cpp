@@ -42,39 +42,42 @@
  * Initializes the Modbus driver with default settings.
  */
 IO::Drivers::Modbus::Modbus()
-  : m_device(nullptr)
+  : m_pollTimer(new QTimer(this))
+  , m_device(nullptr)
   , m_lastReply(nullptr)
-  , m_pollTimer(new QTimer(this))
-  , m_protocolIndex(0)
-  , m_slaveAddress(1)
-  , m_pollInterval(100)
-  , m_currentGroupIndex(0)
   , m_port(5020)
   , m_host("127.0.0.1")
   , m_baudRate(9600)
-  , m_serialPortIndex(0)
   , m_parityIndex(0)
+  , m_slaveAddress(1)
+  , m_pollInterval(100)
   , m_dataBitsIndex(3)
   , m_stopBitsIndex(0)
+  , m_protocolIndex(1)
+  , m_currentGroupIndex(0)
+  , m_serialPortIndex(0)
 {
-  // clang-format off
-  m_protocolIndex = m_settings.value("ModbusDriver/protocolIndex", 0).toUInt();
+  // Read basic settings
   m_slaveAddress = m_settings.value("ModbusDriver/slaveAddress", 1).toUInt();
+  m_protocolIndex = m_settings.value("ModbusDriver/protocolIndex", 1).toUInt();
   m_pollInterval = m_settings.value("ModbusDriver/pollInterval", 100).toUInt();
+
+  // Read Modbus TCP settings
   m_port = m_settings.value("ModbusDriver/port", 5020).toUInt();
   m_host = m_settings.value("ModbusDriver/host", "127.0.0.1").toString();
-  // clang-format on
 
+  // Read Modbus RTU settings
   // clang-format off
   m_baudRate = m_settings.value("ModbusDriver/baudRate", 9600).toInt();
-  m_serialPortIndex = m_settings.value("ModbusDriver/serialPortIndex", 0).toUInt();
   m_parityIndex = m_settings.value("ModbusDriver/parityIndex", 0).toUInt();
   m_dataBitsIndex = m_settings.value("ModbusDriver/dataBitsIndex", 3).toUInt();
   m_stopBitsIndex = m_settings.value("ModbusDriver/stopBitsIndex", 0).toUInt();
+  m_serialPortIndex = m_settings.value("ModbusDriver/serialPortIndex", 0).toUInt();
   // clang-format on
 
-  const int groupCount
-      = m_settings.beginReadArray("ModbusDriver/registerGroups");
+  // Read register groups
+  // clang-format off
+  const int groupCount = m_settings.beginReadArray("ModbusDriver/registerGroups");
   for (int i = 0; i < groupCount; ++i)
   {
     m_settings.setArrayIndex(i);
@@ -86,10 +89,13 @@ IO::Drivers::Modbus::Modbus()
       m_registerGroups.append(group);
   }
   m_settings.endArray();
+  // clang-format on
 
+  // Configure poll timer callback function
   connect(m_pollTimer, &QTimer::timeout, this,
           &IO::Drivers::Modbus::pollRegisters);
 
+  // Connect signals/slots for IO manager connect button
   connect(this, &IO::Drivers::Modbus::protocolIndexChanged, this,
           &IO::Drivers::Modbus::configurationChanged);
   connect(this, &IO::Drivers::Modbus::serialPortIndexChanged, this,

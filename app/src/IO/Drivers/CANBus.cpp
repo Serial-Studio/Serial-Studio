@@ -58,6 +58,10 @@ IO::Drivers::CANBus::CANBus()
           &IO::Drivers::CANBus::configurationChanged);
   connect(this, &IO::Drivers::CANBus::interfaceIndexChanged, this,
           &IO::Drivers::CANBus::configurationChanged);
+  connect(this, &IO::Drivers::CANBus::bitrateChanged, this,
+          &IO::Drivers::CANBus::configurationChanged);
+  connect(this, &IO::Drivers::CANBus::canFDChanged, this,
+          &IO::Drivers::CANBus::configurationChanged);
 }
 
 /**
@@ -420,6 +424,14 @@ QStringList IO::Drivers::CANBus::interfaceList() const
 }
 
 /**
+ * @brief Returns the last error that occurred while querying interfaces
+ */
+QString IO::Drivers::CANBus::interfaceError() const
+{
+  return m_interfaceError;
+}
+
+/**
  * @brief Returns the list of standard CAN bus bitrates
  */
 QStringList IO::Drivers::CANBus::bitrateList() const
@@ -435,6 +447,32 @@ QStringList IO::Drivers::CANBus::bitrateList() const
   list << "800000";
   list << "1000000";
   return list;
+}
+
+/**
+ * @brief Converts a Qt CAN plugin name to a user-friendly display name
+ *
+ * @param plugin The Qt plugin identifier
+ * @return User-friendly display name
+ */
+QString IO::Drivers::CANBus::pluginDisplayName(const QString &plugin) const
+{
+  if (plugin == "socketcan")
+    return "SocketCAN";
+  else if (plugin == "peakcan")
+    return "PEAK CAN";
+  else if (plugin == "passthroughcan" || plugin == "passthrucan")
+    return "PassThru CAN";
+  else if (plugin == "virtualcan")
+    return "Virtual CAN";
+  else if (plugin == "systeccan")
+    return "SysTec CAN";
+  else if (plugin == "tinycan")
+    return "Tiny CAN";
+  else if (plugin == "vectorcan")
+    return "Vector CAN";
+  else
+    return plugin;
 }
 
 //------------------------------------------------------------------------------
@@ -662,9 +700,15 @@ void IO::Drivers::CANBus::onErrorOccurred(QCanBusDevice::CanBusError error)
 void IO::Drivers::CANBus::refreshInterfaces()
 {
   m_interfaceList.clear();
+  m_interfaceError.clear();
 
   if (m_pluginList.isEmpty() || m_pluginIndex >= m_pluginList.count())
+  {
+    m_interfaceError = tr("No CAN driver selected");
+    Q_EMIT interfaceErrorChanged();
+    Q_EMIT availableInterfacesChanged();
     return;
+  }
 
   QString plugin = m_pluginList[m_pluginIndex];
   QString error;
@@ -672,8 +716,47 @@ void IO::Drivers::CANBus::refreshInterfaces()
   const QList<QCanBusDeviceInfo> interfaces
       = QCanBus::instance()->availableDevices(plugin, &error);
 
+  if (!error.isEmpty())
+    qWarning() << "CAN plugin error:" << plugin << error;
+
   for (const QCanBusDeviceInfo &info : interfaces)
     m_interfaceList.append(info.name());
+
+  if (m_interfaceList.isEmpty() && m_interfaceError.isEmpty())
+  {
+    const QString driverName = pluginDisplayName(plugin);
+
+#if defined(Q_OS_LINUX)
+    if (plugin == "socketcan")
+      m_interfaceError = tr("Load SocketCAN kernel modules first");
+    else if (plugin == "virtualcan")
+      m_interfaceError = tr("Set up a virtual CAN interface first");
+    else
+      m_interfaceError = tr("No interfaces found for %1").arg(driverName);
+#elif defined(Q_OS_WIN)
+    if (plugin == "peakcan")
+      m_interfaceError = tr(
+          "Install <a href='https://www.peak-system.com/Drivers.523.0.html?"
+          "&L=1'>PEAK CAN drivers</a>");
+    else if (plugin == "vectorcan")
+      m_interfaceError = tr(
+          "Install <a "
+          "href='https://www.vector.com/int/en/products/products-a-z/software/"
+          "xl-driver-library/'>Vector CAN drivers</a>");
+    else if (plugin == "systeccan")
+      m_interfaceError
+          = tr("Install <a "
+               "href='https://www.systec-electronic.com/en/products/usb-can/'>"
+               "SysTec CAN drivers</a>");
+    else
+      m_interfaceError = tr("Install %1 drivers").arg(driverName);
+#elif defined(Q_OS_MAC)
+    m_interfaceError = tr("Install %1 drivers for macOS").arg(driverName);
+#else
+    m_interfaceError = tr("No interfaces found for %1").arg(driverName);
+#endif
+    Q_EMIT interfaceErrorChanged();
+  }
 
   if (m_interfaceIndex >= m_interfaceList.count())
   {
@@ -697,17 +780,21 @@ void IO::Drivers::CANBus::refreshPlugins()
   if (m_pluginList != currentPlugins)
   {
     m_pluginList = currentPlugins;
+
+    if (m_pluginIndex >= m_pluginList.count())
+    {
+      m_pluginIndex = m_pluginList.isEmpty()
+                          ? 0
+                          : qMin(m_pluginIndex,
+                                 static_cast<quint8>(m_pluginList.count() - 1));
+      m_settings.setValue("CanBusDriver/pluginIndex", m_pluginIndex);
+      Q_EMIT pluginIndexChanged();
+    }
+
     Q_EMIT availablePluginsChanged();
 
     if (!m_pluginList.isEmpty() && m_pluginIndex < m_pluginList.count())
       refreshInterfaces();
-
-    else if (m_pluginIndex >= m_pluginList.count())
-    {
-      m_pluginIndex = 0;
-      m_settings.setValue("CanBusDriver/pluginIndex", 0);
-      Q_EMIT pluginIndexChanged();
-    }
   }
 }
 

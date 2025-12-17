@@ -27,9 +27,9 @@
 #include <QString>
 #include <QSettings>
 #include <QByteArray>
+#include <QModbusReply>
 #include <QModbusClient>
 #include <QModbusDevice>
-#include <QModbusReply>
 
 #include "IO/HAL_Driver.h"
 
@@ -225,54 +225,52 @@ public:
   [[nodiscard]] QStringList registerTypeList() const;
   [[nodiscard]] int registerGroupCount() const;
 
-public slots:
-  void setupExternalConnections();
-  void setHost(const QString &host);
-  void setPort(const quint16 port);
-  void setBaudRate(const qint32 rate);
-  void setProtocolIndex(const quint8 index);
-  void setSlaveAddress(const quint8 address);
-  void setPollInterval(const quint16 interval);
-  void setSerialPortIndex(const quint8 index);
-
-  Q_INVOKABLE void addRegisterGroup(const quint8 type, const quint16 start,
-                                    const quint16 count);
-  Q_INVOKABLE void removeRegisterGroup(const int index);
-  Q_INVOKABLE void clearRegisterGroups();
   Q_INVOKABLE QString registerGroupInfo(const int index) const;
+
+public slots:
+  void clearRegisterGroups();
+  void setupExternalConnections();
+  void setPort(const quint16 port);
+  void setHost(const QString &host);
+  void setBaudRate(const qint32 rate);
   void setParityIndex(const quint8 index);
+  void setProtocolIndex(const quint8 index);
+  void removeRegisterGroup(const int index);
   void setDataBitsIndex(const quint8 index);
   void setStopBitsIndex(const quint8 index);
+  void setSlaveAddress(const quint8 address);
+  void setSerialPortIndex(const quint8 index);
+  void setPollInterval(const quint16 interval);
+  void addRegisterGroup(const quint8 type, const quint16 start,
+                        const quint16 count);
 
 private slots:
+  void onReadReady();
   void pollRegisters();
   void pollNextGroup();
-  void onReadReady();
   void refreshSerialPorts();
   void onStateChanged(QModbusDevice::State state);
   void onErrorOccurred(QModbusDevice::Error error);
 
 private:
+  QTimer *m_pollTimer;
   QModbusClient *m_device;
   QModbusReply *m_lastReply;
-  QTimer *m_pollTimer;
 
-  quint8 m_protocolIndex;
-  quint8 m_slaveAddress;
-  quint16 m_pollInterval;
-  int m_currentGroupIndex;
-  QVector<ModbusRegisterGroup> m_registerGroups;
   quint16 m_port;
   QString m_host;
-
   qint32 m_baudRate;
-  quint8 m_serialPortIndex;
   quint8 m_parityIndex;
+  quint8 m_slaveAddress;
+  quint16 m_pollInterval;
   quint8 m_dataBitsIndex;
   quint8 m_stopBitsIndex;
-
+  quint8 m_protocolIndex;
+  int m_currentGroupIndex;
+  quint8 m_serialPortIndex;
   QStringList m_serialPortNames;
   QStringList m_serialPortLocations;
+  QVector<ModbusRegisterGroup> m_registerGroups;
 
   QSettings m_settings;
 };
