@@ -79,6 +79,9 @@ IO::FrameReader::FrameReader(QObject *parent)
  */
 void IO::FrameReader::processData(const QByteArray &data)
 {
+  if (IO::Manager::instance().paused())
+    return;
+
   bool framesEnqueued = false;
 
   // Parse frames immediately
