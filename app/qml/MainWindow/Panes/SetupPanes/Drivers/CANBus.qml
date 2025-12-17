@@ -239,17 +239,14 @@ Item {
     ColumnLayout {
       spacing: 4
       Layout.fillWidth: true
+      Layout.topMargin: -8
       Layout.alignment: Qt.AlignHCenter
       visible: Cpp_IO_CANBus.interfaceList.length === 0
-
-      Item {
-        implicitHeight: 8
-      }
 
       Image {
         sourceSize: Qt.size(96, 96)
         Layout.alignment: Qt.AlignHCenter
-        source: "qrc:/rcc/images/hammer.svg"
+        source: "qrc:/rcc/images/driver.svg"
       }
 
       Item {
@@ -278,7 +275,7 @@ Item {
       }
 
       Item {
-        implicitHeight: 8
+        implicitHeight: 16
       }
     }
 
