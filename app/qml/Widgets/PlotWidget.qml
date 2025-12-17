@@ -1017,52 +1017,30 @@ Item {
 
       Item {
         implicitHeight: 2
-        visible: _xLabel.visible && (_posLabel.visible || _deltaLabel.visible)
-      }
-
-      Label {
-        id: _posLabel
-        visible: false  // Not needed in cursor mode
-        elide: Qt.ElideRight
-        Layout.alignment: Qt.AlignHCenter
-        horizontalAlignment: Qt.AlignHCenter
-        color: Cpp_ThemeManager.colors["widget_text"]
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.91, false)
-        text: qsTr("%1, %2").arg(_xPosLabel.text).arg(_yPosLabel.text)
-        opacity: 0
-
-        Behavior on opacity {NumberAnimation{}}
-      }
-
-      Item {
-        implicitHeight: 2
-        visible: _posLabel.visible && _deltaLabel.visible
+        visible: _deltaLabel.visible
       }
 
       Label {
         id: _deltaLabel
         elide: Qt.ElideRight
+        Layout.maximumWidth: parent.width
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
         color: Cpp_ThemeManager.colors["widget_text"]
         font: Cpp_Misc_CommonFonts.customMonoFont(0.85, false)
         visible: root.cursorMode
         text: {
-          // Show deltas when both cursors are visible
           if (root.cursorAVisible && root.cursorBVisible)
-            return qsTr("ΔX: %1  ΔY: %2  —  Drag to move, right-click to clear").arg(root.deltaX.toFixed(root.xPrecision)).arg(root.deltaY.toFixed(root.yPrecision))
-          // Show instructions when no cursors
+            return qsTr("ΔX: %1  ΔY: %2 — Drag to move, right-click to clear").arg(root.deltaX.toFixed(root.xPrecision)).arg(root.deltaY.toFixed(root.yPrecision))
           else if (!root.cursorAVisible)
             return qsTr("Click to place cursor")
-          // Show instruction when only cursor A is visible
           else
-            return qsTr("Click to place second cursor  —  Drag to move")
+            return qsTr("Click to place second cursor — Drag to move")
         }
       }
 
       Item {
         implicitHeight: 4
-        visible: _posLabel.visible || _deltaLabel.visible
       }
     }
   }
