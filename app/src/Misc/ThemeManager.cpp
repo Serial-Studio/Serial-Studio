@@ -98,8 +98,6 @@ Misc::ThemeManager::ThemeManager()
   // clang-format off
   const QStringList themes = {
       QStringLiteral("default"),
-      QStringLiteral("light"),
-      QStringLiteral("dark"),
       QStringLiteral("iron"),
       QStringLiteral("rust"),
       QStringLiteral("gunmetal"),
@@ -373,11 +371,11 @@ void Misc::ThemeManager::loadSystemTheme()
   // Get theme name to load
   QString resolved;
   if (scheme == Qt::ColorScheme::Dark)
-    resolved = QStringLiteral("Dark");
+    resolved = QStringLiteral("Fluent Dark");
   else if (scheme == Qt::ColorScheme::Light)
-    resolved = QStringLiteral("Light");
+    resolved = QStringLiteral("Fluent Light");
   else
-    resolved = QStringLiteral("Light");
+    resolved = QStringLiteral("Fluent Light");
 
   // Load theme data
   const auto data = m_themes.value(resolved);
