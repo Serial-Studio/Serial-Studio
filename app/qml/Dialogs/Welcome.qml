@@ -442,7 +442,7 @@ Window {
           Button {
             icon.width: 18
             icon.height: 18
-            rightPadding: 8
+            horizontalPadding: 8
             text: qsTr("Upgrade Now")
             Layout.alignment: Qt.AlignVCenter
             onClicked: Cpp_Licensing_LemonSqueezy.buy()
@@ -454,7 +454,7 @@ Window {
           Button {
             icon.width: 18
             icon.height: 18
-            rightPadding: 8
+            horizontalPadding: 8
             text: qsTr("Activate")
             Layout.alignment: Qt.AlignVCenter
             onClicked: app.showLicenseDialog()
@@ -469,7 +469,7 @@ Window {
           Button {
             icon.width: 18
             icon.height: 18
-            rightPadding: 8
+            horizontalPadding: 8
             Layout.alignment: Qt.AlignVCenter
             highlighted: !Cpp_Licensing_Trial.trialExpired
             icon.source: "qrc:/rcc/icons/buttons/apply.svg"

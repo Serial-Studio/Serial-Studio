@@ -430,7 +430,8 @@ Window {
         Button {
           icon.width: 18
           icon.height: 18
-          text: qsTr("Reset") + " "
+          text: qsTr("Reset")
+          horizontalPadding: 8
           opacity: enabled ? 1 : 0.5
           Layout.alignment: Qt.AlignVCenter
           icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
@@ -456,8 +457,9 @@ Window {
         Button {
           icon.width: 18
           icon.height: 18
+          text: qsTr("Close")
+          horizontalPadding: 8
           onClicked: root.close()
-          text: qsTr("Close") + " "
           Layout.alignment: Qt.AlignVCenter
           icon.source: "qrc:/rcc/icons/buttons/close.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
@@ -466,8 +468,9 @@ Window {
         Button {
           icon.width: 18
           icon.height: 18
+          text: qsTr("Apply")
+          horizontalPadding: 8
           onClicked: root.close()
-          text: qsTr("Apply") + " "
           Layout.alignment: Qt.AlignVCenter
           icon.source: "qrc:/rcc/icons/buttons/apply.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]

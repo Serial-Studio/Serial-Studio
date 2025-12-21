@@ -269,7 +269,12 @@ Window {
         }
 
         Button {
+          icon.width: 18
+          icon.height: 18
+          horizontalPadding: 8
           text: qsTr("Cancel")
+          icon.source: "qrc:/rcc/icons/buttons/close.svg"
+          icon.color: Cpp_ThemeManager.colors["button_text"]
           onClicked: {
             Cpp_JSON_DBCImporter.cancelImport()
             root.close()
@@ -277,8 +282,13 @@ Window {
         }
 
         Button {
-          text: qsTr("Create Project")
+          icon.width: 18
+          icon.height: 18
           highlighted: true
+          horizontalPadding: 8
+          text: qsTr("Create Project")
+          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+          icon.color: Cpp_ThemeManager.colors["button_text"]
           enabled: Cpp_JSON_DBCImporter.messageCount > 0
           onClicked: {
             Cpp_JSON_DBCImporter.confirmImport()
