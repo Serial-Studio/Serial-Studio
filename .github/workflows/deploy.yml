@@ -186,6 +186,7 @@ jobs:
         chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
 
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
+        export EXTRA_QT_PLUGINS="canbus"
 
         ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
 
@@ -323,6 +324,7 @@ jobs:
         chmod +x linuxdeploy-plugin-qt-aarch64.AppImage
 
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
+        export EXTRA_QT_PLUGINS="canbus"
 
         ./linuxdeploy-aarch64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
 
