@@ -434,19 +434,15 @@
         <file>scripts/url_encoded.js</file>
         <file>scripts/xml_data.js</file>
         <file>scripts/yaml_data.js</file>
-        <file>themes/code-editor/dark.xml</file>
         <file>themes/code-editor/default.xml</file>
         <file>themes/code-editor/gunmetal.xml</file>
         <file>themes/code-editor/iron.xml</file>
-        <file>themes/code-editor/light.xml</file>
         <file>themes/code-editor/midday.xml</file>
         <file>themes/code-editor/midnight.xml</file>
         <file>themes/code-editor/rust.xml</file>
-        <file>themes/dark.json</file>
         <file>themes/default.json</file>
         <file>themes/gunmetal.json</file>
         <file>themes/iron.json</file>
-        <file>themes/light.json</file>
         <file>themes/midday.json</file>
         <file>themes/midnight.json</file>
         <file>themes/rust.json</file>
