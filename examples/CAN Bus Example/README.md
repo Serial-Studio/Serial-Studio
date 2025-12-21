@@ -192,7 +192,7 @@ python ecu_simulator.py -i pcan -c PCAN_USBBUS1
 ### macOS
 
 1. **Buy CAN Hardware**: PEAK PCAN-USB adapter (~$150-200)
-2. **Install Drivers**: [PEAK macOS Drivers](https://www.peak-system.com/Drivers.523.0.html?&L=1)
+2. **Install Drivers**: [PEAK macOS Drivers](https://www.mac-can.com/)
 3. **Restart** your Mac
 4. **Verify**: Check that Serial Studio detects the interface
 
