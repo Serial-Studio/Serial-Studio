@@ -49,9 +49,9 @@ Item {
 
     Label {
       wrapMode: Label.WordWrap
+      text: qsTr("No CAN Drivers Found")
       Layout.alignment: Qt.AlignHCenter
       Layout.maximumWidth: root.width - 64
-      text: qsTr("No CAN Drivers Found")
       horizontalAlignment: Label.AlignHCenter
       font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
     }
@@ -61,9 +61,9 @@ Item {
       wrapMode: Label.WordWrap
       Layout.alignment: Qt.AlignHCenter
       Layout.maximumWidth: root.width - 64
-      text: qsTr("Install CAN hardware drivers for your system")
       horizontalAlignment: Label.AlignHCenter
       font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
+      text: qsTr("Install CAN hardware drivers for your system")
     }
   }
 
@@ -92,18 +92,20 @@ Item {
         text: qsTr("CAN Driver") + ":"
       } ComboBox {
         id: _pluginCombo
+        textRole: "display"
         Layout.fillWidth: true
         currentIndex: Cpp_IO_CANBus.pluginIndex
+        Component.onCompleted: _pluginCombo.updatePluginModel()
+        onCurrentIndexChanged: {
+          if (!_updating && currentIndex !== Cpp_IO_CANBus.pluginIndex)
+            Cpp_IO_CANBus.pluginIndex = currentIndex
+        }
 
         property bool _updating: false
 
         model: ListModel {
           id: pluginModel
         }
-
-        textRole: "display"
-
-        Component.onCompleted: _pluginCombo.updatePluginModel()
 
         Connections {
           target: Cpp_IO_CANBus
@@ -124,11 +126,6 @@ Item {
           }
           currentIndex = Cpp_IO_CANBus.pluginIndex
           _updating = false
-        }
-
-        onCurrentIndexChanged: {
-          if (!_updating && currentIndex !== Cpp_IO_CANBus.pluginIndex)
-            Cpp_IO_CANBus.pluginIndex = currentIndex
         }
       }
 
@@ -176,6 +173,8 @@ Item {
         model: Cpp_IO_CANBus.bitrateList
         visible: Cpp_IO_CANBus.interfaceList.length > 0
 
+        property bool _initializing: true
+
         validator: IntValidator { bottom: 1 }
 
         Component.onCompleted: {
@@ -190,19 +189,39 @@ Item {
               _bitrateCombo.currentIndex = -1
               _bitrateCombo.editText = current
             }
+
+            _initializing = false
           })
         }
 
+        Connections {
+          target: Cpp_IO_CANBus
+          function onBitrateChanged() {
+            if (!_bitrateCombo._initializing) {
+              const current = String(Cpp_IO_CANBus.bitrate)
+              const rates = Cpp_IO_CANBus.bitrateList
+              const idx = rates.indexOf(current)
+              if (idx !== -1 && idx !== _bitrateCombo.currentIndex) {
+                _bitrateCombo.currentIndex = idx
+              } else if (idx === -1) {
+                _bitrateCombo.editText = current
+              }
+            }
+          }
+        }
+
         onEditTextChanged: {
-          const value = parseInt(editText)
-          if (!isNaN(value) && value > 0) {
-            if (Cpp_IO_CANBus.bitrate !== value)
-              Cpp_IO_CANBus.bitrate = value
+          if (!_initializing) {
+            const value = parseInt(editText)
+            if (!isNaN(value) && value > 0) {
+              if (Cpp_IO_CANBus.bitrate !== value)
+                Cpp_IO_CANBus.bitrate = value
+            }
           }
         }
 
         onCurrentIndexChanged: {
-          if (currentIndex >= 0 && currentIndex < model.length) {
+          if (!_initializing && currentIndex >= 0 && currentIndex < model.length) {
             const value = parseInt(model[currentIndex])
             if (!isNaN(value) && Cpp_IO_CANBus.bitrate !== value) {
               Cpp_IO_CANBus.bitrate = value
@@ -216,20 +235,46 @@ Item {
       // CAN FD checkbox
       //
       Label {
+        opacity: enabled ? 1 : 0.8
         text: qsTr("Flexible Data-Rate") + ":"
         enabled: Cpp_IO_CANBus.interfaceList.length > 0
-        opacity: enabled ? 1 : 0
       } CheckBox {
         id: _canFDCheck
         Layout.leftMargin: -8
-        Layout.alignment: Qt.AlignLeft
+        opacity: enabled ? 1 : 0.8
         checked: Cpp_IO_CANBus.canFD
+        Layout.alignment: Qt.AlignLeft
         enabled: Cpp_IO_CANBus.interfaceList.length > 0
-        opacity: enabled ? 1 : 0
         onCheckedChanged: {
           if (Cpp_IO_CANBus.canFD !== checked)
             Cpp_IO_CANBus.canFD = checked
         }
+      }
+
+      //
+      // Spacer
+      //
+      Item {
+        Layout.minimumHeight: 8 / 2
+        Layout.maximumHeight: 8 / 2
+        visible: Cpp_IO_CANBus.interfaceList.length > 0
+      } Item {
+        Layout.minimumHeight: 8 / 2
+        Layout.maximumHeight: 8 / 2
+        visible: Cpp_IO_CANBus.interfaceList.length > 0
+      }
+
+      //
+      // Import DBC button
+      //
+      Label {
+        text: qsTr("DBC Database") + ":"
+        visible: Cpp_IO_CANBus.interfaceList.length > 0
+      } Button {
+        Layout.fillWidth: true
+        text: qsTr("Import DBC File...")
+        visible: Cpp_IO_CANBus.interfaceList.length > 0
+        onClicked: Cpp_JSON_DBCImporter.importDBC()
       }
     }
 
@@ -285,5 +330,12 @@ Item {
     Item {
       Layout.fillHeight: true
     }
+  }
+
+  //
+  // DBC Preview Dialog
+  //
+  DBCPreviewDialog {
+    id: dbcPreviewDialog
   }
 }

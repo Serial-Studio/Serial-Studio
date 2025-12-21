@@ -7,11 +7,11 @@
 [![Buy Pro](https://img.shields.io/badge/Buy%20Pro-Lemon%20Squeezy-blue?logo=lemonsqueezy)](https://store.serial-studio.com/buy/ba46c099-0d51-4d98-9154-6be5c35bc1ec)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4b6f3ce14a684704980fea31d8c1632e)](https://app.codacy.com/gh/Serial-Studio/Serial-Studio/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-**Serial Studio** is an open-core, cross-platform telemetry dashboard and real-time data visualization tool for **Arduino**, **ESP32**, **Raspberry Pi**, and other embedded systems. It supports input from **serial ports (UART)**, **Bluetooth Low Energy (BLE)**, **MQTT**, **TCP/UDP sockets**, and **audio devices**, enabling real-time sensor monitoring, IoT data visualization, and hardware debugging without writing code.
+**Serial Studio** is an open-source tool that helps you see data from **Arduino**, **ESP32**, **Raspberry Pi**, and other devices in real-time. It works with **serial ports (UART)**, **Bluetooth Low Energy (BLE)**, **MQTT**, **Modbus TCP/RTU**, **CAN Bus**, **TCP/UDP networks**, and **audio devices**. You can create dashboards to monitor sensors and debug hardware without writing code.
 
-Serial Studio runs on **Windows**, **macOS**, and **Linux** (including ARM64 for Raspberry Pi). It is designed for robotics teams, IoT developers, embedded systems engineers, makers, educators, and researchers who need professional telemetry dashboards and CSV data logging for sensor analysis.
+Serial Studio runs on **Windows**, **macOS**, and **Linux** (including ARM64 for Raspberry Pi). It's perfect for robotics teams, IoT developers, makers, educators, and researchers who need dashboards and CSV data logging.
 
-**Perfect for:** Arduino telemetry, ESP32 dashboard, IoT sensor monitoring, robot debugging, drone flight data, environmental sensors, embedded system visualization, real-time plotting, hardware prototyping, lab data acquisition, and STEM education.
+**Good for:** Arduino data, ESP32 dashboards, IoT sensors, robot debugging, drone data, environmental sensors, real-time plots, hardware testing, lab experiments, car diagnostics (CAN Bus), industrial equipment (Modbus), and STEM education.
 
 📚 **New users?** Check out the [FAQ](FAQ.md), [use cases](USE-CASES.md), and [comparison with alternatives](COMPARISON.md).
 
@@ -64,22 +64,24 @@ Make sure your system meets these requirements before running the AppImage.
 
 ## Features
 
-#### Operation Modes:
-- **Project File Mode (recommended):** Create custom dashboards using the built-in **Project Editor** with drag-and-drop widgets—no coding required.
-- **Quick Plot Mode:** Instantly visualize comma-separated values from Arduino or any serial device with zero configuration.
-- **Device-defined Mode:** Let your embedded device define its own dashboard via JSON (perfect for commercial products).
+#### How It Works:
+- **Project File Mode (recommended):** Create custom dashboards using the **Project Editor** with drag-and-drop widgets. No coding needed.
+- **Quick Plot Mode:** Show comma-separated values from Arduino instantly. No setup needed.
+- **Device-defined Mode:** Let your device send its own dashboard layout via JSON (good for products).
 
-#### Core Capabilities:
-- **No Coding Required:** Build professional telemetry dashboards using a graphical interface
-- **Multi-Protocol Support:** Serial/UART, Bluetooth LE, MQTT, TCP/UDP, and audio input
-- **15+ Visualization Widgets:** Line plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometers, gyroscopes, compass, data grids
-- **CSV Data Export:** Automatic logging of all received data for analysis in Excel, Python, MATLAB, or R
-- **Cross-Platform:** Native apps for Windows 10/11, macOS 11+ (Intel + Apple Silicon), Linux x64, and Raspberry Pi ARM64
-- **Arduino/ESP32 Compatible:** Works with any device that outputs data via serial, BLE, or network
-- **Real-Time Performance:** 60 FPS dashboard updates with low latency (<50ms)
-- **Custom Frame Parsing:** JavaScript decoder for binary protocols, checksums, and complex data formats
-- **MQTT for IoT:** Publish and subscribe to MQTT topics for distributed sensor networks (Pro)
-- **Open Source:** GPL-3.0 licensed core with optional commercial Pro features
+#### What It Can Do:
+- **No Coding Needed:** Build dashboards using a simple visual interface
+- **Many Protocols:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, and audio input
+- **15+ Widgets:** Line plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometers, gyroscopes, compass, data grids
+- **Save to CSV:** Automatically save all data for later analysis in Excel, Python, MATLAB, or R
+- **Works Everywhere:** Windows 10/11, macOS 11+ (Intel + Apple Silicon), Linux x64, and Raspberry Pi ARM64
+- **Works with Arduino/ESP32:** Compatible with any device that sends data via serial, BLE, or network
+- **Fast Updates:** 60 FPS dashboard with low delay (<50ms)
+- **Custom Parsing:** Use JavaScript to decode binary data, checksums, and complex formats
+- **Modbus TCP/RTU:** Connect to industrial PLCs and equipment (Pro)
+- **CAN Bus Support:** Import DBC files for automotive and industrial applications (Pro)
+- **MQTT for IoT:** Connect to MQTT brokers for distributed sensors (Pro)
+- **Dual Licensing:** Open-source GPL-3.0 core, proprietary Pro features (see [LICENSE.md](LICENSE.md))
 
 ## Quick Start
 

@@ -44,14 +44,62 @@ Item {
   property alias curveColors: _theme.seriesColors
 
   //
-  // Calculate tick intervals based on visible range (adjusts with zoom)
+  // TextMetrics for estimating label sizes
   //
-  function smartInterval(min, max) {
+  TextMetrics {
+    id: _xLabelMetrics
+    text: "-8888.88"
+    font: Cpp_Misc_CommonFonts.customMonoFont(0.83)
+  }
+
+  TextMetrics {
+    id: _yLabelMetrics
+    text: "-8888.88"
+    font: Cpp_Misc_CommonFonts.customMonoFont(0.83)
+  }
+
+  //
+  // Calculate tick intervals for X axis based on available width
+  //
+  function smartIntervalX(min, max) {
     const range = max - min
     if (range <= 0)
       return 1.0
 
-    const roughInterval = range / 10.0
+    const availableWidth = _graph.plotArea.width
+    const labelWidth = _xLabelMetrics.width + 20
+    const maxLabels = Math.max(2, Math.floor(availableWidth / labelWidth))
+
+    const roughInterval = range / maxLabels
+    const magnitude = Math.pow(10, Math.floor(Math.log10(roughInterval)))
+    const normalized = roughInterval / magnitude
+
+    let niceInterval
+    if (normalized <= 1.0)
+      niceInterval = 1.0
+    else if (normalized <= 2.0)
+      niceInterval = 2.0
+    else if (normalized <= 5.0)
+      niceInterval = 5.0
+    else
+      niceInterval = 10.0
+
+    return niceInterval * magnitude
+  }
+
+  //
+  // Calculate tick intervals for Y axis based on available height
+  //
+  function smartIntervalY(min, max) {
+    const range = max - min
+    if (range <= 0)
+      return 1.0
+
+    const availableHeight = _graph.plotArea.height
+    const labelHeight = _yLabelMetrics.height + 8
+    const maxLabels = Math.max(2, Math.floor(availableHeight / labelHeight))
+
+    const roughInterval = range / maxLabels
     const magnitude = Math.pow(10, Math.floor(Math.log10(roughInterval)))
     const normalized = roughInterval / magnitude
 
@@ -104,10 +152,10 @@ Item {
   readonly property real yVisibleMax: yVisibleMin + yVisibleRange
 
   //
-  // Dynamic tick intervals based on visible range
+  // Dynamic tick intervals based on visible range and available space
   //
-  readonly property real xTickInterval: smartInterval(xVisibleMin, xVisibleMax)
-  readonly property real yTickInterval: smartInterval(yVisibleMin, yVisibleMax)
+  readonly property real xTickInterval: smartIntervalX(xVisibleMin, xVisibleMax)
+  readonly property real yTickInterval: smartIntervalY(yVisibleMin, yVisibleMax)
 
   //
   // Custom properties

@@ -169,8 +169,8 @@ public slots:
   void setInterfaceIndex(const quint8 index);
 
 private slots:
-  void onFramesReceived();
   void refreshPlugins();
+  void onFramesReceived();
   void onStateChanged(QCanBusDevice::CanBusDeviceState state);
   void onErrorOccurred(QCanBusDevice::CanBusError error);
 

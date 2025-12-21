@@ -1,0 +1,162 @@
+VERSION ""
+
+NS_ :
+    NS_DESC_
+    CM_
+    BA_DEF_
+    BA_
+    VAL_
+    CAT_DEF_
+    CAT_
+    FILTER
+    BA_DEF_DEF_
+    EV_DATA_
+    ENVVAR_DATA_
+    SGTYPE_
+    SGTYPE_VAL_
+    BA_DEF_SGTYPE_
+    BA_SGTYPE_
+    SIG_TYPE_REF_
+    VAL_TABLE_
+    SIG_GROUP_
+    SIG_VALTYPE_
+    SIGTYPE_VALTYPE_
+    BO_TX_BU_
+    BA_REL_
+    BA_SGTYPE_REL_
+    SG_MUL_VAL_
+
+BS_:
+
+BU_: Engine Transmission BMS Chassis BodyControl Cluster
+
+VAL_TABLE_ GearPosition 0 "Park/Neutral" 1 "1st" 2 "2nd" 3 "3rd" 4 "4th" 5 "5th" 6 "6th" 255 "Reverse" ;
+
+BO_ 256 ENGINE_RPM_SPEED: 8 Engine
+ SG_ EngineRPM : 0|16@1+ (0.25,0) [0|8000] "rpm" Vector__XXX
+ SG_ VehicleSpeed : 16|16@1+ (0.01,0) [0|300] "km/h" Vector__XXX
+
+BO_ 257 ENGINE_TEMP_LOAD: 8 Engine
+ SG_ CoolantTemp : 0|8@1+ (1,-40) [-40|215] "degC" Vector__XXX
+ SG_ IntakeTemp : 8|8@1+ (1,-40) [-40|215] "degC" Vector__XXX
+ SG_ EngineLoad : 16|8@1+ (1,0) [0|100] "%" Vector__XXX
+
+BO_ 258 ENGINE_THROTTLE: 8 Engine
+ SG_ ThrottlePosition : 0|8@1+ (0.392157,0) [0|100] "%" Vector__XXX
+ SG_ FuelPressure : 8|16@1+ (1,0) [0|1000] "kPa" Vector__XXX
+
+BO_ 512 TRANSMISSION_GEAR: 8 Transmission
+ SG_ CurrentGear : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ TransmissionTemp : 8|8@1+ (1,-40) [-40|215] "degC" Vector__XXX
+ SG_ TorqueConverterSlip : 16|8@1+ (1,0) [0|100] "%" Vector__XXX
+
+BO_ 1024 BMS_VOLTAGE_CURRENT: 8 BMS
+ SG_ PackVoltage : 0|16@1+ (0.1,0) [0|1000] "V" Vector__XXX
+ SG_ PackCurrent : 16|16@1- (0.1,0) [-500|500] "A" Vector__XXX
+
+BO_ 1025 BMS_SOC_TEMP: 8 BMS
+ SG_ StateOfCharge : 0|8@1+ (1,0) [0|100] "%" Vector__XXX
+ SG_ PackTemperature : 8|8@1+ (1,-40) [-40|215] "degC" Vector__XXX
+
+BO_ 1026 BMS_CELL_VOLTAGES: 8 BMS
+ SG_ Cell1Voltage : 0|8@1+ (0.00471,3.0) [3.0|4.2] "V" Vector__XXX
+ SG_ Cell2Voltage : 8|8@1+ (0.00471,3.0) [3.0|4.2] "V" Vector__XXX
+ SG_ Cell3Voltage : 16|8@1+ (0.00471,3.0) [3.0|4.2] "V" Vector__XXX
+ SG_ Cell4Voltage : 24|8@1+ (0.00471,3.0) [3.0|4.2] "V" Vector__XXX
+ SG_ Cell5Voltage : 32|8@1+ (0.00471,3.0) [3.0|4.2] "V" Vector__XXX
+ SG_ Cell6Voltage : 40|8@1+ (0.00471,3.0) [3.0|4.2] "V" Vector__XXX
+ SG_ Cell7Voltage : 48|8@1+ (0.00471,3.0) [3.0|4.2] "V" Vector__XXX
+ SG_ Cell8Voltage : 56|8@1+ (0.00471,3.0) [3.0|4.2] "V" Vector__XXX
+
+BO_ 768 BCM_LIGHTS: 8 BodyControl
+ SG_ Headlights : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ HighBeams : 1|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ TurnSignalLeft : 2|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ TurnSignalRight : 3|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ HazardLights : 4|1@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 769 BCM_DOORS: 8 BodyControl
+ SG_ DoorFrontLeft : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DoorFrontRight : 1|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DoorRearLeft : 2|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DoorRearRight : 3|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Trunk : 4|1@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 1536 ABS_WHEEL_SPEEDS: 8 Chassis
+ SG_ WheelSpeedFL : 0|16@1+ (0.01,0) [0|300] "km/h" Vector__XXX
+ SG_ WheelSpeedFR : 16|16@1+ (0.01,0) [0|300] "km/h" Vector__XXX
+ SG_ WheelSpeedRL : 32|16@1+ (0.01,0) [0|300] "km/h" Vector__XXX
+ SG_ WheelSpeedRR : 48|16@1+ (0.01,0) [0|300] "km/h" Vector__XXX
+
+BO_ 1537 ABS_BRAKE_PRESSURE: 8 Chassis
+ SG_ BrakePressure : 0|16@1+ (0.1,0) [0|200] "bar" Vector__XXX
+
+BO_ 1792 STEERING_ANGLE: 8 Chassis
+ SG_ SteeringAngle : 0|16@1- (0.1,0) [-720|720] "deg" Vector__XXX
+
+BO_ 1280 CLUSTER_ODOMETER: 8 Cluster
+ SG_ Odometer : 0|32@1+ (0.1,0) [0|999999.9] "km" Vector__XXX
+ SG_ TripDistance : 32|16@1+ (0.1,0) [0|9999.9] "km" Vector__XXX
+
+BO_ 1281 CLUSTER_FUEL: 8 Cluster
+ SG_ FuelLevel : 0|8@1+ (1,0) [0|100] "%" Vector__XXX
+ SG_ FuelConsumption : 8|16@1+ (0.01,0) [0|50] "L/100km" Vector__XXX
+
+CM_ BU_ Engine "Engine Control Unit";
+CM_ BU_ Transmission "Transmission Control Unit";
+CM_ BU_ BMS "Battery Management System";
+CM_ BU_ Chassis "Chassis/ABS Control Module";
+CM_ BU_ BodyControl "Body Control Module";
+CM_ BU_ Cluster "Instrument Cluster";
+
+CM_ BO_ 256 "Engine RPM and vehicle speed";
+CM_ BO_ 257 "Engine temperatures and load";
+CM_ BO_ 258 "Throttle position and fuel pressure";
+CM_ BO_ 512 "Transmission gear and temperature";
+CM_ BO_ 1024 "Battery pack voltage and current";
+CM_ BO_ 1025 "Battery state of charge and temperature";
+CM_ BO_ 1026 "Individual cell voltages (sample of 8 cells)";
+CM_ BO_ 768 "Lighting status";
+CM_ BO_ 769 "Door status";
+CM_ BO_ 1536 "Individual wheel speeds";
+CM_ BO_ 1537 "Brake system pressure";
+CM_ BO_ 1792 "Steering wheel angle";
+CM_ BO_ 1280 "Odometer and trip distance";
+CM_ BO_ 1281 "Fuel level and consumption";
+
+CM_ SG_ 256 EngineRPM "Engine speed in RPM";
+CM_ SG_ 256 VehicleSpeed "Vehicle speed in km/h";
+CM_ SG_ 257 CoolantTemp "Engine coolant temperature";
+CM_ SG_ 257 IntakeTemp "Intake air temperature";
+CM_ SG_ 257 EngineLoad "Calculated engine load percentage";
+CM_ SG_ 512 CurrentGear "Current transmission gear (0=P/N, 1-6=Forward, 255=R)";
+
+VAL_ 512 CurrentGear 0 "Park/Neutral" 1 "1st" 2 "2nd" 3 "3rd" 4 "4th" 5 "5th" 6 "6th" 255 "Reverse" ;
+VAL_ 768 Headlights 0 "Off" 1 "On" ;
+VAL_ 768 HighBeams 0 "Off" 1 "On" ;
+VAL_ 768 TurnSignalLeft 0 "Off" 1 "On" ;
+VAL_ 768 TurnSignalRight 0 "Off" 1 "On" ;
+VAL_ 768 HazardLights 0 "Off" 1 "On" ;
+VAL_ 769 DoorFrontLeft 0 "Closed" 1 "Open" ;
+VAL_ 769 DoorFrontRight 0 "Closed" 1 "Open" ;
+VAL_ 769 DoorRearLeft 0 "Closed" 1 "Open" ;
+VAL_ 769 DoorRearRight 0 "Closed" 1 "Open" ;
+VAL_ 769 Trunk 0 "Closed" 1 "Open" ;
+
+BA_DEF_ BO_ "GenMsgCycleTime" INT 0 10000;
+BA_DEF_DEF_ "GenMsgCycleTime" 100;
+
+BA_ "GenMsgCycleTime" BO_ 256 10;
+BA_ "GenMsgCycleTime" BO_ 257 10;
+BA_ "GenMsgCycleTime" BO_ 258 10;
+BA_ "GenMsgCycleTime" BO_ 512 20;
+BA_ "GenMsgCycleTime" BO_ 1024 100;
+BA_ "GenMsgCycleTime" BO_ 1025 100;
+BA_ "GenMsgCycleTime" BO_ 1026 100;
+BA_ "GenMsgCycleTime" BO_ 768 100;
+BA_ "GenMsgCycleTime" BO_ 769 100;
+BA_ "GenMsgCycleTime" BO_ 1536 10;
+BA_ "GenMsgCycleTime" BO_ 1537 10;
+BA_ "GenMsgCycleTime" BO_ 1792 10;
+BA_ "GenMsgCycleTime" BO_ 1280 200;
+BA_ "GenMsgCycleTime" BO_ 1281 200;

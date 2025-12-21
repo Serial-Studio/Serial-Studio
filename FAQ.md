@@ -19,21 +19,21 @@ Answers to common questions about Serial Studio, from installation to advanced u
 
 ### What is Serial Studio?
 
-Serial Studio is an open-core, cross-platform telemetry dashboard and real-time data visualization tool. It allows you to monitor and visualize sensor data, debug embedded systems, and create custom dashboards without writing code.
+Serial Studio is an open-source tool that helps you see data from devices in real-time. You can monitor sensors, debug hardware, and create custom dashboards without coding.
 
-**Think of it as:** A universal dashboard for any device that outputs data via serial port, Bluetooth, MQTT, or network sockets.
+**Think of it as:** A universal dashboard for any device that sends data via serial port, Bluetooth, MQTT, Modbus TCP/RTU, CAN Bus, or network.
 
 ---
 
-### Is Serial Studio free?
+### Is Serial Studio open source?
 
-**Yes, with two options:**
+**The core is open source, with two options:**
 
-1. **GPL version (free forever):** Build from source code. Includes core features but excludes commercial modules like MQTT, 3D visualization, and advanced plotting.
+1. **GPL version (open source):** Build from source code under GPL-3.0 license. Includes core features but excludes Pro modules like MQTT, Modbus, CAN Bus, 3D visualization, and advanced plotting.
 
-2. **Pro version (paid):** Official binary with all features, 14-day free trial. Purchase license for ~$9.99-179.00 (check current pricing at [store.serial-studio.com](https://store.serial-studio.com/).
+2. **Pro version (proprietary):** Official binary with all features, 14-day trial included. Purchase license for ~$9.99-179.00 (check current pricing at [store.serial-studio.com](https://store.serial-studio.com/)).
 
-See [Pro vs. GPL Version](#pro-vs-gpl-version) for detailed comparison.
+Pro features are proprietary and not open source. See [LICENSE.md](LICENSE.md) and [Pro vs. GPL Version](#pro-vs-gpl-version) for details.
 
 ---
 
@@ -48,26 +48,26 @@ See [Pro vs. GPL Version](#pro-vs-gpl-version) for detailed comparison.
 
 ### How is Serial Studio different from Arduino Serial Plotter?
 
-Arduino Serial Plotter is great for quick debugging but limited to basic line plots and serial ports only.
+Arduino Serial Plotter is good for quick debugging but only works with serial ports and basic plots.
 
 **Serial Studio adds:**
-- Multiple data sources (BLE, MQTT, TCP/UDP)
-- 15+ widget types (gauges, maps, FFT, accelerometers, etc.)
+- More data sources (BLE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP)
+- 15+ widgets (gauges, maps, FFT, accelerometers, etc.)
 - Custom dashboards with Project Editor
-- CSV export for data analysis
-- Advanced frame parsing with JavaScript
+- Save data to CSV files
+- Parse complex data with JavaScript
 
-See [COMPARISON.md](COMPARISON.md) for full comparison with alternatives.
+See [COMPARISON.md](COMPARISON.md) for more comparisons.
 
 ---
 
 ### Can I use Serial Studio for commercial projects?
 
-**Official binaries:** Yes, but you need a **Pro license** for commercial use (business, revenue-generating projects, closed-source products).
+**Official binaries:** Yes, but you need a **Pro license** for commercial use (business, revenue-generating projects, closed-source products). Pro features are proprietary.
 
-**GPL build:** Yes, if you build from source and comply with GPL-3.0 terms (your project must also be open-source).
+**GPL build:** Yes, if you build from source and comply with GPL-3.0 terms (your project must also be open source). GPL builds exclude Pro features like MQTT, Modbus, CAN Bus, and 3D visualization.
 
-See [LICENSE.md](LICENSE.md) for full licensing details.
+See [LICENSE.md](LICENSE.md) for full dual-licensing details.
 
 ---
 
@@ -167,9 +167,11 @@ cmake --build . -j$(nproc)
 
 - **Serial ports:** UART, RS232, RS485 (via USB-serial adapter)
 - **Bluetooth Low Energy (BLE):** GATT characteristics
-- **MQTT:** Publish/subscribe (Pro version only)
+- **MQTT:** Publish/subscribe for IoT (Pro only)
+- **Modbus TCP/RTU:** Industrial PLCs and equipment (Pro only)
+- **CAN Bus:** Automotive and industrial networks (Pro only)
 - **TCP/UDP sockets:** Network-connected devices
-- **Audio input:** Microphone, line-in (Pro version only)
+- **Audio input:** Microphone, line-in (Pro only)
 
 ---
 
@@ -209,6 +211,43 @@ Your devices should publish data to the MQTT topic, and Serial Studio will visua
 
 ---
 
+### How do I use Modbus?
+
+**Pro version only.** Supports both Modbus TCP and Modbus RTU.
+
+**For Modbus TCP:**
+1. Set up a Modbus TCP server (industrial PLC, simulator, or Python script)
+2. In Serial Studio, select **Modbus** as data source
+3. Enter server address (e.g., `192.168.1.100:502`)
+4. Configure registers to read in your project file
+5. Click **Connect**
+
+**For Modbus RTU:**
+1. Connect Modbus RTU device to serial port
+2. In Serial Studio, select **Modbus** as data source
+3. Select serial port and configure baud rate, parity, stop bits
+4. Configure registers to read in your project file
+5. Click **Connect**
+
+See the Modbus PLC Simulator example in the `/examples` folder for a complete demo.
+
+---
+
+### How do I use CAN Bus?
+
+**Pro version only.**
+
+1. Install CAN hardware drivers (or use VirtualCAN for testing)
+2. In Serial Studio, select **CAN Bus** as data source
+3. Choose driver (VirtualCAN, SocketCAN, PEAK, Vector, etc.)
+4. Select interface and bitrate
+5. Import DBC file to automatically create dashboard
+6. Click **Connect**
+
+See the CAN Bus Example in the `/examples` folder for step-by-step instructions.
+
+---
+
 ### How do I connect via TCP/UDP?
 
 1. Select **Network (TCP)** or **Network (UDP)** as data source
@@ -229,23 +268,23 @@ while True:
 
 ### What data format should my device send?
 
-Serial Studio supports three operation modes:
+Serial Studio works with three modes:
 
 **1. Quick Plot Mode (easiest):**
 - Send comma-separated values: `23.5,67.2,1013.25\n`
-- Serial Studio automatically plots each value
+- Serial Studio shows plots automatically
 
 **2. Project File Mode (recommended):**
-- Define a JSON project file with dashboard layout
+- Create a JSON project file with your dashboard layout
 - Device sends raw data (CSV, binary, or custom format)
-- Serial Studio parses according to project definition
+- Serial Studio reads the data based on your project file
 
 **3. Device-defined JSON Mode:**
-- Device sends full JSON with data and widget definitions
-- JSON structure and keywords are subject to change, but generally it's pretty stable.
-- Open a JSON file created by the Project Editor in Notepad to understand the required JSON structure.
+- Device sends JSON with data and widget info
+- JSON format can change between versions
+- Open a JSON file from Project Editor to see the format
 
-See [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki) for detailed protocol specifications.
+See [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki) for more details.
 
 ---
 
@@ -253,18 +292,18 @@ See [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki) for detailed pro
 
 ### How do I create a custom dashboard?
 
-**Method 1: Project Editor (GUI)**
-1. Click **Project Editor** in toolbar
+**Method 1: Project Editor (easy)**
+1. Click **Project Editor** in the toolbar
 2. Click **New Project**
-3. Add **Groups** (containers for related data)
+3. Add **Groups** (containers for your data)
 4. Add **Datasets** to each group
-5. Choose widget type for each dataset (gauge, plot, map, etc.)
-6. Add units, min/max values, labels
-7. Save project file (`.json`)
-8. Load project in Serial Studio
+5. Pick a widget for each dataset (gauge, plot, map, etc.)
+6. Add units, min/max values, and labels
+7. Save the project file (`.json`)
+8. Load the project in Serial Studio
 
-**Method 2: Edit JSON manually**
-Not recommended, but useful if you need to write project files using automation tools.
+**Method 2: Edit JSON by hand**
+Not recommended unless you need to create projects automatically with scripts.
 
 ---
 
@@ -330,13 +369,13 @@ Yes! Click **Preferences → Theme** and choose your preffered theme.
 
 ---
 
-### I see garbled data or weird characters
+### I see garbled data or strange characters
 
-**Check baud rate:** Most common mistake. Ensure Serial Studio baud rate matches your device (common: 9600, 115200).
+**Check baud rate:** This is the most common problem. Make sure Serial Studio baud rate matches your device (common: 9600, 115200).
 
-**Check data bits, parity, stop bits:** Usually 8N1 (8 data bits, no parity, 1 stop bit). Change in Serial Studio settings if your device uses different configuration.
+**Check data bits, parity, stop bits:** Usually 8N1 (8 data bits, no parity, 1 stop bit). Change in Serial Studio settings if your device uses something different.
 
-**Check frame delimiters:** By default, Serial Studio expects newline (`\n`) as frame delimiter. If your device uses different delimiter (e.g., `\r\n`, semicolon, custom byte), configure it in Settings → Frame Detection.
+**Check frame delimiters:** Serial Studio expects newline (`\n`) by default. If your device uses a different end character (like `\r\n`, semicolon, or custom byte), change it in Settings → Frame Detection.
 
 ---
 
@@ -407,10 +446,12 @@ ARM64 AppImage requires Ubuntu 24.04+ (glibc 2.38+). Upgrade your OS or use Flat
 
 ### What features are in Pro vs. GPL?
 
-| Feature | GPL (Free) | Pro (Paid) |
-|---------|------------|------------|
+| Feature | GPL (Open Source) | Pro (Proprietary) |
+|---------|-------------------|-------------------|
 | Serial, BLE, TCP/UDP | ✅ | ✅ |
 | MQTT | ❌ | ✅ |
+| Modbus TCP/RTU | ❌ | ✅ |
+| CAN Bus | ❌ | ✅ |
 | Audio input | ❌ | ✅ |
 | Basic plots, gauges, maps | ✅ | ✅ |
 | XY plots | ❌ | ✅ |
@@ -418,8 +459,10 @@ ARM64 AppImage requires Ubuntu 24.04+ (glibc 2.38+). Upgrade your OS or use Flat
 | FFT spectrum analyzer | ❌ | ✅ |
 | Advanced plotting | ❌ | ✅ |
 | CSV export | ✅ | ✅ |
+| DBC file import (CAN) | ❌ | ✅ |
 | Commercial use | ⚠️ GPL compliant only | ✅ |
 | Priority support | ❌ | ✅ |
+| Source availability | ✅ Open source | ⚠️ Visible but proprietary |
 
 ---
 
@@ -458,7 +501,9 @@ Educational discounts are considered on a case-by-case basis.
 
 If you have a Pro license, yes, you can use all features for your open-source work.
 
-However, if you want to distribute your project under GPL and your users build Serial Studio from source, they won't have access to Pro features (MQTT, 3D, etc.) unless they purchase licenses.
+However, Pro features are proprietary (not open source), even though the source code is visible in the repository. If you want to distribute your project under GPL and your users build Serial Studio from source, they won't have access to Pro features (MQTT, Modbus, CAN Bus, 3D, etc.) unless they purchase licenses.
+
+See [LICENSE.md](LICENSE.md) for the dual-licensing details.
 
 ---
 

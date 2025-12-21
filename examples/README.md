@@ -1,6 +1,6 @@
 # Serial Studio Examples
 
-This directory contains various examples demonstrating how to use Serial Studio to visualize data from sensors, microcontrollers, and external programs. Each example includes complete source code, Serial Studio project files (`*.json` or `*.ssproj`), setup instructions, and screenshots.
+This folder contains examples that show how to use Serial Studio with sensors, microcontrollers, and other programs. Each example includes source code, Serial Studio project files (`*.json` or `*.ssproj`), setup instructions, and screenshots.
 
 **Legend:**
 - 🟢 **Beginner:** Simple setup, minimal hardware
@@ -110,41 +110,63 @@ Fetches real-time International Space Station position and velocity data from a 
   - Software-only example (no microcontroller needed)
 
 ### 9. Modbus PLC Simulator
-**Difficulty:** 🟡 Intermediate | **Time:** ~15 minutes | **License:** Pro (Modbus required)
+**Difficulty:** 🟡 Intermediate | **Time:** ~15 minutes | **License:** Pro (Modbus TCP/RTU required)
 
-Physics-based hydraulic test stand simulator acting as a Modbus TCP server. Demonstrates Serial Studio's industrial protocol support with realistic telemetry, automatic failure modes, and recovery sequences.
+Simulates a hydraulic test system using Modbus TCP. Shows how Serial Studio works with industrial equipment. Includes realistic data, automatic tests, and failure modes.
+
+**Note:** Serial Studio supports both Modbus TCP and Modbus RTU. This example uses Modbus TCP.
 
 **Contents:**
-  - **plc_simulator.py**: Hydraulic power unit simulator with Modbus TCP server
-  - **Modbus PLC Simulator.ssproj**: Serial Studio project file with industrial dashboard
-  - **README.md**: Comprehensive setup and configuration guide
-  - **Screenshot**: Industrial dashboard visualization example
+  - **plc_simulator.py**: Hydraulic power simulator with Modbus TCP server
+  - **Modbus PLC Simulator.ssproj**: Serial Studio project file with dashboard
+  - **README.md**: Setup guide
+  - **Screenshot**: Dashboard example
 
 **Features:**
-  - 50HP motor with VFD soft-start and PID pressure control
-  - 9 Modbus holding registers (temperature, pressure, RPM, flow, vibration)
-  - Realistic physics (thermodynamics, pump dynamics, ISO 10816 vibration)
+  - 50HP motor with soft-start and pressure control
+  - 9 Modbus registers (temperature, pressure, RPM, flow, vibration)
+  - Realistic physics simulation
   - Automatic test sequences (startup, running, pressure test, failure, shutdown)
-  - Custom JavaScript frame parser for Modbus protocol
-  - Software-only example (no hardware needed)
+  - Custom JavaScript parser for Modbus data
+  - No hardware needed - software only
+
+### 10. CAN Bus Example
+**Difficulty:** 🟡 Intermediate | **Time:** ~15 minutes | **License:** Pro (CAN Bus required)
+
+Simulates a car's ECU (Engine Control Unit) and sends realistic vehicle data over CAN bus. Shows how to import DBC files to create dashboards automatically.
+
+**Contents:**
+  - **ecu_simulator.py**: Car simulator with multiple ECU systems
+  - **example_vehicle.dbc**: CAN database file
+  - **CAN Bus Example.ssproj**: Serial Studio project file
+  - **README.md**: Setup guide
+  - **Screenshot**: Dashboard example
+
+**Features:**
+  - Works without hardware using VirtualCAN
+  - Supports real CAN hardware (PEAK, SocketCAN, Vector, etc.)
+  - Automatic DBC file import
+  - Smart widget selection (gauges, plots, bars, LEDs)
+  - Realistic car data (RPM, speed, temperature, battery, etc.)
+  - No hardware needed - software only
 
 ## Getting Started
 
 To use these examples:
 
-1. **Hardware Setup**: Connect the necessary components as described in each example's README file.
-2. **Arduino Code**: Open the Arduino `.ino` file in the Arduino IDE, upload it to your board, and ensure the correct baud rate and port settings are configured.
-3. **Serial Studio Configuration**: 
-   - Launch Serial Studio and import the provided JSON project file, if available.
-   - Follow the configuration instructions in each example's README to set up data parsing and visualization widgets.
-4. **Visualize Data**: Once connected, view live data in Serial Studio through various widgets and mapping features.
+1. **Connect Hardware**: Follow the instructions in each example's README file to connect components.
+2. **Upload Arduino Code**: Open the `.ino` file in Arduino IDE, upload it to your board, and check the baud rate and port settings.
+3. **Configure Serial Studio**:
+   - Open Serial Studio and load the JSON project file (if provided).
+   - Follow the setup instructions in each README file.
+4. **See Your Data**: Once connected, you will see live data in Serial Studio using different widgets.
 
 ## Requirements
 
-- **Arduino IDE**: To compile and upload `.ino` files.
-- **Serial Studio**: For real-time data visualization. Download it from [Serial Studio's website](https://serial-studio.github.io/).
-- **Libraries**: Some examples require additional libraries (e.g., Adafruit MPU6050 or TinyGPS). Refer to individual README files for specific library requirements.
+- **Arduino IDE**: To upload code to your board.
+- **Serial Studio**: Download from [serial-studio.com](https://serial-studio.com).
+- **Libraries**: Some examples need extra libraries (like Adafruit MPU6050 or TinyGPS). Check each README file for details.
 
-## Additional Resources
+## More Information
 
-For more details on Serial Studio, visit the [Serial Studio wiki](https://github.com/Serial-Studio/Serial-Studio/wiki). Each example README also includes troubleshooting tips and step-by-step instructions for setup and visualization.
+For more help, visit the [Serial Studio wiki](https://github.com/Serial-Studio/Serial-Studio/wiki). Each example includes troubleshooting tips and setup instructions.

@@ -75,19 +75,17 @@ Item {
           Layout.minimumHeight: 32
           Layout.maximumHeight: 32
           color: Cpp_ThemeManager.colors["widget_base"]
+          Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
           border.color: Cpp_ThemeManager.colors["widget_border"]
 
           RowLayout {
             id: layout
-            spacing: 0
+            spacing: 12
             anchors.margins: 4
+            anchors.leftMargin: 24
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-
-            Item {
-              Layout.fillWidth: true
-            }
 
             Rectangle {
               id: led
@@ -104,26 +102,17 @@ Item {
               Behavior on color {ColorAnimation{}}
             }
 
-            Item {
-              Layout.fillWidth: true
-              Layout.minimumWidth: 4
-            }
-
             Label {
               elide: Qt.ElideRight
+              Layout.fillWidth: true
               text: root.model.titles[index]
               Layout.alignment: Qt.AlignVCenter
               font: Cpp_Misc_CommonFonts.monoFont
               horizontalAlignment: Label.AlignLeft
-              Layout.maximumWidth: layout.width - 4 - 24
+              Layout.maximumWidth: layout.width - 12 - 24
               color: Cpp_ThemeManager.colors["widget_text"]
 
               Behavior on color {ColorAnimation{}}
-            }
-
-            Item {
-              Layout.fillWidth: true
-              Layout.minimumWidth: 4
             }
           }
 

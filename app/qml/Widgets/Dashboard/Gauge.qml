@@ -165,9 +165,12 @@ Item {
         const w = width
         const h = height
         const padding = labelMetrics.height * 2
-        const radius = Math.min(w, h - padding) / 2 - 10
+        let radius = Math.min(w, h - padding) / 2 - 10
         const cx = w / 2
         const cy = h / 2 + labelMetrics.height * 0.5
+
+        // Ensure minimum valid radius
+        radius = Math.max(20, radius)
 
         // Scaled properties based on radius
         const arcWidthPx = Math.max(4, Math.min(12, radius / 10))
@@ -201,8 +204,9 @@ Item {
         ctx.shadowBlur = 4
 
         // Draw inner background circle
+        const innerRadius = Math.max(1, radius - arcWidthPx)
         ctx.beginPath()
-        ctx.arc(cx, cy, radius - arcWidthPx, 0, 2 * Math.PI)
+        ctx.arc(cx, cy, innerRadius, 0, 2 * Math.PI)
         ctx.fillStyle = backgroundColor
         ctx.fill()
 

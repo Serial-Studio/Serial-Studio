@@ -78,6 +78,7 @@
 #  include "IO/Drivers/CANBus.h"
 #  include "IO/Drivers/Modbus.h"
 #  include "UI/Widgets/Plot3D.h"
+#  include "JSON/DBCImporter.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
@@ -310,6 +311,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto audioDriver = &IO::Drivers::Audio::instance();
   auto canBusDriver = &IO::Drivers::CANBus::instance();
   auto modbusDriver = &IO::Drivers::Modbus::instance();
+  auto dbcImporter = &JSON::DBCImporter::instance();
 #else
   const bool qtCommercialAvailable = false;
 #endif
@@ -391,6 +393,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_IO_Audio", audioDriver);
   c->setContextProperty("Cpp_IO_CANBus", canBusDriver);
   c->setContextProperty("Cpp_IO_Modbus", modbusDriver);
+  c->setContextProperty("Cpp_JSON_DBCImporter", dbcImporter);
   c->setContextProperty("Cpp_Licensing_Trial", trial);
   c->setContextProperty("Cpp_MQTT_Client", mqttClient);
   c->setContextProperty("Cpp_Licensing_LemonSqueezy", lemonSqueezy);

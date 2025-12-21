@@ -211,7 +211,68 @@ set(HEADERS
   src/SerialStudio.h
 )
 
-# Add headers & sources for commercial build
+# Specify required QML files for FOSS version
+set(QML_SOURCES
+  qml/Dialogs/About.qml
+  qml/Dialogs/Acknowledgements.qml
+  qml/Dialogs/CsvPlayer.qml
+  qml/Dialogs/Donate.qml
+  qml/Dialogs/FileTransmission.qml
+  qml/Dialogs/IconPicker.qml
+  qml/Dialogs/Settings.qml
+  qml/Dialogs/Welcome.qml
+  qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml
+  qml/MainWindow/Panes/Dashboard/StartMenu.qml
+  qml/MainWindow/Panes/Dashboard/Taskbar.qml
+  qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml
+  qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml
+  qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml
+  qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml
+  qml/MainWindow/Panes/SetupPanes/Hardware.qml
+  qml/MainWindow/Panes/Console.qml
+  qml/MainWindow/Panes/Dashboard.qml
+  qml/MainWindow/Panes/Setup.qml
+  qml/MainWindow/Panes/Toolbar.qml
+  qml/MainWindow/MainWindow.qml
+  qml/ProjectEditor/Sections/ProjectStructure.qml
+  qml/ProjectEditor/Sections/ProjectToolbar.qml
+  qml/ProjectEditor/Views/ActionView.qml
+  qml/ProjectEditor/Views/DatasetView.qml
+  qml/ProjectEditor/Views/FrameParserView.qml
+  qml/ProjectEditor/Views/GroupView.qml
+  qml/ProjectEditor/Views/ProjectView.qml
+  qml/ProjectEditor/Views/TableDelegate.qml
+  qml/ProjectEditor/ProjectEditor.qml
+  qml/Widgets/Dashboard/Accelerometer.qml
+  qml/Widgets/Dashboard/Bar.qml
+  qml/Widgets/Dashboard/Compass.qml
+  qml/Widgets/Dashboard/DataGrid.qml
+  qml/Widgets/Dashboard/FFTPlot.qml
+  qml/Widgets/Dashboard/Gauge.qml
+  qml/Widgets/Dashboard/GPS.qml
+  qml/Widgets/Dashboard/Gyroscope.qml
+  qml/Widgets/Dashboard/LEDPanel.qml
+  qml/Widgets/Dashboard/MultiPlot.qml
+  qml/Widgets/Dashboard/Plot.qml
+  qml/Widgets/Dashboard/Terminal.qml
+  qml/Widgets/BigButton.qml
+  qml/Widgets/InfoBullet.qml
+  qml/Widgets/JSONDropArea.qml
+  qml/Widgets/MenuButton.qml
+  qml/Widgets/MiniWindow.qml
+  qml/Widgets/Pane.qml
+  qml/Widgets/PlotWidget.qml
+  qml/Widgets/ProNotice.qml
+  qml/Widgets/SmartWindow.qml
+  qml/Widgets/SubMenuCombo.qml
+  qml/Widgets/TaskbarButton.qml
+  qml/Widgets/ToolbarButton.qml
+  qml/Widgets/VisualRange.qml
+  qml/DialogLoader.qml
+  qml/main.qml
+)
+
+# Add commercial source files
 if(BUILD_COMMERCIAL)
   set(HEADERS
     ${HEADERS}
@@ -220,6 +281,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/CANBus.h
     src/IO/Drivers/Modbus.h
     src/UI/Widgets/Plot3D.h
+    src/JSON/DBCImporter.h
     src/Licensing/Trial.h
     src/Licensing/MachineID.h
     src/Licensing/SimpleCrypt.h
@@ -233,11 +295,23 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/CANBus.cpp
     src/IO/Drivers/Modbus.cpp
     src/UI/Widgets/Plot3D.cpp
+    src/JSON/DBCImporter.cpp
     src/Licensing/Trial.cpp
     src/ThirdParty/miniaudio.cpp
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp
     src/Licensing/LemonSqueezy.cpp
+  )
+  set(QML_SOURCES
+    ${QML_SOURCES}
+    qml/Dialogs/LicenseManagement.qml
+    qml/Dialogs/MQTTConfiguration.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml
+    qml/Widgets/Dashboard/Plot3D.qml
   )
 endif()
 
@@ -333,82 +407,8 @@ target_link_openssl(
 )
 
 #-------------------------------------------------------------------------------
-# Import QML code
+# Add QML code and precompile it
 #-------------------------------------------------------------------------------
-
-set(QML_SOURCES
-  qml/Dialogs/About.qml
-  qml/Dialogs/Acknowledgements.qml
-  qml/Dialogs/CsvPlayer.qml
-  qml/Dialogs/Donate.qml
-  qml/Dialogs/FileTransmission.qml
-  qml/Dialogs/IconPicker.qml
-  qml/Dialogs/Settings.qml
-  qml/Dialogs/Welcome.qml
-  qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml
-  qml/MainWindow/Panes/Dashboard/StartMenu.qml
-  qml/MainWindow/Panes/Dashboard/Taskbar.qml
-  qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml
-  qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml
-  qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml
-  qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml
-  qml/MainWindow/Panes/SetupPanes/Hardware.qml
-  qml/MainWindow/Panes/Console.qml
-  qml/MainWindow/Panes/Dashboard.qml
-  qml/MainWindow/Panes/Setup.qml
-  qml/MainWindow/Panes/Toolbar.qml
-  qml/MainWindow/MainWindow.qml
-  qml/ProjectEditor/Sections/ProjectStructure.qml
-  qml/ProjectEditor/Sections/ProjectToolbar.qml
-  qml/ProjectEditor/Views/ActionView.qml
-  qml/ProjectEditor/Views/DatasetView.qml
-  qml/ProjectEditor/Views/FrameParserView.qml
-  qml/ProjectEditor/Views/GroupView.qml
-  qml/ProjectEditor/Views/ProjectView.qml
-  qml/ProjectEditor/Views/TableDelegate.qml
-  qml/ProjectEditor/ProjectEditor.qml
-  qml/Widgets/Dashboard/Accelerometer.qml
-  qml/Widgets/Dashboard/Bar.qml
-  qml/Widgets/Dashboard/Compass.qml
-  qml/Widgets/Dashboard/DataGrid.qml
-  qml/Widgets/Dashboard/FFTPlot.qml
-  qml/Widgets/Dashboard/Gauge.qml
-  qml/Widgets/Dashboard/GPS.qml
-  qml/Widgets/Dashboard/Gyroscope.qml
-  qml/Widgets/Dashboard/LEDPanel.qml
-  qml/Widgets/Dashboard/MultiPlot.qml
-  qml/Widgets/Dashboard/Plot.qml
-  qml/Widgets/Dashboard/Terminal.qml
-  qml/Widgets/BigButton.qml
-  qml/Widgets/InfoBullet.qml
-  qml/Widgets/JSONDropArea.qml
-  qml/Widgets/MenuButton.qml
-  qml/Widgets/MiniWindow.qml
-  qml/Widgets/Pane.qml
-  qml/Widgets/PlotWidget.qml
-  qml/Widgets/ProNotice.qml
-  qml/Widgets/SmartWindow.qml
-  qml/Widgets/SubMenuCombo.qml
-  qml/Widgets/TaskbarButton.qml
-  qml/Widgets/ToolbarButton.qml
-  qml/Widgets/VisualRange.qml
-  qml/DialogLoader.qml
-  qml/main.qml
-)
-
-# Add QML files for commercial build
-if(BUILD_COMMERCIAL)
-  set(QML_SOURCES
-    ${QML_SOURCES}
-    qml/Dialogs/LicenseManagement.qml
-    qml/Dialogs/MQTTConfiguration.qml
-    qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml
-    qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml
-    qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml
-    qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml
-    qml/Widgets/Dashboard/Plot3D.qml
-  )
-endif()
 
 qt_add_qml_module(
   ${PROJECT_EXECUTABLE}
