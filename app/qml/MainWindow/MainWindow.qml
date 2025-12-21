@@ -238,6 +238,7 @@ Widgets.SmartWindow {
   // Load user interface component
   //
   Page {
+    clip: true
     anchors.fill: parent
     palette.mid: Cpp_ThemeManager.colors["mid"]
     palette.dark: Cpp_ThemeManager.colors["dark"]

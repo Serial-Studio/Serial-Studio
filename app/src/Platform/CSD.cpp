@@ -52,7 +52,7 @@ constexpr int ButtonSize = 28;
 constexpr int ButtonWidth = 46;
 constexpr int ResizeMargin = 8;
 constexpr int ButtonMargin = 8;
-constexpr int CornerRadius = 10;
+constexpr int CornerRadius = 0;
 constexpr int ShadowRadius = 24;
 constexpr int ButtonSpacing = 18;
 constexpr int TitleBarHeight = 32;
@@ -65,7 +65,7 @@ constexpr int ButtonSize = 28;
 constexpr int ButtonWidth = 32;
 constexpr int ResizeMargin = 8;
 constexpr int ButtonMargin = 12;
-constexpr int CornerRadius = 16;
+constexpr int CornerRadius = 0;
 constexpr int ShadowRadius = 24;
 constexpr int ButtonSpacing = 0;
 constexpr int TitleBarHeight = 32;
@@ -634,47 +634,39 @@ Frame::Frame(QQuickItem *parent)
  * @param painter The QPainter used for rendering.
  *
  * Renders the complete window frame including:
- * - Corner shadow tiles at each corner (accounting for rounded content)
+ * - Corner shadow tiles at each corner
  * - Edge shadow strips between corners
- * - Rounded background fill matching the theme
+ * - Background fill matching the theme
  *
  * When shadows are disabled (e.g., window maximized), only the background
- * and border are drawn without rounded corners.
+ * is drawn.
  */
 void Frame::paint(QPainter *painter)
 {
-  // Set painter rendering hints
-  painter->setRenderHint(QPainter::Antialiasing);
-  painter->setRenderHint(QPainter::SmoothPixmapTransform);
-
-  // Get window size & corner tile size
   const int r = m_shadowEnabled ? m_shadowRadius : 0;
-  const int cr = CSD::CornerRadius;
-  const int cornerTileSize = r + cr;
   const QRectF content(r, r, width() - 2 * r, height() - 2 * r);
 
   // Draw shadow
   if (m_shadowEnabled && !m_shadowCorner.isNull() && r > 0)
   {
     painter->drawImage(0, 0, m_shadowCorner);
-    painter->drawImage(QPointF(width() - cornerTileSize, 0),
+    painter->drawImage(QPointF(width() - r, 0),
                        m_shadowCorner.flipped(Qt::Horizontal));
-    painter->drawImage(QPointF(0, height() - cornerTileSize),
+    painter->drawImage(QPointF(0, height() - r),
                        m_shadowCorner.flipped(Qt::Vertical));
-    painter->drawImage(
-        QPointF(width() - cornerTileSize, height() - cornerTileSize),
-        m_shadowCorner.flipped(Qt::Horizontal | Qt::Vertical));
+    painter->drawImage(QPointF(width() - r, height() - r),
+                       m_shadowCorner.flipped(Qt::Horizontal | Qt::Vertical));
 
     if (!m_shadowEdge.isNull())
     {
-      const qreal hEdgeLen = width() - 2 * cornerTileSize;
-      const qreal vEdgeLen = height() - 2 * cornerTileSize;
+      const qreal hEdgeLen = width() - 2 * r;
+      const qreal vEdgeLen = height() - 2 * r;
 
       if (hEdgeLen > 0)
       {
-        painter->drawImage(QRectF(cornerTileSize, 0, hEdgeLen, r), m_shadowEdge,
+        painter->drawImage(QRectF(r, 0, hEdgeLen, r), m_shadowEdge,
                            QRectF(0, 0, 1, r));
-        painter->drawImage(QRectF(cornerTileSize, height() - r, hEdgeLen, r),
+        painter->drawImage(QRectF(r, height() - r, hEdgeLen, r),
                            m_shadowEdge.flipped(Qt::Vertical),
                            QRectF(0, 0, 1, r));
       }
@@ -692,27 +684,23 @@ void Frame::paint(QPainter *painter)
           hEdge.setPixelColor(i, 0, QColor(0, 0, 0, qRound(alpha * 255)));
         }
 
-        painter->drawImage(QRectF(0, cornerTileSize, r, vEdgeLen),
+        painter->drawImage(QRectF(0, r, r, vEdgeLen),
                            hEdge.flipped(Qt::Horizontal), QRectF(0, 0, r, 1));
-        painter->drawImage(QRectF(width() - r, cornerTileSize, r, vEdgeLen),
-                           hEdge, QRectF(0, 0, r, 1));
+        painter->drawImage(QRectF(width() - r, r, r, vEdgeLen), hEdge,
+                           QRectF(0, 0, r, 1));
       }
     }
   }
 
-  // Draw content background with rounded corners
+  // Draw content background
   if (content.width() > 0 && content.height() > 0)
   {
     const auto &theme = Misc::ThemeManager::instance();
     const QColor bgColor = theme.getColor(QStringLiteral("toolbar_top"));
-    const qreal radius = m_shadowEnabled ? cr : 0;
 
     painter->setPen(Qt::NoPen);
     painter->setBrush(bgColor);
-    if (radius > 0)
-      painter->drawRoundedRect(content, radius, radius);
-    else
-      painter->fillRect(content, bgColor);
+    painter->fillRect(content, bgColor);
   }
 }
 
@@ -804,45 +792,29 @@ void Frame::regenerateShadow()
 
 /**
  * @brief Generates a shadow corner tile image.
- * @param shadowSize The shadow blur radius in pixels.
- * @param radius Unused parameter (corner radius is taken from
- * CSD::CornerRadius).
+ * @param size The shadow blur radius in pixels.
  * @return The generated corner tile image.
  *
- * Creates a tile of size (shadowSize + cornerRadius) that renders the shadow
- * around a rounded corner. The shadow follows the arc of the content's
- * rounded corner, creating a smooth curved shadow edge.
- *
- * Uses distance-from-arc calculation with smoothstep falloff to create
- * a natural-looking shadow that properly wraps around the corner.
+ * Creates a square shadow tile with a diagonal gradient.
+ * Uses smoothstep falloff for natural shadow appearance.
  */
 QImage Frame::generateShadowCorner(int size)
 {
-  const int cr = CSD::CornerRadius;
-  const int tileSize = size + cr;
-
-  QImage tile(tileSize, tileSize, QImage::Format_ARGB32_Premultiplied);
+  QImage tile(size, size, QImage::Format_ARGB32_Premultiplied);
   tile.fill(Qt::transparent);
 
-  const qreal arcCenterX = static_cast<qreal>(tileSize);
-  const qreal arcCenterY = static_cast<qreal>(tileSize);
-
-  for (int y = 0; y < tileSize; ++y)
+  for (int y = 0; y < size; ++y)
   {
-    for (int x = 0; x < tileSize; ++x)
+    for (int x = 0; x < size; ++x)
     {
-      const qreal dx = arcCenterX - x - 0.5;
-      const qreal dy = arcCenterY - y - 0.5;
-      const qreal distFromArcCenter = qSqrt(dx * dx + dy * dy);
-      const qreal distToContent = distFromArcCenter - cr;
+      const qreal dx = static_cast<qreal>(size - x - 1);
+      const qreal dy = static_cast<qreal>(size - y - 1);
+      const qreal dist = qSqrt(dx * dx + dy * dy);
 
-      if (distToContent > 0)
-      {
-        qreal alpha = 1.0 - qMin(distToContent / static_cast<qreal>(size), 1.0);
-        alpha = alpha * alpha * (3.0 - 2.0 * alpha);
-        alpha *= CSD::ShadowOpacity;
-        tile.setPixelColor(x, y, QColor(0, 0, 0, qRound(alpha * 255)));
-      }
+      qreal alpha = 1.0 - qMin(dist / static_cast<qreal>(size), 1.0);
+      alpha = alpha * alpha * (3.0 - 2.0 * alpha);
+      alpha *= CSD::ShadowOpacity;
+      tile.setPixelColor(x, y, QColor(0, 0, 0, qRound(alpha * 255)));
     }
   }
 
@@ -873,19 +845,16 @@ Border::Border(QQuickItem *parent)
  * @brief Paints the window border.
  * @param painter The QPainter used for rendering.
  *
- * Draws a 1px rounded border around the entire window area using the
- * theme's border color. The border is drawn with antialiasing for
- * smooth rounded corners.
+ * Draws a 1px border around the entire window area using a semi-transparent
+ * gray color.
  */
 void Border::paint(QPainter *painter)
 {
-  painter->setRenderHint(QPainter::Antialiasing);
   const QColor borderColor = QColor(102, 102, 102, 115);
 
   painter->setPen(QPen(borderColor, 1));
   painter->setBrush(Qt::NoBrush);
-  painter->drawRoundedRect(QRectF(0.5, 0.5, width() - 1, height() - 1),
-                           CSD::CornerRadius, CSD::CornerRadius);
+  painter->drawRect(QRectF(0.5, 0.5, width() - 1, height() - 1));
 }
 
 //------------------------------------------------------------------------------
@@ -916,8 +885,6 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
   , m_resizeEdge(ResizeEdge::None)
   , m_minSize(0, 0)
   , m_window(window)
-  , m_clippedWrapper(nullptr)
-  , m_contentSource(nullptr)
   , m_contentContainer(nullptr)
 {
   // Stop if window pointer is invalid
@@ -946,13 +913,8 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
     if (m_border)
       m_border->setVisible(!fillScreen);
 
-    if (m_clippedWrapper)
-      m_clippedWrapper->setProperty("maskRadius",
-                                    fillScreen ? 0 : CSD::CornerRadius);
-
     updateFrameGeometry();
     updateBorderGeometry();
-    updateClippedWrapperGeometry();
     updateContentContainerGeometry();
     updateTitleBarGeometry();
     updateMinimumSize();
@@ -1133,8 +1095,7 @@ void Window::setupBorder()
  *
  * Creates the Titlebar component, connects window control signals
  * (minimize, maximize, close), and sets up tracking for window
- * title and active state changes. The title bar is parented to
- * contentSource so it gets clipped by the OpacityMask.
+ * title and active state changes.
  */
 void Window::setupTitleBar()
 {
@@ -1142,9 +1103,7 @@ void Window::setupTitleBar()
   if (!quickWindow)
     return;
 
-  QQuickItem *parent
-      = m_contentSource ? m_contentSource : quickWindow->contentItem();
-  m_titleBar = new Titlebar(parent);
+  m_titleBar = new Titlebar(quickWindow->contentItem());
   m_titleBar->setZ(999999);
 
   // Window controls
@@ -1256,18 +1215,10 @@ void Window::onMinimumSizeChanged()
 }
 
 /**
- * @brief Creates content container with rounded corner clipping via
- * OpacityMask.
+ * @brief Creates content container for QML content.
  *
- * Creates a QML structure for true rounded corner clipping:
- * - m_clippedWrapper: Parent item positioned at shadow margins
- * - m_contentSource: Hidden item containing titlebar + content (source for
- * mask)
- * - m_contentContainer: Child of contentSource, holds QML content
- * - maskSource: Hidden rounded rectangle (mask shape)
- * - OpacityMask: Renders contentSource through maskSource
- *
- * Installs an event filter to reparent any newly added children.
+ * Creates a simple Item container that holds all QML content,
+ * positioned below the title bar with appropriate margins.
  */
 void Window::setupContentContainer()
 {
@@ -1280,64 +1231,16 @@ void Window::setupContentContainer()
   if (!engine)
     return;
 
-  // clang-format off
   static const char *qmlCode = R"(
     import QtQuick
-    import Qt5Compat.GraphicalEffects
 
     Item {
-      id: wrapper
-      property alias contentSource: contentSource
-      property alias contentContainer: contentContainer
-      property alias maskRadius: maskRect.radius
-
-      Item {
-        id: contentSource
-        x: 0
-        y: 0
-        opacity: 0
-        width: wrapper.width
-        height: wrapper.height
-
-        Item {
-          id: contentContainer
-        }
-      }
-
-      Item {
-        id: maskSource
-        x: 0
-        y: 0
-        visible: false
-        width: wrapper.width
-        height: wrapper.height
-
-        Rectangle {
-          id: maskRect
-          x: 0
-          y: 0
-          width: parent.width
-          height: parent.height
-          radius: %1
-        }
-      }
-
-      OpacityMask {
-        id: mask
-        x: 0
-        y: 0
-        width: wrapper.width
-        height: wrapper.height
-        source: contentSource
-        maskSource: maskSource
-      }
+      id: contentContainer
     }
   )";
-  // clang-format on
 
-  const QString code = QString(qmlCode).arg(CSD::CornerRadius);
   QQmlComponent component(engine);
-  component.setData(code.toUtf8(), QUrl());
+  component.setData(qmlCode, QUrl());
 
   if (component.isError())
   {
@@ -1346,31 +1249,18 @@ void Window::setupContentContainer()
     return;
   }
 
-  m_clippedWrapper = qobject_cast<QQuickItem *>(component.create());
-  if (!m_clippedWrapper)
+  m_contentContainer = qobject_cast<QQuickItem *>(component.create());
+  if (!m_contentContainer)
     return;
 
-  m_clippedWrapper->setParentItem(root);
-  m_clippedWrapper->setZ(0);
+  m_contentContainer->setParentItem(root);
+  m_contentContainer->setZ(0);
 
-  m_contentSource
-      = m_clippedWrapper->property("contentSource").value<QQuickItem *>();
-  m_contentContainer
-      = m_clippedWrapper->property("contentContainer").value<QQuickItem *>();
-
-  if (!m_contentSource || !m_contentContainer)
-    return;
-
-  connect(quickWindow, &QQuickWindow::widthChanged, this,
-          &Window::updateClippedWrapperGeometry);
-  connect(quickWindow, &QQuickWindow::heightChanged, this,
-          &Window::updateClippedWrapperGeometry);
   connect(quickWindow, &QQuickWindow::widthChanged, this,
           &Window::updateContentContainerGeometry);
   connect(quickWindow, &QQuickWindow::heightChanged, this,
           &Window::updateContentContainerGeometry);
 
-  updateClippedWrapperGeometry();
   updateContentContainerGeometry();
 
   const auto children = root->childItems();
@@ -1381,8 +1271,7 @@ void Window::setupContentContainer()
 /**
  * @brief Updates the title bar position and size.
  *
- * Positions the title bar at the top of the clipped wrapper.
- * When using OpacityMask, position is relative to contentSource.
+ * Positions the title bar at the top of the visible content area.
  */
 void Window::updateTitleBarGeometry()
 {
@@ -1392,41 +1281,14 @@ void Window::updateTitleBarGeometry()
   const int margin = shadowMargin();
   const qreal w = m_window->width() - 2 * margin;
 
-  if (m_contentSource)
-  {
-    m_titleBar->setPosition(QPointF(0, 0));
-    m_titleBar->setSize(QSizeF(w, titleBarHeight()));
-  }
-  else
-  {
-    m_titleBar->setPosition(QPointF(margin, margin));
-    m_titleBar->setSize(QSizeF(w, titleBarHeight()));
-  }
-}
-
-/**
- * @brief Updates the clipped wrapper position and size.
- *
- * Positions the wrapper at shadow margins, covering the entire
- * visible content area including the title bar.
- */
-void Window::updateClippedWrapperGeometry()
-{
-  if (!m_clippedWrapper || !m_window)
-    return;
-
-  const int margin = shadowMargin();
-  const qreal w = m_window->width() - 2 * margin;
-  const qreal h = m_window->height() - 2 * margin;
-
-  m_clippedWrapper->setPosition(QPointF(margin, margin));
-  m_clippedWrapper->setSize(QSizeF(w, h));
+  m_titleBar->setPosition(QPointF(margin, margin));
+  m_titleBar->setSize(QSizeF(w, titleBarHeight()));
 }
 
 /**
  * @brief Updates the content container position and size.
  *
- * Positions the container below the title bar within contentSource.
+ * Positions the container below the title bar with appropriate margins.
  * Also updates the size of all children to match the container.
  */
 void Window::updateContentContainerGeometry()
@@ -1439,7 +1301,7 @@ void Window::updateContentContainerGeometry()
   const qreal w = m_window->width() - 2 * margin;
   const qreal h = m_window->height() - 2 * margin - tbHeight;
 
-  m_contentContainer->setPosition(QPointF(0, tbHeight));
+  m_contentContainer->setPosition(QPointF(margin, margin + tbHeight));
   m_contentContainer->setSize(QSizeF(w, h));
 
   const auto children = m_contentContainer->childItems();
@@ -1510,7 +1372,7 @@ void Window::updateTheme()
  * @brief Reparents a child item to the content container.
  * @param child The item to reparent.
  *
- * Skips CSD components (frame, border, title bar, containers, wrapper)
+ * Skips CSD components (frame, border, title bar, content container)
  * and items already in the container. This ensures all user QML content
  * respects the CSD margins automatically.
  */
@@ -1520,17 +1382,10 @@ void Window::reparentChildToContainer(QQuickItem *child)
     return;
 
   if (child == m_frame || child == m_border || child == m_titleBar
-      || child == m_contentContainer || child == m_contentSource
-      || child == m_clippedWrapper)
+      || child == m_contentContainer)
     return;
 
   if (child->parentItem() == m_contentContainer)
-    return;
-
-  if (m_contentSource && child->parentItem() == m_contentSource)
-    return;
-
-  if (m_clippedWrapper && child->parentItem() == m_clippedWrapper)
     return;
 
   child->setParentItem(m_contentContainer);

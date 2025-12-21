@@ -19,6 +19,13 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include <QColor>
+#include <QSysInfo>
+
+#if defined(Q_OS_WIN)
+#  include <dwmapi.h>
+#endif
+
 #include "CSD.h"
 #include "NativeWindow.h"
 #include "Misc/ThemeManager.h"
@@ -28,6 +35,19 @@
 //------------------------------------------------------------------------------
 
 static QHash<QWindow *, CSD::Window *> s_decorators;
+
+//------------------------------------------------------------------------------
+// Helper function to detect Windows 11
+//------------------------------------------------------------------------------
+
+static bool isWindows11()
+{
+#if defined(Q_OS_WIN)
+  return QSysInfo::productVersion().contains("11");
+#else
+  return false;
+#endif
+}
 
 //------------------------------------------------------------------------------
 // NativeWindow Implementation
@@ -70,11 +90,12 @@ void NativeWindow::removeWindow(QObject *window)
 }
 
 /**
- * @brief Configures native window customization for *NIX environments.
+ * @brief Configures native window customization.
  * @param window The window to customize.
  * @param color Optional color for the title bar (hex string).
  *
- * Creates a CSD::Window for the window, which provides:
+ * On Windows 11: Uses native DWM caption color customization.
+ * On Windows 10 and other platforms: Creates a CSD::Window which provides:
  * - Frameless window with custom title bar
  * - Window dragging and resizing
  * - Minimize, maximize, and close buttons
@@ -92,53 +113,109 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
   m_windows.append(w);
   m_colors.insert(w, color);
 
-  // Create decorator for this window
-  auto *decorator = new CSD::Window(w, color, this);
-  s_decorators.insert(w, decorator);
+  // Windows 11: Use native caption coloring instead of CSD
+  if (isWindows11())
+  {
+    connect(w, &QWindow::activeChanged, this, &NativeWindow::onActiveChanged);
+    Q_EMIT w->activeChanged();
+  }
 
-  // Clean up decorator when window is destroyed
-  connect(w, &QObject::destroyed, this, [this, w]() {
-    s_decorators.remove(w);
-    auto *win = qobject_cast<QWindow *>(w);
-    auto index = m_windows.indexOf(win);
-    if (index != -1 && index >= 0)
-    {
-      m_windows.removeAt(index);
-      if (m_colors.contains(win))
-        m_colors.remove(win);
-    }
-  });
+  // Windows 10 / Linux: Create CSD decorator for this window
+  else
+  {
+    auto *decorator = new CSD::Window(w, color, this);
+    s_decorators.insert(w, decorator);
+    connect(w, &QObject::destroyed, this, [this, w]() {
+      s_decorators.remove(w);
+      auto *win = qobject_cast<QWindow *>(w);
+      auto index = m_windows.indexOf(win);
+      if (index != -1 && index >= 0)
+      {
+        m_windows.removeAt(index);
+        if (m_colors.contains(win))
+          m_colors.remove(win);
+      }
+    });
 
-  // Connect active state changes
-  connect(w, &QWindow::activeChanged, this, &NativeWindow::onActiveChanged);
+    connect(w, &QWindow::activeChanged, this, &NativeWindow::onActiveChanged);
+  }
 }
 
 /**
  * @brief Handles theme change events.
  *
- * Propagates theme updates to all managed window decorators, causing
- * them to update their title bar colors based on the new theme.
+ * On Windows 11: Triggers caption color updates for all windows.
+ * On other platforms: Propagates theme updates to all CSD decorators,
+ * causing them to update their title bar colors based on the new theme.
  */
 void NativeWindow::onThemeChanged()
 {
-  for (auto *window : std::as_const(m_windows))
+  // Trigger active changed to update caption colors
+  if (isWindows11())
   {
-    auto *decorator = s_decorators.value(window, nullptr);
-    if (decorator)
-      decorator->updateTheme();
+    for (auto *window : std::as_const(m_windows))
+      Q_EMIT window->activeChanged();
+  }
+
+  // Update CSD decorators
+  else
+  {
+    for (auto *window : std::as_const(m_windows))
+    {
+      auto *decorator = s_decorators.value(window, nullptr);
+      if (decorator)
+        decorator->updateTheme();
+    }
   }
 }
 
 /**
  * @brief Handles the active state change of a window.
  *
- * The CSD window class handles active state changes internally via
- * its connection to QWindow::activeChanged, so this method serves as
- * an extension point for additional behavior if needed.
+ * On Windows 11: Updates the native caption color using DWM API based on
+ * the window's active state and current theme.
+ *
+ * On other platforms: The CSD window class handles active state changes
+ * internally via its connection to QWindow::activeChanged.
  */
 void NativeWindow::onActiveChanged()
 {
-  // Decorator handles active state internally via direct connection
-  // to QWindow::activeChanged. This slot is available for any
-  // additional behavior that may be needed in the future.
+#if defined(Q_OS_WIN)
+  if (!isWindows11())
+    return;
+
+  // Get caller window
+  auto *window = static_cast<QWindow *>(sender());
+  if (!window || !m_windows.contains(window))
+    return;
+
+  // Get color name based on active state
+  const auto &colors = Misc::ThemeManager::instance().colors();
+  QString colorName;
+
+  // Use custom color if provided, otherwise use theme colors
+  if (m_colors.contains(window) && !m_colors[window].isEmpty())
+  {
+    colorName = m_colors[window];
+  }
+  else
+  {
+    if (window->isActive())
+      colorName = colors.value("toolbar_top").toString();
+    else
+      colorName = colors.value("toolbar_top").toString();
+  }
+
+  // Convert hex string to native Windows COLORREF
+  const QColor color(colorName);
+  const COLORREF colorref
+      = color.red() | (color.green() << 8) | (color.blue() << 16);
+
+  // Change color of the caption using DWM API
+  const DWORD attribute = 35;
+  DwmSetWindowAttribute((HWND)window->winId(), attribute, &colorref,
+                        sizeof(colorref));
+#else
+  Q_UNUSED(this);
+#endif
 }

@@ -95,6 +95,7 @@ Widgets.SmartWindow {
   // Use page item to set application palette
   //
   Page {
+    clip: true
     anchors.fill: parent
     palette.mid: Cpp_ThemeManager.colors["mid"]
     palette.dark: Cpp_ThemeManager.colors["dark"]
