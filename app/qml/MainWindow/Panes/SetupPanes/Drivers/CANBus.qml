@@ -44,7 +44,7 @@ Item {
     }
 
     Item {
-      implicitHeight: 4
+      implicitHeight: 12
     }
 
     Label {
@@ -235,16 +235,14 @@ Item {
       // CAN FD checkbox
       //
       Label {
-        opacity: enabled ? 1 : 0.8
         text: qsTr("Flexible Data-Rate") + ":"
-        enabled: Cpp_IO_CANBus.interfaceList.length > 0
+        visible: Cpp_IO_CANBus.interfaceList.length > 0
       } CheckBox {
         id: _canFDCheck
         Layout.leftMargin: -8
-        opacity: enabled ? 1 : 0.8
         checked: Cpp_IO_CANBus.canFD
         Layout.alignment: Qt.AlignLeft
-        enabled: Cpp_IO_CANBus.interfaceList.length > 0
+        visible: Cpp_IO_CANBus.interfaceList.length > 0
         onCheckedChanged: {
           if (Cpp_IO_CANBus.canFD !== checked)
             Cpp_IO_CANBus.canFD = checked
@@ -284,9 +282,12 @@ Item {
     ColumnLayout {
       spacing: 4
       Layout.fillWidth: true
-      Layout.topMargin: -8
       Layout.alignment: Qt.AlignHCenter
       visible: Cpp_IO_CANBus.interfaceList.length === 0
+
+      Item {
+        implicitHeight: 4
+      }
 
       Image {
         sourceSize: Qt.size(96, 96)

@@ -314,6 +314,7 @@ Window {
               Switch {
                 id: dontNagMe
                 Layout.leftMargin: -6
+                visible: Cpp_Licensing_Trial.daysRemaining > 1
               }
 
               Label {

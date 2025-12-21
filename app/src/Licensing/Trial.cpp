@@ -101,7 +101,8 @@ bool Licensing::Trial::firstRun() const
  */
 bool Licensing::Trial::trialEnabled() const
 {
-  return m_deviceRegistered && m_trialEnabled && trialAvailable();
+  return m_deviceRegistered && m_trialEnabled && trialAvailable()
+         && daysRemaining() > 0;
 }
 
 /**
@@ -110,7 +111,8 @@ bool Licensing::Trial::trialEnabled() const
  */
 bool Licensing::Trial::trialExpired() const
 {
-  return m_deviceRegistered && !m_trialEnabled && trialAvailable();
+  return m_deviceRegistered && trialAvailable()
+         && (!m_trialEnabled || daysRemaining() <= 0);
 }
 
 /**
@@ -314,7 +316,7 @@ void Licensing::Trial::onServerReply(QNetworkReply *reply)
         expiry = now.addDays(14);
 
       m_trialExpiry = expiry;
-      m_trialEnabled = enabledVal.toBool();
+      m_trialEnabled = enabledVal.toBool() && (expiry > now);
       m_deviceRegistered = deviceRegistered.toBool();
     }
   }

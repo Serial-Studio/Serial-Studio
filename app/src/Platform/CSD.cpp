@@ -104,7 +104,7 @@ Titlebar::Titlebar(QQuickItem *parent)
   if (!icon.isNull())
   {
     const qreal dpr = qGuiApp->devicePixelRatio();
-    m_icon = icon.pixmap(QSize(CSD::IconSize, CSD::IconSize) * dpr);
+    m_icon = icon.pixmap(QSize(CSD::IconSize, CSD::IconSize));
     m_icon.setDevicePixelRatio(dpr);
   }
 }
@@ -414,7 +414,7 @@ void Titlebar::drawButton(QPainter *painter, Button button,
   if (!renderer.isValid())
     return;
 
-  const qreal dpr = painter->device()->devicePixelRatio();
+  const qreal dpr = qApp->devicePixelRatio();
   const QSize pixelSize(qRound(iconRect.width() * dpr),
                         qRound(iconRect.height() * dpr));
   const QRectF logicalRect(0, 0, iconRect.width(), iconRect.height());
