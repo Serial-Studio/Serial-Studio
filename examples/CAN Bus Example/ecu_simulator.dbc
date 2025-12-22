@@ -33,8 +33,8 @@ BU_: Engine Transmission BMS Chassis BodyControl Cluster
 VAL_TABLE_ GearPosition 0 "Park/Neutral" 1 "1st" 2 "2nd" 3 "3rd" 4 "4th" 5 "5th" 6 "6th" 255 "Reverse" ;
 
 BO_ 256 ENGINE_RPM_SPEED: 8 Engine
- SG_ EngineRPM : 0|16@1+ (0.25,0) [0|8000] "rpm" Vector__XXX
- SG_ VehicleSpeed : 16|16@1+ (0.01,0) [0|300] "km/h" Vector__XXX
+ SG_ EngineRPM : 0|16@1+ (0.25,0) [0|7000] "rpm" Vector__XXX
+ SG_ VehicleSpeed : 16|16@1+ (0.01,0) [0|200] "km/h" Vector__XXX
 
 BO_ 257 ENGINE_TEMP_LOAD: 8 Engine
  SG_ CoolantTemp : 0|8@1+ (1,-40) [-40|215] "degC" Vector__XXX
@@ -51,7 +51,7 @@ BO_ 512 TRANSMISSION_GEAR: 8 Transmission
  SG_ TorqueConverterSlip : 16|8@1+ (1,0) [0|100] "%" Vector__XXX
 
 BO_ 1024 BMS_VOLTAGE_CURRENT: 8 BMS
- SG_ PackVoltage : 0|16@1+ (0.1,0) [0|1000] "V" Vector__XXX
+ SG_ PackVoltage : 0|16@1+ (0.1,0) [0|850] "V" Vector__XXX
  SG_ PackCurrent : 16|16@1- (0.1,0) [-500|500] "A" Vector__XXX
 
 BO_ 1025 BMS_SOC_TEMP: 8 BMS
@@ -83,10 +83,10 @@ BO_ 769 BCM_DOORS: 8 BodyControl
  SG_ Trunk : 4|1@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 1536 ABS_WHEEL_SPEEDS: 8 Chassis
- SG_ WheelSpeedFL : 0|16@1+ (0.01,0) [0|300] "km/h" Vector__XXX
- SG_ WheelSpeedFR : 16|16@1+ (0.01,0) [0|300] "km/h" Vector__XXX
- SG_ WheelSpeedRL : 32|16@1+ (0.01,0) [0|300] "km/h" Vector__XXX
- SG_ WheelSpeedRR : 48|16@1+ (0.01,0) [0|300] "km/h" Vector__XXX
+ SG_ WheelSpeedFL : 0|16@1+ (0.01,0) [0|200] "km/h" Vector__XXX
+ SG_ WheelSpeedFR : 16|16@1+ (0.01,0) [0|200] "km/h" Vector__XXX
+ SG_ WheelSpeedRL : 32|16@1+ (0.01,0) [0|200] "km/h" Vector__XXX
+ SG_ WheelSpeedRR : 48|16@1+ (0.01,0) [0|200] "km/h" Vector__XXX
 
 BO_ 1537 ABS_BRAKE_PRESSURE: 8 Chassis
  SG_ BrakePressure : 0|16@1+ (0.1,0) [0|200] "bar" Vector__XXX

@@ -593,7 +593,6 @@ void IO::Drivers::CANBus::onFramesReceived()
       data.reserve(11);
 
       quint32 can_id = frame.frameId();
-
       data.append(static_cast<char>((can_id >> 8) & 0xFF));
       data.append(static_cast<char>(can_id & 0xFF));
 

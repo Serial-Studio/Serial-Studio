@@ -320,7 +320,6 @@ endif()
 #-------------------------------------------------------------------------------
 
 if(WIN32)
-  target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE Dwmapi.lib)
   set(SOURCES
     ${SOURCES}
     "${CMAKE_CURRENT_SOURCE_DIR}/deploy/windows/info.rc"
@@ -456,6 +455,7 @@ endif()
 #-------------------------------------------------------------------------------
 
 if(WIN32)
+  target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE Dwmapi.lib)
   set_target_properties(${PROJECT_EXECUTABLE} PROPERTIES
     WIN32_EXECUTABLE TRUE
   )

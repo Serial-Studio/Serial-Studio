@@ -30,7 +30,6 @@
 #include <QCanSignalDescription>
 
 #include "Frame.h"
-#include "SerialStudio.h"
 
 namespace JSON
 {
@@ -97,6 +96,18 @@ public slots:
   void showPreview(const QString &filePath);
 
 private:
+  enum SignalFamily
+  {
+    WheelSpeeds,
+    TirePressures,
+    Temperatures,
+    Voltages,
+    BatteryCluster,
+    StatusFlags,
+    GenericRelated,
+    None
+  };
+
   std::vector<Group>
   generateGroups(const QList<QCanMessageDescription> &messages);
   QJsonObject generateProject(const QList<QCanMessageDescription> &messages);
@@ -108,6 +119,20 @@ private:
   QString generateSignalExtraction(const QCanSignalDescription &signal);
   QString generateMessageDecoder(const QCanMessageDescription &message,
                                  int &datasetIndex);
+
+  SignalFamily
+  detectSignalFamily(const QList<QCanSignalDescription> &signalList) const;
+  bool hasPositionalPattern(const QList<QCanSignalDescription> &signalList,
+                            const QStringList &positions) const;
+  bool hasNumberedPattern(const QList<QCanSignalDescription> &signalList) const;
+  bool allSimilarUnits(const QList<QCanSignalDescription> &signalList) const;
+  bool hasBatterySignals(const QList<QCanSignalDescription> &signalList) const;
+  bool allStatusSignals(const QList<QCanSignalDescription> &signalList) const;
+  int countPlottable(const QList<QCanSignalDescription> &signalList) const;
+  bool isCriticalSignal(const QCanSignalDescription &signal) const;
+  bool shouldAssignIndividualWidget(const QString &groupWidget,
+                                    const QCanSignalDescription &signal,
+                                    bool isSingleBit) const;
 
   int countTotalSignals(const QList<QCanMessageDescription> &messages) const;
 

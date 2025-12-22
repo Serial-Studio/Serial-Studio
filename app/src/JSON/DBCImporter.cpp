@@ -24,6 +24,7 @@
 #include "DBCImporter.h"
 #include "FrameBuilder.h"
 #include "ProjectModel.h"
+#include "SerialStudio.h"
 #include "Misc/Utilities.h"
 
 #include <QFile>
@@ -294,16 +295,25 @@ QJsonObject JSON::DBCImporter::generateProject(
  * file. Each group contains:
  * - Group ID: Sequential starting from 0
  * - Title: CAN message name
- * - Widget: "multiplot" for visualization
+ * - Widget: Auto-selected based on signal family detection
  * - Datasets: One dataset per signal in the message
  *
  * Each dataset is configured with:
  * - Index: Sequential dataset index across all groups
  * - Title: Signal name
  * - Units: Physical unit from DBC (e.g., "rpm", "°C")
- * - Widget: Auto-selected based on signal properties
+ * - Widget: Conditionally assigned based on group widget type
  * - Min/Max: Signal range from DBC definition
  * - Flags: graph=true for numeric signals, led=true for boolean signals
+ *
+ * Widget Assignment Optimization:
+ * Individual widgets are only assigned when the group widget cannot
+ * adequately visualize the data. For example:
+ * - MultiPlot groups: No individual widgets (plot shows all signals)
+ * - DataGrid groups: Individual widgets assigned (grid is just a table)
+ * - Boolean signals: Always get LED widgets (group can't show these)
+ *
+ * This significantly reduces widget count and improves dashboard clarity.
  *
  * @param messages List of CAN message descriptions from the DBC file.
  * @return Vector of Group structures ready for serialization.
@@ -359,10 +369,13 @@ JSON::DBCImporter::generateGroups(const QList<QCanMessageDescription> &messages)
         dataset.led = true;
         dataset.ledHigh = 1;
       }
-
       else
       {
-        dataset.widget = selectWidgetForSignal(signal);
+        if (shouldAssignIndividualWidget(group.widget, signal, isSingleBit))
+          dataset.widget = selectWidgetForSignal(signal);
+        else
+          dataset.widget = QString("");
+
         dataset.plt = false;
         dataset.fft = false;
         dataset.led = false;
@@ -506,16 +519,25 @@ QString JSON::DBCImporter::generateFrameParser(
   code += "function extractSignal(data, startBit, length, isBigEndian, isSigned) {\n";
   code += "  let value = 0;\n\n";
   code += "  if (isBigEndian) {\n";
+  code += "    // Motorola (big-endian): Read bytes in big-endian order\n";
   code += "    const startByte = Math.floor(startBit / 8);\n";
-  code += "    const startBitInByte = startBit % 8;\n";
-  code += "    let bitsRead = 0;\n\n";
-  code += "    for (let i = startByte; i < data.length && bitsRead < length; i++) {\n";
-  code += "      const bitsInThisByte = Math.min(8 - (i === startByte ? startBitInByte : 0), length - bitsRead);\n";
-  code += "      const shift = (i === startByte) ? startBitInByte : 0;\n";
-  code += "      const mask = ((1 << bitsInThisByte) - 1) << shift;\n";
-  code += "      const bits = (data[i] & mask) >> shift;\n";
-  code += "      value = (value << bitsInThisByte) | bits;\n";
-  code += "      bitsRead += bitsInThisByte;\n";
+  code += "    const numBytes = Math.ceil(length / 8);\n\n";
+  code += "    // For byte-aligned signals, read bytes directly\n";
+  code += "    if (startBit % 8 === 0 && length % 8 === 0) {\n";
+  code += "      for (let i = 0; i < numBytes && (startByte + i) < data.length; i++) {\n";
+  code += "        value = (value << 8) | data[startByte + i];\n";
+  code += "      }\n";
+  code += "    } else {\n";
+  code += "      // Non-byte-aligned: bit-by-bit extraction\n";
+  code += "      for (let bit = 0; bit < length; bit++) {\n";
+  code += "        const bitPos = startBit + bit;\n";
+  code += "        const byteIdx = Math.floor(bitPos / 8);\n";
+  code += "        const bitIdx = 7 - (bitPos % 8);\n";
+  code += "        if (byteIdx < data.length) {\n";
+  code += "          const bitVal = (data[byteIdx] >> bitIdx) & 1;\n";
+  code += "          value = (value << 1) | bitVal;\n";
+  code += "        }\n";
+  code += "      }\n";
   code += "    }\n";
   code += "  } else {\n";
   code += "    const startByte = Math.floor(startBit / 8);\n";
@@ -650,19 +672,24 @@ JSON::DBCImporter::generateSignalExtraction(const QCanSignalDescription &signal)
  * @brief Selects an appropriate group widget type for a CAN message.
  *
  * This function analyzes the signals in a CAN message to automatically
- * assign a suitable group widget type for dashboard visualization:
+ * assign a suitable group widget type for dashboard visualization.
+ *
+ * The selection uses signal family detection to identify related signals
+ * and choose the most appropriate visualization:
  *
  * - **NoGroupWidget**: Single signal or all boolean (1-bit) signals
  * - **GPS**: Messages with latitude and longitude signals
  * - **Accelerometer**: Exactly 3 signals with acceleration characteristics
  * - **Gyroscope**: Exactly 3 signals with gyroscope/rotation characteristics
- * - **MultiPlot**: 2-8 plottable numeric signals (excludes counters/status)
- * - **DataGrid**: Messages with counters, status, or non-plottable data
+ * - **MultiPlot**: Related signals that benefit from time-series visualization
+ *   (wheel speeds, tire pressures, temperature series, voltage series, etc.)
+ * - **DataGrid**: Mixed signal types (battery clusters) or non-plottable data
  *
- * The selection is based on:
- * 1. Number of signals in the message
- * 2. Signal names and units (to detect counters vs plottable values)
- * 3. Signal bit lengths (numeric vs boolean)
+ * Key improvements:
+ * - Detects positional patterns (FL/FR/RL/RR)
+ * - Detects numbered series (Temp_1, Temp_2, etc.)
+ * - Groups related signals with similar units
+ * - Reduces redundant widgets by smart group selection
  *
  * @param message CAN message description from the DBC file.
  * @return Group widget type string.
@@ -688,6 +715,40 @@ JSON::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
 
   if (allBoolean)
     return SerialStudio::groupWidgetId(SerialStudio::NoGroupWidget);
+
+  const auto family = detectSignalFamily(signalDescriptions);
+
+  switch (family)
+  {
+    case WheelSpeeds:
+    case TirePressures:
+      return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
+
+    case Temperatures:
+    case Voltages:
+      if (signalCount <= 8)
+        return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
+      return SerialStudio::groupWidgetId(SerialStudio::DataGrid);
+
+    case BatteryCluster:
+      return SerialStudio::groupWidgetId(SerialStudio::DataGrid);
+
+    case StatusFlags:
+      return SerialStudio::groupWidgetId(SerialStudio::NoGroupWidget);
+
+    case GenericRelated:
+      if (signalCount >= 2 && signalCount <= 8)
+      {
+        const int plottableCount = countPlottable(signalDescriptions);
+        if (plottableCount >= 2)
+          return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
+      }
+      break;
+
+    case None:
+    default:
+      break;
+  }
 
   if (signalCount >= 2)
   {
@@ -738,29 +799,8 @@ JSON::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
 
   if (signalCount >= 2 && signalCount <= 8)
   {
-    int plottableCount = 0;
-    int counterCount = 0;
-
-    for (const auto &signal : signalDescriptions)
-    {
-      if (signal.bitLength() <= 1)
-        continue;
-
-      const auto name = signal.name().toLower();
-
-      if (name.contains("odometer") || name.contains("trip")
-          || name.contains("counter") || name.contains("timestamp")
-          || name.contains("status"))
-      {
-        counterCount++;
-      }
-      else
-      {
-        plottableCount++;
-      }
-    }
-
-    if (plottableCount >= 2 && counterCount == 0)
+    const int plottableCount = countPlottable(signalDescriptions);
+    if (plottableCount >= 2)
       return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
   }
 
@@ -853,4 +893,335 @@ int JSON::DBCImporter::countTotalSignals(
     count += message.signalDescriptions().count();
 
   return count;
+}
+
+/**
+ * @brief Checks if signals follow a positional naming pattern.
+ *
+ * Detects patterns like FL/FR/RL/RR (front-left, front-right, etc.) in
+ * signal names, which typically indicate related sensors at different
+ * positions.
+ *
+ * @param signalList List of signal descriptions to check.
+ * @param positions List of position identifiers to look for.
+ * @return true if at least 2 signals match the positional pattern.
+ */
+bool JSON::DBCImporter::hasPositionalPattern(
+    const QList<QCanSignalDescription> &signalList,
+    const QStringList &positions) const
+{
+  int matchCount = 0;
+  for (const auto &signal : signalList)
+  {
+    const auto name = signal.name().toLower();
+    for (const auto &pos : positions)
+    {
+      if (name.contains(pos))
+      {
+        matchCount++;
+        break;
+      }
+    }
+  }
+
+  return matchCount >= 2;
+}
+
+/**
+ * @brief Checks if signals follow a numbered naming pattern.
+ *
+ * Detects patterns like Temp_1, Temp_2, Temp_3 or Cell1, Cell2, Cell3
+ * which indicate a series of similar sensors.
+ *
+ * @param signalList List of signal descriptions to check.
+ * @return true if at least 2 signals have numbered suffixes.
+ */
+bool JSON::DBCImporter::hasNumberedPattern(
+    const QList<QCanSignalDescription> &signalList) const
+{
+  if (signalList.count() < 2)
+    return false;
+
+  QRegularExpression numberPattern("[_\\s]?\\d+$|\\d+[_\\s]?");
+  int numberedCount = 0;
+
+  for (const auto &signal : signalList)
+  {
+    const auto name = signal.name();
+    if (numberPattern.match(name).hasMatch())
+      numberedCount++;
+  }
+
+  return numberedCount >= 2;
+}
+
+/**
+ * @brief Checks if all signals have similar or identical physical units.
+ *
+ * This helps identify related signals that should be visualized together,
+ * such as multiple temperature sensors or multiple voltage readings.
+ *
+ * @param signalList List of signal descriptions to check.
+ * @return true if all non-empty units are similar.
+ */
+bool JSON::DBCImporter::allSimilarUnits(
+    const QList<QCanSignalDescription> &signalList) const
+{
+  if (signalList.isEmpty())
+    return false;
+
+  QStringList units;
+  for (const auto &signal : signalList)
+  {
+    const auto unit = signal.physicalUnit().toLower().trimmed();
+    if (!unit.isEmpty() && !units.contains(unit))
+      units.append(unit);
+  }
+
+  return units.count() <= 1;
+}
+
+/**
+ * @brief Detects if signals represent a battery monitoring cluster.
+ *
+ * Battery messages typically contain a mix of voltage, current, temperature,
+ * and state of charge signals. These are best shown in a data grid rather
+ * than a plot.
+ *
+ * @param signalList List of signal descriptions to check.
+ * @return true if signals match battery cluster pattern.
+ */
+bool JSON::DBCImporter::hasBatterySignals(
+    const QList<QCanSignalDescription> &signalList) const
+{
+  if (signalList.count() < 2)
+    return false;
+
+  bool hasVoltage = false;
+  bool hasCurrent = false;
+  bool hasSoC = false;
+
+  for (const auto &signal : signalList)
+  {
+    const auto name = signal.name().toLower();
+    const auto unit = signal.physicalUnit().toLower();
+
+    if (name.contains("volt") || unit.contains("v"))
+      hasVoltage = true;
+    if (name.contains("current") || name.contains("amp") || unit.contains("a"))
+      hasCurrent = true;
+    if (name.contains("soc") || name.contains("charge") || unit.contains("%"))
+      hasSoC = true;
+  }
+
+  return (hasVoltage && hasCurrent) || (hasVoltage && hasSoC)
+         || (hasCurrent && hasSoC);
+}
+
+/**
+ * @brief Checks if all signals are status/boolean flags.
+ *
+ * Messages with only boolean signals or status indicators don't need a
+ * group widget since individual LEDs will handle visualization.
+ *
+ * @param signalList List of signal descriptions to check.
+ * @return true if all signals are 1-bit or status indicators.
+ */
+bool JSON::DBCImporter::allStatusSignals(
+    const QList<QCanSignalDescription> &signalList) const
+{
+  for (const auto &signal : signalList)
+  {
+    if (signal.bitLength() > 1)
+    {
+      const auto name = signal.name().toLower();
+      if (!name.contains("status") && !name.contains("state")
+          && !name.contains("mode") && !name.contains("flag"))
+        return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * @brief Counts the number of plottable signals.
+ *
+ * Excludes counters, timestamps, and status fields that shouldn't be
+ * plotted on time-series graphs.
+ *
+ * @param signalList List of signal descriptions to check.
+ * @return Number of signals suitable for plotting.
+ */
+int JSON::DBCImporter::countPlottable(
+    const QList<QCanSignalDescription> &signalList) const
+{
+  int count = 0;
+  for (const auto &signal : signalList)
+  {
+    if (signal.bitLength() <= 1)
+      continue;
+
+    const auto name = signal.name().toLower();
+    if (name.contains("odometer") || name.contains("trip")
+        || name.contains("counter") || name.contains("timestamp")
+        || name.contains("status") || name.contains("state"))
+      continue;
+
+    count++;
+  }
+
+  return count;
+}
+
+/**
+ * @brief Detects the family/category of related signals in a message.
+ *
+ * Analyzes signal names, units, and patterns to categorize the message,
+ * which helps select appropriate group widgets and reduce redundant
+ * individual widgets.
+ *
+ * @param signalList List of signal descriptions from a CAN message.
+ * @return SignalFamily enum indicating the detected signal category.
+ */
+JSON::DBCImporter::SignalFamily JSON::DBCImporter::detectSignalFamily(
+    const QList<QCanSignalDescription> &signalList) const
+{
+  if (signalList.isEmpty())
+    return None;
+
+  if (hasPositionalPattern(signalList, {"fl", "fr", "rl", "rr"}))
+  {
+    for (const auto &signal : signalList)
+    {
+      const auto unit = signal.physicalUnit().toLower();
+      if (unit.contains("km/h") || unit.contains("mph") || unit.contains("m/s"))
+        return WheelSpeeds;
+      if (unit.contains("psi") || unit.contains("bar") || unit.contains("kpa"))
+        return TirePressures;
+    }
+  }
+
+  if (hasNumberedPattern(signalList) && allSimilarUnits(signalList))
+  {
+    if (!signalList.isEmpty())
+    {
+      const auto unit = signalList.first().physicalUnit().toLower();
+      if (unit.contains("°") || unit.contains("deg"))
+        return Temperatures;
+      if (unit.contains("v") && !unit.contains("rev"))
+        return Voltages;
+    }
+  }
+
+  if (hasBatterySignals(signalList))
+    return BatteryCluster;
+
+  if (allStatusSignals(signalList))
+    return StatusFlags;
+
+  if (signalList.count() >= 2 && allSimilarUnits(signalList))
+    return GenericRelated;
+
+  return None;
+}
+
+/**
+ * @brief Determines if a signal is critical and should always have a widget.
+ *
+ * Critical signals are important values that users need to see at a glance
+ * in the dashboard overview, such as RPM, speed, temperature, voltage, etc.
+ * These should have individual gauges/bars even when a group-level MultiPlot
+ * is showing trends.
+ *
+ * @param signal The signal description to check.
+ * @return true if the signal is critical and should always get a widget.
+ */
+bool JSON::DBCImporter::isCriticalSignal(
+    const QCanSignalDescription &signal) const
+{
+  const auto name = signal.name().toLower();
+  const auto unit = signal.physicalUnit().toLower();
+
+  if (name.contains("rpm") || unit.contains("rpm"))
+    return true;
+
+  if (name.contains("speed") || name.contains("velocity"))
+    return true;
+
+  if (unit.contains("km/h") || unit.contains("mph") || unit.contains("m/s"))
+    return true;
+
+  if (name.contains("temp") || name.contains("temperature"))
+    return true;
+
+  if (unit.contains("°c") || unit.contains("°f") || unit.contains("degc")
+      || unit.contains("degf"))
+    return true;
+
+  if ((name.contains("volt") || unit.contains("v")) && !unit.contains("rev"))
+    return true;
+
+  if (name.contains("current") || name.contains("amp") || unit.contains("a"))
+    return true;
+
+  if (name.contains("pressure") || unit.contains("psi") || unit.contains("bar")
+      || unit.contains("kpa") || unit.contains("pa"))
+    return true;
+
+  if (name.contains("throttle") || name.contains("brake")
+      || name.contains("accelerator"))
+    return true;
+
+  if (name.contains("fuel") || name.contains("battery") || name.contains("soc")
+      || name.contains("charge"))
+    return true;
+
+  if (name.contains("torque") || unit.contains("nm") || unit.contains("n.m"))
+    return true;
+
+  if (name.contains("power") || unit.contains("kw") || unit.contains("hp")
+      || unit.contains("w"))
+    return true;
+
+  return false;
+}
+
+/**
+ * @brief Determines if a signal should get an individual widget.
+ *
+ * This function implements smart widget assignment that balances overview
+ * visibility with dashboard clarity:
+ *
+ * Rules:
+ * - Single-bit signals always get LEDs (group widgets don't show these)
+ * - Critical signals (RPM, speed, temp, voltage, etc.) always get individual
+ *   widgets for overview visibility, even with MultiPlot groups
+ * - Non-critical signals in MultiPlot groups skip individual widgets (reduces
+ *   clutter, group shows trends)
+ * - Signals in DataGrid/NoGroupWidget always get individual widgets
+ *
+ * This ensures important values are visible in overview while reducing
+ * redundant widgets for less critical signals.
+ *
+ * @param groupWidget The widget type assigned to the parent group.
+ * @param signal The signal description.
+ * @param isSingleBit Whether the signal is a 1-bit boolean.
+ * @return true if an individual widget should be assigned.
+ */
+bool JSON::DBCImporter::shouldAssignIndividualWidget(
+    const QString &groupWidget, const QCanSignalDescription &signal,
+    bool isSingleBit) const
+{
+  if (isSingleBit)
+    return true;
+
+  if (groupWidget.isEmpty()
+      || groupWidget == SerialStudio::groupWidgetId(SerialStudio::DataGrid))
+    return true;
+
+  if (isCriticalSignal(signal))
+    return true;
+
+  return false;
 }

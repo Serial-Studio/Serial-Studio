@@ -410,7 +410,6 @@
         <file>scripts/at_commands.js</file>
         <file>scripts/base64_encoded.js</file>
         <file>scripts/binary_tlv.js</file>
-        <file>scripts/can_bus.js</file>
         <file>scripts/cobs_encoded.js</file>
         <file>scripts/comma_separated.js</file>
         <file>scripts/fixed_width_fields.js</file>
