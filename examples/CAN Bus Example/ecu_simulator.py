@@ -359,7 +359,7 @@ class ECUSimulator:
         speed_clamped = max(DBCRanges.VEHICLE_SPEED_MIN, min(DBCRanges.VEHICLE_SPEED_MAX, self.engine.speed_kmh))
         speed_raw = int(speed_clamped * 100)
 
-        return struct.pack('>HH4x', rpm_raw, speed_raw)
+        return struct.pack('<HH4x', rpm_raw, speed_raw)
     
     def encode_engine_temp_load(self) -> bytes:
         """
@@ -393,7 +393,7 @@ class ECUSimulator:
         fuel_clamped = max(DBCRanges.FUEL_PRESSURE_MIN, min(DBCRanges.FUEL_PRESSURE_MAX, fuel_with_noise))
         fuel_press = int(fuel_clamped)
 
-        return struct.pack('>BH5x', throttle, fuel_press)
+        return struct.pack('<BH5x', throttle, fuel_press)
     
     def encode_transmission(self) -> bytes:
         """
@@ -431,7 +431,7 @@ class ECUSimulator:
         current_clamped = max(DBCRanges.PACK_CURRENT_MIN, min(DBCRanges.PACK_CURRENT_MAX, current_with_noise))
         current_raw = int(current_clamped * 10)
 
-        return struct.pack('>Hh4x', voltage_raw, current_raw)
+        return struct.pack('<Hh4x', voltage_raw, current_raw)
     
     def encode_bms_soc_temp(self) -> bytes:
         """
@@ -476,7 +476,7 @@ class ECUSimulator:
         rl = int(rl_clamped * 100)
         rr = int(rr_clamped * 100)
 
-        return struct.pack('>HHHH', fl, fr, rl, rr)
+        return struct.pack('<HHHH', fl, fr, rl, rr)
     
     def encode_brake_pressure(self) -> bytes:
         """
@@ -488,7 +488,7 @@ class ECUSimulator:
         pressure_clamped = max(DBCRanges.BRAKE_PRESSURE_MIN, min(DBCRanges.BRAKE_PRESSURE_MAX, pressure_with_noise))
         pressure = int(pressure_clamped * 10)
 
-        return struct.pack('>H6x', pressure)
+        return struct.pack('<H6x', pressure)
 
     def encode_steering_angle(self) -> bytes:
         """
@@ -500,7 +500,7 @@ class ECUSimulator:
         angle_clamped = max(DBCRanges.STEERING_ANGLE_MIN, min(DBCRanges.STEERING_ANGLE_MAX, angle_with_noise))
         angle = int(angle_clamped * 10)
 
-        return struct.pack('>h6x', angle)
+        return struct.pack('<h6x', angle)
     
     def encode_body_lights(self) -> bytes:
         """
@@ -550,7 +550,7 @@ class ECUSimulator:
         odo = int(self.cluster.odometer_km * 10)
         trip = int(self.cluster.trip_km * 10)
         
-        return struct.pack('>IH2x', odo, trip)
+        return struct.pack('<IH2x', odo, trip)
     
     def encode_fuel(self) -> bytes:
         """
@@ -565,7 +565,7 @@ class ECUSimulator:
         consumption_clamped = max(DBCRanges.FUEL_CONSUMPTION_MIN, min(DBCRanges.FUEL_CONSUMPTION_MAX, self.cluster.fuel_consumption))
         consumption = int(consumption_clamped * 100)
 
-        return struct.pack('>BH5x', level, consumption)
+        return struct.pack('<BH5x', level, consumption)
 
     # =========================================================================
     # Simulation Update Functions

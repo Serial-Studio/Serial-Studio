@@ -40,8 +40,8 @@ Widgets.Pane {
     reuseItems: false
     interactive: true
     width: parent.width
-    boundsBehavior: TreeView.StopAtBounds
     model: Cpp_JSON_ProjectModel.treeModel
+    boundsBehavior: TreeView.DragAndOvershootBounds
     selectionModel: Cpp_JSON_ProjectModel.selectionModel
 
     ScrollBar.vertical: ScrollBar {
@@ -130,8 +130,12 @@ Widgets.Pane {
 
       //
       // Select the item and open the associated view automatically.
+      // Skip selection for spacer items (items with only whitespace text).
       //
       function onLabelClicked() {
+        if (model.treeViewText.trim().length === 0)
+          return
+
         treeView.forceActiveFocus()
         let index = treeView.index(row, column)
         treeView.selectionModel.setCurrentIndex(index, ItemSelectionModel.ClearAndSelect)
@@ -142,6 +146,9 @@ Widgets.Pane {
       // Otherwise, select the item and open the associated view.
       //
       function onLabelDoubleClicked() {
+        if (model.treeViewText.trim().length === 0)
+          return
+
         treeView.forceActiveFocus()
         if (!toggleExpanded()) {
           onLabelClicked()

@@ -176,6 +176,15 @@ void JSON::DBCImporter::showPreview(const QString &filePath)
     return;
   }
 
+  // Sort messages by CAN ID to keep everything in sync.
+  // This ensures dataset indices match between the UI groups and the JavaScript
+  // parser.
+  std::sort(
+      m_messages.begin(), m_messages.end(),
+      [](const QCanMessageDescription &a, const QCanMessageDescription &b) {
+        return a.uniqueId() < b.uniqueId();
+      });
+
   m_dbcFilePath = filePath;
   Q_EMIT messagesChanged();
   Q_EMIT dbcFileNameChanged();
@@ -323,7 +332,7 @@ JSON::DBCImporter::generateGroups(const QList<QCanMessageDescription> &messages)
 {
   std::vector<JSON::Group> groups;
   int groupId = 0;
-  int datasetIndex = 0;
+  int datasetIndex = 1;
 
   for (const auto &message : messages)
   {
@@ -489,7 +498,7 @@ QString JSON::DBCImporter::generateFrameParser(
   code += "  return values;\n";
   code += "}\n\n";
 
-  datasetIndex = 0;
+  datasetIndex = 1;
   for (const auto &message : messages)
   {
     if (message.signalDescriptions().isEmpty())
@@ -509,6 +518,13 @@ QString JSON::DBCImporter::generateFrameParser(
   code += " * - Signals spanning multiple bytes\n";
   code += " * - Non-byte-aligned signals\n";
   code += " *\n";
+  code += " * NOTE: For best compatibility, use byte-aligned signals:\n";
+  code += " *   - Start bits: 0, 8, 16, 24, 32, 40, 48, 56\n";
+  code += " *   - Lengths: 8, 16, 32 bits\n";
+  code += " *\n";
+  code += " * Non-byte-aligned Motorola signals depend on Qt's bit position\n";
+  code += " * normalization and may require validation against other tools.\n";
+  code += " *\n";
   code += " * @param {Uint8Array} data - CAN message data payload\n";
   code += " * @param {number} startBit - Signal start bit position\n";
   code += " * @param {number} length - Signal length in bits\n";
@@ -518,6 +534,9 @@ QString JSON::DBCImporter::generateFrameParser(
   code += " */\n";
   code += "function extractSignal(data, startBit, length, isBigEndian, isSigned) {\n";
   code += "  let value = 0;\n\n";
+  code += "  // Implementation note: Qt's QCanDbcFileParser provides bit positions.\n";
+  code += "  // For byte-aligned signals, this works correctly for both byte orders.\n";
+  code += "  // Non-byte-aligned Motorola signals assume Qt normalizes bit positions.\n\n";
   code += "  if (isBigEndian) {\n";
   code += "    // Motorola (big-endian): Read bytes in big-endian order\n";
   code += "    const startByte = Math.floor(startBit / 8);\n";
@@ -616,7 +635,7 @@ JSON::DBCImporter::generateMessageDecoder(const QCanMessageDescription &message,
   {
     code += generateSignalExtraction(signal);
     code += QString("  values[%1] = value_%2;\n")
-                .arg(datasetIndex)
+                .arg(datasetIndex - 1)
                 .arg(sanitizeJavaScriptString(signal.name()));
     ++datasetIndex;
   }
@@ -646,7 +665,12 @@ JSON::DBCImporter::generateSignalExtraction(const QCanSignalDescription &signal)
 {
   // clang-format off
   QString code;
-  const auto isBigEndian = (signal.dataEndian() == QSysInfo::BigEndian);
+
+  // Qt's DBC parser has a quirk: it reports byte order backwards!
+  // When the DBC says @0 (Intel/little-endian), Qt says "BigEndian"
+  // When the DBC says @1 (Motorola/big-endian), Qt says "LittleEndian"
+  // So we flip Qt's answer to get the correct byte order for signal extraction.
+  const auto isBigEndian = (signal.dataEndian() == QSysInfo::LittleEndian);
   const auto isSigned = (signal.dataFormat() == QtCanBus::DataFormat::SignedInteger);
   // clang-format on
 

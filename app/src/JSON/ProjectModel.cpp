@@ -2288,6 +2288,15 @@ void JSON::ProjectModel::buildTreeModel()
     m_groupItems.insert(groupItem, group);
   }
 
+  // Add invisible spacer at the bottom for comfortable scrolling
+  auto *spacer = new QStandardItem(" ");
+  spacer->setData(" ", TreeViewText);
+  spacer->setData("", TreeViewIcon);
+  spacer->setData(-1, TreeViewFrameIndex);
+  spacer->setEnabled(false);
+  spacer->setSelectable(false);
+  root->appendRow(spacer);
+
   // Construct selection model
   m_selectionModel = new QItemSelectionModel(m_treeModel);
   connect(m_selectionModel, &QItemSelectionModel::currentChanged, this,
