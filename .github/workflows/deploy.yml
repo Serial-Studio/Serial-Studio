@@ -71,6 +71,8 @@ jobs:
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
 
     - name: '⚙️ Install dependencies'
       run: |
@@ -213,6 +215,8 @@ jobs:
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
 
     - name: '⚙️ Install dependencies'
       run: |
@@ -353,6 +357,8 @@ jobs:
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
 
     - name: '⚙️ Install dependencies'
       run: |
@@ -499,6 +505,8 @@ jobs:
     - run: git config --global core.autocrlf input
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
 
     - name: '⚙️ Install dependencies'
       shell: pwsh
