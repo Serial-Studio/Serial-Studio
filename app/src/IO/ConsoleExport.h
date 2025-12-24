@@ -57,6 +57,7 @@ struct ConsoleExportData
 
 class ConsoleExport;
 
+#ifdef BUILD_COMMERCIAL
 /**
  * @brief Worker that handles console export file I/O on background thread
  */
@@ -88,6 +89,7 @@ private:
   std::atomic<bool> *m_exportEnabled;
   std::atomic<size_t> *m_queueSize;
 };
+#endif
 
 /**
  * @class ConsoleExport
@@ -155,16 +157,21 @@ public slots:
   void registerData(QStringView data);
 
 private slots:
+#ifdef BUILD_COMMERCIAL
   void onWorkerOpenChanged();
+#endif
 
 private:
-  std::atomic<bool> m_exportEnabled;
-  std::atomic<bool> m_isOpen;
-  std::atomic<size_t> m_queueSize;
   QSettings m_settings;
+  std::atomic<bool> m_isOpen;
+  std::atomic<bool> m_exportEnabled;
+
+#ifdef BUILD_COMMERCIAL
   QThread m_workerThread;
   ConsoleExportWorker *m_worker;
+  std::atomic<size_t> m_queueSize;
   moodycamel::ReaderWriterQueue<ConsoleExportData> m_pendingData{
       kConsoleExportQueueCapacity};
+#endif
 };
 } // namespace IO

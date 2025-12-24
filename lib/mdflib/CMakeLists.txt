@@ -98,28 +98,31 @@ endif()
 # ##############################################################################
 # Packaging
 # ##############################################################################
-# https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html#creating-a-package-configuration-file
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-  "${CMAKE_CURRENT_BINARY_DIR}/mdflib/mdflibConfigVersion.cmake"
-  VERSION ${Upstream_VERSION}
-  COMPATIBILITY AnyNewerVersion)
+# Only export and install when mdflib is the top-level project
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  # https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html#creating-a-package-configuration-file
+  include(CMakePackageConfigHelpers)
+  write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/mdflib/mdflibConfigVersion.cmake"
+    VERSION ${Upstream_VERSION}
+    COMPATIBILITY AnyNewerVersion)
 
-export(
-  EXPORT MdfLibTargets
-  FILE "${CMAKE_CURRENT_BINARY_DIR}/mdflib/mdflibTargets.cmake"
-  NAMESPACE Upstream::)
-configure_file(cmake/MdfLibConfig.cmake
-               "${CMAKE_CURRENT_BINARY_DIR}/mdflib/MdfLibConfig.cmake" COPYONLY)
+  export(
+    EXPORT MdfLibTargets
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/mdflib/mdflibTargets.cmake"
+    NAMESPACE Upstream::)
+  configure_file(cmake/MdfLibConfig.cmake
+                 "${CMAKE_CURRENT_BINARY_DIR}/mdflib/MdfLibConfig.cmake" COPYONLY)
 
-set(ConfigPackageLocation lib/cmake/mdflib)
-install(
-  EXPORT MdfLibTargets
-  FILE MdfLibTargets.cmake
-  NAMESPACE Upstream::
-  DESTINATION ${ConfigPackageLocation})
-install(
-  FILES cmake/MdfLibConfig.cmake
-        "${CMAKE_CURRENT_BINARY_DIR}/mdflib/mdflibConfigVersion.cmake"
-  DESTINATION ${ConfigPackageLocation}
-  COMPONENT Devel)
+  set(ConfigPackageLocation lib/cmake/mdflib)
+  install(
+    EXPORT MdfLibTargets
+    FILE MdfLibTargets.cmake
+    NAMESPACE Upstream::
+    DESTINATION ${ConfigPackageLocation})
+  install(
+    FILES cmake/MdfLibConfig.cmake
+          "${CMAKE_CURRENT_BINARY_DIR}/mdflib/mdflibConfigVersion.cmake"
+    DESTINATION ${ConfigPackageLocation}
+    COMPONENT Devel)
+endif()

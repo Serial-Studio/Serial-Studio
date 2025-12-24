@@ -198,17 +198,10 @@ Rectangle {
         text: qsTr("Load MDF4")
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
+        onClicked: Cpp_MDF4_Player.openFile()
         icon.source: "qrc:/rcc/icons/toolbar/mf4.svg"
         enabled: !Cpp_MDF4_Player.isOpen && !Cpp_IO_Manager.isConnected
         ToolTip.text: qsTr("Play an MDF4 file as if it were live sensor data (Pro)")
-        onClicked: {
-          if (Cpp_CommercialBuild)
-            Cpp_MDF4_Player.openFile()
-          else
-            Cpp_Misc_Utilities.showMessageBox(
-              qsTr("MDF4 Player is a Pro feature."),
-              qsTr("This feature requires a license. Please purchase one to enable MDF4 file playback."))
-        }
       }
     }
 

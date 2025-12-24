@@ -274,20 +274,23 @@ set_target_properties(mdf PROPERTIES PUBLIC_HEADER "${MDF_PUBLIC_HEADERS}")
 get_target_property(PH1 mdf PUBLIC_HEADER)
 message(STATUS "MDF Target Includes: " "${PH1}")
 
-if(WIN32)
-  install(
-    TARGETS mdf
-    EXPORT MdfLibTargets
-    LIBRARY DESTINATION mdf/lib
-    ARCHIVE DESTINATION mdf/lib
-    RUNTIME DESTINATION mdf/bin
-    PUBLIC_HEADER DESTINATION mdf/include/mdf)
-else()
-  install(
-    TARGETS mdf
-    EXPORT MdfLibTargets
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mdf)
+# Only install when mdflib is the top-level project
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  if(WIN32)
+    install(
+      TARGETS mdf
+      EXPORT MdfLibTargets
+      LIBRARY DESTINATION mdf/lib
+      ARCHIVE DESTINATION mdf/lib
+      RUNTIME DESTINATION mdf/bin
+      PUBLIC_HEADER DESTINATION mdf/include/mdf)
+  else()
+    install(
+      TARGETS mdf
+      EXPORT MdfLibTargets
+      LIBRARY DESTINATION lib
+      ARCHIVE DESTINATION lib
+      RUNTIME DESTINATION bin
+      PUBLIC_HEADER DESTINATION include/mdf)
+  endif()
 endif()

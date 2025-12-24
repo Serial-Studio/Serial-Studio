@@ -168,10 +168,12 @@ void IO::ConsoleExportWorker::createFile()
  * automatically write generated console log files.
  */
 IO::ConsoleExport::ConsoleExport()
-  : m_exportEnabled(false)
-  , m_isOpen(false)
-  , m_queueSize(0)
+  : m_isOpen(false)
+  , m_exportEnabled(false)
+#ifdef BUILD_COMMERCIAL
   , m_worker(nullptr)
+  , m_queueSize(0)
+#endif
 {
 #ifdef BUILD_COMMERCIAL
   m_worker
@@ -322,11 +324,11 @@ void IO::ConsoleExport::registerData(QStringView data)
 /**
  * Called when the worker thread changes the file open state.
  */
+#ifdef BUILD_COMMERCIAL
 void IO::ConsoleExport::onWorkerOpenChanged()
 {
-#ifdef BUILD_COMMERCIAL
   const bool workerIsOpen = m_worker ? m_worker->isOpen() : false;
   m_isOpen.store(workerIsOpen, std::memory_order_relaxed);
   Q_EMIT openChanged();
-#endif
 }
+#endif
