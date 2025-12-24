@@ -19,7 +19,23 @@ cmake ../ -DDEBUG_SANITIZER=ON -DCMAKE_BUILD_TYPE=Debug
 cmake --build . -j$(nproc)
 ```
 
-**Linux prerequisite:** `sudo apt install libgl1-mesa-dev build-essential`
+**Linux prerequisites:**
+```bash
+sudo apt install libgl1-mesa-dev build-essential zlib1g-dev libexpat1-dev
+```
+
+**macOS prerequisites:**
+```bash
+# ZLIB and EXPAT are usually pre-installed
+# If needed, install via Homebrew:
+brew install zlib expat
+```
+
+**Windows prerequisites:**
+- ZLIB and EXPAT can be installed via vcpkg:
+```bash
+vcpkg install zlib expat
+```
 
 ### CMake Options
 - `BUILD_GPL3=ON` (default): GPLv3-compliant build without commercial modules
@@ -32,7 +48,7 @@ cmake --build . -j$(nproc)
 ### Core Directories
 - `app/src/` - Main application source code
 - `app/qml/` - QML UI files
-- `lib/` - Third-party libraries (KissFFT, QCodeEditor, QSimpleUpdater, OpenSSL)
+- `lib/` - Third-party libraries (KissFFT, QCodeEditor, QSimpleUpdater, OpenSSL, mdflib)
 
 ### Key Modules (app/src/)
 
@@ -58,6 +74,14 @@ cmake --build . -j$(nproc)
 - `ThemeManager` - UI theming
 - `ModuleManager` - Module initialization
 - `Translator` - i18n support
+
+**CSV/** - CSV file playback
+- `Player` - CSV file player with timeline controls
+- `Export` - Export telemetry data to CSV format
+
+**MDF4/** - MDF4/MF4 binary file playback
+- `Player` - MDF4 file player supporting CAN, LIN, FlexRay, analog channels
+- Streaming implementation for large files using mdflib
 
 **SerialStudio.h** - Central enums and utility class defining:
 - `BusType` - Available data sources (UART, Network, BluetoothLE, Audio, ModBus, CanBus)

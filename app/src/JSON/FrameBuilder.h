@@ -88,6 +88,7 @@ public slots:
   void setupExternalConnections();
   void loadJsonMap(const QString &path);
   void setFrameParser(JSON::FrameParser *editor);
+  void registerQuickPlotHeaders(const QStringList &headers);
   void setOperationMode(const SerialStudio::OperationMode mode);
 
   void hotpathRxFrame(const QByteArray &data);
@@ -116,7 +117,11 @@ private:
   QByteArray m_frameFinish;
 
   QSettings m_settings;
+
   int m_quickPlotChannels;
+  bool m_quickPlotHasHeader;
+  QStringList m_quickPlotChannelNames;
+
   JSON::FrameParser *m_frameParser;
   SerialStudio::OperationMode m_opMode;
 };

@@ -21,20 +21,62 @@
 
 #pragma once
 
-#include <QFile>
+#include <map>
+#include <vector>
+#include <memory>
+
 #include <QObject>
-#include <QVector>
+#include <QString>
 #include <QKeyEvent>
-#include <QDateTime>
+#include <QByteArray>
 #include <QElapsedTimer>
 
-namespace CSV
+namespace mdf
+{
+class MdfReader;
+class IChannel;
+class IChannelGroup;
+} // namespace mdf
+
+namespace MDF4
 {
 /**
- * @brief The Player class
+ * @class Player
+ * @brief MDF4 file player for Serial Studio
  *
- * The CSV player class allows users to select a CSV file and "re-play" it
- * with Serial Studio.
+ * The MDF4::Player class provides playback functionality for MDF4/MF4 binary
+ * measurement files. Unlike the CSV player, this implementation uses a
+ * streaming architecture with sparse frame indexing to efficiently handle
+ * large files (multi-GB) without loading everything into memory.
+ *
+ * ## Features
+ * - Supports all MDF4 measurement types (CAN, LIN, FlexRay, analog, etc.)
+ * - Memory-efficient streaming with sparse sampling
+ * - Real-time playback with timestamp synchronization
+ * - Manual frame navigation (next/previous)
+ * - Seek/scrub support via progress slider
+ * - Keyboard shortcuts (Space = play/pause, Arrow keys = next/prev frame)
+ *
+ * ## Architecture
+ * The player builds a sparse frame index on file open, sampling every Nth
+ * record to create a lightweight lookup table. During playback, frames are
+ * streamed on-demand and sent through the standard IO::Manager pipeline for
+ * processing, visualization, and export.
+ *
+ * ## Data Flow
+ * MDF4 File → buildFrameIndex() → getFrame() → IO::Manager::processPayload()
+ * → FrameBuilder → Dashboard
+ *
+ * ## Usage Example
+ * @code
+ * MDF4::Player::instance().openFile("/path/to/file.mf4");
+ * MDF4::Player::instance().play();
+ * @endcode
+ *
+ * @note This is a singleton class. Use MDF4::Player::instance() to access it.
+ *
+ * @see CSV::Player for similar functionality with CSV files
+ * @see IO::Manager for data pipeline integration
  */
 class Player : public QObject
 {
@@ -58,15 +100,20 @@ class Player : public QObject
   Q_PROPERTY(const QString& timestamp
              READ timestamp
              NOTIFY timestampChanged)
+  Q_PROPERTY(const QString& fileInfo
+             READ fileInfo
+             NOTIFY fileInfoChanged)
   // clang-format on
 
 signals:
   void openChanged();
   void timestampChanged();
   void playerStateChanged();
+  void fileInfoChanged();
 
 private:
   explicit Player();
+  ~Player();
   Player(Player &&) = delete;
   Player(const Player &) = delete;
   Player &operator=(Player &&) = delete;
@@ -83,6 +130,7 @@ public:
 
   [[nodiscard]] QString filename() const;
   [[nodiscard]] const QString &timestamp() const;
+  [[nodiscard]] const QString &fileInfo() const;
 
 public slots:
   void play();
@@ -97,35 +145,39 @@ public slots:
 
 private slots:
   void updateData();
-
-private:
-  void sendHeaderFrame();
+  void buildFrameIndex();
+  void sendFrame(int frameIndex);
   void processFrameBatch(int startFrame, int endFrame);
 
 private:
-  bool promptUserForDateTimeOrInterval();
-  void generateDateTimeForRows(int interval);
-  void convertColumnToDateTime(int columnIndex);
-
-  QDateTime getDateTime(int row);
-  QDateTime getDateTime(const QString &cell);
-
-  QByteArray getFrame(const int row);
-
-  const QString getCellValue(const int row, const int column, bool &error);
+  void sendHeaderFrame();
+  QByteArray getFrame(const int index);
+  QString formatTimestamp(double timestamp) const;
 
 protected:
   bool eventFilter(QObject *obj, QEvent *event) override;
   bool handleKeyPress(QKeyEvent *keyEvent);
 
 private:
+  struct FrameIndex
+  {
+    double timestamp;
+    uint64_t recordIndex;
+    mdf::IChannelGroup *channelGroup;
+  };
+
+  std::unique_ptr<mdf::MdfReader> m_reader;
+  std::vector<FrameIndex> m_frameIndex;
+  std::vector<mdf::IChannel *> m_channels;
+  std::map<uint64_t, std::vector<double>> m_sampleCache;
+
   int m_framePos;
   bool m_playing;
-  QFile m_csvFile;
+  QString m_filePath;
   QString m_timestamp;
-  QList<QStringList> m_csvData;
+  QString m_fileInfo;
 
   QElapsedTimer m_elapsedTimer;
-  QDateTime m_startTimestamp;
+  double m_startTimestamp;
 };
-} // namespace CSV
+} // namespace MDF4

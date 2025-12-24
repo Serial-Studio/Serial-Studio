@@ -24,6 +24,7 @@
 
 #include "IO/Manager.h"
 #include "CSV/Player.h"
+#include "MDF4/Player.h"
 #include "Misc/TimerEvents.h"
 #include "JSON/FrameBuilder.h"
 
@@ -65,6 +66,7 @@ UI::Dashboard::Dashboard()
 {
   // clang-format off
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
+  connect(&MDF4::Player::instance(), &MDF4::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=, this] { resetData(); }, Qt::QueuedConnection);
   // clang-format on
@@ -141,18 +143,20 @@ bool UI::Dashboard::showActionPanel() const
  */
 bool UI::Dashboard::streamAvailable() const
 {
-  static auto &player = CSV::Player::instance();
   static auto &manager = IO::Manager::instance();
+  static auto &csvPlayer = CSV::Player::instance();
+  static auto &mf4Player = MDF4::Player::instance();
 
-  const bool csvOpen = player.isOpen();
+  const bool csvOpen = csvPlayer.isOpen();
+  const bool mf4Open = mf4Player.isOpen();
   const bool serialConnected = manager.isConnected();
 
 #ifdef BUILD_COMMERCIAL
   static auto &mqtt = MQTT::Client::instance();
   const bool mqttConnected = mqtt.isConnected() && mqtt.isSubscriber();
-  return serialConnected || csvOpen || mqttConnected;
+  return serialConnected || csvOpen || mqttConnected || mf4Open;
 #else
-  return serialConnected || csvOpen;
+  return serialConnected || csvOpen || mf4Open;
 #endif
 }
 

@@ -21,9 +21,36 @@
 
 cmake_minimum_required(VERSION 3.20)
 
+# Prefer static libraries for mdflib dependencies to avoid deployment issues
+if(UNIX)
+  set(CMAKE_FIND_LIBRARY_SUFFIXES ".a" ${CMAKE_FIND_LIBRARY_SUFFIXES})
+endif()
+
+# Find ZLIB and EXPAT for mdflib (static linking preferred)
+# ZLIB is part of CMake's standard modules and widely available
+find_package(ZLIB REQUIRED)
+
+# EXPAT can be found via find_package or pkg-config
+if(UNIX AND NOT APPLE)
+  # On Linux, prefer pkg-config
+  find_package(PkgConfig)
+  if(PkgConfig_FOUND)
+    pkg_check_modules(EXPAT expat)
+  endif()
+
+  # Fallback to find_package if pkg-config didn't find it
+  if(NOT EXPAT_FOUND)
+    find_package(EXPAT REQUIRED)
+  endif()
+else()
+  # On Windows and macOS, use find_package
+  find_package(EXPAT REQUIRED)
+endif()
+
 add_subdirectory(OpenSSL)
 add_subdirectory(KissFFT)
 add_subdirectory(QCodeEditor)
 add_subdirectory(QSimpleUpdater)
+add_subdirectory(mdflib)
 
 

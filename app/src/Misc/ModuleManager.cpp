@@ -29,6 +29,8 @@
 #include "CSV/Export.h"
 #include "CSV/Player.h"
 
+#include "MDF4/Player.h"
+
 #include "JSON/Frame.h"
 #include "JSON/FrameParser.h"
 #include "JSON/ProjectModel.h"
@@ -73,12 +75,12 @@
 
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Client.h"
+#  include "JSON/DBCImporter.h"
 #  include "Licensing/Trial.h"
 #  include "IO/Drivers/Audio.h"
 #  include "IO/Drivers/CANBus.h"
 #  include "IO/Drivers/Modbus.h"
 #  include "UI/Widgets/Plot3D.h"
-#  include "JSON/DBCImporter.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
@@ -288,6 +290,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   // Initialize modules
   auto csvExport = &CSV::Export::instance();
   auto csvPlayer = &CSV::Player::instance();
+  auto mdf4Player = &MDF4::Player::instance();
   auto ioManager = &IO::Manager::instance();
   auto ioConsole = &IO::Console::instance();
   auto uiDashboard = &UI::Dashboard::instance();
@@ -368,6 +371,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_IO_Serial", ioSerial);
   c->setContextProperty("Cpp_CSV_Export", csvExport);
   c->setContextProperty("Cpp_CSV_Player", csvPlayer);
+  c->setContextProperty("Cpp_MDF4_Player", mdf4Player);
   c->setContextProperty("Cpp_IO_Console", ioConsole);
   c->setContextProperty("Cpp_IO_Manager", ioManager);
   c->setContextProperty("Cpp_IO_Network", ioNetwork);

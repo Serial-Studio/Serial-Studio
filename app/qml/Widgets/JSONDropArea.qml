@@ -33,7 +33,7 @@ DropArea {
     // Get file name & set color of rectangle accordingly
     if (drag.urls.length > 0) {
       var path = drag.urls[0].toString()
-      if (path.endsWith(".json") || path.endsWith(".csv") || path.endsWith(".ssproj")) {
+      if (path.endsWith(".json") || path.endsWith(".csv") || path.endsWith(".ssproj") || path.endsWith(".mf4") || path.endsWith(".dat")) {
         drag.accept(Qt.LinkAction)
         dropRectangle.color = Qt.darker(palette.highlight, 1.4)
       }
@@ -63,16 +63,21 @@ DropArea {
 
     // Unescape html codes like '%23' for '#'
     var cleanPath = decodeURIComponent(path);
+    var lowerCase = cleanPath.toLowerCase();
 
     // Process JSON files
-    if (cleanPath.endsWith(".json") || path.endsWith(".ssproj")) {
+    if (lowerCase.endsWith(".json") || lowerCase.endsWith(".ssproj")) {
       Cpp_JSON_FrameBuilder.operationMode = SerialStudio.ProjectFile
       Cpp_JSON_FrameBuilder.loadJsonMap(cleanPath)
     }
 
     // Process CSV files
-    else if (cleanPath.endsWith(".csv"))
+    else if (lowerCase.endsWith(".csv"))
       Cpp_CSV_Player.openFile(cleanPath)
+
+    // Process MDF4 files
+    else if (lowerCase.endsWith(".mf4") || lowerCase.endsWith(".dat"))
+      Cpp_MDF4_Player.openFile(cleanPath)
   }
 
   //

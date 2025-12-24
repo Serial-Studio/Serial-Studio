@@ -34,17 +34,8 @@ Rectangle {
   //
   // Custom signals
   //
-  signal setupClicked()
-  signal consoleClicked()
-  signal dashboardClicked()
   signal projectEditorClicked()
-
   property bool toolbarEnabled: true
-
-  //
-  // Aliases to button check status
-  //
-  property alias setupChecked: setupBt.checked
 
   //
   // Calculate offset based on platform
@@ -204,12 +195,20 @@ Rectangle {
 
       Widgets.ToolbarButton {
         iconSize: 16
-        text: qsTr("Preferences")
+        text: qsTr("Load MDF4")
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
-        onClicked: app.showSettingsDialog()
-        icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
-        ToolTip.text: qsTr("Open application settings and preferences")
+        icon.source: "qrc:/rcc/icons/toolbar/mf4.svg"
+        enabled: !Cpp_MDF4_Player.isOpen && !Cpp_IO_Manager.isConnected
+        ToolTip.text: qsTr("Play an MDF4 file as if it were live sensor data (Pro)")
+        onClicked: {
+          if (Cpp_CommercialBuild)
+            Cpp_MDF4_Player.openFile()
+          else
+            Cpp_Misc_Utilities.showMessageBox(
+              qsTr("MDF4 Player is a Pro feature."),
+              qsTr("This feature requires a license. Please purchase one to enable MDF4 file playback."))
+        }
       }
     }
 
@@ -256,15 +255,14 @@ Rectangle {
     }
 
     //
-    // Setup
+    // Preferences
     //
     Widgets.ToolbarButton {
-      id: setupBt
-      text: qsTr("Setup")
-      onClicked: root.setupClicked()
-      Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/toolbar/device-setup.svg"
-      ToolTip.text: qsTr("Configure device connection settings")
+      text: qsTr("Preferences")
+      Layout.alignment: Qt.AlignLeft
+      onClicked: app.showSettingsDialog()
+      icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
+      ToolTip.text: qsTr("Open application settings and preferences")
     }
 
     //
@@ -465,7 +463,7 @@ Rectangle {
 
       readonly property bool mqttSubscriber: Cpp_CommercialBuild ? (Cpp_MQTT_Client.isConnected && Cpp_MQTT_Client.isSubscriber) : false
 
-      enabled: (Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen) || mqttSubscriber
+      enabled: (Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen && !Cpp_MDF4_Player.isOpen) || mqttSubscriber
 
       onClicked: {
         if (mqttSubscriber)

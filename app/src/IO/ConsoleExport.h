@@ -21,13 +21,74 @@
 
 #pragma once
 
+#include <atomic>
+
 #include <QFile>
 #include <QObject>
+#include <QThread>
 #include <QSettings>
 #include <QTextStream>
 
+#include "ThirdParty/readerwriterqueue.h"
+
 namespace IO
 {
+static constexpr size_t kConsoleExportQueueCapacity = 8192;
+
+/**
+ * @brief Represents a single console data item for export
+ */
+struct ConsoleExportData
+{
+  QString data;
+
+  ConsoleExportData() = default;
+
+  ConsoleExportData(QString &&d)
+    : data(std::move(d))
+  {
+  }
+
+  ConsoleExportData(ConsoleExportData &&) = default;
+  ConsoleExportData(const ConsoleExportData &) = delete;
+  ConsoleExportData &operator=(ConsoleExportData &&) = default;
+  ConsoleExportData &operator=(const ConsoleExportData &) = delete;
+};
+
+class ConsoleExport;
+
+/**
+ * @brief Worker that handles console export file I/O on background thread
+ */
+class ConsoleExportWorker : public QObject
+{
+  Q_OBJECT
+
+public:
+  explicit ConsoleExportWorker(
+      moodycamel::ReaderWriterQueue<ConsoleExportData> *queue,
+      std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize);
+  ~ConsoleExportWorker();
+
+  [[nodiscard]] bool isOpen() const;
+
+signals:
+  void openChanged();
+
+public slots:
+  void writeValues();
+  void closeFile();
+  void createFile();
+
+private:
+  QFile m_file;
+  QTextStream m_textStream;
+  std::vector<ConsoleExportData> m_writeBuffer;
+  moodycamel::ReaderWriterQueue<ConsoleExportData> *m_pendingData;
+  std::atomic<bool> *m_exportEnabled;
+  std::atomic<size_t> *m_queueSize;
+};
+
 /**
  * @class ConsoleExport
  * @brief Manages automatic export of console data to log files.
@@ -91,16 +152,19 @@ public slots:
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
 
-private slots:
-  void writeData();
-  void createFile();
   void registerData(QStringView data);
 
+private slots:
+  void onWorkerOpenChanged();
+
 private:
-  QFile m_file;
-  QString m_buffer;
-  bool m_exportEnabled;
+  std::atomic<bool> m_exportEnabled;
+  std::atomic<bool> m_isOpen;
+  std::atomic<size_t> m_queueSize;
   QSettings m_settings;
-  QTextStream m_textStream;
+  QThread m_workerThread;
+  ConsoleExportWorker *m_worker;
+  moodycamel::ReaderWriterQueue<ConsoleExportData> m_pendingData{
+      kConsoleExportQueueCapacity};
 };
 } // namespace IO

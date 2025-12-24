@@ -89,6 +89,10 @@ Item {
       id: csvPlayer
     }
 
+    Dialogs.Mdf4Player {
+      id: mdf4Player
+    }
+
     Dialogs.Donate {
       id: donateDialog
     }

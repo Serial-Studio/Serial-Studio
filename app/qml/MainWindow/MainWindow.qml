@@ -274,8 +274,6 @@ Widgets.SmartWindow {
         z: 2
         id: toolbar
         Layout.fillWidth: true
-        setupChecked: root.setupVisible
-        onSetupClicked: setup.visible ? setup.hide() : setup.show()
       }
 
       //

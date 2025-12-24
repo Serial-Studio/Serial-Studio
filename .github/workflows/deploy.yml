@@ -86,6 +86,8 @@ jobs:
           libssl-dev \
           libudev-dev \
           libzstd-dev \
+          zlib1g-dev \
+          libexpat1-dev \
           rpm \
           libxcb1 \
           libxcb-cursor0 \
@@ -226,6 +228,8 @@ jobs:
           libssl-dev \
           libudev-dev \
           libzstd-dev \
+          zlib1g-dev \
+          libexpat1-dev \
           rpm \
           libxcb1 \
           libxcb-cursor0 \
@@ -349,6 +353,10 @@ jobs:
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
+
+    - name: '⚙️ Install dependencies'
+      run: |
+        brew install expat
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3
@@ -492,6 +500,12 @@ jobs:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
 
+    - name: '⚙️ Install dependencies'
+      shell: pwsh
+      run: |
+        vcpkg install zlib:x64-windows-static expat:x64-windows-static
+        echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" >> $env:GITHUB_ENV
+
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3
       if: env.INSTALL_QT_WINDOWS == 'false'
@@ -554,7 +568,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
+        cmake ../ -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows-static -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application'
       run: |

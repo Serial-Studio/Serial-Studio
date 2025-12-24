@@ -450,5 +450,6 @@
         <file>themes/code-editor/fluent-dark.xml</file>
         <file>themes/code-editor/fluent-light.xml</file>
         <file>images/driver.svg</file>
+        <file>icons/toolbar/mf4.svg</file>
     </qresource>
 </RCC>

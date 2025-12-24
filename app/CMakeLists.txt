@@ -151,6 +151,7 @@ set(SOURCES
   src/JSON/FrameParserTestDialog.cpp
   src/CSV/Player.cpp
   src/CSV/Export.cpp
+  src/MDF4/Player.cpp
   src/main.cpp
   src/SerialStudio.cpp
 )
@@ -203,6 +204,7 @@ set(HEADERS
   src/JSON/FrameParserTestDialog.h
   src/CSV/Export.h
   src/CSV/Player.h
+  src/MDF4/Player.h
   src/ThirdParty/atomicops.h
   src/ThirdParty/readerwriterqueue.h
   src/ThirdParty/readerwritercircularbuffer.h
@@ -216,6 +218,7 @@ set(QML_SOURCES
   qml/Dialogs/About.qml
   qml/Dialogs/Acknowledgements.qml
   qml/Dialogs/CsvPlayer.qml
+  qml/Dialogs/Mdf4Player.qml
   qml/Dialogs/Donate.qml
   qml/Dialogs/FileTransmission.qml
   qml/Dialogs/IconPicker.qml
@@ -399,6 +402,7 @@ target_link_libraries(
   kissfft
   QCodeEditor
   QSimpleUpdater
+  mdf
 )
 
 target_link_openssl(

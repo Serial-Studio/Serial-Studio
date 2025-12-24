@@ -31,6 +31,7 @@
 #include "UI/Dashboard.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
+#include "JSON/FrameBuilder.h"
 
 /**
  * Constructor function
@@ -194,6 +195,8 @@ void CSV::Player::closeFile()
   m_playing = false;
   m_timestamp = "--.--";
 
+  JSON::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
+
   Q_EMIT openChanged();
   Q_EMIT timestampChanged();
   Q_EMIT playerStateChanged();
@@ -337,6 +340,9 @@ void CSV::Player::openFile(const QString &filePath)
         return;
       }
     }
+
+    // Send the header row before removing it
+    sendHeaderFrame();
 
     // Remove the header row from the data
     m_framePos = 0;
@@ -563,6 +569,30 @@ void CSV::Player::processFrameBatch(int startFrame, int endFrame)
 {
   for (int i = startFrame; i <= endFrame; ++i)
     IO::Manager::instance().processPayload(getFrame(i));
+}
+
+/**
+ * @brief Registers CSV headers with Quick Plot
+ *
+ * Extracts column names from the CSV header row and explicitly registers
+ * them with the FrameBuilder. Skips the first column (timestamp) as it
+ * is not used for plotting. This should be called before the header row
+ * is removed from m_csvData.
+ */
+void CSV::Player::sendHeaderFrame()
+{
+  if (m_csvData.isEmpty())
+    return;
+
+  const auto &headerRow = m_csvData.first();
+  if (headerRow.size() <= 1)
+    return;
+
+  QStringList headers;
+  for (int i = 1; i < headerRow.size(); ++i)
+    headers.append(headerRow[i]);
+
+  JSON::FrameBuilder::instance().registerQuickPlotHeaders(headers);
 }
 
 /**

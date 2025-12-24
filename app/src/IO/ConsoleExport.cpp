@@ -23,6 +23,7 @@
 
 #include <QDir>
 #include <QUrl>
+#include <QTimer>
 #include <QFileInfo>
 #include <QApplication>
 #include <QDesktopServices>
@@ -37,14 +38,156 @@
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
+//------------------------------------------------------------------------------
+// ConsoleExportWorker implementation
+//------------------------------------------------------------------------------
+
+#ifdef BUILD_COMMERCIAL
+
+/**
+ * @brief Constructs the console export worker
+ */
+IO::ConsoleExportWorker::ConsoleExportWorker(
+    moodycamel::ReaderWriterQueue<ConsoleExportData> *queue,
+    std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize)
+  : m_pendingData(queue)
+  , m_exportEnabled(exportEnabled)
+  , m_queueSize(queueSize)
+{
+  m_writeBuffer.reserve(1024);
+}
+
+/**
+ * @brief Destructor - closes file
+ */
+IO::ConsoleExportWorker::~ConsoleExportWorker()
+{
+  closeFile();
+}
+
+/**
+ * @brief Returns true if file is open
+ */
+bool IO::ConsoleExportWorker::isOpen() const
+{
+  return m_file.isOpen();
+}
+
+/**
+ * @brief Writes all queued console data to file
+ */
+void IO::ConsoleExportWorker::writeValues()
+{
+  if (!m_exportEnabled->load(std::memory_order_relaxed))
+    return;
+
+  if (!IO::Manager::instance().isConnected())
+    return;
+
+  m_writeBuffer.clear();
+
+  ConsoleExportData item;
+  while (m_pendingData->try_dequeue(item))
+    m_writeBuffer.push_back(std::move(item));
+
+  const auto count = m_writeBuffer.size();
+  if (count == 0)
+    return;
+
+  m_queueSize->fetch_sub(count, std::memory_order_relaxed);
+
+  if (!isOpen())
+    createFile();
+
+  if (m_textStream.device())
+  {
+    for (const auto &data : m_writeBuffer)
+      m_textStream << data.data;
+
+    m_textStream.flush();
+  }
+}
+
+/**
+ * @brief Closes the output file
+ */
+void IO::ConsoleExportWorker::closeFile()
+{
+  if (isOpen())
+  {
+    writeValues();
+    m_file.close();
+    m_textStream.setDevice(nullptr);
+    Q_EMIT openChanged();
+  }
+}
+
+/**
+ * @brief Creates a new console log file
+ */
+void IO::ConsoleExportWorker::createFile()
+{
+  if (SerialStudio::activated())
+  {
+    if (isOpen())
+      closeFile();
+
+    const auto dateTime = QDateTime::currentDateTime();
+    const auto fileName
+        = dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss"))
+          + QStringLiteral(".txt");
+
+    QDir dir(Misc::WorkspaceManager::instance().path("Console"));
+
+    m_file.setFileName(dir.filePath(fileName));
+    if (!m_file.open(QIODeviceBase::WriteOnly | QIODevice::Text))
+    {
+      Misc::Utilities::showMessageBox(
+          QObject::tr("Console Output File Error"),
+          QObject::tr("Cannot open file for writing!"), QMessageBox::Critical);
+      closeFile();
+      return;
+    }
+
+    m_textStream.setDevice(&m_file);
+    m_textStream.setGenerateByteOrderMark(true);
+    m_textStream.setEncoding(QStringConverter::Utf8);
+
+    Q_EMIT openChanged();
+  }
+}
+
+#endif
+
+//------------------------------------------------------------------------------
+// ConsoleExport implementation
+//------------------------------------------------------------------------------
+
 /**
  * Constructor function, configures the path in which Serial Studio shall
  * automatically write generated console log files.
  */
 IO::ConsoleExport::ConsoleExport()
   : m_exportEnabled(false)
+  , m_isOpen(false)
+  , m_queueSize(0)
+  , m_worker(nullptr)
 {
 #ifdef BUILD_COMMERCIAL
+  m_worker
+      = new ConsoleExportWorker(&m_pendingData, &m_exportEnabled, &m_queueSize);
+  m_worker->moveToThread(&m_workerThread);
+
+  connect(&m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
+  connect(m_worker, &ConsoleExportWorker::openChanged, this,
+          &ConsoleExport::onWorkerOpenChanged);
+
+  m_workerThread.start();
+
+  QTimer *timer = new QTimer(this);
+  connect(timer, &QTimer::timeout, m_worker, &ConsoleExportWorker::writeValues);
+  timer->start(1000);
+
   connect(&Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged, this, [=, this] {
             if (exportEnabled() && !SerialStudio::activated())
@@ -60,7 +203,10 @@ IO::ConsoleExport::ConsoleExport()
  */
 IO::ConsoleExport::~ConsoleExport()
 {
-  closeFile();
+#ifdef BUILD_COMMERCIAL
+  m_workerThread.quit();
+  m_workerThread.wait();
+#endif
 }
 
 /**
@@ -78,7 +224,7 @@ IO::ConsoleExport &IO::ConsoleExport::instance()
 bool IO::ConsoleExport::isOpen() const
 {
 #ifdef BUILD_COMMERCIAL
-  return m_file.isOpen();
+  return m_isOpen.load(std::memory_order_relaxed);
 #else
   return false;
 #endif
@@ -90,7 +236,7 @@ bool IO::ConsoleExport::isOpen() const
 bool IO::ConsoleExport::exportEnabled() const
 {
 #ifdef BUILD_COMMERCIAL
-  return m_exportEnabled;
+  return m_exportEnabled.load(std::memory_order_relaxed);
 #else
   return false;
 #endif
@@ -102,16 +248,9 @@ bool IO::ConsoleExport::exportEnabled() const
 void IO::ConsoleExport::closeFile()
 {
 #ifdef BUILD_COMMERCIAL
-  if (isOpen())
-  {
-    if (m_buffer.size() > 0)
-      writeData();
-
-    m_file.close();
-    m_textStream.setDevice(nullptr);
-
-    Q_EMIT openChanged();
-  }
+  if (m_worker)
+    QMetaObject::invokeMethod(m_worker, &ConsoleExportWorker::closeFile,
+                              Qt::QueuedConnection);
 #endif
 }
 
@@ -126,8 +265,6 @@ void IO::ConsoleExport::setupExternalConnections()
           &IO::ConsoleExport::registerData);
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &IO::ConsoleExport::closeFile);
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
-          &IO::ConsoleExport::writeData);
 #endif
 }
 
@@ -139,23 +276,19 @@ void IO::ConsoleExport::setExportEnabled(const bool enabled)
 #ifdef BUILD_COMMERCIAL
   if (SerialStudio::activated())
   {
-    m_exportEnabled = enabled;
+    m_exportEnabled.store(enabled, std::memory_order_relaxed);
     Q_EMIT enabledChanged();
 
-    if (!exportEnabled() && isOpen())
-    {
-      m_buffer.clear();
+    if (!enabled && isOpen())
       closeFile();
-    }
 
-    m_settings.setValue("ConsoleExport", m_exportEnabled);
+    m_settings.setValue("ConsoleExport", enabled);
     return;
   }
 #endif
 
   closeFile();
-  m_buffer.clear();
-  m_exportEnabled = false;
+  m_exportEnabled.store(false, std::memory_order_relaxed);
   m_settings.setValue("ConsoleExport", false);
   Q_EMIT enabledChanged();
 
@@ -167,95 +300,33 @@ void IO::ConsoleExport::setExportEnabled(const bool enabled)
 }
 
 /**
- * Writes current buffer data to the output file, and creates a new file
- * if needed.
- */
-void IO::ConsoleExport::writeData()
-{
-#ifdef BUILD_COMMERCIAL
-  // Device not connected, abort
-  if (!IO::Manager::instance().isConnected())
-    return;
-
-  // Export is disabled, abort
-  if (!exportEnabled())
-    return;
-
-  // Write data to the file
-  if (m_buffer.size() > 0)
-  {
-    // Create a new file if required
-    if (!isOpen())
-      createFile();
-
-    // Write data to hard disk
-    if (m_textStream.device())
-    {
-      m_textStream << m_buffer;
-      m_textStream.flush();
-      m_buffer.clear();
-    }
-  }
-#endif
-}
-
-/**
- * Creates a new console log output file based on the current date/time.
- */
-void IO::ConsoleExport::createFile()
-{
-#ifdef BUILD_COMMERCIAL
-  // Only enable this feature is program is activated
-  if (SerialStudio::activated())
-  {
-    // Close current file (if any)
-    if (isOpen())
-      closeFile();
-
-    // Get filename
-    const auto dateTime = QDateTime::currentDateTime();
-    const auto fileName
-        = dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss"))
-          + QStringLiteral(".txt");
-
-    // Get console export path
-    QDir dir(Misc::WorkspaceManager::instance().path("Console"));
-
-    // Open file
-    m_file.setFileName(dir.filePath(fileName));
-    if (!m_file.open(QIODeviceBase::WriteOnly | QIODevice::Text))
-    {
-      Misc::Utilities::showMessageBox(tr("Console Output File Error"),
-                                      tr("Cannot open file for writing!"),
-                                      QMessageBox::Critical);
-      closeFile();
-      return;
-    }
-
-    // Configure text stream
-    m_textStream.setDevice(&m_file);
-    m_textStream.setGenerateByteOrderMark(true);
-#  if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    m_textStream.setCodec("UTF-8");
-#  else
-    m_textStream.setEncoding(QStringConverter::Utf8);
-#  endif
-
-    // Emit signals
-    Q_EMIT openChanged();
-  }
-#endif
-}
-
-/**
  * Appends the given console data to the output buffer.
  */
 void IO::ConsoleExport::registerData(QStringView data)
 {
 #ifdef BUILD_COMMERCIAL
   if (!data.isEmpty() && exportEnabled())
-    m_buffer.append(data);
+  {
+    if (m_queueSize.load(std::memory_order_relaxed)
+        < kConsoleExportQueueCapacity)
+    {
+      m_pendingData.enqueue(ConsoleExportData(QString(data)));
+      m_queueSize.fetch_add(1, std::memory_order_relaxed);
+    }
+  }
 #else
   (void)data;
+#endif
+}
+
+/**
+ * Called when the worker thread changes the file open state.
+ */
+void IO::ConsoleExport::onWorkerOpenChanged()
+{
+#ifdef BUILD_COMMERCIAL
+  const bool workerIsOpen = m_worker ? m_worker->isOpen() : false;
+  m_isOpen.store(workerIsOpen, std::memory_order_relaxed);
+  Q_EMIT openChanged();
 #endif
 }

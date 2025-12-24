@@ -51,6 +51,7 @@ constexpr int kDefaultFftSamples = 2048;
  */
 JSON::FrameBuilder::FrameBuilder()
   : m_quickPlotChannels(-1)
+  , m_quickPlotHasHeader(false)
   , m_frameParser(nullptr)
   , m_opMode(SerialStudio::ProjectFile)
 {
@@ -147,6 +148,30 @@ JSON::FrameParser *JSON::FrameBuilder::frameParser() const
 SerialStudio::OperationMode JSON::FrameBuilder::operationMode() const
 {
   return m_opMode;
+}
+
+/**
+ * @brief Registers explicit channel headers for Quick Plot mode
+ *
+ * Allows file players (CSV/MDF4) to explicitly set channel names from
+ * their header rows. For live streaming data, automatic header detection
+ * in parseQuickPlotFrame() will still work.
+ *
+ * @param headers List of channel names to use
+ */
+void JSON::FrameBuilder::registerQuickPlotHeaders(const QStringList &headers)
+{
+  if (!headers.isEmpty())
+  {
+    m_quickPlotHasHeader = true;
+    m_quickPlotChannelNames = headers;
+  }
+
+  else
+  {
+    m_quickPlotHasHeader = false;
+    m_quickPlotChannelNames.clear();
+  }
 }
 
 /**
@@ -359,7 +384,8 @@ void JSON::FrameBuilder::hotpathRxFrame(const QByteArray &data)
  */
 void JSON::FrameBuilder::onConnectedChanged()
 {
-  // Reset quick plot field count
+  // Reset quick plot field count (headers are preserved and reset explicitly by
+  // players)
   m_quickPlotChannels = -1;
 
   // Validate that the device is connected
@@ -511,6 +537,28 @@ void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
   const int channelCount = channels.size();
   if (channelCount > 0)
   {
+    if (m_quickPlotChannels == -1)
+    {
+      bool allNonNumeric = true;
+      for (const auto &channel : std::as_const(channels))
+      {
+        bool isNumeric = false;
+        channel.toDouble(&isNumeric);
+        if (isNumeric)
+        {
+          allNonNumeric = false;
+          break;
+        }
+      }
+
+      if (allNonNumeric)
+      {
+        m_quickPlotHasHeader = true;
+        m_quickPlotChannelNames = channels;
+        return;
+      }
+    }
+
     // Rebuild frame if channel count changed
     if (channelCount != m_quickPlotChannels) [[unlikely]]
     {
@@ -627,7 +675,12 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
       dataset.fftMin = minValue;
       dataset.fftSamples = kDefaultFftSamples;
       dataset.fftSamplingRate = sampleRate;
-      dataset.title = tr("Channel %1").arg(index);
+
+      if (m_quickPlotHasHeader && index - 1 < m_quickPlotChannelNames.size())
+        dataset.title = m_quickPlotChannelNames[index - 1];
+      else
+        dataset.title = tr("Channel %1").arg(index);
+
       dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
       datasets.push_back(dataset);
 
@@ -664,7 +717,12 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
     dataset.index = idx;
     dataset.plt = false;
     dataset.value = channel;
-    dataset.title = tr("Channel %1").arg(idx);
+
+    if (m_quickPlotHasHeader && idx - 1 < m_quickPlotChannelNames.size())
+      dataset.title = m_quickPlotChannelNames[idx - 1];
+    else
+      dataset.title = tr("Channel %1").arg(idx);
+
     dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
     datasets.push_back(dataset);
 

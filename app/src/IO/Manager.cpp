@@ -426,6 +426,9 @@ void IO::Manager::disconnectDevice()
     // Stop frame parsing thread
     killFrameReader();
 
+    // Clear Quick Plot headers when disconnecting
+    JSON::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
+
     // Notify UI
     Q_EMIT driverChanged();
     Q_EMIT connectedChanged();
