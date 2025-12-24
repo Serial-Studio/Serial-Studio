@@ -1,0 +1,5 @@
+<map id="mdf::IMetaData" name="mdf::IMetaData">
+<area shape="rect" id="Node000001" title="Interface against an meta data block (MD) in a MDF4 file." alt="" coords="5,79,116,104"/>
+<area shape="rect" id="Node000002" href="$classmdf_1_1_i_block.html" title="Base class for all MDF blocks." alt="" coords="17,5,104,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="63,44,63,79,58,79,58,44"/>
+</map>

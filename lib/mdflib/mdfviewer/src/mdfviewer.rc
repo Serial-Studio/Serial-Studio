@@ -1,0 +1,8 @@
+#include <wx/msw/wx.rc>
+
+APP_ICON                      ICON "img/app.ico"
+SUB_ICON                      ICON "img/sub.ico"
+
+FOLDER_CLOSE          BITMAP "img/folder_close.bmp"
+FOLDER_OPEN           BITMAP "img/folder_open.bmp"
+TREE_LIST             BITMAP "img/tree_list.bmp"

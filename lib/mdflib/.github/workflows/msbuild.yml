@@ -1,0 +1,33 @@
+---
+name: MSBuild of the C++ Assembly
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+
+      - name: Enable VCPKG for msbuild
+        run: vcpkg integrate install
+
+      - name: Restore DOTNET
+        run: dotnet restore
+
+      - name: Build MDF C++ Lib
+        run: msbuild mdflib.sln -t:rebuild -property:Platform=x64 -property:Configuration=Release
+
+...

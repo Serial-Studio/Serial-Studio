@@ -1,0 +1,72 @@
+install/
+
+.idea/
+
+# CMake
+cmake-build-*/
+CMakeUserPresets.json
+
+# File-based project format
+*.iws
+
+# IntelliJ
+out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# Editor-based Rest Client
+.idea/httpRequests
+
+
+
+# ODS models
+odsconfigurator/model/*_?.xml
+.vs/
+
+# Visual Studio
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+vcpkg_installed/
+
+# Visual Studio code
+.vscode/
+build/
+
+# User-specific files
+.DS_Store
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+TestResults/
+
+#Python
+venv/
+.pytest_cache
+python/tests/__pycache__/
+
+#CPP CHECK
+*-cppcheck-build-*/

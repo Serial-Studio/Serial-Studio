@@ -1,0 +1,7 @@
+<map id="include/mdf/iblock.h" name="include/mdf/iblock.h">
+<area shape="rect" id="Node000001" title="All MDF blocks inherits from the IBlock class. The interface class is used internally in lists...." alt="" coords="9,5,146,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,67,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,32,52,68,47,65,68,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="91,79,146,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="86,30,107,65,103,68,82,32"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="mdf::IChannelObserver" name="mdf::IChannelObserver">
+<area shape="rect" id="Node000001" title="The channel observer object shall hold all samples for a channel." alt="" coords="67,253,219,279"/>
+<area shape="rect" id="Node000002" href="$classmdf_1_1_i_sample_observer.html" title="Interface to a sample observer that handle incoming samples events." alt="" coords="5,179,155,204"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,213,135,251,130,255,97,217"/>
+<area shape="rect" id="Node000003" href="$classmdf_1_1_i_data_group.html" title="Interface to a data group (DG) block." alt="" coords="35,80,151,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="78,118,72,130,71,155,77,178,72,179,66,156,67,129,73,115"/>
+<area shape="rect" id="Node000004" href="$classmdf_1_1_i_block.html" title="Base class for all MDF blocks." alt="" coords="107,5,194,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="135,43,105,81,101,78,131,40"/>
+<area shape="rect" id="Node000005" href="$classmdf_1_1_i_channel.html" title="Defines a MDF channel (CN) block." alt="" coords="157,129,259,155"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="164,42,205,128,200,130,159,44"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="198,168,151,255,146,252,193,166"/>
+</map>

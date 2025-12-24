@@ -1,0 +1,24 @@
+<map id="include/mdf/isourceinformation.h" name="include/mdf/isourceinformation.h">
+<area shape="rect" id="Node000001" title="Interface against a source information (SI) block." alt="" coords="20,5,228,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="36,225,97,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,33,58,81,31,115,11,153,9,170,15,186,40,215,36,218,10,189,4,170,6,151,26,112,54,77,107,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="141,225,195,251"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="129,30,166,211,160,212,124,32"/>
+<area shape="rect" id="Node000004" href="$imetadata_8h.html" title=" " alt="" coords="188,79,303,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="145,28,215,69,213,74,142,33"/>
+<area shape="rect" id="Node000008" href="$iblock_8h.html" title="All MDF blocks inherits from the IBlock class. The interface class is used internally in lists...." alt="" coords="21,152,113,177"/>
+<area shape="poly" id="edge14_Node000001_Node000008" title=" " alt="" coords="122,32,79,140,74,138,117,30"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="241,106,183,215,178,212,237,103"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="331,225,387,251"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="273,102,305,122,336,150,351,181,358,211,353,212,346,183,331,154,302,126,270,106"/>
+<area shape="rect" id="Node000006" href="$etag_8h.html" title="Simple wrapper around meta data items." alt="" coords="239,152,321,177"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="254,103,271,138,266,141,249,106"/>
+<area shape="poly" id="edge11_Node000004_Node000008" title=" " alt="" coords="218,107,109,149,108,144,216,102"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="247,180,111,225,109,220,245,175"/>
+<area shape="poly" id="edge9_Node000006_Node000003" title=" " alt="" coords="264,180,200,220,197,215,261,175"/>
+<area shape="poly" id="edge10_Node000006_Node000005" title=" " alt="" coords="294,175,338,214,334,218,291,179"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="237,225,307,251"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="281,178,278,212,272,212,276,177"/>
+<area shape="poly" id="edge12_Node000008_Node000002" title=" " alt="" coords="69,178,69,212,64,212,64,178"/>
+<area shape="poly" id="edge13_Node000008_Node000003" title=" " alt="" coords="85,175,142,215,139,219,81,180"/>
+</map>

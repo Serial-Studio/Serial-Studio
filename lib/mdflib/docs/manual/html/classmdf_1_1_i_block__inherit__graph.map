@@ -1,0 +1,29 @@
+<map id="mdf::IBlock" name="mdf::IBlock">
+<area shape="rect" id="Node000001" title="Base class for all MDF blocks." alt="" coords="5,301,92,327"/>
+<area shape="rect" id="Node000002" href="$classmdf_1_1_i_attachment.html" title="Interface against an attached file." alt="" coords="161,5,283,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="48,287,54,235,68,169,95,100,114,68,138,40,160,26,162,31,142,44,118,71,99,103,73,171,59,236,54,288"/>
+<area shape="rect" id="Node000003" href="$classmdf_1_1_i_channel.html" title="Defines a MDF channel (CN) block." alt="" coords="171,55,273,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="51,287,59,244,75,191,100,137,118,111,138,89,153,79,170,72,172,77,156,84,142,93,122,115,105,139,80,193,64,245,56,288"/>
+<area shape="rect" id="Node000004" href="$classmdf_1_1_i_channel_array.html" title="Defines an interface against an array (CA) block." alt="" coords="156,104,288,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="54,287,65,253,82,213,107,173,138,139,157,127,160,132,142,143,111,176,87,216,70,255,59,288"/>
+<area shape="rect" id="Node000005" href="$classmdf_1_1_i_channel_conversion.html" title="Defines a channel conversion (CC) block." alt="" coords="140,153,304,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="60,288,91,237,113,211,138,188,160,176,163,181,142,192,116,214,95,240,64,290"/>
+<area shape="rect" id="Node000006" href="$classmdf_1_1_i_channel_group.html" title="Interface against a channel group (CG) block." alt="" coords="154,203,290,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="70,290,101,262,139,237,166,226,168,230,141,242,104,267,74,294"/>
+<area shape="rect" id="Node000007" href="$classmdf_1_1_i_channel_hierarchy.html" title="Channel hierarchy (CH) block." alt="" coords="144,252,300,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="105,295,176,275,177,280,106,301"/>
+<area shape="rect" id="Node000008" href="$classmdf_1_1_i_data_group.html" title="Interface to a data group (DG) block." alt="" coords="164,301,280,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="106,311,164,311,164,317,106,317"/>
+<area shape="rect" id="Node000009" href="$classmdf_1_1_i_event.html" title="Interface against an event block." alt="" coords="179,351,265,376"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="106,328,179,349,178,354,105,333"/>
+<area shape="rect" id="Node000010" href="$classmdf_1_1_i_file_history.html" title="Interface class against an MDF FH block." alt="" coords="164,400,280,425"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="74,334,105,361,141,385,171,398,169,402,139,390,102,365,71,338"/>
+<area shape="rect" id="Node000011" href="$classmdf_1_1_i_header.html" title="Interface class against an MDF HD block." alt="" coords="175,449,269,475"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="64,338,95,387,117,413,141,434,175,450,173,455,139,439,113,416,91,390,60,340"/>
+<area shape="rect" id="Node000012" href="$classmdf_1_1_i_meta_data.html" title="Interface against an meta data block (MD) in a MDF4 file." alt="" coords="167,499,277,524"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="59,339,70,372,87,411,111,450,142,484,168,498,165,503,138,488,107,454,83,414,65,374,54,341"/>
+<area shape="rect" id="Node000013" href="$classmdf_1_1_i_sample_reduction.html" title="Defines an interface to a sample reduction (SR) block." alt="" coords="144,548,300,573"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="56,340,65,383,80,435,106,488,122,512,142,533,161,546,158,550,138,537,118,515,101,490,75,437,59,384,51,341"/>
+<area shape="rect" id="Node000014" href="$classmdf_1_1_i_source_information.html" title="Interface to a source information (SI) block." alt="" coords="143,597,301,623"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="54,340,59,391,74,456,100,524,119,555,142,583,160,595,157,599,138,587,114,558,95,526,68,458,54,392,48,341"/>
+</map>

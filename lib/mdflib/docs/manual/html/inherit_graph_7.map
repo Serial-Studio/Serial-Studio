@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classmdf_1_1_i_timestamp.html" title="Interface for timestamp handling in MDF files." alt="" coords="5,55,124,80"/>
+<area shape="rect" id="Node000001" href="$classmdf_1_1_local_timestamp.html" title="Class representing a local timestamp, with timezone and DST offset." alt="" coords="184,5,331,31"/>
+<area shape="poly" id="edge15_Node000000_Node000001" title=" " alt="" coords="127,49,206,28,207,33,129,54"/>
+<area shape="rect" id="Node000002" href="$classmdf_1_1_timezone_timestamp.html" title="Class representing a timestamp with timezone information." alt="" coords="172,55,343,80"/>
+<area shape="poly" id="edge16_Node000000_Node000002" title=" " alt="" coords="137,65,172,65,172,70,137,70"/>
+<area shape="rect" id="Node000003" href="$classmdf_1_1_utc_timestamp.html" title="Class representing a UTC timestamp." alt="" coords="190,104,325,129"/>
+<area shape="poly" id="edge17_Node000000_Node000003" title=" " alt="" coords="129,81,207,101,206,106,127,86"/>
+</map>

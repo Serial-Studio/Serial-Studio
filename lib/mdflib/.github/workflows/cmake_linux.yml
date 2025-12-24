@@ -1,0 +1,34 @@
+---
+name: CMake Build Linux
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+  VCPKG_FILE: /usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: CMAKE Configure
+        run: >
+          cmake -B ${{github.workspace}}/build 
+          -D MDF_BUILD_TOOL=OFF -D MDF_BUILD_TEST=ON -D MDF_BUILD_SHARED_LIB=ON
+          -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} 
+          -D CMAKE_TOOLCHAIN_FILE=${{env.VCPKG_FILE}}
+
+      - name: CMake Build
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+      - name: Unit Test
+        working-directory: ${{github.workspace}}/build
+        run: ctest -C ${{env.BUILD_TYPE}}
+...

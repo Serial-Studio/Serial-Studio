@@ -1,0 +1,14 @@
+<map id="include/mdf/ichannelarray.h" name="include/mdf/ichannelarray.h">
+<area shape="rect" id="Node000001" title="Defines a channel array (CA) block." alt="" coords="5,5,185,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="43,152,105,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="69,33,39,52,25,65,15,80,12,96,18,113,30,128,46,141,42,145,26,132,13,115,7,97,10,78,21,61,36,48,67,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="25,79,81,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="91,32,69,68,64,66,86,30"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="105,79,171,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="105,30,126,66,122,68,100,32"/>
+<area shape="rect" id="Node000005" href="$iblock_8h.html" title="All MDF blocks inherits from the IBlock class. The interface class is used internally in lists...." alt="" coords="196,79,288,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="120,28,207,70,205,75,118,33"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="216,106,115,149,113,144,214,102"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="215,152,269,177"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="245,104,245,138,239,138,239,104"/>
+</map>

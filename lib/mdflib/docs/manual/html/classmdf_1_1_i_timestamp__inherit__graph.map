@@ -1,0 +1,9 @@
+<map id="mdf::ITimestamp" name="mdf::ITimestamp">
+<area shape="rect" id="Node000001" title="Interface for timestamp handling in MDF files." alt="" coords="202,5,321,31"/>
+<area shape="rect" id="Node000002" href="$classmdf_1_1_local_timestamp.html" title="Class representing a local timestamp, with timezone and DST offset." alt="" coords="5,79,152,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="220,38,110,81,108,76,218,33"/>
+<area shape="rect" id="Node000003" href="$classmdf_1_1_timezone_timestamp.html" title="Class representing a timestamp with timezone information." alt="" coords="176,79,347,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="264,44,264,79,259,79,259,44"/>
+<area shape="rect" id="Node000004" href="$classmdf_1_1_utc_timestamp.html" title="Class representing a UTC timestamp." alt="" coords="371,79,506,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="304,33,411,76,409,81,302,38"/>
+</map>

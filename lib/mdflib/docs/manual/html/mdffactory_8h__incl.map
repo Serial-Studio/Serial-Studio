@@ -1,0 +1,11 @@
+<map id="include/mdf/mdffactory.h" name="include/mdf/mdffactory.h">
+<area shape="rect" id="Node000001" title="Factory class for the MDF library." alt="" coords="97,5,260,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,83,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,33,79,74,77,70,156,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="107,79,168,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,32,153,68,149,65,170,30"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="193,79,247,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="188,30,209,65,204,68,183,32"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="272,79,341,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="201,28,275,69,272,74,198,33"/>
+</map>

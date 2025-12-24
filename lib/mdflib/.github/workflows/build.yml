@@ -1,0 +1,178 @@
+# https://docs.github.com/en/actions/learn-github-actions/contexts
+
+---
+  name: mdflib
+  on:
+    push:
+      branches:
+      - main
+    pull_request:
+    workflow_dispatch:
+  
+  env:
+    vcpkgCommitId: 6c8039453583a431a7376ad3abdd062e142e70cc
+  
+  
+  jobs:
+    windows:
+      name: run on ${{ matrix.os }}(${{ matrix.arch }})
+      runs-on: ${{ matrix.os }}
+      strategy:
+        fail-fast: false
+        matrix:
+          os: [windows-latest]
+          arch: [x64, x64_x86]
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          
+        - name: Setup cmake
+          uses: lukka/get-cmake@latest
+  
+        # Setup vcpkg: ensures vcpkg is downloaded and built.
+        # Since vcpkg.json is being used later on to install the packages
+        # when `run-cmake` runs, no packages are installed at this time 
+        # (and vcpkg does not run).
+        - name: Setup vcpkg
+          uses: lukka/run-vcpkg@v11
+          with:
+            # This is the default location of the directory containing vcpkg sources.
+            # Change it to the right location if needed.
+            vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+  
+            # If not using a submodule for vcpkg sources, this specifies which commit
+            # id must be checkout from a Git repo. 
+            # Note: it must not be set if using a Git submodule for vcpkg.
+            vcpkgGitCommitId: '${{ env.vcpkgCommitId }}'
+  
+            # This is the glob expression used to locate the vcpkg.json. 
+            # Change it to match a single manifest file you want to use.
+            # Note: do not use `${{ github.context }}` to compose the value as it
+            # contains backslashes that would be misinterpreted. Instead
+            # compose a value relative to the root of the repository using
+            # `**/path/from/root/of/repo/to/vcpkg.json` to match the desired `vcpkg.json`.
+            vcpkgJsonGlob: '**/vcpkg.json'
+  
+            # This is only needed if the command `vcpkg install` must run at this step.
+            # Instead it is highly suggested to let `run-cmake` to run vcpkg later on
+            # using the vcpkg.cmake toolchain. The default is `false`.
+            # runVcpkgInstall: true
+  
+        - name: Build Static
+          uses: lukka/run-cmake@v10
+          with:
+            # This is the default path to the CMakeLists.txt along side the
+            # CMakePresets.json. Change if you need have CMakeLists.txt and CMakePresets.json
+            # located elsewhere.
+            cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
+   
+            # This is the name of the CMakePresets.json's configuration to use to generate
+            # the project files. This configuration leverages the vcpkg.cmake toolchain file to
+            # run vcpkg and install all dependencies specified in vcpkg.json.
+            configurePreset: 'msvc-vcpkg-static-${{ matrix.arch }}'
+            configurePresetAdditionalArgs: "['-DMDF_BUILD_SHARED_LIB=OFF', '-DMDF_BUILD_TOOL=ON', '-DMDF_BUILD_SHARED_LIB_EXAMPLE=ON']"
+  
+            # This is the name of the CMakePresets.json's configuration to build the project.
+            buildPreset: 'msvc-vcpkg-static-${{ matrix.arch }}-release'
+
+            # This is the name of the CMakePresets.json's configuration to test the project with.
+            testPreset: 'msvc-vcpkg-static-${{ matrix.arch }}'
+
+        - name: Build Shared
+          uses: lukka/run-cmake@v10
+          with:
+            # This is the default path to the CMakeLists.txt along side the
+            # CMakePresets.json. Change if you need have CMakeLists.txt and CMakePresets.json
+            # located elsewhere.
+            cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
+   
+            # This is the name of the CMakePresets.json's configuration to use to generate
+            # the project files. This configuration leverages the vcpkg.cmake toolchain file to
+            # run vcpkg and install all dependencies specified in vcpkg.json.
+            configurePreset: 'msvc-vcpkg-${{ matrix.arch }}'
+            configurePresetAdditionalArgs: "['-DMDF_BUILD_SHARED_LIB_NET=ON']"
+  
+            # This is the name of the CMakePresets.json's configuration to build the project.
+            buildPreset: 'msvc-vcpkg-${{ matrix.arch }}-release'
+
+        - name: Upload build
+          uses: actions/upload-artifact@v4
+          with:
+            name: mdflibs-${{ matrix.os }}-${{ matrix.arch }}
+            path: |
+              install/msvc-vcpkg-static-${{ matrix.arch }}/
+              install/msvc-vcpkg-${{ matrix.arch }}/
+
+    mac-and-ubuntu:
+      name: run on ${{ matrix.os }}(${{ matrix.arch }})
+      runs-on: ${{ matrix.os }}
+      strategy:
+        fail-fast: false
+        matrix:
+          os: [ubuntu-latest, macos-latest]
+          arch: [x64]
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Setup cmake
+          uses: lukka/get-cmake@latest
+  
+        # Setup vcpkg: ensures vcpkg is downloaded and built.
+        # Since vcpkg.json is being used later on to install the packages
+        # when `run-cmake` runs, no packages are installed at this time 
+        # (and vcpkg does not run).
+        - name: Setup vcpkg
+          uses: lukka/run-vcpkg@v11
+          with:
+            # This is the default location of the directory containing vcpkg sources.
+            # Change it to the right location if needed.
+            vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+  
+            # If not using a submodule for vcpkg sources, this specifies which commit
+            # id must be checkout from a Git repo. 
+            # Note: it must not be set if using a Git submodule for vcpkg.
+            vcpkgGitCommitId: '${{ env.vcpkgCommitId }}'
+  
+            # This is the glob expression used to locate the vcpkg.json. 
+            # Change it to match a single manifest file you want to use.
+            # Note: do not use `${{ github.context }}` to compose the value as it
+            # contains backslashes that would be misinterpreted. Instead
+            # compose a value relative to the root of the repository using
+            # `**/path/from/root/of/repo/to/vcpkg.json` to match the desired `vcpkg.json`.
+            vcpkgJsonGlob: '**/vcpkg.json'
+  
+            # This is only needed if the command `vcpkg install` must run at this step.
+            # Instead it is highly suggested to let `run-cmake` to run vcpkg later on
+            # using the vcpkg.cmake toolchain. The default is `false`.
+            # runVcpkgInstall: true
+  
+        - name: Install dependencies
+          run: sudo apt-get install -y libxi-dev libxtst-dev libxrandr-dev libltdl-dev
+          if: runner.os == 'Linux'
+
+        - name: Build And Test
+          uses: lukka/run-cmake@v10
+          with:
+            # This is the default path to the CMakeLists.txt along side the
+            # CMakePresets.json. Change if you need have CMakeLists.txt and CMakePresets.json
+            # located elsewhere.
+            cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
+   
+            # This is the name of the CMakePresets.json's configuration to use to generate
+            # the project files. This configuration leverages the vcpkg.cmake toolchain file to
+            # run vcpkg and install all dependencies specified in vcpkg.json.
+            configurePreset: 'ninja-vcpkg-${{ matrix.arch }}'
+            configurePresetAdditionalArgs: "['-DMDF_BUILD_TEST=ON', '-DMDF_BUILD_SHARED_LIB_EXAMPLE=ON', '-DMDF_BUILD_TOOL=ON']"
+            
+            # This is the name of the CMakePresets.json's configuration to build the project.
+            buildPreset: 'ninja-vcpkg-${{ matrix.arch }}-release'
+
+            # This is the name of the CMakePresets.json's configuration to test the project with.
+            testPreset: 'ninja-vcpkg-${{ matrix.arch }}'
+
+        - name: Upload build
+          uses: actions/upload-artifact@v4
+          with:
+            name: mdflibs-${{ matrix.os }}-${{ matrix.arch }}
+            path: install/ninja-vcpkg-${{ matrix.arch }}/

@@ -1,0 +1,24 @@
+<map id="include/mdf/mdfhelper.h" name="include/mdf/mdfhelper.h">
+<area shape="rect" id="Node000001" title="Support class for the MDF library." alt="" coords="187,5,345,31"/>
+<area shape="rect" id="Node000002" href="$ichannel_8h.html" title="The define an interface against a channel block (CN)." alt="" coords="335,152,485,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="321,33,355,51,385,77,397,95,405,116,412,151,407,152,400,117,392,98,381,80,352,56,318,38"/>
+<area shape="rect" id="Node000006" href="$ichannelobserver_8h.html" title="A channel observer is holds a list of channel samples for a channel." alt="" coords="137,372,336,397"/>
+<area shape="poly" id="edge13_Node000001_Node000006" title=" " alt="" coords="174,35,117,51,63,77,41,93,24,113,13,137,9,164,9,239,11,285,18,303,33,322,56,340,82,354,138,372,136,377,80,359,53,345,29,326,13,306,6,287,3,239,3,163,8,135,19,110,37,90,60,72,115,46,173,30"/>
+<area shape="rect" id="Node000009" href="$ichannelconversion_8h.html" title="Defines a channel conversion (CC) block." alt="" coords="160,79,372,104"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="269,44,269,79,263,79,263,44"/>
+<area shape="rect" id="Node000003" href="$ichannelgroup_8h.html" title="Defines an interface against a channel group (CG) block." alt="" coords="189,225,372,251"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="378,186,303,227,301,223,376,182"/>
+<area shape="rect" id="Node000004" href="$ichannelhierarchy_8h.html" title="The channel hierarchy (CH) block defines channel dependencies." alt="" coords="264,299,468,324"/>
+<area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="405,192,372,299,367,298,400,190"/>
+<area shape="poly" id="edge8_Node000002_Node000006" title=" " alt="" coords="435,185,460,214,484,250,491,269,495,289,492,308,483,326,460,342,424,356,335,375,334,369,422,351,457,338,479,322,487,306,489,289,486,271,479,253,456,217,431,189"/>
+<area shape="rect" id="Node000008" href="$isamplereduction_8h.html" title=" " alt="" coords="408,372,609,397"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="471,180,502,198,527,224,536,243,540,264,538,307,528,345,517,373,512,371,523,343,532,306,534,265,531,245,522,227,499,202,468,185"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="306,257,354,296,350,300,303,261"/>
+<area shape="rect" id="Node000005" href="$isampleobserver_8h.html" title="Interface class to a sample observer. This class is used internally." alt="" coords="44,299,240,324"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="247,259,166,301,163,296,245,254"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="170,330,223,370,220,374,167,334"/>
+<area shape="rect" id="Node000007" href="$mdfreader_8h_source.html" title=" " alt="" coords="269,445,429,471"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="268,403,332,443,329,447,265,407"/>
+<area shape="poly" id="edge10_Node000008_Node000007" title=" " alt="" coords="472,405,376,448,374,443,470,400"/>
+<area shape="poly" id="edge12_Node000009_Node000002" title=" " alt="" coords="302,108,388,149,385,154,300,112"/>
+</map>

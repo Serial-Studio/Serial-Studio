@@ -1,0 +1,20 @@
+<map id="include/mdf/iheader.h" name="include/mdf/iheader.h">
+<area shape="rect" id="Node000001" title="Interface against a HD block." alt="" coords="151,5,297,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,72,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,33,82,76,81,71,193,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="178,225,233,251"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,33,162,52,148,65,137,80,131,97,130,116,141,152,162,186,186,214,181,217,158,190,136,155,125,116,126,96,132,77,144,61,159,47,192,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="147,79,203,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="218,33,193,69,188,66,214,29"/>
+<area shape="rect" id="Node000005" href="$iblock_8h.html" title="All MDF blocks inherits from the IBlock class. The interface class is used internally in lists...." alt="" coords="227,79,319,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="234,29,260,66,255,69,230,33"/>
+<area shape="rect" id="Node000007" href="$itimestamp_8h_source.html" title=" " alt="" coords="329,152,426,177"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="256,28,295,48,333,77,355,107,371,138,366,140,351,110,329,81,292,53,253,33"/>
+<area shape="rect" id="Node000008" href="$imdftimestamp_8h_source.html" title=" " alt="" coords="395,79,514,104"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="262,28,405,72,404,77,260,33"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="265,106,249,127,233,153,221,183,213,213,208,211,216,182,228,151,244,124,261,103"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="243,152,304,177"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="276,104,276,138,271,138,271,104"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="351,180,246,223,244,218,349,175"/>
+<area shape="poly" id="edge10_Node000008_Node000007" title=" " alt="" coords="444,106,402,144,398,141,440,102"/>
+</map>

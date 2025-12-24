@@ -1,0 +1,28 @@
+/* XPM */
+static const char *folder_close_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 6 1 ",
+"  c None",
+". c gray47",
+"X c #EAB766",
+"o c #8D52AB",
+"O c #C3A3D3",
+"+ c white",
+/* pixels */
+"          ooo   ",
+"        ooooooo ",
+" .....  o++++oo ",
+"...... oo++Ooooo",
+"...... oo+O+Oooo",
+"       oo+oO+Ooo",
+"XXXXXX  ooooO+o ",
+"XXXXXXX ooooooo ",
+"XXXXXXX   ooo   ",
+"XXXXXXXXXXXXXXX ",
+"XXXXXXXXXXXXXXX ",
+"XXXXXXXXXXXXXXX ",
+"XXXXXXXXXXXXXXX ",
+"XXXXXXXXXXXXXXX ",
+"XXXXXXXXXXXXXXX ",
+" XXXXXXXXXXXXX  "
+};

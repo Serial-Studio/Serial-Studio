@@ -1,0 +1,14 @@
+<map id="include/mdf/idatagroup.h" name="include/mdf/idatagroup.h">
+<area shape="rect" id="Node000001" title="Interface to a data group (DG) block." alt="" coords="5,5,168,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="33,152,87,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="63,33,34,52,22,65,12,80,9,96,13,112,36,141,32,144,9,114,3,96,7,78,17,62,31,48,60,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="21,79,77,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="83,32,64,68,59,65,78,30"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="102,79,149,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="95,30,115,65,110,68,91,32"/>
+<area shape="rect" id="Node000005" href="$iblock_8h.html" title="All MDF blocks inherits from the IBlock class. The interface class is used internally in lists...." alt="" coords="173,79,265,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="109,28,186,70,184,74,107,33"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="194,106,99,149,97,144,192,102"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="188,152,249,177"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="221,104,221,138,216,138,216,104"/>
+</map>

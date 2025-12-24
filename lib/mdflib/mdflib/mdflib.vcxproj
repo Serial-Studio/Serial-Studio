@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{4ea4c08d-2555-493b-b3b6-0e26381d0a09}</ProjectGuid>
+    <RootNamespace>mdflib</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>false</EnableASAN>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>false</EnableASAN>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>false</EnableASAN>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>false</EnableASAN>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ExternalIncludePath>../include;$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ExternalIncludePath>../include;$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ExternalIncludePath>../include;$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ExternalIncludePath>../include;$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnableManifest>true</VcpkgEnableManifest>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgUseMD>true</VcpkgUseMD>
+    <VcpkgHostTriplet>x64-windows-static-md</VcpkgHostTriplet>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgUseMD>true</VcpkgUseMD>
+    <VcpkgHostTriplet>x64-windows-static-md</VcpkgHostTriplet>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgUseMD>true</VcpkgUseMD>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgUseMD>true</VcpkgUseMD>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;XML_STATIC</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;XML_STATIC</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\at4block.cpp" />
+    <ClCompile Include="src\atcomment.cpp" />
+    <ClCompile Include="src\bigbuffer.cpp" />
+    <ClCompile Include="src\blockproperty.cpp" />
+    <ClCompile Include="src\ca4block.cpp" />
+    <ClCompile Include="src\canconfigadapter.cpp" />
+    <ClCompile Include="src\canmessage.cpp" />
+    <ClCompile Include="src\cc3block.cpp" />
+    <ClCompile Include="src\cc4block.cpp" />
+    <ClCompile Include="src\cccomment.cpp" />
+    <ClCompile Include="src\ccunit.cpp" />
+    <ClCompile Include="src\cd3block.cpp" />
+    <ClCompile Include="src\ce3block.cpp" />
+    <ClCompile Include="src\cg3block.cpp" />
+    <ClCompile Include="src\cg4block.cpp" />
+    <ClCompile Include="src\cgcomment.cpp" />
+    <ClCompile Include="src\cgrange.cpp" />
+    <ClCompile Include="src\ch4block.cpp" />
+    <ClCompile Include="src\channelobserver.cpp" />
+    <ClCompile Include="src\chcomment.cpp" />
+    <ClCompile Include="src\cn3block.cpp" />
+    <ClCompile Include="src\cn4block.cpp" />
+    <ClCompile Include="src\cncomment.cpp" />
+    <ClCompile Include="src\cnunit.cpp" />
+    <ClCompile Include="src\convertersamplequeue.cpp" />
+    <ClCompile Include="src\cryptoutil.cpp" />
+    <ClCompile Include="src\datablock.cpp" />
+    <ClCompile Include="src\datalistblock.cpp" />
+    <ClCompile Include="src\dbchelper.cpp" />
+    <ClCompile Include="src\dg3block.cpp" />
+    <ClCompile Include="src\dg4block.cpp" />
+    <ClCompile Include="src\dgcomment.cpp" />
+    <ClCompile Include="src\dgrange.cpp" />
+    <ClCompile Include="src\di4block.cpp" />
+    <ClCompile Include="src\dl4block.cpp" />
+    <ClCompile Include="src\dt3block.cpp" />
+    <ClCompile Include="src\dt4block.cpp" />
+    <ClCompile Include="src\dv4block.cpp" />
+    <ClCompile Include="src\dz4block.cpp" />
+    <ClCompile Include="src\etag.cpp" />
+    <ClCompile Include="src\ethconfigadapter.cpp" />
+    <ClCompile Include="src\ethmessage.cpp" />
+    <ClCompile Include="src\ev4block.cpp" />
+    <ClCompile Include="src\evcomment.cpp" />
+    <ClCompile Include="src\expatxml.cpp" />
+    <ClCompile Include="src\fh4block.cpp" />
+    <ClCompile Include="src\fhcomment.cpp" />
+    <ClCompile Include="src\flexrayconfigadapter.cpp" />
+    <ClCompile Include="src\flexraymessage.cpp" />
+    <ClCompile Include="src\hd3block.cpp" />
+    <ClCompile Include="src\hd4block.cpp" />
+    <ClCompile Include="src\hdcomment.cpp" />
+    <ClCompile Include="src\hl4block.cpp" />
+    <ClCompile Include="src\hoadmindata.cpp" />
+    <ClCompile Include="src\hocompumethod.cpp" />
+    <ClCompile Include="src\hocompuscale.cpp" />
+    <ClCompile Include="src\hoenumerates.cpp" />
+    <ClCompile Include="src\hointerval.cpp" />
+    <ClCompile Include="src\honamedetails.cpp" />
+    <ClCompile Include="src\hophysicaldimension.cpp" />
+    <ClCompile Include="src\horevision.cpp" />
+    <ClCompile Include="src\hoscaleconstraint.cpp" />
+    <ClCompile Include="src\hounit.cpp" />
+    <ClCompile Include="src\hounitgroup.cpp" />
+    <ClCompile Include="src\hounitspecification.cpp" />
+    <ClCompile Include="src\iattachment.cpp" />
+    <ClCompile Include="src\iblock.cpp" />
+    <ClCompile Include="src\ichannel.cpp" />
+    <ClCompile Include="src\ichannelarray.cpp" />
+    <ClCompile Include="src\ichannelconversion.cpp" />
+    <ClCompile Include="src\ichannelgroup.cpp" />
+    <ClCompile Include="src\ichannelhierarchy.cpp" />
+    <ClCompile Include="src\ichannelobserver.cpp" />
+    <ClCompile Include="src\iconfigadapter.cpp" />
+    <ClCompile Include="src\idatagroup.cpp" />
+    <ClCompile Include="src\idblock.cpp" />
+    <ClCompile Include="src\ievent.cpp" />
+    <ClCompile Include="src\ifilehistory.cpp" />
+    <ClCompile Include="src\iheader.cpp" />
+    <ClCompile Include="src\imetadata.cpp" />
+    <ClCompile Include="src\isampleobserver.cpp" />
+    <ClCompile Include="src\isamplereduction.cpp" />
+    <ClCompile Include="src\isourceinformation.cpp" />
+    <ClCompile Include="src\ixmlfile.cpp" />
+    <ClCompile Include="src\ixmlnode.cpp" />
+    <ClCompile Include="src\ld4block.cpp" />
+    <ClCompile Include="src\linconfigadapter.cpp" />
+    <ClCompile Include="src\linmessage.cpp" />
+    <ClCompile Include="src\littlebuffer.cpp" />
+    <ClCompile Include="src\md4block.cpp" />
+    <ClCompile Include="src\mdalternativename.cpp" />
+    <ClCompile Include="src\mdcomment.cpp" />
+    <ClCompile Include="src\mdenumerate.cpp" />
+    <ClCompile Include="src\mdextension.cpp" />
+    <ClCompile Include="src\mdf3file.cpp" />
+    <ClCompile Include="src\mdf3timestamp.cpp" />
+    <ClCompile Include="src\mdf3writer.cpp" />
+    <ClCompile Include="src\mdf4file.cpp" />
+    <ClCompile Include="src\mdf4timestamp.cpp" />
+    <ClCompile Include="src\mdf4writer.cpp" />
+    <ClCompile Include="src\mdfblock.cpp" />
+    <ClCompile Include="src\mdfbuslogger.cpp" />
+    <ClCompile Include="src\mdfconverter.cpp" />
+    <ClCompile Include="src\mdfenumerates.cpp" />
+    <ClCompile Include="src\mdffactory.cpp" />
+    <ClCompile Include="src\mdffile.cpp" />
+    <ClCompile Include="src\mdfhelper.cpp" />
+    <ClCompile Include="src\mdflogstream.cpp" />
+    <ClCompile Include="src\mdformula.cpp" />
+    <ClCompile Include="src\mdfreader.cpp" />
+    <ClCompile Include="src\mdfwriter.cpp" />
+    <ClCompile Include="src\mdlist.cpp" />
+    <ClCompile Include="src\mdnumber.cpp" />
+    <ClCompile Include="src\mdproperty.cpp" />
+    <ClCompile Include="src\mdstandardattribute.cpp" />
+    <ClCompile Include="src\mdstring.cpp" />
+    <ClCompile Include="src\mdsyntax.cpp" />
+    <ClCompile Include="src\mdvariable.cpp" />
+    <ClCompile Include="src\mostconfigadapter.cpp" />
+    <ClCompile Include="src\mostmessage.cpp" />
+    <ClCompile Include="src\platform.cpp" />
+    <ClCompile Include="src\pr3block.cpp" />
+    <ClCompile Include="src\rd4block.cpp" />
+    <ClCompile Include="src\readcache.cpp" />
+    <ClCompile Include="src\ri4block.cpp" />
+    <ClCompile Include="src\rv4block.cpp" />
+    <ClCompile Include="src\samplequeue.cpp" />
+    <ClCompile Include="src\sd4block.cpp" />
+    <ClCompile Include="src\si4block.cpp" />
+    <ClCompile Include="src\sicomment.cpp" />
+    <ClCompile Include="src\sr3block.cpp" />
+    <ClCompile Include="src\sr4block.cpp" />
+    <ClCompile Include="src\timestamp.cpp" />
+    <ClCompile Include="src\tr3block.cpp" />
+    <ClCompile Include="src\tx3block.cpp" />
+    <ClCompile Include="src\tx4block.cpp" />
+    <ClCompile Include="src\vlsddata.cpp" />
+    <ClCompile Include="src\writecache.cpp" />
+    <ClCompile Include="src\writer4samplequeue.cpp" />
+    <ClCompile Include="src\writexml.cpp" />
+    <ClCompile Include="src\xmlnode.cpp" />
+    <ClCompile Include="src\zlibutil.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\mdf\atcomment.h" />
+    <ClInclude Include="..\include\mdf\canbusobserver.h" />
+    <ClInclude Include="..\include\mdf\canconfigadapter.h" />
+    <ClInclude Include="..\include\mdf\canmessage.h" />
+    <ClInclude Include="..\include\mdf\cccomment.h" />
+    <ClInclude Include="..\include\mdf\ccunit.h" />
+    <ClInclude Include="..\include\mdf\cgcomment.h" />
+    <ClInclude Include="..\include\mdf\chcomment.h" />
+    <ClInclude Include="..\include\mdf\cncomment.h" />
+    <ClInclude Include="..\include\mdf\cnunit.h" />
+    <ClInclude Include="..\include\mdf\cryptoutil.h" />
+    <ClInclude Include="..\include\mdf\dgcomment.h" />
+    <ClInclude Include="..\include\mdf\etag.h" />
+    <ClInclude Include="..\include\mdf\ethconfigadapter.h" />
+    <ClInclude Include="..\include\mdf\ethmessage.h" />
+    <ClInclude Include="..\include\mdf\evcomment.h" />
+    <ClInclude Include="..\include\mdf\fhcomment.h" />
+    <ClInclude Include="..\include\mdf\flexrayconfigadapter.h" />
+    <ClInclude Include="..\include\mdf\flexraymessage.h" />
+    <ClInclude Include="..\include\mdf\hdcomment.h" />
+    <ClInclude Include="..\include\mdf\hoadmindata.h" />
+    <ClInclude Include="..\include\mdf\hocompumethod.h" />
+    <ClInclude Include="..\include\mdf\hocompuscale.h" />
+    <ClInclude Include="..\include\mdf\hoenumerates.h" />
+    <ClInclude Include="..\include\mdf\hointerval.h" />
+    <ClInclude Include="..\include\mdf\honamedetails.h" />
+    <ClInclude Include="..\include\mdf\hophysicaldimension.h" />
+    <ClInclude Include="..\include\mdf\horevision.h" />
+    <ClInclude Include="..\include\mdf\hoscaleconstraint.h" />
+    <ClInclude Include="..\include\mdf\hounit.h" />
+    <ClInclude Include="..\include\mdf\hounitgroup.h" />
+    <ClInclude Include="..\include\mdf\hounitspecification.h" />
+    <ClInclude Include="..\include\mdf\iattachment.h" />
+    <ClInclude Include="..\include\mdf\iblock.h" />
+    <ClInclude Include="..\include\mdf\ichannel.h" />
+    <ClInclude Include="..\include\mdf\ichannelarray.h" />
+    <ClInclude Include="..\include\mdf\ichannelconversion.h" />
+    <ClInclude Include="..\include\mdf\ichannelgroup.h" />
+    <ClInclude Include="..\include\mdf\ichannelhierarchy.h" />
+    <ClInclude Include="..\include\mdf\ichannelobserver.h" />
+    <ClInclude Include="..\include\mdf\iconfigadapter.h" />
+    <ClInclude Include="..\include\mdf\idatagroup.h" />
+    <ClInclude Include="..\include\mdf\ievent.h" />
+    <ClInclude Include="..\include\mdf\ifilehistory.h" />
+    <ClInclude Include="..\include\mdf\iheader.h" />
+    <ClInclude Include="..\include\mdf\imdftimestamp.h" />
+    <ClInclude Include="..\include\mdf\imetadata.h" />
+    <ClInclude Include="..\include\mdf\isampleobserver.h" />
+    <ClInclude Include="..\include\mdf\isamplereduction.h" />
+    <ClInclude Include="..\include\mdf\isourceinformation.h" />
+    <ClInclude Include="..\include\mdf\linconfigadapter.h" />
+    <ClInclude Include="..\include\mdf\linmessage.h" />
+    <ClInclude Include="..\include\mdf\mdalternativename.h" />
+    <ClInclude Include="..\include\mdf\mdcomment.h" />
+    <ClInclude Include="..\include\mdf\mdenumerate.h" />
+    <ClInclude Include="..\include\mdf\mdextension.h" />
+    <ClInclude Include="..\include\mdf\mdfenumerates.h" />
+    <ClInclude Include="..\include\mdf\mdffactory.h" />
+    <ClInclude Include="..\include\mdf\mdffile.h" />
+    <ClInclude Include="..\include\mdf\mdfhelper.h" />
+    <ClInclude Include="..\include\mdf\mdflogstream.h" />
+    <ClInclude Include="..\include\mdf\mdformula.h" />
+    <ClInclude Include="..\include\mdf\mdfreader.h" />
+    <ClInclude Include="..\include\mdf\mdfwriter.h" />
+    <ClInclude Include="..\include\mdf\mdlist.h" />
+    <ClInclude Include="..\include\mdf\mdnumber.h" />
+    <ClInclude Include="..\include\mdf\mdproperty.h" />
+    <ClInclude Include="..\include\mdf\mdstandardattribute.h" />
+    <ClInclude Include="..\include\mdf\mdstring.h" />
+    <ClInclude Include="..\include\mdf\mdsyntax.h" />
+    <ClInclude Include="..\include\mdf\mdvariable.h" />
+    <ClInclude Include="..\include\mdf\mostconfigadapter.h" />
+    <ClInclude Include="..\include\mdf\mostmessage.h" />
+    <ClInclude Include="..\include\mdf\samplerecord.h" />
+    <ClInclude Include="..\include\mdf\sicomment.h" />
+    <ClInclude Include="..\include\mdf\zlibutil.h" />
+    <ClInclude Include="src\at4block.h" />
+    <ClInclude Include="src\bigbuffer.h" />
+    <ClInclude Include="src\blockproperty.h" />
+    <ClInclude Include="src\ca4block.h" />
+    <ClInclude Include="src\cc3block.h" />
+    <ClInclude Include="src\cc4block.h" />
+    <ClInclude Include="src\cd3block.h" />
+    <ClInclude Include="src\ce3block.h" />
+    <ClInclude Include="src\cg3block.h" />
+    <ClInclude Include="src\cg4block.h" />
+    <ClInclude Include="src\cgrange.h" />
+    <ClInclude Include="src\ch4block.h" />
+    <ClInclude Include="src\channelobserver.h" />
+    <ClInclude Include="src\cn3block.h" />
+    <ClInclude Include="src\cn4block.h" />
+    <ClInclude Include="src\convertersamplequeue.h" />
+    <ClInclude Include="src\datablock.h" />
+    <ClInclude Include="src\datalistblock.h" />
+    <ClInclude Include="src\dbchelper.h" />
+    <ClInclude Include="src\dg3block.h" />
+    <ClInclude Include="src\dg4block.h" />
+    <ClInclude Include="src\dgrange.h" />
+    <ClInclude Include="src\di4block.h" />
+    <ClInclude Include="src\dl4block.h" />
+    <ClInclude Include="src\dt3block.h" />
+    <ClInclude Include="src\dt4block.h" />
+    <ClInclude Include="src\dv4block.h" />
+    <ClInclude Include="src\dz4block.h" />
+    <ClInclude Include="src\ethconfigadapter.h" />
+    <ClInclude Include="src\ev4block.h" />
+    <ClInclude Include="src\expatxml.h" />
+    <ClInclude Include="src\fh4block.h" />
+    <ClInclude Include="src\half.hpp" />
+    <ClInclude Include="src\hd3block.h" />
+    <ClInclude Include="src\hd4block.h" />
+    <ClInclude Include="src\hl4block.h" />
+    <ClInclude Include="src\idblock.h" />
+    <ClInclude Include="src\ixmlfile.h" />
+    <ClInclude Include="src\ixmlnode.h" />
+    <ClInclude Include="src\ld4block.h" />
+    <ClInclude Include="src\littlebuffer.h" />
+    <ClInclude Include="src\md4block.h" />
+    <ClInclude Include="src\mdf3file.h" />
+    <ClInclude Include="src\mdf3timestamp.h" />
+    <ClInclude Include="src\mdf3writer.h" />
+    <ClInclude Include="src\mdf4file.h" />
+    <ClInclude Include="src\mdf4timestamp.h" />
+    <ClInclude Include="src\mdf4writer.h" />
+    <ClInclude Include="src\mdfblock.h" />
+    <ClInclude Include="src\mdfbuslogger.h" />
+    <ClInclude Include="src\mdfconverter.h" />
+    <ClInclude Include="src\platform.h" />
+    <ClInclude Include="src\pr3block.h" />
+    <ClInclude Include="src\rd4block.h" />
+    <ClInclude Include="src\readcache.h" />
+    <ClInclude Include="src\ri4block.h" />
+    <ClInclude Include="src\rv4block.h" />
+    <ClInclude Include="src\samplequeue.h" />
+    <ClInclude Include="src\sd4block.h" />
+    <ClInclude Include="src\si4block.h" />
+    <ClInclude Include="src\sr3block.h" />
+    <ClInclude Include="src\sr4block.h" />
+    <ClInclude Include="src\tr3block.h" />
+    <ClInclude Include="src\tx3block.h" />
+    <ClInclude Include="src\tx4block.h" />
+    <ClInclude Include="src\vlsddata.h" />
+    <ClInclude Include="src\writecache.h" />
+    <ClInclude Include="src\writer4samplequeue.h" />
+    <ClInclude Include="src\writexml.h" />
+    <ClInclude Include="src\xmlnode.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

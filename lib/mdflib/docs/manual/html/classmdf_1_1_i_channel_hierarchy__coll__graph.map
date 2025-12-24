@@ -1,0 +1,5 @@
+<map id="mdf::IChannelHierarchy" name="mdf::IChannelHierarchy">
+<area shape="rect" id="Node000001" title="Channel hierarchy (CH) block." alt="" coords="5,79,161,104"/>
+<area shape="rect" id="Node000002" href="$classmdf_1_1_i_block.html" title="Base class for all MDF blocks." alt="" coords="40,5,127,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,44,86,79,81,79,81,44"/>
+</map>

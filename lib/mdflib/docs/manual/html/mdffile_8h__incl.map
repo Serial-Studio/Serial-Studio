@@ -1,0 +1,26 @@
+<map id="include/mdf/mdffile.h" name="include/mdf/mdffile.h">
+<area shape="rect" id="Node000001" title="Interface against an MDF file object." alt="" coords="63,5,203,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,63,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,33,63,73,60,68,115,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="239,299,293,324"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="131,32,125,59,119,96,119,137,128,176,150,212,177,243,208,269,236,289,233,293,204,273,174,247,145,215,124,178,113,137,114,95,119,58,126,30"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="138,152,194,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="138,31,163,138,158,139,133,32"/>
+<area shape="rect" id="Node000005" href="$iheader_8h.html" title="Interface against a HD block." alt="" coords="252,79,352,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="161,28,263,71,261,76,159,33"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="291,106,273,127,259,153,252,188,252,224,262,285,256,286,246,224,247,187,254,151,269,124,287,103"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="281,106,201,148,199,143,279,102"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="269,152,335,177"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="305,104,305,138,299,138,299,104"/>
+<area shape="rect" id="Node000007" href="$iblock_8h.html" title="All MDF blocks inherits from the IBlock class. The interface class is used internally in lists...." alt="" coords="360,152,452,177"/>
+<area shape="poly" id="edge8_Node000005_Node000007" title=" " alt="" coords="320,102,379,142,376,146,317,106"/>
+<area shape="rect" id="Node000009" href="$itimestamp_8h_source.html" title=" " alt="" coords="451,225,548,251"/>
+<area shape="poly" id="edge11_Node000005_Node000009" title=" " alt="" coords="353,97,411,115,441,130,467,150,487,180,497,211,492,213,482,182,463,154,438,135,409,120,351,103"/>
+<area shape="rect" id="Node000010" href="$imdftimestamp_8h_source.html" title=" " alt="" coords="528,152,647,177"/>
+<area shape="poly" id="edge13_Node000005_Node000010" title=" " alt="" coords="348,101,529,146,527,151,347,107"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="396,180,289,291,285,287,393,176"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="365,225,426,251"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="407,178,402,212,396,211,402,177"/>
+<area shape="poly" id="edge12_Node000009_Node000003" title=" " alt="" coords="463,253,308,300,306,295,461,248"/>
+<area shape="poly" id="edge14_Node000010_Node000009" title=" " alt="" coords="575,179,526,219,523,214,572,175"/>
+</map>

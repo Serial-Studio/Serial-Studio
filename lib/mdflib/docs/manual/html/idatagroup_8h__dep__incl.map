@@ -1,0 +1,11 @@
+<map id="include/mdf/idatagroup.h" name="include/mdf/idatagroup.h">
+<area shape="rect" id="Node000001" title="Interface to a data group (DG) block." alt="" coords="138,5,301,31"/>
+<area shape="rect" id="Node000002" href="$ichannelhierarchy_8h.html" title="The channel hierarchy (CH) block defines channel dependencies." alt="" coords="5,79,209,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,40,127,81,124,76,188,36"/>
+<area shape="rect" id="Node000003" href="$isampleobserver_8h.html" title="Interface class to a sample observer. This class is used internally." alt="" coords="233,79,429,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="251,36,314,76,312,81,248,40"/>
+<area shape="rect" id="Node000004" href="$ichannelobserver_8h.html" title="A channel observer is holds a list of channel samples for a channel." alt="" coords="232,152,431,177"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="334,118,334,152,329,152,329,118"/>
+<area shape="rect" id="Node000005" href="$mdfreader_8h_source.html" title=" " alt="" coords="251,225,411,251"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="334,191,334,225,329,225,329,191"/>
+</map>

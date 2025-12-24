@@ -1,0 +1,13 @@
+---
+remote_theme: pages-themes/minimal@v0.2.0
+plugins:
+  - jekyll-remote-theme # add this line to the plugins list if you already have one
+
+title: MDF Library
+author: Ingemar Hedvall
+logo: /assets/img/logo.png
+
+description: General ASAM MDF library.
+
+# theme: jekyll-theme-minimal
+...

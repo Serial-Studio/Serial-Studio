@@ -1,0 +1,5 @@
+<map id="mdf::TimezoneTimestamp" name="mdf::TimezoneTimestamp">
+<area shape="rect" id="Node000001" title="Class representing a timestamp with timezone information." alt="" coords="5,79,176,104"/>
+<area shape="rect" id="Node000002" href="$classmdf_1_1_i_timestamp.html" title="Interface for timestamp handling in MDF files." alt="" coords="31,5,150,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,44,93,79,88,79,88,44"/>
+</map>

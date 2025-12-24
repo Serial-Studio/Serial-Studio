@@ -1,0 +1,6 @@
+FROM ubuntu:22.04
+
+MAINTAINER martin.marmsoler@gmail.com
+
+RUN apt update
+RUN apt install --yes git cmake libboost-all-dev expat zlib1g flex

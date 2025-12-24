@@ -1,0 +1,5 @@
+<map id="include/mdf/canmessage.h" name="include/mdf/canmessage.h">
+<area shape="rect" id="Node000001" title="Simple wrapper around a CAN or CAN FD message." alt="" coords="5,5,183,31"/>
+<area shape="rect" id="Node000002" href="$mdfwriter_8h.html" title="Interface against an MDF writer object." alt="" coords="17,79,171,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,44,97,79,91,79,91,44"/>
+</map>

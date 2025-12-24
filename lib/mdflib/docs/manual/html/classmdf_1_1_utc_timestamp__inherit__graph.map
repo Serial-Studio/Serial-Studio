@@ -1,0 +1,5 @@
+<map id="mdf::UtcTimestamp" name="mdf::UtcTimestamp">
+<area shape="rect" id="Node000001" title="Class representing a UTC timestamp." alt="" coords="5,79,140,104"/>
+<area shape="rect" id="Node000002" href="$classmdf_1_1_i_timestamp.html" title="Interface for timestamp handling in MDF files." alt="" coords="13,5,132,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,44,75,79,70,79,70,44"/>
+</map>

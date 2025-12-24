@@ -1,0 +1,5 @@
+<map id="mdf::IDataGroup" name="mdf::IDataGroup">
+<area shape="rect" id="Node000001" title="Interface to a data group (DG) block." alt="" coords="5,79,121,104"/>
+<area shape="rect" id="Node000002" href="$classmdf_1_1_i_block.html" title="Base class for all MDF blocks." alt="" coords="20,5,107,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="66,44,66,79,61,79,61,44"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="include/mdf/mdflogstream.h" name="include/mdf/mdflogstream.h">
+<area shape="rect" id="Node000001" title="The mdf log stream file is intended to isolate the logging so the library can be built without depend..." alt="" coords="21,5,203,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,75,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,33,63,71,60,67,98,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="85,152,139,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="115,31,115,138,109,138,109,31"/>
+<area shape="rect" id="Node000004" href="$mdffactory_8h.html" title="Factory class for the MDF library." alt="" coords="150,79,269,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="129,29,184,68,181,72,126,33"/>
+<area shape="poly" id="edge6_Node000004_Node000003" title=" " alt="" coords="195,106,141,146,138,141,192,102"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="164,152,241,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="211,105,208,139,202,138,206,104"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="265,152,327,177"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="225,102,273,141,270,145,222,106"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="351,152,420,177"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="239,102,345,144,343,149,237,106"/>
+</map>

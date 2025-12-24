@@ -1,0 +1,54 @@
+/*
+ * Copyright 2022-2024 Ingemar Hedvall
+ * SPDX-License-Identifier: MIT
+ */
+/**
+\mainpage MDF Library
+
+##Summary
+The MDF Library is a C++ interface against ASAM MDF files. It supports version 3 and 4 of the files.
+MDF files are de-facto standard for measurement data files within the automotive industry. It is well
+suited for long-term storage of data.
+
+The project consist of the following main components.
+
+- C++ Library with all main functionality.
+- C++/CLI .NET assembly DLL that simply is a wrapper of the C++ library.
+- MDF to CSV command line interface. Converts an MDF file to one or more CSV files.
+- MDF Viewer GUI application that simply display the content of MDF files.
+
+## Measurement Data File
+The MDF file consist of several linked file block.
+For an overview of MDF files see [ASAM MDF wiki](https://www.asam.net/standards/detail/mdf/wiki/).
+
+The first block is an ID block of 64 bytes. The identification block,
+just defines that this is a MDF file and its version.
+
+The next block is the important HD block. The header block is the main block of the file and holds
+the links to all other blocks. It have links the following blocks.
+
+- Meta Data Blocks. In version 4, the meta data about the measurement can embedded into the file.
+- History Blocks. Describes who and what created or modified the file.
+- Measurement Data Blocks. Called DG blocks and holds data and channel information.
+- Attachment Blocks. Can be referenced or embedded into the file.
+- Event Blocks. Events and general messages that happened during the measurement.
+- Channel Hierarchy Block. Describe the logical structure for a channel.
+
+##Building the project
+
+The project uses CMAKE for building. The following third-party libraries are used and
+needs to be downloaded and built.
+
+- Util Library. Automatically fetched from GitHub.
+- Boost Library. Set the 'Boost_ROOT' variable to the Boost root path.
+- Expat Library. Set the 'EXPAT_ROOT' variable to the expat root path.
+- OpenSSL Library. Set the 'OPENSSL_ROOT' variable to the OpenSSL root path.
+- ZLIB Library. Set the 'ZLIB_ROOT' variable to the ZLIB root path.
+- WxWidgets Library. Is required if the GUI application should be built.
+- Doxygen's application. Is required if the documentation should be built.
+- Google Test Library. Is required for running and build the unit
+
+*/
+
+
+

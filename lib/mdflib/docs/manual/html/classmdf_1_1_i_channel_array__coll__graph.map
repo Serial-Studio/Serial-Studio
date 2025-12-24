@@ -1,0 +1,16 @@
+<map id="mdf::IChannelArray" name="mdf::IChannelArray">
+<area shape="rect" id="Node000001" title="Defines an interface against an array (CA) block." alt="" coords="5,285,137,311"/>
+<area shape="rect" id="Node000002" href="$classmdf_1_1_i_block.html" title="Base class for all MDF blocks." alt="" coords="148,5,235,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,37,103,55,89,67,78,81,65,108,58,136,55,195,62,248,70,285,65,286,56,249,50,195,53,135,60,106,73,79,85,63,100,51,133,33"/>
+<area shape="rect" id="Node000004" href="$classmdf_1_1_i_data_group.html" title="Interface to a data group (DG) block." alt="" coords="88,80,204,105"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="179,44,156,81,151,78,174,41"/>
+<area shape="rect" id="Node000005" href="$classmdf_1_1_i_channel_group.html" title="Interface against a channel group (CG) block." alt="" coords="229,80,365,105"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="221,36,281,78,278,82,218,41"/>
+<area shape="rect" id="Node000006" href="$classmdf_1_1_i_channel.html" title="Defines a MDF channel (CN) block." alt="" coords="389,80,490,105"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="245,32,401,77,399,83,243,37"/>
+<area shape="rect" id="Node000003" href="$structmdf_1_1_ca_triple_reference.html" title="Structure that defines the channel array (CA) blocks references." alt="" coords="140,168,296,193"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,204,88,287,84,283,191,200"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="166,115,189,142,210,166,206,169,185,146,162,118"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="281,117,256,146,232,170,228,166,252,142,277,114"/>
+<area shape="poly" id="edge7_Node000003_Node000006" title=" " alt="" coords="415,116,360,146,321,160,282,171,281,165,320,155,358,142,412,111"/>
+</map>

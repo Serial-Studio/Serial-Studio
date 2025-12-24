@@ -383,7 +383,15 @@ endif()
 # Add subdirectories
 #-------------------------------------------------------------------------------
 
+set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY TRUE)
+
+function(install)
+endfunction()
+
 add_subdirectory(lib)
+
+unset(install)
+
 add_subdirectory(app)
 
 #-------------------------------------------------------------------------------

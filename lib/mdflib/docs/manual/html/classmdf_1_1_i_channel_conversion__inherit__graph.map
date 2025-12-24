@@ -1,0 +1,5 @@
+<map id="mdf::IChannelConversion" name="mdf::IChannelConversion">
+<area shape="rect" id="Node000001" title="Defines a channel conversion (CC) block." alt="" coords="5,79,169,104"/>
+<area shape="rect" id="Node000002" href="$classmdf_1_1_i_block.html" title="Base class for all MDF blocks." alt="" coords="44,5,131,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,44,90,79,85,79,85,44"/>
+</map>

@@ -1,0 +1,18 @@
+<map id="include/mdf/samplerecord.h" name="include/mdf/samplerecord.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="130,5,311,31"/>
+<area shape="rect" id="Node000002" href="$canmessage_8h.html" title="Simple wrapper around a CAN or CAN FD message." alt="" coords="5,79,183,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,40,116,81,113,76,187,35"/>
+<area shape="rect" id="Node000003" href="$mdfwriter_8h.html" title="Interface against an MDF writer object." alt="" coords="42,152,197,177"/>
+<area shape="poly" id="edge8_Node000001_Node000003" title=" " alt="" coords="219,45,211,75,196,106,170,134,141,154,138,150,166,130,192,102,206,73,214,43"/>
+<area shape="rect" id="Node000004" href="$ichannelgroup_8h.html" title="Defines an interface against a channel group (CG) block." alt="" coords="259,79,441,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="255,35,330,76,328,81,252,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,116,118,151,113,153,100,118"/>
+<area shape="rect" id="Node000005" href="$ichannelhierarchy_8h.html" title="The channel hierarchy (CH) block defines channel dependencies." alt="" coords="235,152,439,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="348,118,341,152,336,151,343,117"/>
+<area shape="rect" id="Node000006" href="$isampleobserver_8h.html" title="Interface class to a sample observer. This class is used internally." alt="" coords="463,152,659,177"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="397,106,527,149,526,154,396,111"/>
+<area shape="rect" id="Node000007" href="$ichannelobserver_8h.html" title="A channel observer is holds a list of channel samples for a channel." alt="" coords="461,225,660,251"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="563,191,563,225,558,225,558,191"/>
+<area shape="rect" id="Node000008" href="$mdfreader_8h_source.html" title=" " alt="" coords="481,299,641,324"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="563,264,563,299,558,299,558,264"/>
+</map>

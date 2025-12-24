@@ -1,0 +1,7 @@
+<map id="mdf::MdfLogStream" name="mdf::MdfLogStream">
+<area shape="rect" id="Node000001" title="MDF log stream interface." alt="" coords="68,93,203,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,132,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,40,128,91,124,94,84,43"/>
+<area shape="rect" id="Node000003" href="$struct_mdf_location.html" title="This is a replacement for the std::source_location library. The standard source_location library cann..." alt="" coords="156,5,248,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="187,43,147,94,143,91,182,40"/>
+</map>

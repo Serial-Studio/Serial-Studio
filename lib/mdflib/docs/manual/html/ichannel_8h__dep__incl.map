@@ -1,0 +1,18 @@
+<map id="include/mdf/ichannel.h" name="include/mdf/ichannel.h">
+<area shape="rect" id="Node000001" title="The define an interface against a channel block (CN)." alt="" coords="324,5,475,31"/>
+<area shape="rect" id="Node000002" href="$ichannelgroup_8h.html" title="Defines an interface against a channel group (CG) block." alt="" coords="240,79,423,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="381,42,344,80,340,77,377,39"/>
+<area shape="rect" id="Node000003" href="$ichannelhierarchy_8h.html" title="The channel hierarchy (CH) block defines channel dependencies." alt="" coords="5,152,209,177"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="343,37,287,56,229,81,168,119,123,154,119,150,165,114,226,76,285,51,342,32"/>
+<area shape="rect" id="Node000005" href="$ichannelobserver_8h.html" title="A channel observer is holds a list of channel samples for a channel." alt="" coords="232,225,431,251"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="418,41,435,70,449,105,455,142,452,161,444,179,431,196,414,209,377,228,374,223,411,205,427,192,440,176,447,160,449,142,444,106,430,72,414,43"/>
+<area shape="rect" id="Node000007" href="$isamplereduction_8h.html" title=" " alt="" coords="455,225,656,251"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="425,38,461,77,517,159,552,224,547,226,512,162,457,80,421,42"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="283,111,144,154,143,149,282,106"/>
+<area shape="rect" id="Node000004" href="$isampleobserver_8h.html" title="Interface class to a sample observer. This class is used internally." alt="" coords="233,152,429,177"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="334,118,334,152,329,152,329,118"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="334,191,334,225,329,225,329,191"/>
+<area shape="rect" id="Node000006" href="$mdfreader_8h_source.html" title=" " alt="" coords="363,299,523,324"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="363,256,426,296,424,301,360,260"/>
+<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="527,260,463,301,460,296,524,256"/>
+</map>

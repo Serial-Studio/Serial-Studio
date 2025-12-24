@@ -1,0 +1,7 @@
+<map id="mdf::ISampleObserver" name="mdf::ISampleObserver">
+<area shape="rect" id="Node000001" title="Interface to a sample observer that handle incoming samples events." alt="" coords="5,168,155,193"/>
+<area shape="rect" id="Node000002" href="$classmdf_1_1_i_data_group.html" title="Interface to a data group (DG) block." alt="" coords="22,80,138,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,119,83,167,77,167,77,119"/>
+<area shape="rect" id="Node000003" href="$classmdf_1_1_i_block.html" title="Base class for all MDF blocks." alt="" coords="37,5,123,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="83,45,83,80,77,80,77,45"/>
+</map>
