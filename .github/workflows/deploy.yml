@@ -508,12 +508,6 @@ jobs:
       with:
         submodules: 'recursive'
 
-    - name: '⚙️ Install dependencies'
-      shell: pwsh
-      run: |
-        vcpkg install zlib:x64-windows-static expat:x64-windows-static
-        echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" >> $env:GITHUB_ENV
-
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v3
       if: env.INSTALL_QT_WINDOWS == 'false'
