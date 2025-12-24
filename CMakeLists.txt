@@ -247,7 +247,6 @@ if(PRODUCTION_OPTIMIZATION)
          /fp:precise                     # IEEE-accurate floating-point math
          /Qpar                           # Enable automatic parallelization of loops
          /Gw                             # Put functions/data into separate COMDATs
-         /arch:AVX                       # Use AVX instructions (2011+ compatible, closer to x86-64-v2)
          /DNDEBUG                        # Disable assertions
       )
       add_link_options(
@@ -338,16 +337,12 @@ else()
 endif()
 
 #-------------------------------------------------------------------------------
-# Enable platform-specific SIMD
+# Enable platform-specific SIMD (non-MSVC only, MSVC x64 has SSE2 as baseline)
 #-------------------------------------------------------------------------------
 
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64)$")
+if(NOT MSVC AND CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
   message(STATUS "Enabling SSE4.1 optimizations")
-  if(MSVC)
-    add_compile_options(/arch:SSE)
-  else()
-    add_compile_options(-msse4.1)
-  endif()
+  add_compile_options(-msse4.1)
 endif()
 
 #-------------------------------------------------------------------------------
