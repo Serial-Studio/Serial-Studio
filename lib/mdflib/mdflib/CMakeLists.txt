@@ -164,7 +164,10 @@ add_library(mdf
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})
 
-if(VCPKG)
+if(TARGET ZLIB::ZLIB AND TARGET expat::expat)
+  target_link_libraries(mdf PRIVATE ZLIB::ZLIB expat::expat)
+  target_compile_definitions(mdf PRIVATE XML_STATIC)
+elseif(VCPKG)
   find_package(ZLIB REQUIRED)
   target_link_libraries(mdf PRIVATE ZLIB::ZLIB)
 
@@ -173,7 +176,7 @@ if(VCPKG)
 else()
   include("../script/zlib.cmake")
   include("../script/expat.cmake")
-  
+
   target_include_directories(mdf PRIVATE ${ZLIB_INCLUDE_DIRS})
   target_include_directories(mdf PRIVATE ${EXPAT_INCLUDE_DIRS})
 

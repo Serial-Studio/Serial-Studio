@@ -47,6 +47,7 @@ FetchContent_Declare(
 
 set(BUILD_SHARED_LIBS   OFF CACHE INTERNAL "Build static libraries")
 set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL     "Build zlib examples" FORCE)
+set(SKIP_INSTALL_ALL    ON  CACHE BOOL     "Skip zlib installation" FORCE)
 
 FetchContent_MakeAvailable(zlib)
 if(NOT TARGET ZLIB::ZLIB)
@@ -80,6 +81,8 @@ set(EXPAT_BUILD_EXAMPLES OFF CACHE BOOL "Build examples"         FORCE)
 set(EXPAT_BUILD_TESTS    OFF CACHE BOOL "Build tests"            FORCE)
 set(EXPAT_BUILD_TOOLS    OFF CACHE BOOL "Build tools"            FORCE)
 set(EXPAT_BUILD_FUZZERS  OFF CACHE BOOL "Build fuzzers"          FORCE)
+set(EXPAT_BUILD_PKGCONFIG OFF CACHE BOOL "Build pkg-config file" FORCE)
+set(EXPAT_ENABLE_INSTALL OFF CACHE BOOL "Skip expat installation" FORCE)
 
 FetchContent_MakeAvailable(expat)
 
