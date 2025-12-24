@@ -139,9 +139,9 @@ set(SOURCES
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
   src/IO/Checksum.cpp
-  src/IO/Console.cpp
+  src/Console/Handler.cpp
   src/IO/Manager.cpp
-  src/IO/ConsoleExport.cpp
+  src/Console/Export.cpp
   src/IO/FileTransmission.cpp
   src/IO/FrameReader.cpp
   src/JSON/FrameParser.cpp
@@ -152,6 +152,7 @@ set(SOURCES
   src/CSV/Player.cpp
   src/CSV/Export.cpp
   src/MDF4/Player.cpp
+  src/MDF4/Export.cpp
   src/main.cpp
   src/SerialStudio.cpp
 )
@@ -186,14 +187,14 @@ set(HEADERS
   src/UI/DeclarativeWidgets/StaticTable.h
   src/Plugins/Server.h
   src/Platform/NativeWindow.h
-  src/IO/Console.h
+  src/Console/Handler.h
   src/IO/Drivers/UART.h
   src/IO/Drivers/Network.h
   src/IO/Drivers/BluetoothLE.h
   src/IO/Manager.h
   src/IO/HAL_Driver.h
   src/IO/Checksum.h
-  src/IO/ConsoleExport.h
+  src/Console/Export.h
   src/IO/CircularBuffer.h
   src/IO/FileTransmission.h
   src/IO/FrameReader.h
@@ -205,6 +206,7 @@ set(HEADERS
   src/CSV/Export.h
   src/CSV/Player.h
   src/MDF4/Player.h
+  src/MDF4/Export.h
   src/ThirdParty/atomicops.h
   src/ThirdParty/readerwriterqueue.h
   src/ThirdParty/readerwritercircularbuffer.h

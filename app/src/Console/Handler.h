@@ -25,19 +25,19 @@
 
 #include "IO/CircularBuffer.h"
 
-namespace IO
+namespace Console
 {
 /**
- * @brief The Console class
+ * @brief The Console::Handler class
  *
- * The console class receives data from the @c IO::Manager class and
+ * The handler class receives data from the @c IO::Manager class and
  * processes it so that it can be easily appended to a text edit widget.
  *
  * The class also controls various UI-related factors, such as the display
  * format of the data (e.g. ASCII or HEX), history of sent commands and
  * exporting of the RX data.
  */
-class Console : public QObject
+class Handler : public QObject
 {
   // clang-format off
   Q_OBJECT
@@ -49,15 +49,15 @@ class Console : public QObject
              READ showTimestamp
              WRITE setShowTimestamp
              NOTIFY showTimestampChanged)
-  Q_PROPERTY(IO::Console::DataMode dataMode
+  Q_PROPERTY(Console::Handler::DataMode dataMode
              READ dataMode
              WRITE setDataMode
              NOTIFY dataModeChanged)
-  Q_PROPERTY(IO::Console::LineEnding lineEnding
+  Q_PROPERTY(Console::Handler::LineEnding lineEnding
              READ lineEnding
              WRITE setLineEnding
              NOTIFY lineEndingChanged)
-  Q_PROPERTY(IO::Console::DisplayMode displayMode
+  Q_PROPERTY(Console::Handler::DisplayMode displayMode
              READ displayMode
              WRITE setDisplayMode
              NOTIFY displayModeChanged)
@@ -95,11 +95,11 @@ signals:
   void displayString(QStringView text);
 
 private:
-  explicit Console();
-  Console(Console &&) = delete;
-  Console(const Console &) = delete;
-  Console &operator=(Console &&) = delete;
-  Console &operator=(const Console &) = delete;
+  explicit Handler();
+  Handler(Handler &&) = delete;
+  Handler(const Handler &) = delete;
+  Handler &operator=(Handler &&) = delete;
+  Handler &operator=(const Handler &) = delete;
 
 public:
   enum class DisplayMode
@@ -125,7 +125,7 @@ public:
   };
   Q_ENUM(LineEnding)
 
-  static Console &instance();
+  static Handler &instance();
 
   [[nodiscard]] bool echo() const;
   [[nodiscard]] bool showTimestamp() const;
@@ -153,9 +153,9 @@ public slots:
   void setEcho(const bool enabled);
   void setChecksumMethod(const int method);
   void setShowTimestamp(const bool enabled);
-  void setDataMode(const IO::Console::DataMode &mode);
-  void setLineEnding(const IO::Console::LineEnding &mode);
-  void setDisplayMode(const IO::Console::DisplayMode &mode);
+  void setDataMode(const Console::Handler::DataMode &mode);
+  void setLineEnding(const Console::Handler::LineEnding &mode);
+  void setDisplayMode(const Console::Handler::DisplayMode &mode);
   void append(const QString &str, const bool addTimestamp = false);
 
   void hotpathRxData(QByteArrayView data);
@@ -183,6 +183,6 @@ private:
   bool m_lastCharWasCR;
 
   QStringList m_historyItems;
-  CircularBuffer<QByteArray, char> m_textBuffer;
+  IO::CircularBuffer<QByteArray, char> m_textBuffer;
 };
-} // namespace IO
+} // namespace Console

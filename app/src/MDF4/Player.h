@@ -170,9 +170,12 @@ private:
   std::vector<FrameIndex> m_frameIndex;
   std::vector<mdf::IChannel *> m_channels;
   std::map<uint64_t, std::vector<double>> m_sampleCache;
+  std::map<uint64_t, double> m_timestampCache;
 
   int m_framePos;
   bool m_playing;
+  bool m_isSerialStudioFile;
+  mdf::IChannel *m_masterTimeChannel;
   QString m_filePath;
   QString m_timestamp;
   QString m_fileInfo;

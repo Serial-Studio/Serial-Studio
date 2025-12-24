@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "ConsoleExport.h"
+#include "Export.h"
 
 #include <QDir>
 #include <QUrl>
@@ -31,15 +31,14 @@
 #include "Misc/Utilities.h"
 
 #ifdef BUILD_COMMERCIAL
-#  include "IO/Console.h"
 #  include "IO/Manager.h"
-#  include "Misc/TimerEvents.h"
+#  include "Console/Handler.h"
 #  include "Misc/WorkspaceManager.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
 //------------------------------------------------------------------------------
-// ConsoleExportWorker implementation
+// ExportWorker implementation
 //------------------------------------------------------------------------------
 
 #ifdef BUILD_COMMERCIAL
@@ -47,8 +46,8 @@
 /**
  * @brief Constructs the console export worker
  */
-IO::ConsoleExportWorker::ConsoleExportWorker(
-    moodycamel::ReaderWriterQueue<ConsoleExportData> *queue,
+Console::ExportWorker::ExportWorker(
+    moodycamel::ReaderWriterQueue<Console::ExportData> *queue,
     std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize)
   : m_pendingData(queue)
   , m_exportEnabled(exportEnabled)
@@ -60,7 +59,7 @@ IO::ConsoleExportWorker::ConsoleExportWorker(
 /**
  * @brief Destructor - closes file
  */
-IO::ConsoleExportWorker::~ConsoleExportWorker()
+Console::ExportWorker::~ExportWorker()
 {
   closeFile();
 }
@@ -68,7 +67,7 @@ IO::ConsoleExportWorker::~ConsoleExportWorker()
 /**
  * @brief Returns true if file is open
  */
-bool IO::ConsoleExportWorker::isOpen() const
+bool Console::ExportWorker::isOpen() const
 {
   return m_file.isOpen();
 }
@@ -76,7 +75,7 @@ bool IO::ConsoleExportWorker::isOpen() const
 /**
  * @brief Writes all queued console data to file
  */
-void IO::ConsoleExportWorker::writeValues()
+void Console::ExportWorker::writeValues()
 {
   if (!m_exportEnabled->load(std::memory_order_relaxed))
     return;
@@ -86,7 +85,7 @@ void IO::ConsoleExportWorker::writeValues()
 
   m_writeBuffer.clear();
 
-  ConsoleExportData item;
+  ExportData item;
   while (m_pendingData->try_dequeue(item))
     m_writeBuffer.push_back(std::move(item));
 
@@ -111,7 +110,7 @@ void IO::ConsoleExportWorker::writeValues()
 /**
  * @brief Closes the output file
  */
-void IO::ConsoleExportWorker::closeFile()
+void Console::ExportWorker::closeFile()
 {
   if (isOpen())
   {
@@ -125,7 +124,7 @@ void IO::ConsoleExportWorker::closeFile()
 /**
  * @brief Creates a new console log file
  */
-void IO::ConsoleExportWorker::createFile()
+void Console::ExportWorker::createFile()
 {
   if (SerialStudio::activated())
   {
@@ -160,14 +159,14 @@ void IO::ConsoleExportWorker::createFile()
 #endif
 
 //------------------------------------------------------------------------------
-// ConsoleExport implementation
+// Export implementation
 //------------------------------------------------------------------------------
 
 /**
  * Constructor function, configures the path in which Serial Studio shall
  * automatically write generated console log files.
  */
-IO::ConsoleExport::ConsoleExport()
+Console::Export::Export()
   : m_isOpen(false)
   , m_exportEnabled(false)
 #ifdef BUILD_COMMERCIAL
@@ -176,18 +175,17 @@ IO::ConsoleExport::ConsoleExport()
 #endif
 {
 #ifdef BUILD_COMMERCIAL
-  m_worker
-      = new ConsoleExportWorker(&m_pendingData, &m_exportEnabled, &m_queueSize);
+  m_worker = new ExportWorker(&m_pendingData, &m_exportEnabled, &m_queueSize);
   m_worker->moveToThread(&m_workerThread);
 
   connect(&m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
-  connect(m_worker, &ConsoleExportWorker::openChanged, this,
-          &ConsoleExport::onWorkerOpenChanged);
+  connect(m_worker, &ExportWorker::openChanged, this,
+          &Export::onWorkerOpenChanged);
 
   m_workerThread.start();
 
   QTimer *timer = new QTimer(this);
-  connect(timer, &QTimer::timeout, m_worker, &ConsoleExportWorker::writeValues);
+  connect(timer, &QTimer::timeout, m_worker, &ExportWorker::writeValues);
   timer->start(1000);
 
   connect(&Licensing::LemonSqueezy::instance(),
@@ -203,7 +201,7 @@ IO::ConsoleExport::ConsoleExport()
 /**
  * Close file & finnish write-operations before destroying the class.
  */
-IO::ConsoleExport::~ConsoleExport()
+Console::Export::~Export()
 {
 #ifdef BUILD_COMMERCIAL
   m_workerThread.quit();
@@ -214,16 +212,16 @@ IO::ConsoleExport::~ConsoleExport()
 /**
  * Returns a pointer to the only instance of this class.
  */
-IO::ConsoleExport &IO::ConsoleExport::instance()
+Console::Export &Console::Export::instance()
 {
-  static ConsoleExport instance;
+  static Export instance;
   return instance;
 }
 
 /**
  * Returns @c true if the console output file is open.
  */
-bool IO::ConsoleExport::isOpen() const
+bool Console::Export::isOpen() const
 {
 #ifdef BUILD_COMMERCIAL
   return m_isOpen.load(std::memory_order_relaxed);
@@ -235,7 +233,7 @@ bool IO::ConsoleExport::isOpen() const
 /**
  * Returns @c true if console log export is enabled.
  */
-bool IO::ConsoleExport::exportEnabled() const
+bool Console::Export::exportEnabled() const
 {
 #ifdef BUILD_COMMERCIAL
   return m_exportEnabled.load(std::memory_order_relaxed);
@@ -247,11 +245,11 @@ bool IO::ConsoleExport::exportEnabled() const
 /**
  * Write all remaining console data & close the output file.
  */
-void IO::ConsoleExport::closeFile()
+void Console::Export::closeFile()
 {
 #ifdef BUILD_COMMERCIAL
   if (m_worker)
-    QMetaObject::invokeMethod(m_worker, &ConsoleExportWorker::closeFile,
+    QMetaObject::invokeMethod(m_worker, &ExportWorker::closeFile,
                               Qt::QueuedConnection);
 #endif
 }
@@ -260,20 +258,20 @@ void IO::ConsoleExport::closeFile()
  * Configures the signal/slot connections with the modules of the application
  * that this module depends upon.
  */
-void IO::ConsoleExport::setupExternalConnections()
+void Console::Export::setupExternalConnections()
 {
 #ifdef BUILD_COMMERCIAL
-  connect(&IO::Console::instance(), &IO::Console::displayString, this,
-          &IO::ConsoleExport::registerData);
+  connect(&Console::Handler::instance(), &Console::Handler::displayString, this,
+          &Console::Export::registerData);
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
-          &IO::ConsoleExport::closeFile);
+          &Console::Export::closeFile);
 #endif
 }
 
 /**
  * Enables or disables data export.
  */
-void IO::ConsoleExport::setExportEnabled(const bool enabled)
+void Console::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
   if (SerialStudio::activated())
@@ -284,14 +282,14 @@ void IO::ConsoleExport::setExportEnabled(const bool enabled)
     if (!enabled && isOpen())
       closeFile();
 
-    m_settings.setValue("ConsoleExport", enabled);
+    m_settings.setValue("Export", enabled);
     return;
   }
 #endif
 
   closeFile();
   m_exportEnabled.store(false, std::memory_order_relaxed);
-  m_settings.setValue("ConsoleExport", false);
+  m_settings.setValue("Export", false);
   Q_EMIT enabledChanged();
 
   if (enabled)
@@ -304,15 +302,14 @@ void IO::ConsoleExport::setExportEnabled(const bool enabled)
 /**
  * Appends the given console data to the output buffer.
  */
-void IO::ConsoleExport::registerData(QStringView data)
+void Console::Export::registerData(QStringView data)
 {
 #ifdef BUILD_COMMERCIAL
   if (!data.isEmpty() && exportEnabled())
   {
-    if (m_queueSize.load(std::memory_order_relaxed)
-        < kConsoleExportQueueCapacity)
+    if (m_queueSize.load(std::memory_order_relaxed) < kExportQueueCapacity)
     {
-      m_pendingData.enqueue(ConsoleExportData(QString(data)));
+      m_pendingData.enqueue(ExportData(QString(data)));
       m_queueSize.fetch_add(1, std::memory_order_relaxed);
     }
   }
@@ -325,7 +322,7 @@ void IO::ConsoleExport::registerData(QStringView data)
  * Called when the worker thread changes the file open state.
  */
 #ifdef BUILD_COMMERCIAL
-void IO::ConsoleExport::onWorkerOpenChanged()
+void Console::Export::onWorkerOpenChanged()
 {
   const bool workerIsOpen = m_worker ? m_worker->isOpen() : false;
   m_isOpen.store(workerIsOpen, std::memory_order_relaxed);

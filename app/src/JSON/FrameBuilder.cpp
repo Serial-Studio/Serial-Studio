@@ -34,6 +34,7 @@
 #endif
 
 #include "CSV/Export.h"
+#include "MDF4/Export.h"
 #include "UI/Dashboard.h"
 #include "Plugins/Server.h"
 
@@ -785,10 +786,12 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
 void JSON::FrameBuilder::hotpathTxFrame(const JSON::Frame &frame)
 {
   static auto &csvExport = CSV::Export::instance();
+  static auto &mdf4Export = MDF4::Export::instance();
   static auto &dashboard = UI::Dashboard::instance();
   static auto &pluginsServer = Plugins::Server::instance();
 
   dashboard.hotpathRxFrame(frame);
   csvExport.hotpathTxFrame(frame);
+  mdf4Export.hotpathTxFrame(frame);
   pluginsServer.hotpathTxFrame(frame);
 }

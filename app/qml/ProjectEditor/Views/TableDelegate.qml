@@ -670,8 +670,8 @@ ColumnLayout {
 
                 // Format the text
                 const originalText = _hexComponent.text;
-                const formattedText = Cpp_IO_Console.formatUserHex(_hexComponent.text);
-                const isValid = Cpp_IO_Console.validateUserHex(formattedText);
+                const formattedText = Cpp_Console_Handler.formatUserHex(_hexComponent.text);
+                const isValid = Cpp_Console_Handler.validateUserHex(formattedText);
 
                 // Update the text only if it has changed
                 if (originalText !== formattedText) {

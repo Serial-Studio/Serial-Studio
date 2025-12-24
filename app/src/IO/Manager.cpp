@@ -20,7 +20,7 @@
  */
 
 #include "IO/Manager.h"
-#include "IO/Console.h"
+#include "Console/Handler.h"
 #include "IO/Drivers/UART.h"
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/BluetoothLE.h"
@@ -334,7 +334,7 @@ qint64 IO::Manager::writeData(const QByteArray &data)
     {
       auto writtenData = data;
       writtenData.chop(data.length() - bytes);
-      IO::Console::instance().displaySentData(writtenData);
+      Console::Handler::instance().displaySentData(writtenData);
     }
 
     return bytes;
@@ -505,7 +505,7 @@ void IO::Manager::processPayload(const QByteArray &payload)
 {
   if (!payload.isEmpty())
   {
-    static auto &console = IO::Console::instance();
+    static auto &console = Console::Handler::instance();
     static auto &server = Plugins::Server::instance();
     static auto &frameBuilder = JSON::FrameBuilder::instance();
 
@@ -852,7 +852,7 @@ void IO::Manager::onReadyRead()
  */
 void IO::Manager::onDataReceived(const QByteArray &data)
 {
-  static auto &console = IO::Console::instance();
+  static auto &console = Console::Handler::instance();
   static auto &server = Plugins::Server::instance();
 
   if (!m_paused) [[likely]]

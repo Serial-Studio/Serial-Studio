@@ -30,6 +30,7 @@
 #include "CSV/Player.h"
 
 #include "MDF4/Player.h"
+#include "MDF4/Export.h"
 
 #include "JSON/Frame.h"
 #include "JSON/FrameParser.h"
@@ -37,8 +38,8 @@
 #include "JSON/FrameBuilder.h"
 
 #include "IO/Manager.h"
-#include "IO/Console.h"
-#include "IO/ConsoleExport.h"
+#include "Console/Handler.h"
+#include "Console/Export.h"
 #include "IO/FileTransmission.h"
 
 #include "IO/Drivers/UART.h"
@@ -156,7 +157,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
     output.append("\n");
 
     // Display data in console
-    IO::Console::instance().hotpathRxData(output.toUtf8());
+    Console::Handler::instance().hotpathRxData(output.toUtf8());
   }
 }
 
@@ -208,6 +209,7 @@ void Misc::ModuleManager::onQuit()
 
   CSV::Export::instance().closeFile();
   CSV::Player::instance().closeFile();
+  MDF4::Export::instance().closeFile();
   IO::Manager::instance().disconnectDevice();
   Plugins::Server::instance().removeConnection();
 }
@@ -288,21 +290,22 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto miscThemeManager = &Misc::ThemeManager::instance();
 
   // Initialize modules
+  auto ioManager = &IO::Manager::instance();
   auto csvExport = &CSV::Export::instance();
   auto csvPlayer = &CSV::Player::instance();
+  auto mdf4Export = &MDF4::Export::instance();
   auto mdf4Player = &MDF4::Player::instance();
-  auto ioManager = &IO::Manager::instance();
-  auto ioConsole = &IO::Console::instance();
   auto uiDashboard = &UI::Dashboard::instance();
   auto ioSerial = &IO::Drivers::UART::instance();
   auto pluginsBridge = &Plugins::Server::instance();
   auto miscUtilities = &Misc::Utilities::instance();
+  auto consoleExport = &Console::Export::instance();
   auto ioNetwork = &IO::Drivers::Network::instance();
   auto frameBuilder = &JSON::FrameBuilder::instance();
   auto projectModel = &JSON::ProjectModel::instance();
+  auto consoleHandler = &Console::Handler::instance();
   auto miscTimerEvents = &Misc::TimerEvents::instance();
   auto miscCommonFonts = &Misc::CommonFonts::instance();
-  auto ioConsoleExport = &IO::ConsoleExport::instance();
   auto ioBluetoothLE = &IO::Drivers::BluetoothLE::instance();
   auto ioFileTransmission = &IO::FileTransmission::instance();
   auto miscWorkspaceManager = &Misc::WorkspaceManager::instance();
@@ -311,10 +314,10 @@ void Misc::ModuleManager::initializeQmlInterface()
 #ifdef BUILD_COMMERCIAL
   const bool qtCommercialAvailable = true;
   auto mqttClient = &MQTT::Client::instance();
+  auto dbcImporter = &JSON::DBCImporter::instance();
   auto audioDriver = &IO::Drivers::Audio::instance();
   auto canBusDriver = &IO::Drivers::CANBus::instance();
   auto modbusDriver = &IO::Drivers::Modbus::instance();
-  auto dbcImporter = &JSON::DBCImporter::instance();
 #else
   const bool qtCommercialAvailable = false;
 #endif
@@ -332,11 +335,12 @@ void Misc::ModuleManager::initializeQmlInterface()
   // Setup singleton module interconnections
   ioSerial->setupExternalConnections();
   csvExport->setupExternalConnections();
-  ioConsole->setupExternalConnections();
   ioManager->setupExternalConnections();
+  mdf4Export->setupExternalConnections();
   projectModel->setupExternalConnections();
   frameBuilder->setupExternalConnections();
-  ioConsoleExport->setupExternalConnections();
+  consoleExport->setupExternalConnections();
+  consoleHandler->setupExternalConnections();
 
 #ifdef BUILD_COMMERCIAL
   modbusDriver->setupExternalConnections();
@@ -371,26 +375,26 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_IO_Serial", ioSerial);
   c->setContextProperty("Cpp_CSV_Export", csvExport);
   c->setContextProperty("Cpp_CSV_Player", csvPlayer);
-  c->setContextProperty("Cpp_MDF4_Player", mdf4Player);
-  c->setContextProperty("Cpp_IO_Console", ioConsole);
   c->setContextProperty("Cpp_IO_Manager", ioManager);
   c->setContextProperty("Cpp_IO_Network", ioNetwork);
+  c->setContextProperty("Cpp_MDF4_Export", mdf4Export);
+  c->setContextProperty("Cpp_MDF4_Player", mdf4Player);
   c->setContextProperty("Cpp_Misc_ModuleManager", this);
   c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
+  c->setContextProperty("Cpp_Console_Export", consoleExport);
   c->setContextProperty("Cpp_NativeWindow", &m_nativeWindow);
   c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
   c->setContextProperty("Cpp_Misc_Utilities", miscUtilities);
   c->setContextProperty("Cpp_IO_Bluetooth_LE", ioBluetoothLE);
   c->setContextProperty("Cpp_ThemeManager", miscThemeManager);
+  c->setContextProperty("Cpp_Console_Handler", consoleHandler);
   c->setContextProperty("Cpp_Misc_Translator", miscTranslator);
   c->setContextProperty("Cpp_JSON_ProjectModel", projectModel);
   c->setContextProperty("Cpp_JSON_FrameBuilder", frameBuilder);
   c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
   c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);
-  c->setContextProperty("Cpp_IO_ConsoleExport", ioConsoleExport);
   c->setContextProperty("Cpp_IO_FileTransmission", ioFileTransmission);
   c->setContextProperty("Cpp_Misc_WorkspaceManager", miscWorkspaceManager);
-  c->setContextProperty("Cpp_CommercialBuild", qtCommercialAvailable);
 
   // Register commercial C++ modules with QML
 #ifdef BUILD_COMMERCIAL
@@ -413,6 +417,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_AppUpdaterUrl", APP_UPDATER_URL);
   c->setContextProperty("Cpp_AppOrganization", APP_DEVELOPER);
   c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
+  c->setContextProperty("Cpp_CommercialBuild", qtCommercialAvailable);
   c->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
 
   // Load main.qml

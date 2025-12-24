@@ -209,6 +209,23 @@ Widgets.Pane {
       }
 
       //
+      // MDF4 generator
+      //
+      CheckBox {
+        Layout.leftMargin: -6
+        Layout.maximumHeight: 18
+        Layout.alignment: Qt.AlignLeft
+        text: qsTr("Create MDF4 File")
+        Layout.maximumWidth: root.maxItemWidth
+        checked: Cpp_MDF4_Export.exportEnabled
+
+        onCheckedChanged: {
+          if (Cpp_MDF4_Export.exportEnabled !== checked)
+            Cpp_MDF4_Export.exportEnabled = checked
+        }
+      }
+
+      //
       // Console data export
       //
       CheckBox {
@@ -217,11 +234,11 @@ Widgets.Pane {
         Layout.alignment: Qt.AlignLeft
         text: qsTr("Export Console Data")
         Layout.maximumWidth: root.maxItemWidth
-        checked: Cpp_IO_ConsoleExport.exportEnabled
+        checked: Cpp_Console_Export.exportEnabled
 
         onCheckedChanged:  {
-          if (Cpp_IO_ConsoleExport.exportEnabled !== checked)
-            Cpp_IO_ConsoleExport.exportEnabled = checked
+          if (Cpp_Console_Export.exportEnabled !== checked)
+            Cpp_Console_Export.exportEnabled = checked
         }
       }
 

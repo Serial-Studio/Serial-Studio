@@ -20,7 +20,7 @@
  */
 
 #include <QtTest>
-#include "IO/Console.h"
+#include "Console/Console.h"
 
 class TestConsole : public QObject
 {
@@ -32,8 +32,8 @@ private slots:
 
 void TestConsole::testSingleton()
 {
-  IO::Console &instance1 = IO::Console::instance();
-  IO::Console &instance2 = IO::Console::instance();
+  Console::Console &instance1 = Console::Handler::instance();
+  Console::Console &instance2 = Console::Handler::instance();
   QCOMPARE(&instance1, &instance2);
 }
 

@@ -120,6 +120,53 @@ private:
 };
 
 /**
+ * @class TimestampCacheObserver
+ * @brief Observer class that caches master time channel values
+ *
+ * This observer extracts timestamp values from the master time channel
+ * for Serial Studio-generated MDF4 files.
+ */
+class TimestampCacheObserver : public mdf::ISampleObserver
+{
+public:
+  TimestampCacheObserver(const mdf::IDataGroup &dataGroup,
+                         std::map<uint64_t, double> &timestampCache,
+                         mdf::IChannel *masterTimeChannel)
+    : mdf::ISampleObserver(dataGroup)
+    , m_timestampCache(timestampCache)
+    , m_masterTimeChannel(masterTimeChannel)
+  {
+  }
+
+  bool OnSample(uint64_t sample, uint64_t record_id,
+                const std::vector<uint8_t> &record) override
+  {
+    if (!m_masterTimeChannel
+        || m_timestampCache.find(sample) != m_timestampCache.end())
+      return true;
+
+    double timestamp = 0.0;
+    const bool success
+        = GetEngValue(*m_masterTimeChannel, record_id, record, timestamp);
+
+    if (!success)
+    {
+      const bool channelSuccess
+          = GetChannelValue(*m_masterTimeChannel, record_id, record, timestamp);
+      if (!channelSuccess)
+        timestamp = 0.0;
+    }
+
+    m_timestampCache[sample] = timestamp;
+    return true;
+  }
+
+private:
+  std::map<uint64_t, double> &m_timestampCache;
+  mdf::IChannel *m_masterTimeChannel;
+};
+
+/**
  * @brief Constructor - Initializes the MDF4 player
  *
  * Sets up event filtering for keyboard shortcuts and connects internal
@@ -129,6 +176,8 @@ MDF4::Player::Player()
   : m_reader(nullptr)
   , m_framePos(0)
   , m_playing(false)
+  , m_isSerialStudioFile(false)
+  , m_masterTimeChannel(nullptr)
   , m_timestamp("")
   , m_fileInfo("")
   , m_startTimestamp(0.0)
@@ -354,6 +403,13 @@ void MDF4::Player::openFile(const QString &filePath)
     return;
   }
 
+  auto *header = m_reader->GetHeader();
+  if (header)
+  {
+    QString author = QString::fromStdString(header->Author());
+    m_isSerialStudioFile = (author == "Serial Studio");
+  }
+
   buildFrameIndex();
 
   if (m_frameIndex.empty())
@@ -368,7 +424,6 @@ void MDF4::Player::openFile(const QString &filePath)
 
   m_filePath = filePath;
 
-  auto *header = m_reader->GetHeader();
   if (header)
   {
     QString author = QString::fromStdString(header->Author());
@@ -406,7 +461,10 @@ void MDF4::Player::closeFile()
   m_frameIndex.clear();
   m_channels.clear();
   m_sampleCache.clear();
+  m_timestampCache.clear();
   m_framePos = 0;
+  m_isSerialStudioFile = false;
+  m_masterTimeChannel = nullptr;
   m_filePath.clear();
   m_timestamp.clear();
   m_fileInfo.clear();
@@ -611,6 +669,8 @@ void MDF4::Player::buildFrameIndex()
   m_frameIndex.clear();
   m_channels.clear();
   m_sampleCache.clear();
+  m_timestampCache.clear();
+  m_masterTimeChannel = nullptr;
 
   if (!m_reader || !m_reader->IsOk())
     return;
@@ -651,6 +711,12 @@ void MDF4::Player::buildFrameIndex()
             && std::find(allChannels.begin(), allChannels.end(), ch)
                    == allChannels.end())
         {
+          if (m_isSerialStudioFile && ch->Type() == mdf::ChannelType::Master)
+          {
+            m_masterTimeChannel = ch;
+            continue;
+          }
+
           allChannels.push_back(ch);
         }
       }
@@ -681,7 +747,20 @@ void MDF4::Player::buildFrameIndex()
 
       SampleCacheObserver observer(*dg, m_sampleCache, m_channels, cgChannels);
       observer.AttachObserver();
-      m_reader->ReadData(*dg);
+
+      if (m_isSerialStudioFile && m_masterTimeChannel)
+      {
+        TimestampCacheObserver timeObserver(*dg, m_timestampCache,
+                                            m_masterTimeChannel);
+        timeObserver.AttachObserver();
+        m_reader->ReadData(*dg);
+        timeObserver.DetachObserver();
+      }
+      else
+      {
+        m_reader->ReadData(*dg);
+      }
+
       observer.DetachObserver();
     }
   }
@@ -697,7 +776,20 @@ void MDF4::Player::buildFrameIndex()
     if (sampleIndex % kSampleInterval == 0)
     {
       FrameIndex frameIdx;
-      frameIdx.timestamp = static_cast<double>(sampleIndex) * 0.001;
+
+      if (m_isSerialStudioFile && !m_timestampCache.empty())
+      {
+        auto timeIt = m_timestampCache.find(cachePair.first);
+        if (timeIt != m_timestampCache.end())
+          frameIdx.timestamp = timeIt->second;
+        else
+          frameIdx.timestamp = static_cast<double>(sampleIndex) * 0.001;
+      }
+      else
+      {
+        frameIdx.timestamp = static_cast<double>(sampleIndex) * 0.001;
+      }
+
       frameIdx.recordIndex = cachePair.first;
       frameIdx.channelGroup = nullptr;
 

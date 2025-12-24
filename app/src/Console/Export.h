@@ -31,45 +31,45 @@
 
 #include "ThirdParty/readerwriterqueue.h"
 
-namespace IO
+namespace Console
 {
-static constexpr size_t kConsoleExportQueueCapacity = 8192;
+static constexpr size_t kExportQueueCapacity = 8192;
 
 /**
  * @brief Represents a single console data item for export
  */
-struct ConsoleExportData
+struct ExportData
 {
   QString data;
 
-  ConsoleExportData() = default;
+  ExportData() = default;
 
-  ConsoleExportData(QString &&d)
+  ExportData(QString &&d)
     : data(std::move(d))
   {
   }
 
-  ConsoleExportData(ConsoleExportData &&) = default;
-  ConsoleExportData(const ConsoleExportData &) = delete;
-  ConsoleExportData &operator=(ConsoleExportData &&) = default;
-  ConsoleExportData &operator=(const ConsoleExportData &) = delete;
+  ExportData(ExportData &&) = default;
+  ExportData(const ExportData &) = delete;
+  ExportData &operator=(ExportData &&) = default;
+  ExportData &operator=(const ExportData &) = delete;
 };
 
-class ConsoleExport;
+class Export;
 
 #ifdef BUILD_COMMERCIAL
 /**
  * @brief Worker that handles console export file I/O on background thread
  */
-class ConsoleExportWorker : public QObject
+class ExportWorker : public QObject
 {
   Q_OBJECT
 
 public:
-  explicit ConsoleExportWorker(
-      moodycamel::ReaderWriterQueue<ConsoleExportData> *queue,
-      std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize);
-  ~ConsoleExportWorker();
+  explicit ExportWorker(moodycamel::ReaderWriterQueue<ExportData> *queue,
+                        std::atomic<bool> *exportEnabled,
+                        std::atomic<size_t> *queueSize);
+  ~ExportWorker();
 
   [[nodiscard]] bool isOpen() const;
 
@@ -84,18 +84,18 @@ public slots:
 private:
   QFile m_file;
   QTextStream m_textStream;
-  std::vector<ConsoleExportData> m_writeBuffer;
-  moodycamel::ReaderWriterQueue<ConsoleExportData> *m_pendingData;
+  std::vector<ExportData> m_writeBuffer;
+  moodycamel::ReaderWriterQueue<ExportData> *m_pendingData;
   std::atomic<bool> *m_exportEnabled;
   std::atomic<size_t> *m_queueSize;
 };
 #endif
 
 /**
- * @class ConsoleExport
+ * @class Export
  * @brief Manages automatic export of console data to log files.
  *
- * The ConsoleExport class is a singleton that provides functionality to capture
+ * The Export class is a singleton that provides functionality to capture
  * and export console output data to persistent log files. This is particularly
  * useful for debugging, data logging, and post-analysis of serial communication
  * sessions.
@@ -117,7 +117,7 @@ private:
  *          The export will be automatically disabled if the license becomes
  *          invalid.
  */
-class ConsoleExport : public QObject
+class Export : public QObject
 {
   // clang-format off
   Q_OBJECT
@@ -135,16 +135,16 @@ signals:
   void enabledChanged();
 
 private:
-  explicit ConsoleExport();
-  ConsoleExport(ConsoleExport &&) = delete;
-  ConsoleExport(const ConsoleExport &) = delete;
-  ConsoleExport &operator=(ConsoleExport &&) = delete;
-  ConsoleExport &operator=(const ConsoleExport &) = delete;
+  explicit Export();
+  Export(Export &&) = delete;
+  Export(const Export &) = delete;
+  Export &operator=(Export &&) = delete;
+  Export &operator=(const Export &) = delete;
 
-  ~ConsoleExport();
+  ~Export();
 
 public:
-  static ConsoleExport &instance();
+  static Export &instance();
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] bool exportEnabled() const;
@@ -168,10 +168,9 @@ private:
 
 #ifdef BUILD_COMMERCIAL
   QThread m_workerThread;
-  ConsoleExportWorker *m_worker;
+  ExportWorker *m_worker;
   std::atomic<size_t> m_queueSize;
-  moodycamel::ReaderWriterQueue<ConsoleExportData> m_pendingData{
-      kConsoleExportQueueCapacity};
+  moodycamel::ReaderWriterQueue<ExportData> m_pendingData{kExportQueueCapacity};
 #endif
 };
-} // namespace IO
+} // namespace Console

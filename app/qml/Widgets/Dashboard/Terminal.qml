@@ -73,7 +73,7 @@ Item {
   // Function to send through serial port data
   //
   function sendData() {
-    Cpp_IO_Console.send(send.text)
+    Cpp_Console_Handler.send(send.text)
     send.clear()
   }
 
@@ -81,7 +81,7 @@ Item {
   // Clears console output
   //
   function clear() {
-    Cpp_IO_Console.clear()
+    Cpp_Console_Handler.clear()
     terminal.clear()
   }
 
@@ -244,8 +244,8 @@ Item {
 
             // Format the text
             const originalText = send.text;
-            const formattedText = Cpp_IO_Console.formatUserHex(send.text);
-            const isValid = Cpp_IO_Console.validateUserHex(formattedText);
+            const formattedText = Cpp_Console_Handler.formatUserHex(send.text);
+            const isValid = Cpp_Console_Handler.validateUserHex(formattedText);
 
             // Update the text only if it has changed
             if (originalText !== formattedText) {
@@ -283,16 +283,16 @@ Item {
         // Navigate command history upwards with <up>
         //
         Keys.onUpPressed: {
-          Cpp_IO_Console.historyUp()
-          send.text = Cpp_IO_Console.currentHistoryString
+          Cpp_Console_Handler.historyUp()
+          send.text = Cpp_Console_Handler.currentHistoryString
         }
 
         //
         // Navigate command history downwards with <down>
         //
         Keys.onDownPressed: {
-          Cpp_IO_Console.historyDown()
-          send.text = Cpp_IO_Console.currentHistoryString
+          Cpp_Console_Handler.historyDown()
+          send.text = Cpp_Console_Handler.currentHistoryString
         }
 
         //
@@ -314,11 +314,11 @@ Item {
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
         enabled: Cpp_IO_Manager.readWrite
-        checked: Cpp_IO_Console.dataMode === 1
+        checked: Cpp_Console_Handler.dataMode === 1
         onCheckedChanged: {
           const newValue = checked ? 1 : 0
-          if (Cpp_IO_Console.dataMode !== newValue)
-            Cpp_IO_Console.dataMode = newValue
+          if (Cpp_Console_Handler.dataMode !== newValue)
+            Cpp_Console_Handler.dataMode = newValue
         }
       }
 
@@ -327,11 +327,11 @@ Item {
         opacity: enabled ? 1 : 0.5
         enabled: Cpp_IO_Manager.readWrite
         Layout.alignment: Qt.AlignVCenter
-        model: Cpp_IO_Console.lineEndings
-        currentIndex: Cpp_IO_Console.lineEnding
+        model: Cpp_Console_Handler.lineEndings
+        currentIndex: Cpp_Console_Handler.lineEnding
         onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_IO_Console.lineEnding)
-            Cpp_IO_Console.lineEnding = currentIndex
+          if (currentIndex !== Cpp_Console_Handler.lineEnding)
+            Cpp_Console_Handler.lineEnding = currentIndex
         }
       }
 
@@ -341,11 +341,11 @@ Item {
         opacity: enabled ? 1 : 0.5
         enabled: Cpp_IO_Manager.readWrite
         Layout.alignment: Qt.AlignVCenter
-        model: Cpp_IO_Console.checksumMethods
-        currentIndex: Cpp_IO_Console.checksumMethod
+        model: Cpp_Console_Handler.checksumMethods
+        currentIndex: Cpp_Console_Handler.checksumMethod
         onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_IO_Console.checksumMethod)
-            Cpp_IO_Console.checksumMethod = currentIndex
+          if (currentIndex !== Cpp_Console_Handler.checksumMethod)
+            Cpp_Console_Handler.checksumMethod = currentIndex
         }
       }
 
@@ -359,7 +359,7 @@ Item {
         opacity: enabled ? 1 : 0.5
         icon.source: "qrc:/rcc/icons/buttons/send.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        enabled: Cpp_IO_Manager.readWrite && (send.length > 0 || Cpp_IO_Console.lineEnding != 0)
+        enabled: Cpp_IO_Manager.readWrite && (send.length > 0 || Cpp_Console_Handler.lineEnding != 0)
       }
     }
 
@@ -374,21 +374,21 @@ Item {
         id: timestampCheck
         text: qsTr("Show Timestamp")
         Layout.alignment: Qt.AlignVCenter
-        checked: Cpp_IO_Console.showTimestamp
+        checked: Cpp_Console_Handler.showTimestamp
         onCheckedChanged: {
-          if (Cpp_IO_Console.showTimestamp !== checked)
-            Cpp_IO_Console.showTimestamp = checked
+          if (Cpp_Console_Handler.showTimestamp !== checked)
+            Cpp_Console_Handler.showTimestamp = checked
         }
       }
 
       CheckBox {
         id: echoCheck
         text: qsTr("Echo")
-        checked: Cpp_IO_Console.echo
+        checked: Cpp_Console_Handler.echo
         Layout.alignment: Qt.AlignVCenter
         onCheckedChanged: {
-          if (Cpp_IO_Console.echo !== checked)
-            Cpp_IO_Console.echo = checked
+          if (Cpp_Console_Handler.echo !== checked)
+            Cpp_Console_Handler.echo = checked
         }
       }
 
@@ -414,12 +414,12 @@ Item {
         Layout.fillWidth: true
         Layout.maximumWidth: 164
         Layout.alignment: Qt.AlignVCenter
-        model: Cpp_IO_Console.displayModes
-        currentIndex: Cpp_IO_Console.displayMode
+        model: Cpp_Console_Handler.displayModes
+        currentIndex: Cpp_Console_Handler.displayMode
         displayText: qsTr("Display: %1").arg(currentText)
         onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_IO_Console.displayMode)
-            Cpp_IO_Console.displayMode = currentIndex
+          if (currentIndex !== Cpp_Console_Handler.displayMode)
+            Cpp_Console_Handler.displayMode = currentIndex
         }
       }
 

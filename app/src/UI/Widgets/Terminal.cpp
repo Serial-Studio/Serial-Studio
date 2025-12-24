@@ -24,7 +24,7 @@
 #include <QFontMetrics>
 #include <QApplication>
 
-#include "IO/Console.h"
+#include "Console/Handler.h"
 #include "IO/Manager.h"
 #include "Misc/Translator.h"
 #include "Misc/TimerEvents.h"
@@ -60,7 +60,7 @@ constexpr int MAX_LINES = 1000;
  * - Configures the initial color palette by calling `onThemeChanged()`.
  * - Connects to the theme manager to update the palette whenever the theme
  *   changes.
- * - Connects to the IO Console handler to receive and append new data for
+ * - Connects to the IO Handler handler to receive and append new data for
  *   display.
  * - Clears the screen when a device connection status changes.
  * - Sets up a cursor blink timer and connects it to toggle the cursor
@@ -108,8 +108,8 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
           this, &Widgets::Terminal::onThemeChanged);
 
-  // Receive data from the IO::Console handler
-  connect(&IO::Console::instance(), &IO::Console::displayString, this,
+  // Receive data from the Console::Console handler
+  connect(&Console::Handler::instance(), &Console::Handler::displayString, this,
           &Widgets::Terminal::append);
 
   // Clear the screen when device is connected/disconnected
