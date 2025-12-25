@@ -356,8 +356,8 @@ void CSV::Player::openFile(const QString &filePath)
         m_timestampCache.append(ts);
       }
 
-      m_startTimestampSeconds = m_timestampCache[1]; // Row 1 is first data row
-      m_useHighPrecisionTimestamps = true; // Set flag AFTER cache is built
+      m_startTimestampSeconds = m_timestampCache[1];
+      m_useHighPrecisionTimestamps = true;
     }
     // Fall back to legacy date/time format
     else if (getDateTime(1).isValid())

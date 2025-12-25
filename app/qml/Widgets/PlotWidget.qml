@@ -130,7 +130,7 @@ Item {
     // For large ranges (low zoom), we need fewer decimal places
     // We want roughly 3-4 significant digits in the displayed value
     const precision = Math.max(0, 2 - magnitude)
-    return Math.min(precision, 6)  // Cap at 6 decimal places
+    return Math.min(precision, 6)
   }
 
   //
@@ -343,7 +343,6 @@ Item {
     if (oldZoom === clampedZoom)
       return
 
-    // // Calculate the center of the full axis range in world coordinates
     const fullRange = axis.max - axis.min
     const worldCenter = axis.min + fullRange / 2
 
@@ -519,7 +518,7 @@ Item {
       property real _startY: 0
       property bool _didDrag: false
       property int _pressedButton: Qt.NoButton
-      property var draggedCursor: null  // null, "A", or "B"
+      property var draggedCursor: null
       readonly property bool dragging: containsPress && _axisX.zoom > 1 && draggedCursor === null
 
       //
@@ -648,7 +647,7 @@ Item {
 
         // Calculate drag distance from start position
         const dragDistSq = Math.pow(mouse.x - _startX, 2) + Math.pow(mouse.y - _startY, 2)
-        const dragThreshold = 5  // Pixels - consider it a drag after moving 5 pixels
+        const dragThreshold = 5
 
         // Mark as drag if we've moved significantly
         if (containsPress && dragDistSq > dragThreshold * dragThreshold) {

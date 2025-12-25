@@ -1785,7 +1785,7 @@ void UI::Dashboard::configureActions(const JSON::Frame &frame)
     {
       disconnect(it.value());
       it.value()->stop();
-      delete it.value(); // Immediate deletion
+      delete it.value();
     }
   }
 

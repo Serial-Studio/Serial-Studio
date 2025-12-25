@@ -160,38 +160,38 @@ private:
   void configureActions(const JSON::Frame &frame);
 
 private:
-  int m_points;                // Number of plot points to retain
-  int m_widgetCount;           // Total number of active widgets
-  bool m_updateRequired;       // Flag to trigger plot/UI update
-  bool m_showActionPanel;      // Whenever the UI shall display an action panel
-  bool m_terminalEnabled;      // Whether terminal group is enabled
-  WidgetID m_terminalWidgetId; // Registry ID for terminal widget
-  bool m_showTaskbarButtons; // Always show taskbar buttons, regardless of state
+  int m_points;
+  int m_widgetCount;
+  bool m_updateRequired;
+  bool m_showActionPanel;
+  bool m_terminalEnabled;
+  WidgetID m_terminalWidgetId;
+  bool m_showTaskbarButtons;
 
-  bool m_updateRetryInProgress; // Used to avoid recursion when frame changes
+  bool m_updateRetryInProgress;
 
-  DSP::AxisData m_pltXAxis;      // Default X-axis data for line plots
-  DSP::AxisData m_multipltXAxis; // Default X-axis data for multi-line plots
+  DSP::AxisData m_pltXAxis;
+  DSP::AxisData m_multipltXAxis;
 
-  QMap<int, DSP::AxisData> m_xAxisData; // X-axis data per dataset index
-  QMap<int, DSP::AxisData> m_yAxisData; // Y-axis data per dataset index
+  QMap<int, DSP::AxisData> m_xAxisData;
+  QMap<int, DSP::AxisData> m_yAxisData;
 
-  QMap<int, bool> m_activePlots;      // Active state per plot index
-  QMap<int, bool> m_activeFFTPlots;   // Active state per FFT plot index
-  QMap<int, bool> m_activeMultiplots; // Active state per multiplot index
+  QMap<int, bool> m_activePlots;
+  QMap<int, bool> m_activeFFTPlots;
+  QMap<int, bool> m_activeMultiplots;
 
-  QVector<DSP::GpsSeries> m_gpsValues;            // GPS data per GPS widget
-  QVector<DSP::AxisData> m_fftValues;             // FFT data per dataset
-  QVector<DSP::LineSeries> m_pltValues;           // Line plot data
-  QVector<DSP::MultiLineSeries> m_multipltValues; // Multi-line plot data
+  QVector<DSP::GpsSeries> m_gpsValues;
+  QVector<DSP::AxisData> m_fftValues;
+  QVector<DSP::LineSeries> m_pltValues;
+  QVector<DSP::MultiLineSeries> m_multipltValues;
 #ifdef BUILD_COMMERCIAL
-  QVector<DSP::LineSeries3D> m_plotData3D; // 3D plot data (commercial only)
+  QVector<DSP::LineSeries3D> m_plotData3D;
 #endif
 
-  QMap<int, QTimer *> m_timers;        // Timers for dashboard actions
-  QVector<JSON::Action> m_actions;     // User-defined dashboard actions
-  SerialStudio::WidgetMap m_widgetMap; // Maps window ID index to widget type
-  QMap<int, JSON::Dataset> m_datasets; // Raw input datasets (by dataset index)
+  QMap<int, QTimer *> m_timers;
+  QVector<JSON::Action> m_actions;
+  SerialStudio::WidgetMap m_widgetMap;
+  QMap<int, JSON::Dataset> m_datasets;
 
   // Maps unique dataset ID to all dataset refs for value updates
   QMap<int, QVector<JSON::Dataset *>> m_datasetReferences;
@@ -202,8 +202,8 @@ private:
   // Datasets by widget type
   QMap<SerialStudio::DashboardWidget, QVector<JSON::Dataset>> m_widgetDatasets;
 
-  JSON::Frame m_rawFrame;  // Unmodified incoming frame
-  JSON::Frame m_lastFrame; // Processed frame used in UI
+  JSON::Frame m_rawFrame;
+  JSON::Frame m_lastFrame;
 };
 } // namespace UI
 
