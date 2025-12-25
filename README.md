@@ -67,7 +67,7 @@ Make sure your system meets these requirements before running the AppImage.
 #### How It Works:
 - **Project File Mode (recommended):** Create custom dashboards using the **Project Editor** with drag-and-drop widgets. No coding needed.
 - **Quick Plot Mode:** Show comma-separated values from Arduino instantly. No setup needed.
-- **Device-defined Mode:** Let your device send its own dashboard layout via JSON (good for products).
+- **Device-defined Mode:** Let your device send its own dashboard layout via JSON.
 
 #### What It Can Do:
 - **No Coding Needed:** Build dashboards using a simple visual interface
@@ -156,8 +156,7 @@ Upload to Arduino → Connect Serial Studio → Enable Quick Plot → Done!
 
 **Minimum Requirements:**
 - **Qt:** Version 6.7 or later (6.9.2 recommended)
-  - Required modules: QtCore, QtGui, QtWidgets, QtSerialPort, QtNetwork, QtCharts, QtSvg
-  - Optional modules: QtBluetooth (for BLE support), QtMultimedia (for audio input)
+  - Required modules: QtCore, QtGui, QtWidgets, QtSerialPort, QtNetwork, QtCharts, QtSvg, QtBluetooth, QtQuick
 - **C++ Compiler:** C++20 compatible
   - GCC 10+ (Linux)
   - Clang 12+ (macOS)
