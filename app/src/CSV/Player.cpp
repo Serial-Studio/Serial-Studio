@@ -40,6 +40,8 @@ CSV::Player::Player()
   : m_framePos(0)
   , m_playing(false)
   , m_timestamp("")
+  , m_startTimestampSeconds(0.0)
+  , m_useHighPrecisionTimestamps(false)
 {
   qApp->installEventFilter(this);
   connect(this, &CSV::Player::playerStateChanged, this,
@@ -194,6 +196,9 @@ void CSV::Player::closeFile()
   m_csvData.squeeze();
   m_playing = false;
   m_timestamp = "--.--";
+  m_timestampCache.clear();
+  m_useHighPrecisionTimestamps = false;
+  m_startTimestampSeconds = 0.0;
 
   JSON::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
@@ -330,9 +335,42 @@ void CSV::Player::openFile(const QString &filePath)
         m_csvData.append(row);
     }
 
-    // Validate the cell at (1,1) for date/time format
-    if (!getDateTime(1).isValid())
+    // Detect timestamp format and validate
+    // First try high-precision format (fractional seconds)
+    bool error = false;
+    QString firstCell = getCellValue(1, 0, error);
+    double firstTimestamp = error ? -1.0 : getTimestampSeconds(firstCell);
+
+    if (firstTimestamp >= 0.0)
     {
+      // High-precision timestamps detected - build cache
+      m_timestampCache.clear();
+      m_timestampCache.reserve(m_csvData.count());
+
+      // Cache all timestamps for efficient playback
+      for (int i = 0; i < m_csvData.count(); ++i)
+      {
+        bool err = false;
+        QString cell = getCellValue(i, 0, err);
+        double ts = err ? 0.0 : getTimestampSeconds(cell);
+        m_timestampCache.append(ts);
+      }
+
+      m_startTimestampSeconds = m_timestampCache[1]; // Row 1 is first data row
+      m_useHighPrecisionTimestamps = true; // Set flag AFTER cache is built
+    }
+    // Fall back to legacy date/time format
+    else if (getDateTime(1).isValid())
+    {
+      m_useHighPrecisionTimestamps = false;
+      m_timestampCache.clear();
+    }
+    // Neither format worked - prompt user
+    else
+    {
+      m_useHighPrecisionTimestamps = false;
+      m_timestampCache.clear();
+
       // Ask user to select date/time column or set interval manually
       if (!promptUserForDateTimeOrInterval())
       {
@@ -347,6 +385,14 @@ void CSV::Player::openFile(const QString &filePath)
     // Remove the header row from the data
     m_framePos = 0;
     m_csvData.removeFirst();
+
+    // Adjust cached timestamps if header was removed
+    if (m_useHighPrecisionTimestamps && !m_timestampCache.isEmpty())
+    {
+      m_timestampCache.removeFirst();
+      if (!m_timestampCache.isEmpty())
+        m_startTimestampSeconds = m_timestampCache[0];
+    }
 
     // Begin reading data
     if (m_csvData.count() >= 2)
@@ -447,111 +493,135 @@ void CSV::Player::setProgress(const double progress)
 }
 
 /**
- * Generates a JSON data frame by combining the values of the current CSV
- * row & the structure of the JSON map file loaded in the @c JsonParser class.
- *
- * If playback is enabled, uses elapsed time tracking to maintain real-time
- * playback. When playback falls behind (due to timer overhead), multiple
- * frames are processed in a batch to catch up.
+ * @brief Updates the timestamp display for the current frame position.
+ */
+void CSV::Player::updateTimestampDisplay()
+{
+  bool err = true;
+  auto ts = getCellValue(m_framePos, 0, err);
+  if (err)
+    return;
+
+  double seconds = getTimestampSeconds(ts);
+  if (seconds >= 0.0)
+    m_timestamp = formatTimestamp(seconds);
+
+  else
+  {
+    auto frameTime = getDateTime(ts);
+    if (frameTime.isValid() && m_startTimestamp.isValid())
+    {
+      qint64 elapsedMs = m_startTimestamp.msecsTo(frameTime);
+      m_timestamp = formatTimestamp(elapsedMs / 1000.0);
+    }
+
+    else
+      m_timestamp = ts;
+  }
+
+  Q_EMIT timestampChanged();
+}
+
+/**
+ * @brief Processes current frame and schedules next frame for playback.
  */
 void CSV::Player::updateData()
 {
-  // File not open, abort
   if (!isOpen())
     return;
 
-  // Update timestamp string
-  bool error = true;
-  auto timestamp = getCellValue(framePosition(), 0, error);
-  if (!error)
+  IO::Manager::instance().processPayload(getFrame(framePosition()));
+  updateTimestampDisplay();
+
+  if (!isPlaying())
+    return;
+
+  if (framePosition() >= frameCount() - 1)
   {
-    m_timestamp = timestamp;
-    IO::Manager::instance().processPayload(getFrame(framePosition()));
-    Q_EMIT timestampChanged();
+    pause();
+    return;
   }
 
-  // If the user wants to 'play' the CSV, get time difference between this
-  // frame and the next frame & schedule an automated update
-  if (!error && isPlaying())
+  const qint64 elapsedMs = m_elapsedTimer.elapsed();
+  qint64 msUntilNext = 0;
+
+  if (m_useHighPrecisionTimestamps)
   {
-    // Check if we've reached the end
-    if (framePosition() >= frameCount() - 1)
+    if (framePosition() + 1 >= m_timestampCache.size())
     {
       pause();
       return;
     }
 
-    // Calculate where we should be based on elapsed real time
-    const qint64 elapsedMs = m_elapsedTimer.elapsed();
-    const QDateTime targetTime = m_startTimestamp.addMSecs(elapsedMs);
+    const double targetTime = m_startTimestampSeconds + (elapsedMs / 1000.0);
+    const double nextTime = m_timestampCache[framePosition() + 1];
+    msUntilNext
+        = qMax(0LL, static_cast<qint64>((nextTime - targetTime) * 1000.0));
+  }
 
-    // Get timestamp of next frame
-    auto nextTime = getDateTime(framePosition() + 1);
+  else
+  {
+    const QDateTime targetTime = m_startTimestamp.addMSecs(elapsedMs);
+    const auto nextTime = getDateTime(framePosition() + 1);
     if (!nextTime.isValid())
     {
       pause();
-      qWarning() << "Error getting next frame timestamp";
       return;
     }
 
-    // Check if we're behind schedule - if so, catch up by processing
-    // frames until we reach the target time
-    if (nextTime <= targetTime)
+    msUntilNext = targetTime.msecsTo(nextTime);
+  }
+
+  if (msUntilNext <= 0)
+  {
+    constexpr int kMaxBatchSize = 100;
+    int processed = 0;
+    while (m_framePos < frameCount() - 1 && processed < kMaxBatchSize
+           && msUntilNext <= 0)
     {
-      // Process frames until we catch up (with a reasonable limit per batch)
-      constexpr int kMaxBatchSize = 100;
-      int processed = 0;
+      ++m_framePos;
+      IO::Manager::instance().processPayload(getFrame(m_framePos));
+      ++processed;
 
-      while (m_framePos < frameCount() - 1 && processed < kMaxBatchSize)
+      if (m_useHighPrecisionTimestamps)
       {
-        ++m_framePos;
-        IO::Manager::instance().processPayload(getFrame(m_framePos));
-        ++processed;
-
-        // Check if we've caught up
-        if (m_framePos >= frameCount() - 1)
-          break;
-
-        auto frameTime = getDateTime(m_framePos);
-        if (frameTime.isValid() && frameTime > targetTime)
-          break;
+        if (m_framePos < m_timestampCache.size())
+        {
+          const double target
+              = m_startTimestampSeconds + (m_elapsedTimer.elapsed() / 1000.0);
+          const double next = m_timestampCache[m_framePos];
+          msUntilNext
+              = qMax(0LL, static_cast<qint64>((next - target) * 1000.0));
+        }
       }
 
-      // Update timestamp display
-      bool err = true;
-      auto ts = getCellValue(m_framePos, 0, err);
-      if (!err)
-      {
-        m_timestamp = ts;
-        Q_EMIT timestampChanged();
-      }
-
-      // Schedule immediate continuation if still behind or more to process
-      if (m_framePos < frameCount() - 1)
-      {
-        QTimer::singleShot(0, this, [this] {
-          if (isOpen() && isPlaying())
-            updateData();
-        });
-      }
       else
       {
-        pause();
+        auto target = m_startTimestamp.addMSecs(m_elapsedTimer.elapsed());
+        auto next = getDateTime(m_framePos);
+        if (next.isValid())
+          msUntilNext = target.msecsTo(next);
       }
     }
-    else
-    {
-      // We're ahead of schedule - wait until the next frame is due
-      const qint64 msUntilNext = targetTime.msecsTo(nextTime);
 
-      QTimer::singleShot(msUntilNext, Qt::PreciseTimer, this, [this] {
-        if (isOpen() && isPlaying() && framePosition() < frameCount())
-        {
-          ++m_framePos;
-          updateData();
-        }
-      });
-    }
+    updateTimestampDisplay();
+
+    if (m_framePos < frameCount() - 1)
+      QTimer::singleShot(qMax(0LL, msUntilNext), Qt::PreciseTimer, this,
+                         &CSV::Player::updateData);
+    else
+      pause();
+  }
+
+  else
+  {
+    QTimer::singleShot(msUntilNext, Qt::PreciseTimer, this, [this] {
+      if (!isOpen() || !isPlaying())
+        return;
+
+      ++m_framePos;
+      updateData();
+    });
   }
 }
 
@@ -776,6 +846,13 @@ QDateTime CSV::Player::getDateTime(const int row)
  */
 QDateTime CSV::Player::getDateTime(const QString &cell)
 {
+  // If the cell is a pure number (fractional seconds), don't try to parse as
+  // date
+  bool isNumber = false;
+  cell.toDouble(&isNumber);
+  if (isNumber)
+    return QDateTime(); // Return invalid QDateTime for fractional seconds
+
   // Initialize parameters
   QDateTime dateTime;
 
@@ -796,6 +873,66 @@ QDateTime CSV::Player::getDateTime(const QString &cell)
 
   // Return date/time
   return dateTime;
+}
+
+/**
+ * @brief Parses a timestamp in fractional seconds format from the given @a row.
+ *
+ * @param row The row index to parse the timestamp from.
+ * @return The timestamp in seconds, or -1.0 if invalid.
+ */
+double CSV::Player::getTimestampSeconds(int row)
+{
+  // Use cached value if available and valid
+  if (m_useHighPrecisionTimestamps && row >= 0 && row < m_timestampCache.size())
+    return m_timestampCache[row];
+
+  // Fallback to parsing from cell
+  bool error = false;
+  QString cell = getCellValue(row, 0, error);
+  if (error)
+    return -1.0;
+
+  return getTimestampSeconds(cell);
+}
+
+/**
+ * @brief Parses a timestamp in fractional seconds format from the given @a
+ * cell.
+ *
+ * This method attempts to parse the cell as a decimal number representing
+ * seconds since Unix epoch with nanosecond precision.
+ *
+ * @param cell The cell string to parse.
+ * @return The timestamp in seconds, or -1.0 if invalid.
+ */
+double CSV::Player::getTimestampSeconds(const QString &cell)
+{
+  bool ok = false;
+  double timestamp = cell.toDouble(&ok);
+
+  if (ok && timestamp >= 0.0)
+    return timestamp;
+
+  return -1.0;
+}
+
+/**
+ * @brief Formats a timestamp in fractional seconds to HH:MM:SS.mmm format.
+ *
+ * @param seconds The timestamp in seconds.
+ * @return Formatted timestamp string.
+ */
+QString CSV::Player::formatTimestamp(double seconds) const
+{
+  int hours = static_cast<int>(seconds / 3600.0);
+  int minutes = static_cast<int>((seconds - hours * 3600.0) / 60.0);
+  double secs = seconds - hours * 3600.0 - minutes * 60.0;
+
+  return QString("%1:%2:%3")
+      .arg(hours, 2, 10, QChar('0'))
+      .arg(minutes, 2, 10, QChar('0'))
+      .arg(secs, 6, 'f', 3, QChar('0'));
 }
 
 /**

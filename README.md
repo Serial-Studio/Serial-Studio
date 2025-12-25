@@ -74,6 +74,7 @@ Make sure your system meets these requirements before running the AppImage.
 - **Many Protocols:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, and audio input
 - **15+ Widgets:** Line plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometers, gyroscopes, compass, data grids
 - **Save to CSV:** Automatically save all data for later analysis in Excel, Python, MATLAB, or R
+- **MDF4 Playback & Export:** Play and export MDF4/MF4 files for CAN Bus, LIN, FlexRay, and analog channels (Pro)
 - **Works Everywhere:** Windows 10/11, macOS 11+ (Intel + Apple Silicon), Linux x64, and Raspberry Pi ARM64
 - **Works with Arduino/ESP32:** Compatible with any device that sends data via serial, BLE, or network
 - **Fast Updates:** 60 FPS dashboard with low delay (<50ms)
@@ -144,9 +145,10 @@ Upload to Arduino → Connect Serial Studio → Enable Quick Plot → Done!
 - **Installation:** Platform-specific setup for Windows, macOS, Linux, Raspberry Pi
 - **Quick Start:** Connect Arduino/ESP32 and visualize data in 5 minutes
 - **Dashboard Creation:** Build custom layouts with Project Editor (no coding)
-- **Protocol Support:** Serial/UART, Bluetooth LE, MQTT, TCP/UDP, Audio
+- **Protocol Support:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio
 - **Frame Parsing:** Handle binary protocols, checksums, custom data formats
-- **CSV Export:** Log sensor data for analysis in Excel, Python, MATLAB, R
+- **CSV Export & Playback:** Log sensor data and replay CSV files for analysis
+- **MDF4 Playback & Export:** Play and export MDF4/MF4 files (CAN Bus, LIN, FlexRay, analog)
 
 ## Building Serial Studio
 

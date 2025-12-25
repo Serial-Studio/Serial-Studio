@@ -117,12 +117,21 @@ void CSV::ExportWorker::writeValues()
     m_indexHeaderPairs = createCsvFile(m_writeBuffer.begin()->data);
     if (m_indexHeaderPairs.isEmpty())
       return;
+
+    // Set reference timestamp from first frame (so timestamps start at 0)
+    m_referenceTimestamp = m_writeBuffer.begin()->highResTimestamp;
   }
 
   for (const auto &i : m_writeBuffer)
   {
-    const auto format = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
-    m_textStream << i.rxDateTime.toString(format) << QStringLiteral(",");
+    // Calculate elapsed time since first frame
+    const auto elapsed = i.highResTimestamp - m_referenceTimestamp;
+    const auto nanoseconds
+        = std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count();
+    const double seconds = static_cast<double>(nanoseconds) / 1'000'000'000.0;
+
+    // Write timestamp with nanosecond precision (9 decimal places)
+    m_textStream << QString::number(seconds, 'f', 9) << QStringLiteral(",");
 
     QMap<int, QString> fieldValues;
     for (const auto &g : i.data.groups)

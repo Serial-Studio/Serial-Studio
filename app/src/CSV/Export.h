@@ -22,6 +22,7 @@
 #pragma once
 
 #include <atomic>
+#include <chrono>
 
 #include <QFile>
 #include <QTimer>
@@ -47,8 +48,13 @@ static constexpr size_t kFlushThreshold = 1024;
  */
 struct TimestampFrame
 {
+  using HighResClock = std::chrono::high_resolution_clock;
+  using TimePoint = HighResClock::time_point;
+
   JSON::Frame data;     ///< The actual data frame.
   QDateTime rxDateTime; ///< Time at which the frame was received.
+  TimePoint
+      highResTimestamp; ///< High-resolution timestamp for nanosecond precision.
 
   /**
    * @brief Default constructor.
@@ -63,6 +69,7 @@ struct TimestampFrame
   TimestampFrame(JSON::Frame &&d)
     : data(std::move(d))
     , rxDateTime(QDateTime::currentDateTime())
+    , highResTimestamp(HighResClock::now())
   {
   }
 
@@ -111,6 +118,7 @@ private:
   moodycamel::ReaderWriterQueue<TimestampFrame> *m_pendingFrames;
   std::atomic<bool> *m_exportEnabled;
   std::atomic<size_t> *m_queueSize;
+  TimestampFrame::TimePoint m_referenceTimestamp;
 };
 
 /**

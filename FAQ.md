@@ -172,6 +172,8 @@ cmake --build . -j$(nproc)
 - **CAN Bus:** Automotive and industrial networks (Pro only)
 - **TCP/UDP sockets:** Network-connected devices
 - **Audio input:** Microphone, line-in (Pro only)
+- **CSV files:** Replay previously recorded telemetry data
+- **MDF4/MF4 files:** Playback automotive measurement files (CAN Bus, LIN, FlexRay, analog) (Pro only)
 
 ---
 
@@ -245,6 +247,58 @@ See the Modbus PLC Simulator example in the `/examples` folder for a complete de
 6. Click **Connect**
 
 See the CAN Bus Example in the `/examples` folder for step-by-step instructions.
+
+---
+
+### How do I play MDF4/MF4 files?
+
+**Pro version only.** MDF4 (Measurement Data Format 4) files are commonly used in automotive and industrial applications to record CAN Bus, LIN, FlexRay, and analog sensor data.
+
+1. In Serial Studio, click **File → Open MDF4 File**
+2. Select your MDF4/MF4 file
+3. Serial Studio will:
+   - Parse all available channels (CAN, LIN, FlexRay, analog)
+   - Create a dashboard automatically based on channel data
+   - Provide playback controls (play, pause, seek)
+   - Support real-time visualization during playback
+
+**Supported channels:**
+- CAN Bus messages (raw and decoded with DBC)
+- LIN frames
+- FlexRay frames
+- Analog voltage/current channels
+- Temperature, pressure, and other sensor data
+
+**Use cases:**
+- Analyzing recorded vehicle test drives
+- Debugging automotive ECU communication
+- Post-processing industrial machine data
+- Comparing multiple test runs
+
+---
+
+### How do I export data to MDF4 format?
+
+**Pro version only.**
+
+1. While receiving real-time data (from any source: serial, CAN Bus, Modbus, etc.)
+2. Click the **MDF4 export icon** in the toolbar to enable MDF4 logging
+3. Serial Studio saves all received data to a timestamped MDF4 file
+4. File location shown in console panel
+5. Stop MDF4 logging by clicking icon again
+
+**Benefits of MDF4 export:**
+- Industry-standard format compatible with Vector CANalyzer, CANape, ETAS INCA
+- Efficient binary storage (smaller than CSV)
+- Preserves timestamp precision (nanosecond resolution)
+- Supports metadata (channel names, units, descriptions)
+
+**Supported data sources for MDF4 export:**
+- CAN Bus (with DBC decoding)
+- Modbus registers
+- Serial/UART sensors
+- MQTT messages
+- Any real-time data source
 
 ---
 
@@ -458,7 +512,8 @@ ARM64 AppImage requires Ubuntu 24.04+ (glibc 2.38+). Upgrade your OS or use Flat
 | 3D visualization | ❌ | ✅ |
 | FFT spectrum analyzer | ❌ | ✅ |
 | Advanced plotting | ❌ | ✅ |
-| CSV export | ✅ | ✅ |
+| CSV export & playback | ✅ | ✅ |
+| MDF4 playback & export | ❌ | ✅ |
 | DBC file import (CAN) | ❌ | ✅ |
 | Commercial use | ⚠️ GPL compliant only | ✅ |
 | Priority support | ❌ | ✅ |

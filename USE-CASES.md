@@ -261,6 +261,40 @@ Real-world applications and success stories for Serial Studio across industries,
 
 ## Automotive and Racing
 
+### CAN Bus Data Logger with DBC Decoding
+**Problem:** Automotive engineer developing ECU software needs to monitor and decode CAN messages in real-time.
+
+**Solution:** Serial Studio Pro with CAN Bus interface and DBC file:
+- Import DBC file to automatically decode CAN messages
+- Display decoded signals as named parameters (e.g., "Engine_RPM", "Vehicle_Speed")
+- Monitor multiple CAN IDs simultaneously
+- Export data to MDF4 format for analysis in CANalyzer/CANape
+- Support for CAN 2.0A/2.0B and CAN FD
+
+**Hardware:** PEAK PCAN-USB, Vector VN1630, SocketCAN interface, or virtual CAN for testing
+**Data Protocol:** CAN Bus with DBC file for signal database
+**Key Benefit:** Professional-grade CAN Bus monitoring without expensive Vector/PEAK software
+**Example:** Monitor engine ECU during test drive, recording 50+ signals at 100 Hz
+
+---
+
+### MDF4 File Analysis
+**Problem:** Test engineer has recorded MDF4 files from vehicle testing and needs to visualize the data for analysis.
+
+**Solution:** Serial Studio Pro opens MDF4/MF4 files:
+- Load MDF4 files created by Vector CANalyzer, ETAS INCA, or other tools
+- Automatically parse CAN Bus, LIN, FlexRay, and analog channels
+- Playback recorded data with timeline controls
+- Compare multiple test runs side-by-side
+- Export specific channels to CSV for further analysis
+
+**Hardware:** None required (file playback only)
+**Supported Formats:** MDF4 (ASAM standard), MF4
+**Key Benefit:** Free alternative to expensive Vector/ETAS tools for post-processing
+**Example:** Analyze brake test data recorded from CAN Bus, comparing pedal force vs. deceleration
+
+---
+
 ### Dynamometer (Dyno) Testing
 **Problem:** Performance shop needs real-time engine metrics during dyno runs.
 
@@ -406,10 +440,27 @@ Real-world applications and success stories for Serial Studio across industries,
 
 ## Industrial and Manufacturing
 
+### Modbus PLC Monitoring
+**Problem:** Factory floor has multiple PLCs controlling various processes, and engineers need to monitor register values in real-time.
+
+**Solution:** Serial Studio Pro connects via Modbus TCP or Modbus RTU:
+- Monitor holding registers, input registers, coils, and discrete inputs
+- Display process variables (temperature, pressure, flow rate) as gauges and plots
+- Track production counters and alarm states
+- Log data to CSV for compliance reporting
+- Support for multiple Modbus slave devices
+
+**Hardware:** Industrial PLC (Siemens, Allen-Bradley, Schneider Electric, etc.) + Ethernet/RS485 connection
+**Data Protocol:** Modbus TCP (Ethernet) or Modbus RTU (RS485 serial)
+**Key Benefit:** Industry-standard protocol support without custom programming
+**Example:** Monitor a water treatment plant with 5 PLCs controlling pumps, valves, and sensors
+
+---
+
 ### CNC Machine Monitor
 **Problem:** Machine shop wants to track spindle load, feed rate, and tool wear.
 
-**Solution:** Industrial PLC outputs data via Modbus RTU (future feature) or serial:
+**Solution:** Industrial PLC outputs data via Modbus RTU or serial:
 - Serial Studio displays:
   - Spindle RPM and load current
   - Axis positions (X, Y, Z)

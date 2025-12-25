@@ -100,6 +100,7 @@ private slots:
 
 private:
   void sendHeaderFrame();
+  void updateTimestampDisplay();
   void processFrameBatch(int startFrame, int endFrame);
 
 private:
@@ -109,6 +110,9 @@ private:
 
   QDateTime getDateTime(int row);
   QDateTime getDateTime(const QString &cell);
+  double getTimestampSeconds(int row);
+  double getTimestampSeconds(const QString &cell);
+  QString formatTimestamp(double seconds) const;
 
   QByteArray getFrame(const int row);
 
@@ -127,5 +131,8 @@ private:
 
   QElapsedTimer m_elapsedTimer;
   QDateTime m_startTimestamp;
+  double m_startTimestampSeconds;
+  bool m_useHighPrecisionTimestamps;
+  QVector<double> m_timestampCache;
 };
 } // namespace CSV

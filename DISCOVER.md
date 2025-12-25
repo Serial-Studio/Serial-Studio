@@ -45,6 +45,9 @@
 | **Serial/UART** | [FAQ: Serial Port](FAQ.md#how-do-i-connect-to-a-serial-port) |
 | **Bluetooth LE** | [FAQ: BLE](FAQ.md#how-do-i-connect-via-bluetooth-low-energy), [Examples](./examples/BLE%20Battery) |
 | **MQTT** | [FAQ: MQTT](FAQ.md#how-do-i-receive-data-via-mqtt), [Comparison: vs Grafana](COMPARISON.md#serial-studio-vs-grafana--telegraf) |
+| **Modbus TCP/RTU** | [FAQ: Modbus](FAQ.md#how-do-i-use-modbus), [Examples](./examples/Modbus%20PLC%20Simulator) |
+| **CAN Bus** | [FAQ: CAN Bus](FAQ.md#how-do-i-use-can-bus), [Examples](./examples/CAN%20Bus%20Example) |
+| **MDF4/MF4 Files** | [FAQ: MDF4](FAQ.md#how-do-i-play-mdf4mf4-files) |
 | **TCP/UDP** | [FAQ: Network](FAQ.md#how-do-i-connect-via-tcpudp), [Examples](./examples/UDP%20Function%20Generator) |
 
 ### Industries & Applications
@@ -96,8 +99,9 @@ If you found this project via search, these are the topics we cover:
 - Environmental sensor network
 - Lab data acquisition
 - Hardware prototyping tool
-- CAN bus monitor (future feature)
-- Modbus visualizer (future feature)
+- CAN Bus monitor and DBC decoder
+- Modbus TCP/RTU visualizer
+- MDF4/MF4 file playback and export
 
 ### Comparison Keywords
 - Arduino plotter alternative
