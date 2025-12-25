@@ -30,7 +30,7 @@ Item {
   //
   // Constants
   //
-  property int maxButtonWidth: 128
+  property int maxButtonWidth: horizontalLayout ? 180 : 156
 
   //
   // Signals
