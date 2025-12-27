@@ -2,6 +2,11 @@
     "actions": [
     ],
     "checksum": "",
+    "dashboardLayout": {
+        "autoLayout": true,
+        "windowOrder": [
+        ]
+    },
     "decoder": 0,
     "frameDetection": 0,
     "frameEnd": "\\n",

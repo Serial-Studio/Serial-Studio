@@ -130,10 +130,35 @@ With Serial Studio's new custom X-axis feature, you can map any dataset to serve
 - Plotting values against elapsed time or packet numbers.
 - Creating advanced visualizations like the Lorenz attractor.
 
+## **Python UDP Version**
+
+For testing without Arduino hardware, a Python script (`lorenz_udp.py`) is provided that sends Lorenz attractor data via UDP.
+
+### **Requirements**
+- Python 3.x (no additional packages required)
+
+### **Usage**
+
+1. Run the Python script:
+   ```bash
+   python3 lorenz_udp.py
+   ```
+
+2. In Serial Studio:
+   - Select **Network** as the data source
+   - Choose **UDP** protocol
+   - Set port to **9000**
+   - Load the `LorenzAttractor.json` project file
+   - Click **Connect**
+
+The script will continuously generate and send Lorenz attractor data to `127.0.0.1:9000`.
+
 ## **Troubleshooting**
 
 - **No Data Appears**:
   - Ensure the Arduino sketch is uploaded correctly.
   - Check the serial port and baud rate in Serial Studio.
+  - For UDP version: Ensure Serial Studio is listening on port 9000 and the Python script is running.
 - **Chaotic Output**:
   - Ensure the `transmissionInterval` in the Arduino sketch is suitable for your system.
+  - For UDP version: Adjust the `transmission_interval` parameter in the Python script if needed.

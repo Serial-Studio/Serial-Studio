@@ -240,7 +240,7 @@
                     "plotMax": 15,
                     "plotMin": 0,
                     "title": "Vibration",
-                    "units": "mm/s",
+                    "units": "mm/s^2",
                     "value": "--.--",
                     "widget": "",
                     "widgetMax": 50,
