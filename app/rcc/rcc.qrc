@@ -314,6 +314,7 @@
         <file>icons/start/full-screen.svg</file>
         <file>icons/start/groups.svg</file>
         <file>icons/start/help.svg</file>
+        <file>icons/start/mf4-log.svg</file>
         <file>icons/start/normal-screen.svg</file>
         <file>icons/start/pause.svg</file>
         <file>icons/start/resume.svg</file>
@@ -337,6 +338,7 @@
         <file>icons/toolbar/disconnect.svg</file>
         <file>icons/toolbar/examples.svg</file>
         <file>icons/toolbar/help.svg</file>
+        <file>icons/toolbar/mf4.svg</file>
         <file>icons/toolbar/mqtt-publisher.svg</file>
         <file>icons/toolbar/mqtt-subscriber.svg</file>
         <file>icons/toolbar/mqtt.svg</file>
@@ -349,6 +351,7 @@
         <file>images/code.svg</file>
         <file>images/dialog-banner.svg</file>
         <file>images/drag-and-drop.svg</file>
+        <file>images/driver.svg</file>
         <file>images/hammer.svg</file>
         <file>images/no-mic.svg</file>
         <file>images/spinner.svg</file>
@@ -434,24 +437,20 @@
         <file>scripts/xml_data.js</file>
         <file>scripts/yaml_data.js</file>
         <file>themes/code-editor/default.xml</file>
+        <file>themes/code-editor/fluent-dark.xml</file>
+        <file>themes/code-editor/fluent-light.xml</file>
         <file>themes/code-editor/gunmetal.xml</file>
         <file>themes/code-editor/iron.xml</file>
         <file>themes/code-editor/midday.xml</file>
         <file>themes/code-editor/midnight.xml</file>
         <file>themes/code-editor/rust.xml</file>
         <file>themes/default.json</file>
+        <file>themes/fluent-dark.json</file>
+        <file>themes/fluent-light.json</file>
         <file>themes/gunmetal.json</file>
         <file>themes/iron.json</file>
         <file>themes/midday.json</file>
         <file>themes/midnight.json</file>
         <file>themes/rust.json</file>
-        <file>themes/fluent-dark.json</file>
-        <file>themes/fluent-light.json</file>
-        <file>themes/code-editor/fluent-dark.xml</file>
-        <file>themes/code-editor/fluent-light.xml</file>
-        <file>images/driver.svg</file>
-        <file>icons/toolbar/mf4.svg</file>
-        <file>icons/start/mf4-log.svg</file>
-        <file>icons/start/mf4-log.svg</file>
     </qresource>
 </RCC>

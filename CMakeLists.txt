@@ -168,10 +168,15 @@ if (UNIX AND NOT APPLE)
 endif()
 
 #-------------------------------------------------------------------------------
-# Set compiler warnings (MSVC excluded... it’s allergic to standards)
+# Set compiler warnings
 #-------------------------------------------------------------------------------
 
-if(NOT MSVC)
+if(MSVC)
+  add_compile_options(
+    /wd4324                        # Structure padding warning
+    /wd4267                        # size_t to int conversion warning
+  )
+else()
   add_compile_options(
     -Wall                          # Enable common warning messages
     -Wextra                        # Enable extra warnings

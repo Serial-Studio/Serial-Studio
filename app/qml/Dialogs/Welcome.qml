@@ -137,6 +137,7 @@ Window {
   // Use page item to set application palette
   //
   Page {
+    clip: true
     anchors.fill: parent
     anchors.topMargin: root.titlebarHeight
     palette.mid: Cpp_ThemeManager.colors["mid"]

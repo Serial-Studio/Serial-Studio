@@ -191,7 +191,7 @@ Rectangle {
 
       Widgets.ToolbarButton {
         iconSize: 16
-        text: qsTr("Load CSV")
+        text: qsTr("Open CSV")
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
         onClicked: Cpp_CSV_Player.openFile()
@@ -202,7 +202,7 @@ Rectangle {
 
       Widgets.ToolbarButton {
         iconSize: 16
-        text: qsTr("Load MDF4")
+        text: qsTr("Open MDF4")
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
         onClicked: Cpp_MDF4_Player.openFile()
