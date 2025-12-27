@@ -278,6 +278,44 @@ void Titlebar::setBackgroundColor(const QColor &color)
 }
 
 /**
+ * @brief Calculates the bounding rectangle for a window control button.
+ * @param button The button type to get the rectangle for.
+ * @return The button's bounding rectangle in item coordinates.
+ *
+ * Buttons are positioned from right to left: close, maximize, minimize.
+ */
+QRectF Titlebar::buttonRect(Button button) const
+{
+  const QRectF bgRect = buttonBackgroundRect(button);
+  const qreal iconSize = CSD::ButtonSize * 0.5;
+
+  return {bgRect.center().x() - iconSize / 2,
+          bgRect.center().y() - iconSize / 2, iconSize, iconSize};
+}
+
+/**
+ * @brief Determines which button (if any) is at the given position.
+ * @param pos The position to test in item coordinates.
+ * @return The button at the position, or Button::None if no button.
+ */
+Titlebar::Button Titlebar::buttonAt(const QPointF &pos) const
+{
+  if (shouldShowButton(Button::Close)
+      && buttonBackgroundRect(Button::Close).contains(pos))
+    return Button::Close;
+
+  else if (shouldShowButton(Button::Maximize)
+           && buttonBackgroundRect(Button::Maximize).contains(pos))
+    return Button::Maximize;
+
+  else if (shouldShowButton(Button::Minimize)
+           && buttonBackgroundRect(Button::Minimize).contains(pos))
+    return Button::Minimize;
+
+  return Button::None;
+}
+
+/**
  * @brief Determines if a button should be shown based on window flags.
  * @param button The button type to check.
  * @return True if the button should be displayed, false otherwise.
@@ -326,44 +364,6 @@ bool Titlebar::shouldShowButton(Button button) const
     default:
       return true;
   }
-}
-
-/**
- * @brief Calculates the bounding rectangle for a window control button.
- * @param button The button type to get the rectangle for.
- * @return The button's bounding rectangle in item coordinates.
- *
- * Buttons are positioned from right to left: close, maximize, minimize.
- */
-QRectF Titlebar::buttonRect(Button button) const
-{
-  const QRectF bgRect = buttonBackgroundRect(button);
-  const qreal iconSize = CSD::ButtonSize * 0.5;
-
-  return {bgRect.center().x() - iconSize / 2,
-          bgRect.center().y() - iconSize / 2, iconSize, iconSize};
-}
-
-/**
- * @brief Determines which button (if any) is at the given position.
- * @param pos The position to test in item coordinates.
- * @return The button at the position, or Button::None if no button.
- */
-Titlebar::Button Titlebar::buttonAt(const QPointF &pos) const
-{
-  if (shouldShowButton(Button::Close)
-      && buttonBackgroundRect(Button::Close).contains(pos))
-    return Button::Close;
-
-  else if (shouldShowButton(Button::Maximize)
-           && buttonBackgroundRect(Button::Maximize).contains(pos))
-    return Button::Maximize;
-
-  else if (shouldShowButton(Button::Minimize)
-           && buttonBackgroundRect(Button::Minimize).contains(pos))
-    return Button::Minimize;
-
-  return Button::None;
 }
 
 /**
