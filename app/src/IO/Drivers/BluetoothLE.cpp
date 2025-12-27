@@ -34,8 +34,10 @@
 IO::Drivers::BluetoothLE::BluetoothLE()
   : m_deviceIndex(-1)
   , m_deviceConnected(false)
+  , m_adapterAvailable(false)
   , m_service(nullptr)
   , m_controller(nullptr)
+  , m_localDevice(nullptr)
   , m_discoveryAgent(nullptr)
 {
   connect(this, &IO::Drivers::BluetoothLE::deviceIndexChanged, this,
@@ -139,7 +141,7 @@ bool IO::Drivers::BluetoothLE::isWritable() const
  */
 bool IO::Drivers::BluetoothLE::configurationOk() const
 {
-  return operatingSystemSupported() && deviceIndex() >= 0;
+  return operatingSystemSupported() && adapterAvailable() && deviceIndex() >= 0;
 }
 
 /**
@@ -242,6 +244,16 @@ bool IO::Drivers::BluetoothLE::operatingSystemSupported() const
   return true;
 }
 
+/**
+ * Returns true if a Bluetooth adapter is available on the system.
+ * This checks if a valid Bluetooth adapter exists, regardless of whether
+ * it is powered on or off.
+ */
+bool IO::Drivers::BluetoothLE::adapterAvailable() const
+{
+  return m_adapterAvailable;
+}
+
 //------------------------------------------------------------------------------
 // Driver specifics
 //------------------------------------------------------------------------------
@@ -311,6 +323,13 @@ void IO::Drivers::BluetoothLE::startDiscovery()
 {
   // Operating system not supported, abort process
   if (!operatingSystemSupported())
+    return;
+
+  // Initialize adapter on first use
+  initializeBluetoothAdapter();
+
+  // Check if adapter is available
+  if (!adapterAvailable())
     return;
 
   // Close previous device
@@ -602,9 +621,6 @@ void IO::Drivers::BluetoothLE::onDiscoveryError(
 {
   switch (e)
   {
-    case QBluetoothDeviceDiscoveryAgent::PoweredOffError:
-      Q_EMIT error(tr("Bluetooth adapter is off!"));
-      break;
     case QBluetoothDeviceDiscoveryAgent::InvalidBluetoothAdapterError:
       Q_EMIT error(tr("Invalid Bluetooth adapter!"));
       break;
@@ -643,4 +659,64 @@ void IO::Drivers::BluetoothLE::onCharacteristicChanged(
   const bool current = (info == m_characteristics.at(m_selectedCharacteristic));
   if (anyCharacteristic || current)
     Q_EMIT dataReceived(value);
+}
+
+/**
+ * Handles changes to the Bluetooth adapter's host mode state.
+ * This is called when the adapter is powered on/off or physically
+ * connected/disconnected (e.g., USB Bluetooth dongles).
+ */
+void IO::Drivers::BluetoothLE::onHostModeStateChanged(
+    QBluetoothLocalDevice::HostMode state)
+{
+  bool wasAvailable = m_adapterAvailable;
+  m_adapterAvailable = (state != QBluetoothLocalDevice::HostPoweredOff);
+
+  if (wasAvailable != m_adapterAvailable)
+  {
+    Q_EMIT adapterAvailabilityChanged();
+
+    if (!m_adapterAvailable)
+    {
+      // If adapter becomes unavailable while scanning, stop scanning
+      if (m_discoveryAgent && m_discoveryAgent->isActive())
+        m_discoveryAgent->stop();
+
+      // Clear any discovered devices
+      m_devices.clear();
+      m_deviceIndex = -1;
+      m_deviceNames.clear();
+      Q_EMIT devicesChanged();
+    }
+    else
+    {
+      // Adapter became available, automatically start discovery
+      startDiscovery();
+    }
+  }
+}
+
+/**
+ * Initializes the Bluetooth adapter detection.
+ * This is called lazily when the Bluetooth driver is first used.
+ */
+void IO::Drivers::BluetoothLE::initializeBluetoothAdapter()
+{
+  // Already initialized or OS not supported
+  if (m_localDevice || !operatingSystemSupported())
+    return;
+
+  // Create local device instance
+  m_localDevice = new QBluetoothLocalDevice(this);
+
+  // Check initial adapter state
+  auto hostMode = m_localDevice->hostMode();
+  m_adapterAvailable = (hostMode != QBluetoothLocalDevice::HostPoweredOff);
+
+  // Monitor adapter state changes
+  connect(m_localDevice, &QBluetoothLocalDevice::hostModeStateChanged, this,
+          &IO::Drivers::BluetoothLE::onHostModeStateChanged);
+
+  // Notify QML of initial state
+  Q_EMIT adapterAvailabilityChanged();
 }

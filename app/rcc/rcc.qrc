@@ -452,5 +452,6 @@
         <file>themes/midday.json</file>
         <file>themes/midnight.json</file>
         <file>themes/rust.json</file>
+        <file>images/no-bluetooth.svg</file>
     </qresource>
 </RCC>

@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QLowEnergyController>
 #include <QBluetoothDeviceDiscoveryAgent>
+#include <QBluetoothLocalDevice>
 
 #include "IO/HAL_Driver.h"
 
@@ -61,6 +62,9 @@ class BluetoothLE : public HAL_Driver
   Q_PROPERTY(bool operatingSystemSupported
              READ operatingSystemSupported
              CONSTANT)
+  Q_PROPERTY(bool adapterAvailable
+             READ adapterAvailable
+             NOTIFY adapterAvailabilityChanged)
   Q_PROPERTY(int characteristicIndex
              READ characteristicIndex
              WRITE setCharacteristicIndex
@@ -74,6 +78,7 @@ signals:
   void characteristicsChanged();
   void deviceConnectedChanged();
   void characteristicIndexChanged();
+  void adapterAvailabilityChanged();
   void error(const QString &message);
 
 private:
@@ -97,6 +102,7 @@ public:
 
   [[nodiscard]] bool ignoreDataDelimeters() const;
   [[nodiscard]] bool operatingSystemSupported() const;
+  [[nodiscard]] bool adapterAvailable() const;
 
   [[nodiscard]] int deviceCount() const;
   [[nodiscard]] int deviceIndex() const;
@@ -121,14 +127,20 @@ private slots:
   void onServiceStateChanged(QLowEnergyService::ServiceState serviceState);
   void onCharacteristicChanged(const QLowEnergyCharacteristic &info,
                                const QByteArray &value);
+  void onHostModeStateChanged(QBluetoothLocalDevice::HostMode state);
+
+private:
+  void initializeBluetoothAdapter();
 
 private:
   int m_deviceIndex;
   bool m_deviceConnected;
+  bool m_adapterAvailable;
   int m_selectedCharacteristic;
 
   QLowEnergyService *m_service;
   QLowEnergyController *m_controller;
+  QBluetoothLocalDevice *m_localDevice;
   QBluetoothDeviceDiscoveryAgent *m_discoveryAgent;
 
   QStringList m_deviceNames;

@@ -363,7 +363,7 @@ Window {
               wrapMode: Label.WordWrap
               Layout.maximumWidth: parent.width
               text: qsTr("Your trial period has ended. To continue using %1 with all " +
-                         "Pro features, please upgrade to a paid plan.").arg(Cpp_AppName)
+                         "Pro features, please upgrade to a paid plan.").arg("Serial Studio")
             }
 
             Item {

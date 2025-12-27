@@ -139,7 +139,9 @@ Item {
     RowLayout {
       spacing: 4
       Layout.fillWidth: true
-      visible: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount < 1
+      visible: Cpp_IO_Bluetooth_LE.operatingSystemSupported &&
+               Cpp_IO_Bluetooth_LE.adapterAvailable &&
+               Cpp_IO_Bluetooth_LE.deviceCount < 1
 
       Image {
         id: spinner
@@ -175,34 +177,87 @@ Item {
     }
 
     //
-    // OS not supported indicator
-    //
-    RowLayout {
-      spacing: 4
-      Layout.fillWidth: true
-      visible: !Cpp_IO_Bluetooth_LE.operatingSystemSupported
-
-      Image {
-        sourceSize: Qt.size(96, 96)
-        Layout.alignment: Qt.AlignVCenter
-        source: "qrc:/rcc/images/hammer.svg"
-      }
-
-      Label {
-        Layout.fillWidth: true
-        wrapMode: Label.WordWrap
-        Layout.alignment: Qt.AlignVCenter
-        text: qsTr("Sorry, this system is not supported yet. " +
-                   "We'll update Serial Studio to work with this operating " +
-                   "system as soon as Qt officially supports it.")
-      }
-    }
-
-    //
     // Spacer
     //
     Item {
       Layout.fillHeight: true
+    }
+  }
+
+  //
+  // No Bluetooth Adapter indicator
+  //
+  ColumnLayout {
+    spacing: 4
+    anchors.centerIn: parent
+    visible: Cpp_IO_Bluetooth_LE.operatingSystemSupported && !Cpp_IO_Bluetooth_LE.adapterAvailable
+
+    Image {
+      sourceSize: Qt.size(96, 96)
+      Layout.alignment: Qt.AlignHCenter
+      source: "qrc:/rcc/images/no-bluetooth.svg"
+    }
+
+    Item {
+      implicitHeight: 4
+    }
+
+    Label {
+      wrapMode: Label.WordWrap
+      Layout.alignment: Qt.AlignHCenter
+      horizontalAlignment: Label.AlignHCenter
+      Layout.maximumWidth: root.width - 64
+      text: qsTr("No Bluetooth Adapter Detected")
+      font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
+    }
+
+    Label {
+      opacity: 0.8
+      wrapMode: Label.WordWrap
+      Layout.alignment: Qt.AlignHCenter
+      Layout.maximumWidth: root.width - 64
+      horizontalAlignment: Label.AlignHCenter
+      font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
+      text: qsTr("Connect a Bluetooth adapter or check your system settings")
+    }
+  }
+
+  //
+  // OS not supported indicator
+  //
+  ColumnLayout {
+    spacing: 4
+    anchors.centerIn: parent
+    visible: !Cpp_IO_Bluetooth_LE.operatingSystemSupported
+
+    Image {
+      sourceSize: Qt.size(96, 96)
+      Layout.alignment: Qt.AlignVCenter
+      source: "qrc:/rcc/images/hammer.svg"
+    }
+
+    Item {
+      implicitHeight: 4
+    }
+
+    Label {
+      wrapMode: Label.WordWrap
+      Layout.alignment: Qt.AlignHCenter
+      horizontalAlignment: Label.AlignHCenter
+      Layout.maximumWidth: root.width - 64
+      text: qsTr("This OS is not Supported Yet.")
+      font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
+    }
+
+    Label {
+      opacity: 0.8
+      wrapMode: Label.WordWrap
+      Layout.alignment: Qt.AlignHCenter
+      Layout.maximumWidth: root.width - 64
+      horizontalAlignment: Label.AlignHCenter
+      font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
+      text: qsTr("We'll update Serial Studio to work with this operating " +
+                 "system as soon as Qt officially supports it")
     }
   }
 }
