@@ -32,6 +32,27 @@ if(UNIX)
 endif()
 
 #-------------------------------------------------------------------------------
+# Compiler flags for third-party libraries
+#-------------------------------------------------------------------------------
+
+if(MSVC)
+  set(LIB_FLAGS
+    /w                          # Suppress all warnings
+    /Zc:inline                  # Remove unreferenced inline functions
+    /Gy                         # Enable function-level linking
+  )
+else()
+  set(LIB_FLAGS
+    -w                          # Suppress all warnings
+    -fvisibility=hidden         # Hide all symbols
+    -fvisibility-inlines-hidden # Hide C++ inline function symbols
+  )
+  set(LIB_LINK_FLAGS
+    -fvisibility=hidden         # Hide all symbols at link time
+  )
+endif()
+
+#-------------------------------------------------------------------------------
 # FetchContent: Download and build ZLIB 1.3.1 as static library
 #-------------------------------------------------------------------------------
 
@@ -51,10 +72,11 @@ set(SKIP_INSTALL_ALL    ON  CACHE BOOL     "Skip zlib installation" FORCE)
 
 FetchContent_MakeAvailable(zlib)
 
-if(NOT MSVC)
-  target_compile_options(zlibstatic PRIVATE -fvisibility=hidden)
-  message(STATUS "Applied symbol hiding to zlib to prevent conflicts")
+target_compile_options(zlibstatic PRIVATE ${LIB_FLAGS})
+if(NOT MSVC AND LIB_LINK_FLAGS)
+  target_link_options(zlibstatic PRIVATE ${LIB_LINK_FLAGS})
 endif()
+
 if(NOT TARGET ZLIB::ZLIB)
   add_library(ZLIB::ZLIB ALIAS zlibstatic)
   set(ZLIB_FOUND TRUE CACHE INTERNAL "ZLIB found via FetchContent")
@@ -91,9 +113,9 @@ set(EXPAT_ENABLE_INSTALL  OFF CACHE BOOL "Skip expat installation" FORCE)
 
 FetchContent_MakeAvailable(expat)
 
-if(NOT MSVC)
-  target_compile_options(expat PRIVATE -fvisibility=hidden)
-  message(STATUS "Applied symbol hiding to expat to prevent conflicts")
+target_compile_options(expat PRIVATE ${LIB_FLAGS})
+if(NOT MSVC AND LIB_LINK_FLAGS)
+  target_link_options(expat PRIVATE ${LIB_LINK_FLAGS})
 endif()
 
 if(TARGET expat AND NOT TARGET expat::expat)
@@ -116,28 +138,34 @@ add_subdirectory(QSimpleUpdater)
 add_subdirectory(mdflib)
 
 #-------------------------------------------------------------------------------
-# Apply symbol hiding to all static libraries (all platforms except MSVC)
+# Apply flags to internal libraries
 #-------------------------------------------------------------------------------
 
-if(NOT MSVC)
-  if(TARGET kissfft)
-    target_compile_options(kissfft PRIVATE -fvisibility=hidden)
-    message(STATUS "Applied symbol hiding to kissfft")
+if(TARGET kissfft)
+  target_compile_options(kissfft PRIVATE ${LIB_FLAGS})
+  if(NOT MSVC AND LIB_LINK_FLAGS)
+    target_link_options(kissfft PRIVATE ${LIB_LINK_FLAGS})
   endif()
+endif()
 
-  if(TARGET QCodeEditor)
-    target_compile_options(QCodeEditor PRIVATE -fvisibility=hidden)
-    message(STATUS "Applied symbol hiding to QCodeEditor")
+if(TARGET QCodeEditor)
+  target_compile_options(QCodeEditor PRIVATE ${LIB_FLAGS})
+  if(NOT MSVC AND LIB_LINK_FLAGS)
+    target_link_options(QCodeEditor PRIVATE ${LIB_LINK_FLAGS})
   endif()
+endif()
 
-  if(TARGET QSimpleUpdater)
-    target_compile_options(QSimpleUpdater PRIVATE -fvisibility=hidden)
-    message(STATUS "Applied symbol hiding to QSimpleUpdater")
+if(TARGET QSimpleUpdater)
+  target_compile_options(QSimpleUpdater PRIVATE ${LIB_FLAGS})
+  if(NOT MSVC AND LIB_LINK_FLAGS)
+    target_link_options(QSimpleUpdater PRIVATE ${LIB_LINK_FLAGS})
   endif()
+endif()
 
-  if(TARGET mdf)
-    target_compile_options(mdf PRIVATE -fvisibility=hidden)
-    message(STATUS "Applied symbol hiding to mdf")
+if(TARGET mdf)
+  target_compile_options(mdf PRIVATE ${LIB_FLAGS})
+  if(NOT MSVC AND LIB_LINK_FLAGS)
+    target_link_options(mdf PRIVATE ${LIB_LINK_FLAGS})
   endif()
 endif()
 

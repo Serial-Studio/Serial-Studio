@@ -42,11 +42,6 @@
 // Constants
 //------------------------------------------------------------------------------
 
-namespace
-{
-constexpr int kDefaultFftSamples = 2048;
-}
-
 /**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
@@ -674,7 +669,7 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
       dataset.pltMin = minValue;
       dataset.fftMax = maxValue;
       dataset.fftMin = minValue;
-      dataset.fftSamples = kDefaultFftSamples;
+      dataset.fftSamples = 2048;
       dataset.fftSamplingRate = sampleRate;
 
       if (m_quickPlotHasHeader && index - 1 < m_quickPlotChannelNames.size())

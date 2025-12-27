@@ -176,7 +176,6 @@ if(NOT MSVC)
     -Wall                          # Enable common warning messages
     -Wextra                        # Enable extra warnings
     -Wno-unused-function           # Silence miniaudio warnings
-    -Wno-cast-align                # Silence KISS FFT warnings
   )
 endif()
 
