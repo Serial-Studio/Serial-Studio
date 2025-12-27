@@ -30,12 +30,19 @@ Window {
   id: root
 
   property int titlebarHeight: 0
+  property int calculatedHeight: {
+    var contentHeight = contentRect.implicitHeight > 0 ? contentRect.implicitHeight : 280
+    var buttonHeight = buttonRow.implicitHeight > 0 ? buttonRow.implicitHeight : 48
+    return Math.min(340, Math.max(280, contentHeight + buttonHeight + 60 + titlebarHeight))
+  }
 
   title: qsTr("Licensing")
   minimumWidth: 640
   maximumWidth: 640
-  minimumHeight: 320
-  maximumHeight: 320
+  width: minimumWidth
+  height: calculatedHeight
+  minimumHeight: calculatedHeight
+  maximumHeight: calculatedHeight
 
   Component.onCompleted: {
     root.flags = Qt.Dialog |
@@ -110,15 +117,18 @@ Window {
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     ColumnLayout {
+      id: mainLayout
       spacing: 12
       anchors.fill: parent
       anchors.margins: 16
 
       Rectangle {
+        id: contentRect
         radius: 2
         border.width: 1
         Layout.fillWidth: true
-        Layout.fillHeight: true
+        implicitHeight: stackLayout.implicitHeight + 32
+        Layout.preferredHeight: implicitHeight
         color: Cpp_ThemeManager.colors["groupbox_background"]
         border.color: Cpp_ThemeManager.colors["groupbox_border"]
 
@@ -127,13 +137,18 @@ Window {
         }
 
         StackLayout {
-          anchors.fill: parent
-          anchors.margins: 16
+          id: stackLayout
+          width: parent.width - 32
+          anchors.centerIn: parent
           currentIndex: Cpp_Licensing_LemonSqueezy.busy ? 0 :
                         (Cpp_Licensing_LemonSqueezy.isActivated ? 2 : 1)
 
           Item {
+            implicitHeight: busyLayout.implicitHeight
+            implicitWidth: busyLayout.implicitWidth
+
             ColumnLayout {
+              id: busyLayout
               spacing: 12
               anchors.centerIn: parent
 
@@ -151,9 +166,13 @@ Window {
           }
 
           Item {
+            implicitHeight: activationLayout.implicitHeight
+            implicitWidth: activationLayout.implicitWidth
+
             RowLayout {
+              id: activationLayout
               spacing: 16
-              anchors.fill: parent
+              width: parent.width
 
               Image {
                 sourceSize.width: 128
@@ -165,12 +184,7 @@ Window {
               ColumnLayout {
                 spacing: 8
                 Layout.fillWidth: true
-                Layout.fillHeight: true
                 Layout.alignment: Qt.AlignVCenter
-
-                Item {
-                  Layout.fillHeight: true
-                }
 
                 Label {
                   Layout.fillWidth: true
@@ -192,7 +206,7 @@ Window {
                 }
 
                 Item {
-                  implicitHeight: 1
+                  Layout.preferredHeight: 8
                 }
 
                 RowLayout {
@@ -254,21 +268,22 @@ Window {
                                                                  TextField.Password)
                   }
                 }
-
-                Item {
-                  Layout.fillHeight: true
-                }
               }
             }
           }
 
           Item {
+            implicitHeight: licenseDetailsLayout.implicitHeight + 16
+            implicitWidth: licenseDetailsLayout.implicitWidth
+
             ScrollView {
+              id: licenseDetailsScroll
               anchors.fill: parent
               contentWidth: availableWidth
               ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
               GridLayout {
+                id: licenseDetailsLayout
                 width: parent.width
                 columns: 3
                 rowSpacing: 8
@@ -448,6 +463,7 @@ Window {
       }
 
       RowLayout {
+        id: buttonRow
         spacing: 8
         Layout.fillWidth: true
 

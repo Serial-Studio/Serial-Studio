@@ -190,9 +190,18 @@ jobs:
         chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
 
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
-        export EXTRA_QT_PLUGINS="serialbus"
 
         ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
+
+        QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/plugins"
+        mkdir -p AppDir/usr/plugins/canbus
+        if [ -d "$QT_PLUGINS_PATH/canbus" ]; then
+          cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
+        else
+          echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
+        fi
+
+        ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
 
         rm linuxdeploy-x86_64.AppImage
         rm linuxdeploy-plugin-qt-x86_64.AppImage
@@ -332,9 +341,18 @@ jobs:
         chmod +x linuxdeploy-plugin-qt-aarch64.AppImage
 
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
-        export EXTRA_QT_PLUGINS="serialbus"
 
         ./linuxdeploy-aarch64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
+
+        QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/plugins"
+        mkdir -p AppDir/usr/plugins/canbus
+        if [ -d "$QT_PLUGINS_PATH/canbus" ]; then
+          cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
+        else
+          echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
+        fi
+
+        ./linuxdeploy-aarch64.AppImage --appdir AppDir --output appimage
 
         rm linuxdeploy-aarch64.AppImage
         rm linuxdeploy-plugin-qt-aarch64.AppImage
@@ -602,7 +620,7 @@ jobs:
         cd build
         7z x ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.tgz
         7z x ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.tar
-        DIRNAME=$(tar -tf ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.tar | head -1 | cut -f1 -d"/")
+        DIRNAME=$(tar -tf ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.tar 2>/dev/null | head -1 | cut -f1 -d"/" || true)
         echo $DIRNAME > dirname.txt
         cp ../app/deploy/windows/license.rtf ./License.rtf
 
