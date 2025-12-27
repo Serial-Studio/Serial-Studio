@@ -24,34 +24,44 @@
 		  <li>Custom dashboards: Design interfaces with visual widgets using the Project Editor</li>
 		  <li>Advanced decoding: Use JavaScript to parse structured or binary data streams</li>
 		</ul>
-		<p>Note: This Flatpak package includes the open-source GPLv3 version of Serial Studio only. Commercial features such as MQTT integration, 3D plotting, and XY analysis are not included.</p>
+		<p>Note: This Flatpak package includes the open-source GPLv3 version of Serial Studio only. Commercial features such as MQTT integration, 3D plotting, CANBus/Modbus and XY plots are not included.</p>
 	</description>
 	<screenshots>
 		<screenshot type="default">
+			<caption>Real-time dashboard with multiple data visualization widgets</caption>
 			<image>https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/doc/screenshot.png</image>
 		</screenshot>
 		<screenshot>
+			<caption>Hydrogen rocket telemetry monitoring example</caption>
 			<image>https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/examples/Hydrogen/doc/screenshot.png</image>
 		</screenshot>
 		<screenshot>
+			<caption>Bluetooth LE battery monitoring with custom widgets</caption>
 			<image>https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/examples/BLE%20Battery/doc/screenshot.png</image>
 		</screenshot>
 		<screenshot>
+			<caption>Hexadecimal ADC data visualization and parsing</caption>
 			<image>https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/examples/HexadecimalADC/doc/screenshot.png</image>
 		</screenshot>
 	</screenshots>
 	<categories>
-		<category>Electronics</category>
-		<category>Engineering</category>
+		<category>Development</category>
+        <category>Electronics</category>
+        <category>Engineering</category>
 		<category>Science</category>
+		<category>Utility</category>
 	</categories>
 	<branding>
 		<color type="primary" scheme_preference="light">#3d6fa6</color>
 		<color type="primary" scheme_preference="dark">#244263</color>
 	</branding>
 	<releases>
-	  <release version="3.1.10" date="2025-09-18">
-		  <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.1.10</url>
+	  <release version="3.2.0" date="2025-12-27">
+		  <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.2.0</url>
+		  <description>
+			  <p>Serial Studio is a multi-platform data visualization tool for embedded systems and IoT projects. Connect to your hardware via serial ports, Bluetooth LE, or network protocols to monitor sensor data, debug firmware, and analyze telemetry in real-time.</p>
+			  <p>Features include customizable dashboards, CSV export, JavaScript-based data parsing, and support for multiple data sources.</p>
+		  </description>
 		</release>
 	</releases>
 	<content_rating type="oars-1.1"/>
