@@ -30,6 +30,11 @@ Window {
   id: root
 
   //
+  // Custom properties
+  //
+  property int titlebarHeight: 0
+
+  //
   // Window options
   //
   title: Cpp_AppName
@@ -37,12 +42,65 @@ Window {
   height: minimumHeight
   minimumWidth: layout.implicitWidth
   maximumWidth: layout.implicitWidth
-  minimumHeight: layout.implicitHeight
-  maximumHeight: layout.implicitHeight
+  minimumHeight: layout.implicitHeight + titlebarHeight
+  maximumHeight: layout.implicitHeight + titlebarHeight
   Component.onCompleted: {
     root.flags = Qt.Dialog |
+        Qt.CustomizeWindowHint |
         Qt.WindowTitleHint |
         Qt.WindowCloseButtonHint
+  }
+
+  //
+  // Native window integration
+  //
+  onVisibleChanged: {
+    if (visible)
+      Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["window"])
+    else
+      Cpp_NativeWindow.removeWindow(root)
+
+    root.titlebarHeight = Cpp_NativeWindow.titlebarHeight(root)
+  }
+
+  //
+  // Top section
+  //
+  Rectangle {
+    height: root.titlebarHeight
+    color: Cpp_ThemeManager.colors["window"]
+    anchors {
+      top: parent.top
+      left: parent.left
+      right: parent.right
+    }
+  }
+
+  //
+  // Titlebar text
+  //
+  Label {
+    text: root.title
+    visible: root.titlebarHeight > 0
+    color: Cpp_ThemeManager.colors["text"]
+    font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
+
+    anchors {
+      topMargin: 6
+      top: parent.top
+      horizontalCenter: parent.horizontalCenter
+    }
+  }
+
+  //
+  // Be able to drag/move the window
+  //
+  DragHandler {
+    target: null
+    onActiveChanged: {
+      if (active)
+        root.startSystemMove()
+    }
   }
 
   //
@@ -80,6 +138,7 @@ Window {
   //
   Page {
     anchors.fill: parent
+    anchors.topMargin: root.titlebarHeight
     palette.mid: Cpp_ThemeManager.colors["mid"]
     palette.dark: Cpp_ThemeManager.colors["dark"]
     palette.text: Cpp_ThemeManager.colors["text"]

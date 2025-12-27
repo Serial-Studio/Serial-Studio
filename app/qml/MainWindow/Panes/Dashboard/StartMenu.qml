@@ -273,19 +273,19 @@ Popup {
     Widgets.MenuButton {
       expandable: false
       Layout.fillWidth: true
-      text: qsTr("Console Logging")
-      checked: Cpp_Console_Export.exportEnabled
-      icon.source: "qrc:/rcc/icons/start/console-log.svg"
-      onClicked: Cpp_Console_Export.exportEnabled = !Cpp_Console_Export.exportEnabled
+      text: qsTr("MDF4 Logging")
+      checked: Cpp_MDF4_Export.exportEnabled
+      icon.source: "qrc:/rcc/icons/start/mf4-log.svg"
+      onClicked: Cpp_MDF4_Export.exportEnabled = !Cpp_MDF4_Export.exportEnabled
     }
 
     Widgets.MenuButton {
       expandable: false
       Layout.fillWidth: true
-      text: qsTr("MDF4 Logging")
-      checked: Cpp_MDF4_Export.exportEnabled
-      icon.source: "qrc:/rcc/icons/toolbar/mf4.svg"
-      onClicked: Cpp_MDF4_Export.exportEnabled = !Cpp_MDF4_Export.exportEnabled
+      text: qsTr("Console Logging")
+      checked: Cpp_Console_Export.exportEnabled
+      icon.source: "qrc:/rcc/icons/start/console-log.svg"
+      onClicked: Cpp_Console_Export.exportEnabled = !Cpp_Console_Export.exportEnabled
     }
 
     Rectangle {

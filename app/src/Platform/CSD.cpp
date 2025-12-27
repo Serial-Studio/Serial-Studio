@@ -159,10 +159,13 @@ void Titlebar::paint(QPainter *painter)
                                             : QStringLiteral(":/rcc/icons/csd/maximize.svg");
   // clang-format on
 
-  // Draw window buttons
-  drawButton(painter, Button::Close, closeSvg);
-  drawButton(painter, Button::Minimize, minimizeSvg);
-  drawButton(painter, Button::Maximize, maximizeSvg);
+  // Draw window buttons (only if they should be shown)
+  if (shouldShowButton(Button::Close))
+    drawButton(painter, Button::Close, closeSvg);
+  if (shouldShowButton(Button::Minimize))
+    drawButton(painter, Button::Minimize, minimizeSvg);
+  if (shouldShowButton(Button::Maximize))
+    drawButton(painter, Button::Maximize, maximizeSvg);
 }
 
 /**
@@ -275,6 +278,57 @@ void Titlebar::setBackgroundColor(const QColor &color)
 }
 
 /**
+ * @brief Determines if a button should be shown based on window flags.
+ * @param button The button type to check.
+ * @return True if the button should be displayed, false otherwise.
+ *
+ * Checks the window flags to determine visibility:
+ * - If CustomizeWindowHint is not set, all buttons are shown (default behavior)
+ * - If CustomizeWindowHint is set, only buttons with explicit hints are shown
+ * - Maximize button is hidden if window has fixed size (minimumSize ==
+ * maximumSize)
+ */
+bool Titlebar::shouldShowButton(Button button) const
+{
+  if (!window())
+    return true;
+
+  const auto flags = window()->flags();
+
+  // If CustomizeWindowHint is not set, show default buttons
+  const bool useCustomHints = flags & Qt::CustomizeWindowHint;
+
+  switch (button)
+  {
+    case Button::Minimize:
+      if (!useCustomHints)
+        return true;
+      return flags & Qt::WindowMinimizeButtonHint;
+
+    case Button::Maximize: {
+      // Check for fixed size windows
+      const auto minSize = window()->minimumSize();
+      const auto maxSize = window()->maximumSize();
+      if (minSize.isValid() && maxSize.isValid() && minSize == maxSize)
+        return false;
+
+      // Check window flags
+      if (!useCustomHints)
+        return true;
+      return flags & Qt::WindowMaximizeButtonHint;
+    }
+
+    case Button::Close:
+      if (!useCustomHints)
+        return true;
+      return flags & Qt::WindowCloseButtonHint;
+
+    default:
+      return true;
+  }
+}
+
+/**
  * @brief Calculates the bounding rectangle for a window control button.
  * @param button The button type to get the rectangle for.
  * @return The button's bounding rectangle in item coordinates.
@@ -297,13 +351,16 @@ QRectF Titlebar::buttonRect(Button button) const
  */
 Titlebar::Button Titlebar::buttonAt(const QPointF &pos) const
 {
-  if (buttonBackgroundRect(Button::Close).contains(pos))
+  if (shouldShowButton(Button::Close)
+      && buttonBackgroundRect(Button::Close).contains(pos))
     return Button::Close;
 
-  else if (buttonBackgroundRect(Button::Maximize).contains(pos))
+  else if (shouldShowButton(Button::Maximize)
+           && buttonBackgroundRect(Button::Maximize).contains(pos))
     return Button::Maximize;
 
-  else if (buttonBackgroundRect(Button::Minimize).contains(pos))
+  else if (shouldShowButton(Button::Minimize)
+           && buttonBackgroundRect(Button::Minimize).contains(pos))
     return Button::Minimize;
 
   return Button::None;
@@ -317,23 +374,43 @@ Titlebar::Button Titlebar::buttonAt(const QPointF &pos) const
  * @return The button's background rectangle.
  *
  * Windows 11 style: buttons span full titlebar height with ~46px width.
- * Close button extends to window edge.
+ * Close button extends to window edge. Buttons are positioned dynamically
+ * based on visibility (window flags and resize constraints).
  */
 QRectF Titlebar::buttonBackgroundRect(Button button) const
 {
   const qreal h = height();
 
+  int buttonIndex = 0;
+  const bool showClose = shouldShowButton(Button::Close);
+  const bool showMaximize = shouldShowButton(Button::Maximize);
+  const bool showMinimize = shouldShowButton(Button::Minimize);
+
   switch (button)
   {
     case Button::Close:
-      return {width() - ButtonWidth, 0, ButtonWidth, h};
+      if (!showClose)
+        return {};
+      buttonIndex = 0;
+      break;
+
     case Button::Maximize:
-      return {width() - ButtonWidth * 2, 0, ButtonWidth, h};
+      if (!showMaximize)
+        return {};
+      buttonIndex = showClose ? 1 : 0;
+      break;
+
     case Button::Minimize:
-      return {width() - ButtonWidth * 3, 0, ButtonWidth, h};
+      if (!showMinimize)
+        return {};
+      buttonIndex = (showClose ? 1 : 0) + (showMaximize ? 1 : 0);
+      break;
+
     default:
       return {};
   }
+
+  return {width() - ButtonWidth * (buttonIndex + 1), 0, ButtonWidth, h};
 }
 
 /**
@@ -554,7 +631,8 @@ void Titlebar::mouseMoveEvent(QMouseEvent *event)
  * @param event The mouse event.
  *
  * Double-clicking on the title bar (not on a button) toggles the window
- * between maximized and normal states.
+ * between maximized and normal states, unless the window has a fixed size
+ * (minimumSize == maximumSize) or lacks the maximize button hint.
  */
 void Titlebar::mouseDoubleClickEvent(QMouseEvent *event)
 {
@@ -564,12 +642,15 @@ void Titlebar::mouseDoubleClickEvent(QMouseEvent *event)
     m_pressedButton = Button::None;
     m_hoveredButton = Button::None;
 
-    if (isMaximized())
-      window()->showNormal();
-    else
-      window()->showMaximized();
+    if (shouldShowButton(Button::Maximize))
+    {
+      if (isMaximized())
+        window()->showNormal();
+      else
+        window()->showMaximized();
 
-    update();
+      update();
+    }
   }
 
   event->accept();
@@ -1398,12 +1479,18 @@ void Window::reparentChildToContainer(QQuickItem *child)
  * @param pos The position in window coordinates.
  * @return The ResizeEdge flags indicating which edges are under the cursor.
  *
- * Returns ResizeEdge::None if the window is maximized or the position
- * is not within the resize margin of any edge.
+ * Returns ResizeEdge::None if the window is maximized, has fixed size
+ * (minimumSize == maximumSize), or the position is not within the
+ * resize margin of any edge.
  */
 Window::ResizeEdge Window::edgeAt(const QPointF &pos) const
 {
   if (!m_window || (m_window->windowStates() & Qt::WindowMaximized))
+    return ResizeEdge::None;
+
+  const auto minSize = m_window->minimumSize();
+  const auto maxSize = m_window->maximumSize();
+  if (minSize.isValid() && maxSize.isValid() && minSize == maxSize)
     return ResizeEdge::None;
 
   const int margin = shadowMargin();

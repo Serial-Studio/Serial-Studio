@@ -84,19 +84,16 @@ void NativeWindow::removeWindow(QObject *window)
 }
 
 /**
- * @brief Initializes the native window customization for macOS.
+ * @brief Applies native window customization for macOS.
  *
- * This function sets the native macOS window to have a transparent titlebar
- * and to integrate the titlebar with the window's content.
+ * This is a helper function that applies the actual native window styling.
+ * It's called both when initially adding a window and when re-applying
+ * customization after full screen mode exit.
  *
- * @param window A pointer to the QWindow object that represents the window
- *               being customized.
+ * @param win The QWindow to customize.
  */
-void NativeWindow::addWindow(QObject *window, const QString &color)
+static void applyMacOSWindowStyle(QWindow *win)
 {
-  (void)color;
-
-  QWindow *win = qobject_cast<QWindow *>(window);
   NSView *view = reinterpret_cast<NSView *>(win->winId());
   NSWindow *w = [view window];
 
@@ -106,6 +103,42 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
 
   NSButton *zoomButton = [w standardWindowButton:NSWindowZoomButton];
   [zoomButton setEnabled:YES];
+}
+
+/**
+ * @brief Initializes the native window customization for macOS.
+ *
+ * This function sets the native macOS window to have a transparent titlebar
+ * and to integrate the titlebar with the window's content. It also activates
+ * the window and brings it to the front. The window is added to the managed
+ * list and monitored for state changes to re-apply customization after
+ * full screen mode exit.
+ *
+ * @param window A pointer to the QWindow object that represents the window
+ *               being customized.
+ * @param color Optional color parameter (unused on macOS).
+ */
+void NativeWindow::addWindow(QObject *window, const QString &color)
+{
+  (void)color;
+
+  QWindow *win = qobject_cast<QWindow *>(window);
+  if (!win)
+    return;
+
+  applyMacOSWindowStyle(win);
+
+  [NSApp activateIgnoringOtherApps:YES];
+  NSView *view = reinterpret_cast<NSView *>(win->winId());
+  NSWindow *w = [view window];
+  [w makeKeyAndOrderFront:nil];
+
+  if (!m_windows.contains(win))
+  {
+    m_windows.append(win);
+    connect(win, &QWindow::windowStateChanged, this,
+            &NativeWindow::onWindowStateChanged);
+  }
 }
 
 /**
@@ -122,4 +155,23 @@ void NativeWindow::onThemeChanged()
 void NativeWindow::onActiveChanged()
 {
   // Nothing to do...
+}
+
+/**
+ * @brief Handles window state changes to re-apply customization.
+ *
+ * When a window exits full screen mode on macOS, the system resets the
+ * window style flags. This slot detects when a window exits full screen
+ * and re-applies the native window customization.
+ *
+ * @param state The new window state.
+ */
+void NativeWindow::onWindowStateChanged(Qt::WindowState state)
+{
+  auto *win = qobject_cast<QWindow *>(sender());
+  if (!win || !m_windows.contains(win))
+    return;
+
+  if (state != Qt::WindowFullScreen)
+    applyMacOSWindowStyle(win);
 }

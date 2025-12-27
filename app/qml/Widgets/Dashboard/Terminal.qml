@@ -44,7 +44,7 @@ Item {
   //
   onVisibleChanged: {
     if (visible)
-      root.forceActiveFocus()
+      Qt.callLater(root.forceActiveFocus)
   }
 
   //

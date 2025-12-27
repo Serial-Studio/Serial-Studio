@@ -451,5 +451,7 @@
         <file>themes/code-editor/fluent-light.xml</file>
         <file>images/driver.svg</file>
         <file>icons/toolbar/mf4.svg</file>
+        <file>icons/start/mf4-log.svg</file>
+        <file>icons/start/mf4-log.svg</file>
     </qresource>
 </RCC>

@@ -170,6 +170,14 @@ void NativeWindow::onThemeChanged()
 }
 
 /**
+ * @brief Handles window state changes.
+ */
+void NativeWindow::onWindowStateChanged(Qt::WindowState state)
+{
+  (void)state;
+}
+
+/**
  * @brief Handles the active state change of a window.
  *
  * On Windows 11: Updates the native caption color using DWM API based on

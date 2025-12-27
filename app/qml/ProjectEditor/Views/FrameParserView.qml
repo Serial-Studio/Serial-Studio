@@ -38,7 +38,7 @@ Widgets.Pane {
   //
   onVisibleChanged: {
     if (visible)
-      frameParser.forceActiveFocus()
+      Qt.callLater(frameParser.forceActiveFocus)
   }
 
   //

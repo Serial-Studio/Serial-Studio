@@ -32,6 +32,11 @@ Window {
   id: root
 
   //
+  // Custom properties
+  //
+  property int titlebarHeight: 0
+
+  //
   // Window options
   //
   width: minimumWidth
@@ -39,12 +44,65 @@ Window {
   title: qsTr("MQTT Setup")
   minimumWidth: column.implicitWidth + 32
   maximumWidth: column.implicitWidth + 32
-  minimumHeight: column.implicitHeight + 32
-  maximumHeight: column.implicitHeight + 32
+  minimumHeight: column.implicitHeight + 32 + titlebarHeight
+  maximumHeight: column.implicitHeight + 32 + titlebarHeight
   Component.onCompleted: {
     root.flags = Qt.Dialog |
+        Qt.CustomizeWindowHint |
         Qt.WindowTitleHint |
         Qt.WindowCloseButtonHint
+  }
+
+  //
+  // Native window integration
+  //
+  onVisibleChanged: {
+    if (visible)
+      Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["window"])
+    else
+      Cpp_NativeWindow.removeWindow(root)
+
+    root.titlebarHeight = Cpp_NativeWindow.titlebarHeight(root)
+  }
+
+  //
+  // Top section
+  //
+  Rectangle {
+    height: root.titlebarHeight
+    color: Cpp_ThemeManager.colors["window"]
+    anchors {
+      top: parent.top
+      left: parent.left
+      right: parent.right
+    }
+  }
+
+  //
+  // Titlebar text
+  //
+  Label {
+    text: root.title
+    visible: root.titlebarHeight > 0
+    color: Cpp_ThemeManager.colors["text"]
+    font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
+
+    anchors {
+      topMargin: 6
+      top: parent.top
+      horizontalCenter: parent.horizontalCenter
+    }
+  }
+
+  //
+  // Be able to drag/move the window
+  //
+  DragHandler {
+    target: null
+    onActiveChanged: {
+      if (active)
+        root.startSystemMove()
+    }
   }
 
   //
@@ -92,7 +150,7 @@ Window {
     target: Cpp_MQTT_Client
     function onHighlightMqttTopicControl() {
       _tab.currentIndex = 2
-      _topic.forceActiveFocus()
+      Qt.callLater(_topic.forceActiveFocus)
     }
   }
 
@@ -101,6 +159,7 @@ Window {
   //
   Page {
     anchors.fill: parent
+    anchors.topMargin: root.titlebarHeight
     palette.mid: Cpp_ThemeManager.colors["mid"]
     palette.dark: Cpp_ThemeManager.colors["dark"]
     palette.text: Cpp_ThemeManager.colors["text"]

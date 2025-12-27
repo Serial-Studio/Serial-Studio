@@ -107,28 +107,31 @@ Widgets.SmartWindow {
     // Increment app launch count
     ++appLaunchCount
 
-    // Show donations dialog every 15 launches
-    if (root.appLaunchCount % 15 == 0 && !Cpp_CommercialBuild)
-      donateDialog.showAutomatically()
-
-    // Ask user if he/she wants to enable automatic updates
-    if (root.appLaunchCount == 2 && Cpp_UpdaterEnabled) {
-      if (Cpp_Misc_Utilities.askAutomaticUpdates()) {
-        root.automaticUpdates = true
-        Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
-      }
-
-      else
-        root.automaticUpdates = false
-    }
-
-    // Check for updates (if we are allowed)
-    if (root.automaticUpdates && Cpp_UpdaterEnabled)
-      Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
-
     // Obtain document title from JSON project editor & display the window
     root.updateDocumentTitle()
     root.displayWindow()
+
+    // Defer dialogs and update checks until after window is fully rendered
+    Qt.callLater(function() {
+      // Show donations dialog every 15 launches
+      if (root.appLaunchCount % 15 == 0 && !Cpp_CommercialBuild)
+        donateDialog.showAutomatically()
+
+      // Ask user if he/she wants to enable automatic updates
+      if (root.appLaunchCount == 2 && Cpp_UpdaterEnabled) {
+        if (Cpp_Misc_Utilities.askAutomaticUpdates()) {
+          root.automaticUpdates = true
+          Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+        }
+
+        else
+          root.automaticUpdates = false
+      }
+
+      // Check for updates (if we are allowed)
+      else if (root.automaticUpdates && Cpp_UpdaterEnabled)
+        Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+    })
   }
 
   //

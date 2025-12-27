@@ -90,6 +90,7 @@ private:
   [[nodiscard]] QRectF buttonRect(Button button) const;
   [[nodiscard]] Button buttonAt(const QPointF &pos) const;
   [[nodiscard]] QRectF buttonBackgroundRect(Button button) const;
+  [[nodiscard]] bool shouldShowButton(Button button) const;
 
   [[nodiscard]] inline bool isMaximized() const
   {

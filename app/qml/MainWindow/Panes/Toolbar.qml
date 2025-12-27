@@ -157,9 +157,13 @@ Rectangle {
     Widgets.ToolbarButton {
       text: qsTr("Project Editor")
       Layout.alignment: Qt.AlignVCenter
-      onClicked: app.showProjectEditor()
       icon.source: "qrc:/rcc/icons/toolbar/project-setup.svg"
       ToolTip.text: qsTr("Open the Project Editor to create or modify your JSON layout")
+
+      onClicked: {
+        Cpp_JSON_ProjectModel.enableProjectMode()
+        app.showProjectEditor()
+      }
     }
 
     //
@@ -177,9 +181,12 @@ Rectangle {
         horizontalLayout: true
         text: qsTr("Open Project")
         Layout.alignment: Qt.AlignLeft
-        onClicked: Cpp_JSON_ProjectModel.openJsonFile()
         ToolTip.text: qsTr("Open an existing JSON project")
         icon.source: "qrc:/rcc/icons/toolbar/open-project.svg"
+        onClicked: {
+          Cpp_JSON_ProjectModel.enableProjectMode()
+          Cpp_JSON_ProjectModel.openJsonFile()
+        }
       }
 
       Widgets.ToolbarButton {

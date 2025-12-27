@@ -50,6 +50,11 @@ set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL     "Build zlib examples"    FORCE)
 set(SKIP_INSTALL_ALL    ON  CACHE BOOL     "Skip zlib installation" FORCE)
 
 FetchContent_MakeAvailable(zlib)
+
+if(NOT MSVC)
+  target_compile_options(zlibstatic PRIVATE -fvisibility=hidden)
+  message(STATUS "Applied symbol hiding to zlib to prevent conflicts")
+endif()
 if(NOT TARGET ZLIB::ZLIB)
   add_library(ZLIB::ZLIB ALIAS zlibstatic)
   set(ZLIB_FOUND TRUE CACHE INTERNAL "ZLIB found via FetchContent")
@@ -86,6 +91,11 @@ set(EXPAT_ENABLE_INSTALL  OFF CACHE BOOL "Skip expat installation" FORCE)
 
 FetchContent_MakeAvailable(expat)
 
+if(NOT MSVC)
+  target_compile_options(expat PRIVATE -fvisibility=hidden)
+  message(STATUS "Applied symbol hiding to expat to prevent conflicts")
+endif()
+
 if(TARGET expat AND NOT TARGET expat::expat)
   add_library(expat::expat ALIAS expat)
   set(EXPAT_FOUND TRUE CACHE INTERNAL "EXPAT found via FetchContent")
@@ -104,5 +114,31 @@ add_subdirectory(KissFFT)
 add_subdirectory(QCodeEditor)
 add_subdirectory(QSimpleUpdater)
 add_subdirectory(mdflib)
+
+#-------------------------------------------------------------------------------
+# Apply symbol hiding to all static libraries (all platforms except MSVC)
+#-------------------------------------------------------------------------------
+
+if(NOT MSVC)
+  if(TARGET kissfft)
+    target_compile_options(kissfft PRIVATE -fvisibility=hidden)
+    message(STATUS "Applied symbol hiding to kissfft")
+  endif()
+
+  if(TARGET QCodeEditor)
+    target_compile_options(QCodeEditor PRIVATE -fvisibility=hidden)
+    message(STATUS "Applied symbol hiding to QCodeEditor")
+  endif()
+
+  if(TARGET QSimpleUpdater)
+    target_compile_options(QSimpleUpdater PRIVATE -fvisibility=hidden)
+    message(STATUS "Applied symbol hiding to QSimpleUpdater")
+  endif()
+
+  if(TARGET mdf)
+    target_compile_options(mdf PRIVATE -fvisibility=hidden)
+    message(STATUS "Applied symbol hiding to mdf")
+  endif()
+endif()
 
 

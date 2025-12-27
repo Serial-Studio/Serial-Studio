@@ -56,6 +56,7 @@ public slots:
 private slots:
   void onThemeChanged();
   void onActiveChanged();
+  void onWindowStateChanged(Qt::WindowState state);
 
 private:
   QList<QWindow *> m_windows;
