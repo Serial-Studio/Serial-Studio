@@ -44,6 +44,8 @@ option(BUILD_GPL3              "Force GPLv3-only build"                 ON)
 option(DEBUG_SANITIZER         "Enable sanitizers for debug builds"    OFF)
 option(PRODUCTION_OPTIMIZATION "Enable production optimization flags"  OFF)
 option(BUILD_COMMERCIAL        "Enable commercial features"            OFF)
+option(USE_SYSTEM_ZLIB         "Use system-provided zlib instead of downloading from GitHub" OFF)
+option(USE_SYSTEM_EXPAT        "Use system-provided expat instead of downloading from GitHub" OFF)
 
 set(ARCGIS_API_KEY $ENV{ARCGIS_API_KEY} CACHE STRING "API Key for ArcGIS map")
 set(SERIAL_STUDIO_LICENSE_KEY $ENV{SERIAL_STUDIO_LICENSE_KEY} CACHE STRING "License key for commercial build")

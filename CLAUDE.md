@@ -17,6 +17,10 @@ cmake --build . -j$(nproc)
 # Debug build with sanitizers
 cmake ../ -DDEBUG_SANITIZER=ON -DCMAKE_BUILD_TYPE=Debug
 cmake --build . -j$(nproc)
+
+# Build using system libraries (for Flathub/sandboxed environments)
+cmake ../ -DUSE_SYSTEM_ZLIB=ON -DUSE_SYSTEM_EXPAT=ON -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j$(nproc)
 ```
 
 **Linux prerequisites:**
@@ -42,6 +46,8 @@ vcpkg install zlib expat
 - `BUILD_COMMERCIAL=ON`: Enables Pro features (requires valid license key)
 - `PRODUCTION_OPTIMIZATION=ON`: Enable release optimizations
 - `DEBUG_SANITIZER=ON`: Enable AddressSanitizer and UBSan
+- `USE_SYSTEM_ZLIB=ON`: Use system-provided zlib instead of downloading from GitHub (required for Flathub builds)
+- `USE_SYSTEM_EXPAT=ON`: Use system-provided expat instead of downloading from GitHub (required for Flathub builds)
 
 ## Architecture
 
