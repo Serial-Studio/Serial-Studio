@@ -535,12 +535,12 @@ int main(int argc, char **argv)
                             "count:1-125):"
                          << spec;
           }
+            
           else
-          {
             qWarning() << "Invalid register format. Expected: type:start:count";
-          }
         }
       }
+        
       else
       {
         qWarning() << "Warning: No register groups specified. Use "
@@ -549,6 +549,7 @@ int main(int argc, char **argv)
 
       IO::Manager::instance().connectDevice();
     }
+      
     else
     {
       qWarning() << "ModBus serial port not found:" << portPath;
@@ -609,7 +610,6 @@ int main(int argc, char **argv)
 
       // Clear and add register groups
       IO::Drivers::Modbus::instance().clearRegisterGroups();
-
       if (parser.isSet(modbusRegisterOpt))
       {
         QStringList registerSpecs = parser.values(modbusRegisterOpt);
@@ -649,12 +649,12 @@ int main(int argc, char **argv)
                             "count:1-125):"
                          << spec;
           }
+            
           else
-          {
             qWarning() << "Invalid register format. Expected: type:start:count";
-          }
         }
       }
+        
       else
       {
         qWarning() << "Warning: No register groups specified. Use "
@@ -663,10 +663,9 @@ int main(int argc, char **argv)
 
       IO::Manager::instance().connectDevice();
     }
+      
     else
-    {
       qWarning() << "Invalid ModBus TCP address format. Expected: host[:port]";
-    }
   }
 
   // Handle CANBus connection options
@@ -718,6 +717,7 @@ int main(int argc, char **argv)
 
           IO::Manager::instance().connectDevice();
         }
+          
         else
         {
           qWarning() << "CAN interface" << interface << "not found for plugin"
@@ -726,16 +726,16 @@ int main(int argc, char **argv)
                      << availableInterfaces.join(", ");
         }
       }
+        
       else
       {
         qWarning() << "CAN plugin" << plugin << "not found";
         qWarning() << "Available plugins:" << availablePlugins.join(", ");
       }
     }
+      
     else
-    {
       qWarning() << "Invalid CAN bus format. Expected: plugin:interface";
-    }
   }
 #endif
 
@@ -835,3 +835,4 @@ static char **adjustArgumentsForFreeType(int &argc, char **argv)
   return newArgv;
 }
 #endif
+
