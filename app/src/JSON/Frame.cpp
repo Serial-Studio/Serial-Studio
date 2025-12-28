@@ -50,8 +50,8 @@ void JSON::read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
   {
     QString resolvedEnd = SerialStudio::resolveEscapeSequences(fEndStr);
     QString resolvedStart = SerialStudio::resolveEscapeSequences(fStartStr);
-    frameStart = QByteArray::fromHex(resolvedEnd.remove(' ').toUtf8());
-    frameEnd = QByteArray::fromHex(resolvedStart.remove(' ').toUtf8());
+    frameStart = QByteArray::fromHex(resolvedStart.remove(' ').toUtf8());
+    frameEnd = QByteArray::fromHex(resolvedEnd.remove(' ').toUtf8());
   }
 
   // Resolve escape sequences (e.g. "\\n") and encode to UTF-8 bytes

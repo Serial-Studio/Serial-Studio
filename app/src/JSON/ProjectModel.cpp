@@ -260,12 +260,7 @@ JSON::ProjectModel::CurrentView JSON::ProjectModel::currentView() const
  */
 SerialStudio::DecoderMethod JSON::ProjectModel::decoderMethod() const
 {
-#ifdef BUILD_COMMERCIAL
-  if (SerialStudio::activated())
-    return m_frameDecoder;
-#endif
-
-  return SerialStudio::PlainText;
+  return m_frameDecoder;
 }
 
 /**
@@ -548,8 +543,7 @@ bool JSON::ProjectModel::currentDatasetIsEditable() const
  */
 bool JSON::ProjectModel::containsCommercialFeatures() const
 {
-  return SerialStudio::commercialCfg(m_groups)
-         || m_frameDecoder != SerialStudio::PlainText;
+  return SerialStudio::commercialCfg(m_groups);
 }
 
 /**
