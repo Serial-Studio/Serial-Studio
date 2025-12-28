@@ -1,7 +1,7 @@
 {
     "actions": [
         {
-            "autoExecuteOnConnect": false,
+            "autoExecuteOnConnect": true,
             "binary": false,
             "eol": "\n",
             "icon": "Play Property",
