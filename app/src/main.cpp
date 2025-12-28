@@ -615,10 +615,10 @@ int main(int argc, char **argv)
         QStringList registerSpecs = parser.values(modbusRegisterOpt);
         for (const QString &spec : registerSpecs)
         {
-          QStringList parts = spec.split(':');
-          if (parts.size() == 3)
+          QStringList regParts = spec.split(':');
+          if (regParts.size() == 3)
           {
-            QString typeStr = parts[0].toLower();
+            QString typeStr = regParts[0].toLower();
             quint8 registerType = 0;
 
             if (typeStr == "holding")
@@ -638,8 +638,8 @@ int main(int argc, char **argv)
             }
 
             bool startOk, countOk;
-            quint16 start = parts[1].toUInt(&startOk);
-            quint16 count = parts[2].toUInt(&countOk);
+            quint16 start = regParts[1].toUInt(&startOk);
+            quint16 count = regParts[2].toUInt(&countOk);
 
             if (startOk && countOk && count >= 1 && count <= 125)
               IO::Drivers::Modbus::instance().addRegisterGroup(registerType,
@@ -677,7 +677,7 @@ int main(int argc, char **argv)
     if (parts.size() == 2)
     {
       QString plugin = parts[0].toLower();
-      QString interface = parts[1];
+      QString interfaceName = parts[1];
 
       IO::Manager::instance().setBusType(SerialStudio::BusType::CanBus);
 
@@ -693,7 +693,7 @@ int main(int argc, char **argv)
         // Get available interfaces for this plugin
         QStringList availableInterfaces
             = IO::Drivers::CANBus::instance().interfaceList();
-        int interfaceIndex = availableInterfaces.indexOf(interface);
+        int interfaceIndex = availableInterfaces.indexOf(interfaceName);
 
         if (interfaceIndex >= 0)
         {
@@ -720,8 +720,8 @@ int main(int argc, char **argv)
 
         else
         {
-          qWarning() << "CAN interface" << interface << "not found for plugin"
-                     << plugin;
+          qWarning() << "CAN interface" << interfaceName
+                     << "not found for plugin" << plugin;
           qWarning() << "Available interfaces:"
                      << availableInterfaces.join(", ");
         }

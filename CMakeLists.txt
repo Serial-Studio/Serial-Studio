@@ -191,6 +191,14 @@ endif()
 #-------------------------------------------------------------------------------
 
 if(PRODUCTION_OPTIMIZATION)
+   # Detect sandboxed build environments (Flathub) and disable LTO
+   if(USE_SYSTEM_ZLIB OR USE_SYSTEM_EXPAT)
+      set(DISABLE_LTO ON)
+      message(STATUS "Sandboxed build detected (USE_SYSTEM_ZLIB or USE_SYSTEM_EXPAT), disabling LTO")
+   else()
+      set(DISABLE_LTO OFF)
+   endif()
+
    # Print status
    message("Enabling production optimization flags for modern hardware (2012+)...")
 
@@ -210,12 +218,16 @@ if(PRODUCTION_OPTIMIZATION)
          -finline-functions              # Inline functions where possible
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
-         -flto=auto                      # Link-time optimization with parallelization
       )
+      if(NOT DISABLE_LTO)
+         add_compile_options(-flto=auto) # Link-time optimization with parallelization
+      endif()
       add_link_options(
          -Wl,--gc-sections               # Remove unused functions/data from final binary
-         -flto=auto                      # Enable LTO at link time
       )
+      if(NOT DISABLE_LTO)
+         add_link_options(-flto=auto)    # Enable LTO at link time
+      endif()
    
    # GCC (MinGW) on Windows
    elseif(WIN32 AND MINGW)
@@ -232,12 +244,16 @@ if(PRODUCTION_OPTIMIZATION)
          -finline-functions              # Inline functions where possible
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
-         -flto=auto                      # Link-time optimization with parallelization
       )
+      if(NOT DISABLE_LTO)
+         add_compile_options(-flto=auto) # Link-time optimization with parallelization
+      endif()
       add_link_options(
          -Wl,--gc-sections               # Remove unused code/data at link time
-         -flto=auto                      # Enable LTO at link time
       )
+      if(NOT DISABLE_LTO)
+         add_link_options(-flto=auto)    # Enable LTO at link time
+      endif()
 
    # MSVC (Visual Studio)
    elseif(WIN32 AND MSVC)
@@ -249,17 +265,21 @@ if(PRODUCTION_OPTIMIZATION)
          /O2                             # Optimize for speed
          /Ot                             # Favor fast code over small code
          /W4                             # High warning level
-         /GL                             # Enable whole program optimization
          /fp:precise                     # IEEE-accurate floating-point math
          /Qpar                           # Enable automatic parallelization of loops
          /Gw                             # Put functions/data into separate COMDATs
          /DNDEBUG                        # Disable assertions
       )
+      if(NOT DISABLE_LTO)
+         add_compile_options(/GL)        # Enable whole program optimization
+      endif()
       add_link_options(
          /OPT:REF                        # Remove unreferenced functions/data
          /OPT:ICF                        # Merge identical code/data blocks
-         /LTCG                           # Link-time optimization
       )
+      if(NOT DISABLE_LTO)
+         add_link_options(/LTCG)         # Link-time optimization
+      endif()
 
    # macOS (Clang/AppleClang)
    elseif(APPLE)
@@ -270,15 +290,19 @@ if(PRODUCTION_OPTIMIZATION)
          -fomit-frame-pointer            # Optimize function call overhead
          -fno-fast-math                  # IEEE-compliant floating point
          -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -flto=auto                      # Link-time optimization with parallelization
          -finline-functions              # Inline functions where possible
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
       )
+      if(NOT DISABLE_LTO)
+         add_compile_options(-flto=auto) # Link-time optimization with parallelization
+      endif()
       add_link_options(
          -Wl,-dead_strip                 # Remove unused functions/data from final binary
-         -flto=auto                      # Enable Link-Time Optimization
       )
+      if(NOT DISABLE_LTO)
+         add_link_options(-flto=auto)    # Enable Link-Time Optimization
+      endif()
 
       if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
          add_compile_options(-march=x86-64-v2)
@@ -300,12 +324,16 @@ if(PRODUCTION_OPTIMIZATION)
          -finline-functions              # Inline functions where possible
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
-         -flto=auto                      # Link-time optimization with parallelization
       )
+      if(NOT DISABLE_LTO)
+         add_compile_options(-flto=auto) # Link-time optimization with parallelization
+      endif()
       add_link_options(
          -Wl,--gc-sections               # Discard unused code sections at link time
-         -flto=auto                      # Enable LTO at link time
       )
+      if(NOT DISABLE_LTO)
+         add_link_options(-flto=auto)    # Enable LTO at link time
+      endif()
 
    # Generic Linux (GCC or Clang)
    elseif(UNIX)
@@ -321,12 +349,16 @@ if(PRODUCTION_OPTIMIZATION)
          -finline-functions              # Inline functions where possible
          -ffunction-sections             # Place each function in its own section
          -fdata-sections                 # Place each data item in its own section
-         -flto=auto                      # Link-time optimization with parallelization
       )
+      if(NOT DISABLE_LTO)
+         add_compile_options(-flto=auto) # Link-time optimization with parallelization
+      endif()
       add_link_options(
          -Wl,--gc-sections               # Strip unused functions/data
-         -flto=auto                      # Enable LTO at link time
       )
+      if(NOT DISABLE_LTO)
+         add_link_options(-flto=auto)    # Enable LTO at link time
+      endif()
 
       if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
          add_compile_options(-march=x86-64-v2)
