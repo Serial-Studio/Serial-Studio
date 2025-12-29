@@ -203,11 +203,12 @@ cmake --build . -j$(nproc)
 **Pro version only.**
 
 1. Set up an MQTT broker (Mosquitto, HiveMQ, AWS IoT, etc.)
-2. In Serial Studio, select **MQTT** as data source
+2. In Serial Studio, click the **MQTT** icon in the toolbar. 
 3. Enter broker address (e.g., `mqtt://broker.hivemq.com:1883`)
 4. Enter topic to subscribe (e.g., `sensors/temperature`)
 5. (Optional) Set username/password
-6. Click **Connect**
+6. Set the connection mode to **subscriber**.
+7. Click **Connect**
 
 Your devices should publish data to the MQTT topic, and Serial Studio will visualize it in real-time.
 
@@ -254,7 +255,7 @@ See the CAN Bus Example in the `/examples` folder for step-by-step instructions.
 
 **Pro version only.** MDF4 (Measurement Data Format 4) files are commonly used in automotive and industrial applications to record CAN Bus, LIN, FlexRay, and analog sensor data.
 
-1. In Serial Studio, click **File → Open MDF4 File**
+1. In Serial Studio, click **Open MDF4** in the toolbar.
 2. Select your MDF4/MF4 file
 3. Serial Studio will:
    - Parse all available channels (CAN, LIN, FlexRay, analog)
@@ -281,11 +282,9 @@ See the CAN Bus Example in the `/examples` folder for step-by-step instructions.
 
 **Pro version only.**
 
-1. While receiving real-time data (from any source: serial, CAN Bus, Modbus, etc.)
-2. Click the **MDF4 export icon** in the toolbar to enable MDF4 logging
+1. Click the **MDF4 export checkbox** in the setup panel to enable MDF4 logging
+2. Start receiving real-time data (from any source: serial, CAN Bus, Modbus, etc.)
 3. Serial Studio saves all received data to a timestamped MDF4 file
-4. File location shown in console panel
-5. Stop MDF4 logging by clicking icon again
 
 **Benefits of MDF4 export:**
 - Industry-standard format compatible with Vector CANalyzer, CANape, ETAS INCA
@@ -390,9 +389,9 @@ Not recommended unless you need to create projects automatically with scripts.
 
 **CSV format:**
 ```
-Timestamp,Group/Dataset 1,Group/Dataset 2,...
-2025-12-02 10:30:00,23.5,67.2,...
-2025-12-02 10:30:01,23.6,67.1,...
+Time,Group/Dataset 1,Group/Dataset 2,...
+0.010000,...
+0.020000,...
 ```
 
 ---
