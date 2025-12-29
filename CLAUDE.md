@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Serial Studio is a cross-platform telemetry dashboard and real-time data visualization application built with Qt 6.9.2 and C++20. It supports data input from serial ports, Bluetooth LE, MQTT, TCP/UDP sockets, and audio devices.
+Serial Studio is a cross-platform telemetry dashboard and real-time data visualization application built with Qt 6.9.2 and C++20. It supports data input from serial ports, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP sockets, and audio devices.
 
 ## Build Commands
 
@@ -60,7 +60,7 @@ vcpkg install zlib expat
 
 **IO/** - Hardware abstraction and data acquisition
 - `Manager` - Central I/O manager handling all communication protocols
-- `Drivers/` - Protocol implementations: UART, Network (TCP/UDP), BluetoothLE, Audio (Pro)
+- `Drivers/` - Protocol implementations: UART, Network (TCP/UDP), BluetoothLE, Modbus (Pro), CanBus (Pro), Audio (Pro)
 - `FrameReader` - Parses incoming data streams into frames
 - `HAL_Driver` - Abstract base class for all I/O drivers
 
@@ -162,4 +162,4 @@ Source files use SPDX headers indicating license:
 - `LicenseRef-SerialStudio-Commercial` - Pro features only
 - `GPL-3.0-only OR LicenseRef-SerialStudio-Commercial` - Dual-licensed
 
-Commercial features (Pro) include: MQTT, 3D visualization, audio input, and advanced plotting.
+Commercial features (Pro) include: MQTT, Modbus TCP/RTU, CAN Bus (with DBC import), MDF4 playback/export, 3D visualization, audio input, and advanced plotting.
