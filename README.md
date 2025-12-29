@@ -96,12 +96,11 @@ Get started with Serial Studio in under 5 minutes:
 
 ### 2. Connect Your Device
    - Launch Serial Studio
-   - Click the **Hardware icon** in the toolbar
    - Select your **serial port** and **baud rate** (common: 9600, 115200)
    - Click **Connect**
 
 ### 3. Visualize Data
-   - **Quick Plot Mode:** Send comma-separated values from Arduino and see instant plots
+   - **Quick Plot Mode:** Send comma-separated values from your device and see instant plots
    - **Project Mode:** Use the Project Editor to build custom dashboards with gauges, maps, and more
    - **Examples:** Explore the [`/examples`](./examples) folder for Arduino sketches, ESP32 code, and Python scripts
 
