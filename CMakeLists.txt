@@ -43,13 +43,24 @@ find_package(
 option(BUILD_GPL3              "Force GPLv3-only build"                 ON)
 option(DEBUG_SANITIZER         "Enable sanitizers for debug builds"    OFF)
 option(PRODUCTION_OPTIMIZATION "Enable production optimization flags"  OFF)
+option(ENABLE_HARDENING        "Enable security hardening flags"       OFF)
 option(BUILD_COMMERCIAL        "Enable commercial features"            OFF)
-option(USE_SYSTEM_ZLIB         "Use system-provided zlib instead of downloading from GitHub" OFF)
-option(USE_SYSTEM_EXPAT        "Use system-provided expat instead of downloading from GitHub" OFF)
+option(USE_SYSTEM_ZLIB         "Use system-provided zlib"              OFF)
+option(USE_SYSTEM_EXPAT        "Use system-provided expat"             OFF)
 
-set(ARCGIS_API_KEY $ENV{ARCGIS_API_KEY} CACHE STRING "API Key for ArcGIS map")
-set(SERIAL_STUDIO_LICENSE_KEY $ENV{SERIAL_STUDIO_LICENSE_KEY} CACHE STRING "License key for commercial build")
-set(SERIAL_STUDIO_INSTANCE_ID $ENV{SERIAL_STUDIO_INSTANCE_ID} CACHE STRING "Instance ID for license validation")
+#-------------------------------------------------------------------------------
+# Commercial build API keys & license validation
+#-------------------------------------------------------------------------------
+
+set(ARCGIS_API_KEY
+  $ENV{ARCGIS_API_KEY}
+  CACHE STRING "API Key for ArcGIS map")
+set(SERIAL_STUDIO_LICENSE_KEY
+  $ENV{SERIAL_STUDIO_LICENSE_KEY}
+  CACHE STRING "License key for commercial build")
+set(SERIAL_STUDIO_INSTANCE_ID
+  $ENV{SERIAL_STUDIO_INSTANCE_ID}
+  CACHE STRING "Instance ID for license validation")
 
 #-------------------------------------------------------------------------------
 # Project information
@@ -191,16 +202,17 @@ endif()
 #-------------------------------------------------------------------------------
 
 if(PRODUCTION_OPTIMIZATION)
-   # Detect sandboxed build environments (Flathub) and disable LTO
+   # Detect sandboxed build environments (Flathub) and enable hardening
    if(USE_SYSTEM_ZLIB OR USE_SYSTEM_EXPAT)
       set(DISABLE_LTO ON)
-      message(STATUS "Sandboxed build detected (USE_SYSTEM_ZLIB or USE_SYSTEM_EXPAT), disabling LTO")
+      set(ENABLE_HARDENING ON CACHE BOOL "Auto-enabled hardening for sandboxed builds" FORCE)
+      message(STATUS "Sandboxed build detected (USE_SYSTEM_ZLIB or USE_SYSTEM_EXPAT), disabling LTO and enabling hardening")
    else()
       set(DISABLE_LTO OFF)
    endif()
 
    # Print status
-   message("Enabling production optimization flags for modern hardware (2012+)...")
+   message("Enabling production optimization flags...")
 
    # Add NDEBUG definition for all configurations
    add_compile_definitions(NDEBUG)
@@ -398,6 +410,69 @@ if(DEBUG_SANITIZER)
       -fsanitize=address                # Link AddressSanitizer
       -fsanitize=undefined              # Link UndefinedBehaviorSanitizer
    )
+endif()
+
+#-------------------------------------------------------------------------------
+# Security hardening flags (for production builds)
+#-------------------------------------------------------------------------------
+
+if(ENABLE_HARDENING)
+   message(STATUS "Enabling security hardening flags for production builds")
+
+   if(MSVC)
+      add_compile_options(
+         /GS                            # Buffer security check
+         /guard:cf                      # Control Flow Guard
+         /DYNAMICBASE                   # Address Space Layout Randomization
+         /NXCOMPAT                      # Data Execution Prevention
+      )
+      add_link_options(
+         /GUARD:CF                      # Control Flow Guard at link time
+         /DYNAMICBASE                   # ASLR
+         /NXCOMPAT                      # DEP
+      )
+   else()
+      add_compile_options(
+         -fstack-protector-strong       # Stack canary protection
+         -Wformat                       # Format string warnings
+         -Wformat-security              # Format security warnings
+         -Werror=format-security        # Make format security errors
+      )
+
+      # Stack clash protection (GCC only, not supported by Clang)
+      if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+         add_compile_options(-fstack-clash-protection)
+      endif()
+
+      # FORTIFY_SOURCE requires optimization
+      if(PRODUCTION_OPTIMIZATION OR CMAKE_BUILD_TYPE STREQUAL "Release")
+         add_compile_options(-D_FORTIFY_SOURCE=2)
+      elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+         add_compile_options(-D_FORTIFY_SOURCE=2)
+      else()
+         message(WARNING "FORTIFY_SOURCE disabled: requires optimization flags (-O1 or higher)")
+      endif()
+
+      if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
+         add_compile_options(
+            -fcf-protection=full        # Control-flow protection (Intel CET)
+         )
+      endif()
+
+      if(UNIX AND NOT APPLE)
+         add_compile_options(
+            -fPIC                        # Position Independent Code
+         )
+         add_link_options(
+            -Wl,-z,relro                 # Relocation Read-Only
+            -Wl,-z,now                   # Resolve all symbols at load time
+            -Wl,-z,noexecstack           # Non-executable stack
+            -pie                         # Position Independent Executable
+         )
+      elseif(APPLE)
+         add_compile_options(-fPIC)      # Position Independent Executable
+      endif()
+   endif()
 endif()
 
 #-------------------------------------------------------------------------------

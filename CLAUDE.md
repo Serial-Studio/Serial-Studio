@@ -19,7 +19,12 @@ cmake ../ -DDEBUG_SANITIZER=ON -DCMAKE_BUILD_TYPE=Debug
 cmake --build . -j$(nproc)
 
 # Build using system libraries (for Flathub/sandboxed environments)
+# Note: ENABLE_HARDENING is auto-enabled when USE_SYSTEM_ZLIB or USE_SYSTEM_EXPAT is ON
 cmake ../ -DUSE_SYSTEM_ZLIB=ON -DUSE_SYSTEM_EXPAT=ON -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j$(nproc)
+
+# Hardened production build (with security flags)
+cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DENABLE_HARDENING=ON -DCMAKE_BUILD_TYPE=Release
 cmake --build . -j$(nproc)
 ```
 
@@ -45,7 +50,8 @@ vcpkg install zlib expat
 - `BUILD_GPL3=ON` (default): GPLv3-compliant build without commercial modules
 - `BUILD_COMMERCIAL=ON`: Enables Pro features (requires valid license key)
 - `PRODUCTION_OPTIMIZATION=ON`: Enable release optimizations
-- `DEBUG_SANITIZER=ON`: Enable AddressSanitizer and UBSan
+- `ENABLE_HARDENING=ON`: Enable security hardening flags (auto-enabled for Flathub builds)
+- `DEBUG_SANITIZER=ON`: Enable AddressSanitizer and UBSan (debug builds only)
 - `USE_SYSTEM_ZLIB=ON`: Use system-provided zlib instead of downloading from GitHub (required for Flathub builds)
 - `USE_SYSTEM_EXPAT=ON`: Use system-provided expat instead of downloading from GitHub (required for Flathub builds)
 

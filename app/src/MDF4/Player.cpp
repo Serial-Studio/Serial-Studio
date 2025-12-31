@@ -492,13 +492,15 @@ void MDF4::Player::nextFrame()
 
   if (m_framePos < frameCount() - 1)
   {
-    int framesToLoad = UI::Dashboard::instance().points();
-    int startFrame = std::max(0, m_framePos - framesToLoad + 1);
-    int endFrame = m_framePos + 1;
-
-    processFrameBatch(startFrame, endFrame);
-
     ++m_framePos;
+
+    int framesToLoad = UI::Dashboard::instance().points();
+    int startFrame = std::max(0, m_framePos - framesToLoad);
+    int endFrame = m_framePos - 1;
+
+    if (endFrame >= startFrame)
+      processFrameBatch(startFrame, endFrame);
+
     updateData();
   }
 }
@@ -523,10 +525,12 @@ void MDF4::Player::previousFrame()
 
     int framesToLoad = UI::Dashboard::instance().points();
     int startFrame = std::max(0, m_framePos - framesToLoad);
-    int endFrame = m_framePos;
+    int endFrame = m_framePos - 1;
 
     UI::Dashboard::instance().clearPlotData();
-    processFrameBatch(startFrame, endFrame);
+
+    if (endFrame >= startFrame)
+      processFrameBatch(startFrame, endFrame);
 
     updateData();
   }
