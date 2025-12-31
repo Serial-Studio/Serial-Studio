@@ -2,23 +2,23 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+版权所有 (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-本软件基于 GNU 通用公共许可证第 3.0 版 (GPLv3) 授权。你可以自由
-使用、修改和分发本软件，前提是所有衍生作品也必须保持开源。
+此软件是自由和开源的，遵循GNU GPLv3许可证。
+您可以使用、修改和重新分发，前提是衍生作品
+在相同条款下保持开源。
 
-→ 完整许可证：https://www.gnu.org/licenses/gpl-3.0.html
-→ 源代码：https://github.com/serial-studio/serial-studio
+→ 许可证: https://www.gnu.org/licenses/gpl-3.0.html
+→ 源代码:  https://github.com/serial-studio/serial-studio
 
-第一次使用 Serial Studio？点击工具栏上的“帮助”按钮开始吧。
-
-喜欢这个项目？欢迎通过购买 Pro 版支持我们：
+喜欢这个项目？考虑通过Serial Studio Pro支持开发：
 → https://store.serial-studio.com/
 
-Pro 版包含强大功能，例如：
-→ 支持 MQTT
-→ XY 图表与 3D 可视化
-→ 适合商业使用的二进制许可证（无 GPL 义务）
-→ 还有更多助力嵌入式开发的工具
+专业功能：
+→ MQTT 集成
+→ XY 和 3D 可视化
+→ 音频输入
+→ CANBus & MODBUS 驱动
+→ 商业许可证（无GPL义务）
 
-→ 了解更多： https://serial-studio.com/
+→ 了解更多: https://serial-studio.com/

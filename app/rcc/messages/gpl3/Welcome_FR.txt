@@ -2,26 +2,23 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Ce logiciel est sous licence Licence Publique Générale GNU version 3.0
-(GPLv3). Vous êtes libre d’utiliser, de modifier et de redistribuer ce
-logiciel selon les termes de la GPL, à condition que tous les travaux
-dérivés restent également open source.
+Ce logiciel est libre et open source sous la licence GNU GPLv3.
+Vous pouvez l'utiliser, le modifier et le redistribuer, à condition
+que les œuvres dérivées restent open source sous les mêmes termes.
 
-→ Licence complète : https://www.gnu.org/licenses/gpl-3.0.html
-→ Code source : https://github.com/serial-studio/serial-studio
+→ Licence : https://www.gnu.org/licenses/gpl-3.0.html
+→ Source :  https://github.com/serial-studio/serial-studio
 
-Nouveau sur Serial Studio ? Cliquez sur le bouton "Aide" dans la barre
-d’outils pour commencer.
-
-Vous aimez ce projet ? Pensez à le soutenir en achetant la version Pro :
+Vous aimez ce projet ? Envisagez de soutenir le développement avec Serial Studio Pro :
 → https://store.serial-studio.com/
 
-La version Pro inclut des fonctionnalités géniales comme :
-→ Support de MQTT
-→ Graphiques XY et visualisation 3D
-→ Licence binaire adaptée aux entreprises (sans obligations GPL)
-→ Et plus d’outils pour booster votre flux de travail embarqué
+Fonctionnalités Pro :
+→ Intégration MQTT
+→ Visualisation XY et 3D
+→ Entrée audio
+→ Pilotes CANBus & MODBUS
+→ Licence commerciale (sans obligations GPL)
 
 → En savoir plus : https://serial-studio.com/

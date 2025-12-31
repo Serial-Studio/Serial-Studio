@@ -425,24 +425,6 @@ Window {
           }
 
           //
-          // Console
-          //
-          Label {
-            text: qsTr("Enable Console Widget")
-            color: Cpp_ThemeManager.colors["text"]
-          } Switch {
-            id: _consoleWidget
-            Layout.rightMargin: -8
-            Layout.alignment: Qt.AlignRight
-            checked: Cpp_UI_Dashboard.terminalEnabled
-            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
-            onCheckedChanged: {
-              if (checked !== Cpp_UI_Dashboard.terminalEnabled)
-                Cpp_UI_Dashboard.terminalEnabled = checked
-            }
-          }
-
-          //
           // Frame extraction
           //
           Label {
@@ -470,6 +452,73 @@ Window {
       //
       Item {
         implicitHeight: 4
+      }
+
+      //
+      // Console settings
+      //
+      Label {
+        text: qsTr("Console")
+        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
+        color: Cpp_ThemeManager.colors["pane_section_label"]
+        Component.onCompleted: font.capitalization = Font.AllUppercase
+      }
+
+      GroupBox {
+        Layout.fillWidth: true
+
+        background: Rectangle {
+          radius: 2
+          border.width: 1
+          color: Cpp_ThemeManager.colors["groupbox_background"]
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        GridLayout {
+          columns: 2
+          rowSpacing: 4
+          columnSpacing: 8
+          anchors.fill: parent
+
+          Label {
+            text: qsTr("Font Family")
+            color: Cpp_ThemeManager.colors["text"]
+          }
+
+          ComboBox {
+            id: _consoleFontFamily
+            Layout.fillWidth: true
+            model: Cpp_Console_Handler.availableFonts
+
+            Component.onCompleted: {
+              currentIndex = find(Cpp_Console_Handler.fontFamily)
+            }
+
+            onCurrentTextChanged: {
+              if (currentText !== Cpp_Console_Handler.fontFamily)
+                Cpp_Console_Handler.fontFamily = currentText
+            }
+          }
+
+          Label {
+            text: qsTr("Font Size")
+            color: Cpp_ThemeManager.colors["text"]
+          }
+
+          SpinBox {
+            id: _consoleFontSize
+            from: 6
+            to: 72
+            editable: true
+            Layout.fillWidth: true
+            value: Cpp_Console_Handler.fontSize
+
+            onValueChanged: {
+              if (value !== Cpp_Console_Handler.fontSize)
+                Cpp_Console_Handler.fontSize = value
+            }
+          }
+        }
       }
 
       //
@@ -505,6 +554,8 @@ Window {
             Cpp_UI_Dashboard.terminalEnabled = false
             Cpp_IO_Manager.threadedFrameExtraction = false
             Cpp_UI_Dashboard.showTaskbarButtons = false
+            Cpp_Console_Handler.setFontFamily(Cpp_Misc_CommonFonts.monoFont.family)
+            Cpp_Console_Handler.setFontSize(Cpp_Misc_CommonFonts.monoFont.pointSize)
           }
         }
 

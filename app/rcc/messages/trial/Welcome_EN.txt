@@ -2,22 +2,19 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
-All Rights Reserved.
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-You are currently using a trial version of Serial Studio Pro.
-
-This version is fully functional and licensed for evaluation and
-personal, non-commercial use only. To continue using Serial Studio
-after your trial ends, please upgrade to a paid plan or compile the
+You are using a trial version of Serial Studio Pro. This version is
+fully functional for evaluation and personal, non-commercial use only.
+To continue after your trial, upgrade to a paid plan or compile the
 GPLv3 source code yourself.
 
 → Support: alex@serial-studio.com
 → Schedule a call: https://calendly.com/serial-studio
 → Learn more: https://serial-studio.com/
 
-Pro features available during your trial:
+Pro features available:
 → MQTT integration
 → XY and 3D visualization
-→ Binary data parsing
-→ Continuous updates
+→ Audio input
+→ CANBus & MODBUS drivers

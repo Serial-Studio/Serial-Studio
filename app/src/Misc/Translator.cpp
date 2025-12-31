@@ -184,15 +184,7 @@ QString Misc::Translator::welcomeConsoleText() const
   QFile file(path);
   if (file.open(QFile::ReadOnly))
   {
-    if (path.contains("pro"))
-    {
-      text = QString::fromUtf8(file.readAll())
-                 .arg(qApp->applicationDisplayName());
-    }
-
-    else
-      text = QString::fromUtf8(file.readAll());
-
+    text = QString::fromUtf8(file.readAll());
     file.close();
   }
 

@@ -62,19 +62,13 @@ Item {
   Layout.maximumWidth: maxButtonWidth
   implicitHeight: horizontalLayout ?
                     Math.max(root.iconSize, _label.implicitHeight) :
-                    root.iconSize + _label.implicitHeight + 20
+                    Math.max(16, _label.implicitHeight) * 3 + 16
   implicitWidth: Math.min(
                    maxButtonWidth,
                    horizontalLayout
                    ? root.iconSize + Math.ceil(_metrics.width + 16)
                    : Math.max(Math.ceil(_metrics.width + 16), icon.width / 32 * 72)
                    )
-
-  //
-  // Tooltip
-  //
-  ToolTip.delay: 700
-  ToolTip.visible: _mouseArea.containsMouse && ToolTip.text !== ""
 
   //
   // Enabled/disabled opacity effect
@@ -189,12 +183,26 @@ Item {
   }
 
   //
+  // Custom tooltip that follows cursor
+  //
+  ToolTip {
+    id: _tooltip
+    delay: 700
+    parent: _mouseArea
+    text: root.ToolTip.text
+    x: _mouseArea.mouseX + 10
+    y: _mouseArea.mouseY + 10
+    visible: _mouseArea.containsMouse && root.ToolTip.text !== ""
+  }
+
+  //
   // Mouse area for detecting clicks
   //
   MouseArea {
     id: _mouseArea
     hoverEnabled: true
     anchors.fill: parent
+
     onClicked: {
       if (root.checkable)
         root.checked = !root.checked

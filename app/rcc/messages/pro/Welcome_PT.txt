@@ -2,23 +2,19 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
-Todos os direitos reservados.
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Obrigado por usar o %1 e por apoiar o software open source!
-
-Esta versão está licenciada sob um contrato comercial e aprovada para uso em
-ambientes comerciais e proprietários.
+Obrigado por usar o Serial Studio Pro e apoiar o desenvolvimento de código
+aberto! Sua licença está ativa e aprovada para uso comercial e proprietário.
 
 → Suporte: alex@serial-studio.com
-→ Agende uma chamada: https://calendly.com/serial-studio
+→ Agendar uma chamada: https://calendly.com/serial-studio
 → Portal do cliente: https://store.serial-studio.com/billing
-
-Os recursos do Pro incluem:
-→ Integração com MQTT
-→ Visualização XY e 3D
-→ Suporte prioritário
-→ Licença adequada para uso comercial
-→ Atualizações contínuas
-
 → Saiba mais: https://serial-studio.com/
+
+Recursos Pro:
+→ Integração MQTT
+→ Visualização XY e 3D
+→ Entrada de áudio
+→ Drivers CANBus & MODBUS
+→ Suporte prioritário

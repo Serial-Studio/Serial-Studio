@@ -21,7 +21,9 @@
 
 #pragma once
 
+#include <QFont>
 #include <QObject>
+#include <QSettings>
 
 #include "IO/CircularBuffer.h"
 
@@ -80,13 +82,36 @@ class Handler : public QObject
              READ checksumMethod
              WRITE setChecksumMethod
              NOTIFY checksumMethodChanged)
+  Q_PROPERTY(QFont font
+             READ font
+             NOTIFY fontChanged)
+  Q_PROPERTY(QString fontFamily
+             READ fontFamily
+             WRITE setFontFamily
+             NOTIFY fontFamilyChanged)
+  Q_PROPERTY(int fontSize
+             READ fontSize
+             WRITE setFontSize
+             NOTIFY fontSizeChanged)
+  Q_PROPERTY(QStringList availableFonts
+             READ availableFonts
+             CONSTANT)
+  Q_PROPERTY(int defaultCharWidth
+             READ defaultCharWidth
+             CONSTANT)
+  Q_PROPERTY(int defaultCharHeight
+             READ defaultCharHeight
+             CONSTANT)
   // clang-format on
 
 signals:
   void echoChanged();
+  void fontChanged();
+  void fontSizeChanged();
   void dataModeChanged();
   void languageChanged();
   void lineEndingChanged();
+  void fontFamilyChanged();
   void displayModeChanged();
   void historyItemChanged();
   void textDocumentChanged();
@@ -141,6 +166,13 @@ public:
   [[nodiscard]] QStringList displayModes() const;
   [[nodiscard]] QStringList checksumMethods() const;
 
+  [[nodiscard]] QFont font() const;
+  [[nodiscard]] int fontSize() const;
+  [[nodiscard]] QString fontFamily() const;
+  [[nodiscard]] QStringList availableFonts() const;
+  [[nodiscard]] int defaultCharWidth() const;
+  [[nodiscard]] int defaultCharHeight() const;
+
   Q_INVOKABLE bool validateUserHex(const QString &text);
   Q_INVOKABLE QString formatUserHex(const QString &text);
 
@@ -151,7 +183,9 @@ public slots:
   void setupExternalConnections();
   void send(const QString &data);
   void setEcho(const bool enabled);
+  void setFontSize(const int size);
   void setChecksumMethod(const int method);
+  void setFontFamily(const QString &family);
   void setShowTimestamp(const bool enabled);
   void setDataMode(const Console::Handler::DataMode &mode);
   void setLineEnding(const Console::Handler::LineEnding &mode);
@@ -162,6 +196,7 @@ public slots:
   void displaySentData(QByteArrayView data);
 
 private slots:
+  void updateFont();
   void addToHistory(const QString &command);
 
 private:
@@ -181,6 +216,11 @@ private:
   bool m_showTimestamp;
   bool m_isStartingLine;
   bool m_lastCharWasCR;
+
+  QFont m_font;
+  int m_fontSize;
+  QString m_fontFamily;
+  QSettings m_settings;
 
   QStringList m_historyItems;
   IO::CircularBuffer<QByteArray, char> m_textBuffer;

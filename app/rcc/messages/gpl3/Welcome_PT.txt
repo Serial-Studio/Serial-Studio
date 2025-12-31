@@ -2,25 +2,23 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Este software está licenciado sob a GNU General Public License v3.0 (GPLv3).
-Você pode usar, modificar e redistribuir este software livremente, conforme os
-termos da GPL, desde que todas as obras derivadas também permaneçam open source.
+Este software é livre e de código aberto sob a licença GNU GPLv3.
+Você pode usar, modificar e redistribuir, desde que as obras derivadas
+permaneçam de código aberto sob os mesmos termos.
 
-→ Licença completa: https://www.gnu.org/licenses/gpl-3.0.html
-→ Código-fonte: https://github.com/serial-studio/serial-studio
+→ Licença: https://www.gnu.org/licenses/gpl-3.0.html
+→ Fonte:  https://github.com/serial-studio/serial-studio
 
-Novo no Serial Studio? Clique no botão "Ajuda" na barra de ferramentas para
-começar.
-
-Gostou do projeto? Considere apoiar comprando a versão Pro:
+Gostou deste projeto? Considere apoiar o desenvolvimento com o Serial Studio Pro:
 → https://store.serial-studio.com/
 
-A versão Pro inclui recursos incríveis como:
-→ Suporte a MQTT
-→ Gráficos XY e visualização 3D
-→ Licença binária para uso comercial (sem obrigações da GPL)
-→ E mais ferramentas para turbinar seu fluxo de trabalho embarcado
+Recursos Pro:
+→ Integração MQTT
+→ Visualização XY e 3D
+→ Entrada de áudio
+→ Drivers CANBus & MODBUS
+→ Licença comercial (sem obrigações GPL)
 
 → Saiba mais: https://serial-studio.com/

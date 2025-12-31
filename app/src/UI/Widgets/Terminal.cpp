@@ -100,8 +100,12 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   // Load the welcome guide
   loadWelcomeGuide();
 
-  // Set font
-  setFont(Misc::CommonFonts::instance().monoFont());
+  // Set font from console handler
+  setFont(Console::Handler::instance().font());
+
+  // Update font when settings change
+  connect(&Console::Handler::instance(), &Console::Handler::fontChanged, this,
+          [this] { setFont(Console::Handler::instance().font()); });
 
   // Set palette
   onThemeChanged();
@@ -124,7 +128,24 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   // Redraw widget as soon as it is visible
   connect(this, &Widgets::Terminal::visibleChanged, this, [=, this] {
     if (isVisible())
+    {
+      if (autoscroll() && linesPerPage() > 0)
+      {
+        int cursorLine = m_cursorPosition.y();
+        int wrappedLines = 1;
+        if (cursorLine < m_data.size())
+        {
+          int lineLength = m_data[cursorLine].length();
+          wrappedLines
+              = (lineLength + maxCharsPerLine() - 1) / maxCharsPerLine();
+        }
+
+        int visualBottom = cursorLine + wrappedLines - 1;
+        setScrollOffsetY(qMax(0, visualBottom - linesPerPage() + 1));
+      }
+
       update();
+    }
   });
 
   // Update welcome guide when Serial Studio changes its activation status
@@ -134,12 +155,9 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
           &Widgets::Terminal::loadWelcomeGuide);
 #endif
 
-  // Change character widths when changing language
+  // Reload welcome guide when changing language
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, [=, this] {
-            loadWelcomeGuide();
-            setFont(Misc::CommonFonts::instance().monoFont());
-          });
+          this, [this] { loadWelcomeGuide(); });
 
   // Blink the cursor
   m_cursorTimer.start(200);
@@ -343,17 +361,65 @@ void Widgets::Terminal::paint(QPainter *painter)
   }
 
   // Draw cursor if visible
-  if (m_cursorVisible && m_cursorPosition.y() >= firstLine
-      && m_cursorPosition.y() <= lastVLine)
+  if (m_cursorVisible)
   {
-    // clang-format off
-    const int cursorX = m_cursorPosition.x() * m_cWidth + m_borderX;
-    const int cursorY = (m_cursorPosition.y() - firstLine + 1) * lineHeight + m_borderY;
-    // clang-format on
+    const int cursorLine = m_cursorPosition.y();
+    const int cursorCol = m_cursorPosition.x();
 
-    // Draw the cursor as a filled block character
-    painter->setPen(m_palette.color(QPalette::Text));
-    painter->drawText(cursorX, cursorY, QStringLiteral("█"));
+    int visualLineY = m_borderY;
+    bool cursorDrawn = false;
+
+    for (int i = firstLine; i <= lastVLine && i < m_data.size(); ++i)
+    {
+      const QString &line = m_data[i];
+
+      if (line.isEmpty())
+      {
+        if (i == cursorLine)
+        {
+          painter->setPen(m_palette.color(QPalette::Text));
+          painter->drawText(m_borderX, visualLineY + m_cHeight,
+                            QStringLiteral("█"));
+          cursorDrawn = true;
+          break;
+        }
+
+        visualLineY += lineHeight;
+        continue;
+      }
+
+      int start = 0;
+      while (start < line.length())
+      {
+        const int end = qMin<int>(start + maxCharsPerLine(), line.length());
+
+        if (i == cursorLine && cursorCol >= start && cursorCol <= end)
+        {
+          int cursorX = m_borderX;
+          for (int j = start; j < cursorCol && j < end; ++j)
+            cursorX += painter->fontMetrics().horizontalAdvance(line[j]);
+
+          painter->setPen(m_palette.color(QPalette::Text));
+          painter->drawText(cursorX, visualLineY + m_cHeight,
+                            QStringLiteral("█"));
+          cursorDrawn = true;
+          break;
+        }
+
+        visualLineY += lineHeight;
+        start = end;
+      }
+
+      if (cursorDrawn)
+        break;
+    }
+
+    if (!cursorDrawn && cursorLine >= m_data.size())
+    {
+      painter->setPen(m_palette.color(QPalette::Text));
+      painter->drawText(m_borderX, visualLineY + m_cHeight,
+                        QStringLiteral("█"));
+    }
   }
 
   // Draw scrollbar if required
@@ -843,6 +909,23 @@ void Widgets::Terminal::loadWelcomeGuide()
   setAutoscroll(false);
   append(Misc::Translator::instance().welcomeConsoleText());
   setAutoscroll(true);
+
+  const int lines = linesPerPage();
+  if (lines > 0 && height() > 0)
+  {
+    int cursorLine = m_cursorPosition.y();
+    int wrappedLines = 1;
+    if (cursorLine < m_data.size())
+    {
+      int lineLength = m_data[cursorLine].length();
+      wrappedLines = (lineLength + maxCharsPerLine() - 1) / maxCharsPerLine();
+    }
+
+    int visualBottom = cursorLine + wrappedLines - 1;
+    setScrollOffsetY(qMax(0, visualBottom - lines + 1));
+  }
+
+  m_stateChanged = true;
 }
 
 /**

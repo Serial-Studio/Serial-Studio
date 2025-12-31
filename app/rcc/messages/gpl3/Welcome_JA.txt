@@ -2,27 +2,24 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-このソフトウェアはGNU General Public License v3.0（GPLv3）のもとで
-ライセンスされています。GPLの条件に従い、このソフトウェアを自由に
-使用・改変・再配布できます。ただし、派生物もオープンソースである
-必要があります。
+このソフトウェアはGNU GPLv3ライセンスの下で無料かつオープンソースです。
+派生作品が同じ条件でオープンソースのままである限り、使用、変更、
+再配布が可能です。
 
-→ ライセンス全文：https://www.gnu.org/licenses/gpl-3.0.html
-→ ソースコード：https://github.com/serial-studio/serial-studio
+→ ライセンス: https://www.gnu.org/licenses/gpl-3.0.html
+→ ソース:  https://github.com/serial-studio/serial-studio
 
-Serial Studioを初めて使いますか？始めるにはツールバーの「ヘルプ」
-ボタンをクリックしてください。
-
-このプロジェクトが気に入りましたか？Pro版を購入して支援をご検討
-ください：
+このプロジェクトが気に入りましたか？Serial Studio Proで開発を支援することを
+ご検討ください:
 → https://store.serial-studio.com/
 
-Pro版には次のような優れた機能が含まれます：
-→ MQTT対応
-→ XYプロットと3Dビジュアライゼーション
-→ 商用利用に適したバイナリライセンス（GPL義務なし）
-→ 組み込み開発をさらに強化する追加ツール
+Proの機能:
+→ MQTT統合
+→ XYおよび3Dビジュアライゼーション
+→ オーディオ入力
+→ CANBus & MODBUSドライバー
+→ 商用ライセンス（GPL義務なし）
 
-→ 詳細はこちら：https://serial-studio.com/
+→ 詳しくはこちら: https://serial-studio.com/

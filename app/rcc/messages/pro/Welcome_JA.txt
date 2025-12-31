@@ -2,24 +2,20 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
-全著作権所有。
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-%1 をご利用いただき、そしてオープンソースを支援していただき
-ありがとうございます！
-
-このバージョンは商用契約のもとでライセンスされており、商用および
-プロプライエタリ環境での使用が承認されています。
+Serial Studio Proをご利用いただき、オープンソース開発をサポートして
+いただきありがとうございます！あなたのライセンスは有効で、商業および
+独自の使用が承認されています。
 
 → サポート: alex@serial-studio.com
-→ ミーティングの予約: https://calendly.com/serial-studio
-→ 顧客ポータル: https://store.serial-studio.com/billing
+→ 通話のスケジュール: https://calendly.com/serial-studio
+→ カスタマーポータル: https://store.serial-studio.com/billing
+→ 詳細はこちら: https://serial-studio.com/
 
-Pro版の機能には以下が含まれます：
+Pro機能:
 → MQTT統合
 → XYおよび3Dビジュアライゼーション
+→ オーディオ入力
+→ CANBus & MODBUSドライバー
 → 優先サポート
-→ 商用向けライセンス
-→ 継続的なアップデート
-
-→ 詳細はこちら: https://serial-studio.com/

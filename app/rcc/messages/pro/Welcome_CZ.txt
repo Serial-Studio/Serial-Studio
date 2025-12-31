@@ -2,23 +2,19 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
-Všechna práva vyhrazena.
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Děkujeme, že používáte %1 a podporujete open source!
-
-Tato verze je licencována na základě komerční dohody a je schválena pro
-použití v komerčním a proprietárním prostředí.
+Děkujeme, že používáte Serial Studio Pro a podporujete vývoj open source!
+Vaše licence je aktivní a schválená pro komerční a proprietární použití.
 
 → Podpora: alex@serial-studio.com
 → Naplánovat hovor: https://calendly.com/serial-studio
-→ Klientský portál: https://store.serial-studio.com/billing
-
-Vaše funkce Pro verze:
-→ Integrace s MQTT
-→ XY a 3D vizualizace
-→ Přednostní podpora
-→ Licence vhodná pro firmy
-→ Pravidelné aktualizace
-
+→ Zákaznický portál: https://store.serial-studio.com/billing
 → Více informací: https://serial-studio.com/
+
+Funkce Pro verze:
+→ Integrace MQTT
+→ Vizualizace XY a 3D
+→ Vstup zvuku
+→ Ovladače CANBus & MODBUS
+→ Prioritní podpora

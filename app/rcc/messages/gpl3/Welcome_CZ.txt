@@ -2,24 +2,23 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Autorská práva (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Tento software je licencován pod GNU General Public License v3.0 (GPLv3).
-Můžete jej volně používat, upravovat a šířit dle podmínek GPL, pokud všechny
-odvozené práce zůstanou open source.
+Tento software je zdarma a open source pod licencí GNU GPLv3.
+Můžete jej používat, upravovat a redistribuovat, pokud odvozená díla
+zůstanou open source za stejných podmínek.
 
-→ Plná licence: https://www.gnu.org/licenses/gpl-3.0.html
-→ Zdrojový kód: https://github.com/serial-studio/serial-studio
+→ Licence: https://www.gnu.org/licenses/gpl-3.0.html
+→ Zdroj:   https://github.com/serial-studio/serial-studio
 
-Poprvé v Serial Studio? Klikněte na tlačítko „Nápověda“ na nástrojové liště.
-
-Líbí se vám projekt? Podpořte ho zakoupením verze Pro:
+Líbí se vám tento projekt? Zvažte podporu vývoje s Serial Studio Pro:
 → https://store.serial-studio.com/
 
-Pro verze obsahuje skvělé funkce navíc:
-→ Podpora MQTT
-→ XY grafy a 3D vizualizace
-→ Podniková binární licence (bez GPL závazků)
-→ A další nástroje pro embedded vývoj
+Funkce Pro:
+→ Integrace MQTT
+→ Vizualizace XY a 3D
+→ Vstup zvuku
+→ Ovladače CANBus & MODBUS
+→ Komerční licence (bez povinností GPL)
 
-→ Více info: https://serial-studio.com/
+→ Více informací: https://serial-studio.com/

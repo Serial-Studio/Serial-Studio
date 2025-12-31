@@ -2,24 +2,20 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
-Wszelkie prawa zastrzeżone.
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Dziękujemy za korzystanie z %1 i za wspieranie otwartego
-oprogramowania!
-
-Ta wersja jest licencjonowana na podstawie umowy komercyjnej i zatwierdzona
-do użytku w środowiskach komercyjnych i zastrzeżonych.
+Dziękujemy za korzystanie z Serial Studio Pro i wspieranie rozwoju 
+open source! Twoja licencja jest aktywna i zatwierdzona do użytku 
+komercyjnego i własnościowego.
 
 → Wsparcie: alex@serial-studio.com
 → Umów się na rozmowę: https://calendly.com/serial-studio
 → Portal klienta: https://store.serial-studio.com/billing
-
-Funkcje wersji Pro obejmują:
-→ Integracja z MQTT
-→ Wizualizacja XY i 3D
-→ Priorytetowe wsparcie
-→ Licencja przyjazna dla biznesu
-→ Ciągłe aktualizacje
-
 → Dowiedz się więcej: https://serial-studio.com/
+
+Funkcje Pro:
+→ Integracja MQTT
+→ Wizualizacja XY i 3D
+→ Wejście audio
+→ Sterowniki CANBus i MODBUS
+→ Priorytetowe wsparcie

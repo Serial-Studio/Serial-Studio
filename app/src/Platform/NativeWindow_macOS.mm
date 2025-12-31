@@ -97,12 +97,23 @@ static void applyMacOSWindowStyle(QWindow *win)
   NSView *view = reinterpret_cast<NSView *>(win->winId());
   NSWindow *w = [view window];
 
-  [w setStyleMask:([w styleMask] | NSWindowStyleMaskFullSizeContentView)];
-  [w setTitlebarAppearsTransparent:YES];
-  [w setTitleVisibility:NSWindowTitleHidden];
+  if (w)
+  {
+    [w setStyleMask:([w styleMask] | NSWindowStyleMaskFullSizeContentView)];
+    [w setTitlebarAppearsTransparent:YES];
+    [w setTitleVisibility:NSWindowTitleHidden];
 
-  NSButton *zoomButton = [w standardWindowButton:NSWindowZoomButton];
-  [zoomButton setEnabled:YES];
+    NSButton *zoomButton = [w standardWindowButton:NSWindowZoomButton];
+    [zoomButton setEnabled:YES];
+
+    [NSApp activateIgnoringOtherApps:YES];
+    [w makeKeyAndOrderFront:nil];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC),
+                   dispatch_get_main_queue(), ^{
+                     [w makeKeyAndOrderFront:nil];
+                   });
+  }
 }
 
 /**
@@ -126,13 +137,10 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
   if (!win)
     return;
 
+  if (!win->handle())
+    win->create();
+
   applyMacOSWindowStyle(win);
-
-  [NSApp activateIgnoringOtherApps:YES];
-  NSView *view = reinterpret_cast<NSView *>(win->winId());
-  NSWindow *w = [view window];
-  [w makeKeyAndOrderFront:nil];
-
   if (!m_windows.contains(win))
   {
     m_windows.append(win);

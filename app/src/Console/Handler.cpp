@@ -21,13 +21,17 @@
 
 #include <QFile>
 #include <QDateTime>
+#include <QFontInfo>
+#include <QFontMetrics>
+#include <QApplication>
+#include <QFontDatabase>
 
-#include "SerialStudio.h"
-
-#include "Console/Handler.h"
 #include "IO/Manager.h"
 #include "IO/Checksum.h"
+#include "SerialStudio.h"
+#include "Console/Handler.h"
 #include "Misc/Translator.h"
+#include "Misc/CommonFonts.h"
 
 /**
  * Constructor function
@@ -45,6 +49,19 @@ Console::Handler::Handler()
   , m_textBuffer(10 * 1024)
 {
   clear();
+
+  const auto defaultFont = Misc::CommonFonts::instance().monoFont();
+  m_fontFamily
+      = m_settings.value("Console/FontFamily", defaultFont.family()).toString();
+  m_fontSize
+      = m_settings.value("Console/FontSize", defaultFont.pointSize()).toInt();
+
+  if (m_fontSize < 6)
+    m_fontSize = 6;
+  else if (m_fontSize > 72)
+    m_fontSize = 72;
+
+  updateFont();
 }
 
 /**
@@ -89,11 +106,8 @@ int Console::Handler::checksumMethod() const
 /**
  * Returns the type of data that the user inputs to the console. There are two
  * possible values:
- * - @c DataMode::DataUTF8        the user is sending data formated in the UTF-8
- * codec.
- * - @c DataMode::DataHexadecimal the user is sending binary data represented in
- *                                hexadecimal format, we must do a conversion to
- * obtain and send the appropiate binary data to the target device.
+ * - @c DataMode::DataUTF8
+ * - @c DataMode::DataHexadecimal
  */
 Console::Handler::DataMode Console::Handler::dataMode() const
 {
@@ -103,13 +117,10 @@ Console::Handler::DataMode Console::Handler::dataMode() const
 /**
  * Returns the line ending character that is added to each datablock sent by the
  * user. Possible values are:
- * - @c LineEnding::NoLineEnding                  leave data as-it-is
- * - @c LineEnding::NewLine,                      add '\n' to the data sent by
- * the user
- * - @c LineEnding::CarriageReturn,               add '\r' to the data sent by
- * the user
- * - @c LineEnding::BothNewLineAndCarriageReturn  add '\r\n' to the data sent by
- * the user
+ * - @c LineEnding::NoLineEnding
+ * - @c LineEnding::NewLine
+ * - @c LineEnding::CarriageReturn
+ * - @c LineEnding::BothNewLineAndCarriageReturn
  */
 Console::Handler::LineEnding Console::Handler::lineEnding() const
 {
@@ -201,6 +212,74 @@ QStringList Console::Handler::checksumMethods() const
   }
 
   return list;
+}
+
+/**
+ * Returns the current console font
+ */
+QFont Console::Handler::font() const
+{
+  return m_font;
+}
+
+/**
+ * Returns the current console font size in points
+ */
+int Console::Handler::fontSize() const
+{
+  return m_fontSize;
+}
+
+/**
+ * Returns the current console font family
+ */
+QString Console::Handler::fontFamily() const
+{
+  return m_fontFamily;
+}
+
+/**
+ * Returns a list of all available monospace fonts
+ */
+QStringList Console::Handler::availableFonts() const
+{
+  QStringList monospaceFonts;
+  const auto allFonts = QFontDatabase::families();
+  auto defaultFamily = Misc::CommonFonts::instance().monoFont().family();
+
+  for (const auto &family : allFonts)
+  {
+    QFontInfo fontInfo(family);
+    if (fontInfo.fixedPitch())
+      monospaceFonts.append(family);
+  }
+
+  monospaceFonts.sort(Qt::CaseInsensitive);
+  const int idx = monospaceFonts.indexOf(defaultFamily);
+  if (idx > 0)
+    monospaceFonts.move(idx, 0);
+
+  return monospaceFonts;
+}
+
+/**
+ * Returns the character width for the default monospace font
+ */
+int Console::Handler::defaultCharWidth() const
+{
+  const auto defaultFont = Misc::CommonFonts::instance().monoFont();
+  const QFontMetrics metrics(defaultFont);
+  return metrics.horizontalAdvance("M");
+}
+
+/**
+ * Returns the character height for the default monospace font
+ */
+int Console::Handler::defaultCharHeight() const
+{
+  const auto defaultFont = Misc::CommonFonts::instance().monoFont();
+  const QFontMetrics metrics(defaultFont);
+  return metrics.height();
 }
 
 /**
@@ -381,6 +460,21 @@ void Console::Handler::setEcho(const bool enabled)
 }
 
 /**
+ * Sets the console font size
+ */
+void Console::Handler::setFontSize(const int size)
+{
+  const int constrainedSize = qBound(6, size, 72);
+  if (m_fontSize != constrainedSize)
+  {
+    m_fontSize = constrainedSize;
+    m_settings.setValue("Console/FontSize", m_fontSize);
+    updateFont();
+    Q_EMIT fontSizeChanged();
+  }
+}
+
+/**
  * @brief Sets the currently selected checksum method by index.
  *
  * Updates the internal checksum method if the provided index differs
@@ -395,6 +489,25 @@ void Console::Handler::setChecksumMethod(const int method)
   {
     m_checksumMethod = method;
     Q_EMIT checksumMethodChanged();
+  }
+}
+
+/**
+ * Sets the console font family
+ */
+void Console::Handler::setFontFamily(const QString &family)
+{
+  if (m_fontFamily != family)
+  {
+    QFont testFont(family);
+    QFontInfo fontInfo(testFont);
+    if (!fontInfo.fixedPitch())
+      return;
+
+    m_fontFamily = family;
+    m_settings.setValue("Console/FontFamily", m_fontFamily);
+    updateFont();
+    Q_EMIT fontFamilyChanged();
   }
 }
 
@@ -518,6 +631,29 @@ void Console::Handler::displaySentData(QByteArrayView data)
 {
   if (echo())
     append(dataToString(data), showTimestamp());
+}
+
+/**
+ * Updates the font based on current family and size settings
+ */
+void Console::Handler::updateFont()
+{
+  QFont testFont(m_fontFamily, m_fontSize);
+  QFontInfo fontInfo(testFont);
+
+  if (!fontInfo.fixedPitch())
+  {
+    const auto defaultFont = Misc::CommonFonts::instance().monoFont();
+    m_fontFamily = defaultFont.family();
+    m_fontSize = defaultFont.pointSize();
+    m_settings.setValue("Console/FontFamily", m_fontFamily);
+    m_settings.setValue("Console/FontSize", m_fontSize);
+    testFont = defaultFont;
+  }
+
+  m_font = testFont;
+  m_font.setStyleStrategy(QFont::PreferAntialias);
+  Q_EMIT fontChanged();
 }
 
 /**

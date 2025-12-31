@@ -53,8 +53,8 @@ Item {
   property bool minimal: true
   property int minimumRows: 24
   property int minimumColumns: 80
-  property int minimumHeight: terminal.charHeight * root.minimumRows
-  property int minimumWidth: terminal.charWidth * root.minimumColumns
+  property int minimumHeight: Cpp_Console_Handler.defaultCharHeight * root.minimumRows
+  property int minimumWidth: Cpp_Console_Handler.defaultCharWidth * root.minimumColumns
 
   //
   // Save settings
@@ -158,8 +158,8 @@ Item {
       vt100emulation: true
       Layout.fillWidth: true
       Layout.fillHeight: true
-      Layout.minimumHeight: root.minimal ? 0 : terminal.charHeight * root.minimumRows
-      Layout.minimumWidth: root.minimal ? 0 : terminal.charWidth * root.minimumColumns
+      Layout.minimumHeight: root.minimal ? 0 : Cpp_Console_Handler.defaultCharHeight * root.minimumRows
+      Layout.minimumWidth: root.minimal ? 0 : Cpp_Console_Handler.defaultCharWidth * root.minimumColumns
 
       Rectangle {
         border.width: 1
@@ -210,11 +210,11 @@ Item {
         id: send
         implicitWidth: 128
         implicitHeight: 24
-        font: terminal.font
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
         enabled: Cpp_IO_Manager.readWrite
+        font: Cpp_Misc_CommonFonts.monoFont
         placeholderText: qsTr("Send Data to Device") + "..."
         palette.base: Cpp_ThemeManager.colors["console_base"]
         palette.text: Cpp_ThemeManager.colors["console_text"]

@@ -2,23 +2,19 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
-全著作権所有。
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-現在、Serial Studio Pro の試用版を使用しています。
-
-このバージョンは完全に機能しますが、評価目的および
-個人の非商用利用にのみライセンスされています。
-試用期間が終了した後も Serial Studio を使い続けるには、
-有料プランにアップグレードするか、GPLv3 のソースコードを
-自分でコンパイルしてください。
+あなたはSerial Studio Proの試用版を使用しています。このバージョンは
+評価および個人的な非商用利用のみで完全に機能します。
+試用期間後も続けるには、有料プランにアップグレードするか、
+GPLv3ソースコードを自分でコンパイルしてください。
 
 → サポート: alex@serial-studio.com
-→ 通話を予約: https://calendly.com/serial-studio
-→ 詳しくはこちら: https://serial-studio.com/
+→ 通話をスケジュール: https://calendly.com/serial-studio
+→ 詳細を見る: https://serial-studio.com/
 
-試用期間中に利用可能な Pro 機能:
-→ MQTT 連携
-→ XY および 3D ビジュアライゼーション
-→ バイナリデータ解析
-→ 継続的なアップデート
+利用可能なPro機能:
+→ MQTT統合
+→ XYおよび3Dビジュアライゼーション
+→ オーディオ入力
+→ CANBus & MODBUSドライバー

@@ -2,24 +2,20 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
-Tüm hakları saklıdır.
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-%1 kullandığınız ve açık kaynak projeleri desteklediğiniz
-için teşekkür ederiz!
-
-Bu sürüm, ticari bir anlaşma kapsamında lisanslanmıştır ve ticari ile
-özel kullanım ortamlarında kullanılmak üzere onaylanmıştır.
+Serial Studio Pro'yu kullandığınız ve açık kaynak geliştirmeyi desteklediğiniz
+için teşekkür ederiz! Lisansınız aktif ve ticari ve özel kullanım için
+onaylanmıştır.
 
 → Destek: alex@serial-studio.com
-→ Görüşme planla: https://calendly.com/serial-studio
+→ Çağrı planla: https://calendly.com/serial-studio
 → Müşteri portalı: https://store.serial-studio.com/billing
-
-Pro sürüm özellikleri şunları içerir:
-→ MQTT entegrasyonu
-→ XY ve 3B görselleştirme
-→ Öncelikli destek
-→ İşletme dostu lisans
-→ Sürekli güncellemeler
-
 → Daha fazla bilgi: https://serial-studio.com/
+
+Pro özellikler:
+→ MQTT entegrasyonu
+→ XY ve 3D görselleştirme
+→ Ses girişi
+→ CANBus & MODBUS sürücüleri
+→ Öncelikli destek

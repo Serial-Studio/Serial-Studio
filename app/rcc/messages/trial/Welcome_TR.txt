@@ -2,23 +2,19 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
-Tüm hakları saklıdır.
+Telif hakkı (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Şu anda Serial Studio Pro'nun deneme sürümünü kullanıyorsunuz.
-
-Bu sürüm tamamen işlevseldir ve yalnızca kişisel, ticari olmayan
-kullanım ve değerlendirme amaçlı lisanslanmıştır. Deneme süreniz
-sona erdikten sonra Serial Studio'yu kullanmaya devam etmek için
-ücretli bir plana geçiş yapabilir veya GPLv3 kaynak kodunu kendiniz
-derleyebilirsiniz.
+Serial Studio Pro'nun deneme sürümünü kullanıyorsunuz. Bu sürüm,
+değerlendirme ve kişisel, ticari olmayan kullanım için tamamen işlevseldir.
+Deneme sürenizden sonra devam etmek için ücretli bir plana geçin veya
+GPLv3 kaynak kodunu kendiniz derleyin.
 
 → Destek: alex@serial-studio.com
-→ Görüşme planla: https://calendly.com/serial-studio
-→ Daha fazla bilgi: https://serial-studio.com/
+→ Görüşme planlayın: https://calendly.com/serial-studio
+→ Daha fazla bilgi edinin: https://serial-studio.com/
 
-Deneme süresince sunulan Pro özellikler:
+Mevcut Pro özellikleri:
 → MQTT entegrasyonu
 → XY ve 3D görselleştirme
-→ İkili veri ayrıştırma
-→ Sürekli güncellemeler
+→ Ses girişi
+→ CANBus & MODBUS sürücüleri

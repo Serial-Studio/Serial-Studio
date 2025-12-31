@@ -139,7 +139,8 @@ private slots:
   void loadWelcomeGuide();
   void append(QStringView data);
   void appendString(QStringView string);
-  void removeStringFromCursor(const Direction direction = RightDirection,
+  void removeStringFromCursor(const Widgets::Terminal::Direction direction
+                              = RightDirection,
                               int len = INT_MAX);
 
 private:
