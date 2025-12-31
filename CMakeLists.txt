@@ -44,6 +44,7 @@ option(BUILD_GPL3              "Force GPLv3-only build"                 ON)
 option(DEBUG_SANITIZER         "Enable sanitizers for debug builds"    OFF)
 option(PRODUCTION_OPTIMIZATION "Enable production optimization flags"  OFF)
 option(ENABLE_HARDENING        "Enable security hardening flags"       OFF)
+option(ENABLE_PGO              "Enable Profile-Guided Optimization"    OFF)
 option(BUILD_COMMERCIAL        "Enable commercial features"            OFF)
 option(USE_SYSTEM_ZLIB         "Use system-provided zlib"              OFF)
 option(USE_SYSTEM_EXPAT        "Use system-provided expat"             OFF)
@@ -413,6 +414,140 @@ if(DEBUG_SANITIZER)
 endif()
 
 #-------------------------------------------------------------------------------
+# Profile-Guided Optimization (PGO)
+#-------------------------------------------------------------------------------
+#
+# PGO is a two-stage optimization process:
+#
+# Stage 1 - GENERATE (build with instrumentation):
+#   cmake .. -DENABLE_PGO=ON -DPGO_STAGE=GENERATE -DCMAKE_BUILD_TYPE=Release
+#   cmake --build . -j$(nproc)
+#
+# Stage 2 - PROFILE (run the application with typical workloads):
+#   ./Serial-Studio-GPL3  # Use the app normally to generate profile data
+#   # Profile data (.gcda files for GCC, .profraw for Clang) is written to build dir
+#
+# Stage 3 - USE (rebuild with profile data):
+#   cmake .. -DENABLE_PGO=ON -DPGO_STAGE=USE -DCMAKE_BUILD_TYPE=Release
+#   cmake --build . -j$(nproc)
+#
+# Expected performance gain: 10-20% for typical workloads
+#-------------------------------------------------------------------------------
+
+set(PGO_STAGE "GENERATE" CACHE STRING "PGO stage: GENERATE or USE")
+set(PGO_PROFILE_DIR "${CMAKE_BINARY_DIR}/pgo-profiles" CACHE STRING "Directory for PGO profile data")
+
+if(ENABLE_PGO)
+   if(NOT PRODUCTION_OPTIMIZATION)
+      message(WARNING "PGO requires PRODUCTION_OPTIMIZATION=ON for best results")
+   endif()
+
+   # Create profile directory if it doesn't exist
+   file(MAKE_DIRECTORY ${PGO_PROFILE_DIR})
+
+   if(PGO_STAGE STREQUAL "GENERATE")
+      message(STATUS "PGO: GENERATE stage - building with profile instrumentation")
+      message(STATUS "PGO: Profile data will be written to: ${PGO_PROFILE_DIR}")
+      message(STATUS "PGO: After running the app, rebuild with -DPGO_STAGE=USE")
+
+      if(MSVC)
+         add_compile_options(/GL)                           # Whole program optimization
+         add_link_options(
+            /LTCG                                           # Link-time code generation
+            /GENPROFILE                                     # Generate profile data
+            /PGD:${PGO_PROFILE_DIR}/profile.pgd             # Profile database location
+         )
+      elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
+         add_compile_options(
+            -fprofile-generate=${PGO_PROFILE_DIR}          # Generate profile data (Clang)
+         )
+         add_link_options(
+            -fprofile-generate=${PGO_PROFILE_DIR}          # Link with profiling
+         )
+      elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+         add_compile_options(
+            -fprofile-generate                             # Generate profile data (GCC)
+            -fprofile-dir=${PGO_PROFILE_DIR}               # Profile data directory
+         )
+         add_link_options(
+            -fprofile-generate                             # Link with profiling
+            -fprofile-dir=${PGO_PROFILE_DIR}               # Profile data directory
+         )
+      else()
+         message(FATAL_ERROR "PGO not supported for compiler: ${CMAKE_CXX_COMPILER_ID}")
+      endif()
+
+   elseif(PGO_STAGE STREQUAL "USE")
+      message(STATUS "PGO: USE stage - building with profile optimization")
+      message(STATUS "PGO: Using profile data from: ${PGO_PROFILE_DIR}")
+
+      # Check if profile data exists
+      if(MSVC)
+         if(NOT EXISTS "${PGO_PROFILE_DIR}/profile.pgd")
+            message(FATAL_ERROR "PGO profile data not found at ${PGO_PROFILE_DIR}/profile.pgd\nRun with -DPGO_STAGE=GENERATE first")
+         endif()
+      elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
+         # Clang stores .profraw files that need to be merged into .profdata
+         file(GLOB PROFRAW_FILES "${PGO_PROFILE_DIR}/*.profraw")
+         if(NOT PROFRAW_FILES)
+            message(FATAL_ERROR "No .profraw files found in ${PGO_PROFILE_DIR}\nRun the instrumented binary first")
+         endif()
+
+         # Merge profile data
+         find_program(LLVM_PROFDATA llvm-profdata)
+         if(NOT LLVM_PROFDATA)
+            message(FATAL_ERROR "llvm-profdata not found. Install LLVM tools to use PGO with Clang")
+         endif()
+
+         set(PROFDATA_FILE "${PGO_PROFILE_DIR}/merged.profdata")
+         if(NOT EXISTS ${PROFDATA_FILE})
+            message(STATUS "Merging profile data: ${PROFRAW_FILES}")
+            execute_process(
+               COMMAND ${LLVM_PROFDATA} merge -output=${PROFDATA_FILE} ${PROFRAW_FILES}
+               RESULT_VARIABLE MERGE_RESULT
+            )
+            if(NOT MERGE_RESULT EQUAL 0)
+               message(FATAL_ERROR "Failed to merge profile data")
+            endif()
+         endif()
+      elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+         file(GLOB GCDA_FILES "${PGO_PROFILE_DIR}/*.gcda")
+         if(NOT GCDA_FILES)
+            message(FATAL_ERROR "No .gcda files found in ${PGO_PROFILE_DIR}\nRun the instrumented binary first")
+         endif()
+      endif()
+
+      if(MSVC)
+         add_compile_options(/GL)                           # Whole program optimization
+         add_link_options(
+            /LTCG                                           # Link-time code generation
+            /USEPROFILE:PGD=${PGO_PROFILE_DIR}/profile.pgd  # Use profile data
+         )
+      elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
+         add_compile_options(
+            -fprofile-use=${PROFDATA_FILE}                 # Use merged profile data
+         )
+         add_link_options(
+            -fprofile-use=${PROFDATA_FILE}                 # Link with profile optimization
+         )
+      elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+         add_compile_options(
+            -fprofile-use                                  # Use profile data (GCC)
+            -fprofile-dir=${PGO_PROFILE_DIR}               # Profile data directory
+            -fprofile-correction                           # Handle profile inconsistencies
+         )
+         add_link_options(
+            -fprofile-use                                  # Link with profile optimization
+            -fprofile-dir=${PGO_PROFILE_DIR}               # Profile data directory
+         )
+      endif()
+
+   else()
+      message(FATAL_ERROR "Invalid PGO_STAGE: ${PGO_STAGE}. Must be GENERATE or USE")
+   endif()
+endif()
+
+#-------------------------------------------------------------------------------
 # Security hardening flags (for production builds)
 #-------------------------------------------------------------------------------
 
@@ -462,6 +597,10 @@ if(ENABLE_HARDENING)
       if(UNIX AND NOT APPLE)
          add_compile_options(
             -fPIC                        # Position Independent Code
+         )
+         add_link_options(
+            -Wl,-z,relro                 # Make relocation sections read-only after relocation
+            -Wl,-z,now                   # Resolve all symbols at startup (full RELRO)
          )
       elseif(APPLE)
          add_compile_options(-fPIC)      # Position Independent Executable

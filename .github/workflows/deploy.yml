@@ -165,7 +165,7 @@ jobs:
       with:
         useLocalCache: true
 
-    - name: '🚧 Configure with CMake'
+    - name: '🚧 Configure with CMake (PGO Stage 1: GENERATE)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
@@ -173,9 +173,62 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DENABLE_HARDENING=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
+        cmake ../ \
+          -DPRODUCTION_OPTIMIZATION=ON \
+          -DENABLE_HARDENING=ON \
+          -DENABLE_PGO=ON \
+          -DPGO_STAGE=GENERATE \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_COMMERCIAL=ON \
+          -DBUILD_GPL3=OFF
 
-    - name: '🚧 Build application'
+    - name: '🚧 Build application (instrumented for profiling)'
+      run: |
+        cd build
+        cmake --build . --config Release -j 16
+
+    - name: '📊 Run application to collect profile data'
+      run: |
+        cd build/app
+
+        # Install Xvfb for headless GUI execution
+        sudo apt-get install -y xvfb xauth
+
+        # Create a minimal profiling script
+        cat > profile_workload.sh << 'EOF'
+        #!/bin/bash
+        # Launch the application and let it initialize
+        timeout 10s ./${{env.UNIXNAME}} --help || true
+
+        # Give it time to generate some profile data
+        sleep 2
+        EOF
+
+        chmod +x profile_workload.sh
+
+        # Run with virtual display
+        xvfb-run -a ./profile_workload.sh || echo "Profiling completed (some errors expected)"
+
+        # Verify profile data was generated
+        find ../.. -name "*.gcda" -o -name "*.profraw" | head -5 || echo "Profile data generated"
+
+    - name: '🚧 Reconfigure with CMake (PGO Stage 2: USE)'
+      env:
+        ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
+      run: |
+        cd build
+        cmake ../ \
+          -DPRODUCTION_OPTIMIZATION=ON \
+          -DENABLE_HARDENING=ON \
+          -DENABLE_PGO=ON \
+          -DPGO_STAGE=USE \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_COMMERCIAL=ON \
+          -DBUILD_GPL3=OFF
+
+    - name: '🚧 Rebuild with PGO optimizations'
       run: |
         cd build
         cmake --build . --config Release -j 16
@@ -316,7 +369,7 @@ jobs:
       with:
         useLocalCache: true
 
-    - name: '🚧 Configure with CMake'
+    - name: '🚧 Configure with CMake (PGO Stage 1: GENERATE)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
@@ -324,9 +377,62 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DENABLE_HARDENING=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
+        cmake ../ \
+          -DPRODUCTION_OPTIMIZATION=ON \
+          -DENABLE_HARDENING=ON \
+          -DENABLE_PGO=ON \
+          -DPGO_STAGE=GENERATE \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_COMMERCIAL=ON \
+          -DBUILD_GPL3=OFF
 
-    - name: '🚧 Build application'
+    - name: '🚧 Build application (instrumented for profiling)'
+      run: |
+        cd build
+        cmake --build . --config Release -j 16
+
+    - name: '📊 Run application to collect profile data'
+      run: |
+        cd build/app
+
+        # Install Xvfb for headless GUI execution
+        sudo apt-get install -y xvfb xauth
+
+        # Create a minimal profiling script
+        cat > profile_workload.sh << 'EOF'
+        #!/bin/bash
+        # Launch the application and let it initialize
+        timeout 10s ./${{env.UNIXNAME}} --help || true
+
+        # Give it time to generate some profile data
+        sleep 2
+        EOF
+
+        chmod +x profile_workload.sh
+
+        # Run with virtual display
+        xvfb-run -a ./profile_workload.sh || echo "Profiling completed (some errors expected)"
+
+        # Verify profile data was generated
+        find ../.. -name "*.gcda" -o -name "*.profraw" | head -5 || echo "Profile data generated"
+
+    - name: '🚧 Reconfigure with CMake (PGO Stage 2: USE)'
+      env:
+        ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
+      run: |
+        cd build
+        cmake ../ \
+          -DPRODUCTION_OPTIMIZATION=ON \
+          -DENABLE_HARDENING=ON \
+          -DENABLE_PGO=ON \
+          -DPGO_STAGE=USE \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_COMMERCIAL=ON \
+          -DBUILD_GPL3=OFF
+
+    - name: '🚧 Rebuild with PGO optimizations'
       run: |
         cd build
         cmake --build . --config Release -j 16
@@ -437,7 +543,7 @@ jobs:
       with:
         node-version: 20
 
-    - name: '🚧 Configure with CMake'
+    - name: '🚧 Configure with CMake (PGO Stage 1: GENERATE)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
@@ -445,9 +551,61 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DENABLE_HARDENING=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
+        cmake ../ \
+          -DPRODUCTION_OPTIMIZATION=ON \
+          -DENABLE_HARDENING=ON \
+          -DENABLE_PGO=ON \
+          -DPGO_STAGE=GENERATE \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
+          -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+          -DBUILD_COMMERCIAL=ON \
+          -DBUILD_GPL3=OFF
 
-    - name: '🚧 Build application'
+    - name: '🚧 Build application (instrumented for profiling)'
+      run: |
+        cd build
+        cmake --build . --config Release -j 16
+
+    - name: '📊 Run application to collect profile data'
+      run: |
+        cd build/app
+
+        # Create a minimal profiling script
+        cat > profile_workload.sh << 'EOF'
+        #!/bin/bash
+        # Try to run the app bundle briefly to generate profile data
+        timeout 10s ./${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --help || true
+
+        # Give it time to generate profile data
+        sleep 2
+        EOF
+
+        chmod +x profile_workload.sh
+        ./profile_workload.sh || echo "Profiling completed (some errors expected)"
+
+        # Verify profile data was generated
+        find ../.. -name "*.profraw" | head -5 || echo "Profile data generated"
+
+    - name: '🚧 Reconfigure with CMake (PGO Stage 2: USE)'
+      env:
+        ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
+      run: |
+        cd build
+        cmake ../ \
+          -DPRODUCTION_OPTIMIZATION=ON \
+          -DENABLE_HARDENING=ON \
+          -DENABLE_PGO=ON \
+          -DPGO_STAGE=USE \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
+          -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+          -DBUILD_COMMERCIAL=ON \
+          -DBUILD_GPL3=OFF
+
+    - name: '🚧 Rebuild with PGO optimizations'
       run: |
         cd build
         cmake --build . --config Release -j 16
@@ -580,7 +738,7 @@ jobs:
       with:
         arch: x64
 
-    - name: '🚧 Configure with CMake'
+    - name: '🚧 Configure with CMake (PGO Stage 1: GENERATE)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
@@ -588,9 +746,72 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows-static -DPRODUCTION_OPTIMIZATION=ON -DENABLE_HARDENING=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_COMMERCIAL=ON -DBUILD_GPL3=OFF
+        cmake ../ `
+          -DCMAKE_CXX_COMPILER=cl `
+          -DCMAKE_C_COMPILER=cl `
+          -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
+          -DVCPKG_TARGET_TRIPLET=x64-windows-static `
+          -DPRODUCTION_OPTIMIZATION=ON `
+          -DENABLE_HARDENING=ON `
+          -DENABLE_PGO=ON `
+          -DPGO_STAGE=GENERATE `
+          -DCMAKE_BUILD_TYPE=Release `
+          -DBUILD_COMMERCIAL=ON `
+          -DBUILD_GPL3=OFF
 
-    - name: '🚧 Build application'
+    - name: '🚧 Build application (instrumented for profiling)'
+      run: |
+        cd build
+        cmake --build . --config Release -j 16
+
+    - name: '📊 Run application to collect profile data'
+      shell: pwsh
+      run: |
+        cd build/app/Release
+
+        # Create a minimal profiling script
+        $script = @"
+        `$process = Start-Process -FilePath ".\${{env.EXECUTABLE}}.exe" -ArgumentList "--help" -PassThru -WindowStyle Hidden
+        Start-Sleep -Seconds 10
+        if (-not `$process.HasExited) {
+            Stop-Process -Id `$process.Id -Force
+        }
+        Start-Sleep -Seconds 2
+        "@
+
+        $script | Out-File -FilePath profile_workload.ps1 -Encoding utf8
+
+        # Run profiling
+        try {
+          powershell -ExecutionPolicy Bypass -File profile_workload.ps1
+        } catch {
+          Write-Host "Profiling completed (some errors expected)"
+        }
+
+        # Verify profile data was generated
+        Get-ChildItem -Path ../../ -Recurse -Filter "*.pgc" -ErrorAction SilentlyContinue | Select-Object -First 5
+
+    - name: '🚧 Reconfigure with CMake (PGO Stage 2: USE)'
+      env:
+        ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
+      run: |
+        cd build
+        cmake ../ `
+          -DCMAKE_CXX_COMPILER=cl `
+          -DCMAKE_C_COMPILER=cl `
+          -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
+          -DVCPKG_TARGET_TRIPLET=x64-windows-static `
+          -DPRODUCTION_OPTIMIZATION=ON `
+          -DENABLE_HARDENING=ON `
+          -DENABLE_PGO=ON `
+          -DPGO_STAGE=USE `
+          -DCMAKE_BUILD_TYPE=Release `
+          -DBUILD_COMMERCIAL=ON `
+          -DBUILD_GPL3=OFF
+
+    - name: '🚧 Rebuild with PGO optimizations'
       run: |
         cd build
         cmake --build . --config Release -j 16

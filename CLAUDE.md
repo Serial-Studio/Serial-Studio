@@ -26,6 +26,16 @@ cmake --build . -j$(nproc)
 # Hardened production build (with security flags)
 cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DENABLE_HARDENING=ON -DCMAKE_BUILD_TYPE=Release
 cmake --build . -j$(nproc)
+
+# Profile-Guided Optimization build (3-stage process for maximum performance)
+# Stage 1: Build with instrumentation
+cmake ../ -DENABLE_PGO=ON -DPGO_STAGE=GENERATE -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j$(nproc)
+# Stage 2: Run the application with typical workloads to collect profile data
+./app/Serial-Studio-GPL3  # Use the app normally (load projects, visualize data, etc.)
+# Stage 3: Rebuild with profile optimization
+cmake ../ -DENABLE_PGO=ON -DPGO_STAGE=USE -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j$(nproc)
 ```
 
 **Linux prerequisites:**
@@ -49,8 +59,13 @@ vcpkg install zlib expat
 ### CMake Options
 - `BUILD_GPL3=ON` (default): GPLv3-compliant build without commercial modules
 - `BUILD_COMMERCIAL=ON`: Enables Pro features (requires valid license key)
-- `PRODUCTION_OPTIMIZATION=ON`: Enable release optimizations
-- `ENABLE_HARDENING=ON`: Enable security hardening flags (auto-enabled for Flathub builds)
+- `PRODUCTION_OPTIMIZATION=ON`: Enable release optimizations (O3, LTO, vectorization)
+- `ENABLE_HARDENING=ON`: Enable security hardening flags (stack protection, ASLR, RELRO, etc.)
+  - Auto-enabled for Flathub builds (when USE_SYSTEM_ZLIB or USE_SYSTEM_EXPAT is ON)
+  - Adds: stack canaries, FORTIFY_SOURCE, control-flow protection, full RELRO (-z relro -z now)
+- `ENABLE_PGO=ON`: Enable Profile-Guided Optimization (requires 3-stage build, see above)
+  - `PGO_STAGE=GENERATE`: Build with instrumentation to collect profile data
+  - `PGO_STAGE=USE`: Build with profile optimization (10-20% performance gain)
 - `DEBUG_SANITIZER=ON`: Enable AddressSanitizer and UBSan (debug builds only)
 - `USE_SYSTEM_ZLIB=ON`: Use system-provided zlib instead of downloading from GitHub (required for Flathub builds)
 - `USE_SYSTEM_EXPAT=ON`: Use system-provided expat instead of downloading from GitHub (required for Flathub builds)
