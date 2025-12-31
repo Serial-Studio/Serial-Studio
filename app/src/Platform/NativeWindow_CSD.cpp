@@ -101,13 +101,33 @@ void NativeWindow::removeWindow(QObject *window)
  * - Minimize, maximize, and close buttons
  * - Theme-aware coloring
  *
- * If a decorator already exists for the window, this method does nothing.
+ * If a window is already registered, this method updates its color.
  */
 void NativeWindow::addWindow(QObject *window, const QString &color)
 {
   auto *w = qobject_cast<QWindow *>(window);
-  if (!w || m_windows.contains(w))
+  if (!w)
     return;
+
+  // If window is already registered, update its color
+  if (m_windows.contains(w))
+  {
+    m_colors.insert(w, color);
+
+    // Windows 11: Trigger color update via activeChanged signal
+    if (isWindows11())
+      Q_EMIT w->activeChanged();
+
+    // Windows 10 / Linux: Update CSD decorator theme
+    else
+    {
+      auto *decorator = s_decorators.value(w, nullptr);
+      if (decorator)
+        decorator->updateTheme();
+    }
+
+    return;
+  }
 
   // Add to managed windows list
   m_windows.append(w);
@@ -201,11 +221,11 @@ void NativeWindow::onActiveChanged()
   const auto &colors = Misc::ThemeManager::instance().colors();
   QString colorName;
 
-  // Use custom color if provided, otherwise use theme colors
+  // Use custom color if provided
   if (m_colors.contains(window) && !m_colors[window].isEmpty())
-  {
     colorName = m_colors[window];
-  }
+
+  // Use theme colors
   else
   {
     if (window->isActive())

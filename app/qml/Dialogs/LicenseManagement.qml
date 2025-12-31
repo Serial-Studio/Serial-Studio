@@ -60,6 +60,14 @@ Window {
     root.titlebarHeight = Cpp_NativeWindow.titlebarHeight(root)
   }
 
+  Connections {
+    target: Cpp_ThemeManager
+    function onThemeChanged() {
+      if (root.visible)
+        Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["window"])
+    }
+  }
+
   Rectangle {
     height: root.titlebarHeight
     color: Cpp_ThemeManager.colors["window"]

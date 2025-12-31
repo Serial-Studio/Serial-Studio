@@ -63,6 +63,17 @@ Window {
   }
 
   //
+  // Update window colors when theme changes
+  //
+  Connections {
+    target: Cpp_ThemeManager
+    function onThemeChanged() {
+      if (root.visible)
+        Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["window"])
+    }
+  }
+
+  //
   // Top section
   //
   Rectangle {
