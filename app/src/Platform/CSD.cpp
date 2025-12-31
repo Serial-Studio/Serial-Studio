@@ -45,6 +45,10 @@ namespace CSD
 // Platform-specific constants
 //------------------------------------------------------------------------------
 
+#ifndef QWINDOWSIZE_MAX
+constexpr int QWINDOWSIZE_MAX = (1 << 24) - 1;
+#endif
+
 #if defined(Q_OS_WIN)
 constexpr int IconSize = 16;
 constexpr int IconMargin = 8;

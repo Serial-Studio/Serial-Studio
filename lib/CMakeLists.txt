@@ -22,6 +22,24 @@
 cmake_minimum_required(VERSION 3.20)
 
 #-------------------------------------------------------------------------------
+# Save and clear global link flags
+#-------------------------------------------------------------------------------
+#
+# PIE (-pie) and other hardening link flags are meant for executables, not
+# static libraries. Save them here and restore at the end so they only apply
+# to the main application executable in app/.
+#
+
+set(_SAVED_CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+set(_SAVED_CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+set(_SAVED_CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+set(_SAVED_CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "")
+set(CMAKE_SHARED_LINKER_FLAGS "")
+set(CMAKE_MODULE_LINKER_FLAGS "")
+set(CMAKE_STATIC_LINKER_FLAGS "")
+
+#-------------------------------------------------------------------------------
 # Include FetchContent module
 #-------------------------------------------------------------------------------
 
@@ -195,4 +213,15 @@ if(TARGET mdf)
   endif()
 endif()
 
+#-------------------------------------------------------------------------------
+# Restore global link flags
+#-------------------------------------------------------------------------------
+#
+# Restore the hardening link flags saved at the top of this file so they
+# apply to the main application executable in app/.
+#
 
+set(CMAKE_EXE_LINKER_FLAGS "${_SAVED_CMAKE_EXE_LINKER_FLAGS}")
+set(CMAKE_SHARED_LINKER_FLAGS "${_SAVED_CMAKE_SHARED_LINKER_FLAGS}")
+set(CMAKE_MODULE_LINKER_FLAGS "${_SAVED_CMAKE_MODULE_LINKER_FLAGS}")
+set(CMAKE_STATIC_LINKER_FLAGS "${_SAVED_CMAKE_STATIC_LINKER_FLAGS}")
