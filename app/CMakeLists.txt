@@ -413,6 +413,20 @@ target_link_openssl(
 )
 
 #-------------------------------------------------------------------------------
+# Apply hardening link flags to executable only (not libraries)
+#-------------------------------------------------------------------------------
+
+if(ENABLE_HARDENING AND UNIX AND NOT APPLE)
+  target_link_options(
+    ${PROJECT_EXECUTABLE} PRIVATE
+    -Wl,-z,relro                 # Relocation Read-Only
+    -Wl,-z,now                   # Resolve all symbols at load time
+    -Wl,-z,noexecstack           # Non-executable stack
+    -pie                         # Position Independent Executable
+  )
+endif()
+
+#-------------------------------------------------------------------------------
 # Add QML code and precompile it
 #-------------------------------------------------------------------------------
 

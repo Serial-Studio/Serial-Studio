@@ -463,12 +463,6 @@ if(ENABLE_HARDENING)
          add_compile_options(
             -fPIC                        # Position Independent Code
          )
-         add_link_options(
-            -Wl,-z,relro                 # Relocation Read-Only
-            -Wl,-z,now                   # Resolve all symbols at load time
-            -Wl,-z,noexecstack           # Non-executable stack
-            -pie                         # Position Independent Executable
-         )
       elseif(APPLE)
          add_compile_options(-fPIC)      # Position Independent Executable
       endif()
