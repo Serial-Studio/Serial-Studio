@@ -597,13 +597,19 @@ if(ENABLE_HARDENING)
       if(UNIX AND NOT APPLE)
          add_compile_options(
             -fPIC                        # Position Independent Code
+            -fno-plt                     # Avoid PLT for better performance with PIC
          )
          add_link_options(
             -Wl,-z,relro                 # Make relocation sections read-only after relocation
             -Wl,-z,now                   # Resolve all symbols at startup (full RELRO)
+            -Wl,-z,noexecstack           # Mark stack as non-executable
+            -Wl,-z,separate-code         # Separate code segments for better security
          )
       elseif(APPLE)
-         add_compile_options(-fPIC)      # Position Independent Executable
+         add_compile_options(
+            -fPIC                        # Position Independent Executable
+            -fno-plt                     # Avoid PLT for better performance
+         )
       endif()
    endif()
 endif()
