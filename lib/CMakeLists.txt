@@ -101,6 +101,8 @@ endif()
 #                                 (only export explicitly marked symbols)
 #   -fvisibility-inlines-hidden - Hide C++ inline functions
 #                                 (prevents inline function bloat in symbol table)
+#   -fstack-protector-strong    - Stack canary protection (when ENABLE_HARDENING=ON)
+#                                 Applied to third-party libs for defense-in-depth
 #
 # Benefits of hidden visibility:
 #   - Smaller binary size (fewer exported symbols)
@@ -119,12 +121,21 @@ if(MSVC)
     /Zc:inline                  # Remove unreferenced inline functions
     /Gy                         # Enable function-level linking
   )
+  # Add buffer security check for libraries when hardening is enabled
+  if(ENABLE_HARDENING)
+    list(APPEND LIB_FLAGS /GS)  # Buffer security check
+  endif()
 else()
   set(LIB_FLAGS
     -w                          # Suppress all warnings
     -fvisibility=hidden         # Hide all symbols
     -fvisibility-inlines-hidden # Hide C++ inline function symbols
   )
+  # Add stack protector for libraries when hardening is enabled
+  # This ensures third-party code also benefits from stack canary protection
+  if(ENABLE_HARDENING)
+    list(APPEND LIB_FLAGS -fstack-protector-strong)
+  endif()
   set(LIB_LINK_FLAGS
     -fvisibility=hidden         # Hide all symbols at link time
   )
@@ -393,33 +404,30 @@ add_subdirectory(mdflib)
 #
 #-------------------------------------------------------------------------------
 
-if(TARGET kissfft)
-  target_compile_options(kissfft PRIVATE ${LIB_FLAGS})
-  if(NOT MSVC AND LIB_LINK_FLAGS)
-    target_link_options(kissfft PRIVATE ${LIB_LINK_FLAGS})
+# Helper function to apply library flags and mark includes as SYSTEM
+# This suppresses warnings when app code includes third-party headers
+function(configure_third_party_lib TARGET_NAME)
+  if(NOT TARGET ${TARGET_NAME})
+    return()
   endif()
-endif()
 
-if(TARGET QCodeEditor)
-  target_compile_options(QCodeEditor PRIVATE ${LIB_FLAGS})
+  target_compile_options(${TARGET_NAME} PRIVATE ${LIB_FLAGS})
   if(NOT MSVC AND LIB_LINK_FLAGS)
-    target_link_options(QCodeEditor PRIVATE ${LIB_LINK_FLAGS})
+    target_link_options(${TARGET_NAME} PRIVATE ${LIB_LINK_FLAGS})
   endif()
-endif()
 
-if(TARGET QSimpleUpdater)
-  target_compile_options(QSimpleUpdater PRIVATE ${LIB_FLAGS})
-  if(NOT MSVC AND LIB_LINK_FLAGS)
-    target_link_options(QSimpleUpdater PRIVATE ${LIB_LINK_FLAGS})
+  # Mark include directories as SYSTEM to suppress warnings in consuming targets
+  get_target_property(INC_DIRS ${TARGET_NAME} INTERFACE_INCLUDE_DIRECTORIES)
+  if(INC_DIRS)
+    set_property(TARGET ${TARGET_NAME} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+    target_include_directories(${TARGET_NAME} SYSTEM PUBLIC ${INC_DIRS})
   endif()
-endif()
+endfunction()
 
-if(TARGET mdf)
-  target_compile_options(mdf PRIVATE ${LIB_FLAGS})
-  if(NOT MSVC AND LIB_LINK_FLAGS)
-    target_link_options(mdf PRIVATE ${LIB_LINK_FLAGS})
-  endif()
-endif()
+configure_third_party_lib(kissfft)
+configure_third_party_lib(QCodeEditor)
+configure_third_party_lib(QSimpleUpdater)
+configure_third_party_lib(mdf)
 
 #-------------------------------------------------------------------------------
 # Restore global link flags

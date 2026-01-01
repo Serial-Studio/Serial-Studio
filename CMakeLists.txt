@@ -351,13 +351,15 @@ endif()
 #             Common in Qt code, usually safe in practice
 #
 # GCC/Clang/MinGW:
-#   -Wall   - Enable all common warning categories
-#             (uninitialized variables, implicit conversions, etc.)
-#   -Wextra - Enable additional warnings beyond -Wall
-#             (unused parameters, sign comparison, etc.)
+#   -Wall     - Enable all common warning categories
+#               (uninitialized variables, implicit conversions, etc.)
+#   -Wextra   - Enable additional warnings beyond -Wall
+#               (unused parameters, sign comparison, etc.)
+#   -pedantic - Enforce strict ISO C++ conformance
+#               (reject non-standard compiler extensions)
 #   -Wno-unused-function - Suppress unused function warnings
-#             Required for miniaudio.h single-header library
-#             which defines many internal functions
+#               Required for miniaudio.h single-header library
+#               which defines many internal functions
 #
 # Note: Third-party libraries in lib/ use -w to suppress all warnings
 #
@@ -372,6 +374,7 @@ else()
   add_compile_options(
     -Wall                          # Enable common warning messages
     -Wextra                        # Enable extra warnings
+    -pedantic                      # Enforce strict ISO C++ conformance
     -Wno-unused-function           # Silence miniaudio warnings
   )
 endif()
@@ -826,10 +829,11 @@ endif()
 #
 # Memory protection:
 #   -D_FORTIFY_SOURCE=2         - Runtime buffer overflow checks (requires -O1+)
-#   -fstack-clash-protection    - Prevent stack clash attacks (GCC only)
+#   -fstack-clash-protection    - Prevent stack clash attacks (GCC 8+/Clang 6+)
 #
 # Control-flow integrity:
-#   -fcf-protection=full        - Intel CET (x86-64 only)
+#   -fcf-protection=full        - Intel CET (x86-64 only, GCC/Clang)
+#   -fsanitize=cfi              - Clang CFI (ARM64 only, requires LTO)
 #   /guard:cf (MSVC)            - Control Flow Guard
 #
 # ASLR (Address Space Layout Randomization):
@@ -880,8 +884,8 @@ if(ENABLE_HARDENING)
          -Werror=format-security        # Make format security errors
       )
 
-      # Stack clash protection (GCC only, not supported by Clang)
-      if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+      # Stack clash protection (GCC 8+ and Clang 6+)
+      if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
          add_compile_options(-fstack-clash-protection)
       endif()
 
@@ -894,10 +898,24 @@ if(ENABLE_HARDENING)
          message(WARNING "FORTIFY_SOURCE disabled: requires optimization flags (-O1 or higher)")
       endif()
 
+      # Control-flow integrity (platform-specific):
+      # - x86-64: Intel CET (Control-flow Enforcement Technology) via -fcf-protection
+      # - ARM64:  Clang CFI (Control Flow Integrity) via -fsanitize=cfi
+      # Note: ARM64 CFI requires LTO and is only available with Clang
       if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
          add_compile_options(
             -fcf-protection=full        # Control-flow protection (Intel CET)
          )
+      elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")
+         if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
+            add_compile_options(
+               -fsanitize=cfi            # Control Flow Integrity for ARM64
+               -fvisibility=hidden       # Required for CFI (symbols must be hidden)
+            )
+            add_link_options(
+               -fsanitize=cfi            # Link with CFI support
+            )
+         endif()
       endif()
 
       if(UNIX AND NOT APPLE)
