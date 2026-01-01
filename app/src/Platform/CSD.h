@@ -257,7 +257,6 @@ private:
   Titlebar *m_titleBar;
   ResizeEdge m_resizeEdge;
   QSize m_minSize;
-  QSize m_maxSize;
   QPointer<QWindow> m_window;
   QQuickItem *m_contentContainer;
 };

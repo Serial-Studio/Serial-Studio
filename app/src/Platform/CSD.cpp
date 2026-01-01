@@ -45,10 +45,6 @@ namespace CSD
 // Platform-specific constants
 //------------------------------------------------------------------------------
 
-#ifndef QWINDOWSIZE_MAX
-constexpr int QWINDOWSIZE_MAX = (1 << 24) - 1;
-#endif
-
 #if defined(Q_OS_WIN)
 constexpr int IconSize = 16;
 constexpr int IconMargin = 8;
@@ -969,7 +965,6 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
   , m_titleBar(nullptr)
   , m_resizeEdge(ResizeEdge::None)
   , m_minSize(0, 0)
-  , m_maxSize(QWINDOWSIZE_MAX, QWINDOWSIZE_MAX)
   , m_window(window)
   , m_contentContainer(nullptr)
 {
@@ -1015,25 +1010,10 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
   connect(m_window, &QWindow::minimumHeightChanged, this,
           &Window::onMinimumSizeChanged);
 
-  // Track maximum size changes from QML/user
-  connect(m_window, &QWindow::maximumWidthChanged, this,
-          &Window::onMinimumSizeChanged);
-  connect(m_window, &QWindow::maximumHeightChanged, this,
-          &Window::onMinimumSizeChanged);
-
   // Theme updates
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
           this, &Window::updateTheme);
   updateTheme();
-
-  // Store initial content maximum size before applying CSD adjustments
-  const auto initialMaxSize = m_window->maximumSize();
-  if (initialMaxSize.isValid() && initialMaxSize.width() > 0
-      && initialMaxSize.height() > 0 && initialMaxSize.width() < QWINDOWSIZE_MAX
-      && initialMaxSize.height() < QWINDOWSIZE_MAX)
-  {
-    m_maxSize = initialMaxSize;
-  }
 
   // Apply initial minimum size
   updateMinimumSize();
@@ -1232,16 +1212,11 @@ void Window::setupTitleBar()
 }
 
 /**
- * @brief Updates the window minimum and maximum sizes to account for CSD
- *        decorations.
+ * @brief Updates the window minimum size to account for CSD decorations.
  *
  * Adds shadow margins and title bar height to the content minimum size
  * to ensure the content area never becomes smaller than intended.
  * Also enforces a minimum width to fit title bar controls.
- *
- * If the window has a maximum size set (indicating a fixed-size window),
- * the maximum size is also adjusted by adding the same CSD margins,
- * preserving the fixed-size constraint.
  */
 void Window::updateMinimumSize()
 {
@@ -1259,15 +1234,6 @@ void Window::updateMinimumSize()
 
   m_window->setMinimumSize(QSize(qMax(minWidth, minTitleBarWidth + 2 * margin),
                                  qMax(minHeight, tbHeight + 2 * margin)));
-
-  if (m_maxSize.width() > 0 && m_maxSize.height() > 0
-      && m_maxSize.width() < QWINDOWSIZE_MAX
-      && m_maxSize.height() < QWINDOWSIZE_MAX)
-  {
-    const int maxWidth = m_maxSize.width() + 2 * margin;
-    const int maxHeight = m_maxSize.height() + 2 * margin + tbHeight;
-    m_window->setMaximumSize(QSize(maxWidth, maxHeight));
-  }
 }
 
 /**
@@ -1303,13 +1269,8 @@ void Window::updateBorderGeometry()
 }
 
 /**
- * @brief Re-calculates window size constraints (considering titlebar & shadows)
- *        when the QML user interface changes its size requirements.
- *
- * Tracks both minimum and maximum size changes from the QML layer and
- * updates the stored content sizes (m_minSize, m_maxSize) by removing
- * CSD margins, then calls updateMinimumSize() to reapply the constraints
- * with correct CSD margins.
+ * @brief Re-calculates minimum window size (considering titlebar & shadows)
+ *        when the QML user interface changes it's minimum size requirements.
  */
 void Window::onMinimumSizeChanged()
 {
@@ -1328,29 +1289,6 @@ void Window::onMinimumSizeChanged()
   {
     changed = true;
     m_minSize.setHeight(size.height() - 2 * shadowMargin() - titleBarHeight());
-  }
-
-  const auto maxSize = m_window->maximumSize();
-  if (maxSize.isValid() && maxSize.width() > 0 && maxSize.height() > 0
-      && maxSize.width() < QWINDOWSIZE_MAX
-      && maxSize.height() < QWINDOWSIZE_MAX)
-  {
-    const int expMaxW = m_maxSize.width() + 2 * shadowMargin();
-    const int expMaxH
-        = m_maxSize.height() + 2 * shadowMargin() + titleBarHeight();
-
-    if (maxSize.width() != expMaxW)
-    {
-      changed = true;
-      m_maxSize.setWidth(maxSize.width() - 2 * shadowMargin());
-    }
-
-    if (maxSize.height() != expMaxH)
-    {
-      changed = true;
-      m_maxSize.setHeight(maxSize.height() - 2 * shadowMargin()
-                          - titleBarHeight());
-    }
   }
 
   if (changed)
