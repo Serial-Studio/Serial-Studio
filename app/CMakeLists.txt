@@ -20,14 +20,41 @@
 #
 
 #-------------------------------------------------------------------------------
-# Project setup
+# Application module setup
+#-------------------------------------------------------------------------------
+#
+# Configures the main Serial Studio application module:
+#
+# Project name: app (internal module name)
+# Version: Inherited from parent PROJECT_VERSION
+# Language: C++ only
+#
+# This is a subproject of the main Serial-Studio CMake project
+# and inherits configuration from the root CMakeLists.txt
+#
 #-------------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.20)
 project(app LANGUAGES CXX VERSION ${PROJECT_VERSION})
 
 #-------------------------------------------------------------------------------
-# C++ options
+# Qt automation and C++ standard
+#-------------------------------------------------------------------------------
+#
+# Qt Meta-Object Compiler (MOC) automation:
+#   CMAKE_AUTOMOC=ON  - Auto-run moc on files with Q_OBJECT/Q_GADGET
+#   CMAKE_AUTOUIC=ON  - Auto-compile .ui files to ui_*.h headers
+#   CMAKE_AUTORCC=ON  - Auto-compile .qrc resource files to C++ code
+#
+# C++ standard:
+#   CMAKE_CXX_STANDARD=20 - Use C++20 features (modules, concepts, ranges)
+#   CMAKE_CXX_STANDARD_REQUIRED=ON - Hard requirement (no fallback to C++17)
+#
+# C++20 features used in Serial Studio:
+#   - std::span, std::format (pending), concepts
+#   - Designated initializers, constexpr improvements
+#   - <=> three-way comparison operator
+#
 #-------------------------------------------------------------------------------
 
 set(CMAKE_AUTOMOC ON)
@@ -37,7 +64,35 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #-------------------------------------------------------------------------------
-# Add external dependencies (Qt)
+# Qt 6 module dependencies
+#-------------------------------------------------------------------------------
+#
+# Configures required Qt 6 modules for GPL and commercial builds:
+#
+# Core modules (GPL + Commercial):
+#   Qt6::Core          - Core non-GUI classes (QObject, QString, etc.)
+#   Qt6::Gui           - GUI base classes (QWindow, QImage, etc.)
+#   Qt6::Widgets       - Desktop widgets (QMainWindow, QPushButton, etc.)
+#   Qt6::Qml           - QML engine for declarative UI
+#   Qt6::Quick         - Qt Quick 2D renderer
+#   Qt6::QuickControls2 - Modern UI controls (Material/Fluent design)
+#   Qt6::Graphs        - 2D graphs and charts (replaces QtCharts)
+#   Qt6::Svg           - SVG rendering support
+#   Qt6::Sql           - Database abstraction layer (for settings)
+#   Qt6::Bluetooth     - Bluetooth LE device discovery and communication
+#   Qt6::SerialPort    - RS-232/RS-485 serial communication
+#   Qt6::Core5Compat   - Qt 5 compatibility (TextCodec, etc.)
+#   Qt6::LinguistTools - Internationalization (lupdate, lrelease)
+#
+# Commercial-only modules:
+#   Qt6::Mqtt          - MQTT client for IoT protocols
+#   Qt6::SerialBus     - CAN Bus, Modbus TCP/RTU support
+#
+# Qt policies:
+#   QTP0001=NEW - Use new Qt resource system (qt_add_resources)
+#   QTP0002=NEW - Use new Qt translation system (qt_add_translations)
+#   QTP0004=NEW - Use new Qt QML module system (qt_add_qml_module)
+#
 #-------------------------------------------------------------------------------
 
 # Specify required modules for FOSS version
@@ -101,7 +156,32 @@ qt_policy(SET QTP0002 NEW)
 qt_policy(SET QTP0004 NEW)
 
 #-------------------------------------------------------------------------------
-# Import source code
+# Source file organization
+#-------------------------------------------------------------------------------
+#
+# Defines the application source files, headers, and QML files:
+#
+# Directory structure:
+#   src/         - C++ implementation files (.cpp)
+#   src/         - C++ header files (.h)
+#   qml/         - QML declarative UI files (.qml)
+#
+# Source file categories:
+#   - Misc/: Utilities (ThemeManager, Translator, ModuleManager)
+#   - UI/: Dashboard widgets and window management
+#   - IO/: Hardware drivers (UART, Network, BluetoothLE, etc.)
+#   - JSON/: Frame parsing and project model
+#   - CSV/: CSV file playback and export
+#   - MDF4/: MDF4 file playback (Pro feature)
+#   - MQTT/: MQTT client (Pro only)
+#   - Licensing/: License validation (Pro only)
+#   - Platform/: Platform-specific code (CSD, native windows)
+#
+# Commercial-only sources are conditionally added based on BUILD_COMMERCIAL
+#
+# Note: include_directories(src) makes all headers accessible without
+# relative paths (e.g., #include "IO/Manager.h" instead of "../IO/Manager.h")
+#
 #-------------------------------------------------------------------------------
 
 include_directories(src)
@@ -321,7 +401,32 @@ if(BUILD_COMMERCIAL)
 endif()
 
 #-------------------------------------------------------------------------------
-# Platform-specific configuration
+# Platform-specific source files and resources
+#-------------------------------------------------------------------------------
+#
+# Adds platform-specific code and resources for each target OS:
+#
+# Windows (WIN32):
+#   - deploy/windows/info.rc: Application metadata (version, icon, manifest)
+#   - src/Platform/CSD.cpp: Client-Side Decorations (custom window frame)
+#   - src/Platform/NativeWindow_CSD.cpp: Windows-specific CSD implementation
+#
+# macOS (APPLE):
+#   - deploy/macOS/AppIcon.icns: Application icon bundle
+#   - deploy/macOS/Assets.car: macOS UI assets (compiled asset catalog)
+#   - deploy/macOS/info-*.plist: Bundle metadata (GPL or Pro variant)
+#   - src/Platform/NativeWindow_macOS.mm: Objective-C++ native window code
+#     (SKIP_UNITY_BUILD_INCLUSION: Obj-C++ doesn't work with unity builds)
+#
+# Linux (UNIX AND NOT APPLE):
+#   - src/Platform/CSD.cpp: Client-Side Decorations for modern Linux DEs
+#   - src/Platform/NativeWindow_CSD.cpp: X11/Wayland CSD implementation
+#
+# Platform differences:
+#   - Windows: Native window frame via DWM, RC file for executable metadata
+#   - macOS: NSWindow with custom title bar, Info.plist for bundle info
+#   - Linux: Custom CSD for GNOME/KDE, .desktop file for app menu integration
+#
 #-------------------------------------------------------------------------------
 
 if(WIN32)
@@ -374,14 +479,60 @@ elseif(UNIX)
 endif()
 
 #-------------------------------------------------------------------------------
-# Add resources
+# Qt resource compilation
+#-------------------------------------------------------------------------------
+#
+# Compiles Qt resource files (.qrc) into C++ code embedded in the executable:
+#
+# RES_RCC (rcc/rcc.qrc):
+#   - Application assets: icons, images, fonts
+#   - JSON schemas and templates
+#   - Default project files and examples
+#   - Embedded resources accessible via qrc:/ URLs
+#
+# QTR_RCC (translations/translations.qrc):
+#   - Compiled translation files (.qm)
+#   - Languages: English, Spanish, Chinese, German, French, etc.
+#   - Loaded at runtime based on system locale
+#
+# Why embed resources?
+#   - Ensures assets are always available (no missing file errors)
+#   - Simplifies deployment (single executable + Qt libs)
+#   - Faster access than filesystem reads (mmap'd in memory)
+#
+# Note: Resources are compiled into the binary, increasing executable size
+#
 #-------------------------------------------------------------------------------
 
 qt_add_resources(RES_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
 qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
 
 #-------------------------------------------------------------------------------
-# Create executable
+# Executable target and library linking
+#-------------------------------------------------------------------------------
+#
+# Creates the main Serial Studio executable and links all dependencies:
+#
+# qt_add_executable():
+#   - Creates the executable target with name ${PROJECT_EXECUTABLE}
+#   - Includes all C++ sources, headers, QML, and resources
+#   - MANUAL_FINALIZATION: Delays Qt-specific finalization to end of file
+#     (allows setting properties before qt_finalize_executable)
+#
+# Linked libraries:
+#   Qt modules: Core, Gui, Widgets, Qml, Quick, Graphs, SerialPort, etc.
+#   Third-party:
+#     - kissfft: Fast Fourier Transform (FFT plot calculations)
+#     - QCodeEditor: Syntax highlighting for JSON/JavaScript editor
+#     - QSimpleUpdater: Auto-update framework (checks for new versions)
+#     - mdf: MDF4/MF4 file format parser (Pro: replay CAN/LIN data)
+#     - OpenSSL: Cryptography, SSL/TLS (for MQTT, secure connections)
+#
+# target_link_openssl():
+#   - Custom CMake function to link OpenSSL static libraries
+#   - Platform-specific: libssl.a, libcrypto.a (or .lib on Windows)
+#   - Ensures secure communications and license validation work
+#
 #-------------------------------------------------------------------------------
 
 qt_add_executable(
@@ -413,7 +564,32 @@ target_link_openssl(
 )
 
 #-------------------------------------------------------------------------------
-# Apply hardening link flags to executable only (not libraries)
+# Executable-specific hardening flags (Linux)
+#-------------------------------------------------------------------------------
+#
+# Applies security hardening link flags directly to the executable:
+#
+# Why target_link_options and not add_link_options?
+#   - These flags are only valid for executables, not static libraries
+#   - Applying them globally would break library builds
+#   - target_link_options ensures they only apply to the final executable
+#
+# Hardening flags (Linux only):
+#   -Wl,-z,relro      - Make GOT (Global Offset Table) read-only after relocation
+#   -Wl,-z,now        - Resolve all symbols at startup (full RELRO)
+#   -Wl,-z,noexecstack - Mark stack memory as non-executable (NX bit)
+#   -pie              - Position Independent Executable (required for ASLR)
+#
+# Why Linux only?
+#   - macOS uses different linker (ld64) with different flags
+#   - Windows hardening is handled via /DYNAMICBASE and /NXCOMPAT
+#   - These are GNU ld-specific flags
+#
+# Security benefits:
+#   - RELRO: Prevents GOT overwrites (common exploit technique)
+#   - NX stack: Prevents shellcode execution on stack
+#   - PIE: Enables ASLR (randomizes executable base address)
+#
 #-------------------------------------------------------------------------------
 
 if(ENABLE_HARDENING AND UNIX AND NOT APPLE)
@@ -427,7 +603,35 @@ if(ENABLE_HARDENING AND UNIX AND NOT APPLE)
 endif()
 
 #-------------------------------------------------------------------------------
-# Add QML code and precompile it
+# QML module compilation and caching
+#-------------------------------------------------------------------------------
+#
+# Compiles QML files into a Qt Quick module with ahead-of-time compilation:
+#
+# qt_add_qml_module() benefits:
+#   - QML type registration: Makes C++ types available in QML automatically
+#   - QML caching: Pre-compiles QML to bytecode for faster startup
+#   - Type safety: Enables QML linter (qmllint) and type checking
+#   - Import resolution: Manages QML import paths and dependencies
+#
+# Configuration:
+#   URI: gui - QML module identifier (import gui 1.0)
+#   VERSION: 1.0 - Module version for QML imports
+#   QML_FILES: ${QML_SOURCES} - All .qml files in qml/ directory
+#   RESOURCE_PREFIX: /serial-studio.com/ - Qt resource path prefix
+#
+# QML file categories:
+#   - qml/MainWindow/: Main window and toolbar
+#   - qml/Dialogs/: Modal dialogs (About, Settings, etc.)
+#   - qml/Widgets/: Reusable UI widgets
+#   - qml/ProjectEditor/: JSON project editor UI
+#   - qml/Widgets/Dashboard/: Dashboard widget implementations
+#
+# Performance impact:
+#   - ~30-40% faster startup time vs. runtime QML compilation
+#   - Smaller memory footprint (cached bytecode)
+#   - Better error detection at build time
+#
 #-------------------------------------------------------------------------------
 
 qt_add_qml_module(
@@ -439,7 +643,39 @@ qt_add_qml_module(
 )
 
 #-------------------------------------------------------------------------------
-# MiniAudio configuration
+# MiniAudio audio input library configuration (Pro only)
+#-------------------------------------------------------------------------------
+#
+# Configures miniaudio.h for audio device input in commercial builds:
+#
+# When BUILD_COMMERCIAL=ON:
+#
+# Disabled features (not needed for audio input):
+#   MA_NO_DECODING         - Disable audio file decoding (WAV, MP3, FLAC)
+#   MA_NO_ENCODING         - Disable audio file encoding
+#   MA_NO_WAV/FLAC/MP3     - Disable codec support (only need raw PCM)
+#   MA_NO_RESOURCE_MANAGER - Disable resource loading system
+#   MA_NO_NODE_GRAPH       - Disable audio graph processing
+#   MA_NO_ENGINE           - Disable high-level engine API
+#   MA_NO_GENERATION       - Disable waveform generation
+#   MA_NO_CUSTOM           - Disable custom backend support
+#   MA_NO_NULL             - Disable null audio backend
+#
+# Platform-specific configuration:
+#   Linux: Link against libasound (ALSA) for audio input
+#   Windows: Uses WASAPI (built-in, no extra libs needed)
+#   macOS: Uses CoreAudio (built-in, no extra libs needed)
+#
+# SIMD optimizations:
+#   x86-64: MA_SUPPORT_SSE2 - Vectorized audio processing
+#   ARM64:  MA_SUPPORT_NEON - NEON SIMD for faster processing
+#           (Not on Apple Silicon - handled differently)
+#
+# Why these settings?
+#   - Reduces binary size by ~200KB (disabling unused features)
+#   - Faster compilation (less template instantiation)
+#   - Only need raw PCM capture for oscilloscope/FFT features
+#
 #-------------------------------------------------------------------------------
 
 if (BUILD_COMMERCIAL)
@@ -471,7 +707,36 @@ if (BUILD_COMMERCIAL)
 endif()
 
 #-------------------------------------------------------------------------------
-# Deployment options
+# Platform-specific deployment configuration
+#-------------------------------------------------------------------------------
+#
+# Configures executable properties and installation for each platform:
+#
+# Windows (WIN32):
+#   - Links Dwmapi.lib: Desktop Window Manager API (for custom window frame)
+#   - WIN32_EXECUTABLE=TRUE: GUI application (no console window)
+#
+# macOS (APPLE):
+#   - MACOSX_BUNDLE=TRUE: Creates .app bundle (required for macOS apps)
+#   - MACOSX_BUNDLE_ICON_FILE: Sets AppIcon.icns as bundle icon
+#   - MACOSX_BUNDLE_INFO_PLIST: Uses Info.plist for bundle metadata
+#
+# Linux (UNIX):
+#   - Installs executable to /usr/bin or /usr/local/bin
+#   - Installs .svg icon to /usr/share/pixmaps (for app launchers)
+#   - Installs .metainfo.xml to /usr/share/metainfo (AppStream metadata)
+#   - Installs .desktop file to /usr/share/applications (app menu entry)
+#
+# Deployment differences:
+#   Windows: Single .exe with Qt DLLs in same directory
+#   macOS:   .app bundle with embedded frameworks
+#   Linux:   Executable + separate Qt shared libraries in system paths
+#
+# Linux metadata files:
+#   - .desktop: Name, icon, categories, command to launch app
+#   - .metainfo.xml: Screenshots, description, changelog for app stores
+#   - .svg: Scalable icon for HiDPI displays
+#
 #-------------------------------------------------------------------------------
 
 if(WIN32)
@@ -503,7 +768,45 @@ elseif(UNIX)
 endif()
 
 #-------------------------------------------------------------------------------
-# Qt Deployment
+# Qt automatic deployment (macdeployqt, windeployqt, linuxdeploy)
+#-------------------------------------------------------------------------------
+#
+# Finalizes the Qt executable and generates deployment scripts:
+#
+# qt_finalize_executable():
+#   - Finalizes Qt-specific setup (resource compilation, MOC, etc.)
+#   - Must be called after all target properties are set
+#   - Required when using MANUAL_FINALIZATION in qt_add_executable
+#
+# install() targets:
+#   BUNDLE:  macOS .app bundles → install to top-level directory
+#   RUNTIME: Executables → install to bin/ directory
+#
+# qt_generate_deploy_qml_app_script():
+#   Generates platform-specific deployment script to bundle Qt dependencies
+#
+# Platform-specific deployment options:
+#
+#   macOS (macdeployqt):
+#     -hardened-runtime     - Enable Hardened Runtime for notarization
+#     -appstore-compliant   - Strip unsupported frameworks for App Store
+#     MACOS_BUNDLE_POST_BUILD - Run deployment automatically after build
+#
+#   Windows (windeployqt):
+#     -force-openssl        - Force inclusion of OpenSSL DLLs
+#     --release             - Deploy release Qt DLLs (not debug)
+#     --no-translations     - Exclude Qt translations (we embed our own)
+#     --no-compiler-runtime - Don't include MSVC runtime (already bundled)
+#
+#   Linux:
+#     NO_UNSUPPORTED_PLATFORM_ERROR - Don't fail on Linux (manual deployment)
+#     DEPLOY_USER_QML_MODULES_ON_UNSUPPORTED_PLATFORM - Deploy QML modules
+#
+# Deployment script:
+#   - Automatically copies Qt libraries, plugins, QML modules
+#   - Runs at install time: cmake --install build --prefix /path
+#   - Creates a self-contained deployment package
+#
 #-------------------------------------------------------------------------------
 
 qt_finalize_executable(${PROJECT_EXECUTABLE})
@@ -533,7 +836,50 @@ qt_generate_deploy_qml_app_script(
 install(SCRIPT ${deploy_script})
 
 #-------------------------------------------------------------------------------
-# Packaging
+# CPack installer/package generation
+#-------------------------------------------------------------------------------
+#
+# Configures CPack to generate platform-specific installers:
+#
+# Common package metadata (all platforms):
+#   CPACK_MONOLITHIC_INSTALL    - Single package (not component-based)
+#   CPACK_PACKAGE_NAME          - "Serial Studio GPLv3" or "Serial Studio Pro"
+#   CPACK_PACKAGE_VENDOR        - "Alex Spataru"
+#   CPACK_PACKAGE_VERSION       - Semantic version (e.g., 3.2.1)
+#   CPACK_PACKAGE_DESCRIPTION   - README.md content
+#   CPACK_RESOURCE_FILE_LICENSE - GPL-3.0-only.txt or Commercial license
+#   CPACK_PACKAGE_HOMEPAGE_URL  - Website for support/downloads
+#
+# Platform-specific package generators:
+#
+#   Windows (WIX):
+#     - Creates .msi installer using WiX Toolset
+#     - CPACK_WIX_PRODUCT_ICON: Installer icon (icon.ico)
+#     - CPACK_WIX_UI_BANNER: Top banner in installer wizard (493x58)
+#     - CPACK_WIX_UI_DIALOG: Installer dialog background (493x312)
+#     - CPACK_WIX_LICENSE_RTF: License agreement displayed during install
+#     - CPACK_WIX_UPGRADE_GUID: Unique ID for upgrade detection
+#       (same GUID = upgrade replaces old version, different = side-by-side)
+#     - CPACK_WIX_ARCHITECTURE: x64 only (no 32-bit support)
+#     - CPACK_WIX_PROGRAM_MENU_FOLDER: Start Menu folder (. = no subfolder)
+#
+#   macOS (DragNDrop):
+#     - Creates .dmg disk image
+#     - User drags .app bundle to /Applications
+#     - No installer wizard (simple drag-and-drop)
+#
+#   Linux (TGZ):
+#     - Creates .tar.gz archive
+#     - Users extract and run binary manually
+#     - For distro-specific packages, use system package tools
+#       (e.g., checkinstall, debuild, rpmbuild)
+#
+# To generate installer:
+#   cmake --build build --target package
+#   # Creates: Serial-Studio-GPL3-v3.2.1.msi (Windows)
+#   #          Serial-Studio-GPL3-v3.2.1.dmg (macOS)
+#   #          Serial-Studio-GPL3-v3.2.1.tar.gz (Linux)
+#
 #-------------------------------------------------------------------------------
 
 set(CPACK_MONOLITHIC_INSTALL              ON)
