@@ -197,11 +197,17 @@ jobs:
         # Create a minimal profiling script
         cat > profile_workload.sh << 'EOF'
         #!/bin/bash
-        # Launch the application and let it initialize
-        timeout 10s ./${{env.UNIXNAME}} --help || true
+        # Launch the application in background and let it initialize
+        ./${{env.UNIXNAME}} > /dev/null 2>&1 &
+        APP_PID=$!
 
-        # Give it time to generate some profile data
+        # Let it run for 15 seconds to collect profile data
+        sleep 15
+
+        # Gracefully terminate
+        kill -TERM $APP_PID 2>/dev/null || true
         sleep 2
+        kill -KILL $APP_PID 2>/dev/null || true
         EOF
 
         chmod +x profile_workload.sh
@@ -401,11 +407,17 @@ jobs:
         # Create a minimal profiling script
         cat > profile_workload.sh << 'EOF'
         #!/bin/bash
-        # Launch the application and let it initialize
-        timeout 10s ./${{env.UNIXNAME}} --help || true
+        # Launch the application in background and let it initialize
+        ./${{env.UNIXNAME}} > /dev/null 2>&1 &
+        APP_PID=$!
 
-        # Give it time to generate some profile data
+        # Let it run for 15 seconds to collect profile data
+        sleep 15
+
+        # Gracefully terminate
+        kill -TERM $APP_PID 2>/dev/null || true
         sleep 2
+        kill -KILL $APP_PID 2>/dev/null || true
         EOF
 
         chmod +x profile_workload.sh
@@ -574,11 +586,17 @@ jobs:
         # Create a minimal profiling script
         cat > profile_workload.sh << 'EOF'
         #!/bin/bash
-        # Try to run the app bundle briefly to generate profile data
-        timeout 10s ./${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --help || true
+        # Launch the application in background and let it initialize
+        ./${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} > /dev/null 2>&1 &
+        APP_PID=$!
 
-        # Give it time to generate profile data
+        # Let it run for 15 seconds to collect profile data
+        sleep 15
+
+        # Gracefully terminate
+        kill -TERM $APP_PID 2>/dev/null || true
         sleep 2
+        kill -KILL $APP_PID 2>/dev/null || true
         EOF
 
         chmod +x profile_workload.sh
@@ -771,11 +789,17 @@ jobs:
 
         # Create a minimal profiling script
         $script = @"
-        `$process = Start-Process -FilePath ".\${{env.EXECUTABLE}}.exe" -ArgumentList "--help" -PassThru -WindowStyle Hidden
-        Start-Sleep -Seconds 10
+        # Launch the application in background
+        `$process = Start-Process -FilePath ".\${{env.EXECUTABLE}}.exe" -PassThru -WindowStyle Hidden
+
+        # Let it run for 15 seconds to collect profile data
+        Start-Sleep -Seconds 15
+
+        # Gracefully terminate
         if (-not `$process.HasExited) {
-            Stop-Process -Id `$process.Id -Force
+            Stop-Process -Id `$process.Id -Force -ErrorAction SilentlyContinue
         }
+
         Start-Sleep -Seconds 2
         "@
 
