@@ -250,7 +250,7 @@ QStringList Console::Handler::availableFonts() const
   for (const auto &family : allFonts)
   {
     QFontInfo fontInfo(family);
-    if (fontInfo.fixedPitch())
+    if (fontInfo.fixedPitch() && !monospaceFonts.contains(family))
       monospaceFonts.append(family);
   }
 

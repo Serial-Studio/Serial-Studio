@@ -170,6 +170,7 @@ public:
   [[nodiscard]] int fontSize() const;
   [[nodiscard]] QString fontFamily() const;
   [[nodiscard]] QStringList availableFonts() const;
+
   [[nodiscard]] int defaultCharWidth() const;
   [[nodiscard]] int defaultCharHeight() const;
 
