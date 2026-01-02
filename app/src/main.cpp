@@ -19,7 +19,6 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include <QThread>
 #include <QSysInfo>
 #include <QSettings>
 #include <QQmlContext>
@@ -110,10 +109,6 @@ int main(int argc, char **argv)
   if (!appIcon.isNull())
     app.setWindowIcon(appIcon);
 #endif
-
-  // Set thread priority (HighPriority instead of Highest to avoid starving
-  // workers)
-  QThread::currentThread()->setPriority(QThread::HighPriority);
 
   // Set application style
   app.setStyle(QStyleFactory::create("Fusion"));
