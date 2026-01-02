@@ -829,7 +829,7 @@ endif()
 #
 # Memory protection:
 #   -D_FORTIFY_SOURCE=2         - Runtime buffer overflow checks (requires -O1+)
-#   -fstack-clash-protection    - Prevent stack clash attacks (GCC 8+/Clang 6+)
+#   -fstack-clash-protection    - Prevent stack clash attacks (GCC 8+/Clang 6+, Linux only)
 #
 # Control-flow integrity:
 #   -fcf-protection=full        - Intel CET (x86-64 Linux only, GCC/Clang)
@@ -885,8 +885,8 @@ if(ENABLE_HARDENING)
          -Werror=format-security        # Make format security errors
       )
 
-      # Stack clash protection (GCC 8+ and Clang 6+)
-      if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+      # Stack clash protection (GCC 8+ and Clang 6+, not supported on macOS)
+      if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND NOT APPLE)
          add_compile_options(-fstack-clash-protection)
       endif()
 
