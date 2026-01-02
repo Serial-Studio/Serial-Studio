@@ -316,9 +316,13 @@ MDF4::Export::Export()
 
   m_workerThread.start();
 
-  QTimer *timer = new QTimer(this);
+  auto *timer = new QTimer();
+  timer->setInterval(1000);
+  timer->setTimerType(Qt::PreciseTimer);
+  timer->moveToThread(&m_workerThread);
   connect(timer, &QTimer::timeout, m_worker, &ExportWorker::writeValues);
-  timer->start(1000);
+  connect(&m_workerThread, &QThread::finished, timer, &QObject::deleteLater);
+  QMetaObject::invokeMethod(timer, "start", Qt::QueuedConnection);
 
   connect(&Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged, this, [=, this] {
@@ -336,6 +340,9 @@ MDF4::Export::Export()
 MDF4::Export::~Export()
 {
 #ifdef BUILD_COMMERCIAL
+  if (m_worker)
+    QMetaObject::invokeMethod(m_worker, &ExportWorker::closeFile,
+                              Qt::BlockingQueuedConnection);
   m_workerThread.quit();
   m_workerThread.wait();
 #endif

@@ -81,12 +81,30 @@ int NativeWindow::titlebarHeight(QObject *window)
 }
 
 /**
- * @brief Removes a window to the management list of NativeWindow.
- * @param window Pointer to the window object to be managed.
+ * @brief Removes a window from the management list of NativeWindow.
+ * @param window Pointer to the window object to be removed.
  */
 void NativeWindow::removeWindow(QObject *window)
 {
-  (void)window;
+  auto *w = qobject_cast<QWindow *>(window);
+  if (!w)
+    return;
+
+  auto index = m_windows.indexOf(w);
+  if (index == -1)
+    return;
+
+  m_windows.removeAt(index);
+  m_colors.remove(w);
+
+  disconnect(w, nullptr, this, nullptr);
+
+  auto *decorator = s_decorators.value(w, nullptr);
+  if (decorator)
+  {
+    s_decorators.remove(w);
+    delete decorator;
+  }
 }
 
 /**
@@ -147,13 +165,11 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
     s_decorators.insert(w, decorator);
     connect(w, &QObject::destroyed, this, [this, w]() {
       s_decorators.remove(w);
-      auto *win = qobject_cast<QWindow *>(w);
-      auto index = m_windows.indexOf(win);
+      auto index = m_windows.indexOf(w);
       if (index != -1 && index >= 0)
       {
         m_windows.removeAt(index);
-        if (m_colors.contains(win))
-          m_colors.remove(win);
+        m_colors.remove(w);
       }
     });
 

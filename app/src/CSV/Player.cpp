@@ -190,11 +190,14 @@ void CSV::Player::openFile()
  */
 void CSV::Player::closeFile()
 {
+  if (!isOpen())
+    return;
+
+  m_playing = false;
   m_framePos = 0;
   m_csvFile.close();
   m_csvData.clear();
   m_csvData.squeeze();
-  m_playing = false;
   m_timestamp = "--.--";
   m_timestampCache.clear();
   m_useHighPrecisionTimestamps = false;
@@ -608,7 +611,10 @@ void CSV::Player::updateData()
 
     if (m_framePos < frameCount() - 1)
       QTimer::singleShot(qMax(0LL, msUntilNext), Qt::PreciseTimer, this,
-                         &CSV::Player::updateData);
+                         [this] {
+                           if (isOpen() && isPlaying())
+                             updateData();
+                         });
     else
       pause();
   }

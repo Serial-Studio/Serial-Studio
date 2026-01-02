@@ -454,6 +454,9 @@ void MDF4::Player::openFile(const QString &filePath)
  */
 void MDF4::Player::closeFile()
 {
+  if (!isOpen())
+    return;
+
   if (isPlaying())
     pause();
 

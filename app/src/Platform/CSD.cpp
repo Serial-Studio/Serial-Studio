@@ -984,6 +984,9 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
 
   // Handle window state changes
   connect(m_window, &QWindow::windowStateChanged, this, [this]() {
+    if (!m_window)
+      return;
+
     const auto state = m_window->windowStates();
     const bool fillScreen
         = state & (Qt::WindowMaximized | Qt::WindowFullScreen);
@@ -1188,11 +1191,17 @@ void Window::setupTitleBar()
   m_titleBar->setZ(999999);
 
   // Window controls
-  connect(m_titleBar, &Titlebar::closeClicked, this,
-          [this]() { m_window->close(); });
-  connect(m_titleBar, &Titlebar::minimizeClicked, this,
-          [this]() { m_window->showMinimized(); });
+  connect(m_titleBar, &Titlebar::closeClicked, this, [this]() {
+    if (m_window)
+      m_window->close();
+  });
+  connect(m_titleBar, &Titlebar::minimizeClicked, this, [this]() {
+    if (m_window)
+      m_window->showMinimized();
+  });
   connect(m_titleBar, &Titlebar::maximizeClicked, this, [this]() {
+    if (!m_window)
+      return;
     if (m_window->windowStates() & Qt::WindowMaximized)
       m_window->showNormal();
     else
@@ -1200,8 +1209,10 @@ void Window::setupTitleBar()
   });
 
   // Track state
-  connect(m_window, &QWindow::activeChanged, this,
-          [this]() { m_titleBar->setWindowActive(m_window->isActive()); });
+  connect(m_window, &QWindow::activeChanged, this, [this]() {
+    if (m_window && m_titleBar)
+      m_titleBar->setWindowActive(m_window->isActive());
+  });
 
   m_titleBar->setTitle(m_window->title());
   connect(m_window, &QWindow::windowTitleChanged, m_titleBar,
