@@ -43,16 +43,13 @@ Misc::CommonFonts::CommonFonts()
 #endif
 
   // Add custom mono font
-  const auto path = QStringLiteral(":/rcc/fonts/IBMPlexMono-Regular.ttf");
+  const auto path = QStringLiteral(":/rcc/fonts/JetBrainsMono-Regular.ttf");
   const auto id = QFontDatabase::addApplicationFont(path);
   if (id != -1)
   {
     const auto families = QFontDatabase::applicationFontFamilies(id);
     if (!families.isEmpty())
-    {
       monoFont = families.at(0);
-      QFontDatabase::addApplicationFont(":/rcc/fonts/IBMPlexMono-Medium.ttf");
-    }
   }
 
   // Set the UI font to the system default

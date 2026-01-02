@@ -108,8 +108,6 @@
         <file>actions/Xbox Y.svg</file>
         <file>actions/Zoom In.svg</file>
         <file>actions/Zoom Out.svg</file>
-        <file>fonts/IBMPlexMono-Medium.ttf</file>
-        <file>fonts/IBMPlexMono-Regular.ttf</file>
         <file>icons/buttons/activate.svg</file>
         <file>icons/buttons/apply.svg</file>
         <file>icons/buttons/attach.svg</file>
@@ -453,5 +451,6 @@
         <file>themes/midnight.json</file>
         <file>themes/rust.json</file>
         <file>images/no-bluetooth.svg</file>
+        <file>fonts/JetBrainsMono-Regular.ttf</file>
     </qresource>
 </RCC>
