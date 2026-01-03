@@ -181,6 +181,8 @@ void CSV::Player::openFile()
             dialog->deleteLater();
           });
 
+  connect(dialog, &QFileDialog::rejected, dialog, &QFileDialog::deleteLater);
+
   dialog->open();
 }
 

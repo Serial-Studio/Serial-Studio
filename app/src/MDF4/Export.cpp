@@ -30,7 +30,9 @@
 
 #ifdef BUILD_COMMERCIAL
 #  include "IO/Manager.h"
+#  include "CSV/Player.h"
 #  include "MDF4/Player.h"
+#  include "MQTT/Client.h"
 #  include "Misc/WorkspaceManager.h"
 #  include "Licensing/LemonSqueezy.h"
 
@@ -52,16 +54,16 @@
  * @brief Constructs the MDF4 export worker
  */
 MDF4::ExportWorker::ExportWorker(
-    moodycamel::ReaderWriterQueue<MDF4::TimestampFrame> *queue,
+    moodycamel::ReaderWriterQueue<JSON::TimestampFrame> *queue,
     std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize)
   : m_fileOpen(false)
-  , m_writer(nullptr)
-  , m_masterTimeChannel(nullptr)
-  , m_pendingFrames(queue)
-  , m_exportEnabled(exportEnabled)
   , m_queueSize(queueSize)
+  , m_masterTimeChannel(nullptr)
+  , m_exportEnabled(exportEnabled)
+  , m_writer(nullptr)
+  , m_pendingFrames(queue)
 {
-  m_writeBuffer.reserve(kMDF4FlushThreshold * 2);
+  m_writeBuffer.reserve(kFlushThreshold * 2);
 }
 
 /**
@@ -92,8 +94,7 @@ void MDF4::ExportWorker::writeValues()
     return;
 
   m_writeBuffer.clear();
-
-  TimestampFrame item;
+  JSON::TimestampFrame item;
   while (m_pendingFrames->try_dequeue(item))
     m_writeBuffer.push_back(std::move(item));
 
@@ -112,7 +113,6 @@ void MDF4::ExportWorker::writeValues()
   for (const auto &frame : m_writeBuffer)
   {
     const auto timestamp = frame.rxDateTime.toMSecsSinceEpoch() / 1000.0;
-
     for (const auto &group : frame.data.groups)
     {
       auto it = m_groupMap.find(group.groupId);
@@ -446,28 +446,24 @@ void MDF4::Export::setExportEnabled(const bool enabled)
 void MDF4::Export::hotpathTxFrame(const JSON::Frame &frame)
 {
 #ifdef BUILD_COMMERCIAL
-  if (!exportEnabled() || MDF4::Player::instance().isOpen())
+  if (!exportEnabled() || CSV::Player::instance().isOpen()
+      || MDF4::Player::instance().isOpen())
     return;
 
-  if (!IO::Manager::instance().isConnected())
+  if (!IO::Manager::instance().isConnected()
+      && !(MQTT::Client::instance().isConnected()
+           && MQTT::Client::instance().isSubscriber()))
     return;
 
-  if (m_queueSize.load(std::memory_order_relaxed) >= kMDF4ExportQueueCapacity)
-  {
-    qWarning() << "MDF4 Export: Dropping frame (queue full)";
-    return;
-  }
-
-  if (!m_pendingFrames.enqueue(TimestampFrame(JSON::Frame(frame))))
+  if (!m_pendingFrames.enqueue(JSON::TimestampFrame(frame)))
   {
     qWarning() << "MDF4 Export: Failed to enqueue frame";
     return;
   }
 
   const auto size = m_queueSize.fetch_add(1, std::memory_order_relaxed) + 1;
-  if (size >= kMDF4FlushThreshold)
-    QMetaObject::invokeMethod(m_worker, &ExportWorker::writeValues,
-                              Qt::QueuedConnection);
+  if (size >= kFlushThreshold)
+    QMetaObject::invokeMethod(m_worker, "writeValues", Qt::QueuedConnection);
 #else
   (void)frame;
 #endif

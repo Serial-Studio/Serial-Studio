@@ -343,6 +343,8 @@ void MDF4::Player::openFile()
             dialog->deleteLater();
           });
 
+  connect(dialog, &QFileDialog::rejected, dialog, &QFileDialog::deleteLater);
+
   dialog->open();
 }
 
@@ -819,10 +821,7 @@ void MDF4::Player::processFrameBatch(int startFrame, int endFrame)
  */
 void MDF4::Player::sendFrame(int frameIndex)
 {
-  if (!isOpen())
-    return;
-
-  if (frameIndex < 0 || frameIndex >= frameCount())
+  if (!isOpen() || frameIndex < 0 || frameIndex >= frameCount())
     return;
 
   IO::Manager::instance().processPayload(getFrame(frameIndex));
@@ -837,7 +836,7 @@ void MDF4::Player::sendFrame(int frameIndex)
  */
 void MDF4::Player::sendHeaderFrame()
 {
-  if (m_channels.empty())
+  if (!isOpen() || m_channels.empty())
     return;
 
   QStringList headers;
@@ -894,7 +893,7 @@ QString MDF4::Player::formatTimestamp(double timestamp) const
  */
 QByteArray MDF4::Player::getFrame(const int index)
 {
-  if (index < 0 || index >= frameCount())
+  if (!isOpen() || index < 0 || index >= frameCount())
     return QByteArray();
 
   const auto &frameIdx = m_frameIndex[index];

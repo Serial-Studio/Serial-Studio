@@ -96,27 +96,7 @@ IO::Manager::Manager()
  */
 IO::Manager::~Manager()
 {
-  // Stop the worker thread first to prevent race conditions
-  if (m_workerThread.isRunning())
-  {
-    m_workerThread.quit();
-    m_workerThread.wait();
-  }
-
-  // Now safely clean up the frame reader
-  if (m_frameReader)
-  {
-    m_frameReader->disconnect();
-    if (driver())
-    {
-      QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived,
-                          m_frameReader, &IO::FrameReader::processData);
-    }
-
-    QMetaObject::invokeMethod(m_frameReader, "deleteLater",
-                              Qt::QueuedConnection);
-    m_frameReader.clear();
-  }
+  killFrameReader();
 }
 
 /**
@@ -724,14 +704,6 @@ void IO::Manager::setBusType(const SerialStudio::BusType driver)
  */
 void IO::Manager::killFrameReader()
 {
-  // Stop the worker thread first to prevent race conditions
-  if (m_workerThread.isRunning())
-  {
-    m_workerThread.quit();
-    m_workerThread.wait();
-  }
-
-  // Now safely clean up the frame reader
   if (m_frameReader)
   {
     m_frameReader->disconnect();
@@ -741,9 +713,26 @@ void IO::Manager::killFrameReader()
                           m_frameReader, &IO::FrameReader::processData);
     }
 
-    QMetaObject::invokeMethod(m_frameReader, &QObject::deleteLater,
-                              Qt::QueuedConnection);
-    m_frameReader.clear();
+    if (m_thrFrameExtr && m_workerThread.isRunning())
+    {
+      QMetaObject::invokeMethod(m_frameReader, &QObject::deleteLater,
+                                Qt::BlockingQueuedConnection);
+      m_frameReader.clear();
+
+      m_workerThread.quit();
+      m_workerThread.wait();
+    }
+    else
+    {
+      m_frameReader->deleteLater();
+      m_frameReader.clear();
+    }
+  }
+
+  else if (m_workerThread.isRunning())
+  {
+    m_workerThread.quit();
+    m_workerThread.wait();
   }
 }
 
@@ -783,16 +772,15 @@ void IO::Manager::startFrameReader()
   if (m_thrFrameExtr)
     m_frameReader->moveToThread(&m_workerThread);
 
-  // Configure initial state for the frame reader
-  // Use Qt::QueuedConnection when threading is enabled for thread safety
-  auto connectionType
-      = m_thrFrameExtr ? Qt::QueuedConnection : Qt::AutoConnection;
+  // Always use Qt::QueuedConnection to ensure thread safety regardless of
+  // whether the frame reader is in a separate thread or not. This prevents
+  // issues if the driver emits signals from different threads.
   QObject::connect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
-                   &IO::FrameReader::processData, connectionType);
+                   &IO::FrameReader::processData, Qt::QueuedConnection);
 
   // Connect frame reader events to IO::Manager
   connect(m_frameReader, &IO::FrameReader::readyRead, this,
-          &IO::Manager::onReadyRead);
+          &IO::Manager::onReadyRead, Qt::QueuedConnection);
 
   // Start the worker thread
   if (m_thrFrameExtr)

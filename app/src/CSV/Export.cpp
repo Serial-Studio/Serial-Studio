@@ -20,10 +20,9 @@
  */
 
 #include "Export.h"
-
 #include "IO/Manager.h"
 #include "CSV/Player.h"
-#include "Misc/Utilities.h"
+#include "MDF4/Player.h"
 #include "Misc/WorkspaceManager.h"
 
 #ifdef BUILD_COMMERCIAL
@@ -45,11 +44,11 @@
  * @param queueSize Pointer to atomic counter tracking queue size.
  */
 CSV::ExportWorker::ExportWorker(
-    moodycamel::ReaderWriterQueue<TimestampFrame> *queue,
+    moodycamel::ReaderWriterQueue<JSON::TimestampFrame> *queue,
     std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize)
-  : m_pendingFrames(queue)
+  : m_queueSize(queueSize)
   , m_exportEnabled(exportEnabled)
-  , m_queueSize(queueSize)
+  , m_pendingFrames(queue)
 {
   m_writeBuffer.reserve(kFlushThreshold * 2);
 }
@@ -102,7 +101,7 @@ void CSV::ExportWorker::writeValues()
 
   m_writeBuffer.clear();
 
-  TimestampFrame frame;
+  JSON::TimestampFrame frame;
   while (m_pendingFrames->try_dequeue(frame))
     m_writeBuffer.push_back(std::move(frame));
 
@@ -230,10 +229,10 @@ CSV::ExportWorker::createCsvFile(const JSON::Frame &frame)
  * for periodic data export.
  */
 CSV::Export::Export()
-  : m_exportEnabled(true)
+  : m_worker(nullptr)
   , m_isOpen(false)
   , m_queueSize(0)
-  , m_worker(nullptr)
+  , m_exportEnabled(true)
 {
   m_worker = new ExportWorker(&m_pendingFrames, &m_exportEnabled, &m_queueSize);
   m_worker->moveToThread(&m_workerThread);
@@ -372,7 +371,8 @@ void CSV::Export::setExportEnabled(const bool enabled)
  */
 void CSV::Export::hotpathTxFrame(const JSON::Frame &frame)
 {
-  if (!exportEnabled() || CSV::Player::instance().isOpen())
+  if (!exportEnabled() || CSV::Player::instance().isOpen()
+      || MDF4::Player::instance().isOpen())
     return;
 
 #ifdef BUILD_COMMERCIAL
@@ -385,7 +385,7 @@ void CSV::Export::hotpathTxFrame(const JSON::Frame &frame)
     return;
 #endif
 
-  if (!m_pendingFrames.enqueue(TimestampFrame(JSON::Frame(frame))))
+  if (!m_pendingFrames.enqueue(JSON::TimestampFrame(frame)))
   {
     qWarning() << "CSV Export: Dropping frame (queue full)";
     return;

@@ -42,31 +42,8 @@ class IChannelGroup;
 
 namespace MDF4
 {
-static constexpr size_t kMDF4ExportQueueCapacity = 8192;
-static constexpr size_t kMDF4FlushThreshold = 1024;
-
-/**
- * @brief Represents a single timestamped frame for MDF4 export.
- */
-struct TimestampFrame
-{
-  JSON::Frame data;
-  QDateTime rxDateTime;
-
-  TimestampFrame() = default;
-
-  TimestampFrame(JSON::Frame &&d)
-    : data(std::move(d))
-    , rxDateTime(QDateTime::currentDateTime())
-  {
-  }
-
-  TimestampFrame(TimestampFrame &&) = default;
-  TimestampFrame(const TimestampFrame &) = delete;
-  TimestampFrame &operator=(TimestampFrame &&) = default;
-  TimestampFrame &operator=(const TimestampFrame &) = delete;
-};
-
+static constexpr size_t kQueueCapacity = 8192;
+static constexpr size_t kFlushThreshold = 1024;
 class Export;
 
 #ifdef BUILD_COMMERCIAL
@@ -78,9 +55,9 @@ class ExportWorker : public QObject
   Q_OBJECT
 
 public:
-  explicit ExportWorker(moodycamel::ReaderWriterQueue<TimestampFrame> *queue,
-                        std::atomic<bool> *exportEnabled,
-                        std::atomic<size_t> *queueSize);
+  explicit ExportWorker(
+      moodycamel::ReaderWriterQueue<JSON::TimestampFrame> *queue,
+      std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize);
   ~ExportWorker();
 
   [[nodiscard]] bool isOpen() const;
@@ -105,13 +82,13 @@ private:
 
   bool m_fileOpen;
   QString m_filePath;
-  std::unique_ptr<mdf::MdfWriter> m_writer;
-  std::vector<TimestampFrame> m_writeBuffer;
-  std::map<int, ChannelGroupInfo> m_groupMap;
-  mdf::IChannel *m_masterTimeChannel;
-  moodycamel::ReaderWriterQueue<TimestampFrame> *m_pendingFrames;
-  std::atomic<bool> *m_exportEnabled;
   std::atomic<size_t> *m_queueSize;
+  mdf::IChannel *m_masterTimeChannel;
+  std::atomic<bool> *m_exportEnabled;
+  std::unique_ptr<mdf::MdfWriter> m_writer;
+  std::map<int, ChannelGroupInfo> m_groupMap;
+  std::vector<JSON::TimestampFrame> m_writeBuffer;
+  moodycamel::ReaderWriterQueue<JSON::TimestampFrame> *m_pendingFrames;
 };
 #endif
 
@@ -195,8 +172,8 @@ private:
   QThread m_workerThread;
   ExportWorker *m_worker;
   std::atomic<size_t> m_queueSize;
-  moodycamel::ReaderWriterQueue<TimestampFrame> m_pendingFrames{
-      kMDF4ExportQueueCapacity};
+  moodycamel::ReaderWriterQueue<JSON::TimestampFrame> m_pendingFrames{
+      kQueueCapacity};
 #endif
 };
 } // namespace MDF4

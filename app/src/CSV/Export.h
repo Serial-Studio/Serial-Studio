@@ -38,48 +38,6 @@ namespace CSV
 {
 static constexpr size_t kQueueCapacity = 8192;
 static constexpr size_t kFlushThreshold = 1024;
-
-/**
- * @brief Represents a single timestamped frame for CSV export.
- *
- * Stores a JSON frame and the associated reception timestamp (in local time).
- * Designed to be move-only for performance reasons, especially when using
- * concurrent queues.
- */
-struct TimestampFrame
-{
-  using HighResClock = std::chrono::high_resolution_clock;
-  using TimePoint = HighResClock::time_point;
-
-  JSON::Frame data;     ///< The actual data frame.
-  QDateTime rxDateTime; ///< Time at which the frame was received.
-  TimePoint
-      highResTimestamp; ///< High-resolution timestamp for nanosecond precision.
-
-  /**
-   * @brief Default constructor.
-   */
-  TimestampFrame() {}
-
-  /**
-   * @brief Constructs a timestamped frame with current time.
-   *
-   * @param d The data frame (moved).
-   */
-  TimestampFrame(JSON::Frame &&d)
-    : data(std::move(d))
-    , rxDateTime(QDateTime::currentDateTime())
-    , highResTimestamp(HighResClock::now())
-  {
-  }
-
-  // Disable copy constructs and use standard move assignments
-  TimestampFrame(TimestampFrame &&) = default;
-  TimestampFrame(const TimestampFrame &) = delete;
-  TimestampFrame &operator=(TimestampFrame &&) = default;
-  TimestampFrame &operator=(const TimestampFrame &) = delete;
-};
-
 class Export;
 
 /**
@@ -93,9 +51,9 @@ class ExportWorker : public QObject
   Q_OBJECT
 
 public:
-  explicit ExportWorker(moodycamel::ReaderWriterQueue<TimestampFrame> *queue,
-                        std::atomic<bool> *exportEnabled,
-                        std::atomic<size_t> *queueSize);
+  explicit ExportWorker(
+      moodycamel::ReaderWriterQueue<JSON::TimestampFrame> *queue,
+      std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize);
   ~ExportWorker();
 
   [[nodiscard]] bool isOpen() const;
@@ -113,12 +71,12 @@ private:
 private:
   QFile m_csvFile;
   QTextStream m_textStream;
-  std::vector<TimestampFrame> m_writeBuffer;
-  QVector<QPair<int, QString>> m_indexHeaderPairs;
-  moodycamel::ReaderWriterQueue<TimestampFrame> *m_pendingFrames;
-  std::atomic<bool> *m_exportEnabled;
   std::atomic<size_t> *m_queueSize;
-  TimestampFrame::TimePoint m_referenceTimestamp;
+  std::atomic<bool> *m_exportEnabled;
+  std::vector<JSON::TimestampFrame> m_writeBuffer;
+  QVector<QPair<int, QString>> m_indexHeaderPairs;
+  JSON::TimestampFrame::TimePoint m_referenceTimestamp;
+  moodycamel::ReaderWriterQueue<JSON::TimestampFrame> *m_pendingFrames;
 };
 
 /**
@@ -175,11 +133,12 @@ private slots:
   void onWorkerOpenChanged();
 
 private:
-  std::atomic<bool> m_exportEnabled;
-  std::atomic<bool> m_isOpen;
-  std::atomic<size_t> m_queueSize;
   QThread m_workerThread;
   ExportWorker *m_worker;
-  moodycamel::ReaderWriterQueue<TimestampFrame> m_pendingFrames{kQueueCapacity};
+  std::atomic<bool> m_isOpen;
+  std::atomic<size_t> m_queueSize;
+  std::atomic<bool> m_exportEnabled;
+  moodycamel::ReaderWriterQueue<JSON::TimestampFrame> m_pendingFrames{
+      kQueueCapacity};
 };
 } // namespace CSV

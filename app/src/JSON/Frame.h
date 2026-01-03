@@ -23,6 +23,7 @@
 
 #include <cmath>
 #include <vector>
+#include <chrono>
 
 #include <QString>
 #include <QJsonArray>
@@ -739,5 +740,44 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
 
   return false;
 }
+
+//------------------------------------------------------------------------------
+// Timestamped data
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Represents a single timestamped frame for data export.
+ * Stores a JSON frame and the associated reception timestamp (in local time).
+ */
+struct TimestampFrame
+{
+  using HighResClock = std::chrono::high_resolution_clock;
+  using TimePoint = HighResClock::time_point;
+
+  JSON::Frame data;           ///< The actual data frame.
+  QDateTime rxDateTime;       ///< Time at which the frame was received.
+  TimePoint highResTimestamp; ///< Timestamp for nanosecond precision.
+
+  /**
+   * @brief Default constructor.
+   */
+  TimestampFrame() {}
+
+  /**
+   * @brief Constructs a timestamped frame with current time.
+   */
+  TimestampFrame(const JSON::Frame &d)
+    : data(d)
+    , rxDateTime(QDateTime::currentDateTime())
+    , highResTimestamp(HighResClock::now())
+  {
+  }
+
+  // Disable copy constructs and use standard move assignments
+  TimestampFrame(TimestampFrame &&) = default;
+  TimestampFrame(const TimestampFrame &) = delete;
+  TimestampFrame &operator=(TimestampFrame &&) = default;
+  TimestampFrame &operator=(const TimestampFrame &) = delete;
+};
 
 } // namespace JSON
