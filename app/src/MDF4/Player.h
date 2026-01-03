@@ -100,37 +100,32 @@ class Player : public QObject
   Q_PROPERTY(const QString& timestamp
              READ timestamp
              NOTIFY timestampChanged)
-  Q_PROPERTY(const QString& fileInfo
-             READ fileInfo
-             NOTIFY fileInfoChanged)
   // clang-format on
 
 signals:
   void openChanged();
   void timestampChanged();
   void playerStateChanged();
-  void fileInfoChanged();
 
 private:
   explicit Player();
-  ~Player();
   Player(Player &&) = delete;
   Player(const Player &) = delete;
   Player &operator=(Player &&) = delete;
   Player &operator=(const Player &) = delete;
 
+  ~Player();
+
 public:
   static Player &instance();
 
   [[nodiscard]] bool isOpen() const;
-  [[nodiscard]] double progress() const;
   [[nodiscard]] bool isPlaying() const;
   [[nodiscard]] int frameCount() const;
-  [[nodiscard]] int framePosition() const;
-
+  [[nodiscard]] double progress() const;
   [[nodiscard]] QString filename() const;
+  [[nodiscard]] int framePosition() const;
   [[nodiscard]] const QString &timestamp() const;
-  [[nodiscard]] const QString &fileInfo() const;
 
 public slots:
   void play();
@@ -155,8 +150,8 @@ private:
   QString formatTimestamp(double timestamp) const;
 
 protected:
-  bool eventFilter(QObject *obj, QEvent *event) override;
   bool handleKeyPress(QKeyEvent *keyEvent);
+  bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
   struct FrameIndex
@@ -166,21 +161,18 @@ private:
     mdf::IChannelGroup *channelGroup;
   };
 
-  std::unique_ptr<mdf::MdfReader> m_reader;
-  std::vector<FrameIndex> m_frameIndex;
-  std::vector<mdf::IChannel *> m_channels;
-  std::map<uint64_t, std::vector<double>> m_sampleCache;
-  std::map<uint64_t, double> m_timestampCache;
-
   int m_framePos;
   bool m_playing;
   bool m_isSerialStudioFile;
-  mdf::IChannel *m_masterTimeChannel;
   QString m_filePath;
   QString m_timestamp;
-  QString m_fileInfo;
-
-  QElapsedTimer m_elapsedTimer;
   double m_startTimestamp;
+  QElapsedTimer m_elapsedTimer;
+  mdf::IChannel *m_masterTimeChannel;
+  std::vector<FrameIndex> m_frameIndex;
+  std::vector<mdf::IChannel *> m_channels;
+  std::unique_ptr<mdf::MdfReader> m_reader;
+  std::map<uint64_t, double> m_timestampCache;
+  std::map<uint64_t, std::vector<double>> m_sampleCache;
 };
 } // namespace MDF4

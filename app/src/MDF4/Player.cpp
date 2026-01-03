@@ -173,14 +173,13 @@ private:
  * signals for playback state management.
  */
 MDF4::Player::Player()
-  : m_reader(nullptr)
-  , m_framePos(0)
+  : m_framePos(0)
   , m_playing(false)
   , m_isSerialStudioFile(false)
-  , m_masterTimeChannel(nullptr)
   , m_timestamp("")
-  , m_fileInfo("")
   , m_startTimestamp(0.0)
+  , m_masterTimeChannel(nullptr)
+  , m_reader(nullptr)
 {
   qApp->installEventFilter(this);
   connect(this, &MDF4::Player::playerStateChanged, this,
@@ -212,18 +211,6 @@ bool MDF4::Player::isOpen() const
 }
 
 /**
- * @brief Returns the current playback progress
- * @return Progress as a value between 0.0 and 1.0
- */
-double MDF4::Player::progress() const
-{
-  if (frameCount() == 0)
-    return 0.0;
-
-  return static_cast<double>(framePosition()) / frameCount();
-}
-
-/**
  * @brief Checks if playback is currently active
  * @return True if playing, false if paused
  */
@@ -242,12 +229,15 @@ int MDF4::Player::frameCount() const
 }
 
 /**
- * @brief Returns the current frame position
- * @return Current frame index (0-based)
+ * @brief Returns the current playback progress
+ * @return Progress as a value between 0.0 and 1.0
  */
-int MDF4::Player::framePosition() const
+double MDF4::Player::progress() const
 {
-  return m_framePos;
+  if (frameCount() == 0)
+    return 0.0;
+
+  return static_cast<double>(framePosition()) / frameCount();
 }
 
 /**
@@ -266,21 +256,21 @@ QString MDF4::Player::filename() const
 }
 
 /**
+ * @brief Returns the current frame position
+ * @return Current frame index (0-based)
+ */
+int MDF4::Player::framePosition() const
+{
+  return m_framePos;
+}
+
+/**
  * @brief Returns the current playback timestamp
  * @return Formatted timestamp string (HH:MM:SS.mmm)
  */
 const QString &MDF4::Player::timestamp() const
 {
   return m_timestamp;
-}
-
-/**
- * @brief Returns file metadata information
- * @return Multi-line string with author, project, subject, and channel count
- */
-const QString &MDF4::Player::fileInfo() const
-{
-  return m_fileInfo;
 }
 
 /**
@@ -291,15 +281,19 @@ const QString &MDF4::Player::fileInfo() const
  */
 void MDF4::Player::play()
 {
+  // Stop if no file is open
   if (!isOpen())
     return;
 
+  // Reset to 0 if frame position is at end
   if (m_framePos >= frameCount() - 1)
     m_framePos = 0;
 
+  // Update time stamp
   m_startTimestamp = m_frameIndex[m_framePos].timestamp;
   m_elapsedTimer.start();
 
+  // Update player state
   m_playing = true;
   Q_EMIT playerStateChanged();
 }
@@ -423,26 +417,11 @@ void MDF4::Player::openFile(const QString &filePath)
   }
 
   m_filePath = filePath;
-
-  if (header)
-  {
-    QString author = QString::fromStdString(header->Author());
-    QString project = QString::fromStdString(header->Project());
-    QString subject = QString::fromStdString(header->Subject());
-
-    m_fileInfo = tr("Author: %1\nProject: %2\nSubject: %3\nChannels: %4")
-                     .arg(author.isEmpty() ? tr("Unknown") : author)
-                     .arg(project.isEmpty() ? tr("Unknown") : project)
-                     .arg(subject.isEmpty() ? tr("Unknown") : subject)
-                     .arg(m_channels.size());
-  }
-
   m_framePos = 0;
 
   sendHeaderFrame();
 
   Q_EMIT openChanged();
-  Q_EMIT fileInfoChanged();
   Q_EMIT playerStateChanged();
 }
 
@@ -457,25 +436,20 @@ void MDF4::Player::closeFile()
   if (!isOpen())
     return;
 
-  if (isPlaying())
-    pause();
-
+  m_framePos = 0;
   m_reader.reset();
-  m_frameIndex.clear();
+  m_filePath.clear();
   m_channels.clear();
+  m_timestamp.clear();
+  m_frameIndex.clear();
   m_sampleCache.clear();
   m_timestampCache.clear();
-  m_framePos = 0;
   m_isSerialStudioFile = false;
   m_masterTimeChannel = nullptr;
-  m_filePath.clear();
-  m_timestamp.clear();
-  m_fileInfo.clear();
 
   JSON::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
   Q_EMIT openChanged();
-  Q_EMIT fileInfoChanged();
   Q_EMIT playerStateChanged();
 }
 
@@ -634,7 +608,7 @@ void MDF4::Player::updateData()
           break;
       }
 
-      if (isOpen() && m_framePos < m_frameIndex.size())
+      if (isOpen() && static_cast<size_t>(m_framePos) < m_frameIndex.size())
       {
         m_timestamp = formatTimestamp(m_frameIndex[m_framePos].timestamp);
         Q_EMIT timestampChanged();
@@ -953,25 +927,6 @@ QByteArray MDF4::Player::getFrame(const int index)
 }
 
 /**
- * @brief Event filter for capturing keyboard events
- * @param obj Object that received the event
- * @param event The event to filter
- * @return True if event was handled, false to propagate
- *
- * Filters keyboard events to provide playback shortcuts when a file is open.
- */
-bool MDF4::Player::eventFilter(QObject *obj, QEvent *event)
-{
-  if (event->type() == QEvent::KeyPress)
-  {
-    auto *keyEvent = static_cast<QKeyEvent *>(event);
-    return handleKeyPress(keyEvent);
-  }
-
-  return QObject::eventFilter(obj, event);
-}
-
-/**
  * @brief Handles keyboard shortcuts for playback control
  * @param keyEvent The key press event
  * @return True if key was handled, false otherwise
@@ -1005,4 +960,23 @@ bool MDF4::Player::handleKeyPress(QKeyEvent *keyEvent)
   }
 
   return false;
+}
+
+/**
+ * @brief Event filter for capturing keyboard events
+ * @param obj Object that received the event
+ * @param event The event to filter
+ * @return True if event was handled, false to propagate
+ *
+ * Filters keyboard events to provide playback shortcuts when a file is open.
+ */
+bool MDF4::Player::eventFilter(QObject *obj, QEvent *event)
+{
+  if (event->type() == QEvent::KeyPress)
+  {
+    auto *keyEvent = static_cast<QKeyEvent *>(event);
+    return handleKeyPress(keyEvent);
+  }
+
+  return QObject::eventFilter(obj, event);
 }

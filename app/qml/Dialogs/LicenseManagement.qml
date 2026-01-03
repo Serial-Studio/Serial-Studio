@@ -29,21 +29,21 @@ import QtQuick.Controls
 Window {
   id: root
 
+  //
+  // Custom properties
+  //
   property int titlebarHeight: 0
-  property int calculatedHeight: {
-    var contentHeight = contentRect.implicitHeight > 0 ? contentRect.implicitHeight : 280
-    var buttonHeight = buttonRow.implicitHeight > 0 ? buttonRow.implicitHeight : 48
-    return Math.min(340, Math.max(280, contentHeight + buttonHeight + 60 + titlebarHeight))
-  }
 
+  //
+  // Window options
+  //
   title: qsTr("Licensing")
-  minimumWidth: 640
-  maximumWidth: 640
   width: minimumWidth
-  height: calculatedHeight
-  minimumHeight: calculatedHeight
-  maximumHeight: calculatedHeight
-
+  height: minimumHeight
+  minimumWidth: column.implicitWidth + 32
+  maximumWidth: column.implicitWidth + 32
+  minimumHeight: column.implicitHeight + 32 + titlebarHeight
+  maximumHeight: column.implicitHeight + 32 + titlebarHeight
   Component.onCompleted: {
     root.flags = Qt.Dialog |
         Qt.CustomizeWindowHint |
@@ -51,6 +51,9 @@ Window {
         Qt.WindowCloseButtonHint
   }
 
+  //
+  // Native window integration
+  //
   onVisibleChanged: {
     if (visible)
       Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["window"])
@@ -60,6 +63,9 @@ Window {
     root.titlebarHeight = Cpp_NativeWindow.titlebarHeight(root)
   }
 
+  //
+  // Update window colors when theme changes
+  //
   Connections {
     target: Cpp_ThemeManager
     function onThemeChanged() {
@@ -68,6 +74,9 @@ Window {
     }
   }
 
+  //
+  // Top section
+  //
   Rectangle {
     height: root.titlebarHeight
     color: Cpp_ThemeManager.colors["window"]
@@ -78,6 +87,9 @@ Window {
     }
   }
 
+  //
+  // Titlebar text
+  //
   Label {
     text: root.title
     visible: root.titlebarHeight > 0
@@ -91,6 +103,9 @@ Window {
     }
   }
 
+  //
+  // Be able to drag/move the window
+  //
   DragHandler {
     target: null
     onActiveChanged: {
@@ -99,6 +114,17 @@ Window {
     }
   }
 
+  //
+  // Close shortcut
+  //
+  Shortcut {
+    sequences: [StandardKey.Close]
+    onActivated: root.close()
+  }
+
+  //
+  // Use page item to set application palette
+  //
   Page {
     anchors.fill: parent
     anchors.topMargin: root.titlebarHeight
@@ -124,345 +150,345 @@ Window {
     palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
+    //
+    // Window controls
+    //
     ColumnLayout {
-      id: mainLayout
+      id: column
       spacing: 12
-      anchors.fill: parent
-      anchors.margins: 16
+      anchors.centerIn: parent
 
+      //
+      // Page index
+      //
+      readonly property int pageIdx: Cpp_Licensing_LemonSqueezy.busy ? 0 :
+          (Cpp_Licensing_LemonSqueezy.isActivated ? 2 : 1)
+
+      //
+      // Busy page
+      //
       Rectangle {
-        id: contentRect
         radius: 2
         border.width: 1
         Layout.fillWidth: true
-        implicitHeight: stackLayout.implicitHeight + 32
-        Layout.preferredHeight: implicitHeight
+        visible: column.pageIdx === 0
+        implicitHeight: activationLayout.implicitHeight + 32
         color: Cpp_ThemeManager.colors["groupbox_background"]
         border.color: Cpp_ThemeManager.colors["groupbox_border"]
 
-        DragHandler {
-          target: null
-        }
+        ColumnLayout {
+          spacing: 12
+          anchors.margins: 16
+          anchors.fill: parent
 
-        StackLayout {
-          id: stackLayout
-          width: parent.width - 32
-          anchors.centerIn: parent
-          currentIndex: Cpp_Licensing_LemonSqueezy.busy ? 0 :
-                        (Cpp_Licensing_LemonSqueezy.isActivated ? 2 : 1)
-
-          Item {
-            implicitHeight: busyLayout.implicitHeight
-            implicitWidth: busyLayout.implicitWidth
-
-            ColumnLayout {
-              id: busyLayout
-              spacing: 12
-              anchors.centerIn: parent
-
-              BusyIndicator {
-                Layout.alignment: Qt.AlignHCenter
-                running: Cpp_Licensing_LemonSqueezy.busy
-              }
-
-              Label {
-                text: qsTr("Please wait...")
-                Layout.alignment: Qt.AlignHCenter
-                font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
-              }
-            }
+          BusyIndicator {
+            Layout.alignment: Qt.AlignHCenter
+            running: Cpp_Licensing_LemonSqueezy.busy
           }
 
-          Item {
-            implicitHeight: activationLayout.implicitHeight
-            implicitWidth: activationLayout.implicitWidth
+          Label {
+            text: qsTr("Please wait...")
+            Layout.alignment: Qt.AlignHCenter
+            font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
+          }
+        }
+      }
+
+      //
+      // Activation page
+      //
+      Rectangle {
+        radius: 2
+        border.width: 1
+        Layout.fillWidth: true
+        visible: column.pageIdx === 1
+        implicitHeight: activationLayout.implicitHeight + 32
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+        RowLayout {
+          id: activationLayout
+
+          spacing: 16
+          anchors.margins: 16
+          anchors.fill: parent
+
+          Image {
+            sourceSize.width: 128
+            sourceSize.height: 128
+            Layout.alignment: Qt.AlignVCenter
+            source: "qrc:/rcc/icons/licensing/license.svg"
+          }
+
+          ColumnLayout {
+            spacing: 8
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
+
+            Label {
+              Layout.fillWidth: true
+              font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
+              text: qsTr("Activate Serial Studio Pro")
+            }
+
+            Label {
+              Layout.fillWidth: true
+              wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+              text: qsTr("Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.")
+            }
+
+            Label {
+              opacity: 0.8
+              Layout.fillWidth: true
+              wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+              text: qsTr("Your license includes 5 device activations.\nPlans include Monthly, Yearly, and Lifetime options.")
+            }
 
             RowLayout {
-              id: activationLayout
-              spacing: 16
-              width: parent.width
+              spacing: 4
+              Layout.fillWidth: true
 
-              Image {
-                sourceSize.width: 128
-                sourceSize.height: 128
-                Layout.alignment: Qt.AlignVCenter
-                source: "qrc:/rcc/icons/licensing/license.svg"
+              TextField {
+                id: _key
+                Layout.fillWidth: true
+                echoMode: TextInput.Password
+                text: Cpp_Licensing_LemonSqueezy.license
+                placeholderText: qsTr("Paste your license key here…")
+                onTextChanged: {
+                  if (Cpp_Licensing_LemonSqueezy.license !== text)
+                    Cpp_Licensing_LemonSqueezy.license = text
+                }
+
+                MouseArea {
+                  anchors.fill: parent
+                  acceptedButtons: Qt.RightButton
+                  onPressed: (mouse) => {
+                               if (mouse.button === Qt.RightButton) {
+                                 _keyContextMenu.popup()
+                               }
+                             }
+
+                  Menu {
+                    id: _keyContextMenu
+
+                    MenuItem {
+                      text: qsTr("Copy")
+                      onTriggered: _key.copy()
+                      enabled: _key.selectedText.length > 0
+                    }
+
+                    MenuItem {
+                      text: qsTr("Paste")
+                      enabled: _key.canPaste
+                      onTriggered: _key.paste()
+                    }
+
+                    MenuItem {
+                      text: qsTr("Select All")
+                      enabled: _key.length > 0
+                      onTriggered: _key.selectAll()
+                    }
+                  }
+                }
               }
 
-              ColumnLayout {
-                spacing: 8
-                Layout.fillWidth: true
+              Button {
+                checkable: true
+                icon.color: palette.text
+                Layout.maximumWidth: height
                 Layout.alignment: Qt.AlignVCenter
+                icon.source: checked ? "qrc:/rcc/icons/buttons/invisible.svg" :
+                                       "qrc:/rcc/icons/buttons/visible.svg"
+                onCheckedChanged: _key.echoMode = (checked ? TextField.Normal :
+                                                             TextField.Password)
+              }
+            }
+          }
+        }
+      }
 
-                Label {
-                  Layout.fillWidth: true
-                  font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
-                  text: qsTr("Activate Serial Studio Pro")
+      //
+      // License page
+      //
+      Rectangle {
+        radius: 2
+        border.width: 1
+        Layout.fillWidth: true
+        visible: column.pageIdx === 2
+        implicitHeight: licenseDetailsLayout.implicitHeight + 32
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+        GridLayout {
+          id: licenseDetailsLayout
+
+          columns: 3
+          rowSpacing: 8
+          columnSpacing: 12
+          anchors.margins: 16
+          anchors.fill: parent
+
+          Image {
+            sourceSize.width: 18
+            sourceSize.height: 18
+            source: "qrc:/rcc/icons/licensing/plan.svg"
+          }
+
+          Label {
+            text: qsTr("Product") + ":"
+            font: Cpp_Misc_CommonFonts.boldUiFont
+          }
+
+          Label {
+            Layout.fillWidth: true
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            text: qsTr("Serial Studio %1").arg(Cpp_Licensing_LemonSqueezy.variantName)
+          }
+
+          Image {
+            sourceSize.width: 18
+            sourceSize.height: 18
+            source: "qrc:/rcc/icons/licensing/user.svg"
+            visible: Cpp_Licensing_LemonSqueezy.customerName.length > 0
+          }
+
+          Label {
+            text: qsTr("Licensee") + ":"
+            font: Cpp_Misc_CommonFonts.boldUiFont
+            visible: Cpp_Licensing_LemonSqueezy.customerName.length > 0
+          }
+
+          Label {
+            Layout.fillWidth: true
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            text: Cpp_Licensing_LemonSqueezy.customerName
+            visible: Cpp_Licensing_LemonSqueezy.customerName.length > 0
+          }
+
+          Image {
+            sourceSize.width: 18
+            sourceSize.height: 18
+            source: "qrc:/rcc/icons/licensing/email.svg"
+          }
+
+          Label {
+            text: qsTr("Licensee E-Mail") + ":"
+            font: Cpp_Misc_CommonFonts.boldUiFont
+          }
+
+          Label {
+            Layout.fillWidth: true
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            text: Cpp_Licensing_LemonSqueezy.customerEmail
+          }
+
+          Image {
+            sourceSize.width: 18
+            sourceSize.height: 18
+            source: "qrc:/rcc/icons/licensing/devices.svg"
+          }
+
+          Label {
+            text: qsTr("Device Usage") + ":"
+            font: Cpp_Misc_CommonFonts.boldUiFont
+          }
+
+          Label {
+            Layout.fillWidth: true
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            text: Cpp_Licensing_LemonSqueezy.seatLimit < 0
+                  ? qsTr("%1 devices in use (Unlimited plan)").arg(Cpp_Licensing_LemonSqueezy.seatUsage)
+                  : qsTr("%1 of %2 devices used").arg(Cpp_Licensing_LemonSqueezy.seatUsage).arg(Cpp_Licensing_LemonSqueezy.seatLimit)
+          }
+
+          Image {
+            sourceSize.width: 18
+            sourceSize.height: 18
+            source: "qrc:/rcc/icons/licensing/uuid.svg"
+          }
+
+          Label {
+            text: qsTr("Device ID") + ":"
+            font: Cpp_Misc_CommonFonts.boldUiFont
+          }
+
+          TextField {
+            id: _uid
+            readOnly: true
+            Layout.fillWidth: true
+            onTextChanged: cursorPosition = 0
+            text: Cpp_Licensing_LemonSqueezy.instanceName
+
+            MouseArea {
+              anchors.fill: parent
+              acceptedButtons: Qt.RightButton
+              onPressed: (mouse) => {
+                           if (mouse.button === Qt.RightButton) {
+                             _uidContextMenu.popup()
+                           }
+                         }
+
+              Menu {
+                id: _uidContextMenu
+
+                MenuItem {
+                  text: qsTr("Copy")
+                  onTriggered: _uid.copy()
+                  enabled: _uid.selectedText.length > 0
                 }
 
-                Label {
-                  Layout.fillWidth: true
-                  wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                  text: qsTr("Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.")
-                }
-
-                Label {
-                  opacity: 0.8
-                  Layout.fillWidth: true
-                  wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                  text: qsTr("Your license includes 5 device activations.\nPlans include Monthly, Yearly, and Lifetime options.")
-                }
-
-                Item {
-                  Layout.preferredHeight: 8
-                }
-
-                RowLayout {
-                  spacing: 4
-                  Layout.fillWidth: true
-
-                  TextField {
-                    id: _key
-                    Layout.fillWidth: true
-                    echoMode: TextInput.Password
-                    text: Cpp_Licensing_LemonSqueezy.license
-                    placeholderText: qsTr("Paste your license key here…")
-                    onTextChanged: {
-                      if (Cpp_Licensing_LemonSqueezy.license !== text)
-                        Cpp_Licensing_LemonSqueezy.license = text
-                    }
-
-                    MouseArea {
-                      anchors.fill: parent
-                      acceptedButtons: Qt.RightButton
-                      onPressed: (mouse) => {
-                                   if (mouse.button === Qt.RightButton) {
-                                     _keyContextMenu.popup()
-                                   }
-                                 }
-
-                      Menu {
-                        id: _keyContextMenu
-
-                        MenuItem {
-                          text: qsTr("Copy")
-                          onTriggered: _key.copy()
-                          enabled: _key.selectedText.length > 0
-                        }
-
-                        MenuItem {
-                          text: qsTr("Paste")
-                          enabled: _key.canPaste
-                          onTriggered: _key.paste()
-                        }
-
-                        MenuItem {
-                          text: qsTr("Select All")
-                          enabled: _key.length > 0
-                          onTriggered: _key.selectAll()
-                        }
-                      }
-                    }
-                  }
-
-                  Button {
-                    checkable: true
-                    icon.color: palette.text
-                    Layout.maximumWidth: height
-                    Layout.alignment: Qt.AlignVCenter
-                    icon.source: checked ? "qrc:/rcc/icons/buttons/invisible.svg" :
-                                           "qrc:/rcc/icons/buttons/visible.svg"
-                    onCheckedChanged: _key.echoMode = (checked ? TextField.Normal :
-                                                                 TextField.Password)
-                  }
+                MenuItem {
+                  text: qsTr("Select All")
+                  enabled: _uid.length > 0
+                  onTriggered: _uid.selectAll()
                 }
               }
             }
           }
 
-          Item {
-            implicitHeight: licenseDetailsLayout.implicitHeight + 16
-            implicitWidth: licenseDetailsLayout.implicitWidth
+          Image {
+            sourceSize.width: 18
+            sourceSize.height: 18
+            source: "qrc:/rcc/icons/licensing/key.svg"
+            visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
+          }
 
-            ScrollView {
-              id: licenseDetailsScroll
+          Label {
+            text: qsTr("License Key") + ":"
+            font: Cpp_Misc_CommonFonts.boldUiFont
+            visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
+          }
+
+          TextField {
+            id: _lic
+            readOnly: true
+            Layout.fillWidth: true
+            onTextChanged: cursorPosition = 0
+            text: Cpp_Licensing_LemonSqueezy.license
+            visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
+
+            MouseArea {
               anchors.fill: parent
-              contentWidth: availableWidth
-              ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+              acceptedButtons: Qt.RightButton
+              onPressed: (mouse) => {
+                           if (mouse.button === Qt.RightButton) {
+                             _licContextMenu.popup()
+                           }
+                         }
 
-              GridLayout {
-                id: licenseDetailsLayout
-                width: parent.width
-                columns: 3
-                rowSpacing: 8
-                columnSpacing: 12
+              Menu {
+                id: _licContextMenu
 
-                Image {
-                  sourceSize.width: 18
-                  sourceSize.height: 18
-                  source: "qrc:/rcc/icons/licensing/plan.svg"
+                MenuItem {
+                  text: qsTr("Copy")
+                  onTriggered: _lic.copy()
+                  enabled: _lic.selectedText.length > 0
                 }
 
-                Label {
-                  text: qsTr("Product") + ":"
-                  font: Cpp_Misc_CommonFonts.boldUiFont
-                }
-
-                Label {
-                  Layout.fillWidth: true
-                  wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                  text: qsTr("Serial Studio %1").arg(Cpp_Licensing_LemonSqueezy.variantName)
-                }
-
-                Image {
-                  sourceSize.width: 18
-                  sourceSize.height: 18
-                  source: "qrc:/rcc/icons/licensing/user.svg"
-                  visible: Cpp_Licensing_LemonSqueezy.customerName.length > 0
-                }
-
-                Label {
-                  text: qsTr("Licensee") + ":"
-                  font: Cpp_Misc_CommonFonts.boldUiFont
-                  visible: Cpp_Licensing_LemonSqueezy.customerName.length > 0
-                }
-
-                Label {
-                  Layout.fillWidth: true
-                  wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                  text: Cpp_Licensing_LemonSqueezy.customerName
-                  visible: Cpp_Licensing_LemonSqueezy.customerName.length > 0
-                }
-
-                Image {
-                  sourceSize.width: 18
-                  sourceSize.height: 18
-                  source: "qrc:/rcc/icons/licensing/email.svg"
-                }
-
-                Label {
-                  text: qsTr("Licensee E-Mail") + ":"
-                  font: Cpp_Misc_CommonFonts.boldUiFont
-                }
-
-                Label {
-                  Layout.fillWidth: true
-                  wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                  text: Cpp_Licensing_LemonSqueezy.customerEmail
-                }
-
-                Image {
-                  sourceSize.width: 18
-                  sourceSize.height: 18
-                  source: "qrc:/rcc/icons/licensing/devices.svg"
-                }
-
-                Label {
-                  text: qsTr("Device Usage") + ":"
-                  font: Cpp_Misc_CommonFonts.boldUiFont
-                }
-
-                Label {
-                  Layout.fillWidth: true
-                  wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                  text: Cpp_Licensing_LemonSqueezy.seatLimit < 0
-                        ? qsTr("%1 devices in use (Unlimited plan)").arg(Cpp_Licensing_LemonSqueezy.seatUsage)
-                        : qsTr("%1 of %2 devices used")
-                  .arg(Cpp_Licensing_LemonSqueezy.seatUsage)
-                  .arg(Cpp_Licensing_LemonSqueezy.seatLimit)
-                }
-
-                Image {
-                  sourceSize.width: 18
-                  sourceSize.height: 18
-                  source: "qrc:/rcc/icons/licensing/uuid.svg"
-                }
-
-                Label {
-                  text: qsTr("Device ID") + ":"
-                  font: Cpp_Misc_CommonFonts.boldUiFont
-                }
-
-                TextField {
-                  id: _uid
-                  readOnly: true
-                  Layout.fillWidth: true
-                  onTextChanged: cursorPosition = 0
-                  text: Cpp_Licensing_LemonSqueezy.instanceName
-
-                  MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.RightButton
-                    onPressed: (mouse) => {
-                                 if (mouse.button === Qt.RightButton) {
-                                   _uidContextMenu.popup()
-                                 }
-                               }
-
-                    Menu {
-                      id: _uidContextMenu
-
-                      MenuItem {
-                        text: qsTr("Copy")
-                        onTriggered: _uid.copy()
-                        enabled: _uid.selectedText.length > 0
-                      }
-
-                      MenuItem {
-                        text: qsTr("Select All")
-                        enabled: _uid.length > 0
-                        onTriggered: _uid.selectAll()
-                      }
-                    }
-                  }
-                }
-
-                Image {
-                  sourceSize.width: 18
-                  sourceSize.height: 18
-                  source: "qrc:/rcc/icons/licensing/key.svg"
-                  visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
-                }
-
-                Label {
-                  text: qsTr("License Key") + ":"
-                  font: Cpp_Misc_CommonFonts.boldUiFont
-                  visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
-                }
-
-                TextField {
-                  id: _lic
-                  readOnly: true
-                  Layout.fillWidth: true
-                  onTextChanged: cursorPosition = 0
-                  text: Cpp_Licensing_LemonSqueezy.license
-                  visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
-
-                  MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.RightButton
-                    onPressed: (mouse) => {
-                                 if (mouse.button === Qt.RightButton) {
-                                   _licContextMenu.popup()
-                                 }
-                               }
-
-                    Menu {
-                      id: _licContextMenu
-
-                      MenuItem {
-                        text: qsTr("Copy")
-                        onTriggered: _lic.copy()
-                        enabled: _lic.selectedText.length > 0
-                      }
-
-                      MenuItem {
-                        text: qsTr("Select All")
-                        enabled: _lic.length > 0
-                        onTriggered: _lic.selectAll()
-                      }
-                    }
-                  }
+                MenuItem {
+                  text: qsTr("Select All")
+                  enabled: _lic.length > 0
+                  onTriggered: _lic.selectAll()
                 }
               }
             }
@@ -470,10 +496,15 @@ Window {
         }
       }
 
+      //
+      // Buttons
+      //
       RowLayout {
         id: buttonRow
+
         spacing: 8
         Layout.fillWidth: true
+        Layout.minimumWidth: 480
 
         Button {
           icon.width: 18
