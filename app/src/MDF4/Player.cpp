@@ -594,7 +594,6 @@ void MDF4::Player::updateData()
   if (m_framePos >= 0 && m_framePos < frameCount())
   {
     m_timestamp = formatTimestamp(m_frameIndex[m_framePos].timestamp);
-    sendFrame(m_framePos);
     Q_EMIT timestampChanged();
   }
 
@@ -605,6 +604,8 @@ void MDF4::Player::updateData()
       pause();
       return;
     }
+
+    sendFrame(m_framePos);
 
     const qint64 elapsedMs = m_elapsedTimer.elapsed();
     const double targetTime = m_startTimestamp + (elapsedMs / 1000.0);
@@ -618,6 +619,9 @@ void MDF4::Player::updateData()
 
       while (m_framePos < frameCount() - 1 && processed < kMaxBatchSize)
       {
+        if (!isOpen() || !isPlaying())
+          break;
+
         ++m_framePos;
         sendFrame(m_framePos);
         ++processed;
@@ -630,8 +634,11 @@ void MDF4::Player::updateData()
           break;
       }
 
-      m_timestamp = formatTimestamp(m_frameIndex[m_framePos].timestamp);
-      Q_EMIT timestampChanged();
+      if (isOpen() && m_framePos < m_frameIndex.size())
+      {
+        m_timestamp = formatTimestamp(m_frameIndex[m_framePos].timestamp);
+        Q_EMIT timestampChanged();
+      }
 
       if (isPlaying())
         QTimer::singleShot(1, Qt::PreciseTimer, this,
@@ -838,6 +845,9 @@ void MDF4::Player::processFrameBatch(int startFrame, int endFrame)
  */
 void MDF4::Player::sendFrame(int frameIndex)
 {
+  if (!isOpen())
+    return;
+
   if (frameIndex < 0 || frameIndex >= frameCount())
     return;
 
@@ -868,10 +878,9 @@ void MDF4::Player::sendHeaderFrame()
 
       headers.append(name);
     }
+
     else
-    {
       headers.append(QString("Channel_%1").arg(i + 1));
-    }
   }
 
   JSON::FrameBuilder::instance().registerQuickPlotHeaders(headers);
@@ -889,9 +898,9 @@ QString MDF4::Player::formatTimestamp(double timestamp) const
   double seconds = timestamp - hours * 3600.0 - minutes * 60.0;
 
   return QString("%1:%2:%3")
-      .arg(hours, 2, 10, QChar('0'))
-      .arg(minutes, 2, 10, QChar('0'))
-      .arg(seconds, 6, 'f', 3, QChar('0'));
+      .arg(qMax(hours, 0), 2, 10, QChar('0'))
+      .arg(qMax(minutes, 0), 2, 10, QChar('0'))
+      .arg(qMax(seconds, 0.0), 6, 'f', 3, QChar('0'));
 }
 
 /**

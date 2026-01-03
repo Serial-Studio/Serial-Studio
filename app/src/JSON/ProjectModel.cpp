@@ -2129,8 +2129,8 @@ void JSON::ProjectModel::displayFrameParserView()
     {
       QTimer::singleShot(100, this, [=, this] {
         if (m_selectionModel)
-          m_selectionModel->setCurrentIndex(it.key()->index(),
-                                            QItemSelectionModel::ClearAndSelect);
+          m_selectionModel->setCurrentIndex(
+              it.key()->index(), QItemSelectionModel::ClearAndSelect);
       });
 
       break;

@@ -533,11 +533,11 @@ void CSV::Player::updateData()
   if (!isOpen())
     return;
 
-  IO::Manager::instance().processPayload(getFrame(framePosition()));
   updateTimestampDisplay();
-
   if (!isPlaying())
     return;
+
+  IO::Manager::instance().processPayload(getFrame(framePosition()));
 
   if (framePosition() >= frameCount() - 1)
   {
@@ -643,6 +643,9 @@ void CSV::Player::updateData()
  */
 void CSV::Player::processFrameBatch(int startFrame, int endFrame)
 {
+  if (!isOpen())
+    return;
+
   for (int i = startFrame; i <= endFrame; ++i)
     IO::Manager::instance().processPayload(getFrame(i));
 }

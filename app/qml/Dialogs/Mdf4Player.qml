@@ -20,6 +20,9 @@ Window {
   //
   property int titlebarHeight: 0
 
+  //
+  // Window options
+  //
   width: minimumWidth
   height: minimumHeight
   title: qsTr("MDF4 Player")
@@ -35,6 +38,9 @@ Window {
         Qt.WindowCloseButtonHint
   }
 
+  //
+  // Automatically display the window when the MDF file is opened
+  //
   Connections {
     target: Cpp_MDF4_Player
     function onOpenChanged() {
@@ -45,6 +51,10 @@ Window {
     }
   }
 
+  //
+  // Automatically close MDF file when dialog is hidden
+  // Also handle native window integration
+  //
   onVisibilityChanged: {
     if (visible)
       Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["window"])
@@ -57,6 +67,9 @@ Window {
     root.titlebarHeight = Cpp_NativeWindow.titlebarHeight(root)
   }
 
+  //
+  // Update colors when theme changes
+  //
   Connections {
     target: Cpp_ThemeManager
     function onThemeChanged() {
