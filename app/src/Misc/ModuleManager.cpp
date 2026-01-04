@@ -32,10 +32,9 @@
 #include "MDF4/Player.h"
 #include "MDF4/Export.h"
 
-#include "JSON/Frame.h"
-#include "JSON/FrameParser.h"
-#include "JSON/ProjectModel.h"
-#include "JSON/FrameBuilder.h"
+#include "DataModel/FrameParser.h"
+#include "DataModel/ProjectModel.h"
+#include "DataModel/FrameBuilder.h"
 
 #include "IO/Manager.h"
 #include "Console/Handler.h"
@@ -76,12 +75,12 @@
 
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Client.h"
-#  include "JSON/DBCImporter.h"
 #  include "Licensing/Trial.h"
 #  include "IO/Drivers/Audio.h"
 #  include "IO/Drivers/CANBus.h"
 #  include "IO/Drivers/Modbus.h"
 #  include "UI/Widgets/Plot3D.h"
+#  include "DataModel/DBCImporter.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
@@ -255,8 +254,8 @@ void Misc::ModuleManager::registerQmlTypes()
 #endif
 
   // Register JSON custom items
-  qmlRegisterType<JSON::FrameParser>("SerialStudio", 1, 0, "FrameParser");
-  qmlRegisterType<JSON::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
+  qmlRegisterType<DataModel::FrameParser>("SerialStudio", 1, 0, "FrameParser");
+  qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
 
   // Register generic dashboard widget
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
@@ -301,8 +300,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto miscUtilities = &Misc::Utilities::instance();
   auto consoleExport = &Console::Export::instance();
   auto ioNetwork = &IO::Drivers::Network::instance();
-  auto frameBuilder = &JSON::FrameBuilder::instance();
-  auto projectModel = &JSON::ProjectModel::instance();
+  auto frameBuilder = &DataModel::FrameBuilder::instance();
+  auto projectModel = &DataModel::ProjectModel::instance();
   auto consoleHandler = &Console::Handler::instance();
   auto miscTimerEvents = &Misc::TimerEvents::instance();
   auto miscCommonFonts = &Misc::CommonFonts::instance();
@@ -314,7 +313,7 @@ void Misc::ModuleManager::initializeQmlInterface()
 #ifdef BUILD_COMMERCIAL
   const bool qtCommercialAvailable = true;
   auto mqttClient = &MQTT::Client::instance();
-  auto dbcImporter = &JSON::DBCImporter::instance();
+  auto dbcImporter = &DataModel::DBCImporter::instance();
   auto audioDriver = &IO::Drivers::Audio::instance();
   auto canBusDriver = &IO::Drivers::CANBus::instance();
   auto modbusDriver = &IO::Drivers::Modbus::instance();

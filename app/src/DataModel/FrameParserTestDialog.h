@@ -33,7 +33,7 @@
 #include <QTableWidget>
 #include <QPlainTextEdit>
 
-namespace JSON
+namespace DataModel
 {
 class FrameParser;
 

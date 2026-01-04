@@ -31,7 +31,7 @@
 #include "UI/Dashboard.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
-#include "JSON/FrameBuilder.h"
+#include "DataModel/FrameBuilder.h"
 
 /**
  * Constructor function
@@ -205,7 +205,7 @@ void CSV::Player::closeFile()
   m_useHighPrecisionTimestamps = false;
   m_startTimestampSeconds = 0.0;
 
-  JSON::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
+  DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
   Q_EMIT openChanged();
   Q_EMIT timestampChanged();
@@ -673,7 +673,7 @@ void CSV::Player::sendHeaderFrame()
   for (int i = 1; i < headerRow.size(); ++i)
     headers.append(headerRow[i]);
 
-  JSON::FrameBuilder::instance().registerQuickPlotHeaders(headers);
+  DataModel::FrameBuilder::instance().registerQuickPlotHeaders(headers);
 }
 
 /**

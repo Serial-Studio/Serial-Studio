@@ -22,30 +22,30 @@
 #include <QFileInfo>
 
 #include "IO/Manager.h"
-#include "Misc/Utilities.h"
-
 #include "CSV/Player.h"
-#include "JSON/ProjectModel.h"
-#include "JSON/FrameBuilder.h"
+#include "CSV/Export.h"
+#include "MDF4/Export.h"
+#include "MDF4/Player.h"
+#include "UI/Dashboard.h"
+#include "Plugins/Server.h"
+#include "Misc/Utilities.h"
+#include "DataModel/ProjectModel.h"
+#include "DataModel/FrameBuilder.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "IO/Drivers/Audio.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
-#include "CSV/Export.h"
-#include "MDF4/Export.h"
-#include "UI/Dashboard.h"
-#include "Plugins/Server.h"
 
 //------------------------------------------------------------------------------
 // Constants
 //------------------------------------------------------------------------------
 
 /**
- * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
+ * Initializes the DataModel Parser class and connects appropiate SIGNALS/SLOTS
  */
-JSON::FrameBuilder::FrameBuilder()
+DataModel::FrameBuilder::FrameBuilder()
   : m_quickPlotChannels(-1)
   , m_quickPlotHasHeader(false)
   , m_frameParser(nullptr)
@@ -82,16 +82,16 @@ JSON::FrameBuilder::FrameBuilder()
 /**
  * Returns the only instance of the class
  */
-JSON::FrameBuilder &JSON::FrameBuilder::instance()
+DataModel::FrameBuilder &DataModel::FrameBuilder::instance()
 {
   static FrameBuilder singleton;
   return singleton;
 }
 
 /**
- * Returns the file path of the loaded JSON map file
+ * Returns the file path of the loaded DataModel map file
  */
-QString JSON::FrameBuilder::jsonMapFilepath() const
+QString DataModel::FrameBuilder::jsonMapFilepath() const
 {
   if (m_jsonMap.isOpen())
   {
@@ -103,9 +103,9 @@ QString JSON::FrameBuilder::jsonMapFilepath() const
 }
 
 /**
- * Returns the file name of the loaded JSON map file
+ * Returns the file name of the loaded DataModel map file
  */
-QString JSON::FrameBuilder::jsonMapFilename() const
+QString DataModel::FrameBuilder::jsonMapFilename() const
 {
   if (m_jsonMap.isOpen())
   {
@@ -117,15 +117,15 @@ QString JSON::FrameBuilder::jsonMapFilename() const
 }
 
 /**
- * @brief Returns the currently loaded JSON frame.
+ * @brief Returns the currently loaded DataModel frame.
  *
  * The frame contains the structure of all groups, datasets, and actions
- * parsed from the active JSON project file. It represents the complete
+ * parsed from the active DataModel project file. It represents the complete
  * configuration used to build the dashboard and manage data parsing.
  *
- * @return A constant reference to the current JSON::Frame.
+ * @return A constant reference to the current DataModel::Frame.
  */
-const JSON::Frame &JSON::FrameBuilder::frame() const
+const DataModel::Frame &DataModel::FrameBuilder::frame() const
 {
   return m_frame;
 }
@@ -133,7 +133,7 @@ const JSON::Frame &JSON::FrameBuilder::frame() const
 /**
  * Returns a pointer to the currently loaded frame parser editor.
  */
-JSON::FrameParser *JSON::FrameBuilder::frameParser() const
+DataModel::FrameParser *DataModel::FrameBuilder::frameParser() const
 {
   return m_frameParser;
 }
@@ -141,7 +141,7 @@ JSON::FrameParser *JSON::FrameBuilder::frameParser() const
 /**
  * Returns the operation mode
  */
-SerialStudio::OperationMode JSON::FrameBuilder::operationMode() const
+SerialStudio::OperationMode DataModel::FrameBuilder::operationMode() const
 {
   return m_opMode;
 }
@@ -155,7 +155,7 @@ SerialStudio::OperationMode JSON::FrameBuilder::operationMode() const
  *
  * @param headers List of channel names to use
  */
-void JSON::FrameBuilder::registerQuickPlotHeaders(const QStringList &headers)
+void DataModel::FrameBuilder::registerQuickPlotHeaders(const QStringList &headers)
 {
   if (!headers.isEmpty())
   {
@@ -174,16 +174,16 @@ void JSON::FrameBuilder::registerQuickPlotHeaders(const QStringList &headers)
  * Configures the signal/slot connections with the rest of the modules of the
  * application.
  */
-void JSON::FrameBuilder::setupExternalConnections()
+void DataModel::FrameBuilder::setupExternalConnections()
 {
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
-          &JSON::FrameBuilder::onConnectedChanged);
+          &DataModel::FrameBuilder::onConnectedChanged);
 }
 
 /**
- * Opens, validates & loads into memory the JSON file in the given @a path.
+ * Opens, validates & loads into memory the DataModel file in the given @a path.
  */
-void JSON::FrameBuilder::loadJsonMap(const QString &path)
+void DataModel::FrameBuilder::loadJsonMap(const QString &path)
 {
   // Validate path
   if (path.isEmpty())
@@ -276,25 +276,25 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
  * @brief Assigns an instance to the frame parser to be used to split frame
  *        data/elements into individual parts.
  */
-void JSON::FrameBuilder::setFrameParser(JSON::FrameParser *parser)
+void DataModel::FrameBuilder::setFrameParser(DataModel::FrameParser *parser)
 {
   m_frameParser = parser;
 }
 
 /**
- * Changes the operation mode of the JSON parser. There are two possible op.
+ * Changes the operation mode of the DataModel parser. There are two possible op.
  * modes:
  *
  * @c kManual serial data only contains the comma-separated values, and we need
- *            to use a JSON map file (given by the user) to know what each value
+ *            to use a DataModel map file (given by the user) to know what each value
  *            means. This method is recommended when we need to transfer &
  *            display a large amount of information from the microcontroller
  *            unit to the computer.
  *
- * @c kAutomatic serial data contains the JSON data frame, good for simple
+ * @c kAutomatic serial data contains the DataModel data frame, good for simple
  *               applications or for prototyping.
  */
-void JSON::FrameBuilder::setOperationMode(
+void DataModel::FrameBuilder::setOperationMode(
     const SerialStudio::OperationMode mode)
 {
   m_opMode = mode;
@@ -336,13 +336,13 @@ void JSON::FrameBuilder::setOperationMode(
  * This is a hotpath function executed at high frequency.
  *
  * It routes the incoming binary data to the correct parsing strategy:
- * - If the device sends JSON directly, parses it using QJsonDocument.
+ * - If the device sends DataModel directly, parses it using QJsonDocument.
  * - If using a project file, delegates parsing to the configured frame parser.
  * - If in Quick Plot mode, parses CSV-like data for plotting.
  *
  * @param data Raw binary input data to be processed.
  */
-void JSON::FrameBuilder::hotpathRxFrame(const QByteArray &data)
+void DataModel::FrameBuilder::hotpathRxFrame(const QByteArray &data)
 {
   switch (operationMode())
   {
@@ -369,7 +369,7 @@ void JSON::FrameBuilder::hotpathRxFrame(const QByteArray &data)
  * This slot is called when the connection state of the serial device changes.
  * If the device has just connected and the application is in project mode
  * (SerialStudio::ProjectFile), this method scans all defined actions in the
- * loaded JSON frame and immediately transmits those marked with the
+ * loaded DataModel frame and immediately transmits those marked with the
  * `autoExecuteOnConnect` flag.
  *
  * This is useful for scenarios where a device must receive a command
@@ -378,7 +378,7 @@ void JSON::FrameBuilder::hotpathRxFrame(const QByteArray &data)
  * Binary and text-based actions are handled accordingly based on the
  * `binaryData()` flag, and the data is sent via IO::Manager.
  */
-void JSON::FrameBuilder::onConnectedChanged()
+void DataModel::FrameBuilder::onConnectedChanged()
 {
   // Reset quick plot field count (headers are preserved and reset explicitly by
   // players)
@@ -406,9 +406,9 @@ void JSON::FrameBuilder::onConnectedChanged()
 }
 
 /**
- * Saves the location of the last valid JSON map file that was opened (if any)
+ * Saves the location of the last valid DataModel map file that was opened (if any)
  */
-void JSON::FrameBuilder::setJsonPathSetting(const QString &path)
+void DataModel::FrameBuilder::setJsonPathSetting(const QString &path)
 {
   m_settings.setValue(QStringLiteral("json_map_location"), path);
 }
@@ -430,14 +430,14 @@ void JSON::FrameBuilder::setJsonPathSetting(const QString &path)
  *
  * @note This function is part of the high-frequency data path. Optimize later.
  */
-void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
+void DataModel::FrameBuilder::parseProjectFrame(const QByteArray &data)
 {
   // Real-time data, parse data & perform conversion
   QStringList channels;
   channels.reserve(64);
-  if (!CSV::Player::instance().isOpen() && m_frameParser) [[likely]]
+  if (!SerialStudio::isAnyPlayerOpen() && m_frameParser) [[likely]]
   {
-    const auto decoderMethod = JSON::ProjectModel::instance().decoderMethod();
+    const auto decoderMethod = DataModel::ProjectModel::instance().decoderMethod();
     switch (decoderMethod)
     {
       case SerialStudio::Hexadecimal:
@@ -458,9 +458,7 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
 
   // CSV data, no need to perform conversions or use frame parser
   else
-  {
     channels = QString::fromUtf8(data).split(',', Qt::SkipEmptyParts);
-  }
 
   // Process data
   if (!channels.isEmpty())
@@ -504,7 +502,7 @@ void JSON::FrameBuilder::parseProjectFrame(const QByteArray &data)
  *
  * @note This function is part of the high-frequency data path. Optimize later.
  */
-void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
+void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
 {
   // Parse comma-separated values
   int start = 0;
@@ -595,7 +593,7 @@ void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
  * @brief Rebuilds the internal frame structure for Quick Plot mode based on
  *        current channel count.
  *
- * Constructs a new `JSON::Frame` and associated `JSON::Group`/`Dataset` layout
+ * Constructs a new `DataModel::Frame` and associated `DataModel::Group`/`Dataset` layout
  * using the provided channel values. If the build is configured for commercial
  * use and the audio bus is active, the function includes additional metadata
  * required for FFT plotting (e.g., sample rate, min/max). Otherwise, it builds
@@ -612,7 +610,7 @@ void JSON::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
  *       of channels changes. Avoid calling this in the real-time path unless
  *       necessary.
  */
-void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
+void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
 {
   // Parse audio data
 #ifdef BUILD_COMMERCIAL
@@ -655,11 +653,11 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
 
     // Obtain microphone values for each channel
     int index = 1;
-    std::vector<JSON::Dataset> datasets;
+    std::vector<DataModel::Dataset> datasets;
     datasets.reserve(channels.count());
     for (const auto &channel : std::as_const(channels))
     {
-      JSON::Dataset dataset;
+      DataModel::Dataset dataset;
       dataset.fft = true;
       dataset.plt = true;
       dataset.groupId = 0;
@@ -684,7 +682,7 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
     }
 
     // Create the holder group
-    JSON::Group group;
+    DataModel::Group group;
     group.groupId = 0;
     group.datasets = datasets;
     group.title = tr("Audio Input");
@@ -704,11 +702,11 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
 
   // Create datasets from the data
   int idx = 1;
-  std::vector<JSON::Dataset> datasets;
+  std::vector<DataModel::Dataset> datasets;
   datasets.reserve(channels.count());
   for (const auto &channel : std::as_const(channels))
   {
-    JSON::Dataset dataset;
+    DataModel::Dataset dataset;
     dataset.groupId = 0;
     dataset.index = idx;
     dataset.plt = false;
@@ -730,7 +728,7 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
   m_quickPlotFrame.title = tr("Quick Plot");
 
   // Create a datagrid group from the dataset array
-  JSON::Group datagrid;
+  DataModel::Group datagrid;
   datagrid.groupId = 0;
   datagrid.datasets = datasets;
   datagrid.title = tr("Quick Plot Data");
@@ -744,7 +742,7 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
   // Create a multiplot group when multiple datasets are found
   if (datasets.size() > 1)
   {
-    JSON::Group multiplot;
+    DataModel::Group multiplot;
     multiplot.groupId = 1;
     multiplot.datasets = datasets;
     multiplot.title = tr("Multiple Plots");
@@ -764,7 +762,7 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
 //------------------------------------------------------------------------------
 
 /**
- * @brief Publishes a fully constructed JSON frame to all registered output
+ * @brief Publishes a fully constructed DataModel frame to all registered output
  *        modules.
  *
  * Dispatches the provided frame to:
@@ -778,15 +776,18 @@ void JSON::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
  *       Do not call it in tight loops unless you're sure the frame is
  *       finalized.
  */
-void JSON::FrameBuilder::hotpathTxFrame(const JSON::Frame &frame)
+void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame &frame)
 {
   static auto &csvExport = CSV::Export::instance();
   static auto &mdf4Export = MDF4::Export::instance();
   static auto &dashboard = UI::Dashboard::instance();
   static auto &pluginsServer = Plugins::Server::instance();
 
+  auto shared_frame = std::make_shared<const DataModel::Frame>(frame);
+  auto timestamped_frame = std::make_shared<DataModel::TimestampedFrame>(shared_frame);
+
   dashboard.hotpathRxFrame(frame);
-  csvExport.hotpathTxFrame(frame);
-  mdf4Export.hotpathTxFrame(frame);
-  pluginsServer.hotpathTxFrame(frame);
+  csvExport.hotpathTxFrame(timestamped_frame);
+  mdf4Export.hotpathTxFrame(timestamped_frame);
+  pluginsServer.hotpathTxFrame(timestamped_frame);
 }

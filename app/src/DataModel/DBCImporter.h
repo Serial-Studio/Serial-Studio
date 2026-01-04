@@ -31,7 +31,7 @@
 
 #include "Frame.h"
 
-namespace JSON
+namespace DataModel
 {
 /**
  * @brief Imports CAN Database (DBC) files and converts them to Serial Studio

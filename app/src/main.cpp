@@ -32,8 +32,8 @@
 #include "UI/Dashboard.h"
 #include "IO/Drivers/UART.h"
 #include "Misc/TimerEvents.h"
-#include "JSON/ProjectModel.h"
-#include "JSON/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
+#include "DataModel/FrameBuilder.h"
 #include "IO/Drivers/Network.h"
 #include "Misc/ModuleManager.h"
 
@@ -229,17 +229,17 @@ int main(int argc, char **argv)
   if (parser.isSet(pOpt))
   {
     QString projectPath = parser.value(pOpt);
-    JSON::ProjectModel::instance().openJsonFile(projectPath);
-    JSON::FrameBuilder::instance().setOperationMode(SerialStudio::ProjectFile);
+    DataModel::ProjectModel::instance().openJsonFile(projectPath);
+    DataModel::FrameBuilder::instance().setOperationMode(SerialStudio::ProjectFile);
   }
 
   // Enable quick plot mode
   else if (parser.isSet(qOpt))
-    JSON::FrameBuilder::instance().setOperationMode(SerialStudio::QuickPlot);
+    DataModel::FrameBuilder::instance().setOperationMode(SerialStudio::QuickPlot);
 
   // Disable frame processing
   else if (parser.isSet(jOpt))
-    JSON::FrameBuilder::instance().setOperationMode(
+    DataModel::FrameBuilder::instance().setOperationMode(
         SerialStudio::DeviceSendsJSON);
 
   // Handle fullscreen option

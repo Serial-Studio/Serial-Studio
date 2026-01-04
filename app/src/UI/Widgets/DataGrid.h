@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "JSON/Frame.h"
+#include "DataModel/Frame.h"
 #include "UI/DeclarativeWidgets/StaticTable.h"
 
 namespace Widgets
@@ -70,7 +70,7 @@ private slots:
   void updateData();
 
 private:
-  QStringList getRow(const JSON::Dataset &dataset);
+  QStringList getRow(const DataModel::Dataset &dataset);
 
 private:
   int m_index;

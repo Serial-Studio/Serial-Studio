@@ -51,69 +51,45 @@
 #ifdef BUILD_COMMERCIAL
 
 /**
- * @brief Constructs the MDF4 export worker
+ * @brief Destructor for the MDF4 export worker
  */
-MDF4::ExportWorker::ExportWorker(
-    moodycamel::ReaderWriterQueue<JSON::TimestampFrame> *queue,
-    std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize)
-  : m_fileOpen(false)
-  , m_queueSize(queueSize)
-  , m_masterTimeChannel(nullptr)
-  , m_exportEnabled(exportEnabled)
-  , m_writer(nullptr)
-  , m_pendingFrames(queue)
-{
-  m_writeBuffer.reserve(kFlushThreshold * 2);
-}
-
-/**
- * @brief Destructor - closes file
- */
-MDF4::ExportWorker::~ExportWorker()
-{
-  closeFile();
-}
+MDF4::ExportWorker::~ExportWorker() = default;
 
 /**
  * @brief Returns true if file is open
  */
-bool MDF4::ExportWorker::isOpen() const
+bool MDF4::ExportWorker::isResourceOpen() const
 {
   return m_fileOpen;
 }
 
 /**
- * @brief Writes all queued frames to the MDF4 file
+ * @brief Processes a batch of MDF4 frames
+ *
+ * Writes frames to MDF4 file using the mdflib writer.
+ * If no file is open, a new file is created before writing.
+ *
+ * @param items Vector of timestamped frames to process.
  */
-void MDF4::ExportWorker::writeValues()
+void MDF4::ExportWorker::processItems(
+    const std::vector<DataModel::TimestampedFramePtr> &items)
 {
-  if (!m_exportEnabled->load(std::memory_order_relaxed))
+  if (items.empty())
     return;
 
   if (!IO::Manager::instance().isConnected())
     return;
 
-  m_writeBuffer.clear();
-  JSON::TimestampFrame item;
-  while (m_pendingFrames->try_dequeue(item))
-    m_writeBuffer.push_back(std::move(item));
+  if (!isResourceOpen() && !items.empty())
+    createFile(*items.front()->data);
 
-  const auto count = m_writeBuffer.size();
-  if (count == 0)
+  if (!isResourceOpen() || !m_writer)
     return;
 
-  m_queueSize->fetch_sub(count, std::memory_order_relaxed);
-
-  if (!isOpen() && !m_writeBuffer.empty())
-    createFile(m_writeBuffer.front().data);
-
-  if (!isOpen() || !m_writer)
-    return;
-
-  for (const auto &frame : m_writeBuffer)
+  for (const auto &frame : items)
   {
-    const auto timestamp = frame.rxDateTime.toMSecsSinceEpoch() / 1000.0;
-    for (const auto &group : frame.data.groups)
+    const auto timestamp = frame->rxDateTime.toMSecsSinceEpoch() / 1000.0;
+    for (const auto &group : frame->data->groups)
     {
       auto it = m_groupMap.find(group.groupId);
       if (it == m_groupMap.end())
@@ -149,12 +125,10 @@ void MDF4::ExportWorker::writeValues()
 /**
  * @brief Closes the MDF4 file
  */
-void MDF4::ExportWorker::closeFile()
+void MDF4::ExportWorker::closeResources()
 {
-  if (isOpen() && m_writer)
+  if (isResourceOpen() && m_writer)
   {
-    writeValues();
-
     const auto stop_time
         = static_cast<uint64_t>(QDateTime::currentMSecsSinceEpoch() * 1000000);
     m_writer->StopMeasurement(stop_time);
@@ -164,18 +138,16 @@ void MDF4::ExportWorker::closeFile()
     m_writer.reset();
     m_groupMap.clear();
     m_masterTimeChannel = nullptr;
-
-    Q_EMIT openChanged();
   }
 }
 
 /**
  * @brief Creates a new MDF4 file with hierarchical structure
  */
-void MDF4::ExportWorker::createFile(const JSON::Frame &frame)
+void MDF4::ExportWorker::createFile(const DataModel::Frame &frame)
 {
-  if (isOpen())
-    closeFile();
+  if (isResourceOpen())
+    closeResources();
 
   if (!SerialStudio::activated())
     return;
@@ -278,7 +250,7 @@ void MDF4::ExportWorker::createFile(const JSON::Frame &frame)
     m_writer->StartMeasurement(dateTime.toMSecsSinceEpoch() * 1000000);
 
     m_fileOpen = true;
-    Q_EMIT openChanged();
+    Q_EMIT resourceOpenChanged();
   }
 
   catch (const std::exception &e)
@@ -299,30 +271,20 @@ void MDF4::ExportWorker::createFile(const JSON::Frame &frame)
  * Constructor function, configures the export settings
  */
 MDF4::Export::Export()
+#ifdef BUILD_COMMERCIAL
+  : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
+      {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
+  , m_isOpen(false)
+  , m_exportEnabled(false)
+#else
   : m_isOpen(false)
   , m_exportEnabled(false)
-#ifdef BUILD_COMMERCIAL
-  , m_worker(nullptr)
-  , m_queueSize(0)
 #endif
 {
 #ifdef BUILD_COMMERCIAL
-  m_worker = new ExportWorker(&m_pendingFrames, &m_exportEnabled, &m_queueSize);
-  m_worker->moveToThread(&m_workerThread);
-
-  connect(&m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
-  connect(m_worker, &ExportWorker::openChanged, this,
-          &Export::onWorkerOpenChanged);
-
-  m_workerThread.start();
-
-  auto *timer = new QTimer();
-  timer->setInterval(1000);
-  timer->setTimerType(Qt::PreciseTimer);
-  timer->moveToThread(&m_workerThread);
-  connect(timer, &QTimer::timeout, m_worker, &ExportWorker::writeValues);
-  connect(&m_workerThread, &QThread::finished, timer, &QObject::deleteLater);
-  QMetaObject::invokeMethod(timer, "start", Qt::QueuedConnection);
+  initializeWorker();
+  connect(m_worker, &ExportWorker::resourceOpenChanged, this,
+          &Export::onWorkerOpenChanged, Qt::QueuedConnection);
 
   connect(&Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged, this, [=, this] {
@@ -337,16 +299,19 @@ MDF4::Export::Export()
 /**
  * Close file & finish write-operations before destroying the class.
  */
-MDF4::Export::~Export()
-{
+MDF4::Export::~Export() = default;
+
 #ifdef BUILD_COMMERCIAL
-  if (m_worker)
-    QMetaObject::invokeMethod(m_worker, &ExportWorker::closeFile,
-                              Qt::BlockingQueuedConnection);
-  m_workerThread.quit();
-  m_workerThread.wait();
-#endif
+/**
+ * @brief Creates the MDF4 export worker instance.
+ *
+ * @return Pointer to newly created ExportWorker.
+ */
+DataModel::FrameConsumerWorkerBase *MDF4::Export::createWorker()
+{
+  return new ExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
 }
+#endif
 
 /**
  * Returns a pointer to the only instance of this class.
@@ -375,7 +340,7 @@ bool MDF4::Export::isOpen() const
 bool MDF4::Export::exportEnabled() const
 {
 #ifdef BUILD_COMMERCIAL
-  return m_exportEnabled.load(std::memory_order_relaxed);
+  return consumerEnabled();
 #else
   return false;
 #endif
@@ -383,13 +348,15 @@ bool MDF4::Export::exportEnabled() const
 
 /**
  * Write all remaining data & close the output file.
+ *
+ * Flushes any remaining data in the queue before closing to prevent
+ * creating small trailing files.
  */
 void MDF4::Export::closeFile()
 {
 #ifdef BUILD_COMMERCIAL
-  if (m_worker)
-    QMetaObject::invokeMethod(m_worker, &ExportWorker::closeFile,
-                              Qt::QueuedConnection);
+  auto *worker = static_cast<ExportWorker *>(m_worker);
+  QMetaObject::invokeMethod(worker, "close", Qt::QueuedConnection);
 #endif
 }
 
@@ -417,21 +384,25 @@ void MDF4::Export::setExportEnabled(const bool enabled)
 #ifdef BUILD_COMMERCIAL
   if (SerialStudio::activated())
   {
-    m_exportEnabled.store(enabled, std::memory_order_relaxed);
-    Q_EMIT enabledChanged();
-
     if (!enabled && isOpen())
       closeFile();
 
+    setConsumerEnabled(enabled);
     m_settings.setValue("MDF4Export", enabled);
+    Q_EMIT enabledChanged();
     return;
   }
-#endif
 
+  closeFile();
+  setConsumerEnabled(false);
+  m_settings.setValue("MDF4Export", false);
+  Q_EMIT enabledChanged();
+#else
   closeFile();
   m_exportEnabled.store(false, std::memory_order_relaxed);
   m_settings.setValue("MDF4Export", false);
   Q_EMIT enabledChanged();
+#endif
 
   if (enabled)
     Misc::Utilities::showMessageBox(
@@ -441,29 +412,16 @@ void MDF4::Export::setExportEnabled(const bool enabled)
 }
 
 /**
- * Receives frame data and enqueues it for export
+ * Receives timestamped frame data and enqueues it for export
  */
-void MDF4::Export::hotpathTxFrame(const JSON::Frame &frame)
+void MDF4::Export::hotpathTxFrame(
+    const DataModel::TimestampedFramePtr &frame)
 {
 #ifdef BUILD_COMMERCIAL
-  if (!exportEnabled() || CSV::Player::instance().isOpen()
-      || MDF4::Player::instance().isOpen())
+  if (!exportEnabled() || SerialStudio::isAnyPlayerOpen())
     return;
 
-  if (!IO::Manager::instance().isConnected()
-      && !(MQTT::Client::instance().isConnected()
-           && MQTT::Client::instance().isSubscriber()))
-    return;
-
-  if (!m_pendingFrames.enqueue(JSON::TimestampFrame(frame)))
-  {
-    qWarning() << "MDF4 Export: Failed to enqueue frame";
-    return;
-  }
-
-  const auto size = m_queueSize.fetch_add(1, std::memory_order_relaxed) + 1;
-  if (size >= kFlushThreshold)
-    QMetaObject::invokeMethod(m_worker, "writeValues", Qt::QueuedConnection);
+  enqueueData(frame);
 #else
   (void)frame;
 #endif
@@ -475,7 +433,8 @@ void MDF4::Export::hotpathTxFrame(const JSON::Frame &frame)
  */
 void MDF4::Export::onWorkerOpenChanged()
 {
-  m_isOpen.store(m_worker->isOpen(), std::memory_order_relaxed);
+  auto *worker = static_cast<ExportWorker *>(m_worker);
+  m_isOpen.store(worker->isResourceOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();
 }
 #endif

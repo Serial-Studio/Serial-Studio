@@ -28,8 +28,8 @@
 #include <QRegularExpression>
 #include <QJavascriptHighlighter>
 
-#include "JSON/FrameParser.h"
-#include "JSON/ProjectModel.h"
+#include "DataModel/FrameParser.h"
+#include "DataModel/ProjectModel.h"
 #include <QtGui/qshortcut.h>
 
 #include "Misc/Utilities.h"
@@ -54,7 +54,7 @@
 /**
  * @brief Constructor function for the code editor widget.
  */
-JSON::FrameParser::FrameParser(QQuickItem *parent)
+DataModel::FrameParser::FrameParser(QQuickItem *parent)
   : QQuickPaintedItem(parent)
   , m_testDialog(this, nullptr)
 {
@@ -89,26 +89,26 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
   // Set widget palette
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &JSON::FrameParser::onThemeChanged);
+          this, &DataModel::FrameParser::onThemeChanged);
 
   // Load template names
   loadTemplateNames();
   loadDefaultTemplate();
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &JSON::FrameParser::loadTemplateNames);
+          this, &DataModel::FrameParser::loadTemplateNames);
 
   // Connect modification check signals
   connect(&m_widget, &QCodeEditor::textChanged, this,
           [=, this] { Q_EMIT modifiedChanged(); });
 
   // Make project editor modification status depend on code modification status
-  connect(this, &JSON::FrameParser::modifiedChanged, &ProjectModel::instance(),
+  connect(this, &DataModel::FrameParser::modifiedChanged, &ProjectModel::instance(),
           &ProjectModel::modifiedChanged);
 
   // Load code from JSON model automatically
-  connect(&JSON::ProjectModel::instance(),
+  connect(&DataModel::ProjectModel::instance(),
           &ProjectModel::frameParserCodeChanged, this,
-          &JSON::FrameParser::readCode);
+          &DataModel::FrameParser::readCode);
 
   // Bridge signals
   connect(&m_widget, &QCodeEditor::textChanged, this,
@@ -116,9 +116,9 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
 
   // Resize widget to fit QtQuick item
   connect(this, &QQuickPaintedItem::widthChanged, this,
-          &JSON::FrameParser::resizeWidget);
+          &DataModel::FrameParser::resizeWidget);
   connect(this, &QQuickPaintedItem::heightChanged, this,
-          &JSON::FrameParser::resizeWidget);
+          &DataModel::FrameParser::resizeWidget);
 
   // Collect JS garbage at 1 Hz
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz,
@@ -126,7 +126,7 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
 
   // Configure render loop
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this,
-          &JSON::FrameParser::renderWidget);
+          &DataModel::FrameParser::renderWidget);
 
   // Load template code
   reload();
@@ -135,7 +135,7 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
 /**
  * @brief Returns the current text/data displayed in the code editor.
  */
-QString JSON::FrameParser::text() const
+QString DataModel::FrameParser::text() const
 {
   return m_widget.toPlainText();
 }
@@ -144,7 +144,7 @@ QString JSON::FrameParser::text() const
  * @brief Indicates whenever there are any unsaved changes in the code editor.
  * @return
  */
-bool JSON::FrameParser::isModified() const
+bool DataModel::FrameParser::isModified() const
 {
   if (m_widget.document())
     return m_widget.document()->isModified();
@@ -162,7 +162,7 @@ bool JSON::FrameParser::isModified() const
  * @param frame Decoded UTF-8 string frame (e.g., "value1,value2,value3").
  * @return An array of strings returned by the JS parser.
  */
-QStringList JSON::FrameParser::parse(const QString &frame)
+QStringList DataModel::FrameParser::parse(const QString &frame)
 {
   QJSValueList args;
   args << frame;
@@ -176,7 +176,7 @@ QStringList JSON::FrameParser::parse(const QString &frame)
  * @param frame Binary frame data (e.g., from serial input).
  * @return Parsed string fields returned by the JS frame parser.
  */
-QStringList JSON::FrameParser::parse(const QByteArray &frame)
+QStringList DataModel::FrameParser::parse(const QByteArray &frame)
 {
   QJSValue jsArray = m_engine.newArray(frame.size());
   const auto *data = reinterpret_cast<const quint8 *>(frame.constData());
@@ -204,7 +204,7 @@ QStringList JSON::FrameParser::parse(const QByteArray &frame)
  * @return QString containing the JavaScript parser code from the selected
  *         template file.
  */
-QString JSON::FrameParser::templateCode() const
+QString DataModel::FrameParser::templateCode() const
 {
   QString code;
   auto path = QString(":/rcc/scripts/%1").arg(m_templateFiles[m_templateIdx]);
@@ -222,7 +222,7 @@ QString JSON::FrameParser::templateCode() const
 /**
  * @brief Returns @c true whenever if there are any actions that can be undone.
  */
-bool JSON::FrameParser::undoAvailable() const
+bool DataModel::FrameParser::undoAvailable() const
 {
   if (m_widget.document())
     return isModified() && m_widget.document()->isUndoAvailable();
@@ -232,7 +232,7 @@ bool JSON::FrameParser::undoAvailable() const
 /**
  * @brief Returns @c true whenever if there are any actions that can be redone.
  */
-bool JSON::FrameParser::redoAvailable() const
+bool DataModel::FrameParser::redoAvailable() const
 {
   if (m_widget.document())
     return isModified() && m_widget.document()->isRedoAvailable();
@@ -247,7 +247,7 @@ bool JSON::FrameParser::redoAvailable() const
  *
  * @return @c true on success, @c false on failure
  */
-bool JSON::FrameParser::save(const bool silent)
+bool DataModel::FrameParser::save(const bool silent)
 {
   // Update text edit
   if (loadScript(text()))
@@ -305,7 +305,7 @@ bool JSON::FrameParser::save(const bool silent)
  * @see evaluate()
  * @see m_parseFunction
  */
-bool JSON::FrameParser::loadScript(const QString &script)
+bool DataModel::FrameParser::loadScript(const QString &script)
 {
   // Reset any previously loaded function
   m_parseFunction = QJSValue();
@@ -440,7 +440,7 @@ bool JSON::FrameParser::loadScript(const QString &script)
  * @brief Removes the selected text from the code editor widget and copies it
  *        into the system's clipboard.
  */
-void JSON::FrameParser::cut()
+void DataModel::FrameParser::cut()
 {
   m_widget.cut();
 }
@@ -448,7 +448,7 @@ void JSON::FrameParser::cut()
 /**
  * @brief Undoes the last user's action.
  */
-void JSON::FrameParser::undo()
+void DataModel::FrameParser::undo()
 {
   m_widget.undo();
 }
@@ -456,7 +456,7 @@ void JSON::FrameParser::undo()
 /**
  * @brief Redoes an undone action.
  */
-void JSON::FrameParser::redo()
+void DataModel::FrameParser::redo()
 {
   m_widget.redo();
 }
@@ -464,7 +464,7 @@ void JSON::FrameParser::redo()
 /**
  * @brief Opens a website with documentation relevant to the frame parser.
  */
-void JSON::FrameParser::help()
+void DataModel::FrameParser::help()
 {
   // clang-format off
   const auto url = QStringLiteral("https://github.com/Serial-Studio/Serial-Studio/wiki/Data-Flow-in-Serial-Studio#frame-parser-function");
@@ -475,7 +475,7 @@ void JSON::FrameParser::help()
 /**
  * @brief Copies the selected text into the system's clipboard.
  */
-void JSON::FrameParser::copy()
+void DataModel::FrameParser::copy()
 {
   m_widget.copy();
 }
@@ -483,7 +483,7 @@ void JSON::FrameParser::copy()
 /**
  * @brief Pastes data from the system's clipboard into the code editor.
  */
-void JSON::FrameParser::paste()
+void DataModel::FrameParser::paste()
 {
   m_widget.paste();
 }
@@ -491,11 +491,11 @@ void JSON::FrameParser::paste()
 /**
  * @brief Writes the current code into the project file.
  */
-void JSON::FrameParser::apply()
+void DataModel::FrameParser::apply()
 {
   if (save(true))
   {
-    auto &model = JSON::ProjectModel::instance();
+    auto &model = DataModel::ProjectModel::instance();
     if (!model.jsonFilePath().isEmpty())
     {
       const bool modified = model.modified();
@@ -513,7 +513,7 @@ void JSON::FrameParser::apply()
 /**
  * @brief Loads the default frame parser function into the code editor.
  */
-void JSON::FrameParser::reload()
+void DataModel::FrameParser::reload()
 {
   // Document has been modified, ask user if he/she wants to continue
   if (isModified())
@@ -533,7 +533,7 @@ void JSON::FrameParser::reload()
 /**
  * @brief Prompts the user to select a JS file to import into the code editor.
  */
-void JSON::FrameParser::import()
+void DataModel::FrameParser::import()
 {
   // Document has been modified, ask user if he/she wants to continue
   if (isModified())
@@ -592,7 +592,7 @@ void JSON::FrameParser::import()
  * @see loadScript()
  * @see text()
  */
-void JSON::FrameParser::evaluate()
+void DataModel::FrameParser::evaluate()
 {
   if (loadScript(text()))
   {
@@ -606,7 +606,7 @@ void JSON::FrameParser::evaluate()
 /**
  * @brief Loads the code stored in the project file into the code editor.
  */
-void JSON::FrameParser::readCode()
+void DataModel::FrameParser::readCode()
 {
   const auto code = ProjectModel::instance().frameParserCode();
 
@@ -621,7 +621,7 @@ void JSON::FrameParser::readCode()
 /**
  * @brief Selects all the text present in the code editor widget.
  */
-void JSON::FrameParser::selectAll()
+void DataModel::FrameParser::selectAll()
 {
   m_widget.selectAll();
 }
@@ -629,7 +629,7 @@ void JSON::FrameParser::selectAll()
 /**
  * @brief Resets the JS context used for testing the frame parser code.
  */
-void JSON::FrameParser::clearContext()
+void DataModel::FrameParser::clearContext()
 {
   (void)loadScript(text());
 }
@@ -638,7 +638,7 @@ void JSON::FrameParser::clearContext()
  * @brief Sets the frame template index, prompting user confirmation if
  *        the document is modified.
  */
-void JSON::FrameParser::selectTemplate()
+void DataModel::FrameParser::selectTemplate()
 {
   // Show combobox dialog to get template selection
   bool ok;
@@ -666,7 +666,7 @@ void JSON::FrameParser::selectTemplate()
  * Loads the current script text and displays the test dialog if loading
  * succeeds. Clears any previous test results before showing.
  */
-void JSON::FrameParser::testWithSampleData()
+void DataModel::FrameParser::testWithSampleData()
 {
   if (loadScript(text()))
   {
@@ -694,18 +694,18 @@ void JSON::FrameParser::testWithSampleData()
  * @see setTemplateIdx()
  * @see loadTemplates()
  */
-void JSON::FrameParser::loadDefaultTemplate()
+void DataModel::FrameParser::loadDefaultTemplate()
 {
   const auto idx = m_templateFiles.indexOf("comma_separated.js");
   setTemplateIdx(idx);
-  JSON::ProjectModel::instance().setModified(false);
+  DataModel::ProjectModel::instance().setModified(false);
 }
 
 /**
  * @brief Modifies the palette of the code editor to match the colorscheme
  *        of the currently loaded theme file.
  */
-void JSON::FrameParser::onThemeChanged()
+void DataModel::FrameParser::onThemeChanged()
 {
   static const auto *t = &Misc::ThemeManager::instance();
   const auto name = t->parameters().value("code-editor-theme").toString();
@@ -724,7 +724,7 @@ void JSON::FrameParser::onThemeChanged()
  * @brief Renders the widget as a pixmap, which is then painted in the QML
  *        user interface.
  */
-void JSON::FrameParser::renderWidget()
+void DataModel::FrameParser::renderWidget()
 {
   if (isVisible())
   {
@@ -736,7 +736,7 @@ void JSON::FrameParser::renderWidget()
 /**
  * Resizes the widget to fit inside the QML painted item.
  */
-void JSON::FrameParser::resizeWidget()
+void DataModel::FrameParser::resizeWidget()
 {
   if (width() > 0 && height() > 0)
   {
@@ -754,7 +754,7 @@ void JSON::FrameParser::resizeWidget()
  *
  * The template files are loaded from the application resources and include
  * parsers for common protocols like NMEA, Modbus, CAN bus, MAVLink, as well
- * as generic formats like CSV, JSON, XML, and various binary encodings.
+ * as generic formats like CSV, DataModel, XML, and various binary encodings.
  *
  * Template files and display names are stored in parallel arrays with matching
  * indices, allowing UI components to display localized names while referencing
@@ -765,7 +765,7 @@ void JSON::FrameParser::resizeWidget()
  *
  * @note The order of m_templateFiles and m_templateNames must be kept in sync
  */
-void JSON::FrameParser::loadTemplateNames()
+void DataModel::FrameParser::loadTemplateNames()
 {
   m_templateFiles.clear();
   m_templateFiles = {"at_commands.js",
@@ -833,7 +833,7 @@ void JSON::FrameParser::loadTemplateNames()
  *
  * @param idx The template index to set
  */
-void JSON::FrameParser::setTemplateIdx(const int idx)
+void DataModel::FrameParser::setTemplateIdx(const int idx)
 {
   // Get current code and template code
   auto code = m_widget.toPlainText().simplified();
@@ -861,15 +861,15 @@ void JSON::FrameParser::setTemplateIdx(const int idx)
   (void)save(true);
 
   // Mark the project file as modified
-  JSON::ProjectModel::instance().setFrameParserCode(templateCode());
-  JSON::ProjectModel::instance().setModified(true);
+  DataModel::ProjectModel::instance().setFrameParserCode(templateCode());
+  DataModel::ProjectModel::instance().setModified(true);
 }
 
 /**
  * Displays the pixmap generated in the @c update() function in the QML
  * interface through the given @a painter pointer.
  */
-void JSON::FrameParser::paint(QPainter *painter)
+void DataModel::FrameParser::paint(QPainter *painter)
 {
   if (painter && isVisible())
     painter->drawPixmap(0, 0, m_pixmap);
@@ -878,7 +878,7 @@ void JSON::FrameParser::paint(QPainter *painter)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::keyPressEvent(QKeyEvent *event)
+void DataModel::FrameParser::keyPressEvent(QKeyEvent *event)
 {
   DW_EXEC_EVENT(&m_widget, keyPressEvent, event);
 }
@@ -886,7 +886,7 @@ void JSON::FrameParser::keyPressEvent(QKeyEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::keyReleaseEvent(QKeyEvent *event)
+void DataModel::FrameParser::keyReleaseEvent(QKeyEvent *event)
 {
   DW_EXEC_EVENT(&m_widget, keyReleaseEvent, event);
 }
@@ -894,7 +894,7 @@ void JSON::FrameParser::keyReleaseEvent(QKeyEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::inputMethodEvent(QInputMethodEvent *event)
+void DataModel::FrameParser::inputMethodEvent(QInputMethodEvent *event)
 {
   DW_EXEC_EVENT(&m_widget, inputMethodEvent, event);
 }
@@ -902,7 +902,7 @@ void JSON::FrameParser::inputMethodEvent(QInputMethodEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::focusInEvent(QFocusEvent *event)
+void DataModel::FrameParser::focusInEvent(QFocusEvent *event)
 {
   DW_EXEC_EVENT(&m_widget, focusInEvent, event);
 }
@@ -910,7 +910,7 @@ void JSON::FrameParser::focusInEvent(QFocusEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::focusOutEvent(QFocusEvent *event)
+void DataModel::FrameParser::focusOutEvent(QFocusEvent *event)
 {
   DW_EXEC_EVENT(&m_widget, focusOutEvent, event);
 }
@@ -918,7 +918,7 @@ void JSON::FrameParser::focusOutEvent(QFocusEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::mousePressEvent(QMouseEvent *event)
+void DataModel::FrameParser::mousePressEvent(QMouseEvent *event)
 {
   auto pos = event->position();
   pos.setX(pos.x() - m_widget.lineNumberArea()->sizeHint().width());
@@ -933,7 +933,7 @@ void JSON::FrameParser::mousePressEvent(QMouseEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::mouseMoveEvent(QMouseEvent *event)
+void DataModel::FrameParser::mouseMoveEvent(QMouseEvent *event)
 {
   auto pos = event->position();
   pos.setX(pos.x() - m_widget.lineNumberArea()->sizeHint().width());
@@ -947,7 +947,7 @@ void JSON::FrameParser::mouseMoveEvent(QMouseEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::mouseReleaseEvent(QMouseEvent *event)
+void DataModel::FrameParser::mouseReleaseEvent(QMouseEvent *event)
 {
   auto pos = event->position();
   pos.setX(pos.x() - m_widget.lineNumberArea()->sizeHint().width());
@@ -961,7 +961,7 @@ void JSON::FrameParser::mouseReleaseEvent(QMouseEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::mouseDoubleClickEvent(QMouseEvent *event)
+void DataModel::FrameParser::mouseDoubleClickEvent(QMouseEvent *event)
 {
   auto pos = event->position();
   pos.setX(pos.x() - m_widget.lineNumberArea()->sizeHint().width());
@@ -975,7 +975,7 @@ void JSON::FrameParser::mouseDoubleClickEvent(QMouseEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::wheelEvent(QWheelEvent *event)
+void DataModel::FrameParser::wheelEvent(QWheelEvent *event)
 {
   DW_EXEC_EVENT(&m_widget, wheelEvent, event);
 }
@@ -983,7 +983,7 @@ void JSON::FrameParser::wheelEvent(QWheelEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::dragEnterEvent(QDragEnterEvent *event)
+void DataModel::FrameParser::dragEnterEvent(QDragEnterEvent *event)
 {
   DW_EXEC_EVENT(&m_widget, dragEnterEvent, event);
 }
@@ -991,7 +991,7 @@ void JSON::FrameParser::dragEnterEvent(QDragEnterEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::dragMoveEvent(QDragMoveEvent *event)
+void DataModel::FrameParser::dragMoveEvent(QDragMoveEvent *event)
 {
   DW_EXEC_EVENT(&m_widget, dragMoveEvent, event);
 }
@@ -999,7 +999,7 @@ void JSON::FrameParser::dragMoveEvent(QDragMoveEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::dragLeaveEvent(QDragLeaveEvent *event)
+void DataModel::FrameParser::dragLeaveEvent(QDragLeaveEvent *event)
 {
   DW_EXEC_EVENT(&m_widget, dragLeaveEvent, event);
 }
@@ -1007,7 +1007,7 @@ void JSON::FrameParser::dragLeaveEvent(QDragLeaveEvent *event)
 /**
  * Passes the given @param event to the contained widget (if any).
  */
-void JSON::FrameParser::dropEvent(QDropEvent *event)
+void DataModel::FrameParser::dropEvent(QDropEvent *event)
 {
   DW_EXEC_EVENT(&m_widget, dropEvent, event);
 }

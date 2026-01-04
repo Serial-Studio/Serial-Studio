@@ -111,13 +111,13 @@ public:
   [[nodiscard]] const SerialStudio::WidgetMap &widgetMap() const;
 
   // clang-format off
-  [[nodiscard]] const QMap<int, JSON::Dataset> &datasets() const;
-  [[nodiscard]] const JSON::Group &getGroupWidget(const SerialStudio::DashboardWidget widget, const int index) const;
-  [[nodiscard]] const JSON::Dataset &getDatasetWidget(const SerialStudio::DashboardWidget widget, const int index) const;
+  [[nodiscard]] const QMap<int, DataModel::Dataset> &datasets() const;
+  [[nodiscard]] const DataModel::Group &getGroupWidget(const SerialStudio::DashboardWidget widget, const int index) const;
+  [[nodiscard]] const DataModel::Dataset &getDatasetWidget(const SerialStudio::DashboardWidget widget, const int index) const;
   // clang-format on
 
-  [[nodiscard]] const JSON::Frame &rawFrame();
-  [[nodiscard]] const JSON::Frame &processedFrame();
+  [[nodiscard]] const DataModel::Frame &rawFrame();
+  [[nodiscard]] const DataModel::Frame &processedFrame();
   [[nodiscard]] const DSP::AxisData &fftData(const int index) const;
   [[nodiscard]] const DSP::GpsSeries &gpsSeries(const int index) const;
   [[nodiscard]] const DSP::LineSeries &plotData(const int index) const;
@@ -145,11 +145,11 @@ public slots:
   void setFFTPlotRunning(const int index, const bool enabled);
   void setMultiplotRunning(const int index, const bool enabled);
 
-  void hotpathRxFrame(const JSON::Frame &frame);
+  void hotpathRxFrame(const DataModel::Frame &frame);
 
 private:
-  void updateDashboardData(const JSON::Frame &frame);
-  void reconfigureDashboard(const JSON::Frame &frame);
+  void updateDashboardData(const DataModel::Frame &frame);
+  void reconfigureDashboard(const DataModel::Frame &frame);
 
   void updateDataSeries();
   void configureGpsSeries();
@@ -157,7 +157,7 @@ private:
   void configureLineSeries();
   void configurePlot3DSeries();
   void configureMultiLineSeries();
-  void configureActions(const JSON::Frame &frame);
+  void configureActions(const DataModel::Frame &frame);
 
 private:
   int m_points;
@@ -189,21 +189,21 @@ private:
 #endif
 
   QMap<int, QTimer *> m_timers;
-  QVector<JSON::Action> m_actions;
+  QVector<DataModel::Action> m_actions;
   SerialStudio::WidgetMap m_widgetMap;
-  QMap<int, JSON::Dataset> m_datasets;
+  QMap<int, DataModel::Dataset> m_datasets;
 
   // Maps unique dataset ID to all dataset refs for value updates
-  QMap<int, QVector<JSON::Dataset *>> m_datasetReferences;
+  QMap<int, QVector<DataModel::Dataset *>> m_datasetReferences;
 
   // Groups by widgets type
-  QMap<SerialStudio::DashboardWidget, QVector<JSON::Group>> m_widgetGroups;
+  QMap<SerialStudio::DashboardWidget, QVector<DataModel::Group>> m_widgetGroups;
 
   // Datasets by widget type
-  QMap<SerialStudio::DashboardWidget, QVector<JSON::Dataset>> m_widgetDatasets;
+  QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>> m_widgetDatasets;
 
-  JSON::Frame m_rawFrame;
-  JSON::Frame m_lastFrame;
+  DataModel::Frame m_rawFrame;
+  DataModel::Frame m_lastFrame;
 };
 } // namespace UI
 
@@ -290,7 +290,7 @@ inline QString FMT_VAL(double val, double min, double max)
  *
  * @return QString Formatted number with appropriate decimal places.
  */
-inline QString FMT_VAL(double val, const JSON::Dataset &dataset)
+inline QString FMT_VAL(double val, const DataModel::Dataset &dataset)
 {
   return FMT_VAL(val, dataset.pltMin, dataset.pltMax);
 }
@@ -304,11 +304,11 @@ inline QString FMT_VAL(double val, const JSON::Dataset &dataset)
  *
  * @param type The widget type (must be a group-based widget).
  * @param index Index of the widget in the corresponding group list.
- * @return Reference to the matching JSON::Group.
+ * @return Reference to the matching DataModel::Group.
  *
  * @note Caller is responsible for ensuring the index is valid.
  */
-inline const JSON::Group &GET_GROUP(const SerialStudio::DashboardWidget type,
+inline const DataModel::Group &GET_GROUP(const SerialStudio::DashboardWidget type,
                                     int index)
 {
   return UI::Dashboard::instance().getGroupWidget(type, index);
@@ -323,11 +323,11 @@ inline const JSON::Group &GET_GROUP(const SerialStudio::DashboardWidget type,
  *
  * @param type The widget type (must be a dataset-based widget).
  * @param index Index of the widget in the corresponding dataset list.
- * @return Reference to the matching JSON::Dataset.
+ * @return Reference to the matching DataModel::Dataset.
  *
  * @note Caller is responsible for ensuring the index is valid.
  */
-inline const JSON::Dataset &
+inline const DataModel::Dataset &
 GET_DATASET(const SerialStudio::DashboardWidget type, int index)
 {
   return UI::Dashboard::instance().getDatasetWidget(type, index);

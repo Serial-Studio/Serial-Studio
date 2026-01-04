@@ -28,8 +28,8 @@
 #include "UI/Dashboard.h"
 #include "UI/WindowManager.h"
 #include "UI/WidgetRegistry.h"
-#include "JSON/ProjectModel.h"
-#include "JSON/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
+#include "DataModel/FrameBuilder.h"
 
 //------------------------------------------------------------------------------
 // Taskbar model implementation
@@ -117,10 +117,10 @@ UI::Taskbar::Taskbar(QQuickItem *parent)
   connect(&UI::Dashboard::instance(), &UI::Dashboard::widgetCountChanged, this,
           &UI::Taskbar::rebuildModel);
 
-  auto *pm = &JSON::ProjectModel::instance();
-  connect(pm, &JSON::ProjectModel::dashboardLayoutChanged, this,
+  auto *pm = &DataModel::ProjectModel::instance();
+  connect(pm, &DataModel::ProjectModel::dashboardLayoutChanged, this,
           &UI::Taskbar::onDashboardLayoutChanged);
-  connect(pm, &JSON::ProjectModel::activeGroupIdChanged, this,
+  connect(pm, &DataModel::ProjectModel::activeGroupIdChanged, this,
           [this, pm] { setActiveGroupId(pm->activeGroupId()); });
 
   connect(qApp, &QGuiApplication::aboutToQuit, this, &UI::Taskbar::saveLayout);
@@ -733,7 +733,7 @@ void UI::Taskbar::setWindowState(const int id,
  *
  * What it does:
  * - Clears previous state and active window
- * - Iterates over all groups from the latest JSON frame
+ * - Iterates over all groups from the latest DataModel frame
  * - For each group, finds all associated widgets (both group-level and
  *   dataset-level)
  * - Builds a hierarchical QStandardItem tree for the group and its widgets
@@ -780,7 +780,7 @@ void UI::Taskbar::rebuildModel()
   // Loop through the groups in the dashboard
   QSet<int> groupIds;
   const auto &widgetMap = db->widgetMap();
-  for (const JSON::Group &group : frame.groups)
+  for (const DataModel::Group &group : frame.groups)
   {
     // Obtain group parameters
     const auto groupId = group.groupId;
@@ -1138,10 +1138,10 @@ void UI::Taskbar::onDashboardLayoutChanged()
   if (!m_windowManager)
     return;
 
-  const auto opMode = JSON::FrameBuilder::instance().operationMode();
+  const auto opMode = DataModel::FrameBuilder::instance().operationMode();
   if (opMode == SerialStudio::ProjectFile)
   {
-    auto *model = &JSON::ProjectModel::instance();
+    auto *model = &DataModel::ProjectModel::instance();
     if (!model->jsonFilePath().isEmpty())
     {
       const auto &layout = model->dashboardLayout();
@@ -1168,10 +1168,10 @@ void UI::Taskbar::saveLayout()
   if (!m_windowManager)
     return;
 
-  const auto opMode = JSON::FrameBuilder::instance().operationMode();
+  const auto opMode = DataModel::FrameBuilder::instance().operationMode();
   if (opMode == SerialStudio::ProjectFile)
   {
-    auto *model = &JSON::ProjectModel::instance();
+    auto *model = &DataModel::ProjectModel::instance();
     if (!model->jsonFilePath().isEmpty())
     {
       auto layout = m_windowManager->serializeLayout();

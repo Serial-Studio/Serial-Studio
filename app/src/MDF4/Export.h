@@ -22,16 +22,14 @@
 #pragma once
 
 #include <map>
-#include <atomic>
 #include <memory>
 #include <vector>
 
 #include <QObject>
-#include <QThread>
 #include <QSettings>
 
-#include "JSON/Frame.h"
-#include "ThirdParty/readerwriterqueue.h"
+#include "DataModel/Frame.h"
+#include "DataModel/FrameConsumer.h"
 
 namespace mdf
 {
@@ -42,35 +40,31 @@ class IChannelGroup;
 
 namespace MDF4
 {
-static constexpr size_t kQueueCapacity = 8192;
-static constexpr size_t kFlushThreshold = 1024;
 class Export;
 
 #ifdef BUILD_COMMERCIAL
 /**
  * @brief Worker that handles MDF4 export file I/O on background thread
  */
-class ExportWorker : public QObject
+class ExportWorker
+  : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>
 {
   Q_OBJECT
 
 public:
-  explicit ExportWorker(
-      moodycamel::ReaderWriterQueue<JSON::TimestampFrame> *queue,
-      std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize);
-  ~ExportWorker();
+  using DataModel::FrameConsumerWorker<
+      DataModel::TimestampedFramePtr>::FrameConsumerWorker;
+  ~ExportWorker() override;
 
-  [[nodiscard]] bool isOpen() const;
+  void closeResources() override;
+  bool isResourceOpen() const override;
 
-signals:
-  void openChanged();
-
-public slots:
-  void writeValues();
-  void closeFile();
+protected:
+  void processItems(
+      const std::vector<DataModel::TimestampedFramePtr> &items) override;
 
 private:
-  void createFile(const JSON::Frame &frame);
+  void createFile(const DataModel::Frame &frame);
 
 private:
   struct ChannelGroupInfo
@@ -82,13 +76,9 @@ private:
 
   bool m_fileOpen;
   QString m_filePath;
-  std::atomic<size_t> *m_queueSize;
   mdf::IChannel *m_masterTimeChannel;
-  std::atomic<bool> *m_exportEnabled;
   std::unique_ptr<mdf::MdfWriter> m_writer;
   std::map<int, ChannelGroupInfo> m_groupMap;
-  std::vector<JSON::TimestampFrame> m_writeBuffer;
-  moodycamel::ReaderWriterQueue<JSON::TimestampFrame> *m_pendingFrames;
 };
 #endif
 
@@ -120,7 +110,12 @@ private:
  *          The export will be automatically disabled if the license becomes
  *          invalid.
  */
-class Export : public QObject
+class Export
+#ifdef BUILD_COMMERCIAL
+  : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr>
+#else
+  : public QObject
+#endif
 {
   // clang-format off
   Q_OBJECT
@@ -156,7 +151,12 @@ public slots:
   void closeFile();
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
-  void hotpathTxFrame(const JSON::Frame &frame);
+  void hotpathTxFrame(const DataModel::TimestampedFramePtr &frame);
+
+protected:
+#ifdef BUILD_COMMERCIAL
+  DataModel::FrameConsumerWorkerBase *createWorker() override;
+#endif
 
 private slots:
 #ifdef BUILD_COMMERCIAL
@@ -167,13 +167,5 @@ private:
   QSettings m_settings;
   std::atomic<bool> m_isOpen;
   std::atomic<bool> m_exportEnabled;
-
-#ifdef BUILD_COMMERCIAL
-  QThread m_workerThread;
-  ExportWorker *m_worker;
-  std::atomic<size_t> m_queueSize;
-  moodycamel::ReaderWriterQueue<JSON::TimestampFrame> m_pendingFrames{
-      kQueueCapacity};
-#endif
 };
 } // namespace MDF4

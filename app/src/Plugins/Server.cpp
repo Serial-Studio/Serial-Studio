@@ -26,25 +26,166 @@
 #include "IO/Manager.h"
 #include "Plugins/Server.h"
 #include "Misc/Utilities.h"
-#include "Misc/TimerEvents.h"
+
+//------------------------------------------------------------------------------
+// ServerWorker implementation
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Destructor
+ */
+Plugins::ServerWorker::~ServerWorker() = default;
+
+/**
+ * @brief Returns false (no file resources to manage)
+ */
+bool Plugins::ServerWorker::isResourceOpen() const
+{
+  return false;
+}
+
+/**
+ * @brief Closes all sockets and cleans up resources
+ */
+void Plugins::ServerWorker::closeResources()
+{
+  for (auto *socket : m_sockets)
+  {
+    if (socket)
+    {
+      socket->abort();
+      socket->deleteLater();
+    }
+  }
+  m_sockets.clear();
+}
+
+/**
+ * @brief Adds a socket to the worker thread
+ *
+ * The socket is moved to this thread and managed here for all I/O operations.
+ */
+void Plugins::ServerWorker::addSocket(QTcpSocket *socket)
+{
+  if (!socket)
+    return;
+
+  socket->moveToThread(thread());
+  m_sockets.append(socket);
+
+  connect(socket, &QTcpSocket::readyRead, this,
+          &ServerWorker::onSocketReadyRead);
+  connect(socket, &QTcpSocket::disconnected, this,
+          &ServerWorker::onSocketDisconnected);
+}
+
+/**
+ * @brief Removes a socket from the worker thread
+ */
+void Plugins::ServerWorker::removeSocket(QTcpSocket *socket)
+{
+  m_sockets.removeAll(socket);
+  if (socket)
+    socket->deleteLater();
+}
+
+/**
+ * @brief Writes raw data to all connected sockets (worker thread)
+ *
+ * Handles transmission of raw I/O data to plugin clients.
+ * The data is base64-encoded and wrapped in JSON format.
+ */
+void Plugins::ServerWorker::writeRawData(const QByteArray &data)
+{
+  if (m_sockets.isEmpty())
+    return;
+
+  QJsonObject object;
+  object.insert(QStringLiteral("data"), QString::fromUtf8(data.toBase64()));
+  const QJsonDocument document(object);
+  const auto json = document.toJson(QJsonDocument::Compact) + "\n";
+
+  for (auto *socket : std::as_const(m_sockets))
+  {
+    if (socket && socket->isWritable())
+      socket->write(json);
+  }
+}
+
+/**
+ * @brief Handles incoming data from a socket (worker thread)
+ */
+void Plugins::ServerWorker::onSocketReadyRead()
+{
+  auto *socket = qobject_cast<QTcpSocket *>(sender());
+  if (socket)
+    Q_EMIT dataReceived(socket->readAll());
+}
+
+/**
+ * @brief Handles socket disconnection (worker thread)
+ */
+void Plugins::ServerWorker::onSocketDisconnected()
+{
+  auto *socket = qobject_cast<QTcpSocket *>(sender());
+  removeSocket(socket);
+}
+
+/**
+ * @brief Processes frames by serializing them to JSON and writing to sockets
+ *
+ * Both JSON serialization and socket writes happen on the worker thread,
+ * eliminating cross-thread communication overhead for high-frequency writes.
+ */
+void Plugins::ServerWorker::processItems(
+    const std::vector<DataModel::TimestampedFramePtr> &items)
+{
+  if (items.empty() || m_sockets.isEmpty())
+    return;
+
+  QJsonArray array;
+  for (const auto &timestampedFrame : items)
+  {
+    QJsonObject object;
+    object.insert(QStringLiteral("data"), serialize(*timestampedFrame->data));
+    array.append(object);
+  }
+
+  QJsonObject object;
+  object.insert(QStringLiteral("frames"), array);
+  const QJsonDocument document(object);
+  const auto json = document.toJson(QJsonDocument::Compact) + "\n";
+
+  for (auto *socket : std::as_const(m_sockets))
+  {
+    if (socket && socket->isWritable())
+      socket->write(json);
+  }
+}
+
+//------------------------------------------------------------------------------
+// Server implementation
+//------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the plugin server.
  *
- * Initializes signal-slot connections for processing raw and structured
- * data frames, sets up socket handling, and prepares the TCP server
- * for later activation via setEnabled().
+ * Initializes the worker thread for JSON serialization and socket I/O,
+ * and prepares the TCP server for later activation via setEnabled().
  */
 Plugins::Server::Server()
-  : m_enabled(false)
+  : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
+      {.queueCapacity = 2048, .flushThreshold = 512, .timerIntervalMs = 1000})
+  , m_enabled(false)
 {
-  // Send processed data at 1 Hz
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
-          &Plugins::Server::sendProcessedData);
+  initializeWorker();
 
-  // Configure TCP server
+  auto *worker = static_cast<ServerWorker *>(m_worker);
+  connect(worker, &ServerWorker::dataReceived, this, &Server::onDataReceived,
+          Qt::QueuedConnection);
+
   connect(&m_server, &QTcpServer::newConnection, this,
-          &Plugins::Server::acceptConnection);
+          &Server::acceptConnection);
 }
 
 /**
@@ -55,6 +196,14 @@ Plugins::Server::Server()
 Plugins::Server::~Server()
 {
   m_server.close();
+}
+
+/**
+ * @brief Creates the server worker instance.
+ */
+DataModel::FrameConsumerWorkerBase *Plugins::Server::createWorker()
+{
+  return new ServerWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
 }
 
 /**
@@ -82,19 +231,17 @@ bool Plugins::Server::enabled() const
 /**
  * @brief Disconnects a client socket from the server.
  *
- * Removes the socket from the active connections list and deletes it.
+ * Forwards the removal request to the worker thread.
  * Triggered automatically when a client disconnects or encounters an error.
  */
 void Plugins::Server::removeConnection()
 {
-  // Get caller socket
-  auto socket = static_cast<QTcpSocket *>(QObject::sender());
-
-  // Remove socket from registered sockets
+  auto *socket = qobject_cast<QTcpSocket *>(sender());
   if (socket)
   {
-    m_sockets.removeAll(socket);
-    socket->deleteLater();
+    auto *worker = static_cast<ServerWorker *>(m_worker);
+    QMetaObject::invokeMethod(worker, "removeSocket", Qt::QueuedConnection,
+                              Q_ARG(QTcpSocket *, socket));
   }
 }
 
@@ -132,188 +279,91 @@ void Plugins::Server::setEnabled(const bool enabled)
   else
   {
     m_server.close();
-    for (int i = 0; i < m_sockets.count(); ++i)
-    {
-      auto socket = m_sockets.at(i);
-      if (socket)
-      {
-        socket->abort();
-        socket->deleteLater();
-      }
-    }
 
-    m_sockets.clear();
-    JSON::Frame frame;
-    while (m_pendingFrames.try_dequeue(frame))
-    {
-    }
+    auto *worker = static_cast<ServerWorker *>(m_worker);
+    QMetaObject::invokeMethod(worker, "closeResources", Qt::QueuedConnection);
   }
 }
 
 /**
  * @brief Sends raw binary data to all connected clients.
  *
- * The data is base64-encoded and wrapped in a JSON object before
- * being transmitted over each writable TCP socket.
+ * Forwards raw I/O data to the worker thread for transmission to plugin
+ * clients. The data will be base64-encoded and wrapped in JSON format.
  *
  * @param data Raw data bytes received from the I/O layer.
  */
 void Plugins::Server::hotpathTxData(const QByteArray &data)
 {
-  // Stop if system is not enabled
   if (!enabled())
     return;
 
-  // Stop if no sockets are available
-  if (m_sockets.count() < 1)
-    return;
-
-  // Create JSON structure with incoming data encoded in Base-64
-  QJsonObject object;
-  object.insert(QStringLiteral("data"), QString::fromUtf8(data.toBase64()));
-
-  // Get JSON string in compact format & send it over the TCP socket
-  QJsonDocument document(object);
-  const auto json = document.toJson(QJsonDocument::Compact) + "\n";
-
-  // Send data to each plugin
-  for (auto *socket : std::as_const(m_sockets))
-  {
-    if (!socket)
-      continue;
-
-    if (socket->isWritable())
-      socket->write(json);
-  }
+  auto *worker = static_cast<ServerWorker *>(m_worker);
+  QMetaObject::invokeMethod(worker, "writeRawData", Qt::QueuedConnection,
+                            Q_ARG(QByteArray, data));
 }
 
 /**
  * @brief Registers a new structured data frame.
  *
- * Appends the frame to an internal buffer that will be transmitted
- * to clients by sendProcessedData().
+ * Enqueues the timestamped frame for background JSON serialization.
+ * The serialized data will be transmitted to all connected plugin clients.
  *
- * @param frame JSON::Frame object to register.
+ * @param frame Timestamped frame object to register.
  */
-void Plugins::Server::hotpathTxFrame(const JSON::Frame &frame)
+void Plugins::Server::hotpathTxFrame(const DataModel::TimestampedFramePtr &frame)
 {
   if (enabled())
-    m_pendingFrames.enqueue(frame);
+    enqueueData(frame);
 }
 
 /**
- * @brief Handles incoming data from a client socket.
+ * @brief Handles incoming data from worker thread.
  *
- * Forwards raw data from the client directly to the I/O manager
- * for processing or device transmission.
+ * Receives data from the worker thread (which read it from a socket)
+ * and forwards it to the I/O manager for device transmission.
  */
-void Plugins::Server::onDataReceived()
+void Plugins::Server::onDataReceived(const QByteArray &data)
 {
-  // Get caller socket
-  auto socket = static_cast<QTcpSocket *>(QObject::sender());
+  static auto &ioManager = IO::Manager::instance();
 
-  // Write incoming data to manager
-  if (enabled() && socket)
-    IO::Manager::instance().writeData(socket->readAll());
+  if (enabled() && !data.isEmpty())
+    ioManager.writeData(data);
 }
 
 /**
  * @brief Accepts new incoming TCP connections.
  *
- * Validates new client sockets and attaches relevant signal handlers.
- * Rejects connections if the server is not enabled.
+ * Creates the socket on the main thread, then moves it to the worker thread
+ * for all I/O operations.
  */
 void Plugins::Server::acceptConnection()
 {
-  // Get & validate socket
-  auto socket = m_server.nextPendingConnection();
-  if (!socket && enabled())
+  auto *socket = m_server.nextPendingConnection();
+  if (!socket)
   {
-    Misc::Utilities::showMessageBox(tr("Plugin server"),
-                                    tr("Invalid pending connection"),
-                                    QMessageBox::Critical);
+    if (enabled())
+      Misc::Utilities::showMessageBox(tr("Plugin server"),
+                                      tr("Invalid pending connection"),
+                                      QMessageBox::Critical);
     return;
   }
 
-  // Close connection if system is not enabled
   if (!enabled())
   {
-    if (socket)
-    {
-      socket->close();
-      socket->deleteLater();
-    }
-
+    socket->close();
+    socket->deleteLater();
     return;
   }
 
-  // Connect socket signals/slots
-  connect(socket, &QTcpSocket::readyRead, this,
-          &Plugins::Server::onDataReceived);
-  connect(socket, &QTcpSocket::disconnected, this,
-          &Plugins::Server::removeConnection);
-
-  // React to socket errors
-#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-  connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this,
-          SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
-#else
   connect(socket, &QTcpSocket::errorOccurred, this,
-          &Plugins::Server::onErrorOccurred);
-#endif
+          &Server::onErrorOccurred);
 
-  // Add socket to sockets list
-  m_sockets.append(socket);
+  auto *worker = static_cast<ServerWorker *>(m_worker);
+  QMetaObject::invokeMethod(worker, "addSocket", Qt::QueuedConnection,
+                            Q_ARG(QTcpSocket *, socket));
 }
 
-/**
- * @brief Sends all collected structured data frames to connected clients.
- *
- * Frames are serialized into a compact JSON array and sent to each
- * writable socket. Called periodically (1 Hz) via timer events.
- */
-void Plugins::Server::sendProcessedData()
-{
-  // Stop if system is not enabled
-  if (!enabled())
-    return;
-
-  // Stop if no sockets are available
-  if (m_sockets.count() < 1)
-    return;
-
-  // Create JSON array with frame data
-  QJsonArray array;
-  JSON::Frame frame;
-  while (m_pendingFrames.try_dequeue(frame))
-  {
-  }
-  {
-    QJsonObject object;
-    object.insert(QStringLiteral("data"), serialize(frame));
-    array.append(object);
-  }
-
-  // Create JSON document with frame arrays
-  if (array.count() > 0)
-  {
-    // Construct QByteArray with data
-    QJsonObject object;
-    object.insert(QStringLiteral("frames"), array);
-    const QJsonDocument document(object);
-    auto json = document.toJson(QJsonDocument::Compact) + "\n";
-
-    // Send data to each plugin
-    for (auto *socket : std::as_const(m_sockets))
-    {
-      if (!socket)
-        continue;
-
-      if (socket->isWritable())
-        socket->write(json);
-    }
-  }
-}
 
 /**
  * @brief Handles socket-level errors from connected clients.

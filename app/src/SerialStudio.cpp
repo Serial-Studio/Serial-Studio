@@ -23,6 +23,8 @@
 #include "Misc/ThemeManager.h"
 
 #ifdef BUILD_COMMERCIAL
+#  include "CSV/Player.h"
+#  include "MDF4/Player.h"
 #  include "Licensing/Trial.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
@@ -59,7 +61,7 @@ bool SerialStudio::activated()
  * @param groups A vector of JSON::Group objects to analyze.
  * @return true if any commercial-only features are detected; false otherwise.
  */
-bool SerialStudio::commercialCfg(const QVector<JSON::Group> &g)
+bool SerialStudio::commercialCfg(const QVector<DataModel::Group> &g)
 {
   for (const auto &group : std::as_const(g))
   {
@@ -82,7 +84,7 @@ bool SerialStudio::commercialCfg(const QVector<JSON::Group> &g)
   return false;
 }
 
-bool SerialStudio::commercialCfg(const std::vector<JSON::Group> &g)
+bool SerialStudio::commercialCfg(const std::vector<DataModel::Group> &g)
 {
   for (const auto &group : std::as_const(g))
   {
@@ -282,7 +284,7 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
  *         not recognized.
  */
 SerialStudio::DashboardWidget
-SerialStudio::getDashboardWidget(const JSON::Group &group)
+SerialStudio::getDashboardWidget(const DataModel::Group &group)
 {
   const auto &widget = group.widget;
 
@@ -317,7 +319,7 @@ SerialStudio::getDashboardWidget(const JSON::Group &group)
  *         by the input @c dataset parameter.
  */
 QList<SerialStudio::DashboardWidget>
-SerialStudio::getDashboardWidgets(const JSON::Dataset &dataset)
+SerialStudio::getDashboardWidgets(const DataModel::Dataset &dataset)
 {
   QList<DashboardWidget> list;
   const auto &widget = dataset.widget;
@@ -481,6 +483,21 @@ QColor SerialStudio::getDatasetColor(const int index)
       = colors.count() > idx ? colors.at(idx) : colors.at(idx % colors.count());
 
   return color;
+}
+
+/**
+ * @brief Checks if any playback players (CSV or MDF4) are currently open.
+ *
+ * This function provides a centralized check to determine if any file players
+ * are active, which is used to prevent data export during playback mode.
+ *
+ * @return true if any player (CSV or MDF4) has an open file; false otherwise.
+ */
+bool SerialStudio::isAnyPlayerOpen()
+{
+  static auto &csvPlayer = CSV::Player::instance();
+  static auto &mdf4Player = MDF4::Player::instance();
+  return csvPlayer.isOpen() || mdf4Player.isOpen();
 }
 
 /**

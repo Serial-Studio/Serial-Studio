@@ -31,10 +31,10 @@
 
 #include "SerialStudio.h"
 
-#include "JSON/Frame.h"
-#include "JSON/FrameParser.h"
+#include "DataModel/Frame.h"
+#include "DataModel/FrameParser.h"
 
-namespace JSON
+namespace DataModel
 {
 /**
  * @brief The FrameBuilder class
@@ -66,7 +66,7 @@ class FrameBuilder : public QObject
 signals:
   void jsonFileMapChanged();
   void operationModeChanged();
-  void frameChanged(const JSON::Frame &frame);
+  void frameChanged(const DataModel::Frame &frame);
 
 private:
   explicit FrameBuilder();
@@ -80,14 +80,14 @@ public:
 
   [[nodiscard]] QString jsonMapFilepath() const;
   [[nodiscard]] QString jsonMapFilename() const;
-  [[nodiscard]] const JSON::Frame &frame() const;
-  [[nodiscard]] JSON::FrameParser *frameParser() const;
+  [[nodiscard]] const DataModel::Frame &frame() const;
+  [[nodiscard]] DataModel::FrameParser *frameParser() const;
   [[nodiscard]] SerialStudio::OperationMode operationMode() const;
 
 public slots:
   void setupExternalConnections();
   void loadJsonMap(const QString &path);
-  void setFrameParser(JSON::FrameParser *editor);
+  void setFrameParser(DataModel::FrameParser *editor);
   void registerQuickPlotHeaders(const QStringList &headers);
   void setOperationMode(const SerialStudio::OperationMode mode);
 
@@ -103,14 +103,14 @@ private:
   void parseQuickPlotFrame(const QByteArray &data);
   void buildQuickPlotFrame(const QStringList &channels);
 
-  void hotpathTxFrame(const JSON::Frame &frame);
+  void hotpathTxFrame(const DataModel::Frame &frame);
 
 private:
   QFile m_jsonMap;
 
-  JSON::Frame m_frame;
-  JSON::Frame m_rawFrame;
-  JSON::Frame m_quickPlotFrame;
+  DataModel::Frame m_frame;
+  DataModel::Frame m_rawFrame;
+  DataModel::Frame m_quickPlotFrame;
 
   QString m_checksum;
   QByteArray m_frameStart;
@@ -122,7 +122,7 @@ private:
   bool m_quickPlotHasHeader;
   QStringList m_quickPlotChannelNames;
 
-  JSON::FrameParser *m_frameParser;
+  DataModel::FrameParser *m_frameParser;
   SerialStudio::OperationMode m_opMode;
 };
 } // namespace JSON

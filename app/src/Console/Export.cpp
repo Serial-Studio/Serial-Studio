@@ -32,6 +32,8 @@
 
 #ifdef BUILD_COMMERCIAL
 #  include "IO/Manager.h"
+#  include "CSV/Player.h"
+#  include "MDF4/Player.h"
 #  include "Console/Handler.h"
 #  include "Misc/WorkspaceManager.h"
 #  include "Licensing/LemonSqueezy.h"
@@ -44,64 +46,37 @@
 #ifdef BUILD_COMMERCIAL
 
 /**
- * @brief Constructs the console export worker
- */
-Console::ExportWorker::ExportWorker(
-    moodycamel::ReaderWriterQueue<Console::ExportData> *queue,
-    std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize)
-  : m_pendingData(queue)
-  , m_exportEnabled(exportEnabled)
-  , m_queueSize(queueSize)
-{
-  m_writeBuffer.reserve(1024);
-}
-
-/**
  * @brief Destructor - closes file
  */
-Console::ExportWorker::~ExportWorker()
-{
-  closeFile();
-}
+Console::ExportWorker::~ExportWorker() = default;
 
 /**
  * @brief Returns true if file is open
  */
-bool Console::ExportWorker::isOpen() const
+bool Console::ExportWorker::isResourceOpen() const
 {
   return m_file.isOpen();
 }
 
 /**
- * @brief Writes all queued console data to file
+ * @brief Processes a batch of console data items
  */
-void Console::ExportWorker::writeValues()
+void Console::ExportWorker::processItems(
+    const std::vector<ExportDataPtr> &items)
 {
-  if (!m_exportEnabled->load(std::memory_order_relaxed))
+  if (items.empty())
     return;
 
   if (!IO::Manager::instance().isConnected())
     return;
 
-  m_writeBuffer.clear();
-
-  ExportData item;
-  while (m_pendingData->try_dequeue(item))
-    m_writeBuffer.push_back(std::move(item));
-
-  const auto count = m_writeBuffer.size();
-  if (count == 0)
-    return;
-
-  m_queueSize->fetch_sub(count, std::memory_order_relaxed);
-
-  if (!isOpen())
+  if (!isResourceOpen())
     createFile();
 
   if (m_textStream.device())
   {
-    for (const auto &data : m_writeBuffer)
-      m_textStream << data.data;
+    for (const auto &dataPtr : items)
+      m_textStream << dataPtr->data;
 
     m_textStream.flush();
   }
@@ -110,14 +85,13 @@ void Console::ExportWorker::writeValues()
 /**
  * @brief Closes the output file
  */
-void Console::ExportWorker::closeFile()
+void Console::ExportWorker::closeResources()
 {
-  if (isOpen())
+  if (isResourceOpen())
   {
-    writeValues();
     m_file.close();
     m_textStream.setDevice(nullptr);
-    Q_EMIT openChanged();
+    Q_EMIT resourceOpenChanged();
   }
 }
 
@@ -128,8 +102,8 @@ void Console::ExportWorker::createFile()
 {
   if (SerialStudio::activated())
   {
-    if (isOpen())
-      closeFile();
+    if (isResourceOpen())
+      closeResources();
 
     const auto dateTime = QDateTime::currentDateTime();
     const auto fileName
@@ -144,7 +118,7 @@ void Console::ExportWorker::createFile()
       Misc::Utilities::showMessageBox(
           QObject::tr("Console Output File Error"),
           QObject::tr("Cannot open file for writing!"), QMessageBox::Critical);
-      closeFile();
+      closeResources();
       return;
     }
 
@@ -152,7 +126,7 @@ void Console::ExportWorker::createFile()
     m_textStream.setGenerateByteOrderMark(true);
     m_textStream.setEncoding(QStringConverter::Utf8);
 
-    Q_EMIT openChanged();
+    Q_EMIT resourceOpenChanged();
   }
 }
 
@@ -167,30 +141,21 @@ void Console::ExportWorker::createFile()
  * automatically write generated console log files.
  */
 Console::Export::Export()
+#ifdef BUILD_COMMERCIAL
+  : DataModel::FrameConsumer<ExportDataPtr>({.queueCapacity = 8192,
+                                             .flushThreshold = 1024,
+                                             .timerIntervalMs = 1000})
+  , m_isOpen(false)
+  , m_exportEnabled(false)
+#else
   : m_isOpen(false)
   , m_exportEnabled(false)
-#ifdef BUILD_COMMERCIAL
-  , m_worker(nullptr)
-  , m_queueSize(0)
 #endif
 {
 #ifdef BUILD_COMMERCIAL
-  m_worker = new ExportWorker(&m_pendingData, &m_exportEnabled, &m_queueSize);
-  m_worker->moveToThread(&m_workerThread);
-
-  connect(&m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
-  connect(m_worker, &ExportWorker::openChanged, this,
-          &Export::onWorkerOpenChanged);
-
-  m_workerThread.start();
-
-  auto *timer = new QTimer();
-  timer->setInterval(1000);
-  timer->setTimerType(Qt::PreciseTimer);
-  timer->moveToThread(&m_workerThread);
-  connect(timer, &QTimer::timeout, m_worker, &ExportWorker::writeValues);
-  connect(&m_workerThread, &QThread::finished, timer, &QObject::deleteLater);
-  QMetaObject::invokeMethod(timer, "start", Qt::QueuedConnection);
+  initializeWorker();
+  connect(m_worker, &ExportWorker::resourceOpenChanged, this,
+          &Export::onWorkerOpenChanged, Qt::QueuedConnection);
 
   connect(&Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged, this, [=, this] {
@@ -205,16 +170,17 @@ Console::Export::Export()
 /**
  * Close file & finnish write-operations before destroying the class.
  */
-Console::Export::~Export()
-{
+Console::Export::~Export() = default;
+
 #ifdef BUILD_COMMERCIAL
-  if (m_worker)
-    QMetaObject::invokeMethod(m_worker, &ExportWorker::closeFile,
-                              Qt::BlockingQueuedConnection);
-  m_workerThread.quit();
-  m_workerThread.wait();
-#endif
+/**
+ * @brief Creates the console export worker instance.
+ */
+DataModel::FrameConsumerWorkerBase *Console::Export::createWorker()
+{
+  return new ExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
 }
+#endif
 
 /**
  * Returns a pointer to the only instance of this class.
@@ -243,7 +209,7 @@ bool Console::Export::isOpen() const
 bool Console::Export::exportEnabled() const
 {
 #ifdef BUILD_COMMERCIAL
-  return m_exportEnabled.load(std::memory_order_relaxed);
+  return consumerEnabled();
 #else
   return false;
 #endif
@@ -251,13 +217,15 @@ bool Console::Export::exportEnabled() const
 
 /**
  * Write all remaining console data & close the output file.
+ *
+ * Flushes any remaining data in the queue before closing to prevent
+ * creating small trailing files.
  */
 void Console::Export::closeFile()
 {
 #ifdef BUILD_COMMERCIAL
-  if (m_worker)
-    QMetaObject::invokeMethod(m_worker, &ExportWorker::closeFile,
-                              Qt::QueuedConnection);
+  auto *worker = static_cast<ExportWorker *>(m_worker);
+  QMetaObject::invokeMethod(worker, "close", Qt::QueuedConnection);
 #endif
 }
 
@@ -283,21 +251,25 @@ void Console::Export::setExportEnabled(const bool enabled)
 #ifdef BUILD_COMMERCIAL
   if (SerialStudio::activated())
   {
-    m_exportEnabled.store(enabled, std::memory_order_relaxed);
-    Q_EMIT enabledChanged();
-
     if (!enabled && isOpen())
       closeFile();
 
-    m_settings.setValue("Export", enabled);
+    setConsumerEnabled(enabled);
+    m_settings.setValue("ConsoleExport", enabled);
+    Q_EMIT enabledChanged();
     return;
   }
-#endif
 
   closeFile();
-  m_exportEnabled.store(false, std::memory_order_relaxed);
-  m_settings.setValue("Export", false);
+  setConsumerEnabled(false);
+  m_settings.setValue("ConsoleExport", false);
   Q_EMIT enabledChanged();
+#else
+  closeFile();
+  m_exportEnabled.store(false, std::memory_order_relaxed);
+  m_settings.setValue("ConsoleExport", false);
+  Q_EMIT enabledChanged();
+#endif
 
   if (enabled)
     Misc::Utilities::showMessageBox(
@@ -312,14 +284,8 @@ void Console::Export::setExportEnabled(const bool enabled)
 void Console::Export::registerData(QStringView data)
 {
 #ifdef BUILD_COMMERCIAL
-  if (!data.isEmpty() && exportEnabled())
-  {
-    if (m_queueSize.load(std::memory_order_relaxed) < kExportQueueCapacity)
-    {
-      m_pendingData.enqueue(ExportData(QString(data)));
-      m_queueSize.fetch_add(1, std::memory_order_relaxed);
-    }
-  }
+  if (exportEnabled() && !data.isEmpty() && !SerialStudio::isAnyPlayerOpen())
+    enqueueData(std::make_shared<ExportData>(QString(data)));
 #else
   (void)data;
 #endif
@@ -331,8 +297,8 @@ void Console::Export::registerData(QStringView data)
 #ifdef BUILD_COMMERCIAL
 void Console::Export::onWorkerOpenChanged()
 {
-  const bool workerIsOpen = m_worker ? m_worker->isOpen() : false;
-  m_isOpen.store(workerIsOpen, std::memory_order_relaxed);
+  auto *worker = static_cast<ExportWorker *>(m_worker);
+  m_isOpen.store(worker->isResourceOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();
 }
 #endif

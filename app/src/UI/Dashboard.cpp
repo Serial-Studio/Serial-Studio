@@ -26,7 +26,7 @@
 #include "CSV/Player.h"
 #include "MDF4/Player.h"
 #include "Misc/TimerEvents.h"
-#include "JSON/FrameBuilder.h"
+#include "DataModel/FrameBuilder.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Client.h"
@@ -68,7 +68,7 @@ UI::Dashboard::Dashboard()
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
   connect(&MDF4::Player::instance(), &MDF4::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=, this] { resetData(); }, Qt::QueuedConnection);
+  connect(&DataModel::FrameBuilder::instance(), &DataModel::FrameBuilder::jsonFileMapChanged, this, [=, this] { resetData(); }, Qt::QueuedConnection);
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
@@ -149,12 +149,12 @@ bool UI::Dashboard::streamAvailable() const
 
   const bool csvOpen = csvPlayer.isOpen();
   const bool mf4Open = mf4Player.isOpen();
-  const bool serialConnected = manager.isConnected();
+  const bool devOpen = manager.isConnected();
 
 #ifdef BUILD_COMMERCIAL
   static auto &mqtt = MQTT::Client::instance();
   const bool mqttConnected = mqtt.isConnected() && mqtt.isSubscriber();
-  return serialConnected || csvOpen || mqttConnected || mf4Open;
+  return devOpen || csvOpen || mqttConnected || mf4Open;
 #else
   return serialConnected || csvOpen || mf4Open;
 #endif
@@ -385,7 +385,7 @@ QVariantList UI::Dashboard::actions() const
     m["checked"] = false;
     m["text"] = action.title;
     m["icon"] = QStringLiteral("qrc:/rcc/actions/%1.svg").arg(action.icon);
-    if (action.timerMode == JSON::TimerMode::ToggleOnTrigger)
+    if (action.timerMode == DataModel::TimerMode::ToggleOnTrigger)
     {
       if (m_timers.contains(i) && m_timers[i] && m_timers[i]->isActive())
         m["checked"] = true;
@@ -430,14 +430,14 @@ const SerialStudio::WidgetMap &UI::Dashboard::widgetMap() const
  * @brief Provides access to the map of dataset objects.
  *
  * This function returns a constant reference to the map that associates dataset
- * indexes with their corresponding `JSON::Dataset` objects.
+ * indexes with their corresponding `DataModel::Dataset` objects.
  *
  * @return A constant reference to the `QMap` mapping dataset indexes (`int`)
- *         to their respective `JSON::Dataset` objects.
+ *         to their respective `DataModel::Dataset` objects.
  *
  * @note The map can be used to retrieve datasets by their index.
  */
-const QMap<int, JSON::Dataset> &UI::Dashboard::datasets() const
+const QMap<int, DataModel::Dataset> &UI::Dashboard::datasets() const
 {
   return m_datasets;
 }
@@ -445,7 +445,7 @@ const QMap<int, JSON::Dataset> &UI::Dashboard::datasets() const
 /**
  * @brief Retrieves a group widget by type and index.
  *
- * This function returns a constant reference to a @c JSON::Group object
+ * This function returns a constant reference to a @c DataModel::Group object
  * corresponding to the specified widget type and index.
  *
  * If the widget type does not exist or the index is out of bounds, a
@@ -453,18 +453,18 @@ const QMap<int, JSON::Dataset> &UI::Dashboard::datasets() const
  *
  * @param widget The type of dashboard widget.
  * @param index  The index of the widget within its group type.
- * @return Reference to the requested @c JSON::Group, or an empty group if not
+ * @return Reference to the requested @c DataModel::Group, or an empty group if not
  *         found.
  *
  * @note This function is production-safe and will not crash if invalid
  *       arguments are provided. It logs warnings for missing widget types or
  *       out-of-bounds indices.
  */
-const JSON::Group &
+const DataModel::Group &
 UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
                               const int index) const
 {
-  static const JSON::Group emptyGroup;
+  static const DataModel::Group emptyGroup;
   const auto it = m_widgetGroups.constFind(widget);
 
   if (it == m_widgetGroups.cend()) [[unlikely]]
@@ -486,7 +486,7 @@ UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
 /**
  * @brief Retrieves a dataset widget by type and index.
  *
- * This function returns a constant reference to a @c JSON::Dataset object
+ * This function returns a constant reference to a @c DataModel::Dataset object
  * corresponding to the specified widget type and index.
  *
  * If the widget type does not exist or the index is out of bounds, a
@@ -494,18 +494,18 @@ UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
  *
  * @param widget The type of dashboard widget.
  * @param index  The index of the dataset within its widget type.
- * @return Reference to the requested @c JSON::Dataset, or an empty dataset if
+ * @return Reference to the requested @c DataModel::Dataset, or an empty dataset if
  *         not found.
  *
  * @note This function is production-safe and will not crash if invalid
  *       arguments are provided. It logs warnings for missing widget types or
  *       out-of-bounds indices.
  */
-const JSON::Dataset &
+const DataModel::Dataset &
 UI::Dashboard::getDatasetWidget(const SerialStudio::DashboardWidget widget,
                                 const int index) const
 {
-  static const JSON::Dataset emptyDataset;
+  static const DataModel::Dataset emptyDataset;
   const auto it = m_widgetDatasets.constFind(widget);
 
   if (it == m_widgetDatasets.cend()) [[unlikely]]
@@ -529,22 +529,22 @@ UI::Dashboard::getDatasetWidget(const SerialStudio::DashboardWidget widget,
 //------------------------------------------------------------------------------
 
 /**
- * @brief Retrieves the last unmodified JSON frame for the dashboard.
- * @return A reference to the current JSON::Frame.
+ * @brief Retrieves the last unmodified DataModel frame for the dashboard.
+ * @return A reference to the current DataModel::Frame.
  */
-const JSON::Frame &UI::Dashboard::rawFrame()
+const DataModel::Frame &UI::Dashboard::rawFrame()
 {
   return m_rawFrame;
 }
 
 /**
- * @brief Retrieves the processed JSON frame for the dashboard. Processing
+ * @brief Retrieves the processed DataModel frame for the dashboard. Processing
  *        can add several group-level widgets, such as terminals, multiplots,
  *        etc...
  *
- * @return A reference to the current JSON::Frame.
+ * @return A reference to the current DataModel::Frame.
  */
-const JSON::Frame &UI::Dashboard::processedFrame()
+const DataModel::Frame &UI::Dashboard::processedFrame()
 {
   return m_lastFrame;
 }
@@ -738,12 +738,12 @@ void UI::Dashboard::resetData(const bool notify)
   m_activeMultiplots.clear();
 
   // Reset frame data
-  m_rawFrame = JSON::Frame();
-  m_lastFrame = JSON::Frame();
+  m_rawFrame = DataModel::Frame();
+  m_lastFrame = DataModel::Frame();
   m_updateRetryInProgress = false;
 
   // Configure actions
-  auto *frameBuilder = &JSON::FrameBuilder::instance();
+  auto *frameBuilder = &DataModel::FrameBuilder::instance();
   if (frameBuilder->operationMode() == SerialStudio::ProjectFile)
     configureActions(frameBuilder->frame());
 
@@ -841,7 +841,7 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
       if (enabled)
       {
         // Create terminal group and add to internal structures
-        JSON::Group terminal;
+        DataModel::Group terminal;
         terminal.widget = "terminal";
         terminal.title = tr("Console");
         terminal.groupId = static_cast<int>(m_lastFrame.groups.size());
@@ -874,7 +874,7 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
         // Remove terminal from processed frame
         auto &groups = m_lastFrame.groups;
         groups.erase(std::remove_if(groups.begin(), groups.end(),
-                                    [](const JSON::Group &g) {
+                                    [](const DataModel::Group &g) {
                                       return g.widget == "terminal";
                                     }),
                      groups.end());
@@ -970,13 +970,13 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 
     else
     {
-      if (action.timerMode == JSON::TimerMode::StartOnTrigger)
+      if (action.timerMode == DataModel::TimerMode::StartOnTrigger)
       {
         if (!timer->isActive())
           timer->start();
       }
 
-      else if (action.timerMode == JSON::TimerMode::ToggleOnTrigger)
+      else if (action.timerMode == DataModel::TimerMode::ToggleOnTrigger)
       {
         if (guiTrigger)
         {
@@ -991,7 +991,7 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 
   // Send data payload
   if (!IO::Manager::instance().paused())
-    IO::Manager::instance().writeData(JSON::get_tx_bytes(action));
+    IO::Manager::instance().writeData(DataModel::get_tx_bytes(action));
 
   // Update action model
   Q_EMIT actionStatusChanged();
@@ -1055,16 +1055,16 @@ void UI::Dashboard::setMultiplotRunning(const int index, const bool enabled)
  * frame structure with the current configuration. If the structure has changed,
  * the dashboard is reconfigured. Finally, updates dataset values and plots.
  *
- * @param frame The new JSON data frame to process.
+ * @param frame The new DataModel data frame to process.
  */
-void UI::Dashboard::hotpathRxFrame(const JSON::Frame &frame)
+void UI::Dashboard::hotpathRxFrame(const DataModel::Frame &frame)
 {
   // Validate frame
   if (frame.groups.size() <= 0 || !streamAvailable()) [[unlikely]]
     return;
 
   // Regenerate dashboard model if frame structure changed
-  if (!JSON::compare_frames(frame, m_rawFrame) || m_datasetReferences.isEmpty())
+  if (!DataModel::compare_frames(frame, m_rawFrame) || m_datasetReferences.isEmpty())
       [[unlikely]]
   {
     const bool hadProFeatures = m_rawFrame.containsCommercialFeatures;
@@ -1092,7 +1092,7 @@ void UI::Dashboard::hotpathRxFrame(const JSON::Frame &frame)
  *
  * @param frame The JSON frame containing new dataset values.
  */
-void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
+void UI::Dashboard::updateDashboardData(const DataModel::Frame &frame)
 {
   // Update all datasets of the frame
   for (const auto &group : frame.groups)
@@ -1116,6 +1116,8 @@ void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
             IO::Manager::instance().disconnectDevice();
           else if (CSV::Player::instance().isOpen())
             CSV::Player::instance().closeFile();
+          else if (MDF4::Player::instance().isOpen())
+            MDF4::Player::instance().closeFile();
 #ifdef BUILD_COMMERCIAL
           else if (MQTT::Client::instance().isConnected())
             MQTT::Client::instance().closeConnection();
@@ -1130,7 +1132,7 @@ void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
         // Try running the update again with a copy to avoid use-after-free
         // if reconfigureDashboard invalidated the frame reference
         m_updateRetryInProgress = true;
-        const JSON::Frame frameCopy = frame;
+        const DataModel::Frame frameCopy = frame;
         updateDashboardData(frameCopy);
         m_updateRetryInProgress = false;
 
@@ -1163,7 +1165,7 @@ void UI::Dashboard::updateDashboardData(const JSON::Frame &frame)
  * @param frame The JSON frame with the new structure to configure.
  * @param pro Indicates whether commercial (pro) features are enabled.
  */
-void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
+void UI::Dashboard::reconfigureDashboard(const DataModel::Frame &frame)
 {
   // Check if we can use pro features
   const bool pro = SerialStudio::activated();
@@ -1178,7 +1180,7 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
   // Add terminal group
   if (m_terminalEnabled)
   {
-    JSON::Group terminal;
+    DataModel::Group terminal;
     terminal.widget = "terminal";
     terminal.title = tr("Console");
     terminal.groupId = m_lastFrame.groups.size();
@@ -1225,7 +1227,7 @@ void UI::Dashboard::reconfigureDashboard(const JSON::Frame &frame)
       m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
 
     // Parse group datasets
-    JSON::Group ledPanel;
+    DataModel::Group ledPanel;
     for (const auto &dataset : group.datasets)
     {
       // Register a new dataset
@@ -1745,10 +1747,10 @@ void UI::Dashboard::configureMultiLineSeries()
 
 /**
  * @brief Configures dashboard actions and associated timers from the
- *        given JSON frame.
+ *        given DataModel frame.
  *
  * This method clears existing actions and timers, then loads a new set of
- * actions from the provided JSON frame. For each action, it sets up an optional
+ * actions from the provided DataModel frame. For each action, it sets up an optional
  * timer based on its configured TimerMode and interval.
  *
  * Timers are connected to trigger the corresponding action via
@@ -1757,7 +1759,7 @@ void UI::Dashboard::configureMultiLineSeries()
  * - TimerMode::AutoStart
  * - autoExecuteOnConnect() flag
  *
- * @param frame The JSON frame containing the user-defined actions to configure.
+ * @param frame The DataModel frame containing the user-defined actions to configure.
  *
  * @note This method has no effect if:
  * - The frame is invalid (`!frame.isValid()`).
@@ -1766,7 +1768,7 @@ void UI::Dashboard::configureMultiLineSeries()
  * @warning If a timer-based action has an interval of 0 milliseconds, a warning
  *          is logged and the timer is not created.
  */
-void UI::Dashboard::configureActions(const JSON::Frame &frame)
+void UI::Dashboard::configureActions(const DataModel::Frame &frame)
 {
   // Stop if frame is not valid
   if (frame.groups.size() <= 0)
@@ -1802,7 +1804,7 @@ void UI::Dashboard::configureActions(const JSON::Frame &frame)
     for (int i = 0; i < m_actions.count(); ++i)
     {
       const auto &action = m_actions[i];
-      if (action.timerMode != JSON::TimerMode::Off)
+      if (action.timerMode != DataModel::TimerMode::Off)
       {
         auto interval = action.timerIntervalMs;
         if (interval > 0)
@@ -1813,7 +1815,7 @@ void UI::Dashboard::configureActions(const JSON::Frame &frame)
           connect(timer, &QTimer::timeout, this,
                   [this, i]() { activateAction(i, false); });
 
-          if (action.timerMode == JSON::TimerMode::AutoStart
+          if (action.timerMode == DataModel::TimerMode::AutoStart
               || action.autoExecuteOnConnect)
             timer->start();
 

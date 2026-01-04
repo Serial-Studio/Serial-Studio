@@ -21,23 +21,16 @@
 
 #pragma once
 
-#include <atomic>
-#include <chrono>
-
 #include <QFile>
-#include <QTimer>
-#include <QThread>
 #include <QVector>
 #include <QObject>
 #include <QTextStream>
 
-#include "JSON/Frame.h"
-#include "ThirdParty/readerwriterqueue.h"
+#include "DataModel/Frame.h"
+#include "DataModel/FrameConsumer.h"
 
 namespace CSV
 {
-static constexpr size_t kQueueCapacity = 8192;
-static constexpr size_t kFlushThreshold = 1024;
 class Export;
 
 /**
@@ -46,37 +39,30 @@ class Export;
  * This class owns all file-related resources and performs disk writes
  * entirely on a dedicated worker thread to avoid blocking the main UI thread.
  */
-class ExportWorker : public QObject
+class ExportWorker
+  : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>
 {
   Q_OBJECT
 
 public:
-  explicit ExportWorker(
-      moodycamel::ReaderWriterQueue<JSON::TimestampFrame> *queue,
-      std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize);
-  ~ExportWorker();
+  using DataModel::FrameConsumerWorker<
+      DataModel::TimestampedFramePtr>::FrameConsumerWorker;
 
-  [[nodiscard]] bool isOpen() const;
+  void closeResources() override;
+  bool isResourceOpen() const override;
 
-signals:
-  void openChanged();
-
-public slots:
-  void writeValues();
-  void closeFile();
+protected:
+  void processItems(
+      const std::vector<DataModel::TimestampedFramePtr> &items) override;
 
 private:
-  QVector<QPair<int, QString>> createCsvFile(const JSON::Frame &frame);
+  QVector<QPair<int, QString>> createCsvFile(const DataModel::Frame &frame);
 
 private:
   QFile m_csvFile;
   QTextStream m_textStream;
-  std::atomic<size_t> *m_queueSize;
-  std::atomic<bool> *m_exportEnabled;
-  std::vector<JSON::TimestampFrame> m_writeBuffer;
   QVector<QPair<int, QString>> m_indexHeaderPairs;
-  JSON::TimestampFrame::TimePoint m_referenceTimestamp;
-  moodycamel::ReaderWriterQueue<JSON::TimestampFrame> *m_pendingFrames;
+  DataModel::TimestampedFrame::TimePoint m_referenceTimestamp;
 };
 
 /**
@@ -90,7 +76,7 @@ private:
  * to offload file I/O operations. It supports enabling/disabling export
  * dynamically and integrates with external modules (IO manager, MQTT, etc.).
  */
-class Export : public QObject
+class Export : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr>
 {
   // clang-format off
   Q_OBJECT
@@ -127,18 +113,15 @@ public slots:
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
 
-  void hotpathTxFrame(const JSON::Frame &frame);
+  void hotpathTxFrame(const DataModel::TimestampedFramePtr &frame);
+
+protected:
+  DataModel::FrameConsumerWorkerBase *createWorker() override;
 
 private slots:
   void onWorkerOpenChanged();
 
 private:
-  QThread m_workerThread;
-  ExportWorker *m_worker;
   std::atomic<bool> m_isOpen;
-  std::atomic<size_t> m_queueSize;
-  std::atomic<bool> m_exportEnabled;
-  moodycamel::ReaderWriterQueue<JSON::TimestampFrame> m_pendingFrames{
-      kQueueCapacity};
 };
 } // namespace CSV

@@ -26,10 +26,10 @@
 #include <QStandardItemModel>
 #include <QItemSelectionModel>
 
-#include "JSON/Frame.h"
+#include "DataModel/Frame.h"
 #include "SerialStudio.h"
 
-namespace JSON
+namespace DataModel
 {
 class CustomModel;
 
@@ -291,18 +291,18 @@ public slots:
 
   void buildTreeModel();
   void buildProjectModel();
-  void buildGroupModel(const JSON::Group &group);
-  void buildActionModel(const JSON::Action &action);
-  void buildDatasetModel(const JSON::Dataset &dataset);
+  void buildGroupModel(const DataModel::Group &group);
+  void buildActionModel(const DataModel::Action &action);
+  void buildDatasetModel(const DataModel::Dataset &dataset);
 
 private slots:
   void onJsonLoaded();
   void generateComboBoxModels();
-  void setCurrentView(const CurrentView view);
   void onGroupItemChanged(QStandardItem *item);
   void onActionItemChanged(QStandardItem *item);
   void onProjectItemChanged(QStandardItem *item);
   void onDatasetItemChanged(QStandardItem *item);
+  void setCurrentView(const DataModel::ProjectModel::CurrentView view);
   void onCurrentSelectionChanged(const QModelIndex &current,
                                  const QModelIndex &previous);
 
@@ -331,12 +331,12 @@ private:
   QString m_filePath;
 
   QMap<QStandardItem *, int> m_rootItems;
-  QMap<QStandardItem *, JSON::Group> m_groupItems;
-  QMap<QStandardItem *, JSON::Action> m_actionItems;
-  QMap<QStandardItem *, JSON::Dataset> m_datasetItems;
+  QMap<QStandardItem *, DataModel::Group> m_groupItems;
+  QMap<QStandardItem *, DataModel::Action> m_actionItems;
+  QMap<QStandardItem *, DataModel::Dataset> m_datasetItems;
 
-  std::vector<JSON::Group> m_groups;
-  std::vector<JSON::Action> m_actions;
+  std::vector<DataModel::Group> m_groups;
+  std::vector<DataModel::Action> m_actions;
 
   CustomModel *m_treeModel;
   QItemSelectionModel *m_selectionModel;
@@ -358,9 +358,9 @@ private:
   QMap<QString, QString> m_datasetWidgets;
   QMap<QPair<bool, bool>, QString> m_plotOptions;
 
-  JSON::Group m_selectedGroup;
-  JSON::Action m_selectedAction;
-  JSON::Dataset m_selectedDataset;
+  DataModel::Group m_selectedGroup;
+  DataModel::Action m_selectedAction;
+  DataModel::Dataset m_selectedDataset;
 
   int m_activeGroupId;
   QJsonObject m_dashboardLayout;

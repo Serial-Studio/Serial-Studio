@@ -22,6 +22,7 @@
 #pragma once
 
 #include <cmath>
+#include <memory>
 #include <vector>
 #include <chrono>
 
@@ -78,7 +79,7 @@ inline constexpr auto DashboardLayout = "dashboardLayout";
 inline constexpr auto ActiveGroupId = "activeGroupId";
 } // namespace Keys
 
-namespace JSON
+namespace DataModel
 {
 
 //------------------------------------------------------------------------------
@@ -748,36 +749,82 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
 /**
  * @brief Represents a single timestamped frame for data export.
  * Stores a JSON frame and the associated reception timestamp (in local time).
+ *
+ * The Frame data is shared via std::shared_ptr to enable efficient distribution
+ * to multiple worker threads (CSV export, MDF4 export, Plugins) without deep
+ * copying on the main thread. The data is immutable (const) to ensure thread
+ * safety.
  */
-struct TimestampFrame
+struct TimestampedFrame
 {
-  using HighResClock = std::chrono::high_resolution_clock;
-  using TimePoint = HighResClock::time_point;
+  using SteadyClock = std::chrono::steady_clock;
+  using TimePoint = SteadyClock::time_point;
 
-  JSON::Frame data;           ///< The actual data frame.
-  QDateTime rxDateTime;       ///< Time at which the frame was received.
-  TimePoint highResTimestamp; ///< Timestamp for nanosecond precision.
+  std::shared_ptr<const DataModel::Frame> data;
+  QDateTime rxDateTime;
+  TimePoint highResTimestamp;
 
   /**
    * @brief Default constructor.
    */
-  TimestampFrame() {}
+  TimestampedFrame() = default;
 
   /**
    * @brief Constructs a timestamped frame with current time.
    */
-  TimestampFrame(const JSON::Frame &d)
-    : data(d)
+  TimestampedFrame(std::shared_ptr<const DataModel::Frame> f)
+    : data(std::move(f))
     , rxDateTime(QDateTime::currentDateTime())
-    , highResTimestamp(HighResClock::now())
+    , highResTimestamp(SteadyClock::now())
   {
   }
 
   // Disable copy constructs and use standard move assignments
-  TimestampFrame(TimestampFrame &&) = default;
-  TimestampFrame(const TimestampFrame &) = delete;
-  TimestampFrame &operator=(TimestampFrame &&) = default;
-  TimestampFrame &operator=(const TimestampFrame &) = delete;
+  TimestampedFrame(TimestampedFrame &&) = default;
+  TimestampedFrame(const TimestampedFrame &) = delete;
+  TimestampedFrame &operator=(TimestampedFrame &&) = default;
+  TimestampedFrame &operator=(const TimestampedFrame &) = delete;
 };
 
-} // namespace JSON
+//------------------------------------------------------------------------------
+// Shared pointer definitions
+//------------------------------------------------------------------------------
+
+/**
+ * @typedef TimestampedFramePtr
+ * @brief Shared pointer to a TimestampedFrame for efficient multi-consumer
+ *        distribution.
+ *
+ * This typedef defines the canonical type for passing timestamped frames from
+ * the main thread to worker threads in the frame consumer architecture.
+ *
+ * **Design Rationale:**
+ * - **Zero-copy distribution**: A single TimestampedFrame instance can be
+ *   safely shared across multiple worker threads (CSV export, MDF4 export,
+ *   Plugins server) without deep copying on the hotpath.
+ * - **Move semantics**: TimestampedFrame itself is move-only (non-copyable)
+ *   to prevent accidental copies, so it must be wrapped in a shared_ptr for
+ *   multi-consumer scenarios.
+ * - **Thread safety**: The underlying Frame data is immutable
+ *   (std::shared_ptr<const Frame>), ensuring safe concurrent access from
+ *   worker threads.
+ *
+ * **Usage:**
+ * - **Producer (FrameBuilder)**: Creates a TimestampedFramePtr via
+ *   `std::make_shared<TimestampedFrame>(frame_data)` and distributes it to
+ *   all registered consumers.
+ * - **Consumers (CSV::Export, MDF4::Export)**: Receive TimestampedFramePtr
+ *   through lock-free queues and process asynchronously on worker threads.
+ *
+ * **Type Safety:**
+ * - This typedef already includes the `std::shared_ptr<>` wrapper.
+ * - Never wrap it in another shared_ptr (i.e., avoid
+ *   `std::shared_ptr<TimestampedFramePtr>`).
+ *
+ * @see TimestampedFrame
+ * @see FrameConsumer
+ * @see FrameBuilder::hotpathTxFrame()
+ */
+typedef std::shared_ptr<DataModel::TimestampedFrame> TimestampedFramePtr;
+
+} // namespace DataModel

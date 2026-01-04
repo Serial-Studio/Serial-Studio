@@ -27,7 +27,7 @@
 
 #include "Plugins/Server.h"
 #include "Misc/Translator.h"
-#include "JSON/FrameBuilder.h"
+#include "DataModel/FrameBuilder.h"
 
 #include <QApplication>
 
@@ -407,7 +407,7 @@ void IO::Manager::disconnectDevice()
     killFrameReader();
 
     // Clear Quick Plot headers when disconnecting
-    JSON::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
+    DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
     // Notify UI
     Q_EMIT driverChanged();
@@ -487,7 +487,7 @@ void IO::Manager::processPayload(const QByteArray &payload)
   {
     static auto &console = Console::Handler::instance();
     static auto &server = Plugins::Server::instance();
-    static auto &frameBuilder = JSON::FrameBuilder::instance();
+    static auto &frameBuilder = DataModel::FrameBuilder::instance();
 
     server.hotpathTxData(payload);
     console.hotpathRxData(payload);
@@ -806,7 +806,7 @@ void IO::Manager::startFrameReader()
  */
 void IO::Manager::onReadyRead()
 {
-  static auto &frameBuilder = JSON::FrameBuilder::instance();
+  static auto &frameBuilder = DataModel::FrameBuilder::instance();
 #ifdef BUILD_COMMERCIAL
   static auto &mqtt = MQTT::Client::instance();
 #endif

@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "JSON/Frame.h"
+#include "DataModel/Frame.h"
 
 /**
  * @class SerialStudio
@@ -252,8 +252,8 @@ public:
   // Commercial-related functions
   //
   [[nodiscard]] static bool activated();
-  [[nodiscard]] static bool commercialCfg(const QVector<JSON::Group> &g);
-  [[nodiscard]] static bool commercialCfg(const std::vector<JSON::Group> &g);
+  [[nodiscard]] static bool commercialCfg(const QVector<DataModel::Group> &g);
+  [[nodiscard]] static bool commercialCfg(const std::vector<DataModel::Group> &g);
 
   //
   // Dashboard logic
@@ -262,8 +262,8 @@ public:
   [[nodiscard]] static bool isGroupWidget(const DashboardWidget widget);
   [[nodiscard]] static bool isDatasetWidget(const DashboardWidget widget);
   [[nodiscard]] static QString dashboardWidgetTitle(const DashboardWidget w);
-  [[nodiscard]] static DashboardWidget getDashboardWidget(const JSON::Group& group);
-  [[nodiscard]] static QList<DashboardWidget> getDashboardWidgets(const JSON::Dataset& dataset);
+  [[nodiscard]] static DashboardWidget getDashboardWidget(const DataModel::Group& group);
+  [[nodiscard]] static QList<DashboardWidget> getDashboardWidgets(const DataModel::Dataset& dataset);
   Q_INVOKABLE static QString dashboardWidgetIcon(const DashboardWidget w, const bool large = false);
   // clang-format on
 
@@ -279,6 +279,7 @@ public:
   // Utility functions
   //
   [[nodiscard]] static QColor getDatasetColor(const int index);
+  [[nodiscard]] static bool isAnyPlayerOpen();
 
   //
   // String processing

@@ -41,7 +41,7 @@
 #include "IO/Manager.h"
 #include "UI/Dashboard.h"
 #include "Misc/Utilities.h"
-#include "JSON/FrameBuilder.h"
+#include "DataModel/FrameBuilder.h"
 #include "Misc/WorkspaceManager.h"
 
 /**
@@ -449,7 +449,7 @@ void MDF4::Player::closeFile()
   m_isSerialStudioFile = false;
   m_masterTimeChannel = nullptr;
 
-  JSON::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
+  DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
   Q_EMIT openChanged();
   Q_EMIT playerStateChanged();
@@ -856,7 +856,7 @@ void MDF4::Player::sendHeaderFrame()
       headers.append(QString("Channel_%1").arg(i + 1));
   }
 
-  JSON::FrameBuilder::instance().registerQuickPlotHeaders(headers);
+  DataModel::FrameBuilder::instance().registerQuickPlotHeaders(headers);
 }
 
 /**

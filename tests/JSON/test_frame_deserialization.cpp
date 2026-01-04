@@ -22,7 +22,7 @@
 #include <QtTest>
 #include <QFile>
 #include <QJsonDocument>
-#include "JSON/Frame.h"
+#include "DataModel/Frame.h"
 
 class TestFrameDeserialization : public QObject
 {

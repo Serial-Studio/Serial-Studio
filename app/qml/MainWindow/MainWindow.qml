@@ -347,9 +347,9 @@ Widgets.SmartWindow {
     }
 
     //
-    // JSON project drop area
+    // File drop area
     //
-    Widgets.JSONDropArea {
+    Widgets.FileDropArea {
       anchors.fill: parent
       enabled: !Cpp_IO_Manager.isConnected
     }

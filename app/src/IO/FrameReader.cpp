@@ -23,8 +23,8 @@
 
 #include "IO/Manager.h"
 #include "IO/Checksum.h"
-#include "JSON/FrameBuilder.h"
-#include "JSON/ProjectModel.h"
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
 
 //------------------------------------------------------------------------------
 // Constructor function
@@ -53,8 +53,8 @@ IO::FrameReader::FrameReader(QObject *parent)
   setChecksum(IO::Manager::instance().checksumAlgorithm());
   setStartSequence(IO::Manager::instance().startSequence());
   setFinishSequence(IO::Manager::instance().finishSequence());
-  setOperationMode(JSON::FrameBuilder::instance().operationMode());
-  setFrameDetectionMode(JSON::ProjectModel::instance().frameDetection());
+  setOperationMode(DataModel::FrameBuilder::instance().operationMode());
+  setFrameDetectionMode(DataModel::ProjectModel::instance().frameDetection());
 }
 
 //------------------------------------------------------------------------------

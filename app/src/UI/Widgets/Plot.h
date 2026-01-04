@@ -25,7 +25,7 @@
 #include <QXYSeries>
 #include <QQuickItem>
 
-#include "JSON/Frame.h"
+#include "DataModel/Frame.h"
 
 namespace Widgets
 {
@@ -104,7 +104,7 @@ private slots:
 private:
   template<typename Extractor>
   bool computeMinMaxValues(double &min, double &max,
-                           const JSON::Dataset &dataset, const bool addPadding,
+                           const DataModel::Dataset &dataset, const bool addPadding,
                            Extractor extractor);
 
 private:

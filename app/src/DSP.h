@@ -348,10 +348,15 @@ private:
 //------------------------------------------------------------------------------
 
 /**
+ * @brief Data type to use for all Serial Studio mathematical structures.
+ */
+typedef double ssfp_t;
+
+/**
  * @typedef PlotDataX
  * @brief Represents the unique X-axis data points for a plot.
  */
-typedef FixedQueue<double> AxisData;
+typedef FixedQueue<ssfp_t> AxisData;
 
 /**
  * @typedef MultiPlotDataY
@@ -426,9 +431,9 @@ typedef std::vector<QVector3D> LineSeries3D;
  */
 typedef struct
 {
-  FixedQueue<double> latitudes;  ///< Latitude values (degrees)
-  FixedQueue<double> longitudes; ///< Longitude values (degrees)
-  FixedQueue<double> altitudes;  ///< Altitude values (meters)
+  FixedQueue<ssfp_t> latitudes;  ///< Latitude values (degrees)
+  FixedQueue<ssfp_t> longitudes; ///< Longitude values (degrees)
+  FixedQueue<ssfp_t> altitudes;  ///< Altitude values (meters)
 } GpsSeries;
 
 //------------------------------------------------------------------------------
@@ -469,8 +474,8 @@ struct DownsampleWorkspace
   std::vector<unsigned int> cnt;
 
   // Column-wise vertical extrema
-  std::vector<double> minY;
-  std::vector<double> maxY;
+  std::vector<ssfp_t> minY;
+  std::vector<ssfp_t> maxY;
 
   // Logical indices associated with extrema and endpoints per column
   std::vector<std::size_t> minI;
@@ -508,9 +513,9 @@ struct DownsampleWorkspace
     // Clear per-column tallies and extrema
     std::fill(cnt.begin(), cnt.end(), 0u);
     std::fill(minY.begin(), minY.end(),
-              std::numeric_limits<double>::infinity());
+              std::numeric_limits<ssfp_t>::infinity());
     std::fill(maxY.begin(), maxY.end(),
-              -std::numeric_limits<double>::infinity());
+              -std::numeric_limits<ssfp_t>::infinity());
   }
 };
 
@@ -534,8 +539,8 @@ struct DownsampleWorkspace
  *
  * Example:
  * ```
- * const double* p0; size_t n0;
- * const double* p1; size_t n1;
+ * const ssftp_t* p0; size_t n0;
+ * const ssftp_t* p1; size_t n1;
  * spanFromFixedQueue(myQueue, p0, n0, p1, n1);
  * for (size_t i = 0; i < n0; ++i) use(p0[i]);
  * for (size_t i = 0; i < n1; ++i) use(p1[i]);
@@ -547,11 +552,11 @@ struct DownsampleWorkspace
  * @param p1  Output pointer to second contiguous block
  * @param n1  Output number of elements in second block
  */
-inline void spanFromFixedQueue(const AxisData &q, const double *&p0,
-                               std::size_t &n0, const double *&p1,
+inline void spanFromFixedQueue(const AxisData &q, const ssfp_t *&p0,
+                               std::size_t &n0, const ssfp_t *&p1,
                                std::size_t &n1)
 {
-  const double *base = q.raw();
+  const ssfp_t *base = q.raw();
 
   const std::size_t n = q.size();
   const std::size_t cap = q.capacity();
@@ -614,30 +619,30 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
 
   // Extract ring buffer spans from data containers
   std::size_t xn0, xn1, yn0, yn1;
-  const double *xp0, *xp1, *yp0, *yp1;
+  const ssfp_t *xp0, *xp1, *yp0, *yp1;
   spanFromFixedQueue(X, xp0, xn0, xp1, xn1);
   spanFromFixedQueue(Y, yp0, yn0, yp1, yn1);
 
   // Functions to map logical indexes to X and Y independently
-  auto xAt = [&](std::size_t i) -> double {
+  auto xAt = [&](std::size_t i) -> ssfp_t {
     return (i < xn0) ? xp0[i] : xp1[i - xn0];
   };
-  auto yAt = [&](std::size_t i) -> double {
+  auto yAt = [&](std::size_t i) -> ssfp_t {
     return (i < yn0) ? yp0[i] : yp1[i - yn0];
   };
 
   // Find data bounds
   std::size_t lastFinite = n;
   std::size_t firstFinite = n;
-  double xmin = std::numeric_limits<double>::infinity();
-  double ymin = std::numeric_limits<double>::infinity();
-  double xmax = -std::numeric_limits<double>::infinity();
-  double ymax = -std::numeric_limits<double>::infinity();
+  ssfp_t xmin = std::numeric_limits<ssfp_t>::infinity();
+  ssfp_t ymin = std::numeric_limits<ssfp_t>::infinity();
+  ssfp_t xmax = -std::numeric_limits<ssfp_t>::infinity();
+  ssfp_t ymax = -std::numeric_limits<ssfp_t>::infinity();
   for (std::size_t i = 0; i < n; ++i)
   {
     // Get & validate raw points
-    const double xv = xAt(i);
-    const double yv = yAt(i);
+    const ssfp_t xv = xAt(i);
+    const ssfp_t yv = yAt(i);
     if (!std::isfinite(xv) || !std::isfinite(yv))
       continue;
 
@@ -689,11 +694,11 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
   ws->reset(C);
 
   // Scaling constants
-  const auto scaleX = static_cast<double>(w - 1) / std::max(1e-12, xmax - xmin);
-  const auto scaleY = static_cast<double>(h) / std::max(1e-12, ymax - ymin);
+  const auto scaleX = static_cast<ssfp_t>(w - 1) / std::max(1e-12, xmax - xmin);
+  const auto scaleY = static_cast<ssfp_t>(h) / std::max(1e-12, ymax - ymin);
 
   // Lambda function to obtain the column index for a "raw" x index
-  auto getColFromX = [&](double x) -> std::size_t {
+  auto getColFromX = [&](ssfp_t x) -> std::size_t {
     auto c = static_cast<long>((x - xmin) * scaleX);
     if (c < 0)
       c = 0;
@@ -708,8 +713,8 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
   for (std::size_t i = 0; i < n; ++i)
   {
     // Obtain raw points & validate them
-    const double xv = xAt(i);
-    const double yv = yAt(i);
+    const ssfp_t xv = xAt(i);
+    const ssfp_t yv = yAt(i);
     if (!std::isfinite(xv) || !std::isfinite(yv))
       continue;
 
@@ -768,7 +773,7 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
     push_unique(ws->firstI[c]);
 
     // Add minimum & maximum points (if needed)
-    const double vspan_px = (ws->maxY[c] - ws->minY[c]) * scaleY;
+    const ssfp_t vspan_px = (ws->maxY[c] - ws->minY[c]) * scaleY;
     if (vspan_px >= 1.0)
     {
       push_unique(ws->minI[c]);
@@ -816,10 +821,89 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
  *
  * @return true on success, false on parameter mismatch.
  */
-inline bool downsampleMonotonic(const LineSeries &in, int width, int height,
-                                QList<QPointF> &out, DownsampleWorkspace *ws)
+[[nodiscard]] inline bool downsampleMonotonic(const LineSeries &in, int width,
+                                              int height, QList<QPointF> &out,
+                                              DownsampleWorkspace *ws)
 {
   return downsampleMonotonic(*in.x, *in.y, width, height, out, ws);
+}
+
+/**
+ * @brief Check whether a value is effectively zero (close to 0.0).
+ *
+ * @param value Value to test.
+ * @param absEps Absolute tolerance threshold (must be non-negative).
+ * @return true if |value| <= absEps, otherwise false.
+ *
+ * @note
+ * This function is intentionally absolute-only. Near zero, relative comparisons
+ * are ill-defined and often lead to surprising results.
+ */
+[[nodiscard]] inline constexpr bool isZero(ssfp_t value,
+                                           ssfp_t absEps = 1e-12) noexcept
+{
+  return std::abs(value) <= absEps;
+}
+
+/**
+ * @brief Compare two ssftp_ts for approximate equality using absolute +
+ * relative tolerances.
+ *
+ * @param a First value.
+ * @param b Second value.
+ * @param relEps Relative tolerance factor (must be non-negative).
+ * @param absEps Absolute tolerance threshold (must be non-negative).
+ *
+ * @return true if the values are considered equal within tolerances, otherwise
+ * false.
+ *
+ * @details
+ * Returns true when:
+ *   |a - b| <= absEps
+ * OR
+ *   |a - b| <= relEps * max(|a|, |b|)
+ *
+ * Rationale:
+ * - The absolute term ensures stable behavior when values are near zero.
+ * - The relative term scales with magnitude for large values.
+ * - Using max(|a|,|b|) avoids pathological behavior when one operand is small.
+ *
+ * @warning
+ * If either value is NaN, the result will be false.
+ * If either value is +/-inf, they compare equal only if both are the same
+ * infinity (handled naturally by the checks below).
+ */
+[[nodiscard]] inline bool almostEqual(ssfp_t a, ssfp_t b, ssfp_t relEps = 1e-12,
+                                      ssfp_t absEps = 1e-12) noexcept
+{
+  // Fast reject for NaNs
+  if (!std::isfinite(a) || !std::isfinite(b))
+    return a == b;
+
+  const ssfp_t diff = std::abs(a - b);
+
+  // Absolute tolerance handles exact/near-zero and very small magnitudes.
+  if (diff <= absEps)
+    return true;
+
+  // Relative tolerance handles larger magnitudes.
+  const ssfp_t scale = std::max(std::abs(a), std::abs(b));
+  return diff <= relEps * scale;
+}
+
+/**
+ * @brief Explicit "not equal" companion to almostEqual().
+ *
+ * @param a First value.
+ * @param b Second value.
+ * @param relEps Relative tolerance factor.
+ * @param absEps Absolute tolerance threshold.
+ * @return true if the values are not approximately equal, otherwise false.
+ */
+[[nodiscard]] inline bool notEqual(ssfp_t a, ssfp_t b, ssfp_t relEps = 1e-12,
+                                   ssfp_t absEps = 1e-12) noexcept
+{
+  return !almostEqual(a, b, relEps, absEps);
 }
 
 } // namespace DSP

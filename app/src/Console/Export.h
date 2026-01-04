@@ -21,19 +21,15 @@
 
 #pragma once
 
-#include <atomic>
-
 #include <QFile>
 #include <QObject>
-#include <QThread>
 #include <QSettings>
 #include <QTextStream>
 
-#include "ThirdParty/readerwriterqueue.h"
+#include "DataModel/FrameConsumer.h"
 
 namespace Console
 {
-static constexpr size_t kExportQueueCapacity = 8192;
 
 /**
  * @brief Represents a single console data item for export
@@ -55,39 +51,37 @@ struct ExportData
   ExportData &operator=(const ExportData &) = delete;
 };
 
+/**
+ * @brief Shared pointer to ExportData for efficient queuing
+ */
+typedef std::shared_ptr<ExportData> ExportDataPtr;
+
 class Export;
 
 #ifdef BUILD_COMMERCIAL
 /**
  * @brief Worker that handles console export file I/O on background thread
  */
-class ExportWorker : public QObject
+class ExportWorker : public DataModel::FrameConsumerWorker<ExportDataPtr>
 {
   Q_OBJECT
 
 public:
-  explicit ExportWorker(moodycamel::ReaderWriterQueue<ExportData> *queue,
-                        std::atomic<bool> *exportEnabled,
-                        std::atomic<size_t> *queueSize);
-  ~ExportWorker();
+  using DataModel::FrameConsumerWorker<ExportDataPtr>::FrameConsumerWorker;
+  ~ExportWorker() override;
 
-  [[nodiscard]] bool isOpen() const;
+  void closeResources() override;
+  bool isResourceOpen() const override;
 
-signals:
-  void openChanged();
+protected:
+  void processItems(const std::vector<ExportDataPtr> &items) override;
 
-public slots:
-  void writeValues();
-  void closeFile();
+private:
   void createFile();
 
 private:
   QFile m_file;
   QTextStream m_textStream;
-  std::vector<ExportData> m_writeBuffer;
-  moodycamel::ReaderWriterQueue<ExportData> *m_pendingData;
-  std::atomic<bool> *m_exportEnabled;
-  std::atomic<size_t> *m_queueSize;
 };
 #endif
 
@@ -117,7 +111,12 @@ private:
  *          The export will be automatically disabled if the license becomes
  *          invalid.
  */
-class Export : public QObject
+class Export
+#ifdef BUILD_COMMERCIAL
+  : public DataModel::FrameConsumer<ExportDataPtr>
+#else
+  : public QObject
+#endif
 {
   // clang-format off
   Q_OBJECT
@@ -156,6 +155,11 @@ public slots:
 
   void registerData(QStringView data);
 
+protected:
+#ifdef BUILD_COMMERCIAL
+  DataModel::FrameConsumerWorkerBase *createWorker() override;
+#endif
+
 private slots:
 #ifdef BUILD_COMMERCIAL
   void onWorkerOpenChanged();
@@ -165,12 +169,5 @@ private:
   QSettings m_settings;
   std::atomic<bool> m_isOpen;
   std::atomic<bool> m_exportEnabled;
-
-#ifdef BUILD_COMMERCIAL
-  QThread m_workerThread;
-  ExportWorker *m_worker;
-  std::atomic<size_t> m_queueSize;
-  moodycamel::ReaderWriterQueue<ExportData> m_pendingData{kExportQueueCapacity};
-#endif
 };
 } // namespace Console

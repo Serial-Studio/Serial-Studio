@@ -123,8 +123,8 @@ Item {
     } ComboBox {
       id: _rate
       Layout.fillWidth: true
-      visible: count > 0 && _inDev.visible
       model: Cpp_IO_Audio.sampleRates
+      visible: count > 0 && _inDev.visible
       currentIndex: Cpp_IO_Audio.selectedSampleRate
       onCurrentIndexChanged: {
         if (currentIndex < 0 || count <= currentIndex)

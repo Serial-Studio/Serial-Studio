@@ -20,7 +20,7 @@
  */
 
 #include <QtTest>
-#include "JSON/Frame.h"
+#include "DataModel/Frame.h"
 
 class TestFrameUtilities : public QObject
 {

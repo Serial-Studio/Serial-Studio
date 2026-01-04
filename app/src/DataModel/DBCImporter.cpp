@@ -20,12 +20,12 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#include "Frame.h"
-#include "DBCImporter.h"
-#include "FrameBuilder.h"
-#include "ProjectModel.h"
 #include "SerialStudio.h"
 #include "Misc/Utilities.h"
+#include "DataModel/Frame.h"
+#include "DataModel/DBCImporter.h"
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -38,13 +38,13 @@
 /**
  * @brief Private constructor for the singleton pattern.
  */
-JSON::DBCImporter::DBCImporter() {}
+DataModel::DBCImporter::DBCImporter() {}
 
 /**
  * @brief Returns the singleton instance of the DBC importer.
  * @return Reference to the DBCImporter singleton.
  */
-JSON::DBCImporter &JSON::DBCImporter::instance()
+DataModel::DBCImporter &DataModel::DBCImporter::instance()
 {
   static DBCImporter instance;
   return instance;
@@ -54,7 +54,7 @@ JSON::DBCImporter &JSON::DBCImporter::instance()
  * @brief Returns the total number of signals across all messages.
  * @return Total signal count from the parsed DBC file.
  */
-int JSON::DBCImporter::signalCount() const
+int DataModel::DBCImporter::signalCount() const
 {
   return countTotalSignals(m_messages);
 }
@@ -63,7 +63,7 @@ int JSON::DBCImporter::signalCount() const
  * @brief Returns the number of messages in the parsed DBC file.
  * @return Message count.
  */
-int JSON::DBCImporter::messageCount() const
+int DataModel::DBCImporter::messageCount() const
 {
   return m_messages.count();
 }
@@ -72,7 +72,7 @@ int JSON::DBCImporter::messageCount() const
  * @brief Returns the filename of the currently loaded DBC file.
  * @return DBC filename without path.
  */
-QString JSON::DBCImporter::dbcFileName() const
+QString DataModel::DBCImporter::dbcFileName() const
 {
   return QFileInfo(m_dbcFilePath).fileName();
 }
@@ -87,7 +87,7 @@ QString JSON::DBCImporter::dbcFileName() const
  * @return Formatted message information string, or empty if index is
  *         invalid.
  */
-QString JSON::DBCImporter::messageInfo(int index) const
+QString DataModel::DBCImporter::messageInfo(int index) const
 {
   if (index < 0 || index >= m_messages.count())
     return QString();
@@ -110,7 +110,7 @@ QString JSON::DBCImporter::messageInfo(int index) const
  * filtered for DBC files. Upon selection, it calls showPreview() to parse
  * and preview the file contents.
  */
-void JSON::DBCImporter::importDBC()
+void DataModel::DBCImporter::importDBC()
 {
   const auto p = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
   auto *dialog = new QFileDialog(nullptr, tr("Import DBC File"), p,
@@ -135,7 +135,7 @@ void JSON::DBCImporter::importDBC()
  * This function clears the message list and file path, then emits signals
  * to update the UI. It's called when the user cancels the preview dialog.
  */
-void JSON::DBCImporter::cancelImport()
+void DataModel::DBCImporter::cancelImport()
 {
   m_messages.clear();
   m_dbcFilePath.clear();
@@ -154,7 +154,7 @@ void JSON::DBCImporter::cancelImport()
  *
  * @param filePath Absolute path to the DBC file to parse.
  */
-void JSON::DBCImporter::showPreview(const QString &filePath)
+void DataModel::DBCImporter::showPreview(const QString &filePath)
 {
   QCanDbcFileParser parser;
   if (!parser.parse(filePath))
@@ -205,7 +205,7 @@ void JSON::DBCImporter::showPreview(const QString &filePath)
  * and the user is prompted to save it to a permanent location. On success,
  * the project editor opens automatically.
  */
-void JSON::DBCImporter::confirmImport()
+void DataModel::DBCImporter::confirmImport()
 {
   if (m_messages.isEmpty())
     return;
@@ -271,7 +271,7 @@ void JSON::DBCImporter::confirmImport()
  * @param messages List of CAN message descriptions from the DBC file.
  * @return QJsonObject containing the complete project structure.
  */
-QJsonObject JSON::DBCImporter::generateProject(
+QJsonObject DataModel::DBCImporter::generateProject(
     const QList<QCanMessageDescription> &messages)
 {
   QJsonObject project;
@@ -327,10 +327,10 @@ QJsonObject JSON::DBCImporter::generateProject(
  * @param messages List of CAN message descriptions from the DBC file.
  * @return Vector of Group structures ready for serialization.
  */
-std::vector<JSON::Group>
-JSON::DBCImporter::generateGroups(const QList<QCanMessageDescription> &messages)
+std::vector<DataModel::Group>
+DataModel::DBCImporter::generateGroups(const QList<QCanMessageDescription> &messages)
 {
-  std::vector<JSON::Group> groups;
+  std::vector<DataModel::Group> groups;
   int groupId = 0;
   int datasetIndex = 1;
 
@@ -340,14 +340,14 @@ JSON::DBCImporter::generateGroups(const QList<QCanMessageDescription> &messages)
     if (signalList.isEmpty())
       continue;
 
-    JSON::Group group;
+    DataModel::Group group;
     group.groupId = groupId;
     group.title = message.name();
     group.widget = selectGroupWidget(message);
 
     for (const auto &signal : signalList)
     {
-      JSON::Dataset dataset;
+      DataModel::Dataset dataset;
       dataset.index = datasetIndex++;
       dataset.title = signal.name();
       dataset.units = signal.physicalUnit();
@@ -428,7 +428,7 @@ JSON::DBCImporter::generateGroups(const QList<QCanMessageDescription> &messages)
  * @param messages List of CAN message descriptions from the DBC file.
  * @return JavaScript code as a QString ready for embedding in the project.
  */
-QString JSON::DBCImporter::generateFrameParser(
+QString DataModel::DBCImporter::generateFrameParser(
     const QList<QCanMessageDescription> &messages)
 {
   QString code;
@@ -599,7 +599,7 @@ QString JSON::DBCImporter::generateFrameParser(
  * @return JavaScript function code as a QString.
  */
 QString
-JSON::DBCImporter::generateMessageDecoder(const QCanMessageDescription &message,
+DataModel::DBCImporter::generateMessageDecoder(const QCanMessageDescription &message,
                                           int &datasetIndex)
 {
   QString code;
@@ -661,7 +661,7 @@ JSON::DBCImporter::generateMessageDecoder(const QCanMessageDescription &message,
  * @return JavaScript code for extracting and scaling the signal.
  */
 QString
-JSON::DBCImporter::generateSignalExtraction(const QCanSignalDescription &signal)
+DataModel::DBCImporter::generateSignalExtraction(const QCanSignalDescription &signal)
 {
   // clang-format off
   QString code;
@@ -719,7 +719,7 @@ JSON::DBCImporter::generateSignalExtraction(const QCanSignalDescription &signal)
  * @return Group widget type string.
  */
 QString
-JSON::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
+DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
 {
   const auto signalDescriptions = message.signalDescriptions();
   const auto signalCount = signalDescriptions.count();
@@ -841,7 +841,7 @@ JSON::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
  * @param str Input string (e.g., signal name from DBC).
  * @return Sanitized string safe for use in JavaScript code.
  */
-QString JSON::DBCImporter::sanitizeJavaScriptString(const QString &str)
+QString DataModel::DBCImporter::sanitizeJavaScriptString(const QString &str)
 {
   QString result = str;
   result.replace(QRegularExpression("[^a-zA-Z0-9_]"), "_");
@@ -869,7 +869,7 @@ QString JSON::DBCImporter::sanitizeJavaScriptString(const QString &str)
  * @return Widget type string ("bar", "gauge", or empty).
  */
 QString
-JSON::DBCImporter::selectWidgetForSignal(const QCanSignalDescription &signal)
+DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescription &signal)
 {
   const auto name = signal.name().toLower();
   const auto unit = signal.physicalUnit().toLower();
@@ -909,7 +909,7 @@ JSON::DBCImporter::selectWidgetForSignal(const QCanSignalDescription &signal)
  * @param messages List of CAN message descriptions.
  * @return Total number of signals across all messages.
  */
-int JSON::DBCImporter::countTotalSignals(
+int DataModel::DBCImporter::countTotalSignals(
     const QList<QCanMessageDescription> &messages) const
 {
   int count = 0;
@@ -930,7 +930,7 @@ int JSON::DBCImporter::countTotalSignals(
  * @param positions List of position identifiers to look for.
  * @return true if at least 2 signals match the positional pattern.
  */
-bool JSON::DBCImporter::hasPositionalPattern(
+bool DataModel::DBCImporter::hasPositionalPattern(
     const QList<QCanSignalDescription> &signalList,
     const QStringList &positions) const
 {
@@ -960,7 +960,7 @@ bool JSON::DBCImporter::hasPositionalPattern(
  * @param signalList List of signal descriptions to check.
  * @return true if at least 2 signals have numbered suffixes.
  */
-bool JSON::DBCImporter::hasNumberedPattern(
+bool DataModel::DBCImporter::hasNumberedPattern(
     const QList<QCanSignalDescription> &signalList) const
 {
   if (signalList.count() < 2)
@@ -988,7 +988,7 @@ bool JSON::DBCImporter::hasNumberedPattern(
  * @param signalList List of signal descriptions to check.
  * @return true if all non-empty units are similar.
  */
-bool JSON::DBCImporter::allSimilarUnits(
+bool DataModel::DBCImporter::allSimilarUnits(
     const QList<QCanSignalDescription> &signalList) const
 {
   if (signalList.isEmpty())
@@ -1015,7 +1015,7 @@ bool JSON::DBCImporter::allSimilarUnits(
  * @param signalList List of signal descriptions to check.
  * @return true if signals match battery cluster pattern.
  */
-bool JSON::DBCImporter::hasBatterySignals(
+bool DataModel::DBCImporter::hasBatterySignals(
     const QList<QCanSignalDescription> &signalList) const
 {
   if (signalList.count() < 2)
@@ -1051,7 +1051,7 @@ bool JSON::DBCImporter::hasBatterySignals(
  * @param signalList List of signal descriptions to check.
  * @return true if all signals are 1-bit or status indicators.
  */
-bool JSON::DBCImporter::allStatusSignals(
+bool DataModel::DBCImporter::allStatusSignals(
     const QList<QCanSignalDescription> &signalList) const
 {
   for (const auto &signal : signalList)
@@ -1077,7 +1077,7 @@ bool JSON::DBCImporter::allStatusSignals(
  * @param signalList List of signal descriptions to check.
  * @return Number of signals suitable for plotting.
  */
-int JSON::DBCImporter::countPlottable(
+int DataModel::DBCImporter::countPlottable(
     const QList<QCanSignalDescription> &signalList) const
 {
   int count = 0;
@@ -1108,7 +1108,7 @@ int JSON::DBCImporter::countPlottable(
  * @param signalList List of signal descriptions from a CAN message.
  * @return SignalFamily enum indicating the detected signal category.
  */
-JSON::DBCImporter::SignalFamily JSON::DBCImporter::detectSignalFamily(
+DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
     const QList<QCanSignalDescription> &signalList) const
 {
   if (signalList.isEmpty())
@@ -1161,7 +1161,7 @@ JSON::DBCImporter::SignalFamily JSON::DBCImporter::detectSignalFamily(
  * @param signal The signal description to check.
  * @return true if the signal is critical and should always get a widget.
  */
-bool JSON::DBCImporter::isCriticalSignal(
+bool DataModel::DBCImporter::isCriticalSignal(
     const QCanSignalDescription &signal) const
 {
   const auto name = signal.name().toLower();
@@ -1233,7 +1233,7 @@ bool JSON::DBCImporter::isCriticalSignal(
  * @param isSingleBit Whether the signal is a 1-bit boolean.
  * @return true if an individual widget should be assigned.
  */
-bool JSON::DBCImporter::shouldAssignIndividualWidget(
+bool DataModel::DBCImporter::shouldAssignIndividualWidget(
     const QString &groupWidget, const QCanSignalDescription &signal,
     bool isSingleBit) const
 {

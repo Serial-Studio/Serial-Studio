@@ -165,7 +165,7 @@ void Widgets::DataGrid::updateData()
  * @param dataset The dataset from which to generate the row.
  * @return A QStringList with two entries: title and value.
  */
-QStringList Widgets::DataGrid::getRow(const JSON::Dataset &dataset)
+QStringList Widgets::DataGrid::getRow(const DataModel::Dataset &dataset)
 {
   const QString title = dataset.title;
   const QString units = dataset.units;

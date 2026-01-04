@@ -229,7 +229,7 @@ void Widgets::Plot::updateData()
 
     // Downsample data that only has one Y point per X point
     if (m_monotonicData)
-      DSP::downsampleMonotonic(plotData, m_dataW, m_dataH, m_data, &ws);
+      (void) DSP::downsampleMonotonic(plotData, m_dataW, m_dataH, m_data, &ws);
 
     // Draw directly on complex plots (such as Lorenz Attractor)
     else
@@ -377,7 +377,7 @@ void Widgets::Plot::calculateAutoScaleRange()
  */
 template<typename Extractor>
 bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
-                                        const JSON::Dataset &dataset,
+                                        const DataModel::Dataset &dataset,
                                         const bool addPadding,
                                         Extractor extractor)
 {

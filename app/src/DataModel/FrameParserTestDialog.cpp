@@ -26,9 +26,9 @@
 #include "SerialStudio.h"
 #include "Misc/Translator.h"
 #include "Misc/CommonFonts.h"
-#include "JSON/FrameParser.h"
+#include "DataModel/FrameParser.h"
 #include "Misc/ThemeManager.h"
-#include "JSON/FrameParserTestDialog.h"
+#include "DataModel/FrameParserTestDialog.h"
 
 //------------------------------------------------------------------------------
 // Constructor function
@@ -40,7 +40,7 @@
  * @param parser Pointer to the FrameParser instance to test
  * @param parent Parent widget
  */
-JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
+DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
                                                    QWidget *parent)
   : QDialog(parent)
   , m_parser(parser)
@@ -150,7 +150,7 @@ JSON::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
 /**
  * @brief Clears all results from the table
  */
-void JSON::FrameParserTestDialog::clear()
+void DataModel::FrameParserTestDialog::clear()
 {
   m_userInput->clear();
   m_table->setRowCount(0);
@@ -164,7 +164,7 @@ void JSON::FrameParserTestDialog::clear()
  *
  * Executes the parser function with the input data and displays results
  */
-void JSON::FrameParserTestDialog::parseData()
+void DataModel::FrameParserTestDialog::parseData()
 {
   const auto input = m_userInput->text();
   if (input.isEmpty())
@@ -196,7 +196,7 @@ void JSON::FrameParserTestDialog::parseData()
 /**
  * @brief Updates the dialog palette when the application theme changes.
  */
-void JSON::FrameParserTestDialog::onThemeChanged()
+void DataModel::FrameParserTestDialog::onThemeChanged()
 {
   // Load theme colors
   setPalette(Misc::ThemeManager::instance().palette());
@@ -224,7 +224,7 @@ void JSON::FrameParserTestDialog::onThemeChanged()
  * Updates all labels, tooltips, placeholders, and re-parses existing data
  * to reflect the new language.
  */
-void JSON::FrameParserTestDialog::onLanguageChanged()
+void DataModel::FrameParserTestDialog::onLanguageChanged()
 {
   m_hexCheckBox->setText(tr("HEX"));
   m_clearButton->setText(tr("Clear"));
@@ -260,7 +260,7 @@ void JSON::FrameParserTestDialog::onLanguageChanged()
  *
  * @param state The new checkbox state (Qt::Checked or Qt::Unchecked)
  */
-void JSON::FrameParserTestDialog::onInputModeChanged(Qt::CheckState state)
+void DataModel::FrameParserTestDialog::onInputModeChanged(Qt::CheckState state)
 {
   if (state == Qt::Checked)
   {
@@ -290,7 +290,7 @@ void JSON::FrameParserTestDialog::onInputModeChanged(Qt::CheckState state)
  *
  * @param t The new input text from the line edit
  */
-void JSON::FrameParserTestDialog::onInputDataChanged(const QString &t)
+void DataModel::FrameParserTestDialog::onInputDataChanged(const QString &t)
 {
   // Automatically add spaces & highlight invalid hex data
   if (m_hexCheckBox->isChecked())
@@ -355,7 +355,7 @@ void JSON::FrameParserTestDialog::onInputDataChanged(const QString &t)
  *
  * @see validateHexInput()
  */
-QString JSON::FrameParserTestDialog::formatHexInput(const QString &text)
+QString DataModel::FrameParserTestDialog::formatHexInput(const QString &text)
 {
   QString cleaned;
   for (const QChar &c : text)
@@ -400,7 +400,7 @@ QString JSON::FrameParserTestDialog::formatHexInput(const QString &text)
  *
  * @see formatHexInput()
  */
-bool JSON::FrameParserTestDialog::validateHexInput(const QString &text)
+bool DataModel::FrameParserTestDialog::validateHexInput(const QString &text)
 {
   if (text.isEmpty())
     return true;
@@ -427,7 +427,7 @@ bool JSON::FrameParserTestDialog::validateHexInput(const QString &text)
  * @param input The input frame data
  * @param output The parsed output array
  */
-void JSON::FrameParserTestDialog::displayOutput(const QString &input,
+void DataModel::FrameParserTestDialog::displayOutput(const QString &input,
                                                 const QStringList &output)
 {
   m_table->setRowCount(0);

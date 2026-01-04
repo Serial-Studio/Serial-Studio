@@ -37,36 +37,11 @@
 //------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the CSV export worker.
- *
- * @param queue Pointer to the lock-free queue shared with Export.
- * @param exportEnabled Pointer to atomic flag indicating export state.
- * @param queueSize Pointer to atomic counter tracking queue size.
- */
-CSV::ExportWorker::ExportWorker(
-    moodycamel::ReaderWriterQueue<JSON::TimestampFrame> *queue,
-    std::atomic<bool> *exportEnabled, std::atomic<size_t> *queueSize)
-  : m_queueSize(queueSize)
-  , m_exportEnabled(exportEnabled)
-  , m_pendingFrames(queue)
-{
-  m_writeBuffer.reserve(kFlushThreshold * 2);
-}
-
-/**
- * @brief Destructor for the export worker.
- */
-CSV::ExportWorker::~ExportWorker()
-{
-  closeFile();
-}
-
-/**
  * @brief Checks whether a CSV file is currently open.
  *
  * @return true if file is open, false otherwise.
  */
-bool CSV::ExportWorker::isOpen() const
+bool CSV::ExportWorker::isResourceOpen() const
 {
   return m_csvFile.isOpen();
 }
@@ -76,64 +51,50 @@ bool CSV::ExportWorker::isOpen() const
  *
  * Flushes any buffered data to disk, clears headers, and resets output.
  */
-void CSV::ExportWorker::closeFile()
+void CSV::ExportWorker::closeResources()
 {
   if (!m_csvFile.isOpen())
     return;
 
-  writeValues();
   m_csvFile.close();
   m_indexHeaderPairs.clear();
   m_textStream.setDevice(nullptr);
-  Q_EMIT openChanged();
 }
 
 /**
- * @brief Writes all queued frames to the CSV file.
+ * @brief Processes a batch of CSV frames.
  *
- * Flushes data in the pending queue to disk using the output stream.
+ * Writes frames to disk using the output stream.
  * If no file is open, a new file is created before writing.
+ *
+ * @param items Vector of timestamped frames to process.
  */
-void CSV::ExportWorker::writeValues()
+void CSV::ExportWorker::processItems(
+    const std::vector<DataModel::TimestampedFramePtr> &items)
 {
-  if (!m_exportEnabled->load(std::memory_order_relaxed))
+  if (items.empty())
     return;
-
-  m_writeBuffer.clear();
-
-  JSON::TimestampFrame frame;
-  while (m_pendingFrames->try_dequeue(frame))
-    m_writeBuffer.push_back(std::move(frame));
-
-  const auto count = m_writeBuffer.size();
-  if (count == 0)
-    return;
-
-  m_queueSize->fetch_sub(count, std::memory_order_relaxed);
 
   if (!m_csvFile.isOpen())
   {
-    m_indexHeaderPairs = createCsvFile(m_writeBuffer.begin()->data);
+    m_indexHeaderPairs = createCsvFile(*(*items.begin())->data);
     if (m_indexHeaderPairs.isEmpty())
       return;
 
-    // Set reference timestamp from first frame (so timestamps start at 0)
-    m_referenceTimestamp = m_writeBuffer.begin()->highResTimestamp;
+    m_referenceTimestamp = (*items.begin())->highResTimestamp;
   }
 
-  for (const auto &i : m_writeBuffer)
+  for (const auto &i : items)
   {
-    // Calculate elapsed time since first frame
-    const auto elapsed = i.highResTimestamp - m_referenceTimestamp;
+    const auto elapsed = i->highResTimestamp - m_referenceTimestamp;
     const auto nanoseconds
         = std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count();
     const double seconds = static_cast<double>(nanoseconds) / 1'000'000'000.0;
 
-    // Write timestamp with nanosecond precision (9 decimal places)
     m_textStream << QString::number(seconds, 'f', 9) << QStringLiteral(",");
 
     QMap<int, QString> fieldValues;
-    for (const auto &g : i.data.groups)
+    for (const auto &g : i->data->groups)
     {
       for (const auto &d : g.datasets)
         fieldValues[d.index] = d.value.simplified();
@@ -159,7 +120,7 @@ void CSV::ExportWorker::writeValues()
  * @return List of index-title pairs for each dataset.
  */
 QVector<QPair<int, QString>>
-CSV::ExportWorker::createCsvFile(const JSON::Frame &frame)
+CSV::ExportWorker::createCsvFile(const DataModel::Frame &frame)
 {
   const auto dt = QDateTime::currentDateTime();
   const auto fileName = dt.toString("yyyy-MM-dd_HH-mm-ss") + ".csv";
@@ -214,7 +175,7 @@ CSV::ExportWorker::createCsvFile(const JSON::Frame &frame)
 
   m_textStream << '\n';
 
-  Q_EMIT openChanged();
+  Q_EMIT resourceOpenChanged();
   return pairs;
 }
 
@@ -229,27 +190,13 @@ CSV::ExportWorker::createCsvFile(const JSON::Frame &frame)
  * for periodic data export.
  */
 CSV::Export::Export()
-  : m_worker(nullptr)
+  : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
+      {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
   , m_isOpen(false)
-  , m_queueSize(0)
-  , m_exportEnabled(true)
 {
-  m_worker = new ExportWorker(&m_pendingFrames, &m_exportEnabled, &m_queueSize);
-  m_worker->moveToThread(&m_workerThread);
-
-  connect(&m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
-  connect(m_worker, &ExportWorker::openChanged, this,
+  initializeWorker();
+  connect(m_worker, &ExportWorker::resourceOpenChanged, this,
           &Export::onWorkerOpenChanged, Qt::QueuedConnection);
-
-  m_workerThread.start();
-
-  auto *timer = new QTimer();
-  timer->setInterval(1000);
-  timer->setTimerType(Qt::PreciseTimer);
-  timer->moveToThread(&m_workerThread);
-  connect(timer, &QTimer::timeout, m_worker, &ExportWorker::writeValues);
-  connect(&m_workerThread, &QThread::finished, timer, &QObject::deleteLater);
-  QMetaObject::invokeMethod(timer, "start", Qt::QueuedConnection);
 }
 
 /**
@@ -257,13 +204,7 @@ CSV::Export::Export()
  *
  * Ensures all data is flushed to disk and stops the background thread.
  */
-CSV::Export::~Export()
-{
-  QMetaObject::invokeMethod(m_worker, "closeFile",
-                            Qt::BlockingQueuedConnection);
-  m_workerThread.quit();
-  m_workerThread.wait();
-}
+CSV::Export::~Export() = default;
 
 /**
  * @brief Singleton access to the export manager.
@@ -274,6 +215,16 @@ CSV::Export &CSV::Export::instance()
 {
   static Export singleton;
   return singleton;
+}
+
+/**
+ * @brief Creates the CSV export worker instance.
+ *
+ * @return Pointer to newly created ExportWorker.
+ */
+DataModel::FrameConsumerWorkerBase *CSV::Export::createWorker()
+{
+  return new ExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
 }
 
 //------------------------------------------------------------------------------
@@ -297,7 +248,7 @@ bool CSV::Export::isOpen() const
  */
 bool CSV::Export::exportEnabled() const
 {
-  return m_exportEnabled.load(std::memory_order_relaxed);
+  return consumerEnabled();
 }
 
 //------------------------------------------------------------------------------
@@ -307,11 +258,13 @@ bool CSV::Export::exportEnabled() const
 /**
  * @brief Closes the currently open CSV file.
  *
- * Delegates to the worker thread to ensure thread-safe file operations.
+ * Flushes any remaining data in the queue before closing to prevent
+ * creating small trailing files.
  */
 void CSV::Export::closeFile()
 {
-  QMetaObject::invokeMethod(m_worker, "closeFile", Qt::QueuedConnection);
+  auto *worker = static_cast<ExportWorker *>(m_worker);
+  QMetaObject::invokeMethod(worker, "close", Qt::QueuedConnection);
 }
 
 /**
@@ -321,7 +274,8 @@ void CSV::Export::closeFile()
  */
 void CSV::Export::onWorkerOpenChanged()
 {
-  m_isOpen.store(m_worker->isOpen(), std::memory_order_relaxed);
+  auto *worker = static_cast<ExportWorker *>(m_worker);
+  m_isOpen.store(worker->isResourceOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();
 }
 
@@ -352,7 +306,7 @@ void CSV::Export::setExportEnabled(const bool enabled)
   if (!enabled && isOpen())
     closeFile();
 
-  m_exportEnabled.store(enabled, std::memory_order_relaxed);
+  setConsumerEnabled(enabled);
   Q_EMIT enabledChanged();
 }
 
@@ -367,31 +321,13 @@ void CSV::Export::setExportEnabled(const bool enabled)
  * met. Triggers an early flush when the queue exceeds the threshold to prevent
  * unbounded memory growth during high-frequency data reception.
  *
- * @param frame The data frame to export.
+ * @param frame The timestamped frame to export (shared pointer).
  */
-void CSV::Export::hotpathTxFrame(const JSON::Frame &frame)
+void CSV::Export::hotpathTxFrame(
+    const DataModel::TimestampedFramePtr &frame)
 {
-  if (!exportEnabled() || CSV::Player::instance().isOpen()
-      || MDF4::Player::instance().isOpen())
+  if (!exportEnabled() || SerialStudio::isAnyPlayerOpen())
     return;
 
-#ifdef BUILD_COMMERCIAL
-  if (!IO::Manager::instance().isConnected()
-      && !(MQTT::Client::instance().isConnected()
-           && MQTT::Client::instance().isSubscriber()))
-    return;
-#else
-  if (!IO::Manager::instance().isConnected())
-    return;
-#endif
-
-  if (!m_pendingFrames.enqueue(JSON::TimestampFrame(frame)))
-  {
-    qWarning() << "CSV Export: Dropping frame (queue full)";
-    return;
-  }
-
-  const auto size = m_queueSize.fetch_add(1, std::memory_order_relaxed) + 1;
-  if (size >= kFlushThreshold)
-    QMetaObject::invokeMethod(m_worker, "writeValues", Qt::QueuedConnection);
+  enqueueData(frame);
 }

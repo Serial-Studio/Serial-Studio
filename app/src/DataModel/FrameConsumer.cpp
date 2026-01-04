@@ -19,23 +19,19 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include <QtTest>
-#include "DataModel/ProjectModel.h"
+#include "FrameConsumer.h"
 
-class TestProjectModel : public QObject
+/**
+ * @brief Constructs the frame consumer worker base.
+ *
+ * @param parent Optional parent QObject.
+ */
+DataModel::FrameConsumerWorkerBase::FrameConsumerWorkerBase(QObject *parent)
+  : QObject(parent)
 {
-  Q_OBJECT
-
-private slots:
-  void testSingleton();
-};
-
-void TestProjectModel::testSingleton()
-{
-  JSON::ProjectModel &instance1 = JSON::ProjectModel::instance();
-  JSON::ProjectModel &instance2 = JSON::ProjectModel::instance();
-  QCOMPARE(&instance1, &instance2);
 }
 
-QTEST_MAIN(TestProjectModel)
-#include "test_project_model.moc"
+/**
+ * @brief Destructor for the frame consumer worker base.
+ */
+DataModel::FrameConsumerWorkerBase::~FrameConsumerWorkerBase() = default;

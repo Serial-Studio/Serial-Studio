@@ -29,9 +29,9 @@
 #include <QSyntaxStyle>
 #include <QQuickPaintedItem>
 
-#include "JSON/FrameParserTestDialog.h"
+#include "DataModel/FrameParserTestDialog.h"
 
-namespace JSON
+namespace DataModel
 {
 class FrameParser : public QQuickPaintedItem
 {

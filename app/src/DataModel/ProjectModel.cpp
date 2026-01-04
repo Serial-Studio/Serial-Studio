@@ -34,9 +34,9 @@
 #include "Misc/Translator.h"
 #include "Misc/WorkspaceManager.h"
 
-#include "JSON/FrameParser.h"
-#include "JSON/ProjectModel.h"
-#include "JSON/FrameBuilder.h"
+#include "DataModel/FrameParser.h"
+#include "DataModel/ProjectModel.h"
+#include "DataModel/FrameBuilder.h"
 
 //------------------------------------------------------------------------------
 // ProjectModel.cpp - Core data model for Serial Studio projects
@@ -148,16 +148,16 @@ typedef enum
 //------------------------------------------------------------------------------
 
 /**
- * @brief Constructor for the JSON::ProjectModel class.
+ * @brief Constructor for the DataModel::ProjectModel class.
  *
  * Initializes the ProjectModel class by setting default values for member
  * variables, generating the necessary combo box models, and connecting signals
  * to handle J SON file changes.
  *
- * This constructor also loads the current JSON map file into the model or
+ * This constructor also loads the current DataModel map file into the model or
  * creates a new project if no file is present.
  */
-JSON::ProjectModel::ProjectModel()
+DataModel::ProjectModel::ProjectModel()
   : m_title("")
   , m_frameParserCode("")
   , m_frameEndSequence("")
@@ -179,7 +179,7 @@ JSON::ProjectModel::ProjectModel()
   generateComboBoxModels();
 
   // Clear selection model when JSON file is changed
-  connect(this, &JSON::ProjectModel::jsonFileChanged, this, [=, this] {
+  connect(this, &DataModel::ProjectModel::jsonFileChanged, this, [=, this] {
     if (m_selectionModel)
     {
       auto index = m_treeModel->index(0, 0);
@@ -189,15 +189,15 @@ JSON::ProjectModel::ProjectModel()
   });
 
   // Ensure toolbar actions are synched with models
-  connect(this, &JSON::ProjectModel::groupModelChanged, this,
-          &JSON::ProjectModel::editableOptionsChanged);
-  connect(this, &JSON::ProjectModel::datasetModelChanged, this,
-          &JSON::ProjectModel::editableOptionsChanged);
-  connect(this, &JSON::ProjectModel::datasetModelChanged, this,
-          &JSON::ProjectModel::datasetOptionsChanged);
+  connect(this, &DataModel::ProjectModel::groupModelChanged, this,
+          &DataModel::ProjectModel::editableOptionsChanged);
+  connect(this, &DataModel::ProjectModel::datasetModelChanged, this,
+          &DataModel::ProjectModel::editableOptionsChanged);
+  connect(this, &DataModel::ProjectModel::datasetModelChanged, this,
+          &DataModel::ProjectModel::datasetOptionsChanged);
 
   // Load current JSON map file into C++ model
-  if (!JSON::FrameBuilder::instance().jsonMapFilepath().isEmpty())
+  if (!DataModel::FrameBuilder::instance().jsonMapFilepath().isEmpty())
     onJsonLoaded();
 
   // Create a new project
@@ -206,11 +206,11 @@ JSON::ProjectModel::ProjectModel()
 }
 
 /**
- * @brief Retrieves the singleton instance of the JSON::ProjectModel class.
+ * @brief Retrieves the singleton instance of the DataModel::ProjectModel class.
  *
- * @return Reference to the singleton instance of JSON::ProjectModel.
+ * @return Reference to the singleton instance of DataModel::ProjectModel.
  */
-JSON::ProjectModel &JSON::ProjectModel::instance()
+DataModel::ProjectModel &DataModel::ProjectModel::instance()
 {
   static ProjectModel singleton;
   return singleton;
@@ -227,11 +227,11 @@ JSON::ProjectModel &JSON::ProjectModel::instance()
  *
  * @return True if the document is modified, false otherwise.
  */
-bool JSON::ProjectModel::modified() const
+bool DataModel::ProjectModel::modified() const
 {
   bool parserModified = false;
-  if (JSON::FrameBuilder::instance().frameParser())
-    parserModified = JSON::FrameBuilder::instance().frameParser()->isModified();
+  if (DataModel::FrameBuilder::instance().frameParser())
+    parserModified = DataModel::FrameBuilder::instance().frameParser()->isModified();
 
   return m_modified || parserModified;
 }
@@ -244,7 +244,7 @@ bool JSON::ProjectModel::modified() const
  *
  * @return The current view as a value from the CurrentView enum.
  */
-JSON::ProjectModel::CurrentView JSON::ProjectModel::currentView() const
+DataModel::ProjectModel::CurrentView DataModel::ProjectModel::currentView() const
 {
   return m_currentView;
 }
@@ -258,7 +258,7 @@ JSON::ProjectModel::CurrentView JSON::ProjectModel::currentView() const
  *
  * @return The current decoder method as a value from the `DecoderMethod` enum.
  */
-SerialStudio::DecoderMethod JSON::ProjectModel::decoderMethod() const
+SerialStudio::DecoderMethod DataModel::ProjectModel::decoderMethod() const
 {
   return m_frameDecoder;
 }
@@ -271,7 +271,7 @@ SerialStudio::DecoderMethod JSON::ProjectModel::decoderMethod() const
  *
  * @return The current decoder method as a value from the `FrameDetection` enum.
  */
-SerialStudio::FrameDetection JSON::ProjectModel::frameDetection() const
+SerialStudio::FrameDetection DataModel::ProjectModel::frameDetection() const
 {
   return m_frameDetection;
 }
@@ -281,14 +281,14 @@ SerialStudio::FrameDetection JSON::ProjectModel::frameDetection() const
 //------------------------------------------------------------------------------
 
 /**
- * @brief Retrieves the name of the JSON file associated with the project.
+ * @brief Retrieves the name of the DataModel file associated with the project.
  *
  * If the file path is not empty, it extracts and returns the file name.
- * If no file path is set, it returns "New JSON".
+ * If no file path is set, it returns "New DataModel".
  *
- * @return The name of the JSON file or "New JSON" if no file is present.
+ * @return The name of the DataModel file or "New DataModel" if no file is present.
  */
-QString JSON::ProjectModel::jsonFileName() const
+QString DataModel::ProjectModel::jsonFileName() const
 {
   if (!jsonFilePath().isEmpty())
   {
@@ -300,14 +300,14 @@ QString JSON::ProjectModel::jsonFileName() const
 }
 
 /**
- * @brief Retrieves the default path for JSON project files.
+ * @brief Retrieves the default path for DataModel project files.
  *
- * Returns the path where JSON project files are stored, creating the directory
+ * Returns the path where DataModel project files are stored, creating the directory
  * if it does not exist.
  *
- * @return The default file path for JSON project files.
+ * @return The default file path for DataModel project files.
  */
-QString JSON::ProjectModel::jsonProjectsPath() const
+QString DataModel::ProjectModel::jsonProjectsPath() const
 {
   return Misc::WorkspaceManager::instance().path("JSON Projects");
 }
@@ -320,7 +320,7 @@ QString JSON::ProjectModel::jsonProjectsPath() const
  *
  * @return The selected item's text, or an empty string if nothing is selected.
  */
-QString JSON::ProjectModel::selectedText() const
+QString DataModel::ProjectModel::selectedText() const
 {
   if (!m_selectionModel || !m_treeModel)
     return "";
@@ -338,7 +338,7 @@ QString JSON::ProjectModel::selectedText() const
  *
  * @return The selected item's icon, or an empty string if nothing is selected.
  */
-QString JSON::ProjectModel::selectedIcon() const
+QString DataModel::ProjectModel::selectedIcon() const
 {
   if (!m_selectionModel || !m_treeModel)
     return "";
@@ -358,7 +358,7 @@ QString JSON::ProjectModel::selectedIcon() const
  *
  * @return A `QStringList` containing the names of X-axis data sources.
  */
-QStringList JSON::ProjectModel::xDataSources() const
+QStringList DataModel::ProjectModel::xDataSources() const
 {
   QStringList list;
   list.append(tr("Samples"));
@@ -390,7 +390,7 @@ QStringList JSON::ProjectModel::xDataSources() const
  *
  * @return A reference to the project title.
  */
-const QString &JSON::ProjectModel::title() const
+const QString &DataModel::ProjectModel::title() const
 {
   return m_title;
 }
@@ -398,7 +398,7 @@ const QString &JSON::ProjectModel::title() const
 /**
  * @brief Retrieves the current icon of the selected action.
  */
-const QString JSON::ProjectModel::actionIcon() const
+const QString DataModel::ProjectModel::actionIcon() const
 {
   return m_selectedAction.icon;
 }
@@ -414,7 +414,7 @@ const QString JSON::ProjectModel::actionIcon() const
  * @return A QStringList containing the base names of all available action
  * icons.
  */
-const QStringList &JSON::ProjectModel::availableActionIcons() const
+const QStringList &DataModel::ProjectModel::availableActionIcons() const
 {
   static QStringList icons;
 
@@ -433,14 +433,14 @@ const QStringList &JSON::ProjectModel::availableActionIcons() const
   return icons;
 }
 /**
- * @brief Retrieves the file path of the JSON file.
+ * @brief Retrieves the file path of the DataModel file.
  *
- * This function returns the full path of the current JSON file associated with
+ * This function returns the full path of the current DataModel file associated with
  * the project.
  *
- * @return A reference to the file path of the JSON file.
+ * @return A reference to the file path of the DataModel file.
  */
-const QString &JSON::ProjectModel::jsonFilePath() const
+const QString &DataModel::ProjectModel::jsonFilePath() const
 {
   return m_filePath;
 }
@@ -452,7 +452,7 @@ const QString &JSON::ProjectModel::jsonFilePath() const
  *
  * @return A reference to the frame parser code.
  */
-const QString &JSON::ProjectModel::frameParserCode() const
+const QString &DataModel::ProjectModel::frameParserCode() const
 {
   return m_frameParserCode;
 }
@@ -465,7 +465,7 @@ const QString &JSON::ProjectModel::frameParserCode() const
  *
  * @return The active group ID, or -1 if none is set.
  */
-int JSON::ProjectModel::activeGroupId() const
+int DataModel::ProjectModel::activeGroupId() const
 {
   return m_activeGroupId;
 }
@@ -477,9 +477,9 @@ int JSON::ProjectModel::activeGroupId() const
  * for the current project. This is used to restore the user's
  * preferred window arrangement when reopening a project.
  *
- * @return A reference to the dashboard layout JSON object.
+ * @return A reference to the dashboard layout DataModel object.
  */
-const QJsonObject &JSON::ProjectModel::dashboardLayout() const
+const QJsonObject &DataModel::ProjectModel::dashboardLayout() const
 {
   return m_dashboardLayout;
 }
@@ -496,7 +496,7 @@ const QJsonObject &JSON::ProjectModel::dashboardLayout() const
  *
  * @return True if the group is editable, false otherwise.
  */
-bool JSON::ProjectModel::currentGroupIsEditable() const
+bool DataModel::ProjectModel::currentGroupIsEditable() const
 {
   if (m_currentView == GroupView)
   {
@@ -521,7 +521,7 @@ bool JSON::ProjectModel::currentGroupIsEditable() const
  *
  * @return True if the dataset is editable, false otherwise.
  */
-bool JSON::ProjectModel::currentDatasetIsEditable() const
+bool DataModel::ProjectModel::currentDatasetIsEditable() const
 {
   if (m_currentView == DatasetView)
   {
@@ -541,7 +541,7 @@ bool JSON::ProjectModel::currentDatasetIsEditable() const
  * Returns @c true if the project contains features that should only be enabled
  * for commercial users with a valid license, such as the 3D plot widget.
  */
-bool JSON::ProjectModel::containsCommercialFeatures() const
+bool DataModel::ProjectModel::containsCommercialFeatures() const
 {
   return SerialStudio::commercialCfg(m_groups);
 }
@@ -554,7 +554,7 @@ bool JSON::ProjectModel::containsCommercialFeatures() const
  *
  * @return The number of groups.
  */
-int JSON::ProjectModel::groupCount() const
+int DataModel::ProjectModel::groupCount() const
 {
   return static_cast<int>(m_groups.size());
 }
@@ -567,7 +567,7 @@ int JSON::ProjectModel::groupCount() const
  *
  * @return The number of datasets.
  */
-int JSON::ProjectModel::datasetCount() const
+int DataModel::ProjectModel::datasetCount() const
 {
   int count = 0;
   for (const auto &group : m_groups)
@@ -585,7 +585,7 @@ int JSON::ProjectModel::datasetCount() const
  *
  * @return A bitmask of dataset options as a quint8 value.
  */
-quint8 JSON::ProjectModel::datasetOptions() const
+quint8 DataModel::ProjectModel::datasetOptions() const
 {
   quint8 option = SerialStudio::DatasetGeneric;
 
@@ -613,12 +613,12 @@ quint8 JSON::ProjectModel::datasetOptions() const
 /**
  * @brief Retrieves the list of groups in the project.
  *
- * This function returns a reference to the vector of JSON::Group objects,
+ * This function returns a reference to the vector of DataModel::Group objects,
  * representing all the groups present in the project.
  *
  * @return A reference to the vector of groups.
  */
-const std::vector<JSON::Group> &JSON::ProjectModel::groups() const
+const std::vector<DataModel::Group> &DataModel::ProjectModel::groups() const
 {
   return m_groups;
 }
@@ -635,7 +635,7 @@ const std::vector<JSON::Group> &JSON::ProjectModel::groups() const
  *
  * @return A pointer to the tree model.
  */
-JSON::CustomModel *JSON::ProjectModel::treeModel() const
+DataModel::CustomModel *DataModel::ProjectModel::treeModel() const
 {
   return m_treeModel;
 }
@@ -648,7 +648,7 @@ JSON::CustomModel *JSON::ProjectModel::treeModel() const
  *
  * @return A pointer to the selection model.
  */
-QItemSelectionModel *JSON::ProjectModel::selectionModel() const
+QItemSelectionModel *DataModel::ProjectModel::selectionModel() const
 {
   return m_selectionModel;
 }
@@ -661,7 +661,7 @@ QItemSelectionModel *JSON::ProjectModel::selectionModel() const
  *
  * @return A pointer to the group model.
  */
-JSON::CustomModel *JSON::ProjectModel::groupModel() const
+DataModel::CustomModel *DataModel::ProjectModel::groupModel() const
 {
   return m_groupModel;
 }
@@ -674,7 +674,7 @@ JSON::CustomModel *JSON::ProjectModel::groupModel() const
  *
  * @return A pointer to the action model.
  */
-JSON::CustomModel *JSON::ProjectModel::actionModel() const
+DataModel::CustomModel *DataModel::ProjectModel::actionModel() const
 {
   return m_actionModel;
 }
@@ -688,7 +688,7 @@ JSON::CustomModel *JSON::ProjectModel::actionModel() const
  *
  * @return A pointer to the project model.
  */
-JSON::CustomModel *JSON::ProjectModel::projectModel() const
+DataModel::CustomModel *DataModel::ProjectModel::projectModel() const
 {
   return m_projectModel;
 }
@@ -701,7 +701,7 @@ JSON::CustomModel *JSON::ProjectModel::projectModel() const
  *
  * @return A pointer to the dataset model.
  */
-JSON::CustomModel *JSON::ProjectModel::datasetModel() const
+DataModel::CustomModel *DataModel::ProjectModel::datasetModel() const
 {
   return m_datasetModel;
 }
@@ -722,7 +722,7 @@ JSON::CustomModel *JSON::ProjectModel::datasetModel() const
  * @return True if the user chooses to save or discard changes, false if the
  *         user cancels the operation.
  */
-bool JSON::ProjectModel::askSave()
+bool DataModel::ProjectModel::askSave()
 {
   if (!modified())
     return true;
@@ -750,16 +750,16 @@ bool JSON::ProjectModel::askSave()
 }
 
 /**
- * @brief Saves the current project as a JSON file.
+ * @brief Saves the current project as a DataModel file.
  *
  * This function saves the current state of the project, including its title,
- * decoder settings, and groups, into a JSON file. If the file path is not
- * specified, the user is prompted to provide one. It writes the JSON data to
+ * decoder settings, and groups, into a DataModel file. If the file path is not
+ * specified, the user is prompted to provide one. It writes the DataModel data to
  * disk and loads the saved file into the application.
  *
  * @return True if the project was saved successfully, false otherwise.
  */
-bool JSON::ProjectModel::saveJsonFile(const bool askPath)
+bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
 {
   // Validate project title
   if (m_title.isEmpty())
@@ -789,7 +789,7 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
   }
 
   // Save and validate javascript code
-  auto *parser = JSON::FrameBuilder::instance().frameParser();
+  auto *parser = DataModel::FrameBuilder::instance().frameParser();
   if (parser && parser->isModified())
   {
     if (!parser->save(true))
@@ -836,12 +836,12 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
  * Configures the signal/slot connections with the rest of the modules of the
  * application.
  */
-void JSON::ProjectModel::setupExternalConnections()
+void DataModel::ProjectModel::setupExternalConnections()
 {
   // Re-load JSON map file into C++ model
-  connect(&JSON::FrameBuilder::instance(),
-          &JSON::FrameBuilder::jsonFileMapChanged, this,
-          &JSON::ProjectModel::onJsonLoaded);
+  connect(&DataModel::FrameBuilder::instance(),
+          &DataModel::FrameBuilder::jsonFileMapChanged, this,
+          &DataModel::ProjectModel::onJsonLoaded);
 
   // Generate combo-boxes again when app is translated
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
@@ -874,7 +874,7 @@ void JSON::ProjectModel::setupExternalConnections()
 //------------------------------------------------------------------------------
 
 /**
- * @brief Initializes a new JSON project.
+ * @brief Initializes a new DataModel project.
  *
  * This function clears the current groups, resets project properties
  * (such as the title, frame decoder, and sequences), and sets default values
@@ -885,7 +885,7 @@ void JSON::ProjectModel::setupExternalConnections()
  *
  * Relevant signals are emitted to notify the UI of these changes.
  */
-void JSON::ProjectModel::newJsonFile()
+void DataModel::ProjectModel::newJsonFile()
 {
   // Clear groups list
   m_groups.clear();
@@ -907,8 +907,8 @@ void JSON::ProjectModel::newJsonFile()
   m_dashboardLayout = QJsonObject();
 
   // Load frame parser code into code editor
-  if (JSON::FrameBuilder::instance().frameParser())
-    JSON::FrameBuilder::instance().frameParser()->readCode();
+  if (DataModel::FrameBuilder::instance().frameParser())
+    DataModel::FrameBuilder::instance().frameParser()->readCode();
 
   // Update file path
   m_filePath = "";
@@ -935,14 +935,14 @@ void JSON::ProjectModel::newJsonFile()
 //------------------------------------------------------------------------------
 
 /**
- * @brief Opens a JSON file by prompting the user to select a file.
+ * @brief Opens a DataModel file by prompting the user to select a file.
  *
- * This function opens a file dialog for the user to select a JSON project file.
+ * This function opens a file dialog for the user to select a DataModel project file.
  * If a valid file is selected, the project is loaded from the file.
  *
  * If the file path is invalid or no file is selected, the operation is aborted.
  */
-void JSON::ProjectModel::openJsonFile()
+void DataModel::ProjectModel::openJsonFile()
 {
   auto *dialog
       = new QFileDialog(nullptr, tr("Select Project File"), jsonProjectsPath(),
@@ -962,9 +962,9 @@ void JSON::ProjectModel::openJsonFile()
 }
 
 /**
- * @brief Opens and loads a JSON project file from the given path.
+ * @brief Opens and loads a DataModel project file from the given path.
  *
- * This function opens a JSON file from the specified file path, validates the
+ * This function opens a DataModel file from the specified file path, validates the
  * content, and loads the project data into the application.
  *
  * It reads the project settings, groups, and updates the models accordingly.
@@ -972,9 +972,9 @@ void JSON::ProjectModel::openJsonFile()
  * It also modifies the @c IO::Manager settings based on the loaded data and
  * emitssignals to update the UI.
  *
- * @param path The file path of the JSON project to load.
+ * @param path The file path of the DataModel project to load.
  */
-void JSON::ProjectModel::openJsonFile(const QString &path)
+void DataModel::ProjectModel::openJsonFile(const QString &path)
 {
   // Validate path
   if (path.isEmpty())
@@ -1020,9 +1020,9 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   auto groups = json.value("groups").toArray();
   for (int g = 0; g < groups.count(); ++g)
   {
-    JSON::Group group;
+    DataModel::Group group;
     group.groupId = g;
-    if (JSON::read(group, groups.at(g).toObject()))
+    if (DataModel::read(group, groups.at(g).toObject()))
       m_groups.push_back(group);
   }
 
@@ -1030,9 +1030,9 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   auto actions = json.value("actions").toArray();
   for (int a = 0; a < actions.count(); ++a)
   {
-    JSON::Action action;
+    DataModel::Action action;
     action.actionId = a;
-    if (JSON::read(action, actions.at(a).toObject()))
+    if (DataModel::read(action, actions.at(a).toObject()))
       m_actions.push_back(action);
   }
 
@@ -1090,8 +1090,8 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   }
 
   // Let the generator use the given JSON file
-  if (JSON::FrameBuilder::instance().jsonMapFilepath() != path)
-    JSON::FrameBuilder::instance().loadJsonMap(path);
+  if (DataModel::FrameBuilder::instance().jsonMapFilepath() != path)
+    DataModel::FrameBuilder::instance().loadJsonMap(path);
 
   // Update UI
   Q_EMIT titleChanged();
@@ -1112,9 +1112,9 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
  * Prompts the user to switch to Project File Mode if the current operation
  * mode is different.
  */
-void JSON::ProjectModel::enableProjectMode()
+void DataModel::ProjectModel::enableProjectMode()
 {
-  const auto opMode = JSON::FrameBuilder::instance().operationMode();
+  const auto opMode = DataModel::FrameBuilder::instance().operationMode();
   if (opMode != SerialStudio::ProjectFile)
   {
     auto answ = Misc::Utilities::showMessageBox(
@@ -1125,7 +1125,7 @@ void JSON::ProjectModel::enableProjectMode()
         QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
     if (answ == QMessageBox::Yes)
-      JSON::FrameBuilder::instance().setOperationMode(
+      DataModel::FrameBuilder::instance().setOperationMode(
           SerialStudio::ProjectFile);
   }
 }
@@ -1143,7 +1143,7 @@ void JSON::ProjectModel::enableProjectMode()
  * rebuilt, the modified flag is set, and the project item is selected in the
  * UI.
  */
-void JSON::ProjectModel::deleteCurrentGroup()
+void DataModel::ProjectModel::deleteCurrentGroup()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
@@ -1184,7 +1184,7 @@ void JSON::ProjectModel::deleteCurrentGroup()
  * the project, and action IDs areregenerated. The tree model is rebuilt, the
  * modified flag is set, and the project item is selected in the UI.
  */
-void JSON::ProjectModel::deleteCurrentAction()
+void DataModel::ProjectModel::deleteCurrentAction()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
@@ -1222,7 +1222,7 @@ void JSON::ProjectModel::deleteCurrentAction()
  * The tree model is rebuilt, the modified flag is set, and the parent group
  * is selected in the UI.
  */
-void JSON::ProjectModel::deleteCurrentDataset()
+void DataModel::ProjectModel::deleteCurrentDataset()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
@@ -1272,10 +1272,10 @@ void JSON::ProjectModel::deleteCurrentDataset()
  * its datasets. The new group is registered, the tree model is updated, and
  * the modified flag is set. The duplicated group is then selected in the UI.
  */
-void JSON::ProjectModel::duplicateCurrentGroup()
+void DataModel::ProjectModel::duplicateCurrentGroup()
 {
   // Initialize a new group
-  JSON::Group group;
+  DataModel::Group group;
   group.groupId = m_groups.size();
   group.widget = m_selectedGroup.widget;
   group.title = tr("%1 (Copy)").arg(m_selectedGroup.title);
@@ -1313,10 +1313,10 @@ void JSON::ProjectModel::duplicateCurrentGroup()
  * The new action is registered, the tree model is updated, and
  * the modified flag is set. The duplicated action is then selected in the UI.
  */
-void JSON::ProjectModel::duplicateCurrentAction()
+void DataModel::ProjectModel::duplicateCurrentAction()
 {
   // Initialize a new group
-  JSON::Action action;
+  DataModel::Action action;
   action.actionId = m_actions.size();
   action.icon = m_selectedAction.icon;
   action.txData = m_selectedAction.txData;
@@ -1353,7 +1353,7 @@ void JSON::ProjectModel::duplicateCurrentAction()
  * updated, and the modified flag is set. The duplicated dataset is then
  * selected in the UI.
  */
-void JSON::ProjectModel::duplicateCurrentDataset()
+void DataModel::ProjectModel::duplicateCurrentDataset()
 {
   // Initialize a new dataset
   auto dataset = m_selectedDataset;
@@ -1393,7 +1393,7 @@ void JSON::ProjectModel::duplicateCurrentDataset()
  *
  * @see addGroup()
  */
-void JSON::ProjectModel::ensureValidGroup()
+void DataModel::ProjectModel::ensureValidGroup()
 {
   // Add a group if needed
   if (m_groups.empty())
@@ -1474,12 +1474,12 @@ void JSON::ProjectModel::ensureValidGroup()
  * @param option The dataset option that defines the type of dataset to add
  *               (e.g., Plot, FFT, Bar, Gauge, Compass).
  */
-void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
+void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
 {
   // Initialize a new dataset
   ensureValidGroup();
   const auto groupId = m_selectedGroup.groupId;
-  JSON::Dataset dataset;
+  DataModel::Dataset dataset;
   dataset.groupId = groupId;
 
   // Configure dataset options
@@ -1589,7 +1589,7 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
  * @param checked A boolean indicating whether the option should be enabled
  *                (true) or disabled (false).
  */
-void JSON::ProjectModel::changeDatasetOption(
+void DataModel::ProjectModel::changeDatasetOption(
     const SerialStudio::DatasetOption option, const bool checked)
 {
   // Modify dataset options
@@ -1646,7 +1646,7 @@ void JSON::ProjectModel::changeDatasetOption(
  * tree model, and sets the modified flag. The newly added action is selected
  * in the user interface.
  */
-void JSON::ProjectModel::addAction()
+void DataModel::ProjectModel::addAction()
 {
   // Check if any existing group has the same title
   int count = 1;
@@ -1680,7 +1680,7 @@ void JSON::ProjectModel::addAction()
   }
 
   // Create a new action
-  JSON::Action action;
+  DataModel::Action action;
   action.title = title;
   action.actionId = m_actions.size();
 
@@ -1714,7 +1714,7 @@ void JSON::ProjectModel::addAction()
  * @param title The desired title for the new group.
  * @param widget The widget type associated with the group.
  */
-void JSON::ProjectModel::addGroup(const QString &title,
+void DataModel::ProjectModel::addGroup(const QString &title,
                                   const SerialStudio::GroupWidget widget)
 {
   // Check if any existing group has the same title
@@ -1749,7 +1749,7 @@ void JSON::ProjectModel::addGroup(const QString &title,
   }
 
   // Create a new group
-  JSON::Group group;
+  DataModel::Group group;
   group.title = newTitle;
   group.groupId = m_groups.size();
 
@@ -1790,7 +1790,7 @@ void JSON::ProjectModel::addGroup(const QString &title,
  * @param widget The type of widget to assign to the group.
  * @return True if the widget was successfully assigned, false otherwise.
  */
-bool JSON::ProjectModel::setGroupWidget(const int group,
+bool DataModel::ProjectModel::setGroupWidget(const int group,
                                         const SerialStudio::GroupWidget widget)
 {
   // Get group data
@@ -1838,7 +1838,7 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
     grp.widget = "accelerometer";
 
     // Create datasets
-    JSON::Dataset x, y, z;
+    DataModel::Dataset x, y, z;
 
     // Set dataset IDs
     x.datasetId = 0;
@@ -1896,7 +1896,7 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
     grp.widget = "gyro";
 
     // Create datasets
-    JSON::Dataset x, y, z;
+    DataModel::Dataset x, y, z;
 
     // Set dataset IDs
     x.datasetId = 0;
@@ -1954,7 +1954,7 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
     grp.widget = "map";
 
     // Create datasets
-    JSON::Dataset lat, lon, alt;
+    DataModel::Dataset lat, lon, alt;
 
     // Set dataset IDs
     lat.datasetId = 0;
@@ -2009,7 +2009,7 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
     grp.widget = "plot3d";
 
     // Create datasets
-    JSON::Dataset x, y, z;
+    DataModel::Dataset x, y, z;
 
     // Set dataset IDs
     x.datasetId = 0;
@@ -2072,7 +2072,7 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
  *
  * @param code The new frame parser code to set.
  */
-void JSON::ProjectModel::setFrameParserCode(const QString &code)
+void DataModel::ProjectModel::setFrameParserCode(const QString &code)
 {
   if (code != m_frameParserCode)
   {
@@ -2091,7 +2091,7 @@ void JSON::ProjectModel::setFrameParserCode(const QString &code)
  *
  * @param groupId The group ID to set as active.
  */
-void JSON::ProjectModel::setActiveGroupId(const int groupId)
+void DataModel::ProjectModel::setActiveGroupId(const int groupId)
 {
   if (m_activeGroupId != groupId)
   {
@@ -2107,9 +2107,9 @@ void JSON::ProjectModel::setActiveGroupId(const int groupId)
  * The layout is saved to the project file so the user's window
  * arrangement is restored when reopening the project.
  *
- * @param layout The JSON object containing the layout configuration.
+ * @param layout The DataModel object containing the layout configuration.
  */
-void JSON::ProjectModel::setDashboardLayout(const QJsonObject &layout)
+void DataModel::ProjectModel::setDashboardLayout(const QJsonObject &layout)
 {
   if (m_dashboardLayout != layout)
   {
@@ -2121,7 +2121,7 @@ void JSON::ProjectModel::setDashboardLayout(const QJsonObject &layout)
 /**
  * @brief Forces the Project Editor to show the frame parser code editor
  */
-void JSON::ProjectModel::displayFrameParserView()
+void DataModel::ProjectModel::displayFrameParserView()
 {
   for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it)
   {
@@ -2157,7 +2157,7 @@ void JSON::ProjectModel::displayFrameParserView()
  *
  * Finally, it emits the `treeModelChanged()` signal to update the UI.
  */
-void JSON::ProjectModel::buildTreeModel()
+void DataModel::ProjectModel::buildTreeModel()
 {
   // Clear model/pointer maps
   m_rootItems.clear();
@@ -2295,7 +2295,7 @@ void JSON::ProjectModel::buildTreeModel()
   // Construct selection model
   m_selectionModel = new QItemSelectionModel(m_treeModel);
   connect(m_selectionModel, &QItemSelectionModel::currentChanged, this,
-          &JSON::ProjectModel::onCurrentSelectionChanged);
+          &DataModel::ProjectModel::onCurrentSelectionChanged);
 
   // Update user interface
   Q_EMIT treeModelChanged();
@@ -2314,7 +2314,7 @@ void JSON::ProjectModel::buildTreeModel()
  * changes made to the model items and emits the `projectModelChanged()`
  * signal to update the user interface.
  */
-void JSON::ProjectModel::buildProjectModel()
+void DataModel::ProjectModel::buildProjectModel()
 {
   // Clear the existing model
   if (m_projectModel)
@@ -2466,7 +2466,7 @@ void JSON::ProjectModel::buildProjectModel()
 
   // Handle edits
   connect(m_projectModel, &CustomModel::itemChanged, this,
-          &JSON::ProjectModel::onProjectItemChanged);
+          &DataModel::ProjectModel::onProjectItemChanged);
 
   // Update user interface
   Q_EMIT projectModelChanged();
@@ -2486,7 +2486,7 @@ void JSON::ProjectModel::buildProjectModel()
  *
  * @param group The group for which the model is being built.
  */
-void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
+void DataModel::ProjectModel::buildGroupModel(const DataModel::Group &group)
 {
   // Clear the existing model
   if (m_groupModel)
@@ -2553,7 +2553,7 @@ void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
 
   // Handle edits
   connect(m_groupModel, &CustomModel::itemChanged, this,
-          &JSON::ProjectModel::onGroupItemChanged);
+          &DataModel::ProjectModel::onGroupItemChanged);
 
   // Update user interface
   emit groupModelChanged();
@@ -2578,7 +2578,7 @@ void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
  *
  * @param action The Action object whose data will populate the editing model.
  */
-void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
+void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
 {
   // Clear the existing model
   if (m_actionModel)
@@ -2772,7 +2772,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   // Timer interval
   auto timerInterval = new QStandardItem();
   timerInterval->setData(IntField, WidgetType);
-  timerInterval->setEditable(action.timerMode != JSON::TimerMode::Off);
+  timerInterval->setEditable(action.timerMode != DataModel::TimerMode::Off);
   timerInterval->setData(tr("Interval (ms)"), ParameterName);
   timerInterval->setData(timerInterval->isEditable(), Active);
   timerInterval->setData(action.timerIntervalMs, EditableValue);
@@ -2785,7 +2785,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
 
   // Handle edits
   connect(m_actionModel, &CustomModel::itemChanged, this,
-          &JSON::ProjectModel::onActionItemChanged);
+          &DataModel::ProjectModel::onActionItemChanged);
 
   // Update user interface
   emit actionModelChanged();
@@ -2809,7 +2809,7 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
  *
  * @param dataset The dataset for which the model is being built.
  */
-void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
+void DataModel::ProjectModel::buildDatasetModel(const DataModel::Dataset &dataset)
 {
   // Clear the existing model
   if (m_datasetModel)
@@ -3245,7 +3245,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
 
   // Handle edits
   connect(m_datasetModel, &CustomModel::itemChanged, this,
-          &JSON::ProjectModel::onDatasetItemChanged);
+          &DataModel::ProjectModel::onDatasetItemChanged);
 
   // Update user interface
   emit datasetModelChanged();
@@ -3256,15 +3256,15 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
 //------------------------------------------------------------------------------
 
 /**
- * @brief Reloads the project model when a new JSON file is loaded.
+ * @brief Reloads the project model when a new DataModel file is loaded.
  *
- * This function checks if the current JSON file path differs from the one
- * loaded by `JSON::FrameBuilder`. If they differ, it opens the new JSON file
+ * This function checks if the current DataModel file path differs from the one
+ * loaded by `DataModel::FrameBuilder`. If they differ, it opens the new DataModel file
  * and reloads the project model.
  */
-void JSON::ProjectModel::onJsonLoaded()
+void DataModel::ProjectModel::onJsonLoaded()
 {
-  openJsonFile(JSON::FrameBuilder::instance().jsonMapFilepath());
+  openJsonFile(DataModel::FrameBuilder::instance().jsonMapFilepath());
 }
 
 //------------------------------------------------------------------------------
@@ -3281,7 +3281,7 @@ void JSON::ProjectModel::onJsonLoaded()
  * These sources are re-generated when the language is changed to ensure
  * proper localization.
  */
-void JSON::ProjectModel::generateComboBoxModels()
+void DataModel::ProjectModel::generateComboBoxModels()
 {
   // Initialize FFT window sizes list
   m_fftSamples.clear();
@@ -3375,7 +3375,7 @@ void JSON::ProjectModel::generateComboBoxModels()
  * @param modified A boolean indicating whether the project has been modified
  * ( true) or not (false).
  */
-void JSON::ProjectModel::setModified(const bool modified)
+void DataModel::ProjectModel::setModified(const bool modified)
 {
   m_modified = modified;
   Q_EMIT modifiedChanged();
@@ -3389,9 +3389,9 @@ void JSON::ProjectModel::setModified(const bool modified)
  *
  * @param currentView The new view mode, selected from the `CurrentView` enum.
  */
-void JSON::ProjectModel::setCurrentView(const CurrentView currentView)
+void DataModel::ProjectModel::setCurrentView(const CurrentView currentView)
 {
-  auto *parser = JSON::FrameBuilder::instance().frameParser();
+  auto *parser = DataModel::FrameBuilder::instance().frameParser();
   if (parser && m_currentView == FrameParserView
       && m_currentView != currentView)
   {
@@ -3443,7 +3443,7 @@ void JSON::ProjectModel::setCurrentView(const CurrentView currentView)
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed group property.
  */
-void JSON::ProjectModel::onGroupItemChanged(QStandardItem *item)
+void DataModel::ProjectModel::onGroupItemChanged(QStandardItem *item)
 {
   // Validate item pointer
   if (!item)
@@ -3537,7 +3537,7 @@ void JSON::ProjectModel::onGroupItemChanged(QStandardItem *item)
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed action property.
  */
-void JSON::ProjectModel::onActionItemChanged(QStandardItem *item)
+void DataModel::ProjectModel::onActionItemChanged(QStandardItem *item)
 {
   // Validate item pointer
   if (!item)
@@ -3577,7 +3577,7 @@ void JSON::ProjectModel::onActionItemChanged(QStandardItem *item)
       m_selectedAction.autoExecuteOnConnect = value.toBool();
       break;
     case kActionView_TimerMode:
-      m_selectedAction.timerMode = static_cast<JSON::TimerMode>(value.toInt());
+      m_selectedAction.timerMode = static_cast<DataModel::TimerMode>(value.toInt());
       buildActionModel(m_selectedAction);
       break;
     case kActionView_TimerInterval:
@@ -3608,7 +3608,7 @@ void JSON::ProjectModel::onActionItemChanged(QStandardItem *item)
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed project property.
  */
-void JSON::ProjectModel::onProjectItemChanged(QStandardItem *item)
+void DataModel::ProjectModel::onProjectItemChanged(QStandardItem *item)
 {
   // Validate item pointer
   if (!item)
@@ -3681,7 +3681,7 @@ void JSON::ProjectModel::onProjectItemChanged(QStandardItem *item)
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed dataset property.
  */
-void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
+void DataModel::ProjectModel::onDatasetItemChanged(QStandardItem *item)
 {
   // Validate item pointer
   if (!item)
@@ -3822,7 +3822,7 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
  * @param previous The previously selected index in the tree model
  *                 (unused in this function).
  */
-void JSON::ProjectModel::onCurrentSelectionChanged(const QModelIndex &current,
+void DataModel::ProjectModel::onCurrentSelectionChanged(const QModelIndex &current,
                                                    const QModelIndex &previous)
 {
   // Ignore previous item, we don't need it
@@ -3883,7 +3883,7 @@ void JSON::ProjectModel::onCurrentSelectionChanged(const QModelIndex &current,
  *
  * @return The next available dataset index.
  */
-int JSON::ProjectModel::nextDatasetIndex()
+int DataModel::ProjectModel::nextDatasetIndex()
 {
   int maxIndex = 1;
   for (size_t i = 0; i < m_groups.size(); ++i)
@@ -3907,13 +3907,13 @@ int JSON::ProjectModel::nextDatasetIndex()
 /**
  * @brief Finalizes the process of saving a Serial Studio project to disk.
  *
- * This method writes the current project configuration into a JSON file,
+ * This method writes the current project configuration into a DataModel file,
  * including metadata, group definitions, and action definitions. It performs
  * the following steps:
  *
  * - Opens the project file for writing
- * - Serializes internal data into a JSON structure
- * - Writes the JSON data to the selected file
+ * - Serializes internal data into a DataModel structure
+ * - Writes the DataModel data to the selected file
  * - Enables project mode in the application
  * - Loads the saved file back into the runtime environment
  *
@@ -3922,7 +3922,7 @@ int JSON::ProjectModel::nextDatasetIndex()
  *
  * @return true if the file was saved successfully, false otherwise
  */
-bool JSON::ProjectModel::finalizeProjectSave()
+bool DataModel::ProjectModel::finalizeProjectSave()
 {
   // Open file for writing
   QFile file(m_filePath);
@@ -3947,7 +3947,7 @@ bool JSON::ProjectModel::finalizeProjectSave()
   // Create group array
   QJsonArray groupArray;
   for (const auto &group : std::as_const(m_groups))
-    groupArray.append(JSON::serialize(group));
+    groupArray.append(DataModel::serialize(group));
 
   // Add groups array to JSON
   json.insert("groups", groupArray);
@@ -3955,7 +3955,7 @@ bool JSON::ProjectModel::finalizeProjectSave()
   // Create actions array
   QJsonArray actionsArray;
   for (const auto &action : std::as_const(m_actions))
-    actionsArray.append(JSON::serialize(action));
+    actionsArray.append(DataModel::serialize(action));
 
   // Insert actions array to JSON
   json.insert("actions", actionsArray);
@@ -3975,7 +3975,7 @@ bool JSON::ProjectModel::finalizeProjectSave()
 
   // Load JSON file to Serial Studio
   openJsonFile(file.fileName());
-  JSON::FrameBuilder::instance().loadJsonMap(file.fileName());
+  DataModel::FrameBuilder::instance().loadJsonMap(file.fileName());
   return true;
 }
 
@@ -3995,7 +3995,7 @@ bool JSON::ProjectModel::finalizeProjectSave()
  * @param map A reference to a `QHash` that stores the state of each item.
  * @param title The current item's title, used as the key in the hash.
  */
-void JSON::ProjectModel::saveExpandedStateMap(QStandardItem *item,
+void DataModel::ProjectModel::saveExpandedStateMap(QStandardItem *item,
                                               QHash<QString, bool> &map,
                                               const QString &title)
 {
@@ -4028,7 +4028,7 @@ void JSON::ProjectModel::saveExpandedStateMap(QStandardItem *item,
  * @param title The current item's title, used to look up its state in the
  * hash.
  */
-void JSON::ProjectModel::restoreExpandedStateMap(QStandardItem *item,
+void DataModel::ProjectModel::restoreExpandedStateMap(QStandardItem *item,
                                                  QHash<QString, bool> &map,
                                                  const QString &title)
 {

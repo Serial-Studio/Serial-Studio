@@ -170,7 +170,7 @@ qt_policy(SET QTP0004 NEW)
 #   - Misc/: Utilities (ThemeManager, Translator, ModuleManager)
 #   - UI/: Dashboard widgets and window management
 #   - IO/: Hardware drivers (UART, Network, BluetoothLE, etc.)
-#   - JSON/: Frame parsing and project model
+#   - DataModel/: Frame parsing and project model
 #   - CSV/: CSV file playback and export
 #   - MDF4/: MDF4 file playback (Pro feature)
 #   - MQTT/: MQTT client (Pro only)
@@ -224,11 +224,12 @@ set(SOURCES
   src/Console/Export.cpp
   src/IO/FileTransmission.cpp
   src/IO/FrameReader.cpp
-  src/JSON/FrameParser.cpp
-  src/JSON/ProjectModel.cpp
-  src/JSON/FrameBuilder.cpp
-  src/JSON/Frame.cpp
-  src/JSON/FrameParserTestDialog.cpp
+  src/DataModel/FrameParser.cpp
+  src/DataModel/ProjectModel.cpp
+  src/DataModel/FrameBuilder.cpp
+  src/DataModel/Frame.cpp
+  src/DataModel/FrameConsumer.cpp
+  src/DataModel/FrameParserTestDialog.cpp
   src/CSV/Player.cpp
   src/CSV/Export.cpp
   src/MDF4/Player.cpp
@@ -278,11 +279,12 @@ set(HEADERS
   src/IO/CircularBuffer.h
   src/IO/FileTransmission.h
   src/IO/FrameReader.h
-  src/JSON/FrameParser.h
-  src/JSON/ProjectModel.h
-  src/JSON/Frame.h
-  src/JSON/FrameBuilder.h
-  src/JSON/FrameParserTestDialog.h
+  src/DataModel/FrameParser.h
+  src/DataModel/ProjectModel.h
+  src/DataModel/Frame.h
+  src/DataModel/FrameBuilder.h
+  src/DataModel/FrameConsumer.h
+  src/DataModel/FrameParserTestDialog.h
   src/CSV/Export.h
   src/CSV/Player.h
   src/MDF4/Player.h
@@ -342,7 +344,7 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/Terminal.qml
   qml/Widgets/BigButton.qml
   qml/Widgets/InfoBullet.qml
-  qml/Widgets/JSONDropArea.qml
+  qml/Widgets/FileDropArea.qml
   qml/Widgets/MenuButton.qml
   qml/Widgets/MiniWindow.qml
   qml/Widgets/Pane.qml
@@ -366,7 +368,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/CANBus.h
     src/IO/Drivers/Modbus.h
     src/UI/Widgets/Plot3D.h
-    src/JSON/DBCImporter.h
+    src/DataModel/DBCImporter.h
     src/Licensing/Trial.h
     src/Licensing/MachineID.h
     src/Licensing/SimpleCrypt.h
@@ -380,7 +382,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/CANBus.cpp
     src/IO/Drivers/Modbus.cpp
     src/UI/Widgets/Plot3D.cpp
-    src/JSON/DBCImporter.cpp
+    src/DataModel/DBCImporter.cpp
     src/Licensing/Trial.cpp
     src/ThirdParty/miniaudio.cpp
     src/Licensing/MachineID.cpp
@@ -486,7 +488,7 @@ endif()
 #
 # RES_RCC (rcc/rcc.qrc):
 #   - Application assets: icons, images, fonts
-#   - JSON schemas and templates
+#   - DataModel schemas and templates
 #   - Default project files and examples
 #   - Embedded resources accessible via qrc:/ URLs
 #
@@ -523,7 +525,7 @@ qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.q
 #   Qt modules: Core, Gui, Widgets, Qml, Quick, Graphs, SerialPort, etc.
 #   Third-party:
 #     - kissfft: Fast Fourier Transform (FFT plot calculations)
-#     - QCodeEditor: Syntax highlighting for JSON/JavaScript editor
+#     - QCodeEditor: Syntax highlighting for DataModel/JavaScript editor
 #     - QSimpleUpdater: Auto-update framework (checks for new versions)
 #     - mdf: MDF4/MF4 file format parser (Pro: replay CAN/LIN data)
 #     - OpenSSL: Cryptography, SSL/TLS (for MQTT, secure connections)
@@ -624,7 +626,7 @@ endif()
 #   - qml/MainWindow/: Main window and toolbar
 #   - qml/Dialogs/: Modal dialogs (About, Settings, etc.)
 #   - qml/Widgets/: Reusable UI widgets
-#   - qml/ProjectEditor/: JSON project editor UI
+#   - qml/ProjectEditor/: DataModel project editor UI
 #   - qml/Widgets/Dashboard/: Dashboard widget implementations
 #
 # Performance impact:

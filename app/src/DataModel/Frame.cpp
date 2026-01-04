@@ -19,10 +19,10 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "JSON/Frame.h"
+#include "DataModel/Frame.h"
 #include "SerialStudio.h"
 
-void JSON::finalize_frame(JSON::Frame &frame)
+void DataModel::finalize_frame(DataModel::Frame &frame)
 {
   frame.containsCommercialFeatures = SerialStudio::commercialCfg(frame.groups);
 
@@ -34,7 +34,7 @@ void JSON::finalize_frame(JSON::Frame &frame)
   }
 }
 
-void JSON::read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
+void DataModel::read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
                             QString &checksum, const QJsonObject &obj)
 {
   // Obtain frame delimiters
@@ -62,7 +62,7 @@ void JSON::read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
   }
 }
 
-QByteArray JSON::get_tx_bytes(const Action &action)
+QByteArray DataModel::get_tx_bytes(const Action &action)
 {
   QByteArray b;
   if (action.binaryData)

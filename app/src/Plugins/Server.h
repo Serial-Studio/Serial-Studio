@@ -27,8 +27,8 @@
 #include <QByteArray>
 #include <QHostAddress>
 
-#include "JSON/Frame.h"
-#include "ThirdParty/readerwriterqueue.h"
+#include "DataModel/Frame.h"
+#include "DataModel/FrameConsumer.h"
 
 /**
  * Default TCP port to use for incoming connections, I choose 7777 because 7 is
@@ -38,6 +38,45 @@
 
 namespace Plugins
 {
+class Server;
+
+/**
+ * @brief Worker that handles JSON serialization and socket I/O on background
+ * thread
+ */
+class ServerWorker
+  : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>
+{
+  Q_OBJECT
+
+public:
+  using DataModel::FrameConsumerWorker<
+      DataModel::TimestampedFramePtr>::FrameConsumerWorker;
+  ~ServerWorker() override;
+
+  void closeResources() override;
+  bool isResourceOpen() const override;
+
+public slots:
+  void addSocket(QTcpSocket *socket);
+  void removeSocket(QTcpSocket *socket);
+  void writeRawData(const QByteArray &data);
+
+signals:
+  void dataReceived(const QByteArray &data);
+
+protected:
+  void processItems(
+      const std::vector<DataModel::TimestampedFramePtr> &items) override;
+
+private slots:
+  void onSocketReadyRead();
+  void onSocketDisconnected();
+
+private:
+  QVector<QTcpSocket *> m_sockets;
+};
+
 /**
  * @class Plugins::Server
  * @brief TCP server interface for plugin communication in Serial Studio.
@@ -58,12 +97,17 @@ namespace Plugins
  * be enabled or disabled at runtime using setEnabled(), and will only accept
  * connections when enabled.
  *
+ * **Performance:** JSON serialization and socket I/O are performed on a
+ * background worker thread to prevent blocking the main UI thread. This
+ * eliminates cross-thread communication overhead for high-frequency frame
+ * transmission (writes >> reads in typical plugin usage).
+ *
  * Example plugin: https://github.com/Kaan-Sat/CC2021-Control-Panel
  *
  * @note Accessed as a singleton via Plugins::Server::instance().
- * @note Not thread-safe; must be used from the main Qt thread.
+ * @note Socket management must be on the main Qt thread.
  */
-class Server : public QObject
+class Server : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr>
 {
   Q_OBJECT
   Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
@@ -88,18 +132,18 @@ public slots:
   void removeConnection();
   void setEnabled(const bool enabled);
   void hotpathTxData(const QByteArray &data);
-  void hotpathTxFrame(const JSON::Frame &frame);
+  void hotpathTxFrame(const DataModel::TimestampedFramePtr &frame);
+
+protected:
+  DataModel::FrameConsumerWorkerBase *createWorker() override;
 
 private slots:
-  void onDataReceived();
   void acceptConnection();
-  void sendProcessedData();
+  void onDataReceived(const QByteArray &data);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:
   bool m_enabled;
   QTcpServer m_server;
-  QVector<QTcpSocket *> m_sockets;
-  moodycamel::ReaderWriterQueue<JSON::Frame> m_pendingFrames{2048};
 };
 } // namespace Plugins
