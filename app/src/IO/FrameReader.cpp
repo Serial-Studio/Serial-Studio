@@ -42,9 +42,9 @@
 IO::FrameReader::FrameReader(QObject *parent)
   : QObject(parent)
   , m_checksumLength(0)
-  , m_circularBuffer(1024 * 1024 * 10)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
+  , m_circularBuffer(1024 * 1024 * 10)
 {
   m_quickPlotEndSequences.append(QByteArray("\n"));
   m_quickPlotEndSequences.append(QByteArray("\r"));
@@ -75,7 +75,6 @@ IO::FrameReader::FrameReader(QObject *parent)
  * per frame to avoid UI flooding. Instead, a single `readyRead()` signal
  * notifies the consumer that new frames are available for reading.
  *
- * **Thread Safety:** Runs in worker thread, uses atomic loads for mode checks.
  * **Performance:** Lock-free, optimized for 256 KHz+ data rates.
  *
  * @param data Incoming byte stream from the device.
@@ -87,15 +86,9 @@ void IO::FrameReader::processData(const ByteArrayPtr &data)
 
   bool framesEnqueued = false;
 
-  const auto operationMode = m_operationMode.load(std::memory_order_acquire);
-  const auto frameDetectionMode
-      = m_frameDetectionMode.load(std::memory_order_acquire);
-
-  if (operationMode == SerialStudio::ProjectFile
-      && frameDetectionMode == SerialStudio::NoDelimiters) [[unlikely]]
-  {
+  if (m_operationMode == SerialStudio::ProjectFile
+      && m_frameDetectionMode == SerialStudio::NoDelimiters)
     framesEnqueued = m_queue.try_enqueue(*data);
-  }
 
   else
   {
@@ -103,7 +96,7 @@ void IO::FrameReader::processData(const ByteArrayPtr &data)
 
     const auto initialSize = m_queue.size_approx();
 
-    switch (operationMode)
+    switch (m_operationMode)
     {
       case SerialStudio::QuickPlot:
         readEndDelimitedFrames();
@@ -112,7 +105,7 @@ void IO::FrameReader::processData(const ByteArrayPtr &data)
         readStartEndDelimitedFrames();
         break;
       case SerialStudio::ProjectFile:
-        switch (frameDetectionMode)
+        switch (m_frameDetectionMode)
         {
           case SerialStudio::EndDelimiterOnly:
             readEndDelimitedFrames();
@@ -134,7 +127,7 @@ void IO::FrameReader::processData(const ByteArrayPtr &data)
     framesEnqueued = (m_queue.size_approx() > initialSize);
   }
 
-  if (framesEnqueued) [[likely]]
+  if (framesEnqueued)
     Q_EMIT readyRead();
 }
 
@@ -145,53 +138,36 @@ void IO::FrameReader::processData(const ByteArrayPtr &data)
 /**
  * @brief Sets the checksum algorithm used for validating incoming frames.
  *
- * Uses atomic shared pointer for lock-free thread-safe updates.
- * The immutable data pattern ensures safe concurrent reads from worker thread.
- *
- * **Thread Safety:** Safe to call from any thread (typically main thread).
- *
  * @param checksum The name of the new checksum algorithm.
  */
 void IO::FrameReader::setChecksum(const QString &checksum)
 {
-  const auto &map = IO::checksumFunctionMap();
-  const auto it = map.find(checksum);
-  const qsizetype newLength = (it != map.end()) ? it.value()("", 0).size() : 0;
-
-  QMutexLocker locker(&m_configMutex);
   m_checksum = checksum;
-  m_checksumLength = newLength;
+  const auto &map = IO::checksumFunctionMap();
+  const auto it = map.find(m_checksum);
+  if (it != map.end())
+    m_checksumLength = it.value()("", 0).size();
+  else
+    m_checksumLength = 0;
 }
 
 /**
  * @brief Sets the start sequence used for frame detection.
  *
- * Uses atomic shared pointer for lock-free thread-safe updates.
- * The immutable data pattern ensures safe concurrent reads from worker thread.
- *
- * **Thread Safety:** Safe to call from any thread (typically main thread).
- *
  * @param start The new start sequence as a QByteArray.
  */
 void IO::FrameReader::setStartSequence(const QByteArray &start)
 {
-  QMutexLocker locker(&m_configMutex);
   m_startSequence = start;
 }
 
 /**
  * @brief Sets the finish sequence used for frame detection.
  *
- * Uses atomic shared pointer for lock-free thread-safe updates.
- * The immutable data pattern ensures safe concurrent reads from worker thread.
- *
- * **Thread Safety:** Safe to call from any thread (typically main thread).
- *
  * @param finish The new finish sequence as a QByteArray.
  */
 void IO::FrameReader::setFinishSequence(const QByteArray &finish)
 {
-  QMutexLocker locker(&m_configMutex);
   m_finishSequence = finish;
 }
 
@@ -199,21 +175,17 @@ void IO::FrameReader::setFinishSequence(const QByteArray &finish)
  * @brief Sets the operation mode of the FrameReader.
  *
  * Changes how the FrameReader processes data, determining the type of frames
- * to detect. Uses atomic store for thread-safe mode switching.
- *
- * **Thread Safety:** Safe to call from any thread (typically main thread).
+ * to detect.
  *
  * @param mode The new operation mode as a SerialStudio::OperationMode enum.
  */
 void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 {
-  m_operationMode.store(mode, std::memory_order_release);
-
-  if (mode != SerialStudio::ProjectFile)
+  m_operationMode = mode;
+  if (m_operationMode != SerialStudio::ProjectFile)
   {
-    QMutexLocker locker(&m_configMutex);
-    m_checksum.clear();
     m_checksumLength = 0;
+    m_checksum = QLatin1String("");
   }
 }
 
@@ -221,9 +193,7 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
  * @brief Sets the frame detection mode for the FrameReader.
  *
  * Specifies how frames are detected, either by end delimiter only or both
- * start and end delimiters. Uses atomic store for thread-safe mode switching.
- *
- * **Thread Safety:** Safe to call from any thread (typically main thread).
+ * start and end delimiters.
  *
  * @param mode The new frame detection mode as a SerialStudio::FrameDetection
  * enum.
@@ -231,7 +201,7 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 void IO::FrameReader::setFrameDetectionMode(
     const SerialStudio::FrameDetection mode)
 {
-  m_frameDetectionMode.store(mode, std::memory_order_release);
+  m_frameDetectionMode = mode;
 }
 
 //------------------------------------------------------------------------------
@@ -253,15 +223,12 @@ void IO::FrameReader::setFrameDetectionMode(
  */
 void IO::FrameReader::readEndDelimitedFrames()
 {
-  const auto opMode = m_operationMode.load(std::memory_order_relaxed);
-  const auto detectMode = m_frameDetectionMode.load(std::memory_order_relaxed);
-
   while (true)
   {
     int endIndex = -1;
     QByteArray delimiter;
 
-    if (opMode == SerialStudio::QuickPlot) [[likely]]
+    if (m_operationMode == SerialStudio::QuickPlot)
     {
       for (const QByteArray &d : std::as_const(m_quickPlotEndSequences))
       {
@@ -275,12 +242,9 @@ void IO::FrameReader::readEndDelimitedFrames()
       }
     }
 
-    else if (detectMode == SerialStudio::EndDelimiterOnly) [[likely]]
+    else if (m_frameDetectionMode == SerialStudio::EndDelimiterOnly)
     {
-      {
-        QMutexLocker locker(&m_configMutex);
-        delimiter = m_finishSequence;
-      }
+      delimiter = m_finishSequence;
       endIndex = m_circularBuffer.findPatternKMP(delimiter);
     }
 
@@ -331,26 +295,17 @@ void IO::FrameReader::readEndDelimitedFrames()
  */
 void IO::FrameReader::readStartDelimitedFrames()
 {
-  QByteArray startSeq;
-  {
-    QMutexLocker locker(&m_configMutex);
-    startSeq = m_startSequence;
-  }
-
   while (true)
   {
-    // Find the first start delimiter in the buffer
-    int startIndex = m_circularBuffer.findPatternKMP(startSeq);
+    int startIndex = m_circularBuffer.findPatternKMP(m_startSequence);
     if (startIndex == -1)
       break;
 
-    // Try to find the next start delimiter after this one
     int nextStartIndex = m_circularBuffer.findPatternKMP(
-        startSeq, startIndex + startSeq.size());
+        m_startSequence, startIndex + m_startSequence.size());
 
-    // Calculate start and end positions of the current frame
     qsizetype frameEndPos;
-    qsizetype frameStart = startIndex + startSeq.size();
+    qsizetype frameStart = startIndex + m_startSequence.size();
 
     // No second start delimiter found...maybe the last frame in the stream
     if (nextStartIndex == -1)
@@ -422,41 +377,28 @@ void IO::FrameReader::readStartDelimitedFrames()
  */
 void IO::FrameReader::readStartEndDelimitedFrames()
 {
-  QByteArray startSeq;
-  QByteArray finishSeq;
-  {
-    QMutexLocker locker(&m_configMutex);
-    startSeq = m_startSequence;
-    finishSeq = m_finishSequence;
-  }
-
-  // Read data into an array of frames
   while (true)
   {
-    // Locate end delimiter
-    int finishIndex = m_circularBuffer.findPatternKMP(finishSeq);
+    int finishIndex = m_circularBuffer.findPatternKMP(m_finishSequence);
     if (finishIndex == -1)
       break;
 
-    // Locate start delimiter and ensure it's before the end
-    int startIndex = m_circularBuffer.findPatternKMP(startSeq);
+    int startIndex = m_circularBuffer.findPatternKMP(m_startSequence);
     if (startIndex == -1 || startIndex >= finishIndex)
     {
-      (void)m_circularBuffer.read(finishIndex + finishSeq.size());
+      (void)m_circularBuffer.read(finishIndex + m_finishSequence.size());
       continue;
     }
 
-    // Determine payload boundaries
-    qsizetype frameStart = startIndex + startSeq.size();
+    qsizetype frameStart = startIndex + m_startSequence.size();
     qsizetype frameLength = finishIndex - frameStart;
     if (frameLength <= 0)
     {
-      (void)m_circularBuffer.read(finishIndex + finishSeq.size());
+      (void)m_circularBuffer.read(finishIndex + m_finishSequence.size());
       continue;
     }
 
-    // Extract frame data
-    const auto crcPosition = finishIndex + finishSeq.size();
+    const auto crcPosition = finishIndex + m_finishSequence.size();
     const auto frameEndPos = crcPosition + m_checksumLength;
     const auto frame = m_circularBuffer.peek(frameStart + frameLength)
                            .mid(frameStart, frameLength);
@@ -517,21 +459,13 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray &frame,
   if (buffer.size() < crcPosition + m_checksumLength)
     return ValidationStatus::ChecksumIncomplete;
 
-  // Compare actual vs received checksum
-  QString crcAlgorithm;
-  {
-    QMutexLocker locker(&m_configMutex);
-    crcAlgorithm = m_checksum;
-  }
-
-  const auto calculated = IO::checksum(crcAlgorithm, frame);
+  const auto calculated = IO::checksum(m_checksum, frame);
   const QByteArray received = buffer.mid(crcPosition, m_checksumLength);
   if (calculated == received)
     return ValidationStatus::FrameOk;
 
-  // Log checksum mismatch
   qWarning() << "\n"
-             << crcAlgorithm.toStdString().c_str() << "failed:\n"
+             << m_checksum.toStdString().c_str() << "failed:\n"
              << "\t- Received:" << received.toHex(' ') << "\n"
              << "\t- Calculated:" << calculated.toHex(' ') << "\n"
              << "\t- Frame:" << frame.toHex(' ') << "\n"

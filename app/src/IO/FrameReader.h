@@ -22,8 +22,6 @@
 #pragma once
 
 #include <memory>
-#include <atomic>
-#include <QMutex>
 #include <QObject>
 #include <QString>
 #include <QByteArray>
@@ -51,11 +49,22 @@ enum class ValidationStatus
  * handling, such as quick plotting, JSON extraction, and project-specific
  * parsing.
  *
- * **Thread Safety:**
- * - processData() runs in worker thread
- * - All configuration setters use atomic shared pointers for lock-free updates
- * - Immutable data pattern ensures safe concurrent reads
- * - Lock-free operation for 256 KHz+ data rates
+ * **Thread Safety Model:**
+ * This class achieves thread safety through immutability rather than locks.
+ * The IO::Manager recreates the FrameReader instance whenever configuration
+ * changes (see IO::Manager::resetFrameReader()). This ensures:
+ *
+ * - Configuration is set ONCE in constructor
+ * - No configuration changes occur during the FrameReader's lifetime
+ * - processData() can safely read member variables without synchronization
+ *
+ * DO NOT add mutexes or atomic operations to this class. If configuration
+ * needs to change, the IO::Manager will destroy this instance and create
+ * a new one with updated settings.
+ *
+ * Lock-free operation for 256 KHz+ data rates.
+ *
+ * @see IO::Manager::resetFrameReader()
  */
 class FrameReader : public QObject
 {
@@ -93,16 +102,14 @@ private:
   ValidationStatus checksum(const QByteArray &frame, qsizetype crcPosition);
 
 private:
-  mutable QMutex m_configMutex;
-
   QString m_checksum;
   qsizetype m_checksumLength;
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
   QVector<QByteArray> m_quickPlotEndSequences;
+  SerialStudio::OperationMode m_operationMode;
+  SerialStudio::FrameDetection m_frameDetectionMode;
   CircularBuffer<QByteArray, char> m_circularBuffer;
   moodycamel::ReaderWriterQueue<QByteArray> m_queue{4096};
-  std::atomic<SerialStudio::OperationMode> m_operationMode;
-  std::atomic<SerialStudio::FrameDetection> m_frameDetectionMode;
 };
 } // namespace IO
