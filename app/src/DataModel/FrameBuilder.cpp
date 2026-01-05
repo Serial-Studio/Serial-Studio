@@ -825,7 +825,8 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame &frame)
 
   if (m_timestampedFramesEnabled) [[unlikely]]
   {
-    auto timestampedFrame = std::make_shared<DataModel::TimestampedFrame>(frame);
+    auto timestampedFrame
+        = std::make_shared<DataModel::TimestampedFrame>(frame);
     csvExport.hotpathTxFrame(timestampedFrame);
     mdf4Export.hotpathTxFrame(timestampedFrame);
     pluginsServer.hotpathTxFrame(timestampedFrame);

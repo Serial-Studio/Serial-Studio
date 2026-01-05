@@ -144,10 +144,9 @@ void MDF4::ExportWorker::closeResources()
     const auto steadyNow = DataModel::TimestampedFrame::SteadyClock::now();
     const auto steadyOffset = steadyNow - m_steadyBaseline;
     const auto systemTime = m_systemBaseline + steadyOffset;
-    const auto stop_time
-        = std::chrono::duration_cast<std::chrono::nanoseconds>(
-              systemTime.time_since_epoch())
-              .count();
+    const auto stop_time = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                               systemTime.time_since_epoch())
+                               .count();
 
     m_writer->StopMeasurement(static_cast<uint64_t>(stop_time));
     m_writer->FinalizeMeasurement();

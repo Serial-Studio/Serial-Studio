@@ -792,7 +792,7 @@ static void attachToConsole()
 {
   if (AttachConsole(ATTACH_PARENT_PROCESS))
   {
-    FILE* fp = nullptr;
+    FILE *fp = nullptr;
     (void)freopen_s(&fp, "CONOUT$", "w", stdout);
     (void)freopen_s(&fp, "CONOUT$", "w", stderr);
     printf("\n");
