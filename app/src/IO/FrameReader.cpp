@@ -521,16 +521,15 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray &frame,
     return ValidationStatus::ChecksumIncomplete;
 
   // Compare actual vs received checksum
-  auto checksumAlg
-      = std::atomic_load_explicit(&m_checksum, std::memory_order_acquire);
-  const auto calculated = IO::checksum(*checksumAlg, frame);
+  auto crc = std::atomic_load_explicit(&m_checksum, std::memory_order_acquire);
+  const auto calculated = IO::checksum(*crc, frame);
   const QByteArray received = buffer.mid(crcPosition, m_checksumLength);
   if (calculated == received)
     return ValidationStatus::FrameOk;
 
   // Log checksum mismatch
   qWarning() << "\n"
-             << checksumAlg->toStdString().c_str() << "failed:\n"
+             << crc->toStdString().c_str() << "failed:\n"
              << "\t- Received:" << received.toHex(' ') << "\n"
              << "\t- Calculated:" << calculated.toHex(' ') << "\n"
              << "\t- Frame:" << frame.toHex(' ') << "\n"
