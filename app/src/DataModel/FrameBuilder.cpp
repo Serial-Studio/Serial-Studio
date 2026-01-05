@@ -20,6 +20,7 @@
  */
 
 #include <QFileInfo>
+#include <QDateTime>
 
 #include "IO/Manager.h"
 #include "CSV/Player.h"
@@ -50,6 +51,9 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_quickPlotHasHeader(false)
   , m_frameParser(nullptr)
   , m_opMode(SerialStudio::ProjectFile)
+  , m_sharedFrame(std::make_shared<DataModel::Frame>())
+  , m_timestampedFrame(std::make_shared<DataModel::TimestampedFrame>())
+  , m_timestampedFramesEnabled(false)
 {
   // Read JSON map location
   auto path = m_settings.value("json_map_location", "").toString();
@@ -77,6 +81,17 @@ DataModel::FrameBuilder::FrameBuilder()
               loadJsonMap(jsonMapFilepath());
           });
 #endif
+
+  // Connect to consumer enabled state changes
+  connect(&CSV::Export::instance(), &CSV::Export::enabledChanged, this,
+          &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
+  connect(&MDF4::Export::instance(), &MDF4::Export::enabledChanged, this,
+          &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
+  connect(&Plugins::Server::instance(), &Plugins::Server::enabledChanged, this,
+          &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
+
+  // Initialize timestamped frames enabled flag
+  updateTimestampedFramesEnabled();
 }
 
 /**
@@ -767,13 +782,33 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
 //------------------------------------------------------------------------------
 
 /**
+ * @brief Updates the cached flag indicating if any timestamped frame consumer
+ *        is enabled.
+ *
+ * This slot is connected to the enabledChanged signals of CSV::Export,
+ * MDF4::Export, and Plugins::Server. It caches the combined enabled state
+ * to avoid checking multiple modules on every frame in the hotpath.
+ */
+void DataModel::FrameBuilder::updateTimestampedFramesEnabled()
+{
+  m_timestampedFramesEnabled = CSV::Export::instance().exportEnabled()
+                               || MDF4::Export::instance().exportEnabled()
+                               || Plugins::Server::instance().enabled();
+}
+
+/**
  * @brief Publishes a fully constructed DataModel frame to all registered output
  *        modules.
  *
  * Dispatches the provided frame to:
  * - The dashboard UI for real-time visualization.
- * - The CSV export system for logging.
- * - The plugin server for external data consumption.
+ * - The CSV export system for logging (if enabled).
+ * - The MDF4 export system for logging (if enabled).
+ * - The plugin server for external data consumption (if enabled).
+ *
+ * This function is optimized to:
+ * - Reuse a pre-allocated shared frame pointer to avoid allocation overhead
+ * - Only create/update timestamped frames when at least one consumer is enabled
  *
  * @param frame The fully populated frame to distribute.
  *
@@ -788,12 +823,21 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame &frame)
   static auto &dashboard = UI::Dashboard::instance();
   static auto &pluginsServer = Plugins::Server::instance();
 
-  auto shared_frame = std::make_shared<const DataModel::Frame>(frame);
-  auto timestamped_frame
-      = std::make_shared<DataModel::TimestampedFrame>(shared_frame);
+  *m_sharedFrame = frame;
+  auto constFrame
+      = std::static_pointer_cast<const DataModel::Frame>(m_sharedFrame);
 
-  dashboard.hotpathRxFrame(shared_frame);
-  csvExport.hotpathTxFrame(timestamped_frame);
-  mdf4Export.hotpathTxFrame(timestamped_frame);
-  pluginsServer.hotpathTxFrame(timestamped_frame);
+  dashboard.hotpathRxFrame(constFrame);
+
+  if (m_timestampedFramesEnabled) [[unlikely]]
+  {
+    m_timestampedFrame->data = constFrame;
+    m_timestampedFrame->rxDateTime = QDateTime::currentDateTime();
+    m_timestampedFrame->highResTimestamp
+        = DataModel::TimestampedFrame::SteadyClock::now();
+
+    csvExport.hotpathTxFrame(m_timestampedFrame);
+    mdf4Export.hotpathTxFrame(m_timestampedFrame);
+    pluginsServer.hotpathTxFrame(m_timestampedFrame);
+  }
 }

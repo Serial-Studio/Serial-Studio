@@ -94,6 +94,7 @@ app/src/IO/
 - **Zero-Copy Architecture**: Immutable `shared_ptr<const QByteArray>` for data distribution
 - **Pattern Matching**: KMP algorithm for O(n+m) delimiter detection in circular buffer
 - **Overflow Protection**: Atomic overflow counters with 10 MB default capacity
+- **Immutability-Based Thread Safety**: `FrameReader` achieves thread safety through immutability rather than locks. Configuration is set once in the constructor; when settings change, `IO::Manager::resetFrameReader()` recreates the instance with updated settings.
 
 #### DataModel Module - Frame Processing
 ```
@@ -115,6 +116,11 @@ app/src/DataModel/
   - **Threshold-based**: Flush when queue reaches N items
 - Lock-free queue (`moodycamel::ReaderWriterQueue`) for zero-mutex data distribution
 - Frames distributed simultaneously to Dashboard, CSV export, MDF4 export without copying
+
+**Hotpath Optimization** (`FrameBuilder::hotpathTxFrame`):
+- Pre-allocated `shared_ptr<Frame>` reused across calls to avoid allocation overhead
+- Timestamped frames created only when consumers are enabled (CSV/MDF4 export, Plugin server)
+- Cached `m_timestampedFramesEnabled` flag updated via signals to avoid per-frame checks
 
 **Parsing Pipeline**:
 1. `IO::FrameReader` extracts raw frame bytes from stream
@@ -496,4 +502,4 @@ See the main repository `CONTRIBUTING.md` for contribution guidelines.
 
 **License**: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
 **Version**: See CMakeLists.txt for current version
-**Last Updated**: 2026-01-04
+**Last Updated**: 2026-01-05

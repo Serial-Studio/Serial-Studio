@@ -105,6 +105,9 @@ private:
 
   void hotpathTxFrame(const DataModel::Frame &frame);
 
+private slots:
+  void updateTimestampedFramesEnabled();
+
 private:
   QFile m_jsonMap;
 
@@ -124,5 +127,9 @@ private:
 
   DataModel::FrameParser *m_frameParser;
   SerialStudio::OperationMode m_opMode;
+
+  std::shared_ptr<DataModel::Frame> m_sharedFrame;
+  DataModel::TimestampedFramePtr m_timestampedFrame;
+  bool m_timestampedFramesEnabled;
 };
 } // namespace DataModel
