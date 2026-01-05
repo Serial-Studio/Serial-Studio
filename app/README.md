@@ -145,13 +145,13 @@ app/src/UI/
 
 **Design Pattern**: Model-View separation with Qt's Model/View framework
 - C++ model layer (`Dashboard`, widget controllers) + QML view layer
-- Widgets update at 20 Hz (rate-limited) regardless of data frame rate
+- Widgets update at user defined frame rate regardless of data frame rate
 - Qt parent-child ownership ensures automatic memory management
 - Each widget subscribes to specific datasets from `Frame` objects
 
 **Performance**:
 - **Frame Rate**: Supports 1000+ Hz data acquisition
-- **Update Rate**: 20 Hz UI refresh (configurable)
+- **Update Rate**: 60 Hz UI refresh (configurable)
 - **Widget Capacity**: 50+ simultaneous widgets without performance degradation
 
 #### Additional Modules
