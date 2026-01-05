@@ -19,6 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "DSP.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/GPS.h"
 #include "Misc/Utilities.h"
@@ -565,8 +566,8 @@ void Widgets::GPS::updateData()
     return;
 
   // Stop update if data did not change
-  if (qFuzzyCompare(lat, m_latitude) && qFuzzyCompare(lon, m_longitude)
-      && qFuzzyCompare(alt, m_altitude))
+  if (DSP::almostEqual(lat, m_latitude) && DSP::almostEqual(lon, m_longitude)
+      && DSP::almostEqual(alt, m_altitude))
     return;
 
   // Update tracking values
@@ -1021,7 +1022,7 @@ void Widgets::GPS::paintPathData(QPainter *painter, const QSize &view)
       const double lon = series.longitudes[i];
       if (!std::isnan(lat) && !std::isnan(lon))
       {
-        if (!qFuzzyIsNull(lat) && !qFuzzyIsNull(lon))
+        if (!DSP::isZero(lat) && !DSP::isZero(lon))
           path.append(project(lat, lon));
       }
     }
@@ -1029,7 +1030,7 @@ void Widgets::GPS::paintPathData(QPainter *painter, const QSize &view)
     // Append current location to path
     if (!std::isnan(m_latitude) && !std::isnan(m_longitude))
     {
-      if (!qFuzzyIsNull(m_latitude) && !qFuzzyIsNull(m_longitude))
+      if (!DSP::isZero(m_latitude) && !DSP::isZero(m_longitude))
         path.append(project(m_latitude, m_longitude));
     }
 

@@ -19,6 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "DSP.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/Plot.h"
 
@@ -396,7 +397,7 @@ bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
   // Obtain min/max values from datasets
   else
   {
-    ok &= !qFuzzyCompare(dataset.pltMin, dataset.pltMax);
+    ok &= DSP::notEqual(dataset.pltMin, dataset.pltMax);
     if (ok)
     {
       min = qMin(dataset.pltMin, dataset.pltMax);
@@ -419,9 +420,9 @@ bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
     }
 
     // If min and max are the same, adjust the range
-    if (qFuzzyCompare(min, max))
+    if (DSP::almostEqual(min, max))
     {
-      if (qFuzzyIsNull(min))
+      if (DSP::isZero(min))
       {
         min = -1;
         max = 1;
@@ -446,7 +447,7 @@ bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
     // Round to integer numbers
     max = std::ceil(max);
     min = std::floor(min);
-    if (qFuzzyCompare(max, min) && addPadding)
+    if (DSP::almostEqual(max, min) && addPadding)
     {
       min -= 1;
       max += 1;
@@ -454,5 +455,5 @@ bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
   }
 
   // Return true if range changed, false otherwise
-  return !qFuzzyCompare(prevMinY, min) || !qFuzzyCompare(prevMaxY, max);
+  return DSP::notEqual(prevMinY, min) || DSP::notEqual(prevMaxY, max);
 }

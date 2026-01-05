@@ -19,6 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "DSP.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/Gauge.h"
 
@@ -81,7 +82,7 @@ void Widgets::Gauge::updateData()
   {
     const auto &dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
     auto value = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
-    if (!qFuzzyCompare(value, m_value))
+    if (DSP::notEqual(value, m_value))
     {
       m_value = value;
       Q_EMIT updated();

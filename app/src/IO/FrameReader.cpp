@@ -41,10 +41,13 @@
  */
 IO::FrameReader::FrameReader(QObject *parent)
   : QObject(parent)
+  , m_circularBuffer(1024 * 1024 * 10)
   , m_checksumLength(0)
+  , m_checksum(std::make_shared<const QString>())
+  , m_startSequence(std::make_shared<const QByteArray>())
+  , m_finishSequence(std::make_shared<const QByteArray>())
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
-  , m_circularBuffer(1024 * 1024 * 10)
 {
   m_quickPlotEndSequences.append(QByteArray("\n"));
   m_quickPlotEndSequences.append(QByteArray("\r"));
@@ -75,6 +78,9 @@ IO::FrameReader::FrameReader(QObject *parent)
  * per frame to avoid UI flooding. Instead, a single `readyRead()` signal
  * notifies the consumer that new frames are available for reading.
  *
+ * **Thread Safety:** Runs in worker thread, uses atomic loads for mode checks.
+ * **Performance:** Lock-free, optimized for 256 KHz+ data rates.
+ *
  * @param data Incoming byte stream from the device.
  */
 void IO::FrameReader::processData(const ByteArrayPtr &data)
@@ -84,22 +90,23 @@ void IO::FrameReader::processData(const ByteArrayPtr &data)
 
   bool framesEnqueued = false;
 
-  // Parse frames immediately
-  if (m_operationMode == SerialStudio::ProjectFile
-      && m_frameDetectionMode == SerialStudio::NoDelimiters)
-    framesEnqueued = m_queue.try_enqueue(*data);
+  const auto operationMode = m_operationMode.load(std::memory_order_acquire);
+  const auto frameDetectionMode
+      = m_frameDetectionMode.load(std::memory_order_acquire);
 
-  // Parse frames using a circular buffer
+  if (operationMode == SerialStudio::ProjectFile
+      && frameDetectionMode == SerialStudio::NoDelimiters) [[unlikely]]
+  {
+    framesEnqueued = m_queue.try_enqueue(*data);
+  }
+
   else
   {
-    // Append to circular buffer
     m_circularBuffer.append(*data);
 
-    // Track initial queue size to detect if frames were added
     const auto initialSize = m_queue.size_approx();
 
-    // Extract frames based on current mode
-    switch (m_operationMode)
+    switch (operationMode)
     {
       case SerialStudio::QuickPlot:
         readEndDelimitedFrames();
@@ -108,7 +115,7 @@ void IO::FrameReader::processData(const ByteArrayPtr &data)
         readStartEndDelimitedFrames();
         break;
       case SerialStudio::ProjectFile:
-        switch (m_frameDetectionMode)
+        switch (frameDetectionMode)
         {
           case SerialStudio::EndDelimiterOnly:
             readEndDelimitedFrames();
@@ -127,12 +134,10 @@ void IO::FrameReader::processData(const ByteArrayPtr &data)
         break;
     }
 
-    // Check if frames were added
     framesEnqueued = (m_queue.size_approx() > initialSize);
   }
 
-  // Only emit signal if frames were actually enqueued
-  if (framesEnqueued)
+  if (framesEnqueued) [[likely]]
     Q_EMIT readyRead();
 }
 
@@ -143,16 +148,21 @@ void IO::FrameReader::processData(const ByteArrayPtr &data)
 /**
  * @brief Sets the checksum algorithm used for validating incoming frames.
  *
- * If the algorithm changes, the internal buffer is cleared to prevent
- * inconsistencies during frame parsing.
+ * Uses atomic shared pointer for lock-free thread-safe updates.
+ * The immutable data pattern ensures safe concurrent reads from worker thread.
+ *
+ * **Thread Safety:** Safe to call from any thread (typically main thread).
  *
  * @param checksum The name of the new checksum algorithm.
  */
 void IO::FrameReader::setChecksum(const QString &checksum)
 {
-  m_checksum = checksum;
+  auto newChecksum = std::make_shared<const QString>(checksum);
+  std::atomic_store_explicit(&m_checksum, newChecksum,
+                             std::memory_order_release);
+
   const auto &map = IO::checksumFunctionMap();
-  const auto it = map.find(m_checksum);
+  const auto it = map.find(checksum);
   if (it != map.end())
     m_checksumLength = it.value()("", 0).size();
   else
@@ -162,44 +172,57 @@ void IO::FrameReader::setChecksum(const QString &checksum)
 /**
  * @brief Sets the start sequence used for frame detection.
  *
- * Updates the sequence that marks the beginning of a frame. Resets the
- * FrameReader state if the start sequence changes.
+ * Uses atomic shared pointer for lock-free thread-safe updates.
+ * The immutable data pattern ensures safe concurrent reads from worker thread.
+ *
+ * **Thread Safety:** Safe to call from any thread (typically main thread).
  *
  * @param start The new start sequence as a QByteArray.
  */
 void IO::FrameReader::setStartSequence(const QByteArray &start)
 {
-  m_startSequence = start;
+  auto newSequence = std::make_shared<const QByteArray>(start);
+  std::atomic_store_explicit(&m_startSequence, newSequence,
+                             std::memory_order_release);
 }
 
 /**
  * @brief Sets the finish sequence used for frame detection.
  *
- * Updates the sequence that marks the end of a frame. Resets the FrameReader
- * state if the finish sequence changes.
+ * Uses atomic shared pointer for lock-free thread-safe updates.
+ * The immutable data pattern ensures safe concurrent reads from worker thread.
+ *
+ * **Thread Safety:** Safe to call from any thread (typically main thread).
  *
  * @param finish The new finish sequence as a QByteArray.
  */
 void IO::FrameReader::setFinishSequence(const QByteArray &finish)
 {
-  m_finishSequence = finish;
+  auto newSequence = std::make_shared<const QByteArray>(finish);
+  std::atomic_store_explicit(&m_finishSequence, newSequence,
+                             std::memory_order_release);
 }
 
 /**
  * @brief Sets the operation mode of the FrameReader.
  *
  * Changes how the FrameReader processes data, determining the type of frames
- * to detect. Resets the FrameReader state if the operation mode changes.
+ * to detect. Uses atomic store for thread-safe mode switching.
+ *
+ * **Thread Safety:** Safe to call from any thread (typically main thread).
  *
  * @param mode The new operation mode as a SerialStudio::OperationMode enum.
  */
 void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 {
-  m_operationMode = mode;
-  if (m_operationMode != SerialStudio::ProjectFile)
+  m_operationMode.store(mode, std::memory_order_release);
+
+  if (mode != SerialStudio::ProjectFile)
   {
     m_checksumLength = 0;
-    m_checksum = QLatin1String("");
+    auto emptyChecksum = std::make_shared<const QString>();
+    std::atomic_store_explicit(&m_checksum, emptyChecksum,
+                               std::memory_order_release);
   }
 }
 
@@ -207,8 +230,9 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
  * @brief Sets the frame detection mode for the FrameReader.
  *
  * Specifies how frames are detected, either by end delimiter only or both
- * start and end delimiters. Resets the FrameReader state if the frame detection
- * mode changes.
+ * start and end delimiters. Uses atomic store for thread-safe mode switching.
+ *
+ * **Thread Safety:** Safe to call from any thread (typically main thread).
  *
  * @param mode The new frame detection mode as a SerialStudio::FrameDetection
  * enum.
@@ -216,7 +240,7 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 void IO::FrameReader::setFrameDetectionMode(
     const SerialStudio::FrameDetection mode)
 {
-  m_frameDetectionMode = mode;
+  m_frameDetectionMode.store(mode, std::memory_order_release);
 }
 
 //------------------------------------------------------------------------------
@@ -238,14 +262,16 @@ void IO::FrameReader::setFrameDetectionMode(
  */
 void IO::FrameReader::readEndDelimitedFrames()
 {
+  const auto operationMode = m_operationMode.load(std::memory_order_relaxed);
+  const auto frameDetectionMode
+      = m_frameDetectionMode.load(std::memory_order_relaxed);
+
   while (true)
   {
-    // Initialize parameters
     int endIndex = -1;
     QByteArray delimiter;
 
-    // Look for the earliest finish sequence (QuickPlot mode)
-    if (m_operationMode == SerialStudio::QuickPlot)
+    if (operationMode == SerialStudio::QuickPlot) [[likely]]
     {
       for (const QByteArray &d : std::as_const(m_quickPlotEndSequences))
       {
@@ -259,10 +285,11 @@ void IO::FrameReader::readEndDelimitedFrames()
       }
     }
 
-    // Or use fixed delimiter (project mode)
-    else if (m_frameDetectionMode == SerialStudio::EndDelimiterOnly)
+    else if (frameDetectionMode == SerialStudio::EndDelimiterOnly) [[likely]]
     {
-      delimiter = m_finishSequence;
+      auto finishSeq = std::atomic_load_explicit(&m_finishSequence,
+                                                 std::memory_order_acquire);
+      delimiter = *finishSeq;
       endIndex = m_circularBuffer.findPatternKMP(delimiter);
     }
 
@@ -313,20 +340,23 @@ void IO::FrameReader::readEndDelimitedFrames()
  */
 void IO::FrameReader::readStartDelimitedFrames()
 {
+  auto startSeq
+      = std::atomic_load_explicit(&m_startSequence, std::memory_order_acquire);
+
   while (true)
   {
     // Find the first start delimiter in the buffer
-    int startIndex = m_circularBuffer.findPatternKMP(m_startSequence);
+    int startIndex = m_circularBuffer.findPatternKMP(*startSeq);
     if (startIndex == -1)
       break;
 
     // Try to find the next start delimiter after this one
     int nextStartIndex = m_circularBuffer.findPatternKMP(
-        m_startSequence, startIndex + m_startSequence.size());
+        *startSeq, startIndex + startSeq->size());
 
     // Calculate start and end positions of the current frame
     qsizetype frameEndPos;
-    qsizetype frameStart = startIndex + m_startSequence.size();
+    qsizetype frameStart = startIndex + startSeq->size();
 
     // No second start delimiter found...maybe the last frame in the stream
     if (nextStartIndex == -1)
@@ -398,33 +428,38 @@ void IO::FrameReader::readStartDelimitedFrames()
  */
 void IO::FrameReader::readStartEndDelimitedFrames()
 {
+  auto startSeq
+      = std::atomic_load_explicit(&m_startSequence, std::memory_order_acquire);
+  auto finishSeq
+      = std::atomic_load_explicit(&m_finishSequence, std::memory_order_acquire);
+
   // Read data into an array of frames
   while (true)
   {
     // Locate end delimiter
-    int finishIndex = m_circularBuffer.findPatternKMP(m_finishSequence);
+    int finishIndex = m_circularBuffer.findPatternKMP(*finishSeq);
     if (finishIndex == -1)
       break;
 
     // Locate start delimiter and ensure it's before the end
-    int startIndex = m_circularBuffer.findPatternKMP(m_startSequence);
+    int startIndex = m_circularBuffer.findPatternKMP(*startSeq);
     if (startIndex == -1 || startIndex >= finishIndex)
     {
-      (void)m_circularBuffer.read(finishIndex + m_finishSequence.size());
+      (void)m_circularBuffer.read(finishIndex + finishSeq->size());
       continue;
     }
 
     // Determine payload boundaries
-    qsizetype frameStart = startIndex + m_startSequence.size();
+    qsizetype frameStart = startIndex + startSeq->size();
     qsizetype frameLength = finishIndex - frameStart;
     if (frameLength <= 0)
     {
-      (void)m_circularBuffer.read(finishIndex + m_finishSequence.size());
+      (void)m_circularBuffer.read(finishIndex + finishSeq->size());
       continue;
     }
 
     // Extract frame data
-    const auto crcPosition = finishIndex + m_finishSequence.size();
+    const auto crcPosition = finishIndex + finishSeq->size();
     const auto frameEndPos = crcPosition + m_checksumLength;
     const auto frame = m_circularBuffer.peek(frameStart + frameLength)
                            .mid(frameStart, frameLength);
@@ -486,14 +521,16 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray &frame,
     return ValidationStatus::ChecksumIncomplete;
 
   // Compare actual vs received checksum
-  const auto calculated = IO::checksum(m_checksum, frame);
+  auto checksumAlg
+      = std::atomic_load_explicit(&m_checksum, std::memory_order_acquire);
+  const auto calculated = IO::checksum(*checksumAlg, frame);
   const QByteArray received = buffer.mid(crcPosition, m_checksumLength);
   if (calculated == received)
     return ValidationStatus::FrameOk;
 
   // Log checksum mismatch
   qWarning() << "\n"
-             << m_checksum.toStdString().c_str() << "failed:\n"
+             << checksumAlg->toStdString().c_str() << "failed:\n"
              << "\t- Received:" << received.toHex(' ') << "\n"
              << "\t- Calculated:" << calculated.toHex(' ') << "\n"
              << "\t- Frame:" << frame.toHex(' ') << "\n"

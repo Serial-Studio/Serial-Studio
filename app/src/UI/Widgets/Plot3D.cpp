@@ -22,6 +22,7 @@
 
 #include <QCursor>
 
+#include "DSP.h"
 #include "UI/Dashboard.h"
 
 #include "Misc/TimerEvents.h"
@@ -1026,7 +1027,7 @@ Widgets::Plot3D::screenProjection(const DSP::LineSeries3D &points,
     QVector4D v = matrix * QVector4D(p, 1.0f);
 
     // Avoid invalid perspective divide
-    if (qFuzzyIsNull(v.w()))
+    if (DSP::isZero(v.w()))
       continue;
 
     // Normalized Device Coordinates [-1, 1]

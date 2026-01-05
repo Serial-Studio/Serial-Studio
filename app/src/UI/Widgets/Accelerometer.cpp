@@ -19,6 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "DSP.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/Accelerometer.h"
 
@@ -94,7 +95,7 @@ void Widgets::Accelerometer::updateData()
   const double theta = qAtan2(y, x) * (180.0 / M_PI);
 
   // Redraw item if required
-  if (!qFuzzyCompare(r, m_magnitude) || !qFuzzyCompare(theta, m_theta))
+  if (DSP::notEqual(r, m_magnitude) || DSP::notEqual(theta, m_theta))
   {
     m_theta = theta;
     m_magnitude = r;

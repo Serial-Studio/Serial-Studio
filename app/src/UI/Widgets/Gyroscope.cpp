@@ -19,6 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "DSP.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/Gyroscope.h"
 
@@ -178,9 +179,9 @@ void Widgets::Gyroscope::updateData()
   m_pitch = normalizeAngle(m_pitch);
 
   // Emit signal if orientation changed
-  const bool yawChanged = !qFuzzyCompare(m_yaw, previousYaw);
-  const bool rollChanged = !qFuzzyCompare(m_roll, previousRoll);
-  const bool pitchChanged = !qFuzzyCompare(m_pitch, previousPitch);
+  const bool yawChanged = DSP::notEqual(m_yaw, previousYaw);
+  const bool rollChanged = DSP::notEqual(m_roll, previousRoll);
+  const bool pitchChanged = DSP::notEqual(m_pitch, previousPitch);
   if (yawChanged || rollChanged || pitchChanged)
     Q_EMIT updated();
 }

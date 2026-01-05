@@ -137,7 +137,7 @@ void IO::Drivers::CANBus::close()
 /**
  * @brief Returns true if a CAN bus connection is currently open
  */
-bool IO::Drivers::CANBus::isOpen() const
+bool IO::Drivers::CANBus::isOpen() const noexcept
 {
   if (m_device)
     return m_device->state() == QCanBusDevice::ConnectedState;
@@ -148,7 +148,7 @@ bool IO::Drivers::CANBus::isOpen() const
 /**
  * @brief Returns true if the current CAN bus device is readable
  */
-bool IO::Drivers::CANBus::isReadable() const
+bool IO::Drivers::CANBus::isReadable() const noexcept
 {
   return isOpen();
 }
@@ -156,7 +156,7 @@ bool IO::Drivers::CANBus::isReadable() const
 /**
  * @brief Returns true if the current CAN bus device is writable
  */
-bool IO::Drivers::CANBus::isWritable() const
+bool IO::Drivers::CANBus::isWritable() const noexcept
 {
   return isOpen();
 }
@@ -165,7 +165,7 @@ bool IO::Drivers::CANBus::isWritable() const
  * @brief Returns true if the user has selected appropriate controls & options
  *        to connect to a CAN bus device
  */
-bool IO::Drivers::CANBus::configurationOk() const
+bool IO::Drivers::CANBus::configurationOk() const noexcept
 {
   if (!canSupportAvailable())
     return false;

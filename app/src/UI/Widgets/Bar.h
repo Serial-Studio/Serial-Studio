@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include "DSP.h"
 #include <QQuickItem>
 
 namespace Widgets
@@ -79,7 +80,7 @@ private:
     const double max = qMax(m_minValue, m_maxValue);
     const double range = max - min;
 
-    if (qFuzzyIsNull(range))
+    if (DSP::isZero(range))
       return 0.0;
 
     const double clamped = qBound(min, value, max);

@@ -121,7 +121,7 @@ void IO::Drivers::Network::close()
 /**
  * Returns @c true if a network connection is currently open
  */
-bool IO::Drivers::Network::isOpen() const
+bool IO::Drivers::Network::isOpen() const noexcept
 {
   bool open = false;
   auto state = QAbstractSocket::UnconnectedState;
@@ -146,7 +146,7 @@ bool IO::Drivers::Network::isOpen() const
 /**
  * Returns @c true if the current network device is readable
  */
-bool IO::Drivers::Network::isReadable() const
+bool IO::Drivers::Network::isReadable() const noexcept
 {
   if (socketType() == QAbstractSocket::UdpSocket)
     return m_udpSocket.isReadable();
@@ -159,7 +159,7 @@ bool IO::Drivers::Network::isReadable() const
 /**
  * Returns @c true if the current network device is writable
  */
-bool IO::Drivers::Network::isWritable() const
+bool IO::Drivers::Network::isWritable() const noexcept
 {
   if (socketType() == QAbstractSocket::UdpSocket)
     return m_udpSocket.isWritable();
@@ -172,7 +172,7 @@ bool IO::Drivers::Network::isWritable() const
 /**
  * Returns @c true if the port is greater than 0 and the host address is valid.
  */
-bool IO::Drivers::Network::configurationOk() const
+bool IO::Drivers::Network::configurationOk() const noexcept
 {
   return tcpPort() > 0 && m_hostExists;
 }

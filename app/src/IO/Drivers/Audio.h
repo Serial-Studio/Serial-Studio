@@ -125,10 +125,10 @@ public:
   void closeDevice();
   void close() override;
 
-  [[nodiscard]] bool isOpen() const override;
-  [[nodiscard]] bool isReadable() const override;
-  [[nodiscard]] bool isWritable() const override;
-  [[nodiscard]] bool configurationOk() const override;
+  [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool isReadable() const noexcept override;
+  [[nodiscard]] bool isWritable() const noexcept override;
+  [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] quint64 write(const QByteArray &data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 

@@ -32,8 +32,7 @@
 
 #ifdef BUILD_COMMERCIAL
 #  include "IO/Manager.h"
-#  include "CSV/Player.h"
-#  include "MDF4/Player.h"
+#  include "SerialStudio.h"
 #  include "Console/Handler.h"
 #  include "Misc/WorkspaceManager.h"
 #  include "Licensing/LemonSqueezy.h"

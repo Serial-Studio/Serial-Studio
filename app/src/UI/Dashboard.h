@@ -234,7 +234,7 @@ inline QString FMT_VAL(double val, double min, double max)
 {
   auto decPoints = [](double v) {
     double abs = std::abs(v);
-    if (qFuzzyIsNull(abs))
+    if (DSP::isZero(abs))
       return 2;
     if (abs >= 1e6)
       return 0;
@@ -267,7 +267,7 @@ inline QString FMT_VAL(double val, double min, double max)
     return 10;
   };
 
-  if (qFuzzyIsNull(min) && qFuzzyIsNull(max))
+  if (DSP::isZero(min) && DSP::isZero(max))
     return QString::number(val, 'f', decPoints(val));
 
   else

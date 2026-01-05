@@ -414,7 +414,7 @@ void IO::Drivers::Audio::close()
  * @brief Checks whether the audio device is currently open.
  * @return True if the device is open, false otherwise.
  */
-bool IO::Drivers::Audio::isOpen() const
+bool IO::Drivers::Audio::isOpen() const noexcept
 {
   return m_isOpen;
 }
@@ -425,7 +425,7 @@ bool IO::Drivers::Audio::isOpen() const
  *
  * @return True if input is configured and active, false otherwise.
  */
-bool IO::Drivers::Audio::isReadable() const
+bool IO::Drivers::Audio::isReadable() const noexcept
 {
   if (!m_isOpen)
     return false;
@@ -441,7 +441,7 @@ bool IO::Drivers::Audio::isReadable() const
  *
  * @return True if output is configured and active, false otherwise.
  */
-bool IO::Drivers::Audio::isWritable() const
+bool IO::Drivers::Audio::isWritable() const noexcept
 {
   if (!m_isOpen)
     return false;
@@ -456,7 +456,7 @@ bool IO::Drivers::Audio::isWritable() const
  * @return True if the selected parameters are within the supported capability
  *              ranges.
  */
-bool IO::Drivers::Audio::configurationOk() const
+bool IO::Drivers::Audio::configurationOk() const noexcept
 {
   if (!validateInput())
     return false;

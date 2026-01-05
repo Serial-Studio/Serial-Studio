@@ -35,7 +35,10 @@
 #include <memory>
 #include <vector>
 #include <limits>
+#include <concepts>
 #include <stdexcept>
+
+#include "Concepts.h"
 
 namespace DSP
 {
@@ -50,9 +53,17 @@ namespace DSP
  * Once full, new elements overwrite the oldest ones. Internally backed by
  * a shared pointer to a heap-allocated array.
  *
- * @tparam T Type of elements stored in the queue.
+ * **Type Requirements:**
+ * - Must be copy-constructible (for std::shared_ptr array initialization)
+ * - Must be copy-assignable (for data insertion)
+ * - Should be default-constructible (for array allocation)
+ *
+ * **Performance:** O(1) push/pop, O(1) random access
+ *
+ * @tparam T Type of elements stored in the queue (must be copyable)
  */
 template<typename T>
+  requires std::copy_constructible<T> && std::is_copy_assignable_v<T>
 class FixedQueue
 {
 public:
@@ -252,10 +263,16 @@ public:
 
   /**
    * @brief Fills the queue with increasing values starting from a given base.
+   *
+   * **Type Requirements:**
+   * - T must support arithmetic operations (addition, multiplication)
+   * - Typically used with numeric types (int, double, etc.)
+   *
    * @param start Starting value.
    * @param step  Increment step (default: 1).
    */
   void fillRange(const T &start, const T &step = 1)
+    requires Concepts::Numeric<T>
   {
     clear();
     for (std::size_t i = 0; i < m_capacity; ++i)
@@ -534,8 +551,14 @@ struct DownsampleWorkspace
  * Together these cover exactly q.size() elements in logical order.
  * One of the spans may be empty if the data is already contiguous.
  *
- * This routine exposes raw pointers and lengths into the queue’s storage.
+ * This routine exposes raw pointers and lengths into the queue's storage.
  * Callers can then scan elements linearly without worrying about wraparound.
+ *
+ * Generic function that works with FixedQueue of any type.
+ * Provides compile-time guarantee that T is copy-constructible.
+ *
+ * **Performance:** O(1) - simple pointer arithmetic
+ * **Thread Safety:** Safe for concurrent reads if queue is not modified
  *
  * Example:
  * ```
@@ -546,17 +569,19 @@ struct DownsampleWorkspace
  * for (size_t i = 0; i < n1; ++i) use(p1[i]);
  * ```
  *
+ * @tparam T Element type stored in the FixedQueue
  * @param q   Ring-buffer queue to extract spans from
  * @param p0  Output pointer to first contiguous block
  * @param n0  Output number of elements in first block
  * @param p1  Output pointer to second contiguous block
  * @param n1  Output number of elements in second block
  */
-inline void spanFromFixedQueue(const AxisData &q, const ssfp_t *&p0,
-                               std::size_t &n0, const ssfp_t *&p1,
-                               std::size_t &n1)
+template<typename T>
+  requires std::copy_constructible<T> && std::is_copy_assignable_v<T>
+inline void spanFromFixedQueue(const FixedQueue<T> &q, const T *&p0,
+                               std::size_t &n0, const T *&p1, std::size_t &n1)
 {
-  const ssfp_t *base = q.raw();
+  const T *base = q.raw();
 
   const std::size_t n = q.size();
   const std::size_t cap = q.capacity();
@@ -829,8 +854,15 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
 }
 
 /**
- * @brief Check whether a value is effectively zero (close to 0.0).
+ * @brief Check whether a numeric value is effectively zero (close to 0.0).
  *
+ * Generic function that works with any numeric type (int, float, double, etc.).
+ * Provides compile-time guarantee that T is a numeric type via concepts.
+ *
+ * **Performance:** O(1) - single comparison
+ * **Thread Safety:** Safe (pure function)
+ *
+ * @tparam T Numeric type (int, float, double, etc.)
  * @param value Value to test.
  * @param absEps Absolute tolerance threshold (must be non-negative).
  * @return true if |value| <= absEps, otherwise false.
@@ -839,16 +871,23 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
  * This function is intentionally absolute-only. Near zero, relative comparisons
  * are ill-defined and often lead to surprising results.
  */
-[[nodiscard]] inline constexpr bool isZero(ssfp_t value,
-                                           ssfp_t absEps = 1e-12) noexcept
+template<Concepts::Numeric T>
+[[nodiscard]] inline bool isZero(T value, T absEps = T(1e-12)) noexcept
 {
   return std::abs(value) <= absEps;
 }
 
 /**
- * @brief Compare two ssftp_ts for approximate equality using absolute +
+ * @brief Compare two numeric values for approximate equality using absolute +
  * relative tolerances.
  *
+ * Generic function that works with any numeric type (int, float, double, etc.).
+ * Provides compile-time guarantee that T is a numeric type via concepts.
+ *
+ * **Performance:** O(1) - constant-time comparison
+ * **Thread Safety:** Safe (pure function)
+ *
+ * @tparam T Numeric type (int, float, double, etc.)
  * @param a First value.
  * @param b Second value.
  * @param relEps Relative tolerance factor (must be non-negative).
@@ -873,35 +912,47 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
  * If either value is +/-inf, they compare equal only if both are the same
  * infinity (handled naturally by the checks below).
  */
-[[nodiscard]] inline bool almostEqual(ssfp_t a, ssfp_t b, ssfp_t relEps = 1e-12,
-                                      ssfp_t absEps = 1e-12) noexcept
+template<Concepts::Numeric T>
+[[nodiscard]] inline bool almostEqual(T a, T b, T relEps = T(1e-12),
+                                      T absEps = T(1e-12)) noexcept
 {
-  // Fast reject for NaNs
-  if (!std::isfinite(a) || !std::isfinite(b))
-    return a == b;
+  // Fast reject for NaNs (only applicable to floating-point types)
+  if constexpr (std::floating_point<T>)
+  {
+    if (!std::isfinite(a) || !std::isfinite(b))
+      return a == b;
+  }
 
-  const ssfp_t diff = std::abs(a - b);
+  const T diff = std::abs(a - b);
 
   // Absolute tolerance handles exact/near-zero and very small magnitudes.
   if (diff <= absEps)
     return true;
 
   // Relative tolerance handles larger magnitudes.
-  const ssfp_t scale = std::max(std::abs(a), std::abs(b));
+  const T scale = std::max(std::abs(a), std::abs(b));
   return diff <= relEps * scale;
 }
 
 /**
  * @brief Explicit "not equal" companion to almostEqual().
  *
+ * Generic function that works with any numeric type (int, float, double, etc.).
+ * Provides compile-time guarantee that T is a numeric type via concepts.
+ *
+ * **Performance:** O(1) - delegates to almostEqual()
+ * **Thread Safety:** Safe (pure function)
+ *
+ * @tparam T Numeric type (int, float, double, etc.)
  * @param a First value.
  * @param b Second value.
  * @param relEps Relative tolerance factor.
  * @param absEps Absolute tolerance threshold.
  * @return true if the values are not approximately equal, otherwise false.
  */
-[[nodiscard]] inline bool notEqual(ssfp_t a, ssfp_t b, ssfp_t relEps = 1e-12,
-                                   ssfp_t absEps = 1e-12) noexcept
+template<Concepts::Numeric T>
+[[nodiscard]] inline bool notEqual(T a, T b, T relEps = T(1e-12),
+                                   T absEps = T(1e-12)) noexcept
 {
   return !almostEqual(a, b, relEps, absEps);
 }

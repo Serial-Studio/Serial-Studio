@@ -31,6 +31,7 @@
 #include "AppInfo.h"
 #include "IO/Checksum.h"
 #include "Misc/Utilities.h"
+#include "Misc/JsonValidator.h"
 #include "Misc/Translator.h"
 #include "Misc/WorkspaceManager.h"
 
@@ -988,7 +989,16 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
   QJsonDocument document;
   if (file.open(QFile::ReadOnly))
   {
-    document = QJsonDocument::fromJson(file.readAll());
+    auto result = Misc::JsonValidator::parseAndValidate(file.readAll());
+    if (!result.valid) [[unlikely]]
+    {
+      Misc::Utilities::showMessageBox(tr("JSON validation error"),
+                                      result.errorMessage,
+                                      QMessageBox::Critical);
+      return;
+    }
+
+    document = result.document;
     file.close();
   }
 

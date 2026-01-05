@@ -29,6 +29,7 @@
 #include "UI/Dashboard.h"
 #include "Plugins/Server.h"
 #include "Misc/Utilities.h"
+#include "Misc/JsonValidator.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/FrameBuilder.h"
 
@@ -181,94 +182,95 @@ void DataModel::FrameBuilder::setupExternalConnections()
 }
 
 /**
- * Opens, validates & loads into memory the DataModel file in the given @a path.
+ * @brief Loads and validates a JSON project file for frame mapping.
+ *
+ * This function handles the complete lifecycle of loading a JSON project file:
+ * 1. Validates the file path
+ * 2. Closes any previously open file
+ * 3. Opens and reads the new file
+ * 4. Validates JSON structure with security checks
+ * 5. Parses frame structure
+ * 6. Updates I/O manager settings
+ *
+ * **Security:** Uses JsonValidator to prevent malicious JSON attacks.
+ * **Thread Safety:** Must be called from main thread (updates UI state).
+ *
+ * @param path Absolute path to JSON project file
  */
 void DataModel::FrameBuilder::loadJsonMap(const QString &path)
 {
-  // Validate path
   if (path.isEmpty())
     return;
 
-  // Close previous file (if open)
+  // Close and cleanup any previously loaded JSON file
   if (m_jsonMap.isOpen())
   {
     clear_frame(m_frame);
-
     m_jsonMap.close();
     Q_EMIT jsonFileMapChanged();
   }
 
-  // Try to open the file (read only mode)
+  // Attempt to open the new file
   m_jsonMap.setFileName(path);
-  if (m_jsonMap.open(QFile::ReadOnly))
-  {
-    // Read data & validate JSON from file
-    QJsonParseError error;
-    auto data = m_jsonMap.readAll();
-    auto document = QJsonDocument::fromJson(data, &error);
-    if (error.error != QJsonParseError::NoError)
-    {
-      clear_frame(m_frame);
-
-      m_jsonMap.close();
-      setJsonPathSetting("");
-      Misc::Utilities::showMessageBox(
-          tr("JSON parse error"), error.errorString(), QMessageBox::Critical);
-    }
-
-    // JSON contains no errors, load compacted JSON document & save settings
-    else
-    {
-      // Save settings
-      setJsonPathSetting(path);
-
-      // Load frame from data
-      clear_frame(m_frame);
-      const bool ok = read(m_frame, document.object());
-
-      // Update I/O manager settings
-      if (ok)
-      {
-        if (operationMode() == SerialStudio::ProjectFile)
-        {
-          read_io_settings(m_frameStart, m_frameFinish, m_checksum,
-                           document.object());
-
-          IO::Manager::instance().setStartSequence(m_frameStart);
-          IO::Manager::instance().setFinishSequence(m_frameFinish);
-          IO::Manager::instance().setChecksumAlgorithm(m_checksum);
-          IO::Manager::instance().resetFrameReader();
-        }
-      }
-
-      // Invalid frame data
-      else
-      {
-        clear_frame(m_frame);
-        m_jsonMap.close();
-        setJsonPathSetting("");
-        Misc::Utilities::showMessageBox(
-            tr("This file isn’t a valid project file"),
-            tr("Make sure it’s a properly formatted JSON project."),
-            QMessageBox::Warning);
-      }
-    }
-
-    // Get rid of warnings
-    Q_UNUSED(document);
-  }
-
-  // Open error
-  else
+  if (!m_jsonMap.open(QFile::ReadOnly)) [[unlikely]]
   {
     setJsonPathSetting("");
     Misc::Utilities::showMessageBox(
         tr("Cannot read JSON file"),
         tr("Please check file permissions & location"), QMessageBox::Critical);
     m_jsonMap.close();
+    Q_EMIT jsonFileMapChanged();
+    return;
   }
 
-  // Update UI
+  // Read and validate JSON with security bounds checking
+  const auto data = m_jsonMap.readAll();
+  const auto result = Misc::JsonValidator::parseAndValidate(data);
+
+  if (!result.valid) [[unlikely]]
+  {
+    clear_frame(m_frame);
+    m_jsonMap.close();
+    setJsonPathSetting("");
+    Misc::Utilities::showMessageBox(tr("JSON validation error"),
+                                    result.errorMessage, QMessageBox::Critical);
+    Q_EMIT jsonFileMapChanged();
+    return;
+  }
+
+  // Parse the validated JSON document into frame structure
+  setJsonPathSetting(path);
+  clear_frame(m_frame);
+
+  const auto document = result.document;
+  const bool ok = read(m_frame, document.object());
+
+  if (!ok) [[unlikely]]
+  {
+    clear_frame(m_frame);
+    m_jsonMap.close();
+    setJsonPathSetting("");
+    Misc::Utilities::showMessageBox(
+        tr("This file isn't a valid project file"),
+        tr("Make sure it's a properly formatted JSON project."),
+        QMessageBox::Warning);
+    Q_EMIT jsonFileMapChanged();
+    return;
+  }
+
+  // Successfully parsed - update I/O manager with frame delimiters and checksum
+  if (operationMode() == SerialStudio::ProjectFile)
+  {
+    read_io_settings(m_frameStart, m_frameFinish, m_checksum,
+                     document.object());
+
+    IO::Manager::instance().setStartSequence(m_frameStart);
+    IO::Manager::instance().setFinishSequence(m_frameFinish);
+    IO::Manager::instance().setChecksumAlgorithm(m_checksum);
+    IO::Manager::instance().resetFrameReader();
+  }
+
+  // Notify UI that JSON file has been successfully loaded
   Q_EMIT jsonFileMapChanged();
 }
 
@@ -352,7 +354,8 @@ void DataModel::FrameBuilder::hotpathRxFrame(const QByteArray &data)
       parseProjectFrame(data);
       break;
     case SerialStudio::DeviceSendsJSON:
-      if (read(m_rawFrame, QJsonDocument::fromJson(data).object()))
+      auto result = Misc::JsonValidator::parseAndValidate(data);
+      if (result.valid && read(m_rawFrame, result.document.object())) [[likely]]
         hotpathTxFrame(m_rawFrame);
       break;
   }

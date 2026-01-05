@@ -847,7 +847,7 @@ endif()
 #
 # DEP (Data Execution Prevention):
 #   -Wl,-z,noexecstack          - Mark stack as non-executable
-#   /NXCOMPAT (MSVC)            - DEP support
+#   /NXCOMPAT (MSVC)            - DEP support is enabled by default
 #
 # Additional security:
 #   -Wl,-z,separate-code        - Separate code segments (Linux only)
@@ -870,12 +870,10 @@ if(ENABLE_HARDENING)
          /GS                            # Buffer security check
          /guard:cf                      # Control Flow Guard
          /DYNAMICBASE                   # Address Space Layout Randomization
-         /NXCOMPAT                      # Data Execution Prevention
       )
       add_link_options(
          /GUARD:CF                      # Control Flow Guard at link time
          /DYNAMICBASE                   # ASLR
-         /NXCOMPAT                      # DEP
       )
    else()
       add_compile_options(

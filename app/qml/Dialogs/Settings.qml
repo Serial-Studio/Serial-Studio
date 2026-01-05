@@ -558,7 +558,7 @@ Window {
           onClicked: {
             Cpp_ThemeManager.theme = 0
             Cpp_UI_Dashboard.points = 100
-            Cpp_Misc_TimerEvents.fps = 24
+            Cpp_Misc_TimerEvents.fps = 60
             Cpp_UI_Dashboard.precision = 2
             Cpp_Plugins_Bridge.enabled = false
             mainWindow.automaticUpdates  = true

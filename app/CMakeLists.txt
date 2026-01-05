@@ -243,6 +243,7 @@ set(HEADERS
   src/Misc/ModuleManager.h
   src/Misc/Utilities.h
   src/Misc/CommonFonts.h
+  src/Misc/JsonValidator.h
   src/Misc/ThemeManager.h
   src/Misc/TimerEvents.h
   src/Misc/Translator.h
@@ -269,13 +270,13 @@ set(HEADERS
   src/Plugins/Server.h
   src/Platform/NativeWindow.h
   src/Console/Handler.h
+  src/Console/Export.h
   src/IO/Drivers/UART.h
   src/IO/Drivers/Network.h
   src/IO/Drivers/BluetoothLE.h
   src/IO/Manager.h
   src/IO/HAL_Driver.h
   src/IO/Checksum.h
-  src/Console/Export.h
   src/IO/CircularBuffer.h
   src/IO/FileTransmission.h
   src/IO/FrameReader.h
@@ -294,6 +295,7 @@ set(HEADERS
   src/ThirdParty/readerwritercircularbuffer.h
   src/AppInfo.h
   src/DSP.h
+  src/Concepts.h
   src/SerialStudio.h
 )
 

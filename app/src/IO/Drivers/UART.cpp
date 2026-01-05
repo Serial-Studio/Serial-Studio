@@ -162,7 +162,7 @@ void IO::Drivers::UART::close()
 /**
  * Returns @c true if a serial port connection is currently open
  */
-bool IO::Drivers::UART::isOpen() const
+bool IO::Drivers::UART::isOpen() const noexcept
 {
   if (port())
     return port()->isOpen();
@@ -173,7 +173,7 @@ bool IO::Drivers::UART::isOpen() const
 /**
  * Returns @c true if the current serial device is readable
  */
-bool IO::Drivers::UART::isReadable() const
+bool IO::Drivers::UART::isReadable() const noexcept
 {
   if (isOpen())
     return port()->isReadable();
@@ -184,7 +184,7 @@ bool IO::Drivers::UART::isReadable() const
 /**
  * Returns @c true if the current serial device is writable
  */
-bool IO::Drivers::UART::isWritable() const
+bool IO::Drivers::UART::isWritable() const noexcept
 {
   if (isOpen())
     return port()->isWritable();
@@ -196,7 +196,7 @@ bool IO::Drivers::UART::isWritable() const
  * Returns @c true if the user selects the appropiate controls & options to be
  * able to connect to a serial device
  */
-bool IO::Drivers::UART::configurationOk() const
+bool IO::Drivers::UART::configurationOk() const noexcept
 {
   return portIndex() > 0;
 }

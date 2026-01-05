@@ -108,7 +108,7 @@ void IO::Drivers::BluetoothLE::close()
  * @brief Checks if the Bluetooth LE device is open (connected).
  * @return True if the device is connected, false otherwise.
  */
-bool IO::Drivers::BluetoothLE::isOpen() const
+bool IO::Drivers::BluetoothLE::isOpen() const noexcept
 {
   return m_deviceConnected;
 }
@@ -117,7 +117,7 @@ bool IO::Drivers::BluetoothLE::isOpen() const
  * @brief Checks if the Bluetooth LE device is readable.
  * @return Always true, as the device supports reading.
  */
-bool IO::Drivers::BluetoothLE::isReadable() const
+bool IO::Drivers::BluetoothLE::isReadable() const noexcept
 {
   return true;
 }
@@ -126,7 +126,7 @@ bool IO::Drivers::BluetoothLE::isReadable() const
  * @brief Checks if the Bluetooth LE device is writable.
  * @return Always true, as the device supports writing.
  */
-bool IO::Drivers::BluetoothLE::isWritable() const
+bool IO::Drivers::BluetoothLE::isWritable() const noexcept
 {
   return true;
 }
@@ -139,7 +139,7 @@ bool IO::Drivers::BluetoothLE::isWritable() const
  *
  * @return True if the configuration is valid, false otherwise.
  */
-bool IO::Drivers::BluetoothLE::configurationOk() const
+bool IO::Drivers::BluetoothLE::configurationOk() const noexcept
 {
   return operatingSystemSupported() && adapterAvailable() && deviceIndex() >= 0;
 }

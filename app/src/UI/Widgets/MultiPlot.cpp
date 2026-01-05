@@ -19,6 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "DSP.h"
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/MultiPlot.h"
@@ -347,7 +348,7 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     int index = 0;
     for (const auto &dataset : group.datasets)
     {
-      ok &= !qFuzzyCompare(dataset.pltMin, dataset.pltMax);
+      ok &= DSP::notEqual(dataset.pltMin, dataset.pltMax);
       if (ok && m_visibleCurves[index])
       {
         m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
@@ -388,9 +389,9 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     }
 
     // If the min and max are the same, set the range to 0-1
-    if (qFuzzyCompare(m_minY, m_maxY))
+    if (DSP::almostEqual(m_minY, m_maxY))
     {
-      if (qFuzzyIsNull(m_minY))
+      if (DSP::isZero(m_minY))
       {
         m_minY = -1;
         m_maxY = 1;
@@ -413,14 +414,14 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
 
       // Expand range symmetrically around midY, with a 10% padding
       double paddedRange = halfRange * 1.1;
-      if (qFuzzyIsNull(paddedRange))
+      if (DSP::isZero(paddedRange))
         paddedRange = 1;
 
       m_minY = std::floor(midY - paddedRange);
       m_maxY = std::ceil(midY + paddedRange);
 
       // Safety check to avoid zero-range
-      if (qFuzzyCompare(m_minY, m_maxY))
+      if (DSP::almostEqual(m_minY, m_maxY))
       {
         m_minY -= 1;
         m_maxY += 1;
@@ -430,7 +431,7 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     // Round to integer numbers
     m_maxY = std::ceil(m_maxY);
     m_minY = std::floor(m_minY);
-    if (qFuzzyCompare(m_maxY, m_minY))
+    if (DSP::almostEqual(m_maxY, m_minY))
     {
       m_minY -= 1;
       m_maxY += 1;
@@ -438,7 +439,7 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
   }
 
   // Update user interface if required
-  if (qFuzzyCompare(prevMinY, m_minY) || qFuzzyCompare(prevMaxY, m_maxY))
+  if (DSP::notEqual(prevMinY, m_minY) || DSP::notEqual(prevMaxY, m_maxY))
     Q_EMIT rangeChanged();
 }
 

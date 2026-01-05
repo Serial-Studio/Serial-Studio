@@ -30,6 +30,8 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+#include "Concepts.h"
+
 //------------------------------------------------------------------------------
 // Standard keys for loading/offloading frame structures using JSON files
 //------------------------------------------------------------------------------
@@ -212,16 +214,28 @@ static_assert(sizeof(Frame) % alignof(Frame) == 0, "Unaligned Frame struct");
  * @brief Clears and resets a Frame object to its default state.
  *
  * This utility function performs a full reset of a Frame by:
- * - Clearing the frame title string.
- * - Clearing all groups and actions.
- * - Releasing memory held by groups and actions via `shrink_to_fit()`.
- * - Resetting `containsCommercialFeatures` to `false`.
+ * - Clearing the frame title string
+ * - Clearing all groups and actions vectors
+ * - Releasing memory held by groups and actions via `shrink_to_fit()`
+ * - Resetting `containsCommercialFeatures` to `false`
  *
- * Use this to recycle or reuse an existing Frame instance without reallocating.
+ * **Performance:**
+ * - Time: O(n) where n = total datasets across all groups
+ * - Space: Releases all heap-allocated memory for groups/actions
  *
- * @param frame The Frame object to be cleared and reset.
+ * **Use Cases:**
+ * - Recycling Frame objects in object pools
+ * - Resetting state when switching data sources
+ * - Preparing for new frame deserialization
+ *
+ * **Thread Safety:** Not thread-safe - caller must synchronize access
+ *
+ * @param frame The Frame object to be cleared and reset
+ *
+ * @note Prefer this over destroying and recreating Frame objects to reduce
+ *       allocator pressure in high-frequency scenarios
  */
-inline void clear_frame(Frame &frame)
+inline void clear_frame(Frame &frame) noexcept
 {
   frame.title.clear();
   frame.groups.clear();
@@ -237,14 +251,30 @@ inline void clear_frame(Frame &frame)
  * This function checks whether two Frame instances have the same group count,
  * matching group IDs, and identical dataset `index` values within each group.
  *
- * It does not compare actions, titles, or any other dataset fields beyond
- * `index`.
+ * **Comparison Scope:**
+ * - Checked: Group count, group IDs, dataset count, dataset indices
+ * - Ignored: Titles, actions, values, units, widget types
  *
- * @param a First frame to compare.
- * @param b Second frame to compare.
- * @return true if both frames are structurally equivalent; false otherwise.
+ * **Use Cases:**
+ * - Detecting frame structure changes during live updates
+ * - Validating compatibility between recorded and live data
+ * - Determining if dashboard layout needs regeneration
+ *
+ * **Performance:**
+ * - Best case: O(1) when group counts differ
+ * - Average case: O(g) where g = number of groups (when early mismatch)
+ * - Worst case: O(g × d) where d = average datasets per group
+ *
+ * **Thread Safety:** Safe if both frames are immutable during comparison
+ *
+ * @param a First frame to compare
+ * @param b Second frame to compare
+ * @return true if both frames are structurally equivalent; false otherwise
+ *
+ * @note This is used in hot path for frame change detection - keep optimized
  */
-inline bool compare_frames(const Frame &a, const Frame &b)
+[[nodiscard]] inline bool compare_frames(const Frame &a,
+                                         const Frame &b) noexcept
 {
   if (a.groups.size() != b.groups.size())
     return false;
@@ -257,19 +287,19 @@ inline bool compare_frames(const Frame &a, const Frame &b)
     const auto &g1 = groupsA[i];
     const auto &g2 = groupsB[i];
 
-    if (g1.groupId != g2.groupId)
+    if (g1.groupId != g2.groupId) [[unlikely]]
       return false;
 
     const auto &datasetsA = g1.datasets;
     const auto &datasetsB = g2.datasets;
 
     const size_t dc = datasetsA.size();
-    if (dc != datasetsB.size())
+    if (dc != datasetsB.size()) [[unlikely]]
       return false;
 
     for (size_t j = 0; j < dc; ++j)
     {
-      if (datasetsA[j].index != datasetsB[j].index)
+      if (datasetsA[j].index != datasetsB[j].index) [[unlikely]]
         return false;
     }
   }
@@ -748,12 +778,35 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
 
 /**
  * @brief Represents a single timestamped frame for data export.
- * Stores a JSON frame and the associated reception timestamp (in local time).
  *
- * The Frame data is shared via std::shared_ptr to enable efficient distribution
- * to multiple worker threads (CSV export, MDF4 export, Plugins) without deep
- * copying on the main thread. The data is immutable (const) to ensure thread
- * safety.
+ * Stores a JSON frame and the associated reception timestamp in both
+ * user-friendly (QDateTime) and high-resolution (steady_clock) formats.
+ *
+ * **Design Rationale:**
+ * - The Frame data is shared via std::shared_ptr to enable efficient
+ *   distribution to multiple worker threads (CSV export, MDF4 export, Plugins)
+ *   without deep copying on the main thread
+ * - The data is immutable (const) to ensure thread safety across consumers
+ * - Dual timestamps support both human-readable logging (QDateTime) and
+ *   high-precision delta-time calculations (steady_clock)
+ *
+ * **Memory Layout:**
+ * - data: 16 bytes (shared_ptr control block pointer + data pointer)
+ * - rxDateTime: ~16 bytes (QDateTime internal representation)
+ * - highResTimestamp: 8 bytes (nanosecond-precision time point)
+ * - Total: ~40 bytes + Frame data
+ *
+ * **Thread Safety:**
+ * - Safe: Reading from multiple threads after construction
+ * - Unsafe: Concurrent construction or modification
+ * - Move-only semantics prevent accidental copies
+ *
+ * **Performance:**
+ * - Construction: O(1) - captures timestamps, no data copy
+ * - Copy: Disabled (move-only type)
+ * - Move: O(1) - transfers ownership
+ *
+ * @see TimestampedFramePtr for the canonical shared wrapper type
  */
 struct TimestampedFrame
 {
@@ -765,24 +818,28 @@ struct TimestampedFrame
   TimePoint highResTimestamp;
 
   /**
-   * @brief Default constructor.
+   * @brief Default constructor - creates empty timestamped frame.
    */
   TimestampedFrame() = default;
 
   /**
    * @brief Constructs a timestamped frame with current time.
+   *
+   * Captures both system time (QDateTime) and high-resolution monotonic time
+   * (steady_clock) at construction.
+   *
+   * @param f Shared pointer to immutable Frame data (moved into this object)
    */
-  TimestampedFrame(std::shared_ptr<const DataModel::Frame> f)
+  TimestampedFrame(std::shared_ptr<const DataModel::Frame> f) noexcept
     : data(std::move(f))
     , rxDateTime(QDateTime::currentDateTime())
     , highResTimestamp(SteadyClock::now())
   {
   }
 
-  // Disable copy constructs and use standard move assignments
-  TimestampedFrame(TimestampedFrame &&) = default;
+  TimestampedFrame(TimestampedFrame &&) noexcept = default;
   TimestampedFrame(const TimestampedFrame &) = delete;
-  TimestampedFrame &operator=(TimestampedFrame &&) = default;
+  TimestampedFrame &operator=(TimestampedFrame &&) noexcept = default;
   TimestampedFrame &operator=(const TimestampedFrame &) = delete;
 };
 
@@ -826,5 +883,70 @@ struct TimestampedFrame
  * @see FrameBuilder::hotpathTxFrame()
  */
 typedef std::shared_ptr<DataModel::TimestampedFrame> TimestampedFramePtr;
+
+//------------------------------------------------------------------------------
+// Generic utilities using C++20 concepts
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Generic JSON serialization for any Serializable type.
+ *
+ * Provides compile-time guarantee that T has a serialize() function.
+ * Useful for template code operating on Frame, Group, Dataset, or Action.
+ *
+ * **Performance:** O(n) where n = object complexity
+ * **Thread Safety:** Safe if input object is immutable
+ *
+ * @tparam T Type satisfying the Serializable concept
+ * @param obj Object to serialize
+ * @return JSON representation of the object
+ */
+template<Concepts::Serializable T>
+[[nodiscard]] inline QJsonObject toJson(const T &obj) noexcept
+{
+  return serialize(obj);
+}
+
+/**
+ * @brief Generic JSON deserialization with validation for Serializable types.
+ *
+ * Provides compile-time guarantee that T has a read() function.
+ * Returns std::optional for safer error handling.
+ *
+ * **Performance:** O(n) where n = JSON complexity
+ * **Thread Safety:** Safe (creates new object)
+ *
+ * @tparam T Type satisfying the Serializable concept
+ * @param json JSON object to deserialize
+ * @return Optional containing the deserialized object if successful
+ */
+template<Concepts::Serializable T>
+[[nodiscard]] inline std::optional<T> fromJson(const QJsonObject &json) noexcept
+{
+  T obj;
+  if (read(obj, json))
+    return obj;
+
+  return std::nullopt;
+}
+
+/**
+ * @brief Validates a Frameable object's structure.
+ *
+ * Checks that a Frame-like object has valid groups and actions.
+ * Provides compile-time guarantee that T has groups/actions members.
+ *
+ * **Performance:** O(1) - only checks counts
+ * **Thread Safety:** Safe if object is immutable
+ *
+ * @tparam T Type satisfying the Frameable concept
+ * @param frame Frame-like object to validate
+ * @return true if frame has at least one group
+ */
+template<Concepts::Frameable T>
+[[nodiscard]] constexpr bool isValidFrame(const T &frame) noexcept
+{
+  return !frame.groups.empty();
+}
 
 } // namespace DataModel

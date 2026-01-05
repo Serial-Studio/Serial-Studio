@@ -197,7 +197,7 @@ void IO::Drivers::Modbus::close()
 /**
  * @brief Returns true if a Modbus connection is currently open
  */
-bool IO::Drivers::Modbus::isOpen() const
+bool IO::Drivers::Modbus::isOpen() const noexcept
 {
   if (m_device)
     return m_device->state() == QModbusDevice::ConnectedState;
@@ -208,7 +208,7 @@ bool IO::Drivers::Modbus::isOpen() const
 /**
  * @brief Returns true if the current Modbus device is readable
  */
-bool IO::Drivers::Modbus::isReadable() const
+bool IO::Drivers::Modbus::isReadable() const noexcept
 {
   return isOpen();
 }
@@ -216,7 +216,7 @@ bool IO::Drivers::Modbus::isReadable() const
 /**
  * @brief Returns true if the current Modbus device is writable
  */
-bool IO::Drivers::Modbus::isWritable() const
+bool IO::Drivers::Modbus::isWritable() const noexcept
 {
   return isOpen();
 }
@@ -225,7 +225,7 @@ bool IO::Drivers::Modbus::isWritable() const
  * @brief Returns true if the user has selected appropriate controls & options
  *        to connect to a Modbus device
  */
-bool IO::Drivers::Modbus::configurationOk() const
+bool IO::Drivers::Modbus::configurationOk() const noexcept
 {
   if (m_protocolIndex == 0)
     return m_serialPortIndex > 0;

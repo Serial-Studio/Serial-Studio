@@ -21,7 +21,10 @@
 
 #pragma once
 
+#include <memory>
+#include <atomic>
 #include <QObject>
+#include <QString>
 #include <QByteArray>
 
 #include "HAL_Driver.h"
@@ -46,6 +49,12 @@ enum class ValidationStatus
  * and end sequences or delimiters. Supports multiple modes for flexible data
  * handling, such as quick plotting, JSON extraction, and project-specific
  * parsing.
+ *
+ * **Thread Safety:**
+ * - processData() runs in worker thread
+ * - All configuration setters use atomic shared pointers for lock-free updates
+ * - Immutable data pattern ensures safe concurrent reads
+ * - Lock-free operation for 256 KHz+ data rates
  */
 class FrameReader : public QObject
 {
@@ -58,6 +67,13 @@ public:
   explicit FrameReader(QObject *parent = nullptr);
 
   inline moodycamel::ReaderWriterQueue<QByteArray> &queue() { return m_queue; }
+
+  [[nodiscard]] qsizetype overflowCount() const noexcept
+  {
+    return m_circularBuffer.overflowCount();
+  }
+
+  void resetOverflowCount() noexcept { m_circularBuffer.resetOverflowCount(); }
 
 public slots:
   void processData(const IO::ByteArrayPtr &data);
@@ -76,16 +92,15 @@ private:
   ValidationStatus checksum(const QByteArray &frame, qsizetype crcPosition);
 
 private:
-  qsizetype m_checksumLength;
-  SerialStudio::OperationMode m_operationMode;
-  SerialStudio::FrameDetection m_frameDetectionMode;
-
-  QString m_checksum;
-  QByteArray m_startSequence;
-  QByteArray m_finishSequence;
   QVector<QByteArray> m_quickPlotEndSequences;
-
   CircularBuffer<QByteArray, char> m_circularBuffer;
   moodycamel::ReaderWriterQueue<QByteArray> m_queue{4096};
+
+  qsizetype m_checksumLength;
+  std::shared_ptr<const QString> m_checksum;
+  std::shared_ptr<const QByteArray> m_startSequence;
+  std::shared_ptr<const QByteArray> m_finishSequence;
+  std::atomic<SerialStudio::OperationMode> m_operationMode;
+  std::atomic<SerialStudio::FrameDetection> m_frameDetectionMode;
 };
 } // namespace IO

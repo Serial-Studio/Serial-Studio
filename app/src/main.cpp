@@ -496,7 +496,7 @@ int main(int argc, char **argv)
       if (parser.isSet(modbusRegisterOpt))
       {
         QStringList registerSpecs = parser.values(modbusRegisterOpt);
-        for (const QString &spec : registerSpecs)
+        for (const QString &spec : std::as_const(registerSpecs))
         {
           QStringList parts = spec.split(':');
           if (parts.size() == 3)
@@ -610,7 +610,7 @@ int main(int argc, char **argv)
       if (parser.isSet(modbusRegisterOpt))
       {
         QStringList registerSpecs = parser.values(modbusRegisterOpt);
-        for (const QString &spec : registerSpecs)
+        for (const QString &spec : std::as_const(registerSpecs))
         {
           QStringList regParts = spec.split(':');
           if (regParts.size() == 3)

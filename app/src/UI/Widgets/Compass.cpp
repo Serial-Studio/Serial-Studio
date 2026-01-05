@@ -19,6 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "DSP.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/Compass.h"
 
@@ -70,7 +71,7 @@ void Widgets::Compass::updateData()
   {
     const auto &dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
     const auto value = dataset.numericValue;
-    if (!qFuzzyCompare(value, m_value))
+    if (DSP::notEqual(value, m_value))
     {
       // Update values
       m_value = qMin(360.0, qMax(0.0, value));

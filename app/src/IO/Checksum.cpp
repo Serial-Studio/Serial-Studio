@@ -121,11 +121,15 @@ namespace IO
  * XORs all bytes in the input data. Useful for simple integrity checks in
  * lightweight protocols.
  *
- * @param data Pointer to the input data array.
- * @param length Length of the input data array.
- * @return The computed 8-bit XOR checksum.
+ * **Performance:** O(n) where n = length, highly optimizable by compiler
+ *
+ * **Thread Safety:** Pure function - safe for concurrent calls
+ *
+ * @param data Pointer to the input data array
+ * @param length Length of the input data array
+ * @return The computed 8-bit XOR checksum
  */
-static uint8_t xor8(const char *data, const int length)
+static constexpr uint8_t xor8(const char *data, const int length) noexcept
 {
   uint8_t checksum = 0;
   for (int i = 0; i < length; ++i)
@@ -139,11 +143,15 @@ static uint8_t xor8(const char *data, const int length)
  *
  * Common in SMBus and lightweight communication protocols.
  *
- * @param data Pointer to the input data array.
- * @param length Length of the input data array.
- * @return The computed 8-bit CRC checksum.
+ * **Algorithm:** CRC-8-SAE-J1850 variant
+ * **Performance:** O(n × 8) where n = length (bit-by-bit computation)
+ * **Thread Safety:** Pure function - safe for concurrent calls
+ *
+ * @param data Pointer to the input data array
+ * @param length Length of the input data array
+ * @return The computed 8-bit CRC checksum
  */
-static uint8_t crc8(const char *data, const int length)
+static constexpr uint8_t crc8(const char *data, const int length) noexcept
 {
   uint8_t crc = 0xFF;
   for (int i = 0; i < length; ++i)
@@ -165,11 +173,14 @@ static uint8_t crc8(const char *data, const int length)
  *
  * Sums all bytes in the input and returns the result modulo 256.
  *
- * @param data Pointer to the input data array.
- * @param length Length of the input data array.
- * @return The computed 8-bit additive checksum.
+ * **Performance:** O(n) where n = length (simple accumulation)
+ * **Thread Safety:** Pure function - safe for concurrent calls
+ *
+ * @param data Pointer to the input data array
+ * @param length Length of the input data array
+ * @return The computed 8-bit additive checksum
  */
-static uint8_t mod256(const char *data, const int length)
+static constexpr uint8_t mod256(const char *data, const int length) noexcept
 {
   uint16_t sum = 0;
   for (int i = 0; i < length; ++i)
@@ -182,11 +193,14 @@ static uint8_t mod256(const char *data, const int length)
  *
  * This is not a standard CRC-16 variant. Rename if needed for clarity.
  *
- * @param data Pointer to the input data array.
- * @param length Length of the input data array.
- * @return The computed 16-bit CRC checksum.
+ * **Performance:** O(n) where n = length (optimized bit manipulation)
+ * **Thread Safety:** Pure function - safe for concurrent calls
+ *
+ * @param data Pointer to the input data array
+ * @param length Length of the input data array
+ * @return The computed 16-bit CRC checksum
  */
-static uint16_t crc16(const char *data, const int length)
+static constexpr uint16_t crc16(const char *data, const int length) noexcept
 {
   uint8_t x;
   uint16_t crc = 0xFFFF;
@@ -206,11 +220,16 @@ static uint16_t crc16(const char *data, const int length)
  *
  * Common in Ethernet, ZIP, PNG, and other file/integrity systems.
  *
- * @param data Pointer to the input data array.
- * @param length Length of the input data array.
- * @return The computed 32-bit CRC checksum.
+ * **Algorithm:** CRC-32 (IEEE 802.3, used in Ethernet, ZIP, PNG)
+ * **Polynomial:** 0x04C11DB7 (normal) / 0xEDB88320 (reflected)
+ * **Performance:** O(n × 8) where n = length (bit-by-bit computation)
+ * **Thread Safety:** Pure function - safe for concurrent calls
+ *
+ * @param data Pointer to the input data array
+ * @param length Length of the input data array
+ * @return The computed 32-bit CRC checksum
  */
-static uint32_t crc32(const char *data, const int length)
+static constexpr uint32_t crc32(const char *data, const int length) noexcept
 {
   uint32_t crc = 0xFFFFFFFF;
 
@@ -234,19 +253,24 @@ static uint32_t crc32(const char *data, const int length)
  *
  * Fast checksum algorithm defined in RFC 1950 (used in zlib).
  *
- * @param data Pointer to the input data array.
- * @param length Length of the input data array.
- * @return The computed 32-bit Adler-32 checksum.
+ * **Algorithm:** Adler-32 (faster than CRC-32, weaker error detection)
+ * **Modulus:** 65521 (largest prime less than 2^16)
+ * **Performance:** O(n) where n = length (two sums with modulo)
+ * **Thread Safety:** Pure function - safe for concurrent calls
+ *
+ * @param data Pointer to the input data array
+ * @param length Length of the input data array
+ * @return The computed 32-bit Adler-32 checksum
  */
-static uint32_t adler32(const char *data, const int length)
+static constexpr uint32_t adler32(const char *data, const int length) noexcept
 {
-  const uint32_t MOD_ADLER = 65521;
+  constexpr uint32_t kModAdler = 65521;
   uint32_t a = 1, b = 0;
 
   for (int i = 0; i < length; ++i)
   {
-    a = (a + static_cast<uint8_t>(data[i])) % MOD_ADLER;
-    b = (b + a) % MOD_ADLER;
+    a = (a + static_cast<uint8_t>(data[i])) % kModAdler;
+    b = (b + a) % kModAdler;
   }
 
   return (b << 16) | a;
@@ -257,11 +281,17 @@ static uint32_t adler32(const char *data, const int length)
  *
  * Offers stronger error detection than simple checksums, with low overhead.
  *
- * @param data Pointer to the input data array.
- * @param length Length of the input data array.
- * @return The computed Fletcher-16 checksum.
+ * **Algorithm:** Fletcher-16 (similar to Adler but different modulus)
+ * **Modulus:** 255
+ * **Performance:** O(n) where n = length (two sums with modulo)
+ * **Thread Safety:** Pure function - safe for concurrent calls
+ *
+ * @param data Pointer to the input data array
+ * @param length Length of the input data array
+ * @return The computed Fletcher-16 checksum
  */
-static uint16_t fletcher16(const char *data, const int length)
+static constexpr uint16_t fletcher16(const char *data,
+                                     const int length) noexcept
 {
   uint16_t sum1 = 0;
   uint16_t sum2 = 0;
@@ -281,11 +311,17 @@ static uint16_t fletcher16(const char *data, const int length)
  *
  * Standard in industrial MODBUS RTU communications.
  *
- * @param data Pointer to the input data array.
- * @param length Length of the input data array.
- * @return The computed 16-bit CRC-MODBUS checksum.
+ * **Algorithm:** CRC-16-MODBUS (reflected polynomial)
+ * **Polynomial:** 0x8005 (normal) / 0xA001 (reflected)
+ * **Performance:** O(n × 8) where n = length (bit-by-bit computation)
+ * **Thread Safety:** Pure function - safe for concurrent calls
+ *
+ * @param data Pointer to the input data array
+ * @param length Length of the input data array
+ * @return The computed 16-bit CRC-MODBUS checksum
  */
-static uint16_t crc16_modbus(const char *data, const int length)
+static constexpr uint16_t crc16_modbus(const char *data,
+                                       const int length) noexcept
 {
   uint16_t crc = 0xFFFF;
 
@@ -310,11 +346,18 @@ static uint16_t crc16_modbus(const char *data, const int length)
  *
  * Used in XModem, HDLC, and general-purpose data integrity.
  *
- * @param data Pointer to the input data array.
- * @param length Length of the input data array.
- * @return The computed CRC-16-CCITT checksum.
+ * **Algorithm:** CRC-16-CCITT (also known as CRC-16-KERMIT)
+ * **Polynomial:** 0x1021
+ * **Init Value:** 0x0000 (XModem variant)
+ * **Performance:** O(n × 8) where n = length (bit-by-bit computation)
+ * **Thread Safety:** Pure function - safe for concurrent calls
+ *
+ * @param data Pointer to the input data array
+ * @param length Length of the input data array
+ * @return The computed CRC-16-CCITT checksum
  */
-static uint16_t crc16_ccitt(const char *data, const int length)
+static constexpr uint16_t crc16_ccitt(const char *data,
+                                      const int length) noexcept
 {
   uint16_t crc = 0x0000;
 
