@@ -14,7 +14,7 @@ Serial Studio is a cross-platform telemetry visualization application that enabl
 - **Multi-Protocol Support**: UART, TCP/UDP, Bluetooth LE, Audio, Modbus TCP/RTU, CAN Bus
 - **Real-Time Visualization**: 15+ widget types (plots, gauges, maps, 3D graphics, FFT)
 - **File Playback**: CSV and MDF4/MF4 (automotive) file support with timeline controls
-- **High Performance**: Lock-free data paths supporting 1000+ Hz frame rates
+- **High Performance**: Lock-free data paths optimized for high-frequency data
 - **Custom Parsing**: JavaScript-based frame parsing with JSON schema definition
 - **Cross-Platform**: Windows, macOS, Linux with native integrations
 
@@ -24,7 +24,8 @@ Serial Studio is a cross-platform telemetry visualization application that enabl
 - Hardware abstraction layer (HAL) for protocol-agnostic data acquisition
 - Qt 6.9.2 with QML for responsive UI
 - Zero-copy dashboard updates via const references (no heap allocation per frame)
-- Value-only frame copies for async consumers (avoids vector reallocation)
+- Nanosecond-precision timestamps via `std::chrono::steady_clock`
+- Single-allocation timestamped frames for async consumers (CSV/MDF4 export)
 - Profile-Guided Optimization (PGO) support for 10-20% performance gains
 
 ## Architecture
@@ -111,22 +112,24 @@ app/src/DataModel/
 ```
 
 **Design Pattern**: Immutable Data + Lock-Free Queues
-- `Frame` objects are immutable and reference-counted via `shared_ptr<const Frame>`
+- `Frame` objects are value types that can be efficiently copied when needed
 - `FrameConsumer<T>` provides generic threaded consumer with dual-trigger flushing:
   - **Time-based**: Periodic flush every N milliseconds
   - **Threshold-based**: Flush when queue reaches N items
 - Lock-free queue (`moodycamel::ReaderWriterQueue`) for zero-mutex data distribution
-- Frames distributed simultaneously to Dashboard, CSV export, MDF4 export without copying
+- Dashboard receives frames by const reference; exports receive isolated copies
 
 **Hotpath Optimization** (`FrameBuilder::hotpathTxFrame`):
 - **Zero-copy dashboard path**: Dashboard receives frames by const reference, avoiding
   expensive deep copies on every frame. The dashboard only copies internally when
   the frame structure changes (rare), not on every value update.
-- **Value-only copy for exports**: When timestamped consumers (CSV/MDF4/Plugins) are enabled,
-  uses `copy_frame_values()` to copy only dataset values (3 fields per dataset) instead of
-  full frame structure. This avoids reallocating vectors on every frame (~10x faster).
-- Pre-allocated `shared_ptr<Frame>` reused across calls to avoid allocation overhead
-- Timestamped frames created only when consumers are enabled (CSV/MDF4 export, Plugin server)
+- **Single-allocation exports**: When timestamped consumers (CSV/MDF4/Plugins) are enabled,
+  creates a single `TimestampedFrame` via `make_shared` with the Frame embedded by value.
+  This ensures one heap allocation per frame instead of two (vs. nested shared_ptr).
+- **Nanosecond timestamps**: `TimestampedFrame` captures `steady_clock::now()` at construction
+  for sub-microsecond precision required by high-frequency data acquisition.
+- **Isolated frame copies**: Each `TimestampedFrame` owns its own `Frame` data, ensuring
+  async consumers (worker threads) see consistent data even as new frames arrive.
 - Cached `m_timestampedFramesEnabled` flag updated via signals to avoid per-frame checks
 
 **Parsing Pipeline**:
@@ -163,9 +166,9 @@ app/src/UI/
 - Each widget subscribes to specific datasets from `Frame` objects
 
 **Performance**:
-- **Frame Rate**: Supports 1000+ Hz data acquisition
-- **Update Rate**: 60 Hz UI refresh (configurable)
-- **Widget Capacity**: 50+ simultaneous widgets without performance degradation
+- **Frame Rate**: Optimized for high-frequency data acquisition
+- **Update Rate**: Configurable UI refresh rate (default 60 Hz)
+- **Widget Capacity**: Supports many simultaneous widgets
 
 #### Additional Modules
 
@@ -210,17 +213,38 @@ DataModel::FrameBuilder::hotpathRxFrame()
 DataModel::Frame (updated in-place)
     ↓
 ┌──────────────────────────────────────────────────────────────┐
-│  UI::Dashboard (const ref, zero-copy)                        │
-│  - Receives frame by reference, no allocation                │
-│  - Only copies when structure changes (rare)                 │
+│  UI::Dashboard::hotpathRxFrame(const Frame&)                 │
+│  - Receives frame by reference (zero-copy, no allocation)    │
+│  - Only copies internally when structure changes (rare)      │
 └──────────────────────────────────────────────────────────────┘
-    ↓ (only when CSV/MDF4/Plugins enabled)
-DataModel::copy_frame_values() → shared_ptr<Frame>
-    ↓ Value-only copy (~10x faster than full copy)
-┌──────────────────┬──────────────────┐
-│  CSV::Export     │  MDF4::Export    │
-│  (worker thread) │  (worker thread) │
-└──────────────────┴──────────────────┘
+    ↓ (only when CSV/MDF4/Plugins enabled - [[unlikely]] path)
+std::make_shared<TimestampedFrame>(frame)
+    ↓ Single allocation: Frame embedded by value + steady_clock timestamp
+    ↓ Nanosecond precision via std::chrono::steady_clock
+┌───────────────────┬───────────────────┬───────────────────┐
+│  CSV::Export      │  MDF4::Export     │  Plugins::Server  │
+│  (worker thread)  │  (worker thread)  │  (worker thread)  │
+│                   │                   │                   │
+│  Uses steady_clock│  Derives wall-    │  JSON serialize   │
+│  for relative     │  clock from       │  & broadcast      │
+│  timestamps (9    │  steady_clock     │                   │
+│  decimal places)  │  baseline offset  │                   │
+└───────────────────┴───────────────────┴───────────────────┘
+```
+
+#### TimestampedFrame Structure
+```cpp
+struct TimestampedFrame {
+  DataModel::Frame data;           // Embedded by value (single allocation)
+  SteadyTimePoint timestamp;       // steady_clock::now() - nanosecond precision
+};
+
+// CSV Export: relative time from first frame
+elapsed_ns = frame->timestamp - m_referenceTimestamp;
+seconds = elapsed_ns / 1'000'000'000.0;  // 9 decimal places
+
+// MDF4 Export: absolute wall-clock derived from steady_clock
+systemTime = m_systemBaseline + (frame->timestamp - m_steadyBaseline);
 ```
 
 ## Build Instructions
@@ -351,12 +375,20 @@ uint16_t calculateCRC16(const QByteArray &data);
 **Optimization Techniques**:
 - Lock-free circular buffers (SPSC) with atomic operations
 - Zero-copy dashboard path via const references (no allocation per frame)
-- Value-only frame copies via `copy_frame_values()` (avoids vector reallocation)
+- Single-allocation `TimestampedFrame` with embedded Frame data (vs. nested shared_ptr)
+- Nanosecond-precision timestamps via `std::chrono::steady_clock` (single syscall)
 - Branch prediction hints (`[[likely]]`, `[[unlikely]]`)
 - Compile-time checksums with `constexpr`
 - KMP pattern matching algorithm (O(n+m))
 - SIMD-optimized math (platform-dependent)
 - Profile-Guided Optimization (PGO) support
+
+**Allocation Strategy**:
+- Dashboard path: Zero allocation per frame (receives const reference)
+- Export path: One `make_shared<TimestampedFrame>` allocation per frame when enabled
+- Timestamps: `steady_clock` provides nanosecond precision
+- CSV: 9 decimal places in timestamp column (relative time from first frame)
+- MDF4: Wall-clock derived from monotonic baseline (avoids clock drift issues)
 
 ## Testing
 
@@ -518,4 +550,3 @@ See the main repository `CONTRIBUTING.md` for contribution guidelines.
 
 **License**: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
 **Version**: See CMakeLists.txt for current version
-**Last Updated**: 2026-01-05

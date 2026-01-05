@@ -77,16 +77,16 @@ void CSV::ExportWorker::processItems(
 
   if (!m_csvFile.isOpen())
   {
-    m_indexHeaderPairs = createCsvFile(*(*items.begin())->data);
+    m_indexHeaderPairs = createCsvFile((*items.begin())->data);
     if (m_indexHeaderPairs.isEmpty())
       return;
 
-    m_referenceTimestamp = (*items.begin())->highResTimestamp;
+    m_referenceTimestamp = (*items.begin())->timestamp;
   }
 
   for (const auto &i : items)
   {
-    const auto elapsed = i->highResTimestamp - m_referenceTimestamp;
+    const auto elapsed = i->timestamp - m_referenceTimestamp;
     const auto nanoseconds
         = std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count();
     const double seconds = static_cast<double>(nanoseconds) / 1'000'000'000.0;
@@ -94,7 +94,7 @@ void CSV::ExportWorker::processItems(
     m_textStream << QString::number(seconds, 'f', 9) << QStringLiteral(",");
 
     QMap<int, QString> fieldValues;
-    for (const auto &g : i->data->groups)
+    for (const auto &g : i->data.groups)
     {
       for (const auto &d : g.datasets)
         fieldValues[d.index] = d.value.simplified();

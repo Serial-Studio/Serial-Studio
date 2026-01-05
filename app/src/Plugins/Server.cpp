@@ -147,7 +147,7 @@ void Plugins::ServerWorker::processItems(
   for (const auto &timestampedFrame : items)
   {
     QJsonObject object;
-    object.insert(QStringLiteral("data"), serialize(*timestampedFrame->data));
+    object.insert(QStringLiteral("data"), serialize(timestampedFrame->data));
     array.append(object);
   }
 

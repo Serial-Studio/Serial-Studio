@@ -51,8 +51,6 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_quickPlotHasHeader(false)
   , m_frameParser(nullptr)
   , m_opMode(SerialStudio::ProjectFile)
-  , m_sharedFrame(std::make_shared<DataModel::Frame>())
-  , m_timestampedFrame(std::make_shared<DataModel::TimestampedFrame>())
   , m_timestampedFramesEnabled(false)
 {
   // Read JSON map location
@@ -827,21 +825,9 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame &frame)
 
   if (m_timestampedFramesEnabled) [[unlikely]]
   {
-    if (DataModel::compare_frames(*m_sharedFrame, frame)) [[likely]]
-      DataModel::copy_frame_values(*m_sharedFrame, frame);
-    else
-      *m_sharedFrame = frame;
-
-    auto constFrame
-        = std::static_pointer_cast<const DataModel::Frame>(m_sharedFrame);
-
-    m_timestampedFrame->data = constFrame;
-    m_timestampedFrame->rxDateTime = QDateTime::currentDateTime();
-    m_timestampedFrame->highResTimestamp
-        = DataModel::TimestampedFrame::SteadyClock::now();
-
-    csvExport.hotpathTxFrame(m_timestampedFrame);
-    mdf4Export.hotpathTxFrame(m_timestampedFrame);
-    pluginsServer.hotpathTxFrame(m_timestampedFrame);
+    auto timestampedFrame = std::make_shared<DataModel::TimestampedFrame>(frame);
+    csvExport.hotpathTxFrame(timestampedFrame);
+    mdf4Export.hotpathTxFrame(timestampedFrame);
+    pluginsServer.hotpathTxFrame(timestampedFrame);
   }
 }

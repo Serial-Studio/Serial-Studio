@@ -81,15 +81,27 @@ void MDF4::ExportWorker::processItems(
     return;
 
   if (!isResourceOpen() && !items.empty())
-    createFile(*items.front()->data);
+  {
+    createFile(items.front()->data);
+    m_steadyBaseline = items.front()->timestamp;
+    m_systemBaseline = std::chrono::system_clock::now();
+  }
 
   if (!isResourceOpen() || !m_writer)
     return;
 
   for (const auto &frame : items)
   {
-    const auto timestamp = frame->rxDateTime.toMSecsSinceEpoch() / 1000.0;
-    for (const auto &group : frame->data->groups)
+    const auto steadyOffset = frame->timestamp - m_steadyBaseline;
+    const auto systemTime = m_systemBaseline + steadyOffset;
+    const auto timestamp_ns
+        = std::chrono::duration_cast<std::chrono::nanoseconds>(
+              systemTime.time_since_epoch())
+              .count();
+    const double timestamp_s
+        = static_cast<double>(timestamp_ns) / 1'000'000'000.0;
+
+    for (const auto &group : frame->data.groups)
     {
       auto it = m_groupMap.find(group.groupId);
       if (it == m_groupMap.end())
@@ -100,7 +112,7 @@ void MDF4::ExportWorker::processItems(
         continue;
 
       if (m_masterTimeChannel)
-        m_masterTimeChannel->SetChannelValue(timestamp);
+        m_masterTimeChannel->SetChannelValue(timestamp_s);
 
       for (size_t i = 0; i < group.datasets.size(); ++i)
       {
@@ -116,8 +128,8 @@ void MDF4::ExportWorker::processItems(
         }
       }
 
-      const auto timestamp_ns = static_cast<uint64_t>(timestamp * 1000000000.0);
-      m_writer->SaveSample(*info.channelGroup, timestamp_ns);
+      m_writer->SaveSample(*info.channelGroup,
+                           static_cast<uint64_t>(timestamp_ns));
     }
   }
 }
@@ -129,9 +141,15 @@ void MDF4::ExportWorker::closeResources()
 {
   if (isResourceOpen() && m_writer)
   {
+    const auto steadyNow = DataModel::TimestampedFrame::SteadyClock::now();
+    const auto steadyOffset = steadyNow - m_steadyBaseline;
+    const auto systemTime = m_systemBaseline + steadyOffset;
     const auto stop_time
-        = static_cast<uint64_t>(QDateTime::currentMSecsSinceEpoch() * 1000000);
-    m_writer->StopMeasurement(stop_time);
+        = std::chrono::duration_cast<std::chrono::nanoseconds>(
+              systemTime.time_since_epoch())
+              .count();
+
+    m_writer->StopMeasurement(static_cast<uint64_t>(stop_time));
     m_writer->FinalizeMeasurement();
 
     m_fileOpen = false;

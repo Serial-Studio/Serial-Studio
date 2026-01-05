@@ -79,6 +79,9 @@ private:
   mdf::IChannel *m_masterTimeChannel;
   std::unique_ptr<mdf::MdfWriter> m_writer;
   std::map<int, ChannelGroupInfo> m_groupMap;
+
+  DataModel::TimestampedFrame::SteadyTimePoint m_steadyBaseline;
+  std::chrono::system_clock::time_point m_systemBaseline;
 };
 #endif
 

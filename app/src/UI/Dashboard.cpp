@@ -156,7 +156,7 @@ bool UI::Dashboard::streamAvailable() const
   const bool mqttConnected = mqtt.isConnected() && mqtt.isSubscriber();
   return devOpen || csvOpen || mqttConnected || mf4Open;
 #else
-  return serialConnected || csvOpen || mf4Open;
+  return devOpen || csvOpen || mf4Open;
 #endif
 }
 

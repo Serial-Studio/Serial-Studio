@@ -825,22 +825,23 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
 /**
  * @brief Represents a single timestamped frame for data export.
  *
- * Stores a JSON frame and the associated reception timestamp in both
- * user-friendly (QDateTime) and high-resolution (steady_clock) formats.
+ * Stores a JSON frame and the associated reception timestamp using
+ * steady_clock with nanosecond precision. This is optimized for high-frequency
+ * data acquisition (192kHz+) where timestamp precision and low overhead are
+ * critical.
  *
  * **Design Rationale:**
- * - The Frame data is shared via std::shared_ptr to enable efficient
- *   distribution to multiple worker threads (CSV export, MDF4 export, Plugins)
- *   without deep copying on the main thread
- * - The data is immutable (const) to ensure thread safety across consumers
- * - Dual timestamps support both human-readable logging (QDateTime) and
- *   high-precision delta-time calculations (steady_clock)
+ * - Frame data is embedded by value for single-allocation efficiency
+ * - When wrapped in TimestampedFramePtr (shared_ptr), only ONE heap allocation
+ *   is needed per frame, compared to two with nested shared_ptr
+ * - Single timestamp (steady_clock) provides nanosecond precision with minimal
+ *   syscall overhead. Wall-clock time can be derived using a cached offset
+ *   when needed (see MDF4::ExportWorker).
  *
  * **Memory Layout:**
- * - data: 16 bytes (shared_ptr control block pointer + data pointer)
- * - rxDateTime: ~16 bytes (QDateTime internal representation)
- * - highResTimestamp: 8 bytes (nanosecond-precision time point)
- * - Total: ~40 bytes + Frame data
+ * - data: sizeof(Frame) bytes (embedded by value)
+ * - timestamp: 8 bytes (nanosecond-precision monotonic time)
+ * - Total: sizeof(Frame) + 8 bytes (single contiguous allocation)
  *
  * **Thread Safety:**
  * - Safe: Reading from multiple threads after construction
@@ -848,7 +849,9 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
  * - Move-only semantics prevent accidental copies
  *
  * **Performance:**
- * - Construction: O(1) - captures timestamps, no data copy
+ * - Construction: O(n) where n = frame complexity (copy into embedded storage)
+ * - Single allocation when used with make_shared<TimestampedFrame>
+ * - Better cache locality than pointer indirection
  * - Copy: Disabled (move-only type)
  * - Move: O(1) - transfers ownership
  *
@@ -857,11 +860,10 @@ void read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
 struct TimestampedFrame
 {
   using SteadyClock = std::chrono::steady_clock;
-  using TimePoint = SteadyClock::time_point;
+  using SteadyTimePoint = SteadyClock::time_point;
 
-  std::shared_ptr<const DataModel::Frame> data;
-  QDateTime rxDateTime;
-  TimePoint highResTimestamp;
+  DataModel::Frame data;
+  SteadyTimePoint timestamp;
 
   /**
    * @brief Default constructor - creates empty timestamped frame.
@@ -869,17 +871,30 @@ struct TimestampedFrame
   TimestampedFrame() = default;
 
   /**
-   * @brief Constructs a timestamped frame with current time.
+   * @brief Constructs a timestamped frame by copying frame data.
    *
-   * Captures both system time (QDateTime) and high-resolution monotonic time
-   * (steady_clock) at construction.
+   * Copies the frame data and captures high-resolution monotonic time
+   * (steady_clock) at construction with nanosecond precision.
    *
-   * @param f Shared pointer to immutable Frame data (moved into this object)
+   * @param f Frame data to copy into this timestamped frame
    */
-  TimestampedFrame(std::shared_ptr<const DataModel::Frame> f) noexcept
+  explicit TimestampedFrame(const DataModel::Frame &f)
+    : data(f)
+    , timestamp(SteadyClock::now())
+  {
+  }
+
+  /**
+   * @brief Constructs a timestamped frame by moving frame data.
+   *
+   * Moves the frame data and captures high-resolution monotonic time
+   * (steady_clock) at construction with nanosecond precision.
+   *
+   * @param f Frame data to move into this timestamped frame
+   */
+  explicit TimestampedFrame(DataModel::Frame &&f) noexcept
     : data(std::move(f))
-    , rxDateTime(QDateTime::currentDateTime())
-    , highResTimestamp(SteadyClock::now())
+    , timestamp(SteadyClock::now())
   {
   }
 

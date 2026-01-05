@@ -62,7 +62,7 @@ private:
   QFile m_csvFile;
   QTextStream m_textStream;
   QVector<QPair<int, QString>> m_indexHeaderPairs;
-  DataModel::TimestampedFrame::TimePoint m_referenceTimestamp;
+  DataModel::TimestampedFrame::SteadyTimePoint m_referenceTimestamp;
 };
 
 /**
