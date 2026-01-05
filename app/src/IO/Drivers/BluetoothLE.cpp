@@ -492,7 +492,7 @@ void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
 
     // Display current value
     if (!c.value().isEmpty())
-      Q_EMIT dataReceived(c.value());
+      Q_EMIT dataReceived(makeByteArray(c.value()));
   }
 
   // Update UI
@@ -658,7 +658,7 @@ void IO::Drivers::BluetoothLE::onCharacteristicChanged(
   const bool anyCharacteristic = (m_selectedCharacteristic == -1);
   const bool current = (info == m_characteristics.at(m_selectedCharacteristic));
   if (anyCharacteristic || current)
-    Q_EMIT dataReceived(value);
+    Q_EMIT dataReceived(makeByteArray(value));
 }
 
 /**

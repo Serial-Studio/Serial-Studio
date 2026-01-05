@@ -273,7 +273,9 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame &frame)
 MDF4::Export::Export()
 #ifdef BUILD_COMMERCIAL
   : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
-      {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
+        {.queueCapacity = 8192,
+         .flushThreshold = 1024,
+         .timerIntervalMs = 1000})
   , m_isOpen(false)
   , m_exportEnabled(false)
 #else
@@ -414,8 +416,7 @@ void MDF4::Export::setExportEnabled(const bool enabled)
 /**
  * Receives timestamped frame data and enqueues it for export
  */
-void MDF4::Export::hotpathTxFrame(
-    const DataModel::TimestampedFramePtr &frame)
+void MDF4::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr &frame)
 {
 #ifdef BUILD_COMMERCIAL
   if (!exportEnabled() || SerialStudio::isAnyPlayerOpen())

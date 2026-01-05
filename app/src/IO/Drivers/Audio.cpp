@@ -1420,7 +1420,7 @@ void IO::Drivers::Audio::processInputBuffer()
 
   // Report only the valid chunk of CSV data that we wrote
   const auto length = m_csvBuffer.pos();
-  Q_EMIT dataReceived(m_csvData.left(length));
+  Q_EMIT dataReceived(makeByteArray(m_csvData.left(length)));
 }
 
 //------------------------------------------------------------------------------

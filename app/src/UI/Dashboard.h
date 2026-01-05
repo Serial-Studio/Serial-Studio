@@ -145,7 +145,7 @@ public slots:
   void setFFTPlotRunning(const int index, const bool enabled);
   void setMultiplotRunning(const int index, const bool enabled);
 
-  void hotpathRxFrame(const DataModel::Frame &frame);
+  void hotpathRxFrame(const std::shared_ptr<const DataModel::Frame> &frame);
 
 private:
   void updateDashboardData(const DataModel::Frame &frame);
@@ -200,7 +200,8 @@ private:
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Group>> m_widgetGroups;
 
   // Datasets by widget type
-  QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>> m_widgetDatasets;
+  QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>>
+      m_widgetDatasets;
 
   DataModel::Frame m_rawFrame;
   DataModel::Frame m_lastFrame;
@@ -308,8 +309,8 @@ inline QString FMT_VAL(double val, const DataModel::Dataset &dataset)
  *
  * @note Caller is responsible for ensuring the index is valid.
  */
-inline const DataModel::Group &GET_GROUP(const SerialStudio::DashboardWidget type,
-                                    int index)
+inline const DataModel::Group &
+GET_GROUP(const SerialStudio::DashboardWidget type, int index)
 {
   return UI::Dashboard::instance().getGroupWidget(type, index);
 }

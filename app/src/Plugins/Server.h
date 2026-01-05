@@ -60,7 +60,7 @@ public:
 public slots:
   void addSocket(QTcpSocket *socket);
   void removeSocket(QTcpSocket *socket);
-  void writeRawData(const QByteArray &data);
+  void writeRawData(const IO::ByteArrayPtr &data);
 
 signals:
   void dataReceived(const QByteArray &data);
@@ -131,7 +131,7 @@ public:
 public slots:
   void removeConnection();
   void setEnabled(const bool enabled);
-  void hotpathTxData(const QByteArray &data);
+  void hotpathTxData(const IO::ByteArrayPtr &data);
   void hotpathTxFrame(const DataModel::TimestampedFramePtr &frame);
 
 protected:

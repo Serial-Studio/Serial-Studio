@@ -35,7 +35,7 @@ void DataModel::finalize_frame(DataModel::Frame &frame)
 }
 
 void DataModel::read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
-                            QString &checksum, const QJsonObject &obj)
+                                 QString &checksum, const QJsonObject &obj)
 {
   // Obtain frame delimiters
   auto fEndStr = ss_jsr(obj, "frameEnd", "").toString();

@@ -327,8 +327,8 @@ QJsonObject DataModel::DBCImporter::generateProject(
  * @param messages List of CAN message descriptions from the DBC file.
  * @return Vector of Group structures ready for serialization.
  */
-std::vector<DataModel::Group>
-DataModel::DBCImporter::generateGroups(const QList<QCanMessageDescription> &messages)
+std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
+    const QList<QCanMessageDescription> &messages)
 {
   std::vector<DataModel::Group> groups;
   int groupId = 0;
@@ -598,9 +598,8 @@ QString DataModel::DBCImporter::generateFrameParser(
  *                     indexing.
  * @return JavaScript function code as a QString.
  */
-QString
-DataModel::DBCImporter::generateMessageDecoder(const QCanMessageDescription &message,
-                                          int &datasetIndex)
+QString DataModel::DBCImporter::generateMessageDecoder(
+    const QCanMessageDescription &message, int &datasetIndex)
 {
   QString code;
   const auto msgId = static_cast<quint32>(message.uniqueId());
@@ -660,8 +659,8 @@ DataModel::DBCImporter::generateMessageDecoder(const QCanMessageDescription &mes
  * @param signal CAN signal description from the DBC file.
  * @return JavaScript code for extracting and scaling the signal.
  */
-QString
-DataModel::DBCImporter::generateSignalExtraction(const QCanSignalDescription &signal)
+QString DataModel::DBCImporter::generateSignalExtraction(
+    const QCanSignalDescription &signal)
 {
   // clang-format off
   QString code;
@@ -868,8 +867,8 @@ QString DataModel::DBCImporter::sanitizeJavaScriptString(const QString &str)
  * @param signal CAN signal description from the DBC file.
  * @return Widget type string ("bar", "gauge", or empty).
  */
-QString
-DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescription &signal)
+QString DataModel::DBCImporter::selectWidgetForSignal(
+    const QCanSignalDescription &signal)
 {
   const auto name = signal.name().toLower();
   const auto unit = signal.physicalUnit().toLower();

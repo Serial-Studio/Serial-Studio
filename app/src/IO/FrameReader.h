@@ -24,9 +24,10 @@
 #include <QObject>
 #include <QByteArray>
 
+#include "HAL_Driver.h"
 #include "SerialStudio.h"
-#include "ThirdParty/readerwriterqueue.h"
 #include "IO/CircularBuffer.h"
+#include "ThirdParty/readerwriterqueue.h"
 
 namespace IO
 {
@@ -59,7 +60,7 @@ public:
   inline moodycamel::ReaderWriterQueue<QByteArray> &queue() { return m_queue; }
 
 public slots:
-  void processData(const QByteArray &data);
+  void processData(const IO::ByteArrayPtr &data);
 
   void setChecksum(const QString &checksum);
   void setStartSequence(const QByteArray &start);

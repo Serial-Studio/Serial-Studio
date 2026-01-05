@@ -141,4 +141,4 @@ private:
   QList<QCanMessageDescription> m_messages;
 };
 
-} // namespace JSON
+} // namespace DataModel

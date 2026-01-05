@@ -41,7 +41,7 @@
  * @param parent Parent widget
  */
 DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
-                                                   QWidget *parent)
+                                                        QWidget *parent)
   : QDialog(parent)
   , m_parser(parser)
 {
@@ -428,7 +428,7 @@ bool DataModel::FrameParserTestDialog::validateHexInput(const QString &text)
  * @param output The parsed output array
  */
 void DataModel::FrameParserTestDialog::displayOutput(const QString &input,
-                                                const QStringList &output)
+                                                     const QStringList &output)
 {
   m_table->setRowCount(0);
   m_inputDisplay->setPlainText(input);

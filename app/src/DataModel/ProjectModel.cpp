@@ -231,7 +231,8 @@ bool DataModel::ProjectModel::modified() const
 {
   bool parserModified = false;
   if (DataModel::FrameBuilder::instance().frameParser())
-    parserModified = DataModel::FrameBuilder::instance().frameParser()->isModified();
+    parserModified
+        = DataModel::FrameBuilder::instance().frameParser()->isModified();
 
   return m_modified || parserModified;
 }
@@ -244,7 +245,8 @@ bool DataModel::ProjectModel::modified() const
  *
  * @return The current view as a value from the CurrentView enum.
  */
-DataModel::ProjectModel::CurrentView DataModel::ProjectModel::currentView() const
+DataModel::ProjectModel::CurrentView
+DataModel::ProjectModel::currentView() const
 {
   return m_currentView;
 }
@@ -286,7 +288,8 @@ SerialStudio::FrameDetection DataModel::ProjectModel::frameDetection() const
  * If the file path is not empty, it extracts and returns the file name.
  * If no file path is set, it returns "New DataModel".
  *
- * @return The name of the DataModel file or "New DataModel" if no file is present.
+ * @return The name of the DataModel file or "New DataModel" if no file is
+ * present.
  */
 QString DataModel::ProjectModel::jsonFileName() const
 {
@@ -302,8 +305,8 @@ QString DataModel::ProjectModel::jsonFileName() const
 /**
  * @brief Retrieves the default path for DataModel project files.
  *
- * Returns the path where DataModel project files are stored, creating the directory
- * if it does not exist.
+ * Returns the path where DataModel project files are stored, creating the
+ * directory if it does not exist.
  *
  * @return The default file path for DataModel project files.
  */
@@ -435,8 +438,8 @@ const QStringList &DataModel::ProjectModel::availableActionIcons() const
 /**
  * @brief Retrieves the file path of the DataModel file.
  *
- * This function returns the full path of the current DataModel file associated with
- * the project.
+ * This function returns the full path of the current DataModel file associated
+ * with the project.
  *
  * @return A reference to the file path of the DataModel file.
  */
@@ -754,8 +757,8 @@ bool DataModel::ProjectModel::askSave()
  *
  * This function saves the current state of the project, including its title,
  * decoder settings, and groups, into a DataModel file. If the file path is not
- * specified, the user is prompted to provide one. It writes the DataModel data to
- * disk and loads the saved file into the application.
+ * specified, the user is prompted to provide one. It writes the DataModel data
+ * to disk and loads the saved file into the application.
  *
  * @return True if the project was saved successfully, false otherwise.
  */
@@ -937,8 +940,8 @@ void DataModel::ProjectModel::newJsonFile()
 /**
  * @brief Opens a DataModel file by prompting the user to select a file.
  *
- * This function opens a file dialog for the user to select a DataModel project file.
- * If a valid file is selected, the project is loaded from the file.
+ * This function opens a file dialog for the user to select a DataModel project
+ * file. If a valid file is selected, the project is loaded from the file.
  *
  * If the file path is invalid or no file is selected, the operation is aborted.
  */
@@ -964,8 +967,8 @@ void DataModel::ProjectModel::openJsonFile()
 /**
  * @brief Opens and loads a DataModel project file from the given path.
  *
- * This function opens a DataModel file from the specified file path, validates the
- * content, and loads the project data into the application.
+ * This function opens a DataModel file from the specified file path, validates
+ * the content, and loads the project data into the application.
  *
  * It reads the project settings, groups, and updates the models accordingly.
  *
@@ -1474,7 +1477,8 @@ void DataModel::ProjectModel::ensureValidGroup()
  * @param option The dataset option that defines the type of dataset to add
  *               (e.g., Plot, FFT, Bar, Gauge, Compass).
  */
-void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
+void DataModel::ProjectModel::addDataset(
+    const SerialStudio::DatasetOption option)
 {
   // Initialize a new dataset
   ensureValidGroup();
@@ -1715,7 +1719,7 @@ void DataModel::ProjectModel::addAction()
  * @param widget The widget type associated with the group.
  */
 void DataModel::ProjectModel::addGroup(const QString &title,
-                                  const SerialStudio::GroupWidget widget)
+                                       const SerialStudio::GroupWidget widget)
 {
   // Check if any existing group has the same title
   int count = 1;
@@ -1790,8 +1794,8 @@ void DataModel::ProjectModel::addGroup(const QString &title,
  * @param widget The type of widget to assign to the group.
  * @return True if the widget was successfully assigned, false otherwise.
  */
-bool DataModel::ProjectModel::setGroupWidget(const int group,
-                                        const SerialStudio::GroupWidget widget)
+bool DataModel::ProjectModel::setGroupWidget(
+    const int group, const SerialStudio::GroupWidget widget)
 {
   // Get group data
   auto &grp = m_groups[group];
@@ -2809,7 +2813,8 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
  *
  * @param dataset The dataset for which the model is being built.
  */
-void DataModel::ProjectModel::buildDatasetModel(const DataModel::Dataset &dataset)
+void DataModel::ProjectModel::buildDatasetModel(
+    const DataModel::Dataset &dataset)
 {
   // Clear the existing model
   if (m_datasetModel)
@@ -3259,8 +3264,8 @@ void DataModel::ProjectModel::buildDatasetModel(const DataModel::Dataset &datase
  * @brief Reloads the project model when a new DataModel file is loaded.
  *
  * This function checks if the current DataModel file path differs from the one
- * loaded by `DataModel::FrameBuilder`. If they differ, it opens the new DataModel file
- * and reloads the project model.
+ * loaded by `DataModel::FrameBuilder`. If they differ, it opens the new
+ * DataModel file and reloads the project model.
  */
 void DataModel::ProjectModel::onJsonLoaded()
 {
@@ -3577,7 +3582,8 @@ void DataModel::ProjectModel::onActionItemChanged(QStandardItem *item)
       m_selectedAction.autoExecuteOnConnect = value.toBool();
       break;
     case kActionView_TimerMode:
-      m_selectedAction.timerMode = static_cast<DataModel::TimerMode>(value.toInt());
+      m_selectedAction.timerMode
+          = static_cast<DataModel::TimerMode>(value.toInt());
       buildActionModel(m_selectedAction);
       break;
     case kActionView_TimerInterval:
@@ -3822,8 +3828,8 @@ void DataModel::ProjectModel::onDatasetItemChanged(QStandardItem *item)
  * @param previous The previously selected index in the tree model
  *                 (unused in this function).
  */
-void DataModel::ProjectModel::onCurrentSelectionChanged(const QModelIndex &current,
-                                                   const QModelIndex &previous)
+void DataModel::ProjectModel::onCurrentSelectionChanged(
+    const QModelIndex &current, const QModelIndex &previous)
 {
   // Ignore previous item, we don't need it
   (void)previous;
@@ -3996,8 +4002,8 @@ bool DataModel::ProjectModel::finalizeProjectSave()
  * @param title The current item's title, used as the key in the hash.
  */
 void DataModel::ProjectModel::saveExpandedStateMap(QStandardItem *item,
-                                              QHash<QString, bool> &map,
-                                              const QString &title)
+                                                   QHash<QString, bool> &map,
+                                                   const QString &title)
 {
   // Validate item
   if (!item)
@@ -4029,8 +4035,8 @@ void DataModel::ProjectModel::saveExpandedStateMap(QStandardItem *item,
  * hash.
  */
 void DataModel::ProjectModel::restoreExpandedStateMap(QStandardItem *item,
-                                                 QHash<QString, bool> &map,
-                                                 const QString &title)
+                                                      QHash<QString, bool> &map,
+                                                      const QString &title)
 {
   // Validate item
   if (!item)

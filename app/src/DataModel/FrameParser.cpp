@@ -102,8 +102,8 @@ DataModel::FrameParser::FrameParser(QQuickItem *parent)
           [=, this] { Q_EMIT modifiedChanged(); });
 
   // Make project editor modification status depend on code modification status
-  connect(this, &DataModel::FrameParser::modifiedChanged, &ProjectModel::instance(),
-          &ProjectModel::modifiedChanged);
+  connect(this, &DataModel::FrameParser::modifiedChanged,
+          &ProjectModel::instance(), &ProjectModel::modifiedChanged);
 
   // Load code from JSON model automatically
   connect(&DataModel::ProjectModel::instance(),

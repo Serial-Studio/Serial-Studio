@@ -1043,7 +1043,7 @@ void IO::Drivers::Modbus::onReadReady()
       }
     }
 
-    Q_EMIT dataReceived(data);
+    Q_EMIT dataReceived(makeByteArray(std::move(data)));
   }
 
   catch (...)

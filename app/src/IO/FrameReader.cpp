@@ -77,7 +77,7 @@ IO::FrameReader::FrameReader(QObject *parent)
  *
  * @param data Incoming byte stream from the device.
  */
-void IO::FrameReader::processData(const QByteArray &data)
+void IO::FrameReader::processData(const ByteArrayPtr &data)
 {
   if (IO::Manager::instance().paused())
     return;
@@ -87,13 +87,13 @@ void IO::FrameReader::processData(const QByteArray &data)
   // Parse frames immediately
   if (m_operationMode == SerialStudio::ProjectFile
       && m_frameDetectionMode == SerialStudio::NoDelimiters)
-    framesEnqueued = m_queue.try_enqueue(data);
+    framesEnqueued = m_queue.try_enqueue(*data);
 
   // Parse frames using a circular buffer
   else
   {
     // Append to circular buffer
-    m_circularBuffer.append(data);
+    m_circularBuffer.append(*data);
 
     // Track initial queue size to detect if frames were added
     const auto initialSize = m_queue.size_approx();

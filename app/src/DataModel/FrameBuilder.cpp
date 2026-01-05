@@ -37,7 +37,6 @@
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
-
 //------------------------------------------------------------------------------
 // Constants
 //------------------------------------------------------------------------------
@@ -155,7 +154,8 @@ SerialStudio::OperationMode DataModel::FrameBuilder::operationMode() const
  *
  * @param headers List of channel names to use
  */
-void DataModel::FrameBuilder::registerQuickPlotHeaders(const QStringList &headers)
+void DataModel::FrameBuilder::registerQuickPlotHeaders(
+    const QStringList &headers)
 {
   if (!headers.isEmpty())
   {
@@ -282,14 +282,13 @@ void DataModel::FrameBuilder::setFrameParser(DataModel::FrameParser *parser)
 }
 
 /**
- * Changes the operation mode of the DataModel parser. There are two possible op.
- * modes:
+ * Changes the operation mode of the DataModel parser. There are two possible
+ * op. modes:
  *
  * @c kManual serial data only contains the comma-separated values, and we need
- *            to use a DataModel map file (given by the user) to know what each value
- *            means. This method is recommended when we need to transfer &
- *            display a large amount of information from the microcontroller
- *            unit to the computer.
+ *            to use a DataModel map file (given by the user) to know what each
+ * value means. This method is recommended when we need to transfer & display a
+ * large amount of information from the microcontroller unit to the computer.
  *
  * @c kAutomatic serial data contains the DataModel data frame, good for simple
  *               applications or for prototyping.
@@ -406,7 +405,8 @@ void DataModel::FrameBuilder::onConnectedChanged()
 }
 
 /**
- * Saves the location of the last valid DataModel map file that was opened (if any)
+ * Saves the location of the last valid DataModel map file that was opened (if
+ * any)
  */
 void DataModel::FrameBuilder::setJsonPathSetting(const QString &path)
 {
@@ -437,7 +437,8 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray &data)
   channels.reserve(64);
   if (!SerialStudio::isAnyPlayerOpen() && m_frameParser) [[likely]]
   {
-    const auto decoderMethod = DataModel::ProjectModel::instance().decoderMethod();
+    const auto decoderMethod
+        = DataModel::ProjectModel::instance().decoderMethod();
     switch (decoderMethod)
     {
       case SerialStudio::Hexadecimal:
@@ -593,11 +594,12 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
  * @brief Rebuilds the internal frame structure for Quick Plot mode based on
  *        current channel count.
  *
- * Constructs a new `DataModel::Frame` and associated `DataModel::Group`/`Dataset` layout
- * using the provided channel values. If the build is configured for commercial
- * use and the audio bus is active, the function includes additional metadata
- * required for FFT plotting (e.g., sample rate, min/max). Otherwise, it builds
- * a generic datagrid and multiplot view for standard Quick Plot channels.
+ * Constructs a new `DataModel::Frame` and associated
+ * `DataModel::Group`/`Dataset` layout using the provided channel values. If the
+ * build is configured for commercial use and the audio bus is active, the
+ * function includes additional metadata required for FFT plotting (e.g., sample
+ * rate, min/max). Otherwise, it builds a generic datagrid and multiplot view
+ * for standard Quick Plot channels.
  *
  * This function is only called when the number of input channels changes, not
  * on every data frame.
@@ -784,9 +786,10 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame &frame)
   static auto &pluginsServer = Plugins::Server::instance();
 
   auto shared_frame = std::make_shared<const DataModel::Frame>(frame);
-  auto timestamped_frame = std::make_shared<DataModel::TimestampedFrame>(shared_frame);
+  auto timestamped_frame
+      = std::make_shared<DataModel::TimestampedFrame>(shared_frame);
 
-  dashboard.hotpathRxFrame(frame);
+  dashboard.hotpathRxFrame(shared_frame);
   csvExport.hotpathTxFrame(timestamped_frame);
   mdf4Export.hotpathTxFrame(timestamped_frame);
   pluginsServer.hotpathTxFrame(timestamped_frame);

@@ -191,7 +191,9 @@ CSV::ExportWorker::createCsvFile(const DataModel::Frame &frame)
  */
 CSV::Export::Export()
   : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
-      {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
+        {.queueCapacity = 8192,
+         .flushThreshold = 1024,
+         .timerIntervalMs = 1000})
   , m_isOpen(false)
 {
   initializeWorker();
@@ -323,8 +325,7 @@ void CSV::Export::setExportEnabled(const bool enabled)
  *
  * @param frame The timestamped frame to export (shared pointer).
  */
-void CSV::Export::hotpathTxFrame(
-    const DataModel::TimestampedFramePtr &frame)
+void CSV::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr &frame)
 {
   if (!exportEnabled() || SerialStudio::isAnyPlayerOpen())
     return;

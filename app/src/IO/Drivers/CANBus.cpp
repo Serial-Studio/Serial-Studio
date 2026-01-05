@@ -604,7 +604,7 @@ void IO::Drivers::CANBus::onFramesReceived()
       while (data.size() < 11)
         data.append(static_cast<char>(0));
 
-      Q_EMIT dataReceived(data);
+      Q_EMIT dataReceived(makeByteArray(std::move(data)));
     }
   }
   catch (...)

@@ -153,7 +153,7 @@ private:
   void startFrameReader();
 
   void onReadyRead();
-  void onDataReceived(const QByteArray &data);
+  void onDataReceived(const ByteArrayPtr &data);
 
 private:
   std::atomic<bool> m_paused;

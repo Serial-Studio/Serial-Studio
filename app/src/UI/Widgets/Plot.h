@@ -104,8 +104,8 @@ private slots:
 private:
   template<typename Extractor>
   bool computeMinMaxValues(double &min, double &max,
-                           const DataModel::Dataset &dataset, const bool addPadding,
-                           Extractor extractor);
+                           const DataModel::Dataset &dataset,
+                           const bool addPadding, Extractor extractor);
 
 private:
   int m_index;

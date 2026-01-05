@@ -83,4 +83,4 @@ private:
   QPlainTextEdit *m_inputDisplay;
 };
 
-} // namespace JSON
+} // namespace DataModel

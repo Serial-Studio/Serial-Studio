@@ -230,12 +230,14 @@ int main(int argc, char **argv)
   {
     QString projectPath = parser.value(pOpt);
     DataModel::ProjectModel::instance().openJsonFile(projectPath);
-    DataModel::FrameBuilder::instance().setOperationMode(SerialStudio::ProjectFile);
+    DataModel::FrameBuilder::instance().setOperationMode(
+        SerialStudio::ProjectFile);
   }
 
   // Enable quick plot mode
   else if (parser.isSet(qOpt))
-    DataModel::FrameBuilder::instance().setOperationMode(SerialStudio::QuickPlot);
+    DataModel::FrameBuilder::instance().setOperationMode(
+        SerialStudio::QuickPlot);
 
   // Disable frame processing
   else if (parser.isSet(jOpt))

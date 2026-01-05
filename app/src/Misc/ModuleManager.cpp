@@ -156,7 +156,8 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
     output.append("\n");
 
     // Display data in console
-    Console::Handler::instance().hotpathRxData(output.toUtf8());
+    Console::Handler::instance().hotpathRxData(
+        IO::makeByteArray(output.toUtf8()));
   }
 }
 
@@ -255,7 +256,8 @@ void Misc::ModuleManager::registerQmlTypes()
 
   // Register JSON custom items
   qmlRegisterType<DataModel::FrameParser>("SerialStudio", 1, 0, "FrameParser");
-  qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
+  qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0,
+                                           "ProjectModel");
 
   // Register generic dashboard widget
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");

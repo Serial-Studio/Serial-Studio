@@ -21,9 +21,9 @@
 
 #pragma once
 
+#include <QTimer>
 #include <QObject>
 #include <QThread>
-#include <QTimer>
 
 #include <atomic>
 #include <vector>

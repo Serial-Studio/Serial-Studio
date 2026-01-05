@@ -125,4 +125,4 @@ private:
   DataModel::FrameParser *m_frameParser;
   SerialStudio::OperationMode m_opMode;
 };
-} // namespace JSON
+} // namespace DataModel

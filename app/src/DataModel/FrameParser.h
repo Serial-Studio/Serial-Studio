@@ -117,4 +117,4 @@ private:
 
   FrameParserTestDialog m_testDialog;
 };
-} // namespace JSON
+} // namespace DataModel

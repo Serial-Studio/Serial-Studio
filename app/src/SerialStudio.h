@@ -253,7 +253,8 @@ public:
   //
   [[nodiscard]] static bool activated();
   [[nodiscard]] static bool commercialCfg(const QVector<DataModel::Group> &g);
-  [[nodiscard]] static bool commercialCfg(const std::vector<DataModel::Group> &g);
+  [[nodiscard]] static bool
+  commercialCfg(const std::vector<DataModel::Group> &g);
 
   //
   // Dashboard logic

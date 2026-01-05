@@ -95,13 +95,13 @@ void Plugins::ServerWorker::removeSocket(QTcpSocket *socket)
  * Handles transmission of raw I/O data to plugin clients.
  * The data is base64-encoded and wrapped in JSON format.
  */
-void Plugins::ServerWorker::writeRawData(const QByteArray &data)
+void Plugins::ServerWorker::writeRawData(const IO::ByteArrayPtr &data)
 {
   if (m_sockets.isEmpty())
     return;
 
   QJsonObject object;
-  object.insert(QStringLiteral("data"), QString::fromUtf8(data.toBase64()));
+  object.insert(QStringLiteral("data"), QString::fromUtf8(data->toBase64()));
   const QJsonDocument document(object);
   const auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
@@ -175,7 +175,7 @@ void Plugins::ServerWorker::processItems(
  */
 Plugins::Server::Server()
   : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
-      {.queueCapacity = 2048, .flushThreshold = 512, .timerIntervalMs = 1000})
+        {.queueCapacity = 2048, .flushThreshold = 512, .timerIntervalMs = 1000})
   , m_enabled(false)
 {
   initializeWorker();
@@ -293,14 +293,14 @@ void Plugins::Server::setEnabled(const bool enabled)
  *
  * @param data Raw data bytes received from the I/O layer.
  */
-void Plugins::Server::hotpathTxData(const QByteArray &data)
+void Plugins::Server::hotpathTxData(const IO::ByteArrayPtr &data)
 {
   if (!enabled())
     return;
 
   auto *worker = static_cast<ServerWorker *>(m_worker);
   QMetaObject::invokeMethod(worker, "writeRawData", Qt::QueuedConnection,
-                            Q_ARG(QByteArray, data));
+                            Q_ARG(IO::ByteArrayPtr, data));
 }
 
 /**
@@ -311,7 +311,8 @@ void Plugins::Server::hotpathTxData(const QByteArray &data)
  *
  * @param frame Timestamped frame object to register.
  */
-void Plugins::Server::hotpathTxFrame(const DataModel::TimestampedFramePtr &frame)
+void Plugins::Server::hotpathTxFrame(
+    const DataModel::TimestampedFramePtr &frame)
 {
   if (enabled())
     enqueueData(frame);
@@ -356,14 +357,12 @@ void Plugins::Server::acceptConnection()
     return;
   }
 
-  connect(socket, &QTcpSocket::errorOccurred, this,
-          &Server::onErrorOccurred);
+  connect(socket, &QTcpSocket::errorOccurred, this, &Server::onErrorOccurred);
 
   auto *worker = static_cast<ServerWorker *>(m_worker);
   QMetaObject::invokeMethod(worker, "addSocket", Qt::QueuedConnection,
                             Q_ARG(QTcpSocket *, socket));
 }
-
 
 /**
  * @brief Handles socket-level errors from connected clients.

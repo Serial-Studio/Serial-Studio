@@ -21,11 +21,47 @@
 
 #pragma once
 
+#include <memory>
+
 #include <QObject>
 #include <QIODevice>
 
 namespace IO
 {
+/**
+ * @brief Type alias for shared byte array pointers used in data hotpath.
+ *
+ * Using shared_ptr<const T> provides:
+ * - Zero-copy distribution to multiple consumers
+ * - Thread-safe reference counting
+ * - Compile-time const-correctness
+ */
+typedef std::shared_ptr<const QByteArray> ByteArrayPtr;
+
+/**
+ * @brief Creates a shared byte array from a const reference.
+ *
+ * @param data Source data (will be copied into shared_ptr)
+ * @return Shared pointer to immutable byte array
+ */
+[[nodiscard]] inline ByteArrayPtr makeByteArray(const QByteArray &data)
+{
+  return std::make_shared<const QByteArray>(data);
+}
+
+/**
+ * @brief Creates a shared byte array from an rvalue reference.
+ *
+ * Uses move semantics to avoid unnecessary copy when source is temporary.
+ *
+ * @param data Source data (will be moved into shared_ptr)
+ * @return Shared pointer to immutable byte array
+ */
+[[nodiscard]] inline ByteArrayPtr makeByteArray(QByteArray &&data)
+{
+  return std::make_shared<const QByteArray>(std::move(data));
+}
+
 /**
  * @class HAL_Driver
  * @brief Abstract base class for hardware abstraction layer drivers.
@@ -70,9 +106,9 @@ signals:
 
   /**
    * @brief Emitted when buffered data is ready.
-   * @param data The buffered data.
+   * @param data The buffered data (shared pointer for zero-copy distribution).
    */
-  void dataReceived(const QByteArray &data);
+  void dataReceived(const IO::ByteArrayPtr &data);
 
 public:
   /**

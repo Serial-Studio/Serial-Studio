@@ -489,8 +489,9 @@ void IO::Manager::processPayload(const QByteArray &payload)
     static auto &server = Plugins::Server::instance();
     static auto &frameBuilder = DataModel::FrameBuilder::instance();
 
-    server.hotpathTxData(payload);
-    console.hotpathRxData(payload);
+    const auto data = makeByteArray(payload);
+    server.hotpathTxData(data);
+    console.hotpathRxData(data);
     frameBuilder.hotpathRxFrame(payload);
 
 #ifdef BUILD_COMMERCIAL
@@ -838,7 +839,7 @@ void IO::Manager::onReadyRead()
  *
  * @param data Raw input bytes from the communication channel.
  */
-void IO::Manager::onDataReceived(const QByteArray &data)
+void IO::Manager::onDataReceived(const ByteArrayPtr &data)
 {
   static auto &console = Console::Handler::instance();
   static auto &server = Plugins::Server::instance();

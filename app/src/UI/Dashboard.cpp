@@ -453,8 +453,8 @@ const QMap<int, DataModel::Dataset> &UI::Dashboard::datasets() const
  *
  * @param widget The type of dashboard widget.
  * @param index  The index of the widget within its group type.
- * @return Reference to the requested @c DataModel::Group, or an empty group if not
- *         found.
+ * @return Reference to the requested @c DataModel::Group, or an empty group if
+ * not found.
  *
  * @note This function is production-safe and will not crash if invalid
  *       arguments are provided. It logs warnings for missing widget types or
@@ -494,8 +494,8 @@ UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
  *
  * @param widget The type of dashboard widget.
  * @param index  The index of the dataset within its widget type.
- * @return Reference to the requested @c DataModel::Dataset, or an empty dataset if
- *         not found.
+ * @return Reference to the requested @c DataModel::Dataset, or an empty dataset
+ * if not found.
  *
  * @note This function is production-safe and will not crash if invalid
  *       arguments are provided. It logs warnings for missing widget types or
@@ -1057,24 +1057,25 @@ void UI::Dashboard::setMultiplotRunning(const int index, const bool enabled)
  *
  * @param frame The new DataModel data frame to process.
  */
-void UI::Dashboard::hotpathRxFrame(const DataModel::Frame &frame)
+void UI::Dashboard::hotpathRxFrame(
+    const std::shared_ptr<const DataModel::Frame> &frame)
 {
   // Validate frame
-  if (frame.groups.size() <= 0 || !streamAvailable()) [[unlikely]]
+  if (frame->groups.size() <= 0 || !streamAvailable()) [[unlikely]]
     return;
 
   // Regenerate dashboard model if frame structure changed
-  if (!DataModel::compare_frames(frame, m_rawFrame) || m_datasetReferences.isEmpty())
-      [[unlikely]]
+  if (!DataModel::compare_frames(*frame, m_rawFrame)
+      || m_datasetReferences.isEmpty()) [[unlikely]]
   {
     const bool hadProFeatures = m_rawFrame.containsCommercialFeatures;
-    reconfigureDashboard(frame);
-    if (hadProFeatures != frame.containsCommercialFeatures)
+    reconfigureDashboard(*frame);
+    if (hadProFeatures != frame->containsCommercialFeatures)
       Q_EMIT containsCommercialFeaturesChanged();
   }
 
   // Update dashboard data
-  updateDashboardData(frame);
+  updateDashboardData(*frame);
 
   // Set dashboard update flag
   m_updateRequired = true;
@@ -1750,8 +1751,8 @@ void UI::Dashboard::configureMultiLineSeries()
  *        given DataModel frame.
  *
  * This method clears existing actions and timers, then loads a new set of
- * actions from the provided DataModel frame. For each action, it sets up an optional
- * timer based on its configured TimerMode and interval.
+ * actions from the provided DataModel frame. For each action, it sets up an
+ * optional timer based on its configured TimerMode and interval.
  *
  * Timers are connected to trigger the corresponding action via
  * `activateAction()`, and are automatically started if the action is configured
@@ -1759,7 +1760,8 @@ void UI::Dashboard::configureMultiLineSeries()
  * - TimerMode::AutoStart
  * - autoExecuteOnConnect() flag
  *
- * @param frame The DataModel frame containing the user-defined actions to configure.
+ * @param frame The DataModel frame containing the user-defined actions to
+ * configure.
  *
  * @note This method has no effect if:
  * - The frame is invalid (`!frame.isValid()`).

@@ -229,7 +229,7 @@ void Widgets::Plot::updateData()
 
     // Downsample data that only has one Y point per X point
     if (m_monotonicData)
-      (void) DSP::downsampleMonotonic(plotData, m_dataW, m_dataH, m_data, &ws);
+      (void)DSP::downsampleMonotonic(plotData, m_dataW, m_dataH, m_data, &ws);
 
     // Draw directly on complex plots (such as Lorenz Attractor)
     else

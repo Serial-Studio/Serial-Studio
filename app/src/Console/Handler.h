@@ -26,6 +26,7 @@
 #include <QSettings>
 
 #include "IO/CircularBuffer.h"
+#include "IO/HAL_Driver.h"
 
 namespace Console
 {
@@ -193,7 +194,7 @@ public slots:
   void setDisplayMode(const Console::Handler::DisplayMode &mode);
   void append(const QString &str, const bool addTimestamp = false);
 
-  void hotpathRxData(QByteArrayView data);
+  void hotpathRxData(const IO::ByteArrayPtr &data);
   void displaySentData(QByteArrayView data);
 
 private slots:

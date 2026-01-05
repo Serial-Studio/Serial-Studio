@@ -493,13 +493,13 @@ void IO::Drivers::Network::onReadyRead()
       QByteArray datagram;
       datagram.resize(int(udpSocket()->pendingDatagramSize()));
       udpSocket()->readDatagram(datagram.data(), datagram.size());
-      Q_EMIT dataReceived(datagram);
+      Q_EMIT dataReceived(makeByteArray(std::move(datagram)));
     }
   }
 
   // We are using the TCP socket...
   else if (socketType() == QAbstractSocket::TcpSocket)
-    Q_EMIT dataReceived(tcpSocket()->readAll());
+    Q_EMIT dataReceived(makeByteArray(tcpSocket()->readAll()));
 }
 
 /**
