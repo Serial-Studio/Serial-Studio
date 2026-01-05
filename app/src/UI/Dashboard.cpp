@@ -1057,25 +1057,24 @@ void UI::Dashboard::setMultiplotRunning(const int index, const bool enabled)
  *
  * @param frame The new DataModel data frame to process.
  */
-void UI::Dashboard::hotpathRxFrame(
-    const std::shared_ptr<const DataModel::Frame> &frame)
+void UI::Dashboard::hotpathRxFrame(const DataModel::Frame &frame)
 {
   // Validate frame
-  if (frame->groups.size() <= 0 || !streamAvailable()) [[unlikely]]
+  if (frame.groups.size() <= 0 || !streamAvailable()) [[unlikely]]
     return;
 
   // Regenerate dashboard model if frame structure changed
-  if (!DataModel::compare_frames(*frame, m_rawFrame)
+  if (!DataModel::compare_frames(frame, m_rawFrame)
       || m_datasetReferences.isEmpty()) [[unlikely]]
   {
     const bool hadProFeatures = m_rawFrame.containsCommercialFeatures;
-    reconfigureDashboard(*frame);
-    if (hadProFeatures != frame->containsCommercialFeatures)
+    reconfigureDashboard(frame);
+    if (hadProFeatures != frame.containsCommercialFeatures)
       Q_EMIT containsCommercialFeaturesChanged();
   }
 
   // Update dashboard data
-  updateDashboardData(*frame);
+  updateDashboardData(frame);
 
   // Set dashboard update flag
   m_updateRequired = true;

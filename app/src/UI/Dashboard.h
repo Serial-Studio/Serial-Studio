@@ -145,7 +145,7 @@ public slots:
   void setFFTPlotRunning(const int index, const bool enabled);
   void setMultiplotRunning(const int index, const bool enabled);
 
-  void hotpathRxFrame(const std::shared_ptr<const DataModel::Frame> &frame);
+  void hotpathRxFrame(const DataModel::Frame &frame);
 
 private:
   void updateDashboardData(const DataModel::Frame &frame);
