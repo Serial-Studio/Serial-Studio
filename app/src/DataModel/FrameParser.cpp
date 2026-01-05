@@ -206,6 +206,9 @@ QStringList DataModel::FrameParser::parse(const QByteArray &frame)
  */
 QString DataModel::FrameParser::templateCode() const
 {
+  if (m_templateIdx < 0 || m_templateIdx >= m_templateFiles.count())
+    return "";
+
   QString code;
   auto path = QString(":/rcc/scripts/%1").arg(m_templateFiles[m_templateIdx]);
 

@@ -300,6 +300,10 @@ void Widgets::FFTPlot::updateData()
     }
   }
 
+  // Ensure we have data to work with
+  if (newSize <= 0)
+    return;
+
   // Access the internal buffer and state of the circular queue
   const double *in = data.raw();
   std::size_t idx = data.frontIndex();
