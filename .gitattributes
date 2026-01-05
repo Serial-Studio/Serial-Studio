@@ -1,2 +1,9 @@
 deploy/* linguist-vendored
 libs/* linguist-vendored
+lib/* linguist-vendored
+tests/* linguist-vendored
+doc/* linguist-vendored
+examples/* linguist-vendored
+licenses/* linguist-vendored
+scripts/* linguist-vendored
+.github/* linguist-vendored
