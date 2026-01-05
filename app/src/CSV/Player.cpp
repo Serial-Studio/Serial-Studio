@@ -862,7 +862,7 @@ QDateTime CSV::Player::getDateTime(const QString &cell)
   bool isNumber = false;
   cell.toDouble(&isNumber);
   if (isNumber)
-    return QDateTime(); // Return invalid QDateTime for fractional seconds
+    return QDateTime();
 
   // Initialize parameters
   QDateTime dateTime;
