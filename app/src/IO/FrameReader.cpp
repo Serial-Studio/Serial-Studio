@@ -41,11 +41,8 @@
  */
 IO::FrameReader::FrameReader(QObject *parent)
   : QObject(parent)
-  , m_circularBuffer(1024 * 1024 * 10)
   , m_checksumLength(0)
-  , m_checksum(std::make_shared<const QString>())
-  , m_startSequence(std::make_shared<const QByteArray>())
-  , m_finishSequence(std::make_shared<const QByteArray>())
+  , m_circularBuffer(1024 * 1024 * 10)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
 {
@@ -157,16 +154,13 @@ void IO::FrameReader::processData(const ByteArrayPtr &data)
  */
 void IO::FrameReader::setChecksum(const QString &checksum)
 {
-  auto newChecksum = std::make_shared<const QString>(checksum);
-  std::atomic_store_explicit(&m_checksum, newChecksum,
-                             std::memory_order_release);
-
   const auto &map = IO::checksumFunctionMap();
   const auto it = map.find(checksum);
-  if (it != map.end())
-    m_checksumLength = it.value()("", 0).size();
-  else
-    m_checksumLength = 0;
+  const qsizetype newLength = (it != map.end()) ? it.value()("", 0).size() : 0;
+
+  QMutexLocker locker(&m_configMutex);
+  m_checksum = checksum;
+  m_checksumLength = newLength;
 }
 
 /**
@@ -181,9 +175,8 @@ void IO::FrameReader::setChecksum(const QString &checksum)
  */
 void IO::FrameReader::setStartSequence(const QByteArray &start)
 {
-  auto newSequence = std::make_shared<const QByteArray>(start);
-  std::atomic_store_explicit(&m_startSequence, newSequence,
-                             std::memory_order_release);
+  QMutexLocker locker(&m_configMutex);
+  m_startSequence = start;
 }
 
 /**
@@ -198,9 +191,8 @@ void IO::FrameReader::setStartSequence(const QByteArray &start)
  */
 void IO::FrameReader::setFinishSequence(const QByteArray &finish)
 {
-  auto newSequence = std::make_shared<const QByteArray>(finish);
-  std::atomic_store_explicit(&m_finishSequence, newSequence,
-                             std::memory_order_release);
+  QMutexLocker locker(&m_configMutex);
+  m_finishSequence = finish;
 }
 
 /**
@@ -219,10 +211,9 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 
   if (mode != SerialStudio::ProjectFile)
   {
+    QMutexLocker locker(&m_configMutex);
+    m_checksum.clear();
     m_checksumLength = 0;
-    auto emptyChecksum = std::make_shared<const QString>();
-    std::atomic_store_explicit(&m_checksum, emptyChecksum,
-                               std::memory_order_release);
   }
 }
 
@@ -262,16 +253,15 @@ void IO::FrameReader::setFrameDetectionMode(
  */
 void IO::FrameReader::readEndDelimitedFrames()
 {
-  const auto operationMode = m_operationMode.load(std::memory_order_relaxed);
-  const auto frameDetectionMode
-      = m_frameDetectionMode.load(std::memory_order_relaxed);
+  const auto opMode = m_operationMode.load(std::memory_order_relaxed);
+  const auto detectMode = m_frameDetectionMode.load(std::memory_order_relaxed);
 
   while (true)
   {
     int endIndex = -1;
     QByteArray delimiter;
 
-    if (operationMode == SerialStudio::QuickPlot) [[likely]]
+    if (opMode == SerialStudio::QuickPlot) [[likely]]
     {
       for (const QByteArray &d : std::as_const(m_quickPlotEndSequences))
       {
@@ -285,11 +275,12 @@ void IO::FrameReader::readEndDelimitedFrames()
       }
     }
 
-    else if (frameDetectionMode == SerialStudio::EndDelimiterOnly) [[likely]]
+    else if (detectMode == SerialStudio::EndDelimiterOnly) [[likely]]
     {
-      auto finishSeq = std::atomic_load_explicit(&m_finishSequence,
-                                                 std::memory_order_acquire);
-      delimiter = *finishSeq;
+      {
+        QMutexLocker locker(&m_configMutex);
+        delimiter = m_finishSequence;
+      }
       endIndex = m_circularBuffer.findPatternKMP(delimiter);
     }
 
@@ -340,23 +331,26 @@ void IO::FrameReader::readEndDelimitedFrames()
  */
 void IO::FrameReader::readStartDelimitedFrames()
 {
-  auto startSeq
-      = std::atomic_load_explicit(&m_startSequence, std::memory_order_acquire);
+  QByteArray startSeq;
+  {
+    QMutexLocker locker(&m_configMutex);
+    startSeq = m_startSequence;
+  }
 
   while (true)
   {
     // Find the first start delimiter in the buffer
-    int startIndex = m_circularBuffer.findPatternKMP(*startSeq);
+    int startIndex = m_circularBuffer.findPatternKMP(startSeq);
     if (startIndex == -1)
       break;
 
     // Try to find the next start delimiter after this one
     int nextStartIndex = m_circularBuffer.findPatternKMP(
-        *startSeq, startIndex + startSeq->size());
+        startSeq, startIndex + startSeq.size());
 
     // Calculate start and end positions of the current frame
     qsizetype frameEndPos;
-    qsizetype frameStart = startIndex + startSeq->size();
+    qsizetype frameStart = startIndex + startSeq.size();
 
     // No second start delimiter found...maybe the last frame in the stream
     if (nextStartIndex == -1)
@@ -428,38 +422,41 @@ void IO::FrameReader::readStartDelimitedFrames()
  */
 void IO::FrameReader::readStartEndDelimitedFrames()
 {
-  auto startSeq
-      = std::atomic_load_explicit(&m_startSequence, std::memory_order_acquire);
-  auto finishSeq
-      = std::atomic_load_explicit(&m_finishSequence, std::memory_order_acquire);
+  QByteArray startSeq;
+  QByteArray finishSeq;
+  {
+    QMutexLocker locker(&m_configMutex);
+    startSeq = m_startSequence;
+    finishSeq = m_finishSequence;
+  }
 
   // Read data into an array of frames
   while (true)
   {
     // Locate end delimiter
-    int finishIndex = m_circularBuffer.findPatternKMP(*finishSeq);
+    int finishIndex = m_circularBuffer.findPatternKMP(finishSeq);
     if (finishIndex == -1)
       break;
 
     // Locate start delimiter and ensure it's before the end
-    int startIndex = m_circularBuffer.findPatternKMP(*startSeq);
+    int startIndex = m_circularBuffer.findPatternKMP(startSeq);
     if (startIndex == -1 || startIndex >= finishIndex)
     {
-      (void)m_circularBuffer.read(finishIndex + finishSeq->size());
+      (void)m_circularBuffer.read(finishIndex + finishSeq.size());
       continue;
     }
 
     // Determine payload boundaries
-    qsizetype frameStart = startIndex + startSeq->size();
+    qsizetype frameStart = startIndex + startSeq.size();
     qsizetype frameLength = finishIndex - frameStart;
     if (frameLength <= 0)
     {
-      (void)m_circularBuffer.read(finishIndex + finishSeq->size());
+      (void)m_circularBuffer.read(finishIndex + finishSeq.size());
       continue;
     }
 
     // Extract frame data
-    const auto crcPosition = finishIndex + finishSeq->size();
+    const auto crcPosition = finishIndex + finishSeq.size();
     const auto frameEndPos = crcPosition + m_checksumLength;
     const auto frame = m_circularBuffer.peek(frameStart + frameLength)
                            .mid(frameStart, frameLength);
@@ -521,15 +518,20 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray &frame,
     return ValidationStatus::ChecksumIncomplete;
 
   // Compare actual vs received checksum
-  auto crc = std::atomic_load_explicit(&m_checksum, std::memory_order_acquire);
-  const auto calculated = IO::checksum(*crc, frame);
+  QString crcAlgorithm;
+  {
+    QMutexLocker locker(&m_configMutex);
+    crcAlgorithm = m_checksum;
+  }
+
+  const auto calculated = IO::checksum(crcAlgorithm, frame);
   const QByteArray received = buffer.mid(crcPosition, m_checksumLength);
   if (calculated == received)
     return ValidationStatus::FrameOk;
 
   // Log checksum mismatch
   qWarning() << "\n"
-             << crc->toStdString().c_str() << "failed:\n"
+             << crcAlgorithm.toStdString().c_str() << "failed:\n"
              << "\t- Received:" << received.toHex(' ') << "\n"
              << "\t- Calculated:" << calculated.toHex(' ') << "\n"
              << "\t- Frame:" << frame.toHex(' ') << "\n"

@@ -23,6 +23,7 @@
 
 #include <memory>
 #include <atomic>
+#include <QMutex>
 #include <QObject>
 #include <QString>
 #include <QByteArray>
@@ -92,14 +93,15 @@ private:
   ValidationStatus checksum(const QByteArray &frame, qsizetype crcPosition);
 
 private:
+  mutable QMutex m_configMutex;
+
+  QString m_checksum;
+  qsizetype m_checksumLength;
+  QByteArray m_startSequence;
+  QByteArray m_finishSequence;
   QVector<QByteArray> m_quickPlotEndSequences;
   CircularBuffer<QByteArray, char> m_circularBuffer;
   moodycamel::ReaderWriterQueue<QByteArray> m_queue{4096};
-
-  qsizetype m_checksumLength;
-  std::shared_ptr<const QString> m_checksum;
-  std::shared_ptr<const QByteArray> m_startSequence;
-  std::shared_ptr<const QByteArray> m_finishSequence;
   std::atomic<SerialStudio::OperationMode> m_operationMode;
   std::atomic<SerialStudio::FrameDetection> m_frameDetectionMode;
 };
