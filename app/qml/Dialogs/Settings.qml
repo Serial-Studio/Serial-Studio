@@ -173,6 +173,7 @@ Window {
         Component.onCompleted: font.capitalization = Font.AllUppercase
       } GroupBox {
         Layout.fillWidth: true
+        Layout.minimumWidth: 356
 
         background: Rectangle {
           radius: 2
