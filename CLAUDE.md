@@ -10,7 +10,7 @@ Serial Studio is a cross-platform telemetry dashboard and real-time data visuali
 - **Multi-Protocol Support**: UART, TCP/UDP, Bluetooth LE, Audio, Modbus TCP/RTU, CAN Bus
 - **Real-Time Visualization**: 15+ widget types (plots, gauges, maps, 3D graphics, FFT)
 - **File Playback**: CSV and MDF4/MF4 (automotive) file support with timeline controls
-- **High Performance**: Lock-free data paths optimized for high-frequency data (256 KHz+)
+- **High Performance**: Lock-free data paths optimized for high-frequency data 
 - **Custom Parsing**: JavaScript-based frame parsing with JSON schema definition
 
 **Technical Highlights:**
@@ -20,7 +20,7 @@ Serial Studio is a cross-platform telemetry dashboard and real-time data visuali
 - Zero-copy dashboard updates via const references (no heap allocation per frame)
 - Nanosecond-precision timestamps via `std::chrono::steady_clock`
 - Single-allocation timestamped frames for async consumers (CSV/MDF4 export)
-- Profile-Guided Optimization (PGO) support for 10-20% performance gains
+- Profile-Guided Optimization (PGO) support for possible performance gains
 
 ## Build Commands
 
@@ -81,7 +81,7 @@ vcpkg install zlib expat
   - Adds: stack canaries, FORTIFY_SOURCE, control-flow protection, full RELRO (-z relro -z now)
 - `ENABLE_PGO=ON`: Enable Profile-Guided Optimization (requires 3-stage build, see above)
   - `PGO_STAGE=GENERATE`: Build with instrumentation to collect profile data
-  - `PGO_STAGE=USE`: Build with profile optimization (10-20% performance gain)
+  - `PGO_STAGE=USE`: Build with profile optimization
 - `DEBUG_SANITIZER=ON`: Enable AddressSanitizer and UBSan (debug builds only)
 - `USE_SYSTEM_ZLIB=ON`: Use system-provided zlib instead of downloading from GitHub (required for Flathub builds)
 - `USE_SYSTEM_EXPAT=ON`: Use system-provided expat instead of downloading from GitHub (required for Flathub builds)
@@ -606,7 +606,7 @@ Commercial features (Pro) include: MQTT, Modbus TCP/RTU, CAN Bus (with DBC impor
 2. **Follow the zero-copy pattern** - Pass large objects by const reference when possible
 3. **Use C++20 concepts** - Add type constraints to template functions
 4. **Avoid inline comments** - Use block comments and self-documenting code
-5. **Test performance impact** - This is a high-performance application optimized for 256 KHz+ data rates
+5. **Test performance impact** - This is a high-performance application optimized for 192 KHz+ data rates
 6. **Consider PGO builds** - Profile-Guided Optimization provides 10-20% performance gains
 7. **Use branch prediction hints** - Add `[[likely]]` and `[[unlikely]]` to hotpaths
 8. **Cache singleton references** - Use static references in tight loops
