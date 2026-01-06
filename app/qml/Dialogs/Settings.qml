@@ -39,6 +39,8 @@ Window {
   // Window options
   //
   title: qsTr("Preferences")
+  width: minimumWidth
+  height: minimumHeight
   minimumWidth: layout.implicitWidth + 32
   maximumWidth: layout.implicitWidth + 32
   minimumHeight: layout.implicitHeight + 32 + titlebarHeight
@@ -53,7 +55,7 @@ Window {
   //
   // Native window integration
   //
-  onVisibleChanged: {
+  onVisibilityChanged: {
     if (visible)
       Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["window"])
     else

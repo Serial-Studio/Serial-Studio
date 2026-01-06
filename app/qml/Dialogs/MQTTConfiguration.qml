@@ -56,7 +56,7 @@ Window {
   //
   // Native window integration
   //
-  onVisibleChanged: {
+  onVisibilityChanged: {
     if (visible)
       Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["window"])
     else
