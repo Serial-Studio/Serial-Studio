@@ -50,6 +50,11 @@ IO::FrameReader::FrameReader(QObject *parent)
   m_quickPlotEndSequences.append(QByteArray("\r"));
   m_quickPlotEndSequences.append(QByteArray("\r\n"));
 
+  m_quickPlotEndSequenceLps.clear();
+  m_quickPlotEndSequenceLps.reserve(m_quickPlotEndSequences.size());
+  for (const auto &delimiter : std::as_const(m_quickPlotEndSequences))
+    m_quickPlotEndSequenceLps.append(m_circularBuffer.buildKMPTable(delimiter));
+
   setChecksum(IO::Manager::instance().checksumAlgorithm());
   setStartSequence(IO::Manager::instance().startSequence());
   setFinishSequence(IO::Manager::instance().finishSequence());
@@ -159,6 +164,7 @@ void IO::FrameReader::setChecksum(const QString &checksum)
 void IO::FrameReader::setStartSequence(const QByteArray &start)
 {
   m_startSequence = start;
+  m_startSequenceLps = m_circularBuffer.buildKMPTable(m_startSequence);
 }
 
 /**
@@ -169,6 +175,7 @@ void IO::FrameReader::setStartSequence(const QByteArray &start)
 void IO::FrameReader::setFinishSequence(const QByteArray &finish)
 {
   m_finishSequence = finish;
+  m_finishSequenceLps = m_circularBuffer.buildKMPTable(m_finishSequence);
 }
 
 /**
@@ -230,9 +237,11 @@ void IO::FrameReader::readEndDelimitedFrames()
 
     if (m_operationMode == SerialStudio::QuickPlot)
     {
-      for (const QByteArray &d : std::as_const(m_quickPlotEndSequences))
+      for (int i = 0; i < m_quickPlotEndSequences.size(); ++i)
       {
-        int index = m_circularBuffer.findPatternKMP(d);
+        const auto &d = m_quickPlotEndSequences[i];
+        const auto &lps = m_quickPlotEndSequenceLps[i];
+        int index = m_circularBuffer.findPatternKMP(d, lps);
         if (index != -1 && (endIndex == -1 || index < endIndex))
         {
           endIndex = index;
@@ -245,7 +254,8 @@ void IO::FrameReader::readEndDelimitedFrames()
     else if (m_frameDetectionMode == SerialStudio::EndDelimiterOnly)
     {
       delimiter = m_finishSequence;
-      endIndex = m_circularBuffer.findPatternKMP(delimiter);
+      endIndex
+          = m_circularBuffer.findPatternKMP(delimiter, m_finishSequenceLps);
     }
 
     // No frame found
@@ -297,12 +307,14 @@ void IO::FrameReader::readStartDelimitedFrames()
 {
   while (true)
   {
-    int startIndex = m_circularBuffer.findPatternKMP(m_startSequence);
+    int startIndex
+        = m_circularBuffer.findPatternKMP(m_startSequence, m_startSequenceLps);
     if (startIndex == -1)
       break;
 
-    int nextStartIndex = m_circularBuffer.findPatternKMP(
-        m_startSequence, startIndex + m_startSequence.size());
+    int nextStartIndex
+        = m_circularBuffer.findPatternKMP(m_startSequence, m_startSequenceLps,
+                                          startIndex + m_startSequence.size());
 
     qsizetype frameEndPos;
     qsizetype frameStart = startIndex + m_startSequence.size();
@@ -379,11 +391,13 @@ void IO::FrameReader::readStartEndDelimitedFrames()
 {
   while (true)
   {
-    int finishIndex = m_circularBuffer.findPatternKMP(m_finishSequence);
+    int finishIndex = m_circularBuffer.findPatternKMP(m_finishSequence,
+                                                      m_finishSequenceLps);
     if (finishIndex == -1)
       break;
 
-    int startIndex = m_circularBuffer.findPatternKMP(m_startSequence);
+    int startIndex
+        = m_circularBuffer.findPatternKMP(m_startSequence, m_startSequenceLps);
     if (startIndex == -1 || startIndex >= finishIndex)
     {
       (void)m_circularBuffer.read(finishIndex + m_finishSequence.size());
@@ -455,12 +469,13 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray &frame,
     return ValidationStatus::FrameOk;
 
   // Validate that we can read the checksum
-  const auto buffer = m_circularBuffer.peek(m_circularBuffer.size());
-  if (buffer.size() < crcPosition + m_checksumLength)
+  const auto bufferSize = m_circularBuffer.size();
+  if (bufferSize < crcPosition + m_checksumLength)
     return ValidationStatus::ChecksumIncomplete;
 
   const auto calculated = IO::checksum(m_checksum, frame);
-  const QByteArray received = buffer.mid(crcPosition, m_checksumLength);
+  const QByteArray received
+      = m_circularBuffer.peekRange(crcPosition, m_checksumLength);
   if (calculated == received)
     return ValidationStatus::FrameOk;
 
@@ -469,7 +484,7 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray &frame,
              << "\t- Received:" << received.toHex(' ') << "\n"
              << "\t- Calculated:" << calculated.toHex(' ') << "\n"
              << "\t- Frame:" << frame.toHex(' ') << "\n"
-             << "\t- Buffer:" << buffer.toHex(' ');
+             << "\t- Buffer:" << m_circularBuffer.peek(bufferSize).toHex(' ');
 
   // Return error
   return ValidationStatus::ChecksumError;

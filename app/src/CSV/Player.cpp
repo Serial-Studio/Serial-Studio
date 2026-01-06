@@ -70,7 +70,11 @@ bool CSV::Player::isOpen() const
  */
 double CSV::Player::progress() const
 {
-  return ((double)framePosition()) / frameCount();
+  const auto count = frameCount();
+  if (count <= 0)
+    return 0.0;
+
+  return static_cast<double>(framePosition()) / count;
 }
 
 /**

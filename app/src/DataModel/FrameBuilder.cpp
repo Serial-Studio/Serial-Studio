@@ -39,6 +39,34 @@
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
+namespace
+{
+void parseCsvValues(const QByteArray &data, QStringList &out,
+                    const int reserveHint)
+{
+  out.clear();
+  if (reserveHint > 0)
+    out.reserve(reserveHint);
+  else
+    out.reserve(64);
+
+  const QString str = QString::fromUtf8(data);
+  const int dataLength = str.size();
+  int start = 0;
+  for (int i = 0; i <= dataLength; ++i)
+  {
+    if (i == dataLength || str[i] == ',')
+    {
+      const auto channel = str.mid(start, i - start).trimmed();
+      if (!channel.isEmpty())
+        out.append(channel);
+
+      start = i + 1;
+    }
+  }
+}
+} // namespace
+
 //------------------------------------------------------------------------------
 // Constants
 //------------------------------------------------------------------------------
@@ -449,8 +477,7 @@ void DataModel::FrameBuilder::setJsonPathSetting(const QString &path)
 void DataModel::FrameBuilder::parseProjectFrame(const QByteArray &data)
 {
   // Real-time data, parse data & perform conversion
-  QStringList channels;
-  channels.reserve(64);
+  auto &channels = m_channelScratch;
   if (!SerialStudio::isAnyPlayerOpen() && m_frameParser) [[likely]]
   {
     const auto decoderMethod
@@ -475,7 +502,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray &data)
 
   // CSV data, no need to perform conversions or use frame parser
   else
-    channels = QString::fromUtf8(data).split(',', Qt::SkipEmptyParts);
+    parseCsvValues(data, channels, 64);
 
   // Process data
   if (!channels.isEmpty())
@@ -522,27 +549,9 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray &data)
 void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
 {
   // Parse comma-separated values
-  int start = 0;
-  QStringList channels;
-  const auto str = QString::fromUtf8(data);
-  const int dataLength = str.size();
-
-  if (m_quickPlotChannels > 0) [[likely]]
-    channels.reserve(m_quickPlotChannels);
-  else
-    channels.reserve(64);
-
-  for (int i = 0; i <= dataLength; ++i)
-  {
-    if (i == dataLength || str[i] == ',')
-    {
-      const auto channel = str.mid(start, i - start).trimmed();
-      if (!channel.isEmpty())
-        channels.append(channel);
-
-      start = i + 1;
-    }
-  }
+  auto &channels = m_channelScratch;
+  const int reserveHint = (m_quickPlotChannels > 0) ? m_quickPlotChannels : 64;
+  parseCsvValues(data, channels, reserveHint);
 
   // Process data
   const int channelCount = channels.size();

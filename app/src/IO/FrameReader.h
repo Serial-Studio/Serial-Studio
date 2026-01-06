@@ -22,6 +22,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include <QObject>
 #include <QString>
 #include <QByteArray>
@@ -107,6 +108,9 @@ private:
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
   QVector<QByteArray> m_quickPlotEndSequences;
+  std::vector<int> m_startSequenceLps;
+  std::vector<int> m_finishSequenceLps;
+  QVector<std::vector<int>> m_quickPlotEndSequenceLps;
   SerialStudio::OperationMode m_operationMode;
   SerialStudio::FrameDetection m_frameDetectionMode;
   CircularBuffer<QByteArray, char> m_circularBuffer;

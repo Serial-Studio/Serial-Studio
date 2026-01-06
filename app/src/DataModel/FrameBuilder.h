@@ -124,6 +124,7 @@ private:
   int m_quickPlotChannels;
   bool m_quickPlotHasHeader;
   QStringList m_quickPlotChannelNames;
+  QStringList m_channelScratch;
 
   DataModel::FrameParser *m_frameParser;
   SerialStudio::OperationMode m_opMode;

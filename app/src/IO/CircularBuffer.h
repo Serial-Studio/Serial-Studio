@@ -72,8 +72,17 @@ public:
 
   [[nodiscard]] T read(qsizetype size);
   [[nodiscard]] T peek(qsizetype size) const;
+  [[nodiscard]] T peekRange(qsizetype offset, qsizetype size) const;
 
   [[nodiscard]] int findPatternKMP(const T &pattern, const int pos = 0);
+  [[nodiscard]] int findPatternKMP(const T &pattern,
+                                   const std::vector<int> &lps,
+                                   const int pos = 0);
+
+  [[nodiscard]] std::vector<int> buildKMPTable(const T &p) const
+  {
+    return computeKMPTable(p);
+  }
 
   [[nodiscard]] qsizetype overflowCount() const noexcept
   {
@@ -316,15 +325,35 @@ T IO::CircularBuffer<T, StorageType>::read(qsizetype size)
 template<typename T, Concepts::ByteLike StorageType>
 T IO::CircularBuffer<T, StorageType>::peek(qsizetype size) const
 {
+  return peekRange(0, size);
+}
+
+/**
+ * @brief Retrieves data from the buffer at the given logical offset without
+ *        removing it.
+ *
+ * @param offset The logical offset from the head position.
+ * @param size The number of bytes to peek.
+ * @return Data peeked from the buffer. If the buffer contains less data
+ *         than requested, the returned data will be smaller.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+T IO::CircularBuffer<T, StorageType>::peekRange(qsizetype offset,
+                                                qsizetype size) const
+{
   const qsizetype current_size = this->size();
-  size = std::min(size, current_size);
+  if (offset >= current_size)
+    return T();
+
+  size = std::min(size, current_size - offset);
 
   T result;
   result.resize(size);
 
   const qsizetype head = m_head.load(std::memory_order_acquire);
-  const qsizetype firstChunk = std::min(size, m_capacity - head);
-  std::memcpy(result.data(), &m_buffer[head], firstChunk);
+  const qsizetype start = (head + offset) % m_capacity;
+  const qsizetype firstChunk = std::min(size, m_capacity - start);
+  std::memcpy(result.data(), &m_buffer[start], firstChunk);
 
   if (size > firstChunk) [[unlikely]]
   {
@@ -361,12 +390,18 @@ template<typename T, Concepts::ByteLike StorageType>
 int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T &pattern,
                                                        const int pos)
 {
+  return findPatternKMP(pattern, computeKMPTable(pattern), pos);
+}
+
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::findPatternKMP(
+    const T &pattern, const std::vector<int> &lps, const int pos)
+{
   const qsizetype current_size = size();
   if (pattern.isEmpty() || current_size < pattern.size()) [[unlikely]]
     return -1;
 
   const qsizetype head = m_head.load(std::memory_order_acquire);
-  std::vector<int> lps = computeKMPTable(pattern);
   qsizetype bufferIdx = (head + pos) % m_capacity;
   int i = pos, j = 0;
 
