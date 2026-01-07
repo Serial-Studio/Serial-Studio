@@ -20,7 +20,7 @@
  */
 
 #include <QColor>
-#include <QSysInfo>
+#include <QOperatingSystemVersion>
 
 #if defined(Q_OS_WIN)
 #  include <dwmapi.h>
@@ -43,7 +43,8 @@ static QHash<QWindow *, CSD::Window *> s_decorators;
 static bool isWindows11()
 {
 #if defined(Q_OS_WIN)
-  return QSysInfo::productVersion().contains("11");
+  static const auto current = QOperatingSystemVersion::current();
+  return current >= QOperatingSystemVersion::Windows11;
 #else
   return false;
 #endif
@@ -155,6 +156,14 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
   if (isWindows11())
   {
     connect(w, &QWindow::activeChanged, this, &NativeWindow::onActiveChanged);
+    connect(w, &QObject::destroyed, this, [this, w]() {
+      auto index = m_windows.indexOf(w);
+      if (index != -1 && index >= 0)
+      {
+        m_windows.removeAt(index);
+        m_colors.remove(w);
+      }
+    });
     Q_EMIT w->activeChanged();
   }
 

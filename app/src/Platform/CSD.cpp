@@ -52,7 +52,6 @@ constexpr int ButtonSize = 28;
 constexpr int ButtonWidth = 46;
 constexpr int ResizeMargin = 8;
 constexpr int ButtonMargin = 8;
-constexpr int CornerRadius = 0;
 constexpr int ShadowRadius = 24;
 constexpr int ButtonSpacing = 18;
 constexpr int TitleBarHeight = 32;
@@ -65,13 +64,29 @@ constexpr int ButtonSize = 28;
 constexpr int ButtonWidth = 32;
 constexpr int ResizeMargin = 8;
 constexpr int ButtonMargin = 12;
-constexpr int CornerRadius = 0;
 constexpr int ShadowRadius = 24;
 constexpr int ButtonSpacing = 0;
 constexpr int TitleBarHeight = 32;
 constexpr int TitleBarHeightMaximized = 28;
 constexpr qreal ShadowOpacity = 0.10;
 #endif
+
+/**
+ * @brief Returns @c true if the given @a window has same minimum and
+ *        maximum sizes set.
+ */
+static bool isFixedSizeWindow(const QWindow *window)
+{
+  if (!window)
+    return false;
+
+  const auto minSize = window->minimumSize();
+  const auto maxSize = window->maximumSize();
+  if (!minSize.isValid() || !maxSize.isValid())
+    return false;
+
+  return minSize == maxSize;
+}
 
 //------------------------------------------------------------------------------
 // Titlebar
@@ -344,10 +359,7 @@ bool Titlebar::shouldShowButton(Button button) const
       return flags & Qt::WindowMinimizeButtonHint;
 
     case Button::Maximize: {
-      // Check for fixed size windows
-      const auto minSize = window()->minimumSize();
-      const auto maxSize = window()->maximumSize();
-      if (minSize.isValid() && maxSize.isValid() && minSize == maxSize)
+      if (isFixedSizeWindow(window()))
         return false;
 
       // Check window flags
@@ -487,14 +499,30 @@ void Titlebar::drawButton(QPainter *painter, Button button,
     iconColor = foregroundColor();
 #endif
 
-  QSvgRenderer renderer(svgPath);
-  if (!renderer.isValid())
-    return;
-
   const qreal dpr = qApp->devicePixelRatio();
   const QSize pixelSize(qRound(iconRect.width() * dpr),
                         qRound(iconRect.height() * dpr));
   const QRectF logicalRect(0, 0, iconRect.width(), iconRect.height());
+
+  if (pixelSize.isEmpty())
+    return;
+
+  const QString cacheKey = QStringLiteral("%1|%2|%3x%4|%5")
+                               .arg(svgPath)
+                               .arg(QString::number(iconColor.rgba(), 16))
+                               .arg(pixelSize.width())
+                               .arg(pixelSize.height())
+                               .arg(QString::number(dpr, 'f', 3));
+  auto cacheIt = m_iconCache.constFind(cacheKey);
+  if (cacheIt != m_iconCache.cend())
+  {
+    painter->drawPixmap(iconRect.topLeft(), cacheIt.value());
+    return;
+  }
+
+  QSvgRenderer renderer(svgPath);
+  if (!renderer.isValid())
+    return;
 
   QPixmap pixmap(pixelSize);
   pixmap.setDevicePixelRatio(dpr);
@@ -516,6 +544,7 @@ void Titlebar::drawButton(QPainter *painter, Button button,
   colorPainter.fillRect(logicalRect, iconColor);
   colorPainter.end();
 
+  m_iconCache.insert(cacheKey, colorized);
   painter->drawPixmap(iconRect.topLeft(), colorized);
 }
 
@@ -731,12 +760,10 @@ void Frame::paint(QPainter *painter)
   if (m_shadowEnabled && !m_shadowCorner.isNull() && r > 0)
   {
     painter->drawImage(0, 0, m_shadowCorner);
-    painter->drawImage(QPointF(width() - r, 0),
-                       m_shadowCorner.flipped(Qt::Horizontal));
-    painter->drawImage(QPointF(0, height() - r),
-                       m_shadowCorner.flipped(Qt::Vertical));
+    painter->drawImage(QPointF(width() - r, 0), m_shadowCornerFlippedH);
+    painter->drawImage(QPointF(0, height() - r), m_shadowCornerFlippedV);
     painter->drawImage(QPointF(width() - r, height() - r),
-                       m_shadowCorner.flipped(Qt::Horizontal | Qt::Vertical));
+                       m_shadowCornerFlippedHV);
 
     if (!m_shadowEdge.isNull())
     {
@@ -748,27 +775,15 @@ void Frame::paint(QPainter *painter)
         painter->drawImage(QRectF(r, 0, hEdgeLen, r), m_shadowEdge,
                            QRectF(0, 0, 1, r));
         painter->drawImage(QRectF(r, height() - r, hEdgeLen, r),
-                           m_shadowEdge.flipped(Qt::Vertical),
-                           QRectF(0, 0, 1, r));
+                           m_shadowEdgeFlipped, QRectF(0, 0, 1, r));
       }
 
       if (vEdgeLen > 0)
       {
-        QImage hEdge(r, 1, QImage::Format_ARGB32_Premultiplied);
-        hEdge.fill(Qt::transparent);
-        for (int i = 0; i < r; ++i)
-        {
-          const qreal dist = static_cast<qreal>(i) / r;
-          qreal alpha = 1.0 - dist;
-          alpha = alpha * alpha * (3.0 - 2.0 * alpha);
-          alpha *= CSD::ShadowOpacity;
-          hEdge.setPixelColor(i, 0, QColor(0, 0, 0, qRound(alpha * 255)));
-        }
-
         painter->drawImage(QRectF(0, r, r, vEdgeLen),
-                           hEdge.flipped(Qt::Horizontal), QRectF(0, 0, r, 1));
-        painter->drawImage(QRectF(width() - r, r, r, vEdgeLen), hEdge,
-                           QRectF(0, 0, r, 1));
+                           m_shadowEdgeVerticalFlipped, QRectF(0, 0, r, 1));
+        painter->drawImage(QRectF(width() - r, r, r, vEdgeLen),
+                           m_shadowEdgeVertical, QRectF(0, 0, r, 1));
       }
     }
   }
@@ -853,10 +868,20 @@ void Frame::regenerateShadow()
   {
     m_shadowCorner = QImage();
     m_shadowEdge = QImage();
+    m_shadowEdgeFlipped = QImage();
+    m_shadowEdgeVertical = QImage();
+    m_shadowEdgeVerticalFlipped = QImage();
+    m_shadowCornerFlippedH = QImage();
+    m_shadowCornerFlippedV = QImage();
+    m_shadowCornerFlippedHV = QImage();
     return;
   }
 
   m_shadowCorner = generateShadowCorner(m_shadowRadius);
+  m_shadowCornerFlippedH = m_shadowCorner.flipped(Qt::Horizontal);
+  m_shadowCornerFlippedV = m_shadowCorner.flipped(Qt::Vertical);
+  m_shadowCornerFlippedHV
+      = m_shadowCorner.flipped(Qt::Horizontal | Qt::Vertical);
   m_shadowEdge = QImage(1, m_shadowRadius, QImage::Format_ARGB32_Premultiplied);
   m_shadowEdge.fill(Qt::transparent);
 
@@ -869,6 +894,24 @@ void Frame::regenerateShadow()
     alpha *= CSD::ShadowOpacity;
     m_shadowEdge.setPixelColor(0, y, QColor(0, 0, 0, qRound(alpha * 255)));
   }
+
+  m_shadowEdgeFlipped = m_shadowEdge.flipped(Qt::Vertical);
+
+  m_shadowEdgeVertical
+      = QImage(m_shadowRadius, 1, QImage::Format_ARGB32_Premultiplied);
+  m_shadowEdgeVertical.fill(Qt::transparent);
+
+  for (int x = 0; x < m_shadowRadius; ++x)
+  {
+    const qreal dist = static_cast<qreal>(x) / m_shadowRadius;
+    qreal alpha = 1.0 - dist;
+    alpha = alpha * alpha * (3.0 - 2.0 * alpha);
+    alpha *= CSD::ShadowOpacity;
+    m_shadowEdgeVertical.setPixelColor(x, 0,
+                                       QColor(0, 0, 0, qRound(alpha * 255)));
+  }
+
+  m_shadowEdgeVerticalFlipped = m_shadowEdgeVertical.flipped(Qt::Horizontal);
 }
 
 /**
@@ -1499,9 +1542,7 @@ Window::ResizeEdge Window::edgeAt(const QPointF &pos) const
   if (!m_window || (m_window->windowStates() & Qt::WindowMaximized))
     return ResizeEdge::None;
 
-  const auto minSize = m_window->minimumSize();
-  const auto maxSize = m_window->maximumSize();
-  if (minSize.isValid() && maxSize.isValid() && minSize == maxSize)
+  if (isFixedSizeWindow(m_window))
     return ResizeEdge::None;
 
   const int margin = shadowMargin();
@@ -1594,8 +1635,11 @@ bool Window::eventFilter(QObject *watched, QEvent *event)
       auto *childEvent = static_cast<QChildEvent *>(event);
       if (auto *child = qobject_cast<QQuickItem *>(childEvent->child()))
       {
-        QTimer::singleShot(
-            0, this, [this, child]() { reparentChildToContainer(child); });
+        QPointer<QQuickItem> guardedChild(child);
+        QTimer::singleShot(0, this, [this, guardedChild]() {
+          if (guardedChild)
+            reparentChildToContainer(guardedChild);
+        });
       }
 
       return false;

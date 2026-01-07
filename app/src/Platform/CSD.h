@@ -25,6 +25,7 @@
 #include <QWindow>
 #include <QObject>
 #include <QPointer>
+#include <QHash>
 #include <QQuickItem>
 #include <QQuickWindow>
 #include <QQuickPaintedItem>
@@ -112,6 +113,7 @@ private:
   Button m_hoveredButton;
   Button m_pressedButton;
   QColor m_backgroundColor;
+  QHash<QString, QPixmap> m_iconCache;
 };
 
 /**
@@ -169,7 +171,13 @@ private:
   bool m_shadowEnabled;
 
   QImage m_shadowEdge;
+  QImage m_shadowEdgeFlipped;
+  QImage m_shadowEdgeVertical;
+  QImage m_shadowEdgeVerticalFlipped;
   QImage m_shadowCorner;
+  QImage m_shadowCornerFlippedH;
+  QImage m_shadowCornerFlippedV;
+  QImage m_shadowCornerFlippedHV;
 };
 
 /**
