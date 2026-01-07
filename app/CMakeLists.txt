@@ -353,6 +353,7 @@ set(QML_SOURCES
   qml/Widgets/PlotWidget.qml
   qml/Widgets/ProNotice.qml
   qml/Widgets/SmartWindow.qml
+  qml/Widgets/SmartDialog.qml
   qml/Widgets/SubMenuCombo.qml
   qml/Widgets/TaskbarButton.qml
   qml/Widgets/ToolbarButton.qml

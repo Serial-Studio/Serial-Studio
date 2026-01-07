@@ -19,99 +19,21 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-import QtCore
 import QtQuick
-import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 
-Window {
-  id: root
+import QtCore as Core
 
-  //
-  // Custom properties
-  //
-  property int titlebarHeight: 0
+import "../Widgets"
+
+SmartDialog {
+  id: root
 
   //
   // Window options
   //
-  width: minimumWidth
-  height: minimumHeight
   title: qsTr("File Transmission")
-  minimumWidth: column.implicitWidth + 32
-  maximumWidth: column.implicitWidth + 32
-  minimumHeight: column.implicitHeight + 32 + titlebarHeight
-  maximumHeight: column.implicitHeight + 32 + titlebarHeight
-  Component.onCompleted: {
-    root.flags = Qt.Dialog |
-        Qt.CustomizeWindowHint |
-        Qt.WindowTitleHint |
-        Qt.WindowCloseButtonHint
-  }
-
-  //
-  // Native window integration
-  //
-  onVisibilityChanged: {
-    if (visible)
-      Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["window"])
-    else
-      Cpp_NativeWindow.removeWindow(root)
-
-    root.titlebarHeight = Cpp_NativeWindow.titlebarHeight(root)
-  }
-
-  //
-  // Update window colors when theme changes
-  //
-  Connections {
-    target: Cpp_ThemeManager
-    function onThemeChanged() {
-      if (root.visible)
-        Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["window"])
-    }
-  }
-
-  //
-  // Top section
-  //
-  Rectangle {
-    height: root.titlebarHeight
-    color: Cpp_ThemeManager.colors["window"]
-    anchors {
-      top: parent.top
-      left: parent.left
-      right: parent.right
-    }
-  }
-
-  //
-  // Titlebar text
-  //
-  Label {
-    text: root.title
-    visible: root.titlebarHeight > 0
-    color: Cpp_ThemeManager.colors["text"]
-    font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
-
-    anchors {
-      topMargin: 6
-      top: parent.top
-      horizontalCenter: parent.horizontalCenter
-    }
-  }
-
-  //
-  // Be able to drag/move the window
-  //
-  DragHandler {
-    target: null
-    onActiveChanged: {
-      if (active)
-        root.startSystemMove()
-    }
-  }
 
   //
   // Stop transmission & clear file when dialog is closed
@@ -132,53 +54,18 @@ Window {
   //
   // Save settings
   //
-  Settings {
+  Core.Settings {
     category: "FileTransmission"
     property alias interval: _interval.value
   }
 
   //
-  // Close shortcut
+  // Window controls
   //
-  Shortcut {
-    sequences: [StandardKey.Close]
-    onActivated: root.close()
-  }
-
-  //
-  // Use page item to set application palette
-  //
-  Page {
-    anchors.fill: parent
-    anchors.topMargin: root.titlebarHeight
-    palette.mid: Cpp_ThemeManager.colors["mid"]
-    palette.dark: Cpp_ThemeManager.colors["dark"]
-    palette.text: Cpp_ThemeManager.colors["text"]
-    palette.base: Cpp_ThemeManager.colors["base"]
-    palette.link: Cpp_ThemeManager.colors["link"]
-    palette.light: Cpp_ThemeManager.colors["light"]
-    palette.window: Cpp_ThemeManager.colors["window"]
-    palette.shadow: Cpp_ThemeManager.colors["shadow"]
-    palette.accent: Cpp_ThemeManager.colors["accent"]
-    palette.button: Cpp_ThemeManager.colors["button"]
-    palette.midlight: Cpp_ThemeManager.colors["midlight"]
-    palette.highlight: Cpp_ThemeManager.colors["highlight"]
-    palette.windowText: Cpp_ThemeManager.colors["window_text"]
-    palette.brightText: Cpp_ThemeManager.colors["bright_text"]
-    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-    palette.toolTipBase: Cpp_ThemeManager.colors["tooltip_base"]
-    palette.toolTipText: Cpp_ThemeManager.colors["tooltip_text"]
-    palette.linkVisited: Cpp_ThemeManager.colors["link_visited"]
-    palette.alternateBase: Cpp_ThemeManager.colors["alternate_base"]
-    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
-    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
-
-    //
-    // Window controls
-    //
-    ColumnLayout {
-      id: column
-      anchors.centerIn: parent
+  contentItem: ColumnLayout {
+    id: column
+    spacing: 4
+    anchors.centerIn: parent
 
       GroupBox {
         Layout.fillWidth: true
@@ -318,5 +205,4 @@ Window {
         }
       }
     }
-  }
 }

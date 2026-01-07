@@ -20,11 +20,12 @@
  */
 
 import QtQuick
-import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 
-Window {
+import "../Widgets"
+
+SmartDialog {
   id: root
 
   //
@@ -32,206 +33,93 @@ Window {
   //
   signal iconSelected(var icon)
   property string selectedIcon: ""
-  property int titlebarHeight: 0
 
   //
   // Window options
   //
-  width: minimumWidth
-  height: minimumHeight
-  minimumWidth: 320 + 32
-  maximumWidth: 320 + 32
-  minimumHeight: 480 + 32 + titlebarHeight
-  maximumHeight: 480 + 32 + titlebarHeight
   title: qsTr("Select Icon")
-  Component.onCompleted: {
-    root.flags = Qt.Dialog |
-        Qt.CustomizeWindowHint |
-        Qt.WindowTitleHint |
-        Qt.WindowStaysOnTopHint |
-        Qt.WindowCloseButtonHint
-  }
+  staysOnTop: true
 
   //
-  // Native window integration
+  // Window controls
   //
-  onVisibilityChanged: {
-    if (visible)
-      Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["window"])
-    else
-      Cpp_NativeWindow.removeWindow(root)
+  contentItem: ColumnLayout {
+    spacing: 4
 
-    root.titlebarHeight = Cpp_NativeWindow.titlebarHeight(root)
-  }
+    Rectangle {
+      radius: 2
+      border.width: 1
+      implicitWidth: 320
+      implicitHeight: 480
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      color: Cpp_ThemeManager.colors["groupbox_background"]
+      border.color: Cpp_ThemeManager.colors["groupbox_border"]
 
-  //
-  // Update window colors when theme changes
-  //
-  Connections {
-    target: Cpp_ThemeManager
-    function onThemeChanged() {
-      if (root.visible)
-        Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["window"])
-    }
-  }
+      GridView {
+        clip: true
+        cellWidth: 48
+        cellHeight: 48
+        anchors.margins: 4
+        anchors.fill: parent
+        model: Cpp_JSON_ProjectModel.availableActionIcons
+        ScrollBar.vertical: ScrollBar {}
 
-  //
-  // Top section
-  //
-  Rectangle {
-    height: root.titlebarHeight
-    color: Cpp_ThemeManager.colors["window"]
-    anchors {
-      top: parent.top
-      left: parent.left
-      right: parent.right
-    }
-  }
+        delegate: Item {
+          width: 48
+          height: 48
 
-  //
-  // Titlebar text
-  //
-  Label {
-    text: root.title
-    visible: root.titlebarHeight > 0
-    color: Cpp_ThemeManager.colors["text"]
-    font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
+          Rectangle {
+            width: 42
+            height: 42
+            anchors.centerIn: parent
+            color: root.selectedIcon === modelData ?
+                     Cpp_ThemeManager.colors["highlight"] : "transparent"
+          }
 
-    anchors {
-      topMargin: 6
-      top: parent.top
-      horizontalCenter: parent.horizontalCenter
-    }
-  }
+          Image {
+            anchors.centerIn: parent
+            sourceSize: Qt.size(32, 32)
+            source: "qrc:/rcc/actions/" + modelData + ".svg"
 
-  //
-  // Be able to drag/move the window
-  //
-  DragHandler {
-    target: null
-    onActiveChanged: {
-      if (active)
-        root.startSystemMove()
-    }
-  }
-
-  //
-  // Close shortcut
-  //
-  Shortcut {
-    sequences: [StandardKey.Close]
-    onActivated: root.close()
-  }
-
-  //
-  // Use page item to set application palette
-  //
-  Page {
-    anchors.fill: parent
-    anchors.topMargin: root.titlebarHeight
-    palette.mid: Cpp_ThemeManager.colors["mid"]
-    palette.dark: Cpp_ThemeManager.colors["dark"]
-    palette.text: Cpp_ThemeManager.colors["text"]
-    palette.base: Cpp_ThemeManager.colors["base"]
-    palette.link: Cpp_ThemeManager.colors["link"]
-    palette.light: Cpp_ThemeManager.colors["light"]
-    palette.window: Cpp_ThemeManager.colors["window"]
-    palette.shadow: Cpp_ThemeManager.colors["shadow"]
-    palette.accent: Cpp_ThemeManager.colors["accent"]
-    palette.button: Cpp_ThemeManager.colors["button"]
-    palette.midlight: Cpp_ThemeManager.colors["midlight"]
-    palette.highlight: Cpp_ThemeManager.colors["highlight"]
-    palette.windowText: Cpp_ThemeManager.colors["window_text"]
-    palette.brightText: Cpp_ThemeManager.colors["bright_text"]
-    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-    palette.toolTipBase: Cpp_ThemeManager.colors["tooltip_base"]
-    palette.toolTipText: Cpp_ThemeManager.colors["tooltip_text"]
-    palette.linkVisited: Cpp_ThemeManager.colors["link_visited"]
-    palette.alternateBase: Cpp_ThemeManager.colors["alternate_base"]
-    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
-    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
-
-    //
-    // Window controls
-    //
-    ColumnLayout {
-      spacing: 4
-      anchors.fill: parent
-      anchors.margins: 16
-
-      Rectangle {
-        radius: 2
-        border.width: 1
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        color: Cpp_ThemeManager.colors["groupbox_background"]
-        border.color: Cpp_ThemeManager.colors["groupbox_border"]
-
-        GridView {
-          clip: true
-          cellWidth: 48
-          cellHeight: 48
-          anchors.margins: 4
-          anchors.fill: parent
-          model: Cpp_JSON_ProjectModel.availableActionIcons
-          ScrollBar.vertical: ScrollBar {}
-
-          delegate: Item {
-            width: 48
-            height: 48
-
-            Rectangle {
-              width: 42
-              height: 42
-              anchors.centerIn: parent
-              color: root.selectedIcon === modelData ?
-                       Cpp_ThemeManager.colors["highlight"] : "transparent"
-            }
-
-            Image {
-              anchors.centerIn: parent
-              sourceSize: Qt.size(32, 32)
-              source: "qrc:/rcc/actions/" + modelData + ".svg"
-
-              MouseArea {
-                anchors.fill: parent
-                onClicked: root.selectedIcon = modelData
-                onDoubleClicked: {
-                  root.selectedIcon = modelData
-                  root.iconSelected(root.selectedIcon)
-                  root.close()
-                }
+            MouseArea {
+              anchors.fill: parent
+              onClicked: root.selectedIcon = modelData
+              onDoubleClicked: {
+                root.selectedIcon = modelData
+                root.iconSelected(root.selectedIcon)
+                root.close()
               }
             }
           }
         }
       }
+    }
+
+    Item {
+      implicitHeight: 4
+    }
+
+    RowLayout {
+      spacing: 4
+      Layout.fillWidth: true
 
       Item {
-        implicitHeight: 4
+        Layout.fillWidth: true
       }
 
-      RowLayout {
-        spacing: 4
-        Layout.fillWidth: true
-
-        Item {
-          Layout.fillWidth: true
+      Button {
+        text: qsTr("OK")
+        highlighted: true
+        onClicked: {
+          root.iconSelected(root.selectedIcon)
+          root.close()
         }
+      }
 
-        Button {
-          text: qsTr("OK")
-          highlighted: true
-          onClicked: {
-            root.iconSelected(root.selectedIcon)
-            root.close()
-          }
-        }
-
-        Button {
-          text: qsTr("Cancel")
-          onClicked: root.close()
-        }
+      Button {
+        text: qsTr("Cancel")
+        onClicked: root.close()
       }
     }
   }
