@@ -106,8 +106,8 @@ SmartDialog {
           opacity: enabled ? 1 : 0.5
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_CSV_Player.previousFrame()
-          icon.source: "qrc:/rcc/icons/buttons/media-prev.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
+          icon.source: "qrc:/rcc/icons/buttons/media-prev.svg"
           enabled: Cpp_CSV_Player.framePosition > 0 && !Cpp_CSV_Player.isPlaying
         }
 
@@ -129,8 +129,8 @@ SmartDialog {
           opacity: enabled ? 1 : 0.5
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_CSV_Player.nextFrame()
-          icon.source: "qrc:/rcc/icons/buttons/media-next.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
+          icon.source: "qrc:/rcc/icons/buttons/media-next.svg"
           enabled: (Cpp_CSV_Player.framePosition < Cpp_CSV_Player.frameCount - 1) && !Cpp_CSV_Player.isPlaying
         }
       }

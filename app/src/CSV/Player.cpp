@@ -140,6 +140,10 @@ void CSV::Player::play()
   m_startTimestamp = getDateTime(m_framePos);
   m_elapsedTimer.start();
 
+  // Update high-precision timestamp baseline for seeking support
+  if (m_useHighPrecisionTimestamps && m_framePos < m_timestampCache.size())
+    m_startTimestampSeconds = m_timestampCache[m_framePos];
+
   m_playing = true;
   Q_EMIT playerStateChanged();
 }
