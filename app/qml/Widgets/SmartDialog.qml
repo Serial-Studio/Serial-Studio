@@ -47,6 +47,12 @@ Window {
   maximumHeight: contentArea.implicitHeight + (contentPadding * 1.50) + titlebarHeight
 
   //
+  // CSD-safety properties
+  //
+  property int preferredWidth: contentArea.implicitWidth + (contentPadding * 2)
+  property int preferredHeight: contentArea.implicitHeight + (contentPadding * 1.50) + titlebarHeight
+
+  //
   // Configure window flags
   //
   Component.onCompleted: {
