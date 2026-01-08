@@ -26,7 +26,7 @@ import QtQuick.Controls
 
 import "../Widgets" as Widgets
 
-SmartDialog {
+Widgets.SmartDialog {
   id: root
 
   //
@@ -470,7 +470,7 @@ SmartDialog {
           icon.height: 18
           text: qsTr("Close")
           horizontalPadding: 8
-          onClicked: root.close()
+          onClicked: root.hide()
           Layout.alignment: Qt.AlignVCenter
           icon.source: "qrc:/rcc/icons/buttons/close.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
@@ -481,7 +481,7 @@ SmartDialog {
           icon.height: 18
           text: qsTr("Apply")
           horizontalPadding: 8
-          onClicked: root.close()
+          onClicked: root.hide()
           Layout.alignment: Qt.AlignVCenter
           icon.source: "qrc:/rcc/icons/buttons/apply.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]

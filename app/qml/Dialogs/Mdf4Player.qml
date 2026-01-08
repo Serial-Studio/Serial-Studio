@@ -19,8 +19,8 @@ SmartDialog {
   //
   // Window options
   //
-  title: qsTr("MDF4 Player")
   staysOnTop: true
+  title: qsTr("MDF4 Player")
 
   //
   // Automatically display the window when the MDF file is opened

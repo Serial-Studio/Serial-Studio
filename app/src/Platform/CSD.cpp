@@ -1073,11 +1073,44 @@ Window::Window(QWindow *window, const QString &color, QObject *parent)
  */
 Window::~Window()
 {
+  QQuickWindow *quickWindow = nullptr;
+  QQuickItem *root = nullptr;
+
   if (m_window)
   {
     m_window->removeEventFilter(this);
-    if (auto *quickWindow = qobject_cast<QQuickWindow *>(m_window.data()))
-      quickWindow->contentItem()->removeEventFilter(this);
+    quickWindow = qobject_cast<QQuickWindow *>(m_window.data());
+    if (quickWindow && quickWindow->contentItem())
+    {
+      root = quickWindow->contentItem();
+      root->removeEventFilter(this);
+    }
+  }
+
+  if (root && m_contentContainer)
+  {
+    const auto children = m_contentContainer->childItems();
+    for (QQuickItem *child : children)
+    {
+      if (!child)
+        continue;
+
+      child->setParentItem(root);
+      child->setPosition(QPointF(0, 0));
+      child->setSize(root->size());
+    }
+  }
+
+  if (root)
+  {
+    if (m_contentContainer)
+      m_contentContainer->deleteLater();
+    if (m_titleBar)
+      m_titleBar->deleteLater();
+    if (m_border)
+      m_border->deleteLater();
+    if (m_frame)
+      m_frame->deleteLater();
   }
 }
 

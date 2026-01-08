@@ -37,8 +37,8 @@ SmartDialog {
   //
   // Window options
   //
-  title: qsTr("Select Icon")
   staysOnTop: true
+  title: qsTr("Select Icon")
 
   //
   // Window controls
