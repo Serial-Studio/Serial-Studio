@@ -88,6 +88,7 @@ Window {
   Connections {
     target: Cpp_ThemeManager
     function onThemeChanged() {
+      Cpp_NativeWindow.removeWindow(root)
       if (root.visible)
         Cpp_NativeWindow.addWindow(root, root.backgroundColor)
     }
