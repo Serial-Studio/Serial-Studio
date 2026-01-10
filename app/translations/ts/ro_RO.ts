@@ -29,7 +29,7 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="100"/>
         <source>All Rights Reserved</source>
-        <translation>Toate drepturile rezervate</translation>
+        <translation>Toate Drepturile Rezervate</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="116"/>
@@ -89,14 +89,14 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="212"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="212"/>
         <source>License Agreement</source>
-        <translation>Acord de licență</translation>
+        <translation>Acord de Licență</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="221"/>
         <source>Report Bug</source>
-        <translation>Raportează o eroare</translation>
+        <translation>Raportează O Eroare</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="230"/>
@@ -151,7 +151,7 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <source>Change Icon</source>
-        <translation>Schimbă pictograma</translation>
+        <translation>Schimbă Pictograma</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="106"/>
@@ -193,40 +193,49 @@
     <name>Audio</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="68"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="68"/>
         <source>No Microphone Detected</source>
-        <translation>Niciun microfon detectat</translation>
+        <translation>Niciun Microfon Detectat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="77"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="77"/>
         <source>Connect a mic or check your settings</source>
         <translation>Conectați un microfon sau verificați setările</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="101"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="101"/>
         <source>Input Device</source>
-        <translation>Dispozitiv de intrare</translation>
+        <translation>Dispozitiv de Intrare</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="122"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="122"/>
         <source>Sample Rate</source>
-        <translation>Rată de eșantionare</translation>
+        <translation>Rată de Eșantionare</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="143"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="218"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="143"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="218"/>
         <source>Sample Format</source>
-        <translation>Format eșantion</translation>
+        <translation>Format Eșantion</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="164"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="239"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="164"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="239"/>
         <source>Channels</source>
         <translation>Canale</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="197"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="197"/>
         <source>Output Device</source>
-        <translation>Dispozitiv de ieșire</translation>
+        <translation>Dispozitiv de Ieșire</translation>
     </message>
 </context>
 <context>
@@ -264,7 +273,7 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <source>No Bluetooth Adapter Detected</source>
-        <translation>Niciun adaptor Bluetooth detectat</translation>
+        <translation>Niciun Adaptor Bluetooth Detectat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
@@ -292,48 +301,57 @@
     <name>CANBus</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="52"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="52"/>
         <source>No CAN Drivers Found</source>
-        <translation>Nu au fost găsiți drivere CAN</translation>
+        <translation>Nu Au Fost Găsiți Drivere CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="66"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="66"/>
         <source>Install CAN hardware drivers for your system</source>
         <translation>Instalați driverele hardware CAN pentru sistemul dumneavoastră</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="92"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="92"/>
         <source>CAN Driver</source>
         <translation>Driver CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="136"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="136"/>
         <source>Interface</source>
         <translation>Interfață</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="167"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="167"/>
         <source>Bitrate</source>
         <translation>Rată de biți</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="238"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="238"/>
         <source>Flexible Data-Rate</source>
-        <translation>Rată de date flexibilă</translation>
+        <translation>Rată de Date Flexibilă</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="269"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="269"/>
         <source>DBC Database</source>
-        <translation>Baza de date DBC</translation>
+        <translation>Baza de Date DBC</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="273"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="273"/>
         <source>Import DBC File...</source>
-        <translation>Importați fișier DBC...</translation>
+        <translation>Importați Fișier DBC...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="306"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="306"/>
         <source>No CAN Interfaces Found</source>
-        <translation>Nu au fost găsite interfețe CAN</translation>
+        <translation>Nu Au Fost Găsite Interfețe CAN</translation>
     </message>
 </context>
 <context>
@@ -478,17 +496,17 @@
     <message>
         <location filename="../../src/Console/Handler.cpp" line="175"/>
         <source>No Line Ending</source>
-        <translation>Fără sfârșit de linie</translation>
+        <translation>Fără Sfârșit de Linie</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="176"/>
         <source>New Line</source>
-        <translation>Linie nouă</translation>
+        <translation>Linie Nouă</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="177"/>
         <source>Carriage Return</source>
-        <translation>Returnare de car</translation>
+        <translation>Returnare de Car</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="178"/>
@@ -498,7 +516,7 @@
     <message>
         <location filename="../../src/Console/Handler.cpp" line="189"/>
         <source>Plain Text</source>
-        <translation>Text simplu</translation>
+        <translation>Text Simplu</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="190"/>
@@ -508,7 +526,7 @@
     <message>
         <location filename="../../src/Console/Handler.cpp" line="211"/>
         <source>No Checksum</source>
-        <translation>Fără sumă de control</translation>
+        <translation>Fără Sumă de Control</translation>
     </message>
 </context>
 <context>
@@ -525,61 +543,73 @@
     <name>DBCPreviewDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="41"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="41"/>
         <source>DBC File Preview</source>
-        <translation>Previzualizare fișier DBC</translation>
+        <translation>Previzualizare Fișier DBC</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="162"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="162"/>
         <source>DBC File: %1</source>
         <translation>Fișier DBC: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
         <source>Review the CAN messages and signals that will be imported into a new Serial Studio project.</source>
         <translation>Revizuiește mesajele și semnalele CAN care vor fi importate într-un nou proiect Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="181"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="181"/>
         <source>Messages</source>
         <translation>Mesaje</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="215"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="215"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="222"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="222"/>
         <source>Message Name</source>
-        <translation>Nume mesaj</translation>
+        <translation>Nume Mesaj</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="230"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="230"/>
         <source>CAN ID</source>
         <translation>ID CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="237"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="237"/>
         <source>Signals</source>
         <translation>Semnale</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="319"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="319"/>
         <source>No messages found in DBC file.</source>
         <translation>Nu au fost găsite mesaje în fișierul DBC.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="337"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="337"/>
         <source>Total: %1 messages, %2 signals</source>
         <translation>Total: %1 mesaje, %2 semnale</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="346"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="346"/>
         <source>Cancel</source>
         <translation>Anulează</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="360"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="360"/>
         <source>Create Project</source>
         <translation>Creează Proiect</translation>
     </message>
@@ -654,12 +684,12 @@
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="116"/>
         <source>Import DBC File</source>
-        <translation>Importă fișier DBC</translation>
+        <translation>Importă Fișier DBC</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="117"/>
         <source>DBC Files (*.dbc);;All Files (*)</source>
-        <translation>Fișiere DBC (*.dbc);;Toate fișierele (*)</translation>
+        <translation>Fișiere DBC (*.dbc);;Toate Fișierele (*)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="163"/>
@@ -675,7 +705,7 @@
         <location filename="../../src/DataModel/DBCImporter.cpp" line="165"/>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="227"/>
         <source>DBC Import Error</source>
-        <translation>Eroare la importul DBC</translation>
+        <translation>Eroare la Importul DBC</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="173"/>
@@ -690,7 +720,7 @@
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="175"/>
         <source>DBC Import Warning</source>
-        <translation>Avertisment la importul DBC</translation>
+        <translation>Avertisment la Importul DBC</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="224"/>
@@ -715,7 +745,7 @@
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="248"/>
         <source>DBC Import Complete</source>
-        <translation>Importul DBC a fost finalizat</translation>
+        <translation>Importul DBC A Fost Finalizat</translation>
     </message>
 </context>
 <context>
@@ -802,7 +832,7 @@
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="339"/>
         <source>JavaScript Exception Occurred</source>
-        <translation>A Apărut o Excepție JavaScript</translation>
+        <translation>A Apărut O Excepție JavaScript</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="340"/>
@@ -938,7 +968,7 @@ Vă rugăm să corectați eroarea în corpul funcției.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="603"/>
         <source>Code Validation Successful</source>
-        <translation>Validarea Codului a Fost Realizată cu Succes</translation>
+        <translation>Validarea Codului A Fost Realizată cu Succes</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="604"/>
@@ -968,7 +998,7 @@ Vă rugăm să corectați eroarea în corpul funcției.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="804"/>
         <source>Binary TLV (Tag-Length-Value)</source>
-        <translation>TLV binar (Tag-Length-Value)</translation>
+        <translation>TLV Binar (Tag-Length-Value)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="805"/>
@@ -1096,7 +1126,7 @@ Vă rugăm să corectați eroarea în corpul funcției.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="175"/>
         <source>Invalid Hex Input</source>
-        <translation>Intrare Hex invalidă</translation>
+        <translation>Intrare Hex Invalidă</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="176"/>
@@ -1185,7 +1215,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="303"/>
         <source>New Project</source>
-        <translation>Proiect nou</translation>
+        <translation>Proiect Nou</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="368"/>
@@ -1313,17 +1343,17 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1504"/>
         <source>New Dataset</source>
-        <translation>Set de date nou</translation>
+        <translation>Set de Date Nou</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1507"/>
         <source>New Plot</source>
-        <translation>Grafic nou</translation>
+        <translation>Grafic Nou</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1511"/>
         <source>New FFT Plot</source>
-        <translation>Grafic FFT nou</translation>
+        <translation>Grafic FFT Nou</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1515"/>
@@ -1432,7 +1462,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2389"/>
         <source>Frame Detection Method</source>
-        <translation>Metoda de Detectare a Cadrelor</translation>
+        <translation>Metoda de Detectare A Cadrelor</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2390"/>
@@ -1472,7 +1502,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2445"/>
         <source>Payload Processing &amp; Validation</source>
-        <translation>Procesare și Validare a Sarcinii</translation>
+        <translation>Procesare și Validare A Sarcinii</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2457"/>
@@ -1487,7 +1517,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2471"/>
         <source>Checksum Algorithm</source>
-        <translation>Algoritmul de verificare a sumei de control</translation>
+        <translation>Algoritmul de Verificare A Sumei de Control</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2473"/>
@@ -1497,17 +1527,17 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2519"/>
         <source>Group Information</source>
-        <translation>Informații despre grup</translation>
+        <translation>Informații Despre Grup</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2531"/>
         <source>Group Title</source>
-        <translation>Titlul grupului</translation>
+        <translation>Titlul Grupului</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2532"/>
         <source>Untitled Group</source>
-        <translation>Grup fără titlu</translation>
+        <translation>Grup Fără Titlu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2533"/>
@@ -1517,7 +1547,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2562"/>
         <source>Composite Widget</source>
-        <translation>Widget compozit</translation>
+        <translation>Widget Compozit</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2564"/>
@@ -1528,7 +1558,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2615"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2850"/>
         <source>General Information</source>
-        <translation>Informații generale</translation>
+        <translation>Informații Generale</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2626"/>
@@ -1684,7 +1714,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2889"/>
         <source>Measurement Unit</source>
-        <translation>Unitate de măsură</translation>
+        <translation>Unitate de Măsură</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2890"/>
@@ -1699,12 +1729,12 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2902"/>
         <source>Plot Settings</source>
-        <translation>Setări grafic</translation>
+        <translation>Setări Grafic</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2932"/>
         <source>Enable Plot Widget</source>
-        <translation>Activează widget grafic</translation>
+        <translation>Activează Widget Grafic</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2934"/>
@@ -1714,7 +1744,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2963"/>
         <source>X-Axis Source</source>
-        <translation>Sursă axă X</translation>
+        <translation>Sursă Axă X</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2964"/>
@@ -1724,7 +1754,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2976"/>
         <source>Minimum Plot Value (optional)</source>
-        <translation>Valoare minimă grafic (opțional)</translation>
+        <translation>Valoare Minimă Grafic (opțional)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2977"/>
@@ -1734,7 +1764,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2989"/>
         <source>Maximum Plot Value (optional)</source>
-        <translation>Valoare maximă a graficului (opțional)</translation>
+        <translation>Valoare Maximă A Graficului (opțional)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2990"/>
@@ -1749,7 +1779,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3014"/>
         <source>Enable FFT Analysis</source>
-        <translation>Activează analiza FFT</translation>
+        <translation>Activează Analiza FFT</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3015"/>
@@ -1759,7 +1789,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3033"/>
         <source>FFT Window Size</source>
-        <translation>Dimensiunea ferestrei FFT</translation>
+        <translation>Dimensiunea Ferestrei FFT</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3035"/>
@@ -1779,7 +1809,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3061"/>
         <source>Minimum Value (recommended)</source>
-        <translation>Valoare minimă (recomandat)</translation>
+        <translation>Valoare Minimă (recomandat)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3062"/>
@@ -1789,7 +1819,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3074"/>
         <source>Maximum Value (recommended)</source>
-        <translation>Valoare maximă (recomandat)</translation>
+        <translation>Valoare Maximă (recomandat)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3075"/>
@@ -1799,7 +1829,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3086"/>
         <source>Widget Settings</source>
-        <translation>Setări widget</translation>
+        <translation>Setări Widget</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3116"/>
@@ -1824,7 +1854,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3146"/>
         <source>Minimum Display Value (required)</source>
-        <translation>Valoare minimă de afișare (necesar)</translation>
+        <translation>Valoare Minimă de Afișare (necesar)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3147"/>
@@ -1834,7 +1864,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3159"/>
         <source>Maximum Display Value (required)</source>
-        <translation>Valoare maximă afișată (obligatoriu)</translation>
+        <translation>Valoare Maximă Afișată (obligatoriu)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3160"/>
@@ -1844,12 +1874,12 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3171"/>
         <source>Alarm Settings</source>
-        <translation>Setări alarmă</translation>
+        <translation>Setări Alarmă</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3184"/>
         <source>Enable Alarms</source>
-        <translation>Activează alarmele</translation>
+        <translation>Activează Alarmele</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3186"/>
@@ -1859,7 +1889,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3198"/>
         <source>Low Threshold</source>
-        <translation>Prag minim</translation>
+        <translation>Prag Minim</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3200"/>
@@ -1869,7 +1899,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3212"/>
         <source>High Threshold</source>
-        <translation>Prag maxim</translation>
+        <translation>Prag Maxim</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3214"/>
@@ -1879,7 +1909,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3225"/>
         <source>LED Display Settings</source>
-        <translation>Setări afișaj LED</translation>
+        <translation>Setări Afișaj LED</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3238"/>
@@ -1944,7 +1974,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3335"/>
         <source>No Checksum</source>
-        <translation>Fără sumă de control</translation>
+        <translation>Fără Sumă de Control</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3340"/>
@@ -2026,7 +2056,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3370"/>
         <source>Carriage Return (\r)</source>
-        <translation>Întoarcere la început (\r)</translation>
+        <translation>Întoarcere la Început (\r)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3371"/>
@@ -2056,7 +2086,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3420"/>
         <source>Save Changes</source>
-        <translation>Salvează modificările</translation>
+        <translation>Salvează Modificările</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3947"/>
@@ -2250,6 +2280,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <source>Stop</source>
         <translation>Opriți</translation>
     </message>
@@ -2257,6 +2288,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="344"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Downloading updates</source>
         <translation>Descărcare actualizări</translation>
     </message>
@@ -2319,6 +2351,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <source>Updater</source>
         <translation>Actualizator</translation>
     </message>
@@ -2358,12 +2391,12 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="370"/>
         <source>Downloading Updates</source>
-        <translation>Descărcare actualizări</translation>
+        <translation>Descărcare Actualizări</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
         <source>Time Remaining</source>
-        <translation>Timp rămas</translation>
+        <translation>Timp Rămas</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
@@ -2402,11 +2435,13 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <source>Time remaining: 0 minutes</source>
         <translation>Timp rămas: 0 minute</translation>
     </message>
     <message>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <source>Open</source>
         <translation>Deschide</translation>
     </message>
@@ -2445,28 +2480,28 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
         <source>File Transmission</source>
-        <translation>Transmitere fișier</translation>
+        <translation>Transmitere Fișier</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="89"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="89"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="89"/>
         <source>File Selection:</source>
-        <translation>Selecție fișier:</translation>
+        <translation>Selecție Fișier:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="107"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="107"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="107"/>
         <source>Select File...</source>
-        <translation>Selectați fișierul...</translation>
+        <translation>Selectați Fișierul...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="124"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="124"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="124"/>
         <source>Transmission Interval:</source>
-        <translation>Interval de transmitere:</translation>
+        <translation>Interval de Transmitere:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="148"/>
@@ -2487,28 +2522,28 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="193"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="193"/>
         <source>Pause Transmission</source>
-        <translation>Pune pe pauză transmisia</translation>
+        <translation>Pune pe Pauză Transmisia</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="194"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="194"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="194"/>
         <source>Resume Transmission</source>
-        <translation>Reia transmisia</translation>
+        <translation>Reia Transmisia</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="195"/>
         <source>Stop Transmission</source>
-        <translation>Oprește transmisia</translation>
+        <translation>Oprește Transmisia</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
         <source>Begin Transmission</source>
-        <translation>Începe transmisia</translation>
+        <translation>Începe Transmisia</translation>
     </message>
 </context>
 <context>
@@ -2575,7 +2610,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <source>Select All</source>
-        <translation>Selectează tot</translation>
+        <translation>Selectează Tot</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
@@ -2673,14 +2708,14 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
         <source>Select Template...</source>
-        <translation>Selectează șablonul...</translation>
+        <translation>Selectează Șablonul...</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
         <source>Test With Sample Data</source>
-        <translation>Testează cu date de probă</translation>
+        <translation>Testează cu Date de Probă</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
@@ -2697,7 +2732,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <source>Base Map: %1</source>
-        <translation>Hartă de bază: %1</translation>
+        <translation>Hartă de Bază: %1</translation>
     </message>
 </context>
 <context>
@@ -2850,7 +2885,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="99"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="99"/>
         <source>Integrate Angles</source>
-        <translation>Integrați unghiurile</translation>
+        <translation>Integrați Unghiurile</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="343"/>
@@ -3008,7 +3043,7 @@ Exemplu (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="286"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="292"/>
         <source>CAN Bus Not Available</source>
-        <translation>CAN Bus indisponibil</translation>
+        <translation>CAN Bus Indisponibil</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="275"/>
@@ -3045,7 +3080,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="302"/>
         <source>Invalid CAN Configuration</source>
-        <translation>Configurație CAN invalidă</translation>
+        <translation>Configurație CAN Invalidă</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="303"/>
@@ -3055,7 +3090,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="313"/>
         <source>Invalid Selection</source>
-        <translation>Selecție invalidă</translation>
+        <translation>Selecție Invalidă</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="314"/>
@@ -3065,7 +3100,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="323"/>
         <source>No Devices Available</source>
-        <translation>Niciun dispozitiv disponibil</translation>
+        <translation>Niciun Dispozitiv Disponibil</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
@@ -3075,7 +3110,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="339"/>
         <source>CAN Device Creation Failed</source>
-        <translation>Crearea dispozitivului CAN a eșuat</translation>
+        <translation>Crearea Dispozitivului CAN A Eșuat</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="340"/>
@@ -3085,7 +3120,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
         <source>CAN Connection Failed</source>
-        <translation>Conexiunea CAN a eșuat</translation>
+        <translation>Conexiunea CAN A Eșuat</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
@@ -3110,7 +3145,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="689"/>
         <source>CAN Bus Communication Error</source>
-        <translation>Eroare de comunicare CAN Bus</translation>
+        <translation>Eroare de Comunicare CAN Bus</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="709"/>
@@ -3164,7 +3199,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="331"/>
         <source>Invalid Serial Port</source>
-        <translation>Port serial invalid</translation>
+        <translation>Port Serial Invalid</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="332"/>
@@ -3174,7 +3209,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="393"/>
         <source>Modbus Initialization Failed</source>
-        <translation>Inițializarea Modbus a eșuat</translation>
+        <translation>Inițializarea Modbus A Eșuat</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="394"/>
@@ -3184,7 +3219,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="414"/>
         <source>Modbus Connection Failed</source>
-        <translation>Conexiunea Modbus a eșuat</translation>
+        <translation>Conexiunea Modbus A Eșuat</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="415"/>
@@ -3219,12 +3254,12 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="594"/>
         <source>Holding Registers (0x03)</source>
-        <translation>Registre de menținere (0x03)</translation>
+        <translation>Registre de Menținere (0x03)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="595"/>
         <source>Input Registers (0x04)</source>
-        <translation>Registre de intrare (0x04)</translation>
+        <translation>Registre de Intrare (0x04)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="596"/>
@@ -3234,7 +3269,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="597"/>
         <source>Discrete Inputs (0x02)</source>
-        <translation>Intrări discrete (0x02)</translation>
+        <translation>Intrări Discrete (0x02)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1134"/>
@@ -3244,12 +3279,12 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1136"/>
         <source>Modbus Communication Error</source>
-        <translation>Eroare de comunicare Modbus</translation>
+        <translation>Eroare de Comunicare Modbus</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1160"/>
         <source>Select Port</source>
-        <translation>Selectați portul</translation>
+        <translation>Selectați Portul</translation>
     </message>
 </context>
 <context>
@@ -3279,7 +3314,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
         <location filename="../../src/IO/Drivers/UART.cpp" line="384"/>
         <location filename="../../src/IO/Drivers/UART.cpp" line="791"/>
         <source>Select Port</source>
-        <translation>Selectați portul</translation>
+        <translation>Selectați Portul</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="416"/>
@@ -3405,7 +3440,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <message>
         <location filename="../../src/IO/Manager.cpp" line="283"/>
         <source>Network Socket</source>
-        <translation>Soclu de rețea</translation>
+        <translation>Soclu de Rețea</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="284"/>
@@ -3414,8 +3449,20 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="286"/>
+        <source>Audio</source>
+        <translation>Audio</translation>
+    </message>
+    <message>
+        <source>CANBus</source>
+        <translation type="vanished">CANBus</translation>
+    </message>
+    <message>
+        <source>CAN</source>
+        <translation type="vanished">CAN</translation>
+    </message>
+    <message>
         <source>Audio Stream</source>
-        <translation>Flux audio</translation>
+        <translation type="vanished">Flux Audio</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="287"/>
@@ -3445,7 +3492,7 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="41"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/IconPicker.qml" line="41"/>
         <source>Select Icon</source>
-        <translation>Selectați pictograma</translation>
+        <translation>Selectați Pictograma</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="112"/>
@@ -3466,26 +3513,31 @@ Suportul CAN bus pe macOS este limitat și poate necesita drivere hardware terț
     <name>LicenseManagement</name>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="36"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="36"/>
         <source>Licensing</source>
         <translation>Licențiere</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="75"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="75"/>
         <source>Please wait...</source>
         <translation>Vă rugăm să așteptați...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="116"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="116"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Activează Serial Studio Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="122"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="122"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
         <translation>Lipește cheia de licență mai jos pentru a debloca funcții Pro precum MQTT, graficare 3D și altele.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="129"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="129"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
         <translation>Licența ta include 5 activări de dispozitiv.
@@ -3493,6 +3545,7 @@ Planurile includ opțiuni lunare, anuale și pe viață.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="141"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="141"/>
         <source>Paste your license key here…</source>
         <translation>Lipește cheia de licență aici…</translation>
     </message>
@@ -3500,11 +3553,15 @@ Planurile includ opțiuni lunare, anuale și pe viață.</translation>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="160"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="320"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="368"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="160"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="320"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="368"/>
         <source>Copy</source>
         <translation>Copiază</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="166"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="166"/>
         <source>Paste</source>
         <translation>Lipește</translation>
     </message>
@@ -3512,71 +3569,87 @@ Planurile includ opțiuni lunare, anuale și pe viață.</translation>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="172"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="326"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="374"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="172"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="326"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="374"/>
         <source>Select All</source>
-        <translation>Selectează tot</translation>
+        <translation>Selectează Tot</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="223"/>
         <source>Product</source>
         <translation>Produs</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="230"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="230"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="241"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="241"/>
         <source>Licensee</source>
         <translation>Licențiat</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="260"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="260"/>
         <source>Licensee E-Mail</source>
         <translation>E-Mail Licențiat</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="277"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="277"/>
         <source>Device Usage</source>
         <translation>Utilizare Dispozitiv</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="285"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="285"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>%1 dispozitive în uz (Plan nelimitat)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="286"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="286"/>
         <source>%1 of %2 devices used</source>
         <translation>%1 din %2 dispozitive utilizate</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="296"/>
         <source>Device ID</source>
         <translation>ID Dispozitiv</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="342"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="342"/>
         <source>License Key</source>
         <translation>Cheie Licență</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="398"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="398"/>
         <source>Customer Portal</source>
         <translation>Portal Client</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="412"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="412"/>
         <source>Buy License</source>
         <translation>Cumpără Licență</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="422"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="422"/>
         <source>Activate</source>
         <translation>Activează</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="435"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="435"/>
         <source>Deactivate</source>
         <translation>Dezactivează</translation>
     </message>
@@ -3712,12 +3785,12 @@ Thank you again for supporting Serial Studio!</source>
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="428"/>
+        <location filename="../../src/MDF4/Export.cpp" line="441"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>Exportul MDF4 este o funcție Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="429"/>
+        <location filename="../../src/MDF4/Export.cpp" line="442"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>Această funcție necesită o licență. Te rugăm să achiziționezi una pentru a activa exportul MDF4.</translation>
     </message>
@@ -3815,12 +3888,12 @@ Thank you again for supporting Serial Studio!</source>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="52"/>
         <source>Any Protocol</source>
-        <translation>Orice protocol</translation>
+        <translation>Orice Protocol</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="53"/>
         <source>Secure Protocols Only</source>
-        <translation>Doar protocoale securizate</translation>
+        <translation>Doar Protocoale Securizate</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="56"/>
@@ -3830,27 +3903,27 @@ Thank you again for supporting Serial Studio!</source>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="57"/>
         <source>Query Peer</source>
-        <translation>Interogare peer</translation>
+        <translation>Interogare Peer</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="58"/>
         <source>Verify Peer</source>
-        <translation>Verificare peer</translation>
+        <translation>Verificare Peer</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="59"/>
         <source>Auto Verify Peer</source>
-        <translation>Verificare automată peer</translation>
+        <translation>Verificare Automată Peer</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="331"/>
         <source>Use System Database</source>
-        <translation>Folosește baza de date a sistemului</translation>
+        <translation>Folosește Baza de Date A Sistemului</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="332"/>
         <source>Load From Folder...</source>
-        <translation>Încărcare Din Director...</translation>
+        <translation>Încărcare din Director...</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="346"/>
@@ -3996,7 +4069,7 @@ Pentru a debloca această funcționalitate, vă rugăm să activați licența sa
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="853"/>
         <source>MQTT Protocol Violation</source>
-        <translation>Încălcare a Protocolului MQTT</translation>
+        <translation>Încălcare A Protocolului MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="854"/>
@@ -4006,7 +4079,7 @@ Pentru a debloca această funcționalitate, vă rugăm să activați licența sa
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="860"/>
         <source>Unknown Error</source>
-        <translation>Eroare necunoscută</translation>
+        <translation>Eroare Necunoscută</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="861"/>
@@ -4026,7 +4099,7 @@ Pentru a debloca această funcționalitate, vă rugăm să activați licența sa
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="889"/>
         <source>MQTT Authentication Failed</source>
-        <translation>Autentificare MQTT eșuată</translation>
+        <translation>Autentificare MQTT Eșuată</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="890"/>
@@ -4046,7 +4119,7 @@ Pentru a debloca această funcționalitate, vă rugăm să activați licența sa
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="917"/>
         <source>MQTT Authentication Required</source>
-        <translation>Este necesară autentificarea MQTT</translation>
+        <translation>Este Necesară Autentificarea MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="918"/>
@@ -4082,166 +4155,199 @@ Vă rugăm să furnizați datele de autentificare necesare.</translation>
     <name>MQTTConfiguration</name>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="36"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="36"/>
         <source>MQTT Setup</source>
         <translation>Configurare MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="96"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="96"/>
         <source>MQTT is a Pro Feature</source>
         <translation>MQTT este o Funcție Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="97"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="97"/>
         <source>Activate your license or visit the store to unlock MQTT support.</source>
         <translation>Activați licența dvs. sau vizitați magazinul pentru a debloca suportul MQTT.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="109"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="109"/>
         <source>General</source>
         <translation>General</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="115"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="115"/>
         <source>Authentication</source>
         <translation>Autentificare</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="121"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="121"/>
         <source>MQTT Options</source>
         <translation>Opțiuni MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="127"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="127"/>
         <source>SSL Properties</source>
         <translation>Proprietăți SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="183"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="183"/>
         <source>Host</source>
         <translation>Gazdă</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="195"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="195"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="211"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="211"/>
         <source>Client ID</source>
         <translation>ID Client</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="223"/>
         <source>Keep Alive (s)</source>
         <translation>Menține Activ (s)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="236"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="236"/>
         <source>Clean Session</source>
         <translation>Sesiune Curată</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="285"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="285"/>
         <source>Username</source>
         <translation>Nume Utilizator</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="290"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="290"/>
         <source>MQTT Username</source>
         <translation>Nume Utilizator MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="297"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="297"/>
         <source>Password</source>
         <translation>Parolă</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="307"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="307"/>
         <source>MQTT Password</source>
         <translation>Parolă MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="364"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="364"/>
         <source>Version</source>
         <translation>Versiune</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="376"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="376"/>
         <source>Mode</source>
         <translation>Mod</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="388"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="388"/>
         <source>Topic</source>
         <translation>Subiect</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="393"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="393"/>
         <source>e.g. sensors/temperature or home/+/status</source>
         <translation>ex. senzori/temperatura sau acasă/+/status</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="400"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="400"/>
         <source>Will Retain</source>
-        <translation>Va reține</translation>
+        <translation>Va Reține</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="411"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="411"/>
         <source>Will QoS</source>
         <translation>Va QoS</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="423"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="423"/>
         <source>Will Topic</source>
         <translation>Va Subiect</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="428"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="428"/>
         <source>e.g. device/alerts/offline</source>
         <translation>ex. dispozitiv/alerte/offline</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="435"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="435"/>
         <source>Will Message</source>
         <translation>Va Mesaj</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="440"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="440"/>
         <source>e.g. Device unexpectedly disconnected</source>
         <translation>ex. Dispozitiv deconectat neașteptat</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="485"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="485"/>
         <source>Enable SSL</source>
         <translation>Activează SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="496"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="496"/>
         <source>SSL Protocol</source>
         <translation>Protocol SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="512"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="512"/>
         <source>Verify Depth</source>
-        <translation>Verificare adâncime</translation>
+        <translation>Verificare Adâncime</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="530"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="530"/>
         <source>Verify Mode</source>
-        <translation>Mod verificare</translation>
+        <translation>Mod Verificare</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="562"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="562"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Disconnect</source>
         <translation>Deconectează</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Connect</source>
         <translation>Conectează</translation>
     </message>
@@ -4253,21 +4359,21 @@ Vă rugăm să furnizați datele de autentificare necesare.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <source>Device Defined Project</source>
-        <translation>Proiect definit de dispozitiv</translation>
+        <translation>Proiect Definit de Dispozitiv</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="94"/>
         <source>Quick Plot Mode</source>
-        <translation>Mod grafic rapid</translation>
+        <translation>Mod Grafic Rapid</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="100"/>
         <source>Empty Project</source>
-        <translation>Proiect gol</translation>
+        <translation>Proiect Gol</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="146"/>
@@ -4421,93 +4527,110 @@ Vă rugăm să furnizați datele de autentificare necesare.</translation>
     <message>
         <location filename="../../src/Misc/WorkspaceManager.cpp" line="128"/>
         <source>Select Workspace Location</source>
-        <translation>Selectează locația spațiului de lucru</translation>
+        <translation>Selectează Locația Spațiului de Lucru</translation>
     </message>
 </context>
 <context>
     <name>Modbus</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="45"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="45"/>
         <source>Protocol</source>
         <translation>Protocol</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="67"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="67"/>
         <source>Serial Port</source>
-        <translation>Port serial</translation>
+        <translation>Port Serial</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="91"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="91"/>
         <source>Baud Rate</source>
         <translation>Rată Baud</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="143"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="143"/>
         <source>Parity</source>
         <translation>Paritate</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="166"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="166"/>
         <source>Data Bits</source>
         <translation>Biți de Date</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="189"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="189"/>
         <source>Stop Bits</source>
         <translation>Biți de Stop</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="212"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="212"/>
         <source>Host</source>
         <translation>Gazdă</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="221"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="221"/>
         <source>IP Address</source>
         <translation>Adresă IP</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="235"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="235"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="244"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="244"/>
         <source>TCP Port</source>
         <translation>Port TCP</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="270"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="270"/>
         <source>Slave Address</source>
         <translation>Adresă Sclav</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="274"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="274"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="289"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="289"/>
         <source>Poll Interval (ms)</source>
-        <translation>Interval de interogare (ms)</translation>
+        <translation>Interval de Interogare (ms)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="293"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="293"/>
         <source>Polling interval</source>
         <translation>Interval de interogare</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="318"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="318"/>
         <source>Configure Register Groups...</source>
-        <translation>Configurează grupuri de registre...</translation>
+        <translation>Configurează Grupuri de Registre...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
         <source>%1 group(s) configured</source>
         <translation>%1 grup(uri) configurat(e)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="330"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="330"/>
         <source>No groups configured</source>
         <translation>Niciun grup configurat</translation>
     </message>
@@ -4516,86 +4639,103 @@ Vă rugăm să furnizați datele de autentificare necesare.</translation>
     <name>ModbusGroupsDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
         <source>Modbus Register Groups</source>
-        <translation>Grupuri de registre Modbus</translation>
+        <translation>Grupuri de Registre Modbus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="158"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="158"/>
         <source>Configure multiple register groups to poll different register types in sequence.</source>
         <translation>Configurează mai multe grupuri de registre pentru a interoga diferite tipuri de registre în secvență.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
         <source>Add New Group</source>
-        <translation>Adaugă grup nou</translation>
+        <translation>Adaugă Grup Nou</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="193"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="193"/>
         <source>Register Type:</source>
-        <translation>Tip de registru:</translation>
+        <translation>Tip de Registru:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="204"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="204"/>
         <source>Start Address:</source>
-        <translation>Adresă de început:</translation>
+        <translation>Adresă de Început:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="211"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="211"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="216"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="216"/>
         <source>Register Count:</source>
-        <translation>Număr de registre:</translation>
+        <translation>Număr de Registre:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="227"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="227"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="232"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="232"/>
         <source>Add Group</source>
-        <translation>Adaugă grup</translation>
+        <translation>Adaugă Grup</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="255"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="255"/>
         <source>Configured Groups</source>
-        <translation>Grupuri configurate</translation>
+        <translation>Grupuri Configurate</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="289"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="289"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
         <source>Type</source>
         <translation>Tip</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="310"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="310"/>
         <source>Count</source>
         <translation>Număr</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="317"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="317"/>
         <source>Action</source>
         <translation>Acțiune</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="392"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="392"/>
         <source>Remove</source>
         <translation>Elimină</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="405"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="405"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>Niciun grup configurat.
@@ -4603,16 +4743,19 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="423"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="423"/>
         <source>Total groups: %1</source>
         <translation>Total grupuri: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
         <source>Clear All</source>
-        <translation>Șterge tot</translation>
+        <translation>Șterge Tot</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="433"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="433"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
@@ -4724,7 +4867,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <source>Visit Website</source>
-        <translation>Vizitează site-ul</translation>
+        <translation>Vizitează Site-ul</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="131"/>
@@ -4817,7 +4960,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <source>Save As</source>
-        <translation>Salvează ca</translation>
+        <translation>Salvează Ca</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
@@ -4901,7 +5044,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <source>Level Indicator</source>
-        <translation>Indicator de nivel</translation>
+        <translation>Indicator de Nivel</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="293"/>
@@ -4957,7 +5100,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
         <source>Dataset Container</source>
-        <translation>Container set de date</translation>
+        <translation>Container Set de Date</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
@@ -4978,7 +5121,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
         <source>Data Grid</source>
-        <translation>Grilă de date</translation>
+        <translation>Grilă de Date</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
@@ -5104,7 +5247,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/Misc/Translator.cpp" line="180"/>
+        <location filename="../../src/Misc/Translator.cpp" line="198"/>
         <source>Failed to load welcome text :(</source>
         <translation>Nu s-a reușit încărcarea textului de bun venit :(</translation>
     </message>
@@ -5118,7 +5261,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../src/Licensing/Trial.cpp" line="292"/>
         <location filename="../../src/Licensing/Trial.cpp" line="330"/>
         <source>Trial Activation Error</source>
-        <translation>Eroare activare probă</translation>
+        <translation>Eroare Activare Probă</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="289"/>
@@ -5143,7 +5286,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
     <message>
         <location filename="../../src/Console/Export.cpp" line="118"/>
         <source>Console Output File Error</source>
-        <translation>Eroare fișier ieșire consolă</translation>
+        <translation>Eroare Fișier Ieșire Consolă</translation>
     </message>
     <message>
         <location filename="../../src/Console/Export.cpp" line="119"/>
@@ -5156,12 +5299,12 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
     <message>
         <location filename="../../src/SerialStudio.cpp" line="232"/>
         <source>Data Grids</source>
-        <translation>Grile de date</translation>
+        <translation>Grile de Date</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="235"/>
         <source>Multiple Data Plots</source>
-        <translation>Mai multe diagrame de date</translation>
+        <translation>Mai Multe Diagrame de Date</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="238"/>
@@ -5191,7 +5334,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
     <message>
         <location filename="../../src/SerialStudio.cpp" line="253"/>
         <source>Data Plots</source>
-        <translation>Grafice de date</translation>
+        <translation>Grafice de Date</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="256"/>
@@ -5254,7 +5397,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="123"/>
         <source>Workspace Folder</source>
-        <translation>Dosar de lucru</translation>
+        <translation>Dosar de Lucru</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="166"/>
@@ -5268,7 +5411,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="191"/>
         <source>Enable TCP Plugins (Port 7777)</source>
-        <translation>Activează pluginuri TCP (Port 7777)</translation>
+        <translation>Activează Pluginuri TCP (Port 7777)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="209"/>
@@ -5289,28 +5432,28 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="258"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="258"/>
         <source>Point Count</source>
-        <translation>Număr de puncte</translation>
+        <translation>Număr de Puncte</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="278"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="278"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="278"/>
         <source>UI Refresh Rate (Hz)</source>
-        <translation>Rată de reîmprospătare UI (Hz)</translation>
+        <translation>Rată de Reîmprospătare UI (Hz)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="296"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="296"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="296"/>
         <source>Show Actions Panel</source>
-        <translation>Afișează panoul de acțiuni</translation>
+        <translation>Afișează Panoul de Acțiuni</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="314"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="314"/>
         <source>Always Show Taskbar Buttons</source>
-        <translation>Afișează întotdeauna butoanele din bara de activități</translation>
+        <translation>Afișează Întotdeauna Butoanele din Bara de Activități</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
@@ -5331,14 +5474,14 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="385"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="385"/>
         <source>Font Family</source>
-        <translation>Familie de fonturi</translation>
+        <translation>Familie de Fonturi</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="405"/>
         <source>Font Size</source>
-        <translation>Dimensiune font</translation>
+        <translation>Dimensiune Font</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="442"/>
@@ -5393,7 +5536,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="142"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="142"/>
         <source>Quick Plot (Comma Separated Values)</source>
-        <translation>Grafic Rapid (Valori Separate prin Virgulă)</translation>
+        <translation>Grafic Rapid (Valori Separate Prin Virgulă)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="153"/>
@@ -5435,14 +5578,14 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="218"/>
         <source>Create MDF4 File</source>
-        <translation>Creează fișier MDF4</translation>
+        <translation>Creează Fișier MDF4</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="235"/>
         <source>Export Console Data</source>
-        <translation>Exportă datele din consolă</translation>
+        <translation>Exportă Datele din Consolă</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="264"/>
@@ -5466,7 +5609,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
         <source>No Groups Available</source>
-        <translation>Niciun grup disponibil</translation>
+        <translation>Niciun Grup Disponibil</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="188"/>
@@ -5480,21 +5623,21 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <source>No Actions Available</source>
-        <translation>Nicio acțiune disponibilă</translation>
+        <translation>Nicio Acțiune Disponibilă</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <source>Auto Layout</source>
-        <translation>Aranjare automată</translation>
+        <translation>Aranjare Automată</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <source>Full Screen</source>
-        <translation>Ecran complet</translation>
+        <translation>Ecran Complet</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
@@ -5515,7 +5658,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
         <source>Console Logging</source>
-        <translation>Înregistrare consolă</translation>
+        <translation>Înregistrare Consolă</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="302"/>
@@ -5574,7 +5717,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <source>No Data Available</source>
-        <translation>Date indisponibile</translation>
+        <translation>Date Indisponibile</translation>
     </message>
 </context>
 <context>
@@ -5807,8 +5950,21 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="323"/>
+        <source>Modbus</source>
+        <translation>Modbus</translation>
+    </message>
+    <message>
+        <source>CANBus</source>
+        <translation type="vanished">CANBus</translation>
+    </message>
+    <message>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="351"/>
+        <source>CAN</source>
+        <translation>CAN</translation>
+    </message>
+    <message>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <source>ModBus</source>
         <translation>ModBus</translation>
     </message>
@@ -5836,7 +5992,6 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="351"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="351"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="351"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
@@ -6038,7 +6193,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
     <message>
         <location filename="../../src/UI/Taskbar.cpp" line="255"/>
         <source>All Data</source>
-        <translation>Toate datele</translation>
+        <translation>Toate Datele</translation>
     </message>
 </context>
 <context>
@@ -6046,7 +6201,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="673"/>
         <source>Select Background Image</source>
-        <translation>Selectați imaginea de fundal</translation>
+        <translation>Selectați Imaginea de Fundal</translation>
     </message>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="675"/>
@@ -6209,7 +6364,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="448"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="448"/>
         <source>Upgrade Now</source>
-        <translation>Upgradează acum</translation>
+        <translation>Upgradează Acum</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="460"/>
@@ -6286,14 +6441,14 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::DataGrid</name>
     <message>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="137"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="46"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="138"/>
         <source>Title</source>
         <translation>Titlu</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="137"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="46"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="138"/>
         <source>Value</source>
         <translation>Valoare</translation>
     </message>

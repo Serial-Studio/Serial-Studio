@@ -320,7 +320,7 @@ Rectangle {
         sourceComponent: Component {
           Widgets.ToolbarButton {
             iconSize: 16
-            text: qsTr("ModBus")
+            text: qsTr("Modbus")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
             font.bold: Cpp_IO_Manager.busType === SerialStudio.ModBus

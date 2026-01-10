@@ -137,7 +137,7 @@ private slots:
   void toggleCursor();
   void onThemeChanged();
   void loadWelcomeGuide();
-  void append(QStringView data);
+  void append(const QString &data);
   void appendString(QStringView string);
   void removeStringFromCursor(const Widgets::Terminal::Direction direction
                               = RightDirection,

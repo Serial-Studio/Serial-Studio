@@ -283,7 +283,7 @@ QStringList IO::Manager::availableBuses() const
   list.append(tr("Network Socket"));
   list.append(tr("Bluetooth LE"));
 #ifdef BUILD_COMMERCIAL
-  list.append(tr("Audio Stream"));
+  list.append(tr("Audio"));
   list.append(tr("Modbus"));
   list.append(tr("CAN Bus"));
 #endif

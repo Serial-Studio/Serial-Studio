@@ -51,6 +51,19 @@
 #ifdef BUILD_COMMERCIAL
 
 /**
+ * @brief Constructor for the MDF4 export worker
+ */
+MDF4::ExportWorker::ExportWorker(
+    moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr> *queue,
+    std::atomic<bool> *enabled,
+    std::atomic<size_t> *queueSize)
+  : FrameConsumerWorker(queue, enabled, queueSize)
+  , m_fileOpen(false)
+  , m_masterTimeChannel(nullptr)
+{
+}
+
+/**
  * @brief Destructor for the MDF4 export worker
  */
 MDF4::ExportWorker::~ExportWorker() = default;

@@ -74,6 +74,10 @@ constexpr int MAX_LINES = 1000;
  */
 Widgets::Terminal::Terminal(QQuickItem *parent)
   : QQuickPaintedItem(parent)
+  , m_cWidth(0)
+  , m_cHeight(0)
+  , m_borderX(0)
+  , m_borderY(0)
   , m_scrollOffsetY(0)
   , m_state(Text)
   , m_autoscroll(true)
@@ -83,6 +87,7 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   , m_formatValue(0)
   , m_formatValueY(0)
   , m_useFormatValueY(false)
+  , m_stateChanged(false)
 {
   // Initialize data buffer
   initBuffer();
@@ -547,6 +552,9 @@ int Widgets::Terminal::lineCount() const
  */
 int Widgets::Terminal::linesPerPage() const
 {
+  if (m_cHeight <= 0)
+    return 0;
+
   return static_cast<int>(qFloor((height() - 2 * m_borderY) / m_cHeight));
 }
 
@@ -582,6 +590,9 @@ int Widgets::Terminal::scrollOffsetY() const
  */
 int Widgets::Terminal::maxCharsPerLine() const
 {
+  if (m_cWidth <= 0)
+    return 84;
+
   const auto realValue = (width() - 2 * m_borderX) / m_cWidth;
   return qMax<int>(84, realValue);
 }
@@ -943,7 +954,7 @@ void Widgets::Terminal::loadWelcomeGuide()
  * @see processText(), processEscape(), processFormat(), processResetFont(),
  * appendString()
  */
-void Widgets::Terminal::append(QStringView data)
+void Widgets::Terminal::append(const QString &data)
 {
   QString text;
   auto it = data.constBegin();

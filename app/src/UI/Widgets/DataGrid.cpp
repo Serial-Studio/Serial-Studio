@@ -35,6 +35,7 @@
 Widgets::DataGrid::DataGrid(const int index, QQuickItem *parent)
   : StaticTable(parent)
   , m_index(index)
+  , m_paused(false)
 {
   if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index))
     return;

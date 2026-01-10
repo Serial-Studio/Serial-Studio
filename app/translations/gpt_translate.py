@@ -19,6 +19,34 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #
+# USAGE:
+#   Normal mode (translate missing strings using GPT):
+#     python3 gpt_translate.py
+#
+#   Verification mode (fix capitalization in existing translations - NO GPT):
+#     python3 gpt_translate.py --verify-only
+#
+# The script enforces language-aware title case matching:
+#   - Title Case sources (Every Word Capitalized) → Proper title case in target language
+#   - Example: "Data Grid" → "Cuadrícula de Datos" (lowercase "de" in Spanish)
+#   - Example: "Data Grid" → "Grille de Données" (lowercase "de" in French)
+#   - Respects language-specific rules for articles, prepositions, and connectors
+#
+# Verification mode uses DETERMINISTIC, language-aware title case (no AI calls):
+#   - "PAUSE" → makes translation ALL UPPERCASE
+#   - "Data Grid" (Spanish) → "Cuadrícula de Datos" (lowercase "de")
+#   - "Data Grid" (French) → "Grille de Données" (lowercase "de")
+#   - "About" → Capitalizes First Letter Only
+#
+# Language-specific rules:
+#   - Spanish: lowercase "de", "del", "la", "el", "y", "en", "con", etc.
+#   - French: lowercase "de", "du", "la", "le", "et", "ou", "à", etc.
+#   - Portuguese, Italian, German, Turkish, Russian, etc. have their own rules
+#   - First and last words are ALWAYS capitalized
+#
+# IMPORTANT: Verification is SKIPPED for caseless scripts (Chinese, Japanese,
+# Korean, Hindi, Arabic, etc.) since they don't have uppercase/lowercase.
+#
 
 import re
 import os
@@ -60,6 +88,68 @@ LANGUAGE_MAP = {
     "ro_RO": "Romanian",
     "nl_NL": "Dutch",
     "sv_SE": "Swedish"
+}
+
+# Languages that use scripts WITHOUT uppercase/lowercase distinction
+# Capitalization verification will be SKIPPED for these
+CASELESS_SCRIPTS = {
+    "ja_JP",  # Japanese (Hiragana/Katakana/Kanji)
+    "ko_KR",  # Korean (Hangul)
+    "zh_CN",  # Simplified Chinese (Hanzi)
+    "hi_IN",  # Hindi (Devanagari)
+    # Add more as needed: "ar_SA" (Arabic), "th_TH" (Thai), "he_IL" (Hebrew)
+}
+
+# Language-specific "small words" that should be lowercase in title case
+# (except when they're the first or last word)
+TITLE_CASE_SMALL_WORDS = {
+    "es_MX": {  # Spanish
+        "de", "del", "la", "las", "el", "los", "un", "una", "unos", "unas",
+        "y", "e", "o", "u", "en", "con", "por", "para", "sin", "sobre",
+        "a", "al", "desde", "hasta"
+    },
+    "fr_FR": {  # French
+        "de", "du", "des", "la", "le", "les", "un", "une",
+        "et", "ou", "à", "au", "aux", "en", "dans", "pour", "avec",
+        "par", "sur", "sous", "sans"
+    },
+    "pt_BR": {  # Portuguese
+        "de", "do", "da", "dos", "das", "o", "a", "os", "as", "um", "uma",
+        "e", "ou", "em", "no", "na", "nos", "nas", "com", "por", "para",
+        "sem", "sob", "sobre"
+    },
+    "it_IT": {  # Italian
+        "di", "del", "della", "dei", "delle", "il", "lo", "la", "i", "gli", "le",
+        "un", "uno", "una", "e", "o", "in", "con", "per", "a", "da", "su"
+    },
+    "de_DE": {  # German (capitalize ALL nouns, but small words exist)
+        "der", "die", "das", "den", "dem", "des", "ein", "eine", "einen",
+        "und", "oder", "in", "von", "zu", "mit", "für", "auf", "an"
+    },
+    "tr_TR": {  # Turkish
+        "ve", "veya", "ile", "için", "de", "da", "den", "dan", "bir"
+    },
+    "ru_RU": {  # Russian (Cyrillic)
+        "и", "или", "в", "на", "с", "от", "до", "для", "к", "о", "об", "по"
+    },
+    "uk_UA": {  # Ukrainian (Cyrillic)
+        "і", "та", "або", "в", "на", "з", "від", "до", "для", "к", "о", "по"
+    },
+    "pl_PL": {  # Polish
+        "i", "lub", "w", "na", "z", "od", "do", "dla", "o", "po", "przez"
+    },
+    "cs_CZ": {  # Czech
+        "a", "nebo", "v", "na", "s", "od", "do", "pro", "k", "o", "po"
+    },
+    "ro_RO": {  # Romanian
+        "de", "și", "sau", "în", "pe", "cu", "la", "din", "pentru", "ca"
+    },
+    "nl_NL": {  # Dutch
+        "de", "het", "een", "en", "of", "in", "op", "van", "voor", "met", "aan"
+    },
+    "sv_SE": {  # Swedish
+        "och", "eller", "i", "på", "av", "för", "med", "till", "från", "om"
+    },
 }
 
 #------------------------------------------------------------------------------
@@ -146,6 +236,19 @@ def translate_batch(source_texts, target_language):
         "3. Maintain meaning for all technical/computer-related terminology (e.g. 'unsigned int', '24-bit'). Do not mistranslate or generalize these.",
         "4. Keep translations concise, ideally matching the original character length to fit UI constraints.",
         "5. Respond with one translated string per line, same order, prefixed by its number.",
+        "6. CRITICAL - Apply proper title case for your language:",
+        "   - If the source uses Title Case (Every Word Capitalized), apply proper title case rules for your language.",
+        "   - In Spanish: 'Data Grid' → 'Cuadrícula de Datos' (lowercase 'de', 'del', 'la', 'el', 'y', 'en', 'con', etc.)",
+        "   - In French: 'Data Grid' → 'Grille de Données' (lowercase 'de', 'du', 'la', 'le', 'et', 'ou', 'à', etc.)",
+        "   - ALWAYS capitalize the first and last words, regardless of what they are.",
+        "   - If the source uses sentence case (First word only), keep that pattern.",
+        "   - If the source uses all lowercase or all uppercase, preserve that exactly.",
+        "7. CRITICAL - Preserve technical acronyms in ALL UPPERCASE:",
+        "   - 'CAN Bus' → 'Magistrala CAN' (NOT 'Magistrala Can' or 'magistrala can')",
+        "   - 'TCP/IP Protocol' → 'Protocolo TCP/IP' (NOT 'Protocolo Tcp/Ip')",
+        "   - 'JSON Layout' → 'Diseño JSON' (NOT 'Diseño Json')",
+        "   - 'USB Device' → 'Dispositivo USB' (NOT 'Dispositivo Usb')",
+        "   - Keep ALL technical acronyms uppercase regardless of position in the sentence.",
         "",
     ] + [f"{i+1}. [{loc}] {line}" for i, (loc, line) in enumerate(escaped_entries)])
 
@@ -185,6 +288,109 @@ def translate_batch(source_texts, target_language):
         final_output.append(trans)
 
     return final_output
+
+#------------------------------------------------------------------------------
+# Verification Logic - Deterministic Capitalization Matching
+#------------------------------------------------------------------------------
+
+def apply_capitalization_pattern(source: str, translation: str, lang_code: str = None) -> str:
+    """
+    Apply language-aware capitalization pattern from source to translation.
+
+    This is a deterministic algorithm that applies proper title case rules
+    for each language, respecting which words should be lowercase.
+
+    Args:
+        source: English source string
+        translation: Translated string (may have inconsistent capitalization)
+        lang_code: Language code (e.g., "es_MX") for language-specific rules
+
+    Returns:
+        Translation with proper capitalization
+
+    Examples:
+        apply_capitalization_pattern("Data Grid", "cuadrícula de datos", "es_MX")
+        → "Cuadrícula de Datos" (lowercase "de")
+
+        apply_capitalization_pattern("PAUSE", "duraklat", "tr_TR")
+        → "DURAKLAT"
+
+        apply_capitalization_pattern("About", "hakkında", "tr_TR")
+        → "Hakkında"
+    """
+    # Handle empty strings
+    if not source or not translation:
+        return translation
+
+    # Detect overall capitalization pattern
+    if source.isupper():
+        # ALL UPPERCASE
+        return translation.upper()
+
+    if source.islower():
+        # all lowercase
+        return translation.lower()
+
+    # Check if source is Title Case (every word capitalized)
+    source_words = source.split()
+    is_title_case = all(
+        word[0].isupper() if word and word[0].isalpha() else True
+        for word in source_words
+    )
+
+    if is_title_case and len(source_words) > 1:
+        # Apply language-specific title case
+        trans_words = translation.split()
+        small_words = TITLE_CASE_SMALL_WORDS.get(lang_code, set())
+
+        result_words = []
+        for i, word in enumerate(trans_words):
+            if not word or not word[0].isalpha():
+                result_words.append(word)
+                continue
+
+            word_lower = word.lower()
+            is_first = (i == 0)
+            is_last = (i == len(trans_words) - 1)
+
+            # Always capitalize first and last words
+            # For middle words, check if it's a "small word"
+            if is_first or is_last or word_lower not in small_words:
+                result_words.append(word[0].upper() + word[1:])
+            else:
+                result_words.append(word_lower)
+
+        return ' '.join(result_words)
+
+    # Sentence case: capitalize only first letter
+    if source and source[0].isupper() and not source.isupper():
+        if translation and translation[0].isalpha():
+            return translation[0].upper() + translation[1:]
+
+    # No change needed
+    return translation
+
+
+def verify_capitalization_batch(entries, lang_code):
+    """
+    Verify and fix capitalization patterns in existing translations.
+
+    This is a DETERMINISTIC function that applies language-specific title case
+    rules without using GPT.
+
+    Args:
+        entries (list of (str, str, str)): Tuples of (context_location, source_text, translation_text).
+        lang_code (str): Language code (e.g., "es_MX") for language-specific rules.
+
+    Returns:
+        list of str: Corrected translations with proper capitalization.
+    """
+    results = []
+    for loc, source, translation in entries:
+        corrected = apply_capitalization_pattern(source, translation, lang_code)
+        results.append(corrected)
+
+    return results
 
 #------------------------------------------------------------------------------
 # Core Translation Logic
@@ -287,17 +493,84 @@ def translate_ts_file(filename, batch_size=10):
     tree.write(ts_path, encoding="utf-8", xml_declaration=True)
     print(f"{filename}: {total_updated} strings translated.")
 
+def verify_capitalization_ts_file(filename):
+    """
+    Review and fix capitalization in existing translations using deterministic
+    pattern matching (no GPT calls).
+
+    Args:
+        filename (str): TS file to process (e.g., 'fr_FR.ts').
+    """
+    lang_code = filename.replace(".ts", "")
+    target_language = LANGUAGE_MAP.get(lang_code)
+    if not target_language:
+        print(f"Skipping {filename}: unsupported language code.")
+        return
+
+    # Skip languages with caseless scripts (Chinese, Japanese, Hindi, etc.)
+    if lang_code in CASELESS_SCRIPTS:
+        print(f"\n{filename}: Skipped (caseless script - no uppercase/lowercase) ⊘\n")
+        return
+
+    ts_path = os.path.join(SCRIPT_DIR, TS_DIRECTORY, filename)
+    tree = etree.parse(ts_path)
+    root = tree.getroot()
+    total_fixed = 0
+
+    for context in root.findall("context"):
+        context_name = context.findtext("name", default="unknown")
+
+        for message in context.findall("message"):
+            source = message.find("source")
+            translation = message.find("translation")
+
+            if source is None or not source.text or not source.text.strip():
+                continue
+
+            if translation is None or not translation.text or not translation.text.strip():
+                continue
+
+            if translation.get("type") == "unfinished":
+                continue
+
+            # Apply language-aware capitalization matching
+            original = translation.text
+            corrected = apply_capitalization_pattern(source.text, original, lang_code)
+
+            if original != corrected:
+                print(f"[FIX] {source.text}")
+                print(f"      {original} → {corrected}")
+                translation.text = corrected
+                total_fixed += 1
+
+    if total_fixed > 0:
+        tree.write(ts_path, encoding="utf-8", xml_declaration=True)
+        print(f"\n{filename}: {total_fixed} capitalization issues fixed.\n")
+    else:
+        print(f"\n{filename}: No capitalization issues found. ✓\n")
+
 #------------------------------------------------------------------------------
 # Entry Point
 #------------------------------------------------------------------------------
 
 def main():
     """Run full translation pipeline: update sources, translate, then compile."""
-    run_qt_translation_tool("--lupdate")
+    import sys
+
+    # Check for --verify-only flag
+    verify_only = "--verify-only" in sys.argv
+
+    if not verify_only:
+        run_qt_translation_tool("--lupdate")
 
     for file in os.listdir(os.path.join(SCRIPT_DIR, TS_DIRECTORY)):
         if file.endswith(".ts") and file != "en_US.ts":
-            translate_ts_file(file)
+            if verify_only:
+                print(f"\n=== Verifying capitalization: {file} ===")
+                verify_capitalization_ts_file(file)
+            else:
+                print(f"\n=== Translating: {file} ===")
+                translate_ts_file(file)
 
     run_qt_translation_tool("--lrelease")
 

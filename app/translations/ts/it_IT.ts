@@ -29,7 +29,7 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="100"/>
         <source>All Rights Reserved</source>
-        <translation>Tutti i diritti riservati</translation>
+        <translation>Tutti i Diritti Riservati</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="116"/>
@@ -89,14 +89,14 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="212"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="212"/>
         <source>License Agreement</source>
-        <translation>Accordo di licenza</translation>
+        <translation>Accordo di Licenza</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="221"/>
         <source>Report Bug</source>
-        <translation>Segnala bug</translation>
+        <translation>Segnala Bug</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="230"/>
@@ -151,7 +151,7 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <source>Change Icon</source>
-        <translation>Cambia icona</translation>
+        <translation>Cambia Icona</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="106"/>
@@ -193,40 +193,49 @@
     <name>Audio</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="68"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="68"/>
         <source>No Microphone Detected</source>
-        <translation>Nessun microfono rilevato</translation>
+        <translation>Nessun Microfono Rilevato</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="77"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="77"/>
         <source>Connect a mic or check your settings</source>
         <translation>Collega un microfono o controlla le tue impostazioni</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="101"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="101"/>
         <source>Input Device</source>
-        <translation>Dispositivo di input</translation>
+        <translation>Dispositivo di Input</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="122"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="122"/>
         <source>Sample Rate</source>
-        <translation>Frequenza di campionamento</translation>
+        <translation>Frequenza di Campionamento</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="143"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="218"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="143"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="218"/>
         <source>Sample Format</source>
-        <translation>Formato di campionamento</translation>
+        <translation>Formato di Campionamento</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="164"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="239"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="164"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="239"/>
         <source>Channels</source>
         <translation>Canali</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="197"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="197"/>
         <source>Output Device</source>
-        <translation>Dispositivo di uscita</translation>
+        <translation>Dispositivo di Uscita</translation>
     </message>
 </context>
 <context>
@@ -264,7 +273,7 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <source>No Bluetooth Adapter Detected</source>
-        <translation>Nessun adattatore Bluetooth rilevato</translation>
+        <translation>Nessun Adattatore Bluetooth Rilevato</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
@@ -300,48 +309,57 @@
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="52"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="52"/>
         <source>No CAN Drivers Found</source>
-        <translation>Nessun driver CAN trovato</translation>
+        <translation>Nessun Driver CAN Trovato</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="66"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="66"/>
         <source>Install CAN hardware drivers for your system</source>
         <translation>Installa i driver hardware CAN per il tuo sistema</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="92"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="92"/>
         <source>CAN Driver</source>
         <translation>Driver CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="136"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="136"/>
         <source>Interface</source>
         <translation>Interfaccia</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="167"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="167"/>
         <source>Bitrate</source>
         <translation>Velocità di trasmissione</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="238"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="238"/>
         <source>Flexible Data-Rate</source>
-        <translation>Velocità dati flessibile</translation>
+        <translation>Velocità Dati Flessibile</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="269"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="269"/>
         <source>DBC Database</source>
         <translation>Database DBC</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="273"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="273"/>
         <source>Import DBC File...</source>
-        <translation>Importa file DBC...</translation>
+        <translation>Importa File DBC...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="306"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="306"/>
         <source>No CAN Interfaces Found</source>
-        <translation>Nessuna interfaccia CAN trovata</translation>
+        <translation>Nessuna Interfaccia CAN Trovata</translation>
     </message>
     <message>
         <source>CAN FD</source>
@@ -352,7 +370,7 @@
     <name>CSV::Export</name>
     <message>
         <source>CSV File Error</source>
-        <translation type="vanished">Errore file CSV</translation>
+        <translation type="vanished">Errore File CSV</translation>
     </message>
     <message>
         <source>Cannot open CSV file for writing!</source>
@@ -408,7 +426,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="705"/>
         <source>Invalid CSV</source>
-        <translation>CSV non valido</translation>
+        <translation>CSV Non Valido</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="706"/>
@@ -459,7 +477,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="755"/>
         <source>Invalid Selection</source>
-        <translation>Selezione non valida</translation>
+        <translation>Selezione Non Valida</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="756"/>
@@ -575,61 +593,73 @@
     <name>DBCPreviewDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="41"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="41"/>
         <source>DBC File Preview</source>
         <translation>Anteprima File DBC</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="162"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="162"/>
         <source>DBC File: %1</source>
         <translation>File DBC: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
         <source>Review the CAN messages and signals that will be imported into a new Serial Studio project.</source>
         <translation>Rivedi i messaggi CAN e i segnali che verranno importati in un nuovo progetto Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="181"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="181"/>
         <source>Messages</source>
         <translation>Messaggi</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="215"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="215"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="222"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="222"/>
         <source>Message Name</source>
         <translation>Nome Messaggio</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="230"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="230"/>
         <source>CAN ID</source>
         <translation>ID CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="237"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="237"/>
         <source>Signals</source>
         <translation>Segnali</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="319"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="319"/>
         <source>No messages found in DBC file.</source>
         <translation>Nessun messaggio trovato nel file DBC.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="337"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="337"/>
         <source>Total: %1 messages, %2 signals</source>
         <translation>Totale: %1 messaggi, %2 segnali</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="346"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="346"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="360"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="360"/>
         <source>Create Project</source>
         <translation>Crea Progetto</translation>
     </message>
@@ -765,7 +795,7 @@
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="248"/>
         <source>DBC Import Complete</source>
-        <translation>Importazione DBC completata</translation>
+        <translation>Importazione DBC Completata</translation>
     </message>
 </context>
 <context>
@@ -804,7 +834,7 @@
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="715"/>
         <source>Audio Input</source>
-        <translation>Ingresso audio</translation>
+        <translation>Ingresso Audio</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="721"/>
@@ -852,7 +882,7 @@
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="339"/>
         <source>JavaScript Exception Occurred</source>
-        <translation>Si è verificata un'eccezione JavaScript</translation>
+        <translation>Si È Verificata Un'eccezione JavaScript</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="340"/>
@@ -882,7 +912,7 @@ function parse(frame) { ... }</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="363"/>
         <source>Invalid Parse Function</source>
-        <translation>Funzione di Parse non valida</translation>
+        <translation>Funzione di Parse Non Valida</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="364"/>
@@ -896,7 +926,7 @@ Assicurati che 'parse' sia dichiarato come funzione.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="377"/>
         <source>Invalid Function Declaration</source>
-        <translation>Dichiarazione di Funzione non valida</translation>
+        <translation>Dichiarazione di Funzione Non Valida</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="378"/>
@@ -912,7 +942,7 @@ function parse(frame) { ... }</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="393"/>
         <source>Invalid Function Parameter</source>
-        <translation>Parametro di Funzione non valido</translation>
+        <translation>Parametro di Funzione Non Valido</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="394"/>
@@ -928,7 +958,7 @@ function parse(frame) { ... }</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="405"/>
         <source>Deprecated Function Signature</source>
-        <translation>Firma di Funzione deprecata</translation>
+        <translation>Firma di Funzione Deprecata</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="406"/>
@@ -988,7 +1018,7 @@ Si prega di correggere l'errore nel corpo della funzione.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="603"/>
         <source>Code Validation Successful</source>
-        <translation>Convalida del codice riuscita</translation>
+        <translation>Convalida del Codice Riuscita</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="604"/>
@@ -1018,7 +1048,7 @@ Si prega di correggere l'errore nel corpo della funzione.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="804"/>
         <source>Binary TLV (Tag-Length-Value)</source>
-        <translation>TLV binario (Tag-Length-Value)</translation>
+        <translation>TLV Binario (Tag-Length-Value)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="805"/>
@@ -1146,7 +1176,7 @@ Si prega di correggere l'errore nel corpo della funzione.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="175"/>
         <source>Invalid Hex Input</source>
-        <translation>Input Hex non valido</translation>
+        <translation>Input Hex Non Valido</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="176"/>
@@ -1462,7 +1492,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2350"/>
         <source>Project Information</source>
-        <translation>Informazioni sul Progetto</translation>
+        <translation>Informazioni Sul Progetto</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2362"/>
@@ -1492,7 +1522,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2400"/>
         <source>Hexadecimal Delimiters</source>
-        <translation>Delimitatori esadecimali</translation>
+        <translation>Delimitatori Esadecimali</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2402"/>
@@ -1502,7 +1532,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2417"/>
         <source>Start Sequence</source>
-        <translation>Sequenza di inizio</translation>
+        <translation>Sequenza di Inizio</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2420"/>
@@ -1512,7 +1542,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2431"/>
         <source>End Sequence</source>
-        <translation>Sequenza di fine</translation>
+        <translation>Sequenza di Fine</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2434"/>
@@ -1522,12 +1552,12 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2445"/>
         <source>Payload Processing &amp; Validation</source>
-        <translation>Elaborazione e convalida del payload</translation>
+        <translation>Elaborazione e Convalida del Payload</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2457"/>
         <source>Data Format</source>
-        <translation>Formato dei dati</translation>
+        <translation>Formato dei Dati</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2459"/>
@@ -1537,7 +1567,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2471"/>
         <source>Checksum Algorithm</source>
-        <translation>Algoritmo di checksum</translation>
+        <translation>Algoritmo di Checksum</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2473"/>
@@ -1547,17 +1577,17 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2519"/>
         <source>Group Information</source>
-        <translation>Informazioni sul gruppo</translation>
+        <translation>Informazioni Sul Gruppo</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2531"/>
         <source>Group Title</source>
-        <translation>Titolo del gruppo</translation>
+        <translation>Titolo del Gruppo</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2532"/>
         <source>Untitled Group</source>
-        <translation>Gruppo senza titolo</translation>
+        <translation>Gruppo Senza Titolo</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2533"/>
@@ -1567,7 +1597,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2562"/>
         <source>Composite Widget</source>
-        <translation>Widget composito</translation>
+        <translation>Widget Composito</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2564"/>
@@ -1578,17 +1608,17 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2615"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2850"/>
         <source>General Information</source>
-        <translation>Informazioni generali</translation>
+        <translation>Informazioni Generali</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2626"/>
         <source>Action Title</source>
-        <translation>Titolo dell'azione</translation>
+        <translation>Titolo Dell'azione</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2628"/>
         <source>Untitled Action</source>
-        <translation>Azione senza titolo</translation>
+        <translation>Azione Senza Titolo</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2629"/>
@@ -1598,12 +1628,12 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2640"/>
         <source>Action Icon</source>
-        <translation>Icona dell'azione</translation>
+        <translation>Icona Dell'azione</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2641"/>
         <source>Default Icon</source>
-        <translation>Icona predefinita</translation>
+        <translation>Icona Predefinita</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2642"/>
@@ -1613,7 +1643,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2653"/>
         <source>Data Payload</source>
-        <translation>Pacchetto dati</translation>
+        <translation>Pacchetto Dati</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2666"/>
@@ -1749,12 +1779,12 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2902"/>
         <source>Plot Settings</source>
-        <translation>Impostazioni del grafico</translation>
+        <translation>Impostazioni del Grafico</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2932"/>
         <source>Enable Plot Widget</source>
-        <translation>Abilita il widget del grafico</translation>
+        <translation>Abilita il Widget del Grafico</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2934"/>
@@ -1764,7 +1794,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2963"/>
         <source>X-Axis Source</source>
-        <translation>Sorgente asse X</translation>
+        <translation>Sorgente Asse X</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2964"/>
@@ -1774,7 +1804,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2976"/>
         <source>Minimum Plot Value (optional)</source>
-        <translation>Valore minimo del grafico (opzionale)</translation>
+        <translation>Valore Minimo del Grafico (opzionale)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2977"/>
@@ -1784,7 +1814,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2989"/>
         <source>Maximum Plot Value (optional)</source>
-        <translation>Valore massimo del grafico (opzionale)</translation>
+        <translation>Valore Massimo del Grafico (opzionale)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2990"/>
@@ -2106,7 +2136,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3420"/>
         <source>Save Changes</source>
-        <translation>Salva modifiche</translation>
+        <translation>Salva Modifiche</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3947"/>
@@ -2300,6 +2330,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <source>Stop</source>
         <translation>Interrompi</translation>
     </message>
@@ -2307,6 +2338,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="344"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Downloading updates</source>
         <translation>Scaricamento aggiornamenti</translation>
     </message>
@@ -2369,6 +2401,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <source>Updater</source>
         <translation>Aggiornamento</translation>
     </message>
@@ -2408,12 +2441,12 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="370"/>
         <source>Downloading Updates</source>
-        <translation>Scaricamento aggiornamenti</translation>
+        <translation>Scaricamento Aggiornamenti</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
         <source>Time Remaining</source>
-        <translation>Tempo rimanente</translation>
+        <translation>Tempo Rimanente</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
@@ -2452,11 +2485,13 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <source>Time remaining: 0 minutes</source>
         <translation>Tempo rimanente: 0 minuti</translation>
     </message>
     <message>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <source>Open</source>
         <translation>Apri</translation>
     </message>
@@ -2625,7 +2660,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <source>Select All</source>
-        <translation>Seleziona tutto</translation>
+        <translation>Seleziona Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
@@ -2667,7 +2702,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
         <source>Test With Sample Data</source>
-        <translation>Testa Con Dati di Esempio</translation>
+        <translation>Testa con Dati di Esempio</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
@@ -2689,7 +2724,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Validate &amp; Save</source>
-        <translation type="vanished">Convalida e salva</translation>
+        <translation type="vanished">Convalida e Salva</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="229"/>
@@ -2755,7 +2790,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <source>Base Map: %1</source>
-        <translation>Mappa di base: %1</translation>
+        <translation>Mappa di Base: %1</translation>
     </message>
 </context>
 <context>
@@ -2944,15 +2979,15 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>No Line Ending</source>
-        <translation type="vanished">Nessuna terminazione di linea</translation>
+        <translation type="vanished">Nessuna Terminazione di Linea</translation>
     </message>
     <message>
         <source>New Line</source>
-        <translation type="vanished">Nuova linea</translation>
+        <translation type="vanished">Nuova Linea</translation>
     </message>
     <message>
         <source>Carriage Return</source>
-        <translation type="vanished">Ritorno a capo</translation>
+        <translation type="vanished">Ritorno a Capo</translation>
     </message>
     <message>
         <source>CR + NL</source>
@@ -2960,7 +2995,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Plain Text</source>
-        <translation type="vanished">Testo normale</translation>
+        <translation type="vanished">Testo Normale</translation>
     </message>
     <message>
         <source>Hexadecimal</source>
@@ -2968,7 +3003,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>No Checksum</source>
-        <translation type="vanished">Nessun checksum</translation>
+        <translation type="vanished">Nessun Checksum</translation>
     </message>
 </context>
 <context>
@@ -3005,7 +3040,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1191"/>
         <source>Unsigned 8-bit</source>
-        <translation>Non firmato 8-bit</translation>
+        <translation>Non Firmato 8-bit</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1192"/>
@@ -3165,7 +3200,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="302"/>
         <source>Invalid CAN Configuration</source>
-        <translation>Configurazione CAN non valida</translation>
+        <translation>Configurazione CAN Non Valida</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="303"/>
@@ -3175,7 +3210,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="313"/>
         <source>Invalid Selection</source>
-        <translation>Selezione non valida</translation>
+        <translation>Selezione Non Valida</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="314"/>
@@ -3185,7 +3220,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="323"/>
         <source>No Devices Available</source>
-        <translation>Nessun dispositivo disponibile</translation>
+        <translation>Nessun Dispositivo Disponibile</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
@@ -3195,7 +3230,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="339"/>
         <source>CAN Device Creation Failed</source>
-        <translation>Creazione del dispositivo CAN fallita</translation>
+        <translation>Creazione del Dispositivo CAN Fallita</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="340"/>
@@ -3205,7 +3240,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
         <source>CAN Connection Failed</source>
-        <translation>Connessione al CAN fallita</translation>
+        <translation>Connessione Al CAN Fallita</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
@@ -3215,7 +3250,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="679"/>
         <source>CAN Bus Error</source>
-        <translation>Errore del bus CAN</translation>
+        <translation>Errore del Bus CAN</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="680"/>
@@ -3230,7 +3265,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="689"/>
         <source>CAN Bus Communication Error</source>
-        <translation>Errore di comunicazione del bus CAN</translation>
+        <translation>Errore di Comunicazione del Bus CAN</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="709"/>
@@ -3284,7 +3319,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="331"/>
         <source>Invalid Serial Port</source>
-        <translation>Porta seriale non valida</translation>
+        <translation>Porta Seriale Non Valida</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="332"/>
@@ -3294,7 +3329,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="393"/>
         <source>Modbus Initialization Failed</source>
-        <translation>Inizializzazione Modbus fallita</translation>
+        <translation>Inizializzazione Modbus Fallita</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="394"/>
@@ -3304,7 +3339,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="414"/>
         <source>Modbus Connection Failed</source>
-        <translation>Connessione Modbus fallita</translation>
+        <translation>Connessione Modbus Fallita</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="415"/>
@@ -3364,7 +3399,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1136"/>
         <source>Modbus Communication Error</source>
-        <translation>Errore di comunicazione Modbus</translation>
+        <translation>Errore di Comunicazione Modbus</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1160"/>
@@ -3525,7 +3560,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <message>
         <location filename="../../src/IO/Manager.cpp" line="283"/>
         <source>Network Socket</source>
-        <translation>Socket di rete</translation>
+        <translation>Socket di Rete</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="284"/>
@@ -3534,8 +3569,20 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="286"/>
+        <source>Audio</source>
+        <translation>Audio</translation>
+    </message>
+    <message>
+        <source>CANBus</source>
+        <translation type="vanished">CANBus</translation>
+    </message>
+    <message>
+        <source>CAN</source>
+        <translation type="vanished">CAN</translation>
+    </message>
+    <message>
         <source>Audio Stream</source>
-        <translation>Flusso audio</translation>
+        <translation type="vanished">Flusso Audio</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="287"/>
@@ -3586,11 +3633,11 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     <name>JSON::DBCImporter</name>
     <message>
         <source>Import DBC File</source>
-        <translation type="vanished">Importa file DBC</translation>
+        <translation type="vanished">Importa File DBC</translation>
     </message>
     <message>
         <source>DBC Files (*.dbc);;All Files (*)</source>
-        <translation type="vanished">File DBC (*.dbc);;Tutti i file (*)</translation>
+        <translation type="vanished">File DBC (*.dbc);;Tutti i File (*)</translation>
     </message>
     <message>
         <source>Failed to parse DBC file: %1</source>
@@ -3602,7 +3649,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     </message>
     <message>
         <source>DBC Import Error</source>
-        <translation type="vanished">Errore di importazione DBC</translation>
+        <translation type="vanished">Errore di Importazione DBC</translation>
     </message>
     <message>
         <source>DBC file contains no messages</source>
@@ -3614,7 +3661,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     </message>
     <message>
         <source>DBC Import Warning</source>
-        <translation type="vanished">Avviso di importazione DBC</translation>
+        <translation type="vanished">Avviso di Importazione DBC</translation>
     </message>
     <message>
         <source>Failed to create temporary project file</source>
@@ -3634,7 +3681,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     </message>
     <message>
         <source>DBC Import Complete</source>
-        <translation type="vanished">Importazione DBC completata</translation>
+        <translation type="vanished">Importazione DBC Completata</translation>
     </message>
 </context>
 <context>
@@ -3732,7 +3779,7 @@ Il supporto CAN bus su macOS è limitato e potrebbe richiedere driver hardware d
     </message>
     <message>
         <source>JavaScript Exception Occurred</source>
-        <translation type="vanished">Si è Verificata un'Eccezione JavaScript</translation>
+        <translation type="vanished">Si È Verificata Un'Eccezione JavaScript</translation>
     </message>
     <message>
         <source>The parser code triggered the following exceptions:
@@ -3864,7 +3911,7 @@ Si prega di correggere l'errore nel corpo della funzione.</translation>
     </message>
     <message>
         <source>Binary TLV (Tag-Length-Value)</source>
-        <translation type="vanished">TLV binario (Tag-Length-Value)</translation>
+        <translation type="vanished">TLV Binario (Tag-Length-Value)</translation>
     </message>
     <message>
         <source>CAN bus frames</source>
@@ -3979,7 +4026,7 @@ Si prega di correggere l'errore nel corpo della funzione.</translation>
     <name>JSON::FrameParserTestDialog</name>
     <message>
         <source>Invalid Hex Input</source>
-        <translation type="vanished">Input Hex non valido</translation>
+        <translation type="vanished">Input Hex Non Valido</translation>
     </message>
     <message>
         <source>Please enter valid hexadecimal bytes.
@@ -4088,11 +4135,11 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Project Information</source>
-        <translation type="vanished">Informazioni sul progetto</translation>
+        <translation type="vanished">Informazioni Sul Progetto</translation>
     </message>
     <message>
         <source>Project Title</source>
-        <translation type="vanished">Titolo del progetto</translation>
+        <translation type="vanished">Titolo del Progetto</translation>
     </message>
     <message>
         <source>Name or description of the project</source>
@@ -4100,7 +4147,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Frame Detection Method</source>
-        <translation type="vanished">Metodo di rilevamento del frame</translation>
+        <translation type="vanished">Metodo di Rilevamento del Frame</translation>
     </message>
     <message>
         <source>Select how incoming data frames are identified</source>
@@ -4108,7 +4155,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Hexadecimal Delimiters</source>
-        <translation type="vanished">Delimitatori esadecimali</translation>
+        <translation type="vanished">Delimitatori Esadecimali</translation>
     </message>
     <message>
         <source>Use hex values to define frame boundaries</source>
@@ -4116,7 +4163,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Start Sequence</source>
-        <translation type="vanished">Sequenza di inizio</translation>
+        <translation type="vanished">Sequenza di Inizio</translation>
     </message>
     <message>
         <source>Marks the beginning of each data frame</source>
@@ -4124,7 +4171,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>End Sequence</source>
-        <translation type="vanished">Sequenza di fine</translation>
+        <translation type="vanished">Sequenza di Fine</translation>
     </message>
     <message>
         <source>Marks the end of each data frame</source>
@@ -4176,7 +4223,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Action Icon</source>
-        <translation type="vanished">Icona dell'Azione</translation>
+        <translation type="vanished">Icona Dell'Azione</translation>
     </message>
     <message>
         <source>Icon displayed for this action in the dashboard</source>
@@ -4248,7 +4295,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Dataset Title</source>
-        <translation type="vanished">Titolo del dataset</translation>
+        <translation type="vanished">Titolo del Dataset</translation>
     </message>
     <message>
         <source>Name of the dataset, used for labeling and identification</source>
@@ -4264,11 +4311,11 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Plot Settings</source>
-        <translation type="vanished">Impostazioni del grafico</translation>
+        <translation type="vanished">Impostazioni del Grafico</translation>
     </message>
     <message>
         <source>Enable Plot Widget</source>
-        <translation type="vanished">Abilita il widget del grafico</translation>
+        <translation type="vanished">Abilita il Widget del Grafico</translation>
     </message>
     <message>
         <source>Choose which dataset to use for the X-Axis in plots</source>
@@ -4276,7 +4323,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Minimum Plot Value (optional)</source>
-        <translation type="vanished">Valore minimo del grafico (opzionale)</translation>
+        <translation type="vanished">Valore Minimo del Grafico (opzionale)</translation>
     </message>
     <message>
         <source>Lower bound for plot display range</source>
@@ -4284,7 +4331,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Maximum Plot Value (optional)</source>
-        <translation type="vanished">Valore massimo del grafico (opzionale)</translation>
+        <translation type="vanished">Valore Massimo del Grafico (opzionale)</translation>
     </message>
     <message>
         <source>Upper bound for plot display range</source>
@@ -4296,7 +4343,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Enable FFT Analysis</source>
-        <translation type="vanished">Abilita analisi FFT</translation>
+        <translation type="vanished">Abilita Analisi FFT</translation>
     </message>
     <message>
         <source>Perform frequency-domain analysis of the dataset</source>
@@ -4332,7 +4379,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Widget Settings</source>
-        <translation type="vanished">Impostazioni del widget</translation>
+        <translation type="vanished">Impostazioni del Widget</translation>
     </message>
     <message>
         <source>Alarm Settings</source>
@@ -4356,7 +4403,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Display Widget</source>
-        <translation type="vanished">Visualizza widget</translation>
+        <translation type="vanished">Visualizza Widget</translation>
     </message>
     <message>
         <source>Select the visual widget used to display this dataset</source>
@@ -4372,7 +4419,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Minimum Display Value (required)</source>
-        <translation type="vanished">Valore minimo di visualizzazione (richiesto)</translation>
+        <translation type="vanished">Valore Minimo di Visualizzazione (richiesto)</translation>
     </message>
     <message>
         <source>Lower bound of the gauge or bar display range</source>
@@ -4380,7 +4427,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Maximum Display Value (required)</source>
-        <translation type="vanished">Valore massimo di visualizzazione (richiesto)</translation>
+        <translation type="vanished">Valore Massimo di Visualizzazione (richiesto)</translation>
     </message>
     <message>
         <source>Upper bound of the gauge or bar display range</source>
@@ -4388,7 +4435,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Alarm: Low Threshold (optional)</source>
-        <translation type="vanished">Allarme: Soglia bassa (opzionale)</translation>
+        <translation type="vanished">Allarme: Soglia Bassa (opzionale)</translation>
     </message>
     <message>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
@@ -4396,7 +4443,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Alarm: High Threshold (optional)</source>
-        <translation type="vanished">Allarme: Soglia alta (opzionale)</translation>
+        <translation type="vanished">Allarme: Soglia Alta (opzionale)</translation>
     </message>
     <message>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
@@ -4404,7 +4451,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>LED Display Settings</source>
-        <translation type="vanished">Impostazioni display LED</translation>
+        <translation type="vanished">Impostazioni Display LED</translation>
     </message>
     <message>
         <source>Enable visual status monitoring using an LED display</source>
@@ -4428,7 +4475,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Untitled Project</source>
-        <translation type="vanished">Progetto senza titolo</translation>
+        <translation type="vanished">Progetto Senza Titolo</translation>
     </message>
     <message>
         <source>Serial Studio Project Files (*.ssproj)</source>
@@ -4636,7 +4683,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Untitled Action</source>
-        <translation type="vanished">Azione senza titolo</translation>
+        <translation type="vanished">Azione Senza Titolo</translation>
     </message>
     <message>
         <source>Name or description of the action</source>
@@ -4648,7 +4695,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Default Icon</source>
-        <translation type="vanished">Icona predefinita</translation>
+        <translation type="vanished">Icona Predefinita</translation>
     </message>
     <message>
         <source>Icon to display in the dashboard</source>
@@ -4656,7 +4703,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Binary Data</source>
-        <translation type="vanished">Dati binari</translation>
+        <translation type="vanished">Dati Binari</translation>
     </message>
     <message>
         <source>Send binary data when the action is triggered.</source>
@@ -4716,7 +4763,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Untitled Dataset</source>
-        <translation type="vanished">Dataset senza titolo</translation>
+        <translation type="vanished">Dataset Senza Titolo</translation>
     </message>
     <message>
         <source>Name or description of the dataset</source>
@@ -4724,7 +4771,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Frame Index</source>
-        <translation type="vanished">Indice del frame</translation>
+        <translation type="vanished">Indice del Frame</translation>
     </message>
     <message>
         <source>Position in the frame</source>
@@ -4732,7 +4779,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Measurement Unit</source>
-        <translation type="vanished">Unità di misura</translation>
+        <translation type="vanished">Unità di Misura</translation>
     </message>
     <message>
         <source>Volts, Amps, etc.</source>
@@ -4756,7 +4803,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Oscilloscope Plot</source>
-        <translation type="vanished">Grafico dell'oscilloscopio</translation>
+        <translation type="vanished">Grafico Dell'oscilloscopio</translation>
     </message>
     <message>
         <source>Plot data in real-time</source>
@@ -4780,7 +4827,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>X-Axis Source</source>
-        <translation type="vanished">Sorgente asse X</translation>
+        <translation type="vanished">Sorgente Asse X</translation>
     </message>
     <message>
         <source>Data series for the X-Axis</source>
@@ -4788,7 +4835,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Minimum Value</source>
-        <translation type="vanished">Valore minimo</translation>
+        <translation type="vanished">Valore Minimo</translation>
     </message>
     <message>
         <source>Required for range widgets, optional for plots</source>
@@ -4796,7 +4843,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Maximum Value</source>
-        <translation type="vanished">Valore massimo</translation>
+        <translation type="vanished">Valore Massimo</translation>
     </message>
     <message>
         <source>Alarm Low Value</source>
@@ -4888,11 +4935,11 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>No Delimiters</source>
-        <translation type="vanished">Nessun delimitatore</translation>
+        <translation type="vanished">Nessun Delimitatore</translation>
     </message>
     <message>
         <source>Data Grid</source>
-        <translation type="vanished">Griglia dati</translation>
+        <translation type="vanished">Griglia Dati</translation>
     </message>
     <message>
         <source>GPS Map</source>
@@ -4904,7 +4951,7 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Multiple Plot</source>
-        <translation type="vanished">Grafico multiplo</translation>
+        <translation type="vanished">Grafico Multiplo</translation>
     </message>
     <message>
         <source>Accelerometer</source>
@@ -4974,26 +5021,31 @@ Esempio (HEX):  48 65 6C 6C 6F</translation>
     <name>LicenseManagement</name>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="36"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="36"/>
         <source>Licensing</source>
         <translation>Licenze</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="75"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="75"/>
         <source>Please wait...</source>
         <translation>Attendere prego...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="116"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="116"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Attiva Serial Studio Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="122"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="122"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
         <translation>Incolla il tuo codice di licenza qui sotto per sbloccare funzionalità Pro come MQTT, grafici 3D e altro.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="129"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="129"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
         <translation>La tua licenza include 5 attivazioni dispositivo.
@@ -5001,6 +5053,7 @@ I piani includono opzioni Mensili, Annuali e a Vita.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="141"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="141"/>
         <source>Paste your license key here…</source>
         <translation>Incolla il tuo codice di licenza qui…</translation>
     </message>
@@ -5008,11 +5061,15 @@ I piani includono opzioni Mensili, Annuali e a Vita.</translation>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="160"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="320"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="368"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="160"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="320"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="368"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="166"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="166"/>
         <source>Paste</source>
         <translation>Incolla</translation>
     </message>
@@ -5020,71 +5077,87 @@ I piani includono opzioni Mensili, Annuali e a Vita.</translation>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="172"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="326"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="374"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="172"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="326"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="374"/>
         <source>Select All</source>
-        <translation>Seleziona tutto</translation>
+        <translation>Seleziona Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="223"/>
         <source>Product</source>
         <translation>Prodotto</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="230"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="230"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="241"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="241"/>
         <source>Licensee</source>
         <translation>Licenziatario</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="260"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="260"/>
         <source>Licensee E-Mail</source>
         <translation>E-Mail del Licenziatario</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="277"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="277"/>
         <source>Device Usage</source>
         <translation>Utilizzo del Dispositivo</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="285"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="285"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>%1 dispositivi in uso (Piano illimitato)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="286"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="286"/>
         <source>%1 of %2 devices used</source>
         <translation>%1 di %2 dispositivi utilizzati</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="296"/>
         <source>Device ID</source>
         <translation>ID Dispositivo</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="342"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="342"/>
         <source>License Key</source>
         <translation>Chiave di Licenza</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="398"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="398"/>
         <source>Customer Portal</source>
         <translation>Portale Clienti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="412"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="412"/>
         <source>Buy License</source>
         <translation>Acquista Licenza</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="422"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="422"/>
         <source>Activate</source>
         <translation>Attiva</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="435"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="435"/>
         <source>Deactivate</source>
         <translation>Disattiva</translation>
     </message>
@@ -5224,12 +5297,12 @@ Grazie ancora per aver supportato Serial Studio!</translation>
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="428"/>
+        <location filename="../../src/MDF4/Export.cpp" line="441"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>L'esportazione MDF4 è una funzione Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="429"/>
+        <location filename="../../src/MDF4/Export.cpp" line="442"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>Questa funzione richiede una licenza. Si prega di acquistarne una per abilitare l'esportazione MDF4.</translation>
     </message>
@@ -5291,10 +5364,7 @@ Grazie ancora per aver supportato Serial Studio!</translation>
 Project: %2
 Subject: %3
 Channels: %4</source>
-        <translation type="vanished">Autore: %1
-Progetto: %2
-Soggetto: %3
-Canali: %4</translation>
+        <translation type="vanished">Autore: %1 Progetto: %2 Soggetto: %3 Canali: %4</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -5341,12 +5411,12 @@ Canali: %4</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="52"/>
         <source>Any Protocol</source>
-        <translation>Qualsiasi protocollo</translation>
+        <translation>Qualsiasi Protocollo</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="53"/>
         <source>Secure Protocols Only</source>
-        <translation>Solo protocolli sicuri</translation>
+        <translation>Solo Protocolli Sicuri</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="56"/>
@@ -5356,27 +5426,27 @@ Canali: %4</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="57"/>
         <source>Query Peer</source>
-        <translation>Interroga peer</translation>
+        <translation>Interroga Peer</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="58"/>
         <source>Verify Peer</source>
-        <translation>Verifica peer</translation>
+        <translation>Verifica Peer</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="59"/>
         <source>Auto Verify Peer</source>
-        <translation>Verifica automatica peer</translation>
+        <translation>Verifica Automatica Peer</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="331"/>
         <source>Use System Database</source>
-        <translation>Usa database di sistema</translation>
+        <translation>Usa Database di Sistema</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="332"/>
         <source>Load From Folder...</source>
-        <translation>Carica da cartella...</translation>
+        <translation>Carica da Cartella...</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="346"/>
@@ -5405,7 +5475,7 @@ Per sbloccare questa funzione, attiva la tua licenza o visita il negozio.</trans
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="427"/>
         <source>Missing MQTT Topic</source>
-        <translation>Argomento MQTT mancante</translation>
+        <translation>Argomento MQTT Mancante</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="428"/>
@@ -5416,12 +5486,12 @@ Per sbloccare questa funzione, attiva la tua licenza o visita il negozio.</trans
         <location filename="../../src/MQTT/Client.cpp" line="429"/>
         <location filename="../../src/MQTT/Client.cpp" line="453"/>
         <source>Configuration Error</source>
-        <translation>Errore di configurazione</translation>
+        <translation>Errore di Configurazione</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="437"/>
         <source>MQTT Topic Not Set</source>
-        <translation>Argomento MQTT non impostato</translation>
+        <translation>Argomento MQTT Non Impostato</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="438"/>
@@ -5431,12 +5501,12 @@ Per sbloccare questa funzione, attiva la tua licenza o visita il negozio.</trans
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="439"/>
         <source>Configuration Warning</source>
-        <translation>Avviso di configurazione</translation>
+        <translation>Avviso di Configurazione</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="451"/>
         <source>Invalid MQTT Topic</source>
-        <translation>Argomento MQTT non valido</translation>
+        <translation>Argomento MQTT Non Valido</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="452"/>
@@ -5552,7 +5622,7 @@ Per sbloccare questa funzione, attiva la tua licenza o visita il negozio.</trans
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="889"/>
         <source>MQTT Authentication Failed</source>
-        <translation>Autenticazione MQTT fallita</translation>
+        <translation>Autenticazione MQTT Fallita</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="890"/>
@@ -5572,7 +5642,7 @@ Per sbloccare questa funzione, attiva la tua licenza o visita il negozio.</trans
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="917"/>
         <source>MQTT Authentication Required</source>
-        <translation>Autenticazione MQTT richiesta</translation>
+        <translation>Autenticazione MQTT Richiesta</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="918"/>
@@ -5586,7 +5656,7 @@ Fornisci le credenziali necessarie.</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="926"/>
         <source>Enter MQTT Username</source>
-        <translation>Inserisci nome utente MQTT</translation>
+        <translation>Inserisci Nome Utente MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="927"/>
@@ -5608,166 +5678,199 @@ Fornisci le credenziali necessarie.</translation>
     <name>MQTTConfiguration</name>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="36"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="36"/>
         <source>MQTT Setup</source>
         <translation>Configurazione MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="96"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="96"/>
         <source>MQTT is a Pro Feature</source>
         <translation>MQTT è una Funzione Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="97"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="97"/>
         <source>Activate your license or visit the store to unlock MQTT support.</source>
         <translation>Attiva la tua licenza o visita il negozio per sbloccare il supporto MQTT.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="109"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="109"/>
         <source>General</source>
         <translation>Generale</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="115"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="115"/>
         <source>Authentication</source>
         <translation>Autenticazione</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="121"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="121"/>
         <source>MQTT Options</source>
         <translation>Opzioni MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="127"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="127"/>
         <source>SSL Properties</source>
         <translation>Proprietà SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="183"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="183"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="195"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="195"/>
         <source>Port</source>
         <translation>Porta</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="211"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="211"/>
         <source>Client ID</source>
         <translation>ID Cliente</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="223"/>
         <source>Keep Alive (s)</source>
         <translation>Mantieni Attivo (s)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="236"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="236"/>
         <source>Clean Session</source>
         <translation>Sessione Pulita</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="285"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="285"/>
         <source>Username</source>
         <translation>Nome Utente</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="290"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="290"/>
         <source>MQTT Username</source>
         <translation>Nome Utente MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="297"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="297"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="307"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="307"/>
         <source>MQTT Password</source>
         <translation>Password MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="364"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="364"/>
         <source>Version</source>
         <translation>Versione</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="376"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="376"/>
         <source>Mode</source>
         <translation>Modalità</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="388"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="388"/>
         <source>Topic</source>
         <translation>Argomento</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="393"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="393"/>
         <source>e.g. sensors/temperature or home/+/status</source>
         <translation>ad es. sensori/temperatura o casa/+/stato</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="400"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="400"/>
         <source>Will Retain</source>
         <translation>Mantieni Will</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="411"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="411"/>
         <source>Will QoS</source>
         <translation>QoS Will</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="423"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="423"/>
         <source>Will Topic</source>
         <translation>Argomento Will</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="428"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="428"/>
         <source>e.g. device/alerts/offline</source>
         <translation>ad es. dispositivo/avvisi/offline</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="435"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="435"/>
         <source>Will Message</source>
         <translation>Messaggio Will</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="440"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="440"/>
         <source>e.g. Device unexpectedly disconnected</source>
         <translation>ad es. Dispositivo disconnesso inaspettatamente</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="485"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="485"/>
         <source>Enable SSL</source>
         <translation>Abilita SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="496"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="496"/>
         <source>SSL Protocol</source>
         <translation>Protocollo SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="512"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="512"/>
         <source>Verify Depth</source>
         <translation>Verifica Profondità</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="530"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="530"/>
         <source>Verify Mode</source>
         <translation>Verifica Modalità</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="562"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="562"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Disconnect</source>
         <translation>Disconnetti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Connect</source>
         <translation>Connetti</translation>
     </message>
@@ -5779,7 +5882,7 @@ Fornisci le credenziali necessarie.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <source>Device Defined Project</source>
-        <translation>Progetto Definito dal Dispositivo</translation>
+        <translation>Progetto Definito Dal Dispositivo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="94"/>
@@ -5965,61 +6068,73 @@ Fornisci le credenziali necessarie.</translation>
     <name>Modbus</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="45"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="45"/>
         <source>Protocol</source>
         <translation>Protocollo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="67"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="67"/>
         <source>Serial Port</source>
         <translation>Porta Seriale</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="91"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="91"/>
         <source>Baud Rate</source>
         <translation>Velocità di Trasmissione</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="143"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="143"/>
         <source>Parity</source>
         <translation>Parità</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="166"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="166"/>
         <source>Data Bits</source>
         <translation>Bit di Dati</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="189"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="189"/>
         <source>Stop Bits</source>
         <translation>Bit di Stop</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="212"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="212"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="221"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="221"/>
         <source>IP Address</source>
         <translation>Indirizzo IP</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="235"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="235"/>
         <source>Port</source>
         <translation>Porta</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="244"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="244"/>
         <source>TCP Port</source>
         <translation>Porta TCP</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="270"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="270"/>
         <source>Slave Address</source>
         <translation>Indirizzo Slave</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="274"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="274"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
@@ -6033,7 +6148,7 @@ Fornisci le credenziali necessarie.</translation>
     </message>
     <message>
         <source>Start Address</source>
-        <translation type="vanished">Indirizzo di inizio</translation>
+        <translation type="vanished">Indirizzo di Inizio</translation>
     </message>
     <message>
         <source>Register address</source>
@@ -6041,7 +6156,7 @@ Fornisci le credenziali necessarie.</translation>
     </message>
     <message>
         <source>Register Count</source>
-        <translation type="vanished">Conteggio dei registri</translation>
+        <translation type="vanished">Conteggio dei Registri</translation>
     </message>
     <message>
         <source>Number of registers</source>
@@ -6049,26 +6164,31 @@ Fornisci le credenziali necessarie.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="318"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="318"/>
         <source>Configure Register Groups...</source>
         <translation>Configura Gruppi di Registri...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
         <source>%1 group(s) configured</source>
         <translation>%1 gruppo/i configurato/i</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="330"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="330"/>
         <source>No groups configured</source>
         <translation>Nessun gruppo configurato</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="289"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="289"/>
         <source>Poll Interval (ms)</source>
-        <translation>Intervallo di polling (ms)</translation>
+        <translation>Intervallo di Polling (ms)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="293"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="293"/>
         <source>Polling interval</source>
         <translation>Intervallo di polling</translation>
     </message>
@@ -6077,86 +6197,103 @@ Fornisci le credenziali necessarie.</translation>
     <name>ModbusGroupsDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
         <source>Modbus Register Groups</source>
         <translation>Gruppi di Registri Modbus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="158"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="158"/>
         <source>Configure multiple register groups to poll different register types in sequence.</source>
         <translation>Configura più gruppi di registri per interrogare diversi tipi di registri in sequenza.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
         <source>Add New Group</source>
         <translation>Aggiungi Nuovo Gruppo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="193"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="193"/>
         <source>Register Type:</source>
         <translation>Tipo di Registro:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="204"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="204"/>
         <source>Start Address:</source>
         <translation>Indirizzo di Inizio:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="211"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="211"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="216"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="216"/>
         <source>Register Count:</source>
         <translation>Numero di Registri:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="227"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="227"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="232"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="232"/>
         <source>Add Group</source>
         <translation>Aggiungi Gruppo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="255"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="255"/>
         <source>Configured Groups</source>
         <translation>Gruppi Configurati</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="289"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="289"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
         <source>Start</source>
         <translation>Inizio</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="310"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="310"/>
         <source>Count</source>
         <translation>Conteggio</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="317"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="317"/>
         <source>Action</source>
         <translation>Azione</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="392"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="392"/>
         <source>Remove</source>
         <translation>Rimuovi</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="405"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="405"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>Nessun gruppo configurato.
@@ -6164,16 +6301,19 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="423"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="423"/>
         <source>Total groups: %1</source>
         <translation>Gruppi totali: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
         <source>Clear All</source>
-        <translation>Cancella tutto</translation>
+        <translation>Cancella Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="433"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="433"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -6297,7 +6437,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <source>Visit Website</source>
-        <translation>Visita il sito web</translation>
+        <translation>Visita il Sito Web</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="131"/>
@@ -6331,7 +6471,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <source>Project Structure</source>
-        <translation>Struttura del progetto</translation>
+        <translation>Struttura del Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="248"/>
@@ -6390,7 +6530,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <source>Save As</source>
-        <translation>Salva come</translation>
+        <translation>Salva Come</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
@@ -6677,7 +6817,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/Misc/Translator.cpp" line="180"/>
+        <location filename="../../src/Misc/Translator.cpp" line="198"/>
         <source>Failed to load welcome text :(</source>
         <translation>Caricamento del testo di benvenuto fallito :(</translation>
     </message>
@@ -6691,7 +6831,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../src/Licensing/Trial.cpp" line="292"/>
         <location filename="../../src/Licensing/Trial.cpp" line="330"/>
         <source>Trial Activation Error</source>
-        <translation>Errore di attivazione della prova</translation>
+        <translation>Errore di Attivazione della Prova</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="289"/>
@@ -6729,12 +6869,12 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="232"/>
         <source>Data Grids</source>
-        <translation>Griglie di dati</translation>
+        <translation>Griglie di Dati</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="235"/>
         <source>Multiple Data Plots</source>
-        <translation>Grafici dati multipli</translation>
+        <translation>Grafici Dati Multipli</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="238"/>
@@ -6764,7 +6904,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="253"/>
         <source>Data Plots</source>
-        <translation>Grafici dei dati</translation>
+        <translation>Grafici dei Dati</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="256"/>
@@ -6827,7 +6967,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="123"/>
         <source>Workspace Folder</source>
-        <translation>Cartella di lavoro</translation>
+        <translation>Cartella di Lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="166"/>
@@ -6841,11 +6981,11 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="191"/>
         <source>Enable TCP Plugins (Port 7777)</source>
-        <translation>Abilita plugin TCP (Porta 7777)</translation>
+        <translation>Abilita Plugin TCP (Porta 7777)</translation>
     </message>
     <message>
         <source>Force Software Rendering</source>
-        <translation type="vanished">Forza rendering software</translation>
+        <translation type="vanished">Forza Rendering Software</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="209"/>
@@ -6866,25 +7006,25 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="258"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="258"/>
         <source>Point Count</source>
-        <translation>Conteggio punti</translation>
+        <translation>Conteggio Punti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="278"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="278"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="278"/>
         <source>UI Refresh Rate (Hz)</source>
-        <translation>Frequenza di aggiornamento UI (Hz)</translation>
+        <translation>Frequenza di Aggiornamento UI (Hz)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="314"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="314"/>
         <source>Always Show Taskbar Buttons</source>
-        <translation>Mostra sempre i pulsanti della barra delle applicazioni</translation>
+        <translation>Mostra Sempre i Pulsanti della Barra delle Applicazioni</translation>
     </message>
     <message>
         <source>Decimal Precision</source>
-        <translation type="vanished">Precisione decimale</translation>
+        <translation type="vanished">Precisione Decimale</translation>
     </message>
     <message>
         <source>Threaded mode (better for high-rate data)</source>
@@ -6895,7 +7035,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="296"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="296"/>
         <source>Show Actions Panel</source>
-        <translation>Mostra pannello azioni</translation>
+        <translation>Mostra Pannello Azioni</translation>
     </message>
     <message>
         <source>Always Show Tashbar Buttons</source>
@@ -6903,7 +7043,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
     </message>
     <message>
         <source>Enable Console Widget</source>
-        <translation type="vanished">Abilita widget console</translation>
+        <translation type="vanished">Abilita Widget Console</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
@@ -6924,14 +7064,14 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="385"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="385"/>
         <source>Font Family</source>
-        <translation>Famiglia di caratteri</translation>
+        <translation>Famiglia di Caratteri</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="405"/>
         <source>Font Size</source>
-        <translation>Dimensione del carattere</translation>
+        <translation>Dimensione del Carattere</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="442"/>
@@ -6965,28 +7105,28 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="33"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="256"/>
         <source>Device Setup</source>
-        <translation>Configurazione dispositivo</translation>
+        <translation>Configurazione Dispositivo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="123"/>
         <source>Frame Parsing</source>
-        <translation>Analisi del frame</translation>
+        <translation>Analisi del Frame</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="131"/>
         <source>No Parsing (Device Sends JSON Data)</source>
-        <translation>Nessuna analisi (il dispositivo invia dati JSON)</translation>
+        <translation>Nessuna Analisi (il Dispositivo Invia Dati JSON)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="142"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="142"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="142"/>
         <source>Quick Plot (Comma Separated Values)</source>
-        <translation>Grafico rapido (valori separati da virgola)</translation>
+        <translation>Grafico Rapido (valori Separati da Virgola)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="153"/>
@@ -7073,21 +7213,21 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <source>No Actions Available</source>
-        <translation>Nessuna azione disponibile</translation>
+        <translation>Nessuna Azione Disponibile</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <source>Auto Layout</source>
-        <translation>Layout automatico</translation>
+        <translation>Layout Automatico</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <source>Full Screen</source>
-        <translation>Schermo intero</translation>
+        <translation>Schermo Intero</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
@@ -7101,7 +7241,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
         <source>Console Logging</source>
-        <translation>Registrazione console</translation>
+        <translation>Registrazione Console</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
@@ -7167,7 +7307,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <source>No Data Available</source>
-        <translation>Nessun dato disponibile</translation>
+        <translation>Nessun Dato Disponibile</translation>
     </message>
 </context>
 <context>
@@ -7246,7 +7386,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="375"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="375"/>
         <source>Show Timestamp</source>
-        <translation>Mostra timestamp</translation>
+        <translation>Mostra Timestamp</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="386"/>
@@ -7277,7 +7417,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="158"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="158"/>
         <source>Project Editor</source>
-        <translation>Editor di progetto</translation>
+        <translation>Editor di Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="161"/>
@@ -7398,9 +7538,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <translation>Seleziona comunicazione di rete TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="323"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <source>ModBus</source>
         <translation>ModBus</translation>
     </message>
@@ -7428,7 +7566,6 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="351"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="351"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="351"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
@@ -7512,6 +7649,21 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <translation>Riproduci un file MDF4 come se fosse un dato sensore in tempo reale (Pro)</translation>
     </message>
     <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="323"/>
+        <source>Modbus</source>
+        <translation>Modbus</translation>
+    </message>
+    <message>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="351"/>
+        <source>CAN</source>
+        <translation>CAN</translation>
+    </message>
+    <message>
+        <source>CANBus</source>
+        <translation type="vanished">CANBus</translation>
+    </message>
+    <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="382"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="382"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="382"/>
@@ -7589,14 +7741,14 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="92"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="92"/>
         <source>Baud Rate</source>
-        <translation>Velocità di trasmissione</translation>
+        <translation>Velocità di Trasmissione</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="151"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="151"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="151"/>
         <source>Data Bits</source>
-        <translation>Bit di dati</translation>
+        <translation>Bit di Dati</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="167"/>
@@ -7610,28 +7762,28 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
         <source>Stop Bits</source>
-        <translation>Bit di stop</translation>
+        <translation>Bit di Stop</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="199"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="199"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="199"/>
         <source>Flow Control</source>
-        <translation>Controllo di flusso</translation>
+        <translation>Controllo di Flusso</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
         <source>Auto Reconnect</source>
-        <translation>Riconnessione automatica</translation>
+        <translation>Riconnessione Automatica</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="243"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="243"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="243"/>
         <source>Send DTR Signal</source>
-        <translation>Invia segnale DTR</translation>
+        <translation>Invia Segnale DTR</translation>
     </message>
 </context>
 <context>
@@ -7671,7 +7823,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
     <message>
         <location filename="../../src/UI/Taskbar.cpp" line="255"/>
         <source>All Data</source>
-        <translation>Tutti i dati</translation>
+        <translation>Tutti i Dati</translation>
     </message>
 </context>
 <context>
@@ -7679,7 +7831,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="673"/>
         <source>Select Background Image</source>
-        <translation>Seleziona immagine di sfondo</translation>
+        <translation>Seleziona Immagine di Sfondo</translation>
     </message>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="675"/>
@@ -7919,14 +8071,14 @@ Capisco che quando finisce, dovrò acquistare una licenza o costruire la version
 <context>
     <name>Widgets::DataGrid</name>
     <message>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="137"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="46"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="138"/>
         <source>Title</source>
         <translation>Titolo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="137"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="46"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="138"/>
         <source>Value</source>
         <translation>Valore</translation>
     </message>
@@ -7936,7 +8088,7 @@ Capisco che quando finisce, dovrò acquistare una licenza o costruire la version
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="84"/>
         <source>Satellite Imagery</source>
-        <translation>Immagini satellitari</translation>
+        <translation>Immagini Satellitari</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="84"/>
@@ -7946,12 +8098,12 @@ Capisco che quando finisce, dovrò acquistare una licenza o costruire la version
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Street Map</source>
-        <translation>Mappa stradale</translation>
+        <translation>Mappa Stradale</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Topographic Map</source>
-        <translation>Mappa topografica</translation>
+        <translation>Mappa Topografica</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
@@ -7961,12 +8113,12 @@ Capisco che quando finisce, dovrò acquistare una licenza o costruire la version
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="86"/>
         <source>Light Gray Canvas</source>
-        <translation>Tela grigio chiaro</translation>
+        <translation>Tela Grigio Chiaro</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="86"/>
         <source>Dark Gray Canvas</source>
-        <translation>Tela grigio scuro</translation>
+        <translation>Tela Grigio Scuro</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="87"/>

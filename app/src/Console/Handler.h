@@ -118,7 +118,7 @@ signals:
   void textDocumentChanged();
   void showTimestampChanged();
   void checksumMethodChanged();
-  void displayString(QStringView text);
+  void displayString(const QString &text);
 
 private:
   explicit Handler();

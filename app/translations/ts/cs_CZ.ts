@@ -29,7 +29,7 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="100"/>
         <source>All Rights Reserved</source>
-        <translation>Všechna práva vyhrazena</translation>
+        <translation>Všechna Práva Vyhrazena</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="116"/>
@@ -68,7 +68,7 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="183"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="183"/>
         <source>Manage License</source>
-        <translation>Spravovat licenci</translation>
+        <translation>Spravovat Licenci</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="192"/>
@@ -89,14 +89,14 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="212"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="212"/>
         <source>License Agreement</source>
-        <translation>Licenční smlouva</translation>
+        <translation>Licenční Smlouva</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="221"/>
         <source>Report Bug</source>
-        <translation>Nahlásit chybu</translation>
+        <translation>Nahlásit Chybu</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="230"/>
@@ -151,7 +151,7 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <source>Change Icon</source>
-        <translation>Změnit ikonu</translation>
+        <translation>Změnit Ikonu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="106"/>
@@ -193,40 +193,49 @@
     <name>Audio</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="68"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="68"/>
         <source>No Microphone Detected</source>
-        <translation>Mikrofon nebyl detekován</translation>
+        <translation>Mikrofon Nebyl Detekován</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="77"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="77"/>
         <source>Connect a mic or check your settings</source>
         <translation>Připojte mikrofon nebo zkontrolujte nastavení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="101"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="101"/>
         <source>Input Device</source>
-        <translation>Vstupní zařízení</translation>
+        <translation>Vstupní Zařízení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="122"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="122"/>
         <source>Sample Rate</source>
-        <translation>Vzorkovací frekvence</translation>
+        <translation>Vzorkovací Frekvence</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="143"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="218"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="143"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="218"/>
         <source>Sample Format</source>
-        <translation>Formát vzorku</translation>
+        <translation>Formát Vzorku</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="164"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="239"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="164"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="239"/>
         <source>Channels</source>
         <translation>Kanály</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="197"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="197"/>
         <source>Output Device</source>
-        <translation>Výstupní zařízení</translation>
+        <translation>Výstupní Zařízení</translation>
     </message>
 </context>
 <context>
@@ -264,7 +273,7 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <source>No Bluetooth Adapter Detected</source>
-        <translation>Nebyl detekován žádný Bluetooth adaptér</translation>
+        <translation>Nebyl Detekován Žádný Bluetooth Adaptér</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
@@ -300,48 +309,57 @@
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="52"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="52"/>
         <source>No CAN Drivers Found</source>
-        <translation>Nebyly nalezeny žádné ovladače CAN</translation>
+        <translation>Nebyly Nalezeny Žádné Ovladače CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="66"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="66"/>
         <source>Install CAN hardware drivers for your system</source>
         <translation>Nainstalujte ovladače hardwaru CAN pro váš systém</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="92"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="92"/>
         <source>CAN Driver</source>
         <translation>Ovladač CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="136"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="136"/>
         <source>Interface</source>
         <translation>Rozhraní</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="167"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="167"/>
         <source>Bitrate</source>
         <translation>Přenosová rychlost</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="238"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="238"/>
         <source>Flexible Data-Rate</source>
-        <translation>Flexibilní datová rychlost</translation>
+        <translation>Flexibilní Datová Rychlost</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="269"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="269"/>
         <source>DBC Database</source>
-        <translation>DBC databáze</translation>
+        <translation>DBC Databáze</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="273"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="273"/>
         <source>Import DBC File...</source>
-        <translation>Importovat DBC soubor...</translation>
+        <translation>Importovat DBC Soubor...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="306"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="306"/>
         <source>No CAN Interfaces Found</source>
-        <translation>Nebyla nalezena žádná rozhraní CAN</translation>
+        <translation>Nebyla Nalezena Žádná Rozhraní CAN</translation>
     </message>
     <message>
         <source>CAN FD</source>
@@ -352,7 +370,7 @@
     <name>CSV::Export</name>
     <message>
         <source>CSV File Error</source>
-        <translation type="vanished">Chyba CSV souboru</translation>
+        <translation type="vanished">Chyba CSV Souboru</translation>
     </message>
     <message>
         <source>Cannot open CSV file for writing!</source>
@@ -378,7 +396,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="312"/>
         <source>Device Connection Active</source>
-        <translation>Připojení zařízení aktivní</translation>
+        <translation>Připojení Zařízení Aktivní</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="313"/>
@@ -429,7 +447,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="719"/>
         <source>CSV Date/Time Selection</source>
-        <translation>Výběr data/času CSV</translation>
+        <translation>Výběr Data/času CSV</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="720"/>
@@ -439,7 +457,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="730"/>
         <source>Set Interval</source>
-        <translation>Nastavit interval</translation>
+        <translation>Nastavit Interval</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="731"/>
@@ -449,7 +467,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="745"/>
         <source>Select Date/Time Column</source>
-        <translation>Vyberte sloupec data/času</translation>
+        <translation>Vyberte Sloupec Data/času</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="746"/>
@@ -459,7 +477,7 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="755"/>
         <source>Invalid Selection</source>
-        <translation>Neplatný výběr</translation>
+        <translation>Neplatný Výběr</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="756"/>
@@ -471,15 +489,15 @@
     <name>Canvas</name>
     <message>
         <source>Set Wallpaper...</source>
-        <translation type="vanished">Nastavit tapetu...</translation>
+        <translation type="vanished">Nastavit Tapetu...</translation>
     </message>
     <message>
         <source>Clear Wallpaper</source>
-        <translation type="vanished">Vymazat tapetu</translation>
+        <translation type="vanished">Vymazat Tapetu</translation>
     </message>
     <message>
         <source>Tile Windows</source>
-        <translation type="vanished">Dlaždicová okna</translation>
+        <translation type="vanished">Dlaždicová Okna</translation>
     </message>
     <message>
         <source>Pro features detected in this project.</source>
@@ -528,17 +546,17 @@
     <message>
         <location filename="../../src/Console/Handler.cpp" line="175"/>
         <source>No Line Ending</source>
-        <translation>Žádný konec řádku</translation>
+        <translation>Žádný Konec Řádku</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="176"/>
         <source>New Line</source>
-        <translation>Nový řádek</translation>
+        <translation>Nový Řádek</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="177"/>
         <source>Carriage Return</source>
-        <translation>Návrat vozíku</translation>
+        <translation>Návrat Vozíku</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="178"/>
@@ -548,7 +566,7 @@
     <message>
         <location filename="../../src/Console/Handler.cpp" line="189"/>
         <source>Plain Text</source>
-        <translation>Prostý text</translation>
+        <translation>Prostý Text</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="190"/>
@@ -558,7 +576,7 @@
     <message>
         <location filename="../../src/Console/Handler.cpp" line="211"/>
         <source>No Checksum</source>
-        <translation>Bez kontrolního součtu</translation>
+        <translation>Bez Kontrolního Součtu</translation>
     </message>
 </context>
 <context>
@@ -568,70 +586,82 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/CsvPlayer.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/CsvPlayer.qml" line="34"/>
         <source>CSV Player</source>
-        <translation>CSV přehrávač</translation>
+        <translation>CSV Přehrávač</translation>
     </message>
 </context>
 <context>
     <name>DBCPreviewDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="41"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="41"/>
         <source>DBC File Preview</source>
-        <translation>Náhled souboru DBC</translation>
+        <translation>Náhled Souboru DBC</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="162"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="162"/>
         <source>DBC File: %1</source>
         <translation>Soubor DBC: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
         <source>Review the CAN messages and signals that will be imported into a new Serial Studio project.</source>
         <translation>Zkontrolujte zprávy a signály CAN, které budou importovány do nového projektu Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="181"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="181"/>
         <source>Messages</source>
         <translation>Zprávy</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="215"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="215"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="222"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="222"/>
         <source>Message Name</source>
-        <translation>Název zprávy</translation>
+        <translation>Název Zprávy</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="230"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="230"/>
         <source>CAN ID</source>
         <translation>CAN ID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="237"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="237"/>
         <source>Signals</source>
         <translation>Signály</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="319"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="319"/>
         <source>No messages found in DBC file.</source>
         <translation>V souboru DBC nebyly nalezeny žádné zprávy.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="337"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="337"/>
         <source>Total: %1 messages, %2 signals</source>
         <translation>Celkem: %1 zpráv, %2 signálů</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="346"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="346"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="360"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="360"/>
         <source>Create Project</source>
-        <translation>Vytvořit projekt</translation>
+        <translation>Vytvořit Projekt</translation>
     </message>
 </context>
 <context>
@@ -651,21 +681,21 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
         <source>Set Wallpaper...</source>
-        <translation>Nastavit tapetu...</translation>
+        <translation>Nastavit Tapetu...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
         <source>Clear Wallpaper</source>
-        <translation>Vymazat tapetu</translation>
+        <translation>Vymazat Tapetu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
         <source>Tile Windows</source>
-        <translation>Dlaždicová okna</translation>
+        <translation>Dlaždicová Okna</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="84"/>
@@ -704,12 +734,12 @@
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="116"/>
         <source>Import DBC File</source>
-        <translation>Importovat DBC soubor</translation>
+        <translation>Importovat DBC Soubor</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="117"/>
         <source>DBC Files (*.dbc);;All Files (*)</source>
-        <translation>DBC soubory (*.dbc);;Všechny soubory (*)</translation>
+        <translation>DBC Soubory (*.dbc);;Všechny Soubory (*)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="163"/>
@@ -725,7 +755,7 @@
         <location filename="../../src/DataModel/DBCImporter.cpp" line="165"/>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="227"/>
         <source>DBC Import Error</source>
-        <translation>Chyba importu DBC</translation>
+        <translation>Chyba Importu DBC</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="173"/>
@@ -740,7 +770,7 @@
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="175"/>
         <source>DBC Import Warning</source>
-        <translation>Upozornění na import DBC</translation>
+        <translation>Upozornění na Import DBC</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="224"/>
@@ -765,7 +795,7 @@
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="248"/>
         <source>DBC Import Complete</source>
-        <translation>Import DBC dokončen</translation>
+        <translation>Import DBC Dokončen</translation>
     </message>
 </context>
 <context>
@@ -804,23 +834,23 @@
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="715"/>
         <source>Audio Input</source>
-        <translation>Vstup zvuku</translation>
+        <translation>Vstup Zvuku</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="721"/>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="755"/>
         <source>Quick Plot</source>
-        <translation>Rychlý graf</translation>
+        <translation>Rychlý Graf</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="761"/>
         <source>Quick Plot Data</source>
-        <translation>Data pro rychlý graf</translation>
+        <translation>Data pro Rychlý Graf</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="775"/>
         <source>Multiple Plots</source>
-        <translation>Více grafů</translation>
+        <translation>Více Grafů</translation>
     </message>
 </context>
 <context>
@@ -838,7 +868,7 @@
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="327"/>
         <source>JavaScript Syntax Error</source>
-        <translation>Chyba syntaxe JavaScriptu</translation>
+        <translation>Chyba Syntaxe JavaScriptu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="328"/>
@@ -852,7 +882,7 @@
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="339"/>
         <source>JavaScript Exception Occurred</source>
-        <translation>Došlo k výjimce JavaScriptu</translation>
+        <translation>Došlo k Výjimce JavaScriptu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="340"/>
@@ -866,7 +896,7 @@
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="351"/>
         <source>Missing Parse Function</source>
-        <translation>Chybějící funkce pro analýzu</translation>
+        <translation>Chybějící Funkce pro Analýzu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="352"/>
@@ -882,7 +912,7 @@ funkce parse(frame) { ... }</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="363"/>
         <source>Invalid Parse Function</source>
-        <translation>Neplatná funkce Parse</translation>
+        <translation>Neplatná Funkce Parse</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="364"/>
@@ -896,7 +926,7 @@ Ujistěte se, že 'parse' je deklarována jako funkce.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="377"/>
         <source>Invalid Function Declaration</source>
-        <translation>Neplatná deklarace funkce</translation>
+        <translation>Neplatná Deklarace Funkce</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="378"/>
@@ -912,7 +942,7 @@ funkce parse(frame) { ... }</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="393"/>
         <source>Invalid Function Parameter</source>
-        <translation>Neplatný parametr funkce</translation>
+        <translation>Neplatný Parametr Funkce</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="394"/>
@@ -928,7 +958,7 @@ funkce parse(frame) { ... }</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="405"/>
         <source>Deprecated Function Signature</source>
-        <translation>Zastaralý podpis funkce</translation>
+        <translation>Zastaralý Podpis Funkce</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="406"/>
@@ -948,7 +978,7 @@ Parametr oddělovače již není potřeba.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="427"/>
         <source>Parse Function Runtime Error</source>
-        <translation>Chyba za běhu funkce Parse</translation>
+        <translation>Chyba Za Běhu Funkce Parse</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="428"/>
@@ -988,7 +1018,7 @@ Prosím opravte chybu v těle funkce.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="603"/>
         <source>Code Validation Successful</source>
-        <translation>Ověření kódu bylo úspěšné</translation>
+        <translation>Ověření Kódu Bylo Úspěšné</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="604"/>
@@ -998,7 +1028,7 @@ Prosím opravte chybu v těle funkce.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="649"/>
         <source>Select Frame Parser Template</source>
-        <translation>Vyberte šablonu Frame Parseru</translation>
+        <translation>Vyberte Šablonu Frame Parseru</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="650"/>
@@ -1146,7 +1176,7 @@ Prosím opravte chybu v těle funkce.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="175"/>
         <source>Invalid Hex Input</source>
-        <translation>Neplatný vstup Hex</translation>
+        <translation>Neplatný Vstup Hex</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="176"/>
@@ -1175,12 +1205,12 @@ Platný formát: 01 A2 FF 3C</translation>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="232"/>
         <source>Frame Data Input</source>
-        <translation>Vstup dat rámce</translation>
+        <translation>Vstup Dat Rámce</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="233"/>
         <source>Frame Parser Results</source>
-        <translation>Výsledky parseru rámce</translation>
+        <translation>Výsledky Parseru Rámce</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="234"/>
@@ -1191,7 +1221,7 @@ Platný formát: 01 A2 FF 3C</translation>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="235"/>
         <source>Dataset Index</source>
-        <translation>Index datové sady</translation>
+        <translation>Index Datové Sady</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="235"/>
@@ -1212,7 +1242,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="246"/>
         <source>Test Frame Parser</source>
-        <translation>Testovat parser rámce</translation>
+        <translation>Testovat Parser Rámce</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="267"/>
@@ -1235,7 +1265,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="303"/>
         <source>New Project</source>
-        <translation>Nový projekt</translation>
+        <translation>Nový Projekt</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="368"/>
@@ -1277,28 +1307,28 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="807"/>
         <source>Save Serial Studio Project</source>
-        <translation>Uložit projekt Serial Studio</translation>
+        <translation>Uložit Projekt Serial Studio</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="809"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation>Soubory projektů Serial Studio (*.ssproj)</translation>
+        <translation>Soubory Projektů Serial Studio (*.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="907"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2363"/>
         <source>Untitled Project</source>
-        <translation>Nepojmenovaný projekt</translation>
+        <translation>Nepojmenovaný Projekt</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="952"/>
         <source>Select Project File</source>
-        <translation>Vyberte soubor projektu</translation>
+        <translation>Vyberte Soubor Projektu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="953"/>
         <source>Project Files (*.json *.ssproj)</source>
-        <translation>Soubory projektů (*.json *.ssproj)</translation>
+        <translation>Soubory Projektů (*.json *.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="995"/>
@@ -1363,42 +1393,42 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1504"/>
         <source>New Dataset</source>
-        <translation>Nová datová sada</translation>
+        <translation>Nová Datová Sada</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1507"/>
         <source>New Plot</source>
-        <translation>Nový graf</translation>
+        <translation>Nový Graf</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1511"/>
         <source>New FFT Plot</source>
-        <translation>Nový FFT graf</translation>
+        <translation>Nový FFT Graf</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1515"/>
         <source>New Level Indicator</source>
-        <translation>Nový indikátor úrovně</translation>
+        <translation>Nový Indikátor Úrovně</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1519"/>
         <source>New Gauge</source>
-        <translation>Nový měřič</translation>
+        <translation>Nový Měřič</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1523"/>
         <source>New Compass</source>
-        <translation>Nový kompas</translation>
+        <translation>Nový Kompas</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1531"/>
         <source>New LED Indicator</source>
-        <translation>Nový LED indikátor</translation>
+        <translation>Nový LED Indikátor</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1667"/>
         <source>New Action</source>
-        <translation>Nová akce</translation>
+        <translation>Nová Akce</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1826"/>
@@ -1457,17 +1487,17 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2211"/>
         <source>Frame Parser Code</source>
-        <translation>Kód analyzátoru rámců</translation>
+        <translation>Kód Analyzátoru Rámců</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2350"/>
         <source>Project Information</source>
-        <translation>Informace o projektu</translation>
+        <translation>Informace o Projektu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2362"/>
         <source>Project Title</source>
-        <translation>Název projektu</translation>
+        <translation>Název Projektu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2364"/>
@@ -1477,12 +1507,12 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2375"/>
         <source>Frame Detection</source>
-        <translation>Detekce rámců</translation>
+        <translation>Detekce Rámců</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2389"/>
         <source>Frame Detection Method</source>
-        <translation>Metoda detekce rámců</translation>
+        <translation>Metoda Detekce Rámců</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2390"/>
@@ -1492,7 +1522,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2400"/>
         <source>Hexadecimal Delimiters</source>
-        <translation>Hexadecimální oddělovače</translation>
+        <translation>Hexadecimální Oddělovače</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2402"/>
@@ -1502,7 +1532,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2417"/>
         <source>Start Sequence</source>
-        <translation>Počáteční sekvence</translation>
+        <translation>Počáteční Sekvence</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2420"/>
@@ -1512,7 +1542,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2431"/>
         <source>End Sequence</source>
-        <translation>Koncová sekvence</translation>
+        <translation>Koncová Sekvence</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2434"/>
@@ -1522,12 +1552,12 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2445"/>
         <source>Payload Processing &amp; Validation</source>
-        <translation>Zpracování a ověření datového obsahu</translation>
+        <translation>Zpracování a Ověření Datového Obsahu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2457"/>
         <source>Data Format</source>
-        <translation>Formát dat</translation>
+        <translation>Formát Dat</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2459"/>
@@ -1537,7 +1567,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2471"/>
         <source>Checksum Algorithm</source>
-        <translation>Algoritmus kontrolního součtu</translation>
+        <translation>Algoritmus Kontrolního Součtu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2473"/>
@@ -1547,17 +1577,17 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2519"/>
         <source>Group Information</source>
-        <translation>Informace o skupině</translation>
+        <translation>Informace o Skupině</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2531"/>
         <source>Group Title</source>
-        <translation>Název skupiny</translation>
+        <translation>Název Skupiny</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2532"/>
         <source>Untitled Group</source>
-        <translation>Skupina bez názvu</translation>
+        <translation>Skupina Bez Názvu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2533"/>
@@ -1567,7 +1597,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2562"/>
         <source>Composite Widget</source>
-        <translation>Složený widget</translation>
+        <translation>Složený Widget</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2564"/>
@@ -1578,17 +1608,17 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2615"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2850"/>
         <source>General Information</source>
-        <translation>Obecné informace</translation>
+        <translation>Obecné Informace</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2626"/>
         <source>Action Title</source>
-        <translation>Název akce</translation>
+        <translation>Název Akce</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2628"/>
         <source>Untitled Action</source>
-        <translation>Akce bez názvu</translation>
+        <translation>Akce Bez Názvu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2629"/>
@@ -1598,12 +1628,12 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2640"/>
         <source>Action Icon</source>
-        <translation>Ikona akce</translation>
+        <translation>Ikona Akce</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2641"/>
         <source>Default Icon</source>
-        <translation>Výchozí ikona</translation>
+        <translation>Výchozí Ikona</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2642"/>
@@ -1613,7 +1643,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2653"/>
         <source>Data Payload</source>
-        <translation>Datový obsah</translation>
+        <translation>Datový Obsah</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2666"/>
@@ -1634,7 +1664,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2681"/>
         <source>Transmit Data (Hex)</source>
-        <translation>Přenést data (Hex)</translation>
+        <translation>Přenést Data (Hex)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2683"/>
@@ -1644,7 +1674,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2698"/>
         <source>Transmit Data</source>
-        <translation>Přenést data</translation>
+        <translation>Přenést Data</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2699"/>
@@ -1654,7 +1684,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2729"/>
         <source>End-of-Line Sequence</source>
-        <translation>Konec řádku</translation>
+        <translation>Konec Řádku</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2730"/>
@@ -1664,7 +1694,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2741"/>
         <source>Execution Behavior</source>
-        <translation>Chování při spuštění</translation>
+        <translation>Chování Při Spuštění</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2754"/>
@@ -1679,12 +1709,12 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2767"/>
         <source>Timer Behavior</source>
-        <translation>Chování časovače</translation>
+        <translation>Chování Časovače</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2778"/>
         <source>Timer Mode</source>
-        <translation>Režim časovače</translation>
+        <translation>Režim Časovače</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2782"/>
@@ -1699,7 +1729,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2794"/>
         <source>Timer Interval (ms)</source>
-        <translation>Interval časovače (ms)</translation>
+        <translation>Interval Časovače (ms)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2796"/>
@@ -1709,12 +1739,12 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2862"/>
         <source>Untitled Dataset</source>
-        <translation>Nepojmenovaná datová sada</translation>
+        <translation>Nepojmenovaná Datová Sada</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2863"/>
         <source>Dataset Title</source>
-        <translation>Název datové sady</translation>
+        <translation>Název Datové Sady</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2865"/>
@@ -1724,7 +1754,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2877"/>
         <source>Frame Index</source>
-        <translation>Index snímku</translation>
+        <translation>Index Snímku</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2878"/>
@@ -1734,7 +1764,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2889"/>
         <source>Measurement Unit</source>
-        <translation>Měrná jednotka</translation>
+        <translation>Měrná Jednotka</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2890"/>
@@ -1749,12 +1779,12 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2902"/>
         <source>Plot Settings</source>
-        <translation>Nastavení grafu</translation>
+        <translation>Nastavení Grafu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2932"/>
         <source>Enable Plot Widget</source>
-        <translation>Povolte widget grafu</translation>
+        <translation>Povolte Widget Grafu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2934"/>
@@ -1764,7 +1794,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2963"/>
         <source>X-Axis Source</source>
-        <translation>Zdroj osy X</translation>
+        <translation>Zdroj Osy X</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2964"/>
@@ -1774,7 +1804,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2976"/>
         <source>Minimum Plot Value (optional)</source>
-        <translation>Minimální hodnota grafu (volitelné)</translation>
+        <translation>Minimální Hodnota Grafu (volitelné)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2977"/>
@@ -1784,7 +1814,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2989"/>
         <source>Maximum Plot Value (optional)</source>
-        <translation>Maximální hodnota grafu (volitelné)</translation>
+        <translation>Maximální Hodnota Grafu (volitelné)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2990"/>
@@ -1799,7 +1829,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3014"/>
         <source>Enable FFT Analysis</source>
-        <translation>Povolit analýzu FFT</translation>
+        <translation>Povolit Analýzu FFT</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3015"/>
@@ -1809,7 +1839,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3033"/>
         <source>FFT Window Size</source>
-        <translation>Velikost okna FFT</translation>
+        <translation>Velikost Okna FFT</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3035"/>
@@ -1829,7 +1859,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3061"/>
         <source>Minimum Value (recommended)</source>
-        <translation>Minimální hodnota (doporučeno)</translation>
+        <translation>Minimální Hodnota (doporučeno)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3062"/>
@@ -1839,7 +1869,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3074"/>
         <source>Maximum Value (recommended)</source>
-        <translation>Maximální hodnota (doporučeno)</translation>
+        <translation>Maximální Hodnota (doporučeno)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3075"/>
@@ -1849,7 +1879,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3086"/>
         <source>Widget Settings</source>
-        <translation>Nastavení widgetu</translation>
+        <translation>Nastavení Widgetu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3116"/>
@@ -1874,7 +1904,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3146"/>
         <source>Minimum Display Value (required)</source>
-        <translation>Minimální zobrazovaná hodnota (povinné)</translation>
+        <translation>Minimální Zobrazovaná Hodnota (povinné)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3147"/>
@@ -1884,7 +1914,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3159"/>
         <source>Maximum Display Value (required)</source>
-        <translation>Maximální zobrazovaná hodnota (povinné)</translation>
+        <translation>Maximální Zobrazovaná Hodnota (povinné)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3160"/>
@@ -1894,12 +1924,12 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3171"/>
         <source>Alarm Settings</source>
-        <translation>Nastavení alarmu</translation>
+        <translation>Nastavení Alarmu</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3184"/>
         <source>Enable Alarms</source>
-        <translation>Povolit alarmy</translation>
+        <translation>Povolit Alarmy</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3186"/>
@@ -1909,7 +1939,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3198"/>
         <source>Low Threshold</source>
-        <translation>Dolní práh</translation>
+        <translation>Dolní Práh</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3200"/>
@@ -1919,7 +1949,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3212"/>
         <source>High Threshold</source>
-        <translation>Horní práh</translation>
+        <translation>Horní Práh</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3214"/>
@@ -1929,7 +1959,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3225"/>
         <source>LED Display Settings</source>
-        <translation>Nastavení LED displeje</translation>
+        <translation>Nastavení LED Displeje</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3238"/>
@@ -1944,7 +1974,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3251"/>
         <source>LED On Threshold (required)</source>
-        <translation>Prahová hodnota pro zapnutí LED (povinné)</translation>
+        <translation>Prahová Hodnota pro Zapnutí LED (povinné)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3253"/>
@@ -1959,7 +1989,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3319"/>
         <source>Auto Start</source>
-        <translation>Automatický start</translation>
+        <translation>Automatický Start</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3320"/>
@@ -1974,7 +2004,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
         <source>Plain Text (UTF8)</source>
-        <translation>Prostý text (UTF8)</translation>
+        <translation>Prostý Text (UTF8)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3326"/>
@@ -1994,37 +2024,37 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3335"/>
         <source>No Checksum</source>
-        <translation>Žádná kontrolní suma</translation>
+        <translation>Žádná Kontrolní Suma</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3340"/>
         <source>End Delimiter Only</source>
-        <translation>Pouze koncový oddělovač</translation>
+        <translation>Pouze Koncový Oddělovač</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3341"/>
         <source>Start Delimiter Only</source>
-        <translation>Pouze počáteční oddělovač</translation>
+        <translation>Pouze Počáteční Oddělovač</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3342"/>
         <source>Start + End Delimiter</source>
-        <translation>Počáteční + koncový oddělovač</translation>
+        <translation>Počáteční + Koncový Oddělovač</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
         <source>No Delimiters</source>
-        <translation>Žádné oddělovače</translation>
+        <translation>Žádné Oddělovače</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3351"/>
         <source>Data Grid</source>
-        <translation>Datová mřížka</translation>
+        <translation>Datová Mřížka</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3352"/>
         <source>GPS Map</source>
-        <translation>GPS mapa</translation>
+        <translation>GPS Mapa</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3353"/>
@@ -2034,7 +2064,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3354"/>
         <source>Multiple Plot</source>
-        <translation>Vícenásobný graf</translation>
+        <translation>Vícenásobný Graf</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3355"/>
@@ -2071,12 +2101,12 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3369"/>
         <source>New Line (\n)</source>
-        <translation>Nový řádek (</translation>
+        <translation>Nový Řádek (</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3370"/>
         <source>Carriage Return (\r)</source>
-        <translation>Návrat vozíku (\r)</translation>
+        <translation>Návrat Vozíku (\r)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3371"/>
@@ -2106,7 +2136,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3420"/>
         <source>Save Changes</source>
-        <translation>Uložit změny</translation>
+        <translation>Uložit Změny</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3947"/>
@@ -2300,6 +2330,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <source>Stop</source>
         <translation>Zastavit</translation>
     </message>
@@ -2307,6 +2338,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="344"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Downloading updates</source>
         <translation>Stahování aktualizací</translation>
     </message>
@@ -2369,6 +2401,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <source>Updater</source>
         <translation>Aktualizátor</translation>
     </message>
@@ -2408,12 +2441,12 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="370"/>
         <source>Downloading Updates</source>
-        <translation>Stahování aktualizací</translation>
+        <translation>Stahování Aktualizací</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
         <source>Time Remaining</source>
-        <translation>Zbývající čas</translation>
+        <translation>Zbývající Čas</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
@@ -2452,11 +2485,13 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <source>Time remaining: 0 minutes</source>
         <translation>Zbývající čas: 0 minut</translation>
     </message>
     <message>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <source>Open</source>
         <translation>Otevřít</translation>
     </message>
@@ -2495,28 +2530,28 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
         <source>File Transmission</source>
-        <translation>Přenos souboru</translation>
+        <translation>Přenos Souboru</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="89"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="89"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="89"/>
         <source>File Selection:</source>
-        <translation>Výběr souboru:</translation>
+        <translation>Výběr Souboru:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="107"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="107"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="107"/>
         <source>Select File...</source>
-        <translation>Vybrat soubor...</translation>
+        <translation>Vybrat Soubor...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="124"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="124"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="124"/>
         <source>Transmission Interval:</source>
-        <translation>Interval přenosu:</translation>
+        <translation>Interval Přenosu:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="148"/>
@@ -2537,28 +2572,28 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="193"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="193"/>
         <source>Pause Transmission</source>
-        <translation>Pozastavit přenos</translation>
+        <translation>Pozastavit Přenos</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="194"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="194"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="194"/>
         <source>Resume Transmission</source>
-        <translation>Obnovit přenos</translation>
+        <translation>Obnovit Přenos</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="195"/>
         <source>Stop Transmission</source>
-        <translation>Zastavit přenos</translation>
+        <translation>Zastavit Přenos</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
         <source>Begin Transmission</source>
-        <translation>Zahájit přenos</translation>
+        <translation>Zahájit Přenos</translation>
     </message>
 </context>
 <context>
@@ -2625,7 +2660,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <source>Select All</source>
-        <translation>Vybrat vše</translation>
+        <translation>Vybrat Vše</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
@@ -2660,14 +2695,14 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
         <source>Select Template...</source>
-        <translation>Vybrat šablonu...</translation>
+        <translation>Vybrat Šablonu...</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
         <source>Test With Sample Data</source>
-        <translation>Testovat s ukázkovými daty</translation>
+        <translation>Testovat s Ukázkovými Daty</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
@@ -2689,7 +2724,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Validate &amp; Save</source>
-        <translation type="vanished">Ověřit a uložit</translation>
+        <translation type="vanished">Ověřit a Uložit</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="229"/>
@@ -2755,7 +2790,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <source>Base Map: %1</source>
-        <translation>Základní mapa: %1</translation>
+        <translation>Základní Mapa: %1</translation>
     </message>
 </context>
 <context>
@@ -2908,7 +2943,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="99"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="99"/>
         <source>Integrate Angles</source>
-        <translation>Integrovat úhly</translation>
+        <translation>Integrovat Úhly</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="343"/>
@@ -2944,15 +2979,15 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>No Line Ending</source>
-        <translation type="vanished">Bez ukončení řádku</translation>
+        <translation type="vanished">Bez Ukončení Řádku</translation>
     </message>
     <message>
         <source>New Line</source>
-        <translation type="vanished">Nový řádek</translation>
+        <translation type="vanished">Nový Řádek</translation>
     </message>
     <message>
         <source>Carriage Return</source>
-        <translation type="vanished">Návrat vozíku</translation>
+        <translation type="vanished">Návrat Vozíku</translation>
     </message>
     <message>
         <source>CR + NL</source>
@@ -2960,7 +2995,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Plain Text</source>
-        <translation type="vanished">Prostý text</translation>
+        <translation type="vanished">Prostý Text</translation>
     </message>
     <message>
         <source>Hexadecimal</source>
@@ -2968,7 +3003,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>No Checksum</source>
-        <translation type="vanished">Bez kontrolního součtu</translation>
+        <translation type="vanished">Bez Kontrolního Součtu</translation>
     </message>
 </context>
 <context>
@@ -2983,7 +3018,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Console Output File Error</source>
-        <translation type="vanished">Chyba souboru výstupu konzole</translation>
+        <translation type="vanished">Chyba Souboru Výstupu Konzole</translation>
     </message>
     <message>
         <source>Cannot open file for writing!</source>
@@ -3043,22 +3078,22 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="48"/>
         <source>BLE I/O Module Error</source>
-        <translation>Chyba modulu BLE I/O</translation>
+        <translation>Chyba Modulu BLE I/O</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="291"/>
         <source>Select Device</source>
-        <translation>Vyberte zařízení</translation>
+        <translation>Vyberte Zařízení</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="302"/>
         <source>Select Service</source>
-        <translation>Vyberte službu</translation>
+        <translation>Vyberte Službu</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="314"/>
         <source>Select Characteristic</source>
-        <translation>Vyberte charakteristiku</translation>
+        <translation>Vyberte Charakteristiku</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="453"/>
@@ -3128,7 +3163,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="286"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="292"/>
         <source>CAN Bus Not Available</source>
-        <translation>CAN Bus není dostupný</translation>
+        <translation>CAN Bus Není Dostupný</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="275"/>
@@ -3165,7 +3200,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="302"/>
         <source>Invalid CAN Configuration</source>
-        <translation>Neplatná konfigurace CAN</translation>
+        <translation>Neplatná Konfigurace CAN</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="303"/>
@@ -3175,7 +3210,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="313"/>
         <source>Invalid Selection</source>
-        <translation>Neplatný výběr</translation>
+        <translation>Neplatný Výběr</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="314"/>
@@ -3185,7 +3220,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="323"/>
         <source>No Devices Available</source>
-        <translation>Žádná dostupná zařízení</translation>
+        <translation>Žádná Dostupná Zařízení</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
@@ -3195,7 +3230,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="339"/>
         <source>CAN Device Creation Failed</source>
-        <translation>Vytvoření CAN zařízení selhalo</translation>
+        <translation>Vytvoření CAN Zařízení Selhalo</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="340"/>
@@ -3205,7 +3240,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
         <source>CAN Connection Failed</source>
-        <translation>Připojení k CAN selhalo</translation>
+        <translation>Připojení k CAN Selhalo</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
@@ -3215,7 +3250,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="679"/>
         <source>CAN Bus Error</source>
-        <translation>Chyba CAN sběrnice</translation>
+        <translation>Chyba CAN Sběrnice</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="680"/>
@@ -3230,7 +3265,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="689"/>
         <source>CAN Bus Communication Error</source>
-        <translation>Chyba komunikace CAN Bus</translation>
+        <translation>Chyba Komunikace CAN Bus</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="709"/>
@@ -3284,7 +3319,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="331"/>
         <source>Invalid Serial Port</source>
-        <translation>Neplatný sériový port</translation>
+        <translation>Neplatný Sériový Port</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="332"/>
@@ -3294,7 +3329,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="393"/>
         <source>Modbus Initialization Failed</source>
-        <translation>Inicializace Modbus selhala</translation>
+        <translation>Inicializace Modbus Selhala</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="394"/>
@@ -3304,7 +3339,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="414"/>
         <source>Modbus Connection Failed</source>
-        <translation>Připojení Modbus selhalo</translation>
+        <translation>Připojení Modbus Selhalo</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="415"/>
@@ -3339,12 +3374,12 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="594"/>
         <source>Holding Registers (0x03)</source>
-        <translation>Holding registry (0x03)</translation>
+        <translation>Holding Registry (0x03)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="595"/>
         <source>Input Registers (0x04)</source>
-        <translation>Vstupní registry (0x04)</translation>
+        <translation>Vstupní Registry (0x04)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="596"/>
@@ -3354,7 +3389,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="597"/>
         <source>Discrete Inputs (0x02)</source>
-        <translation>Diskrétní vstupy (0x02)</translation>
+        <translation>Diskrétní Vstupy (0x02)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1134"/>
@@ -3364,12 +3399,12 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1136"/>
         <source>Modbus Communication Error</source>
-        <translation>Chyba komunikace Modbus</translation>
+        <translation>Chyba Komunikace Modbus</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1160"/>
         <source>Select Port</source>
-        <translation>Vyberte port</translation>
+        <translation>Vyberte Port</translation>
     </message>
 </context>
 <context>
@@ -3399,7 +3434,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
         <location filename="../../src/IO/Drivers/UART.cpp" line="384"/>
         <location filename="../../src/IO/Drivers/UART.cpp" line="791"/>
         <source>Select Port</source>
-        <translation>Vyberte port</translation>
+        <translation>Vyberte Port</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="416"/>
@@ -3525,7 +3560,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <message>
         <location filename="../../src/IO/Manager.cpp" line="283"/>
         <source>Network Socket</source>
-        <translation>Síťová zásuvka</translation>
+        <translation>Síťová Zásuvka</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="284"/>
@@ -3534,8 +3569,20 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="286"/>
+        <source>Audio</source>
+        <translation>Audio</translation>
+    </message>
+    <message>
+        <source>CANBus</source>
+        <translation type="vanished">CANBus</translation>
+    </message>
+    <message>
+        <source>CAN</source>
+        <translation type="vanished">CAN</translation>
+    </message>
+    <message>
         <source>Audio Stream</source>
-        <translation>Zvukový proud</translation>
+        <translation type="vanished">Zvukový Proud</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="287"/>
@@ -3565,7 +3612,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="41"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/IconPicker.qml" line="41"/>
         <source>Select Icon</source>
-        <translation>Vybrat ikonu</translation>
+        <translation>Vybrat Ikonu</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="112"/>
@@ -3586,11 +3633,11 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     <name>JSON::DBCImporter</name>
     <message>
         <source>Import DBC File</source>
-        <translation type="vanished">Importovat DBC soubor</translation>
+        <translation type="vanished">Importovat DBC Soubor</translation>
     </message>
     <message>
         <source>DBC Files (*.dbc);;All Files (*)</source>
-        <translation type="vanished">DBC soubory (*.dbc);;Všechny soubory (*)</translation>
+        <translation type="vanished">DBC Soubory (*.dbc);;Všechny Soubory (*)</translation>
     </message>
     <message>
         <source>Failed to parse DBC file: %1</source>
@@ -3602,7 +3649,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     </message>
     <message>
         <source>DBC Import Error</source>
-        <translation type="vanished">Chyba importu DBC</translation>
+        <translation type="vanished">Chyba Importu DBC</translation>
     </message>
     <message>
         <source>DBC file contains no messages</source>
@@ -3614,7 +3661,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     </message>
     <message>
         <source>DBC Import Warning</source>
-        <translation type="vanished">Varování importu DBC</translation>
+        <translation type="vanished">Varování Importu DBC</translation>
     </message>
     <message>
         <source>Failed to create temporary project file</source>
@@ -3634,7 +3681,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     </message>
     <message>
         <source>DBC Import Complete</source>
-        <translation type="vanished">Import DBC dokončen</translation>
+        <translation type="vanished">Import DBC Dokončen</translation>
     </message>
 </context>
 <context>
@@ -3665,19 +3712,19 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     </message>
     <message>
         <source>Audio Input</source>
-        <translation type="vanished">Vstup zvuku</translation>
+        <translation type="vanished">Vstup Zvuku</translation>
     </message>
     <message>
         <source>Multiple Plots</source>
-        <translation type="vanished">Více grafů</translation>
+        <translation type="vanished">Více Grafů</translation>
     </message>
     <message>
         <source>Quick Plot</source>
-        <translation type="vanished">Rychlý graf</translation>
+        <translation type="vanished">Rychlý Graf</translation>
     </message>
     <message>
         <source>Quick Plot Data</source>
-        <translation type="vanished">Data pro rychlý graf</translation>
+        <translation type="vanished">Data pro Rychlý Graf</translation>
     </message>
 </context>
 <context>
@@ -3720,7 +3767,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     </message>
     <message>
         <source>JavaScript Syntax Error</source>
-        <translation type="vanished">Chyba syntaxe JavaScriptu</translation>
+        <translation type="vanished">Chyba Syntaxe JavaScriptu</translation>
     </message>
     <message>
         <source>The parser code contains a syntax error at line %1:
@@ -3732,7 +3779,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     </message>
     <message>
         <source>JavaScript Exception Occurred</source>
-        <translation type="vanished">Došlo k výjimce v JavaScriptu</translation>
+        <translation type="vanished">Došlo k Výjimce v JavaScriptu</translation>
     </message>
     <message>
         <source>The parser code triggered the following exceptions:
@@ -3744,7 +3791,7 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
     </message>
     <message>
         <source>Missing Parse Function</source>
-        <translation type="vanished">Chybí funkce Parse</translation>
+        <translation type="vanished">Chybí Funkce Parse</translation>
     </message>
     <message>
         <source>The 'parse' function is not defined in the script.
@@ -3758,7 +3805,7 @@ funkce parse(frame) { ... }</translation>
     </message>
     <message>
         <source>Invalid Parse Function</source>
-        <translation type="vanished">Neplatná funkce Parse</translation>
+        <translation type="vanished">Neplatná Funkce Parse</translation>
     </message>
     <message>
         <source>The 'parse' property exists but is not a callable function.
@@ -3770,7 +3817,7 @@ Ujistěte se, že 'parse' je deklarována jako funkce.</translation>
     </message>
     <message>
         <source>Invalid Function Declaration</source>
-        <translation type="vanished">Neplatná deklarace funkce</translation>
+        <translation type="vanished">Neplatná Deklarace Funkce</translation>
     </message>
     <message>
         <source>No valid 'parse' function declaration found.
@@ -3784,7 +3831,7 @@ funkce parse(frame) { ... }</translation>
     </message>
     <message>
         <source>Invalid Function Parameter</source>
-        <translation type="vanished">Neplatný parametr funkce</translation>
+        <translation type="vanished">Neplatný Parametr Funkce</translation>
     </message>
     <message>
         <source>The 'parse' function must have at least one parameter.
@@ -3798,7 +3845,7 @@ funkce parse(frame) { ... }</translation>
     </message>
     <message>
         <source>Deprecated Function Signature</source>
-        <translation type="vanished">Zastaralý podpis funkce</translation>
+        <translation type="vanished">Zastaralý Podpis Funkce</translation>
     </message>
     <message>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
@@ -3816,7 +3863,7 @@ Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
         <source>Parse Function Runtime Error</source>
-        <translation type="vanished">Chyba běhu funkce Parse</translation>
+        <translation type="vanished">Chyba Běhu Funkce Parse</translation>
     </message>
     <message>
         <source>The parse function contains an error at line %1:
@@ -3840,7 +3887,7 @@ Opravte chybu v těle funkce.</translation>
     </message>
     <message>
         <source>Code Validation Successful</source>
-        <translation type="vanished">Ověření kódu bylo úspěšné</translation>
+        <translation type="vanished">Ověření Kódu Bylo Úspěšné</translation>
     </message>
     <message>
         <source>No syntax errors detected in the parser code.</source>
@@ -3848,7 +3895,7 @@ Opravte chybu v těle funkce.</translation>
     </message>
     <message>
         <source>Select Frame Parser Template</source>
-        <translation type="vanished">Vyberte šablonu Frame Parser</translation>
+        <translation type="vanished">Vyberte Šablonu Frame Parser</translation>
     </message>
     <message>
         <source>Choose a template to load:</source>
@@ -3979,7 +4026,7 @@ Opravte chybu v těle funkce.</translation>
     <name>JSON::FrameParserTestDialog</name>
     <message>
         <source>Invalid Hex Input</source>
-        <translation type="vanished">Neplatný hexadecimální vstup</translation>
+        <translation type="vanished">Neplatný Hexadecimální Vstup</translation>
     </message>
     <message>
         <source>Please enter valid hexadecimal bytes.
@@ -4003,11 +4050,11 @@ Platný formát: 01 A2 FF 3C</translation>
     </message>
     <message>
         <source>Frame Data Input</source>
-        <translation type="vanished">Vstup dat rámce</translation>
+        <translation type="vanished">Vstup Dat Rámce</translation>
     </message>
     <message>
         <source>Frame Parser Results</source>
-        <translation type="vanished">Výsledky analyzátoru rámců</translation>
+        <translation type="vanished">Výsledky Analyzátoru Rámců</translation>
     </message>
     <message>
         <source>Enter frame data here...</source>
@@ -4015,7 +4062,7 @@ Platný formát: 01 A2 FF 3C</translation>
     </message>
     <message>
         <source>Dataset Index</source>
-        <translation type="vanished">Index datové sady</translation>
+        <translation type="vanished">Index Datové Sady</translation>
     </message>
     <message>
         <source>Value</source>
@@ -4033,7 +4080,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Test Frame Parser</source>
-        <translation type="vanished">Testovat analyzátor rámců</translation>
+        <translation type="vanished">Testovat Analyzátor Rámců</translation>
     </message>
     <message>
         <source>Enter hex bytes (e.g., 01 A2 FF)</source>
@@ -4052,7 +4099,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <name>JSON::ProjectModel</name>
     <message>
         <source>New Project</source>
-        <translation type="vanished">Nový projekt</translation>
+        <translation type="vanished">Nový Projekt</translation>
     </message>
     <message>
         <source>Samples</source>
@@ -4084,15 +4131,15 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Save Serial Studio Project</source>
-        <translation type="vanished">Uložit projekt Serial Studio</translation>
+        <translation type="vanished">Uložit Projekt Serial Studio</translation>
     </message>
     <message>
         <source>Project Information</source>
-        <translation type="vanished">Informace o projektu</translation>
+        <translation type="vanished">Informace o Projektu</translation>
     </message>
     <message>
         <source>Project Title</source>
-        <translation type="vanished">Název projektu</translation>
+        <translation type="vanished">Název Projektu</translation>
     </message>
     <message>
         <source>Name or description of the project</source>
@@ -4100,7 +4147,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Frame Detection Method</source>
-        <translation type="vanished">Metoda detekce rámců</translation>
+        <translation type="vanished">Metoda Detekce Rámců</translation>
     </message>
     <message>
         <source>Select how incoming data frames are identified</source>
@@ -4108,7 +4155,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Hexadecimal Delimiters</source>
-        <translation type="vanished">Hexadecimální oddělovače</translation>
+        <translation type="vanished">Hexadecimální Oddělovače</translation>
     </message>
     <message>
         <source>Use hex values to define frame boundaries</source>
@@ -4116,7 +4163,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Start Sequence</source>
-        <translation type="vanished">Počáteční sekvence</translation>
+        <translation type="vanished">Počáteční Sekvence</translation>
     </message>
     <message>
         <source>Marks the beginning of each data frame</source>
@@ -4124,7 +4171,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>End Sequence</source>
-        <translation type="vanished">Koncová sekvence</translation>
+        <translation type="vanished">Koncová Sekvence</translation>
     </message>
     <message>
         <source>Marks the end of each data frame</source>
@@ -4132,11 +4179,11 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Payload Processing &amp; Validation</source>
-        <translation type="vanished">Zpracování a ověřování užitečného zatížení</translation>
+        <translation type="vanished">Zpracování a Ověřování Užitečného Zatížení</translation>
     </message>
     <message>
         <source>Data Format</source>
-        <translation type="vanished">Formát dat</translation>
+        <translation type="vanished">Formát Dat</translation>
     </message>
     <message>
         <source>Format of raw data used for decoding each frame</source>
@@ -4148,11 +4195,11 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Group Information</source>
-        <translation type="vanished">Informace o skupině</translation>
+        <translation type="vanished">Informace o Skupině</translation>
     </message>
     <message>
         <source>Group Title</source>
-        <translation type="vanished">Název skupiny</translation>
+        <translation type="vanished">Název Skupiny</translation>
     </message>
     <message>
         <source>Title or description of this dataset group</source>
@@ -4160,7 +4207,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Composite Widget</source>
-        <translation type="vanished">Složený widget</translation>
+        <translation type="vanished">Složený Widget</translation>
     </message>
     <message>
         <source>Select how this group of datasets should be visualized (optional)</source>
@@ -4168,7 +4215,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Action Title</source>
-        <translation type="vanished">Název akce</translation>
+        <translation type="vanished">Název Akce</translation>
     </message>
     <message>
         <source>Name or description of this action</source>
@@ -4176,7 +4223,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Action Icon</source>
-        <translation type="vanished">Ikona akce</translation>
+        <translation type="vanished">Ikona Akce</translation>
     </message>
     <message>
         <source>Icon displayed for this action in the dashboard</source>
@@ -4184,7 +4231,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Data Payload</source>
-        <translation type="vanished">Datový náklad</translation>
+        <translation type="vanished">Datový Náklad</translation>
     </message>
     <message>
         <source>Send as Binary</source>
@@ -4196,7 +4243,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Transmit Data (Hex)</source>
-        <translation type="vanished">Přenést data (Hex)</translation>
+        <translation type="vanished">Přenést Data (Hex)</translation>
     </message>
     <message>
         <source>Hexadecimal payload to send when the action is triggered</source>
@@ -4204,7 +4251,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Transmit Data</source>
-        <translation type="vanished">Přenést data</translation>
+        <translation type="vanished">Přenést Data</translation>
     </message>
     <message>
         <source>Text payload to send when the action is triggered</source>
@@ -4212,7 +4259,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>End-of-Line Sequence</source>
-        <translation type="vanished">Sekvence konce řádku</translation>
+        <translation type="vanished">Sekvence Konce Řádku</translation>
     </message>
     <message>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
@@ -4220,7 +4267,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Execution Behavior</source>
-        <translation type="vanished">Chování provádění</translation>
+        <translation type="vanished">Chování Provádění</translation>
     </message>
     <message>
         <source>Auto-Execute on Connect</source>
@@ -4232,7 +4279,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Timer Behavior</source>
-        <translation type="vanished">Chování časovače</translation>
+        <translation type="vanished">Chování Časovače</translation>
     </message>
     <message>
         <source>Choose when and how this action should repeat automatically</source>
@@ -4248,7 +4295,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Dataset Title</source>
-        <translation type="vanished">Název datové sady</translation>
+        <translation type="vanished">Název Datové Sady</translation>
     </message>
     <message>
         <source>Name of the dataset, used for labeling and identification</source>
@@ -4264,11 +4311,11 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Plot Settings</source>
-        <translation type="vanished">Nastavení grafu</translation>
+        <translation type="vanished">Nastavení Grafu</translation>
     </message>
     <message>
         <source>Enable Plot Widget</source>
-        <translation type="vanished">Povolit widget grafu</translation>
+        <translation type="vanished">Povolit Widget Grafu</translation>
     </message>
     <message>
         <source>Choose which dataset to use for the X-Axis in plots</source>
@@ -4276,7 +4323,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Minimum Plot Value (optional)</source>
-        <translation type="vanished">Minimální hodnota grafu (volitelné)</translation>
+        <translation type="vanished">Minimální Hodnota Grafu (volitelné)</translation>
     </message>
     <message>
         <source>Lower bound for plot display range</source>
@@ -4284,7 +4331,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Maximum Plot Value (optional)</source>
-        <translation type="vanished">Maximální hodnota grafu (volitelné)</translation>
+        <translation type="vanished">Maximální Hodnota Grafu (volitelné)</translation>
     </message>
     <message>
         <source>Upper bound for plot display range</source>
@@ -4296,7 +4343,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Enable FFT Analysis</source>
-        <translation type="vanished">Povolit analýzu FFT</translation>
+        <translation type="vanished">Povolit Analýzu FFT</translation>
     </message>
     <message>
         <source>Perform frequency-domain analysis of the dataset</source>
@@ -4316,7 +4363,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Minimum Value (recommended)</source>
-        <translation type="vanished">Minimální hodnota (doporučeno)</translation>
+        <translation type="vanished">Minimální Hodnota (doporučeno)</translation>
     </message>
     <message>
         <source>Lower bound for data normalization</source>
@@ -4324,7 +4371,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Maximum Value (recommended)</source>
-        <translation type="vanished">Maximální hodnota (doporučeno)</translation>
+        <translation type="vanished">Maximální Hodnota (doporučeno)</translation>
     </message>
     <message>
         <source>Upper bound for data normalization</source>
@@ -4332,15 +4379,15 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Widget Settings</source>
-        <translation type="vanished">Nastavení widgetu</translation>
+        <translation type="vanished">Nastavení Widgetu</translation>
     </message>
     <message>
         <source>Alarm Settings</source>
-        <translation type="vanished">Nastavení alarmu</translation>
+        <translation type="vanished">Nastavení Alarmu</translation>
     </message>
     <message>
         <source>Enable Alarms</source>
-        <translation type="vanished">Povolit alarmy</translation>
+        <translation type="vanished">Povolit Alarmy</translation>
     </message>
     <message>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
@@ -4348,15 +4395,15 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Low Threshold</source>
-        <translation type="vanished">Dolní práh</translation>
+        <translation type="vanished">Dolní Práh</translation>
     </message>
     <message>
         <source>High Threshold</source>
-        <translation type="vanished">Horní práh</translation>
+        <translation type="vanished">Horní Práh</translation>
     </message>
     <message>
         <source>Display Widget</source>
-        <translation type="vanished">Zobrazit widget</translation>
+        <translation type="vanished">Zobrazit Widget</translation>
     </message>
     <message>
         <source>Select the visual widget used to display this dataset</source>
@@ -4372,7 +4419,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Minimum Display Value (required)</source>
-        <translation type="vanished">Minimální zobrazovaná hodnota (povinné)</translation>
+        <translation type="vanished">Minimální Zobrazovaná Hodnota (povinné)</translation>
     </message>
     <message>
         <source>Lower bound of the gauge or bar display range</source>
@@ -4380,7 +4427,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Maximum Display Value (required)</source>
-        <translation type="vanished">Maximální zobrazovaná hodnota (povinné)</translation>
+        <translation type="vanished">Maximální Zobrazovaná Hodnota (povinné)</translation>
     </message>
     <message>
         <source>Upper bound of the gauge or bar display range</source>
@@ -4388,7 +4435,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Alarm: Low Threshold (optional)</source>
-        <translation type="vanished">Alarm: Nízký práh (volitelné)</translation>
+        <translation type="vanished">Alarm: Nízký Práh (volitelné)</translation>
     </message>
     <message>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
@@ -4396,7 +4443,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Alarm: High Threshold (optional)</source>
-        <translation type="vanished">Alarm: Vysoký práh (volitelné)</translation>
+        <translation type="vanished">Alarm: Vysoký Práh (volitelné)</translation>
     </message>
     <message>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
@@ -4404,7 +4451,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>LED Display Settings</source>
-        <translation type="vanished">Nastavení LED displeje</translation>
+        <translation type="vanished">Nastavení LED Displeje</translation>
     </message>
     <message>
         <source>Enable visual status monitoring using an LED display</source>
@@ -4412,7 +4459,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>LED On Threshold (required)</source>
-        <translation type="vanished">Prahová hodnota pro zapnutí LED (povinné)</translation>
+        <translation type="vanished">Prahová Hodnota pro Zapnutí LED (povinné)</translation>
     </message>
     <message>
         <source>LED lights up when value meets or exceeds this threshold</source>
@@ -4428,19 +4475,19 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Untitled Project</source>
-        <translation type="vanished">Nepojmenovaný projekt</translation>
+        <translation type="vanished">Nepojmenovaný Projekt</translation>
     </message>
     <message>
         <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation type="vanished">Soubory projektu Serial Studio (*.ssproj)</translation>
+        <translation type="vanished">Soubory Projektu Serial Studio (*.ssproj)</translation>
     </message>
     <message>
         <source>Select Project File</source>
-        <translation type="vanished">Vybrat soubor projektu</translation>
+        <translation type="vanished">Vybrat Soubor Projektu</translation>
     </message>
     <message>
         <source>Project Files (*.json *.ssproj)</source>
-        <translation type="vanished">Soubor projektu (*.json *.ssproj)</translation>
+        <translation type="vanished">Soubor Projektu (*.json *.ssproj)</translation>
     </message>
     <message>
         <source>Legacy frame parser function updated</source>
@@ -4484,35 +4531,35 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>New Dataset</source>
-        <translation type="vanished">Nová datová sada</translation>
+        <translation type="vanished">Nová Datová Sada</translation>
     </message>
     <message>
         <source>New Plot</source>
-        <translation type="vanished">Nový graf</translation>
+        <translation type="vanished">Nový Graf</translation>
     </message>
     <message>
         <source>New FFT Plot</source>
-        <translation type="vanished">Nový FFT graf</translation>
+        <translation type="vanished">Nový FFT Graf</translation>
     </message>
     <message>
         <source>New Level Indicator</source>
-        <translation type="vanished">Nový indikátor úrovně</translation>
+        <translation type="vanished">Nový Indikátor Úrovně</translation>
     </message>
     <message>
         <source>New Gauge</source>
-        <translation type="vanished">Nový ukazatel</translation>
+        <translation type="vanished">Nový Ukazatel</translation>
     </message>
     <message>
         <source>New Compass</source>
-        <translation type="vanished">Nový kompas</translation>
+        <translation type="vanished">Nový Kompas</translation>
     </message>
     <message>
         <source>New LED Indicator</source>
-        <translation type="vanished">Nový LED indikátor</translation>
+        <translation type="vanished">Nový LED Indikátor</translation>
     </message>
     <message>
         <source>New Action</source>
-        <translation type="vanished">Nová akce</translation>
+        <translation type="vanished">Nová Akce</translation>
     </message>
     <message>
         <source>Are you sure you want to change the group-level widget?</source>
@@ -4556,7 +4603,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Frame Parser Code</source>
-        <translation type="vanished">Kód analyzátoru rámců</translation>
+        <translation type="vanished">Kód Analyzátoru Rámců</translation>
     </message>
     <message>
         <source>Title</source>
@@ -4568,7 +4615,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Data Conversion Method</source>
-        <translation type="vanished">Metoda převodu dat</translation>
+        <translation type="vanished">Metoda Převodu Dat</translation>
     </message>
     <message>
         <source>Input data format for frame parser</source>
@@ -4576,7 +4623,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Frame Detection</source>
-        <translation type="vanished">Detekce rámců</translation>
+        <translation type="vanished">Detekce Rámců</translation>
     </message>
     <message>
         <source>Strategy used for identifying frame data</source>
@@ -4584,7 +4631,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Frame Start Delimeter</source>
-        <translation type="vanished">Oddělovač začátku rámce</translation>
+        <translation type="vanished">Oddělovač Začátku Rámce</translation>
     </message>
     <message>
         <source>String marking the start of a frame</source>
@@ -4624,7 +4671,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Visual Widget</source>
-        <translation type="vanished">Vizuální widget</translation>
+        <translation type="vanished">Vizuální Widget</translation>
     </message>
     <message>
         <source>Widget</source>
@@ -4636,7 +4683,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Untitled Action</source>
-        <translation type="vanished">Nepojmenovaná akce</translation>
+        <translation type="vanished">Nepojmenovaná Akce</translation>
     </message>
     <message>
         <source>Name or description of the action</source>
@@ -4648,7 +4695,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Default Icon</source>
-        <translation type="vanished">Výchozí ikona</translation>
+        <translation type="vanished">Výchozí Ikona</translation>
     </message>
     <message>
         <source>Icon to display in the dashboard</source>
@@ -4656,7 +4703,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Binary Data</source>
-        <translation type="vanished">Binární data</translation>
+        <translation type="vanished">Binární Data</translation>
     </message>
     <message>
         <source>Send binary data when the action is triggered.</source>
@@ -4696,7 +4743,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Timer Mode</source>
-        <translation type="vanished">Režim časovače</translation>
+        <translation type="vanished">Režim Časovače</translation>
     </message>
     <message>
         <source>How and when the timer should activate.</source>
@@ -4704,7 +4751,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Timer Interval (ms)</source>
-        <translation type="vanished">Interval časovače (ms)</translation>
+        <translation type="vanished">Interval Časovače (ms)</translation>
     </message>
     <message>
         <source>Interval in milliseconds between each timer-triggered action.</source>
@@ -4712,11 +4759,11 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>General Information</source>
-        <translation type="vanished">Obecné informace</translation>
+        <translation type="vanished">Obecné Informace</translation>
     </message>
     <message>
         <source>Untitled Dataset</source>
-        <translation type="vanished">Nepojmenovaná datová sada</translation>
+        <translation type="vanished">Nepojmenovaná Datová Sada</translation>
     </message>
     <message>
         <source>Name or description of the dataset</source>
@@ -4724,7 +4771,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Frame Index</source>
-        <translation type="vanished">Index rámce</translation>
+        <translation type="vanished">Index Rámce</translation>
     </message>
     <message>
         <source>Position in the frame</source>
@@ -4732,7 +4779,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Measurement Unit</source>
-        <translation type="vanished">Měrná jednotka</translation>
+        <translation type="vanished">Měrná Jednotka</translation>
     </message>
     <message>
         <source>Volts, Amps, etc.</source>
@@ -4756,7 +4803,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Oscilloscope Plot</source>
-        <translation type="vanished">Osciloskopický graf</translation>
+        <translation type="vanished">Osciloskopický Graf</translation>
     </message>
     <message>
         <source>Plot data in real-time</source>
@@ -4764,7 +4811,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>FFT Plot</source>
-        <translation type="vanished">FFT graf</translation>
+        <translation type="vanished">FFT Graf</translation>
     </message>
     <message>
         <source>Plot frequency-domain data</source>
@@ -4780,7 +4827,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>X-Axis Source</source>
-        <translation type="vanished">Zdroj osy X</translation>
+        <translation type="vanished">Zdroj Osy X</translation>
     </message>
     <message>
         <source>Data series for the X-Axis</source>
@@ -4788,7 +4835,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Minimum Value</source>
-        <translation type="vanished">Minimální hodnota</translation>
+        <translation type="vanished">Minimální Hodnota</translation>
     </message>
     <message>
         <source>Required for range widgets, optional for plots</source>
@@ -4796,15 +4843,15 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Maximum Value</source>
-        <translation type="vanished">Maximální hodnota</translation>
+        <translation type="vanished">Maximální Hodnota</translation>
     </message>
     <message>
         <source>Alarm Low Value</source>
-        <translation type="vanished">Hodnota nízkého alarmu</translation>
+        <translation type="vanished">Hodnota Nízkého Alarmu</translation>
     </message>
     <message>
         <source>Alarm Value</source>
-        <translation type="vanished">Hodnota alarmu</translation>
+        <translation type="vanished">Hodnota Alarmu</translation>
     </message>
     <message>
         <source>Triggers alarm in bar widgets and LED panels</source>
@@ -4812,11 +4859,11 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Alarm High Value</source>
-        <translation type="vanished">Hodnota vysokého alarmu</translation>
+        <translation type="vanished">Hodnota Vysokého Alarmu</translation>
     </message>
     <message>
         <source>FFT Window Size</source>
-        <translation type="vanished">Velikost FFT okna</translation>
+        <translation type="vanished">Velikost FFT Okna</translation>
     </message>
     <message>
         <source>Samples for FFT calculation</source>
@@ -4824,7 +4871,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>FFT Sampling Rate</source>
-        <translation type="vanished">Vzorkovací frekvence FFT</translation>
+        <translation type="vanished">Vzorkovací Frekvence FFT</translation>
     </message>
     <message>
         <source>Sampling rate (Hz) for FFT calculation</source>
@@ -4832,7 +4879,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>LED High (On) Value</source>
-        <translation type="vanished">Hodnota LED vysoká (Zapnuto)</translation>
+        <translation type="vanished">Hodnota LED Vysoká (Zapnuto)</translation>
     </message>
     <message>
         <source>Threshold for LED on</source>
@@ -4844,7 +4891,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Auto Start</source>
-        <translation type="vanished">Automatický start</translation>
+        <translation type="vanished">Automatický Start</translation>
     </message>
     <message>
         <source>Start on Trigger</source>
@@ -4856,7 +4903,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Plain Text (UTF8)</source>
-        <translation type="vanished">Prostý text (UTF8)</translation>
+        <translation type="vanished">Prostý Text (UTF8)</translation>
     </message>
     <message>
         <source>Hexadecimal</source>
@@ -4872,31 +4919,31 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>No Checksum</source>
-        <translation type="vanished">Bez kontrolního součtu</translation>
+        <translation type="vanished">Bez Kontrolního Součtu</translation>
     </message>
     <message>
         <source>End Delimiter Only</source>
-        <translation type="vanished">Pouze koncový oddělovač</translation>
+        <translation type="vanished">Pouze Koncový Oddělovač</translation>
     </message>
     <message>
         <source>Start Delimiter Only</source>
-        <translation type="vanished">Pouze počáteční oddělovač</translation>
+        <translation type="vanished">Pouze Počáteční Oddělovač</translation>
     </message>
     <message>
         <source>Start + End Delimiter</source>
-        <translation type="vanished">Počáteční + koncový oddělovač</translation>
+        <translation type="vanished">Počáteční + Koncový Oddělovač</translation>
     </message>
     <message>
         <source>No Delimiters</source>
-        <translation type="vanished">Žádné oddělovače</translation>
+        <translation type="vanished">Žádné Oddělovače</translation>
     </message>
     <message>
         <source>Data Grid</source>
-        <translation type="vanished">Datová mřížka</translation>
+        <translation type="vanished">Datová Mřížka</translation>
     </message>
     <message>
         <source>GPS Map</source>
-        <translation type="vanished">GPS mapa</translation>
+        <translation type="vanished">GPS Mapa</translation>
     </message>
     <message>
         <source>Gyroscope</source>
@@ -4904,7 +4951,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Multiple Plot</source>
-        <translation type="vanished">Vícenásobný graf</translation>
+        <translation type="vanished">Vícenásobný Graf</translation>
     </message>
     <message>
         <source>Accelerometer</source>
@@ -4912,7 +4959,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>3D Plot</source>
-        <translation type="vanished">3D graf</translation>
+        <translation type="vanished">3D Graf</translation>
     </message>
     <message>
         <source>None</source>
@@ -4932,11 +4979,11 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>New Line (\n)</source>
-        <translation type="vanished">Nový řádek (</translation>
+        <translation type="vanished">Nový Řádek (</translation>
     </message>
     <message>
         <source>Carriage Return (\r)</source>
-        <translation type="vanished">Návrat vozíku (\r)</translation>
+        <translation type="vanished">Návrat Vozíku (\r)</translation>
     </message>
     <message>
         <source>CRLF (\r\n)</source>
@@ -4948,7 +4995,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Linear Plot</source>
-        <translation type="vanished">Lineární graf</translation>
+        <translation type="vanished">Lineární Graf</translation>
     </message>
     <message>
         <source>Save changes to frame parser code?</source>
@@ -4960,7 +5007,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <source>Save Changes</source>
-        <translation type="vanished">Uložit změny</translation>
+        <translation type="vanished">Uložit Změny</translation>
     </message>
 </context>
 <context>
@@ -4974,26 +5021,31 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <name>LicenseManagement</name>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="36"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="36"/>
         <source>Licensing</source>
         <translation>Licencování</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="75"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="75"/>
         <source>Please wait...</source>
         <translation>Prosím čekejte...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="116"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="116"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Aktivovat Serial Studio Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="122"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="122"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
         <translation>Vložte svůj licenční klíč níže pro odemknutí Pro funkcí jako MQTT, 3D vykreslování a další.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="129"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="129"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
         <translation>Vaše licence zahrnuje 5 aktivací zařízení.
@@ -5001,6 +5053,7 @@ Plány zahrnují měsíční, roční a doživotní možnosti.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="141"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="141"/>
         <source>Paste your license key here…</source>
         <translation>Vložte svůj licenční klíč sem…</translation>
     </message>
@@ -5008,11 +5061,15 @@ Plány zahrnují měsíční, roční a doživotní možnosti.</translation>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="160"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="320"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="368"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="160"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="320"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="368"/>
         <source>Copy</source>
         <translation>Kopírovat</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="166"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="166"/>
         <source>Paste</source>
         <translation>Vložit</translation>
     </message>
@@ -5020,71 +5077,87 @@ Plány zahrnují měsíční, roční a doživotní možnosti.</translation>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="172"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="326"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="374"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="172"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="326"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="374"/>
         <source>Select All</source>
-        <translation>Vybrat vše</translation>
+        <translation>Vybrat Vše</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="223"/>
         <source>Product</source>
         <translation>Produkt</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="230"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="230"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="241"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="241"/>
         <source>Licensee</source>
         <translation>Licencovaný uživatel</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="260"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="260"/>
         <source>Licensee E-Mail</source>
-        <translation>E-mail licencovaného uživatele</translation>
+        <translation>E-mail Licencovaného Uživatele</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="277"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="277"/>
         <source>Device Usage</source>
-        <translation>Použití zařízení</translation>
+        <translation>Použití Zařízení</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="285"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="285"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>%1 zařízení v použití (Neomezený plán)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="286"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="286"/>
         <source>%1 of %2 devices used</source>
-        <translation>Použito %1 z %2 zařízení</translation>
+        <translation>použito %1 z %2 zařízení</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="296"/>
         <source>Device ID</source>
-        <translation>ID zařízení</translation>
+        <translation>ID Zařízení</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="342"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="342"/>
         <source>License Key</source>
-        <translation>Licenční klíč</translation>
+        <translation>Licenční Klíč</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="398"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="398"/>
         <source>Customer Portal</source>
-        <translation>Zákaznický portál</translation>
+        <translation>Zákaznický Portál</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="412"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="412"/>
         <source>Buy License</source>
-        <translation>Koupit licenci</translation>
+        <translation>Koupit Licenci</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="422"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="422"/>
         <source>Activate</source>
         <translation>Aktivovat</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="435"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/LicenseManagement.qml" line="435"/>
         <source>Deactivate</source>
         <translation>Deaktivovat</translation>
     </message>
@@ -5224,12 +5297,12 @@ Děkujeme vám znovu za podporu Serial Studio!</translation>
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="428"/>
+        <location filename="../../src/MDF4/Export.cpp" line="441"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>Export MDF4 je funkce Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="429"/>
+        <location filename="../../src/MDF4/Export.cpp" line="442"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>Tato funkce vyžaduje licenci. Prosím, zakupte si ji pro povolení exportu MDF4.</translation>
     </message>
@@ -5291,10 +5364,7 @@ Děkujeme vám znovu za podporu Serial Studio!</translation>
 Project: %2
 Subject: %3
 Channels: %4</source>
-        <translation type="vanished">Autor: %1
-Projekt: %2
-Předmět: %3
-Kanály: %4</translation>
+        <translation type="vanished">Autor: %1 Projekt: %2 Předmět: %3 Kanály: %4</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -5341,12 +5411,12 @@ Kanály: %4</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="52"/>
         <source>Any Protocol</source>
-        <translation>Jakýkoliv protokol</translation>
+        <translation>Jakýkoliv Protokol</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="53"/>
         <source>Secure Protocols Only</source>
-        <translation>Pouze zabezpečené protokoly</translation>
+        <translation>Pouze Zabezpečené Protokoly</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="56"/>
@@ -5356,32 +5426,32 @@ Kanály: %4</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="57"/>
         <source>Query Peer</source>
-        <translation>Dotázat se na protějšek</translation>
+        <translation>Dotázat Se na Protějšek</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="58"/>
         <source>Verify Peer</source>
-        <translation>Ověřit protějšek</translation>
+        <translation>Ověřit Protějšek</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="59"/>
         <source>Auto Verify Peer</source>
-        <translation>Automaticky ověřit protějšek</translation>
+        <translation>Automaticky Ověřit Protějšek</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="331"/>
         <source>Use System Database</source>
-        <translation>Použít systémovou databázi</translation>
+        <translation>Použít Systémovou Databázi</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="332"/>
         <source>Load From Folder...</source>
-        <translation>Načíst ze složky...</translation>
+        <translation>Načíst Ze Složky...</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="346"/>
         <source>MQTT Subscriber</source>
-        <translation>MQTT odběratel</translation>
+        <translation>MQTT Odběratel</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="347"/>
@@ -5405,7 +5475,7 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="427"/>
         <source>Missing MQTT Topic</source>
-        <translation>Chybí MQTT téma</translation>
+        <translation>Chybí MQTT Téma</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="428"/>
@@ -5416,12 +5486,12 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
         <location filename="../../src/MQTT/Client.cpp" line="429"/>
         <location filename="../../src/MQTT/Client.cpp" line="453"/>
         <source>Configuration Error</source>
-        <translation>Chyba konfigurace</translation>
+        <translation>Chyba Konfigurace</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="437"/>
         <source>MQTT Topic Not Set</source>
-        <translation>MQTT téma není nastaveno</translation>
+        <translation>MQTT Téma Není Nastaveno</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="438"/>
@@ -5431,12 +5501,12 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="439"/>
         <source>Configuration Warning</source>
-        <translation>Varování konfigurace</translation>
+        <translation>Varování Konfigurace</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="451"/>
         <source>Invalid MQTT Topic</source>
-        <translation>Neplatné MQTT téma</translation>
+        <translation>Neplatné MQTT Téma</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="452"/>
@@ -5446,12 +5516,12 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="677"/>
         <source>Select PEM Certificates Directory</source>
-        <translation>Vyberte adresář certifikátů PEM</translation>
+        <translation>Vyberte Adresář Certifikátů PEM</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="792"/>
         <source>Subscription Error</source>
-        <translation>Chyba přihlášení</translation>
+        <translation>Chyba Přihlášení</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="793"/>
@@ -5461,7 +5531,7 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>Invalid MQTT Protocol Version</source>
-        <translation>Neplatná verze protokolu MQTT</translation>
+        <translation>Neplatná Verze Protokolu MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="813"/>
@@ -5471,7 +5541,7 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="819"/>
         <source>Client ID Rejected</source>
-        <translation>ID klienta odmítnuto</translation>
+        <translation>ID Klienta Odmítnuto</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="820"/>
@@ -5481,7 +5551,7 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="826"/>
         <source>MQTT Server Unavailable</source>
-        <translation>MQTT server nedostupný</translation>
+        <translation>MQTT Server Nedostupný</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="827"/>
@@ -5492,7 +5562,7 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
         <location filename="../../src/MQTT/Client.cpp" line="833"/>
         <location filename="../../src/MQTT/Client.cpp" line="903"/>
         <source>Authentication Error</source>
-        <translation>Chyba ověření</translation>
+        <translation>Chyba Ověření</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="834"/>
@@ -5502,7 +5572,7 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="839"/>
         <source>Authorization Error</source>
-        <translation>Chyba autorizace</translation>
+        <translation>Chyba Autorizace</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="840"/>
@@ -5522,7 +5592,7 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="853"/>
         <source>MQTT Protocol Violation</source>
-        <translation>Porušení protokolu MQTT</translation>
+        <translation>Porušení Protokolu MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="854"/>
@@ -5532,7 +5602,7 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="860"/>
         <source>Unknown Error</source>
-        <translation>Neznámá chyba</translation>
+        <translation>Neznámá Chyba</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="861"/>
@@ -5552,7 +5622,7 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="889"/>
         <source>MQTT Authentication Failed</source>
-        <translation>Selhání ověření MQTT</translation>
+        <translation>Selhání Ověření MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="890"/>
@@ -5572,7 +5642,7 @@ Pro odemknutí této funkce aktivujte svou licenci nebo navštivte obchod.</tran
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="917"/>
         <source>MQTT Authentication Required</source>
-        <translation>Vyžadováno ověření MQTT</translation>
+        <translation>Vyžadováno Ověření MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="918"/>
@@ -5586,7 +5656,7 @@ Poskytněte prosím potřebné údaje.</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="926"/>
         <source>Enter MQTT Username</source>
-        <translation>Zadejte uživatelské jméno MQTT</translation>
+        <translation>Zadejte Uživatelské Jméno MQTT</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="927"/>
@@ -5596,7 +5666,7 @@ Poskytněte prosím potřebné údaje.</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="933"/>
         <source>Enter MQTT Password</source>
-        <translation>Zadejte MQTT heslo</translation>
+        <translation>Zadejte MQTT Heslo</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="934"/>
@@ -5608,166 +5678,199 @@ Poskytněte prosím potřebné údaje.</translation>
     <name>MQTTConfiguration</name>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="36"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="36"/>
         <source>MQTT Setup</source>
         <translation>Nastavení MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="96"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="96"/>
         <source>MQTT is a Pro Feature</source>
         <translation>MQTT je prémiová funkce</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="97"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="97"/>
         <source>Activate your license or visit the store to unlock MQTT support.</source>
         <translation>Aktivujte svou licenci nebo navštivte obchod pro odemknutí podpory MQTT.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="109"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="109"/>
         <source>General</source>
         <translation>Obecné</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="115"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="115"/>
         <source>Authentication</source>
         <translation>Ověřování</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="121"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="121"/>
         <source>MQTT Options</source>
         <translation>Možnosti MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="127"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="127"/>
         <source>SSL Properties</source>
         <translation>Vlastnosti SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="183"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="183"/>
         <source>Host</source>
         <translation>Hostitel</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="195"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="195"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="211"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="211"/>
         <source>Client ID</source>
-        <translation>ID klienta</translation>
+        <translation>ID Klienta</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="223"/>
         <source>Keep Alive (s)</source>
-        <translation>Udržovat naživu (s)</translation>
+        <translation>Udržovat Naživu (s)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="236"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="236"/>
         <source>Clean Session</source>
-        <translation>Čisté sezení</translation>
+        <translation>Čisté Sezení</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="285"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="285"/>
         <source>Username</source>
         <translation>Uživatelské jméno</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="290"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="290"/>
         <source>MQTT Username</source>
-        <translation>MQTT uživatelské jméno</translation>
+        <translation>MQTT Uživatelské Jméno</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="297"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="297"/>
         <source>Password</source>
         <translation>Heslo</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="307"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="307"/>
         <source>MQTT Password</source>
-        <translation>MQTT heslo</translation>
+        <translation>MQTT Heslo</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="364"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="364"/>
         <source>Version</source>
         <translation>Verze</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="376"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="376"/>
         <source>Mode</source>
         <translation>Režim</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="388"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="388"/>
         <source>Topic</source>
         <translation>Téma</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="393"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="393"/>
         <source>e.g. sensors/temperature or home/+/status</source>
         <translation>např. senzory/teplota nebo domov/+/stav</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="400"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="400"/>
         <source>Will Retain</source>
-        <translation>Zachovat vůli</translation>
+        <translation>Zachovat Vůli</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="411"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="411"/>
         <source>Will QoS</source>
-        <translation>Kvalita služby vůle</translation>
+        <translation>Kvalita Služby Vůle</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="423"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="423"/>
         <source>Will Topic</source>
-        <translation>Téma vůle</translation>
+        <translation>Téma Vůle</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="428"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="428"/>
         <source>e.g. device/alerts/offline</source>
         <translation>např. zařízení/varování/offline</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="435"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="435"/>
         <source>Will Message</source>
-        <translation>Zpráva vůle</translation>
+        <translation>Zpráva Vůle</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="440"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="440"/>
         <source>e.g. Device unexpectedly disconnected</source>
         <translation>např. Zařízení neočekávaně odpojeno</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="485"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="485"/>
         <source>Enable SSL</source>
         <translation>Povolit SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="496"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="496"/>
         <source>SSL Protocol</source>
-        <translation>SSL protokol</translation>
+        <translation>SSL Protokol</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="512"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="512"/>
         <source>Verify Depth</source>
-        <translation>Ověřit hloubku</translation>
+        <translation>Ověřit Hloubku</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="530"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="530"/>
         <source>Verify Mode</source>
-        <translation>Ověřit režim</translation>
+        <translation>Ověřit Režim</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="562"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="562"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Disconnect</source>
         <translation>Odpojit</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Connect</source>
         <translation>Připojit</translation>
     </message>
@@ -5779,21 +5882,21 @@ Poskytněte prosím potřebné údaje.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <source>Device Defined Project</source>
-        <translation>Projekt definovaný zařízením</translation>
+        <translation>Projekt Definovaný Zařízením</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="94"/>
         <source>Quick Plot Mode</source>
-        <translation>Režim rychlého vykreslení</translation>
+        <translation>Režim Rychlého Vykreslení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="100"/>
         <source>Empty Project</source>
-        <translation>Prázdný projekt</translation>
+        <translation>Prázdný Projekt</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="146"/>
@@ -5958,82 +6061,94 @@ Poskytněte prosím potřebné údaje.</translation>
     <message>
         <location filename="../../src/Misc/WorkspaceManager.cpp" line="128"/>
         <source>Select Workspace Location</source>
-        <translation>Vybrat umístění pracovního prostoru</translation>
+        <translation>Vybrat Umístění Pracovního Prostoru</translation>
     </message>
 </context>
 <context>
     <name>Modbus</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="45"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="45"/>
         <source>Protocol</source>
         <translation>Protokol</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="67"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="67"/>
         <source>Serial Port</source>
-        <translation>Sériový port</translation>
+        <translation>Sériový Port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="91"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="91"/>
         <source>Baud Rate</source>
-        <translation>Přenosová rychlost</translation>
+        <translation>Přenosová Rychlost</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="143"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="143"/>
         <source>Parity</source>
         <translation>Parita</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="166"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="166"/>
         <source>Data Bits</source>
-        <translation>Datové bity</translation>
+        <translation>Datové Bity</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="189"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="189"/>
         <source>Stop Bits</source>
-        <translation>Stop bity</translation>
+        <translation>Stop Bity</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="212"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="212"/>
         <source>Host</source>
         <translation>Hostitel</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="221"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="221"/>
         <source>IP Address</source>
-        <translation>IP adresa</translation>
+        <translation>IP Adresa</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="235"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="235"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="244"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="244"/>
         <source>TCP Port</source>
-        <translation>TCP port</translation>
+        <translation>TCP Port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="270"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="270"/>
         <source>Slave Address</source>
-        <translation>Adresa slave zařízení</translation>
+        <translation>Adresa Slave Zařízení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="274"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="274"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
     <message>
         <source>Multi-Group Mode</source>
-        <translation type="vanished">Režim více skupin</translation>
+        <translation type="vanished">Režim Více Skupin</translation>
     </message>
     <message>
         <source>Register Type</source>
-        <translation type="vanished">Typ registru</translation>
+        <translation type="vanished">Typ Registru</translation>
     </message>
     <message>
         <source>Start Address</source>
-        <translation type="vanished">Počáteční adresa</translation>
+        <translation type="vanished">Počáteční Adresa</translation>
     </message>
     <message>
         <source>Register address</source>
@@ -6041,7 +6156,7 @@ Poskytněte prosím potřebné údaje.</translation>
     </message>
     <message>
         <source>Register Count</source>
-        <translation type="vanished">Počet registrů</translation>
+        <translation type="vanished">Počet Registrů</translation>
     </message>
     <message>
         <source>Number of registers</source>
@@ -6049,26 +6164,31 @@ Poskytněte prosím potřebné údaje.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="318"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="318"/>
         <source>Configure Register Groups...</source>
-        <translation>Nastavit skupiny registrů...</translation>
+        <translation>Nastavit Skupiny Registrů...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
         <source>%1 group(s) configured</source>
         <translation>%1 skupina(y) nakonfigurována(y)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="330"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="330"/>
         <source>No groups configured</source>
         <translation>Žádné skupiny nejsou nakonfigurovány</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="289"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="289"/>
         <source>Poll Interval (ms)</source>
-        <translation>Interval dotazování (ms)</translation>
+        <translation>Interval Dotazování (ms)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="293"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="293"/>
         <source>Polling interval</source>
         <translation>Interval dotazování</translation>
     </message>
@@ -6077,86 +6197,103 @@ Poskytněte prosím potřebné údaje.</translation>
     <name>ModbusGroupsDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
         <source>Modbus Register Groups</source>
-        <translation>Skupiny registrů Modbus</translation>
+        <translation>Skupiny Registrů Modbus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="158"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="158"/>
         <source>Configure multiple register groups to poll different register types in sequence.</source>
         <translation>Nakonfigurujte více skupin registrů pro sekvenční dotazování různých typů registrů.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
         <source>Add New Group</source>
-        <translation>Přidat novou skupinu</translation>
+        <translation>Přidat Novou Skupinu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="193"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="193"/>
         <source>Register Type:</source>
-        <translation>Typ registru:</translation>
+        <translation>Typ Registru:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="204"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="204"/>
         <source>Start Address:</source>
-        <translation>Počáteční adresa:</translation>
+        <translation>Počáteční Adresa:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="211"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="211"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="216"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="216"/>
         <source>Register Count:</source>
-        <translation>Počet registrů:</translation>
+        <translation>Počet Registrů:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="227"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="227"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="232"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="232"/>
         <source>Add Group</source>
-        <translation>Přidat skupinu</translation>
+        <translation>Přidat Skupinu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="255"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="255"/>
         <source>Configured Groups</source>
-        <translation>Nakonfigurované skupiny</translation>
+        <translation>Nakonfigurované Skupiny</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="289"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="289"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="310"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="310"/>
         <source>Count</source>
         <translation>Počet</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="317"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="317"/>
         <source>Action</source>
         <translation>Akce</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="392"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="392"/>
         <source>Remove</source>
         <translation>Odebrat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="405"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="405"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>Žádné skupiny nejsou nakonfigurovány.
@@ -6164,16 +6301,19 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="423"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="423"/>
         <source>Total groups: %1</source>
         <translation>Celkem skupin: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
         <source>Clear All</source>
-        <translation>Vymazat vše</translation>
+        <translation>Vymazat Vše</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="433"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="433"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -6195,14 +6335,14 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="73"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="73"/>
         <source>Socket Type</source>
-        <translation>Typ soketu</translation>
+        <translation>Typ Soketu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
         <source>Remote Address</source>
-        <translation>Vzdálená adresa</translation>
+        <translation>Vzdálená Adresa</translation>
     </message>
     <message>
         <source>Port</source>
@@ -6213,7 +6353,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="93"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="93"/>
         <source>Local Port</source>
-        <translation>Místní port</translation>
+        <translation>Místní Port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="99"/>
@@ -6230,7 +6370,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="146"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="179"/>
         <source>Remote Port</source>
-        <translation>Vzdálený port</translation>
+        <translation>Vzdálený Port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="209"/>
@@ -6297,14 +6437,14 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <source>Visit Website</source>
-        <translation>Navštivte web</translation>
+        <translation>Navštivte Web</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/ProNotice.qml" line="131"/>
         <source>Buy License</source>
-        <translation>Koupit licenci</translation>
+        <translation>Koupit Licenci</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="147"/>
@@ -6331,7 +6471,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <source>Project Structure</source>
-        <translation>Struktura projektu</translation>
+        <translation>Struktura Projektu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="248"/>
@@ -6390,7 +6530,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <source>Save As</source>
-        <translation>Uložit jako</translation>
+        <translation>Uložit Jako</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
@@ -6474,7 +6614,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <source>Level Indicator</source>
-        <translation>Ukazatel úrovně</translation>
+        <translation>Ukazatel Úrovně</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="293"/>
@@ -6502,7 +6642,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
         <source>LED Indicator</source>
-        <translation>LED indikátor</translation>
+        <translation>LED Indikátor</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="315"/>
@@ -6530,7 +6670,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
         <source>Dataset Container</source>
-        <translation>Kontejner datové sady</translation>
+        <translation>Kontejner Datové Sady</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
@@ -6551,7 +6691,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
         <source>Data Grid</source>
-        <translation>Datová mřížka</translation>
+        <translation>Datová Mřížka</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
@@ -6572,7 +6712,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
         <source>Multiple Plot</source>
-        <translation>Více grafů</translation>
+        <translation>Více Grafů</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
@@ -6677,7 +6817,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/Misc/Translator.cpp" line="180"/>
+        <location filename="../../src/Misc/Translator.cpp" line="198"/>
         <source>Failed to load welcome text :(</source>
         <translation>Nepodařilo se načíst uvítací text :(</translation>
     </message>
@@ -6691,7 +6831,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../src/Licensing/Trial.cpp" line="292"/>
         <location filename="../../src/Licensing/Trial.cpp" line="330"/>
         <source>Trial Activation Error</source>
-        <translation>Chyba aktivace zkušební verze</translation>
+        <translation>Chyba Aktivace Zkušební Verze</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="289"/>
@@ -6716,7 +6856,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     <message>
         <location filename="../../src/Console/Export.cpp" line="118"/>
         <source>Console Output File Error</source>
-        <translation>Chyba souboru výstupu konzole</translation>
+        <translation>Chyba Souboru Výstupu Konzole</translation>
     </message>
     <message>
         <location filename="../../src/Console/Export.cpp" line="119"/>
@@ -6729,12 +6869,12 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="232"/>
         <source>Data Grids</source>
-        <translation>Datové mřížky</translation>
+        <translation>Datové Mřížky</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="235"/>
         <source>Multiple Data Plots</source>
-        <translation>Více datových grafů</translation>
+        <translation>Více Datových Grafů</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="238"/>
@@ -6754,17 +6894,17 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="247"/>
         <source>FFT Plots</source>
-        <translation>FFT grafy</translation>
+        <translation>FFT Grafy</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="250"/>
         <source>LED Panels</source>
-        <translation>LED panely</translation>
+        <translation>LED Panely</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="253"/>
         <source>Data Plots</source>
-        <translation>Datové grafy</translation>
+        <translation>Datové Grafy</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="256"/>
@@ -6789,7 +6929,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="268"/>
         <source>3D Plots</source>
-        <translation>3D grafy</translation>
+        <translation>3D Grafy</translation>
     </message>
 </context>
 <context>
@@ -6827,7 +6967,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="123"/>
         <source>Workspace Folder</source>
-        <translation>Pracovní složka</translation>
+        <translation>Pracovní Složka</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="166"/>
@@ -6841,11 +6981,11 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="191"/>
         <source>Enable TCP Plugins (Port 7777)</source>
-        <translation>Povolit TCP pluginy (Port 7777)</translation>
+        <translation>Povolit TCP Pluginy (Port 7777)</translation>
     </message>
     <message>
         <source>Force Software Rendering</source>
-        <translation type="vanished">Vynutit softwarové vykreslování</translation>
+        <translation type="vanished">Vynutit Softwarové Vykreslování</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="209"/>
@@ -6866,25 +7006,25 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="258"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="258"/>
         <source>Point Count</source>
-        <translation>Počet bodů</translation>
+        <translation>Počet Bodů</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="278"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="278"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="278"/>
         <source>UI Refresh Rate (Hz)</source>
-        <translation>Obnovovací frekvence UI (Hz)</translation>
+        <translation>Obnovovací Frekvence UI (Hz)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="314"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="314"/>
         <source>Always Show Taskbar Buttons</source>
-        <translation>Vždy zobrazovat tlačítka na hlavním panelu</translation>
+        <translation>Vždy Zobrazovat Tlačítka na Hlavním Panelu</translation>
     </message>
     <message>
         <source>Decimal Precision</source>
-        <translation type="vanished">Desetinná přesnost</translation>
+        <translation type="vanished">Desetinná Přesnost</translation>
     </message>
     <message>
         <source>Threaded mode (better for high-rate data)</source>
@@ -6895,15 +7035,15 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="296"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="296"/>
         <source>Show Actions Panel</source>
-        <translation>Zobrazit panel akcí</translation>
+        <translation>Zobrazit Panel Akcí</translation>
     </message>
     <message>
         <source>Always Show Tashbar Buttons</source>
-        <translation type="vanished">Vždy zobrazovat tlačítka na panelu úloh</translation>
+        <translation type="vanished">Vždy Zobrazovat Tlačítka na Panelu Úloh</translation>
     </message>
     <message>
         <source>Enable Console Widget</source>
-        <translation type="vanished">Povolit konzolový widget</translation>
+        <translation type="vanished">Povolit Konzolový Widget</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
@@ -6931,7 +7071,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="405"/>
         <source>Font Size</source>
-        <translation>Velikost písma</translation>
+        <translation>Velikost Písma</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="442"/>
@@ -6965,28 +7105,28 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="33"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="256"/>
         <source>Device Setup</source>
-        <translation>Nastavení zařízení</translation>
+        <translation>Nastavení Zařízení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="123"/>
         <source>Frame Parsing</source>
-        <translation>Zpracování rámců</translation>
+        <translation>Zpracování Rámců</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="131"/>
         <source>No Parsing (Device Sends JSON Data)</source>
-        <translation>Žádné zpracování (zařízení odesílá data ve formátu JSON)</translation>
+        <translation>Žádné Zpracování (zařízení Odesílá Data Ve Formátu JSON)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="142"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="142"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="142"/>
         <source>Quick Plot (Comma Separated Values)</source>
-        <translation>Rychlý graf (hodnoty oddělené čárkou)</translation>
+        <translation>Rychlý Graf (hodnoty Oddělené Čárkou)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="153"/>
@@ -7000,49 +7140,49 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="172"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="172"/>
         <source>Change Project File (%1)</source>
-        <translation>Změnit projektový soubor (%1)</translation>
+        <translation>Změnit Projektový Soubor (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="173"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="173"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="173"/>
         <source>Select Project File</source>
-        <translation>Vybrat projektový soubor</translation>
+        <translation>Vybrat Projektový Soubor</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="187"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="187"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="187"/>
         <source>Data Export</source>
-        <translation>Export dat</translation>
+        <translation>Export Dat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="200"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="200"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="200"/>
         <source>Create CSV File</source>
-        <translation>Vytvořit CSV soubor</translation>
+        <translation>Vytvořit CSV Soubor</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="218"/>
         <source>Create MDF4 File</source>
-        <translation>Vytvořit soubor MDF4</translation>
+        <translation>Vytvořit Soubor MDF4</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="235"/>
         <source>Export Console Data</source>
-        <translation>Exportovat data konzole</translation>
+        <translation>Exportovat Data Konzole</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="264"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="264"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="264"/>
         <source>I/O Interface: %1</source>
-        <translation>I/O rozhraní: %1</translation>
+        <translation>I/O Rozhraní: %1</translation>
     </message>
 </context>
 <context>
@@ -7059,7 +7199,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
         <source>No Groups Available</source>
-        <translation>Nejsou dostupné žádné skupiny</translation>
+        <translation>Nejsou Dostupné Žádné Skupiny</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="188"/>
@@ -7073,35 +7213,35 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <source>No Actions Available</source>
-        <translation>Nejsou dostupné žádné akce</translation>
+        <translation>Nejsou Dostupné Žádné Akce</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <source>Auto Layout</source>
-        <translation>Automatické rozvržení</translation>
+        <translation>Automatické Rozvržení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <source>Full Screen</source>
-        <translation>Celá obrazovka</translation>
+        <translation>Celá Obrazovka</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
         <source>CSV Logging</source>
-        <translation>CSV protokolování</translation>
+        <translation>CSV Protokolování</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
         <source>Console Logging</source>
-        <translation>Konzolové protokolování</translation>
+        <translation>Konzolové Protokolování</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
@@ -7167,7 +7307,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <source>No Data Available</source>
-        <translation>Žádná data nejsou k dispozici</translation>
+        <translation>Žádná Data Nejsou k Dispozici</translation>
     </message>
 </context>
 <context>
@@ -7246,7 +7386,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="375"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="375"/>
         <source>Show Timestamp</source>
-        <translation>Zobrazit časové razítko</translation>
+        <translation>Zobrazit Časové Razítko</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="386"/>
@@ -7277,7 +7417,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="158"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="158"/>
         <source>Project Editor</source>
-        <translation>Editor projektu</translation>
+        <translation>Editor Projektu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="161"/>
@@ -7288,7 +7428,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     </message>
     <message>
         <source>CSV Player</source>
-        <translation type="vanished">CSV přehrávač</translation>
+        <translation type="vanished">CSV Přehrávač</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="200"/>
@@ -7398,9 +7538,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Vyberte síťovou komunikaci TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="323"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <source>ModBus</source>
         <translation>ModBus</translation>
     </message>
@@ -7428,7 +7566,6 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="351"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="351"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="351"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
@@ -7487,7 +7624,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="182"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="182"/>
         <source>Open Project</source>
-        <translation>Otevřít projekt</translation>
+        <translation>Otevřít Projekt</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="184"/>
@@ -7510,6 +7647,21 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="211"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Přehrát soubor MDF4, jako by to byla živá data ze senzoru (Pro)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="323"/>
+        <source>Modbus</source>
+        <translation>Modbus</translation>
+    </message>
+    <message>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="351"/>
+        <source>CAN</source>
+        <translation>CAN</translation>
+    </message>
+    <message>
+        <source>CANBus</source>
+        <translation type="vanished">CANBus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="382"/>
@@ -7582,21 +7734,21 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="64"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="64"/>
         <source>COM Port</source>
-        <translation>COM port</translation>
+        <translation>COM Port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="92"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="92"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="92"/>
         <source>Baud Rate</source>
-        <translation>Přenosová rychlost</translation>
+        <translation>Přenosová Rychlost</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="151"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="151"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="151"/>
         <source>Data Bits</source>
-        <translation>Datové bity</translation>
+        <translation>Datové Bity</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="167"/>
@@ -7610,28 +7762,28 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
         <source>Stop Bits</source>
-        <translation>Stop bity</translation>
+        <translation>Stop Bity</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="199"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="199"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="199"/>
         <source>Flow Control</source>
-        <translation>Řízení toku</translation>
+        <translation>Řízení Toku</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
         <source>Auto Reconnect</source>
-        <translation>Automatické opětovné připojení</translation>
+        <translation>Automatické Opětovné Připojení</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="243"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="243"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="243"/>
         <source>Send DTR Signal</source>
-        <translation>Odeslat signál DTR</translation>
+        <translation>Odeslat Signál DTR</translation>
     </message>
 </context>
 <context>
@@ -7650,7 +7802,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="1267"/>
         <source>LED Panel (%1)</source>
-        <translation>LED panel (%1)</translation>
+        <translation>LED Panel (%1)</translation>
     </message>
 </context>
 <context>
@@ -7671,7 +7823,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     <message>
         <location filename="../../src/UI/Taskbar.cpp" line="255"/>
         <source>All Data</source>
-        <translation>Všechna data</translation>
+        <translation>Všechna Data</translation>
     </message>
 </context>
 <context>
@@ -7679,7 +7831,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="673"/>
         <source>Select Background Image</source>
-        <translation>Vyberte obrázek na pozadí</translation>
+        <translation>Vyberte Obrázek na Pozadí</translation>
     </message>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="675"/>
@@ -7770,7 +7922,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="269"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="269"/>
         <source>%1 days remaining in your trial.</source>
-        <translation>Zbývá %1 dní ve vaší zkušební verzi.</translation>
+        <translation>zbývá %1 dní ve vaší zkušební verzi.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="279"/>
@@ -7842,7 +7994,7 @@ Rozumím, že až skončí, budu si muset koupit licenci nebo vytvořit verzi GP
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="448"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="448"/>
         <source>Upgrade Now</source>
-        <translation>Upgradovat nyní</translation>
+        <translation>Upgradovat Nyní</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="460"/>
@@ -7870,7 +8022,7 @@ Rozumím, že až skončí, budu si muset koupit licenci nebo vytvořit verzi GP
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Start Trial</source>
-        <translation>Zahájit zkušební verzi</translation>
+        <translation>Zahájit Zkušební Verzi</translation>
     </message>
 </context>
 <context>
@@ -7919,14 +8071,14 @@ Rozumím, že až skončí, budu si muset koupit licenci nebo vytvořit verzi GP
 <context>
     <name>Widgets::DataGrid</name>
     <message>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="137"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="46"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="138"/>
         <source>Title</source>
         <translation>Název</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="137"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="46"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="138"/>
         <source>Value</source>
         <translation>Hodnota</translation>
     </message>
@@ -7936,7 +8088,7 @@ Rozumím, že až skončí, budu si muset koupit licenci nebo vytvořit verzi GP
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="84"/>
         <source>Satellite Imagery</source>
-        <translation>Satelitní snímky</translation>
+        <translation>Satelitní Snímky</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="84"/>
@@ -7946,12 +8098,12 @@ Rozumím, že až skončí, budu si muset koupit licenci nebo vytvořit verzi GP
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Street Map</source>
-        <translation>Ulice mapa</translation>
+        <translation>Ulice Mapa</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Topographic Map</source>
-        <translation>Topografická mapa</translation>
+        <translation>Topografická Mapa</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
@@ -7961,12 +8113,12 @@ Rozumím, že až skončí, budu si muset koupit licenci nebo vytvořit verzi GP
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="86"/>
         <source>Light Gray Canvas</source>
-        <translation>Světle šedé plátno</translation>
+        <translation>Světle Šedé Plátno</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="86"/>
         <source>Dark Gray Canvas</source>
-        <translation>Tmavě šedé plátno</translation>
+        <translation>Tmavě Šedé Plátno</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="87"/>
