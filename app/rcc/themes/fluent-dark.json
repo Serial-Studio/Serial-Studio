@@ -18,7 +18,8 @@
     "tr_TR":"Fluent Karanlık",
     "zh_CN":"Fluent 深色",
     "cs_CZ":"Fluent Tmavý",
-    "uk_UA":"Fluent Темна"
+    "uk_UA":"Fluent Темна",
+    "hi_IN":"फ्लुएंट डार्क"
   },
   "colors": {
  "groupbox_border": "#3D3D3D",

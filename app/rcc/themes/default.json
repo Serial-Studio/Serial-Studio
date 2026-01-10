@@ -18,7 +18,8 @@
     "tr_TR":"Varsayılan",
     "zh_CN":"默认",
     "cs_CZ":"Výchozí",
-    "uk_UA":"Типова"
+    "uk_UA":"Типова",
+    "hi_IN":"डिफ़ॉल्ट"
   },
   "colors":{
     "groupbox_border": "#c2c2c2",

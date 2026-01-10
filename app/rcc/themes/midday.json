@@ -18,7 +18,8 @@
     "tr_TR": "Gün Ortası",
     "zh_CN": "正午",
     "cs_CZ": "Poledne",
-    "uk_UA": "Полудень"
+    "uk_UA": "Полудень",
+    "hi_IN": "दोपहर"
   },
   "colors": {
     "groupbox_border": "#C2C7CC",

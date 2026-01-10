@@ -4,9 +4,9 @@
 
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Este software é livre e de código aberto sob a licença GNU GPLv3.
-Você pode usar, modificar e redistribuir, desde que as obras derivadas
-permaneçam de código aberto sob os mesmos termos.
+Este software é gratuito e de código aberto sob a licença GNU GPLv3.
+Você pode usar, modificar e redistribuir, desde que os trabalhos
+derivados permaneçam de código aberto sob os mesmos termos.
 
 → Licença: https://www.gnu.org/licenses/gpl-3.0.html
 → Fonte:  https://github.com/serial-studio/serial-studio

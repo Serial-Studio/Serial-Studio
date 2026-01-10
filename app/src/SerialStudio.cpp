@@ -19,12 +19,12 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "CSV/Player.h"
+#include "MDF4/Player.h"
 #include "SerialStudio.h"
 #include "Misc/ThemeManager.h"
 
 #ifdef BUILD_COMMERCIAL
-#  include "CSV/Player.h"
-#  include "MDF4/Player.h"
 #  include "Licensing/Trial.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif

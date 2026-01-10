@@ -25,6 +25,7 @@
 #include <QQuickStyle>
 #include <QApplication>
 #include <QStyleFactory>
+#include <QLoggingCategory>
 #include <QCommandLineParser>
 
 #include "AppInfo.h"
@@ -80,6 +81,9 @@ static char **adjustArgumentsForFreeType(int &argc, char **argv);
  */
 int main(int argc, char **argv)
 {
+  // Configure logging categories
+  QLoggingCategory::setFilterRules("*font*=false");
+
   // Set application info
   QApplication::setApplicationName(APP_EXECUTABLE);
   QApplication::setOrganizationName(APP_DEVELOPER);

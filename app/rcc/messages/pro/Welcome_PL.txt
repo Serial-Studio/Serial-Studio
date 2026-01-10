@@ -14,7 +14,7 @@ komercyjnego i własnościowego.
 → Dowiedz się więcej: https://serial-studio.com/
 
 Funkcje Pro:
-→ Integracja MQTT
+→ Integracja z MQTT
 → Wizualizacja XY i 3D
 → Wejście audio
 → Sterowniki CANBus i MODBUS

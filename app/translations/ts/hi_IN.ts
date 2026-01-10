@@ -1,31 +1,31 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh_CN" sourcelanguage="en_US">
+<TS version="2.1" language="hi_IN" sourcelanguage="en_US">
 <context>
     <name>About</name>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="39"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="39"/>
         <source>About</source>
-        <translation>关于</translation>
+        <translation>के बारे में</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="85"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="85"/>
         <source>Version %1</source>
-        <translation>版本 %1</translation>
+        <translation>संस्करण %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="95"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="95"/>
         <source>Copyright © %1 %2</source>
-        <translation>版权所有 © %1 %2</translation>
+        <translation>कॉपीराइट © %1 %2</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="100"/>
         <source>All Rights Reserved</source>
-        <translation>保留所有权利</translation>
+        <translation>सर्वाधिकार सुरक्षित</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="116"/>
@@ -33,75 +33,75 @@
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
-        <translation>%1 是自由软件：您可以根据自由软件基金会发布的 GNU 通用公共许可证的条款重新分发和/或修改它；许可证的第 3 版，或（根据您的选择）任何更高版本。
+        <translation>%1 एक मुफ्त सॉफ़्टवेयर है: आप इसे GNU जनरल पब्लिक लाइसेंस की शर्तों के तहत पुनर्वितरित और/या संशोधित कर सकते हैं जैसा कि फ्री सॉफ्टवेयर फाउंडेशन द्वारा प्रकाशित किया गया है; या तो लाइसेंस का संस्करण 3, या (आपकी पसंद पर) कोई भी बाद का संस्करण।
 
-%1 的发布希望它会有用，但没有任何保证；甚至没有关于适销性或特定用途适用性的隐含保证。有关详细信息，请参阅 GNU 通用公共许可证。</translation>
+%1 को इस उम्मीद में वितरित किया गया है कि यह उपयोगी होगा, लेकिन बिना किसी वारंटी के; यहां तक कि व्यापारिकता या किसी विशेष उद्देश्य के लिए उपयुक्तता की निहित वारंटी के बिना भी। अधिक विवरण के लिए GNU जनरल पब्लिक लाइसेंस देखें।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="135"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="135"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
-        <translation>此配置被许可用于商业和专有用途。它可以在闭源和商业应用中使用，须遵守商业许可证条款。</translation>
+        <translation>यह कॉन्फ़िगरेशन वाणिज्यिक और स्वामित्व उपयोग के लिए लाइसेंस प्राप्त है। इसे वाणिज्यिक लाइसेंस की शर्तों के अधीन बंद-स्रोत और वाणिज्यिक अनुप्रयोगों में उपयोग किया जा सकता है।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="149"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="149"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
-        <translation>此配置仅供个人和评估用途。除非激活有效的商业许可证，否则禁止商业使用。</translation>
+        <translation>यह कॉन्फ़िगरेशन केवल व्यक्तिगत और मूल्यांकन उद्देश्यों के लिए है। जब तक एक वैध वाणिज्यिक लाइसेंस सक्रिय नहीं किया जाता है, वाणिज्यिक उपयोग निषिद्ध है।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="163"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="163"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>本软件按“原样”提供，不提供任何明示或暗示的保证，包括但不限于适销性或特定用途适用性的保证。在任何情况下，作者均不对因使用本软件而产生的任何损害负责。</translation>
+        <translation>यह सॉफ़्टवेयर 'जैसा है' बिना किसी प्रकार की वारंटी के प्रदान किया गया है, चाहे वह स्पष्ट हो या निहित, जिसमें लेकिन व्यापारिकता या किसी विशेष उद्देश्य के लिए उपयुक्तता की वारंटी शामिल नहीं है। किसी भी स्थिति में लेखक इस सॉफ़्टवेयर के उपयोग से उत्पन्न किसी भी क्षति के लिए उत्तरदायी नहीं होगा।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="183"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="183"/>
         <source>Manage License</source>
-        <translation>管理许可证</translation>
+        <translation>लाइसेंस प्रबंधित करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="192"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="192"/>
         <source>Donate</source>
-        <translation>捐赠</translation>
+        <translation>दान करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="203"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="203"/>
         <source>Check for Updates</source>
-        <translation>检查更新</translation>
+        <translation>अपडेट्स की जाँच करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="212"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="212"/>
         <source>License Agreement</source>
-        <translation>许可协议</translation>
+        <translation>लाइसेंस समझौता</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="221"/>
         <source>Report Bug</source>
-        <translation>报告错误</translation>
+        <translation>बग रिपोर्ट करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="230"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="230"/>
         <source>Acknowledgements</source>
-        <translation>鸣谢</translation>
+        <translation>आभार</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="239"/>
         <source>Website</source>
-        <translation>网站</translation>
+        <translation>वेबसाइट</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="254"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="254"/>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation>बंद करें</translation>
     </message>
 </context>
 <context>
@@ -110,19 +110,19 @@
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="34"/>
         <source>Acknowledgements</source>
-        <translation>鸣谢</translation>
+        <translation>आभार</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="69"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="69"/>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation>बंद करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="83"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="83"/>
         <source>About Qt...</source>
-        <translation>关于 Qt...</translation>
+        <translation>Qt के बारे में...</translation>
     </message>
 </context>
 <context>
@@ -131,37 +131,37 @@
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <source>Change Icon</source>
-        <translation>更改图标</translation>
+        <translation>आइकन बदलें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="106"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="106"/>
         <source>Change the icon used for this action</source>
-        <translation>更改此操作使用的图标</translation>
+        <translation>इस क्रिया के लिए प्रयुक्त चिह्न बदलें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="127"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="127"/>
         <source>Duplicate</source>
-        <translation>复制</translation>
+        <translation>प्रतिलिपि बनाएँ</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="129"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="129"/>
         <source>Duplicate this action with all its settings</source>
-        <translation>复制此操作及其所有设置</translation>
+        <translation>इस क्रिया को इसकी सभी सेटिंग्स के साथ प्रतिलिपि बनाएँ</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="139"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="139"/>
         <source>Delete</source>
-        <translation>删除</translation>
+        <translation>हटाएँ</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="143"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="143"/>
         <source>Delete this action from the project</source>
-        <translation>从项目中删除此操作</translation>
+        <translation>इस क्रिया को परियोजना से हटाएँ</translation>
     </message>
 </context>
 <context>
@@ -169,39 +169,39 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="68"/>
         <source>No Microphone Detected</source>
-        <translation>未检测到麦克风</translation>
+        <translation>कोई माइक्रोफोन नहीं मिला</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="77"/>
         <source>Connect a mic or check your settings</source>
-        <translation>连接麦克风或检查您的设置</translation>
+        <translation>एक माइक कनेक्ट करें या अपनी सेटिंग्स की जाँच करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="101"/>
         <source>Input Device</source>
-        <translation>输入设备</translation>
+        <translation>इनपुट डिवाइस</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="122"/>
         <source>Sample Rate</source>
-        <translation>采样率</translation>
+        <translation>नमूना दर</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="143"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="218"/>
         <source>Sample Format</source>
-        <translation>采样格式</translation>
+        <translation>नमूना प्रारूप</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="164"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="239"/>
         <source>Channels</source>
-        <translation>通道</translation>
+        <translation>चैनल</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="197"/>
         <source>Output Device</source>
-        <translation>输出设备</translation>
+        <translation>आउटपुट डिवाइस</translation>
     </message>
 </context>
 <context>
@@ -210,120 +210,97 @@
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
         <source>Device</source>
-        <translation>设备</translation>
+        <translation>डिवाइस</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
         <source>Service</source>
-        <translation>服务</translation>
+        <translation>सेवा</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
         <source>Characteristic</source>
-        <translation>特征</translation>
+        <translation>विशेषता</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="174"/>
         <source>Scanning....</source>
-        <translation>正在扫描....</translation>
+        <translation>स्कैनिंग....</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <source>No Bluetooth Adapter Detected</source>
-        <translation>未检测到蓝牙适配器</translation>
+        <translation>कोई ब्लूटूथ एडेप्टर नहीं मिला</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
         <source>Connect a Bluetooth adapter or check your system settings</source>
-        <translation>连接蓝牙适配器或检查您的系统设置</translation>
+        <translation>एक ब्लूटूथ एडेप्टर कनेक्ट करें या अपने सिस्टम सेटिंग्स की जाँच करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="248"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="248"/>
         <source>This OS is not Supported Yet.</source>
-        <translation>此操作系统尚不支持。</translation>
+        <translation>यह ऑपरेटिंग सिस्टम अभी समर्थित नहीं है।</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="259"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="259"/>
         <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
-        <translation>一旦 Qt 官方支持该操作系统，我们将更新 Serial Studio 以兼容。</translation>
-    </message>
-    <message>
-        <source>Sorry, this system is not supported yet. We'll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
-        <translation type="vanished">抱歉，该系统尚不支持。一旦 Qt 官方支持此操作系统，我们将更新 Serial Studio 以配合使用。</translation>
+        <translation>जैसे ही Qt इसे आधिकारिक रूप से समर्थन करेगा, हम इस ऑपरेटिंग सिस्टम के साथ काम करने के लिए Serial Studio को अपडेट करेंगे।</translation>
     </message>
 </context>
 <context>
     <name>CANBus</name>
     <message>
-        <source>CAN Plugin</source>
-        <translation type="vanished">CAN 插件</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="52"/>
         <source>No CAN Drivers Found</source>
-        <translation>未找到CAN驱动程序</translation>
+        <translation>कोई CAN ड्राइवर नहीं मिला</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="66"/>
         <source>Install CAN hardware drivers for your system</source>
-        <translation>为您的系统安装CAN硬件驱动程序</translation>
+        <translation>अपने सिस्टम के लिए CAN हार्डवेयर ड्राइवर इंस्टॉल करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="92"/>
         <source>CAN Driver</source>
-        <translation>CAN驱动程序</translation>
+        <translation>CAN ड्राइवर</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="136"/>
         <source>Interface</source>
-        <translation>接口</translation>
+        <translation>इंटरफ़ेस</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="167"/>
         <source>Bitrate</source>
-        <translation>比特率</translation>
+        <translation>बिटरेट</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="238"/>
         <source>Flexible Data-Rate</source>
-        <translation>灵活的数据速率</translation>
+        <translation>लचीला डेटा-दर</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="269"/>
         <source>DBC Database</source>
-        <translation>DBC数据库</translation>
+        <translation>DBC डेटाबेस</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="273"/>
         <source>Import DBC File...</source>
-        <translation>导入DBC文件...</translation>
+        <translation>DBC फ़ाइल आयात करें...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="306"/>
         <source>No CAN Interfaces Found</source>
-        <translation>未找到CAN接口</translation>
-    </message>
-    <message>
-        <source>CAN FD</source>
-        <translation type="vanished">CAN FD</translation>
-    </message>
-</context>
-<context>
-    <name>CSV::Export</name>
-    <message>
-        <source>CSV File Error</source>
-        <translation type="vanished">CSV 文件错误</translation>
-    </message>
-    <message>
-        <source>Cannot open CSV file for writing!</source>
-        <translation type="vanished">无法打开 CSV 文件进行写入！</translation>
+        <translation>कोई CAN इंटरफ़ेस नहीं मिला</translation>
     </message>
 </context>
 <context>
@@ -331,130 +308,103 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="177"/>
         <source>Select CSV file</source>
-        <translation>选择 CSV 文件</translation>
-    </message>
-    <message>
-        <source>CSV files</source>
-        <translation type="vanished">CSV 文件</translation>
+        <translation>CSV फ़ाइल चुनें</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="179"/>
         <source>CSV files (*.csv)</source>
-        <translation>CSV 文件 (*.csv)</translation>
+        <translation>CSV फाइलें (*.csv)</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="312"/>
         <source>Device Connection Active</source>
-        <translation>设备连接已激活</translation>
+        <translation>डिवाइस कनेक्शन सक्रिय</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="313"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
-        <translation>要使用此功能，您必须断开设备连接。您想继续吗？</translation>
+        <translation>इस सुविधा का उपयोग करने के लिए, आपको डिवाइस से डिस्कनेक्ट करना होगा। क्या आप जारी रखना चाहते हैं?</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="421"/>
         <source>Insufficient Data in CSV File</source>
-        <translation>CSV 文件中的数据不足</translation>
+        <translation>CSV फाइल में अपर्याप्त डेटा</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="422"/>
         <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
-        <translation>CSV 文件必须至少包含两帧（数据行）才能继续。请检查文件并重试。</translation>
+        <translation>CSV फाइल में कम से कम दो फ्रेम (डेटा पंक्तियाँ) होना आवश्यक है। कृपया फाइल की जाँच करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="433"/>
         <source>Cannot read CSV file</source>
-        <translation>无法读取 CSV 文件</translation>
+        <translation>CSV फाइल पढ़ी नहीं जा सकती</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="434"/>
         <source>Please check file permissions &amp; location</source>
-        <translation>请检查文件权限和位置</translation>
+        <translation>कृपया फाइल अनुमतियाँ और स्थान जांचें</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="705"/>
         <source>Invalid CSV</source>
-        <translation>无效的 CSV</translation>
+        <translation>अमान्य CSV</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="706"/>
         <source>The CSV file does not contain any data or headers.</source>
-        <translation>CSV 文件不包含任何数据或标题。</translation>
+        <translation>CSV फाइल में कोई डेटा या हेडर नहीं है।</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="717"/>
         <source>Select a date/time column</source>
-        <translation>选择一个日期/时间列</translation>
+        <translation>दिनांक/समय कॉलम चुनें</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="717"/>
         <location filename="../../src/CSV/Player.cpp" line="727"/>
         <source>Set interval manually</source>
-        <translation>手动设置间隔</translation>
+        <translation>अंतराल को मैन्युअल रूप से सेट करें</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="719"/>
         <source>CSV Date/Time Selection</source>
-        <translation>CSV 日期/时间选择</translation>
+        <translation>CSV दिनांक/समय चयन</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="720"/>
         <source>Choose how to handle the date/time data:</source>
-        <translation>选择如何处理日期/时间数据：</translation>
+        <translation>दिनांक/समय डेटा को कैसे संभालें चुनें:</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="730"/>
         <source>Set Interval</source>
-        <translation>设置间隔</translation>
+        <translation>अंतराल सेट करें</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="731"/>
         <source>Please enter the interval between rows in milliseconds:</source>
-        <translation>请输入行之间的间隔（毫秒）：</translation>
+        <translation>कृपया पंक्तियों के बीच का अंतराल मिलीसेकंड में दर्ज करें:</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="745"/>
         <source>Select Date/Time Column</source>
-        <translation>选择日期/时间列</translation>
+        <translation>दिनांक/समय स्तंभ चुनें</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="746"/>
         <source>Please select the column that contains the date/time data:</source>
-        <translation>请选择包含日期/时间数据的列：</translation>
+        <translation>कृपया वह स्तंभ चुनें जिसमें दिनांक/समय डेटा है:</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="755"/>
         <source>Invalid Selection</source>
-        <translation>无效选择</translation>
+        <translation>अमान्य चयन</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="756"/>
         <source>The selected column is not valid.</source>
-        <translation>所选列无效。</translation>
-    </message>
-</context>
-<context>
-    <name>Canvas</name>
-    <message>
-        <source>Set Wallpaper...</source>
-        <translation type="vanished">设置壁纸...</translation>
-    </message>
-    <message>
-        <source>Clear Wallpaper</source>
-        <translation type="vanished">清除壁纸</translation>
-    </message>
-    <message>
-        <source>Tile Windows</source>
-        <translation type="vanished">平铺窗口</translation>
-    </message>
-    <message>
-        <source>Pro features detected in this project.</source>
-        <translation type="vanished">在此项目中检测到专业功能。</translation>
-    </message>
-    <message>
-        <source>Fallback widgets are active. Purchase a license for full functionality.</source>
-        <translation type="vanished">回退小部件已激活。购买许可证以获得完整功能。</translation>
+        <translation>चयनित स्तंभ मान्य नहीं है।</translation>
     </message>
 </context>
 <context>
@@ -463,7 +413,7 @@
         <location filename="../../qml/MainWindow/Panes/Console.qml" line="31"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Console.qml" line="31"/>
         <source>Console</source>
-        <translation>控制台</translation>
+        <translation>कंसोल</translation>
     </message>
 </context>
 <context>
@@ -471,12 +421,12 @@
     <message>
         <location filename="../../src/Console/Export.cpp" line="275"/>
         <source>Console Export is a Pro feature.</source>
-        <translation>控制台导出是专业版功能。</translation>
+        <translation>कंसोल निर्यात एक प्रो फीचर है।</translation>
     </message>
     <message>
         <location filename="../../src/Console/Export.cpp" line="276"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
-        <translation>此功能需要许可证。请购买以启用控制台导出。</translation>
+        <translation>इस फीचर के लिए लाइसेंस की आवश्यकता है। कृपया कंसोल निर्यात सक्षम करने के लिए एक खरीदें।</translation>
     </message>
 </context>
 <context>
@@ -484,47 +434,47 @@
     <message>
         <location filename="../../src/Console/Handler.cpp" line="163"/>
         <source>ASCII</source>
-        <translation>ASCII</translation>
+        <translation>एएससीआईआई</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="164"/>
         <source>HEX</source>
-        <translation>HEX</translation>
+        <translation>हेक्स</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="175"/>
         <source>No Line Ending</source>
-        <translation>无行结尾</translation>
+        <translation>कोई पंक्ति समाप्ति नहीं</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="176"/>
         <source>New Line</source>
-        <translation>新行</translation>
+        <translation>नई पंक्ति</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="177"/>
         <source>Carriage Return</source>
-        <translation>回车</translation>
+        <translation>कैरिज रिटर्न</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="178"/>
         <source>CR + NL</source>
-        <translation>回车 + 新行</translation>
+        <translation>सीआर + एनएल</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="189"/>
         <source>Plain Text</source>
-        <translation>纯文本</translation>
+        <translation>सादा पाठ</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="190"/>
         <source>Hexadecimal</source>
-        <translation>十六进制</translation>
+        <translation>हेक्साडेसिमल</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="211"/>
         <source>No Checksum</source>
-        <translation>无校验和</translation>
+        <translation>कोई चेकसम नहीं</translation>
     </message>
 </context>
 <context>
@@ -533,7 +483,7 @@
         <location filename="../../qml/Dialogs/CsvPlayer.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/CsvPlayer.qml" line="34"/>
         <source>CSV Player</source>
-        <translation>CSV 播放器</translation>
+        <translation>CSV प्लेयर</translation>
     </message>
 </context>
 <context>
@@ -541,22 +491,22 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="41"/>
         <source>DBC File Preview</source>
-        <translation>DBC 文件预览</translation>
+        <translation>DBC फ़ाइल पूर्वावलोकन</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="162"/>
         <source>DBC File: %1</source>
-        <translation>DBC 文件: %1</translation>
+        <translation>DBC फ़ाइल: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
         <source>Review the CAN messages and signals that will be imported into a new Serial Studio project.</source>
-        <translation>查看将导入到新Serial Studio项目中的CAN消息和信号。</translation>
+        <translation>उन CAN संदेशों और संकेतों की समीक्षा करें जो एक नए Serial Studio प्रोजेक्ट में आयात किए जाएंगे।</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="181"/>
         <source>Messages</source>
-        <translation>消息</translation>
+        <translation>संदेश</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="215"/>
@@ -566,37 +516,37 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="222"/>
         <source>Message Name</source>
-        <translation>消息名称</translation>
+        <translation>संदेश नाम</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="230"/>
         <source>CAN ID</source>
-        <translation>CAN ID</translation>
+        <translation>CAN आईडी</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="237"/>
         <source>Signals</source>
-        <translation>信号</translation>
+        <translation>संकेत</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="319"/>
         <source>No messages found in DBC file.</source>
-        <translation>DBC文件中未找到消息。</translation>
+        <translation>DBC फ़ाइल में कोई संदेश नहीं मिला।</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="337"/>
         <source>Total: %1 messages, %2 signals</source>
-        <translation>总计：%1条消息，%2个信号</translation>
+        <translation>कुल: %1 संदेश, %2 संकेत</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="346"/>
         <source>Cancel</source>
-        <translation>取消</translation>
+        <translation>रद्द करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="360"/>
         <source>Create Project</source>
-        <translation>创建项目</translation>
+        <translation>प्रोजेक्ट बनाएँ</translation>
     </message>
 </context>
 <context>
@@ -605,7 +555,7 @@
         <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard.qml" line="34"/>
         <source>Dashboard</source>
-        <translation>仪表板</translation>
+        <translation>डैशबोर्ड</translation>
     </message>
 </context>
 <context>
@@ -614,31 +564,31 @@
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
         <source>Set Wallpaper...</source>
-        <translation>设置壁纸...</translation>
+        <translation>वॉलपेपर सेट करें...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
         <source>Clear Wallpaper</source>
-        <translation>清除壁纸</translation>
+        <translation>वॉलपेपर साफ़ करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
         <source>Tile Windows</source>
-        <translation>窗口平铺</translation>
+        <translation>विंडो टाइल करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="84"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="84"/>
         <source>Pro features detected in this project.</source>
-        <translation>此项目中检测到专业功能。</translation>
+        <translation>इस प्रोजेक्ट में प्रो सुविधाएँ मिलीं।</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="85"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="85"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
-        <translation>后备小部件已激活。购买许可证以获取完整功能。</translation>
+        <translation>फॉलबैक विजेट सक्रिय हैं। पूर्ण कार्यक्षमता के लिए लाइसेंस खरीदें।</translation>
     </message>
 </context>
 <context>
@@ -647,13 +597,13 @@
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <source>Pause</source>
-        <translation>暂停</translation>
+        <translation>विराम</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <source>Resume</source>
-        <translation>恢复</translation>
+        <translation>पुनः आरंभ</translation>
     </message>
 </context>
 <context>
@@ -661,68 +611,68 @@
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="116"/>
         <source>Import DBC File</source>
-        <translation>导入 DBC 文件</translation>
+        <translation>DBC फ़ाइल आयात करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="117"/>
         <source>DBC Files (*.dbc);;All Files (*)</source>
-        <translation>DBC 文件 (*.dbc);;所有文件 (*)</translation>
+        <translation>DBC फ़ाइलें (*.dbc);;सभी फ़ाइलें (*)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="163"/>
         <source>Failed to parse DBC file: %1</source>
-        <translation>无法解析 DBC 文件：%1</translation>
+        <translation>DBC फ़ाइल पार्स करने में विफल: %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="164"/>
         <source>Please verify the file format and try again.</source>
-        <translation>请验证文件格式并重试。</translation>
+        <translation>कृपया फ़ाइल प्रारूप की जाँच करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="165"/>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="227"/>
         <source>DBC Import Error</source>
-        <translation>DBC 导入错误</translation>
+        <translation>DBC आयात त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="173"/>
         <source>DBC file contains no messages</source>
-        <translation>DBC 文件不包含消息</translation>
+        <translation>DBC फ़ाइल में कोई संदेश नहीं है</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="174"/>
         <source>The selected file does not contain any CAN message definitions.</source>
-        <translation>所选文件不包含任何 CAN 消息定义。</translation>
+        <translation>चयनित फ़ाइल में कोई भी CAN संदेश परिभाषाएँ नहीं हैं।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="175"/>
         <source>DBC Import Warning</source>
-        <translation>DBC 导入警告</translation>
+        <translation>DBC आयात चेतावनी</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="224"/>
         <source>Failed to create temporary project file</source>
-        <translation>无法创建临时项目文件</translation>
+        <translation>अस्थायी प्रोजेक्ट फ़ाइल बनाने में विफल</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="225"/>
         <source>Check if the application has write permissions to the temporary directory.</source>
-        <translation>请检查应用程序是否有写入临时目录的权限。</translation>
+        <translation>जांचें कि क्या एप्लिकेशन को अस्थायी निर्देशिका में लिखने की अनुमति है।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="243"/>
         <source>Successfully imported DBC file with %1 messages and %2 signals.</source>
-        <translation>成功导入DBC文件，包含%1条消息和%2个信号。</translation>
+        <translation>%1 संदेशों और %2 संकेतों के साथ DBC फ़ाइल सफलतापूर्वक आयात की गई।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="246"/>
         <source>The project editor is now open for customization.</source>
-        <translation>项目编辑器现已打开以供自定义。</translation>
+        <translation>प्रोजेक्ट संपादक अब अनुकूलन के लिए खुला है।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="248"/>
         <source>DBC Import Complete</source>
-        <translation>DBC导入完成</translation>
+        <translation>DBC आयात पूर्ण</translation>
     </message>
 </context>
 <context>
@@ -730,54 +680,54 @@
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="260"/>
         <source>Cannot read JSON file</source>
-        <translation>无法读取JSON文件</translation>
+        <translation>JSON फ़ाइल नहीं पढ़ सकते</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="261"/>
         <source>Please check file permissions &amp; location</source>
-        <translation>请检查文件权限和位置</translation>
+        <translation>कृपया फ़ाइल अनुमतियाँ और स्थान जांचें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="276"/>
         <source>JSON validation error</source>
-        <translation>JSON验证错误</translation>
+        <translation>JSON मान्यकरण त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="295"/>
         <source>This file isn't a valid project file</source>
-        <translation>此文件不是有效的项目文件</translation>
+        <translation>यह फ़ाइल मान्य प्रोजेक्ट फ़ाइल नहीं है</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="296"/>
         <source>Make sure it's a properly formatted JSON project.</source>
-        <translation>请确保它是格式正确的JSON项目。</translation>
+        <translation>सुनिश्चित करें कि यह एक सही स्वरूपित JSON प्रोजेक्ट है।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="703"/>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="745"/>
         <source>Channel %1</source>
-        <translation>通道%1</translation>
+        <translation>चैनल %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="715"/>
         <source>Audio Input</source>
-        <translation>音频输入</translation>
+        <translation>ऑडियो इनपुट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="721"/>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="755"/>
         <source>Quick Plot</source>
-        <translation>快速绘图</translation>
+        <translation>त्वरित प्लॉट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="761"/>
         <source>Quick Plot Data</source>
-        <translation>快速绘图数据</translation>
+        <translation>त्वरित प्लॉट डेटा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="775"/>
         <source>Multiple Plots</source>
-        <translation>多个绘图</translation>
+        <translation>बहु प्लॉट्स</translation>
     </message>
 </context>
 <context>
@@ -785,45 +735,45 @@
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="267"/>
         <source>Frame parser code updated successfully!</source>
-        <translation>帧解析器代码更新成功！</translation>
+        <translation>फ्रेम पार्सर कोड सफलतापूर्वक अपडेट किया गया!</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="268"/>
         <source>No errors have been detected in the code.</source>
-        <translation>代码中未检测到错误。</translation>
+        <translation>कोड में कोई त्रुटि नहीं मिली है।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="327"/>
         <source>JavaScript Syntax Error</source>
-        <translation>JavaScript语法错误</translation>
+        <translation>जावास्क्रिप्ट सिंटैक्स त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="328"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
-        <translation>解析器代码在第%1行包含语法错误：
+        <translation>पार्सर कोड में लाइन %1 पर एक सिंटैक्स त्रुटि है:
 
 %2</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="339"/>
         <source>JavaScript Exception Occurred</source>
-        <translation>发生JavaScript异常</translation>
+        <translation>जावास्क्रिप्ट अपवाद उत्पन्न हुआ</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="340"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
-        <translation>解析器代码触发了以下异常：
+        <translation>पार्सर कोड ने निम्नलिखित अपवादों को उत्पन्न किया:
 
 %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="351"/>
         <source>Missing Parse Function</source>
-        <translation>缺少解析函数</translation>
+        <translation>पार्स फ़ंक्शन गायब है</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="352"/>
@@ -831,29 +781,29 @@
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
-        <translation>'parse'函数在脚本中未定义。
+        <translation>'parse' फ़ंक्शन स्क्रिप्ट में परिभाषित नहीं है।
 
-请确保您的代码包括：
+कृपया सुनिश्चित करें कि आपके कोड में शामिल है:
 function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="363"/>
         <source>Invalid Parse Function</source>
-        <translation>无效的解析函数</translation>
+        <translation>अमान्य पार्स फ़ंक्शन</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="364"/>
         <source>The 'parse' property exists but is not a callable function.
 
 Please ensure 'parse' is declared as a function.</source>
-        <translation>'parse'属性存在但不是可调用的函数。
+        <translation>'parse' प्रॉपर्टी मौजूद है लेकिन यह एक कॉल करने योग्य फ़ंक्शन नहीं है।
 
-请确保'parse'被声明为一个函数。</translation>
+कृपया सुनिश्चित करें कि 'parse' को एक फ़ंक्शन के रूप में घोषित किया गया है।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="377"/>
         <source>Invalid Function Declaration</source>
-        <translation>无效的函数声明</translation>
+        <translation>अमान्य फ़ंक्शन घोषणा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="378"/>
@@ -861,15 +811,15 @@ Please ensure 'parse' is declared as a function.</source>
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation>未找到有效的'parse'函数声明。
+        <translation>कोई मान्य 'parse' फ़ंक्शन घोषणा नहीं मिली।
 
-预期格式：
+अपेक्षित प्रारूप:
 function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="393"/>
         <source>Invalid Function Parameter</source>
-        <translation>无效的函数参数</translation>
+        <translation>अमान्य फ़ंक्शन पैरामीटर</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="394"/>
@@ -877,15 +827,15 @@ function parse(frame) { ... }</translation>
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation>'parse'函数必须至少有一个参数。
+        <translation>'parse' फ़ंक्शन में कम से कम एक पैरामीटर होना चाहिए।
 
-预期格式：
+अपेक्षित प्रारूप:
 function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="405"/>
         <source>Deprecated Function Signature</source>
-        <translation>已弃用的函数签名</translation>
+        <translation>अप्रचलित फ़ंक्शन हस्ताक्षर</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="406"/>
@@ -895,17 +845,17 @@ This format is no longer supported. Please update to the new single-parameter fo
 function parse(%1) { ... }
 
 The separator parameter is no longer needed.</source>
-        <translation>'parse'函数使用旧的双参数格式：parse(%1, %2)
+        <translation>'parse' फ़ंक्शन पुराने दो-पैरामीटर प्रारूप का उपयोग करता है: parse(%1, %2)
 
-此格式不再支持。请更新为新的单参数格式：
+यह प्रारूप अब समर्थित नहीं है। कृपया नए एकल-पैरामीटर प्रारूप में अपडेट करें:
 function parse(%1) { ... }
 
-不再需要分隔符参数。</translation>
+विभाजक पैरामीटर की अब आवश्यकता नहीं है।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="427"/>
         <source>Parse Function Runtime Error</source>
-        <translation>解析函数运行时错误</translation>
+        <translation>पार्स फ़ंक्शन रनटाइम त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="428"/>
@@ -914,188 +864,188 @@ function parse(%1) { ... }
 %2
 
 Please fix the error in the function body.</source>
-        <translation>解析函数在第 %1 行包含错误：
+        <translation>पार्स फ़ंक्शन में पंक्ति %1 पर त्रुटि है:
 
 %2
 
-请修正函数体中的错误。</translation>
+कृपया फ़ंक्शन बॉडी में त्रुटि को ठीक करें।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="525"/>
         <source>The document has been modified.</source>
-        <translation>文档已被修改。</translation>
+        <translation>दस्तावेज़ को संशोधित किया गया है।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="526"/>
         <location filename="../../src/DataModel/FrameParser.cpp" line="546"/>
         <location filename="../../src/DataModel/FrameParser.cpp" line="854"/>
         <source>Are you sure you want to continue?</source>
-        <translation>您确定要继续吗？</translation>
+        <translation>क्या आप वाकई जारी रखना चाहते हैं?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="545"/>
         <source>The document has been modified!</source>
-        <translation>文档已被修改！</translation>
+        <translation>दस्तावेज़ को संशोधित किया गया है!</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="553"/>
         <source>Select Javascript file to import</source>
-        <translation>选择要导入的 Javascript 文件</translation>
+        <translation>आयात करने के लिए जावास्क्रिप्ट फ़ाइल चुनें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="603"/>
         <source>Code Validation Successful</source>
-        <translation>代码验证成功</translation>
+        <translation>कोड सत्यापन सफल</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="604"/>
         <source>No syntax errors detected in the parser code.</source>
-        <translation>在解析器代码中未检测到语法错误。</translation>
+        <translation>पार्सर कोड में कोई वाक्य रचना त्रुटियाँ नहीं मिलीं।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="649"/>
         <source>Select Frame Parser Template</source>
-        <translation>选择帧解析器模板</translation>
+        <translation>फ़्रेम पार्सर टेम्पलेट चुनें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="650"/>
         <source>Choose a template to load:</source>
-        <translation>选择要加载的模板：</translation>
+        <translation>लोड करने के लिए एक टेम्पलेट चुनें:</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="802"/>
         <source>AT command responses</source>
-        <translation>AT 命令响应</translation>
+        <translation>एटी कमांड प्रतिक्रियाएँ</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="803"/>
         <source>Base64-encoded data</source>
-        <translation>Base64编码数据</translation>
+        <translation>बेस64-एन्कोडेड डेटा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="804"/>
         <source>Binary TLV (Tag-Length-Value)</source>
-        <translation>二进制TLV（标签-长度-值）</translation>
+        <translation>बाइनरी टीएलवी (टैग-लंबाई-मूल्य)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="805"/>
         <source>COBS-encoded frames</source>
-        <translation>COBS编码帧</translation>
+        <translation>सीओबीएस-एन्कोडेड फ्रेम्स</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="806"/>
         <source>Comma-separated data</source>
-        <translation>逗号分隔数据</translation>
+        <translation>कॉमा-सेपरेटेड डेटा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="807"/>
         <source>Fixed-width fields</source>
-        <translation>固定宽度字段</translation>
+        <translation>फिक्स्ड-चौड़ाई फील्ड्स</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="808"/>
         <source>Hexadecimal bytes</source>
-        <translation>十六进制字节</translation>
+        <translation>हेक्साडेसिमल बाइट्स</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="809"/>
         <source>INI/config format</source>
-        <translation>INI/配置格式</translation>
+        <translation>आईएनआई/कॉन्फ़िग प्रारूप</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="810"/>
         <source>JSON data</source>
-        <translation>JSON数据</translation>
+        <translation>जेएसओएन डेटा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="811"/>
         <source>Key-value pairs</source>
-        <translation>键值对</translation>
+        <translation>कुंजी-मूल्य जोड़े</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="812"/>
         <source>MAVLink messages</source>
-        <translation>MAVLink消息</translation>
+        <translation>MAVLink संदेश</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="813"/>
         <source>MessagePack data</source>
-        <translation>MessagePack 数据</translation>
+        <translation>MessagePack डेटा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="814"/>
         <source>Modbus frames</source>
-        <translation>Modbus 帧</translation>
+        <translation>Modbus फ्रेम</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="815"/>
         <source>NMEA 0183 sentences</source>
-        <translation>NMEA 0183 语句</translation>
+        <translation>NMEA 0183 वाक्य</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="816"/>
         <source>NMEA 2000 messages</source>
-        <translation>NMEA 2000 消息</translation>
+        <translation>NMEA 2000 संदेश</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="817"/>
         <source>Pipe-delimited data</source>
-        <translation>管道分隔数据</translation>
+        <translation>पाइप-डिलिमिटेड डेटा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="818"/>
         <source>Raw bytes</source>
-        <translation>原始字节</translation>
+        <translation>कच्चे बाइट्स</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="819"/>
         <source>RTCM corrections</source>
-        <translation>RTCM 校正</translation>
+        <translation>RTCM सुधार</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="820"/>
         <source>Semicolon-separated data</source>
-        <translation>分号分隔数据</translation>
+        <translation>सेमीकोलन-विभाजित डेटा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="821"/>
         <source>SiRF binary protocol</source>
-        <translation>SiRF 二进制协议</translation>
+        <translation>SiRF बाइनरी प्रोटोकॉल</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="822"/>
         <source>SLIP-encoded frames</source>
-        <translation>SLIP 编码帧</translation>
+        <translation>SLIP-एन्कोडेड फ्रेम्स</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="823"/>
         <source>Tab-separated data</source>
-        <translation>制表符分隔的数据</translation>
+        <translation>टैब-विभाजित डेटा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="824"/>
         <source>UBX protocol (u-blox)</source>
-        <translation>UBX 协议 (u-blox)</translation>
+        <translation>UBX प्रोटोकॉल (u-blox)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="825"/>
         <source>URL-encoded data</source>
-        <translation>URL 编码的数据</translation>
+        <translation>URL-एन्कोडेड डेटा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="826"/>
         <source>XML data</source>
-        <translation>XML 数据</translation>
+        <translation>XML डेटा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="827"/>
         <source>YAML data</source>
-        <translation>YAML 数据</translation>
+        <translation>YAML डेटा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="853"/>
         <source>Loading a template will replace your current code.</source>
-        <translation>加载模板将替换您当前的代码。</translation>
+        <translation>एक टेम्पलेट लोड करने से आपका वर्तमान कोड बदल जाएगा।</translation>
     </message>
 </context>
 <context>
@@ -1103,57 +1053,57 @@ Please fix the error in the function body.</source>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="175"/>
         <source>Invalid Hex Input</source>
-        <translation>无效的十六进制输入</translation>
+        <translation>अमान्य हेक्स इनपुट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="176"/>
         <source>Please enter valid hexadecimal bytes.
 
 Valid format: 01 A2 FF 3C</source>
-        <translation>请输入有效的十六进制字节。
+        <translation>कृपया मान्य हेक्साडेसिमल बाइट्स दर्ज करें।
 
-有效格式: 01 A2 FF 3C</translation>
+मान्य प्रारूप: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="229"/>
         <source>HEX</source>
-        <translation>十六进制</translation>
+        <translation>HEX</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="230"/>
         <source>Clear</source>
-        <translation>清除</translation>
+        <translation>साफ़ करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="231"/>
         <source>Evaluate</source>
-        <translation>评估</translation>
+        <translation>मूल्यांकन करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="232"/>
         <source>Frame Data Input</source>
-        <translation>帧数据输入</translation>
+        <translation>फ्रेम डेटा इनपुट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="233"/>
         <source>Frame Parser Results</source>
-        <translation>帧解析结果</translation>
+        <translation>फ्रेम पार्सर परिणाम</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="234"/>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="277"/>
         <source>Enter frame data here...</source>
-        <translation>在此输入帧数据...</translation>
+        <translation>यहां फ्रेम डेटा दर्ज करें...</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="235"/>
         <source>Dataset Index</source>
-        <translation>数据集索引</translation>
+        <translation>डेटा सेट सूचकांक</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="235"/>
         <source>Value</source>
-        <translation>值</translation>
+        <translation>मान</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="237"/>
@@ -1161,30 +1111,30 @@ Valid format: 01 A2 FF 3C</source>
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
-        <translation>在上方输入帧数据，若需要启用HEX模式，然后点击“评估”运行帧解析器。
+        <translation>ऊपर फ्रेम डेटा दर्ज करें, यदि आवश्यक हो तो HEX मोड सक्षम करें, फिर फ्रेम पार्सर चलाने के लिए "मूल्यांकन करें" पर क्लिक करें।
 
-示例（文本）：a,b,c,d,e,f
-示例（HEX）：48 65 6C 6C 6F</translation>
+उदाहरण (पाठ): a,b,c,d,e,f
+उदाहरण (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="246"/>
         <source>Test Frame Parser</source>
-        <translation>测试帧解析器</translation>
+        <translation>परीक्षण फ्रेम पार्सर</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="267"/>
         <source>Enter hex bytes (e.g., 01 A2 FF)</source>
-        <translation>输入十六进制字节（例如，01 A2 FF）</translation>
+        <translation>हेक्स बाइट्स दर्ज करें (जैसे, 01 A2 FF)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="443"/>
         <source>(empty)</source>
-        <translation>（空）</translation>
+        <translation>(खाली)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="444"/>
         <source>No data returned</source>
-        <translation>无数据返回</translation>
+        <translation>कोई डेटा वापस नहीं आया</translation>
     </message>
 </context>
 <context>
@@ -1192,209 +1142,209 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="303"/>
         <source>New Project</source>
-        <translation>新建项目</translation>
+        <translation>नया प्रोजेक्ट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="368"/>
         <source>Samples</source>
-        <translation>样本</translation>
+        <translation>नमूने</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="735"/>
         <source>Do you want to save your changes?</source>
-        <translation>您要保存更改吗？</translation>
+        <translation>क्या आप अपने परिवर्तन सहेजना चाहते हैं?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="736"/>
         <source>You have unsaved modifications in this project!</source>
-        <translation>您在此项目中有未保存的修改！</translation>
+        <translation>इस प्रोजेक्ट में आपके पास बिना सहेजे गए परिवर्तन हैं!</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="771"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="780"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="789"/>
         <source>Project error</source>
-        <translation>项目错误</translation>
+        <translation>प्रोजेक्ट त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="772"/>
         <source>Project title cannot be empty!</source>
-        <translation>项目标题不能为空！</translation>
+        <translation>प्रोजेक्ट शीर्षक खाली नहीं हो सकता!</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="781"/>
         <source>You need to add at least one group!</source>
-        <translation>您需要至少添加一个组！</translation>
+        <translation>आपको कम से कम एक समूह जोड़ने की आवश्यकता है!</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="790"/>
         <source>You need to add at least one dataset!</source>
-        <translation>您需要至少添加一个数据集！</translation>
+        <translation>आपको कम से कम एक डेटा सेट जोड़ने की आवश्यकता है!</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="807"/>
         <source>Save Serial Studio Project</source>
-        <translation>保存 Serial Studio 项目</translation>
+        <translation>सीरियल स्टूडियो प्रोजेक्ट सहेजें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="809"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation>Serial Studio 项目文件 (*.ssproj)</translation>
+        <translation>सीरियल स्टूडियो प्रोजेक्ट फ़ाइलें (*.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="907"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2363"/>
         <source>Untitled Project</source>
-        <translation>未命名项目</translation>
+        <translation>बिना शीर्षक का प्रोजेक्ट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="952"/>
         <source>Select Project File</source>
-        <translation>选择项目文件</translation>
+        <translation>प्रोजेक्ट फ़ाइल चुनें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="953"/>
         <source>Project Files (*.json *.ssproj)</source>
-        <translation>项目文件 (*.json *.ssproj)</translation>
+        <translation>प्रोजेक्ट फ़ाइलें (*.json *.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="995"/>
         <source>JSON validation error</source>
-        <translation>JSON 验证错误</translation>
+        <translation>JSON सत्यापन त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1095"/>
         <source>Legacy frame parser function updated</source>
-        <translation>旧版帧解析函数已更新</translation>
+        <translation>पुरानी फ्रेम पार्सर फ़ंक्शन अपडेट किया गया</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1096"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>您的项目使用了带有“分隔符”参数的旧版帧解析函数，已自动迁移到新格式。</translation>
+        <translation>आपके प्रोजेक्ट ने 'सेपरेटर' आर्गुमेंट के साथ एक पुरानी फ्रेम पार्सर फ़ंक्शन का उपयोग किया। इसे स्वचालित रूप से नए प्रारूप में माइग्रेट किया गया है।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1134"/>
         <source>Switch Serial Studio to Project Mode?</source>
-        <translation>要将 Serial Studio 切换到项目模式吗？</translation>
+        <translation>सीरियल स्टूडियो को प्रोजेक्ट मोड में स्विच करें?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1135"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
-        <translation>此操作模式是加载和显示项目文件中的仪表板所必需的。</translation>
+        <translation>यह संचालन मोड प्रोजेक्ट फाइलों से डैशबोर्ड लोड और प्रदर्शित करने के लिए आवश्यक है।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1163"/>
         <source>Do you want to delete group "%1"?</source>
-        <translation>您要删除组“%1”吗？</translation>
+        <translation>क्या आप समूह "%1" को हटाना चाहते हैं?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1164"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1205"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1243"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
-        <translation>此操作无法撤销。您确定要继续吗？</translation>
+        <translation>इस क्रिया को पूर्ववत नहीं किया जा सकता। क्या आप आगे बढ़ना चाहते हैं?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1204"/>
         <source>Do you want to delete action "%1"?</source>
-        <translation>您要删除操作“%1”吗？</translation>
+        <translation>क्या आप क्रिया "%1" को हटाना चाहते हैं?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1242"/>
         <source>Do you want to delete dataset "%1"?</source>
-        <translation>您要删除数据集“%1”吗？</translation>
+        <translation>क्या आप डेटा सेट "%1" को हटाना चाहते हैं?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1294"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1339"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1374"/>
         <source>%1 (Copy)</source>
-        <translation>%1 (副本)</translation>
+        <translation>%1 (प्रतिलिपि)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1413"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1475"/>
         <source>Group</source>
-        <translation>组</translation>
+        <translation>समूह</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1504"/>
         <source>New Dataset</source>
-        <translation>新数据集</translation>
+        <translation>नया डेटा सेट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1507"/>
         <source>New Plot</source>
-        <translation>新图表</translation>
+        <translation>नया प्लॉट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1511"/>
         <source>New FFT Plot</source>
-        <translation>新FFT图表</translation>
+        <translation>नया FFT प्लॉट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1515"/>
         <source>New Level Indicator</source>
-        <translation>新水平指示器</translation>
+        <translation>नया स्तर संकेतक</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1519"/>
         <source>New Gauge</source>
-        <translation>新仪表盘</translation>
+        <translation>नया गेज</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1523"/>
         <source>New Compass</source>
-        <translation>新指南针</translation>
+        <translation>नया कंपास</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1531"/>
         <source>New LED Indicator</source>
-        <translation>新LED指示器</translation>
+        <translation>नया एलईडी संकेतक</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1667"/>
         <source>New Action</source>
-        <translation>新动作</translation>
+        <translation>नया क्रिया</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1826"/>
         <source>Are you sure you want to change the group-level widget?</source>
-        <translation>您确定要更改组级别小部件吗？</translation>
+        <translation>क्या आप वाकई समूह-स्तरीय विजेट को बदलना चाहते हैं?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1827"/>
         <source>Existing datasets for this group will be deleted</source>
-        <translation>此组的现有数据集将被删除</translation>
+        <translation>इस समूह के मौजूदा डेटा सेट हटा दिए जाएंगे</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1896"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1897"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1898"/>
         <source>Accelerometer %1</source>
-        <translation>加速度计 %1</translation>
+        <translation>एक्सेलेरोमीटर %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1954"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1955"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1956"/>
         <source>Gyro %1</source>
-        <translation>陀螺仪 %1</translation>
+        <translation>गाइरो %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2009"/>
         <source>Latitude</source>
-        <translation>纬度</translation>
+        <translation>अक्षांश</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2010"/>
         <source>Longitude</source>
-        <translation>经度</translation>
+        <translation>देशांतर</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2011"/>
         <source>Altitude</source>
-        <translation>海拔</translation>
+        <translation>ऊँचाई</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2059"/>
@@ -1414,626 +1364,626 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2211"/>
         <source>Frame Parser Code</source>
-        <translation>帧解析代码</translation>
+        <translation>फ्रेम पार्सर कोड</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2350"/>
         <source>Project Information</source>
-        <translation>项目信息</translation>
+        <translation>परियोजना जानकारी</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2362"/>
         <source>Project Title</source>
-        <translation>项目标题</translation>
+        <translation>परियोजना शीर्षक</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2364"/>
         <source>Name or description of the project</source>
-        <translation>项目名称或描述</translation>
+        <translation>परियोजना का नाम या विवरण</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2375"/>
         <source>Frame Detection</source>
-        <translation>帧检测</translation>
+        <translation>फ्रेम पहचान</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2389"/>
         <source>Frame Detection Method</source>
-        <translation>帧检测方法</translation>
+        <translation>फ्रेम डिटेक्शन विधि</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2390"/>
         <source>Select how incoming data frames are identified</source>
-        <translation>选择如何识别传入数据帧</translation>
+        <translation>इनकमिंग डेटा फ्रेम्स की पहचान कैसे की जाती है, चुनें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2400"/>
         <source>Hexadecimal Delimiters</source>
-        <translation>十六进制分隔符</translation>
+        <translation>हेक्साडेसिमल डिलिमिटर्स</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2402"/>
         <source>Use hex values to define frame boundaries</source>
-        <translation>使用十六进制值定义帧边界</translation>
+        <translation>फ्रेम सीमाओं को परिभाषित करने के लिए हेक्स मानों का उपयोग करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2417"/>
         <source>Start Sequence</source>
-        <translation>起始序列</translation>
+        <translation>प्रारंभ अनुक्रम</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2420"/>
         <source>Marks the beginning of each data frame</source>
-        <translation>标记每个数据帧的开始</translation>
+        <translation>प्रत्येक डेटा फ्रेम की शुरुआत को चिह्नित करता है</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2431"/>
         <source>End Sequence</source>
-        <translation>结束序列</translation>
+        <translation>अंत अनुक्रम</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2434"/>
         <source>Marks the end of each data frame</source>
-        <translation>标记每个数据帧的结束</translation>
+        <translation>प्रत्येक डेटा फ्रेम के अंत को चिह्नित करता है</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2445"/>
         <source>Payload Processing &amp; Validation</source>
-        <translation>负载处理与验证</translation>
+        <translation>पेलोड प्रोसेसिंग और सत्यापन</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2457"/>
         <source>Data Format</source>
-        <translation>数据格式</translation>
+        <translation>डेटा प्रारूप</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2459"/>
         <source>Format of raw data used for decoding each frame</source>
-        <translation>用于解码每个帧的原始数据格式</translation>
+        <translation>प्रत्येक फ्रेम को डिकोड करने के लिए उपयोग किए गए कच्चे डेटा का प्रारूप</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2471"/>
         <source>Checksum Algorithm</source>
-        <translation>校验算法</translation>
+        <translation>चेकसम एल्गोरिदम</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2473"/>
         <source>Method used to validate frame integrity</source>
-        <translation>用于验证帧完整性的方法</translation>
+        <translation>फ्रेम की अखंडता को सत्यापित करने के लिए उपयोग की गई विधि</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2519"/>
         <source>Group Information</source>
-        <translation>组信息</translation>
+        <translation>समूह जानकारी</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2531"/>
         <source>Group Title</source>
-        <translation>组标题</translation>
+        <translation>समूह शीर्षक</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2532"/>
         <source>Untitled Group</source>
-        <translation>未命名组</translation>
+        <translation>बिना शीर्षक का समूह</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2533"/>
         <source>Title or description of this dataset group</source>
-        <translation>此数据集组的标题或描述</translation>
+        <translation>इस डेटा सेट समूह का शीर्षक या विवरण</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2562"/>
         <source>Composite Widget</source>
-        <translation>复合小部件</translation>
+        <translation>समग्र विजेट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2564"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
-        <translation>选择如何可视化此数据集组（可选）</translation>
+        <translation>चुनें कि इस डेटा सेट समूह को कैसे प्रदर्शित किया जाना चाहिए (वैकल्पिक)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2615"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2850"/>
         <source>General Information</source>
-        <translation>常规信息</translation>
+        <translation>सामान्य जानकारी</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2626"/>
         <source>Action Title</source>
-        <translation>操作标题</translation>
+        <translation>क्रिया शीर्षक</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2628"/>
         <source>Untitled Action</source>
-        <translation>未命名操作</translation>
+        <translation>बिना शीर्षक की क्रिया</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2629"/>
         <source>Name or description of this action</source>
-        <translation>此操作的名称或描述</translation>
+        <translation>इस क्रिया का नाम या विवरण</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2640"/>
         <source>Action Icon</source>
-        <translation>操作图标</translation>
+        <translation>क्रिया आइकन</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2641"/>
         <source>Default Icon</source>
-        <translation>默认图标</translation>
+        <translation>डिफ़ॉल्ट आइकन</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2642"/>
         <source>Icon displayed for this action in the dashboard</source>
-        <translation>仪表板中显示此操作的图标</translation>
+        <translation>डैशबोर्ड में इस क्रिया के लिए प्रदर्शित आइकन</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2653"/>
         <source>Data Payload</source>
-        <translation>数据负载</translation>
+        <translation>डेटा पेलोड</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2666"/>
         <source>Send as Binary</source>
-        <translation>以二进制发送</translation>
+        <translation>बाइनरी के रूप में भेजें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2667"/>
         <source>Send raw binary data when this action is triggered</source>
-        <translation>触发此操作时发送原始二进制数据</translation>
+        <translation>जब यह क्रिया सक्रिय होती है तो कच्चा बाइनरी डेटा भेजें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2680"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2697"/>
         <source>Command</source>
-        <translation>命令</translation>
+        <translation>कमांड</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2681"/>
         <source>Transmit Data (Hex)</source>
-        <translation>传输数据（十六进制）</translation>
+        <translation>डेटा प्रसारित करें (हेक्स)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2683"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
-        <translation>触发操作时发送的十六进制负载</translation>
+        <translation>हेक्साडेसिमल पेलोड जो क्रिया ट्रिगर होने पर भेजा जाएगा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2698"/>
         <source>Transmit Data</source>
-        <translation>传输数据</translation>
+        <translation>डेटा प्रसारित करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2699"/>
         <source>Text payload to send when the action is triggered</source>
-        <translation>触发操作时要发送的文本负载</translation>
+        <translation>क्रिया ट्रिगर होने पर भेजने के लिए टेक्स्ट पेलोड</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2729"/>
         <source>End-of-Line Sequence</source>
-        <translation>行尾序列</translation>
+        <translation>अंत-पंक्ति अनुक्रम</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2730"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
-        <translation>要附加到消息的行尾字符（例如 </translation>
+        <translation>संदेश में जोड़ने के लिए EOL वर्ण (जैसे </translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2741"/>
         <source>Execution Behavior</source>
-        <translation>执行行为</translation>
+        <translation>निष्पादन व्यवहार</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2754"/>
         <source>Auto-Execute on Connect</source>
-        <translation>连接时自动执行</translation>
+        <translation>कनेक्ट पर स्वचालित निष्पादन</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2756"/>
         <source>Automatically trigger this action when the device connects</source>
-        <translation>设备连接时自动触发此操作</translation>
+        <translation>जब डिवाइस कनेक्ट हो, तो स्वचालित रूप से इस क्रिया को ट्रिगर करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2767"/>
         <source>Timer Behavior</source>
-        <translation>定时器行为</translation>
+        <translation>टाइमर व्यवहार</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2778"/>
         <source>Timer Mode</source>
-        <translation>定时器模式</translation>
+        <translation>टाइमर मोड</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2782"/>
         <source>Choose when and how this action should repeat automatically</source>
-        <translation>选择此操作应何时以及如何自动重复</translation>
+        <translation>चुनें कि यह क्रिया कब और कैसे स्वचालित रूप से दोहराई जानी चाहिए</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2790"/>
         <source>Interval (ms)</source>
-        <translation>间隔 (毫秒)</translation>
+        <translation>अंतराल (मिलीसेकंड)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2794"/>
         <source>Timer Interval (ms)</source>
-        <translation>定时器间隔 (毫秒)</translation>
+        <translation>टाइमर अंतराल (मिलीसेकंड)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2796"/>
         <source>Milliseconds between each repeated trigger of this action</source>
-        <translation>每次重复触发此操作之间的毫秒数</translation>
+        <translation>इस क्रिया के प्रत्येक दोहराव के बीच मिलीसेकंड</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2862"/>
         <source>Untitled Dataset</source>
-        <translation>未命名数据集</translation>
+        <translation>बिना शीर्षक का डेटासेट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2863"/>
         <source>Dataset Title</source>
-        <translation>数据集标题</translation>
+        <translation>डेटासेट शीर्षक</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2865"/>
         <source>Name of the dataset, used for labeling and identification</source>
-        <translation>数据集名称，用于标记和识别</translation>
+        <translation>डेटासेट का नाम, लेबलिंग और पहचान के लिए उपयोग किया जाता है</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2877"/>
         <source>Frame Index</source>
-        <translation>帧索引</translation>
+        <translation>फ्रेम इंडेक्स</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2878"/>
         <source>Frame position used for aligning datasets in time</source>
-        <translation>用于在时间上对齐数据集的帧位置</translation>
+        <translation>समय में डेटासेट्स को संरेखित करने के लिए उपयोग की गई फ्रेम स्थिति</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2889"/>
         <source>Measurement Unit</source>
-        <translation>测量单位</translation>
+        <translation>माप की इकाई</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2890"/>
         <source>Volts, Amps, etc.</source>
-        <translation>伏特、电流等。</translation>
+        <translation>वोल्ट, एम्प्स, आदि</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2891"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
-        <translation>测量单位，例如伏特或安培（可选）</translation>
+        <translation>माप की इकाई, जैसे वोल्ट या एम्प्स (वैकल्पिक)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2902"/>
         <source>Plot Settings</source>
-        <translation>图表设置</translation>
+        <translation>प्लॉट सेटिंग्स</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2932"/>
         <source>Enable Plot Widget</source>
-        <translation>启用图表小部件</translation>
+        <translation>प्लॉट विजेट सक्षम करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2934"/>
         <source>Plot data in real-time</source>
-        <translation>实时绘制数据</translation>
+        <translation>वास्तविक समय में डेटा प्लॉट करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2963"/>
         <source>X-Axis Source</source>
-        <translation>X轴来源</translation>
+        <translation>X-अक्ष स्रोत</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2964"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
-        <translation>选择用于图表X轴的数据集</translation>
+        <translation>X-अक्ष के लिए उपयोग करने के लिए डेटा सेट चुनें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2976"/>
         <source>Minimum Plot Value (optional)</source>
-        <translation>最小图表值（可选）</translation>
+        <translation>न्यूनतम प्लॉट मान (वैकल्पिक)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2977"/>
         <source>Lower bound for plot display range</source>
-        <translation>图表显示范围的下限</translation>
+        <translation>प्लॉट प्रदर्शन सीमा के लिए निचली सीमा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2989"/>
         <source>Maximum Plot Value (optional)</source>
-        <translation>最大图表值（可选）</translation>
+        <translation>अधिकतम प्लॉट मान (वैकल्पिक)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2990"/>
         <source>Upper bound for plot display range</source>
-        <translation>图表显示范围的上限</translation>
+        <translation>प्लॉट प्रदर्शन सीमा के लिए ऊपरी सीमा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3001"/>
         <source>FFT Configuration</source>
-        <translation>FFT 配置</translation>
+        <translation>एफएफटी विन्यास</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3014"/>
         <source>Enable FFT Analysis</source>
-        <translation>启用 FFT 分析</translation>
+        <translation>एफएफटी विश्लेषण सक्षम करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3015"/>
         <source>Perform frequency-domain analysis of the dataset</source>
-        <translation>对数据集进行频域分析</translation>
+        <translation>डेटा सेट का आवृत्ति-डोमेन विश्लेषण करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3033"/>
         <source>FFT Window Size</source>
-        <translation>FFT 窗口大小</translation>
+        <translation>एफएफटी विंडो आकार</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3035"/>
         <source>Number of samples used for each FFT calculation window</source>
-        <translation>每个 FFT 计算窗口使用的样本数量</translation>
+        <translation>प्रत्येक एफएफटी गणना विंडो के लिए उपयोग किए गए नमूनों की संख्या</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3047"/>
         <source>FFT Sampling Rate (Hz, required)</source>
-        <translation>FFT 采样率（Hz，必需）</translation>
+        <translation>एफएफटी सैंपलिंग दर (Hz, आवश्यक)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3049"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
-        <translation>FFT 使用的采样频率（单位：Hz）</translation>
+        <translation>एफएफटी के लिए उपयोग की गई सैंपलिंग आवृत्ति (Hz में)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3061"/>
         <source>Minimum Value (recommended)</source>
-        <translation>最小值（推荐）</translation>
+        <translation>न्यूनतम मान (अनुशंसित)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3062"/>
         <source>Lower bound for data normalization</source>
-        <translation>数据归一化的下限</translation>
+        <translation>डेटा सामान्यीकरण के लिए निचली सीमा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3074"/>
         <source>Maximum Value (recommended)</source>
-        <translation>最大值（推荐）</translation>
+        <translation>अधिकतम मान (अनुशंसित)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3075"/>
         <source>Upper bound for data normalization</source>
-        <translation>数据归一化的上限</translation>
+        <translation>डेटा सामान्यीकरण के लिए ऊपरी सीमा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3086"/>
         <source>Widget Settings</source>
-        <translation>小部件设置</translation>
+        <translation>विजेट सेटिंग्स</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3116"/>
         <source>Widget</source>
-        <translation>小部件</translation>
+        <translation>विजेट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3117"/>
         <source>Select the visual widget used to display this dataset</source>
-        <translation>选择用于显示此数据集的视觉小部件</translation>
+        <translation>इस डेटा सेट को प्रदर्शित करने के लिए दृश्य विजेट चुनें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3128"/>
         <source>Show in Overview</source>
-        <translation>在概览中显示</translation>
+        <translation>अवलोकन में दिखाएं</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3130"/>
         <source>Display this widget in the dashboard overview (if enabled)</source>
-        <translation>在仪表板概览中显示此小部件（如果启用）</translation>
+        <translation>डैशबोर्ड अवलोकन में इस विजेट को प्रदर्शित करें (यदि सक्षम है)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3146"/>
         <source>Minimum Display Value (required)</source>
-        <translation>最小显示值（必需）</translation>
+        <translation>न्यूनतम प्रदर्शन मान (आवश्यक)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3147"/>
         <source>Lower bound of the gauge or bar display range</source>
-        <translation>仪表或条形显示范围的下限</translation>
+        <translation>गेज या बार प्रदर्शन सीमा की निचली सीमा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3159"/>
         <source>Maximum Display Value (required)</source>
-        <translation>最大显示值（必需）</translation>
+        <translation>अधिकतम प्रदर्शन मान (आवश्यक)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3160"/>
         <source>Upper bound of the gauge or bar display range</source>
-        <translation>仪表或条形显示范围的上限</translation>
+        <translation>गेज या बार प्रदर्शन सीमा की ऊपरी सीमा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3171"/>
         <source>Alarm Settings</source>
-        <translation>报警设置</translation>
+        <translation>अलार्म सेटिंग्स</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3184"/>
         <source>Enable Alarms</source>
-        <translation>启用报警</translation>
+        <translation>अलार्म सक्षम करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3186"/>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
-        <translation>当值超过报警阈值时触发视觉报警</translation>
+        <translation>मान अलार्म सीमा से अधिक होने पर दृश्य अलार्म ट्रिगर करता है</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3198"/>
         <source>Low Threshold</source>
-        <translation>低阈值</translation>
+        <translation>निम्न सीमा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3200"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
-        <translation>当值低于此阈值时触发视觉报警</translation>
+        <translation>मान इस सीमा से नीचे गिरने पर दृश्य अलार्म ट्रिगर करता है</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3212"/>
         <source>High Threshold</source>
-        <translation>高阈值</translation>
+        <translation>उच्च सीमा</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3214"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
-        <translation>当值超过此阈值时触发视觉报警</translation>
+        <translation>मान इस सीमा से अधिक होने पर दृश्य अलार्म ट्रिगर करता है</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3225"/>
         <source>LED Display Settings</source>
-        <translation>LED显示设置</translation>
+        <translation>एलईडी प्रदर्शन सेटिंग्स</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3238"/>
         <source>Show in LED Panel</source>
-        <translation>在LED面板中显示</translation>
+        <translation>LED पैनल में दिखाएँ</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3239"/>
         <source>Enable visual status monitoring using an LED display</source>
-        <translation>使用LED显示启用视觉状态监控</translation>
+        <translation>LED डिस्प्ले का उपयोग करके दृश्य स्थिति निगरानी सक्षम करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3251"/>
         <source>LED On Threshold (required)</source>
-        <translation>LED开启阈值（必需）</translation>
+        <translation>LED ऑन थ्रेशोल्ड (आवश्यक)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3253"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
-        <translation>当值达到或超过此阈值时LED亮起</translation>
+        <translation>जब मान इस थ्रेशोल्ड को पूरा करता है या उससे अधिक होता है तो LED जलती है</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3318"/>
         <source>Off</source>
-        <translation>关闭</translation>
+        <translation>बंद</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3319"/>
         <source>Auto Start</source>
-        <translation>自动启动</translation>
+        <translation>ऑटो स्टार्ट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3320"/>
         <source>Start on Trigger</source>
-        <translation>触发时启动</translation>
+        <translation>ट्रिगर पर शुरू करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3321"/>
         <source>Toggle on Trigger</source>
-        <translation>触发时切换</translation>
+        <translation>ट्रिगर पर टॉगल करें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
         <source>Plain Text (UTF8)</source>
-        <translation>纯文本（UTF8）</translation>
+        <translation>सादा पाठ (UTF8)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3326"/>
         <source>Hexadecimal</source>
-        <translation>十六进制</translation>
+        <translation>हेक्साडेसिमल</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3327"/>
         <source>Base64</source>
-        <translation>Base64</translation>
+        <translation>बेस64</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3328"/>
         <source>Binary (Direct)</source>
-        <translation>二进制（直接）</translation>
+        <translation>बाइनरी (डायरेक्ट)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3335"/>
         <source>No Checksum</source>
-        <translation>无校验和</translation>
+        <translation>कोई चेकसम नहीं</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3340"/>
         <source>End Delimiter Only</source>
-        <translation>仅结束定界符</translation>
+        <translation>केवल अंत सीमांकक</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3341"/>
         <source>Start Delimiter Only</source>
-        <translation>仅开始定界符</translation>
+        <translation>केवल प्रारंभ सीमांकक</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3342"/>
         <source>Start + End Delimiter</source>
-        <translation>开始 + 结束定界符</translation>
+        <translation>प्रारंभ + अंत सीमांकक</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
         <source>No Delimiters</source>
-        <translation>无定界符</translation>
+        <translation>कोई सीमांकक नहीं</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3351"/>
         <source>Data Grid</source>
-        <translation>数据网格</translation>
+        <translation>डेटा ग्रिड</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3352"/>
         <source>GPS Map</source>
-        <translation>GPS地图</translation>
+        <translation>जीपीएस मानचित्र</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3353"/>
         <source>Gyroscope</source>
-        <translation>陀螺仪</translation>
+        <translation>गाइरोस्कोप</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3354"/>
         <source>Multiple Plot</source>
-        <translation>多重绘图</translation>
+        <translation>मल्टीपल प्लॉट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3355"/>
         <source>Accelerometer</source>
-        <translation>加速度计</translation>
+        <translation>एक्सेलेरोमीटर</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3356"/>
         <source>3D Plot</source>
-        <translation>3D 绘图</translation>
+        <translation>3डी प्लॉट</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3357"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3361"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3368"/>
         <source>None</source>
-        <translation>无</translation>
+        <translation>कोई नहीं</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3362"/>
         <source>Bar</source>
-        <translation>柱状图</translation>
+        <translation>बार</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3363"/>
         <source>Gauge</source>
-        <translation>仪表</translation>
+        <translation>गेज</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3364"/>
         <source>Compass</source>
-        <translation>罗盘</translation>
+        <translation>कम्पास</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3369"/>
         <source>New Line (\n)</source>
-        <translation>新行 (</translation>
+        <translation>नई पंक्ति (</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3370"/>
         <source>Carriage Return (\r)</source>
-        <translation>回车 (\r)</translation>
+        <translation>कैरिज रिटर्न (\r)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3371"/>
@@ -2043,32 +1993,32 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3375"/>
         <source>No</source>
-        <translation>否</translation>
+        <translation>नहीं</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3376"/>
         <source>Yes</source>
-        <translation>是</translation>
+        <translation>हाँ</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3417"/>
         <source>Save changes to frame parser code?</source>
-        <translation>保存对帧解析器代码的更改？</translation>
+        <translation>फ्रेम पार्सर कोड में परिवर्तन सहेजें?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3418"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation>选择“保存”以保留更改，“放弃”以永久丢失更改，或“取消”以返回。</translation>
+        <translation>अपने परिवर्तनों को रखने के लिए 'सहेजें' चुनें, स्थायी रूप से खोने के लिए 'अस्वीकार करें', या वापस लौटने के लिए 'रद्द करें'।</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3420"/>
         <source>Save Changes</source>
-        <translation>保存更改</translation>
+        <translation>परिवर्तन सहेजें</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3947"/>
         <source>File open error</source>
-        <translation>文件打开错误</translation>
+        <translation>फ़ाइल खोलने में त्रुटि</translation>
     </message>
 </context>
 <context>
@@ -2077,109 +2027,109 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
         <source>Pro features detected in this project.</source>
-        <translation>在此项目中检测到专业功能。</translation>
+        <translation>इस प्रोजेक्ट में प्रो फीचर्स का पता चला है।</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>将使用备用小部件。购买许可证以解锁全部功能。</translation>
+        <translation>फॉलबैक विजेट्स का उपयोग किया जाएगा। पूरी कार्यक्षमता को अनलॉक करने के लिए लाइसेंस खरीदें।</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
         <source>Plot</source>
-        <translation>图表</translation>
+        <translation>प्लॉट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
         <source>Toggle 2D plot visualization for this dataset</source>
-        <translation>切换此数据集的二维图表可视化</translation>
+        <translation>इस डेटासेट के लिए 2D प्लॉट दृश्य को टॉगल करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
         <source>FFT Plot</source>
-        <translation>FFT 图表</translation>
+        <translation>FFT प्लॉट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <source>Toggle FFT plot to visualize frequency content</source>
-        <translation>切换 FFT 图表以可视化频率内容</translation>
+        <translation>आवृत्ति सामग्री को देखने के लिए FFT प्लॉट टॉगल करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
         <source>Bar/Level</source>
-        <translation>条形图/等级</translation>
+        <translation>बार/स्तर</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
         <source>Toggle bar/level indicator for this dataset</source>
-        <translation>切换此数据集的条形图/等级指示器</translation>
+        <translation>इस डेटा सेट के लिए बार/स्तर संकेतक टॉगल करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
         <source>Gauge</source>
-        <translation>仪表</translation>
+        <translation>गेज</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <source>Toggle gauge widget for analog-style display</source>
-        <translation>切换仪表小部件以模拟风格显示</translation>
+        <translation>एनालॉग-शैली प्रदर्शन के लिए गेज विजेट टॉगल करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
         <source>Compass</source>
-        <translation>罗盘</translation>
+        <translation>कम्पास</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <source>Toggle compass widget for directional data</source>
-        <translation>切换方向数据的罗盘小部件</translation>
+        <translation>दिशात्मक डेटा के लिए कम्पास विजेट टॉगल करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
         <source>LED</source>
-        <translation>LED</translation>
+        <translation>एलईडी</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
-        <translation>切换二进制或阈值的 LED 指示灯</translation>
+        <translation>बाइनरी या थ्रेशोल्डेड मानों के लिए एलईडी संकेतक टॉगल करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
         <source>Duplicate</source>
-        <translation>复制</translation>
+        <translation>डुप्लिकेट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
         <source>Duplicate this dataset with the same configuration</source>
-        <translation>使用相同配置复制此数据集</translation>
+        <translation>इस डेटा सेट को समान कॉन्फ़िगरेशन के साथ डुप्लिकेट करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
         <source>Delete</source>
-        <translation>删除</translation>
+        <translation>हटाएं</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
         <source>Delete this dataset from the group</source>
-        <translation>从组中删除此数据集</translation>
+        <translation>इस डेटा सेट को समूह से हटाएं</translation>
     </message>
 </context>
 <context>
@@ -2188,43 +2138,43 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="36"/>
         <source>Support Serial Studio</source>
-        <translation>支持 Serial Studio</translation>
+        <translation>सीरियल स्टूडियो का समर्थन करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="94"/>
         <source>Support the development of %1!</source>
-        <translation>支持 %1 的开发！</translation>
+        <translation>%1 के विकास का समर्थन करें!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="105"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="105"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
-        <translation>Serial Studio 是由志愿者支持的免费开源软件。请考虑捐赠或获取专业版许可证以支持开发工作 :)</translation>
+        <translation>सीरियल स्टूडियो मुफ्त और ओपन-सोर्स सॉफ्टवेयर है जो स्वयंसेवकों द्वारा समर्थित है। विकास प्रयासों का समर्थन करने के लिए दान करने या प्रो लाइसेंस प्राप्त करने पर विचार करें :)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="118"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="118"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
-        <translation>您还可以通过分享此项目、报告错误和提出新功能来支持它！</translation>
+        <translation>आप इसे साझा करके, बग रिपोर्ट करके और नई सुविधाओं का प्रस्ताव देकर भी इस परियोजना का समर्थन कर सकते हैं!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="134"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="134"/>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation>बंद करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="148"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="148"/>
         <source>Donate</source>
-        <translation>捐赠</translation>
+        <translation>दान करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="166"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="166"/>
         <source>Get Serial Studio Pro</source>
-        <translation>获取 Serial Studio Pro</translation>
+        <translation>Serial Studio प्रो प्राप्त करें</translation>
     </message>
 </context>
 <context>
@@ -2233,92 +2183,92 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <source>Stop</source>
-        <translation>停止</translation>
+        <translation>रोकें</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="344"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Downloading updates</source>
-        <translation>正在下载更新</translation>
+        <translation>अपडेट डाउनलोड हो रहे हैं</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="111"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="426"/>
         <source>Time remaining</source>
-        <translation>剩余时间</translation>
+        <translation>शेष समय</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="111"/>
         <source>unknown</source>
-        <translation>未知</translation>
+        <translation>अज्ञात</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="189"/>
         <source>Error</source>
-        <translation>错误</translation>
+        <translation>त्रुटि</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="190"/>
         <source>Cannot find downloaded update!</source>
-        <translation>找不到下载的更新！</translation>
+        <translation>डाउनलोड किया गया अपडेट नहीं मिल सकता!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="209"/>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation>बंद करें</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="210"/>
         <source>Download complete!</source>
-        <translation>下载完成！</translation>
+        <translation>डाउनलोड पूरा!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="211"/>
         <source>The installer will open separately</source>
-        <translation>安装程序将单独打开</translation>
+        <translation>इंस्टॉलर अलग से खुलेगा</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="219"/>
         <source>Click "OK" to begin installing the update</source>
-        <translation>点击“确定”开始安装更新</translation>
+        <translation>"अपडेट इंस्टॉल करना शुरू करने के लिए "OK" पर क्लिक करें</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="221"/>
         <source>In order to install the update, you may need to quit the application.</source>
-        <translation>为了安装更新，您可能需要退出应用程序。</translation>
+        <translation>अपडेट इंस्टॉल करने के लिए, आपको एप्लिकेशन बंद करना पड़ सकता है।</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="225"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application</source>
-        <translation>为了安装更新，您可能需要退出应用程序。这是强制更新，现在退出将关闭应用程序</translation>
+        <translation>अपडेट इंस्टॉल करने के लिए, आपको एप्लिकेशन बंद करना पड़ सकता है। यह एक अनिवार्य अपडेट है, अब बाहर निकलने से एप्लिकेशन बंद हो जाएगा</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="245"/>
         <source>Click the "Open" button to apply the update</source>
-        <translation>点击“打开”按钮应用更新</translation>
+        <translation>अपडेट लागू करने के लिए "Open" बटन पर क्लिक करें</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <source>Updater</source>
-        <translation>更新程序</translation>
+        <translation>अपडेटर</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="264"/>
         <source>Are you sure you want to cancel the download?</source>
-        <translation>您确定要取消下载吗？</translation>
+        <translation>क्या आप वाकई डाउनलोड रद्द करना चाहते हैं?</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="267"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
-        <translation>您确定要取消下载吗？这是强制更新，现在退出将关闭应用程序</translation>
+        <translation>क्या आप वाकई डाउनलोड रद्द करना चाहते हैं? यह एक अनिवार्य अपडेट है, अब बाहर निकलने से एप्लिकेशन बंद हो जाएगा</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="327"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="336"/>
         <source>%1 bytes</source>
-        <translation>%1 字节</translation>
+        <translation>%1 बाइट्स</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="330"/>
@@ -2335,62 +2285,62 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="345"/>
         <source>of</source>
-        <translation>的</translation>
+        <translation>का</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="370"/>
         <source>Downloading Updates</source>
-        <translation>下载更新</translation>
+        <translation>अपडेट्स डाउनलोड हो रहे हैं</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
         <source>Time Remaining</source>
-        <translation>剩余时间</translation>
+        <translation>शेष समय</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
         <source>Unknown</source>
-        <translation>未知</translation>
+        <translation>अज्ञात</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="400"/>
         <source>about %1 hours</source>
-        <translation>约 %1 小时</translation>
+        <translation>लगभग %1 घंटे</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="402"/>
         <source>about one hour</source>
-        <translation>约一小时</translation>
+        <translation>लगभग एक घंटा</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="411"/>
         <source>%1 minutes</source>
-        <translation>%1 分钟</translation>
+        <translation>%1 मिनट</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="413"/>
         <source>1 minute</source>
-        <translation>1 分钟</translation>
+        <translation>1 मिनट</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="421"/>
         <source>%1 seconds</source>
-        <translation>%1 秒</translation>
+        <translation>%1 सेकंड</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="423"/>
         <source>1 second</source>
-        <translation>1 秒</translation>
+        <translation>1 सेकंड</translation>
     </message>
     <message>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <source>Time remaining: 0 minutes</source>
-        <translation>剩余时间：0分钟</translation>
+        <translation>शेष समय: 0 मिनट</translation>
     </message>
     <message>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <source>Open</source>
-        <translation>打开</translation>
+        <translation>खोलें</translation>
     </message>
 </context>
 <context>
@@ -2399,13 +2349,13 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
         <source>Magnitude (dB)</source>
-        <translation>幅度 (dB)</translation>
+        <translation>परिमाण (dB)</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
         <source>Frequency (Hz)</source>
-        <translation>频率 (Hz)</translation>
+        <translation>आवृत्ति (Hz)</translation>
     </message>
 </context>
 <context>
@@ -2414,7 +2364,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../qml/Widgets/FileDropArea.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/FileDropArea.qml" line="121"/>
         <source>Drop Projects and CSV files here</source>
-        <translation>将项目和CSV文件拖放到此处</translation>
+        <translation>प्रोजेक्ट्स और CSV फाइलें यहाँ छोड़ें</translation>
     </message>
 </context>
 <context>
@@ -2423,61 +2373,61 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="36"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
         <source>File Transmission</source>
-        <translation>文件传输</translation>
+        <translation>फाइल ट्रांसमिशन</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="89"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="89"/>
         <source>File Selection:</source>
-        <translation>文件选择：</translation>
+        <translation>फाइल चयन:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="107"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="107"/>
         <source>Select File...</source>
-        <translation>选择文件...</translation>
+        <translation>फाइल चुनें...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="124"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="124"/>
         <source>Transmission Interval:</source>
-        <translation>传输间隔：</translation>
+        <translation>ट्रांसमिशन अंतराल:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="148"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="148"/>
         <source>msecs</source>
-        <translation>毫秒</translation>
+        <translation>मिलीसेकंड</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="177"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="177"/>
         <source>Progress: %1</source>
-        <translation>进度：%1</translation>
+        <translation>प्रगति: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="193"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="193"/>
         <source>Pause Transmission</source>
-        <translation>暂停传输</translation>
+        <translation>ट्रांसमिशन रोकें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="194"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="194"/>
         <source>Resume Transmission</source>
-        <translation>恢复传输</translation>
+        <translation>संचरण पुनः आरंभ करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="195"/>
         <source>Stop Transmission</source>
-        <translation>停止传输</translation>
+        <translation>संचरण रोकें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
         <source>Begin Transmission</source>
-        <translation>开始传输</translation>
+        <translation>संचरण प्रारंभ करें</translation>
     </message>
 </context>
 <context>
@@ -2486,7 +2436,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="34"/>
         <source>modified</source>
-        <translation>已修改</translation>
+        <translation>संशोधित</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="93"/>
@@ -2494,7 +2444,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="93"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="248"/>
         <source>Undo</source>
-        <translation>撤销</translation>
+        <translation>पूर्ववत करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="100"/>
@@ -2502,7 +2452,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="262"/>
         <source>Redo</source>
-        <translation>重做</translation>
+        <translation>पुनः करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
@@ -2510,7 +2460,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="287"/>
         <source>Cut</source>
-        <translation>剪切</translation>
+        <translation>काटें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="114"/>
@@ -2518,7 +2468,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="114"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="300"/>
         <source>Copy</source>
-        <translation>复制</translation>
+        <translation>प्रतिलिपि करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="119"/>
@@ -2526,117 +2476,109 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="119"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="313"/>
         <source>Paste</source>
-        <translation>粘贴</translation>
+        <translation>चिपकाएँ</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <source>Select All</source>
-        <translation>全选</translation>
+        <translation>सभी चुनें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
         <source>Reset</source>
-        <translation>重置</translation>
+        <translation>रीसेट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="202"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="202"/>
         <source>Reset to the default parsing script</source>
-        <translation>重置为默认解析脚本</translation>
+        <translation>डिफ़ॉल्ट पार्सिंग स्क्रिप्ट पर रीसेट करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="210"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="210"/>
         <source>Open</source>
-        <translation>打开</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
-        <source>Save</source>
-        <translation>保存</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
-        <source>Select Template...</source>
-        <translation>选择模板...</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
-        <source>Test With Sample Data</source>
-        <translation>使用示例数据测试</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
-        <source>Evaluate</source>
-        <translation>评估</translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <translation type="vanished">导入</translation>
+        <translation>खोलें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="215"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="215"/>
         <source>Import a JavaScript file for data parsing</source>
-        <translation>导入用于数据解析的 JavaScript 文件</translation>
+        <translation>डेटा पार्सिंग के लिए एक जावास्क्रिप्ट फ़ाइल आयात करें</translation>
     </message>
     <message>
-        <source>Validate &amp; Save</source>
-        <translation type="vanished">验证并保存</translation>
+        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
+        <source>Save</source>
+        <translation>सहेजें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="229"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="229"/>
         <source>Validate syntax and apply parsing changes</source>
-        <translation>验证语法并应用解析更改</translation>
+        <translation>सिंटैक्स मान्य करें और पार्सिंग परिवर्तन लागू करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
         <source>Undo the last code edit</source>
-        <translation>撤销上次代码编辑</translation>
+        <translation>अंतिम कोड संपादन पूर्ववत करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="268"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="268"/>
         <source>Redo the previously undone edit</source>
-        <translation>重做之前撤销的编辑</translation>
+        <translation>पहले पूर्ववत संपादन को फिर से करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="292"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="292"/>
         <source>Cut selected code to clipboard</source>
-        <translation>将选定的代码剪切到剪贴板</translation>
+        <translation>चयनित कोड को क्लिपबोर्ड पर काटें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="305"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="305"/>
         <source>Copy selected code to clipboard</source>
-        <translation>将选定的代码复制到剪贴板</translation>
+        <translation>चयनित कोड को क्लिपबोर्ड पर कॉपी करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
         <source>Paste code from clipboard</source>
-        <translation>从剪贴板粘贴代码</translation>
+        <translation>क्लिपबोर्ड से कोड पेस्ट करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="337"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="337"/>
         <source>Help</source>
-        <translation>帮助</translation>
+        <translation>सहायता</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="342"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="342"/>
         <source>Open help documentation for JavaScript data parsing</source>
-        <translation>打开 JavaScript 数据解析的帮助文档</translation>
+        <translation>जावास्क्रिप्ट डेटा पार्सिंग के लिए सहायता दस्तावेज़ खोलें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
+        <source>Select Template...</source>
+        <translation>टेम्पलेट चुनें...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
+        <source>Test With Sample Data</source>
+        <translation>नमूना डेटा के साथ परीक्षण करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
+        <source>Evaluate</source>
+        <translation>मूल्यांकन करें</translation>
     </message>
 </context>
 <context>
@@ -2645,7 +2587,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <source>Base Map: %1</source>
-        <translation>底图：%1</translation>
+        <translation>बेस मैप: %1</translation>
     </message>
 </context>
 <context>
@@ -2654,121 +2596,121 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
-        <translation>在此项目中检测到专业功能。</translation>
+        <translation>इस प्रोजेक्ट में प्रो फीचर्स का पता चला है।</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>将使用备用小部件。购买许可证以解锁全部功能。</translation>
+        <translation>फॉलबैक विजेट का उपयोग किया जाएगा। पूर्ण कार्यक्षमता अनलॉक करने के लिए लाइसेंस खरीदें।</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="116"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="116"/>
         <source>Dataset</source>
-        <translation>数据集</translation>
+        <translation>डेटा सेट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="121"/>
         <source>Add a generic dataset to the current group</source>
-        <translation>向当前组添加通用数据集</translation>
+        <translation>वर्तमान समूह में एक सामान्य डेटा सेट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="129"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="129"/>
         <source>Plot</source>
-        <translation>图表</translation>
+        <translation>प्लॉट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="135"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="135"/>
         <source>Add a 2D plot to visualize numeric data</source>
-        <translation>添加 2D 图表以可视化数值数据</translation>
+        <translation>संख्यात्मक डेटा को दृश्य बनाने के लिए 2D प्लॉट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="144"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="144"/>
         <source>FFT Plot</source>
-        <translation>FFT 图表</translation>
+        <translation>FFT प्लॉट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="149"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="149"/>
         <source>Add an FFT plot for frequency domain visualization</source>
-        <translation>添加 FFT 图表以进行频域可视化</translation>
+        <translation>आवृत्ति डोमेन दृश्य के लिए FFT प्लॉट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="158"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="158"/>
         <source>Bar/Level</source>
-        <translation>条形/级别</translation>
+        <translation>बार/स्तर</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="163"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="163"/>
         <source>Add a bar or level indicator for scaled values</source>
-        <translation>添加条形或级别指示器以显示缩放值</translation>
+        <translation>स्केल्ड मानों के लिए बार या स्तर संकेतक जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="171"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="171"/>
         <source>Gauge</source>
-        <translation>仪表</translation>
+        <translation>गेज</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="177"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="177"/>
         <source>Add a gauge widget for analog-style visualization</source>
-        <translation>添加仪表小部件以进行模拟风格可视化</translation>
+        <translation>एनालॉग-शैली दृश्य के लिए गेज विजेट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="186"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="186"/>
         <source>Compass</source>
-        <translation>罗盘</translation>
+        <translation>कम्पास</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="191"/>
         <source>Add a compass to display directional or angular data</source>
-        <translation>添加罗盘以显示方向或角度数据</translation>
+        <translation>दिशात्मक या कोणीय डेटा प्रदर्शित करने के लिए एक कंपास जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="199"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="199"/>
         <source>LED</source>
-        <translation>LED</translation>
+        <translation>एलईडी</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <source>Add an LED indicator for binary status signals</source>
-        <translation>为二进制状态信号添加一个 LED 指示器</translation>
+        <translation>बाइनरी स्थिति संकेतों के लिए एक एलईडी संकेतक जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="221"/>
         <source>Duplicate</source>
-        <translation>复制</translation>
+        <translation>डुप्लिकेट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="225"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="225"/>
         <source>Duplicate the current group and its contents</source>
-        <translation>复制当前组及其内容</translation>
+        <translation>वर्तमान समूह और इसकी सामग्री को डुप्लिकेट करें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="234"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="234"/>
         <source>Delete</source>
-        <translation>删除</translation>
+        <translation>हटाएं</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="238"/>
         <source>Delete the current group and all contained datasets</source>
-        <translation>删除当前组及其所有数据集</translation>
+        <translation>वर्तमान समूह और सभी समाहित डेटा सेट हटाएं</translation>
     </message>
 </context>
 <context>
@@ -2777,83 +2719,25 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="99"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="99"/>
         <source>Integrate Angles</source>
-        <translation>积分角度</translation>
+        <translation>कोण एकीकृत करें</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="343"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="343"/>
         <source>Roll: %1</source>
-        <translation>横滚: %1</translation>
+        <translation>रोल: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="361"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="361"/>
         <source>Yaw: %1</source>
-        <translation>偏航: %1</translation>
+        <translation>यॉ: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="379"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="379"/>
         <source>Pitch: %1</source>
-        <translation>俯仰: %1</translation>
-    </message>
-</context>
-<context>
-    <name>IO::Console</name>
-    <message>
-        <source>ASCII</source>
-        <translation type="vanished">ASCII</translation>
-    </message>
-    <message>
-        <source>HEX</source>
-        <translation type="vanished">HEX</translation>
-    </message>
-    <message>
-        <source>No Line Ending</source>
-        <translation type="vanished">无行结尾</translation>
-    </message>
-    <message>
-        <source>New Line</source>
-        <translation type="vanished">新行</translation>
-    </message>
-    <message>
-        <source>Carriage Return</source>
-        <translation type="vanished">回车</translation>
-    </message>
-    <message>
-        <source>CR + NL</source>
-        <translation type="vanished">回车 + 新行</translation>
-    </message>
-    <message>
-        <source>Plain Text</source>
-        <translation type="vanished">纯文本</translation>
-    </message>
-    <message>
-        <source>Hexadecimal</source>
-        <translation type="vanished">十六进制</translation>
-    </message>
-    <message>
-        <source>No Checksum</source>
-        <translation type="vanished">无校验和</translation>
-    </message>
-</context>
-<context>
-    <name>IO::ConsoleExport</name>
-    <message>
-        <source>Console Export is a Pro feature.</source>
-        <translation type="vanished">控制台导出是专业版功能。</translation>
-    </message>
-    <message>
-        <source>This feature requires a license. Please purchase one to enable console export.</source>
-        <translation type="vanished">此功能需要许可证。请购买以启用控制台导出。</translation>
-    </message>
-    <message>
-        <source>Console Output File Error</source>
-        <translation type="vanished">控制台输出文件错误</translation>
-    </message>
-    <message>
-        <source>Cannot open file for writing!</source>
-        <translation type="vanished">无法打开文件进行写入！</translation>
+        <translation>पिच: %1</translation>
     </message>
 </context>
 <context>
@@ -2861,47 +2745,47 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="939"/>
         <source>channels</source>
-        <translation>通道</translation>
+        <translation>चैनल</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1012"/>
         <source> channels</source>
-        <translation> 通道</translation>
+        <translation>चैनल</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1191"/>
         <source>Unsigned 8-bit</source>
-        <translation>无符号 8 位</translation>
+        <translation>अनसाइन्ड 8-बिट</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1192"/>
         <source>Signed 16-bit</source>
-        <translation>有符号 16 位</translation>
+        <translation>साइन 16-बिट</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1193"/>
         <source>Signed 24-bit</source>
-        <translation>有符号 24 位</translation>
+        <translation>साइन 24-बिट</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1194"/>
         <source>Signed 32-bit</source>
-        <translation>有符号 32 位</translation>
+        <translation>साइन 32-बिट</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1195"/>
         <source>Float 32-bit</source>
-        <translation>浮点 32 位</translation>
+        <translation>फ्लोट 32-बिट</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1196"/>
         <source>Mono</source>
-        <translation>单声道</translation>
+        <translation>मोनो</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1196"/>
         <source>Stereo</source>
-        <translation>立体声</translation>
+        <translation>स्टीरियो</translation>
     </message>
 </context>
 <context>
@@ -2909,81 +2793,77 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="48"/>
         <source>BLE I/O Module Error</source>
-        <translation>BLE I/O 模块错误</translation>
+        <translation>BLE I/O मॉड्यूल त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="291"/>
         <source>Select Device</source>
-        <translation>选择设备</translation>
+        <translation>डिवाइस चुनें</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="302"/>
         <source>Select Service</source>
-        <translation>选择服务</translation>
+        <translation>सेवा चुनें</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="314"/>
         <source>Select Characteristic</source>
-        <translation>选择特性</translation>
+        <translation>विशेषता चुनें</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="453"/>
         <source>Error while configuring BLE service</source>
-        <translation>配置 BLE 服务时出错</translation>
+        <translation>BLE सेवा को कॉन्फ़िगर करते समय त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="593"/>
         <source>Operation error</source>
-        <translation>操作错误</translation>
+        <translation>संचालन त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="596"/>
         <source>Characteristic write error</source>
-        <translation>特性写入错误</translation>
+        <translation>विशेषता लेखन त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="599"/>
         <source>Descriptor write error</source>
-        <translation>描述符写入错误</translation>
+        <translation>वर्णनकर्ता लेखन त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="602"/>
         <source>Unknown error</source>
-        <translation>未知错误</translation>
+        <translation>अज्ञात त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="605"/>
         <source>Characteristic read error</source>
-        <translation>特征读取错误</translation>
+        <translation>विशेषता पढ़ने की त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="608"/>
         <source>Descriptor read error</source>
-        <translation>描述符读取错误</translation>
-    </message>
-    <message>
-        <source>Bluetooth adapter is off!</source>
-        <translation type="vanished">蓝牙适配器已关闭！</translation>
+        <translation>विवरण पढ़ने में त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="625"/>
         <source>Invalid Bluetooth adapter!</source>
-        <translation>无效的蓝牙适配器！</translation>
+        <translation>अवैध ब्लूटूथ एडेप्टर!</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="628"/>
         <source>Unsuported platform or operating system</source>
-        <translation>不支持的平台或操作系统</translation>
+        <translation>असमर्थित प्लेटफ़ॉर्म या ऑपरेटिंग सिस्टम</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="631"/>
         <source>Unsupported discovery method</source>
-        <translation>不支持的发现方法</translation>
+        <translation>असमर्थित खोज विधि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="634"/>
         <source>General I/O error</source>
-        <translation>常规 I/O 错误</translation>
+        <translation>सामान्य I/O त्रुटि</translation>
     </message>
 </context>
 <context>
@@ -2994,155 +2874,155 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="286"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="292"/>
         <source>CAN Bus Not Available</source>
-        <translation>CAN 总线不可用</translation>
+        <translation>CAN बस उपलब्ध नहीं है</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="275"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, please ensure SocketCAN kernel modules are loaded.</source>
-        <translation>此系统上未找到 CAN 总线插件。
+        <translation>इस सिस्टम पर कोई CAN बस प्लगइन्स नहीं मिले।
 
-在 Linux 上，请确保加载了 SocketCAN 内核模块。</translation>
+लिनक्स पर, कृपया सुनिश्चित करें कि सॉकेटCAN कर्नेल मॉड्यूल लोड हैं।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="281"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, please install CAN hardware drivers (PEAK, Vector, etc.).</source>
-        <translation>此系统上未找到 CAN 总线插件。
+        <translation>इस सिस्टम पर कोई CAN बस प्लगइन्स नहीं मिले।
 
-在 Windows 上，请安装 CAN 硬件驱动程序（PEAK、Vector 等）。</translation>
+विंडोज़ पर, कृपया CAN हार्डवेयर ड्राइवर (PEAK, Vector, आदि) स्थापित करें।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="287"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
-        <translation>此系统上未找到 CAN 总线插件。
+        <translation>इस सिस्टम पर कोई CAN बस प्लगइन्स नहीं मिले।
 
-macOS 上的 CAN 总线支持有限，可能需要第三方硬件驱动程序。</translation>
+macOS पर CAN बस समर्थन सीमित है और इसके लिए तृतीय-पक्ष हार्डवेयर ड्राइवर की आवश्यकता हो सकती है।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="293"/>
         <source>No CAN bus plugins are available on this platform.</source>
-        <translation>此平台上没有可用的 CAN 总线插件。</translation>
+        <translation>इस प्लेटफ़ॉर्म पर कोई CAN बस प्लगइन्स उपलब्ध नहीं हैं।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="302"/>
         <source>Invalid CAN Configuration</source>
-        <translation>CAN 配置无效</translation>
+        <translation>अमान्य CAN कॉन्फ़िगरेशन</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="303"/>
         <source>The CAN bus configuration is incomplete. Please select a valid plugin and interface.</source>
-        <translation>CAN总线配置不完整。请选择有效的插件和接口。</translation>
+        <translation>CAN बस कॉन्फ़िगरेशन अधूरी है। कृपया एक मान्य प्लगइन और इंटरफ़ेस चुनें।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="313"/>
         <source>Invalid Selection</source>
-        <translation>无效选择</translation>
+        <translation>अमान्य चयन</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="314"/>
         <source>The selected plugin or interface is no longer available. Please refresh the lists and try again.</source>
-        <translation>所选插件或接口不再可用。请刷新列表并重试。</translation>
+        <translation>चयनित प्लगइन या इंटरफ़ेस अब उपलब्ध नहीं है। कृपया सूचियों को ताज़ा करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="323"/>
         <source>No Devices Available</source>
-        <translation>无可用设备</translation>
+        <translation>कोई डिवाइस उपलब्ध नहीं</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
         <source>The plugin or interface list is empty. Please refresh the lists and ensure your CAN hardware is connected.</source>
-        <translation>插件或接口列表为空。请刷新列表并确保您的CAN硬件已连接。</translation>
+        <translation>प्लगइन या इंटरफ़ेस सूची खाली है। कृपया सूचियों को ताज़ा करें और सुनिश्चित करें कि आपका CAN हार्डवेयर जुड़ा हुआ है।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="339"/>
         <source>CAN Device Creation Failed</source>
-        <translation>CAN设备创建失败</translation>
+        <translation>CAN डिवाइस निर्माण विफल</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="340"/>
         <source>Unable to create CAN bus device. Please check your hardware and drivers.</source>
-        <translation>无法创建CAN总线设备。请检查您的硬件和驱动程序。</translation>
+        <translation>CAN बस डिवाइस बनाने में असमर्थ। कृपया अपना हार्डवेयर और ड्राइवर जांचें।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
         <source>CAN Connection Failed</source>
-        <translation>CAN连接失败</translation>
+        <translation>CAN कनेक्शन विफल</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
         <source>Unable to connect to CAN bus device. Please check your hardware connection and settings.</source>
-        <translation>无法连接到CAN总线设备。请检查您的硬件连接和设置。</translation>
+        <translation>CAN बस डिवाइस से कनेक्ट करने में असमर्थ। कृपया अपना हार्डवेयर कनेक्शन और सेटिंग्स जांचें।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="679"/>
         <source>CAN Bus Error</source>
-        <translation>CAN总线错误</translation>
+        <translation>CAN बस त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="680"/>
         <source>An error occurred but the CAN device is no longer available.</source>
-        <translation>发生错误，但 CAN 设备不再可用。</translation>
+        <translation>एक त्रुटि हुई लेकिन CAN डिवाइस अब उपलब्ध नहीं है।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="687"/>
         <source>Error code: %1</source>
-        <translation>错误代码：%1</translation>
+        <translation>त्रुटि कोड: %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="689"/>
         <source>CAN Bus Communication Error</source>
-        <translation>CAN 总线通信错误</translation>
+        <translation>CAN बस संचार त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="709"/>
         <source>No CAN driver selected</source>
-        <translation>未选择 CAN 驱动程序</translation>
+        <translation>कोई CAN ड्राइवर चयनित नहीं</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="733"/>
         <source>Load SocketCAN kernel modules first</source>
-        <translation>先加载 SocketCAN 内核模块</translation>
+        <translation>पहले SocketCAN कर्नेल मॉड्यूल लोड करें</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="735"/>
         <source>Set up a virtual CAN interface first</source>
-        <translation>先设置虚拟 CAN 接口</translation>
+        <translation>पहले एक वर्चुअल CAN इंटरफेस सेट करें</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="737"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="766"/>
         <source>No interfaces found for %1</source>
-        <translation>未找到 %1 的接口</translation>
+        <translation>%1 के लिए कोई इंटरफेस नहीं मिला</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="742"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>安装 &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN 驱动程序&lt;/a&gt;</translation>
+        <translation>&lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN ड्राइवर&lt;/a&gt; इंस्टॉल करें</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="749"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>安装 &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN 驱动程序&lt;/a&gt;</translation>
+        <translation>&lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN ड्राइवर&lt;/a&gt; इंस्टॉल करें</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="755"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
-        <translation>安装 &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN 驱动程序&lt;/a&gt;</translation>
+        <translation>&lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN ड्राइवर&lt;/a&gt; स्थापित करें</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="761"/>
         <source>Install %1 drivers</source>
-        <translation>安装 %1 驱动程序</translation>
+        <translation>%1 ड्राइवर स्थापित करें</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="764"/>
         <source>Install %1 drivers for macOS</source>
-        <translation>为 macOS 安装 %1 驱动程序</translation>
+        <translation>macOS के लिए %1 ड्राइवर स्थापित करें</translation>
     </message>
 </context>
 <context>
@@ -3150,92 +3030,92 @@ macOS 上的 CAN 总线支持有限，可能需要第三方硬件驱动程序。
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="331"/>
         <source>Invalid Serial Port</source>
-        <translation>无效的串口</translation>
+        <translation>अमान्य सीरियल पोर्ट</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="332"/>
         <source>The selected serial port is no longer available. Please refresh the port list and try again.</source>
-        <translation>选择的串口不再可用。请刷新端口列表并重试。</translation>
+        <translation>चयनित सीरियल पोर्ट अब उपलब्ध नहीं है। कृपया पोर्ट सूची को रिफ्रेश करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="393"/>
         <source>Modbus Initialization Failed</source>
-        <translation>Modbus 初始化失败</translation>
+        <translation>Modbus प्रारंभ विफल</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="394"/>
         <source>Unable to create Modbus device. Please check your system configuration and try again.</source>
-        <translation>无法创建 Modbus 设备。请检查您的系统配置并重试。</translation>
+        <translation>Modbus डिवाइस बनाने में असमर्थ। कृपया अपनी सिस्टम कॉन्फ़िगरेशन जांचें और पुनः प्रयास करें।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="414"/>
         <source>Modbus Connection Failed</source>
-        <translation>Modbus 连接失败</translation>
+        <translation>Modbus कनेक्शन विफल</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="415"/>
         <source>Unable to connect to the Modbus device. Please check your connection settings.</source>
-        <translation>无法连接到 Modbus 设备。请检查您的连接设置。</translation>
+        <translation>Modbus डिवाइस से कनेक्ट करने में असमर्थ। कृपया अपनी कनेक्शन सेटिंग्स जांचें।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="538"/>
         <source>None</source>
-        <translation>无</translation>
+        <translation>कोई नहीं</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="539"/>
         <source>Even</source>
-        <translation>偶数</translation>
+        <translation>सम</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="540"/>
         <source>Odd</source>
-        <translation>奇数</translation>
+        <translation>विषम</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="541"/>
         <source>Space</source>
-        <translation>空格</translation>
+        <translation>रिक्त</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="542"/>
         <source>Mark</source>
-        <translation>标记</translation>
+        <translation>चिह्न</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="594"/>
         <source>Holding Registers (0x03)</source>
-        <translation>保持寄存器 (0x03)</translation>
+        <translation>होल्डिंग रजिस्टर (0x03)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="595"/>
         <source>Input Registers (0x04)</source>
-        <translation>输入寄存器 (0x04)</translation>
+        <translation>इनपुट रजिस्टर (0x04)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="596"/>
         <source>Coils (0x01)</source>
-        <translation>线圈 (0x01)</translation>
+        <translation>कॉइल्स (0x01)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="597"/>
         <source>Discrete Inputs (0x02)</source>
-        <translation>离散输入 (0x02)</translation>
+        <translation>असतत इनपुट (0x02)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1134"/>
         <source>Error code: %1</source>
-        <translation>错误代码：%1</translation>
+        <translation>त्रुटि कोड: %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1136"/>
         <source>Modbus Communication Error</source>
-        <translation>Modbus通信错误</translation>
+        <translation>मोडबस संचार त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1160"/>
         <source>Select Port</source>
-        <translation>选择端口</translation>
+        <translation>पोर्ट चुनें</translation>
     </message>
 </context>
 <context>
@@ -3243,7 +3123,7 @@ macOS 上的 CAN 总线支持有限，可能需要第三方硬件驱动程序。
     <message>
         <location filename="../../src/IO/Drivers/Network.cpp" line="544"/>
         <source>Network socket error</source>
-        <translation>网络套接字错误</translation>
+        <translation>नेटवर्क सॉकेट त्रुटि</translation>
     </message>
 </context>
 <context>
@@ -3254,43 +3134,43 @@ macOS 上的 CAN 总线支持有限，可能需要第三方硬件驱动程序。
         <location filename="../../src/IO/Drivers/UART.cpp" line="415"/>
         <location filename="../../src/IO/Drivers/UART.cpp" line="457"/>
         <source>None</source>
-        <translation>无</translation>
+        <translation>कोई नहीं</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="286"/>
         <source>Failed to connect to serial port device</source>
-        <translation>无法连接到串口设备</translation>
+        <translation>सीरियल पोर्ट डिवाइस से कनेक्ट करने में विफल</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="384"/>
         <location filename="../../src/IO/Drivers/UART.cpp" line="791"/>
         <source>Select Port</source>
-        <translation>选择端口</translation>
+        <translation>पोर्ट चुनें</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="416"/>
         <source>Even</source>
-        <translation>偶</translation>
+        <translation>सम</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="417"/>
         <source>Odd</source>
-        <translation>奇</translation>
+        <translation>विषम</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="418"/>
         <source>Space</source>
-        <translation>空格</translation>
+        <translation>स्पेस</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="419"/>
         <source>Mark</source>
-        <translation>标记</translation>
+        <translation>मार्क</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="458"/>
         <source>RTS/CTS</source>
-        <translation>RTS/CTS</translation>
+        <translation>आरटीएस/सीटीएस</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="459"/>
@@ -3300,72 +3180,72 @@ macOS 上的 CAN 总线支持有限，可能需要第三方硬件驱动程序。
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="610"/>
         <source>"%1" is not a valid path</source>
-        <translation>“%1” 不是有效路径</translation>
+        <translation>"%1" एक मान्य पथ नहीं है</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="611"/>
         <source>Please type another path to register a custom serial device</source>
-        <translation>请输入另一个路径以注册自定义串行设备</translation>
+        <translation>कृपया एक कस्टम सीरियल डिवाइस पंजीकृत करने के लिए कोई अन्य पथ टाइप करें</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="898"/>
         <source>Critical serial port error</source>
-        <translation>严重的串口错误</translation>
+        <translation>गंभीर सीरियल पोर्ट त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="924"/>
         <source>No error occurred.</source>
-        <translation>没有发生错误。</translation>
+        <translation>कोई त्रुटि नहीं हुई।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="925"/>
         <source>The specified device could not be found. Please check the connection and try again.</source>
-        <translation>找不到指定的设备。请检查连接并重试。</translation>
+        <translation>निर्दिष्ट डिवाइस नहीं मिला। कृपया कनेक्शन की जांच करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="926"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
-        <translation>权限被拒绝。请确保应用程序对设备具有必要的访问权限。</translation>
+        <translation>अनुमति अस्वीकृत। सुनिश्चित करें कि एप्लिकेशन के पास डिवाइस तक आवश्यक पहुँच अधिकार हैं।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="927"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
-        <translation>打开设备失败。设备可能已被使用或不可用。</translation>
+        <translation>डिवाइस खोलने में विफल। यह पहले से उपयोग में हो सकता है या अनुपलब्ध हो सकता है।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="928"/>
         <source>An error occurred while writing data to the device.</source>
-        <translation>向设备写入数据时发生错误。</translation>
+        <translation>डिवाइस पर डेटा लिखते समय एक त्रुटि हुई।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="929"/>
         <source>An error occurred while reading data from the device.</source>
-        <translation>从设备读取数据时发生错误。</translation>
+        <translation>डिवाइस से डेटा पढ़ते समय एक त्रुटि हुई।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="930"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
-        <translation>发生严重资源错误。设备可能已断开或不再可访问。</translation>
+        <translation>एक गंभीर संसाधन त्रुटि हुई। डिवाइस को डिस्कनेक्ट किया जा सकता है या अब सुलभ नहीं है।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="931"/>
         <source>The requested operation is not supported on this device.</source>
-        <translation>请求的操作不支持此设备。</translation>
+        <translation>अनुरोधित ऑपरेशन इस डिवाइस पर समर्थित नहीं है।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="932"/>
         <source>An unknown error occurred. Please check the device and try again.</source>
-        <translation>发生未知错误。请检查设备并重试。</translation>
+        <translation>एक अज्ञात त्रुटि हुई। कृपया डिवाइस की जाँच करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="933"/>
         <source>The operation timed out. The device may not be responding.</source>
-        <translation>操作超时。设备可能没有响应。</translation>
+        <translation>ऑपरेशन का समय समाप्त हो गया। डिवाइस प्रतिक्रिया नहीं दे रहा हो सकता है।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="934"/>
         <source>The device is not open. Please open the device before attempting this operation.</source>
-        <translation>设备未打开。请在尝试此操作前打开设备。</translation>
+        <translation>डिवाइस खुला नहीं है। कृपया इस ऑपरेशन का प्रयास करने से पहले डिवाइस खोलें।</translation>
     </message>
 </context>
 <context>
@@ -3373,12 +3253,12 @@ macOS 上的 CAN 总线支持有限，可能需要第三方硬件驱动程序。
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="85"/>
         <source>No file selected...</source>
-        <translation>未选择文件...</translation>
+        <translation>कोई फ़ाइल चयनित नहीं...</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="119"/>
         <source>Select file to transmit</source>
-        <translation>选择要传输的文件</translation>
+        <translation>प्रेषण के लिए फ़ाइल चुनें</translation>
     </message>
 </context>
 <context>
@@ -3391,37 +3271,37 @@ macOS 上的 CAN 总线支持有限，可能需要第三方硬件驱动程序。
     <message>
         <location filename="../../src/IO/Manager.cpp" line="283"/>
         <source>Network Socket</source>
-        <translation>网络套接字</translation>
+        <translation>नेटवर्क सॉकेट</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="284"/>
         <source>Bluetooth LE</source>
-        <translation>蓝牙 LE</translation>
+        <translation>ब्लूटूथ LE</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="286"/>
         <source>Audio Stream</source>
-        <translation>音频流</translation>
+        <translation>ऑडियो स्ट्रीम</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="287"/>
         <source>Modbus</source>
-        <translation>Modbus</translation>
+        <translation>मोडबस</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="288"/>
         <source>CAN Bus</source>
-        <translation>CAN总线</translation>
+        <translation>सीएएन बस</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="361"/>
         <source>Your trial period has ended.</source>
-        <translation>您的试用期已结束。</translation>
+        <translation>आपकी परीक्षण अवधि समाप्त हो गई है।</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="362"/>
         <source>To continue using Serial Studio, please activate your license.</source>
-        <translation>要继续使用 Serial Studio，请激活您的许可证。</translation>
+        <translation>सीरियल स्टूडियो का उपयोग जारी रखने के लिए, कृपया अपनी लाइसेंस सक्रिय करें।</translation>
     </message>
 </context>
 <context>
@@ -3430,1407 +3310,19 @@ macOS 上的 CAN 总线支持有限，可能需要第三方硬件驱动程序。
         <location filename="../../qml/Dialogs/IconPicker.qml" line="41"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="41"/>
         <source>Select Icon</source>
-        <translation>选择图标</translation>
+        <translation>आइकन चुनें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="112"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="112"/>
         <source>OK</source>
-        <translation>确定</translation>
+        <translation>ठीक है</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="121"/>
         <source>Cancel</source>
-        <translation>取消</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::DBCImporter</name>
-    <message>
-        <source>Import DBC File</source>
-        <translation type="vanished">导入 DBC 文件</translation>
-    </message>
-    <message>
-        <source>DBC Files (*.dbc);;All Files (*)</source>
-        <translation type="vanished">DBC 文件 (*.dbc);;所有文件 (*)</translation>
-    </message>
-    <message>
-        <source>Failed to parse DBC file: %1</source>
-        <translation type="vanished">无法解析 DBC 文件：%1</translation>
-    </message>
-    <message>
-        <source>Please verify the file format and try again.</source>
-        <translation type="vanished">请验证文件格式并重试。</translation>
-    </message>
-    <message>
-        <source>DBC Import Error</source>
-        <translation type="vanished">DBC 导入错误</translation>
-    </message>
-    <message>
-        <source>DBC file contains no messages</source>
-        <translation type="vanished">DBC 文件不包含消息</translation>
-    </message>
-    <message>
-        <source>The selected file does not contain any CAN message definitions.</source>
-        <translation type="vanished">选定的文件不包含任何 CAN 消息定义。</translation>
-    </message>
-    <message>
-        <source>DBC Import Warning</source>
-        <translation type="vanished">DBC 导入警告</translation>
-    </message>
-    <message>
-        <source>Failed to create temporary project file</source>
-        <translation type="vanished">无法创建临时项目文件</translation>
-    </message>
-    <message>
-        <source>Check if the application has write permissions to the temporary directory.</source>
-        <translation type="vanished">检查应用程序是否有临时目录的写权限。</translation>
-    </message>
-    <message>
-        <source>Successfully imported DBC file with %1 messages and %2 signals.</source>
-        <translation type="vanished">成功导入 DBC 文件，包含 %1 条消息和 %2 个信号。</translation>
-    </message>
-    <message>
-        <source>The project editor is now open for customization.</source>
-        <translation type="vanished">项目编辑器现已开放定制。</translation>
-    </message>
-    <message>
-        <source>DBC Import Complete</source>
-        <translation type="vanished">DBC导入完成</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::FrameBuilder</name>
-    <message>
-        <source>JSON parse error</source>
-        <translation type="vanished">JSON 解析错误</translation>
-    </message>
-    <message>
-        <source>This file isn’t a valid project file</source>
-        <translation type="vanished">此文件不是有效的项目文件</translation>
-    </message>
-    <message>
-        <source>Make sure it’s a properly formatted JSON project.</source>
-        <translation type="vanished">请确保它是格式正确的 JSON 项目。</translation>
-    </message>
-    <message>
-        <source>Cannot read JSON file</source>
-        <translation type="vanished">无法读取 JSON 文件</translation>
-    </message>
-    <message>
-        <source>Please check file permissions &amp; location</source>
-        <translation type="vanished">请检查文件权限和位置</translation>
-    </message>
-    <message>
-        <source>Channel %1</source>
-        <translation type="vanished">通道 %1</translation>
-    </message>
-    <message>
-        <source>Audio Input</source>
-        <translation type="vanished">音频输入</translation>
-    </message>
-    <message>
-        <source>Multiple Plots</source>
-        <translation type="vanished">多个图表</translation>
-    </message>
-    <message>
-        <source>Quick Plot</source>
-        <translation type="vanished">快速绘图</translation>
-    </message>
-    <message>
-        <source>Quick Plot Data</source>
-        <translation type="vanished">快速绘图数据</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::FrameParser</name>
-    <message>
-        <source>Frame parser code updated successfully!</source>
-        <translation type="vanished">帧解析器代码更新成功！</translation>
-    </message>
-    <message>
-        <source>No errors have been detected in the code.</source>
-        <translation type="vanished">代码中未检测到错误。</translation>
-    </message>
-    <message>
-        <source>Frame parser error!</source>
-        <translation type="vanished">帧解析器错误！</translation>
-    </message>
-    <message>
-        <source>The 'parse' function is not declared or is not callable!</source>
-        <translation type="vanished">'parse' 函数未声明或不可调用！</translation>
-    </message>
-    <message>
-        <source>No valid 'parse' function declaration found in the script!</source>
-        <translation type="vanished">脚本中未找到有效的 'parse' 函数声明！</translation>
-    </message>
-    <message>
-        <source>Legacy frame parser function detected</source>
-        <translation type="vanished">检测到旧版帧解析器函数</translation>
-    </message>
-    <message>
-        <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
-        <translation type="vanished">'parse' 函数有两个参数 ('%1', '%2')，表明使用旧格式。请更新为仅使用帧数据作为参数的新格式。</translation>
-    </message>
-    <message>
-        <source>The document has been modified!</source>
-        <translation type="vanished">文档已被修改！</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to continue?</source>
-        <translation type="vanished">您确定要继续吗？</translation>
-    </message>
-    <message>
-        <source>JavaScript Syntax Error</source>
-        <translation type="vanished">JavaScript语法错误</translation>
-    </message>
-    <message>
-        <source>The parser code contains a syntax error at line %1:
-
-%2</source>
-        <translation type="vanished">解析器代码在第%1行包含语法错误：
-
-%2</translation>
-    </message>
-    <message>
-        <source>JavaScript Exception Occurred</source>
-        <translation type="vanished">发生JavaScript异常</translation>
-    </message>
-    <message>
-        <source>The parser code triggered the following exceptions:
-
-%1</source>
-        <translation type="vanished">解析器代码触发了以下异常：
-
-%1</translation>
-    </message>
-    <message>
-        <source>Missing Parse Function</source>
-        <translation type="vanished">缺少解析函数</translation>
-    </message>
-    <message>
-        <source>The 'parse' function is not defined in the script.
-
-Please ensure your code includes:
-function parse(frame) { ... }</source>
-        <translation type="vanished">脚本中未定义“parse”函数。
-
-请确保您的代码包含：
-function parse(frame) { ... }</translation>
-    </message>
-    <message>
-        <source>Invalid Parse Function</source>
-        <translation type="vanished">无效的解析函数</translation>
-    </message>
-    <message>
-        <source>The 'parse' property exists but is not a callable function.
-
-Please ensure 'parse' is declared as a function.</source>
-        <translation type="vanished">“parse”属性存在但不是可调用函数。
-
-请确保“parse”被声明为函数。</translation>
-    </message>
-    <message>
-        <source>Invalid Function Declaration</source>
-        <translation type="vanished">无效的函数声明</translation>
-    </message>
-    <message>
-        <source>No valid 'parse' function declaration found.
-
-Expected format:
-function parse(frame) { ... }</source>
-        <translation type="vanished">未找到有效的“parse”函数声明。
-
-预期格式：
-function parse(frame) { ... }</translation>
-    </message>
-    <message>
-        <source>Invalid Function Parameter</source>
-        <translation type="vanished">无效的函数参数</translation>
-    </message>
-    <message>
-        <source>The 'parse' function must have at least one parameter.
-
-Expected format:
-function parse(frame) { ... }</source>
-        <translation type="vanished">“parse”函数必须至少有一个参数。
-
-预期格式：
-function parse(frame) { ... }</translation>
-    </message>
-    <message>
-        <source>Deprecated Function Signature</source>
-        <translation type="vanished">已弃用的函数签名</translation>
-    </message>
-    <message>
-        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
-
-This format is no longer supported. Please update to the new single-parameter format:
-function parse(%1) { ... }
-
-The separator parameter is no longer needed.</source>
-        <translation type="vanished">'parse'函数使用旧的双参数格式：parse(%1, %2)
-
-此格式不再支持。请更新为新的单参数格式：
-function parse(%1) { ... }
-
-不再需要分隔符参数。</translation>
-    </message>
-    <message>
-        <source>Parse Function Runtime Error</source>
-        <translation type="vanished">解析函数运行时错误</translation>
-    </message>
-    <message>
-        <source>The parse function contains an error at line %1:
-
-%2
-
-Please fix the error in the function body.</source>
-        <translation type="vanished">解析函数在第%1行包含错误：
-
-%2
-
-请修正函数体中的错误。</translation>
-    </message>
-    <message>
-        <source>The document has been modified.</source>
-        <translation type="vanished">文档已被修改。</translation>
-    </message>
-    <message>
-        <source>Select Javascript file to import</source>
-        <translation type="vanished">选择要导入的 Javascript 文件</translation>
-    </message>
-    <message>
-        <source>Code Validation Successful</source>
-        <translation type="vanished">代码验证成功</translation>
-    </message>
-    <message>
-        <source>No syntax errors detected in the parser code.</source>
-        <translation type="vanished">在解析器代码中未检测到语法错误。</translation>
-    </message>
-    <message>
-        <source>Select Frame Parser Template</source>
-        <translation type="vanished">选择帧解析器模板</translation>
-    </message>
-    <message>
-        <source>Choose a template to load:</source>
-        <translation type="vanished">选择要加载的模板：</translation>
-    </message>
-    <message>
-        <source>AT command responses</source>
-        <translation type="vanished">AT命令响应</translation>
-    </message>
-    <message>
-        <source>Base64-encoded data</source>
-        <translation type="vanished">Base64编码数据</translation>
-    </message>
-    <message>
-        <source>Binary TLV (Tag-Length-Value)</source>
-        <translation type="vanished">二进制 TLV（标签-长度-值）</translation>
-    </message>
-    <message>
-        <source>CAN bus frames</source>
-        <translation type="vanished">CAN 总线帧</translation>
-    </message>
-    <message>
-        <source>COBS-encoded frames</source>
-        <translation type="vanished">COBS 编码帧</translation>
-    </message>
-    <message>
-        <source>Comma-separated data</source>
-        <translation type="vanished">逗号分隔数据</translation>
-    </message>
-    <message>
-        <source>Fixed-width fields</source>
-        <translation type="vanished">固定宽度字段</translation>
-    </message>
-    <message>
-        <source>Hexadecimal bytes</source>
-        <translation type="vanished">十六进制字节</translation>
-    </message>
-    <message>
-        <source>INI/config format</source>
-        <translation type="vanished">INI/配置格式</translation>
-    </message>
-    <message>
-        <source>JSON data</source>
-        <translation type="vanished">JSON 数据</translation>
-    </message>
-    <message>
-        <source>Key-value pairs</source>
-        <translation type="vanished">键值对</translation>
-    </message>
-    <message>
-        <source>MAVLink messages</source>
-        <translation type="vanished">MAVLink 消息</translation>
-    </message>
-    <message>
-        <source>MessagePack data</source>
-        <translation type="vanished">MessagePack 数据</translation>
-    </message>
-    <message>
-        <source>Modbus frames</source>
-        <translation type="vanished">Modbus 帧</translation>
-    </message>
-    <message>
-        <source>Modbus ASCII frames</source>
-        <translation type="vanished">Modbus ASCII 帧</translation>
-    </message>
-    <message>
-        <source>Modbus RTU frames</source>
-        <translation type="vanished">Modbus RTU 帧</translation>
-    </message>
-    <message>
-        <source>NMEA 0183 sentences</source>
-        <translation type="vanished">NMEA 0183 语句</translation>
-    </message>
-    <message>
-        <source>NMEA 2000 messages</source>
-        <translation type="vanished">NMEA 2000 消息</translation>
-    </message>
-    <message>
-        <source>Pipe-delimited data</source>
-        <translation type="vanished">管道分隔数据</translation>
-    </message>
-    <message>
-        <source>Raw bytes</source>
-        <translation type="vanished">原始字节</translation>
-    </message>
-    <message>
-        <source>RTCM corrections</source>
-        <translation type="vanished">RTCM 校正</translation>
-    </message>
-    <message>
-        <source>Semicolon-separated data</source>
-        <translation type="vanished">分号分隔数据</translation>
-    </message>
-    <message>
-        <source>SiRF binary protocol</source>
-        <translation type="vanished">SiRF 二进制协议</translation>
-    </message>
-    <message>
-        <source>SLIP-encoded frames</source>
-        <translation type="vanished">SLIP编码帧</translation>
-    </message>
-    <message>
-        <source>Tab-separated data</source>
-        <translation type="vanished">制表符分隔数据</translation>
-    </message>
-    <message>
-        <source>UBX protocol (u-blox)</source>
-        <translation type="vanished">UBX协议（u-blox）</translation>
-    </message>
-    <message>
-        <source>URL-encoded data</source>
-        <translation type="vanished">URL编码数据</translation>
-    </message>
-    <message>
-        <source>XML data</source>
-        <translation type="vanished">XML数据</translation>
-    </message>
-    <message>
-        <source>YAML data</source>
-        <translation type="vanished">YAML数据</translation>
-    </message>
-    <message>
-        <source>Loading a template will replace your current code.</source>
-        <translation type="vanished">加载模板将替换您当前的代码。</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::FrameParserTestDialog</name>
-    <message>
-        <source>Invalid Hex Input</source>
-        <translation type="vanished">无效的十六进制输入</translation>
-    </message>
-    <message>
-        <source>Please enter valid hexadecimal bytes.
-
-Valid format: 01 A2 FF 3C</source>
-        <translation type="vanished">请输入有效的十六进制字节。
-
-有效格式：01 A2 FF 3C</translation>
-    </message>
-    <message>
-        <source>HEX</source>
-        <translation type="vanished">十六进制</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="vanished">清除</translation>
-    </message>
-    <message>
-        <source>Evaluate</source>
-        <translation type="vanished">评估</translation>
-    </message>
-    <message>
-        <source>Frame Data Input</source>
-        <translation type="vanished">帧数据输入</translation>
-    </message>
-    <message>
-        <source>Frame Parser Results</source>
-        <translation type="vanished">帧解析结果</translation>
-    </message>
-    <message>
-        <source>Enter frame data here...</source>
-        <translation type="vanished">在此输入帧数据...</translation>
-    </message>
-    <message>
-        <source>Dataset Index</source>
-        <translation type="vanished">数据集索引</translation>
-    </message>
-    <message>
-        <source>Value</source>
-        <translation type="vanished">值</translation>
-    </message>
-    <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
-
-Example (Text): a,b,c,d,e,f
-Example (HEX):  48 65 6C 6C 6F</source>
-        <translation type="vanished">在上方输入帧数据，如有需要启用HEX模式，然后点击“评估”以运行帧解析器。
-
-示例（文本）：a,b,c,d,e,f
-示例（HEX）：48 65 6C 6C 6F</translation>
-    </message>
-    <message>
-        <source>Test Frame Parser</source>
-        <translation type="vanished">测试帧解析器</translation>
-    </message>
-    <message>
-        <source>Enter hex bytes (e.g., 01 A2 FF)</source>
-        <translation type="vanished">输入十六进制字节（例如，01 A2 FF）</translation>
-    </message>
-    <message>
-        <source>(empty)</source>
-        <translation type="vanished">(空)</translation>
-    </message>
-    <message>
-        <source>No data returned</source>
-        <translation type="vanished">未返回数据</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::ProjectModel</name>
-    <message>
-        <source>New Project</source>
-        <translation type="vanished">新建项目</translation>
-    </message>
-    <message>
-        <source>Samples</source>
-        <translation type="vanished">示例</translation>
-    </message>
-    <message>
-        <source>Do you want to save your changes?</source>
-        <translation type="vanished">您要保存更改吗？</translation>
-    </message>
-    <message>
-        <source>You have unsaved modifications in this project!</source>
-        <translation type="vanished">您在此项目中有未保存的修改！</translation>
-    </message>
-    <message>
-        <source>Project error</source>
-        <translation type="vanished">项目错误</translation>
-    </message>
-    <message>
-        <source>Project title cannot be empty!</source>
-        <translation type="vanished">项目标题不能为空！</translation>
-    </message>
-    <message>
-        <source>You need to add at least one group!</source>
-        <translation type="vanished">您需要至少添加一个组！</translation>
-    </message>
-    <message>
-        <source>You need to add at least one dataset!</source>
-        <translation type="vanished">您需要至少添加一个数据集！</translation>
-    </message>
-    <message>
-        <source>Save Serial Studio Project</source>
-        <translation type="vanished">保存 Serial Studio 项目</translation>
-    </message>
-    <message>
-        <source>Project Information</source>
-        <translation type="vanished">项目信息</translation>
-    </message>
-    <message>
-        <source>Project Title</source>
-        <translation type="vanished">项目标题</translation>
-    </message>
-    <message>
-        <source>Name or description of the project</source>
-        <translation type="vanished">项目的名称或描述</translation>
-    </message>
-    <message>
-        <source>Frame Detection Method</source>
-        <translation type="vanished">帧检测方法</translation>
-    </message>
-    <message>
-        <source>Select how incoming data frames are identified</source>
-        <translation type="vanished">选择如何识别传入数据帧</translation>
-    </message>
-    <message>
-        <source>Hexadecimal Delimiters</source>
-        <translation type="vanished">十六进制分隔符</translation>
-    </message>
-    <message>
-        <source>Use hex values to define frame boundaries</source>
-        <translation type="vanished">使用十六进制值定义帧边界</translation>
-    </message>
-    <message>
-        <source>Start Sequence</source>
-        <translation type="vanished">起始序列</translation>
-    </message>
-    <message>
-        <source>Marks the beginning of each data frame</source>
-        <translation type="vanished">标记每个数据帧的开始</translation>
-    </message>
-    <message>
-        <source>End Sequence</source>
-        <translation type="vanished">结束序列</translation>
-    </message>
-    <message>
-        <source>Marks the end of each data frame</source>
-        <translation type="vanished">标记每个数据帧的结束</translation>
-    </message>
-    <message>
-        <source>Payload Processing &amp; Validation</source>
-        <translation type="vanished">负载处理和验证</translation>
-    </message>
-    <message>
-        <source>Data Format</source>
-        <translation type="vanished">数据格式</translation>
-    </message>
-    <message>
-        <source>Format of raw data used for decoding each frame</source>
-        <translation type="vanished">用于解码每个帧的原始数据格式</translation>
-    </message>
-    <message>
-        <source>Method used to validate frame integrity</source>
-        <translation type="vanished">用于验证帧完整性的方法</translation>
-    </message>
-    <message>
-        <source>Group Information</source>
-        <translation type="vanished">组信息</translation>
-    </message>
-    <message>
-        <source>Group Title</source>
-        <translation type="vanished">组标题</translation>
-    </message>
-    <message>
-        <source>Title or description of this dataset group</source>
-        <translation type="vanished">此数据集组的标题或描述</translation>
-    </message>
-    <message>
-        <source>Composite Widget</source>
-        <translation type="vanished">复合小部件</translation>
-    </message>
-    <message>
-        <source>Select how this group of datasets should be visualized (optional)</source>
-        <translation type="vanished">选择如何可视化这组数据集（可选）</translation>
-    </message>
-    <message>
-        <source>Action Title</source>
-        <translation type="vanished">操作标题</translation>
-    </message>
-    <message>
-        <source>Name or description of this action</source>
-        <translation type="vanished">此操作的名称或描述</translation>
-    </message>
-    <message>
-        <source>Action Icon</source>
-        <translation type="vanished">操作图标</translation>
-    </message>
-    <message>
-        <source>Icon displayed for this action in the dashboard</source>
-        <translation type="vanished">仪表板中显示此操作的图标</translation>
-    </message>
-    <message>
-        <source>Data Payload</source>
-        <translation type="vanished">数据负载</translation>
-    </message>
-    <message>
-        <source>Send as Binary</source>
-        <translation type="vanished">以二进制发送</translation>
-    </message>
-    <message>
-        <source>Send raw binary data when this action is triggered</source>
-        <translation type="vanished">触发此操作时发送原始二进制数据</translation>
-    </message>
-    <message>
-        <source>Transmit Data (Hex)</source>
-        <translation type="vanished">传输数据（十六进制）</translation>
-    </message>
-    <message>
-        <source>Hexadecimal payload to send when the action is triggered</source>
-        <translation type="vanished">触发操作时发送的十六进制负载</translation>
-    </message>
-    <message>
-        <source>Transmit Data</source>
-        <translation type="vanished">传输数据</translation>
-    </message>
-    <message>
-        <source>Text payload to send when the action is triggered</source>
-        <translation type="vanished">触发操作时发送的文本负载</translation>
-    </message>
-    <message>
-        <source>End-of-Line Sequence</source>
-        <translation type="vanished">行结尾序列</translation>
-    </message>
-    <message>
-        <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
-        <translation type="vanished">消息要附加的 EOL 字符（例如 \n, \r\n）</translation>
-    </message>
-    <message>
-        <source>Execution Behavior</source>
-        <translation type="vanished">执行行为</translation>
-    </message>
-    <message>
-        <source>Auto-Execute on Connect</source>
-        <translation type="vanished">连接时自动执行</translation>
-    </message>
-    <message>
-        <source>Automatically trigger this action when the device connects</source>
-        <translation type="vanished">设备连接时自动触发此操作</translation>
-    </message>
-    <message>
-        <source>Timer Behavior</source>
-        <translation type="vanished">定时器行为</translation>
-    </message>
-    <message>
-        <source>Choose when and how this action should repeat automatically</source>
-        <translation type="vanished">选择此操作应何时以及如何自动重复</translation>
-    </message>
-    <message>
-        <source>Interval (ms)</source>
-        <translation type="vanished">间隔（毫秒）</translation>
-    </message>
-    <message>
-        <source>Milliseconds between each repeated trigger of this action</source>
-        <translation type="vanished">每次重复触发此操作之间的毫秒数</translation>
-    </message>
-    <message>
-        <source>Dataset Title</source>
-        <translation type="vanished">数据集标题</translation>
-    </message>
-    <message>
-        <source>Name of the dataset, used for labeling and identification</source>
-        <translation type="vanished">数据集名称，用于标记和识别</translation>
-    </message>
-    <message>
-        <source>Frame position used for aligning datasets in time</source>
-        <translation type="vanished">用于对齐数据集时间的帧位置</translation>
-    </message>
-    <message>
-        <source>Unit of measurement, such as volts or amps (optional)</source>
-        <translation type="vanished">测量单位，如伏特或安培（可选）</translation>
-    </message>
-    <message>
-        <source>Plot Settings</source>
-        <translation type="vanished">绘图设置</translation>
-    </message>
-    <message>
-        <source>Enable Plot Widget</source>
-        <translation type="vanished">启用绘图小部件</translation>
-    </message>
-    <message>
-        <source>Choose which dataset to use for the X-Axis in plots</source>
-        <translation type="vanished">选择用于绘图中 X 轴的数据集</translation>
-    </message>
-    <message>
-        <source>Minimum Plot Value (optional)</source>
-        <translation type="vanished">最小绘图值（可选）</translation>
-    </message>
-    <message>
-        <source>Lower bound for plot display range</source>
-        <translation type="vanished">绘图显示范围的下限</translation>
-    </message>
-    <message>
-        <source>Maximum Plot Value (optional)</source>
-        <translation type="vanished">最大绘图值（可选）</translation>
-    </message>
-    <message>
-        <source>Upper bound for plot display range</source>
-        <translation type="vanished">绘图显示范围的上限</translation>
-    </message>
-    <message>
-        <source>FFT Configuration</source>
-        <translation type="vanished">FFT 配置</translation>
-    </message>
-    <message>
-        <source>Enable FFT Analysis</source>
-        <translation type="vanished">启用 FFT 分析</translation>
-    </message>
-    <message>
-        <source>Perform frequency-domain analysis of the dataset</source>
-        <translation type="vanished">执行数据集的频域分析</translation>
-    </message>
-    <message>
-        <source>Number of samples used for each FFT calculation window</source>
-        <translation type="vanished">每个 FFT 计算窗口使用的样本数量</translation>
-    </message>
-    <message>
-        <source>FFT Sampling Rate (Hz, required)</source>
-        <translation type="vanished">FFT 采样率（Hz，必需）</translation>
-    </message>
-    <message>
-        <source>Sampling frequency used for FFT (in Hz)</source>
-        <translation type="vanished">FFT 使用的采样频率（单位：Hz）</translation>
-    </message>
-    <message>
-        <source>Minimum Value (recommended)</source>
-        <translation type="vanished">最小值（推荐）</translation>
-    </message>
-    <message>
-        <source>Lower bound for data normalization</source>
-        <translation type="vanished">数据归一化的下限</translation>
-    </message>
-    <message>
-        <source>Maximum Value (recommended)</source>
-        <translation type="vanished">最大值（推荐）</translation>
-    </message>
-    <message>
-        <source>Upper bound for data normalization</source>
-        <translation type="vanished">数据归一化的上限</translation>
-    </message>
-    <message>
-        <source>Widget Settings</source>
-        <translation type="vanished">小部件设置</translation>
-    </message>
-    <message>
-        <source>Alarm Settings</source>
-        <translation type="vanished">报警设置</translation>
-    </message>
-    <message>
-        <source>Enable Alarms</source>
-        <translation type="vanished">启用报警</translation>
-    </message>
-    <message>
-        <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
-        <translation type="vanished">当值超过报警阈值时触发视觉报警</translation>
-    </message>
-    <message>
-        <source>Low Threshold</source>
-        <translation type="vanished">低阈值</translation>
-    </message>
-    <message>
-        <source>High Threshold</source>
-        <translation type="vanished">高阈值</translation>
-    </message>
-    <message>
-        <source>Display Widget</source>
-        <translation type="vanished">显示小部件</translation>
-    </message>
-    <message>
-        <source>Select the visual widget used to display this dataset</source>
-        <translation type="vanished">选择用于显示此数据集的可视化小部件</translation>
-    </message>
-    <message>
-        <source>Show in Overview</source>
-        <translation type="vanished">在概览中显示</translation>
-    </message>
-    <message>
-        <source>Display this widget in the dashboard overview (if enabled)</source>
-        <translation type="vanished">在仪表板概览中显示此小部件（如果启用）</translation>
-    </message>
-    <message>
-        <source>Minimum Display Value (required)</source>
-        <translation type="vanished">最小显示值（必需）</translation>
-    </message>
-    <message>
-        <source>Lower bound of the gauge or bar display range</source>
-        <translation type="vanished">仪表或条形图显示范围的下限</translation>
-    </message>
-    <message>
-        <source>Maximum Display Value (required)</source>
-        <translation type="vanished">最大显示值（必需）</translation>
-    </message>
-    <message>
-        <source>Upper bound of the gauge or bar display range</source>
-        <translation type="vanished">仪表或条形图显示范围的上限</translation>
-    </message>
-    <message>
-        <source>Alarm: Low Threshold (optional)</source>
-        <translation type="vanished">报警：低阈值（可选）</translation>
-    </message>
-    <message>
-        <source>Triggers a visual alarm when the value drops below this threshold</source>
-        <translation type="vanished">当值低于此阈值时触发视觉报警</translation>
-    </message>
-    <message>
-        <source>Alarm: High Threshold (optional)</source>
-        <translation type="vanished">报警：高阈值（可选）</translation>
-    </message>
-    <message>
-        <source>Triggers a visual alarm when the value exceeds this threshold</source>
-        <translation type="vanished">当值超过此阈值时触发视觉警报</translation>
-    </message>
-    <message>
-        <source>LED Display Settings</source>
-        <translation type="vanished">LED 显示设置</translation>
-    </message>
-    <message>
-        <source>Enable visual status monitoring using an LED display</source>
-        <translation type="vanished">使用 LED 显示启用视觉状态监控</translation>
-    </message>
-    <message>
-        <source>LED On Threshold (required)</source>
-        <translation type="vanished">LED 开启阈值（必需）</translation>
-    </message>
-    <message>
-        <source>LED lights up when value meets or exceeds this threshold</source>
-        <translation type="vanished">当值达到或超过此阈值时，LED 点亮</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">是</translation>
-    </message>
-    <message>
-        <source>File open error</source>
-        <translation type="vanished">文件打开错误</translation>
-    </message>
-    <message>
-        <source>Untitled Project</source>
-        <translation type="vanished">无标题项目</translation>
-    </message>
-    <message>
-        <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation type="vanished">Serial Studio 项目文件 (*.ssproj)</translation>
-    </message>
-    <message>
-        <source>Select Project File</source>
-        <translation type="vanished">选择项目文件</translation>
-    </message>
-    <message>
-        <source>Project Files (*.json *.ssproj)</source>
-        <translation type="vanished">项目文件 (*.json *.ssproj)</translation>
-    </message>
-    <message>
-        <source>Legacy frame parser function updated</source>
-        <translation type="vanished">旧版帧解析函数已更新</translation>
-    </message>
-    <message>
-        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation type="vanished">您的项目使用了带有“分隔符”参数的旧版帧解析函数。它已自动迁移到新格式。</translation>
-    </message>
-    <message>
-        <source>Switch Serial Studio to Project Mode?</source>
-        <translation type="vanished">是否将 Serial Studio 切换到项目模式？</translation>
-    </message>
-    <message>
-        <source>This operation mode is required to load and display dashboards from project files.</source>
-        <translation type="vanished">此操作模式是加载和显示项目文件中的仪表板所必需的。</translation>
-    </message>
-    <message>
-        <source>Do you want to delete group "%1"?</source>
-        <translation type="vanished">您要删除组“%1”吗？</translation>
-    </message>
-    <message>
-        <source>This action cannot be undone. Do you wish to proceed?</source>
-        <translation type="vanished">此操作无法撤销。您确定要继续吗？</translation>
-    </message>
-    <message>
-        <source>Do you want to delete action "%1"?</source>
-        <translation type="vanished">您要删除操作“%1”吗？</translation>
-    </message>
-    <message>
-        <source>Do you want to delete dataset "%1"?</source>
-        <translation type="vanished">您想删除数据集“%1”吗？</translation>
-    </message>
-    <message>
-        <source>%1 (Copy)</source>
-        <translation type="vanished">%1（副本）</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">组</translation>
-    </message>
-    <message>
-        <source>New Dataset</source>
-        <translation type="vanished">新建数据集</translation>
-    </message>
-    <message>
-        <source>New Plot</source>
-        <translation type="vanished">新建图表</translation>
-    </message>
-    <message>
-        <source>New FFT Plot</source>
-        <translation type="vanished">新建 FFT 图表</translation>
-    </message>
-    <message>
-        <source>New Level Indicator</source>
-        <translation type="vanished">新建水平指示器</translation>
-    </message>
-    <message>
-        <source>New Gauge</source>
-        <translation type="vanished">新建仪表</translation>
-    </message>
-    <message>
-        <source>New Compass</source>
-        <translation type="vanished">新建指南针</translation>
-    </message>
-    <message>
-        <source>New LED Indicator</source>
-        <translation type="vanished">新建 LED 指示器</translation>
-    </message>
-    <message>
-        <source>New Action</source>
-        <translation type="vanished">新建操作</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to change the group-level widget?</source>
-        <translation type="vanished">您确定要更改组级别的小部件吗？</translation>
-    </message>
-    <message>
-        <source>Existing datasets for this group will be deleted</source>
-        <translation type="vanished">此组的现有数据集将被删除</translation>
-    </message>
-    <message>
-        <source>Accelerometer %1</source>
-        <translation type="vanished">加速度计 %1</translation>
-    </message>
-    <message>
-        <source>Gyro %1</source>
-        <translation type="vanished">陀螺仪 %1</translation>
-    </message>
-    <message>
-        <source>Latitude</source>
-        <translation type="vanished">纬度</translation>
-    </message>
-    <message>
-        <source>Longitude</source>
-        <translation type="vanished">经度</translation>
-    </message>
-    <message>
-        <source>Altitude</source>
-        <translation type="vanished">海拔</translation>
-    </message>
-    <message>
-        <source>X</source>
-        <translation type="vanished">X</translation>
-    </message>
-    <message>
-        <source>Y</source>
-        <translation type="vanished">Y</translation>
-    </message>
-    <message>
-        <source>Z</source>
-        <translation type="vanished">Z</translation>
-    </message>
-    <message>
-        <source>Frame Parser Code</source>
-        <translation type="vanished">帧解析器代码</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="vanished">标题</translation>
-    </message>
-    <message>
-        <source>Project name/description</source>
-        <translation type="vanished">项目名称/描述</translation>
-    </message>
-    <message>
-        <source>Data Conversion Method</source>
-        <translation type="vanished">数据转换方法</translation>
-    </message>
-    <message>
-        <source>Input data format for frame parser</source>
-        <translation type="vanished">帧解析器输入数据格式</translation>
-    </message>
-    <message>
-        <source>Frame Detection</source>
-        <translation type="vanished">帧检测</translation>
-    </message>
-    <message>
-        <source>Strategy used for identifying frame data</source>
-        <translation type="vanished">用于识别帧数据的策略</translation>
-    </message>
-    <message>
-        <source>Frame Start Delimeter</source>
-        <translation type="vanished">帧起始分隔符</translation>
-    </message>
-    <message>
-        <source>String marking the start of a frame</source>
-        <translation type="vanished">标记帧起始的字符串</translation>
-    </message>
-    <message>
-        <source>Frame End Delimeter</source>
-        <translation type="vanished">帧结束分隔符</translation>
-    </message>
-    <message>
-        <source>String marking the end of a frame</source>
-        <translation type="vanished">标记帧结束的字符串</translation>
-    </message>
-    <message>
-        <source>Hexadecimal Delimeters</source>
-        <translation type="vanished">十六进制分隔符</translation>
-    </message>
-    <message>
-        <source>Use hexadecimal delimiters for data frames</source>
-        <translation type="vanished">对数据帧使用十六进制分隔符</translation>
-    </message>
-    <message>
-        <source>Checksum Algorithm</source>
-        <translation type="vanished">校验和算法</translation>
-    </message>
-    <message>
-        <source>Checksum algorithm used for frame validation</source>
-        <translation type="vanished">用于帧验证的校验和算法</translation>
-    </message>
-    <message>
-        <source>Untitled Group</source>
-        <translation type="vanished">未命名组</translation>
-    </message>
-    <message>
-        <source>Name or description of the group</source>
-        <translation type="vanished">组的名称或描述</translation>
-    </message>
-    <message>
-        <source>Visual Widget</source>
-        <translation type="vanished">可视化小部件</translation>
-    </message>
-    <message>
-        <source>Widget</source>
-        <translation type="vanished">小部件</translation>
-    </message>
-    <message>
-        <source>Group display widget (optional)</source>
-        <translation type="vanished">组显示小部件（可选）</translation>
-    </message>
-    <message>
-        <source>Untitled Action</source>
-        <translation type="vanished">无标题操作</translation>
-    </message>
-    <message>
-        <source>Name or description of the action</source>
-        <translation type="vanished">操作的名称或描述</translation>
-    </message>
-    <message>
-        <source>Icon</source>
-        <translation type="vanished">图标</translation>
-    </message>
-    <message>
-        <source>Default Icon</source>
-        <translation type="vanished">默认图标</translation>
-    </message>
-    <message>
-        <source>Icon to display in the dashboard</source>
-        <translation type="vanished">仪表板上显示的图标</translation>
-    </message>
-    <message>
-        <source>Binary Data</source>
-        <translation type="vanished">二进制数据</translation>
-    </message>
-    <message>
-        <source>Send binary data when the action is triggered.</source>
-        <translation type="vanished">触发操作时发送二进制数据。</translation>
-    </message>
-    <message>
-        <source>TX Data (Hex)</source>
-        <translation type="vanished">发送数据（十六进制）</translation>
-    </message>
-    <message>
-        <source>Command</source>
-        <translation type="vanished">命令</translation>
-    </message>
-    <message>
-        <source>Data to transmit when the action is triggered.</source>
-        <translation type="vanished">触发操作时要传输的数据。</translation>
-    </message>
-    <message>
-        <source>TX Data</source>
-        <translation type="vanished">发送数据</translation>
-    </message>
-    <message>
-        <source>EOL Sequence</source>
-        <translation type="vanished">换行符序列</translation>
-    </message>
-    <message>
-        <source>End-of-line (EOL) sequence to use</source>
-        <translation type="vanished">使用的换行符（EOL）序列</translation>
-    </message>
-    <message>
-        <source>Auto Execute on Connect</source>
-        <translation type="vanished">连接时自动执行</translation>
-    </message>
-    <message>
-        <source>Trigger this action automatically when a device connects.</source>
-        <translation type="vanished">设备连接时自动触发此操作。</translation>
-    </message>
-    <message>
-        <source>Timer Mode</source>
-        <translation type="vanished">定时器模式</translation>
-    </message>
-    <message>
-        <source>How and when the timer should activate.</source>
-        <translation type="vanished">定时器的激活方式和时间。</translation>
-    </message>
-    <message>
-        <source>Timer Interval (ms)</source>
-        <translation type="vanished">定时器间隔（毫秒）</translation>
-    </message>
-    <message>
-        <source>Interval in milliseconds between each timer-triggered action.</source>
-        <translation type="vanished">每次定时器触发操作之间的间隔（毫秒）。</translation>
-    </message>
-    <message>
-        <source>General Information</source>
-        <translation type="vanished">常规信息</translation>
-    </message>
-    <message>
-        <source>Untitled Dataset</source>
-        <translation type="vanished">未命名数据集</translation>
-    </message>
-    <message>
-        <source>Name or description of the dataset</source>
-        <translation type="vanished">数据集的名称或描述</translation>
-    </message>
-    <message>
-        <source>Frame Index</source>
-        <translation type="vanished">帧索引</translation>
-    </message>
-    <message>
-        <source>Position in the frame</source>
-        <translation type="vanished">帧中的位置</translation>
-    </message>
-    <message>
-        <source>Measurement Unit</source>
-        <translation type="vanished">测量单位</translation>
-    </message>
-    <message>
-        <source>Volts, Amps, etc.</source>
-        <translation type="vanished">伏特，安培等</translation>
-    </message>
-    <message>
-        <source>Unit of measurement (optional)</source>
-        <translation type="vanished">测量单位（可选）</translation>
-    </message>
-    <message>
-        <source>Overview</source>
-        <translation type="vanished">概览</translation>
-    </message>
-    <message>
-        <source>Include widget in overview dashboard</source>
-        <translation type="vanished">在概览仪表板中包含小部件</translation>
-    </message>
-    <message>
-        <source>Display widget (optional)</source>
-        <translation type="vanished">显示小部件（可选）</translation>
-    </message>
-    <message>
-        <source>Oscilloscope Plot</source>
-        <translation type="vanished">示波器图</translation>
-    </message>
-    <message>
-        <source>Plot data in real-time</source>
-        <translation type="vanished">实时绘制数据</translation>
-    </message>
-    <message>
-        <source>FFT Plot</source>
-        <translation type="vanished">FFT 绘图</translation>
-    </message>
-    <message>
-        <source>Plot frequency-domain data</source>
-        <translation type="vanished">绘制频域数据</translation>
-    </message>
-    <message>
-        <source>Show in LED Panel</source>
-        <translation type="vanished">在 LED 面板显示</translation>
-    </message>
-    <message>
-        <source>Quick status monitoring</source>
-        <translation type="vanished">快速状态监控</translation>
-    </message>
-    <message>
-        <source>X-Axis Source</source>
-        <translation type="vanished">X 轴来源</translation>
-    </message>
-    <message>
-        <source>Data series for the X-Axis</source>
-        <translation type="vanished">X 轴数据系列</translation>
-    </message>
-    <message>
-        <source>Minimum Value</source>
-        <translation type="vanished">最小值</translation>
-    </message>
-    <message>
-        <source>Required for range widgets, optional for plots</source>
-        <translation type="vanished">范围控件必需，绘图可选</translation>
-    </message>
-    <message>
-        <source>Maximum Value</source>
-        <translation type="vanished">最大值</translation>
-    </message>
-    <message>
-        <source>Alarm Low Value</source>
-        <translation type="vanished">报警低值</translation>
-    </message>
-    <message>
-        <source>Alarm Value</source>
-        <translation type="vanished">报警值</translation>
-    </message>
-    <message>
-        <source>Triggers alarm in bar widgets and LED panels</source>
-        <translation type="vanished">在条形控件和LED面板中触发报警</translation>
-    </message>
-    <message>
-        <source>Alarm High Value</source>
-        <translation type="vanished">报警高值</translation>
-    </message>
-    <message>
-        <source>FFT Window Size</source>
-        <translation type="vanished">FFT窗口大小</translation>
-    </message>
-    <message>
-        <source>Samples for FFT calculation</source>
-        <translation type="vanished">FFT计算的样本数</translation>
-    </message>
-    <message>
-        <source>FFT Sampling Rate</source>
-        <translation type="vanished">FFT采样率</translation>
-    </message>
-    <message>
-        <source>Sampling rate (Hz) for FFT calculation</source>
-        <translation type="vanished">FFT计算的采样率（Hz）</translation>
-    </message>
-    <message>
-        <source>LED High (On) Value</source>
-        <translation type="vanished">LED高（开）值</translation>
-    </message>
-    <message>
-        <source>Threshold for LED on</source>
-        <translation type="vanished">LED开启的阈值</translation>
-    </message>
-    <message>
-        <source>Off</source>
-        <translation type="vanished">关闭</translation>
-    </message>
-    <message>
-        <source>Auto Start</source>
-        <translation type="vanished">自动启动</translation>
-    </message>
-    <message>
-        <source>Start on Trigger</source>
-        <translation type="vanished">触发时启动</translation>
-    </message>
-    <message>
-        <source>Toggle on Trigger</source>
-        <translation type="vanished">触发时切换</translation>
-    </message>
-    <message>
-        <source>Plain Text (UTF8)</source>
-        <translation type="vanished">纯文本 (UTF8)</translation>
-    </message>
-    <message>
-        <source>Hexadecimal</source>
-        <translation type="vanished">十六进制</translation>
-    </message>
-    <message>
-        <source>Base64</source>
-        <translation type="vanished">Base64</translation>
-    </message>
-    <message>
-        <source>Binary (Direct)</source>
-        <translation type="vanished">二进制 (直接)</translation>
-    </message>
-    <message>
-        <source>No Checksum</source>
-        <translation type="vanished">无校验和</translation>
-    </message>
-    <message>
-        <source>End Delimiter Only</source>
-        <translation type="vanished">仅结束分隔符</translation>
-    </message>
-    <message>
-        <source>Start Delimiter Only</source>
-        <translation type="vanished">仅开始分隔符</translation>
-    </message>
-    <message>
-        <source>Start + End Delimiter</source>
-        <translation type="vanished">开始 + 结束分隔符</translation>
-    </message>
-    <message>
-        <source>No Delimiters</source>
-        <translation type="vanished">无分隔符</translation>
-    </message>
-    <message>
-        <source>Data Grid</source>
-        <translation type="vanished">数据网格</translation>
-    </message>
-    <message>
-        <source>GPS Map</source>
-        <translation type="vanished">GPS 地图</translation>
-    </message>
-    <message>
-        <source>Gyroscope</source>
-        <translation type="vanished">陀螺仪</translation>
-    </message>
-    <message>
-        <source>Multiple Plot</source>
-        <translation type="vanished">多重图表</translation>
-    </message>
-    <message>
-        <source>Accelerometer</source>
-        <translation type="vanished">加速度计</translation>
-    </message>
-    <message>
-        <source>3D Plot</source>
-        <translation type="vanished">3D 图表</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="vanished">无</translation>
-    </message>
-    <message>
-        <source>Bar</source>
-        <translation type="vanished">条形图</translation>
-    </message>
-    <message>
-        <source>Gauge</source>
-        <translation type="vanished">仪表盘</translation>
-    </message>
-    <message>
-        <source>Compass</source>
-        <translation type="vanished">罗盘</translation>
-    </message>
-    <message>
-        <source>New Line (\n)</source>
-        <translation type="vanished">新行 (\n)</translation>
-    </message>
-    <message>
-        <source>Carriage Return (\r)</source>
-        <translation type="vanished">回车 (\r)</translation>
-    </message>
-    <message>
-        <source>CRLF (\r\n)</source>
-        <translation type="vanished">CRLF (\r\n)</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">否</translation>
-    </message>
-    <message>
-        <source>Linear Plot</source>
-        <translation type="vanished">线性图</translation>
-    </message>
-    <message>
-        <source>Save changes to frame parser code?</source>
-        <translation type="vanished">保存对帧解析器代码的更改？</translation>
-    </message>
-    <message>
-        <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation type="vanished">选择“保存”以保留更改，“放弃”以永久丢失更改，或“取消”以返回。</translation>
-    </message>
-    <message>
-        <source>Save Changes</source>
-        <translation type="vanished">保存更改</translation>
-    </message>
-</context>
-<context>
-    <name>JSONDropArea</name>
-    <message>
-        <source>Drop Projects and CSV files here</source>
-        <translation type="vanished">将项目和 CSV 文件拖放到此处</translation>
+        <translation>रद्द करें</translation>
     </message>
 </context>
 <context>
@@ -4838,118 +3330,118 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="36"/>
         <source>Licensing</source>
-        <translation>许可管理</translation>
+        <translation>लाइसेंसिंग</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="75"/>
         <source>Please wait...</source>
-        <translation>请稍候...</translation>
+        <translation>कृपया प्रतीक्षा करें...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="116"/>
         <source>Activate Serial Studio Pro</source>
-        <translation>激活 Serial Studio Pro</translation>
+        <translation>सीरियल स्टूडियो प्रो सक्रिय करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="122"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
-        <translation>在下方粘贴您的许可证密钥以解锁专业功能，如 MQTT、3D 绘图等。</translation>
+        <translation>प्रो सुविधाओं जैसे MQTT, 3D प्लॉटिंग, और अधिक को अनलॉक करने के लिए नीचे अपना लाइसेंस कुंजी पेस्ट करें।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="129"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
-        <translation>您的许可证包括 5 个设备激活。
-计划包括每月、每年和终身选项。</translation>
+        <translation>आपके लाइसेंस में 5 डिवाइस सक्रियण शामिल हैं।
+योजनाओं में मासिक, वार्षिक, और जीवनकाल विकल्प शामिल हैं।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="141"/>
         <source>Paste your license key here…</source>
-        <translation>在此处粘贴您的许可证密钥…</translation>
+        <translation>यहां अपनी लाइसेंस कुंजी पेस्ट करें…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="160"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="320"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="368"/>
         <source>Copy</source>
-        <translation>复制</translation>
+        <translation>कॉपी</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="166"/>
         <source>Paste</source>
-        <translation>粘贴</translation>
+        <translation>पेस्ट</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="172"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="326"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="374"/>
         <source>Select All</source>
-        <translation>全选</translation>
+        <translation>सभी चुनें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="223"/>
         <source>Product</source>
-        <translation>产品</translation>
+        <translation>उत्पाद</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="230"/>
         <source>Serial Studio %1</source>
-        <translation>Serial Studio %1</translation>
+        <translation>सीरियल स्टूडियो %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="241"/>
         <source>Licensee</source>
-        <translation>许可证持有人</translation>
+        <translation>लाइसेंसी</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="260"/>
         <source>Licensee E-Mail</source>
-        <translation>持有人电子邮件</translation>
+        <translation>लाइसेंसी ई-मेल</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="277"/>
         <source>Device Usage</source>
-        <translation>设备使用情况</translation>
+        <translation>डिवाइस उपयोग</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="285"/>
         <source>%1 devices in use (Unlimited plan)</source>
-        <translation>正在使用 %1 台设备（无限计划）</translation>
+        <translation>%1 डिवाइस उपयोग में (अनलिमिटेड प्लान)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="286"/>
         <source>%1 of %2 devices used</source>
-        <translation>已使用 %1 台，共 %2 台设备</translation>
+        <translation>%1 में से %2 डिवाइस उपयोग किए गए</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
         <source>Device ID</source>
-        <translation>设备 ID</translation>
+        <translation>डिवाइस आईडी</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="342"/>
         <source>License Key</source>
-        <translation>许可证密钥</translation>
+        <translation>लाइसेंस कुंजी</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="398"/>
         <source>Customer Portal</source>
-        <translation>客户门户</translation>
+        <translation>ग्राहक पोर्टल</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="412"/>
         <source>Buy License</source>
-        <translation>购买许可证</translation>
+        <translation>लाइसेंस खरीदें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="422"/>
         <source>Activate</source>
-        <translation>激活</translation>
+        <translation>सक्रिय करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="435"/>
         <source>Deactivate</source>
-        <translation>停用</translation>
+        <translation>निष्क्रिय करें</translation>
     </message>
 </context>
 <context>
@@ -4957,68 +3449,68 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="579"/>
         <source>There was an issue validating your license.</source>
-        <translation>验证您的许可证时出现问题。</translation>
+        <translation>आपके लाइसेंस को मान्य करने में एक समस्या हुई थी।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="777"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="900"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
-        <translation>您提供的许可证密钥不属于 Serial Studio。</translation>
+        <translation>आपके द्वारा प्रदान किया गया लाइसेंस कुंजी Serial Studio से संबंधित नहीं है।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="778"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="901"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
-        <translation>请仔细检查您是否从官方 Serial Studio 商店购买了许可证。</translation>
+        <translation>कृपया दोबारा जांच लें कि आपने अपना लाइसेंस आधिकारिक Serial Studio स्टोर से खरीदा है।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="790"/>
         <source>This license key was activated on a different device.</source>
-        <translation>此许可证密钥已在其他设备上激活。</translation>
+        <translation>यह लाइसेंस कुंजी किसी अन्य डिवाइस पर सक्रिय की गई थी।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
         <source>Please deactivate it there first or contact support for help.</source>
-        <translation>请先在该设备上停用或联系支持以获取帮助。</translation>
+        <translation>कृपया पहले इसे वहां निष्क्रिय करें या सहायता के लिए समर्थन से संपर्क करें।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="804"/>
         <source>This license is not currently active.</source>
-        <translation>此许可证当前未激活。</translation>
+        <translation>यह लाइसेंस वर्तमान में सक्रिय नहीं है।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="627"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="805"/>
         <source>It may have expired or been deactivated (status: %1).</source>
-        <translation>它可能已过期或被停用（状态：%1）。</translation>
+        <translation>यह समाप्त हो सकता है या निष्क्रिय कर दिया गया हो (स्थिति: %1)।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="639"/>
         <source>Something went wrong on the server.</source>
-        <translation>服务器出现问题。</translation>
+        <translation>सर्वर पर कुछ गलत हो गया।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="640"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="818"/>
         <source>No activation ID was returned.</source>
-        <translation>未返回激活 ID。</translation>
+        <translation>कोई सक्रियण ID वापस नहीं की गई।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="651"/>
         <source>Could not validate your license at this time.</source>
-        <translation>目前无法验证您的许可证。</translation>
+        <translation>इस समय आपके लाइसेंस को मान्य नहीं किया जा सका।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="652"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="914"/>
         <source>Please try again later.</source>
-        <translation>请稍后再试。</translation>
+        <translation>कृपया बाद में पुनः प्रयास करें।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="674"/>
@@ -5028,60 +3520,56 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="676"/>
         <source>%1 (%2)</source>
-        <translation>%1（%2）</translation>
-    </message>
-    <message>
-        <source>%1 Pro</source>
-        <translation type="vanished">%1 Pro</translation>
+        <translation>%1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="703"/>
         <source>Your license has been successfully activated.</source>
-        <translation>您的许可证已成功激活。</translation>
+        <translation>आपका लाइसेंस सफलतापूर्वक सक्रिय कर दिया गया है।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="704"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
-        <translation>感谢您支持 Serial Studio！
-您现在可以访问所有高级功能。</translation>
+        <translation>Serial Studio का समर्थन करने के लिए धन्यवाद!
+अब आपके पास सभी प्रीमियम सुविधाओं की पहुंच है।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="766"/>
         <source>There was an issue activating your license.</source>
-        <translation>激活您的许可证时出现问题。</translation>
+        <translation>आपका लाइसेंस सक्रिय करने में एक समस्या हुई।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="817"/>
         <source>Something went wrong on the server...</source>
-        <translation>服务器出现问题...</translation>
+        <translation>सर्वर पर कुछ गलत हो गया...</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="829"/>
         <source>Could not activate your license at this time.</source>
-        <translation>目前无法激活您的许可证。</translation>
+        <translation>इस समय आपका लाइसेंस सक्रिय नहीं किया जा सका।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
         <source>There was an issue deactivating your license.</source>
-        <translation>无法停用您的许可证。</translation>
+        <translation>आपका लाइसेंस निष्क्रिय करने में एक समस्या हुई।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="913"/>
         <source>Could not deactivate your license at this time.</source>
-        <translation>目前无法停用您的许可证。</translation>
+        <translation>इस समय आपका लाइसेंस निष्क्रिय नहीं किया जा सका।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="923"/>
         <source>Your license has been deactivated.</source>
-        <translation>您的许可证已停用。</translation>
+        <translation>आपका लाइसेंस निष्क्रिय कर दिया गया है।</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="924"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
-        <translation>专业功能访问已被移除。
-再次感谢您支持 Serial Studio！</translation>
+        <translation>प्रो सुविधाओं तक पहुंच हटा दी गई है।
+Serial Studio का समर्थन करने के लिए फिर से धन्यवाद!</translation>
     </message>
 </context>
 <context>
@@ -5089,12 +3577,12 @@ Thank you again for supporting Serial Studio!</source>
     <message>
         <location filename="../../src/MDF4/Export.cpp" line="428"/>
         <source>MDF4 Export is a Pro feature.</source>
-        <translation>MDF4导出是专业版功能。</translation>
+        <translation>MDF4 निर्यात एक प्रो सुविधा है।</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Export.cpp" line="429"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
-        <translation>此功能需要许可证。请购买以启用MDF4导出。</translation>
+        <translation>इस सुविधा के लिए एक लाइसेंस की आवश्यकता है। कृपया MDF4 निर्यात सक्षम करने के लिए एक खरीदें।</translation>
     </message>
 </context>
 <context>
@@ -5102,66 +3590,52 @@ Thank you again for supporting Serial Studio!</source>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="331"/>
         <source>Select MDF4 file</source>
-        <translation>选择MDF4文件</translation>
+        <translation>MDF4 फ़ाइल चुनें</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="333"/>
         <source>MDF4 files (*.mf4 *.dat)</source>
-        <translation>MDF4文件 (*.mf4 *.dat)</translation>
+        <translation>MDF4 फ़ाइलें (*.mf4 *.dat)</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="367"/>
         <source>Disconnect from device?</source>
-        <translation>断开设备连接？</translation>
+        <translation>डिवाइस से डिस्कनेक्ट करें?</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="368"/>
         <source>You must disconnect from the current device before opening a MDF4 file.</source>
-        <translation>在打开MDF4文件之前，您必须断开当前设备的连接。</translation>
+        <translation>आपको MDF4 फ़ाइल खोलने से पहले वर्तमान डिवाइस से डिस्कनेक्ट करना होगा।</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="385"/>
         <source>Cannot open MDF4 file</source>
-        <translation>无法打开MDF4文件</translation>
+        <translation>MDF4 फ़ाइल नहीं खोल सकते</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="386"/>
         <source>The file may be corrupted or in an unsupported format.</source>
-        <translation>文件可能已损坏或格式不受支持。</translation>
+        <translation>फ़ाइल भ्रष्ट हो सकती है या असमर्थित प्रारूप में हो सकती है।</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="395"/>
         <source>Invalid MDF4 file</source>
-        <translation>无效的MDF4文件</translation>
+        <translation>अमान्य MDF4 फ़ाइल</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="396"/>
         <source>Failed to read file structure. The file may be corrupted.</source>
-        <translation>无法读取文件结构。文件可能已损坏。</translation>
+        <translation>फ़ाइल संरचना पढ़ने में विफल। फ़ाइल भ्रष्ट हो सकती है।</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="414"/>
         <source>No data in file</source>
-        <translation>文件中无数据</translation>
+        <translation>फ़ाइल में कोई डेटा नहीं</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="415"/>
         <source>The MDF4 file contains no measurement data.</source>
-        <translation>MDF4文件不包含测量数据。</translation>
-    </message>
-    <message>
-        <source>Author: %1
-Project: %2
-Subject: %3
-Channels: %4</source>
-        <translation type="vanished">作者：%1
-项目：%2
-主题：%3
-通道：%4</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation type="vanished">未知</translation>
+        <translation>MDF4 फ़ाइल में कोई माप डेटा नहीं है।</translation>
     </message>
 </context>
 <context>
@@ -5194,277 +3668,277 @@ Channels: %4</source>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="50"/>
         <source>TLS 1.3 or Later</source>
-        <translation>TLS 1.3或更高版本</translation>
+        <translation>TLS 1.3 या बाद का</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="51"/>
         <source>DTLS 1.2 or Later</source>
-        <translation>DTLS 1.2或更高版本</translation>
+        <translation>DTLS 1.2 या बाद का</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="52"/>
         <source>Any Protocol</source>
-        <translation>任意协议</translation>
+        <translation>कोई भी प्रोटोकॉल</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="53"/>
         <source>Secure Protocols Only</source>
-        <translation>仅限安全协议</translation>
+        <translation>केवल सुरक्षित प्रोटोकॉल</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="56"/>
         <source>None</source>
-        <translation>无</translation>
+        <translation>कोई नहीं</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="57"/>
         <source>Query Peer</source>
-        <translation>查询对等方</translation>
+        <translation>सहकर्मी से पूछें</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="58"/>
         <source>Verify Peer</source>
-        <translation>验证对等方</translation>
+        <translation>सहकर्मी सत्यापित करें</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="59"/>
         <source>Auto Verify Peer</source>
-        <translation>自动验证对等方</translation>
+        <translation>स्वतः सहकर्मी सत्यापित करें</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="331"/>
         <source>Use System Database</source>
-        <translation>使用系统数据库</translation>
+        <translation>सिस्टम डेटाबेस का उपयोग करें</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="332"/>
         <source>Load From Folder...</source>
-        <translation>从文件夹加载...</translation>
+        <translation>फ़ोल्डर से लोड करें...</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="346"/>
         <source>MQTT Subscriber</source>
-        <translation>MQTT 订阅者</translation>
+        <translation>MQTT सब्सक्राइबर</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="347"/>
         <source>MQTT Publisher</source>
-        <translation>MQTT 发布者</translation>
+        <translation>MQTT प्रकाशक</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="412"/>
         <source>MQTT Feature Requires a Commercial License</source>
-        <translation>MQTT 功能需要商业许可证</translation>
+        <translation>MQTT सुविधा के लिए वाणिज्यिक लाइसेंस आवश्यक है</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="413"/>
         <source>Connecting to MQTT brokers is only available with a valid Serial Studio commercial license.
 
 To unlock this feature, please activate your license or visit the store.</source>
-        <translation>连接到 MQTT 代理仅适用于有效的 Serial Studio 商业许可证。
+        <translation>MQTT ब्रोकर्स से कनेक्ट करना केवल एक मान्य Serial Studio वाणिज्यिक लाइसेंस के साथ उपलब्ध है।
 
-要解锁此功能，请激活您的许可证或访问商店。</translation>
+इस सुविधा को अनलॉक करने के लिए, कृपया अपना लाइसेंस सक्रिय करें या स्टोर पर जाएँ।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="427"/>
         <source>Missing MQTT Topic</source>
-        <translation>缺少 MQTT 主题</translation>
+        <translation>MQTT विषय गायब है</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="428"/>
         <source>You must specify a topic before connecting as a publisher.</source>
-        <translation>在作为发布者连接之前，您必须指定一个主题。</translation>
+        <translation>प्रकाशक के रूप में कनेक्ट करने से पहले आपको एक विषय निर्दिष्ट करना होगा।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="429"/>
         <location filename="../../src/MQTT/Client.cpp" line="453"/>
         <source>Configuration Error</source>
-        <translation>配置错误</translation>
+        <translation>कॉन्फ़िगरेशन त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="437"/>
         <source>MQTT Topic Not Set</source>
-        <translation>MQTT 主题未设置</translation>
+        <translation>MQTT विषय सेट नहीं है</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="438"/>
         <source>You won't receive any messages until a topic is configured.</source>
-        <translation>在配置主题之前，您不会收到任何消息。</translation>
+        <translation>जब तक कोई विषय कॉन्फ़िगर नहीं किया जाता, आपको कोई संदेश प्राप्त नहीं होगा।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="439"/>
         <source>Configuration Warning</source>
-        <translation>配置警告</translation>
+        <translation>कॉन्फ़िगरेशन चेतावनी</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="451"/>
         <source>Invalid MQTT Topic</source>
-        <translation>无效的 MQTT 主题</translation>
+        <translation>अमान्य MQTT विषय</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="452"/>
         <source>The topic "%1" is not valid.</source>
-        <translation>主题“%1”无效。</translation>
+        <translation>विषय "%1" मान्य नहीं है।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="677"/>
         <source>Select PEM Certificates Directory</source>
-        <translation>选择 PEM 证书目录</translation>
+        <translation>PEM प्रमाणपत्र निर्देशिका चुनें</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="792"/>
         <source>Subscription Error</source>
-        <translation>订阅错误</translation>
+        <translation>सदस्यता त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="793"/>
         <source>Failed to subscribe to topic "%1".</source>
-        <translation>无法订阅主题“%1”。</translation>
+        <translation>विषय "%1" के लिए सदस्यता लेने में विफल।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>Invalid MQTT Protocol Version</source>
-        <translation>无效的 MQTT 协议版本</translation>
+        <translation>अमान्य MQTT प्रोटोकॉल संस्करण</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="813"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
-        <translation>MQTT 代理因不支持的协议版本拒绝连接。确保您的客户端和代理支持相同的协议版本。</translation>
+        <translation>MQTT ब्रोकर ने असमर्थित प्रोटोकॉल संस्करण के कारण कनेक्शन अस्वीकार कर दिया। सुनिश्चित करें कि आपका क्लाइंट और ब्रोकर एक ही प्रोटोकॉल संस्करण का समर्थन करते हैं।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="819"/>
         <source>Client ID Rejected</source>
-        <translation>客户端 ID 被拒绝</translation>
+        <translation>क्लाइंट आईडी अस्वीकार की गई</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="820"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
-        <translation>代理拒绝了客户端 ID。可能格式错误、过长或已被使用。尝试使用不同的客户端 ID。</translation>
+        <translation>ब्रोकर ने क्लाइंट आईडी अस्वीकार कर दी। यह गलत, बहुत लंबा, या पहले से उपयोग में हो सकता है। एक अलग क्लाइंट आईडी का उपयोग करने का प्रयास करें।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="826"/>
         <source>MQTT Server Unavailable</source>
-        <translation>MQTT 服务器不可用</translation>
+        <translation>MQTT सर्वर अनुपलब्ध</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="827"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
-        <translation>网络连接已建立，但代理当前不可用。请检查代理状态并稍后重试。</translation>
+        <translation>नेटवर्क कनेक्शन स्थापित किया गया था, लेकिन ब्रोकर वर्तमान में अनुपलब्ध है। ब्रोकर की स्थिति की पुष्टि करें और बाद में पुनः प्रयास करें।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="833"/>
         <location filename="../../src/MQTT/Client.cpp" line="903"/>
         <source>Authentication Error</source>
-        <translation>认证错误</translation>
+        <translation>प्रमाणीकरण त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="834"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
-        <translation>提供的用户名或密码不正确或格式错误。请仔细检查您的凭据并重试。</translation>
+        <translation>प्रदान किया गया उपयोगकर्ता नाम या पासवर्ड गलत या विकृत है। अपनी प्रमाण-पत्रों की दोबारा जांच करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="839"/>
         <source>Authorization Error</source>
-        <translation>授权错误</translation>
+        <translation>प्राधिकरण त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="840"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
-        <translation>由于权限不足，MQTT 代理拒绝了连接。确保您的账户具有必要的访问权限。</translation>
+        <translation>MQTT ब्रोकर ने अपर्याप्त अनुमतियों के कारण कनेक्शन अस्वीकार कर दिया। सुनिश्चित करें कि आपके खाते के पास आवश्यक पहुंच अधिकार हैं।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="846"/>
         <source>Network or Transport Error</source>
-        <translation>网络或传输错误</translation>
+        <translation>नेटवर्क या परिवहन त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="847"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
-        <translation>发生了网络或传输层问题，导致连接意外失败。请检查您的网络连接和代理设置。</translation>
+        <translation>एक नेटवर्क या परिवहन परत समस्या हुई, जिससे अप्रत्याशित कनेक्शन विफलता हुई। अपने नेटवर्क कनेक्शन और ब्रोकर सेटिंग्स की जांच करें।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="853"/>
         <source>MQTT Protocol Violation</source>
-        <translation>MQTT 协议违规</translation>
+        <translation>MQTT प्रोटोकॉल उल्लंघन</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="854"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
-        <translation>客户端检测到 MQTT 协议违规并关闭了连接。请检查您的 MQTT 实现是否符合规范。</translation>
+        <translation>क्लाइंट ने MQTT प्रोटोकॉल का उल्लंघन पाया और कनेक्शन बंद कर दिया। अनुपालन के लिए अपनी MQTT कार्यान्वयन की जांच करें।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="860"/>
         <source>Unknown Error</source>
-        <translation>未知错误</translation>
+        <translation>अज्ञात त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="861"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
-        <translation>发生了意外错误。请检查日志获取更多详细信息或重启应用程序。</translation>
+        <translation>एक अप्रत्याशित त्रुटि हुई। अधिक विवरण के लिए लॉग की जांच करें या एप्लिकेशन को पुनरारंभ करें।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="866"/>
         <source>MQTT 5 Error</source>
-        <translation>MQTT 5 错误</translation>
+        <translation>MQTT 5 त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="867"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
-        <translation>发生了 MQTT 协议级别 5 错误。检查代理日志或原因代码以获取更多详细信息。</translation>
+        <translation>एक MQTT प्रोटोकॉल स्तर 5 त्रुटि हुई। अधिक जानकारी के लिए ब्रोकर लॉग या कारण कोड जांचें।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="889"/>
         <source>MQTT Authentication Failed</source>
-        <translation>MQTT 认证失败</translation>
+        <translation>MQTT प्रमाणीकरण विफल</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="890"/>
         <source>Authentication failed: %.</source>
-        <translation>认证失败: %。</translation>
+        <translation>प्रमाणीकरण विफल: %.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="904"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
-        <translation>需要扩展认证，但未启用 MQTT 5.0。</translation>
+        <translation>विस्तारित प्रमाणीकरण आवश्यक है, लेकिन MQTT 5.0 सक्षम नहीं है।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="913"/>
         <source>Unknown</source>
-        <translation>未知</translation>
+        <translation>अज्ञात</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="917"/>
         <source>MQTT Authentication Required</source>
-        <translation>需要 MQTT 认证</translation>
+        <translation>MQTT प्रमाणीकरण आवश्यक</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="918"/>
         <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
-        <translation>MQTT 代理需要使用方法：“%1”进行认证。
+        <translation>MQTT ब्रोकर को प्रमाणीकरण की आवश्यकता है विधि का उपयोग करके: "%1"।
 
-请提供必要的凭据。</translation>
+कृपया आवश्यक क्रेडेंशियल प्रदान करें।</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="926"/>
         <source>Enter MQTT Username</source>
-        <translation>输入 MQTT 用户名</translation>
+        <translation>MQTT उपयोगकर्ता नाम दर्ज करें</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="927"/>
         <source>Username:</source>
-        <translation>用户名:</translation>
+        <translation>उपयोगकर्ता नाम:</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="933"/>
         <source>Enter MQTT Password</source>
-        <translation>输入 MQTT 密码</translation>
+        <translation>MQTT पासवर्ड दर्ज करें</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="934"/>
         <source>Password:</source>
-        <translation>密码：</translation>
+        <translation>पासवर्ड:</translation>
     </message>
 </context>
 <context>
@@ -5472,167 +3946,167 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="36"/>
         <source>MQTT Setup</source>
-        <translation>MQTT 设置</translation>
+        <translation>MQTT सेटअप</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="96"/>
         <source>MQTT is a Pro Feature</source>
-        <translation>MQTT 是一个专业功能</translation>
+        <translation>MQTT एक प्रो फीचर है</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="97"/>
         <source>Activate your license or visit the store to unlock MQTT support.</source>
-        <translation>激活您的许可证或访问商店以解锁 MQTT 支持。</translation>
+        <translation>अपना लाइसेंस सक्रिय करें या MQTT समर्थन अनलॉक करने के लिए स्टोर पर जाएं।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="109"/>
         <source>General</source>
-        <translation>常规</translation>
+        <translation>सामान्य</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="115"/>
         <source>Authentication</source>
-        <translation>认证</translation>
+        <translation>प्रमाणीकरण</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="121"/>
         <source>MQTT Options</source>
-        <translation>MQTT 选项</translation>
+        <translation>MQTT विकल्प</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="127"/>
         <source>SSL Properties</source>
-        <translation>SSL 属性</translation>
+        <translation>SSL गुण</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="183"/>
         <source>Host</source>
-        <translation>主机</translation>
+        <translation>होस्ट</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="195"/>
         <source>Port</source>
-        <translation>端口</translation>
+        <translation>पोर्ट</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="211"/>
         <source>Client ID</source>
-        <translation>客户端 ID</translation>
+        <translation>क्लाइंट आईडी</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="223"/>
         <source>Keep Alive (s)</source>
-        <translation>保持连接（秒）</translation>
+        <translation>कीप अलाइव (सेकंड में)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="236"/>
         <source>Clean Session</source>
-        <translation>清除会话</translation>
+        <translation>क्लीन सेशन</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="285"/>
         <source>Username</source>
-        <translation>用户名</translation>
+        <translation>उपयोगकर्ता नाम</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="290"/>
         <source>MQTT Username</source>
-        <translation>MQTT 用户名</translation>
+        <translation>MQTT उपयोगकर्ता नाम</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="297"/>
         <source>Password</source>
-        <translation>密码</translation>
+        <translation>पासवर्ड</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="307"/>
         <source>MQTT Password</source>
-        <translation>MQTT 密码</translation>
+        <translation>MQTT पासवर्ड</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="364"/>
         <source>Version</source>
-        <translation>版本</translation>
+        <translation>संस्करण</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="376"/>
         <source>Mode</source>
-        <translation>模式</translation>
+        <translation>मोड</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="388"/>
         <source>Topic</source>
-        <translation>主题</translation>
+        <translation>विषय</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="393"/>
         <source>e.g. sensors/temperature or home/+/status</source>
-        <translation>例如 sensors/temperature 或 home/+/status</translation>
+        <translation>उदाहरण के लिए sensors/temperature या home/+/status</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="400"/>
         <source>Will Retain</source>
-        <translation>保留遗嘱</translation>
+        <translation>विल रिटेन</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="411"/>
         <source>Will QoS</source>
-        <translation>遗嘱 QoS</translation>
+        <translation>विल QoS</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="423"/>
         <source>Will Topic</source>
-        <translation>遗嘱主题</translation>
+        <translation>विल टॉपिक</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="428"/>
         <source>e.g. device/alerts/offline</source>
-        <translation>例如 device/alerts/offline</translation>
+        <translation>उदाहरण के लिए device/alerts/offline</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="435"/>
         <source>Will Message</source>
-        <translation>遗嘱消息</translation>
+        <translation>विल संदेश</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="440"/>
         <source>e.g. Device unexpectedly disconnected</source>
-        <translation>例如设备意外断开连接</translation>
+        <translation>उदाहरण के लिए डिवाइस अप्रत्याशित रूप से डिस्कनेक्ट हो गया</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="485"/>
         <source>Enable SSL</source>
-        <translation>启用 SSL</translation>
+        <translation>SSL सक्षम करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="496"/>
         <source>SSL Protocol</source>
-        <translation>SSL 协议</translation>
+        <translation>SSL प्रोटोकॉल</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="512"/>
         <source>Verify Depth</source>
-        <translation>验证深度</translation>
+        <translation>सत्यापन गहराई</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="530"/>
         <source>Verify Mode</source>
-        <translation>验证模式</translation>
+        <translation>सत्यापन मोड</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="562"/>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation>बंद करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Disconnect</source>
-        <translation>断开连接</translation>
+        <translation>डिस्कनेक्ट करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Connect</source>
-        <translation>连接</translation>
+        <translation>कनेक्ट करें</translation>
     </message>
 </context>
 <context>
@@ -5641,44 +4115,44 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="91"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <source>Device Defined Project</source>
-        <translation>设备定义项目</translation>
+        <translation>उपकरण परिभाषित परियोजना</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="94"/>
         <source>Quick Plot Mode</source>
-        <translation>快速绘图模式</translation>
+        <translation>त्वरित प्लॉट मोड</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="100"/>
         <source>Empty Project</source>
-        <translation>空项目</translation>
+        <translation>खाली परियोजना</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="146"/>
         <source>Code sample</source>
-        <translation>代码示例</translation>
+        <translation>कोड नमूना</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="148"/>
         <source>Completer</source>
-        <translation>补全器</translation>
+        <translation>पूरा करने वाला</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="150"/>
         <source>Highlighter</source>
-        <translation>高亮器</translation>
+        <translation>हाइलाइटर</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="152"/>
         <source>Style</source>
-        <translation>样式</translation>
+        <translation>शैली</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="214"/>
         <source> spaces</source>
-        <translation>空格</translation>
+        <translation>स्थान</translation>
     </message>
 </context>
 <context>
@@ -5687,18 +4161,7 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/Dialogs/Mdf4Player.qml" line="23"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Mdf4Player.qml" line="23"/>
         <source>MDF4 Player</source>
-        <translation>MDF4播放器</translation>
-    </message>
-</context>
-<context>
-    <name>Misc::ModuleManager</name>
-    <message>
-        <source>To apply this change, %1 needs to restart.</source>
-        <translation type="vanished">要应用此更改，%1 需要重启。</translation>
-    </message>
-    <message>
-        <source>Would you like to restart now?</source>
-        <translation type="vanished">您想现在重启吗？</translation>
+        <translation>एमडीएफ4 प्लेयर</translation>
     </message>
 </context>
 <context>
@@ -5706,7 +4169,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Misc/ThemeManager.cpp" line="428"/>
         <source>System</source>
-        <translation>系统</translation>
+        <translation>सिस्टम</translation>
     </message>
 </context>
 <context>
@@ -5714,102 +4177,102 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="88"/>
         <source>Check for updates automatically?</source>
-        <translation>自动检查更新？</translation>
+        <translation>स्वचालित रूप से अपडेट की जाँच करें?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="89"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation>%1 应该自动检查更新吗？您可以随时从“关于”对话框手动检查更新</translation>
+        <translation>क्या %1 स्वचालित रूप से अपडेट की जाँच करे? आप हमेशा "About" डायलॉग से मैन्युअली अपडेट की जाँच कर सकते हैं</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="154"/>
         <source>Ok</source>
-        <translation>确定</translation>
+        <translation>ठीक है</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="156"/>
         <source>Save</source>
-        <translation>保存</translation>
+        <translation>सहेजें</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="158"/>
         <source>Save all</source>
-        <translation>全部保存</translation>
+        <translation>सब सहेजें</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="160"/>
         <source>Open</source>
-        <translation>打开</translation>
+        <translation>खोलें</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="162"/>
         <source>Yes</source>
-        <translation>是</translation>
+        <translation>हाँ</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="164"/>
         <source>Yes to all</source>
-        <translation>全部是</translation>
+        <translation>सभी के लिए हाँ</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="166"/>
         <source>No</source>
-        <translation>否</translation>
+        <translation>नहीं</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="168"/>
         <source>No to all</source>
-        <translation>全部否</translation>
+        <translation>सभी के लिए नहीं</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="170"/>
         <source>Abort</source>
-        <translation>中止</translation>
+        <translation>रद्द करें</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="172"/>
         <source>Retry</source>
-        <translation>重试</translation>
+        <translation>पुनः प्रयास करें</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="174"/>
         <source>Ignore</source>
-        <translation>忽略</translation>
+        <translation>अनदेखा करें</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="176"/>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation>बंद करें</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="178"/>
         <source>Cancel</source>
-        <translation>取消</translation>
+        <translation>रद्द करें</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="180"/>
         <source>Discard</source>
-        <translation>丢弃</translation>
+        <translation>त्यागें</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="182"/>
         <source>Help</source>
-        <translation>帮助</translation>
+        <translation>सहायता</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="184"/>
         <source>Apply</source>
-        <translation>应用</translation>
+        <translation>लागू करें</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="186"/>
         <source>Reset</source>
-        <translation>重置</translation>
+        <translation>रीसेट</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="188"/>
         <source>Restore defaults</source>
-        <translation>恢复默认</translation>
+        <translation>डिफ़ॉल्ट पुनर्स्थापित करें</translation>
     </message>
 </context>
 <context>
@@ -5817,7 +4280,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Misc/WorkspaceManager.cpp" line="128"/>
         <source>Select Workspace Location</source>
-        <translation>选择工作区位置</translation>
+        <translation>कार्यस्थान स्थान चुनें</translation>
     </message>
 </context>
 <context>
@@ -5825,57 +4288,57 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="45"/>
         <source>Protocol</source>
-        <translation>协议</translation>
+        <translation>प्रोटोकॉल</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="67"/>
         <source>Serial Port</source>
-        <translation>串口</translation>
+        <translation>सीरियल पोर्ट</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="91"/>
         <source>Baud Rate</source>
-        <translation>波特率</translation>
+        <translation>बौड दर</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="143"/>
         <source>Parity</source>
-        <translation>校验</translation>
+        <translation>पैरिटी</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="166"/>
         <source>Data Bits</source>
-        <translation>数据位</translation>
+        <translation>डेटा बिट्स</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="189"/>
         <source>Stop Bits</source>
-        <translation>停止位</translation>
+        <translation>स्टॉप बिट्स</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="212"/>
         <source>Host</source>
-        <translation>主机</translation>
+        <translation>होस्ट</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="221"/>
         <source>IP Address</source>
-        <translation>IP地址</translation>
+        <translation>आईपी पता</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="235"/>
         <source>Port</source>
-        <translation>端口</translation>
+        <translation>पोर्ट</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="244"/>
         <source>TCP Port</source>
-        <translation>TCP端口</translation>
+        <translation>टीसीपी पोर्ट</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="270"/>
         <source>Slave Address</source>
-        <translation>从机地址</translation>
+        <translation>स्लेव पता</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="274"/>
@@ -5883,53 +4346,29 @@ Please provide the necessary credentials.</source>
         <translation>1-247</translation>
     </message>
     <message>
-        <source>Multi-Group Mode</source>
-        <translation type="vanished">多组模式</translation>
-    </message>
-    <message>
-        <source>Register Type</source>
-        <translation type="vanished">寄存器类型</translation>
-    </message>
-    <message>
-        <source>Start Address</source>
-        <translation type="vanished">起始地址</translation>
-    </message>
-    <message>
-        <source>Register address</source>
-        <translation type="vanished">寄存器地址</translation>
-    </message>
-    <message>
-        <source>Register Count</source>
-        <translation type="vanished">寄存器数量</translation>
-    </message>
-    <message>
-        <source>Number of registers</source>
-        <translation type="vanished">寄存器个数</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="318"/>
-        <source>Configure Register Groups...</source>
-        <translation>配置寄存器组...</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
-        <source>%1 group(s) configured</source>
-        <translation>已配置 %1 组</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="330"/>
-        <source>No groups configured</source>
-        <translation>未配置任何组</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="289"/>
         <source>Poll Interval (ms)</source>
-        <translation>轮询间隔（毫秒）</translation>
+        <translation>पोल अंतराल (मि.से.)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="293"/>
         <source>Polling interval</source>
-        <translation>轮询间隔</translation>
+        <translation>पोलिंग अंतराल</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="318"/>
+        <source>Configure Register Groups...</source>
+        <translation>रजिस्टर समूह कॉन्फ़िगर करें...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
+        <source>%1 group(s) configured</source>
+        <translation>%1 समूह कॉन्फ़िगर किए गए</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="330"/>
+        <source>No groups configured</source>
+        <translation>कोई समूह कॉन्फ़िगर नहीं किया गया</translation>
     </message>
 </context>
 <context>
@@ -5937,27 +4376,27 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
         <source>Modbus Register Groups</source>
-        <translation>Modbus寄存器组</translation>
+        <translation>मोडबस रजिस्टर समूह</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="158"/>
         <source>Configure multiple register groups to poll different register types in sequence.</source>
-        <translation>配置多个寄存器组以顺序轮询不同的寄存器类型。</translation>
+        <translation>विभिन्न रजिस्टर प्रकारों को अनुक्रम में पोल करने के लिए कई रजिस्टर समूह कॉन्फ़िगर करें।</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
         <source>Add New Group</source>
-        <translation>添加新组</translation>
+        <translation>नया समूह जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="193"/>
         <source>Register Type:</source>
-        <translation>寄存器类型：</translation>
+        <translation>रजिस्टर प्रकार:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="204"/>
         <source>Start Address:</source>
-        <translation>起始地址：</translation>
+        <translation>प्रारंभ पता:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="211"/>
@@ -5967,7 +4406,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="216"/>
         <source>Register Count:</source>
-        <translation>寄存器数量：</translation>
+        <translation>रजिस्टर संख्या:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="227"/>
@@ -5977,12 +4416,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="232"/>
         <source>Add Group</source>
-        <translation>添加组</translation>
+        <translation>समूह जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="255"/>
         <source>Configured Groups</source>
-        <translation>已配置的组</translation>
+        <translation>कॉन्फ़िगर किए गए समूह</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="289"/>
@@ -5992,49 +4431,49 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
         <source>Type</source>
-        <translation>类型</translation>
+        <translation>प्रकार</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
         <source>Start</source>
-        <translation>开始</translation>
+        <translation>प्रारंभ</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="310"/>
         <source>Count</source>
-        <translation>计数</translation>
+        <translation>संख्या</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="317"/>
         <source>Action</source>
-        <translation>操作</translation>
+        <translation>क्रिया</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="392"/>
         <source>Remove</source>
-        <translation>移除</translation>
+        <translation>हटाएं</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="405"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
-        <translation>未配置任何组。
-在上方添加组以轮询多种寄存器类型。</translation>
+        <translation>कोई समूह कॉन्फ़िगर नहीं किए गए हैं।
+कई रजिस्टर प्रकारों को पोल करने के लिए ऊपर समूह जोड़ें।</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="423"/>
         <source>Total groups: %1</source>
-        <translation>总组数：%1</translation>
+        <translation>कुल समूह: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
         <source>Clear All</source>
-        <translation>清除全部</translation>
+        <translation>सभी साफ़ करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="433"/>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation>बंद करें</translation>
     </message>
 </context>
 <context>
@@ -6043,7 +4482,7 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
         <source>Samples</source>
-        <translation>样本</translation>
+        <translation>नमूने</translation>
     </message>
 </context>
 <context>
@@ -6052,29 +4491,25 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="73"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="73"/>
         <source>Socket Type</source>
-        <translation>套接字类型</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
-        <source>Remote Address</source>
-        <translation>远程地址</translation>
-    </message>
-    <message>
-        <source>Port</source>
-        <translation type="vanished">端口</translation>
+        <translation>सॉकेट प्रकार</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="93"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="93"/>
         <source>Local Port</source>
-        <translation>本地端口</translation>
+        <translation>स्थानीय पोर्ट</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="99"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="99"/>
         <source>Type 0 for automatic port</source>
-        <translation>输入 0 以自动选择端口</translation>
+        <translation>स्वचालित पोर्ट के लिए 0 टाइप करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
+        <source>Remote Address</source>
+        <translation>दूरस्थ पता</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="146"/>
@@ -6082,42 +4517,34 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="146"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="179"/>
         <source>Remote Port</source>
-        <translation>远程端口</translation>
+        <translation>दूरस्थ पोर्ट</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="209"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="209"/>
         <source>Multicast</source>
-        <translation>多播</translation>
+        <translation>मल्टीकास्ट</translation>
     </message>
 </context>
 <context>
     <name>PlotWidget</name>
     <message>
-        <source>%1, %2</source>
-        <translation type="vanished">%1, %2</translation>
-    </message>
-    <message>
-        <source>ΔX: %1  ΔY: %2</source>
-        <translation type="vanished">ΔX: %1  ΔY: %2</translation>
-    </message>
-    <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1081"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1081"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
-        <translation>ΔX: %1  ΔY: %2 — 拖动以移动，右键单击以清除</translation>
+        <translation>ΔX: %1  ΔY: %2 — खिसकाने के लिए ड्रैग करें, साफ़ करने के लिए राइट-क्लिक करें</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1083"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1083"/>
         <source>Click to place cursor</source>
-        <translation>点击以放置光标</translation>
+        <translation>कर्सर रखने के लिए क्लिक करें</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1085"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1085"/>
         <source>Click to place second cursor — Drag to move</source>
-        <translation>点击以放置第二个光标 — 拖动以移动</translation>
+        <translation>दूसरा कर्सर रखने के लिए क्लिक करें — खिसकाने के लिए ड्रैग करें</translation>
     </message>
 </context>
 <context>
@@ -6125,17 +4552,17 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="270"/>
         <source>Unable to start plugin TCP server</source>
-        <translation>无法启动插件 TCP 服务器</translation>
+        <translation>प्लगइन TCP सर्वर शुरू करने में असमर्थ</translation>
     </message>
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="347"/>
         <source>Plugin server</source>
-        <translation>插件服务器</translation>
+        <translation>प्लगइन सर्वर</translation>
     </message>
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="348"/>
         <source>Invalid pending connection</source>
-        <translation>无效的待处理连接</translation>
+        <translation>अमान्य लंबित कनेक्शन</translation>
     </message>
 </context>
 <context>
@@ -6144,19 +4571,19 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/Widgets/ProNotice.qml" line="120"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <source>Visit Website</source>
-        <translation>访问网站</translation>
+        <translation>वेबसाइट पर जाएं</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="131"/>
         <source>Buy License</source>
-        <translation>购买许可证</translation>
+        <translation>लाइसेंस खरीदें</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="147"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="147"/>
         <source>Activate</source>
-        <translation>激活</translation>
+        <translation>सक्रिय करें</translation>
     </message>
 </context>
 <context>
@@ -6165,7 +4592,7 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="49"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="49"/>
         <source>modified</source>
-        <translation>修改</translation>
+        <translation>संशोधित</translation>
     </message>
 </context>
 <context>
@@ -6174,7 +4601,7 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <source>Project Structure</source>
-        <translation>项目结构</translation>
+        <translation>परियोजना संरचना</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="248"/>
@@ -6189,199 +4616,199 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="151"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="151"/>
         <source>New</source>
-        <translation>新建</translation>
+        <translation>नया</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="154"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="154"/>
         <source>Create a new JSON project</source>
-        <translation>创建一个新的 JSON 项目</translation>
+        <translation>एक नया JSON परियोजना बनाएं</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="170"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="170"/>
         <source>Open</source>
-        <translation>打开</translation>
+        <translation>खोलें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
         <source>Open an existing JSON project</source>
-        <translation>打开一个现有的 JSON 项目</translation>
+        <translation>एक मौजूदा JSON परियोजना खोलें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="180"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="180"/>
         <source>Save</source>
-        <translation>保存</translation>
+        <translation>सहेजें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="184"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="184"/>
         <source>Save the current project</source>
-        <translation>保存当前项目</translation>
+        <translation>वर्तमान परियोजना सहेजें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <source>Save As</source>
-        <translation>另存为</translation>
+        <translation>इस रूप में सहेजें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
         <source>Save the current project under a new name</source>
-        <translation>将当前项目另存为新名称</translation>
+        <translation>वर्तमान परियोजना को एक नए नाम के तहत सहेजें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="215"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="215"/>
         <source>Action</source>
-        <translation>操作</translation>
+        <translation>क्रिया</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="218"/>
         <source>Add a new action to the project</source>
-        <translation>向项目添加新操作</translation>
+        <translation>परियोजना में एक नई क्रिया जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="237"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="237"/>
         <source>Dataset</source>
-        <translation>数据集</translation>
+        <translation>डेटा सेट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="239"/>
         <source>Add a generic dataset</source>
-        <translation>添加通用数据集</translation>
+        <translation>एक सामान्य डेटा सेट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
         <source>Plot</source>
-        <translation>图表</translation>
+        <translation>प्लॉट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="260"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="260"/>
         <source>Add a 2D plot dataset</source>
-        <translation>添加二维图表数据集</translation>
+        <translation>एक 2D प्लॉट डेटा सेट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <source>FFT Plot</source>
-        <translation>FFT图表</translation>
+        <translation>FFT प्लॉट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
         <source>Add a Fast Fourier Transform plot</source>
-        <translation>添加快速傅里叶变换图表</translation>
+        <translation>एक फास्ट फूरियर ट्रांसफॉर्म प्लॉट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
         <source>Gauge</source>
-        <translation>仪表盘</translation>
+        <translation>गेज</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <source>Add a gauge widget for numeric data</source>
-        <translation>添加一个用于数值数据的仪表小部件</translation>
+        <translation>संख्यात्मक डेटा के लिए एक गेज विजेट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <source>Level Indicator</source>
-        <translation>水平指示器</translation>
+        <translation>स्तर सूचक</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="293"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="293"/>
         <source>Add a vertical bar level indicator</source>
-        <translation>添加一个垂直条形水平指示器</translation>
+        <translation>एक ऊर्ध्वाधर बार स्तर सूचक जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <source>Compass</source>
-        <translation>罗盘</translation>
+        <translation>कंपास</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="304"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="304"/>
         <source>Add a compass widget for directional data</source>
-        <translation>添加一个用于方向数据的罗盘小部件</translation>
+        <translation>दिशात्मक डेटा के लिए एक कंपास विजेट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
         <source>LED Indicator</source>
-        <translation>LED 指示器</translation>
+        <translation>एलईडी सूचक</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="315"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="315"/>
         <source>Add an LED-style status indicator</source>
-        <translation>添加一个 LED 风格的状态指示器</translation>
+        <translation>एलईडी-शैली स्थिति सूचक जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="336"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="336"/>
         <source>Group</source>
-        <translation>组</translation>
+        <translation>समूह</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <source>Add a dataset container group</source>
-        <translation>添加一个数据集容器组</translation>
+        <translation>एक डेटा सेट कंटेनर समूह जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
         <source>Dataset Container</source>
-        <translation>数据集容器</translation>
+        <translation>डेटा सेट कंटेनर</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
         <source>Table</source>
-        <translation>表格</translation>
+        <translation>तालिका</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="359"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="359"/>
         <source>Add a data table view</source>
-        <translation>添加数据表视图</translation>
+        <translation>डेटा तालिका दृश्य जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
         <source>Data Grid</source>
-        <translation>数据网格</translation>
+        <translation>डेटा ग्रिड</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <source>Multi-Plot</source>
-        <translation>多重绘图</translation>
+        <translation>मल्टी-प्लॉट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="370"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="370"/>
         <source>Add a 2D plot with multiple signals</source>
-        <translation>添加具有多个信号的 2D 绘图</translation>
+        <translation>कई संकेतों के साथ 2D प्लॉट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
         <source>Multiple Plot</source>
-        <translation>多重绘图</translation>
+        <translation>मल्टीपल प्लॉट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
@@ -6389,13 +4816,13 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="383"/>
         <source>3D Plot</source>
-        <translation>3D 绘图</translation>
+        <translation>3D प्लॉट</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
         <source>Add a 3D plot visualization</source>
-        <translation>添加 3D 绘图可视化</translation>
+        <translation>3D प्लॉट दृश्य जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="387"/>
@@ -6403,13 +4830,13 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="387"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="394"/>
         <source>Accelerometer</source>
-        <translation>加速度计</translation>
+        <translation>एक्सेलेरोमीटर</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
         <source>Add a group for 3-axis accelerometer data</source>
-        <translation>添加用于三轴加速度计数据的组</translation>
+        <translation>3-अक्ष एक्सेलेरोमीटर डेटा के लिए समूह जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
@@ -6417,13 +4844,13 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="404"/>
         <source>Gyroscope</source>
-        <translation>陀螺仪</translation>
+        <translation>जाइरोस्कोप</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="405"/>
         <source>Add a group for 3-axis gyroscope data (angular rates are integrated into orientation automatically)</source>
-        <translation>为三轴陀螺仪数据添加一个组（角速度会自动整合到方位中）</translation>
+        <translation>3-अक्ष जाइरोस्कोप डेटा के लिए एक समूह जोड़ें (कोणीय दरें स्वचालित रूप से उन्मुखीकरण में एकीकृत होती हैं)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="409"/>
@@ -6431,25 +4858,25 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="409"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="416"/>
         <source>GPS Map</source>
-        <translation>GPS 地图</translation>
+        <translation>जीपीएस मानचित्र</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="414"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="414"/>
         <source>Add a map widget for GPS data</source>
-        <translation>为 GPS 数据添加一个地图小部件</translation>
+        <translation>जीपीएस डेटा के लिए एक मानचित्र विजेट जोड़ें</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
         <source>Help</source>
-        <translation>帮助</translation>
+        <translation>सहायता</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="438"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="438"/>
         <source>Open the online Project Editor documentation</source>
-        <translation>打开在线项目编辑器文档</translation>
+        <translation>ऑनलाइन प्रोजेक्ट एडिटर प्रलेखन खोलें</translation>
     </message>
 </context>
 <context>
@@ -6458,13 +4885,13 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
         <source>Pro features detected in this project.</source>
-        <translation>在此项目中检测到专业功能。</translation>
+        <translation>इस प्रोजेक्ट में प्रो फीचर्स का पता चला।</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>将使用备用小部件。购买许可证以解锁全部功能。</translation>
+        <translation>बैकअप विजेट का उपयोग किया जाएगा। पूरी कार्यक्षमता अनलॉक करने के लिए लाइसेंस खरीदें।</translation>
     </message>
 </context>
 <context>
@@ -6472,49 +4899,49 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../src/Misc/Translator.cpp" line="174"/>
         <source>Failed to load welcome text :(</source>
-        <translation>加载欢迎文本失败 :(</translation>
+        <translation>स्वागत पाठ लोड करने में विफल :(</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="271"/>
         <source>Network error</source>
-        <translation>网络错误</translation>
+        <translation>नेटवर्क त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="273"/>
         <location filename="../../src/Licensing/Trial.cpp" line="292"/>
         <location filename="../../src/Licensing/Trial.cpp" line="330"/>
         <source>Trial Activation Error</source>
-        <translation>试用激活错误</translation>
+        <translation>परीक्षण सक्रियण त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="289"/>
         <source>Invalid server response</source>
-        <translation>无效的服务器响应</translation>
+        <translation>अमान्य सर्वर प्रतिक्रिया</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="290"/>
         <source>The server returned malformed data: %1</source>
-        <translation>服务器返回了格式错误的数据：%1</translation>
+        <translation>सर्वर ने विकृत डेटा लौटाया: %1</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="328"/>
         <source>Unexpected server response</source>
-        <translation>意外的服务器响应</translation>
+        <translation>अप्रत्याशित सर्वर प्रतिक्रिया</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="329"/>
         <source>The server response is missing required fields.</source>
-        <translation>服务器响应缺少必要字段。</translation>
+        <translation>सर्वर प्रतिक्रिया में आवश्यक फ़ील्ड गायब हैं।</translation>
     </message>
     <message>
         <location filename="../../src/Console/Export.cpp" line="118"/>
         <source>Console Output File Error</source>
-        <translation>控制台输出文件错误</translation>
+        <translation>कंसोल आउटपुट फ़ाइल त्रुटि</translation>
     </message>
     <message>
         <location filename="../../src/Console/Export.cpp" line="119"/>
         <source>Cannot open file for writing!</source>
-        <translation>无法打开文件进行写入！</translation>
+        <translation>लेखन के लिए फ़ाइल नहीं खोल सकते!</translation>
     </message>
 </context>
 <context>
@@ -6522,67 +4949,67 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="232"/>
         <source>Data Grids</source>
-        <translation>数据网格</translation>
+        <translation>डेटा ग्रिड्स</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="235"/>
         <source>Multiple Data Plots</source>
-        <translation>多数据绘图</translation>
+        <translation>बहु डेटा प्लॉट्स</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="238"/>
         <source>Accelerometers</source>
-        <translation>加速度计</translation>
+        <translation>एक्सेलेरोमीटर</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="241"/>
         <source>Gyroscopes</source>
-        <translation>陀螺仪</translation>
+        <translation>जाइरोस्कोप्स</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="244"/>
         <source>GPS</source>
-        <translation>GPS</translation>
+        <translation>जीपीएस</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="247"/>
         <source>FFT Plots</source>
-        <translation>FFT 图</translation>
+        <translation>एफएफटी प्लॉट्स</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="250"/>
         <source>LED Panels</source>
-        <translation>LED 面板</translation>
+        <translation>एलईडी पैनल्स</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="253"/>
         <source>Data Plots</source>
-        <translation>数据图</translation>
+        <translation>डेटा प्लॉट्स</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="256"/>
         <source>Bars</source>
-        <translation>条形图</translation>
+        <translation>बार्स</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="259"/>
         <source>Gauges</source>
-        <translation>仪表</translation>
+        <translation>गेजेज</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="262"/>
         <source>Terminal</source>
-        <translation>终端</translation>
+        <translation>टर्मिनल</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="265"/>
         <source>Compasses</source>
-        <translation>罗盘</translation>
+        <translation>कंपासेस</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="268"/>
         <source>3D Plots</source>
-        <translation>3D 图</translation>
+        <translation>3डी प्लॉट्स</translation>
     </message>
 </context>
 <context>
@@ -6591,141 +5018,121 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/Dialogs/Settings.qml" line="35"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="35"/>
         <source>Preferences</source>
-        <translation>偏好设置</translation>
+        <translation>प्राथमिकताएँ</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="59"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="59"/>
         <source>General</source>
-        <translation>常规</translation>
+        <translation>सामान्य</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="84"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="84"/>
         <source>Language</source>
-        <translation>语言</translation>
+        <translation>भाषा</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="104"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="104"/>
         <source>Theme</source>
-        <translation>主题</translation>
+        <translation>थीम</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="123"/>
         <source>Workspace Folder</source>
-        <translation>工作区文件夹</translation>
+        <translation>कार्यक्षेत्र फ़ोल्डर</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="166"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="166"/>
         <source>Miscellaneous</source>
-        <translation>杂项</translation>
+        <translation>विविध</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="191"/>
         <source>Enable TCP Plugins (Port 7777)</source>
-        <translation>启用 TCP 插件（端口 7777）</translation>
-    </message>
-    <message>
-        <source>Force Software Rendering</source>
-        <translation type="vanished">强制软件渲染</translation>
+        <translation>TCP प्लगइन्स सक्षम करें (पोर्ट 7777)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="209"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="209"/>
         <source>Automatically Check for Updates</source>
-        <translation>自动检查更新</translation>
+        <translation>स्वचालित रूप से अपडेट की जाँच करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="234"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="234"/>
         <source>Dashboard</source>
-        <translation>仪表板</translation>
+        <translation>डैशबोर्ड</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="258"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="258"/>
         <source>Point Count</source>
-        <translation>点数</translation>
+        <translation>बिंदु गणना</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="278"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="278"/>
         <source>UI Refresh Rate (Hz)</source>
-        <translation>UI 刷新率 (Hz)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="314"/>
-        <source>Always Show Taskbar Buttons</source>
-        <translation>始终显示任务栏按钮</translation>
-    </message>
-    <message>
-        <source>Decimal Precision</source>
-        <translation type="vanished">小数精度</translation>
-    </message>
-    <message>
-        <source>Threaded mode (better for high-rate data)</source>
-        <translation type="vanished">线程模式（更适合高频数据）</translation>
+        <translation>UI ताज़गी दर (Hz)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="296"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="296"/>
         <source>Show Actions Panel</source>
-        <translation>显示操作面板</translation>
+        <translation>कार्य पैनल दिखाएं</translation>
     </message>
     <message>
-        <source>Always Show Tashbar Buttons</source>
-        <translation type="vanished">始终显示任务栏按钮</translation>
-    </message>
-    <message>
-        <source>Enable Console Widget</source>
-        <translation type="vanished">启用控制台小部件</translation>
+        <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="314"/>
+        <source>Always Show Taskbar Buttons</source>
+        <translation>हमेशा टास्कबार बटन दिखाएं</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="335"/>
         <source>Use Separate Thread for Frame Extraction</source>
-        <translation>使用单独线程进行帧提取</translation>
+        <translation>फ्रेम निष्कर्षण के लिए अलग थ्रेड का उपयोग करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="362"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="362"/>
         <source>Console</source>
-        <translation>控制台</translation>
+        <translation>कंसोल</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="385"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="385"/>
         <source>Font Family</source>
-        <translation>字体系列</translation>
+        <translation>फ़ॉन्ट परिवार</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="405"/>
         <source>Font Size</source>
-        <translation>字体大小</translation>
+        <translation>फ़ॉन्ट आकार</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="442"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="442"/>
         <source>Reset</source>
-        <translation>重置</translation>
+        <translation>रीसेट</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="471"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="471"/>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation>बंद करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="482"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="482"/>
         <source>Apply</source>
-        <translation>应用</translation>
+        <translation>लागू करें</translation>
     </message>
 </context>
 <context>
@@ -6736,73 +5143,73 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="33"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="256"/>
         <source>Device Setup</source>
-        <translation>设备设置</translation>
+        <translation>डिवाइस सेटअप</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="123"/>
         <source>Frame Parsing</source>
-        <translation>帧解析</translation>
+        <translation>फ़्रेम पार्सिंग</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="131"/>
         <source>No Parsing (Device Sends JSON Data)</source>
-        <translation>无解析（设备发送 JSON 数据）</translation>
+        <translation>कोई पार्सिंग नहीं (डिवाइस JSON डेटा भेजता है)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="142"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="142"/>
         <source>Quick Plot (Comma Separated Values)</source>
-        <translation>快速绘图（逗号分隔值）</translation>
+        <translation>त्वरित प्लॉट (अल्पविराम से पृथक मान)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="153"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="153"/>
         <source>Parse via JSON Project File</source>
-        <translation>通过 JSON 项目文件解析</translation>
+        <translation>JSON प्रोजेक्ट फ़ाइल के माध्यम से पार्स करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="172"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="172"/>
         <source>Change Project File (%1)</source>
-        <translation>更改项目文件 (%1)</translation>
+        <translation>प्रोजेक्ट फ़ाइल बदलें (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="173"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="173"/>
         <source>Select Project File</source>
-        <translation>选择项目文件</translation>
+        <translation>प्रोजेक्ट फ़ाइल चुनें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="187"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="187"/>
         <source>Data Export</source>
-        <translation>数据导出</translation>
+        <translation>डेटा निर्यात</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="200"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="200"/>
         <source>Create CSV File</source>
-        <translation>创建 CSV 文件</translation>
+        <translation>CSV फ़ाइल बनाएँ</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="218"/>
         <source>Create MDF4 File</source>
-        <translation>创建 MDF4 文件</translation>
+        <translation>MDF4 फ़ाइल बनाएँ</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="235"/>
         <source>Export Console Data</source>
-        <translation>导出控制台数据</translation>
+        <translation>कंसोल डेटा निर्यात करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="264"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="264"/>
         <source>I/O Interface: %1</source>
-        <translation>I/O 接口：%1</translation>
+        <translation>I/O इंटरफ़ेस: %1</translation>
     </message>
 </context>
 <context>
@@ -6811,73 +5218,73 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="147"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="147"/>
         <source>Workspaces</source>
-        <translation>工作区</translation>
+        <translation>कार्यक्षेत्र</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
         <source>No Groups Available</source>
-        <translation>无可用组</translation>
+        <translation>कोई समूह उपलब्ध नहीं</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="188"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="188"/>
         <source>Actions</source>
-        <translation>操作</translation>
+        <translation>क्रियाएँ</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <source>No Actions Available</source>
-        <translation>无可用操作</translation>
+        <translation>कोई क्रियाएँ उपलब्ध नहीं</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <source>Auto Layout</source>
-        <translation>自动布局</translation>
+        <translation>स्वचालित लेआउट</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <source>Full Screen</source>
-        <translation>全屏</translation>
+        <translation>पूर्ण स्क्रीन</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
         <source>CSV Logging</source>
-        <translation>CSV 记录</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
-        <source>Console Logging</source>
-        <translation>控制台记录</translation>
+        <translation>CSV लॉगिंग</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
         <source>MDF4 Logging</source>
-        <translation>MDF4 记录</translation>
+        <translation>MDF4 लॉगिंग</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
+        <source>Console Logging</source>
+        <translation>कंसोल लॉगिंग</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="302"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="302"/>
         <source>Console</source>
-        <translation>控制台</translation>
+        <translation>कंसोल</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="317"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="317"/>
         <source>Preferences</source>
-        <translation>偏好设置</translation>
+        <translation>प्राथमिकताएँ</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="327"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="327"/>
         <source>Help</source>
-        <translation>帮助</translation>
+        <translation>सहायता</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="352"/>
@@ -6889,19 +5296,19 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="377"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="377"/>
         <source>Resume</source>
-        <translation>恢复</translation>
+        <translation>पुनः प्रारंभ करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="378"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="378"/>
         <source>Pause</source>
-        <translation>暂停</translation>
+        <translation>विराम</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="387"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="387"/>
         <source>Disconnect</source>
-        <translation>断开连接</translation>
+        <translation>डिस्कनेक्ट</translation>
     </message>
 </context>
 <context>
@@ -6910,7 +5317,7 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/Widgets/SubMenuCombo.qml" line="80"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <source>No Data Available</source>
-        <translation>无可用数据</translation>
+        <translation>कोई डेटा उपलब्ध नहीं</translation>
     </message>
 </context>
 <context>
@@ -6919,25 +5326,25 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="123"/>
         <source>Parameter</source>
-        <translation>参数</translation>
+        <translation>पैरामीटर</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
         <source>Value</source>
-        <translation>值</translation>
+        <translation>मान</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <source>No</source>
-        <translation>否</translation>
+        <translation>नहीं</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <source>Yes</source>
-        <translation>是</translation>
+        <translation>हाँ</translation>
     </message>
 </context>
 <context>
@@ -6946,7 +5353,7 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="87"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="87"/>
         <source>Menu</source>
-        <translation>菜单</translation>
+        <translation>मेनू</translation>
     </message>
 </context>
 <context>
@@ -6955,49 +5362,49 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="124"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="124"/>
         <source>Copy</source>
-        <translation>复制</translation>
+        <translation>कॉपी</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="131"/>
         <source>Select all</source>
-        <translation>全选</translation>
+        <translation>सभी चुनें</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="138"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="138"/>
         <source>Clear</source>
-        <translation>清除</translation>
+        <translation>साफ करें</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="218"/>
         <source>Send Data to Device</source>
-        <translation>发送数据到设备</translation>
+        <translation>डिवाइस को डेटा भेजें</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="375"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="375"/>
         <source>Show Timestamp</source>
-        <translation>显示时间戳</translation>
+        <translation>समय-मुद्रा दिखाएं</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="386"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="386"/>
         <source>Echo</source>
-        <translation>回显</translation>
+        <translation>इको</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="397"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="397"/>
         <source>Emulate VT-100</source>
-        <translation>模拟 VT-100</translation>
+        <translation>VT-100 अनुकरण करें</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="419"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="419"/>
         <source>Display: %1</source>
-        <translation>显示：%1</translation>
+        <translation>प्रदर्शन: %1</translation>
     </message>
 </context>
 <context>
@@ -7006,43 +5413,49 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="158"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="158"/>
         <source>Project Editor</source>
-        <translation>项目编辑器</translation>
+        <translation>परियोजना संपादक</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="161"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="161"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
-        <translation>打开项目编辑器以创建或修改您的 JSON 布局</translation>
+        <translation>अपनी JSON लेआउट बनाने या संशोधित करने के लिए परियोजना संपादक खोलें</translation>
     </message>
     <message>
-        <source>CSV Player</source>
-        <translation type="vanished">CSV 播放器</translation>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="182"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="182"/>
+        <source>Open Project</source>
+        <translation>परियोजना खोलें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="184"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="184"/>
+        <source>Open an existing JSON project</source>
+        <translation>एक मौजूदा JSON परियोजना खोलें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="194"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="194"/>
+        <source>Open CSV</source>
+        <translation>CSV खोलें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="200"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="200"/>
         <source>Play a CSV file as if it were live sensor data</source>
-        <translation>播放 CSV 文件，仿佛它是实时传感器数据</translation>
+        <translation>एक CSV फ़ाइल को लाइव सेंसर डेटा की तरह चलाएं</translation>
     </message>
     <message>
-        <source>Devices</source>
-        <translation type="vanished">设备</translation>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="205"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="205"/>
+        <source>Open MDF4</source>
+        <translation>MDF4 खोलें</translation>
     </message>
     <message>
-        <source>Configure device connection via Serial, BLE, or network socket</source>
-        <translation type="vanished">通过串口、BLE 或网络套接字配置设备连接</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="261"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="261"/>
-        <source>Preferences</source>
-        <translation>偏好设置</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="265"/>
-        <source>Open application settings and preferences</source>
-        <translation>打开应用程序设置和偏好设置</translation>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="211"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="211"/>
+        <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
+        <translation>एक MDF4 फ़ाइल को लाइव सेंसर डेटा की तरह चलाएं (प्रो)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="234"/>
@@ -7051,30 +5464,22 @@ Add groups above to poll multiple register types.</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="194"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="194"/>
-        <source>Open CSV</source>
-        <translation>打开 CSV</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="205"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="205"/>
-        <source>Open MDF4</source>
-        <translation>打开 MDF4</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="241"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="241"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
-        <translation>配置 MQTT 连接（发布或订阅）</translation>
+        <translation>MQTT कनेक्शन कॉन्फ़िगर करें (प्रकाशित या सदस्यता लें)</translation>
     </message>
     <message>
-        <source>Setup</source>
-        <translation type="vanished">设置</translation>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="261"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="261"/>
+        <source>Preferences</source>
+        <translation>प्राथमिकताएँ</translation>
     </message>
     <message>
-        <source>Configure device connection settings</source>
-        <translation type="vanished">配置设备连接设置</translation>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="265"/>
+        <source>Open application settings and preferences</source>
+        <translation>एप्लिकेशन सेटिंग्स और प्राथमिकताएँ खोलें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="280"/>
@@ -7086,155 +5491,127 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="285"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="285"/>
         <source>Select Serial port (UART) communication</source>
-        <translation>选择串口（UART）通信</translation>
+        <translation>सीरियल पोर्ट (UART) संचार चुनें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="295"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="295"/>
         <source>Audio</source>
-        <translation>音频</translation>
+        <translation>ऑडियो</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="300"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="300"/>
         <source>Select audio input device (Pro)</source>
-        <translation>选择音频输入设备（专业版）</translation>
+        <translation>ऑडियो इनपुट डिवाइस चुनें (प्रो)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="308"/>
         <source>Network</source>
-        <translation>网络</translation>
+        <translation>नेटवर्क</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="313"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="313"/>
         <source>Select TCP/UDP network communication</source>
-        <translation>选择TCP/UDP网络通信</translation>
+        <translation>TCP/UDP नेटवर्क संचार चुनें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <source>ModBus</source>
-        <translation>ModBus</translation>
+        <translation>मोडबस</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="328"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="328"/>
         <source>Select MODBUS communication (Pro)</source>
-        <translation>选择MODBUS通信（专业版）</translation>
+        <translation>MODBUS संचार का चयन करें (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="337"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="337"/>
         <source>Bluetooth</source>
-        <translation>蓝牙</translation>
+        <translation>ब्लूटूथ</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="341"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="341"/>
         <source>Select Bluetooth Low Energy communication</source>
-        <translation>选择蓝牙低功耗通信</translation>
+        <translation>ब्लूटूथ लो एनर्जी संचार का चयन करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="351"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="351"/>
         <source>CAN Bus</source>
-        <translation>CAN总线</translation>
+        <translation>CAN बस</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="356"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="356"/>
         <source>Select CAN Bus communication (Pro)</source>
-        <translation>选择CAN总线通信（专业版）</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="397"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="397"/>
-        <source>Examples</source>
-        <translation>示例</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="401"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="401"/>
-        <source>Browse example projects on GitHub</source>
-        <translation>在 GitHub 上浏览示例项目</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">帮助</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="411"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="411"/>
-        <source>Open the online documentation for help and guidance</source>
-        <translation>打开在线文档以获取帮助和指导</translation>
-    </message>
-    <message>
-        <source>AI Help</source>
-        <translation type="vanished">AI 帮助</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="421"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="421"/>
-        <source>View detailed documentation and ask questions on DeepWiki</source>
-        <translation>查看详细文档并在 DeepWiki 上提问</translation>
+        <translation>CAN बस संचार का चयन करें (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="378"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="378"/>
         <source>About</source>
-        <translation>关于</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="182"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="182"/>
-        <source>Open Project</source>
-        <translation>打开项目</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="184"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="184"/>
-        <source>Open an existing JSON project</source>
-        <translation>打开现有的JSON项目</translation>
-    </message>
-    <message>
-        <source>Load CSV</source>
-        <translation type="vanished">加载CSV</translation>
-    </message>
-    <message>
-        <source>Load MDF4</source>
-        <translation type="vanished">加载 MDF4</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="211"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="211"/>
-        <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
-        <translation>播放 MDF4 文件，就像实时传感器数据一样 (专业版)</translation>
+        <translation>के बारे में</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="382"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="382"/>
         <source>Show application info and license details</source>
-        <translation>显示应用信息和许可详情</translation>
+        <translation>एप्लिकेशन जानकारी और लाइसेंस विवरण दिखाएं</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="397"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="397"/>
+        <source>Examples</source>
+        <translation>उदाहरण</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="401"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="401"/>
+        <source>Browse example projects on GitHub</source>
+        <translation>GitHub पर उदाहरण परियोजनाओं को ब्राउज़ करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="408"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="408"/>
         <source>Getting Started</source>
-        <translation>入门指南</translation>
+        <translation>शुरुआत करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="411"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="411"/>
+        <source>Open the online documentation for help and guidance</source>
+        <translation>सहायता और मार्गदर्शन के लिए ऑनलाइन प्रलेखन खोलें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="418"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="418"/>
         <source>AI Wiki &amp; Chat</source>
-        <translation>AI 维基和聊天</translation>
+        <translation>एआई विकी और चैट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="421"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="421"/>
+        <source>View detailed documentation and ask questions on DeepWiki</source>
+        <translation>विस्तृत प्रलेखन देखें और डीपविकी पर प्रश्न पूछें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="438"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="438"/>
+        <source>Activate</source>
+        <translation>सक्रिय करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="442"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="442"/>
         <source>Manage license and activate Serial Studio Pro</source>
-        <translation>管理许可证并激活Serial Studio Pro</translation>
+        <translation>लाइसेंस प्रबंधित करें और सीरियल स्टूडियो प्रो सक्रिय करें</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="457"/>
@@ -7242,29 +5619,19 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="457"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="477"/>
         <source>Disconnect</source>
-        <translation>断开连接</translation>
+        <translation>डिस्कनेक्ट</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="457"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="457"/>
         <source>Connect</source>
-        <translation>连接</translation>
+        <translation>कनेक्ट</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="460"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="460"/>
         <source>Connect or disconnect from device or MQTT broker</source>
-        <translation>连接或断开设备或 MQTT 代理</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="438"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="438"/>
-        <source>Activate</source>
-        <translation>激活</translation>
-    </message>
-    <message>
-        <source>Manage license and activate the application</source>
-        <translation type="vanished">管理许可证并激活应用</translation>
+        <translation>डिवाइस या MQTT ब्रोकर से कनेक्ट या डिस्कनेक्ट करें</translation>
     </message>
 </context>
 <context>
@@ -7273,49 +5640,49 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="64"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="64"/>
         <source>COM Port</source>
-        <translation>COM 端口</translation>
+        <translation>COM पोर्ट</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="92"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="92"/>
         <source>Baud Rate</source>
-        <translation>波特率</translation>
+        <translation>बॉड दर</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="151"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="151"/>
         <source>Data Bits</source>
-        <translation>数据位</translation>
+        <translation>डेटा बिट्स</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="167"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="167"/>
         <source>Parity</source>
-        <translation>奇偶校验</translation>
+        <translation>पैरिटी</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
         <source>Stop Bits</source>
-        <translation>停止位</translation>
+        <translation>स्टॉप बिट्स</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="199"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="199"/>
         <source>Flow Control</source>
-        <translation>流控</translation>
+        <translation>फ्लो नियंत्रण</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
         <source>Auto Reconnect</source>
-        <translation>自动重连</translation>
+        <translation>ऑटो पुनः कनेक्ट</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="243"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="243"/>
         <source>Send DTR Signal</source>
-        <translation>发送 DTR 信号</translation>
+        <translation>डीटीआर सिग्नल भेजें</translation>
     </message>
 </context>
 <context>
@@ -7324,17 +5691,17 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../src/UI/Dashboard.cpp" line="846"/>
         <location filename="../../src/UI/Dashboard.cpp" line="1185"/>
         <source>Console</source>
-        <translation>控制台</translation>
+        <translation>कंसोल</translation>
     </message>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="1204"/>
         <source>%1 (Fallback)</source>
-        <translation>%1（备用）</translation>
+        <translation>%1 (फॉलबैक)</translation>
     </message>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="1267"/>
         <source>LED Panel (%1)</source>
-        <translation>LED 面板（%1）</translation>
+        <translation>एलईडी पैनल (%1)</translation>
     </message>
 </context>
 <context>
@@ -7342,7 +5709,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../src/UI/DashboardWidget.cpp" line="124"/>
         <source>Invalid</source>
-        <translation>无效</translation>
+        <translation>अमान्य</translation>
     </message>
 </context>
 <context>
@@ -7350,12 +5717,12 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../src/UI/Taskbar.cpp" line="245"/>
         <source>Overview</source>
-        <translation>总览</translation>
+        <translation>अवलोकन</translation>
     </message>
     <message>
         <location filename="../../src/UI/Taskbar.cpp" line="255"/>
         <source>All Data</source>
-        <translation>所有数据</translation>
+        <translation>सभी डेटा</translation>
     </message>
 </context>
 <context>
@@ -7363,12 +5730,12 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="673"/>
         <source>Select Background Image</source>
-        <translation>选择背景图像</translation>
+        <translation>पृष्ठभूमि छवि चुनें</translation>
     </message>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="675"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
-        <translation>图像 (*.png *.jpg *.jpeg *.bmp)</translation>
+        <translation>छवियाँ (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
 </context>
 <context>
@@ -7376,27 +5743,27 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="438"/>
         <source>Would you like to download the update now?</source>
-        <translation>您想立即下载更新吗？</translation>
+        <translation>क्या आप अभी अपडेट डाउनलोड करना चाहेंगे?</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="441"/>
         <source>Would you like to download the update now? This is a mandatory update, exiting now will close the application</source>
-        <translation>您想立即下载更新吗？这是一个强制更新，退出将关闭应用程序</translation>
+        <translation>क्या आप अभी अपडेट डाउनलोड करना चाहेंगे? यह एक अनिवार्य अपडेट है, बाहर निकलने से एप्लिकेशन बंद हो जाएगा</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="447"/>
         <source>Version %1 of %2 has been released!</source>
-        <translation>%2 的版本 %1 已发布！</translation>
+        <translation>संस्करण %1 का %2 जारी किया गया है!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="485"/>
         <source>No updates are available for the moment</source>
-        <translation>目前没有可用更新</translation>
+        <translation>फिलहाल कोई अपडेट उपलब्ध नहीं है</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="487"/>
         <source>Congratulations! You are running the latest version of %1</source>
-        <translation>恭喜！您正在运行 %1 的最新版本</translation>
+        <translation>बधाई हो! आप %1 के नवीनतम संस्करण का उपयोग कर रहे हैं</translation>
     </message>
 </context>
 <context>
@@ -7405,19 +5772,19 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/Dialogs/Welcome.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="174"/>
         <source>Welcome to %1!</source>
-        <translation>欢迎使用 %1！</translation>
+        <translation>%1 में आपका स्वागत है!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="185"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="185"/>
         <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
-        <translation>Serial Studio 是一个强大的实时可视化工具，为工程师、学生和创客而设计。</translation>
+        <translation>Serial Studio एक शक्तिशाली वास्तविक-समय दृश्य उपकरण है, जो इंजीनियरों, छात्रों, और निर्माताओं के लिए बनाया गया है।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="196"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="196"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
-        <translation>您可以开始一个功能齐全的 14 天试用，通过您的许可证密钥激活，或自行下载和编译 GPLv3 源代码。</translation>
+        <translation>आप एक पूर्ण-कार्यात्मक 14-दिवसीय परीक्षण शुरू कर सकते हैं, इसे अपनी लाइसेंस कुंजी से सक्रिय कर सकते हैं, या GPLv3 स्रोत कोड डाउनलोड और संकलित कर सकते हैं।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="206"/>
@@ -7425,7 +5792,7 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="206"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="385"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
-        <translation>购买专业版直接支持作者，并有助于资助未来的开发。</translation>
+        <translation>प्रो खरीदना लेखक को सीधे समर्थन करता है और भविष्य के विकास को वित्तपोषित करने में मदद करता है।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="214"/>
@@ -7433,105 +5800,105 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="214"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="393"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
-        <translation>自行构建 GPLv3 版本有助于社区成长，并鼓励技术贡献。</translation>
+        <translation>स्वयं GPLv3 संस्करण का निर्माण करने से समुदाय का विकास होता है और तकनीकी योगदान को प्रोत्साहन मिलता है।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="235"/>
         <source>Please wait...</source>
-        <translation>请稍候...</translation>
+        <translation>कृपया प्रतीक्षा करें...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="269"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="269"/>
         <source>%1 days remaining in your trial.</source>
-        <translation>您的试用期还剩 %1 天。</translation>
+        <translation>आपके परीक्षण में %1 दिन शेष हैं।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="279"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="279"/>
         <source>You’re currently using the fully-featured trial of %1 Pro. It’s valid for 14 days of personal, non-commercial use.</source>
-        <translation>您当前正在使用 %1 Pro 的全功能试用版。它适用于14天的个人非商业用途。</translation>
+        <translation>आप वर्तमान में %1 प्रो के पूर्ण विशेषताओं वाले परीक्षण का उपयोग कर रहे हैं। यह व्यक्तिगत, गैर-व्यावसायिक उपयोग के लिए 14 दिनों के लिए मान्य है।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="290"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="290"/>
         <source>Upgrade to a paid plan to keep using Serial Studio Pro.</source>
-        <translation>升级到付费计划以继续使用 Serial Studio Pro。</translation>
+        <translation>Serial Studio Pro का उपयोग जारी रखने के लिए एक भुगतान योजना में अपग्रेड करें।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="298"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="298"/>
         <source>Or, compile the GPLv3 source code to use it for free.</source>
-        <translation>或者，编译 GPLv3 源代码以免费使用。</translation>
+        <translation>या, मुफ्त में उपयोग करने के लिए GPLv3 स्रोत कोड को संकलित करें।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="306"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="306"/>
         <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>要查看可用的订阅计划，请点击下面的“立即升级”。</translation>
+        <translation>उपलब्ध सदस्यता योजनाओं को देखने के लिए, नीचे "Upgrade Now" पर क्लिक करें।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="326"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="326"/>
         <source>Don't nag me about the trial.
 I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
-        <translation>不要提醒我试用期。
-我明白结束后，我需要购买许可证或构建 GPLv3 版本。</translation>
+        <translation>मुझे परीक्षण के बारे में परेशान न करें।
+मैं समझता हूँ कि जब यह समाप्त होगा, तो मुझे लाइसेंस खरीदना होगा या GPLv3 संस्करण बनाना होगा।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="355"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="355"/>
         <source>Your %1 trial has expired.</source>
-        <translation>您的 %1 试用已过期。</translation>
+        <translation>आपका %1 परीक्षण समाप्त हो गया है।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="365"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="365"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
-        <translation>您的试用期已结束。要继续使用 %1 的所有专业功能，请升级到付费计划。</translation>
+        <translation>आपकी परीक्षण अवधि समाप्त हो गई है। सभी प्रो सुविधाओं के साथ %1 का उपयोग जारी रखने के लिए, कृपया एक भुगतान योजना में अपग्रेड करें।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="376"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="376"/>
         <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
-        <translation>如果您愿意，也可以在 GPLv3 许可证下编译开源版本。</translation>
+        <translation>यदि आप चाहें, तो आप GPLv3 लाइसेंस के अंतर्गत ओपन-सोर्स संस्करण भी संकलित कर सकते हैं।</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="404"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="404"/>
         <source>Thank you for trying %1!</source>
-        <translation>感谢您试用 %1！</translation>
+        <translation>%1 को आजमाने के लिए धन्यवाद!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="448"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="448"/>
         <source>Upgrade Now</source>
-        <translation>立即升级</translation>
+        <translation>अभी अपग्रेड करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="460"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="460"/>
         <source>Activate</source>
-        <translation>激活</translation>
+        <translation>सक्रिय करें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Open in Limited Mode</source>
-        <translation>在限制模式下打开</translation>
+        <translation>सीमित मोड में खोलें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Continue</source>
-        <translation>继续</translation>
+        <translation>जारी रखें</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Start Trial</source>
-        <translation>开始试用</translation>
+        <translation>परीक्षण प्रारंभ करें</translation>
     </message>
 </context>
 <context>
@@ -7539,42 +5906,42 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="91"/>
         <source>N</source>
-        <translation>北</translation>
+        <translation>उ</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="93"/>
         <source>NE</source>
-        <translation>东北</translation>
+        <translation>उ-पूर्व</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="95"/>
         <source>E</source>
-        <translation>东</translation>
+        <translation>पू</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="97"/>
         <source>SE</source>
-        <translation>东南</translation>
+        <translation>द-पूर्व</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="99"/>
         <source>S</source>
-        <translation>南</translation>
+        <translation>द</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="101"/>
         <source>SW</source>
-        <translation>西南</translation>
+        <translation>द-पश्चिम</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="103"/>
         <source>W</source>
-        <translation>西</translation>
+        <translation>प</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="105"/>
         <source>NW</source>
-        <translation>西北</translation>
+        <translation>उ-पश्चिम</translation>
     </message>
 </context>
 <context>
@@ -7583,13 +5950,13 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="137"/>
         <source>Title</source>
-        <translation>标题</translation>
+        <translation>शीर्षक</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="137"/>
         <source>Value</source>
-        <translation>值</translation>
+        <translation>मान</translation>
     </message>
 </context>
 <context>
@@ -7597,52 +5964,52 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="84"/>
         <source>Satellite Imagery</source>
-        <translation>卫星影像</translation>
+        <translation>उपग्रह चित्रण</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="84"/>
         <source>Satellite Imagery with Labels</source>
-        <translation>带标签的卫星影像</translation>
+        <translation>लेबल के साथ उपग्रह चित्रण</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Street Map</source>
-        <translation>街道地图</translation>
+        <translation>सड़क मानचित्र</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Topographic Map</source>
-        <translation>地形图</translation>
+        <translation>स्थलाकृतिक मानचित्र</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Terrain</source>
-        <translation>地形</translation>
+        <translation>भू-भाग</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="86"/>
         <source>Light Gray Canvas</source>
-        <translation>浅灰色画布</translation>
+        <translation>हल्का ग्रे कैनवास</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="86"/>
         <source>Dark Gray Canvas</source>
-        <translation>深灰色画布</translation>
+        <translation>गहरा ग्रे कैनवास</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="87"/>
         <source>National Geographic</source>
-        <translation>国家地理</translation>
+        <translation>नेशनल ज्योग्राफिक</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="390"/>
         <source>Additional map layers are available only for Pro users.</source>
-        <translation>额外的地图图层仅对专业用户开放。</translation>
+        <translation>अतिरिक्त मानचित्र परतें केवल प्रो उपयोगकर्ताओं के लिए उपलब्ध हैं।</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="391"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
-        <translation>我们无法提供无限制访问，因为 ArcGIS API 密钥会产生实际费用。</translation>
+        <translation>हम असीमित पहुंच की पेशकश नहीं कर सकते क्योंकि ArcGIS API कुंजी वास्तविक लागतें उत्पन्न करती है।</translation>
     </message>
 </context>
 <context>
@@ -7650,7 +6017,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../src/UI/Widgets/Plot.cpp" line="62"/>
         <source>Samples</source>
-        <translation>样本</translation>
+        <translation>नमूने</translation>
     </message>
 </context>
 <context>
@@ -7658,7 +6025,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1197"/>
         <source>Grid Interval: %1 unit(s)</source>
-        <translation>网格间隔：%1 单位</translation>
+        <translation>ग्रिड अंतराल: %1 इकाई(याँ)</translation>
     </message>
 </context>
 </TS>

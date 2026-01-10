@@ -108,6 +108,7 @@
         <file>actions/Xbox Y.svg</file>
         <file>actions/Zoom In.svg</file>
         <file>actions/Zoom Out.svg</file>
+        <file>fonts/JetBrainsMono-Regular.ttf</file>
         <file>icons/buttons/activate.svg</file>
         <file>icons/buttons/apply.svg</file>
         <file>icons/buttons/attach.svg</file>
@@ -351,6 +352,7 @@
         <file>images/drag-and-drop.svg</file>
         <file>images/driver.svg</file>
         <file>images/hammer.svg</file>
+        <file>images/no-bluetooth.svg</file>
         <file>images/no-mic.svg</file>
         <file>images/spinner.svg</file>
         <file>instruments/attitude_crosshair.svg</file>
@@ -370,6 +372,7 @@
         <file>messages/gpl3/Welcome_EN.txt</file>
         <file>messages/gpl3/Welcome_ES.txt</file>
         <file>messages/gpl3/Welcome_FR.txt</file>
+        <file>messages/gpl3/Welcome_HI.txt</file>
         <file>messages/gpl3/Welcome_IT.txt</file>
         <file>messages/gpl3/Welcome_JA.txt</file>
         <file>messages/gpl3/Welcome_KO.txt</file>
@@ -384,6 +387,7 @@
         <file>messages/pro/Welcome_EN.txt</file>
         <file>messages/pro/Welcome_ES.txt</file>
         <file>messages/pro/Welcome_FR.txt</file>
+        <file>messages/pro/Welcome_HI.txt</file>
         <file>messages/pro/Welcome_IT.txt</file>
         <file>messages/pro/Welcome_JA.txt</file>
         <file>messages/pro/Welcome_KO.txt</file>
@@ -398,6 +402,7 @@
         <file>messages/trial/Welcome_EN.txt</file>
         <file>messages/trial/Welcome_ES.txt</file>
         <file>messages/trial/Welcome_FR.txt</file>
+        <file>messages/trial/Welcome_HI.txt</file>
         <file>messages/trial/Welcome_IT.txt</file>
         <file>messages/trial/Welcome_JA.txt</file>
         <file>messages/trial/Welcome_KO.txt</file>
@@ -450,7 +455,5 @@
         <file>themes/midday.json</file>
         <file>themes/midnight.json</file>
         <file>themes/rust.json</file>
-        <file>images/no-bluetooth.svg</file>
-        <file>fonts/JetBrainsMono-Regular.ttf</file>
     </qresource>
 </RCC>

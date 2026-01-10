@@ -4,9 +4,9 @@
 
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Používáte zkušební verzi Serial Studio Pro. Tato verze je plně
-funkční pro hodnocení a osobní, nekomerční použití. Pro pokračování
-po skončení zkušební doby přejděte na placený plán nebo si sami
+Používáte zkušební verzi Serial Studio Pro. Tato verze je plně funkční
+pro hodnocení a osobní, nekomerční použití. Chcete-li pokračovat po
+skončení zkušební doby, upgradujte na placený plán nebo si sami
 zkompilujte zdrojový kód GPLv3.
 
 → Podpora: alex@serial-studio.com

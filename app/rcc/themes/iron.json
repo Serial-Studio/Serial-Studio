@@ -18,7 +18,8 @@
     "tr_TR":"Demir",
     "zh_CN":"铁",
     "cs_CZ":"Železo",
-    "uk_UA":"Залізо"
+    "uk_UA":"Залізо",
+    "hi_IN":"लोहा"
   },
   "colors":{
     "groupbox_border":"#B0B0B0",

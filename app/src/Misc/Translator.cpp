@@ -107,6 +107,9 @@ Misc::Translator::Language Misc::Translator::systemLanguage() const
     case QLocale::Czech:
       lang = Czech;
       break;
+    case QLocale::Hindi:
+      lang = Hindi;
+      break;
     default:
       lang = English;
       break;
@@ -164,6 +167,9 @@ QString Misc::Translator::welcomeConsoleText() const
       break;
     case Czech:
       lang = QStringLiteral("CZ");
+      break;
+    case Hindi:
+      lang = QStringLiteral("HI");
       break;
     default:
       lang = QStringLiteral("EN");
@@ -230,6 +236,7 @@ QStringList &Misc::Translator::availableLanguages()
     list.append(QStringLiteral("Türkçe"));
     list.append(QStringLiteral("Українська"));
     list.append(QStringLiteral("Čeština"));
+    list.append(QStringLiteral("हिन्दी"));
   }
 
   return list;
@@ -303,6 +310,10 @@ void Misc::Translator::setLanguage(const Language language)
     case Czech:
       langName = QStringLiteral("cs_CZ");
       locale = QLocale(QLocale::Czech);
+      break;
+    case Hindi:
+      langName = QStringLiteral("hi_IN");
+      locale = QLocale(QLocale::Hindi);
       break;
     default:
       langName = QStringLiteral("en_US");

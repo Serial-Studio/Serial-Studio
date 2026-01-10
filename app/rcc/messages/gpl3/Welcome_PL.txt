@@ -11,11 +11,11 @@ prace pochodne pozostaną otwarte na tych samych warunkach.
 → Licencja: https://www.gnu.org/licenses/gpl-3.0.html
 → Źródło:  https://github.com/serial-studio/serial-studio
 
-Podoba Ci się ten projekt? Rozważ wsparcie rozwoju poprzez Serial Studio Pro:
+Podoba Ci się ten projekt? Rozważ wsparcie rozwoju z Serial Studio Pro:
 → https://store.serial-studio.com/
 
 Funkcje Pro:
-→ Integracja MQTT
+→ Integracja z MQTT
 → Wizualizacja XY i 3D
 → Wejście audio
 → Sterowniki CANBus i MODBUS

@@ -4,16 +4,16 @@
 
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Serial Studio Proをご利用いただき、オープンソース開発をサポートして
-いただきありがとうございます！あなたのライセンスは有効で、商業および
-独自の使用が承認されています。
+Serial Studio Proをご利用いただき、オープンソース開発をサポートしていただき
+ありがとうございます！ライセンスは有効で、商業および専有使用が承認されて
+います。
 
 → サポート: alex@serial-studio.com
-→ 通話のスケジュール: https://calendly.com/serial-studio
+→ コールをスケジュール: https://calendly.com/serial-studio
 → カスタマーポータル: https://store.serial-studio.com/billing
-→ 詳細はこちら: https://serial-studio.com/
+→ 詳しくはこちら: https://serial-studio.com/
 
-Pro機能:
+Proの機能:
 → MQTT統合
 → XYおよび3Dビジュアライゼーション
 → オーディオ入力

@@ -4,17 +4,17 @@
 
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Tento software je zdarma a open source pod licencí GNU GPLv3.
-Můžete jej používat, upravovat a redistribuovat, pokud odvozená díla
-zůstanou open source za stejných podmínek.
+Tento software je zdarma a open source podle licence GNU GPLv3.
+Můžete jej používat, upravovat a redistribuovat, za předpokladu,
+že odvozená díla zůstanou open source za stejných podmínek.
 
 → Licence: https://www.gnu.org/licenses/gpl-3.0.html
-→ Zdroj:   https://github.com/serial-studio/serial-studio
+→ Zdroj:  https://github.com/serial-studio/serial-studio
 
-Líbí se vám tento projekt? Zvažte podporu vývoje s Serial Studio Pro:
+Líbí se vám tento projekt? Zvažte podporu vývoje pomocí Serial Studio Pro:
 → https://store.serial-studio.com/
 
-Funkce Pro:
+Funkce Pro verze:
 → Integrace MQTT
 → Vizualizace XY a 3D
 → Vstup zvuku

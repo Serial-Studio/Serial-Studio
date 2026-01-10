@@ -55,7 +55,8 @@ LANGUAGE_MAP = {
     "tr_TR": "Turkish",
     "zh_CN": "Simplified Chinese",
     "uk_UA": "Ukrainian",
-    "cs_CZ": "Czech"
+    "cs_CZ": "Czech",
+    "hi_IN": "Hindi"
 }
 
 #------------------------------------------------------------------------------

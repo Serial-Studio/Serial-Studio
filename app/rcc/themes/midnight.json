@@ -18,7 +18,8 @@
     "tr_TR":"Gece Yarısı",
     "zh_CN":"午夜",
     "cs_CZ":"Půlnoc",
-    "uk_UA":"Північ"
+    "uk_UA":"Північ",
+    "hi_IN":"आधी रात"
   },
   "colors":{
     "groupbox_border":"#3a3d42",

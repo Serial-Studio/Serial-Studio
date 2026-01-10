@@ -1,9 +1,11 @@
 <RCC>
     <qresource prefix="/">
+        <file>qm/cs_CZ.qm</file>
         <file>qm/de_DE.qm</file>
         <file>qm/en_US.qm</file>
         <file>qm/es_MX.qm</file>
         <file>qm/fr_FR.qm</file>
+        <file>qm/hi_IN.qm</file>
         <file>qm/it_IT.qm</file>
         <file>qm/ja_JP.qm</file>
         <file>qm/ko_KR.qm</file>
@@ -11,8 +13,7 @@
         <file>qm/pt_BR.qm</file>
         <file>qm/ru_RU.qm</file>
         <file>qm/tr_TR.qm</file>
-        <file>qm/zh_CN.qm</file>
-        <file>qm/cs_CZ.qm</file>
         <file>qm/uk_UA.qm</file>
+        <file>qm/zh_CN.qm</file>
     </qresource>
 </RCC>

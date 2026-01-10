@@ -82,7 +82,8 @@ public:
     Polish,
     Turkish,
     Ukrainian,
-    Czech
+    Czech,
+    Hindi
   };
   Q_ENUM(Language);
 
@@ -94,7 +95,7 @@ public:
   [[nodiscard]] QString acknowledgementsText() const;
 
 public slots:
-  void setLanguage(const Language language);
+  void setLanguage(const Misc::Translator::Language language);
   void setLanguage(const QLocale &locale, const QString &language);
 
 private:

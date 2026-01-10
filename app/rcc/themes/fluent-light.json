@@ -18,7 +18,8 @@
     "tr_TR":"Fluent Açık",
     "zh_CN":"Fluent 浅色",
     "cs_CZ":"Fluent Světlý",
-    "uk_UA":"Fluent Світла"
+    "uk_UA":"Fluent Світла",
+    "hi_IN":"फ्लुएंट लाइट"
   },
   "colors":{
     "groupbox_border": "#D1D1D1",

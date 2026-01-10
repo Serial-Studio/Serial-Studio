@@ -19,6 +19,6 @@ Pro özellikler:
 → XY ve 3D görselleştirme
 → Ses girişi
 → CANBus & MODBUS sürücüleri
-→ Ticari lisans (GPL yükümlülükleri yok)
+→ Ticari lisans (GPL yükümlülüğü yok)
 
 → Daha fazla bilgi edinin: https://serial-studio.com/

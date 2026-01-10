@@ -2,20 +2,20 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Derechos de autor (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
 Este software es libre y de código abierto bajo la licencia GNU GPLv3.
 Puede usarlo, modificarlo y redistribuirlo, siempre que los trabajos
 derivados permanezcan de código abierto bajo los mismos términos.
 
 → Licencia: https://www.gnu.org/licenses/gpl-3.0.html
-→ Código fuente: https://github.com/serial-studio/serial-studio
+→ Fuente:  https://github.com/serial-studio/serial-studio
 
 ¿Te gusta este proyecto? Considera apoyar el desarrollo con Serial Studio Pro:
 → https://store.serial-studio.com/
 
-Funciones Pro:
-→ Integración con MQTT
+Características Pro:
+→ Integración MQTT
 → Visualización XY y 3D
 → Entrada de audio
 → Controladores CANBus & MODBUS
