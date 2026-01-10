@@ -455,5 +455,14 @@
         <file>themes/midday.json</file>
         <file>themes/midnight.json</file>
         <file>themes/rust.json</file>
+        <file>messages/gpl3/Welcome_NL.txt</file>
+        <file>messages/gpl3/Welcome_RO.txt</file>
+        <file>messages/gpl3/Welcome_SV.txt</file>
+        <file>messages/pro/Welcome_NL.txt</file>
+        <file>messages/pro/Welcome_RO.txt</file>
+        <file>messages/pro/Welcome_SV.txt</file>
+        <file>messages/trial/Welcome_NL.txt</file>
+        <file>messages/trial/Welcome_RO.txt</file>
+        <file>messages/trial/Welcome_SV.txt</file>
     </qresource>
 </RCC>

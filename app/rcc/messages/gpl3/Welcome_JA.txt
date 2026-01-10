@@ -11,8 +11,8 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 → ライセンス: https://www.gnu.org/licenses/gpl-3.0.html
 → ソース:  https://github.com/serial-studio/serial-studio
 
-このプロジェクトが気に入りましたか？Serial Studio Proで開発を
-サポートすることを検討してください:
+このプロジェクトが気に入りましたか？Serial Studio Proでの開発支援を
+ご検討ください:
 → https://store.serial-studio.com/
 
 Proの機能:
@@ -20,6 +20,6 @@ Proの機能:
 → XYおよび3Dビジュアライゼーション
 → オーディオ入力
 → CANBus & MODBUSドライバー
-→ 商用ライセンス（GPLの義務なし）
+→ 商用ライセンス（GPL義務なし）
 
-→ 詳細はこちら: https://serial-studio.com/
+→ 詳細: https://serial-studio.com/

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
-<TS version="2.1" language="tr_TR" sourcelanguage="en_US">
+<TS version="2.1" language="sv_SE" sourcelanguage="en_US">
 <context>
     <name>About</name>
     <message>
@@ -8,28 +8,28 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="39"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="39"/>
         <source>About</source>
-        <translation>Hakkında</translation>
+        <translation>Om</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="85"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="85"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="85"/>
         <source>Version %1</source>
-        <translation>Sürüm %1</translation>
+        <translation>Version %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="95"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="95"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="95"/>
         <source>Copyright © %1 %2</source>
-        <translation>Telif Hakkı © %1 %2</translation>
+        <translation>Upphovsrätt © %1 %2</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="100"/>
         <source>All Rights Reserved</source>
-        <translation>Tüm Hakları Saklıdır</translation>
+        <translation>Alla rättigheter förbehållna</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="116"/>
@@ -38,86 +38,86 @@
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
-        <translation>%1 özgür bir yazılımdır: GNU Genel Kamu Lisansı'nın Free Software Foundation tarafından yayımlanan ya 3. sürümü ya da (tercihinize bağlı olarak) daha sonraki bir sürümü altında yeniden dağıtabilir ve/veya değiştirebilirsiniz.
+        <translation>%1 är fri programvara: du kan distribuera och/eller modifiera den under villkoren i GNU General Public License som publicerats av Free Software Foundation; antingen version 3 av licensen, eller (om du vill) någon senare version.
 
-%1, yararlı olacağı umuduyla dağıtılmaktadır, ancak TİCARİ ELVERİŞLİLİK veya BELİRLİ BİR AMACA UYGUNLUK garantisi olmaksızın. Daha fazla bilgi için GNU Genel Kamu Lisansı'na bakın.</translation>
+%1 distribueras i hopp om att den ska vara användbar, men UTAN NÅGON GARANTI; inte ens underförstådd garanti för SÄLJBARHET eller LÄMPLIGHET FÖR ETT SÄRSKILT ÄNDAMÅL. Se GNU General Public License för mer information.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="135"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="135"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="135"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
-        <translation>Bu yapılandırma ticari ve tescilli kullanım için lisanslanmıştır. Kapalı kaynak ve ticari uygulamalarda, ticari lisansın şartlarına tabi olarak kullanılabilir.</translation>
+        <translation>Denna konfiguration är licensierad för kommersiellt och proprietärt bruk. Den kan användas i stängd källkod och kommersiella applikationer, under förutsättning av villkoren i den kommersiella licensen.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="149"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="149"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="149"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
-        <translation>Bu yapılandırma yalnızca kişisel ve değerlendirme amaçlıdır. Geçerli bir ticari lisans etkinleştirilmedikçe ticari kullanım yasaktır.</translation>
+        <translation>Denna konfiguration är endast för personligt och utvärderingsändamål. Kommersiell användning är förbjuden om inte en giltig kommersiell licens aktiveras.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="163"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="163"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="163"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Bu yazılım, açık veya zımni herhangi bir garanti olmaksızın 'olduğu gibi' sağlanmaktadır, bunlarla sınırlı olmamak üzere, ticari elverişlilik veya belirli bir amaca uygunluk garantileri dahil. Yazar, bu yazılımın kullanımından kaynaklanan herhangi bir zarardan sorumlu tutulamaz.</translation>
+        <translation>Denna programvara tillhandahålls 'i befintligt skick' utan någon form av garanti, uttrycklig eller underförstådd, inklusive men inte begränsat till garantier för säljbarhet eller lämplighet för ett visst ändamål. Författaren ska under inga omständigheter hållas ansvarig för skador som uppstår från användningen av denna programvara.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="183"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="183"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="183"/>
         <source>Manage License</source>
-        <translation>Lisansı Yönet</translation>
+        <translation>Hantera licens</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="192"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="192"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="192"/>
         <source>Donate</source>
-        <translation>Bağış Yap</translation>
+        <translation>Donera</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="203"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="203"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="203"/>
         <source>Check for Updates</source>
-        <translation>Güncellemeleri Kontrol Et</translation>
+        <translation>Kontrollera uppdateringar</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="212"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="212"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="212"/>
         <source>License Agreement</source>
-        <translation>Lisans Anlaşması</translation>
+        <translation>Licensavtal</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="221"/>
         <source>Report Bug</source>
-        <translation>Hata Bildir</translation>
+        <translation>Rapportera fel</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="230"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="230"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="230"/>
         <source>Acknowledgements</source>
-        <translation>Teşekkürler</translation>
+        <translation>Erkännanden</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="239"/>
         <source>Website</source>
-        <translation>Web Sitesi</translation>
+        <translation>Webbplats</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="254"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="254"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="254"/>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation>Stäng</translation>
     </message>
 </context>
 <context>
@@ -127,21 +127,21 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Acknowledgements.qml" line="34"/>
         <source>Acknowledgements</source>
-        <translation>Teşekkürler</translation>
+        <translation>Erkännanden</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="69"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="69"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Acknowledgements.qml" line="69"/>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="83"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="83"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Acknowledgements.qml" line="83"/>
         <source>About Qt...</source>
-        <translation>Qt Hakkında...</translation>
+        <translation>Om Qt...</translation>
     </message>
 </context>
 <context>
@@ -151,42 +151,42 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <source>Change Icon</source>
-        <translation>Simgeyi Değiştir</translation>
+        <translation>Ändra ikon</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="106"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="106"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="106"/>
         <source>Change the icon used for this action</source>
-        <translation>Bu eylem için kullanılan simgeyi değiştir</translation>
+        <translation>Ändra ikonen som används för denna åtgärd</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="127"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="127"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="127"/>
         <source>Duplicate</source>
-        <translation>Çoğalt</translation>
+        <translation>Duplicera</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="129"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="129"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="129"/>
         <source>Duplicate this action with all its settings</source>
-        <translation>Bu eylemi tüm ayarlarıyla çoğalt</translation>
+        <translation>Duplicera denna åtgärd med alla dess inställningar</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="139"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="139"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="139"/>
         <source>Delete</source>
-        <translation>Sil</translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="143"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="143"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="143"/>
         <source>Delete this action from the project</source>
-        <translation>Bu eylemi projeden sil</translation>
+        <translation>Ta bort denna åtgärd från projektet</translation>
     </message>
 </context>
 <context>
@@ -194,39 +194,39 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="68"/>
         <source>No Microphone Detected</source>
-        <translation>Mikrofon Algılanmadı</translation>
+        <translation>Ingen mikrofon upptäckt</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="77"/>
         <source>Connect a mic or check your settings</source>
-        <translation>Bir mikrofon bağlayın veya ayarlarınızı kontrol edin</translation>
+        <translation>Anslut en mikrofon eller kontrollera dina inställningar</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="101"/>
         <source>Input Device</source>
-        <translation>Giriş Cihazı</translation>
+        <translation>Indataenhet</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="122"/>
         <source>Sample Rate</source>
-        <translation>Örnekleme Hızı</translation>
+        <translation>Samplingsfrekvens</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="143"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="218"/>
         <source>Sample Format</source>
-        <translation>Örnekleme Formatı</translation>
+        <translation>Samplingsformat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="164"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="239"/>
         <source>Channels</source>
-        <translation>Kanallar</translation>
+        <translation>Kanaler</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="197"/>
         <source>Output Device</source>
-        <translation>Çıkış Cihazı</translation>
+        <translation>Utgångsenhet</translation>
     </message>
 </context>
 <context>
@@ -236,127 +236,104 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
         <source>Device</source>
-        <translation>Cihaz</translation>
+        <translation>Enhet</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
         <source>Service</source>
-        <translation>Servis</translation>
+        <translation>Tjänst</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
         <source>Characteristic</source>
-        <translation>Karakteristik</translation>
+        <translation>Egenskap</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="174"/>
         <source>Scanning....</source>
-        <translation>Tarama yapılıyor....</translation>
+        <translation>Skannar....</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <source>No Bluetooth Adapter Detected</source>
-        <translation>Bluetooth Adaptörü Algılanmadı</translation>
+        <translation>Ingen Bluetooth-adapter upptäckt</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
         <source>Connect a Bluetooth adapter or check your system settings</source>
-        <translation>Bir Bluetooth adaptörü bağlayın veya sistem ayarlarınızı kontrol edin</translation>
+        <translation>Anslut en Bluetooth-adapter eller kontrollera dina systeminställningar</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="248"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="248"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="248"/>
         <source>This OS is not Supported Yet.</source>
-        <translation>Bu İşletim Sistemi Henüz Desteklenmiyor.</translation>
+        <translation>Detta operativsystem stöds inte ännu.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="259"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="259"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="259"/>
         <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
-        <translation>Qt resmi olarak desteklediğinde, Serial Studio'yu bu işletim sistemiyle çalışacak şekilde güncelleyeceğiz</translation>
-    </message>
-    <message>
-        <source>Sorry, this system is not supported yet. We'll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
-        <translation type="vanished">Üzgünüz, bu sistem henüz desteklenmiyor. Qt resmi olarak desteklediğinde, Serial Studio'yu bu işletim sistemiyle çalışacak şekilde güncelleyeceğiz.</translation>
+        <translation>Vi kommer att uppdatera Serial Studio för att fungera med detta operativsystem så snart Qt officiellt stöder det.</translation>
     </message>
 </context>
 <context>
     <name>CANBus</name>
     <message>
-        <source>CAN Plugin</source>
-        <translation type="vanished">CAN Eklentisi</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="52"/>
         <source>No CAN Drivers Found</source>
-        <translation>CAN Sürücüleri Bulunamadı</translation>
+        <translation>Inga CAN-drivrutiner hittades</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="66"/>
         <source>Install CAN hardware drivers for your system</source>
-        <translation>Sisteminiz için CAN donanım sürücülerini yükleyin</translation>
+        <translation>Installera CAN-hårdvarudrivrutiner för ditt system</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="92"/>
         <source>CAN Driver</source>
-        <translation>CAN Sürücüsü</translation>
+        <translation>CAN-drivrutin</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="136"/>
         <source>Interface</source>
-        <translation>Arayüz</translation>
+        <translation>Gränssnitt</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="167"/>
         <source>Bitrate</source>
-        <translation>Bit hızı</translation>
+        <translation>Bitrate</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="238"/>
         <source>Flexible Data-Rate</source>
-        <translation>Esnek Veri Hızı</translation>
+        <translation>Flexibel datahastighet</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="269"/>
         <source>DBC Database</source>
-        <translation>DBC Veritabanı</translation>
+        <translation>DBC-databas</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="273"/>
         <source>Import DBC File...</source>
-        <translation>DBC Dosyasını İçe Aktar...</translation>
+        <translation>Importera DBC-fil...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="306"/>
         <source>No CAN Interfaces Found</source>
-        <translation>CAN Arayüzleri Bulunamadı</translation>
-    </message>
-    <message>
-        <source>CAN FD</source>
-        <translation type="vanished">CAN FD</translation>
-    </message>
-</context>
-<context>
-    <name>CSV::Export</name>
-    <message>
-        <source>CSV File Error</source>
-        <translation type="vanished">CSV Dosya Hatası</translation>
-    </message>
-    <message>
-        <source>Cannot open CSV file for writing!</source>
-        <translation type="vanished">CSV dosyası yazma için açılamıyor!</translation>
+        <translation>Inga CAN-gränssnitt hittades</translation>
     </message>
 </context>
 <context>
@@ -364,130 +341,103 @@
     <message>
         <location filename="../../src/CSV/Player.cpp" line="177"/>
         <source>Select CSV file</source>
-        <translation>CSV dosyası seç</translation>
-    </message>
-    <message>
-        <source>CSV files</source>
-        <translation type="vanished">CSV dosyaları</translation>
+        <translation>Välj CSV-fil</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="179"/>
         <source>CSV files (*.csv)</source>
-        <translation>CSV dosyaları (*.csv)</translation>
+        <translation>CSV-filer (*.csv)</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="312"/>
         <source>Device Connection Active</source>
-        <translation>Cihaz Bağlantısı Aktif</translation>
+        <translation>Enhetsanslutning aktiv</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="313"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
-        <translation>Bu özelliği kullanmak için cihaz bağlantısını kesmelisiniz. Devam etmek istiyor musunuz?</translation>
+        <translation>För att använda denna funktion måste du koppla från enheten. Vill du fortsätta?</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="421"/>
         <source>Insufficient Data in CSV File</source>
-        <translation>CSV Dosyasında Yetersiz Veri</translation>
+        <translation>Otillräcklig data i CSV-fil</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="422"/>
         <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
-        <translation>Devam etmek için CSV dosyasında en az iki kare (veri satırı) bulunmalıdır. Lütfen dosyayı kontrol edip tekrar deneyin.</translation>
+        <translation>CSV-filen måste innehålla minst två ramar (datarader) för att fortsätta. Kontrollera filen och försök igen.</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="433"/>
         <source>Cannot read CSV file</source>
-        <translation>CSV dosyası okunamıyor</translation>
+        <translation>Kan inte läsa CSV-fil</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="434"/>
         <source>Please check file permissions &amp; location</source>
-        <translation>Lütfen dosya izinlerini ve konumunu kontrol edin</translation>
+        <translation>Kontrollera filbehörigheter och plats</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="705"/>
         <source>Invalid CSV</source>
-        <translation>Geçersiz CSV</translation>
+        <translation>Ogiltig CSV</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="706"/>
         <source>The CSV file does not contain any data or headers.</source>
-        <translation>CSV dosyası herhangi bir veri veya başlık içermiyor.</translation>
+        <translation>CSV-filen innehåller inga data eller rubriker.</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="717"/>
         <source>Select a date/time column</source>
-        <translation>Bir tarih/saat sütunu seçin</translation>
+        <translation>Välj en datum/tid-kolumn</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="717"/>
         <location filename="../../src/CSV/Player.cpp" line="727"/>
         <source>Set interval manually</source>
-        <translation>Aralığı elle ayarla</translation>
+        <translation>Ställ in intervall manuellt</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="719"/>
         <source>CSV Date/Time Selection</source>
-        <translation>CSV Tarih/Saat Seçimi</translation>
+        <translation>CSV Datum/Tid Val</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="720"/>
         <source>Choose how to handle the date/time data:</source>
-        <translation>Tarih/saat verilerini nasıl işleyeceğinizi seçin:</translation>
+        <translation>Välj hur datum/tid-data ska hanteras:</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="730"/>
         <source>Set Interval</source>
-        <translation>Aralığı Ayarla</translation>
+        <translation>Ställ in Intervall</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="731"/>
         <source>Please enter the interval between rows in milliseconds:</source>
-        <translation>Lütfen satırlar arasındaki aralığı milisaniye cinsinden girin:</translation>
+        <translation>Ange intervallet mellan rader i millisekunder:</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="745"/>
         <source>Select Date/Time Column</source>
-        <translation>Tarih/Saat Sütununu Seç</translation>
+        <translation>Välj Datum/Tid Kolumn</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="746"/>
         <source>Please select the column that contains the date/time data:</source>
-        <translation>Lütfen tarih/saat verilerini içeren sütunu seçin:</translation>
+        <translation>Vänligen välj kolumnen som innehåller datum/tid-data:</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="755"/>
         <source>Invalid Selection</source>
-        <translation>Geçersiz Seçim</translation>
+        <translation>Ogiltigt Val</translation>
     </message>
     <message>
         <location filename="../../src/CSV/Player.cpp" line="756"/>
         <source>The selected column is not valid.</source>
-        <translation>Seçilen sütun geçerli değil.</translation>
-    </message>
-</context>
-<context>
-    <name>Canvas</name>
-    <message>
-        <source>Set Wallpaper...</source>
-        <translation type="vanished">Duvar Kağıdını Ayarla...</translation>
-    </message>
-    <message>
-        <source>Clear Wallpaper</source>
-        <translation type="vanished">Duvar Kağıdını Temizle</translation>
-    </message>
-    <message>
-        <source>Tile Windows</source>
-        <translation type="vanished">Pencereleri Döşe</translation>
-    </message>
-    <message>
-        <source>Pro features detected in this project.</source>
-        <translation type="vanished">Bu projede Pro özellikler tespit edildi.</translation>
-    </message>
-    <message>
-        <source>Fallback widgets are active. Purchase a license for full functionality.</source>
-        <translation type="vanished">Yedek widget'lar aktif. Tam işlevsellik için lisans satın alın.</translation>
+        <translation>Den valda kolumnen är inte giltig.</translation>
     </message>
 </context>
 <context>
@@ -505,12 +455,12 @@
     <message>
         <location filename="../../src/Console/Export.cpp" line="275"/>
         <source>Console Export is a Pro feature.</source>
-        <translation>Konsol Dışa Aktarımı bir Pro özelliğidir.</translation>
+        <translation>Konsolexport är en Pro-funktion.</translation>
     </message>
     <message>
         <location filename="../../src/Console/Export.cpp" line="276"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
-        <translation>Bu özellik bir lisans gerektirir. Konsol dışa aktarmayı etkinleştirmek için lütfen bir lisans satın alın.</translation>
+        <translation>Denna funktion kräver en licens. Vänligen köp en för att aktivera konsolexport.</translation>
     </message>
 </context>
 <context>
@@ -528,37 +478,37 @@
     <message>
         <location filename="../../src/Console/Handler.cpp" line="175"/>
         <source>No Line Ending</source>
-        <translation>Satır Sonu Yok</translation>
+        <translation>Inget radslut</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="176"/>
         <source>New Line</source>
-        <translation>Yeni Satır</translation>
+        <translation>Ny rad</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="177"/>
         <source>Carriage Return</source>
-        <translation>Satır Başı</translation>
+        <translation>Vagnretur</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="178"/>
         <source>CR + NL</source>
-        <translation>SB + YS</translation>
+        <translation>VR + NR</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="189"/>
         <source>Plain Text</source>
-        <translation>Düz Metin</translation>
+        <translation>Oformaterad text</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="190"/>
         <source>Hexadecimal</source>
-        <translation>Onaltılık</translation>
+        <translation>Hexadecimal</translation>
     </message>
     <message>
         <location filename="../../src/Console/Handler.cpp" line="211"/>
         <source>No Checksum</source>
-        <translation>Sağlama Yok</translation>
+        <translation>Ingen kontrollsumma</translation>
     </message>
 </context>
 <context>
@@ -568,7 +518,7 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/CsvPlayer.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/CsvPlayer.qml" line="34"/>
         <source>CSV Player</source>
-        <translation>CSV Oynatıcı</translation>
+        <translation>CSV-spelare</translation>
     </message>
 </context>
 <context>
@@ -576,22 +526,22 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="41"/>
         <source>DBC File Preview</source>
-        <translation>DBC Dosyası Önizlemesi</translation>
+        <translation>Förhandsgranskning av DBC-fil</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="162"/>
         <source>DBC File: %1</source>
-        <translation>DBC Dosyası: %1</translation>
+        <translation>DBC-fil: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
         <source>Review the CAN messages and signals that will be imported into a new Serial Studio project.</source>
-        <translation>Yeni bir Serial Studio projesine aktarılacak CAN mesajlarını ve sinyallerini gözden geçirin.</translation>
+        <translation>Granska CAN-meddelanden och signaler som kommer att importeras till ett nytt Serial Studio-projekt.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="181"/>
         <source>Messages</source>
-        <translation>Mesajlar</translation>
+        <translation>Meddelanden</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="215"/>
@@ -601,37 +551,37 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="222"/>
         <source>Message Name</source>
-        <translation>Mesaj Adı</translation>
+        <translation>Meddelandenamn</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="230"/>
         <source>CAN ID</source>
-        <translation>CAN ID</translation>
+        <translation>CAN-ID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="237"/>
         <source>Signals</source>
-        <translation>Sinyaller</translation>
+        <translation>Signaler</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="319"/>
         <source>No messages found in DBC file.</source>
-        <translation>DBC dosyasında mesaj bulunamadı.</translation>
+        <translation>Inga meddelanden hittades i DBC-filen.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="337"/>
         <source>Total: %1 messages, %2 signals</source>
-        <translation>Toplam: %1 mesaj, %2 sinyal</translation>
+        <translation>Totalt: %1 meddelanden, %2 signaler</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="346"/>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="360"/>
         <source>Create Project</source>
-        <translation>Proje Oluştur</translation>
+        <translation>Skapa projekt</translation>
     </message>
 </context>
 <context>
@@ -641,7 +591,7 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard.qml" line="34"/>
         <source>Dashboard</source>
-        <translation>Gösterge Paneli</translation>
+        <translation>Instrumentpanel</translation>
     </message>
 </context>
 <context>
@@ -651,35 +601,35 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
         <source>Set Wallpaper...</source>
-        <translation>Duvar Kağıdını Ayarla...</translation>
+        <translation>Ställ in bakgrund...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
         <source>Clear Wallpaper</source>
-        <translation>Duvar Kağıdını Temizle</translation>
+        <translation>Rensa bakgrund</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
         <source>Tile Windows</source>
-        <translation>Pencereleri Döşe</translation>
+        <translation>Ordna fönster</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="84"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="84"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="84"/>
         <source>Pro features detected in this project.</source>
-        <translation>Bu projede Pro özellikler tespit edildi.</translation>
+        <translation>Pro-funktioner upptäcktes i detta projekt.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="85"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="85"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="85"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
-        <translation>Yedek widget'lar aktif. Tam işlevsellik için lisans satın alın.</translation>
+        <translation>Reservwidgets är aktiva. Köp en licens för full funktionalitet.</translation>
     </message>
 </context>
 <context>
@@ -689,14 +639,14 @@
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <source>Pause</source>
-        <translation>Duraklat</translation>
+        <translation>Paus</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="90"/>
         <source>Resume</source>
-        <translation>Devam Et</translation>
+        <translation>Återuppta</translation>
     </message>
 </context>
 <context>
@@ -704,68 +654,68 @@
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="116"/>
         <source>Import DBC File</source>
-        <translation>DBC Dosyasını İçe Aktar</translation>
+        <translation>Importera DBC-fil</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="117"/>
         <source>DBC Files (*.dbc);;All Files (*)</source>
-        <translation>DBC Dosyaları (*.dbc);;Tüm Dosyalar (*)</translation>
+        <translation>DBC-filer (*.dbc);;Alla filer (*)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="163"/>
         <source>Failed to parse DBC file: %1</source>
-        <translation>DBC dosyası çözümlenemedi: %1</translation>
+        <translation>Misslyckades med att tolka DBC-fil: %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="164"/>
         <source>Please verify the file format and try again.</source>
-        <translation>Lütfen dosya formatını kontrol edin ve tekrar deneyin.</translation>
+        <translation>Kontrollera filformatet och försök igen.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="165"/>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="227"/>
         <source>DBC Import Error</source>
-        <translation>DBC İçe Aktarma Hatası</translation>
+        <translation>DBC-importfel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="173"/>
         <source>DBC file contains no messages</source>
-        <translation>DBC dosyası mesaj içermiyor</translation>
+        <translation>DBC-filen innehåller inga meddelanden</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="174"/>
         <source>The selected file does not contain any CAN message definitions.</source>
-        <translation>Seçilen dosya herhangi bir CAN mesaj tanımı içermiyor.</translation>
+        <translation>Den valda filen innehåller inga CAN-meddelandedefinitioner.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="175"/>
         <source>DBC Import Warning</source>
-        <translation>DBC İçe Aktarma Uyarısı</translation>
+        <translation>DBC-importvarning</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="224"/>
         <source>Failed to create temporary project file</source>
-        <translation>Geçici proje dosyası oluşturulamadı</translation>
+        <translation>Misslyckades med att skapa tillfällig projektfil</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="225"/>
         <source>Check if the application has write permissions to the temporary directory.</source>
-        <translation>Uygulamanın geçici dizine yazma izni olup olmadığını kontrol edin.</translation>
+        <translation>Kontrollera om applikationen har skrivrättigheter till den tillfälliga katalogen.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="243"/>
         <source>Successfully imported DBC file with %1 messages and %2 signals.</source>
-        <translation>DBC dosyası %1 mesaj ve %2 sinyalle başarıyla içe aktarıldı.</translation>
+        <translation>DBC-fil importerades framgångsrikt med %1 meddelanden och %2 signaler.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="246"/>
         <source>The project editor is now open for customization.</source>
-        <translation>Proje düzenleyici artık özelleştirme için açık.</translation>
+        <translation>Projektredigeraren är nu öppen för anpassning.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="248"/>
         <source>DBC Import Complete</source>
-        <translation>DBC İçe Aktarma Tamamlandı</translation>
+        <translation>DBC-importering slutförd</translation>
     </message>
 </context>
 <context>
@@ -773,27 +723,27 @@
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="260"/>
         <source>Cannot read JSON file</source>
-        <translation>JSON dosyası okunamıyor</translation>
+        <translation>Kan inte läsa JSON-fil</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="261"/>
         <source>Please check file permissions &amp; location</source>
-        <translation>Lütfen dosya izinlerini ve konumunu kontrol edin</translation>
+        <translation>Kontrollera filbehörigheter och plats</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="276"/>
         <source>JSON validation error</source>
-        <translation>JSON doğrulama hatası</translation>
+        <translation>JSON-valideringsfel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="295"/>
         <source>This file isn't a valid project file</source>
-        <translation>Bu dosya geçerli bir proje dosyası değil</translation>
+        <translation>Denna fil är inte en giltig projektfil</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="296"/>
         <source>Make sure it's a properly formatted JSON project.</source>
-        <translation>Doğru biçimlendirilmiş bir JSON projesi olduğundan emin olun.</translation>
+        <translation>Se till att det är ett korrekt formaterat JSON-projekt.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="703"/>
@@ -804,23 +754,23 @@
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="715"/>
         <source>Audio Input</source>
-        <translation>Ses Girişi</translation>
+        <translation>Ljudingång</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="721"/>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="755"/>
         <source>Quick Plot</source>
-        <translation>Hızlı Grafik</translation>
+        <translation>Snabbplot</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="761"/>
         <source>Quick Plot Data</source>
-        <translation>Hızlı Grafik Verisi</translation>
+        <translation>Snabbplotdata</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameBuilder.cpp" line="775"/>
         <source>Multiple Plots</source>
-        <translation>Çoklu Grafikler</translation>
+        <translation>Flera plottar</translation>
     </message>
 </context>
 <context>
@@ -828,45 +778,45 @@
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="267"/>
         <source>Frame parser code updated successfully!</source>
-        <translation>Çerçeve ayrıştırıcı kodu başarıyla güncellendi!</translation>
+        <translation>Ramparserkod uppdaterad framgångsrikt!</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="268"/>
         <source>No errors have been detected in the code.</source>
-        <translation>Kodda hata tespit edilmedi.</translation>
+        <translation>Inga fel har upptäckts i koden.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="327"/>
         <source>JavaScript Syntax Error</source>
-        <translation>JavaScript Sözdizimi Hatası</translation>
+        <translation>JavaScript-syntaxfel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="328"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
-        <translation>Ayrıştırıcı kodu satır %1'de bir sözdizimi hatası içeriyor:
+        <translation>Parserkoden innehåller ett syntaxfel på rad %1:
 
 %2</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="339"/>
         <source>JavaScript Exception Occurred</source>
-        <translation>JavaScript İstisnası Meydana Geldi</translation>
+        <translation>JavaScript-undantag inträffade</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="340"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
-        <translation>Ayrıştırıcı kodu şu istisnaları tetikledi:
+        <translation>Parserkoden utlöste följande undantag:
 
 %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="351"/>
         <source>Missing Parse Function</source>
-        <translation>Ayrıştırma Fonksiyonu Eksik</translation>
+        <translation>Saknad Parse-funktion</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="352"/>
@@ -874,29 +824,29 @@
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
-        <translation>'parse' fonksiyonu betikte tanımlı değil.
+        <translation>'parse'-funktionen är inte definierad i skriptet.
 
-Lütfen kodunuzun şunları içerdiğinden emin olun:
+Se till att din kod innehåller:
 function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="363"/>
         <source>Invalid Parse Function</source>
-        <translation>Geçersiz Ayrıştırma Fonksiyonu</translation>
+        <translation>Ogiltig Parse-funktion</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="364"/>
         <source>The 'parse' property exists but is not a callable function.
 
 Please ensure 'parse' is declared as a function.</source>
-        <translation>'parse' özelliği mevcut ama çağrılabilir bir fonksiyon değil.
+        <translation>'parse'-egenskapen finns men är inte en anropbar funktion.
 
-Lütfen 'parse' fonksiyon olarak tanımlandığından emin olun.</translation>
+Se till att 'parse' deklareras som en funktion.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="377"/>
         <source>Invalid Function Declaration</source>
-        <translation>Geçersiz Fonksiyon Bildirimi</translation>
+        <translation>Ogiltig funktionsdeklaration</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="378"/>
@@ -904,15 +854,15 @@ Lütfen 'parse' fonksiyon olarak tanımlandığından emin olun.</translation>
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation>Geçerli bir 'parse' fonksiyon bildirimi bulunamadı.
+        <translation>Ingen giltig 'parse'-funktionsdeklaration hittades.
 
-Beklenen format:
+Förväntat format:
 function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="393"/>
         <source>Invalid Function Parameter</source>
-        <translation>Geçersiz Fonksiyon Parametresi</translation>
+        <translation>Ogiltig funktionsparameter</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="394"/>
@@ -920,15 +870,15 @@ function parse(frame) { ... }</translation>
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation>'parse' fonksiyonu en az bir parametreye sahip olmalıdır.
+        <translation>'parse'-funktionen måste ha minst en parameter.
 
-Beklenen format:
+Förväntat format:
 function parse(frame) { ... }</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="405"/>
         <source>Deprecated Function Signature</source>
-        <translation>Kullanım Dışı Fonksiyon İmzası</translation>
+        <translation>Föråldrad funktionssignatur</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="406"/>
@@ -938,17 +888,17 @@ This format is no longer supported. Please update to the new single-parameter fo
 function parse(%1) { ... }
 
 The separator parameter is no longer needed.</source>
-        <translation>'parse' fonksiyonu eski iki parametreli formatı kullanıyor: parse(%1, %2)
+        <translation>Funktionen 'parse' använder det gamla två-parameterformatet: parse(%1, %2)
 
-Bu format artık desteklenmiyor. Lütfen yeni tek parametreli formata güncelleyin:
-function parse(%1) { ... }
+Detta format stöds inte längre. Uppdatera till det nya en-parameterformatet:
+funktion parse(%1) { ... }
 
-Ayırıcı parametre artık gerekli değil.</translation>
+Separatorparametern behövs inte längre.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="427"/>
         <source>Parse Function Runtime Error</source>
-        <translation>Ayrıştırma Fonksiyonu Çalışma Zamanı Hatası</translation>
+        <translation>Fel vid körning av parse-funktion</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="428"/>
@@ -957,188 +907,188 @@ Ayırıcı parametre artık gerekli değil.</translation>
 %2
 
 Please fix the error in the function body.</source>
-        <translation>Ayrıştırma fonksiyonu %1 satırında bir hata içeriyor:
+        <translation>Parse-funktionen innehåller ett fel på rad %1:
 
 %2
 
-Lütfen fonksiyon gövdesindeki hatayı düzeltin.</translation>
+Vänligen rätta felet i funktionskroppen.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="525"/>
         <source>The document has been modified.</source>
-        <translation>Belge değiştirildi.</translation>
+        <translation>Dokumentet har ändrats.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="526"/>
         <location filename="../../src/DataModel/FrameParser.cpp" line="546"/>
         <location filename="../../src/DataModel/FrameParser.cpp" line="854"/>
         <source>Are you sure you want to continue?</source>
-        <translation>Devam etmek istediğinizden emin misiniz?</translation>
+        <translation>Är du säker på att du vill fortsätta?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="545"/>
         <source>The document has been modified!</source>
-        <translation>Belge değiştirildi!</translation>
+        <translation>Dokumentet har ändrats!</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="553"/>
         <source>Select Javascript file to import</source>
-        <translation>İçe aktarmak için Javascript dosyasını seçin</translation>
+        <translation>Välj Javascript-fil att importera</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="603"/>
         <source>Code Validation Successful</source>
-        <translation>Kod Doğrulama Başarılı</translation>
+        <translation>Kodvalidering lyckades</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="604"/>
         <source>No syntax errors detected in the parser code.</source>
-        <translation>Ayrıştırıcı kodunda sözdizimi hatası tespit edilmedi.</translation>
+        <translation>Inga syntaxfel upptäcktes i parserkoden.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="649"/>
         <source>Select Frame Parser Template</source>
-        <translation>Çerçeve Ayrıştırıcı Şablonunu Seçin</translation>
+        <translation>Välj ramparsermall</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="650"/>
         <source>Choose a template to load:</source>
-        <translation>Yüklemek için bir şablon seçin:</translation>
+        <translation>Välj en mall att ladda:</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="802"/>
         <source>AT command responses</source>
-        <translation>AT komut yanıtları</translation>
+        <translation>AT-kommando svar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="803"/>
         <source>Base64-encoded data</source>
-        <translation>Base64 ile kodlanmış veri</translation>
+        <translation>Base64-kodad data</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="804"/>
         <source>Binary TLV (Tag-Length-Value)</source>
-        <translation>İkili TLV (Etiket-Uzunluk-Değer)</translation>
+        <translation>Binär TLV (Tag-Length-Value)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="805"/>
         <source>COBS-encoded frames</source>
-        <translation>COBS ile kodlanmış çerçeveler</translation>
+        <translation>COBS-kodade ramar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="806"/>
         <source>Comma-separated data</source>
-        <translation>Virgülle ayrılmış veri</translation>
+        <translation>Kommaseparerad data</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="807"/>
         <source>Fixed-width fields</source>
-        <translation>Sabit genişlikte alanlar</translation>
+        <translation>Fält med fast bredd</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="808"/>
         <source>Hexadecimal bytes</source>
-        <translation>Onaltılık baytlar</translation>
+        <translation>Hexadecimala byte</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="809"/>
         <source>INI/config format</source>
-        <translation>INI/konfigürasyon formatı</translation>
+        <translation>INI/konfigurationsformat</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="810"/>
         <source>JSON data</source>
-        <translation>JSON verisi</translation>
+        <translation>JSON-data</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="811"/>
         <source>Key-value pairs</source>
-        <translation>Anahtar-değer çiftleri</translation>
+        <translation>Nyckel-värde par</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="812"/>
         <source>MAVLink messages</source>
-        <translation>MAVLink mesajları</translation>
+        <translation>MAVLink-meddelanden</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="813"/>
         <source>MessagePack data</source>
-        <translation>MessagePack verileri</translation>
+        <translation>MessagePack-data</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="814"/>
         <source>Modbus frames</source>
-        <translation>Modbus çerçeveleri</translation>
+        <translation>Modbus-ramar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="815"/>
         <source>NMEA 0183 sentences</source>
-        <translation>NMEA 0183 cümleleri</translation>
+        <translation>NMEA 0183-meningar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="816"/>
         <source>NMEA 2000 messages</source>
-        <translation>NMEA 2000 mesajları</translation>
+        <translation>NMEA 2000-meddelanden</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="817"/>
         <source>Pipe-delimited data</source>
-        <translation>Boru ile ayrılmış veriler</translation>
+        <translation>Rör-avgränsade data</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="818"/>
         <source>Raw bytes</source>
-        <translation>Ham baytlar</translation>
+        <translation>Rå byte</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="819"/>
         <source>RTCM corrections</source>
-        <translation>RTCM düzeltmeleri</translation>
+        <translation>RTCM-korrigeringar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="820"/>
         <source>Semicolon-separated data</source>
-        <translation>Noktalı virgülle ayrılmış veriler</translation>
+        <translation>Semikolon-separerade data</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="821"/>
         <source>SiRF binary protocol</source>
-        <translation>SiRF ikili protokolü</translation>
+        <translation>SiRF binärprotokoll</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="822"/>
         <source>SLIP-encoded frames</source>
-        <translation>SLIP kodlu çerçeveler</translation>
+        <translation>SLIP-kodade ramar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="823"/>
         <source>Tab-separated data</source>
-        <translation>Sekmeyle ayrılmış veri</translation>
+        <translation>Tab-separerad data</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="824"/>
         <source>UBX protocol (u-blox)</source>
-        <translation>UBX protokolü (u-blox)</translation>
+        <translation>UBX-protokoll (u-blox)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="825"/>
         <source>URL-encoded data</source>
-        <translation>URL kodlu veri</translation>
+        <translation>URL-kodad data</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="826"/>
         <source>XML data</source>
-        <translation>XML verisi</translation>
+        <translation>XML-data</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="827"/>
         <source>YAML data</source>
-        <translation>YAML verisi</translation>
+        <translation>YAML-data</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParser.cpp" line="853"/>
         <source>Loading a template will replace your current code.</source>
-        <translation>Bir şablon yüklemek mevcut kodunuzu değiştirecektir.</translation>
+        <translation>Att ladda en mall kommer att ersätta din nuvarande kod.</translation>
     </message>
 </context>
 <context>
@@ -1146,16 +1096,16 @@ Lütfen fonksiyon gövdesindeki hatayı düzeltin.</translation>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="175"/>
         <source>Invalid Hex Input</source>
-        <translation>Geçersiz Hex Girişi</translation>
+        <translation>Ogiltig Hex-ingång</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="176"/>
         <source>Please enter valid hexadecimal bytes.
 
 Valid format: 01 A2 FF 3C</source>
-        <translation>Lütfen geçerli onaltılık baytlar girin.
+        <translation>Vänligen ange giltiga hexadecimala byte.
 
-Geçerli format: 01 A2 FF 3C</translation>
+Giltigt format: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="229"/>
@@ -1165,38 +1115,38 @@ Geçerli format: 01 A2 FF 3C</translation>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="230"/>
         <source>Clear</source>
-        <translation>Temizle</translation>
+        <translation>Rensa</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="231"/>
         <source>Evaluate</source>
-        <translation>Değerlendir</translation>
+        <translation>Utvärdera</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="232"/>
         <source>Frame Data Input</source>
-        <translation>Çerçeve Veri Girişi</translation>
+        <translation>Ramdataingång</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="233"/>
         <source>Frame Parser Results</source>
-        <translation>Çerçeve Ayrıştırıcı Sonuçları</translation>
+        <translation>Ramparserresultat</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="234"/>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="277"/>
         <source>Enter frame data here...</source>
-        <translation>Çerçeve verisini buraya girin...</translation>
+        <translation>Ange ramdata här...</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="235"/>
         <source>Dataset Index</source>
-        <translation>Veri Kümesi İndeksi</translation>
+        <translation>Datasetindex</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="235"/>
         <source>Value</source>
-        <translation>Değer</translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="237"/>
@@ -1204,30 +1154,30 @@ Geçerli format: 01 A2 FF 3C</translation>
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
-        <translation>Çerçeve verisini yukarıya girin, gerekirse HEX modunu etkinleştirin, ardından çerçeve ayrıştırıcıyı çalıştırmak için "Değerlendir"e tıklayın.
+        <translation>Ange ramdata ovan, aktivera HEX-läge om det behövs, klicka sedan på "Utvärdera" för att köra ramparsern.
 
-Örnek (Metin): a,b,c,d,e,f
-Örnek (HEX):  48 65 6C 6C 6F</translation>
+Exempel (Text): a,b,c,d,e,f
+Exempel (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="246"/>
         <source>Test Frame Parser</source>
-        <translation>Çerçeve Ayrıştırıcıyı Test Et</translation>
+        <translation>Testa ramparser</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="267"/>
         <source>Enter hex bytes (e.g., 01 A2 FF)</source>
-        <translation>Hex baytları girin (ör. 01 A2 FF)</translation>
+        <translation>Ange hexadecimala byte (t.ex. 01 A2 FF)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="443"/>
         <source>(empty)</source>
-        <translation>(boş)</translation>
+        <translation>(tom)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="444"/>
         <source>No data returned</source>
-        <translation>Veri döndürülmedi</translation>
+        <translation>Ingen data returnerades</translation>
     </message>
 </context>
 <context>
@@ -1235,209 +1185,209 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="303"/>
         <source>New Project</source>
-        <translation>Yeni Proje</translation>
+        <translation>Nytt projekt</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="368"/>
         <source>Samples</source>
-        <translation>Örnekler</translation>
+        <translation>Exempel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="735"/>
         <source>Do you want to save your changes?</source>
-        <translation>Değişikliklerinizi kaydetmek istiyor musunuz?</translation>
+        <translation>Vill du spara dina ändringar?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="736"/>
         <source>You have unsaved modifications in this project!</source>
-        <translation>Bu projede kaydedilmemiş değişiklikleriniz var!</translation>
+        <translation>Du har osparade ändringar i detta projekt!</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="771"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="780"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="789"/>
         <source>Project error</source>
-        <translation>Proje hatası</translation>
+        <translation>Projektfel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="772"/>
         <source>Project title cannot be empty!</source>
-        <translation>Proje başlığı boş olamaz!</translation>
+        <translation>Projekttiteln kan inte vara tom!</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="781"/>
         <source>You need to add at least one group!</source>
-        <translation>En az bir grup eklemelisiniz!</translation>
+        <translation>Du måste lägga till minst en grupp!</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="790"/>
         <source>You need to add at least one dataset!</source>
-        <translation>En az bir veri kümesi eklemelisiniz!</translation>
+        <translation>Du måste lägga till minst en dataset!</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="807"/>
         <source>Save Serial Studio Project</source>
-        <translation>Serial Studio Projesini Kaydet</translation>
+        <translation>Spara Serial Studio-projekt</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="809"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation>Serial Studio Proje Dosyaları (*.ssproj)</translation>
+        <translation>Serial Studio-projektfiler (*.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="907"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2363"/>
         <source>Untitled Project</source>
-        <translation>İsimsiz Proje</translation>
+        <translation>Omdöpt projekt</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="952"/>
         <source>Select Project File</source>
-        <translation>Proje Dosyasını Seç</translation>
+        <translation>Välj projektfil</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="953"/>
         <source>Project Files (*.json *.ssproj)</source>
-        <translation>Proje Dosyaları (*.json *.ssproj)</translation>
+        <translation>Projektfiler (*.json *.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="995"/>
         <source>JSON validation error</source>
-        <translation>JSON doğrulama hatası</translation>
+        <translation>JSON-valideringsfel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1095"/>
         <source>Legacy frame parser function updated</source>
-        <translation>Eski çerçeve ayrıştırıcı fonksiyonu güncellendi</translation>
+        <translation>Äldre ramparserfunktion uppdaterad</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1096"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>Projeniz, 'ayırıcı' argümanıyla eski bir çerçeve ayrıştırıcı fonksiyonu kullanıyordu. Yeni formata otomatik olarak geçirildi.</translation>
+        <translation>Ditt projekt använde en äldre ramparserfunktion med ett 'separator'-argument. Det har automatiskt migrerats till det nya formatet.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1134"/>
         <source>Switch Serial Studio to Project Mode?</source>
-        <translation>Serial Studio'yu Proje Moduna Geçirmek İstiyor musunuz?</translation>
+        <translation>Växla Serial Studio till projektläge?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1135"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
-        <translation>Bu işlem modu, proje dosyalarından panoları yüklemek ve görüntülemek için gereklidir.</translation>
+        <translation>Detta driftläge krävs för att ladda och visa instrumentpaneler från projektfiler.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1163"/>
         <source>Do you want to delete group "%1"?</source>
-        <translation>"%1" grubunu silmek istiyor musunuz?</translation>
+        <translation>Vill du radera gruppen "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1164"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1205"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1243"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
-        <translation>Bu işlem geri alınamaz. Devam etmek istiyor musunuz?</translation>
+        <translation>Denna åtgärd kan inte ångras. Vill du fortsätta?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1204"/>
         <source>Do you want to delete action "%1"?</source>
-        <translation>"%1" eylemini silmek istiyor musunuz?</translation>
+        <translation>Vill du radera åtgärden "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1242"/>
         <source>Do you want to delete dataset "%1"?</source>
-        <translation>"%1" veri setini silmek istiyor musunuz?</translation>
+        <translation>Vill du radera datasetet "%1"?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1294"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1339"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1374"/>
         <source>%1 (Copy)</source>
-        <translation>%1 (Kopya)</translation>
+        <translation>%1 (Kopia)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1413"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1475"/>
         <source>Group</source>
-        <translation>Grup</translation>
+        <translation>Grupp</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1504"/>
         <source>New Dataset</source>
-        <translation>Yeni Veri Seti</translation>
+        <translation>Nytt Dataset</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1507"/>
         <source>New Plot</source>
-        <translation>Yeni Grafik</translation>
+        <translation>Nytt Diagram</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1511"/>
         <source>New FFT Plot</source>
-        <translation>Yeni FFT Grafiği</translation>
+        <translation>Nytt FFT Diagram</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1515"/>
         <source>New Level Indicator</source>
-        <translation>Yeni Seviye Göstergesi</translation>
+        <translation>Ny Nivåindikator</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1519"/>
         <source>New Gauge</source>
-        <translation>Yeni Gösterge</translation>
+        <translation>Ny Mätare</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1523"/>
         <source>New Compass</source>
-        <translation>Yeni Pusula</translation>
+        <translation>Ny Kompass</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1531"/>
         <source>New LED Indicator</source>
-        <translation>Yeni LED Göstergesi</translation>
+        <translation>Ny LED-indikator</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1667"/>
         <source>New Action</source>
-        <translation>Yeni Eylem</translation>
+        <translation>Ny Åtgärd</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1826"/>
         <source>Are you sure you want to change the group-level widget?</source>
-        <translation>Grup düzeyi widget'ını değiştirmek istediğinizden emin misiniz?</translation>
+        <translation>Är du säker på att du vill ändra gruppnivåwidgeten?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1827"/>
         <source>Existing datasets for this group will be deleted</source>
-        <translation>Bu grup için mevcut veri kümeleri silinecek</translation>
+        <translation>Befintliga dataset för denna grupp kommer att raderas</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1896"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1897"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1898"/>
         <source>Accelerometer %1</source>
-        <translation>İvmeölçer %1</translation>
+        <translation>Accelerometer %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1954"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1955"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1956"/>
         <source>Gyro %1</source>
-        <translation>Jiroskop %1</translation>
+        <translation>Gyro %1</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2009"/>
         <source>Latitude</source>
-        <translation>Enlem</translation>
+        <translation>Latitud</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2010"/>
         <source>Longitude</source>
-        <translation>Boylam</translation>
+        <translation>Longitud</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2011"/>
         <source>Altitude</source>
-        <translation>İrtifa</translation>
+        <translation>Altitud</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2059"/>
@@ -1457,529 +1407,529 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2211"/>
         <source>Frame Parser Code</source>
-        <translation>Çerçeve Ayrıştırma Kodu</translation>
+        <translation>Ramparserkod</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2350"/>
         <source>Project Information</source>
-        <translation>Proje Bilgisi</translation>
+        <translation>Projektinformation</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2362"/>
         <source>Project Title</source>
-        <translation>Proje Başlığı</translation>
+        <translation>Projekttitel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2364"/>
         <source>Name or description of the project</source>
-        <translation>Projenin adı veya açıklaması</translation>
+        <translation>Namn eller beskrivning av projektet</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2375"/>
         <source>Frame Detection</source>
-        <translation>Çerçeve Algılama</translation>
+        <translation>Raminmärkning</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2389"/>
         <source>Frame Detection Method</source>
-        <translation>Çerçeve Algılama Yöntemi</translation>
+        <translation>Ramdetekteringsmetod</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2390"/>
         <source>Select how incoming data frames are identified</source>
-        <translation>Gelen veri çerçevelerinin nasıl tanımlandığını seçin</translation>
+        <translation>Välj hur inkommande dataramar identifieras</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2400"/>
         <source>Hexadecimal Delimiters</source>
-        <translation>Onaltılık Ayraçlar</translation>
+        <translation>Hexadecimala avgränsare</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2402"/>
         <source>Use hex values to define frame boundaries</source>
-        <translation>Çerçeve sınırlarını tanımlamak için onaltılık değerleri kullanın</translation>
+        <translation>Använd hexvärden för att definiera ramgränser</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2417"/>
         <source>Start Sequence</source>
-        <translation>Başlangıç Dizisi</translation>
+        <translation>Startsekvens</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2420"/>
         <source>Marks the beginning of each data frame</source>
-        <translation>Her veri çerçevesinin başlangıcını işaretler</translation>
+        <translation>Markerar början på varje dataram</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2431"/>
         <source>End Sequence</source>
-        <translation>Bitiş Dizisi</translation>
+        <translation>Slutsekvens</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2434"/>
         <source>Marks the end of each data frame</source>
-        <translation>Her veri çerçevesinin sonunu işaretler</translation>
+        <translation>Markerar slutet på varje dataram</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2445"/>
         <source>Payload Processing &amp; Validation</source>
-        <translation>Yük İşleme ve Doğrulama</translation>
+        <translation>Bearbetning och validering av nyttolast</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2457"/>
         <source>Data Format</source>
-        <translation>Veri Formatı</translation>
+        <translation>Dataformat</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2459"/>
         <source>Format of raw data used for decoding each frame</source>
-        <translation>Her çerçeveyi çözmek için kullanılan ham verinin formatı</translation>
+        <translation>Format för rådata som används för att avkoda varje ram</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2471"/>
         <source>Checksum Algorithm</source>
-        <translation>Checksum Algoritması</translation>
+        <translation>Kontrollsummaalgoritm</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2473"/>
         <source>Method used to validate frame integrity</source>
-        <translation>Çerçeve bütünlüğünü doğrulamak için kullanılan yöntem</translation>
+        <translation>Metod som används för att validera ramens integritet</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2519"/>
         <source>Group Information</source>
-        <translation>Grup Bilgisi</translation>
+        <translation>Gruppinformation</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2531"/>
         <source>Group Title</source>
-        <translation>Grup Başlığı</translation>
+        <translation>Gruppens titel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2532"/>
         <source>Untitled Group</source>
-        <translation>Başlıksız Grup</translation>
+        <translation>Namnlös grupp</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2533"/>
         <source>Title or description of this dataset group</source>
-        <translation>Bu veri kümesi grubunun başlığı veya açıklaması</translation>
+        <translation>Titel eller beskrivning av denna datasetgrupp</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2562"/>
         <source>Composite Widget</source>
-        <translation>Bileşik Araç</translation>
+        <translation>Sammansatt widget</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2564"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
-        <translation>Bu veri kümesi grubunun nasıl görselleştirileceğini seçin (isteğe bağlı)</translation>
+        <translation>Välj hur denna grupp av datasets ska visualiseras (valfritt)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2615"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2850"/>
         <source>General Information</source>
-        <translation>Genel Bilgi</translation>
+        <translation>Allmän information</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2626"/>
         <source>Action Title</source>
-        <translation>Eylem Başlığı</translation>
+        <translation>Åtgärdstitel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2628"/>
         <source>Untitled Action</source>
-        <translation>Başlıksız Eylem</translation>
+        <translation>Namnlös åtgärd</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2629"/>
         <source>Name or description of this action</source>
-        <translation>Bu eylemin adı veya açıklaması</translation>
+        <translation>Namn eller beskrivning av denna åtgärd</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2640"/>
         <source>Action Icon</source>
-        <translation>Eylem Simgesi</translation>
+        <translation>Åtgärdsikon</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2641"/>
         <source>Default Icon</source>
-        <translation>Varsayılan Simge</translation>
+        <translation>Standardikon</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2642"/>
         <source>Icon displayed for this action in the dashboard</source>
-        <translation>Gösterge panelinde bu eylem için görüntülenen simge</translation>
+        <translation>Ikon som visas för denna åtgärd på instrumentpanelen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2653"/>
         <source>Data Payload</source>
-        <translation>Veri Yükü</translation>
+        <translation>Datapaket</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2666"/>
         <source>Send as Binary</source>
-        <translation>İkili Olarak Gönder</translation>
+        <translation>Skicka som binär</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2667"/>
         <source>Send raw binary data when this action is triggered</source>
-        <translation>Bu eylem tetiklendiğinde ham ikili veriyi gönder</translation>
+        <translation>Skicka rå binärdata när denna åtgärd utlöses</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2680"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2697"/>
         <source>Command</source>
-        <translation>Komut</translation>
+        <translation>Kommando</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2681"/>
         <source>Transmit Data (Hex)</source>
-        <translation>Veriyi İlet (Hex)</translation>
+        <translation>Skicka data (Hex)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2683"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
-        <translation>Eylem tetiklendiğinde gönderilecek onaltılık yük</translation>
+        <translation>Hexadecimalt innehåll att skicka när åtgärden utlöses</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2698"/>
         <source>Transmit Data</source>
-        <translation>Veri Gönder</translation>
+        <translation>Skicka data</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2699"/>
         <source>Text payload to send when the action is triggered</source>
-        <translation>Eylem tetiklendiğinde gönderilecek metin yükü</translation>
+        <translation>Textinnehåll att skicka när åtgärden utlöses</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2729"/>
         <source>End-of-Line Sequence</source>
-        <translation>Satır Sonu Dizisi</translation>
+        <translation>Slut-på-rad-sekvens</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2730"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
-        <translation>Mesaja eklenecek SSL karakterleri (ör. </translation>
+        <translation>EOL-tecken att lägga till i meddelandet (t.ex. </translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2741"/>
         <source>Execution Behavior</source>
-        <translation>Yürütme Davranışı</translation>
+        <translation>Utförandebeteende</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2754"/>
         <source>Auto-Execute on Connect</source>
-        <translation>Bağlanınca Otomatik Yürüt</translation>
+        <translation>Automatisk körning vid anslutning</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2756"/>
         <source>Automatically trigger this action when the device connects</source>
-        <translation>Cihaz bağlandığında bu eylemi otomatik olarak tetikle</translation>
+        <translation>Utlös automatiskt denna åtgärd när enheten ansluter</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2767"/>
         <source>Timer Behavior</source>
-        <translation>Zamanlayıcı Davranışı</translation>
+        <translation>Timerbeteende</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2778"/>
         <source>Timer Mode</source>
-        <translation>Zamanlayıcı Modu</translation>
+        <translation>Timerläge</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2782"/>
         <source>Choose when and how this action should repeat automatically</source>
-        <translation>Bu eylemin ne zaman ve nasıl otomatik olarak tekrarlanacağını seçin</translation>
+        <translation>Välj när och hur denna åtgärd ska upprepas automatiskt</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2790"/>
         <source>Interval (ms)</source>
-        <translation>Aralık (ms)</translation>
+        <translation>Intervall (ms)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2794"/>
         <source>Timer Interval (ms)</source>
-        <translation>Zamanlayıcı Aralığı (ms)</translation>
+        <translation>Timerintervall (ms)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2796"/>
         <source>Milliseconds between each repeated trigger of this action</source>
-        <translation>Bu eylemin her tekrarlanan tetiklenmesi arasındaki milisaniye</translation>
+        <translation>Millisekunder mellan varje upprepad utlösning av denna åtgärd</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2862"/>
         <source>Untitled Dataset</source>
-        <translation>İsimsiz Veri Kümesi</translation>
+        <translation>Namnlös dataset</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2863"/>
         <source>Dataset Title</source>
-        <translation>Veri Kümesi Başlığı</translation>
+        <translation>Datasetets titel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2865"/>
         <source>Name of the dataset, used for labeling and identification</source>
-        <translation>Etiketleme ve tanımlama için kullanılan veri kümesinin adı</translation>
+        <translation>Namn på datasetet, används för märkning och identifiering</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2877"/>
         <source>Frame Index</source>
-        <translation>Çerçeve İndeksi</translation>
+        <translation>Ramindex</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2878"/>
         <source>Frame position used for aligning datasets in time</source>
-        <translation>Veri kümelerini zaman içinde hizalamak için kullanılan çerçeve konumu</translation>
+        <translation>Ramposition används för att justera dataset i tid</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2889"/>
         <source>Measurement Unit</source>
-        <translation>Ölçüm Birimi</translation>
+        <translation>Mätenhet</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2890"/>
         <source>Volts, Amps, etc.</source>
-        <translation>Volt, Amper, vb.</translation>
+        <translation>Volt, Ampere, etc.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2891"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
-        <translation>Ölçü birimi, örneğin volt veya amper (isteğe bağlı)</translation>
+        <translation>Mätenhet, såsom volt eller ampere (valfritt)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2902"/>
         <source>Plot Settings</source>
-        <translation>Grafik Ayarları</translation>
+        <translation>Diagraminställningar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2932"/>
         <source>Enable Plot Widget</source>
-        <translation>Grafik Bileşenini Etkinleştir</translation>
+        <translation>Aktivera diagramwidget</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2934"/>
         <source>Plot data in real-time</source>
-        <translation>Verileri gerçek zamanlı olarak grafikte göster</translation>
+        <translation>Plotta data i realtid</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2963"/>
         <source>X-Axis Source</source>
-        <translation>X-Ekseni Kaynağı</translation>
+        <translation>X-Axel Källa</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2964"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
-        <translation>Grafiklerde X-Ekseni için kullanılacak veri kümesini seçin</translation>
+        <translation>Välj vilket dataset som ska användas för X-Axeln i diagram</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2976"/>
         <source>Minimum Plot Value (optional)</source>
-        <translation>Minimum Grafik Değeri (isteğe bağlı)</translation>
+        <translation>Minsta diagramvärde (valfritt)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2977"/>
         <source>Lower bound for plot display range</source>
-        <translation>Grafik gösterim aralığı için alt sınır</translation>
+        <translation>Nedre gräns för diagramvisningsområde</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2989"/>
         <source>Maximum Plot Value (optional)</source>
-        <translation>Maksimum Grafik Değeri (isteğe bağlı)</translation>
+        <translation>Maximalt värde för diagram (valfritt)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2990"/>
         <source>Upper bound for plot display range</source>
-        <translation>Grafik gösterim aralığı için üst sınır</translation>
+        <translation>Övre gräns för diagramvisningsintervall</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3001"/>
         <source>FFT Configuration</source>
-        <translation>FFT Yapılandırması</translation>
+        <translation>FFT-konfiguration</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3014"/>
         <source>Enable FFT Analysis</source>
-        <translation>FFT Analizini Etkinleştir</translation>
+        <translation>Aktivera FFT-analys</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3015"/>
         <source>Perform frequency-domain analysis of the dataset</source>
-        <translation>Veri kümesinin frekans alanı analizini yap</translation>
+        <translation>Utför frekvensdomänanalys av datasetet</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3033"/>
         <source>FFT Window Size</source>
-        <translation>FFT Pencere Boyutu</translation>
+        <translation>FFT-fönsterstorlek</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3035"/>
         <source>Number of samples used for each FFT calculation window</source>
-        <translation>Her bir FFT hesaplama penceresi için kullanılan örnek sayısı</translation>
+        <translation>Antal prover som används för varje FFT-beräkningsfönster</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3047"/>
         <source>FFT Sampling Rate (Hz, required)</source>
-        <translation>FFT Örnekleme Hızı (Hz, gerekli)</translation>
+        <translation>FFT-samplingsfrekvens (Hz, obligatorisk)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3049"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
-        <translation>FFT için kullanılan örnekleme frekansı (Hz cinsinden)</translation>
+        <translation>Samplingsfrekvens som används för FFT (i Hz)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3061"/>
         <source>Minimum Value (recommended)</source>
-        <translation>Minimum Değer (önerilen)</translation>
+        <translation>Minimivärde (rekommenderat)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3062"/>
         <source>Lower bound for data normalization</source>
-        <translation>Veri normalizasyonu için alt sınır</translation>
+        <translation>Nedre gräns för datanormalisering</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3074"/>
         <source>Maximum Value (recommended)</source>
-        <translation>Maksimum Değer (önerilen)</translation>
+        <translation>Maxvärde (rekommenderat)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3075"/>
         <source>Upper bound for data normalization</source>
-        <translation>Verilerin normalizasyonu için üst sınır</translation>
+        <translation>Övre gräns för datanormalisering</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3086"/>
         <source>Widget Settings</source>
-        <translation>Araç Ayarları</translation>
+        <translation>Widgetinställningar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3116"/>
         <source>Widget</source>
-        <translation>Araç</translation>
+        <translation>Widget</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3117"/>
         <source>Select the visual widget used to display this dataset</source>
-        <translation>Bu veri kümesini göstermek için kullanılacak görsel aracı seçin</translation>
+        <translation>Välj den visuella widget som används för att visa denna dataset</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3128"/>
         <source>Show in Overview</source>
-        <translation>Genel Bakışta Göster</translation>
+        <translation>Visa i översikt</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3130"/>
         <source>Display this widget in the dashboard overview (if enabled)</source>
-        <translation>Bu aracı kontrol paneli genel bakışında göster (etkinse)</translation>
+        <translation>Visa denna widget i instrumentpanelens översikt (om aktiverad)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3146"/>
         <source>Minimum Display Value (required)</source>
-        <translation>Minimum Görüntüleme Değeri (gerekli)</translation>
+        <translation>Minsta visningsvärde (krävs)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3147"/>
         <source>Lower bound of the gauge or bar display range</source>
-        <translation>Gösterge veya çubuk görüntüleme aralığının alt sınırı</translation>
+        <translation>Nedre gräns för mätarens eller stapelns visningsområde</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3159"/>
         <source>Maximum Display Value (required)</source>
-        <translation>Maksimum Görüntüleme Değeri (gerekli)</translation>
+        <translation>Maximalt visningsvärde (obligatoriskt)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3160"/>
         <source>Upper bound of the gauge or bar display range</source>
-        <translation>Gösterge veya çubuk görüntüleme aralığının üst sınırı</translation>
+        <translation>Övre gräns för mätarens eller stapelns visningsintervall</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3171"/>
         <source>Alarm Settings</source>
-        <translation>Alarm Ayarları</translation>
+        <translation>Larminställningar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3184"/>
         <source>Enable Alarms</source>
-        <translation>Alarmları Etkinleştir</translation>
+        <translation>Aktivera larm</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3186"/>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
-        <translation>Değer alarm eşiklerini aştığında görsel bir alarm tetikler</translation>
+        <translation>Utlöser ett visuellt larm när värdet överstiger larmgränserna</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3198"/>
         <source>Low Threshold</source>
-        <translation>Düşük Eşik</translation>
+        <translation>Låg tröskel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3200"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
-        <translation>Değer bu eşikten düştüğünde görsel bir alarm tetikler</translation>
+        <translation>Utlöser ett visuellt larm när värdet faller under denna tröskel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3212"/>
         <source>High Threshold</source>
-        <translation>Yüksek Eşik</translation>
+        <translation>Hög tröskel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3214"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
-        <translation>Değer bu eşiği aştığında görsel bir alarm tetikler</translation>
+        <translation>Utlöser ett visuellt larm när värdet överstiger denna tröskel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3225"/>
         <source>LED Display Settings</source>
-        <translation>LED Ekran Ayarları</translation>
+        <translation>LED-visningsinställningar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3238"/>
         <source>Show in LED Panel</source>
-        <translation>LED Panelde Göster</translation>
+        <translation>Visa i LED-panel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3239"/>
         <source>Enable visual status monitoring using an LED display</source>
-        <translation>LED ekran kullanarak görsel durum izlemeyi etkinleştir</translation>
+        <translation>Aktivera visuell statusövervakning med en LED-display</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3251"/>
         <source>LED On Threshold (required)</source>
-        <translation>LED Açık Eşik (gerekli)</translation>
+        <translation>LED På Tröskelvärde (krävs)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3253"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
-        <translation>Değer bu eşiğe ulaştığında veya aştığında LED yanar</translation>
+        <translation>LED tänds när värdet når eller överstiger detta tröskelvärde</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3318"/>
         <source>Off</source>
-        <translation>Kapalı</translation>
+        <translation>Av</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3319"/>
         <source>Auto Start</source>
-        <translation>Otomatik Başlat</translation>
+        <translation>Auto Start</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3320"/>
         <source>Start on Trigger</source>
-        <translation>Tetikleyici ile Başlat</translation>
+        <translation>Starta vid Utlösare</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3321"/>
         <source>Toggle on Trigger</source>
-        <translation>Tetikleyici ile Değiştir</translation>
+        <translation>Växla vid Utlösare</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
         <source>Plain Text (UTF8)</source>
-        <translation>Düz Metin (UTF8)</translation>
+        <translation>Oformaterad Text (UTF8)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3326"/>
         <source>Hexadecimal</source>
-        <translation>Onaltılık</translation>
+        <translation>Hexadecimal</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3327"/>
@@ -1989,94 +1939,94 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3328"/>
         <source>Binary (Direct)</source>
-        <translation>İkili (Doğrudan)</translation>
+        <translation>Binär (Direkt)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3335"/>
         <source>No Checksum</source>
-        <translation>Checksum Yok</translation>
+        <translation>Ingen Kontrollsumma</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3340"/>
         <source>End Delimiter Only</source>
-        <translation>Sadece Son Ayraç</translation>
+        <translation>Endast Slutavgränsare</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3341"/>
         <source>Start Delimiter Only</source>
-        <translation>Sadece Başlangıç Ayraç</translation>
+        <translation>Endast Startavgränsare</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3342"/>
         <source>Start + End Delimiter</source>
-        <translation>Başlangıç + Son Ayraç</translation>
+        <translation>Start + Slutavgränsare</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
         <source>No Delimiters</source>
-        <translation>Ayraç Yok</translation>
+        <translation>Inga Avgränsare</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3351"/>
         <source>Data Grid</source>
-        <translation>Veri Tablosu</translation>
+        <translation>Datamatris</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3352"/>
         <source>GPS Map</source>
-        <translation>GPS Haritası</translation>
+        <translation>GPS-karta</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3353"/>
         <source>Gyroscope</source>
-        <translation>Jiroskop</translation>
+        <translation>Gyroskop</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3354"/>
         <source>Multiple Plot</source>
-        <translation>Çoklu Grafik</translation>
+        <translation>Flera Diagram</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3355"/>
         <source>Accelerometer</source>
-        <translation>İvmeölçer</translation>
+        <translation>Accelerometer</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3356"/>
         <source>3D Plot</source>
-        <translation>3D Grafik</translation>
+        <translation>3D Diagram</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3357"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3361"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3368"/>
         <source>None</source>
-        <translation>Yok</translation>
+        <translation>Ingen</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3362"/>
         <source>Bar</source>
-        <translation>Çubuk</translation>
+        <translation>Stapel</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3363"/>
         <source>Gauge</source>
-        <translation>Gösterge</translation>
+        <translation>Mätare</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3364"/>
         <source>Compass</source>
-        <translation>Pusula</translation>
+        <translation>Kompass</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3369"/>
         <source>New Line (\n)</source>
-        <translation>Yeni Satır (</translation>
+        <translation>Ny Rad (</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3370"/>
         <source>Carriage Return (\r)</source>
-        <translation>Satır Başı (\r)</translation>
+        <translation>Vagnretur (\r)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3371"/>
@@ -2086,32 +2036,32 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3375"/>
         <source>No</source>
-        <translation>Hayır</translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3376"/>
         <source>Yes</source>
-        <translation>Evet</translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3417"/>
         <source>Save changes to frame parser code?</source>
-        <translation>Çerçeve ayrıştırıcı kodundaki değişiklikleri kaydet?</translation>
+        <translation>Spara ändringar i ramparserkoden?</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3418"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation>Değişikliklerinizi korumak için 'Kaydet'i, kalıcı olarak kaybetmek için 'Vazgeç'i veya geri dönmek için 'İptal'i seçin.</translation>
+        <translation>Välj 'Spara' för att behålla dina ändringar, 'Kassera' för att förlora dem permanent, eller 'Avbryt' för att återgå.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3420"/>
         <source>Save Changes</source>
-        <translation>Değişiklikleri Kaydet</translation>
+        <translation>Spara ändringar</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3947"/>
         <source>File open error</source>
-        <translation>Dosya açma hatası</translation>
+        <translation>Filöppningsfel</translation>
     </message>
 </context>
 <context>
@@ -2121,84 +2071,84 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
         <source>Pro features detected in this project.</source>
-        <translation>Bu projede Pro özellikler tespit edildi.</translation>
+        <translation>Pro-funktioner upptäckta i detta projekt.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>Yedek widget'lar kullanılacak. Tüm işlevselliği açmak için bir lisans satın alın.</translation>
+        <translation>Reservwidgets kommer att användas. Köp en licens för att låsa upp full funktionalitet.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
         <source>Plot</source>
-        <translation>Grafik</translation>
+        <translation>Diagram</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
         <source>Toggle 2D plot visualization for this dataset</source>
-        <translation>Bu veri kümesi için 2D grafik görselleştirmesini değiştir</translation>
+        <translation>Växla 2D-diagramvisualisering för denna dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
         <source>FFT Plot</source>
-        <translation>FFT Grafiği</translation>
+        <translation>FFT-diagram</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <source>Toggle FFT plot to visualize frequency content</source>
-        <translation>Frekans içeriğini görselleştirmek için FFT grafiğini değiştir</translation>
+        <translation>Växla FFT-diagram för att visualisera frekvensinnehåll</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
         <source>Bar/Level</source>
-        <translation>Çubuk/Seviye</translation>
+        <translation>Stapel/Nivå</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
         <source>Toggle bar/level indicator for this dataset</source>
-        <translation>Bu veri kümesi için çubuk/seviye göstergesini değiştir</translation>
+        <translation>Växla stapel-/nivåindikator för denna dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
         <source>Gauge</source>
-        <translation>Gösterge</translation>
+        <translation>Mätare</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <source>Toggle gauge widget for analog-style display</source>
-        <translation>Analog tarzı gösterim için gösterge widget'ını değiştir</translation>
+        <translation>Växla mätarwidget för analog visning</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
         <source>Compass</source>
-        <translation>Pusula</translation>
+        <translation>Kompass</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <source>Toggle compass widget for directional data</source>
-        <translation>Yön verileri için pusula widget'ını değiştir</translation>
+        <translation>Växla kompasswidget för riktningsdata</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
@@ -2212,35 +2162,35 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
-        <translation>İkili veya eşik değerleri için LED göstergesini değiştir</translation>
+        <translation>Växla LED-indikator för binära eller tröskelvärden</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
         <source>Duplicate</source>
-        <translation>Çoğalt</translation>
+        <translation>Duplicera</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
         <source>Duplicate this dataset with the same configuration</source>
-        <translation>Aynı yapılandırmayla bu veri kümesini çoğalt</translation>
+        <translation>Duplicera denna dataset med samma konfiguration</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
         <source>Delete</source>
-        <translation>Sil</translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
         <source>Delete this dataset from the group</source>
-        <translation>Bu veri kümesini gruptan sil</translation>
+        <translation>Ta bort denna dataset från gruppen</translation>
     </message>
 </context>
 <context>
@@ -2250,49 +2200,49 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="36"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="36"/>
         <source>Support Serial Studio</source>
-        <translation>Serial Studio'yu Destekle</translation>
+        <translation>Stöd Serial Studio</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="94"/>
         <source>Support the development of %1!</source>
-        <translation>%1'in gelişimini destekleyin!</translation>
+        <translation>Stöd utvecklingen av %1!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="105"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="105"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="105"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
-        <translation>Serial Studio, gönüllüler tarafından desteklenen ücretsiz ve açık kaynaklı bir yazılımdır. Geliştirme çabalarını desteklemek için bağış yapmayı veya Pro lisans almayı düşünün :)</translation>
+        <translation>Serial Studio är gratis &amp; öppen källkod mjukvara stödd av volontärer. Överväg att donera eller skaffa en Pro-licens för att stödja utvecklingsinsatser :)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="118"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="118"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="118"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
-        <translation>Bu projeyi paylaşarak, hataları bildirerek ve yeni özellikler önererek de destekleyebilirsiniz!</translation>
+        <translation>Du kan också stödja detta projekt genom att dela det, rapportera buggar och föreslå nya funktioner!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="134"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="134"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="134"/>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="148"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="148"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="148"/>
         <source>Donate</source>
-        <translation>Bağış Yap</translation>
+        <translation>Donera</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="166"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="166"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="166"/>
         <source>Get Serial Studio Pro</source>
-        <translation>Serial Studio Pro'yu Al</translation>
+        <translation>Få Serial Studio Pro</translation>
     </message>
 </context>
 <context>
@@ -2301,92 +2251,92 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <source>Stop</source>
-        <translation>Durdur</translation>
+        <translation>Stoppa</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="344"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Downloading updates</source>
-        <translation>Güncellemeler indiriliyor</translation>
+        <translation>Hämtar uppdateringar</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="111"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="426"/>
         <source>Time remaining</source>
-        <translation>Kalan süre</translation>
+        <translation>Återstående tid</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="111"/>
         <source>unknown</source>
-        <translation>bilinmiyor</translation>
+        <translation>okänd</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="189"/>
         <source>Error</source>
-        <translation>Hata</translation>
+        <translation>Fel</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="190"/>
         <source>Cannot find downloaded update!</source>
-        <translation>İndirilen güncelleme bulunamıyor!</translation>
+        <translation>Kan inte hitta nedladdad uppdatering!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="209"/>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="210"/>
         <source>Download complete!</source>
-        <translation>İndirme tamamlandı!</translation>
+        <translation>Nedladdning klar!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="211"/>
         <source>The installer will open separately</source>
-        <translation>Yükleyici ayrı olarak açılacak</translation>
+        <translation>Installationsprogrammet öppnas separat</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="219"/>
         <source>Click "OK" to begin installing the update</source>
-        <translation>Güncellemeyi yüklemek için "Tamam"a tıklayın</translation>
+        <translation>Klicka "OK" för att börja installera uppdateringen</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="221"/>
         <source>In order to install the update, you may need to quit the application.</source>
-        <translation>Güncellemeyi yüklemek için uygulamadan çıkmanız gerekebilir.</translation>
+        <translation>För att installera uppdateringen kan du behöva avsluta applikationen.</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="225"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application</source>
-        <translation>Güncellemeyi yüklemek için uygulamadan çıkmanız gerekebilir. Bu zorunlu bir güncellemedir, şimdi çıkarsanız uygulama kapanacaktır</translation>
+        <translation>För att installera uppdateringen kan du behöva avsluta applikationen. Detta är en obligatorisk uppdatering, att avsluta nu kommer att stänga applikationen</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="245"/>
         <source>Click the "Open" button to apply the update</source>
-        <translation>Güncellemeyi uygulamak için "Aç" düğmesine tıklayın</translation>
+        <translation>Klicka på "Öppna"-knappen för att tillämpa uppdateringen</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <source>Updater</source>
-        <translation>Güncelleyici</translation>
+        <translation>Uppdaterare</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="264"/>
         <source>Are you sure you want to cancel the download?</source>
-        <translation>İndirmeyi iptal etmek istediğinizden emin misiniz?</translation>
+        <translation>Är du säker på att du vill avbryta nedladdningen?</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="267"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
-        <translation>İndirmeyi iptal etmek istediğinizden emin misiniz? Bu zorunlu bir güncellemedir, şimdi çıkarsanız uygulama kapanacaktır</translation>
+        <translation>Är du säker på att du vill avbryta nedladdningen? Detta är en obligatorisk uppdatering, att avsluta nu kommer att stänga applikationen</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="327"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="336"/>
         <source>%1 bytes</source>
-        <translation>%1 bayt</translation>
+        <translation>%1 byte</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="330"/>
@@ -2403,62 +2353,62 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="345"/>
         <source>of</source>
-        <translation>/</translation>
+        <translation>av</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="370"/>
         <source>Downloading Updates</source>
-        <translation>Güncellemeler İndiriliyor</translation>
+        <translation>Laddar ner uppdateringar</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
         <source>Time Remaining</source>
-        <translation>Kalan Süre</translation>
+        <translation>Återstående tid</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="372"/>
         <source>Unknown</source>
-        <translation>Bilinmeyen</translation>
+        <translation>Okänd</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="400"/>
         <source>about %1 hours</source>
-        <translation>yaklaşık %1 saat</translation>
+        <translation>cirka %1 timmar</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="402"/>
         <source>about one hour</source>
-        <translation>yaklaşık bir saat</translation>
+        <translation>cirka en timme</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="411"/>
         <source>%1 minutes</source>
-        <translation>%1 dakika</translation>
+        <translation>%1 minuter</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="413"/>
         <source>1 minute</source>
-        <translation>1 dakika</translation>
+        <translation>1 minut</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="421"/>
         <source>%1 seconds</source>
-        <translation>%1 saniye</translation>
+        <translation>%1 sekunder</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="423"/>
         <source>1 second</source>
-        <translation>1 saniye</translation>
+        <translation>1 sekund</translation>
     </message>
     <message>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <source>Time remaining: 0 minutes</source>
-        <translation>Kalan süre: 0 dakika</translation>
+        <translation>Återstående tid: 0 minuter</translation>
     </message>
     <message>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <source>Open</source>
-        <translation>Aç</translation>
+        <translation>Öppna</translation>
     </message>
 </context>
 <context>
@@ -2468,14 +2418,14 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
         <source>Magnitude (dB)</source>
-        <translation>Büyüklük (dB)</translation>
+        <translation>Magnitud (dB)</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
         <source>Frequency (Hz)</source>
-        <translation>Frekans (Hz)</translation>
+        <translation>Frekvens (Hz)</translation>
     </message>
 </context>
 <context>
@@ -2485,7 +2435,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/FileDropArea.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/FileDropArea.qml" line="121"/>
         <source>Drop Projects and CSV files here</source>
-        <translation>Projeleri ve CSV dosyalarını buraya bırakın</translation>
+        <translation>Släpp projekt och CSV-filer här</translation>
     </message>
 </context>
 <context>
@@ -2495,70 +2445,70 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
         <source>File Transmission</source>
-        <translation>Dosya Aktarımı</translation>
+        <translation>Filöverföring</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="89"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="89"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="89"/>
         <source>File Selection:</source>
-        <translation>Dosya Seçimi:</translation>
+        <translation>Filval:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="107"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="107"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="107"/>
         <source>Select File...</source>
-        <translation>Dosya Seç...</translation>
+        <translation>Välj fil...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="124"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="124"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="124"/>
         <source>Transmission Interval:</source>
-        <translation>Aktarım Aralığı:</translation>
+        <translation>Överföringsintervall:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="148"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="148"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="148"/>
         <source>msecs</source>
-        <translation>milisaniye</translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="177"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="177"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="177"/>
         <source>Progress: %1</source>
-        <translation>İlerleme: %1</translation>
+        <translation>Framsteg: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="193"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="193"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="193"/>
         <source>Pause Transmission</source>
-        <translation>İletimi Durdur</translation>
+        <translation>Pausa överföring</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="194"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="194"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="194"/>
         <source>Resume Transmission</source>
-        <translation>İletimi Sürdür</translation>
+        <translation>Återuppta överföring</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="195"/>
         <source>Stop Transmission</source>
-        <translation>İletimi Durdur</translation>
+        <translation>Stoppa överföring</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
         <source>Begin Transmission</source>
-        <translation>İletimi Başlat</translation>
+        <translation>Börja överföring</translation>
     </message>
 </context>
 <context>
@@ -2568,7 +2518,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="34"/>
         <source>modified</source>
-        <translation>değiştirildi</translation>
+        <translation>ändrad</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="93"/>
@@ -2578,7 +2528,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="93"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="248"/>
         <source>Undo</source>
-        <translation>Geri Al</translation>
+        <translation>Ångra</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="100"/>
@@ -2588,7 +2538,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="262"/>
         <source>Redo</source>
-        <translation>Yinele</translation>
+        <translation>Gör om</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
@@ -2598,7 +2548,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="287"/>
         <source>Cut</source>
-        <translation>Kes</translation>
+        <translation>Klipp ut</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="114"/>
@@ -2608,7 +2558,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="114"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="300"/>
         <source>Copy</source>
-        <translation>Kopyala</translation>
+        <translation>Kopiera</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="119"/>
@@ -2618,134 +2568,126 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="119"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="313"/>
         <source>Paste</source>
-        <translation>Yapıştır</translation>
+        <translation>Klistra in</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <source>Select All</source>
-        <translation>Tümünü Seç</translation>
+        <translation>Markera allt</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
         <source>Reset</source>
-        <translation>Sıfırla</translation>
+        <translation>Återställ</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="202"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="202"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="202"/>
         <source>Reset to the default parsing script</source>
-        <translation>Varsayılan ayrıştırma betiğine sıfırla</translation>
+        <translation>Återställ till standardtolkningsskriptet</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="210"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="210"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="210"/>
         <source>Open</source>
-        <translation>Aç</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
-        <source>Save</source>
-        <translation>Kaydet</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
-        <source>Select Template...</source>
-        <translation>Şablon Seç...</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
-        <source>Test With Sample Data</source>
-        <translation>Örnek Veri ile Test Et</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
-        <source>Evaluate</source>
-        <translation>Değerlendir</translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <translation type="vanished">İçe Aktar</translation>
+        <translation>Öppna</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="215"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="215"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="215"/>
         <source>Import a JavaScript file for data parsing</source>
-        <translation>Veri ayrıştırma için bir JavaScript dosyası içe aktar</translation>
+        <translation>Importera en JavaScript-fil för datatolkning</translation>
     </message>
     <message>
-        <source>Validate &amp; Save</source>
-        <translation type="vanished">Doğrula ve Kaydet</translation>
+        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
+        <source>Save</source>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="229"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="229"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="229"/>
         <source>Validate syntax and apply parsing changes</source>
-        <translation>Sözdizimini doğrula ve ayrıştırma değişikliklerini uygula</translation>
+        <translation>Validera syntax och tillämpa tolkningsändringar</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
         <source>Undo the last code edit</source>
-        <translation>Son kod düzenlemesini geri al</translation>
+        <translation>Ångra den senaste kodändringen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="268"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="268"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="268"/>
         <source>Redo the previously undone edit</source>
-        <translation>Önceden geri alınan düzenlemeyi yinele</translation>
+        <translation>Gör om den tidigare ångrade ändringen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="292"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="292"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="292"/>
         <source>Cut selected code to clipboard</source>
-        <translation>Seçilen kodu panoya kes</translation>
+        <translation>Klipp ut vald kod till urklipp</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="305"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="305"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="305"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Seçilen kodu panoya kopyala</translation>
+        <translation>Kopiera vald kod till urklipp</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
         <source>Paste code from clipboard</source>
-        <translation>Panodan kodu yapıştır</translation>
+        <translation>Klistra in kod från urklipp</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="337"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="337"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="337"/>
         <source>Help</source>
-        <translation>Yardım</translation>
+        <translation>Hjälp</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="342"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="342"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="342"/>
         <source>Open help documentation for JavaScript data parsing</source>
-        <translation>JavaScript veri ayrıştırma için yardım belgelerini aç</translation>
+        <translation>Öppna hjälpdokumentation för JavaScript-dataparsering</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
+        <source>Select Template...</source>
+        <translation>Välj mall...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
+        <source>Test With Sample Data</source>
+        <translation>Testa med exempeldata</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
+        <source>Evaluate</source>
+        <translation>Utvärdera</translation>
     </message>
 </context>
 <context>
@@ -2755,7 +2697,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/GPS.qml" line="190"/>
         <source>Base Map: %1</source>
-        <translation>Temel Harita: %1</translation>
+        <translation>Basemap: %1</translation>
     </message>
 </context>
 <context>
@@ -2765,98 +2707,98 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
-        <translation>Bu projede Pro özellikler algılandı.</translation>
+        <translation>Pro-funktioner upptäckta i detta projekt.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>Yedek widget'lar kullanılacak. Tam işlevselliği açmak için lisans satın alın.</translation>
+        <translation>Reservwidgets kommer att användas. Köp en licens för att låsa upp full funktionalitet.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="116"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="116"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="116"/>
         <source>Dataset</source>
-        <translation>Veri Kümesi</translation>
+        <translation>Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="121"/>
         <source>Add a generic dataset to the current group</source>
-        <translation>Mevcut gruba genel bir veri kümesi ekle</translation>
+        <translation>Lägg till ett generiskt dataset till den aktuella gruppen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="129"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="129"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="129"/>
         <source>Plot</source>
-        <translation>Grafik</translation>
+        <translation>Diagram</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="135"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="135"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="135"/>
         <source>Add a 2D plot to visualize numeric data</source>
-        <translation>Sayısal veriyi görselleştirmek için bir 2D grafik ekleyin</translation>
+        <translation>Lägg till ett 2D-diagram för att visualisera numeriska data</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="144"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="144"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="144"/>
         <source>FFT Plot</source>
-        <translation>FFT Grafiği</translation>
+        <translation>FFT-diagram</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="149"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="149"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="149"/>
         <source>Add an FFT plot for frequency domain visualization</source>
-        <translation>Frekans alanı görselleştirmesi için bir FFT grafiği ekleyin</translation>
+        <translation>Lägg till ett FFT-diagram för visualisering i frekvensdomänen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="158"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="158"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="158"/>
         <source>Bar/Level</source>
-        <translation>Çubuk/Seviye</translation>
+        <translation>Stapel/Nivå</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="163"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="163"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="163"/>
         <source>Add a bar or level indicator for scaled values</source>
-        <translation>Ölçekli değerler için bir çubuk veya seviye göstergesi ekleyin</translation>
+        <translation>Lägg till en stapel- eller nivåindikator för skalade värden</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="171"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="171"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="171"/>
         <source>Gauge</source>
-        <translation>Gösterge</translation>
+        <translation>Mätare</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="177"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="177"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="177"/>
         <source>Add a gauge widget for analog-style visualization</source>
-        <translation>Analog tarzı görselleştirme için bir gösterge bileşeni ekleyin</translation>
+        <translation>Lägg till en mätare för analog visualisering</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="186"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="186"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="186"/>
         <source>Compass</source>
-        <translation>Pusula</translation>
+        <translation>Kompass</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="191"/>
         <source>Add a compass to display directional or angular data</source>
-        <translation>Yön veya açısal veriyi göstermek için bir pusula ekleyin</translation>
+        <translation>Lägg till en kompass för att visa riktning eller vinkeldata</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="199"/>
@@ -2870,35 +2812,35 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <source>Add an LED indicator for binary status signals</source>
-        <translation>İkili durum sinyalleri için bir LED göstergesi ekleyin</translation>
+        <translation>Lägg till en LED-indikator för binära statusindikeringar</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="221"/>
         <source>Duplicate</source>
-        <translation>Çoğalt</translation>
+        <translation>Duplicera</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="225"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="225"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="225"/>
         <source>Duplicate the current group and its contents</source>
-        <translation>Mevcut grubu ve içeriğini çoğalt</translation>
+        <translation>Duplicera den aktuella gruppen och dess innehåll</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="234"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="234"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="234"/>
         <source>Delete</source>
-        <translation>Sil</translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="238"/>
         <source>Delete the current group and all contained datasets</source>
-        <translation>Mevcut grubu ve içindeki tüm veri kümelerini sil</translation>
+        <translation>Ta bort den aktuella gruppen och alla inkluderade datamängder</translation>
     </message>
 </context>
 <context>
@@ -2908,86 +2850,28 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="99"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="99"/>
         <source>Integrate Angles</source>
-        <translation>Açıları Entegre Et</translation>
+        <translation>Integrera vinklar</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="343"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="343"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="343"/>
         <source>Roll: %1</source>
-        <translation>Yuvarlanma: %1</translation>
+        <translation>Roll: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="361"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="361"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="361"/>
         <source>Yaw: %1</source>
-        <translation>Yön: %1</translation>
+        <translation>Yaw: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="379"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="379"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="379"/>
         <source>Pitch: %1</source>
-        <translation>Eğilme: %1</translation>
-    </message>
-</context>
-<context>
-    <name>IO::Console</name>
-    <message>
-        <source>ASCII</source>
-        <translation type="vanished">ASCII</translation>
-    </message>
-    <message>
-        <source>HEX</source>
-        <translation type="vanished">HEX</translation>
-    </message>
-    <message>
-        <source>No Line Ending</source>
-        <translation type="vanished">Satır Sonu Yok</translation>
-    </message>
-    <message>
-        <source>New Line</source>
-        <translation type="vanished">Yeni Satır</translation>
-    </message>
-    <message>
-        <source>Carriage Return</source>
-        <translation type="vanished">Satır Başı</translation>
-    </message>
-    <message>
-        <source>CR + NL</source>
-        <translation type="vanished">SB + YS</translation>
-    </message>
-    <message>
-        <source>Plain Text</source>
-        <translation type="vanished">Düz Metin</translation>
-    </message>
-    <message>
-        <source>Hexadecimal</source>
-        <translation type="vanished">Onaltılık</translation>
-    </message>
-    <message>
-        <source>No Checksum</source>
-        <translation type="vanished">Sağlama Yok</translation>
-    </message>
-</context>
-<context>
-    <name>IO::ConsoleExport</name>
-    <message>
-        <source>Console Export is a Pro feature.</source>
-        <translation type="vanished">Konsol Dışa Aktarma bir Pro özelliğidir.</translation>
-    </message>
-    <message>
-        <source>This feature requires a license. Please purchase one to enable console export.</source>
-        <translation type="vanished">Bu özellik bir lisans gerektirir. Lütfen konsol dışa aktarmayı etkinleştirmek için bir tane satın alın.</translation>
-    </message>
-    <message>
-        <source>Console Output File Error</source>
-        <translation type="vanished">Konsol Çıkış Dosyası Hatası</translation>
-    </message>
-    <message>
-        <source>Cannot open file for writing!</source>
-        <translation type="vanished">Dosya yazmak için açılamıyor!</translation>
+        <translation>Pitch: %1</translation>
     </message>
 </context>
 <context>
@@ -2995,37 +2879,37 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="939"/>
         <source>channels</source>
-        <translation>kanallar</translation>
+        <translation>kanaler</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1012"/>
         <source> channels</source>
-        <translation>kanallar</translation>
+        <translation>kanaler</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1191"/>
         <source>Unsigned 8-bit</source>
-        <translation>İşaretsiz 8-bit</translation>
+        <translation>Osignerad 8-bit</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1192"/>
         <source>Signed 16-bit</source>
-        <translation>İşaretli 16-bit</translation>
+        <translation>Signerad 16-bit</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1193"/>
         <source>Signed 24-bit</source>
-        <translation>İşaretli 24-bit</translation>
+        <translation>Signerad 24-bit</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1194"/>
         <source>Signed 32-bit</source>
-        <translation>İşaretli 32-bit</translation>
+        <translation>Signerad 32-bit</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1195"/>
         <source>Float 32-bit</source>
-        <translation>Float 32-bit</translation>
+        <translation>Flyttal 32-bit</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Audio.cpp" line="1196"/>
@@ -3043,81 +2927,77 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="48"/>
         <source>BLE I/O Module Error</source>
-        <translation>BLE G/Ç Modülü Hatası</translation>
+        <translation>BLE I/O-modulfel</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="291"/>
         <source>Select Device</source>
-        <translation>Cihazı Seç</translation>
+        <translation>Välj enhet</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="302"/>
         <source>Select Service</source>
-        <translation>Servisi Seç</translation>
+        <translation>Välj tjänst</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="314"/>
         <source>Select Characteristic</source>
-        <translation>Özelliği Seç</translation>
+        <translation>Välj egenskap</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="453"/>
         <source>Error while configuring BLE service</source>
-        <translation>BLE servisi yapılandırılırken hata oluştu</translation>
+        <translation>Fel vid konfiguration av BLE-tjänst</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="593"/>
         <source>Operation error</source>
-        <translation>İşlem hatası</translation>
+        <translation>Driftfel</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="596"/>
         <source>Characteristic write error</source>
-        <translation>Özellik yazma hatası</translation>
+        <translation>Fel vid skrivning av egenskap</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="599"/>
         <source>Descriptor write error</source>
-        <translation>Tanımlayıcı yazma hatası</translation>
+        <translation>Fel vid skrivning av beskrivning</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="602"/>
         <source>Unknown error</source>
-        <translation>Bilinmeyen hata</translation>
+        <translation>Okänt fel</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="605"/>
         <source>Characteristic read error</source>
-        <translation>Karakteristik okuma hatası</translation>
+        <translation>Karaktäristisk läsfel</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="608"/>
         <source>Descriptor read error</source>
-        <translation>Tanımlayıcı okuma hatası</translation>
-    </message>
-    <message>
-        <source>Bluetooth adapter is off!</source>
-        <translation type="vanished">Bluetooth adaptörü kapalı!</translation>
+        <translation>Beskrivande läsfel</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="625"/>
         <source>Invalid Bluetooth adapter!</source>
-        <translation>Geçersiz Bluetooth adaptörü!</translation>
+        <translation>Ogiltig Bluetooth-adapter!</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="628"/>
         <source>Unsuported platform or operating system</source>
-        <translation>Desteklenmeyen platform veya işletim sistemi</translation>
+        <translation>Osupported plattform eller operativsystem</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="631"/>
         <source>Unsupported discovery method</source>
-        <translation>Desteklenmeyen keşif yöntemi</translation>
+        <translation>Osupported upptäcktsmetod</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="634"/>
         <source>General I/O error</source>
-        <translation>Genel G/Ç hatası</translation>
+        <translation>Allmänt I/O-fel</translation>
     </message>
 </context>
 <context>
@@ -3128,155 +3008,155 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="286"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="292"/>
         <source>CAN Bus Not Available</source>
-        <translation>CAN Veri Yolu Kullanılamıyor</translation>
+        <translation>CAN-buss ej tillgänglig</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="275"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, please ensure SocketCAN kernel modules are loaded.</source>
-        <translation>Bu sistemde CAN veri yolu eklentisi bulunamadı.
+        <translation>Inga CAN-bussplugins hittades på detta system.
 
-Linux'ta, lütfen SocketCAN çekirdek modüllerinin yüklü olduğundan emin olun.</translation>
+På Linux, se till att SocketCAN-kärnmoduler är laddade.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="281"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, please install CAN hardware drivers (PEAK, Vector, etc.).</source>
-        <translation>Bu sistemde CAN veri yolu eklentisi bulunamadı.
+        <translation>Inga CAN-bussplugins hittades på detta system.
 
-Windows'ta, lütfen CAN donanım sürücülerini yükleyin (PEAK, Vector, vb.).</translation>
+På Windows, installera CAN-hårdvarudrivrutiner (PEAK, Vector, etc.).</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="287"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
-        <translation>Bu sistemde CAN veri yolu eklentisi bulunamadı.
+        <translation>Inga CAN-buss plugins hittades på detta system.
 
-macOS'ta CAN veri yolu desteği sınırlıdır ve üçüncü taraf donanım sürücüleri gerektirebilir.</translation>
+CAN-buss support på macOS är begränsad och kan kräva tredjeparts hårdvarudrivrutiner.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="293"/>
         <source>No CAN bus plugins are available on this platform.</source>
-        <translation>Bu platformda CAN veri yolu eklentisi mevcut değil.</translation>
+        <translation>Inga CAN-buss plugins är tillgängliga på denna plattform.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="302"/>
         <source>Invalid CAN Configuration</source>
-        <translation>Geçersiz CAN Yapılandırması</translation>
+        <translation>Ogiltig CAN-konfiguration</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="303"/>
         <source>The CAN bus configuration is incomplete. Please select a valid plugin and interface.</source>
-        <translation>CAN veri yolu yapılandırması eksik. Lütfen geçerli bir eklenti ve arayüz seçin.</translation>
+        <translation>CAN-buss konfigurationen är ofullständig. Vänligen välj ett giltigt plugin och gränssnitt.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="313"/>
         <source>Invalid Selection</source>
-        <translation>Geçersiz Seçim</translation>
+        <translation>Ogiltigt val</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="314"/>
         <source>The selected plugin or interface is no longer available. Please refresh the lists and try again.</source>
-        <translation>Seçilen eklenti veya arayüz artık mevcut değil. Lütfen listeleri yenileyin ve tekrar deneyin.</translation>
+        <translation>Det valda pluginet eller gränssnittet är inte längre tillgängligt. Vänligen uppdatera listorna och försök igen.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="323"/>
         <source>No Devices Available</source>
-        <translation>Kullanılabilir Cihaz Yok</translation>
+        <translation>Inga enheter tillgängliga</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="324"/>
         <source>The plugin or interface list is empty. Please refresh the lists and ensure your CAN hardware is connected.</source>
-        <translation>Eklenti veya arayüz listesi boş. Lütfen listeleri yenileyin ve CAN donanımınızın bağlı olduğundan emin olun.</translation>
+        <translation>Plugin- eller gränssnittslistan är tom. Vänligen uppdatera listorna och säkerställ att din CAN-hårdvara är ansluten.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="339"/>
         <source>CAN Device Creation Failed</source>
-        <translation>CAN Cihazı Oluşturulamadı</translation>
+        <translation>Misslyckades med att skapa CAN-enhet</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="340"/>
         <source>Unable to create CAN bus device. Please check your hardware and drivers.</source>
-        <translation>CAN veri yolu cihazı oluşturulamadı. Lütfen donanım ve sürücülerinizi kontrol edin.</translation>
+        <translation>Kunde inte skapa CAN-buss enhet. Vänligen kontrollera din hårdvara och drivrutiner.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="364"/>
         <source>CAN Connection Failed</source>
-        <translation>CAN Bağlantısı Başarısız</translation>
+        <translation>CAN-anslutning misslyckades</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="366"/>
         <source>Unable to connect to CAN bus device. Please check your hardware connection and settings.</source>
-        <translation>CAN veri yolu cihazına bağlanılamıyor. Lütfen donanım bağlantınızı ve ayarlarınızı kontrol edin.</translation>
+        <translation>Kan inte ansluta till CAN-bussenhet. Kontrollera din hårdvaruanslutning och inställningar.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="679"/>
         <source>CAN Bus Error</source>
-        <translation>CAN Veri Yolu Hatası</translation>
+        <translation>CAN-bussfel</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="680"/>
         <source>An error occurred but the CAN device is no longer available.</source>
-        <translation>Bir hata oluştu ancak CAN cihazı artık mevcut değil.</translation>
+        <translation>Ett fel inträffade men CAN-enheten är inte längre tillgänglig.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="687"/>
         <source>Error code: %1</source>
-        <translation>Hata kodu: %1</translation>
+        <translation>Felkod: %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="689"/>
         <source>CAN Bus Communication Error</source>
-        <translation>CAN Bus İletişim Hatası</translation>
+        <translation>Kommunikationsfel på CAN-bussen</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="709"/>
         <source>No CAN driver selected</source>
-        <translation>CAN sürücüsü seçilmedi</translation>
+        <translation>Ingen CAN-drivrutin vald</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="733"/>
         <source>Load SocketCAN kernel modules first</source>
-        <translation>Önce SocketCAN çekirdek modüllerini yükleyin</translation>
+        <translation>Ladda SocketCAN-kärnmoduler först</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="735"/>
         <source>Set up a virtual CAN interface first</source>
-        <translation>Önce sanal bir CAN arayüzü kurun</translation>
+        <translation>Ställ in ett virtuellt CAN-gränssnitt först</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="737"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="766"/>
         <source>No interfaces found for %1</source>
-        <translation>%1 için arayüz bulunamadı</translation>
+        <translation>Inga gränssnitt hittades för %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="742"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>&lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN sürücülerini&lt;/a&gt; yükleyin</translation>
+        <translation>Installera &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN-drivrutiner&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="749"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>&lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN sürücülerini&lt;/a&gt; yükleyin</translation>
+        <translation>Installera &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN-drivrutiner&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="755"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
-        <translation>&lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN sürücülerini&lt;/a&gt; yükleyin</translation>
+        <translation>Installera &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN-drivrutiner&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="761"/>
         <source>Install %1 drivers</source>
-        <translation>%1 sürücülerini yükleyin</translation>
+        <translation>Installera %1-drivrutiner</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="764"/>
         <source>Install %1 drivers for macOS</source>
-        <translation>macOS için %1 sürücülerini yükleyin</translation>
+        <translation>Installera %1-drivrutiner för macOS</translation>
     </message>
 </context>
 <context>
@@ -3284,92 +3164,92 @@ macOS'ta CAN veri yolu desteği sınırlıdır ve üçüncü taraf donanım sür
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="331"/>
         <source>Invalid Serial Port</source>
-        <translation>Geçersiz Seri Port</translation>
+        <translation>Ogiltig seriel port</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="332"/>
         <source>The selected serial port is no longer available. Please refresh the port list and try again.</source>
-        <translation>Seçilen seri port artık mevcut değil. Lütfen port listesini yenileyin ve tekrar deneyin.</translation>
+        <translation>Den valda seriel porten är inte längre tillgänglig. Vänligen uppdatera portlistan och försök igen.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="393"/>
         <source>Modbus Initialization Failed</source>
-        <translation>Modbus Başlatma Başarısız</translation>
+        <translation>Modbus-initialisering misslyckades</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="394"/>
         <source>Unable to create Modbus device. Please check your system configuration and try again.</source>
-        <translation>Modbus cihazı oluşturulamadı. Lütfen sistem yapılandırmanızı kontrol edin ve tekrar deneyin.</translation>
+        <translation>Kunde inte skapa Modbus-enhet. Vänligen kontrollera din systemkonfiguration och försök igen.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="414"/>
         <source>Modbus Connection Failed</source>
-        <translation>Modbus Bağlantısı Başarısız</translation>
+        <translation>Modbus-anslutning misslyckades</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="415"/>
         <source>Unable to connect to the Modbus device. Please check your connection settings.</source>
-        <translation>Modbus cihazına bağlanılamadı. Lütfen bağlantı ayarlarınızı kontrol edin.</translation>
+        <translation>Det går inte att ansluta till Modbus-enheten. Kontrollera dina anslutningsinställningar.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="538"/>
         <source>None</source>
-        <translation>Yok</translation>
+        <translation>Ingen</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="539"/>
         <source>Even</source>
-        <translation>Çift</translation>
+        <translation>Jämn</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="540"/>
         <source>Odd</source>
-        <translation>Tek</translation>
+        <translation>Udda</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="541"/>
         <source>Space</source>
-        <translation>Boşluk</translation>
+        <translation>Mellanslag</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="542"/>
         <source>Mark</source>
-        <translation>İşaret</translation>
+        <translation>Markering</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="594"/>
         <source>Holding Registers (0x03)</source>
-        <translation>Tutma Kayıtları (0x03)</translation>
+        <translation>Hållregister (0x03)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="595"/>
         <source>Input Registers (0x04)</source>
-        <translation>Giriş Kayıtları (0x04)</translation>
+        <translation>Inmatningsregister (0x04)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="596"/>
         <source>Coils (0x01)</source>
-        <translation>Bobinler (0x01)</translation>
+        <translation>Spolar (0x01)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="597"/>
         <source>Discrete Inputs (0x02)</source>
-        <translation>Ayrık Girişler (0x02)</translation>
+        <translation>Diskreta inmatningar (0x02)</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1134"/>
         <source>Error code: %1</source>
-        <translation>Hata kodu: %1</translation>
+        <translation>Felkod: %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1136"/>
         <source>Modbus Communication Error</source>
-        <translation>Modbus İletişim Hatası</translation>
+        <translation>Modbus Kommunikationsfel</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="1160"/>
         <source>Select Port</source>
-        <translation>Port Seç</translation>
+        <translation>Välj Port</translation>
     </message>
 </context>
 <context>
@@ -3377,7 +3257,7 @@ macOS'ta CAN veri yolu desteği sınırlıdır ve üçüncü taraf donanım sür
     <message>
         <location filename="../../src/IO/Drivers/Network.cpp" line="544"/>
         <source>Network socket error</source>
-        <translation>Ağ soketi hatası</translation>
+        <translation>Nätverkssocketfel</translation>
     </message>
 </context>
 <context>
@@ -3388,38 +3268,38 @@ macOS'ta CAN veri yolu desteği sınırlıdır ve üçüncü taraf donanım sür
         <location filename="../../src/IO/Drivers/UART.cpp" line="415"/>
         <location filename="../../src/IO/Drivers/UART.cpp" line="457"/>
         <source>None</source>
-        <translation>Hiçbiri</translation>
+        <translation>Ingen</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="286"/>
         <source>Failed to connect to serial port device</source>
-        <translation>Seri port cihazına bağlanılamadı</translation>
+        <translation>Misslyckades med att ansluta till seriell portenhet</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="384"/>
         <location filename="../../src/IO/Drivers/UART.cpp" line="791"/>
         <source>Select Port</source>
-        <translation>Port Seç</translation>
+        <translation>Välj Port</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="416"/>
         <source>Even</source>
-        <translation>Çift</translation>
+        <translation>Jämn</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="417"/>
         <source>Odd</source>
-        <translation>Tek</translation>
+        <translation>Udda</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="418"/>
         <source>Space</source>
-        <translation>Boşluk</translation>
+        <translation>Mellanslag</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="419"/>
         <source>Mark</source>
-        <translation>İşaret</translation>
+        <translation>Markera</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="458"/>
@@ -3434,72 +3314,72 @@ macOS'ta CAN veri yolu desteği sınırlıdır ve üçüncü taraf donanım sür
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="610"/>
         <source>"%1" is not a valid path</source>
-        <translation>"%1" geçerli bir yol değil</translation>
+        <translation>"%1" är inte en giltig sökväg</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="611"/>
         <source>Please type another path to register a custom serial device</source>
-        <translation>Özel bir seri cihaz kaydetmek için başka bir yol yazın</translation>
+        <translation>Vänligen ange en annan sökväg för att registrera en anpassad seriell enhet</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="898"/>
         <source>Critical serial port error</source>
-        <translation>Kritik seri port hatası</translation>
+        <translation>Kritiskt fel på seriell port</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="924"/>
         <source>No error occurred.</source>
-        <translation>Hata oluşmadı.</translation>
+        <translation>Inget fel inträffade.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="925"/>
         <source>The specified device could not be found. Please check the connection and try again.</source>
-        <translation>Belirtilen cihaz bulunamadı. Lütfen bağlantıyı kontrol edin ve tekrar deneyin.</translation>
+        <translation>Den angivna enheten kunde inte hittas. Kontrollera anslutningen och försök igen.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="926"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
-        <translation>İzin reddedildi. Uygulamanın cihaza gerekli erişim haklarına sahip olduğundan emin olun.</translation>
+        <translation>Åtkomst nekad. Se till att applikationen har nödvändiga åtkomsträttigheter till enheten.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="927"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
-        <translation>Cihaz açılamadı. Zaten kullanımda olabilir veya kullanılamaz durumda.</translation>
+        <translation>Det gick inte att öppna enheten. Den kan redan vara i bruk eller otillgänglig.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="928"/>
         <source>An error occurred while writing data to the device.</source>
-        <translation>Cihaza veri yazılırken bir hata oluştu.</translation>
+        <translation>Ett fel inträffade vid skrivning av data till enheten.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="929"/>
         <source>An error occurred while reading data from the device.</source>
-        <translation>Cihazdan veri okunurken bir hata oluştu.</translation>
+        <translation>Ett fel inträffade vid läsning av data från enheten.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="930"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
-        <translation>Kritik bir kaynak hatası meydana geldi. Cihaz bağlantısı kesilmiş olabilir veya artık erişilemez durumda.</translation>
+        <translation>Ett kritiskt resursfel inträffade. Enheten kan ha kopplats bort eller är inte längre tillgänglig.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="931"/>
         <source>The requested operation is not supported on this device.</source>
-        <translation>İstenen işlem bu cihazda desteklenmiyor.</translation>
+        <translation>Den begärda operationen stöds inte på denna enhet.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="932"/>
         <source>An unknown error occurred. Please check the device and try again.</source>
-        <translation>Bilinmeyen bir hata oluştu. Lütfen cihazı kontrol edin ve tekrar deneyin.</translation>
+        <translation>Ett okänt fel inträffade. Kontrollera enheten och försök igen.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="933"/>
         <source>The operation timed out. The device may not be responding.</source>
-        <translation>İşlem zaman aşımına uğradı. Cihaz yanıt vermiyor olabilir.</translation>
+        <translation>Operationen tog för lång tid. Enheten kanske inte svarar.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="934"/>
         <source>The device is not open. Please open the device before attempting this operation.</source>
-        <translation>Cihaz açık değil. Lütfen bu işlemi denemeden önce cihazı açın.</translation>
+        <translation>Enheten är inte öppen. Öppna enheten innan du försöker denna operation.</translation>
     </message>
 </context>
 <context>
@@ -3507,12 +3387,12 @@ macOS'ta CAN veri yolu desteği sınırlıdır ve üçüncü taraf donanım sür
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="85"/>
         <source>No file selected...</source>
-        <translation>Seçili dosya yok...</translation>
+        <translation>Ingen fil vald...</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="119"/>
         <source>Select file to transmit</source>
-        <translation>Gönderilecek dosyayı seçin</translation>
+        <translation>Välj fil att överföra</translation>
     </message>
 </context>
 <context>
@@ -3525,7 +3405,7 @@ macOS'ta CAN veri yolu desteği sınırlıdır ve üçüncü taraf donanım sür
     <message>
         <location filename="../../src/IO/Manager.cpp" line="283"/>
         <source>Network Socket</source>
-        <translation>Ağ Soketi</translation>
+        <translation>Nätverkssocket</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="284"/>
@@ -3535,7 +3415,7 @@ macOS'ta CAN veri yolu desteği sınırlıdır ve üçüncü taraf donanım sür
     <message>
         <location filename="../../src/IO/Manager.cpp" line="286"/>
         <source>Audio Stream</source>
-        <translation>Ses Akışı</translation>
+        <translation>Ljudström</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="287"/>
@@ -3545,17 +3425,17 @@ macOS'ta CAN veri yolu desteği sınırlıdır ve üçüncü taraf donanım sür
     <message>
         <location filename="../../src/IO/Manager.cpp" line="288"/>
         <source>CAN Bus</source>
-        <translation>CAN Bus</translation>
+        <translation>CAN-buss</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="361"/>
         <source>Your trial period has ended.</source>
-        <translation>Deneme süreniz sona erdi.</translation>
+        <translation>Din provperiod har avslutats.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="362"/>
         <source>To continue using Serial Studio, please activate your license.</source>
-        <translation>Serial Studio'yu kullanmaya devam etmek için lütfen lisansınızı etkinleştirin.</translation>
+        <translation>För att fortsätta använda Serial Studio, vänligen aktivera din licens.</translation>
     </message>
 </context>
 <context>
@@ -3565,1409 +3445,21 @@ macOS'ta CAN veri yolu desteği sınırlıdır ve üçüncü taraf donanım sür
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="41"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/IconPicker.qml" line="41"/>
         <source>Select Icon</source>
-        <translation>Simge Seç</translation>
+        <translation>Välj ikon</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="112"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="112"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/IconPicker.qml" line="112"/>
         <source>OK</source>
-        <translation>Tamam</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/IconPicker.qml" line="121"/>
         <source>Cancel</source>
-        <translation>İptal</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::DBCImporter</name>
-    <message>
-        <source>Import DBC File</source>
-        <translation type="vanished">DBC Dosyasını İçe Aktar</translation>
-    </message>
-    <message>
-        <source>DBC Files (*.dbc);;All Files (*)</source>
-        <translation type="vanished">DBC Dosyaları (*.dbc);;Tüm Dosyalar (*)</translation>
-    </message>
-    <message>
-        <source>Failed to parse DBC file: %1</source>
-        <translation type="vanished">DBC dosyası çözümlenemedi: %1</translation>
-    </message>
-    <message>
-        <source>Please verify the file format and try again.</source>
-        <translation type="vanished">Lütfen dosya formatını kontrol edin ve tekrar deneyin.</translation>
-    </message>
-    <message>
-        <source>DBC Import Error</source>
-        <translation type="vanished">DBC İçe Aktarma Hatası</translation>
-    </message>
-    <message>
-        <source>DBC file contains no messages</source>
-        <translation type="vanished">DBC dosyası mesaj içermiyor</translation>
-    </message>
-    <message>
-        <source>The selected file does not contain any CAN message definitions.</source>
-        <translation type="vanished">Seçilen dosya herhangi bir CAN mesaj tanımı içermiyor.</translation>
-    </message>
-    <message>
-        <source>DBC Import Warning</source>
-        <translation type="vanished">DBC İçe Aktarma Uyarısı</translation>
-    </message>
-    <message>
-        <source>Failed to create temporary project file</source>
-        <translation type="vanished">Geçici proje dosyası oluşturulamadı</translation>
-    </message>
-    <message>
-        <source>Check if the application has write permissions to the temporary directory.</source>
-        <translation type="vanished">Uygulamanın geçici dizine yazma izni olup olmadığını kontrol edin.</translation>
-    </message>
-    <message>
-        <source>Successfully imported DBC file with %1 messages and %2 signals.</source>
-        <translation type="vanished">%1 mesaj ve %2 sinyalle DBC dosyası başarıyla içe aktarıldı.</translation>
-    </message>
-    <message>
-        <source>The project editor is now open for customization.</source>
-        <translation type="vanished">Proje düzenleyici artık özelleştirme için açık.</translation>
-    </message>
-    <message>
-        <source>DBC Import Complete</source>
-        <translation type="vanished">DBC İçe Aktarma Tamamlandı</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::FrameBuilder</name>
-    <message>
-        <source>JSON parse error</source>
-        <translation type="vanished">JSON ayrıştırma hatası</translation>
-    </message>
-    <message>
-        <source>This file isn’t a valid project file</source>
-        <translation type="vanished">Bu dosya geçerli bir proje dosyası değil</translation>
-    </message>
-    <message>
-        <source>Make sure it’s a properly formatted JSON project.</source>
-        <translation type="vanished">Doğru biçimlendirilmiş bir JSON projesi olduğundan emin olun.</translation>
-    </message>
-    <message>
-        <source>Cannot read JSON file</source>
-        <translation type="vanished">JSON dosyası okunamıyor</translation>
-    </message>
-    <message>
-        <source>Please check file permissions &amp; location</source>
-        <translation type="vanished">Lütfen dosya izinlerini ve konumunu kontrol edin</translation>
-    </message>
-    <message>
-        <source>Channel %1</source>
-        <translation type="vanished">Kanal %1</translation>
-    </message>
-    <message>
-        <source>Audio Input</source>
-        <translation type="vanished">Ses Girişi</translation>
-    </message>
-    <message>
-        <source>Multiple Plots</source>
-        <translation type="vanished">Birden Fazla Grafik</translation>
-    </message>
-    <message>
-        <source>Quick Plot</source>
-        <translation type="vanished">Hızlı Grafik</translation>
-    </message>
-    <message>
-        <source>Quick Plot Data</source>
-        <translation type="vanished">Hızlı Grafik Verisi</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::FrameParser</name>
-    <message>
-        <source>Frame parser code updated successfully!</source>
-        <translation type="vanished">Çerçeve ayrıştırıcı kodu başarıyla güncellendi!</translation>
-    </message>
-    <message>
-        <source>No errors have been detected in the code.</source>
-        <translation type="vanished">Kodda hata tespit edilmedi.</translation>
-    </message>
-    <message>
-        <source>Frame parser error!</source>
-        <translation type="vanished">Çerçeve ayrıştırıcı hatası!</translation>
-    </message>
-    <message>
-        <source>The 'parse' function is not declared or is not callable!</source>
-        <translation type="vanished">'parse' fonksiyonu tanımlanmamış veya çağrılamıyor!</translation>
-    </message>
-    <message>
-        <source>No valid 'parse' function declaration found in the script!</source>
-        <translation type="vanished">Scripte geçerli bir 'parse' fonksiyonu tanımı bulunamadı!</translation>
-    </message>
-    <message>
-        <source>Legacy frame parser function detected</source>
-        <translation type="vanished">Eski çerçeve ayrıştırıcı fonksiyonu tespit edildi</translation>
-    </message>
-    <message>
-        <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
-        <translation type="vanished">'parse' fonksiyonu iki argüman ('%1', '%2') alıyor, bu da eski formatın kullanıldığını gösteriyor. Lütfen yalnızca çerçeve verisini argüman olarak alan yeni formata güncelleyin.</translation>
-    </message>
-    <message>
-        <source>The document has been modified!</source>
-        <translation type="vanished">Belge değiştirildi!</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to continue?</source>
-        <translation type="vanished">Devam etmek istediğinizden emin misiniz?</translation>
-    </message>
-    <message>
-        <source>JavaScript Syntax Error</source>
-        <translation type="vanished">JavaScript Sözdizimi Hatası</translation>
-    </message>
-    <message>
-        <source>The parser code contains a syntax error at line %1:
-
-%2</source>
-        <translation type="vanished">Ayrıştırıcı kodu %1. satırda bir sözdizimi hatası içeriyor:
-
-%2</translation>
-    </message>
-    <message>
-        <source>JavaScript Exception Occurred</source>
-        <translation type="vanished">JavaScript İstisnası Oluştu</translation>
-    </message>
-    <message>
-        <source>The parser code triggered the following exceptions:
-
-%1</source>
-        <translation type="vanished">Ayrıştırıcı kodu aşağıdaki istisnaları tetikledi:
-
-%1</translation>
-    </message>
-    <message>
-        <source>Missing Parse Function</source>
-        <translation type="vanished">Ayrıştırma Fonksiyonu Eksik</translation>
-    </message>
-    <message>
-        <source>The 'parse' function is not defined in the script.
-
-Please ensure your code includes:
-function parse(frame) { ... }</source>
-        <translation type="vanished">'parse' fonksiyonu betikte tanımlı değil.
-
-Lütfen kodunuzun şunları içerdiğinden emin olun:
-function parse(frame) { ... }</translation>
-    </message>
-    <message>
-        <source>Invalid Parse Function</source>
-        <translation type="vanished">Geçersiz Ayrıştırma Fonksiyonu</translation>
-    </message>
-    <message>
-        <source>The 'parse' property exists but is not a callable function.
-
-Please ensure 'parse' is declared as a function.</source>
-        <translation type="vanished">'parse' özelliği mevcut ancak çağrılabilir bir fonksiyon değil.
-
-Lütfen 'parse' fonksiyon olarak ilan edildiğinden emin olun.</translation>
-    </message>
-    <message>
-        <source>Invalid Function Declaration</source>
-        <translation type="vanished">Geçersiz Fonksiyon Deklarasyonu</translation>
-    </message>
-    <message>
-        <source>No valid 'parse' function declaration found.
-
-Expected format:
-function parse(frame) { ... }</source>
-        <translation type="vanished">Geçerli bir 'parse' fonksiyonu deklarasyonu bulunamadı.
-
-Beklenen format:
-function parse(frame) { ... }</translation>
-    </message>
-    <message>
-        <source>Invalid Function Parameter</source>
-        <translation type="vanished">Geçersiz Fonksiyon Parametresi</translation>
-    </message>
-    <message>
-        <source>The 'parse' function must have at least one parameter.
-
-Expected format:
-function parse(frame) { ... }</source>
-        <translation type="vanished">'parse' fonksiyonu en az bir parametreye sahip olmalıdır.
-
-Beklenen format:
-function parse(frame) { ... }</translation>
-    </message>
-    <message>
-        <source>Deprecated Function Signature</source>
-        <translation type="vanished">Kullanım Dışı Fonksiyon İmzası</translation>
-    </message>
-    <message>
-        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
-
-This format is no longer supported. Please update to the new single-parameter format:
-function parse(%1) { ... }
-
-The separator parameter is no longer needed.</source>
-        <translation type="vanished">'parse' fonksiyonu eski iki parametreli formatı kullanıyor: parse(%1, %2)
-
-Bu format artık desteklenmiyor. Lütfen yeni tek parametreli formata güncelleyin:
-function parse(%1) { ... }
-
-Ayrıştırıcı parametresi artık gerekli değil.</translation>
-    </message>
-    <message>
-        <source>Parse Function Runtime Error</source>
-        <translation type="vanished">Ayrıştırma Fonksiyonu Çalışma Zamanı Hatası</translation>
-    </message>
-    <message>
-        <source>The parse function contains an error at line %1:
-
-%2
-
-Please fix the error in the function body.</source>
-        <translation type="vanished">Ayrıştırma fonksiyonu %1. satırda bir hata içeriyor:
-
-%2
-
-Lütfen fonksiyon gövdesindeki hatayı düzeltin.</translation>
-    </message>
-    <message>
-        <source>The document has been modified.</source>
-        <translation type="vanished">Belge değiştirildi.</translation>
-    </message>
-    <message>
-        <source>Select Javascript file to import</source>
-        <translation type="vanished">İçe aktarmak için Javascript dosyasını seçin</translation>
-    </message>
-    <message>
-        <source>Code Validation Successful</source>
-        <translation type="vanished">Kod Doğrulama Başarılı</translation>
-    </message>
-    <message>
-        <source>No syntax errors detected in the parser code.</source>
-        <translation type="vanished">Ayrıştırıcı kodunda sözdizimi hatası tespit edilmedi.</translation>
-    </message>
-    <message>
-        <source>Select Frame Parser Template</source>
-        <translation type="vanished">Çerçeve Ayrıştırıcı Şablonunu Seçin</translation>
-    </message>
-    <message>
-        <source>Choose a template to load:</source>
-        <translation type="vanished">Yüklenecek bir şablon seçin:</translation>
-    </message>
-    <message>
-        <source>AT command responses</source>
-        <translation type="vanished">AT komut yanıtları</translation>
-    </message>
-    <message>
-        <source>Base64-encoded data</source>
-        <translation type="vanished">Base64 ile kodlanmış veri</translation>
-    </message>
-    <message>
-        <source>Binary TLV (Tag-Length-Value)</source>
-        <translation type="vanished">İkili TLV (Etiket-Uzunluk-Değer)</translation>
-    </message>
-    <message>
-        <source>CAN bus frames</source>
-        <translation type="vanished">CAN veri yolu çerçeveleri</translation>
-    </message>
-    <message>
-        <source>COBS-encoded frames</source>
-        <translation type="vanished">COBS kodlu çerçeveler</translation>
-    </message>
-    <message>
-        <source>Comma-separated data</source>
-        <translation type="vanished">Virgülle ayrılmış veriler</translation>
-    </message>
-    <message>
-        <source>Fixed-width fields</source>
-        <translation type="vanished">Sabit genişlikli alanlar</translation>
-    </message>
-    <message>
-        <source>Hexadecimal bytes</source>
-        <translation type="vanished">Onaltılık baytlar</translation>
-    </message>
-    <message>
-        <source>INI/config format</source>
-        <translation type="vanished">INI/ayar formatı</translation>
-    </message>
-    <message>
-        <source>JSON data</source>
-        <translation type="vanished">JSON verisi</translation>
-    </message>
-    <message>
-        <source>Key-value pairs</source>
-        <translation type="vanished">Anahtar-değer çiftleri</translation>
-    </message>
-    <message>
-        <source>MAVLink messages</source>
-        <translation type="vanished">MAVLink mesajları</translation>
-    </message>
-    <message>
-        <source>MessagePack data</source>
-        <translation type="vanished">MessagePack verisi</translation>
-    </message>
-    <message>
-        <source>Modbus frames</source>
-        <translation type="vanished">Modbus çerçeveleri</translation>
-    </message>
-    <message>
-        <source>Modbus ASCII frames</source>
-        <translation type="vanished">Modbus ASCII çerçeveleri</translation>
-    </message>
-    <message>
-        <source>Modbus RTU frames</source>
-        <translation type="vanished">Modbus RTU çerçeveleri</translation>
-    </message>
-    <message>
-        <source>NMEA 0183 sentences</source>
-        <translation type="vanished">NMEA 0183 cümleleri</translation>
-    </message>
-    <message>
-        <source>NMEA 2000 messages</source>
-        <translation type="vanished">NMEA 2000 mesajları</translation>
-    </message>
-    <message>
-        <source>Pipe-delimited data</source>
-        <translation type="vanished">Boru ile ayrılmış veri</translation>
-    </message>
-    <message>
-        <source>Raw bytes</source>
-        <translation type="vanished">Ham baytlar</translation>
-    </message>
-    <message>
-        <source>RTCM corrections</source>
-        <translation type="vanished">RTCM düzeltmeleri</translation>
-    </message>
-    <message>
-        <source>Semicolon-separated data</source>
-        <translation type="vanished">Noktalı virgülle ayrılmış veri</translation>
-    </message>
-    <message>
-        <source>SiRF binary protocol</source>
-        <translation type="vanished">SiRF ikili protokolü</translation>
-    </message>
-    <message>
-        <source>SLIP-encoded frames</source>
-        <translation type="vanished">SLIP-kodlu çerçeveler</translation>
-    </message>
-    <message>
-        <source>Tab-separated data</source>
-        <translation type="vanished">Sekmeyle ayrılmış veriler</translation>
-    </message>
-    <message>
-        <source>UBX protocol (u-blox)</source>
-        <translation type="vanished">UBX protokolü (u-blox)</translation>
-    </message>
-    <message>
-        <source>URL-encoded data</source>
-        <translation type="vanished">URL-kodlu veriler</translation>
-    </message>
-    <message>
-        <source>XML data</source>
-        <translation type="vanished">XML verileri</translation>
-    </message>
-    <message>
-        <source>YAML data</source>
-        <translation type="vanished">YAML verileri</translation>
-    </message>
-    <message>
-        <source>Loading a template will replace your current code.</source>
-        <translation type="vanished">Bir şablon yüklemek mevcut kodunuzu değiştirecek.</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::FrameParserTestDialog</name>
-    <message>
-        <source>Invalid Hex Input</source>
-        <translation type="vanished">Geçersiz Hex Girişi</translation>
-    </message>
-    <message>
-        <source>Please enter valid hexadecimal bytes.
-
-Valid format: 01 A2 FF 3C</source>
-        <translation type="vanished">Lütfen geçerli onaltılık baytlar girin.
-
-Geçerli format: 01 A2 FF 3C</translation>
-    </message>
-    <message>
-        <source>HEX</source>
-        <translation type="vanished">HEX</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="vanished">Temizle</translation>
-    </message>
-    <message>
-        <source>Evaluate</source>
-        <translation type="vanished">Değerlendir</translation>
-    </message>
-    <message>
-        <source>Frame Data Input</source>
-        <translation type="vanished">Çerçeve Veri Girişi</translation>
-    </message>
-    <message>
-        <source>Frame Parser Results</source>
-        <translation type="vanished">Çerçeve Ayrıştırıcı Sonuçları</translation>
-    </message>
-    <message>
-        <source>Enter frame data here...</source>
-        <translation type="vanished">Çerçeve verilerini buraya girin...</translation>
-    </message>
-    <message>
-        <source>Dataset Index</source>
-        <translation type="vanished">Veri Kümesi İndeksi</translation>
-    </message>
-    <message>
-        <source>Value</source>
-        <translation type="vanished">Değer</translation>
-    </message>
-    <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
-
-Example (Text): a,b,c,d,e,f
-Example (HEX):  48 65 6C 6C 6F</source>
-        <translation type="vanished">Çerçeve verilerini yukarıya girin, gerekirse HEX modunu etkinleştirin, ardından çerçeve ayrıştırıcısını çalıştırmak için "Değerlendir"e tıklayın.
-
-Örnek (Metin): a,b,c,d,e,f
-Örnek (HEX):  48 65 6C 6C 6F</translation>
-    </message>
-    <message>
-        <source>Test Frame Parser</source>
-        <translation type="vanished">Çerçeve Ayrıştırıcıyı Test Et</translation>
-    </message>
-    <message>
-        <source>Enter hex bytes (e.g., 01 A2 FF)</source>
-        <translation type="vanished">Hex baytlarını girin (ör., 01 A2 FF)</translation>
-    </message>
-    <message>
-        <source>(empty)</source>
-        <translation type="vanished">(boş)</translation>
-    </message>
-    <message>
-        <source>No data returned</source>
-        <translation type="vanished">Veri döndürülmedi</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::ProjectModel</name>
-    <message>
-        <source>New Project</source>
-        <translation type="vanished">Yeni Proje</translation>
-    </message>
-    <message>
-        <source>Samples</source>
-        <translation type="vanished">Örnekler</translation>
-    </message>
-    <message>
-        <source>Do you want to save your changes?</source>
-        <translation type="vanished">Değişikliklerinizi kaydetmek istiyor musunuz?</translation>
-    </message>
-    <message>
-        <source>You have unsaved modifications in this project!</source>
-        <translation type="vanished">Bu projede kaydedilmemiş değişiklikleriniz var!</translation>
-    </message>
-    <message>
-        <source>Project error</source>
-        <translation type="vanished">Proje hatası</translation>
-    </message>
-    <message>
-        <source>Project title cannot be empty!</source>
-        <translation type="vanished">Proje başlığı boş olamaz!</translation>
-    </message>
-    <message>
-        <source>You need to add at least one group!</source>
-        <translation type="vanished">En az bir grup eklemelisiniz!</translation>
-    </message>
-    <message>
-        <source>You need to add at least one dataset!</source>
-        <translation type="vanished">En az bir veri kümesi eklemelisiniz!</translation>
-    </message>
-    <message>
-        <source>Save Serial Studio Project</source>
-        <translation type="vanished">Serial Studio Projesini Kaydet</translation>
-    </message>
-    <message>
-        <source>Project Information</source>
-        <translation type="vanished">Proje Bilgisi</translation>
-    </message>
-    <message>
-        <source>Project Title</source>
-        <translation type="vanished">Proje Başlığı</translation>
-    </message>
-    <message>
-        <source>Name or description of the project</source>
-        <translation type="vanished">Projenin adı veya açıklaması</translation>
-    </message>
-    <message>
-        <source>Frame Detection Method</source>
-        <translation type="vanished">Çerçeve Tespit Yöntemi</translation>
-    </message>
-    <message>
-        <source>Select how incoming data frames are identified</source>
-        <translation type="vanished">Gelen veri çerçevelerinin nasıl tanımlandığını seçin</translation>
-    </message>
-    <message>
-        <source>Hexadecimal Delimiters</source>
-        <translation type="vanished">Onaltılık Ayırıcılar</translation>
-    </message>
-    <message>
-        <source>Use hex values to define frame boundaries</source>
-        <translation type="vanished">Çerçeve sınırlarını tanımlamak için onaltılık değerleri kullanın</translation>
-    </message>
-    <message>
-        <source>Start Sequence</source>
-        <translation type="vanished">Başlangıç Dizisi</translation>
-    </message>
-    <message>
-        <source>Marks the beginning of each data frame</source>
-        <translation type="vanished">Her veri çerçevesinin başlangıcını işaretler</translation>
-    </message>
-    <message>
-        <source>End Sequence</source>
-        <translation type="vanished">Bitiş Dizisi</translation>
-    </message>
-    <message>
-        <source>Marks the end of each data frame</source>
-        <translation type="vanished">Her veri çerçevesinin sonunu işaretler</translation>
-    </message>
-    <message>
-        <source>Payload Processing &amp; Validation</source>
-        <translation type="vanished">Yük İşleme ve Doğrulama</translation>
-    </message>
-    <message>
-        <source>Data Format</source>
-        <translation type="vanished">Veri Biçimi</translation>
-    </message>
-    <message>
-        <source>Format of raw data used for decoding each frame</source>
-        <translation type="vanished">Her çerçeveyi çözmek için kullanılan ham verinin biçimi</translation>
-    </message>
-    <message>
-        <source>Method used to validate frame integrity</source>
-        <translation type="vanished">Çerçeve bütünlüğünü doğrulamak için kullanılan yöntem</translation>
-    </message>
-    <message>
-        <source>Group Information</source>
-        <translation type="vanished">Grup Bilgisi</translation>
-    </message>
-    <message>
-        <source>Group Title</source>
-        <translation type="vanished">Grup Başlığı</translation>
-    </message>
-    <message>
-        <source>Title or description of this dataset group</source>
-        <translation type="vanished">Bu veri seti grubunun başlığı veya açıklaması</translation>
-    </message>
-    <message>
-        <source>Composite Widget</source>
-        <translation type="vanished">Bileşik Araç</translation>
-    </message>
-    <message>
-        <source>Select how this group of datasets should be visualized (optional)</source>
-        <translation type="vanished">Bu veri kümesi grubunun nasıl görselleştirileceğini seçin (isteğe bağlı)</translation>
-    </message>
-    <message>
-        <source>Action Title</source>
-        <translation type="vanished">Eylem Başlığı</translation>
-    </message>
-    <message>
-        <source>Name or description of this action</source>
-        <translation type="vanished">Bu eylemin adı veya açıklaması</translation>
-    </message>
-    <message>
-        <source>Action Icon</source>
-        <translation type="vanished">Eylem Simgesi</translation>
-    </message>
-    <message>
-        <source>Icon displayed for this action in the dashboard</source>
-        <translation type="vanished">Kontrol panelinde bu eylem için görüntülenen simge</translation>
-    </message>
-    <message>
-        <source>Data Payload</source>
-        <translation type="vanished">Veri Yükü</translation>
-    </message>
-    <message>
-        <source>Send as Binary</source>
-        <translation type="vanished">İkili Olarak Gönder</translation>
-    </message>
-    <message>
-        <source>Send raw binary data when this action is triggered</source>
-        <translation type="vanished">Bu eylem tetiklendiğinde ham ikili veriyi gönder</translation>
-    </message>
-    <message>
-        <source>Transmit Data (Hex)</source>
-        <translation type="vanished">Veriyi Aktar (Hex)</translation>
-    </message>
-    <message>
-        <source>Hexadecimal payload to send when the action is triggered</source>
-        <translation type="vanished">Eylem tetiklendiğinde gönderilecek onaltılık yük</translation>
-    </message>
-    <message>
-        <source>Transmit Data</source>
-        <translation type="vanished">Veriyi Aktar</translation>
-    </message>
-    <message>
-        <source>Text payload to send when the action is triggered</source>
-        <translation type="vanished">Eylem tetiklendiğinde gönderilecek metin yükü</translation>
-    </message>
-    <message>
-        <source>End-of-Line Sequence</source>
-        <translation type="vanished">Satır Sonu Dizisi</translation>
-    </message>
-    <message>
-        <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
-        <translation type="vanished">Mesaja eklenecek EOL karakterleri (ör. </translation>
-    </message>
-    <message>
-        <source>Execution Behavior</source>
-        <translation type="vanished">Çalıştırma Davranışı</translation>
-    </message>
-    <message>
-        <source>Auto-Execute on Connect</source>
-        <translation type="vanished">Bağlanınca Otomatik Çalıştır</translation>
-    </message>
-    <message>
-        <source>Automatically trigger this action when the device connects</source>
-        <translation type="vanished">Cihaz bağlandığında bu eylemi otomatik olarak tetikle</translation>
-    </message>
-    <message>
-        <source>Timer Behavior</source>
-        <translation type="vanished">Zamanlayıcı Davranışı</translation>
-    </message>
-    <message>
-        <source>Choose when and how this action should repeat automatically</source>
-        <translation type="vanished">Bu eylemin ne zaman ve nasıl otomatik olarak tekrarlanacağını seçin</translation>
-    </message>
-    <message>
-        <source>Interval (ms)</source>
-        <translation type="vanished">Aralık (ms)</translation>
-    </message>
-    <message>
-        <source>Milliseconds between each repeated trigger of this action</source>
-        <translation type="vanished">Bu eylemin her tekrar tetiklenmesi arasındaki milisaniye süresi</translation>
-    </message>
-    <message>
-        <source>Dataset Title</source>
-        <translation type="vanished">Veri Kümesi Başlığı</translation>
-    </message>
-    <message>
-        <source>Name of the dataset, used for labeling and identification</source>
-        <translation type="vanished">Etiketleme ve tanımlama için kullanılan veri kümesi adı</translation>
-    </message>
-    <message>
-        <source>Frame position used for aligning datasets in time</source>
-        <translation type="vanished">Veri kümelerini zaman içinde hizalamak için kullanılan çerçeve konumu</translation>
-    </message>
-    <message>
-        <source>Unit of measurement, such as volts or amps (optional)</source>
-        <translation type="vanished">Ölçü birimi, örneğin volt veya amper (isteğe bağlı)</translation>
-    </message>
-    <message>
-        <source>Plot Settings</source>
-        <translation type="vanished">Grafik Ayarları</translation>
-    </message>
-    <message>
-        <source>Enable Plot Widget</source>
-        <translation type="vanished">Grafik Widget'ını Etkinleştir</translation>
-    </message>
-    <message>
-        <source>Choose which dataset to use for the X-Axis in plots</source>
-        <translation type="vanished">Grafiklerde X-Ekseninde kullanılacak veri kümesini seçin</translation>
-    </message>
-    <message>
-        <source>Minimum Plot Value (optional)</source>
-        <translation type="vanished">Minimum Grafik Değeri (isteğe bağlı)</translation>
-    </message>
-    <message>
-        <source>Lower bound for plot display range</source>
-        <translation type="vanished">Grafik görüntüleme aralığı için alt sınır</translation>
-    </message>
-    <message>
-        <source>Maximum Plot Value (optional)</source>
-        <translation type="vanished">Maksimum Grafik Değeri (isteğe bağlı)</translation>
-    </message>
-    <message>
-        <source>Upper bound for plot display range</source>
-        <translation type="vanished">Grafik gösterim aralığı için üst sınır</translation>
-    </message>
-    <message>
-        <source>FFT Configuration</source>
-        <translation type="vanished">FFT Yapılandırması</translation>
-    </message>
-    <message>
-        <source>Enable FFT Analysis</source>
-        <translation type="vanished">FFT Analizini Etkinleştir</translation>
-    </message>
-    <message>
-        <source>Perform frequency-domain analysis of the dataset</source>
-        <translation type="vanished">Veri kümesinin frekans-domeni analizini yap</translation>
-    </message>
-    <message>
-        <source>Number of samples used for each FFT calculation window</source>
-        <translation type="vanished">Her FFT hesaplama penceresi için kullanılan örnek sayısı</translation>
-    </message>
-    <message>
-        <source>FFT Sampling Rate (Hz, required)</source>
-        <translation type="vanished">FFT Örnekleme Hızı (Hz, zorunlu)</translation>
-    </message>
-    <message>
-        <source>Sampling frequency used for FFT (in Hz)</source>
-        <translation type="vanished">FFT için kullanılan örnekleme frekansı (Hz cinsinden)</translation>
-    </message>
-    <message>
-        <source>Minimum Value (recommended)</source>
-        <translation type="vanished">Minimum Değer (önerilen)</translation>
-    </message>
-    <message>
-        <source>Lower bound for data normalization</source>
-        <translation type="vanished">Veri normalizasyonu için alt sınır</translation>
-    </message>
-    <message>
-        <source>Maximum Value (recommended)</source>
-        <translation type="vanished">Maksimum Değer (önerilen)</translation>
-    </message>
-    <message>
-        <source>Upper bound for data normalization</source>
-        <translation type="vanished">Veri normalizasyonu için üst sınır</translation>
-    </message>
-    <message>
-        <source>Widget Settings</source>
-        <translation type="vanished">Araç Ayarları</translation>
-    </message>
-    <message>
-        <source>Alarm Settings</source>
-        <translation type="vanished">Alarm Ayarları</translation>
-    </message>
-    <message>
-        <source>Enable Alarms</source>
-        <translation type="vanished">Alarmları Etkinleştir</translation>
-    </message>
-    <message>
-        <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
-        <translation type="vanished">Değer alarm eşiklerini aştığında görsel bir alarm tetikler</translation>
-    </message>
-    <message>
-        <source>Low Threshold</source>
-        <translation type="vanished">Düşük Eşik</translation>
-    </message>
-    <message>
-        <source>High Threshold</source>
-        <translation type="vanished">Yüksek Eşik</translation>
-    </message>
-    <message>
-        <source>Display Widget</source>
-        <translation type="vanished">Araç Gösterimi</translation>
-    </message>
-    <message>
-        <source>Select the visual widget used to display this dataset</source>
-        <translation type="vanished">Bu veri kümesini görüntülemek için kullanılacak görsel bileşeni seçin</translation>
-    </message>
-    <message>
-        <source>Show in Overview</source>
-        <translation type="vanished">Genel Bakışta Göster</translation>
-    </message>
-    <message>
-        <source>Display this widget in the dashboard overview (if enabled)</source>
-        <translation type="vanished">Bu bileşeni kontrol paneli genel bakışında göster (etkinse)</translation>
-    </message>
-    <message>
-        <source>Minimum Display Value (required)</source>
-        <translation type="vanished">Minimum Görüntüleme Değeri (gerekli)</translation>
-    </message>
-    <message>
-        <source>Lower bound of the gauge or bar display range</source>
-        <translation type="vanished">Gösterge veya çubuk görüntüleme aralığının alt sınırı</translation>
-    </message>
-    <message>
-        <source>Maximum Display Value (required)</source>
-        <translation type="vanished">Maksimum Görüntüleme Değeri (gerekli)</translation>
-    </message>
-    <message>
-        <source>Upper bound of the gauge or bar display range</source>
-        <translation type="vanished">Gösterge veya çubuk görüntüleme aralığının üst sınırı</translation>
-    </message>
-    <message>
-        <source>Alarm: Low Threshold (optional)</source>
-        <translation type="vanished">Alarm: Düşük Eşik (isteğe bağlı)</translation>
-    </message>
-    <message>
-        <source>Triggers a visual alarm when the value drops below this threshold</source>
-        <translation type="vanished">Değer bu eşikten düştüğünde görsel alarm tetikler</translation>
-    </message>
-    <message>
-        <source>Alarm: High Threshold (optional)</source>
-        <translation type="vanished">Alarm: Yüksek Eşik (isteğe bağlı)</translation>
-    </message>
-    <message>
-        <source>Triggers a visual alarm when the value exceeds this threshold</source>
-        <translation type="vanished">Değer bu eşiği aştığında görsel bir alarm tetikler</translation>
-    </message>
-    <message>
-        <source>LED Display Settings</source>
-        <translation type="vanished">LED Ekran Ayarları</translation>
-    </message>
-    <message>
-        <source>Enable visual status monitoring using an LED display</source>
-        <translation type="vanished">LED ekran kullanarak görsel durum izlemeyi etkinleştir</translation>
-    </message>
-    <message>
-        <source>LED On Threshold (required)</source>
-        <translation type="vanished">LED Açık Eşiği (gerekli)</translation>
-    </message>
-    <message>
-        <source>LED lights up when value meets or exceeds this threshold</source>
-        <translation type="vanished">Değer bu eşiğe ulaştığında veya aştığında LED yanar</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">Evet</translation>
-    </message>
-    <message>
-        <source>File open error</source>
-        <translation type="vanished">Dosya açma hatası</translation>
-    </message>
-    <message>
-        <source>Untitled Project</source>
-        <translation type="vanished">İsimsiz Proje</translation>
-    </message>
-    <message>
-        <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation type="vanished">Serial Studio Proje Dosyaları (*.ssproj)</translation>
-    </message>
-    <message>
-        <source>Select Project File</source>
-        <translation type="vanished">Proje Dosyasını Seç</translation>
-    </message>
-    <message>
-        <source>Project Files (*.json *.ssproj)</source>
-        <translation type="vanished">Proje Dosyaları (*.json *.ssproj)</translation>
-    </message>
-    <message>
-        <source>Legacy frame parser function updated</source>
-        <translation type="vanished">Eski çerçeve ayrıştırıcı fonksiyonu güncellendi</translation>
-    </message>
-    <message>
-        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation type="vanished">Projeniz, 'separator' argümanıyla eski bir çerçeve ayrıştırıcı fonksiyonu kullanıyordu. Yeni formata otomatik olarak geçirildi.</translation>
-    </message>
-    <message>
-        <source>Switch Serial Studio to Project Mode?</source>
-        <translation type="vanished">Serial Studio'yu Proje Moduna Geçirmek İster misiniz?</translation>
-    </message>
-    <message>
-        <source>This operation mode is required to load and display dashboards from project files.</source>
-        <translation type="vanished">Bu işlem modu, proje dosyalarından panoları yüklemek ve görüntülemek için gereklidir.</translation>
-    </message>
-    <message>
-        <source>Do you want to delete group "%1"?</source>
-        <translation type="vanished">"%1" grubunu silmek istiyor musunuz?</translation>
-    </message>
-    <message>
-        <source>This action cannot be undone. Do you wish to proceed?</source>
-        <translation type="vanished">Bu işlem geri alınamaz. Devam etmek istiyor musunuz?</translation>
-    </message>
-    <message>
-        <source>Do you want to delete action "%1"?</source>
-        <translation type="vanished">"%1" eylemini silmek istiyor musunuz?</translation>
-    </message>
-    <message>
-        <source>Do you want to delete dataset "%1"?</source>
-        <translation type="vanished">Veri kümesini silmek istiyor musunuz "%1"?</translation>
-    </message>
-    <message>
-        <source>%1 (Copy)</source>
-        <translation type="vanished">%1 (Kopya)</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">Grup</translation>
-    </message>
-    <message>
-        <source>New Dataset</source>
-        <translation type="vanished">Yeni Veri Kümesi</translation>
-    </message>
-    <message>
-        <source>New Plot</source>
-        <translation type="vanished">Yeni Grafik</translation>
-    </message>
-    <message>
-        <source>New FFT Plot</source>
-        <translation type="vanished">Yeni FFT Grafiği</translation>
-    </message>
-    <message>
-        <source>New Level Indicator</source>
-        <translation type="vanished">Yeni Seviye Göstergesi</translation>
-    </message>
-    <message>
-        <source>New Gauge</source>
-        <translation type="vanished">Yeni Gösterge</translation>
-    </message>
-    <message>
-        <source>New Compass</source>
-        <translation type="vanished">Yeni Pusula</translation>
-    </message>
-    <message>
-        <source>New LED Indicator</source>
-        <translation type="vanished">Yeni LED Göstergesi</translation>
-    </message>
-    <message>
-        <source>New Action</source>
-        <translation type="vanished">Yeni Eylem</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to change the group-level widget?</source>
-        <translation type="vanished">Grup düzeyindeki widget'ı değiştirmek istediğinizden emin misiniz?</translation>
-    </message>
-    <message>
-        <source>Existing datasets for this group will be deleted</source>
-        <translation type="vanished">Bu grup için mevcut veri kümeleri silinecek</translation>
-    </message>
-    <message>
-        <source>Accelerometer %1</source>
-        <translation type="vanished">İvmeölçer %1</translation>
-    </message>
-    <message>
-        <source>Gyro %1</source>
-        <translation type="vanished">Jiroskop %1</translation>
-    </message>
-    <message>
-        <source>Latitude</source>
-        <translation type="vanished">Enlem</translation>
-    </message>
-    <message>
-        <source>Longitude</source>
-        <translation type="vanished">Boylam</translation>
-    </message>
-    <message>
-        <source>Altitude</source>
-        <translation type="vanished">Yükseklik</translation>
-    </message>
-    <message>
-        <source>X</source>
-        <translation type="vanished">X</translation>
-    </message>
-    <message>
-        <source>Y</source>
-        <translation type="vanished">Y</translation>
-    </message>
-    <message>
-        <source>Z</source>
-        <translation type="vanished">Z</translation>
-    </message>
-    <message>
-        <source>Frame Parser Code</source>
-        <translation type="vanished">Çerçeve Ayrıştırıcı Kodu</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="vanished">Başlık</translation>
-    </message>
-    <message>
-        <source>Project name/description</source>
-        <translation type="vanished">Proje adı/açıklaması</translation>
-    </message>
-    <message>
-        <source>Data Conversion Method</source>
-        <translation type="vanished">Veri Dönüştürme Yöntemi</translation>
-    </message>
-    <message>
-        <source>Input data format for frame parser</source>
-        <translation type="vanished">Çerçeve ayrıştırıcı için giriş veri formatı</translation>
-    </message>
-    <message>
-        <source>Frame Detection</source>
-        <translation type="vanished">Çerçeve Tespiti</translation>
-    </message>
-    <message>
-        <source>Strategy used for identifying frame data</source>
-        <translation type="vanished">Çerçeve verilerini tanımlamak için kullanılan strateji</translation>
-    </message>
-    <message>
-        <source>Frame Start Delimeter</source>
-        <translation type="vanished">Çerçeve Başlangıç Ayırıcı</translation>
-    </message>
-    <message>
-        <source>String marking the start of a frame</source>
-        <translation type="vanished">Bir çerçevenin başlangıcını işaretleyen dize</translation>
-    </message>
-    <message>
-        <source>Frame End Delimeter</source>
-        <translation type="vanished">Çerçeve Sonlandırıcı</translation>
-    </message>
-    <message>
-        <source>String marking the end of a frame</source>
-        <translation type="vanished">Bir çerçevenin sonunu belirten dize</translation>
-    </message>
-    <message>
-        <source>Hexadecimal Delimeters</source>
-        <translation type="vanished">Onaltılık Ayraçlar</translation>
-    </message>
-    <message>
-        <source>Use hexadecimal delimiters for data frames</source>
-        <translation type="vanished">Veri çerçeveleri için onaltılık ayraçlar kullan</translation>
-    </message>
-    <message>
-        <source>Checksum Algorithm</source>
-        <translation type="vanished">Checksum Algoritması</translation>
-    </message>
-    <message>
-        <source>Checksum algorithm used for frame validation</source>
-        <translation type="vanished">Çerçeve doğrulaması için kullanılan checksum algoritması</translation>
-    </message>
-    <message>
-        <source>Untitled Group</source>
-        <translation type="vanished">İsimsiz Grup</translation>
-    </message>
-    <message>
-        <source>Name or description of the group</source>
-        <translation type="vanished">Grubun adı veya açıklaması</translation>
-    </message>
-    <message>
-        <source>Visual Widget</source>
-        <translation type="vanished">Görsel Araç</translation>
-    </message>
-    <message>
-        <source>Widget</source>
-        <translation type="vanished">Araç</translation>
-    </message>
-    <message>
-        <source>Group display widget (optional)</source>
-        <translation type="vanished">Grup görüntüleme aracı (isteğe bağlı)</translation>
-    </message>
-    <message>
-        <source>Untitled Action</source>
-        <translation type="vanished">İsimsiz Eylem</translation>
-    </message>
-    <message>
-        <source>Name or description of the action</source>
-        <translation type="vanished">Eylemin adı veya açıklaması</translation>
-    </message>
-    <message>
-        <source>Icon</source>
-        <translation type="vanished">Simge</translation>
-    </message>
-    <message>
-        <source>Default Icon</source>
-        <translation type="vanished">Varsayılan Simge</translation>
-    </message>
-    <message>
-        <source>Icon to display in the dashboard</source>
-        <translation type="vanished">Gösterge panelinde görüntülenecek simge</translation>
-    </message>
-    <message>
-        <source>Binary Data</source>
-        <translation type="vanished">İkili Veri</translation>
-    </message>
-    <message>
-        <source>Send binary data when the action is triggered.</source>
-        <translation type="vanished">Eylem tetiklendiğinde ikili veri gönder.</translation>
-    </message>
-    <message>
-        <source>TX Data (Hex)</source>
-        <translation type="vanished">TX Verisi (Hex)</translation>
-    </message>
-    <message>
-        <source>Command</source>
-        <translation type="vanished">Komut</translation>
-    </message>
-    <message>
-        <source>Data to transmit when the action is triggered.</source>
-        <translation type="vanished">Eylem tetiklendiğinde iletilecek veri.</translation>
-    </message>
-    <message>
-        <source>TX Data</source>
-        <translation type="vanished">TX Verisi</translation>
-    </message>
-    <message>
-        <source>EOL Sequence</source>
-        <translation type="vanished">EOL Dizisi</translation>
-    </message>
-    <message>
-        <source>End-of-line (EOL) sequence to use</source>
-        <translation type="vanished">Kullanılacak satır sonu (EOL) dizisi</translation>
-    </message>
-    <message>
-        <source>Auto Execute on Connect</source>
-        <translation type="vanished">Bağlantıda Otomatik Çalıştır</translation>
-    </message>
-    <message>
-        <source>Trigger this action automatically when a device connects.</source>
-        <translation type="vanished">Bir cihaz bağlandığında bu işlemi otomatik olarak tetikleyin.</translation>
-    </message>
-    <message>
-        <source>Timer Mode</source>
-        <translation type="vanished">Zamanlayıcı Modu</translation>
-    </message>
-    <message>
-        <source>How and when the timer should activate.</source>
-        <translation type="vanished">Zamanlayıcının nasıl ve ne zaman etkinleşmesi gerektiği.</translation>
-    </message>
-    <message>
-        <source>Timer Interval (ms)</source>
-        <translation type="vanished">Zamanlayıcı Aralığı (ms)</translation>
-    </message>
-    <message>
-        <source>Interval in milliseconds between each timer-triggered action.</source>
-        <translation type="vanished">Her zamanlayıcı tetiklemeli işlem arasındaki milisaniye cinsinden aralık.</translation>
-    </message>
-    <message>
-        <source>General Information</source>
-        <translation type="vanished">Genel Bilgiler</translation>
-    </message>
-    <message>
-        <source>Untitled Dataset</source>
-        <translation type="vanished">İsimsiz Veri Kümesi</translation>
-    </message>
-    <message>
-        <source>Name or description of the dataset</source>
-        <translation type="vanished">Veri kümesinin adı veya açıklaması</translation>
-    </message>
-    <message>
-        <source>Frame Index</source>
-        <translation type="vanished">Çerçeve İndeksi</translation>
-    </message>
-    <message>
-        <source>Position in the frame</source>
-        <translation type="vanished">Çerçevedeki Konum</translation>
-    </message>
-    <message>
-        <source>Measurement Unit</source>
-        <translation type="vanished">Ölçüm Birimi</translation>
-    </message>
-    <message>
-        <source>Volts, Amps, etc.</source>
-        <translation type="vanished">Volt, Amper, vb.</translation>
-    </message>
-    <message>
-        <source>Unit of measurement (optional)</source>
-        <translation type="vanished">Ölçüm birimi (isteğe bağlı)</translation>
-    </message>
-    <message>
-        <source>Overview</source>
-        <translation type="vanished">Genel Bakış</translation>
-    </message>
-    <message>
-        <source>Include widget in overview dashboard</source>
-        <translation type="vanished">Genel bakış panosuna widget ekle</translation>
-    </message>
-    <message>
-        <source>Display widget (optional)</source>
-        <translation type="vanished">Widget gösterimi (isteğe bağlı)</translation>
-    </message>
-    <message>
-        <source>Oscilloscope Plot</source>
-        <translation type="vanished">Osiloskop Grafiği</translation>
-    </message>
-    <message>
-        <source>Plot data in real-time</source>
-        <translation type="vanished">Gerçek zamanlı veri grafiği</translation>
-    </message>
-    <message>
-        <source>FFT Plot</source>
-        <translation type="vanished">FFT Grafiği</translation>
-    </message>
-    <message>
-        <source>Plot frequency-domain data</source>
-        <translation type="vanished">Frekans alanı verilerini grafiğe dök</translation>
-    </message>
-    <message>
-        <source>Show in LED Panel</source>
-        <translation type="vanished">LED Panelde Göster</translation>
-    </message>
-    <message>
-        <source>Quick status monitoring</source>
-        <translation type="vanished">Hızlı durum izleme</translation>
-    </message>
-    <message>
-        <source>X-Axis Source</source>
-        <translation type="vanished">X-Ekseni Kaynağı</translation>
-    </message>
-    <message>
-        <source>Data series for the X-Axis</source>
-        <translation type="vanished">X-Ekseni için veri serisi</translation>
-    </message>
-    <message>
-        <source>Minimum Value</source>
-        <translation type="vanished">Minimum Değer</translation>
-    </message>
-    <message>
-        <source>Required for range widgets, optional for plots</source>
-        <translation type="vanished">Aralık widget'ları için gerekli, grafikler için isteğe bağlı</translation>
-    </message>
-    <message>
-        <source>Maximum Value</source>
-        <translation type="vanished">Maksimum Değer</translation>
-    </message>
-    <message>
-        <source>Alarm Low Value</source>
-        <translation type="vanished">Alarm Düşük Değer</translation>
-    </message>
-    <message>
-        <source>Alarm Value</source>
-        <translation type="vanished">Alarm Değeri</translation>
-    </message>
-    <message>
-        <source>Triggers alarm in bar widgets and LED panels</source>
-        <translation type="vanished">Çubuk widget'larında ve LED panellerinde alarmı tetikler</translation>
-    </message>
-    <message>
-        <source>Alarm High Value</source>
-        <translation type="vanished">Alarm Yüksek Değer</translation>
-    </message>
-    <message>
-        <source>FFT Window Size</source>
-        <translation type="vanished">FFT Pencere Boyutu</translation>
-    </message>
-    <message>
-        <source>Samples for FFT calculation</source>
-        <translation type="vanished">FFT hesaplaması için örnekler</translation>
-    </message>
-    <message>
-        <source>FFT Sampling Rate</source>
-        <translation type="vanished">FFT Örnekleme Oranı</translation>
-    </message>
-    <message>
-        <source>Sampling rate (Hz) for FFT calculation</source>
-        <translation type="vanished">FFT hesaplaması için örnekleme oranı (Hz)</translation>
-    </message>
-    <message>
-        <source>LED High (On) Value</source>
-        <translation type="vanished">LED Yüksek (Açık) Değeri</translation>
-    </message>
-    <message>
-        <source>Threshold for LED on</source>
-        <translation type="vanished">LED açma eşiği</translation>
-    </message>
-    <message>
-        <source>Off</source>
-        <translation type="vanished">Kapalı</translation>
-    </message>
-    <message>
-        <source>Auto Start</source>
-        <translation type="vanished">Otomatik Başlat</translation>
-    </message>
-    <message>
-        <source>Start on Trigger</source>
-        <translation type="vanished">Tetikleyici ile Başlat</translation>
-    </message>
-    <message>
-        <source>Toggle on Trigger</source>
-        <translation type="vanished">Tetikleyici ile Geçiş</translation>
-    </message>
-    <message>
-        <source>Plain Text (UTF8)</source>
-        <translation type="vanished">Düz Metin (UTF8)</translation>
-    </message>
-    <message>
-        <source>Hexadecimal</source>
-        <translation type="vanished">Onaltılık</translation>
-    </message>
-    <message>
-        <source>Base64</source>
-        <translation type="vanished">Base64</translation>
-    </message>
-    <message>
-        <source>Binary (Direct)</source>
-        <translation type="vanished">İkili (Doğrudan)</translation>
-    </message>
-    <message>
-        <source>No Checksum</source>
-        <translation type="vanished">Checksum Yok</translation>
-    </message>
-    <message>
-        <source>End Delimiter Only</source>
-        <translation type="vanished">Sadece Son Ayraç</translation>
-    </message>
-    <message>
-        <source>Start Delimiter Only</source>
-        <translation type="vanished">Sadece Başlangıç Ayraç</translation>
-    </message>
-    <message>
-        <source>Start + End Delimiter</source>
-        <translation type="vanished">Başlangıç + Son Ayraç</translation>
-    </message>
-    <message>
-        <source>No Delimiters</source>
-        <translation type="vanished">Ayırıcı Yok</translation>
-    </message>
-    <message>
-        <source>Data Grid</source>
-        <translation type="vanished">Veri Tablosu</translation>
-    </message>
-    <message>
-        <source>GPS Map</source>
-        <translation type="vanished">GPS Haritası</translation>
-    </message>
-    <message>
-        <source>Gyroscope</source>
-        <translation type="vanished">Jiroskop</translation>
-    </message>
-    <message>
-        <source>Multiple Plot</source>
-        <translation type="vanished">Çoklu Grafik</translation>
-    </message>
-    <message>
-        <source>Accelerometer</source>
-        <translation type="vanished">İvmeölçer</translation>
-    </message>
-    <message>
-        <source>3D Plot</source>
-        <translation type="vanished">3D Grafik</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="vanished">Yok</translation>
-    </message>
-    <message>
-        <source>Bar</source>
-        <translation type="vanished">Çubuk</translation>
-    </message>
-    <message>
-        <source>Gauge</source>
-        <translation type="vanished">Gösterge</translation>
-    </message>
-    <message>
-        <source>Compass</source>
-        <translation type="vanished">Pusula</translation>
-    </message>
-    <message>
-        <source>New Line (\n)</source>
-        <translation type="vanished">Yeni Satır (</translation>
-    </message>
-    <message>
-        <source>Carriage Return (\r)</source>
-        <translation type="vanished">Satır Başı (\r)</translation>
-    </message>
-    <message>
-        <source>CRLF (\r\n)</source>
-        <translation type="vanished">CRLF (\r</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">Hayır</translation>
-    </message>
-    <message>
-        <source>Linear Plot</source>
-        <translation type="vanished">Doğrusal Grafik</translation>
-    </message>
-    <message>
-        <source>Save changes to frame parser code?</source>
-        <translation type="vanished">Çerçeve ayrıştırıcı kodundaki değişiklikleri kaydet?</translation>
-    </message>
-    <message>
-        <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation type="vanished">Değişikliklerinizi korumak için 'Kaydet'i, kalıcı olarak kaybetmek için 'Vazgeç'i veya geri dönmek için 'İptal'i seçin.</translation>
-    </message>
-    <message>
-        <source>Save Changes</source>
-        <translation type="vanished">Değişiklikleri Kaydet</translation>
-    </message>
-</context>
-<context>
-    <name>JSONDropArea</name>
-    <message>
-        <source>Drop Projects and CSV files here</source>
-        <translation type="vanished">Projeleri ve CSV dosyalarını buraya bırakın</translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
@@ -4975,58 +3467,58 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="36"/>
         <source>Licensing</source>
-        <translation>Lisanslama</translation>
+        <translation>Licenshantering</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="75"/>
         <source>Please wait...</source>
-        <translation>Lütfen bekleyin...</translation>
+        <translation>Vänta...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="116"/>
         <source>Activate Serial Studio Pro</source>
-        <translation>Serial Studio Pro'yu Etkinleştir</translation>
+        <translation>Aktivera Serial Studio Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="122"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
-        <translation>MQTT, 3D grafikler ve daha fazlası gibi Pro özelliklerini açmak için lisans anahtarınızı aşağıya yapıştırın.</translation>
+        <translation>Klistra in din licensnyckel nedan för att låsa upp Pro-funktioner som MQTT, 3D-plotting och mer.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="129"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
-        <translation>Lisansınız 5 cihaz etkinleştirmesi içerir.
-Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
+        <translation>Din licens inkluderar 5 enhetsaktiveringar.
+Planer inkluderar Månads-, Års- och Livstidsalternativ.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="141"/>
         <source>Paste your license key here…</source>
-        <translation>Lisans anahtarınızı buraya yapıştırın…</translation>
+        <translation>Klistra in din licensnyckel här…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="160"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="320"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="368"/>
         <source>Copy</source>
-        <translation>Kopyala</translation>
+        <translation>Kopiera</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="166"/>
         <source>Paste</source>
-        <translation>Yapıştır</translation>
+        <translation>Klistra in</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="172"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="326"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="374"/>
         <source>Select All</source>
-        <translation>Tümünü Seç</translation>
+        <translation>Markera allt</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="223"/>
         <source>Product</source>
-        <translation>Ürün</translation>
+        <translation>Produkt</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="230"/>
@@ -5036,57 +3528,57 @@ Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="241"/>
         <source>Licensee</source>
-        <translation>Lisans Sahibi</translation>
+        <translation>Licenstagare</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="260"/>
         <source>Licensee E-Mail</source>
-        <translation>Lisans Sahibi E-Posta</translation>
+        <translation>Licenstagarens e-post</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="277"/>
         <source>Device Usage</source>
-        <translation>Cihaz Kullanımı</translation>
+        <translation>Enhetsanvändning</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="285"/>
         <source>%1 devices in use (Unlimited plan)</source>
-        <translation>%1 cihaz kullanılıyor (Sınırsız plan)</translation>
+        <translation>%1 enheter används (Obegränsad plan)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="286"/>
         <source>%1 of %2 devices used</source>
-        <translation>%1 / %2 cihaz kullanıldı</translation>
+        <translation>%1 av %2 enheter används</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
         <source>Device ID</source>
-        <translation>Cihaz Kimliği</translation>
+        <translation>Enhets-ID</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="342"/>
         <source>License Key</source>
-        <translation>Lisans Anahtarı</translation>
+        <translation>Licensnyckel</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="398"/>
         <source>Customer Portal</source>
-        <translation>Müşteri Portalı</translation>
+        <translation>Kundportal</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="412"/>
         <source>Buy License</source>
-        <translation>Lisans Satın Al</translation>
+        <translation>Köp licens</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="422"/>
         <source>Activate</source>
-        <translation>Etkinleştir</translation>
+        <translation>Aktivera</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="435"/>
         <source>Deactivate</source>
-        <translation>Devre Dışı Bırak</translation>
+        <translation>Avaktivera</translation>
     </message>
 </context>
 <context>
@@ -5094,68 +3586,68 @@ Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="579"/>
         <source>There was an issue validating your license.</source>
-        <translation>Lisansınızı doğrularken bir sorun oluştu.</translation>
+        <translation>Det uppstod ett problem med att validera din licens.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="777"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="900"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
-        <translation>Sağladığınız lisans anahtarı Serial Studio'ya ait değil.</translation>
+        <translation>Licensnyckeln du angav tillhör inte Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="778"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="901"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
-        <translation>Lütfen lisansınızı resmi Serial Studio mağazasından satın aldığınızdan emin olun.</translation>
+        <translation>Kontrollera att du köpte din licens från den officiella Serial Studio-butiken.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="612"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="790"/>
         <source>This license key was activated on a different device.</source>
-        <translation>Bu lisans anahtarı farklı bir cihazda etkinleştirildi.</translation>
+        <translation>Denna licensnyckel aktiverades på en annan enhet.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="613"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="791"/>
         <source>Please deactivate it there first or contact support for help.</source>
-        <translation>Lütfen önce orada devre dışı bırakın veya yardım için destekle iletişime geçin.</translation>
+        <translation>Avaktivera den där först eller kontakta support för hjälp.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="626"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="804"/>
         <source>This license is not currently active.</source>
-        <translation>Bu lisans şu anda etkin değil.</translation>
+        <translation>Denna licens är inte aktiv för närvarande.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="627"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="805"/>
         <source>It may have expired or been deactivated (status: %1).</source>
-        <translation>Süresi dolmuş veya devre dışı bırakılmış olabilir (durum: %1).</translation>
+        <translation>Den kan ha gått ut eller avaktiverats (status: %1).</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="639"/>
         <source>Something went wrong on the server.</source>
-        <translation>Sunucuda bir şeyler ters gitti.</translation>
+        <translation>Något gick fel på servern.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="640"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="818"/>
         <source>No activation ID was returned.</source>
-        <translation>Aktivasyon kimliği döndürülmedi.</translation>
+        <translation>Inget aktiverings-ID returnerades.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="651"/>
         <source>Could not validate your license at this time.</source>
-        <translation>Lisansınız şu anda doğrulanamadı.</translation>
+        <translation>Kunde inte validera din licens just nu.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="652"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="914"/>
         <source>Please try again later.</source>
-        <translation>Lütfen daha sonra tekrar deneyin.</translation>
+        <translation>Försök igen senare.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="674"/>
@@ -5168,57 +3660,53 @@ Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <source>%1 Pro</source>
-        <translation type="vanished">%1 Pro</translation>
-    </message>
-    <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="703"/>
         <source>Your license has been successfully activated.</source>
-        <translation>Lisansınız başarıyla etkinleştirildi.</translation>
+        <translation>Din licens har aktiverats framgångsrikt.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="704"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
-        <translation>Serial Studio'yu desteklediğiniz için teşekkür ederiz!
-Artık tüm premium özelliklere erişiminiz var.</translation>
+        <translation>Tack för att du stödjer Serial Studio!
+Du har nu tillgång till alla premiumfunktioner.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="766"/>
         <source>There was an issue activating your license.</source>
-        <translation>Lisansınızı etkinleştirirken bir sorun oluştu.</translation>
+        <translation>Det uppstod ett problem med att aktivera din licens.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="817"/>
         <source>Something went wrong on the server...</source>
-        <translation>Sunucuda bir şeyler ters gitti...</translation>
+        <translation>Något gick fel på servern...</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="829"/>
         <source>Could not activate your license at this time.</source>
-        <translation>Lisansınız şu anda etkinleştirilemedi.</translation>
+        <translation>Kunde inte aktivera din licens just nu.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
         <source>There was an issue deactivating your license.</source>
-        <translation>Lisansınızı devre dışı bırakırken bir sorun oluştu.</translation>
+        <translation>Det uppstod ett problem med att avaktivera din licens.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="913"/>
         <source>Could not deactivate your license at this time.</source>
-        <translation>Şu anda lisansınızı devre dışı bırakamadık.</translation>
+        <translation>Kunde inte avaktivera din licens just nu.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="923"/>
         <source>Your license has been deactivated.</source>
-        <translation>Lisansınız devre dışı bırakıldı.</translation>
+        <translation>Din licens har avaktiverats.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="924"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
-        <translation>Pro özelliklere erişim kaldırıldı.
-Serial Studio'yu desteklediğiniz için tekrar teşekkürler!</translation>
+        <translation>Tillgång till Pro-funktioner har tagits bort.
+Tack igen för att du stödjer Serial Studio!</translation>
     </message>
 </context>
 <context>
@@ -5226,12 +3714,12 @@ Serial Studio'yu desteklediğiniz için tekrar teşekkürler!</translation>
     <message>
         <location filename="../../src/MDF4/Export.cpp" line="428"/>
         <source>MDF4 Export is a Pro feature.</source>
-        <translation>MDF4 Dışa Aktarma bir Pro özelliğidir.</translation>
+        <translation>MDF4-export är en Pro-funktion.</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Export.cpp" line="429"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
-        <translation>Bu özellik bir lisans gerektirir. MDF4 dışa aktarmayı etkinleştirmek için lütfen bir tane satın alın.</translation>
+        <translation>Denna funktion kräver en licens. Vänligen köp en för att aktivera MDF4-export.</translation>
     </message>
 </context>
 <context>
@@ -5239,66 +3727,52 @@ Serial Studio'yu desteklediğiniz için tekrar teşekkürler!</translation>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="331"/>
         <source>Select MDF4 file</source>
-        <translation>MDF4 dosyası seçin</translation>
+        <translation>Välj MDF4-fil</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="333"/>
         <source>MDF4 files (*.mf4 *.dat)</source>
-        <translation>MDF4 dosyaları (*.mf4 *.dat)</translation>
+        <translation>MDF4-filer (*.mf4 *.dat)</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="367"/>
         <source>Disconnect from device?</source>
-        <translation>Cihazdan bağlantıyı kesilsin mi?</translation>
+        <translation>Koppla från enheten?</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="368"/>
         <source>You must disconnect from the current device before opening a MDF4 file.</source>
-        <translation>Bir MDF4 dosyası açmadan önce mevcut cihazdan bağlantıyı kesmelisiniz.</translation>
+        <translation>Du måste koppla från den aktuella enheten innan du öppnar en MDF4-fil.</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="385"/>
         <source>Cannot open MDF4 file</source>
-        <translation>MDF4 dosyası açılamıyor</translation>
+        <translation>Kan inte öppna MDF4-fil</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="386"/>
         <source>The file may be corrupted or in an unsupported format.</source>
-        <translation>Dosya bozuk olabilir veya desteklenmeyen bir formatta olabilir.</translation>
+        <translation>Filen kan vara skadad eller i ett format som inte stöds.</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="395"/>
         <source>Invalid MDF4 file</source>
-        <translation>Geçersiz MDF4 dosyası</translation>
+        <translation>Ogiltig MDF4-fil</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="396"/>
         <source>Failed to read file structure. The file may be corrupted.</source>
-        <translation>Dosya yapısı okunamadı. Dosya bozulmuş olabilir.</translation>
+        <translation>Misslyckades med att läsa filstruktur. Filen kan vara skadad.</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="414"/>
         <source>No data in file</source>
-        <translation>Dosyada veri yok</translation>
+        <translation>Ingen data i filen</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Player.cpp" line="415"/>
         <source>The MDF4 file contains no measurement data.</source>
-        <translation>MDF4 dosyası ölçüm verisi içermiyor.</translation>
-    </message>
-    <message>
-        <source>Author: %1
-Project: %2
-Subject: %3
-Channels: %4</source>
-        <translation type="vanished">Yazar: %1
-Proje: %2
-Konu: %3
-Kanallar: %4</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation type="vanished">Bilinmeyen</translation>
+        <translation>MDF4-filen innehåller ingen mätdata.</translation>
     </message>
 </context>
 <context>
@@ -5331,277 +3805,277 @@ Kanallar: %4</translation>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="50"/>
         <source>TLS 1.3 or Later</source>
-        <translation>TLS 1.3 veya Daha Sonrası</translation>
+        <translation>TLS 1.3 eller senare</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="51"/>
         <source>DTLS 1.2 or Later</source>
-        <translation>DTLS 1.2 veya Daha Yeni</translation>
+        <translation>DTLS 1.2 eller senare</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="52"/>
         <source>Any Protocol</source>
-        <translation>Herhangi Bir Protokol</translation>
+        <translation>Valfritt protokoll</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="53"/>
         <source>Secure Protocols Only</source>
-        <translation>Yalnızca Güvenli Protokoller</translation>
+        <translation>Endast säkra protokoll</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="56"/>
         <source>None</source>
-        <translation>Yok</translation>
+        <translation>Ingen</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="57"/>
         <source>Query Peer</source>
-        <translation>Karşı Tarafı Sorgula</translation>
+        <translation>Fråga peer</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="58"/>
         <source>Verify Peer</source>
-        <translation>Karşı Tarafı Doğrula</translation>
+        <translation>Verifiera peer</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="59"/>
         <source>Auto Verify Peer</source>
-        <translation>Karşı Tarafı Otomatik Doğrula</translation>
+        <translation>Auto-verifiera peer</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="331"/>
         <source>Use System Database</source>
-        <translation>Sistem Veritabanını Kullan</translation>
+        <translation>Använd systemdatabas</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="332"/>
         <source>Load From Folder...</source>
-        <translation>Klasörden Yükle...</translation>
+        <translation>Ladda från mapp...</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="346"/>
         <source>MQTT Subscriber</source>
-        <translation>MQTT Abonesi</translation>
+        <translation>MQTT-prenumerant</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="347"/>
         <source>MQTT Publisher</source>
-        <translation>MQTT Yayıncısı</translation>
+        <translation>MQTT-publicerare</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="412"/>
         <source>MQTT Feature Requires a Commercial License</source>
-        <translation>MQTT Özelliği Ticari Lisans Gerektirir</translation>
+        <translation>MQTT-funktion kräver en kommersiell licens</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="413"/>
         <source>Connecting to MQTT brokers is only available with a valid Serial Studio commercial license.
 
 To unlock this feature, please activate your license or visit the store.</source>
-        <translation>MQTT brokerlarına bağlanmak yalnızca geçerli bir Serial Studio ticari lisansı ile mümkündür.
+        <translation>Anslutning till MQTT-mäklare är endast tillgänglig med en giltig Serial Studio kommersiell licens.
 
-Bu özelliği açmak için lütfen lisansınızı etkinleştirin veya mağazayı ziyaret edin.</translation>
+För att låsa upp denna funktion, aktivera din licens eller besök butiken.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="427"/>
         <source>Missing MQTT Topic</source>
-        <translation>MQTT Konusu Eksik</translation>
+        <translation>Saknar MQTT-ämne</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="428"/>
         <source>You must specify a topic before connecting as a publisher.</source>
-        <translation>Yayıncı olarak bağlanmadan önce bir konu belirtmelisiniz.</translation>
+        <translation>Du måste ange ett ämne innan du ansluter som publicerare.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="429"/>
         <location filename="../../src/MQTT/Client.cpp" line="453"/>
         <source>Configuration Error</source>
-        <translation>Yapılandırma Hatası</translation>
+        <translation>Konfigurationsfel</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="437"/>
         <source>MQTT Topic Not Set</source>
-        <translation>MQTT Konusu Ayarlanmadı</translation>
+        <translation>MQTT-ämne ej inställt</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="438"/>
         <source>You won't receive any messages until a topic is configured.</source>
-        <translation>Bir konu yapılandırılmadıkça herhangi bir mesaj almayacaksınız.</translation>
+        <translation>Du kommer inte att få några meddelanden förrän ett ämne är konfigurerat.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="439"/>
         <source>Configuration Warning</source>
-        <translation>Yapılandırma Uyarısı</translation>
+        <translation>Konfigurationsvarning</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="451"/>
         <source>Invalid MQTT Topic</source>
-        <translation>Geçersiz MQTT Konusu</translation>
+        <translation>Ogiltigt MQTT-ämne</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="452"/>
         <source>The topic "%1" is not valid.</source>
-        <translation>Konu "%1" geçerli değil.</translation>
+        <translation>Ämnet "%1" är inte giltigt.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="677"/>
         <source>Select PEM Certificates Directory</source>
-        <translation>PEM Sertifikaları Dizini Seç</translation>
+        <translation>Välj PEM-certifikatkatalog</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="792"/>
         <source>Subscription Error</source>
-        <translation>Abonelik Hatası</translation>
+        <translation>Prenumerationsfel</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="793"/>
         <source>Failed to subscribe to topic "%1".</source>
-        <translation>"%1" konusuna abone olunamadı.</translation>
+        <translation>Misslyckades med att prenumerera på ämnet "%1".</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="812"/>
         <source>Invalid MQTT Protocol Version</source>
-        <translation>Geçersiz MQTT Protokol Sürümü</translation>
+        <translation>Ogiltig MQTT-protokollversion</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="813"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
-        <translation>MQTT broker, desteklenmeyen protokol sürümü nedeniyle bağlantıyı reddetti. İstemcinizin ve brokerınızın aynı protokol sürümünü desteklediğinden emin olun.</translation>
+        <translation>MQTT-mäklaren avvisade anslutningen på grund av en icke-stödd protokollversion. Se till att din klient och mäklare stöder samma protokollversion.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="819"/>
         <source>Client ID Rejected</source>
-        <translation>İstemci Kimliği Reddedildi</translation>
+        <translation>Klient-ID avvisat</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="820"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
-        <translation>Broker istemci kimliğini reddetti. Hatalı, çok uzun veya zaten kullanılıyor olabilir. Farklı bir istemci kimliği kullanmayı deneyin.</translation>
+        <translation>Mäklaren avvisade klient-ID:t. Det kan vara felaktigt, för långt eller redan i bruk. Försök använda ett annat klient-ID.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="826"/>
         <source>MQTT Server Unavailable</source>
-        <translation>MQTT Sunucusu Kullanılamıyor</translation>
+        <translation>MQTT-server otillgänglig</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="827"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
-        <translation>Ağ bağlantısı kuruldu, ancak broker şu anda kullanılamıyor. Broker durumunu kontrol edin ve daha sonra tekrar deneyin.</translation>
+        <translation>Nätverksanslutningen upprättades, men mäklaren är för närvarande otillgänglig. Kontrollera mäklarens status och försök igen senare.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="833"/>
         <location filename="../../src/MQTT/Client.cpp" line="903"/>
         <source>Authentication Error</source>
-        <translation>Kimlik Doğrulama Hatası</translation>
+        <translation>Autentiseringsfel</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="834"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
-        <translation>Sağlanan kullanıcı adı veya şifre yanlış veya hatalı. Kimlik bilgilerinizi kontrol edin ve tekrar deneyin.</translation>
+        <translation>Det angivna användarnamnet eller lösenordet är felaktigt eller felformat. Kontrollera dina inloggningsuppgifter och försök igen.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="839"/>
         <source>Authorization Error</source>
-        <translation>Yetkilendirme Hatası</translation>
+        <translation>Auktoriseringsfel</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="840"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
-        <translation>MQTT broker, yetersiz izinler nedeniyle bağlantıyı reddetti. Hesabınızın gerekli erişim haklarına sahip olduğundan emin olun.</translation>
+        <translation>MQTT-mäklaren nekade anslutningen på grund av otillräckliga behörigheter. Se till att ditt konto har nödvändiga åtkomsträttigheter.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="846"/>
         <source>Network or Transport Error</source>
-        <translation>Ağ veya Taşıma Hatası</translation>
+        <translation>Nätverks- eller transportfel</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="847"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
-        <translation>Ağ veya taşıma katmanı sorunu oluştu ve beklenmedik bir bağlantı hatasına neden oldu. Ağ bağlantınızı ve broker ayarlarını kontrol edin.</translation>
+        <translation>Ett problem i nätverks- eller transportlagret uppstod, vilket orsakade ett oväntat anslutningsfel. Kontrollera din nätverksanslutning och mäklarinställningar.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="853"/>
         <source>MQTT Protocol Violation</source>
-        <translation>MQTT Protokol İhlali</translation>
+        <translation>MQTT-protokollbrott</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="854"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
-        <translation>İstemci, MQTT protokolü ihlali tespit etti ve bağlantıyı kapattı. MQTT uygulamanızın uyumluluğunu kontrol edin.</translation>
+        <translation>Klienten upptäckte ett brott mot MQTT-protokollet och stängde anslutningen. Kontrollera din MQTT-implementering för överensstämmelse.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="860"/>
         <source>Unknown Error</source>
-        <translation>Bilinmeyen Hata</translation>
+        <translation>Okänt fel</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="861"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
-        <translation>Beklenmedik bir hata oluştu. Daha fazla ayrıntı için logları kontrol edin veya uygulamayı yeniden başlatın.</translation>
+        <translation>Ett oväntat fel inträffade. Kontrollera loggarna för mer information eller starta om applikationen.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="866"/>
         <source>MQTT 5 Error</source>
-        <translation>MQTT 5 Hatası</translation>
+        <translation>MQTT 5-fel</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="867"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
-        <translation>MQTT protokol seviyesi 5 hatası oluştu. Daha fazla bilgi için broker günlüklerini veya neden kodlarını kontrol edin.</translation>
+        <translation>Ett MQTT-protokollnivå 5-fel inträffade. Kontrollera mäklarloggarna eller orsakkoderna för mer information.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="889"/>
         <source>MQTT Authentication Failed</source>
-        <translation>MQTT Kimlik Doğrulama Başarısız</translation>
+        <translation>MQTT-autentisering misslyckades</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="890"/>
         <source>Authentication failed: %.</source>
-        <translation>Kimlik doğrulama başarısız: %.</translation>
+        <translation>Autentisering misslyckades: %.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="904"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
-        <translation>Genişletilmiş kimlik doğrulama gerekli, ancak MQTT 5.0 etkin değil.</translation>
+        <translation>Utökad autentisering krävs, men MQTT 5.0 är inte aktiverad.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="913"/>
         <source>Unknown</source>
-        <translation>Bilinmeyen</translation>
+        <translation>Okänd</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="917"/>
         <source>MQTT Authentication Required</source>
-        <translation>MQTT Kimlik Doğrulama Gerekli</translation>
+        <translation>MQTT-autentisering krävs</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="918"/>
         <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
-        <translation>MQTT broker, "%1" yöntemiyle kimlik doğrulama gerektiriyor.
+        <translation>MQTT-mäklaren kräver autentisering med metod: "%1".
 
-Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
+Vänligen ange nödvändiga referenser.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="926"/>
         <source>Enter MQTT Username</source>
-        <translation>MQTT Kullanıcı Adı Girin</translation>
+        <translation>Ange MQTT-användarnamn</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="927"/>
         <source>Username:</source>
-        <translation>Kullanıcı Adı:</translation>
+        <translation>Användarnamn:</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="933"/>
         <source>Enter MQTT Password</source>
-        <translation>MQTT Parolasını Girin</translation>
+        <translation>Ange MQTT-lösenord</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="934"/>
         <source>Password:</source>
-        <translation>Parola:</translation>
+        <translation>Lösenord:</translation>
     </message>
 </context>
 <context>
@@ -5609,42 +4083,42 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="36"/>
         <source>MQTT Setup</source>
-        <translation>MQTT Kurulumu</translation>
+        <translation>MQTT-inställningar</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="96"/>
         <source>MQTT is a Pro Feature</source>
-        <translation>MQTT bir Pro Özelliktir</translation>
+        <translation>MQTT är en Pro-funktion</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="97"/>
         <source>Activate your license or visit the store to unlock MQTT support.</source>
-        <translation>Lisansınızı etkinleştirin veya mağazayı ziyaret ederek MQTT desteğini açın.</translation>
+        <translation>Aktivera din licens eller besök butiken för att låsa upp MQTT-stöd.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="109"/>
         <source>General</source>
-        <translation>Genel</translation>
+        <translation>Allmänt</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="115"/>
         <source>Authentication</source>
-        <translation>Kimlik Doğrulama</translation>
+        <translation>Autentisering</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="121"/>
         <source>MQTT Options</source>
-        <translation>MQTT Seçenekleri</translation>
+        <translation>MQTT-alternativ</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="127"/>
         <source>SSL Properties</source>
-        <translation>SSL Özellikleri</translation>
+        <translation>SSL-egenskaper</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="183"/>
         <source>Host</source>
-        <translation>Sunucu</translation>
+        <translation>Värd</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="195"/>
@@ -5654,122 +4128,122 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="211"/>
         <source>Client ID</source>
-        <translation>İstemci Kimliği</translation>
+        <translation>Klient-ID</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="223"/>
         <source>Keep Alive (s)</source>
-        <translation>Canlı Tutma (s)</translation>
+        <translation>Håll-alive (s)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="236"/>
         <source>Clean Session</source>
-        <translation>Temiz Oturum</translation>
+        <translation>Ren session</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="285"/>
         <source>Username</source>
-        <translation>Kullanıcı Adı</translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="290"/>
         <source>MQTT Username</source>
-        <translation>MQTT Kullanıcı Adı</translation>
+        <translation>MQTT-användarnamn</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="297"/>
         <source>Password</source>
-        <translation>Parola</translation>
+        <translation>Lösenord</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="307"/>
         <source>MQTT Password</source>
-        <translation>MQTT Parolası</translation>
+        <translation>MQTT-lösenord</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="364"/>
         <source>Version</source>
-        <translation>Sürüm</translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="376"/>
         <source>Mode</source>
-        <translation>Mod</translation>
+        <translation>Läge</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="388"/>
         <source>Topic</source>
-        <translation>Konu</translation>
+        <translation>Ämne</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="393"/>
         <source>e.g. sensors/temperature or home/+/status</source>
-        <translation>örn. sensors/temperature veya home/+/status</translation>
+        <translation>t.ex. sensorer/temperatur eller hem/+/status</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="400"/>
         <source>Will Retain</source>
-        <translation>Saklanacak</translation>
+        <translation>Behåll Vilja</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="411"/>
         <source>Will QoS</source>
-        <translation>QoS Olacak</translation>
+        <translation>Vilja QoS</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="423"/>
         <source>Will Topic</source>
-        <translation>Konu Olacak</translation>
+        <translation>Vilja Ämne</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="428"/>
         <source>e.g. device/alerts/offline</source>
-        <translation>örn. device/alerts/offline</translation>
+        <translation>t.ex. enhet/varningar/offline</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="435"/>
         <source>Will Message</source>
-        <translation>Mesaj Olacak</translation>
+        <translation>Vilja Meddelande</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="440"/>
         <source>e.g. Device unexpectedly disconnected</source>
-        <translation>örn. Cihaz beklenmedik şekilde bağlantıyı kesti</translation>
+        <translation>t.ex. Enhet oväntat frånkopplad</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="485"/>
         <source>Enable SSL</source>
-        <translation>SSL'i Etkinleştir</translation>
+        <translation>Aktivera SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="496"/>
         <source>SSL Protocol</source>
-        <translation>SSL Protokolü</translation>
+        <translation>SSL-protokoll</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="512"/>
         <source>Verify Depth</source>
-        <translation>Derinliği Doğrula</translation>
+        <translation>Verifieringsdjup</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="530"/>
         <source>Verify Mode</source>
-        <translation>Modu Doğrula</translation>
+        <translation>Verifieringsläge</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="562"/>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Disconnect</source>
-        <translation>Bağlantıyı Kes</translation>
+        <translation>Koppla från</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Connect</source>
-        <translation>Bağlan</translation>
+        <translation>Anslut</translation>
     </message>
 </context>
 <context>
@@ -5779,36 +4253,36 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <source>Device Defined Project</source>
-        <translation>Cihaz Tanımlı Proje</translation>
+        <translation>Enhetsdefinierat projekt</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="94"/>
         <source>Quick Plot Mode</source>
-        <translation>Hızlı Grafik Modu</translation>
+        <translation>Snabbplottläge</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="100"/>
         <source>Empty Project</source>
-        <translation>Boş Proje</translation>
+        <translation>Tomt projekt</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="146"/>
         <source>Code sample</source>
-        <translation>Kod örneği</translation>
+        <translation>Kodexempel</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="148"/>
         <source>Completer</source>
-        <translation>Tamamlayıcı</translation>
+        <translation>Kompletterare</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="150"/>
         <source>Highlighter</source>
-        <translation>Vurgulayıcı</translation>
+        <translation>Markör</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="152"/>
@@ -5818,7 +4292,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="214"/>
         <source> spaces</source>
-        <translation>boşluklar</translation>
+        <translation>mellanslag</translation>
     </message>
 </context>
 <context>
@@ -5828,18 +4302,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Mdf4Player.qml" line="23"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Mdf4Player.qml" line="23"/>
         <source>MDF4 Player</source>
-        <translation>MDF4 Oynatıcı</translation>
-    </message>
-</context>
-<context>
-    <name>Misc::ModuleManager</name>
-    <message>
-        <source>To apply this change, %1 needs to restart.</source>
-        <translation type="vanished">Bu değişikliği uygulamak için %1'in yeniden başlatılması gerekiyor.</translation>
-    </message>
-    <message>
-        <source>Would you like to restart now?</source>
-        <translation type="vanished">Şimdi yeniden başlatmak ister misiniz?</translation>
+        <translation>MDF4-spelare</translation>
     </message>
 </context>
 <context>
@@ -5847,7 +4310,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/Misc/ThemeManager.cpp" line="428"/>
         <source>System</source>
-        <translation>Sistem</translation>
+        <translation>System</translation>
     </message>
 </context>
 <context>
@@ -5855,102 +4318,102 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="88"/>
         <source>Check for updates automatically?</source>
-        <translation>Güncellemeleri otomatik kontrol et?</translation>
+        <translation>Kontrollera uppdateringar automatiskt?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="89"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation>%1 güncellemeleri otomatik kontrol etsin mi? "Hakkında" penceresinden her zaman manuel olarak kontrol edebilirsiniz.</translation>
+        <translation>Ska %1 automatiskt söka efter uppdateringar? Du kan alltid söka efter uppdateringar manuellt från dialogrutan "Om"</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="154"/>
         <source>Ok</source>
-        <translation>Tamam</translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="156"/>
         <source>Save</source>
-        <translation>Kaydet</translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="158"/>
         <source>Save all</source>
-        <translation>Hepsini kaydet</translation>
+        <translation>Spara alla</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="160"/>
         <source>Open</source>
-        <translation>Aç</translation>
+        <translation>Öppna</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="162"/>
         <source>Yes</source>
-        <translation>Evet</translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="164"/>
         <source>Yes to all</source>
-        <translation>Tümüne Evet</translation>
+        <translation>Ja för alla</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="166"/>
         <source>No</source>
-        <translation>Hayır</translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="168"/>
         <source>No to all</source>
-        <translation>Tümüne Hayır</translation>
+        <translation>Nej för alla</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="170"/>
         <source>Abort</source>
-        <translation>Durdur</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="172"/>
         <source>Retry</source>
-        <translation>Yeniden Dene</translation>
+        <translation>Försök igen</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="174"/>
         <source>Ignore</source>
-        <translation>Yoksay</translation>
+        <translation>Ignorera</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="176"/>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="178"/>
         <source>Cancel</source>
-        <translation>İptal Et</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="180"/>
         <source>Discard</source>
-        <translation>At</translation>
+        <translation>Kassera</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="182"/>
         <source>Help</source>
-        <translation>Yardım</translation>
+        <translation>Hjälp</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="184"/>
         <source>Apply</source>
-        <translation>Uygula</translation>
+        <translation>Tillämpa</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="186"/>
         <source>Reset</source>
-        <translation>Sıfırla</translation>
+        <translation>Återställ</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="188"/>
         <source>Restore defaults</source>
-        <translation>Varsayılanları geri yükle</translation>
+        <translation>Återställ standard</translation>
     </message>
 </context>
 <context>
@@ -5958,7 +4421,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../src/Misc/WorkspaceManager.cpp" line="128"/>
         <source>Select Workspace Location</source>
-        <translation>Çalışma Alanı Konumunu Seç</translation>
+        <translation>Välj arbetsplatsens plats</translation>
     </message>
 </context>
 <context>
@@ -5966,42 +4429,42 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="45"/>
         <source>Protocol</source>
-        <translation>Protokol</translation>
+        <translation>Protokoll</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="67"/>
         <source>Serial Port</source>
-        <translation>Seri Port</translation>
+        <translation>Seriell port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="91"/>
         <source>Baud Rate</source>
-        <translation>Baud Hızı</translation>
+        <translation>Baudhastighet</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="143"/>
         <source>Parity</source>
-        <translation>Parite</translation>
+        <translation>Paritet</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="166"/>
         <source>Data Bits</source>
-        <translation>Veri Bitleri</translation>
+        <translation>Databitar</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="189"/>
         <source>Stop Bits</source>
-        <translation>Durdurma Bitleri</translation>
+        <translation>Stoppbitar</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="212"/>
         <source>Host</source>
-        <translation>Sunucu</translation>
+        <translation>Värd</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="221"/>
         <source>IP Address</source>
-        <translation>IP Adresi</translation>
+        <translation>IP-adress</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="235"/>
@@ -6011,12 +4474,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="244"/>
         <source>TCP Port</source>
-        <translation>TCP Portu</translation>
+        <translation>TCP-port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="270"/>
         <source>Slave Address</source>
-        <translation>Slave Adresi</translation>
+        <translation>Slavadress</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="274"/>
@@ -6024,53 +4487,29 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
         <translation>1-247</translation>
     </message>
     <message>
-        <source>Multi-Group Mode</source>
-        <translation type="vanished">Çoklu Grup Modu</translation>
-    </message>
-    <message>
-        <source>Register Type</source>
-        <translation type="vanished">Kayıt Türü</translation>
-    </message>
-    <message>
-        <source>Start Address</source>
-        <translation type="vanished">Başlangıç Adresi</translation>
-    </message>
-    <message>
-        <source>Register address</source>
-        <translation type="vanished">Kayıt adresi</translation>
-    </message>
-    <message>
-        <source>Register Count</source>
-        <translation type="vanished">Kayıt Sayısı</translation>
-    </message>
-    <message>
-        <source>Number of registers</source>
-        <translation type="vanished">Kayıtların sayısı</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="318"/>
-        <source>Configure Register Groups...</source>
-        <translation>Kayıt Gruplarını Yapılandır...</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
-        <source>%1 group(s) configured</source>
-        <translation>%1 grup yapılandırıldı</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="330"/>
-        <source>No groups configured</source>
-        <translation>Hiçbir grup yapılandırılmadı</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="289"/>
         <source>Poll Interval (ms)</source>
-        <translation>Anket Aralığı (ms)</translation>
+        <translation>Pollintervall (ms)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="293"/>
         <source>Polling interval</source>
-        <translation>Anket aralığı</translation>
+        <translation>Pollintervall</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="318"/>
+        <source>Configure Register Groups...</source>
+        <translation>Konfigurera registergrupper...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
+        <source>%1 group(s) configured</source>
+        <translation>%1 grupp(er) konfigurerade</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="330"/>
+        <source>No groups configured</source>
+        <translation>Inga grupper konfigurerade</translation>
     </message>
 </context>
 <context>
@@ -6078,27 +4517,27 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
         <source>Modbus Register Groups</source>
-        <translation>Modbus Kayıt Grupları</translation>
+        <translation>Modbus-registergrupper</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="158"/>
         <source>Configure multiple register groups to poll different register types in sequence.</source>
-        <translation>Farklı kayıt türlerini sırayla sorgulamak için birden fazla kayıt grubu yapılandırın.</translation>
+        <translation>Konfigurera flera registergrupper för att pollera olika registertyper i följd.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
         <source>Add New Group</source>
-        <translation>Yeni Grup Ekle</translation>
+        <translation>Lägg till ny grupp</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="193"/>
         <source>Register Type:</source>
-        <translation>Kayıt Türü:</translation>
+        <translation>Registertyp:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="204"/>
         <source>Start Address:</source>
-        <translation>Başlangıç Adresi:</translation>
+        <translation>Startadress:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="211"/>
@@ -6108,7 +4547,7 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="216"/>
         <source>Register Count:</source>
-        <translation>Kayıt Sayısı:</translation>
+        <translation>Registerantal:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="227"/>
@@ -6118,12 +4557,12 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="232"/>
         <source>Add Group</source>
-        <translation>Grup Ekle</translation>
+        <translation>Lägg till grupp</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="255"/>
         <source>Configured Groups</source>
-        <translation>Yapılandırılmış Gruplar</translation>
+        <translation>Konfigurerade grupper</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="289"/>
@@ -6133,49 +4572,49 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
         <source>Type</source>
-        <translation>Tür</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
         <source>Start</source>
-        <translation>Başlangıç</translation>
+        <translation>Start</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="310"/>
         <source>Count</source>
-        <translation>Sayı</translation>
+        <translation>Antal</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="317"/>
         <source>Action</source>
-        <translation>Eylem</translation>
+        <translation>Åtgärd</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="392"/>
         <source>Remove</source>
-        <translation>Kaldır</translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="405"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
-        <translation>Hiçbir grup yapılandırılmamış.
-Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</translation>
+        <translation>Inga grupper konfigurerade.
+Lägg till grupper ovan för att fråga flera registertyper.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="423"/>
         <source>Total groups: %1</source>
-        <translation>Toplam gruplar: %1</translation>
+        <translation>Totalt antal grupper: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
         <source>Clear All</source>
-        <translation>Hepsini Temizle</translation>
+        <translation>Rensa alla</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="433"/>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation>Stäng</translation>
     </message>
 </context>
 <context>
@@ -6185,7 +4624,7 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
         <source>Samples</source>
-        <translation>Örnekler</translation>
+        <translation>Prover</translation>
     </message>
 </context>
 <context>
@@ -6195,32 +4634,28 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="73"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="73"/>
         <source>Socket Type</source>
-        <translation>Soket Türü</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
-        <source>Remote Address</source>
-        <translation>Uzak Adres</translation>
-    </message>
-    <message>
-        <source>Port</source>
-        <translation type="vanished">Port</translation>
+        <translation>Sockettyp</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="93"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="93"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="93"/>
         <source>Local Port</source>
-        <translation>Yerel Port</translation>
+        <translation>Lokal port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="99"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="99"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="99"/>
         <source>Type 0 for automatic port</source>
-        <translation>Otomatik port için 0 yazın</translation>
+        <translation>Skriv 0 för automatisk port</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="125"/>
+        <source>Remote Address</source>
+        <translation>Fjärradress</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="146"/>
@@ -6230,46 +4665,38 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="146"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="179"/>
         <source>Remote Port</source>
-        <translation>Uzaktan Port</translation>
+        <translation>Fjärrport</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="209"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="209"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="209"/>
         <source>Multicast</source>
-        <translation>Çoklu Yayın</translation>
+        <translation>Multicast</translation>
     </message>
 </context>
 <context>
     <name>PlotWidget</name>
     <message>
-        <source>%1, %2</source>
-        <translation type="vanished">%1, %2</translation>
-    </message>
-    <message>
-        <source>ΔX: %1  ΔY: %2</source>
-        <translation type="vanished">ΔX: %1  ΔY: %2</translation>
-    </message>
-    <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1081"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1081"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/PlotWidget.qml" line="1081"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
-        <translation>ΔX: %1  ΔY: %2 — Taşımak için sürükleyin, temizlemek için sağ tıklayın</translation>
+        <translation>ΔX: %1  ΔY: %2 — Dra för att flytta, högerklicka för att rensa</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1083"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1083"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/PlotWidget.qml" line="1083"/>
         <source>Click to place cursor</source>
-        <translation>İmleci yerleştirmek için tıklayın</translation>
+        <translation>Klicka för att placera markör</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1085"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1085"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/PlotWidget.qml" line="1085"/>
         <source>Click to place second cursor — Drag to move</source>
-        <translation>İkinci imleci yerleştirmek için tıklayın — Taşımak için sürükleyin</translation>
+        <translation>Klicka för att placera andra markören — Dra för att flytta</translation>
     </message>
 </context>
 <context>
@@ -6277,17 +4704,17 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="270"/>
         <source>Unable to start plugin TCP server</source>
-        <translation>Eklenti TCP sunucusu başlatılamıyor</translation>
+        <translation>Kunde inte starta plugin TCP-server</translation>
     </message>
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="347"/>
         <source>Plugin server</source>
-        <translation>Eklenti sunucusu</translation>
+        <translation>Plugin-server</translation>
     </message>
     <message>
         <location filename="../../src/Plugins/Server.cpp" line="348"/>
         <source>Invalid pending connection</source>
-        <translation>Geçersiz bekleyen bağlantı</translation>
+        <translation>Ogiltig väntande anslutning</translation>
     </message>
 </context>
 <context>
@@ -6297,21 +4724,21 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <source>Visit Website</source>
-        <translation>Web Sitesini Ziyaret Et</translation>
+        <translation>Besök webbplats</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/ProNotice.qml" line="131"/>
         <source>Buy License</source>
-        <translation>Lisans Satın Al</translation>
+        <translation>Köp licens</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="147"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="147"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/ProNotice.qml" line="147"/>
         <source>Activate</source>
-        <translation>Etkinleştir</translation>
+        <translation>Aktivera</translation>
     </message>
 </context>
 <context>
@@ -6321,7 +4748,7 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="49"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="49"/>
         <source>modified</source>
-        <translation>değiştirildi</translation>
+        <translation>ändrad</translation>
     </message>
 </context>
 <context>
@@ -6331,7 +4758,7 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <source>Project Structure</source>
-        <translation>Proje Yapısı</translation>
+        <translation>Projektstruktur</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="248"/>
@@ -6348,231 +4775,231 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="151"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="151"/>
         <source>New</source>
-        <translation>Yeni</translation>
+        <translation>Ny</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="154"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="154"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="154"/>
         <source>Create a new JSON project</source>
-        <translation>Yeni bir JSON projesi oluştur</translation>
+        <translation>Skapa ett nytt JSON-projekt</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="170"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="170"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="170"/>
         <source>Open</source>
-        <translation>Aç</translation>
+        <translation>Öppna</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
         <source>Open an existing JSON project</source>
-        <translation>Mevcut bir JSON projesi aç</translation>
+        <translation>Öppna ett befintligt JSON-projekt</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="180"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="180"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="180"/>
         <source>Save</source>
-        <translation>Kaydet</translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="184"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="184"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="184"/>
         <source>Save the current project</source>
-        <translation>Mevcut projeyi kaydet</translation>
+        <translation>Spara det aktuella projektet</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <source>Save As</source>
-        <translation>Farklı Kaydet</translation>
+        <translation>Spara som</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
         <source>Save the current project under a new name</source>
-        <translation>Mevcut projeyi yeni bir adla kaydet</translation>
+        <translation>Spara det aktuella projektet under ett nytt namn</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="215"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="215"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="215"/>
         <source>Action</source>
-        <translation>Eylem</translation>
+        <translation>Åtgärd</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="218"/>
         <source>Add a new action to the project</source>
-        <translation>Projeye yeni bir eylem ekle</translation>
+        <translation>Lägg till en ny åtgärd till projektet</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="237"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="237"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="237"/>
         <source>Dataset</source>
-        <translation>Veri kümesi</translation>
+        <translation>Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="239"/>
         <source>Add a generic dataset</source>
-        <translation>Genel bir veri kümesi ekle</translation>
+        <translation>Lägg till ett generiskt dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
         <source>Plot</source>
-        <translation>Grafik</translation>
+        <translation>Diagram</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="260"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="260"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="260"/>
         <source>Add a 2D plot dataset</source>
-        <translation>2D grafik veri kümesi ekle</translation>
+        <translation>Lägg till ett 2D-diagram dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <source>FFT Plot</source>
-        <translation>FFT Grafiği</translation>
+        <translation>FFT Diagram</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
         <source>Add a Fast Fourier Transform plot</source>
-        <translation>Hızlı Fourier Dönüşümü grafiği ekle</translation>
+        <translation>Lägg till ett Fast Fourier Transform diagram</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
         <source>Gauge</source>
-        <translation>Gösterge</translation>
+        <translation>Mätare</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <source>Add a gauge widget for numeric data</source>
-        <translation>Sayısal veri için bir gösterge widget'ı ekle</translation>
+        <translation>Lägg till en mätarwidget för numeriska data</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <source>Level Indicator</source>
-        <translation>Seviye Göstergesi</translation>
+        <translation>Nivåindikator</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="293"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="293"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="293"/>
         <source>Add a vertical bar level indicator</source>
-        <translation>Dikey çubuk seviye göstergesi ekle</translation>
+        <translation>Lägg till en vertikal stapelnivåindikator</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <source>Compass</source>
-        <translation>Pusula</translation>
+        <translation>Kompass</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="304"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="304"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="304"/>
         <source>Add a compass widget for directional data</source>
-        <translation>Yön verileri için bir pusula widget'ı ekle</translation>
+        <translation>Lägg till en kompasswidget för riktningsdata</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
         <source>LED Indicator</source>
-        <translation>LED Göstergesi</translation>
+        <translation>LED-indikator</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="315"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="315"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="315"/>
         <source>Add an LED-style status indicator</source>
-        <translation>LED tarzı bir durum göstergesi ekle</translation>
+        <translation>Lägg till en LED-stil statusindikator</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="336"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="336"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="336"/>
         <source>Group</source>
-        <translation>Grup</translation>
+        <translation>Grupp</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <source>Add a dataset container group</source>
-        <translation>Veri seti konteyner grubu ekle</translation>
+        <translation>Lägg till en datasetbehållargrupp</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
         <source>Dataset Container</source>
-        <translation>Veri Seti Konteyneri</translation>
+        <translation>Datasetbehållare</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
         <source>Table</source>
-        <translation>Tablo</translation>
+        <translation>Tabell</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="359"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="359"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="359"/>
         <source>Add a data table view</source>
-        <translation>Bir veri tablosu görünümü ekle</translation>
+        <translation>Lägg till en datatabellvy</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
         <source>Data Grid</source>
-        <translation>Veri Izgarası</translation>
+        <translation>Datamatris</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <source>Multi-Plot</source>
-        <translation>Çoklu Grafik</translation>
+        <translation>Multi-Plot</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="370"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="370"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="370"/>
         <source>Add a 2D plot with multiple signals</source>
-        <translation>Birden fazla sinyalli 2D grafik ekle</translation>
+        <translation>Lägg till ett 2D-diagram med flera signaler</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
         <source>Multiple Plot</source>
-        <translation>Çoklu Grafik</translation>
+        <translation>Flera diagram</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
@@ -6582,14 +5009,14 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="383"/>
         <source>3D Plot</source>
-        <translation>3D Grafik</translation>
+        <translation>3D-diagram</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
         <source>Add a 3D plot visualization</source>
-        <translation>3D grafik görselleştirmesi ekle</translation>
+        <translation>Lägg till en 3D-diagramvisualisering</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="387"/>
@@ -6599,14 +5026,14 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="387"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="394"/>
         <source>Accelerometer</source>
-        <translation>İvmeölçer</translation>
+        <translation>Accelerometer</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
         <source>Add a group for 3-axis accelerometer data</source>
-        <translation>3 eksen ivmeölçer verisi için bir grup ekle</translation>
+        <translation>Lägg till en grupp för 3-axlig accelerometerdata</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
@@ -6616,14 +5043,14 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="404"/>
         <source>Gyroscope</source>
-        <translation>Jiroskop</translation>
+        <translation>Gyroskop</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="405"/>
         <source>Add a group for 3-axis gyroscope data (angular rates are integrated into orientation automatically)</source>
-        <translation>3 eksenli jiroskop verileri için bir grup ekleyin (açısal hızlar otomatik olarak yönlendirmeye entegre edilir)</translation>
+        <translation>Lägg till en grupp för 3-axlig gyroskopdata (vinkelhastigheter integreras automatiskt i orientering)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="409"/>
@@ -6633,28 +5060,28 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="409"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="416"/>
         <source>GPS Map</source>
-        <translation>GPS Haritası</translation>
+        <translation>GPS-karta</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="414"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="414"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="414"/>
         <source>Add a map widget for GPS data</source>
-        <translation>GPS verileri için bir harita bileşeni ekleyin</translation>
+        <translation>Lägg till en kartwidget för GPS-data</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
         <source>Help</source>
-        <translation>Yardım</translation>
+        <translation>Hjälp</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="438"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="438"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="438"/>
         <source>Open the online Project Editor documentation</source>
-        <translation>Çevrimiçi Proje Düzenleyici belgelerini açın</translation>
+        <translation>Öppna den online dokumentationen för projektredigeraren</translation>
     </message>
 </context>
 <context>
@@ -6664,14 +5091,14 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
         <source>Pro features detected in this project.</source>
-        <translation>Bu projede Pro özellikler algılandı.</translation>
+        <translation>Pro-funktioner upptäckta i detta projekt.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>Yedek bileşenler kullanılacak. Tam işlevselliği açmak için bir lisans satın alın.</translation>
+        <translation>Reservwidgets kommer att användas. Köp en licens för att låsa upp full funktionalitet.</translation>
     </message>
 </context>
 <context>
@@ -6679,49 +5106,49 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
     <message>
         <location filename="../../src/Misc/Translator.cpp" line="180"/>
         <source>Failed to load welcome text :(</source>
-        <translation>Hoş geldiniz metni yüklenemedi :(</translation>
+        <translation>Misslyckades med att ladda välkomsttexten :(</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="271"/>
         <source>Network error</source>
-        <translation>Ağ hatası</translation>
+        <translation>Nätverksfel</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="273"/>
         <location filename="../../src/Licensing/Trial.cpp" line="292"/>
         <location filename="../../src/Licensing/Trial.cpp" line="330"/>
         <source>Trial Activation Error</source>
-        <translation>Deneme Aktivasyon Hatası</translation>
+        <translation>Testversionsaktiveringsfel</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="289"/>
         <source>Invalid server response</source>
-        <translation>Geçersiz sunucu yanıtı</translation>
+        <translation>Ogiltigt serverrespons</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="290"/>
         <source>The server returned malformed data: %1</source>
-        <translation>Sunucu bozuk veri döndürdü: %1</translation>
+        <translation>Servern returnerade felaktig data: %1</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="328"/>
         <source>Unexpected server response</source>
-        <translation>Beklenmeyen sunucu yanıtı</translation>
+        <translation>Oväntat serverrespons</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="329"/>
         <source>The server response is missing required fields.</source>
-        <translation>Sunucu yanıtında gerekli alanlar eksik.</translation>
+        <translation>Serverresponsen saknar nödvändiga fält.</translation>
     </message>
     <message>
         <location filename="../../src/Console/Export.cpp" line="118"/>
         <source>Console Output File Error</source>
-        <translation>Konsol Çıkış Dosyası Hatası</translation>
+        <translation>Konsolutdatafilfel</translation>
     </message>
     <message>
         <location filename="../../src/Console/Export.cpp" line="119"/>
         <source>Cannot open file for writing!</source>
-        <translation>Dosya yazma için açılamıyor!</translation>
+        <translation>Kan inte öppna fil för skrivning!</translation>
     </message>
 </context>
 <context>
@@ -6729,22 +5156,22 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
     <message>
         <location filename="../../src/SerialStudio.cpp" line="232"/>
         <source>Data Grids</source>
-        <translation>Veri Tabloları</translation>
+        <translation>Datamatriser</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="235"/>
         <source>Multiple Data Plots</source>
-        <translation>Çoklu Veri Grafikleri</translation>
+        <translation>Flera dataplotteringar</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="238"/>
         <source>Accelerometers</source>
-        <translation>İvmeölçerler</translation>
+        <translation>Accelerometrar</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="241"/>
         <source>Gyroscopes</source>
-        <translation>Jiroskoplar</translation>
+        <translation>Gyroskop</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="244"/>
@@ -6754,27 +5181,27 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
     <message>
         <location filename="../../src/SerialStudio.cpp" line="247"/>
         <source>FFT Plots</source>
-        <translation>FFT Grafikleri</translation>
+        <translation>FFT-diagram</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="250"/>
         <source>LED Panels</source>
-        <translation>LED Panelleri</translation>
+        <translation>LED-paneler</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="253"/>
         <source>Data Plots</source>
-        <translation>Veri Grafikleri</translation>
+        <translation>Datadiagram</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="256"/>
         <source>Bars</source>
-        <translation>Çubuklar</translation>
+        <translation>Staplar</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="259"/>
         <source>Gauges</source>
-        <translation>Göstergeler</translation>
+        <translation>Mätare</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="262"/>
@@ -6784,12 +5211,12 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
     <message>
         <location filename="../../src/SerialStudio.cpp" line="265"/>
         <source>Compasses</source>
-        <translation>Pusulalar</translation>
+        <translation>Kompasser</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="268"/>
         <source>3D Plots</source>
-        <translation>3D Grafikleri</translation>
+        <translation>3D-diagram</translation>
     </message>
 </context>
 <context>
@@ -6799,21 +5226,21 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="35"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="35"/>
         <source>Preferences</source>
-        <translation>Tercihler</translation>
+        <translation>Inställningar</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="59"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="59"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="59"/>
         <source>General</source>
-        <translation>Genel</translation>
+        <translation>Allmänt</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="84"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="84"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="84"/>
         <source>Language</source>
-        <translation>Dil</translation>
+        <translation>Språk</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="104"/>
@@ -6827,90 +5254,70 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="123"/>
         <source>Workspace Folder</source>
-        <translation>Çalışma Alanı Klasörü</translation>
+        <translation>Arbetsmapp</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="166"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="166"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="166"/>
         <source>Miscellaneous</source>
-        <translation>Çeşitli</translation>
+        <translation>Diverse</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="191"/>
         <source>Enable TCP Plugins (Port 7777)</source>
-        <translation>TCP Eklentilerini Etkinleştir (Port 7777)</translation>
-    </message>
-    <message>
-        <source>Force Software Rendering</source>
-        <translation type="vanished">Yazılım Tabanlı Çizim Zorla</translation>
+        <translation>Aktivera TCP-plugins (Port 7777)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="209"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="209"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="209"/>
         <source>Automatically Check for Updates</source>
-        <translation>Güncellemeleri Otomatik Kontrol Et</translation>
+        <translation>Kontrollera automatiskt efter uppdateringar</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="234"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="234"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="234"/>
         <source>Dashboard</source>
-        <translation>Gösterge Paneli</translation>
+        <translation>Instrumentpanel</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="258"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="258"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="258"/>
         <source>Point Count</source>
-        <translation>Nokta Sayısı</translation>
+        <translation>Punktantal</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="278"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="278"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="278"/>
         <source>UI Refresh Rate (Hz)</source>
-        <translation>Kullanıcı Arayüzü Yenileme Hızı (Hz)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="314"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="314"/>
-        <source>Always Show Taskbar Buttons</source>
-        <translation>Her Zaman Görev Çubuğu Düğmelerini Göster</translation>
-    </message>
-    <message>
-        <source>Decimal Precision</source>
-        <translation type="vanished">Ondalık Hassasiyeti</translation>
-    </message>
-    <message>
-        <source>Threaded mode (better for high-rate data)</source>
-        <translation type="vanished">İplikli mod (yüksek hızlı veri için daha iyi)</translation>
+        <translation>UI Uppdateringsfrekvens (Hz)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="296"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="296"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="296"/>
         <source>Show Actions Panel</source>
-        <translation>Eylem Panelini Göster</translation>
+        <translation>Visa Åtgärdspanel</translation>
     </message>
     <message>
-        <source>Always Show Tashbar Buttons</source>
-        <translation type="vanished">Görev Çubuğu Düğmelerini Her Zaman Göster</translation>
-    </message>
-    <message>
-        <source>Enable Console Widget</source>
-        <translation type="vanished">Konsol Araç Takımını Etkinleştir</translation>
+        <location filename="../../qml/Dialogs/Settings.qml" line="314"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="314"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="314"/>
+        <source>Always Show Taskbar Buttons</source>
+        <translation>Visa alltid Aktivitetsfältsknappar</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="335"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="335"/>
         <source>Use Separate Thread for Frame Extraction</source>
-        <translation>Çerçeve Çıkartma için Ayrı İş Parçacığı Kullan</translation>
+        <translation>Använd Separat Tråd för Ramextraktion</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="362"/>
@@ -6924,35 +5331,35 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="385"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="385"/>
         <source>Font Family</source>
-        <translation>Yazı Tipi Ailesi</translation>
+        <translation>Teckensnittsfamilj</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="405"/>
         <source>Font Size</source>
-        <translation>Yazı Tipi Boyutu</translation>
+        <translation>Teckenstorlek</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="442"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="442"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="442"/>
         <source>Reset</source>
-        <translation>Sıfırla</translation>
+        <translation>Återställ</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="471"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="471"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="471"/>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="482"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="482"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="482"/>
         <source>Apply</source>
-        <translation>Uygula</translation>
+        <translation>Verkställ</translation>
     </message>
 </context>
 <context>
@@ -6965,84 +5372,84 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="33"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="256"/>
         <source>Device Setup</source>
-        <translation>Cihaz Kurulumu</translation>
+        <translation>Enhetsinställning</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="123"/>
         <source>Frame Parsing</source>
-        <translation>Çerçeve Ayrıştırma</translation>
+        <translation>Ramanalys</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="131"/>
         <source>No Parsing (Device Sends JSON Data)</source>
-        <translation>Ayrıştırma Yok (Cihaz JSON Verisi Gönderir)</translation>
+        <translation>Ingen analys (Enheten skickar JSON-data)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="142"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="142"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="142"/>
         <source>Quick Plot (Comma Separated Values)</source>
-        <translation>Hızlı Grafik (Virgülle Ayrılmış Değerler)</translation>
+        <translation>Snabbplott (Kommaseparerade värden)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="153"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="153"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="153"/>
         <source>Parse via JSON Project File</source>
-        <translation>JSON Proje Dosyası ile Ayrıştır</translation>
+        <translation>Analysera via JSON-projektfil</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="172"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="172"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="172"/>
         <source>Change Project File (%1)</source>
-        <translation>Proje Dosyasını Değiştir (%1)</translation>
+        <translation>Ändra projektfil (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="173"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="173"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="173"/>
         <source>Select Project File</source>
-        <translation>Proje Dosyasını Seç</translation>
+        <translation>Välj projektfil</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="187"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="187"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="187"/>
         <source>Data Export</source>
-        <translation>Veri Dışa Aktarımı</translation>
+        <translation>Dataexport</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="200"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="200"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="200"/>
         <source>Create CSV File</source>
-        <translation>CSV Dosyası Oluştur</translation>
+        <translation>Skapa CSV-fil</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="218"/>
         <source>Create MDF4 File</source>
-        <translation>MDF4 Dosyası Oluştur</translation>
+        <translation>Skapa MDF4-fil</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="235"/>
         <source>Export Console Data</source>
-        <translation>Konsol Verilerini Dışa Aktar</translation>
+        <translation>Exportera konsoldata</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="264"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="264"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="264"/>
         <source>I/O Interface: %1</source>
-        <translation>G/Ç Arayüzü: %1</translation>
+        <translation>I/O-gränssnitt: %1</translation>
     </message>
 </context>
 <context>
@@ -7052,63 +5459,63 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="147"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="147"/>
         <source>Workspaces</source>
-        <translation>Çalışma Alanları</translation>
+        <translation>Arbetsytor</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
         <source>No Groups Available</source>
-        <translation>Kullanılabilir Grup Yok</translation>
+        <translation>Inga grupper tillgängliga</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="188"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="188"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="188"/>
         <source>Actions</source>
-        <translation>Eylemler</translation>
+        <translation>Åtgärder</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="208"/>
         <source>No Actions Available</source>
-        <translation>Eylem Yok</translation>
+        <translation>Inga åtgärder tillgängliga</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <source>Auto Layout</source>
-        <translation>Otomatik Düzen</translation>
+        <translation>Automatisk layout</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="250"/>
         <source>Full Screen</source>
-        <translation>Tam Ekran</translation>
+        <translation>Helskärm</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="267"/>
         <source>CSV Logging</source>
-        <translation>CSV Günlüğü</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
-        <source>Console Logging</source>
-        <translation>Konsol Günlüğü</translation>
+        <translation>CSV-loggning</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
         <source>MDF4 Logging</source>
-        <translation>MDF4 Günlüğü</translation>
+        <translation>MDF4 Loggning</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="285"/>
+        <source>Console Logging</source>
+        <translation>Konsoll Loggning</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="302"/>
@@ -7122,14 +5529,14 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="317"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="317"/>
         <source>Preferences</source>
-        <translation>Tercihler</translation>
+        <translation>Inställningar</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="327"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="327"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="327"/>
         <source>Help</source>
-        <translation>Yardım</translation>
+        <translation>Hjälp</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="352"/>
@@ -7143,21 +5550,21 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="377"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="377"/>
         <source>Resume</source>
-        <translation>Devam Et</translation>
+        <translation>Återuppta</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="378"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="378"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="378"/>
         <source>Pause</source>
-        <translation>Duraklat</translation>
+        <translation>Paus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="387"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="387"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="387"/>
         <source>Disconnect</source>
-        <translation>Bağlantıyı Kes</translation>
+        <translation>Koppla från</translation>
     </message>
 </context>
 <context>
@@ -7167,7 +5574,7 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <source>No Data Available</source>
-        <translation>Veri Yok</translation>
+        <translation>Ingen data tillgänglig</translation>
     </message>
 </context>
 <context>
@@ -7177,28 +5584,28 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="123"/>
         <source>Parameter</source>
-        <translation>Parametre</translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
         <source>Value</source>
-        <translation>Değer</translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <source>No</source>
-        <translation>Hayır</translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <source>Yes</source>
-        <translation>Evet</translation>
+        <translation>Ja</translation>
     </message>
 </context>
 <context>
@@ -7208,7 +5615,7 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="87"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="87"/>
         <source>Menu</source>
-        <translation>Menü</translation>
+        <translation>Meny</translation>
     </message>
 </context>
 <context>
@@ -7218,56 +5625,56 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="124"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="124"/>
         <source>Copy</source>
-        <translation>Kopyala</translation>
+        <translation>Kopiera</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="131"/>
         <source>Select all</source>
-        <translation>Tümünü Seç</translation>
+        <translation>Markera allt</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="138"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="138"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="138"/>
         <source>Clear</source>
-        <translation>Temizle</translation>
+        <translation>Rensa</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="218"/>
         <source>Send Data to Device</source>
-        <translation>Cihaza Veri Gönder</translation>
+        <translation>Skicka data till enhet</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="375"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="375"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="375"/>
         <source>Show Timestamp</source>
-        <translation>Zaman Damgasını Göster</translation>
+        <translation>Visa tidsstämpel</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="386"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="386"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="386"/>
         <source>Echo</source>
-        <translation>Yankı</translation>
+        <translation>Eko</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="397"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="397"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="397"/>
         <source>Emulate VT-100</source>
-        <translation>VT-100 Taklit Et</translation>
+        <translation>Emulera VT-100</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="419"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="419"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="419"/>
         <source>Display: %1</source>
-        <translation>Görüntüle: %1</translation>
+        <translation>Visa: %1</translation>
     </message>
 </context>
 <context>
@@ -7277,47 +5684,56 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="158"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="158"/>
         <source>Project Editor</source>
-        <translation>Proje Düzenleyici</translation>
+        <translation>Projektredigerare</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="161"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="161"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="161"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
-        <translation>JSON düzeninizi oluşturmak veya değiştirmek için Proje Düzenleyiciyi açın</translation>
+        <translation>Öppna projektredigeraren för att skapa eller ändra din JSON-layout</translation>
     </message>
     <message>
-        <source>CSV Player</source>
-        <translation type="vanished">CSV Oynatıcı</translation>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="182"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="182"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="182"/>
+        <source>Open Project</source>
+        <translation>Öppna projekt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="184"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="184"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="184"/>
+        <source>Open an existing JSON project</source>
+        <translation>Öppna ett befintligt JSON-projekt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="194"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="194"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="194"/>
+        <source>Open CSV</source>
+        <translation>Öppna CSV</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="200"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="200"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="200"/>
         <source>Play a CSV file as if it were live sensor data</source>
-        <translation>Bir CSV dosyasını canlı sensör verisi gibi oynat</translation>
+        <translation>Spela upp en CSV-fil som om det vore live-sensordata</translation>
     </message>
     <message>
-        <source>Devices</source>
-        <translation type="vanished">Cihazlar</translation>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="205"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="205"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="205"/>
+        <source>Open MDF4</source>
+        <translation>Öppna MDF4</translation>
     </message>
     <message>
-        <source>Configure device connection via Serial, BLE, or network socket</source>
-        <translation type="vanished">Seri, BLE veya ağ soketi üzerinden cihaz bağlantısını yapılandır</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="261"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="261"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="261"/>
-        <source>Preferences</source>
-        <translation>Tercihler</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="265"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="265"/>
-        <source>Open application settings and preferences</source>
-        <translation>Uygulama ayarlarını ve tercihlerini aç</translation>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="211"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="211"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="211"/>
+        <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
+        <translation>Spela upp en MDF4-fil som om det vore live sensordata (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="234"/>
@@ -7327,33 +5743,25 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="194"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="194"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="194"/>
-        <source>Open CSV</source>
-        <translation>CSV Aç</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="205"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="205"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="205"/>
-        <source>Open MDF4</source>
-        <translation>MDF4 Aç</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="241"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="241"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="241"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
-        <translation>MQTT bağlantısını yapılandır (yayınla veya abone ol)</translation>
+        <translation>Konfigurera MQTT-anslutning (publicera eller prenumerera)</translation>
     </message>
     <message>
-        <source>Setup</source>
-        <translation type="vanished">Kurulum</translation>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="261"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="261"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="261"/>
+        <source>Preferences</source>
+        <translation>Inställningar</translation>
     </message>
     <message>
-        <source>Configure device connection settings</source>
-        <translation type="vanished">Cihaz bağlantı ayarlarını yapılandır</translation>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="265"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="265"/>
+        <source>Open application settings and preferences</source>
+        <translation>Öppna applikationsinställningar och preferenser</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="280"/>
@@ -7367,35 +5775,35 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="285"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="285"/>
         <source>Select Serial port (UART) communication</source>
-        <translation>Seri port (UART) iletişimini seç</translation>
+        <translation>Välj serieportskommunikation (UART)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="295"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="295"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="295"/>
         <source>Audio</source>
-        <translation>Ses</translation>
+        <translation>Ljud</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="300"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="300"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="300"/>
         <source>Select audio input device (Pro)</source>
-        <translation>Ses giriş cihazını seç (Pro)</translation>
+        <translation>Välj ljudingångsenhet (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="308"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="308"/>
         <source>Network</source>
-        <translation>Ağ</translation>
+        <translation>Nätverk</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="313"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="313"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="313"/>
         <source>Select TCP/UDP network communication</source>
-        <translation>TCP/UDP ağ iletişimini seç</translation>
+        <translation>Välj TCP/UDP nätverkskommunikation</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
@@ -7409,7 +5817,7 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="328"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="328"/>
         <source>Select MODBUS communication (Pro)</source>
-        <translation>MODBUS iletişimini seç (Pro)</translation>
+        <translation>Välj MODBUS-kommunikation (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="337"/>
@@ -7423,7 +5831,7 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="341"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="341"/>
         <source>Select Bluetooth Low Energy communication</source>
-        <translation>Bluetooth Düşük Enerji iletişimini seç</translation>
+        <translation>Välj Bluetooth Low Energy-kommunikation</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="351"/>
@@ -7437,107 +5845,77 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="356"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="356"/>
         <source>Select CAN Bus communication (Pro)</source>
-        <translation>CAN Bus iletişimini seç (Pro)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="397"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="397"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="397"/>
-        <source>Examples</source>
-        <translation>Örnekler</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="401"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="401"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="401"/>
-        <source>Browse example projects on GitHub</source>
-        <translation>GitHub'da örnek projelere göz at</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Yardım</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="411"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="411"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="411"/>
-        <source>Open the online documentation for help and guidance</source>
-        <translation>Yardım ve rehberlik için çevrimiçi belgeleri aç</translation>
-    </message>
-    <message>
-        <source>AI Help</source>
-        <translation type="vanished">AI Yardımı</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="421"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="421"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="421"/>
-        <source>View detailed documentation and ask questions on DeepWiki</source>
-        <translation>Ayrıntılı belgeleri görüntüleyin ve DeepWiki'de sorular sorun</translation>
+        <translation>Välj CAN Bus-kommunikation (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="378"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="378"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="378"/>
         <source>About</source>
-        <translation>Hakkında</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="182"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="182"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="182"/>
-        <source>Open Project</source>
-        <translation>Projeyi Aç</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="184"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="184"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="184"/>
-        <source>Open an existing JSON project</source>
-        <translation>Mevcut bir JSON projesi aç</translation>
-    </message>
-    <message>
-        <source>Load CSV</source>
-        <translation type="vanished">CSV Yükle</translation>
-    </message>
-    <message>
-        <source>Load MDF4</source>
-        <translation type="vanished">MDF4 Yükle</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="211"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="211"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="211"/>
-        <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
-        <translation>Bir MDF4 dosyasını canlı sensör verisi gibi oynat (Pro)</translation>
+        <translation>Om</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="382"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="382"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="382"/>
         <source>Show application info and license details</source>
-        <translation>Uygulama bilgilerini ve lisans detaylarını göster</translation>
+        <translation>Visa applikationsinfo och licensdetaljer</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="397"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="397"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="397"/>
+        <source>Examples</source>
+        <translation>Exempel</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="401"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="401"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="401"/>
+        <source>Browse example projects on GitHub</source>
+        <translation>Bläddra bland exempelprojekt på GitHub</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="408"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="408"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="408"/>
         <source>Getting Started</source>
-        <translation>Başlarken</translation>
+        <translation>Kom igång</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="411"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="411"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="411"/>
+        <source>Open the online documentation for help and guidance</source>
+        <translation>Öppna online-dokumentationen för hjälp och vägledning</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="418"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="418"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="418"/>
         <source>AI Wiki &amp; Chat</source>
-        <translation>AI Wiki &amp; Sohbet</translation>
+        <translation>AI Wiki &amp; Chatt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="421"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="421"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="421"/>
+        <source>View detailed documentation and ask questions on DeepWiki</source>
+        <translation>Visa detaljerad dokumentation och ställ frågor på DeepWiki</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="438"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="438"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="438"/>
+        <source>Activate</source>
+        <translation>Aktivera</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="442"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="442"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="442"/>
         <source>Manage license and activate Serial Studio Pro</source>
-        <translation>Lisansı yönet ve Serial Studio Pro'yu etkinleştir</translation>
+        <translation>Hantera licens och aktivera Serial Studio Pro</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="457"/>
@@ -7547,32 +5925,21 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="457"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="477"/>
         <source>Disconnect</source>
-        <translation>Bağlantıyı kes</translation>
+        <translation>Koppla från</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="457"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="457"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="457"/>
         <source>Connect</source>
-        <translation>Bağlan</translation>
+        <translation>Anslut</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="460"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="460"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="460"/>
         <source>Connect or disconnect from device or MQTT broker</source>
-        <translation>Cihaza veya MQTT broker'a bağlanın veya bağlantıyı kesin</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="438"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="438"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="438"/>
-        <source>Activate</source>
-        <translation>Etkinleştir</translation>
-    </message>
-    <message>
-        <source>Manage license and activate the application</source>
-        <translation type="vanished">Lisansı yönetin ve uygulamayı etkinleştirin</translation>
+        <translation>Anslut eller koppla från enhet eller MQTT-mäklare</translation>
     </message>
 </context>
 <context>
@@ -7582,56 +5949,56 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="64"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="64"/>
         <source>COM Port</source>
-        <translation>COM Portu</translation>
+        <translation>COM-port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="92"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="92"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="92"/>
         <source>Baud Rate</source>
-        <translation>Baud Hızı</translation>
+        <translation>Baudhastighet</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="151"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="151"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="151"/>
         <source>Data Bits</source>
-        <translation>Veri Bitleri</translation>
+        <translation>Databitar</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="167"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="167"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="167"/>
         <source>Parity</source>
-        <translation>Parite</translation>
+        <translation>Paritet</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
         <source>Stop Bits</source>
-        <translation>Dur Bitleri</translation>
+        <translation>Stoppbitar</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="199"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="199"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="199"/>
         <source>Flow Control</source>
-        <translation>Akış Kontrolü</translation>
+        <translation>Flödeskontroll</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="226"/>
         <source>Auto Reconnect</source>
-        <translation>Otomatik Yeniden Bağlan</translation>
+        <translation>Automatisk återanslutning</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="243"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="243"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="243"/>
         <source>Send DTR Signal</source>
-        <translation>DTR Sinyali Gönder</translation>
+        <translation>Skicka DTR-signal</translation>
     </message>
 </context>
 <context>
@@ -7645,12 +6012,12 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="1204"/>
         <source>%1 (Fallback)</source>
-        <translation>%1 (Yedek)</translation>
+        <translation>%1 (Reserv)</translation>
     </message>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="1267"/>
         <source>LED Panel (%1)</source>
-        <translation>LED Paneli (%1)</translation>
+        <translation>LED-panel (%1)</translation>
     </message>
 </context>
 <context>
@@ -7658,7 +6025,7 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
     <message>
         <location filename="../../src/UI/DashboardWidget.cpp" line="124"/>
         <source>Invalid</source>
-        <translation>Geçersiz</translation>
+        <translation>Ogiltig</translation>
     </message>
 </context>
 <context>
@@ -7666,12 +6033,12 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
     <message>
         <location filename="../../src/UI/Taskbar.cpp" line="245"/>
         <source>Overview</source>
-        <translation>Genel Bakış</translation>
+        <translation>Översikt</translation>
     </message>
     <message>
         <location filename="../../src/UI/Taskbar.cpp" line="255"/>
         <source>All Data</source>
-        <translation>Tüm Veriler</translation>
+        <translation>All data</translation>
     </message>
 </context>
 <context>
@@ -7679,12 +6046,12 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="673"/>
         <source>Select Background Image</source>
-        <translation>Arka Plan Resmini Seç</translation>
+        <translation>Välj bakgrundsbild</translation>
     </message>
     <message>
         <location filename="../../src/UI/WindowManager.cpp" line="675"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
-        <translation>Görüntüler (*.png *.jpg *.jpeg *.bmp)</translation>
+        <translation>Bilder (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
 </context>
 <context>
@@ -7692,27 +6059,27 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="438"/>
         <source>Would you like to download the update now?</source>
-        <translation>Güncellemeyi şimdi indirmek ister misiniz?</translation>
+        <translation>Vill du ladda ner uppdateringen nu?</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="441"/>
         <source>Would you like to download the update now? This is a mandatory update, exiting now will close the application</source>
-        <translation>Güncellemeyi şimdi indirmek ister misiniz? Bu zorunlu bir güncellemedir, şimdi çıkmak uygulamayı kapatacaktır</translation>
+        <translation>Vill du ladda ner uppdateringen nu? Detta är en obligatorisk uppdatering, att avsluta nu stänger applikationen</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="447"/>
         <source>Version %1 of %2 has been released!</source>
-        <translation>%2'nin %1 sürümü yayınlandı!</translation>
+        <translation>Version %1 av %2 har släppts!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="485"/>
         <source>No updates are available for the moment</source>
-        <translation>Şu anda güncelleme yok</translation>
+        <translation>Inga uppdateringar är tillgängliga för tillfället</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="487"/>
         <source>Congratulations! You are running the latest version of %1</source>
-        <translation>Tebrikler! %1'in en son sürümünü kullanıyorsunuz</translation>
+        <translation>Grattis! Du kör den senaste versionen av %1</translation>
     </message>
 </context>
 <context>
@@ -7722,21 +6089,21 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="174"/>
         <source>Welcome to %1!</source>
-        <translation>%1'e Hoş Geldiniz!</translation>
+        <translation>Välkommen till %1!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="185"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="185"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="185"/>
         <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
-        <translation>Serial Studio, mühendisler, öğrenciler ve maker'lar için geliştirilmiş güçlü bir gerçek zamanlı görselleştirme aracıdır.</translation>
+        <translation>Serial Studio är ett kraftfullt verktyg för realtidsvisualisering, byggt för ingenjörer, studenter och skapare.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="196"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="196"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="196"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
-        <translation>Tam işlevli 14 günlük bir deneme başlatabilir, lisans anahtarınızla etkinleştirebilir veya GPLv3 kaynak kodunu indirip kendiniz derleyebilirsiniz.</translation>
+        <translation>Du kan starta en fullt fungerande 14-dagars provperiod, aktivera den med din licensnyckel, eller ladda ner och kompilera GPLv3-källkoden själv.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="206"/>
@@ -7746,7 +6113,7 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="206"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="385"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
-        <translation>Pro satın almak, yazarı doğrudan destekler ve gelecekteki geliştirmeleri finanse etmeye yardımcı olur.</translation>
+        <translation>Att köpa Pro stödjer författaren direkt och hjälper till att finansiera framtida utveckling.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="214"/>
@@ -7756,49 +6123,49 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="214"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="393"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
-        <translation>GPLv3 sürümünü kendiniz derlemek, topluluğun büyümesine yardımcı olur ve teknik katkıları teşvik eder.</translation>
+        <translation>Att bygga GPLv3-versionen själv hjälper till att växa gemenskapen och uppmuntrar tekniska bidrag.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="235"/>
         <source>Please wait...</source>
-        <translation>Lütfen bekleyin...</translation>
+        <translation>Vänta, tack...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="269"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="269"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="269"/>
         <source>%1 days remaining in your trial.</source>
-        <translation>Deneme sürenizde %1 gün kaldı.</translation>
+        <translation>%1 dagar kvar av din provperiod.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="279"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="279"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="279"/>
         <source>You’re currently using the fully-featured trial of %1 Pro. It’s valid for 14 days of personal, non-commercial use.</source>
-        <translation>Şu anda %1 Pro'nun tam özellikli deneme sürümünü kullanıyorsunuz. Kişisel, ticari olmayan kullanım için 14 gün geçerlidir.</translation>
+        <translation>Du använder för närvarande den fullständiga provversionen av %1 Pro. Den är giltig i 14 dagar för personligt, icke-kommersiellt bruk.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="290"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="290"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="290"/>
         <source>Upgrade to a paid plan to keep using Serial Studio Pro.</source>
-        <translation>Serial Studio Pro'yu kullanmaya devam etmek için ücretli bir plana yükseltin.</translation>
+        <translation>Uppgradera till en betald plan för att fortsätta använda Serial Studio Pro.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="298"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="298"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="298"/>
         <source>Or, compile the GPLv3 source code to use it for free.</source>
-        <translation>Veya, ücretsiz kullanmak için GPLv3 kaynak kodunu derleyin.</translation>
+        <translation>Eller, kompilera GPLv3-källkoden för att använda den gratis.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="306"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="306"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="306"/>
         <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>Mevcut abonelik planlarını görmek için aşağıdaki "Şimdi Yükselt"e tıklayın.</translation>
+        <translation>För att se tillgängliga prenumerationsplaner, klicka på "Uppgradera nu" nedan.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="326"/>
@@ -7806,71 +6173,71 @@ Birden fazla kayıt türünü sorgulamak için yukarıda gruplar ekleyin.</trans
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="326"/>
         <source>Don't nag me about the trial.
 I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
-        <translation>Deneme hakkında beni rahatsız etme.
-Bittiğinde bir lisans almam veya GPLv3 sürümünü oluşturmam gerektiğini anlıyorum.</translation>
+        <translation>Påminn mig inte om testversionen.
+Jag förstår att när den slutar, måste jag köpa en licens eller bygga GPLv3-versionen.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="355"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="355"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="355"/>
         <source>Your %1 trial has expired.</source>
-        <translation>%1 deneme süreniz doldu.</translation>
+        <translation>Din %1-testperiod har gått ut.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="365"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="365"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="365"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
-        <translation>Deneme süreniz sona erdi. %1'i tüm Pro özellikleriyle kullanmaya devam etmek için lütfen ücretli bir plana yükseltin.</translation>
+        <translation>Din testperiod har avslutats. För att fortsätta använda %1 med alla Pro-funktioner, uppgradera till en betald plan.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="376"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="376"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="376"/>
         <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
-        <translation>İsterseniz, GPLv3 lisansı altında açık kaynak sürümünü de derleyebilirsiniz.</translation>
+        <translation>Om du föredrar det, kan du också kompilera den öppna källkodsversionen under GPLv3-licensen.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="404"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="404"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="404"/>
         <source>Thank you for trying %1!</source>
-        <translation>%1'i denediğiniz için teşekkür ederiz!</translation>
+        <translation>Tack för att du provar %1!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="448"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="448"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="448"/>
         <source>Upgrade Now</source>
-        <translation>Şimdi Yükselt</translation>
+        <translation>Uppgradera nu</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="460"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="460"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="460"/>
         <source>Activate</source>
-        <translation>Etkinleştir</translation>
+        <translation>Aktivera</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Open in Limited Mode</source>
-        <translation>Sınırlı Modda Aç</translation>
+        <translation>Öppna i begränsat läge</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Continue</source>
-        <translation>Devam Et</translation>
+        <translation>Fortsätt</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Start Trial</source>
-        <translation>Denemeyi Başlat</translation>
+        <translation>Starta testperiod</translation>
     </message>
 </context>
 <context>
@@ -7878,42 +6245,42 @@ Bittiğinde bir lisans almam veya GPLv3 sürümünü oluşturmam gerektiğini an
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="91"/>
         <source>N</source>
-        <translation>K</translation>
+        <translation>N</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="93"/>
         <source>NE</source>
-        <translation>KD</translation>
+        <translation>NO</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="95"/>
         <source>E</source>
-        <translation>D</translation>
+        <translation>Ö</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="97"/>
         <source>SE</source>
-        <translation>GD</translation>
+        <translation>SO</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="99"/>
         <source>S</source>
-        <translation>G</translation>
+        <translation>S</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="101"/>
         <source>SW</source>
-        <translation>GB</translation>
+        <translation>SV</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="103"/>
         <source>W</source>
-        <translation>B</translation>
+        <translation>V</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Compass.cpp" line="105"/>
         <source>NW</source>
-        <translation>KB</translation>
+        <translation>NV</translation>
     </message>
 </context>
 <context>
@@ -7922,13 +6289,13 @@ Bittiğinde bir lisans almam veya GPLv3 sürümünü oluşturmam gerektiğini an
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="137"/>
         <source>Title</source>
-        <translation>Başlık</translation>
+        <translation>Titel</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="137"/>
         <source>Value</source>
-        <translation>Değer</translation>
+        <translation>Värde</translation>
     </message>
 </context>
 <context>
@@ -7936,37 +6303,37 @@ Bittiğinde bir lisans almam veya GPLv3 sürümünü oluşturmam gerektiğini an
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="84"/>
         <source>Satellite Imagery</source>
-        <translation>Uydu Görüntüsü</translation>
+        <translation>Satellitbilder</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="84"/>
         <source>Satellite Imagery with Labels</source>
-        <translation>Etiketli Uydu Görüntüleri</translation>
+        <translation>Satellitbilder med etiketter</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Street Map</source>
-        <translation>Sokak Haritası</translation>
+        <translation>Gatukarta</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Topographic Map</source>
-        <translation>Topografik Harita</translation>
+        <translation>Topografisk karta</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="85"/>
         <source>Terrain</source>
-        <translation>Arazi</translation>
+        <translation>Terräng</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="86"/>
         <source>Light Gray Canvas</source>
-        <translation>Açık Gri Tuval</translation>
+        <translation>Ljusgrå duk</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="86"/>
         <source>Dark Gray Canvas</source>
-        <translation>Koyu Gri Tuval</translation>
+        <translation>Mörkgrå duk</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="87"/>
@@ -7976,12 +6343,12 @@ Bittiğinde bir lisans almam veya GPLv3 sürümünü oluşturmam gerektiğini an
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="390"/>
         <source>Additional map layers are available only for Pro users.</source>
-        <translation>Ek harita katmanları yalnızca Pro kullanıcılar için mevcuttur.</translation>
+        <translation>Ytterligare kartlager är endast tillgängliga för Pro-användare.</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="391"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
-        <translation>ArcGIS API anahtarı gerçek maliyetler getirdiği için sınırsız erişim sunamıyoruz.</translation>
+        <translation>Vi kan inte erbjuda obegränsad tillgång eftersom ArcGIS API-nyckeln medför verkliga kostnader.</translation>
     </message>
 </context>
 <context>
@@ -7989,7 +6356,7 @@ Bittiğinde bir lisans almam veya GPLv3 sürümünü oluşturmam gerektiğini an
     <message>
         <location filename="../../src/UI/Widgets/Plot.cpp" line="62"/>
         <source>Samples</source>
-        <translation>Örnekler</translation>
+        <translation>Prover</translation>
     </message>
 </context>
 <context>
@@ -7997,7 +6364,7 @@ Bittiğinde bir lisans almam veya GPLv3 sürümünü oluşturmam gerektiğini an
     <message>
         <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1197"/>
         <source>Grid Interval: %1 unit(s)</source>
-        <translation>Izgara Aralığı: %1 birim</translation>
+        <translation>Rutnätsintervall: %1 enhet(er)</translation>
     </message>
 </context>
 </TS>

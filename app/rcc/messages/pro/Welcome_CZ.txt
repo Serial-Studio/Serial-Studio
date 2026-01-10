@@ -10,7 +10,7 @@ Vaše licence je aktivní a schválená pro komerční a proprietární použit�
 → Podpora: alex@serial-studio.com
 → Naplánujte si hovor: https://calendly.com/serial-studio
 → Zákaznický portál: https://store.serial-studio.com/billing
-→ Více informací: https://serial-studio.com/
+→ Dozvědět se více: https://serial-studio.com/
 
 Funkce Pro verze:
 → Integrace MQTT

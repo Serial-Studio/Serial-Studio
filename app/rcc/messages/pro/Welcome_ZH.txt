@@ -8,7 +8,7 @@
 您的许可证已激活并批准用于商业和专有用途。
 
 → 支持: alex@serial-studio.com
-→ 预约通话: https://calendly.com/serial-studio
+→ 安排通话: https://calendly.com/serial-studio
 → 客户门户: https://store.serial-studio.com/billing
 → 了解更多: https://serial-studio.com/
 
@@ -16,5 +16,5 @@
 → MQTT 集成
 → XY 和 3D 可视化
 → 音频输入
-→ CANBus & MODBUS 驱动
+→ CANBus 和 MODBUS 驱动
 → 优先支持

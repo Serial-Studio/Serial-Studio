@@ -15,5 +15,8 @@
         <file>qm/tr_TR.qm</file>
         <file>qm/uk_UA.qm</file>
         <file>qm/zh_CN.qm</file>
+        <file>qm/nl_NL.qm</file>
+        <file>qm/ro_RO.qm</file>
+        <file>qm/sv_SE.qm</file>
     </qresource>
 </RCC>

@@ -56,7 +56,10 @@ LANGUAGE_MAP = {
     "zh_CN": "Simplified Chinese",
     "uk_UA": "Ukrainian",
     "cs_CZ": "Czech",
-    "hi_IN": "Hindi"
+    "hi_IN": "Hindi",
+    "ro_RO": "Romanian",
+    "nl_NL": "Dutch",
+    "sv_SE": "Swedish"
 }
 
 #------------------------------------------------------------------------------

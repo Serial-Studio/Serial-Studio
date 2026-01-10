@@ -4,18 +4,17 @@
 
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Serial Studio Proをご利用いただき、オープンソース開発をサポートしていただき
-ありがとうございます！あなたのライセンスは商業および専有利用のために
-アクティブで承認されています。
+Du använder en testversion av Serial Studio Pro. Denna version är
+fullt funktionell för utvärdering och personligt, icke-kommersiellt bruk
+endast. För att fortsätta efter din testperiod, uppgradera till en betald
+plan eller kompilera GPLv3-källkoden själv.
 
-→ サポート: alex@serial-studio.com
-→ 通話をスケジュール: https://calendly.com/serial-studio
-→ カスタマーポータル: https://store.serial-studio.com/billing
-→ 詳しくはこちら: https://serial-studio.com/
+→ Support: alex@serial-studio.com
+→ Boka ett samtal: https://calendly.com/serial-studio
+→ Läs mer: https://serial-studio.com/
 
-Proの機能:
-→ MQTT統合
-→ XYおよび3Dビジュアライゼーション
-→ オーディオ入力
-→ CANBus & MODBUSドライバー
-→ 優先サポート
+Pro-funktioner tillgängliga:
+→ MQTT-integration
+→ XY- och 3D-visualisering
+→ Ljudingång
+→ CANBus & MODBUS-drivrutiner

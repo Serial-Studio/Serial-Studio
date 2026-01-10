@@ -4,17 +4,21 @@
 
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Dziękujemy za korzystanie z Serial Studio Pro i wspieranie rozwoju open source!
-Twoja licencja jest aktywna i zatwierdzona do użytku komercyjnego i własnościowego.
+Denna programvara är fri och öppen källkod under GNU GPLv3-licensen.
+Du får använda, modifiera och distribuera den, förutsatt att härledda
+verk förblir öppen källkod under samma villkor.
 
-→ Wsparcie: alex@serial-studio.com
-→ Umów się na rozmowę: https://calendly.com/serial-studio
-→ Portal klienta: https://store.serial-studio.com/billing
-→ Dowiedz się więcej: https://serial-studio.com/
+→ Licens: https://www.gnu.org/licenses/gpl-3.0.html
+→ Källa:  https://github.com/serial-studio/serial-studio
 
-Funkcje Pro:
-→ Integracja z MQTT
-→ Wizualizacja XY i 3D
-→ Wejście audio
-→ Sterowniki CANBus i MODBUS
-→ Priorytetowe wsparcie
+Gillar du detta projekt? Överväg att stödja utvecklingen med Serial Studio Pro:
+→ https://store.serial-studio.com/
+
+Pro-funktioner:
+→ MQTT-integration
+→ XY- och 3D-visualisering
+→ Ljudingång
+→ CANBus & MODBUS-drivrutiner
+→ Kommersiell licens (inga GPL-förpliktelser)
+
+→ Läs mer: https://serial-studio.com/

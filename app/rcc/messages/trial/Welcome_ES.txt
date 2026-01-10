@@ -4,16 +4,16 @@
 
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Estás usando una versión de prueba de Serial Studio Pro. Esta versión es
-totalmente funcional para evaluación y uso personal, no comercial.
-Para continuar después de tu prueba, actualiza a un plan de pago o
-compila el código fuente GPLv3 tú mismo.
+Estás utilizando una versión de prueba de Serial Studio Pro. Esta versión
+es completamente funcional para evaluación y uso personal, no comercial.
+Para continuar después de tu prueba, actualiza a un plan de pago o compila
+el código fuente GPLv3 tú mismo.
 
 → Soporte: alex@serial-studio.com
-→ Agenda una llamada: https://calendly.com/serial-studio
+→ Programa una llamada: https://calendly.com/serial-studio
 → Aprende más: https://serial-studio.com/
 
-Funciones Pro disponibles:
+Características Pro disponibles:
 → Integración MQTT
 → Visualización XY y 3D
 → Entrada de audio

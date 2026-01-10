@@ -5,8 +5,8 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
 Este software es libre y de código abierto bajo la licencia GNU GPLv3.
-Puede usarlo, modificarlo y redistribuirlo, siempre que los trabajos
-derivados permanezcan de código abierto bajo los mismos términos.
+Puede usarlo, modificarlo y redistribuirlo, siempre que las obras derivadas
+permanezcan de código abierto bajo los mismos términos.
 
 → Licencia: https://www.gnu.org/licenses/gpl-3.0.html
 → Fuente:  https://github.com/serial-studio/serial-studio
@@ -18,7 +18,7 @@ Características Pro:
 → Integración MQTT
 → Visualización XY y 3D
 → Entrada de audio
-→ Controladores CANBus & MODBUS
+→ Controladores CANBus y MODBUS
 → Licencia comercial (sin obligaciones GPL)
 
 → Más información: https://serial-studio.com/

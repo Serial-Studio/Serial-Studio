@@ -83,7 +83,10 @@ public:
     Turkish,
     Ukrainian,
     Czech,
-    Hindi
+    Hindi,
+    Dutch,
+    Romanian,
+    Swedish
   };
   Q_ENUM(Language);
 

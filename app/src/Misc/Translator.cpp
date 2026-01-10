@@ -110,6 +110,15 @@ Misc::Translator::Language Misc::Translator::systemLanguage() const
     case QLocale::Hindi:
       lang = Hindi;
       break;
+    case QLocale::Dutch:
+      lang = Dutch;
+      break;
+    case QLocale::Romanian:
+      lang = Romanian;
+      break;
+    case QLocale::Swedish:
+      lang = Swedish;
+      break;
     default:
       lang = English;
       break;
@@ -170,6 +179,15 @@ QString Misc::Translator::welcomeConsoleText() const
       break;
     case Hindi:
       lang = QStringLiteral("HI");
+      break;
+    case Dutch:
+      lang = QStringLiteral("NL");
+      break;
+    case Romanian:
+      lang = QStringLiteral("RO");
+      break;
+    case Swedish:
+      lang = QStringLiteral("SV");
       break;
     default:
       lang = QStringLiteral("EN");
@@ -237,6 +255,9 @@ QStringList &Misc::Translator::availableLanguages()
     list.append(QStringLiteral("Українська"));
     list.append(QStringLiteral("Čeština"));
     list.append(QStringLiteral("हिन्दी"));
+    list.append(QStringLiteral("Nederlands"));
+    list.append(QStringLiteral("Română"));
+    list.append(QStringLiteral("Svenska"));
   }
 
   return list;
@@ -314,6 +335,18 @@ void Misc::Translator::setLanguage(const Language language)
     case Hindi:
       langName = QStringLiteral("hi_IN");
       locale = QLocale(QLocale::Hindi);
+      break;
+    case Dutch:
+      langName = QStringLiteral("nl_NL");
+      locale = QLocale(QLocale::Dutch);
+      break;
+    case Romanian:
+      langName = QStringLiteral("ro_RO");
+      locale = QLocale(QLocale::Romanian);
+      break;
+    case Swedish:
+      langName = QStringLiteral("sv_SE");
+      locale = QLocale(QLocale::Swedish);
       break;
     default:
       langName = QStringLiteral("en_US");

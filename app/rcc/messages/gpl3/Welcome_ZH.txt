@@ -5,20 +5,20 @@
 版权所有 (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
 该软件是免费的开源软件，遵循GNU GPLv3许可证。
-您可以使用、修改和重新分发，但衍生作品必须
+您可以使用、修改和重新分发，前提是衍生作品
 在相同条款下保持开源。
 
 → 许可证: https://www.gnu.org/licenses/gpl-3.0.html
-→ 源代码: https://github.com/serial-studio/serial-studio
+→ 源代码:  https://github.com/serial-studio/serial-studio
 
-喜欢这个项目？考虑通过Serial Studio Pro支持开发：
+喜欢这个项目？请考虑通过Serial Studio Pro支持开发：
 → https://store.serial-studio.com/
 
-专业功能：
+专业版功能：
 → MQTT 集成
 → XY 和 3D 可视化
 → 音频输入
-→ CANBus 和 MODBUS 驱动
+→ CANBus & MODBUS 驱动
 → 商业许可证（无GPL义务）
 
 → 了解更多: https://serial-studio.com/

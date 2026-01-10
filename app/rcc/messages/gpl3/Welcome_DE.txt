@@ -5,7 +5,7 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
 Diese Software ist kostenlos und quelloffen unter der GNU GPLv3-Lizenz.
-Sie dürfen sie verwenden, ändern und weiterverbreiten, vorausgesetzt,
+Sie dürfen sie verwenden, modifizieren und weiterverbreiten, vorausgesetzt,
 dass abgeleitete Werke unter denselben Bedingungen quelloffen bleiben.
 
 → Lizenz: https://www.gnu.org/licenses/gpl-3.0.html
@@ -22,4 +22,4 @@ Pro-Funktionen:
 → CANBus- & MODBUS-Treiber
 → Kommerzielle Lizenz (keine GPL-Verpflichtungen)
 
-→ Mehr erfahren: https://serial-studio.com/
+→ Erfahren Sie mehr: https://serial-studio.com/

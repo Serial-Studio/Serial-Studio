@@ -4,14 +4,14 @@
 
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Vielen Dank, dass Sie Serial Studio Pro verwenden und die Entwicklung von
-Open-Source-Software unterstützen! Ihre Lizenz ist aktiv und für kommerzielle
-und proprietäre Nutzung genehmigt.
+Vielen Dank, dass Sie Serial Studio Pro verwenden und die Open-Source-
+Entwicklung unterstützen! Ihre Lizenz ist aktiv und für kommerzielle und
+proprietäre Nutzung genehmigt.
 
 → Support: alex@serial-studio.com
-→ Termin vereinbaren: https://calendly.com/serial-studio
+→ Vereinbaren Sie einen Anruf: https://calendly.com/serial-studio
 → Kundenportal: https://store.serial-studio.com/billing
-→ Mehr erfahren: https://serial-studio.com/
+→ Erfahren Sie mehr: https://serial-studio.com/
 
 Pro-Funktionen:
 → MQTT-Integration

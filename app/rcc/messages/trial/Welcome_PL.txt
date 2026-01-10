@@ -6,8 +6,8 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
 Używasz wersji próbnej Serial Studio Pro. Ta wersja jest w pełni
 funkcjonalna do oceny i użytku osobistego, niekomercyjnego. Aby
-kontynuować po zakończeniu okresu próbnego, przejdź na płatny plan
-lub skompiluj samodzielnie kod źródłowy GPLv3.
+kontynuować po okresie próbnym, przejdź na płatny plan lub skompiluj
+kod źródłowy GPLv3 samodzielnie.
 
 → Wsparcie: alex@serial-studio.com
 → Umów się na rozmowę: https://calendly.com/serial-studio

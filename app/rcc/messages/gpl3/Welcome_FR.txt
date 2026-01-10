@@ -19,6 +19,6 @@ Fonctionnalités Pro :
 → Visualisation XY et 3D
 → Entrée audio
 → Pilotes CANBus & MODBUS
-→ Licence commerciale (sans obligations GPL)
+→ Licence commerciale (pas d'obligations GPL)
 
 → En savoir plus : https://serial-studio.com/

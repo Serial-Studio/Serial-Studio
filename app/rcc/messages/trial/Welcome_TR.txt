@@ -4,13 +4,13 @@
 
 Telif hakkı (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Serial Studio Pro'nun deneme sürümünü kullanıyorsunuz. Bu sürüm,
-değerlendirme ve kişisel, ticari olmayan kullanım için tamamen
-işlevseldir. Deneme sürenizden sonra devam etmek için ücretli bir
-plana yükseltin veya GPLv3 kaynak kodunu kendiniz derleyin.
+Serial Studio Pro'nun deneme sürümünü kullanıyorsunuz. Bu sürüm, yalnızca
+değerlendirme ve kişisel, ticari olmayan kullanım için tam işlevseldir.
+Deneme sürenizden sonra devam etmek için ücretli bir plana yükseltin veya
+GPLv3 kaynak kodunu kendiniz derleyin.
 
 → Destek: alex@serial-studio.com
-→ Görüşme planlayın: https://calendly.com/serial-studio
+→ Görüşme ayarla: https://calendly.com/serial-studio
 → Daha fazla bilgi edinin: https://serial-studio.com/
 
 Mevcut Pro özellikleri:

@@ -4,18 +4,17 @@
 
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Serial Studio Proをご利用いただき、オープンソース開発をサポートしていただき
-ありがとうございます！あなたのライセンスは商業および専有利用のために
-アクティブで承認されています。
+Utilizați o versiune de încercare a Serial Studio Pro. Această versiune
+este complet funcțională pentru evaluare și utilizare personală,
+necomercială. Pentru a continua după perioada de încercare, treceți la
+un plan plătit sau compilați singur codul sursă GPLv3.
 
-→ サポート: alex@serial-studio.com
-→ 通話をスケジュール: https://calendly.com/serial-studio
-→ カスタマーポータル: https://store.serial-studio.com/billing
-→ 詳しくはこちら: https://serial-studio.com/
+→ Suport: alex@serial-studio.com
+→ Programează un apel: https://calendly.com/serial-studio
+→ Află mai multe: https://serial-studio.com/
 
-Proの機能:
-→ MQTT統合
-→ XYおよび3Dビジュアライゼーション
-→ オーディオ入力
-→ CANBus & MODBUSドライバー
-→ 優先サポート
+Funcționalități Pro disponibile:
+→ Integrare MQTT
+→ Vizualizare XY și 3D
+→ Intrare audio
+→ Drivere CANBus & MODBUS

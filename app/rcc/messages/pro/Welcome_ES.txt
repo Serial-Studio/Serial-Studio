@@ -8,13 +8,13 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 Su licencia está activa y aprobada para uso comercial y propietario.
 
 → Soporte: alex@serial-studio.com
-→ Programa una llamada: https://calendly.com/serial-studio
+→ Programar una llamada: https://calendly.com/serial-studio
 → Portal del cliente: https://store.serial-studio.com/billing
-→ Aprende más: https://serial-studio.com/
+→ Más información: https://serial-studio.com/
 
 Características Pro:
 → Integración MQTT
 → Visualización XY y 3D
 → Entrada de audio
-→ Controladores CANBus y MODBUS
+→ Controladores CANBus & MODBUS
 → Soporte prioritario

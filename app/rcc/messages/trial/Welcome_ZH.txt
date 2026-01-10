@@ -4,11 +4,12 @@
 
 版权所有 (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-您正在使用 Serial Studio Pro 的试用版。此版本完全可用
-于评估和个人非商业用途。试用期结束后，如需继续使用，
-请升级到付费计划或自行编译 GPLv3 源代码。
+您正在使用 Serial Studio Pro 的试用版。此版本
+功能齐全，仅供评估和个人非商业用途。
+试用结束后，您可以升级到付费计划或自行编译
+GPLv3 源代码。
 
-→ 支持: alex@serial-studio.com
+→ 技术支持: alex@serial-studio.com
 → 预约电话: https://calendly.com/serial-studio
 → 了解更多: https://serial-studio.com/
 
@@ -16,4 +17,4 @@
 → MQTT 集成
 → XY 和 3D 可视化
 → 音频输入
-→ CANBus & MODBUS 驱动程序
+→ CANBus 和 MODBUS 驱动程序

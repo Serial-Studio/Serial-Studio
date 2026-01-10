@@ -11,7 +11,7 @@ derivados permaneçam de código aberto sob os mesmos termos.
 → Licença: https://www.gnu.org/licenses/gpl-3.0.html
 → Fonte:  https://github.com/serial-studio/serial-studio
 
-Gostou deste projeto? Considere apoiar o desenvolvimento com o Serial Studio Pro:
+Gosta deste projeto? Considere apoiar o desenvolvimento com o Serial Studio Pro:
 → https://store.serial-studio.com/
 
 Recursos Pro:

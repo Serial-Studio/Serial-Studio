@@ -16,6 +16,6 @@ proprietario.
 Funzionalità Pro:
 → Integrazione MQTT
 → Visualizzazione XY e 3D
-→ Ingresso audio
+→ Input audio
 → Driver CANBus & MODBUS
 → Supporto prioritario
