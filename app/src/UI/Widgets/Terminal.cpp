@@ -244,12 +244,20 @@ void Widgets::Terminal::paint(QPainter *painter)
       continue;
     }
 
-    // If the line is fully selected, draw a single rectangle
+    // If the line is fully selected, draw rectangles for each wrapped segment
     if (lineFullySelected)
     {
-      QRect selectionRect(m_borderX, y, width() - 2 * m_borderX, m_cHeight);
-      painter->fillRect(selectionRect, m_palette.color(QPalette::Highlight));
-      y += lineHeight;
+      const int wrappedLines
+          = qMax(1, (line.length() + maxCharsPerLine() - 1) / maxCharsPerLine());
+      for (int wrapIndex = 0; wrapIndex < wrappedLines
+                              && y < height() - m_borderY;
+           ++wrapIndex)
+      {
+        QRect selectionRect(m_borderX, y, width() - 2 * m_borderX, m_cHeight);
+        painter->fillRect(selectionRect, m_palette.color(QPalette::Highlight));
+        y += lineHeight;
+      }
+
       continue;
     }
 
