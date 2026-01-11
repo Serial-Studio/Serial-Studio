@@ -52,9 +52,9 @@ class ExportWorker
   Q_OBJECT
 
 public:
-  ExportWorker(moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr> *queue,
-               std::atomic<bool> *enabled,
-               std::atomic<size_t> *queueSize);
+  ExportWorker(
+      moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr> *queue,
+      std::atomic<bool> *enabled, std::atomic<size_t> *queueSize);
   ~ExportWorker() override;
 
   void closeResources() override;

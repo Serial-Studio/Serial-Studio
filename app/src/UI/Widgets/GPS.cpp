@@ -687,7 +687,8 @@ void Widgets::GPS::updateTiles()
   const int tileSize = 256;
   const double scaledTileSize = tileSize * scale;
 
-  // Current map center in tile coordinates (convert from fractional to base zoom)
+  // Current map center in tile coordinates (convert from fractional to base
+  // zoom)
   const QPointF center = m_centerTile / scale;
 
   // Viewport size in pixels
@@ -772,8 +773,10 @@ void Widgets::GPS::updateTiles()
           {
             for (int sy = 0; sy < 2; ++sy)
             {
-              const auto nextUrl = tileUrl(tx_next + sx, ty_next + sy, nextZoom);
-              if (!m_tileCache.contains(nextUrl) && !m_pending.contains(nextUrl))
+              const auto nextUrl
+                  = tileUrl(tx_next + sx, ty_next + sy, nextZoom);
+              if (!m_tileCache.contains(nextUrl)
+                  && !m_pending.contains(nextUrl))
               {
                 QNetworkReply *reply
                     = m_network.get(QNetworkRequest(QUrl(nextUrl)));
@@ -904,16 +907,18 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
   const int tileSize = 256;
   const double scaledTileSize = tileSize * scale;
 
-  // m_centerTile is at fractional zoom, we need base zoom coordinates for tile fetching
-  // Relationship: tileCoord_baseZoom = tileCoord_fractionalZoom / 2^(fractionalZoom)
+  // m_centerTile is at fractional zoom, we need base zoom coordinates for tile
+  // fetching Relationship: tileCoord_baseZoom = tileCoord_fractionalZoom /
+  // 2^(fractionalZoom)
   const QPointF centerTileBase = m_centerTile / scale;
 
   // Integer tile coordinates of the center tile at base zoom
   const int centerX = static_cast<int>(centerTileBase.x());
   const int centerY = static_cast<int>(centerTileBase.y());
 
-  // Pixel offset (fractional part times scaled tile size for smooth positioning)
-  // Round to integer pixels to avoid tile seams during auto-tracking
+  // Pixel offset (fractional part times scaled tile size for smooth
+  // positioning) Round to integer pixels to avoid tile seams during
+  // auto-tracking
   const int offsetX = qRound((centerTileBase.x() - centerX) * scaledTileSize);
   const int offsetY = qRound((centerTileBase.y() - centerY) * scaledTileSize);
 
@@ -942,8 +947,10 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
       const QString url = tileUrl(wrappedTx, ty, baseZoom);
 
       // Compute pixel position on screen for drawing this tile
-      const int drawX = view.width() / 2 + qRound(dx * scaledTileSize) - offsetX;
-      const int drawY = view.height() / 2 + qRound(dy * scaledTileSize) - offsetY;
+      const int drawX
+          = view.width() / 2 + qRound(dx * scaledTileSize) - offsetX;
+      const int drawY
+          = view.height() / 2 + qRound(dy * scaledTileSize) - offsetY;
 
       // Target rectangle for scaled tile rendering (rounded to integers)
       const QRect targetRect(drawX, drawY, qRound(scaledTileSize),
@@ -994,8 +1001,7 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
             QColor dominant = img.pixelColor(0, 0);
 
             const int roundedSize = qRound(scaledTileSize);
-            finalTile = QImage(roundedSize, roundedSize,
-                               QImage::Format_ARGB32);
+            finalTile = QImage(roundedSize, roundedSize, QImage::Format_ARGB32);
             finalTile.fill(dominant);
           }
 
@@ -1003,9 +1009,9 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
           else
           {
             const int roundedSize = qRound(scaledTileSize);
-            finalTile = cropped.scaled(roundedSize, roundedSize,
-                                       Qt::KeepAspectRatio,
-                                       Qt::SmoothTransformation);
+            finalTile
+                = cropped.scaled(roundedSize, roundedSize, Qt::KeepAspectRatio,
+                                 Qt::SmoothTransformation);
           }
 
           // Render the fallback tile
@@ -1052,10 +1058,10 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
 
         // Crop and scale the source image tile to scaled tile size
         const int roundedSize = qRound(scaledTileSize);
-        QImage cropped = m_cloudOverlay.copy(sourceRect)
-                             .scaled(roundedSize, roundedSize,
-                                     Qt::IgnoreAspectRatio,
-                                     Qt::SmoothTransformation);
+        QImage cropped
+            = m_cloudOverlay.copy(sourceRect)
+                  .scaled(roundedSize, roundedSize, Qt::IgnoreAspectRatio,
+                          Qt::SmoothTransformation);
 
         // Draw the cloud overlay with partial transparency
         painter->drawImage(targetRect, cropped);
@@ -1140,14 +1146,12 @@ void Widgets::GPS::paintPathData(QPainter *painter, const QSize &view)
 
     // Project lat/lon to on-screen pixel
     auto project = [&](double lat, double lon) -> QPointF {
-      // Convert to base zoom tile coordinates
       QPointF tile = latLonToTile(lat, lon, baseZoom);
 
       double dx = tile.x() - cTile.x();
       dx -= std::round(dx / world) * world;
 
       QPointF delta(dx, tile.y() - cTile.y());
-      // Use tileSize * scale to convert base zoom tiles to screen pixels
       return {view.width() * 0.5 + delta.x() * tileSize * scale,
               view.height() * 0.5 + delta.y() * tileSize * scale};
     };
@@ -1492,8 +1496,7 @@ void Widgets::GPS::wheelEvent(QWheelEvent *event)
   const double zoomFactor = 1.15;
   const double deltaNorm = -delta / 120.0;
   const double factor = qPow(zoomFactor, -deltaNorm);
-  const double newZoom = qBound(static_cast<double>(MIN_ZOOM),
-                                m_zoom * factor,
+  const double newZoom = qBound(static_cast<double>(MIN_ZOOM), m_zoom * factor,
                                 static_cast<double>(m_mapMaxZoom[m_mapType]));
 
   if (qAbs(newZoom - m_zoom) < 0.001)

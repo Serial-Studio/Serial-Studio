@@ -55,8 +55,7 @@
  */
 MDF4::ExportWorker::ExportWorker(
     moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr> *queue,
-    std::atomic<bool> *enabled,
-    std::atomic<size_t> *queueSize)
+    std::atomic<bool> *enabled, std::atomic<size_t> *queueSize)
   : FrameConsumerWorker(queue, enabled, queueSize)
   , m_fileOpen(false)
   , m_masterTimeChannel(nullptr)

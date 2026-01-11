@@ -617,12 +617,10 @@ const QPoint &Widgets::Terminal::cursorPosition() const
  */
 QPoint Widgets::Terminal::positionToCursor(const QPoint &pos) const
 {
-  int y = (pos.y() - m_borderY) / m_cHeight + m_scrollOffsetY;
-  int actualY = 0;
-  int actualX = 0;
-  int remainingY = y;
+  int localY = (pos.y() - m_borderY) / m_cHeight;
+  int remainingY = localY;
 
-  for (int i = 0; i < m_data.size() && i <= y; ++i)
+  for (int i = m_scrollOffsetY; i < m_data.size(); ++i)
   {
     const QString &line = m_data[i];
 
@@ -639,22 +637,22 @@ QPoint Widgets::Terminal::positionToCursor(const QPoint &pos) const
       int lines = (line.length() + maxCharsPerLine() - 1) / maxCharsPerLine();
       if (remainingY < lines)
       {
-        actualY = i;
+        int segmentIndex = remainingY;
+        int segmentStart = segmentIndex * maxCharsPerLine();
+        int segmentEnd = qMin(segmentStart + maxCharsPerLine(), line.length());
+
         int x = pos.x() - m_borderX;
         int widthSum = 0;
-        for (int j = 0; j < line.length(); ++j)
+
+        for (int j = segmentStart; j < segmentEnd; ++j)
         {
           int charWidth = QFontMetrics(m_font).horizontalAdvance(line[j]);
           if (widthSum + charWidth > x)
-          {
-            actualX = j;
-            return QPoint(actualX, actualY);
-          }
+            return QPoint(j, i);
           widthSum += charWidth;
         }
 
-        actualX = line.length();
-        return QPoint(actualX, actualY);
+        return QPoint(segmentEnd, i);
       }
 
       remainingY -= lines;
@@ -663,11 +661,12 @@ QPoint Widgets::Terminal::positionToCursor(const QPoint &pos) const
 
   if (!m_data.isEmpty())
   {
-    actualY = m_data.size() - 1;
-    actualX = m_data.last().length();
+    int lastLine = m_data.size() - 1;
+    int lastChar = m_data.last().length();
+    return QPoint(lastChar, lastLine);
   }
 
-  return QPoint(qMax(0, actualX), qMax(0, actualY));
+  return QPoint(0, 0);
 }
 
 /**
