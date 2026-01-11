@@ -99,6 +99,7 @@ public:
 
   [[nodiscard]] int mapType() const;
   [[nodiscard]] int zoomLevel() const;
+  [[nodiscard]] double zoomLevelPrecise() const;
 
   [[nodiscard]] bool autoCenter() const;
   [[nodiscard]] bool showWeather() const;
@@ -110,6 +111,7 @@ public:
 public slots:
   void center();
   void setZoomLevel(int zoom);
+  void setZoomLevelPrecise(double zoom);
   void setMapType(const int type);
   void setAutoCenter(const bool enabled);
   void setShowWeather(const bool enabled);
@@ -130,8 +132,8 @@ private:
 
 private:
   QPointF clampCenterTile(QPointF tile) const;
-  QPointF tileToLatLon(const QPointF &tile, int zoom);
-  QPointF latLonToTile(double lat, double lon, int zoom);
+  QPointF tileToLatLon(const QPointF &tile, double zoom);
+  QPointF latLonToTile(double lat, double lon, double zoom);
 
   QString tileUrl(const int tx, const int ty, const int zoom) const;
   QString referenceUrl(const int tx, const int ty, const int zoom) const;
@@ -144,7 +146,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
-  int m_zoom;
+  double m_zoom;
   int m_index;
   int m_mapType;
 

@@ -1414,16 +1414,21 @@ Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix)
 /**
  * @brief Handles mouse wheel events to worldScale in or out of the 3D plot.
  * @param event The wheel event containing scroll delta.
+ *
+ * Applies smooth continuous zoom using the same approach as PlotWidget.
+ * Normalizes scroll delta to fractional ticks for touchpad compatibility.
  */
 void Widgets::Plot3D::wheelEvent(QWheelEvent *event)
 {
   if (event->angleDelta().y() != 0)
   {
     event->accept();
-    if (event->angleDelta().y() > 0)
-      setWorldScale(worldScale() * 1.1);
-    else
-      setWorldScale(worldScale() / 1.1);
+
+    const double zoomFactor = 1.15;
+    const double delta = -event->angleDelta().y() / 120.0;
+    const double factor = qPow(zoomFactor, -delta);
+
+    setWorldScale(worldScale() * factor);
   }
 }
 

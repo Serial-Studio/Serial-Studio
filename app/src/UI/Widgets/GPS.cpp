@@ -233,6 +233,14 @@ int Widgets::GPS::mapType() const
  */
 int Widgets::GPS::zoomLevel() const
 {
+  return qRound(m_zoom);
+}
+
+/**
+ * @brief Returns the precise (floating-point) zoom level.
+ */
+double Widgets::GPS::zoomLevelPrecise() const
+{
   return m_zoom;
 }
 
@@ -366,6 +374,64 @@ void Widgets::GPS::setZoomLevel(int zoom)
     m_zoom = z;
     center();
   }
+
+  // Emit signal
+  Q_EMIT zoomLevelChanged();
+}
+
+/**
+ * @brief Sets the zoom level with fractional precision for smooth zooming.
+ *
+ * This function accepts a floating-point zoom level and supports smooth
+ * continuous zooming similar to Google Maps. Tiles are rendered at the
+ * floor zoom level and scaled appropriately.
+ *
+ * @param zoom Desired zoom level (can be fractional).
+ */
+void Widgets::GPS::setZoomLevelPrecise(double zoom)
+{
+  // Bound zoom to valid zoom level
+  const auto z = qBound(static_cast<double>(MIN_ZOOM), zoom,
+                        static_cast<double>(m_mapMaxZoom[m_mapType]));
+
+  // Skip if zoom is effectively the same (within small epsilon)
+  if (qAbs(m_zoom - z) < 0.001)
+    return;
+
+  // Set zoom level and center map on viewport center
+  if (!autoCenter())
+  {
+    // Compute which lat/lon is currently at the center of the widget
+    const QPointF pixelCenter(width() / 2.0, height() / 2.0);
+    const QPointF tileCenter
+        = m_centerTile
+          + QPointF((pixelCenter.x() - width() / 2.0) / 256.0,
+                    (pixelCenter.y() - height() / 2.0) / 256.0);
+
+    // Convert screen center tile to geographic lat/lon
+    const QPointF geo = tileToLatLon(tileCenter, m_zoom);
+
+    // Update zoom, then reproject lat/lon to new zoom level
+    m_zoom = z;
+    const QPointF newTile = latLonToTile(geo.x(), geo.y(), m_zoom);
+
+    // Set new center tile so that geo stays centered in the widget
+    m_centerTile = clampCenterTile(newTile);
+
+    // Redraw the widget
+    updateTiles();
+    update();
+  }
+
+  // Set the zoom level and let center() fix the world for us
+  else
+  {
+    m_zoom = z;
+    center();
+  }
+
+  // Emit signal
+  Q_EMIT zoomLevelChanged();
 }
 
 /**
@@ -612,18 +678,24 @@ void Widgets::GPS::updateData()
  */
 void Widgets::GPS::updateTiles()
 {
-  // Tile size in pixels (standard slippy map tile size)
-  const int tileSize = 256;
+  // Only download tiles at integer zoom levels
+  const int baseZoom = qFloor(m_zoom);
+  const double fractionalZoom = m_zoom - baseZoom;
+  const double scale = qPow(2.0, fractionalZoom);
 
-  // Current map center in tile coordinates
-  const QPointF center = m_centerTile;
+  // Tile size in pixels
+  const int tileSize = 256;
+  const double scaledTileSize = tileSize * scale;
+
+  // Current map center in tile coordinates (convert from fractional to base zoom)
+  const QPointF center = m_centerTile / scale;
 
   // Viewport size in pixels
   const QSize viewSize = size().toSize();
 
-  // Number of tiles visible horizontally and vertically
-  const int tilesX = viewSize.width() / tileSize + 2;
-  const int tilesY = viewSize.height() / tileSize + 2;
+  // Number of tiles visible horizontally and vertically (based on scaled size)
+  const int tilesX = qCeil(viewSize.width() / scaledTileSize) + 1;
+  const int tilesY = qCeil(viewSize.height() / scaledTileSize) + 1;
 
   // Loop through the visible tile range
   for (int dx = -tilesX / 2; dx <= tilesX / 2; ++dx)
@@ -635,14 +707,14 @@ void Widgets::GPS::updateTiles()
       const int ty = static_cast<int>(center.y()) + dy;
 
       // Maximum valid tile index for the current zoom level
-      const int maxTiles = 1 << m_zoom;
+      const int maxTiles = 1 << baseZoom;
 
       // Skip tiles outside vertical and horizontal bounds
       if (tx < 0 || ty < 0 || tx >= maxTiles || ty >= maxTiles)
         continue;
 
-      // Construct the tile URL
-      const auto url = tileUrl(tx, ty, m_zoom);
+      // Construct the tile URL (use baseZoom for actual tile requests)
+      const auto url = tileUrl(tx, ty, baseZoom);
 
       // Request tile if it's not already cached or being downloaded
       if (!m_tileCache.contains(url) && !m_pending.contains(url))
@@ -656,9 +728,9 @@ void Widgets::GPS::updateTiles()
       }
 
       // Request tiles for weather layer
-      if (m_showNasaWeather && m_zoom <= WEATHER_GIBS_MAX_ZOOM)
+      if (m_showNasaWeather && baseZoom <= WEATHER_GIBS_MAX_ZOOM)
       {
-        const auto gibsUrl = nasaWeatherUrl(tx, ty, m_zoom);
+        const auto gibsUrl = nasaWeatherUrl(tx, ty, baseZoom);
         if (!m_tileCache.contains(gibsUrl) && !m_pending.contains(gibsUrl))
         {
           QNetworkReply *reply = m_network.get(QNetworkRequest(QUrl(gibsUrl)));
@@ -672,7 +744,7 @@ void Widgets::GPS::updateTiles()
       // Request tiles for reference layer
       if (m_enableReferenceLayer)
       {
-        const auto refUrl = referenceUrl(tx, ty, m_zoom);
+        const auto refUrl = referenceUrl(tx, ty, baseZoom);
         if (!m_tileCache.contains(refUrl) && !m_pending.contains(refUrl))
         {
           QNetworkReply *reply = m_network.get(QNetworkRequest(QUrl(refUrl)));
@@ -680,6 +752,38 @@ void Widgets::GPS::updateTiles()
 
           connect(reply, &QNetworkReply::finished, this,
                   [=, this]() { onTileFetched(reply); });
+        }
+      }
+
+      // Preload next zoom level tiles for smooth zoom transitions
+      // Only preload when we're close to the next zoom level (> 0.7)
+      if (fractionalZoom > 0.7)
+      {
+        const int nextZoom = baseZoom + 1;
+        if (nextZoom <= m_mapMaxZoom[m_mapType])
+        {
+          // Convert tile coordinates to next zoom level
+          // When going from zoom N to N+1, each tile becomes 4 tiles
+          const int tx_next = tx * 2;
+          const int ty_next = ty * 2;
+
+          // Preload the 4 sub-tiles
+          for (int sx = 0; sx < 2; ++sx)
+          {
+            for (int sy = 0; sy < 2; ++sy)
+            {
+              const auto nextUrl = tileUrl(tx_next + sx, ty_next + sy, nextZoom);
+              if (!m_tileCache.contains(nextUrl) && !m_pending.contains(nextUrl))
+              {
+                QNetworkReply *reply
+                    = m_network.get(QNetworkRequest(QUrl(nextUrl)));
+                m_pending[nextUrl] = reply;
+
+                connect(reply, &QNetworkReply::finished, this,
+                        [=, this]() { onTileFetched(reply); });
+              }
+            }
+          }
         }
       }
     }
@@ -784,24 +888,38 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
   // Validate arguments
   Q_ASSERT(painter);
 
+  // Disable antialiasing for tile rendering to prevent seams
+  painter->setRenderHint(QPainter::Antialiasing, false);
+  painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+
   // Fill the painter with a background
   painter->fillRect(painter->viewport(), QColor(0x0C, 0x47, 0x5C));
 
+  // Fractional zoom handling for smooth zooming
+  const int baseZoom = qFloor(m_zoom);
+  const double fractionalZoom = m_zoom - baseZoom;
+  const double scale = qPow(2.0, fractionalZoom);
+
   // Tile sizing constants
   const int tileSize = 256;
-  const QPointF centerTile = m_centerTile;
+  const double scaledTileSize = tileSize * scale;
 
-  // Integer tile coordinates of the center tile
-  const int centerX = static_cast<int>(centerTile.x());
-  const int centerY = static_cast<int>(centerTile.y());
+  // m_centerTile is at fractional zoom, we need base zoom coordinates for tile fetching
+  // Relationship: tileCoord_baseZoom = tileCoord_fractionalZoom / 2^(fractionalZoom)
+  const QPointF centerTileBase = m_centerTile / scale;
 
-  // Pixel offset inside the center tile (sub-tile precision)
-  const double offsetX = (centerTile.x() - centerX) * tileSize;
-  const double offsetY = (centerTile.y() - centerY) * tileSize;
+  // Integer tile coordinates of the center tile at base zoom
+  const int centerX = static_cast<int>(centerTileBase.x());
+  const int centerY = static_cast<int>(centerTileBase.y());
+
+  // Pixel offset (fractional part times scaled tile size for smooth positioning)
+  // Round to integer pixels to avoid tile seams during auto-tracking
+  const int offsetX = qRound((centerTileBase.x() - centerX) * scaledTileSize);
+  const int offsetY = qRound((centerTileBase.y() - centerY) * scaledTileSize);
 
   // Number of tiles needed horizontally and vertically (including margins)
-  const int tilesX = view.width() / tileSize + 2;
-  const int tilesY = view.height() / tileSize + 2;
+  const int tilesX = qCeil(view.width() / scaledTileSize) + 1;
+  const int tilesY = qCeil(view.height() / scaledTileSize) + 1;
 
   // Render visible tiles
   for (int dx = -tilesX / 2; dx <= tilesX / 2; ++dx)
@@ -814,30 +932,34 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
 
       // Wrap X to allow seamless east/west panning around the globe
       const int wrappedTx
-          = (tx % (1 << m_zoom) + (1 << m_zoom)) % (1 << m_zoom);
+          = (tx % (1 << baseZoom) + (1 << baseZoom)) % (1 << baseZoom);
 
       // Skip if tile is outside vertical bounds (no wrapping in Y)
-      if (ty < 0 || ty >= (1 << m_zoom))
+      if (ty < 0 || ty >= (1 << baseZoom))
         continue;
 
       // Generate tile URL for current zoom level
-      const QString url = tileUrl(wrappedTx, ty, m_zoom);
+      const QString url = tileUrl(wrappedTx, ty, baseZoom);
 
       // Compute pixel position on screen for drawing this tile
-      const QPoint drawPoint(view.width() / 2 + dx * tileSize - offsetX,
-                             view.height() / 2 + dy * tileSize - offsetY);
+      const int drawX = view.width() / 2 + qRound(dx * scaledTileSize) - offsetX;
+      const int drawY = view.height() / 2 + qRound(dy * scaledTileSize) - offsetY;
 
-      // Draw tile if it's already in cache
+      // Target rectangle for scaled tile rendering (rounded to integers)
+      const QRect targetRect(drawX, drawY, qRound(scaledTileSize),
+                             qRound(scaledTileSize));
+
+      // Draw tile if it's already in cache (scaled for fractional zoom)
       if (m_tileCache.contains(url))
-        painter->drawImage(drawPoint, *m_tileCache.object(url));
+        painter->drawImage(targetRect, *m_tileCache.object(url));
 
       // Tile not found: fallback to scaled lower-zoom tiles if possible
       else
       {
-        for (int z = m_zoom - 1; z >= MIN_ZOOM; --z)
+        for (int z = baseZoom - 1; z >= MIN_ZOOM; --z)
         {
-          const int dz = m_zoom - z;
-          const int scale = 1 << dz;
+          const int dz = baseZoom - z;
+          const int tileScale = 1 << dz;
 
           // Compute coordinates of parent tile at this lower zoom level
           const int parentTx = tx >> dz;
@@ -856,34 +978,38 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
 
           // Extract subregion of the parent tile corresponding to target tile
           auto *src = m_tileCache.object(parentUrl);
-          const QRect sourceRect((tx % scale) * (tileSize / scale),
-                                 (ty % scale) * (tileSize / scale),
-                                 tileSize / scale, tileSize / scale);
+          const QRect sourceRect((tx % tileScale) * (tileSize / tileScale),
+                                 (ty % tileScale) * (tileSize / tileScale),
+                                 tileSize / tileScale, tileSize / tileScale);
 
           // Get parent tile
           QImage finalTile;
           const auto cropped = src->copy(sourceRect);
 
           // Fill with the dominant color if parent zoom level is too coarse
-          if (qAbs(m_zoom - z) > 5)
+          if (qAbs(baseZoom - z) > 5)
           {
             QImage img = cropped.scaled(1, 1, Qt::IgnoreAspectRatio,
                                         Qt::FastTransformation);
             QColor dominant = img.pixelColor(0, 0);
 
-            finalTile = QImage(tileSize, tileSize, QImage::Format_ARGB32);
+            const int roundedSize = qRound(scaledTileSize);
+            finalTile = QImage(roundedSize, roundedSize,
+                               QImage::Format_ARGB32);
             finalTile.fill(dominant);
           }
 
-          // Otherwise, scale up the subregion to tile size
+          // Otherwise, scale up the subregion to scaled tile size
           else
           {
-            finalTile = cropped.scaled(tileSize, tileSize, Qt::KeepAspectRatio,
-                                       Qt::FastTransformation);
+            const int roundedSize = qRound(scaledTileSize);
+            finalTile = cropped.scaled(roundedSize, roundedSize,
+                                       Qt::KeepAspectRatio,
+                                       Qt::SmoothTransformation);
           }
 
           // Render the fallback tile
-          painter->drawImage(drawPoint, finalTile);
+          painter->drawImage(targetRect, finalTile);
 
           // Stop as soon as we successfully rendered one fallback tile
           break;
@@ -892,14 +1018,14 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
 
       // Overlay global cloud image tile
       if (m_showWeather && !m_cloudOverlay.isNull()
-          && m_zoom <= WEATHER_MAX_ZOOM)
+          && baseZoom <= WEATHER_MAX_ZOOM)
       {
         // Get dimensions of the cloud image (equirectangular: 4096x2048)
         const int cloudWidth = m_cloudOverlay.width();
         const int cloudHeight = m_cloudOverlay.height();
 
         // Number of tiles at the current zoom level
-        const double n = 1 << m_zoom;
+        const double n = 1 << baseZoom;
 
         // Compute geographic longitude bounds of the tile
         double lon0 = (wrappedTx / n) * 360.0 - 180.0;
@@ -924,19 +1050,21 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
                          int((u1 - u0) * cloudWidth),
                          int((v1 - v0) * cloudHeight));
 
-        // Crop and scale the source image tile to screen tile size
+        // Crop and scale the source image tile to scaled tile size
+        const int roundedSize = qRound(scaledTileSize);
         QImage cropped = m_cloudOverlay.copy(sourceRect)
-                             .scaled(tileSize, tileSize, Qt::IgnoreAspectRatio,
+                             .scaled(roundedSize, roundedSize,
+                                     Qt::IgnoreAspectRatio,
                                      Qt::SmoothTransformation);
 
         // Draw the cloud overlay with partial transparency
-        painter->drawImage(drawPoint, cropped);
+        painter->drawImage(targetRect, cropped);
       }
 
       // Overlay weather tile on top of the base tile
-      if (m_showNasaWeather && m_zoom <= WEATHER_GIBS_MAX_ZOOM)
+      if (m_showNasaWeather && baseZoom <= WEATHER_GIBS_MAX_ZOOM)
       {
-        const QString gibsUrl = nasaWeatherUrl(wrappedTx, ty, m_zoom);
+        const QString gibsUrl = nasaWeatherUrl(wrappedTx, ty, baseZoom);
 
         if (m_tileCache.contains(gibsUrl))
         {
@@ -944,7 +1072,7 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
 
           painter->save();
           painter->setCompositionMode(QPainter::CompositionMode_Screen);
-          painter->drawImage(drawPoint, *weatherTile);
+          painter->drawImage(targetRect, *weatherTile);
           painter->restore();
         }
       }
@@ -952,9 +1080,9 @@ void Widgets::GPS::paintMap(QPainter *painter, const QSize &view)
       // Overlay reference tile on top of the base tile
       if (m_enableReferenceLayer)
       {
-        const QString refUrl = referenceUrl(wrappedTx, ty, m_zoom);
+        const QString refUrl = referenceUrl(wrappedTx, ty, baseZoom);
         if (m_tileCache.contains(refUrl))
-          painter->drawImage(drawPoint, *m_tileCache.object(refUrl));
+          painter->drawImage(targetRect, *m_tileCache.object(refUrl));
       }
     }
   }
@@ -991,27 +1119,37 @@ void Widgets::GPS::paintPathData(QPainter *painter, const QSize &view)
       || series.altitudes.empty())
     return;
 
+  // Enable antialiasing for smooth path and indicator rendering
+  painter->setRenderHint(QPainter::Antialiasing, true);
+
   // Initialize parameters
-  constexpr int tileSize = 256;
-  const QPointF centerTile = m_centerTile;
+  const int baseZoom = qFloor(m_zoom);
+  const double fractionalZoom = m_zoom - baseZoom;
+  const double scale = qPow(2.0, fractionalZoom);
+  const int tileSize = 256;
+
+  // Convert center tile to base zoom for consistent calculations
+  const QPointF centerTileBase = m_centerTile / scale;
 
   // Plot the trajectory of the tracked device
   if (m_plotTrajectory)
   {
-    // Initialize parameters
-    const double world = 1 << m_zoom;
-    const QPointF cTile = m_centerTile;
+    // Initialize parameters (world size at base zoom)
+    const double world = qPow(2.0, baseZoom);
+    const QPointF cTile = centerTileBase;
 
     // Project lat/lon to on-screen pixel
     auto project = [&](double lat, double lon) -> QPointF {
-      QPointF tile = latLonToTile(lat, lon, m_zoom);
+      // Convert to base zoom tile coordinates
+      QPointF tile = latLonToTile(lat, lon, baseZoom);
 
       double dx = tile.x() - cTile.x();
       dx -= std::round(dx / world) * world;
 
       QPointF delta(dx, tile.y() - cTile.y());
-      return {view.width() * 0.5 + delta.x() * tileSize,
-              view.height() * 0.5 + delta.y() * tileSize};
+      // Use tileSize * scale to convert base zoom tiles to screen pixels
+      return {view.width() * 0.5 + delta.x() * tileSize * scale,
+              view.height() * 0.5 + delta.y() * tileSize * scale};
     };
 
     // Generate a path with historical samples
@@ -1058,19 +1196,22 @@ void Widgets::GPS::paintPathData(QPainter *painter, const QSize &view)
     }
   }
 
-  // Convert current lat/lon to tile-space at current zoom
-  const QPointF gpsTile = latLonToTile(m_latitude, m_longitude, m_zoom);
-  const QPointF deltaBase = gpsTile - centerTile;
+  // Convert current lat/lon to tile-space at base zoom
+  const QPointF gpsTile = latLonToTile(m_latitude, m_longitude, baseZoom);
+  const QPointF deltaBase = gpsTile - centerTileBase;
+
+  // World size at base zoom for wrap-around calculation
+  const double world = qPow(2.0, baseZoom);
 
   // Render the indicator three times: centre plus one wrap left / right
   for (int wrap = -1; wrap <= 1; ++wrap)
   {
-    // Shift X by ±(2^zoom) tiles to handle east/west wrap-around
-    const QPointF delta = deltaBase + QPointF(wrap * (1 << m_zoom), 0);
+    // Shift X by ±world tiles to handle east/west wrap-around
+    const QPointF delta = deltaBase + QPointF(wrap * world, 0);
 
-    // Convert tile delta to on-screen pixel position
-    const QPoint drawPos(view.width() / 2 + delta.x() * tileSize,
-                         view.height() / 2 + delta.y() * tileSize);
+    // Convert tile delta to on-screen pixel position (base zoom tiles * scale)
+    const QPoint drawPos(view.width() / 2 + delta.x() * tileSize * scale,
+                         view.height() / 2 + delta.y() * tileSize * scale);
 
     // Set indicator sizes
     constexpr int dotRadius = 5;
@@ -1171,15 +1312,19 @@ void Widgets::GPS::paintAttributionText(QPainter *painter, const QSize &view)
  */
 QPointF Widgets::GPS::clampCenterTile(QPointF tile) const
 {
-  const double maxTile = static_cast<double>(1 << m_zoom);
+  // World size at fractional zoom level (tile param is at fractional zoom)
+  const double maxTile = qPow(2.0, m_zoom);
 
   // Wrap X coordinate for horizontal panning
   double x = std::fmod(tile.x(), maxTile);
   if (x < 0)
     x += maxTile;
 
-  // Compute how many tiles fit vertically in the view
-  const double tilesInViewY = static_cast<double>(height()) / 256.0;
+  // Compute how many tiles fit vertically in the view at current zoom
+  const double fractionalZoom = m_zoom - qFloor(m_zoom);
+  const double scale = qPow(2.0, fractionalZoom);
+  const double scaledTileSize = 256.0 * scale;
+  const double tilesInViewY = static_cast<double>(height()) / scaledTileSize;
   const double marginY = tilesInViewY / 2.0;
 
   // Clamp Y so full view fits within tile bounds (no overshooting north/south)
@@ -1193,7 +1338,7 @@ QPointF Widgets::GPS::clampCenterTile(QPointF tile) const
  * @param zoom Zoom level.
  * @return Coordinate in degrees (lat, lon).
  */
-QPointF Widgets::GPS::tileToLatLon(const QPointF &tile, int zoom)
+QPointF Widgets::GPS::tileToLatLon(const QPointF &tile, double zoom)
 {
   double n = qPow(2.0, zoom);
   double lon = tile.x() / n * 360.0 - 180.0;
@@ -1206,10 +1351,10 @@ QPointF Widgets::GPS::tileToLatLon(const QPointF &tile, int zoom)
  * @brief Converts geographic lat/lon to tile XY.
  * @param lat Latitude in degrees.
  * @param lon Longitude in degrees.
- * @param zoom Zoom level.
+ * @param zoom Zoom level (can be fractional).
  * @return Tile coordinate.
  */
-QPointF Widgets::GPS::latLonToTile(double lat, double lon, int zoom)
+QPointF Widgets::GPS::latLonToTile(double lat, double lon, double zoom)
 {
   double latRad = qDegreesToRadians(lat);
   double n = qPow(2.0, zoom);
@@ -1331,39 +1476,50 @@ QString Widgets::GPS::nasaWeatherUrl(const int tx, const int ty,
  *
  * Zooms in/out based on scroll direction and recenters the map to keep the
  * current cursor location fixed in geo space.
+ *
+ * Applies smooth continuous zoom using the same approach as PlotWidget.
+ * Normalizes scroll delta to fractional ticks for touchpad compatibility.
+ * Renders tiles at floor(zoom) level with scaling for smooth transitions.
  */
 void Widgets::GPS::wheelEvent(QWheelEvent *event)
 {
   const int delta = event->angleDelta().y();
-  const int newZoom = qBound(MIN_ZOOM, m_zoom + (delta > 0 ? 1 : -1),
-                             m_mapMaxZoom[m_mapType]);
-
-  if (newZoom != m_zoom)
-  {
-    if (!autoCenter())
-    {
-      const QPointF cursorPos = event->position();
-      const QPointF cursorTileOffset((cursorPos.x() - width() / 2.0) / 256.0,
-                                     (cursorPos.y() - height() / 2.0) / 256.0);
-
-      const QPointF cursorTile = m_centerTile + cursorTileOffset;
-      const QPointF geo = tileToLatLon(cursorTile, m_zoom);
-      m_zoom = newZoom;
-
-      const QPointF newTile = latLonToTile(geo.x(), geo.y(), m_zoom);
-      m_centerTile = clampCenterTile(newTile - cursorTileOffset);
-
-      updateTiles();
-      update();
-
-      Q_EMIT zoomLevelChanged();
-    }
-
-    else
-      setZoomLevel(newZoom);
-  }
+  if (delta == 0)
+    return;
 
   event->accept();
+
+  const double zoomFactor = 1.15;
+  const double deltaNorm = -delta / 120.0;
+  const double factor = qPow(zoomFactor, -deltaNorm);
+  const double newZoom = qBound(static_cast<double>(MIN_ZOOM),
+                                m_zoom * factor,
+                                static_cast<double>(m_mapMaxZoom[m_mapType]));
+
+  if (qAbs(newZoom - m_zoom) < 0.001)
+    return;
+
+  if (!autoCenter())
+  {
+    const QPointF cursorPos = event->position();
+    const QPointF cursorTileOffset((cursorPos.x() - width() / 2.0) / 256.0,
+                                   (cursorPos.y() - height() / 2.0) / 256.0);
+
+    const QPointF cursorTile = m_centerTile + cursorTileOffset;
+    const QPointF geo = tileToLatLon(cursorTile, m_zoom);
+    m_zoom = newZoom;
+
+    const QPointF newTile = latLonToTile(geo.x(), geo.y(), m_zoom);
+    m_centerTile = clampCenterTile(newTile - cursorTileOffset);
+
+    updateTiles();
+    update();
+
+    Q_EMIT zoomLevelChanged();
+  }
+
+  else
+    setZoomLevelPrecise(newZoom);
 }
 
 /**
