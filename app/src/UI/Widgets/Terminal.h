@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QTimer>
+#include <QColor>
 #include <QPalette>
 #include <QQuickPaintedItem>
 
@@ -73,6 +74,10 @@ class Terminal : public QQuickPaintedItem
              READ scrollOffsetY
              WRITE setScrollOffsetY
              NOTIFY scrollOffsetYChanged)
+  Q_PROPERTY(bool ansiColors
+             READ ansiColors
+             WRITE setAnsiColors
+             NOTIFY ansiColorsChanged)
   // clang-format on
 
 signals:
@@ -84,6 +89,7 @@ signals:
   void copyAvailableChanged();
   void scrollOffsetYChanged();
   void vt100EmulationChanged();
+  void ansiColorsChanged();
 
 public:
   Terminal(QQuickItem *parent = 0);
@@ -112,6 +118,7 @@ public:
   [[nodiscard]] const QPalette &palette() const;
 
   [[nodiscard]] bool autoscroll() const;
+  [[nodiscard]] bool ansiColors() const;
   [[nodiscard]] bool copyAvailable() const;
   [[nodiscard]] bool vt100emulation() const;
 
@@ -131,6 +138,7 @@ public slots:
   void setAutoscroll(const bool enabled);
   void setScrollOffsetY(const int offset);
   void setPalette(const QPalette &palette);
+  void setAnsiColors(const bool enabled);
   void setVt100Emulation(const bool enabled);
 
 private slots:
@@ -153,6 +161,7 @@ private:
   void setCursorPosition(const QPoint &position);
   void setCursorPosition(const int x, const int y);
   void replaceData(int x, int y, const QChar &byte);
+  void applyAnsiColor(int code);
 
 protected:
   bool shouldEndSelection(const QChar &c);
@@ -165,6 +174,7 @@ protected:
 private:
   QPalette m_palette;
   QStringList m_data;
+  QList<QList<QColor>> m_colorData;
 
   QFont m_font;
   int m_cWidth;
@@ -183,6 +193,7 @@ private:
 
   State m_state;
   bool m_autoscroll;
+  bool m_ansiColors;
   bool m_emulateVt100;
   bool m_cursorVisible;
   bool m_mouseTracking;
@@ -192,5 +203,6 @@ private:
   bool m_useFormatValueY;
 
   bool m_stateChanged;
+  QColor m_currentColor;
 };
 } // namespace Widgets

@@ -81,6 +81,7 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   , m_scrollOffsetY(0)
   , m_state(Text)
   , m_autoscroll(true)
+  , m_ansiColors(false)
   , m_emulateVt100(false)
   , m_cursorVisible(true)
   , m_mouseTracking(false)
@@ -331,6 +332,8 @@ void Widgets::Terminal::paint(QPainter *painter)
 
   // Draw characters one by one with variable width handling
   y = m_borderY;
+  const QColor defaultTextColor = m_palette.color(QPalette::Text);
+
   for (int i = firstLine; i <= lastVLine && y < height() - m_borderY; ++i)
   {
     // Obtain line data
@@ -343,6 +346,11 @@ void Widgets::Terminal::paint(QPainter *painter)
       continue;
     }
 
+    // Obtain color data for this line (only if ANSI colors enabled)
+    const QList<QColor> *colorLine = nullptr;
+    if (m_ansiColors && i < m_colorData.size())
+      colorLine = &m_colorData[i];
+
     // Render line with word-wrapping
     int start = 0;
     while (start < line.length())
@@ -351,21 +359,38 @@ void Widgets::Terminal::paint(QPainter *painter)
       const QString segment = line.mid(start, end - start);
       int x = m_borderX;
 
-      for (int j = 0; j < segment.length(); ++j)
+      // Fast path: no ANSI colors - use single pen color for all characters
+      if (!colorLine)
       {
-        // Get character to render
-        const QString character = segment.mid(j, 1);
+        painter->setPen(defaultTextColor);
+        for (int j = 0; j < segment.length(); ++j)
+        {
+          const QString character = segment.mid(j, 1);
+          int charWidth = painter->fontMetrics().horizontalAdvance(character);
+          painter->drawText(x, y, charWidth, m_cHeight, Qt::AlignCenter,
+                            character);
+          x += charWidth;
+        }
+      }
+      // Slow path: ANSI colors - set pen per character
+      else
+      {
+        for (int j = 0; j < segment.length(); ++j)
+        {
+          const QString character = segment.mid(j, 1);
+          int charWidth = painter->fontMetrics().horizontalAdvance(character);
 
-        // Measure the character width dynamically
-        int charWidth = painter->fontMetrics().horizontalAdvance(character);
+          // Get the color for this character
+          const int charIndex = start + j;
+          QColor textColor = defaultTextColor;
+          if (charIndex < colorLine->size())
+            textColor = (*colorLine)[charIndex];
 
-        // Draw the character at the centered position within its cell
-        painter->setPen(m_palette.color(QPalette::Text));
-        painter->drawText(x, y, charWidth, m_cHeight, Qt::AlignCenter,
-                          character);
-
-        // Move to the next character position
-        x += charWidth;
+          painter->setPen(textColor);
+          painter->drawText(x, y, charWidth, m_cHeight, Qt::AlignCenter,
+                            character);
+          x += charWidth;
+        }
       }
 
       y += lineHeight;
@@ -541,6 +566,16 @@ bool Widgets::Terminal::copyAvailable() const
 bool Widgets::Terminal::vt100emulation() const
 {
   return m_emulateVt100;
+}
+
+/**
+ * @brief Checks if ANSI color support is enabled.
+ *
+ * @return True if ANSI colors are enabled, false otherwise.
+ */
+bool Widgets::Terminal::ansiColors() const
+{
+  return m_ansiColors;
 }
 
 /**
@@ -882,6 +917,33 @@ void Widgets::Terminal::setVt100Emulation(const bool enabled)
 }
 
 /**
+ * @brief Enables or disables ANSI color support.
+ *
+ * @param enabled If true, ANSI colors are enabled; otherwise, text uses the
+ * default palette color.
+ *
+ * When enabled, the terminal interprets ANSI SGR escape sequences for text
+ * coloring (codes 30-37 for foreground colors, 0 for reset, 1 for bold).
+ * Emits the ansiColorsChanged() signal on change.
+ */
+void Widgets::Terminal::setAnsiColors(const bool enabled)
+{
+  m_ansiColors = enabled;
+
+  if (enabled)
+  {
+    // Initialize color tracking when enabling
+    m_currentColor = m_palette.color(QPalette::Text);
+    m_colorData.reserve(MAX_LINES);
+  }
+  // Note: We keep m_colorData when disabling so colors can be restored
+  // if the user re-enables. Memory is only used for text received while
+  // ANSI colors was enabled at some point.
+
+  Q_EMIT ansiColorsChanged();
+}
+
+/**
  * @brief Toggles the visibility of the cursor.
  *
  * Flips the visibility state of the cursor, which is typically used to create
@@ -1016,6 +1078,8 @@ void Widgets::Terminal::appendString(QStringView string)
   if (m_data.size() >= MAX_LINES && linesToDrop > 0)
   {
     m_data.erase(m_data.begin(), m_data.begin() + linesToDrop);
+    if (m_ansiColors && m_colorData.size() >= linesToDrop)
+      m_colorData.erase(m_colorData.begin(), m_colorData.begin() + linesToDrop);
 
     if (m_cursorPosition.y() >= linesToDrop)
       m_cursorPosition.setY(m_cursorPosition.y() - linesToDrop);
@@ -1145,6 +1209,17 @@ void Widgets::Terminal::initBuffer()
   m_data.squeeze();
   m_scrollOffsetY = 0;
   m_data.reserve(MAX_LINES);
+
+  // Always clear color data on terminal reset
+  m_colorData.clear();
+  m_colorData.squeeze();
+
+  // Only pre-allocate color memory if ANSI colors is currently enabled
+  if (m_ansiColors)
+  {
+    m_colorData.reserve(MAX_LINES);
+    m_currentColor = m_palette.color(QPalette::Text);
+  }
 }
 
 /**
@@ -1282,9 +1357,13 @@ void Widgets::Terminal::processFormat(const QChar &byte, QString &text)
       m_state = Format;
     }
 
-    // Exit text formatting
+    // Exit text formatting and apply ANSI color if enabled
     else if (byte == 'm')
+    {
+      if (m_ansiColors)
+        applyAnsiColor(m_formatValue);
       m_state = Text;
+    }
 
     // Cursor movement
     else if (byte >= 'A' && byte <= 'D')
@@ -1399,6 +1478,68 @@ void Widgets::Terminal::processResetFont(const QChar &byte, QString &text)
 }
 
 /**
+ * @brief Applies an ANSI SGR (Select Graphic Rendition) color code.
+ *
+ * @param code The ANSI SGR code to apply.
+ *
+ * Interprets standard ANSI color codes:
+ * - 0: Reset to default text color
+ * - 1: Bold/bright (makes current color brighter)
+ * - 30-37: Standard foreground colors (black, red, green, yellow, blue,
+ *          magenta, cyan, white)
+ * - 90-97: Bright foreground colors
+ *
+ * Updates m_currentColor which is used when appending characters.
+ */
+void Widgets::Terminal::applyAnsiColor(int code)
+{
+  // Standard ANSI colors (30-37)
+  static const QColor standardColors[] = {
+      QColor(0, 0, 0),       // 30: Black
+      QColor(205, 49, 49),   // 31: Red
+      QColor(13, 188, 121),  // 32: Green
+      QColor(229, 229, 16),  // 33: Yellow
+      QColor(36, 114, 200),  // 34: Blue
+      QColor(188, 63, 188),  // 35: Magenta
+      QColor(17, 168, 205),  // 36: Cyan
+      QColor(229, 229, 229)  // 37: White
+  };
+
+  // Bright ANSI colors (90-97)
+  static const QColor brightColors[] = {
+      QColor(102, 102, 102), // 90: Bright Black (Gray)
+      QColor(241, 76, 76),   // 91: Bright Red
+      QColor(35, 209, 139),  // 92: Bright Green
+      QColor(245, 245, 67),  // 93: Bright Yellow
+      QColor(59, 142, 234),  // 94: Bright Blue
+      QColor(214, 112, 214), // 95: Bright Magenta
+      QColor(41, 184, 219),  // 96: Bright Cyan
+      QColor(255, 255, 255)  // 97: Bright White
+  };
+
+  if (code == 0)
+  {
+    // Reset to default color
+    m_currentColor = m_palette.color(QPalette::Text);
+  }
+  else if (code == 1)
+  {
+    // Bold/bright - make current color lighter
+    m_currentColor = m_currentColor.lighter(130);
+  }
+  else if (code >= 30 && code <= 37)
+  {
+    // Standard foreground colors
+    m_currentColor = standardColors[code - 30];
+  }
+  else if (code >= 90 && code <= 97)
+  {
+    // Bright foreground colors
+    m_currentColor = brightColors[code - 90];
+  }
+}
+
+/**
  * @brief Sets the cursor position to a specified point.
  *
  * @param position The new cursor position as a QPoint object.
@@ -1467,6 +1608,35 @@ void Widgets::Terminal::replaceData(int x, int y, const QChar &byte)
 
   // Get reference to current line
   QString &line = m_data[y];
+
+  // Only manage color data if ANSI colors is enabled
+  if (m_ansiColors)
+  {
+    // Ensure color buffer line exists
+    if (y >= m_colorData.size())
+      m_colorData.resize(y + 1);
+
+    QList<QColor> &colorLine = m_colorData[y];
+
+    // Pad color line if needed
+    if (x > line.size())
+    {
+      const int padCount = x - line.size();
+      const QColor defaultColor = m_palette.color(QPalette::Text);
+      for (int i = 0; i < padCount; ++i)
+        colorLine.append(defaultColor);
+    }
+
+    // Ensure colorLine is long enough
+    while (colorLine.size() < line.size())
+      colorLine.append(m_palette.color(QPalette::Text));
+
+    // Store color for the character position
+    if (x >= 0 && x < colorLine.size())
+      colorLine[x] = m_currentColor;
+    else if (x >= 0)
+      colorLine.append(m_currentColor);
+  }
 
   // Pad line to x if needed
   if (x > line.size())
