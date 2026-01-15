@@ -974,6 +974,7 @@ void Widgets::Terminal::onThemeChanged()
   m_palette.setColor(QPalette::Window, theme->getColor("console_border"));
   m_palette.setColor(QPalette::Highlight, theme->getColor("console_highlight"));
   setFillColor(m_palette.color(QPalette::Base));
+  updateAnsiColorPalette();
   update();
   // clang-format on
 }
@@ -1477,6 +1478,71 @@ void Widgets::Terminal::processResetFont(const QChar &byte, QString &text)
 }
 
 /**
+ * @brief Updates the ANSI color palette based on the current theme.
+ *
+ * Determines whether to use light or dark ANSI colors based on the background
+ * color luminance. Uses standard UNIX/Linux terminal color palette.
+ *
+ * Light themes (dark background) use bright colors, dark themes (light
+ * background) use darker colors for better contrast.
+ */
+void Widgets::Terminal::updateAnsiColorPalette()
+{
+  const auto theme = &Misc::ThemeManager::instance();
+  const QColor consoleBase = theme->getColor("console_base");
+  const QColor consoleText = theme->getColor("console_text");
+  const bool isDarkTheme = consoleText.lightness() > consoleBase.lightness();
+
+  // Colors for dark backgrounds
+  if (isDarkTheme)
+  {
+    // Standard colors
+    m_ansiStandardColors[0] = QColor(0, 0, 0);       // Black
+    m_ansiStandardColors[1] = QColor(205, 49, 49);   // Red
+    m_ansiStandardColors[2] = QColor(13, 188, 121);  // Green
+    m_ansiStandardColors[3] = QColor(229, 229, 16);  // Yellow
+    m_ansiStandardColors[4] = QColor(36, 114, 200);  // Blue
+    m_ansiStandardColors[5] = QColor(188, 63, 188);  // Magenta
+    m_ansiStandardColors[6] = QColor(17, 168, 205);  // Cyan
+    m_ansiStandardColors[7] = QColor(229, 229, 229); // White
+
+    // Bright colors
+    m_ansiBrightColors[0] = QColor(102, 102, 102); // Bright Black (Gray)
+    m_ansiBrightColors[1] = QColor(241, 76, 76);   // Bright Red
+    m_ansiBrightColors[2] = QColor(35, 209, 139);  // Bright Green
+    m_ansiBrightColors[3] = QColor(245, 245, 67);  // Bright Yellow
+    m_ansiBrightColors[4] = QColor(59, 142, 234);  // Bright Blue
+    m_ansiBrightColors[5] = QColor(214, 112, 214); // Bright Magenta
+    m_ansiBrightColors[6] = QColor(41, 184, 219);  // Bright Cyan
+    m_ansiBrightColors[7] = QColor(255, 255, 255); // Bright White
+  }
+
+  // Colors for light backgrounds
+  else
+  {
+    // Standard colors
+    m_ansiStandardColors[0] = QColor(0, 0, 0);       // Black
+    m_ansiStandardColors[1] = QColor(170, 0, 0);     // Red
+    m_ansiStandardColors[2] = QColor(0, 140, 0);     // Green
+    m_ansiStandardColors[3] = QColor(170, 140, 0);   // Yellow
+    m_ansiStandardColors[4] = QColor(0, 0, 170);     // Blue
+    m_ansiStandardColors[5] = QColor(170, 0, 170);   // Magenta
+    m_ansiStandardColors[6] = QColor(0, 140, 170);   // Cyan
+    m_ansiStandardColors[7] = QColor(170, 170, 170); // White
+
+    // Bright colors
+    m_ansiBrightColors[0] = QColor(85, 85, 85);  // Bright Black (Gray)
+    m_ansiBrightColors[1] = QColor(210, 0, 0);   // Bright Red
+    m_ansiBrightColors[2] = QColor(0, 170, 0);   // Bright Green
+    m_ansiBrightColors[3] = QColor(210, 170, 0); // Bright Yellow
+    m_ansiBrightColors[4] = QColor(0, 0, 210);   // Bright Blue
+    m_ansiBrightColors[5] = QColor(210, 0, 210); // Bright Magenta
+    m_ansiBrightColors[6] = QColor(0, 170, 210); // Bright Cyan
+    m_ansiBrightColors[7] = QColor(85, 85, 85);  // Bright White
+  }
+}
+
+/**
  * @brief Applies an ANSI SGR (Select Graphic Rendition) color code.
  *
  * @param code The ANSI SGR code to apply.
@@ -1492,30 +1558,6 @@ void Widgets::Terminal::processResetFont(const QChar &byte, QString &text)
  */
 void Widgets::Terminal::applyAnsiColor(int code)
 {
-  // Standard ANSI colors (30-37)
-  static const QColor standardColors[] = {
-      QColor(0, 0, 0),      // 30: Black
-      QColor(205, 49, 49),  // 31: Red
-      QColor(13, 188, 121), // 32: Green
-      QColor(229, 229, 16), // 33: Yellow
-      QColor(36, 114, 200), // 34: Blue
-      QColor(188, 63, 188), // 35: Magenta
-      QColor(17, 168, 205), // 36: Cyan
-      QColor(229, 229, 229) // 37: White
-  };
-
-  // Bright ANSI colors (90-97)
-  static const QColor brightColors[] = {
-      QColor(102, 102, 102), // 90: Bright Black (Gray)
-      QColor(241, 76, 76),   // 91: Bright Red
-      QColor(35, 209, 139),  // 92: Bright Green
-      QColor(245, 245, 67),  // 93: Bright Yellow
-      QColor(59, 142, 234),  // 94: Bright Blue
-      QColor(214, 112, 214), // 95: Bright Magenta
-      QColor(41, 184, 219),  // 96: Bright Cyan
-      QColor(255, 255, 255)  // 97: Bright White
-  };
-
   // Reset to default color
   if (code == 0)
     m_currentColor = m_palette.color(QPalette::Text);
@@ -1524,13 +1566,13 @@ void Widgets::Terminal::applyAnsiColor(int code)
   else if (code == 1)
     m_currentColor = m_currentColor.lighter(130);
 
-  // Standard foreground colors
+  // Standard foreground colors (30-37)
   else if (code >= 30 && code <= 37)
-    m_currentColor = standardColors[code - 30];
+    m_currentColor = m_ansiStandardColors[code - 30];
 
-  // Bright foreground colors
+  // Bright foreground colors (90-97)
   else if (code >= 90 && code <= 97)
-    m_currentColor = brightColors[code - 90];
+    m_currentColor = m_ansiBrightColors[code - 90];
 }
 
 /**

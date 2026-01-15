@@ -162,6 +162,7 @@ private:
   void setCursorPosition(const int x, const int y);
   void replaceData(int x, int y, const QChar &byte);
   void applyAnsiColor(int code);
+  void updateAnsiColorPalette();
 
 protected:
   bool shouldEndSelection(const QChar &c);
@@ -204,5 +205,8 @@ private:
 
   bool m_stateChanged;
   QColor m_currentColor;
+
+  QColor m_ansiStandardColors[8];
+  QColor m_ansiBrightColors[8];
 };
 } // namespace Widgets

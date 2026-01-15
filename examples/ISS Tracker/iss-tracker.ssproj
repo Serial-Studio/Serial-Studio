@@ -5,6 +5,9 @@
     "dashboardLayout": {
         "autoLayout": true,
         "windowOrder": [
+            0,
+            1,
+            2
         ]
     },
     "decoder": 0,
