@@ -248,11 +248,10 @@ void Widgets::Terminal::paint(QPainter *painter)
     // If the line is fully selected, draw rectangles for each wrapped segment
     if (lineFullySelected)
     {
-      const int wrappedLines
-          = qMax(1, (line.length() + maxCharsPerLine() - 1) / maxCharsPerLine());
-      for (int wrapIndex = 0; wrapIndex < wrappedLines
-                              && y < height() - m_borderY;
-           ++wrapIndex)
+      const int wrappedLines = qMax(1, (line.length() + maxCharsPerLine() - 1)
+                                           / maxCharsPerLine());
+      for (int wrapIndex = 0;
+           wrapIndex < wrappedLines && y < height() - m_borderY; ++wrapIndex)
       {
         QRect selectionRect(m_borderX, y, width() - 2 * m_borderX, m_cHeight);
         painter->fillRect(selectionRect, m_palette.color(QPalette::Highlight));
@@ -1495,14 +1494,14 @@ void Widgets::Terminal::applyAnsiColor(int code)
 {
   // Standard ANSI colors (30-37)
   static const QColor standardColors[] = {
-      QColor(0, 0, 0),       // 30: Black
-      QColor(205, 49, 49),   // 31: Red
-      QColor(13, 188, 121),  // 32: Green
-      QColor(229, 229, 16),  // 33: Yellow
-      QColor(36, 114, 200),  // 34: Blue
-      QColor(188, 63, 188),  // 35: Magenta
-      QColor(17, 168, 205),  // 36: Cyan
-      QColor(229, 229, 229)  // 37: White
+      QColor(0, 0, 0),      // 30: Black
+      QColor(205, 49, 49),  // 31: Red
+      QColor(13, 188, 121), // 32: Green
+      QColor(229, 229, 16), // 33: Yellow
+      QColor(36, 114, 200), // 34: Blue
+      QColor(188, 63, 188), // 35: Magenta
+      QColor(17, 168, 205), // 36: Cyan
+      QColor(229, 229, 229) // 37: White
   };
 
   // Bright ANSI colors (90-97)
@@ -1517,26 +1516,21 @@ void Widgets::Terminal::applyAnsiColor(int code)
       QColor(255, 255, 255)  // 97: Bright White
   };
 
+  // Reset to default color
   if (code == 0)
-  {
-    // Reset to default color
     m_currentColor = m_palette.color(QPalette::Text);
-  }
+
+  // Bold/bright - make current color lighter
   else if (code == 1)
-  {
-    // Bold/bright - make current color lighter
     m_currentColor = m_currentColor.lighter(130);
-  }
+
+  // Standard foreground colors
   else if (code >= 30 && code <= 37)
-  {
-    // Standard foreground colors
     m_currentColor = standardColors[code - 30];
-  }
+
+  // Bright foreground colors
   else if (code >= 90 && code <= 97)
-  {
-    // Bright foreground colors
     m_currentColor = brightColors[code - 90];
-  }
 }
 
 /**
