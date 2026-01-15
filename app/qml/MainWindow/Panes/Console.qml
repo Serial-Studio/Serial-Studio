@@ -41,6 +41,15 @@ Widgets.Pane {
   property alias ansiColors: terminal.ansiColors
 
   //
+  // Bind terminal ANSI colors to console handler color timestamps
+  //
+  Binding {
+    target: Cpp_Console_Handler
+    property: "colorTimestamps"
+    value: terminal.ansiColors
+  }
+
+  //
   // Utility functions between terminal widget & main window
   //
   function sendData() {

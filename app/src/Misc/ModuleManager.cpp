@@ -139,20 +139,19 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
   switch (type)
   {
     case QtInfoMsg:
-      output = QStringLiteral("%1[INFO] %2%3")
-                   .arg(ansiCyan, message, ansiReset);
+      output
+          = QStringLiteral("%1[INFO] %2%3").arg(ansiCyan, message, ansiReset);
       break;
     case QtDebugMsg:
-      output = QStringLiteral("%1[DEBG] %2%3")
-                   .arg(ansiGreen, message, ansiReset);
+      output
+          = QStringLiteral("%1[DEBG] %2%3").arg(ansiGreen, message, ansiReset);
       break;
     case QtWarningMsg:
-      output = QStringLiteral("%1[WARN] %2%3")
-                   .arg(ansiYellow, message, ansiReset);
+      output
+          = QStringLiteral("%1[WARN] %2%3").arg(ansiYellow, message, ansiReset);
       break;
     case QtCriticalMsg:
-      output = QStringLiteral("%1[CRIT] %2%3")
-                   .arg(ansiRed, message, ansiReset);
+      output = QStringLiteral("%1[CRIT] %2%3").arg(ansiRed, message, ansiReset);
       break;
     case QtFatalMsg:
       output = QStringLiteral("%1[FATL] %2%3")

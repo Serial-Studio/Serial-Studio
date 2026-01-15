@@ -52,6 +52,10 @@ class Handler : public QObject
              READ showTimestamp
              WRITE setShowTimestamp
              NOTIFY showTimestampChanged)
+  Q_PROPERTY(bool colorTimestamps
+             READ colorTimestamps
+             WRITE setColorTimestamps
+             NOTIFY colorTimestampsChanged)
   Q_PROPERTY(Console::Handler::DataMode dataMode
              READ dataMode
              WRITE setDataMode
@@ -117,6 +121,7 @@ signals:
   void historyItemChanged();
   void textDocumentChanged();
   void showTimestampChanged();
+  void colorTimestampsChanged();
   void checksumMethodChanged();
   void displayString(const QString &text);
 
@@ -155,6 +160,7 @@ public:
 
   [[nodiscard]] bool echo() const;
   [[nodiscard]] bool showTimestamp() const;
+  [[nodiscard]] bool colorTimestamps() const;
   [[nodiscard]] int checksumMethod() const;
 
   [[nodiscard]] DataMode dataMode() const;
@@ -189,6 +195,7 @@ public slots:
   void setChecksumMethod(const int method);
   void setFontFamily(const QString &family);
   void setShowTimestamp(const bool enabled);
+  void setColorTimestamps(const bool enabled);
   void setDataMode(const Console::Handler::DataMode &mode);
   void setLineEnding(const Console::Handler::LineEnding &mode);
   void setDisplayMode(const Console::Handler::DisplayMode &mode);
@@ -216,6 +223,7 @@ private:
 
   bool m_echo;
   bool m_showTimestamp;
+  bool m_colorTimestamps;
   bool m_isStartingLine;
   bool m_lastCharWasCR;
 

@@ -28,7 +28,6 @@
 #include "IO/Manager.h"
 #include "Misc/Translator.h"
 #include "Misc/TimerEvents.h"
-#include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/Terminal.h"
 
