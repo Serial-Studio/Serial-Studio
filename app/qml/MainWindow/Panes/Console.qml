@@ -38,6 +38,7 @@ Widgets.Pane {
   // Custom properties
   //
   property alias vt100emulation: terminal.vt100emulation
+  property alias ansiColors: terminal.ansiColors
 
   //
   // Utility functions between terminal widget & main window

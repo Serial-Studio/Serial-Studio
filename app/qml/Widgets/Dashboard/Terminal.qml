@@ -31,6 +31,7 @@ Item {
   implicitWidth: layout.implicitWidth + 32
   implicitHeight: layout.implicitHeight + 32
   property alias vt100emulation: terminal.vt100emulation
+  property alias ansiColors: terminal.ansiColors
 
   //
   // Widget data inputs (unused)
@@ -65,6 +66,7 @@ Item {
     property alias timestamp: timestampCheck.checked
     property alias checksum: checkumCombo.currentIndex
     property alias vt100Enabled: terminal.vt100emulation
+    property alias ansiColorsEnabled: terminal.ansiColors
     property alias lineEnding: lineEndingCombo.currentIndex
     property alias displayMode: displayModeCombo.currentIndex
   }
@@ -400,6 +402,17 @@ Item {
         onCheckedChanged: {
           if (terminal.vt100emulation !== checked)
             terminal.vt100emulation = checked
+        }
+      }
+
+      CheckBox {
+        id: ansiColorsCheck
+        text: qsTr("ANSI Colors")
+        Layout.alignment: Qt.AlignVCenter
+        checked: terminal.ansiColors
+        onCheckedChanged: {
+          if (terminal.ansiColors !== checked)
+            terminal.ansiColors = checked
         }
       }
 
