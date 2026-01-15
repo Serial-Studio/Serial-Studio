@@ -84,9 +84,7 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   , m_emulateVt100(false)
   , m_cursorVisible(true)
   , m_mouseTracking(false)
-  , m_formatValue(0)
-  , m_formatValueY(0)
-  , m_useFormatValueY(false)
+  , m_currentFormatValue(0)
   , m_stateChanged(false)
 {
   // Initialize data buffer
@@ -331,7 +329,6 @@ void Widgets::Terminal::paint(QPainter *painter)
   // Draw characters one by one with variable width handling
   y = m_borderY;
   const QColor defaultTextColor = m_palette.color(QPalette::Text);
-
   for (int i = firstLine; i <= lastVLine && y < height() - m_borderY; ++i)
   {
     // Obtain line data
@@ -345,7 +342,7 @@ void Widgets::Terminal::paint(QPainter *painter)
     }
 
     // Obtain color data for this line (only if ANSI colors enabled)
-    const QList<QColor> *colorLine = nullptr;
+    const QList<CharColor> *colorLine = nullptr;
     if (m_ansiColors && i < m_colorData.size())
       colorLine = &m_colorData[i];
 
@@ -370,25 +367,68 @@ void Widgets::Terminal::paint(QPainter *painter)
           x += charWidth;
         }
       }
-      // Slow path: ANSI colors - set pen per character
+      // Slow path: ANSI colors - pre-calculate positions, draw backgrounds,
+      // then text
       else
       {
+        // Pre-calculate character info
+        struct CharInfo
+        {
+          QString text;
+          int x;
+          int width;
+          QColor fgColor;
+          QColor bgColor;
+        };
+
+        QVector<CharInfo> charInfos;
+        charInfos.reserve(segment.length());
+
+        int xPos = x;
         for (int j = 0; j < segment.length(); ++j)
         {
           const QString character = segment.mid(j, 1);
-          int charWidth = painter->fontMetrics().horizontalAdvance(character);
-
-          // Get the color for this character
+          const int charWidth
+              = painter->fontMetrics().horizontalAdvance(character);
           const int charIndex = start + j;
-          QColor textColor = defaultTextColor;
-          if (charIndex < colorLine->size())
-            textColor = (*colorLine)[charIndex];
 
-          painter->setPen(textColor);
-          painter->drawText(x, y, charWidth, m_cHeight, Qt::AlignCenter,
-                            character);
-          x += charWidth;
+          CharInfo info;
+          info.text = character;
+          info.x = xPos;
+          info.width = charWidth;
+          info.fgColor = defaultTextColor;
+
+          if (charIndex < colorLine->size())
+          {
+            const CharColor &charColor = (*colorLine)[charIndex];
+            if (charColor.foreground.isValid())
+              info.fgColor = charColor.foreground;
+            info.bgColor = charColor.background;
+          }
+
+          charInfos.append(info);
+          xPos += charWidth;
         }
+
+        // First pass: draw all backgrounds
+        // Use the same Y position as drawText since we're using Qt::AlignCenter
+        for (const CharInfo &info : charInfos)
+        {
+          if (info.bgColor.isValid())
+          {
+            painter->fillRect(info.x, y, info.width, m_cHeight, info.bgColor);
+          }
+        }
+
+        // Second pass: draw all text
+        for (const CharInfo &info : charInfos)
+        {
+          painter->setPen(info.fgColor);
+          painter->drawText(info.x, y, info.width, m_cHeight, Qt::AlignCenter,
+                            info.text);
+        }
+
+        x = xPos;
       }
 
       y += lineHeight;
@@ -1293,9 +1333,8 @@ void Widgets::Terminal::processEscape(const QChar &byte, QString &text)
 {
   (void)text;
 
-  m_formatValue = 0;
-  m_formatValueY = 0;
-  m_useFormatValueY = false;
+  m_formatValues.clear();
+  m_currentFormatValue = 0;
 
   if (byte == '[')
     m_state = Format;
@@ -1339,58 +1378,54 @@ void Widgets::Terminal::processFormat(const QChar &byte, QString &text)
   // Obtain format value
   if (byte >= '0' && byte <= '9')
   {
-    if (m_useFormatValueY)
-      m_formatValueY = m_formatValueY * 10 + (byte.cell() - '0');
-    else
-      m_formatValue = m_formatValue * 10 + (byte.cell() - '0');
+    m_currentFormatValue = m_currentFormatValue * 10 + (byte.cell() - '0');
   }
 
   // Control sequences
   else
   {
-    // Text formatting (ignored)
+    // Semicolon: store current value and prepare for next
     if (byte == ';')
     {
-      m_formatValueY = 0;
-      m_useFormatValueY = true;
+      m_formatValues.append(m_currentFormatValue);
+      m_currentFormatValue = 0;
       m_state = Format;
     }
 
     // Exit text formatting and apply ANSI color if enabled
     else if (byte == 'm')
     {
+      m_formatValues.append(m_currentFormatValue);
       if (m_ansiColors)
-        applyAnsiColor(m_formatValue);
+        applyAnsiColor(m_formatValues);
       m_state = Text;
     }
 
     // Cursor movement
     else if (byte >= 'A' && byte <= 'D')
     {
-      if (!m_formatValue)
-        m_formatValue++;
-
+      const int value = m_currentFormatValue ? m_currentFormatValue : 1;
       int x = 0;
       int y = 0;
       switch (byte.toLatin1())
       {
         case 'A':
           x = m_cursorPosition.x();
-          y = qMax(0, m_cursorPosition.y() - m_formatValue);
+          y = qMax(0, m_cursorPosition.y() - value);
           setCursorPosition(x, y);
           break;
         case 'B':
           x = m_cursorPosition.x();
-          y = m_cursorPosition.y() + m_formatValue;
+          y = m_cursorPosition.y() + value;
           setCursorPosition(x, y);
           break;
         case 'C':
-          x = m_cursorPosition.x() + m_formatValue;
+          x = m_cursorPosition.x() + value;
           y = m_cursorPosition.y();
           setCursorPosition(x, y);
           break;
         case 'D':
-          x = qMax(0, m_cursorPosition.x() - m_formatValue);
+          x = qMax(0, m_cursorPosition.x() - value);
           y = m_cursorPosition.y();
           setCursorPosition(x, y);
           break;
@@ -1404,14 +1439,16 @@ void Widgets::Terminal::processFormat(const QChar &byte, QString &text)
     // Move cursor to current format value?
     else if (byte == 'H')
     {
-      setCursorPosition(m_formatValue, m_formatValueY);
+      const int x = m_formatValues.value(0, 0);
+      const int y = m_formatValues.value(1, 0);
+      setCursorPosition(x, y);
       m_state = Text;
     }
 
     // J function
     else if (byte == 'J')
     {
-      switch (m_formatValue)
+      switch (m_currentFormatValue)
       {
         case 0:
         case 1:
@@ -1419,7 +1456,8 @@ void Widgets::Terminal::processFormat(const QChar &byte, QString &text)
           clear();
           break;
         default:
-          qWarning() << "J" << m_formatValue << "function not implemented!";
+          qWarning() << "J" << m_currentFormatValue
+                     << "function not implemented!";
           break;
       }
 
@@ -1429,14 +1467,15 @@ void Widgets::Terminal::processFormat(const QChar &byte, QString &text)
     // K function
     else if (byte == 'K')
     {
-      switch (m_formatValue)
+      switch (m_currentFormatValue)
       {
         case 0:
           removeStringFromCursor(RightDirection);
           break;
         case 1:
         case 2:
-          qWarning() << "K" << m_formatValue << "function not implemented!";
+          qWarning() << "K" << m_currentFormatValue
+                     << "function not implemented!";
           break;
       }
 
@@ -1446,7 +1485,7 @@ void Widgets::Terminal::processFormat(const QChar &byte, QString &text)
     // P function
     else if (byte == 'P')
     {
-      removeStringFromCursor(LeftDirection, m_formatValue);
+      removeStringFromCursor(LeftDirection, m_currentFormatValue);
       removeStringFromCursor(RightDirection);
       m_state = Text;
     }
@@ -1542,36 +1581,228 @@ void Widgets::Terminal::updateAnsiColorPalette()
 }
 
 /**
- * @brief Applies an ANSI SGR (Select Graphic Rendition) color code.
+ * @brief Applies ANSI SGR (Select Graphic Rendition) color codes.
  *
- * @param code The ANSI SGR code to apply.
+ * @param codes List of ANSI SGR codes to apply.
  *
- * Interprets standard ANSI color codes:
- * - 0: Reset to default text color
+ * Supports:
+ * - 0: Reset to default colors
  * - 1: Bold/bright (makes current color brighter)
- * - 30-37: Standard foreground colors (black, red, green, yellow, blue,
- *          magenta, cyan, white)
+ * - 30-37: Standard foreground colors
+ * - 40-47: Standard background colors
  * - 90-97: Bright foreground colors
- *
- * Updates m_currentColor which is used when appending characters.
+ * - 100-107: Bright background colors
+ * - 38;5;N: 256-color foreground (N = 0-255)
+ * - 48;5;N: 256-color background (N = 0-255)
+ * - 38;2;R;G;B: RGB foreground
+ * - 48;2;R;G;B: RGB background
  */
-void Widgets::Terminal::applyAnsiColor(int code)
+void Widgets::Terminal::applyAnsiColor(const QList<int> &codes)
 {
-  // Reset to default color
-  if (code == 0)
-    m_currentColor = m_palette.color(QPalette::Text);
+  for (int i = 0; i < codes.size(); ++i)
+  {
+    const int code = codes[i];
 
-  // Bold/bright - make current color lighter
-  else if (code == 1)
-    m_currentColor = m_currentColor.lighter(130);
+    // Reset to default colors
+    if (code == 0)
+    {
+      m_currentColor = m_palette.color(QPalette::Text);
+      m_currentBgColor = QColor();
+    }
 
-  // Standard foreground colors (30-37)
-  else if (code >= 30 && code <= 37)
-    m_currentColor = m_ansiStandardColors[code - 30];
+    // Bold/bright - make current color lighter
+    else if (code == 1)
+      m_currentColor = m_currentColor.lighter(130);
 
-  // Bright foreground colors (90-97)
-  else if (code >= 90 && code <= 97)
-    m_currentColor = m_ansiBrightColors[code - 90];
+    // Standard foreground colors (30-37)
+    else if (code >= 30 && code <= 37)
+      m_currentColor = m_ansiStandardColors[code - 30];
+
+    // Standard background colors (40-47)
+    else if (code >= 40 && code <= 47)
+      m_currentBgColor = m_ansiStandardColors[code - 40];
+
+    // Bright foreground colors (90-97)
+    else if (code >= 90 && code <= 97)
+      m_currentColor = m_ansiBrightColors[code - 90];
+
+    // Bright background colors (100-107)
+    else if (code >= 100 && code <= 107)
+      m_currentBgColor = m_ansiBrightColors[code - 100];
+
+    // 256-color foreground: 38;5;N
+    else if (code == 38 && i + 2 < codes.size() && codes[i + 1] == 5)
+    {
+      const int colorIndex = codes[i + 2];
+      m_currentColor = getColor256(colorIndex);
+      i += 2;
+    }
+
+    // 256-color background: 48;5;N
+    else if (code == 48 && i + 2 < codes.size() && codes[i + 1] == 5)
+    {
+      const int colorIndex = codes[i + 2];
+      m_currentBgColor = getColor256(colorIndex);
+      i += 2;
+    }
+
+    // RGB foreground: 38;2;R;G;B
+    else if (code == 38 && i + 4 < codes.size() && codes[i + 1] == 2)
+    {
+      const int r = codes[i + 2];
+      const int g = codes[i + 3];
+      const int b = codes[i + 4];
+      m_currentColor = QColor(r, g, b);
+      i += 4;
+    }
+
+    // RGB background: 48;2;R;G;B
+    else if (code == 48 && i + 4 < codes.size() && codes[i + 1] == 2)
+    {
+      const int r = codes[i + 2];
+      const int g = codes[i + 3];
+      const int b = codes[i + 4];
+      m_currentBgColor = QColor(r, g, b);
+      i += 4;
+    }
+  }
+}
+
+/**
+ * @brief Converts a 256-color palette index to a QColor.
+ *
+ * @param index Color index (0-255).
+ * @return QColor corresponding to the index.
+ *
+ * Color ranges:
+ * - 0-7: Standard colors
+ * - 8-15: Bright colors
+ * - 16-231: 6x6x6 RGB cube
+ * - 232-255: Grayscale ramp
+ */
+QColor Widgets::Terminal::getColor256(int index) const
+{
+  return getColor256Static(index);
+}
+
+/**
+ * @brief Static version of getColor256 for use without instance.
+ */
+QColor Widgets::Terminal::getColor256Static(int index)
+{
+  // Standard colors (0-7)
+  if (index < 8)
+  {
+    static const QColor standard[8] = {
+        QColor(0, 0, 0),       // Black
+        QColor(170, 0, 0),     // Red
+        QColor(0, 170, 0),     // Green
+        QColor(170, 85, 0),    // Yellow
+        QColor(0, 0, 170),     // Blue
+        QColor(170, 0, 170),   // Magenta
+        QColor(0, 170, 170),   // Cyan
+        QColor(170, 170, 170), // White
+    };
+    return standard[index];
+  }
+
+  // Bright colors (8-15)
+  if (index < 16)
+  {
+    static const QColor bright[8] = {
+        QColor(85, 85, 85),    // Bright Black
+        QColor(255, 85, 85),   // Bright Red
+        QColor(85, 255, 85),   // Bright Green
+        QColor(255, 255, 85),  // Bright Yellow
+        QColor(85, 85, 255),   // Bright Blue
+        QColor(255, 85, 255),  // Bright Magenta
+        QColor(85, 255, 255),  // Bright Cyan
+        QColor(255, 255, 255), // Bright White
+    };
+    return bright[index - 8];
+  }
+
+  // 216-color RGB cube (16-231): 16 + 36*r + 6*g + b
+  if (index < 232)
+  {
+    const int adjusted = index - 16;
+    const int r = (adjusted / 36) % 6;
+    const int g = (adjusted / 6) % 6;
+    const int b = adjusted % 6;
+
+    return QColor(r ? (r * 40 + 55) : 0, g ? (g * 40 + 55) : 0,
+                  b ? (b * 40 + 55) : 0);
+  }
+
+  // Grayscale ramp (232-255): 24 steps
+  const int gray = 8 + (index - 232) * 10;
+  return QColor(gray, gray, gray);
+}
+
+/**
+ * @brief Formats a debug message with optional ANSI colors.
+ *
+ * @param type Message type (QtDebugMsg, QtWarningMsg, etc.).
+ * @param message The message content.
+ * @param useAnsiColors Whether to include ANSI color codes.
+ * @return Formatted message string.
+ *
+ * This static function provides consistent debug message formatting
+ * across the application, with optional ANSI color codes for terminal
+ * output.
+ */
+QString Widgets::Terminal::formatDebugMessage(QtMsgType type,
+                                              const QString &message,
+                                              bool useAnsiColors)
+{
+  QString prefix;
+  QString ansiColor;
+  QString ansiReset;
+
+  if (useAnsiColors)
+    ansiReset = QStringLiteral("\033[0m");
+
+  switch (type)
+  {
+    case QtInfoMsg:
+      prefix = QStringLiteral("[INFO]");
+      if (useAnsiColors)
+        ansiColor = QStringLiteral("\033[36m");
+      break;
+
+    case QtDebugMsg:
+      prefix = QStringLiteral("[DEBG]");
+      if (useAnsiColors)
+        ansiColor = QStringLiteral("\033[32m");
+      break;
+
+    case QtWarningMsg:
+      prefix = QStringLiteral("[WARN]");
+      if (useAnsiColors)
+        ansiColor = QStringLiteral("\033[33m");
+      break;
+
+    case QtCriticalMsg:
+      prefix = QStringLiteral("[CRIT]");
+      if (useAnsiColors)
+        ansiColor = QStringLiteral("\033[31m");
+      break;
+
+    case QtFatalMsg:
+      prefix = QStringLiteral("[FATL]");
+      if (useAnsiColors)
+        ansiColor = QStringLiteral("\033[91m");
+      break;
+
+    default:
+      break;
+  }
+
+  if (useAnsiColors)
+    return QStringLiteral("%1%2 %3%4")
+        .arg(ansiColor, prefix, message, ansiReset);
+  else
+    return QStringLiteral("%1 %2").arg(prefix, message);
 }
 
 /**
@@ -1651,7 +1882,7 @@ void Widgets::Terminal::replaceData(int x, int y, const QChar &byte)
     if (y >= m_colorData.size())
       m_colorData.resize(y + 1);
 
-    QList<QColor> &colorLine = m_colorData[y];
+    QList<CharColor> &colorLine = m_colorData[y];
 
     // Pad color line if needed
     if (x > line.size())
@@ -1659,18 +1890,19 @@ void Widgets::Terminal::replaceData(int x, int y, const QChar &byte)
       const int padCount = x - line.size();
       const QColor defaultColor = m_palette.color(QPalette::Text);
       for (int i = 0; i < padCount; ++i)
-        colorLine.append(defaultColor);
+        colorLine.append(CharColor(defaultColor));
     }
 
     // Ensure colorLine is long enough
     while (colorLine.size() < line.size())
-      colorLine.append(m_palette.color(QPalette::Text));
+      colorLine.append(CharColor(m_palette.color(QPalette::Text)));
 
-    // Store color for the character position
+    // Store foreground and background colors for the character position
+    const CharColor charColor(m_currentColor, m_currentBgColor);
     if (x >= 0 && x < colorLine.size())
-      colorLine[x] = m_currentColor;
+      colorLine[x] = charColor;
     else if (x >= 0)
-      colorLine.append(m_currentColor);
+      colorLine.append(charColor);
   }
 
   // Pad line to x if needed

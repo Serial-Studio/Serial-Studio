@@ -126,41 +126,8 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
   }
 #endif
 
-  // ANSI color codes for terminal display
-  const QString ansiReset = QStringLiteral("\033[0m");
-  const QString ansiCyan = QStringLiteral("\033[36m");
-  const QString ansiGreen = QStringLiteral("\033[32m");
-  const QString ansiYellow = QStringLiteral("\033[33m");
-  const QString ansiRed = QStringLiteral("\033[31m");
-  const QString ansiBrightRed = QStringLiteral("\033[91m");
-
-  // Show message & warning level with ANSI colors
-  QString output;
-  switch (type)
-  {
-    case QtInfoMsg:
-      output
-          = QStringLiteral("%1[INFO] %2%3").arg(ansiCyan, message, ansiReset);
-      break;
-    case QtDebugMsg:
-      output
-          = QStringLiteral("%1[DEBG] %2%3").arg(ansiGreen, message, ansiReset);
-      break;
-    case QtWarningMsg:
-      output
-          = QStringLiteral("%1[WARN] %2%3").arg(ansiYellow, message, ansiReset);
-      break;
-    case QtCriticalMsg:
-      output = QStringLiteral("%1[CRIT] %2%3").arg(ansiRed, message, ansiReset);
-      break;
-    case QtFatalMsg:
-      output = QStringLiteral("%1[FATL] %2%3")
-                   .arg(ansiBrightRed, message, ansiReset);
-      break;
-    default:
-      break;
-  }
-
+  // Format message with ANSI colors
+  QString output = Widgets::Terminal::formatDebugMessage(type, message, true);
   if (!output.isEmpty())
   {
     // Add a newline at the end

@@ -29,6 +29,28 @@
 namespace Widgets
 {
 /**
+ * @struct CharColor
+ * @brief Stores foreground and background colors for a character.
+ */
+struct CharColor
+{
+  QColor foreground;
+  QColor background;
+
+  CharColor()
+    : foreground()
+    , background()
+  {
+  }
+
+  CharColor(const QColor &fg, const QColor &bg = QColor())
+    : foreground(fg)
+    , background(bg)
+  {
+  }
+};
+
+/**
  * @class Terminal
  * @brief A QML terminal widget with optional VT-100 emulation.
  *
@@ -130,6 +152,9 @@ public:
   [[nodiscard]] const QPoint &cursorPosition() const;
   [[nodiscard]] QPoint positionToCursor(const QPoint &pos) const;
 
+  static QString formatDebugMessage(QtMsgType type, const QString &message,
+                                    bool useAnsiColors);
+
 public slots:
   void copy();
   void clear();
@@ -161,8 +186,10 @@ private:
   void setCursorPosition(const QPoint &position);
   void setCursorPosition(const int x, const int y);
   void replaceData(int x, int y, const QChar &byte);
-  void applyAnsiColor(int code);
+  void applyAnsiColor(const QList<int> &codes);
   void updateAnsiColorPalette();
+  QColor getColor256(int index) const;
+  static QColor getColor256Static(int index);
 
 protected:
   bool shouldEndSelection(const QChar &c);
@@ -175,7 +202,7 @@ protected:
 private:
   QPalette m_palette;
   QStringList m_data;
-  QList<QList<QColor>> m_colorData;
+  QList<QList<CharColor>> m_colorData;
 
   QFont m_font;
   int m_cWidth;
@@ -199,12 +226,12 @@ private:
   bool m_cursorVisible;
   bool m_mouseTracking;
 
-  int m_formatValue;
-  int m_formatValueY;
-  bool m_useFormatValueY;
+  QList<int> m_formatValues;
+  int m_currentFormatValue;
 
   bool m_stateChanged;
   QColor m_currentColor;
+  QColor m_currentBgColor;
 
   QColor m_ansiStandardColors[8];
   QColor m_ansiBrightColors[8];

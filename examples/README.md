@@ -150,6 +150,24 @@ Simulates a car's ECU (Engine Control Unit) and sends realistic vehicle data ove
   - Realistic car data (RPM, speed, temperature, battery, etc.)
   - No hardware needed - software only
 
+### 11. ANSI Color Test
+**Difficulty:** 🟢 Beginner | **Time:** ~5 minutes | **License:** GPL / Pro
+
+Comprehensive test suite demonstrating Serial Studio's full ANSI color and VT-100 terminal emulation support. Sends colorful test sequences over UDP to showcase 4-bit, 8-bit (256 colors), and 24-bit RGB (true color) capabilities.
+
+**Contents:**
+  - **test_ansi_colors.py**: Python script that sends ANSI color test sequences via UDP
+  - **README.md**: Comprehensive guide with color code reference and examples
+
+**Features:**
+  - 4-bit standard and bright colors (foreground and background)
+  - 8-bit 256-color palette (standard colors, RGB cube, grayscale ramp)
+  - 24-bit RGB true color support (16.7 million colors)
+  - VT-100 control sequences (cursor movement, bold text)
+  - Creative effects (rainbow text, color gradients)
+  - Colored timestamps synchronized with ANSI colors setting
+  - No hardware needed - software only
+
 ## Getting Started
 
 To use these examples:
