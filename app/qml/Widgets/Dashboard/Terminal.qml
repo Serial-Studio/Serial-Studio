@@ -409,10 +409,12 @@ Item {
       CheckBox {
         id: ansiColorsCheck
         text: qsTr("ANSI Colors")
+        opacity: enabled ? 1 : 0.5
+        enabled: terminal.vt100emulation
         Layout.alignment: Qt.AlignVCenter
-        checked: terminal.ansiColors
+        checked: terminal.vt100emulation && terminal.ansiColors
         onCheckedChanged: {
-          if (terminal.ansiColors !== checked)
+          if (enabled && terminal.ansiColors !== checked)
             terminal.ansiColors = checked
         }
       }

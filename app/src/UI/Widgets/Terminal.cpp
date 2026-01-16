@@ -1024,11 +1024,26 @@ void Widgets::Terminal::onThemeChanged()
  */
 void Widgets::Terminal::loadWelcomeGuide()
 {
+  // Define logo
+  // clang-format off
+  static const QString logo = \
+    "▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█\n" \
+    "░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█\n" \
+    "▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█\n\n";
+  // clang-format on
+
+  // Clear screen & disable autoscrolling while writing welcome text
   clear();
   setAutoscroll(false);
+
+  // Append translated welcome message
+  append(logo);
   append(Misc::Translator::instance().welcomeConsoleText());
+
+  // Re-enable autoscroll
   setAutoscroll(true);
 
+  // Set scroll offset
   const int lines = linesPerPage();
   if (lines > 0 && height() > 0)
   {
@@ -1044,6 +1059,7 @@ void Widgets::Terminal::loadWelcomeGuide()
     setScrollOffsetY(qMax(0, visualBottom - lines + 1));
   }
 
+  // Schedule redraw
   m_stateChanged = true;
 }
 
