@@ -735,25 +735,29 @@ QString Console::Handler::dataToString(QByteArrayView data)
  */
 QString Console::Handler::plainTextStr(QByteArrayView data)
 {
-  // Filter out non-printable characters, but keep line breaks
+  QString utf8Data = QString::fromUtf8(data);
+
   QString filteredData;
-  filteredData.reserve(data.size());
-  for (int i = 0; i < data.size(); ++i)
+  filteredData.reserve(utf8Data.size());
+
+  for (int i = 0; i < utf8Data.size(); ++i)
   {
+    const QChar ch = utf8Data[i];
+    const ushort unicode = ch.unicode();
+
     // clang-format off
-    unsigned char ch = static_cast<unsigned char>(data[i]);
-    bool printable = (data[i] == '\r') ||
-                     (data[i] == '\n') ||
-                      std::isprint(ch) ||
-                      std::iscntrl(ch) ||
-                      std::isspace(ch);
+    bool printable = (unicode == '\r') ||
+                     (unicode == '\n') ||
+                     (unicode == '\t') ||
+                     (unicode == 0x1B) ||
+                     (unicode >= 0x20 && unicode < 0x7F) ||
+                     (unicode >= 0x80);
     // clang-format on
 
-    printable = printable && (data[i] != '\0');
-    filteredData += printable ? data[i] : '.';
+    printable = printable && (unicode != '\0');
+    filteredData += printable ? ch : QChar('.');
   }
 
-  // Return the filtered data
   return filteredData;
 }
 

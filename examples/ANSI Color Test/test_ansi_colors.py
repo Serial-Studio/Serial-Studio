@@ -382,6 +382,141 @@ def test_gradient():
     send_udp("\n\n")
 
 
+def draw_16_color_table():
+    """Display standard 16 ANSI colors (0-15) in a table format."""
+    print("Drawing 16-color table...")
+
+    send_udp("\n")
+    send_udp("\033[1;37m╔══════════════════════════════════════════════════════════════════╗\033[0m\n")
+    send_udp("\033[1;37m║              STANDARD 16 ANSI COLORS (0-15)                      ║\033[0m\n")
+    send_udp("\033[1;37m╚══════════════════════════════════════════════════════════════════╝\033[0m\n\n")
+    time.sleep(0.2)
+
+    send_udp("  Normal Colors (0-7):\n  ")
+    for i in range(8):
+        send_udp(f"\033[48;5;{i}m  {i:1d}  \033[0m ")
+    send_udp("\n\n")
+    time.sleep(0.2)
+
+    send_udp("  Bright Colors (8-15):\n  ")
+    for i in range(8, 16):
+        send_udp(f"\033[48;5;{i}m  {i:2d}  \033[0m ")
+    send_udp("\n\n")
+    time.sleep(0.2)
+
+
+def draw_256_color_table():
+    """Display full 256-color palette in organized blocks."""
+    print("Drawing 256-color table...")
+
+    send_udp("\n")
+    send_udp("\033[1;37m╔══════════════════════════════════════════════════════════════════╗\033[0m\n")
+    send_udp("\033[1;37m║                 256 COLOR PALETTE (8-BIT)                        ║\033[0m\n")
+    send_udp("\033[1;37m╚══════════════════════════════════════════════════════════════════╝\033[0m\n\n")
+    time.sleep(0.2)
+
+    send_udp("  6x6x6 RGB Color Cube (16-231):\n")
+    time.sleep(0.1)
+
+    for row in range(6):
+        send_udp("  ")
+        for col in range(36):
+            color_idx = 16 + (row * 36) + col
+            send_udp(f"\033[48;5;{color_idx}m  \033[0m")
+            if (col + 1) % 18 == 0:
+                send_udp("  ")
+        send_udp("\n")
+        time.sleep(0.05)
+
+    send_udp("\n  Grayscale Ramp (232-255):\n  ")
+    time.sleep(0.1)
+
+    for i in range(232, 256):
+        send_udp(f"\033[48;5;{i}m  \033[0m")
+        if (i - 231) % 12 == 0:
+            send_udp("\n  ")
+    send_udp("\n\n")
+    time.sleep(0.2)
+
+
+def draw_color_boxes():
+    """Draw simple colored boxes with labels."""
+    print("Drawing colored boxes...")
+
+    send_udp("\n")
+    send_udp("\033[1;37m╔══════════════════════════════════════════════════════════════════╗\033[0m\n")
+    send_udp("\033[1;37m║                     COLOR BOX DISPLAY                            ║\033[0m\n")
+    send_udp("\033[1;37m╚══════════════════════════════════════════════════════════════════╝\033[0m\n\n")
+    time.sleep(0.2)
+
+    colors = [
+        (196, "Red"),
+        (208, "Orange"),
+        (226, "Yellow"),
+        (46, "Green"),
+        (51, "Cyan"),
+        (21, "Blue"),
+        (201, "Magenta"),
+        (231, "White"),
+    ]
+
+    for color_code, name in colors:
+        send_udp(f"  {name:10} ")
+        send_udp(f"\033[48;5;{color_code}m" + "          " + "\033[0m")
+        send_udp(f"  (Color {color_code})\n")
+        time.sleep(0.1)
+
+    send_udp("\n")
+    time.sleep(0.2)
+
+
+def draw_rgb_gradients():
+    """Draw RGB color gradients using 24-bit colors."""
+    print("Drawing RGB gradients...")
+
+    send_udp("\n")
+    send_udp("\033[1;37m╔══════════════════════════════════════════════════════════════════╗\033[0m\n")
+    send_udp("\033[1;37m║                   RGB GRADIENTS (24-BIT)                         ║\033[0m\n")
+    send_udp("\033[1;37m╚══════════════════════════════════════════════════════════════════╝\033[0m\n\n")
+    time.sleep(0.2)
+
+    send_udp("  Red Gradient:\n  ")
+    for i in range(32):
+        r = int(255 * (i / 31))
+        send_udp(f"\033[48;2;{r};0;0m  \033[0m")
+    send_udp("\n\n")
+    time.sleep(0.1)
+
+    send_udp("  Green Gradient:\n  ")
+    for i in range(32):
+        g = int(255 * (i / 31))
+        send_udp(f"\033[48;2;0;{g};0m  \033[0m")
+    send_udp("\n\n")
+    time.sleep(0.1)
+
+    send_udp("  Blue Gradient:\n  ")
+    for i in range(32):
+        b = int(255 * (i / 31))
+        send_udp(f"\033[48;2;0;0;{b}m  \033[0m")
+    send_udp("\n\n")
+    time.sleep(0.1)
+
+    send_udp("  Cyan-Magenta Gradient:\n  ")
+    for i in range(32):
+        r = int(255 * (i / 31))
+        b = 255 - r
+        send_udp(f"\033[48;2;{r};0;{b}m  \033[0m")
+    send_udp("\n\n")
+    time.sleep(0.1)
+
+    send_udp("  Grayscale Gradient:\n  ")
+    for i in range(32):
+        gray = int(255 * (i / 31))
+        send_udp(f"\033[48;2;{gray};{gray};{gray}m  \033[0m")
+    send_udp("\n\n")
+    time.sleep(0.2)
+
+
 def run_all_tests():
     """Run all color and VT-100 tests."""
     print("\n" + "="*60)
@@ -392,6 +527,19 @@ def run_all_tests():
     send_udp("\n\n" + "="*60 + "\n")
     send_udp("Serial Studio ANSI Color & VT-100 Test Suite\n")
     send_udp("="*60 + "\n\n")
+    time.sleep(0.5)
+
+    # Color palette displays
+    draw_16_color_table()
+    time.sleep(0.5)
+
+    draw_256_color_table()
+    time.sleep(0.5)
+
+    draw_color_boxes()
+    time.sleep(0.5)
+
+    draw_rgb_gradients()
     time.sleep(0.5)
 
     # 4-bit color tests
@@ -482,7 +630,35 @@ def run_all_tests():
 
 if __name__ == "__main__":
     try:
-        run_all_tests()
+        if len(sys.argv) > 1:
+            option = sys.argv[1]
+            if option == "--16colors":
+                draw_16_color_table()
+            elif option == "--256colors":
+                draw_256_color_table()
+            elif option == "--boxes":
+                draw_color_boxes()
+            elif option == "--gradients":
+                draw_rgb_gradients()
+            elif option == "--help" or option == "-h":
+                print("\nSerial Studio ANSI Color Test Script")
+                print("=" * 60)
+                print("\nUsage: python test_ansi_colors.py [option]")
+                print("\nOptions:")
+                print("  (no args)     Run full test suite with all color tests")
+                print("  --16colors    Display 16-color ANSI palette")
+                print("  --256colors   Display 256-color palette")
+                print("  --boxes       Display simple color boxes")
+                print("  --gradients   Display RGB gradients")
+                print("  --help        Show this help message")
+                print("\nAll output is sent via UDP to localhost:9000")
+                print("Make sure Serial Studio is running and listening on that port.\n")
+            else:
+                print(f"Unknown option: {option}")
+                print("Use --help to see available options")
+                sys.exit(1)
+        else:
+            run_all_tests()
     except KeyboardInterrupt:
         print("\n\nTest interrupted by user.")
         sys.exit(0)

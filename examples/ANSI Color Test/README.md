@@ -2,6 +2,8 @@
 
 This example demonstrates Serial Studio's comprehensive ANSI color and VT-100 terminal emulation support.
 
+![Serial Studio ANSI Color Test](doc/screenshot.png)
+
 ## Features Tested
 
 ### 4-bit Colors (Standard ANSI)
@@ -28,6 +30,12 @@ This example demonstrates Serial Studio's comprehensive ANSI color and VT-100 te
 - Bold text styling
 - Combined text styles with colors
 
+### Visual Displays
+- 16-color ANSI palette table
+- 256-color palette organized display
+- Color boxes with labels
+- RGB gradients (red, green, blue, cyan-magenta, grayscale)
+
 ### Creative Effects
 - Rainbow text using both 8-bit and 24-bit RGB
 - Color gradients (red→yellow, blue, grayscale)
@@ -53,7 +61,9 @@ This example demonstrates Serial Studio's comprehensive ANSI color and VT-100 te
 
 ## Usage
 
-Run the test script:
+### Run Full Test Suite
+
+Run the complete test script with all color tests:
 
 ```bash
 python3 test_ansi_colors.py
@@ -65,6 +75,27 @@ The script will send a comprehensive suite of ANSI color and VT-100 test sequenc
 - Background colors behind text
 - Rainbow effects and gradients
 - VT-100 cursor movement demonstrations
+
+### Command-Line Options
+
+You can also run individual test sections:
+
+```bash
+# Display 16-color ANSI palette
+python3 test_ansi_colors.py --16colors
+
+# Display 256-color palette
+python3 test_ansi_colors.py --256colors
+
+# Display simple color boxes
+python3 test_ansi_colors.py --boxes
+
+# Display RGB gradients
+python3 test_ansi_colors.py --gradients
+
+# Show help message
+python3 test_ansi_colors.py --help
+```
 
 ## How It Works
 

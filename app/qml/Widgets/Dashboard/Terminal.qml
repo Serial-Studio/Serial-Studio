@@ -157,6 +157,7 @@ Item {
     //
     TerminalWidget {
       id: terminal
+      ansiColors: true
       vt100emulation: true
       Layout.fillWidth: true
       Layout.fillHeight: true
