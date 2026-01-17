@@ -71,7 +71,7 @@ void Plugins::ServerWorker::addSocket(QTcpSocket *socket)
   if (!socket)
     return;
 
-  socket->moveToThread(thread());
+  // Socket is already moved to worker thread by Server::acceptConnection()
   m_sockets.append(socket);
 
   connect(socket, &QTcpSocket::readyRead, this,
@@ -397,6 +397,11 @@ void Plugins::Server::acceptConnection()
   }
 
   connect(socket, &QTcpSocket::errorOccurred, this, &Server::onErrorOccurred);
+
+  // Move socket to worker thread from main thread (where socket currently lives)
+  // Must be done BEFORE invoking addSocket on the worker thread
+  socket->setParent(nullptr);
+  socket->moveToThread(&m_workerThread);
 
   auto *worker = static_cast<ServerWorker *>(m_worker);
   QMetaObject::invokeMethod(worker, "addSocket", Qt::QueuedConnection,
