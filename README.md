@@ -139,7 +139,7 @@ Upload to Arduino → Connect Serial Studio → Enable Quick Plot → Done!
 - 🎯 [Use Cases](USE-CASES.md) - Real-world examples: robotics, IoT, drones, education, research
 - ⚖️ [Comparison](COMPARISON.md) - Serial Studio vs. Arduino Plotter, MATLAB, Processing, LabVIEW, Python
 - 🤖 [AI Agent Guide](AGENTS.md) - For ChatGPT, Claude, and other AI assistants
-- 🔌 [API Reference](API_REFERENCE.md) - Complete TCP API documentation and automation guide
+- 🔌 [API Reference](https://github.com/Serial-Studio/Serial-Studio/wiki/API-Reference) - Complete TCP API documentation and automation guide
 - 💡 [Examples](./examples) - Arduino, ESP32, Python code with sample projects
 
 ### Key Topics
