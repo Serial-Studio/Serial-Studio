@@ -1,13 +1,36 @@
 #!/usr/bin/env python3
 """
-Serial Studio API Test Suite
-=============================
+Serial Studio API Client & Test Suite
+======================================
 
-Comprehensive tests for the Serial Studio Plugin Server API.
-Tests protocol handling, command execution, error handling, and batch operations.
+A versatile tool for interacting with the Serial Studio Plugin Server API.
+Can be used as a command-line client, interactive shell, or test suite.
 
 Usage:
-    python test_api.py [--host HOST] [--port PORT] [--verbose]
+    # Send a single command
+    python test_api.py send io.manager.getStatus
+
+    # Send command with parameters
+    python test_api.py send io.driver.uart.setBaudRate --params '{"baudRate": 115200}'
+
+    # List all available commands
+    python test_api.py list
+
+    # Interactive mode (REPL)
+    python test_api.py interactive
+
+    # Run test suite
+    python test_api.py test [--verbose]
+
+    # Send batch from JSON file
+    python test_api.py batch commands.json
+
+    # Pipe JSON output (for scripting)
+    python test_api.py send io.manager.getStatus --json | jq '.result'
+
+Common options for all modes:
+    --host HOST    Server host (default: 127.0.0.1)
+    --port PORT    Server port (default: 7777)
 
 Requirements:
     - Serial Studio running with Plugin Server enabled (port 7777)
@@ -959,51 +982,221 @@ def test_configuration_workflow(api: SerialStudioAPI, suite: TestSuite):
 
 
 # =============================================================================
-# Main Entry Point
+# CLI Modes
 # =============================================================================
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Serial Studio API Test Suite",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  python test_api.py                     # Run all tests on localhost:7777
-  python test_api.py --verbose           # Run with verbose output
-  python test_api.py --host 192.168.1.5  # Test remote instance
-        """)
-    parser.add_argument("--host", default=DEFAULT_HOST, help=f"Server host (default: {DEFAULT_HOST})")
-    parser.add_argument("--port", type=int, default=DEFAULT_PORT, help=f"Server port (default: {DEFAULT_PORT})")
-    parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose output")
-    args = parser.parse_args()
+def cmd_send(api: SerialStudioAPI, args) -> int:
+    """Send a single command and print the result."""
+    # Parse parameters if provided
+    params = None
+    if args.params:
+        try:
+            params = json.loads(args.params)
+        except json.JSONDecodeError as e:
+            print(f"[ERROR] Invalid JSON in --params: {e}", file=sys.stderr)
+            return 1
 
+    # Send the command
+    response = api.send_command(args.command, params)
+
+    if response is None:
+        print("[ERROR] No response received", file=sys.stderr)
+        return 1
+
+    # Output the response
+    if args.json:
+        print(json.dumps(response, indent=2))
+    else:
+        if response.get("success"):
+            result = response.get("result", {})
+            if result:
+                print(json.dumps(result, indent=2))
+            else:
+                print("[OK] Command executed successfully")
+        else:
+            error = response.get("error", {})
+            print(f"[ERROR] {error.get('code')}: {error.get('message')}", file=sys.stderr)
+            return 1
+
+    return 0
+
+
+def cmd_batch(api: SerialStudioAPI, args) -> int:
+    """Send batch commands from a JSON file."""
+    try:
+        with open(args.file, 'r') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print(f"[ERROR] File not found: {args.file}", file=sys.stderr)
+        return 1
+    except json.JSONDecodeError as e:
+        print(f"[ERROR] Invalid JSON in file: {e}", file=sys.stderr)
+        return 1
+
+    # Handle both formats: array of commands or {"commands": [...]}
+    if isinstance(data, list):
+        commands = data
+    elif isinstance(data, dict) and "commands" in data:
+        commands = data["commands"]
+    else:
+        print("[ERROR] Expected array of commands or {\"commands\": [...]}", file=sys.stderr)
+        return 1
+
+    response = api.send_batch(commands)
+
+    if response is None:
+        print("[ERROR] No response received", file=sys.stderr)
+        return 1
+
+    if args.json:
+        print(json.dumps(response, indent=2))
+    else:
+        results = response.get("results", [])
+        success_count = sum(1 for r in results if r.get("success"))
+        print(f"Executed {len(results)} commands: {success_count} succeeded, {len(results) - success_count} failed")
+        for i, result in enumerate(results):
+            status = "✓" if result.get("success") else "✗"
+            cmd_id = result.get("id", f"#{i+1}")
+            if result.get("success"):
+                print(f"  {status} {cmd_id}")
+            else:
+                error = result.get("error", {})
+                print(f"  {status} {cmd_id}: {error.get('code')} - {error.get('message')}")
+
+    return 0 if response.get("success") else 1
+
+
+def cmd_list(api: SerialStudioAPI, args) -> int:
+    """List all available commands."""
+    response = api.send_command("api.getCommands")
+
+    if response is None:
+        print("[ERROR] No response received", file=sys.stderr)
+        return 1
+
+    if not response.get("success"):
+        error = response.get("error", {})
+        print(f"[ERROR] {error.get('code')}: {error.get('message')}", file=sys.stderr)
+        return 1
+
+    commands = response.get("result", {}).get("commands", [])
+
+    if args.json:
+        print(json.dumps(commands, indent=2))
+    else:
+        # Group commands by prefix
+        groups = {}
+        for cmd in commands:
+            name = cmd.get("name", "")
+            parts = name.split(".")
+            group = ".".join(parts[:-1]) if len(parts) > 1 else "other"
+            if group not in groups:
+                groups[group] = []
+            groups[group].append(cmd)
+
+        print(f"Available Commands ({len(commands)} total):\n")
+        for group in sorted(groups.keys()):
+            print(f"  {group}.*")
+            for cmd in sorted(groups[group], key=lambda c: c.get("name", "")):
+                name = cmd.get("name", "")
+                desc = cmd.get("description", "")
+                # Truncate description if too long
+                if len(desc) > 50:
+                    desc = desc[:47] + "..."
+                print(f"    {name:<40} {desc}")
+            print()
+
+    return 0
+
+
+def cmd_interactive(api: SerialStudioAPI, args) -> int:
+    """Interactive REPL mode."""
+    print("Serial Studio Interactive Mode")
+    print("Type 'help' for commands, 'quit' to exit\n")
+
+    while True:
+        try:
+            line = input("ss> ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nGoodbye!")
+            break
+
+        if not line:
+            continue
+
+        # Built-in commands
+        if line.lower() in ("quit", "exit", "q"):
+            print("Goodbye!")
+            break
+
+        if line.lower() == "help":
+            print("""
+Interactive Mode Commands:
+  help                          Show this help
+  quit, exit, q                 Exit interactive mode
+  list                          List all available API commands
+  <command>                     Execute a command (e.g., io.manager.getStatus)
+  <command> <json_params>       Execute with params (e.g., io.driver.uart.setBaudRate {"baudRate":115200})
+
+Examples:
+  io.manager.getStatus
+  io.driver.uart.setBaudRate {"baudRate": 115200}
+  io.driver.network.setRemoteAddress {"address": "192.168.1.100"}
+""")
+            continue
+
+        if line.lower() == "list":
+            response = api.send_command("api.getCommands")
+            if response and response.get("success"):
+                commands = response.get("result", {}).get("commands", [])
+                for cmd in sorted(commands, key=lambda c: c.get("name", "")):
+                    print(f"  {cmd.get('name')}")
+            else:
+                print("[ERROR] Could not fetch command list")
+            continue
+
+        # Parse command and optional JSON params
+        parts = line.split(None, 1)
+        command = parts[0]
+        params = None
+
+        if len(parts) > 1:
+            try:
+                params = json.loads(parts[1])
+            except json.JSONDecodeError as e:
+                print(f"[ERROR] Invalid JSON parameters: {e}")
+                continue
+
+        # Send command
+        response = api.send_command(command, params)
+
+        if response is None:
+            print("[ERROR] No response received")
+            continue
+
+        if response.get("success"):
+            result = response.get("result", {})
+            if result:
+                print(json.dumps(result, indent=2))
+            else:
+                print("[OK]")
+        else:
+            error = response.get("error", {})
+            print(f"[ERROR] {error.get('code')}: {error.get('message')}")
+
+    return 0
+
+
+def cmd_test(api: SerialStudioAPI, args) -> int:
+    """Run the test suite."""
     print("=" * 60)
     print("Serial Studio API Test Suite")
     print("=" * 60)
-    print(f"Target: {args.host}:{args.port}")
-    print(f"Verbose: {args.verbose}")
     print()
 
-    # Create API client
-    api = SerialStudioAPI(args.host, args.port, args.verbose)
-
-    # Connect to server
-    print("Connecting to Serial Studio Plugin Server...")
-    if not api.connect():
-        print("\n[FATAL] Could not connect to Serial Studio.")
-        print("Please ensure:")
-        print("  1. Serial Studio is running")
-        print("  2. Plugin Server is enabled (Settings > Extensions > Enable Plugin Server)")
-        print(f"  3. The server is listening on port {args.port}")
-        return 1
-
-    print("Connected successfully!\n")
-
-    # Create test suite
     suite = TestSuite("Serial Studio API")
 
     try:
-        # Run all test categories
         test_protocol(api, suite)
         test_api_commands(api, suite)
         test_io_manager(api, suite)
@@ -1012,21 +1205,106 @@ Examples:
         test_batch_commands(api, suite)
         test_stress(api, suite)
         test_configuration_workflow(api, suite)
-
     except KeyboardInterrupt:
         print("\n[INTERRUPTED] Tests cancelled by user")
     except Exception as e:
         print(f"\n[FATAL] Unexpected error: {e}")
         import traceback
         traceback.print_exc()
+
+    suite.print_summary()
+    return 0 if suite.failed == 0 else 1
+
+
+# =============================================================================
+# Main Entry Point
+# =============================================================================
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Serial Studio API Client & Test Suite",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  %(prog)s send io.manager.getStatus                           # Send a command
+  %(prog)s send io.driver.uart.setBaudRate -p '{"baudRate":115200}'  # With params
+  %(prog)s list                                                 # List commands
+  %(prog)s interactive                                          # Interactive mode
+  %(prog)s batch commands.json                                  # Batch from file
+  %(prog)s test --verbose                                       # Run test suite
+        """)
+
+    parser.add_argument("--host", default=DEFAULT_HOST, help=f"Server host (default: {DEFAULT_HOST})")
+    parser.add_argument("--port", type=int, default=DEFAULT_PORT, help=f"Server port (default: {DEFAULT_PORT})")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose output")
+    parser.add_argument("--json", "-j", action="store_true", help="Output raw JSON (for scripting)")
+
+    subparsers = parser.add_subparsers(dest="mode", help="Operation mode")
+
+    # send subcommand
+    send_parser = subparsers.add_parser("send", help="Send a single command")
+    send_parser.add_argument("command", help="Command to send (e.g., io.manager.getStatus)")
+    send_parser.add_argument("--params", "-p", help="JSON parameters (e.g., '{\"baudRate\": 115200}')")
+
+    # batch subcommand
+    batch_parser = subparsers.add_parser("batch", help="Send batch commands from JSON file")
+    batch_parser.add_argument("file", help="JSON file containing commands")
+
+    # list subcommand
+    subparsers.add_parser("list", help="List all available commands")
+
+    # interactive subcommand
+    subparsers.add_parser("interactive", aliases=["i", "repl"], help="Interactive REPL mode")
+
+    # test subcommand
+    subparsers.add_parser("test", help="Run the API test suite")
+
+    args = parser.parse_args()
+
+    # Default to interactive mode if no subcommand given
+    if args.mode is None:
+        parser.print_help()
+        print("\nTip: Use 'interactive' for a REPL, or 'send <command>' to execute a command.")
+        return 0
+
+    # Create API client
+    api = SerialStudioAPI(args.host, args.port, args.verbose)
+
+    # Connect to server
+    if not args.json:
+        print(f"Connecting to {args.host}:{args.port}...", file=sys.stderr)
+
+    if not api.connect():
+        if args.json:
+            print(json.dumps({"error": "Connection failed"}))
+        else:
+            print("\n[ERROR] Could not connect to Serial Studio.", file=sys.stderr)
+            print("Please ensure:", file=sys.stderr)
+            print("  1. Serial Studio is running", file=sys.stderr)
+            print("  2. Plugin Server is enabled (Settings > Extensions > Enable Plugin Server)", file=sys.stderr)
+            print(f"  3. The server is listening on port {args.port}", file=sys.stderr)
+        return 1
+
+    if not args.json:
+        print("Connected!\n", file=sys.stderr)
+
+    try:
+        # Dispatch to appropriate handler
+        if args.mode == "send":
+            return cmd_send(api, args)
+        elif args.mode == "batch":
+            return cmd_batch(api, args)
+        elif args.mode == "list":
+            return cmd_list(api, args)
+        elif args.mode in ("interactive", "i", "repl"):
+            return cmd_interactive(api, args)
+        elif args.mode == "test":
+            return cmd_test(api, args)
+        else:
+            parser.print_help()
+            return 1
     finally:
         api.disconnect()
-
-    # Print summary
-    suite.print_summary()
-
-    # Return exit code
-    return 0 if suite.failed == 0 else 1
 
 
 if __name__ == "__main__":
