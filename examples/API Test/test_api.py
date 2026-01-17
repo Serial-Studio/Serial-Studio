@@ -10,7 +10,13 @@ Usage:
     # Send a single command
     python test_api.py send io.manager.getStatus
 
-    # Send command with parameters
+    # Send command with parameters (key=value format - works on all shells)
+    python test_api.py send io.driver.uart.setBaudRate -p baudRate=115200
+
+    # Multiple parameters
+    python test_api.py send io.driver.network.setTcpPort -p port=8080
+
+    # JSON format (use on bash/zsh, tricky on PowerShell)
     python test_api.py send io.driver.uart.setBaudRate --params '{"baudRate": 115200}'
 
     # List all available commands
@@ -985,15 +991,75 @@ def test_configuration_workflow(api: SerialStudioAPI, suite: TestSuite):
 # CLI Modes
 # =============================================================================
 
+def parse_params(param_list: list[str]) -> Optional[dict]:
+    """
+    Parse parameters from command line.
+    Supports two formats:
+      - JSON: '{"key": "value"}'
+      - Key=Value pairs: key=value key2=value2
+
+    For key=value, attempts to auto-convert types:
+      - "true"/"false" -> bool
+      - integers -> int
+      - floats -> float
+      - everything else -> string
+    """
+    if not param_list:
+        return None
+
+    # If first param looks like JSON, parse it as JSON
+    joined = " ".join(param_list)
+    stripped = joined.strip()
+    if stripped.startswith("{"):
+        # Try to parse as JSON, with some fixups for shell escaping issues
+        try:
+            return json.loads(stripped)
+        except json.JSONDecodeError:
+            # Try fixing common PowerShell issues (unquoted keys)
+            # Convert {key:value} to {"key":value}
+            import re
+            fixed = re.sub(r'(\{|,)\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:', r'\1"\2":', stripped)
+            try:
+                return json.loads(fixed)
+            except json.JSONDecodeError as e:
+                raise ValueError(f"Invalid JSON: {e}\nTip: On PowerShell, use key=value format instead: -p baudRate=115200")
+
+    # Parse as key=value pairs
+    params = {}
+    for param in param_list:
+        if "=" not in param:
+            raise ValueError(f"Invalid parameter format: '{param}'. Use key=value or JSON format.")
+        key, value = param.split("=", 1)
+        key = key.strip()
+        value = value.strip()
+
+        # Auto-convert types
+        if value.lower() == "true":
+            params[key] = True
+        elif value.lower() == "false":
+            params[key] = False
+        else:
+            # Try int, then float, then keep as string
+            try:
+                params[key] = int(value)
+            except ValueError:
+                try:
+                    params[key] = float(value)
+                except ValueError:
+                    params[key] = value
+
+    return params
+
+
 def cmd_send(api: SerialStudioAPI, args) -> int:
     """Send a single command and print the result."""
     # Parse parameters if provided
     params = None
     if args.params:
         try:
-            params = json.loads(args.params)
-        except json.JSONDecodeError as e:
-            print(f"[ERROR] Invalid JSON in --params: {e}", file=sys.stderr)
+            params = parse_params(args.params)
+        except ValueError as e:
+            print(f"[ERROR] {e}", file=sys.stderr)
             return 1
 
     # Send the command
@@ -1226,8 +1292,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  %(prog)s send io.manager.getStatus                           # Send a command
-  %(prog)s send io.driver.uart.setBaudRate -p '{"baudRate":115200}'  # With params
+  %(prog)s send io.manager.getStatus                            # Send a command
+  %(prog)s send io.driver.uart.setBaudRate -p baudRate=115200   # With key=value params
+  %(prog)s send io.driver.uart.setDtrEnabled -p dtrEnabled=true # Boolean param
   %(prog)s list                                                 # List commands
   %(prog)s interactive                                          # Interactive mode
   %(prog)s batch commands.json                                  # Batch from file
@@ -1244,7 +1311,8 @@ Examples:
     # send subcommand
     send_parser = subparsers.add_parser("send", help="Send a single command")
     send_parser.add_argument("command", help="Command to send (e.g., io.manager.getStatus)")
-    send_parser.add_argument("--params", "-p", help="JSON parameters (e.g., '{\"baudRate\": 115200}')")
+    send_parser.add_argument("--params", "-p", nargs="+", metavar="PARAM",
+                             help="Parameters as key=value pairs or JSON. Examples: baudRate=115200 or '{\"baudRate\": 115200}'")
 
     # batch subcommand
     batch_parser = subparsers.add_parser("batch", help="Send batch commands from JSON file")
