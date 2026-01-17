@@ -215,6 +215,11 @@ set(SOURCES
   src/UI/DeclarativeWidgets/DeclarativeWidget.cpp
   src/UI/DeclarativeWidgets/StaticTable.cpp
   src/Plugins/Server.cpp
+  src/API/CommandRegistry.cpp
+  src/API/CommandHandler.cpp
+  src/API/Handlers/IOManagerHandler.cpp
+  src/API/Handlers/UARTHandler.cpp
+  src/API/Handlers/NetworkHandler.cpp
   src/IO/Drivers/Network.cpp
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
@@ -268,6 +273,12 @@ set(HEADERS
   src/UI/DeclarativeWidgets/DeclarativeWidget.h
   src/UI/DeclarativeWidgets/StaticTable.h
   src/Plugins/Server.h
+  src/API/CommandProtocol.h
+  src/API/CommandRegistry.h
+  src/API/CommandHandler.h
+  src/API/Handlers/IOManagerHandler.h
+  src/API/Handlers/UARTHandler.h
+  src/API/Handlers/NetworkHandler.h
   src/Platform/NativeWindow.h
   src/Console/Handler.h
   src/Console/Export.h
