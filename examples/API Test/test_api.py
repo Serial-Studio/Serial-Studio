@@ -503,7 +503,7 @@ def test_uart_handler(api: SerialStudioAPI, suite: TestSuite):
         if not baud_rates:
             return False, "No baud rates returned"
         # Verify common baud rates exist
-        common = [9600, 115200]
+        common = ["9600", "115200"]
         for rate in common:
             if rate not in baud_rates:
                 return False, f"Missing common baud rate: {rate}"
