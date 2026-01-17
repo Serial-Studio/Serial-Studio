@@ -61,9 +61,10 @@ public slots:
   void addSocket(QTcpSocket *socket);
   void removeSocket(QTcpSocket *socket);
   void writeRawData(const IO::ByteArrayPtr &data);
+  void writeToSocket(QTcpSocket *socket, const QByteArray &data);
 
 signals:
-  void dataReceived(const QByteArray &data);
+  void dataReceived(QTcpSocket *socket, const QByteArray &data);
 
 protected:
   void processItems(
@@ -139,7 +140,7 @@ protected:
 
 private slots:
   void acceptConnection();
-  void onDataReceived(const QByteArray &data);
+  void onDataReceived(QTcpSocket *socket, const QByteArray &data);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:

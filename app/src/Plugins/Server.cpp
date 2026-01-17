@@ -26,6 +26,7 @@
 #include "IO/Manager.h"
 #include "Plugins/Server.h"
 #include "Misc/Utilities.h"
+#include "API/CommandHandler.h"
 
 //------------------------------------------------------------------------------
 // ServerWorker implementation
@@ -119,7 +120,22 @@ void Plugins::ServerWorker::onSocketReadyRead()
 {
   auto *socket = qobject_cast<QTcpSocket *>(sender());
   if (socket)
-    Q_EMIT dataReceived(socket->readAll());
+    Q_EMIT dataReceived(socket, socket->readAll());
+}
+
+/**
+ * @brief Writes data to a specific socket (worker thread)
+ *
+ * Used to send API command responses back to the requesting client.
+ *
+ * @param socket The socket to write to
+ * @param data The data to write
+ */
+void Plugins::ServerWorker::writeToSocket(QTcpSocket *socket,
+                                          const QByteArray &data)
+{
+  if (socket && socket->isWritable() && m_sockets.contains(socket))
+    socket->write(data);
 }
 
 /**
@@ -186,6 +202,9 @@ Plugins::Server::Server()
 
   connect(&m_server, &QTcpServer::newConnection, this,
           &Server::acceptConnection);
+
+  // Initialize API command handlers
+  API::CommandHandler::instance();
 }
 
 /**
@@ -321,15 +340,35 @@ void Plugins::Server::hotpathTxFrame(
 /**
  * @brief Handles incoming data from worker thread.
  *
- * Receives data from the worker thread (which read it from a socket)
- * and forwards it to the I/O manager for device transmission.
+ * Receives data from the worker thread (which read it from a socket).
+ * If the data is an API command, processes it and sends response back.
+ * Otherwise, forwards raw data to the I/O manager for device transmission.
+ *
+ * @param socket The socket that sent the data (for sending responses)
+ * @param data The received data
  */
-void Plugins::Server::onDataReceived(const QByteArray &data)
+void Plugins::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
 {
-  static auto &ioManager = IO::Manager::instance();
+  if (!enabled() || data.isEmpty())
+    return;
 
-  if (enabled() && !data.isEmpty())
-    ioManager.writeData(data);
+  // Check if this is an API command
+  auto &cmdHandler = API::CommandHandler::instance();
+  if (cmdHandler.isApiMessage(data))
+  {
+    // Process the API command and get response
+    const QByteArray response = cmdHandler.processMessage(data);
+
+    // Send response back to the requesting socket
+    auto *worker = static_cast<ServerWorker *>(m_worker);
+    QMetaObject::invokeMethod(worker, "writeToSocket", Qt::QueuedConnection,
+                              Q_ARG(QTcpSocket *, socket),
+                              Q_ARG(QByteArray, response));
+    return;
+  }
+
+  // Not an API command - forward to I/O device (existing behavior)
+  IO::Manager::instance().writeData(data);
 }
 
 /**
