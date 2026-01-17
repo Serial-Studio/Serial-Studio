@@ -168,6 +168,29 @@ Comprehensive test suite demonstrating Serial Studio's full ANSI color and VT-10
   - Colored timestamps synchronized with ANSI colors setting
   - No hardware needed - software only
 
+### 12. API Client
+**Difficulty:** 🟡 Intermediate | **Time:** ~10 minutes | **License:** GPL / Pro
+
+Python client for the Serial Studio API that allows external programs to control and configure Serial Studio through a TCP connection. Features an interactive REPL for easy exploration.
+
+**Contents:**
+  - **test_api.py**: Full-featured API client with interactive REPL, CLI, and test suite
+  - **README.md**: Complete API reference and usage guide
+  - **API_REFERENCE.md**: Detailed command documentation
+
+**Features:**
+  - **Live Monitor**: Real-time dashboard showing connection status and configuration
+  - **Interactive REPL**: Explore 116 API commands with an easy-to-use interface
+  - **CLI Client**: Send single commands or batches from terminal
+  - **Test Suite**: Automated testing for all API functionality
+  - **All Drivers Supported**: UART, Network, BLE, Modbus (Pro), CAN Bus (Pro), MQTT (Pro)
+  - **Export Control**: CSV and MDF4 (Pro) export management
+  - **I/O Manager**: Connection control, data transmission, configuration
+  - **Batch Commands**: Execute multiple commands from JSON files
+  - **JSON Output**: Scriptable output for automation
+  - **No Dependencies**: Uses only Python standard library
+  - No hardware needed - software only
+
 ## Getting Started
 
 To use these examples:

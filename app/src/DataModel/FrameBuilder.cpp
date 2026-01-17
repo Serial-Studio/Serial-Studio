@@ -28,7 +28,7 @@
 #include "MDF4/Export.h"
 #include "MDF4/Player.h"
 #include "UI/Dashboard.h"
-#include "Plugins/Server.h"
+#include "API/Server.h"
 #include "Misc/Utilities.h"
 #include "Misc/JsonValidator.h"
 #include "DataModel/ProjectModel.h"
@@ -113,7 +113,7 @@ DataModel::FrameBuilder::FrameBuilder()
           &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
   connect(&MDF4::Export::instance(), &MDF4::Export::enabledChanged, this,
           &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
-  connect(&Plugins::Server::instance(), &Plugins::Server::enabledChanged, this,
+  connect(&API::Server::instance(), &API::Server::enabledChanged, this,
           &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
 
   // Initialize timestamped frames enabled flag
@@ -793,14 +793,14 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
  *        is enabled.
  *
  * This slot is connected to the enabledChanged signals of CSV::Export,
- * MDF4::Export, and Plugins::Server. It caches the combined enabled state
+ * MDF4::Export, and API::Server. It caches the combined enabled state
  * to avoid checking multiple modules on every frame in the hotpath.
  */
 void DataModel::FrameBuilder::updateTimestampedFramesEnabled()
 {
   m_timestampedFramesEnabled = CSV::Export::instance().exportEnabled()
                                || MDF4::Export::instance().exportEnabled()
-                               || Plugins::Server::instance().enabled();
+                               || API::Server::instance().enabled();
 }
 
 /**
@@ -828,7 +828,7 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame &frame)
   static auto &csvExport = CSV::Export::instance();
   static auto &mdf4Export = MDF4::Export::instance();
   static auto &dashboard = UI::Dashboard::instance();
-  static auto &pluginsServer = Plugins::Server::instance();
+  static auto &pluginsServer = API::Server::instance();
 
   dashboard.hotpathRxFrame(frame);
 

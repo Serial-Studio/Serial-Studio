@@ -51,7 +51,8 @@ void API::Handlers::IOManagerHandler::registerCommands()
 
   registry.registerCommand(
       QStringLiteral("io.manager.writeData"),
-      QStringLiteral("Write raw data to device (params: data - base64 encoded)"),
+      QStringLiteral(
+          "Write raw data to device (params: data - base64 encoded)"),
       &writeData);
 
   registry.registerCommand(
@@ -59,9 +60,9 @@ void API::Handlers::IOManagerHandler::registerCommands()
       QStringLiteral("Get current connection status and configuration"),
       &getStatus);
 
-  registry.registerCommand(
-      QStringLiteral("io.manager.getAvailableBuses"),
-      QStringLiteral("Get list of available bus types"), &getAvailableBuses);
+  registry.registerCommand(QStringLiteral("io.manager.getAvailableBuses"),
+                           QStringLiteral("Get list of available bus types"),
+                           &getAvailableBuses);
 }
 
 /**
@@ -79,15 +80,15 @@ API::Handlers::IOManagerHandler::connect(const QString &id,
   if (manager.isConnected())
   {
     return CommandResponse::makeError(id, ErrorCode::ExecutionError,
-                                  QStringLiteral("Already connected"));
+                                      QStringLiteral("Already connected"));
   }
 
   // Check configuration
   if (!manager.configurationOk())
   {
     return CommandResponse::makeError(id, ErrorCode::ExecutionError,
-                                  QStringLiteral("Device configuration is "
-                                                 "invalid"));
+                                      QStringLiteral("Device configuration is "
+                                                     "invalid"));
   }
 
   // Attempt connection
@@ -113,7 +114,7 @@ API::Handlers::IOManagerHandler::disconnect(const QString &id,
   if (!manager.isConnected())
   {
     return CommandResponse::makeError(id, ErrorCode::ExecutionError,
-                                  QStringLiteral("Not connected"));
+                                      QStringLiteral("Not connected"));
   }
 
   manager.disconnectDevice();
@@ -133,9 +134,10 @@ API::Handlers::IOManagerHandler::setPaused(const QString &id,
 {
   if (!params.contains(QStringLiteral("paused")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "paused"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "paused"));
   }
 
   const bool paused = params.value(QStringLiteral("paused")).toBool();
@@ -156,9 +158,10 @@ API::Handlers::IOManagerHandler::setBusType(const QString &id,
 {
   if (!params.contains(QStringLiteral("busType")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "busType"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "busType"));
   }
 
   const int busType = params.value(QStringLiteral("busType")).toInt();
@@ -173,7 +176,8 @@ API::Handlers::IOManagerHandler::setBusType(const QString &id,
             .arg(availableBuses.count() - 1));
   }
 
-  IO::Manager::instance().setBusType(static_cast<SerialStudio::BusType>(busType));
+  IO::Manager::instance().setBusType(
+      static_cast<SerialStudio::BusType>(busType));
 
   QJsonObject result;
   result[QStringLiteral("busType")] = busType;
@@ -189,19 +193,13 @@ API::CommandResponse
 API::Handlers::IOManagerHandler::writeData(const QString &id,
                                            const QJsonObject &params)
 {
-  auto &manager = IO::Manager::instance();
-
-  if (!manager.isConnected())
-  {
-    return CommandResponse::makeError(id, ErrorCode::ExecutionError,
-                                  QStringLiteral("Not connected"));
-  }
-
+  // Validate parameters first before checking execution preconditions
   if (!params.contains(QStringLiteral("data")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "data"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "data"));
   }
 
   const QString dataStr = params.value(QStringLiteral("data")).toString();
@@ -210,7 +208,15 @@ API::Handlers::IOManagerHandler::writeData(const QString &id,
   if (data.isEmpty() && !dataStr.isEmpty())
   {
     return CommandResponse::makeError(id, ErrorCode::InvalidParam,
-                                  QStringLiteral("Invalid base64 data"));
+                                      QStringLiteral("Invalid base64 data"));
+  }
+
+  // Now check execution preconditions
+  auto &manager = IO::Manager::instance();
+  if (!manager.isConnected())
+  {
+    return CommandResponse::makeError(id, ErrorCode::ExecutionError,
+                                      QStringLiteral("Not connected"));
   }
 
   const qint64 bytesWritten = manager.writeData(data);
@@ -272,4 +278,3 @@ API::Handlers::IOManagerHandler::getAvailableBuses(const QString &id,
   result[QStringLiteral("buses")] = busArray;
   return CommandResponse::makeSuccess(id, result);
 }
-

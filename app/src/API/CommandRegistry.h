@@ -34,8 +34,8 @@ namespace API
  *
  * Takes params as input, returns a CommandResponse
  */
-using CommandFunction = std::function<CommandResponse(const QString &id,
-                                                      const QJsonObject &params)>;
+using CommandFunction = std::function<CommandResponse(
+    const QString &id, const QJsonObject &params)>;
 
 /**
  * @struct CommandDefinition
@@ -119,4 +119,3 @@ private:
 };
 
 } // namespace API
-

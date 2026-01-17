@@ -40,17 +40,18 @@ void API::Handlers::NetworkHandler::registerCommands()
                            QStringLiteral("Set TCP port (params: port)"),
                            &setTcpPort);
 
-  registry.registerCommand(
-      QStringLiteral("io.driver.network.setUdpLocalPort"),
-      QStringLiteral("Set UDP local port (params: port)"), &setUdpLocalPort);
+  registry.registerCommand(QStringLiteral("io.driver.network.setUdpLocalPort"),
+                           QStringLiteral("Set UDP local port (params: port)"),
+                           &setUdpLocalPort);
 
-  registry.registerCommand(
-      QStringLiteral("io.driver.network.setUdpRemotePort"),
-      QStringLiteral("Set UDP remote port (params: port)"), &setUdpRemotePort);
+  registry.registerCommand(QStringLiteral("io.driver.network.setUdpRemotePort"),
+                           QStringLiteral("Set UDP remote port (params: port)"),
+                           &setUdpRemotePort);
 
   registry.registerCommand(
       QStringLiteral("io.driver.network.setSocketType"),
-      QStringLiteral("Set socket type (params: socketTypeIndex - 0=TCP, 1=UDP)"),
+      QStringLiteral(
+          "Set socket type (params: socketTypeIndex - 0=TCP, 1=UDP)"),
       &setSocketType);
 
   registry.registerCommand(
@@ -58,14 +59,14 @@ void API::Handlers::NetworkHandler::registerCommands()
       QStringLiteral("Enable/disable UDP multicast (params: enabled)"),
       &setUdpMulticast);
 
-  registry.registerCommand(
-      QStringLiteral("io.driver.network.lookup"),
-      QStringLiteral("Perform DNS lookup (params: host)"), &lookup);
+  registry.registerCommand(QStringLiteral("io.driver.network.lookup"),
+                           QStringLiteral("Perform DNS lookup (params: host)"),
+                           &lookup);
 
   // Query commands
-  registry.registerCommand(
-      QStringLiteral("io.driver.network.getConfiguration"),
-      QStringLiteral("Get current network configuration"), &getConfiguration);
+  registry.registerCommand(QStringLiteral("io.driver.network.getConfiguration"),
+                           QStringLiteral("Get current network configuration"),
+                           &getConfiguration);
 
   registry.registerCommand(QStringLiteral("io.driver.network.getSocketTypes"),
                            QStringLiteral("Get available socket types"),
@@ -83,16 +84,17 @@ API::Handlers::NetworkHandler::setRemoteAddress(const QString &id,
 {
   if (!params.contains(QStringLiteral("address")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "address"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "address"));
   }
 
   const QString address = params.value(QStringLiteral("address")).toString();
   if (address.isEmpty())
   {
-    return CommandResponse::makeError(id, ErrorCode::InvalidParam,
-                                  QStringLiteral("Address cannot be empty"));
+    return CommandResponse::makeError(
+        id, ErrorCode::InvalidParam, QStringLiteral("Address cannot be empty"));
   }
 
   IO::Drivers::Network::instance().setRemoteAddress(address);
@@ -112,17 +114,19 @@ API::Handlers::NetworkHandler::setTcpPort(const QString &id,
 {
   if (!params.contains(QStringLiteral("port")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "port"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "port"));
   }
 
   const int port = params.value(QStringLiteral("port")).toInt();
   if (port < 1 || port > 65535)
   {
-    return CommandResponse::makeError(id, ErrorCode::InvalidParam,
-                                  QStringLiteral("Port must be between 1 and "
-                                                 "65535"));
+    return CommandResponse::makeError(
+        id, ErrorCode::InvalidParam,
+        QStringLiteral("Port must be between 1 and "
+                       "65535"));
   }
 
   IO::Drivers::Network::instance().setTcpPort(static_cast<quint16>(port));
@@ -142,17 +146,19 @@ API::Handlers::NetworkHandler::setUdpLocalPort(const QString &id,
 {
   if (!params.contains(QStringLiteral("port")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "port"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "port"));
   }
 
   const int port = params.value(QStringLiteral("port")).toInt();
   if (port < 0 || port > 65535)
   {
-    return CommandResponse::makeError(id, ErrorCode::InvalidParam,
-                                  QStringLiteral("Port must be between 0 and "
-                                                 "65535"));
+    return CommandResponse::makeError(
+        id, ErrorCode::InvalidParam,
+        QStringLiteral("Port must be between 0 and "
+                       "65535"));
   }
 
   IO::Drivers::Network::instance().setUdpLocalPort(static_cast<quint16>(port));
@@ -172,17 +178,19 @@ API::Handlers::NetworkHandler::setUdpRemotePort(const QString &id,
 {
   if (!params.contains(QStringLiteral("port")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "port"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "port"));
   }
 
   const int port = params.value(QStringLiteral("port")).toInt();
   if (port < 1 || port > 65535)
   {
-    return CommandResponse::makeError(id, ErrorCode::InvalidParam,
-                                  QStringLiteral("Port must be between 1 and "
-                                                 "65535"));
+    return CommandResponse::makeError(
+        id, ErrorCode::InvalidParam,
+        QStringLiteral("Port must be between 1 and "
+                       "65535"));
   }
 
   IO::Drivers::Network::instance().setUdpRemotePort(static_cast<quint16>(port));
@@ -202,9 +210,10 @@ API::Handlers::NetworkHandler::setSocketType(const QString &id,
 {
   if (!params.contains(QStringLiteral("socketTypeIndex")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "socketTypeIndex"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "socketTypeIndex"));
   }
 
   const int socketTypeIndex
@@ -238,9 +247,10 @@ API::Handlers::NetworkHandler::setUdpMulticast(const QString &id,
 {
   if (!params.contains(QStringLiteral("enabled")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "enabled"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "enabled"));
   }
 
   const bool enabled = params.value(QStringLiteral("enabled")).toBool();
@@ -264,16 +274,17 @@ API::Handlers::NetworkHandler::lookup(const QString &id,
 {
   if (!params.contains(QStringLiteral("host")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "host"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "host"));
   }
 
   const QString host = params.value(QStringLiteral("host")).toString();
   if (host.isEmpty())
   {
     return CommandResponse::makeError(id, ErrorCode::InvalidParam,
-                                  QStringLiteral("Host cannot be empty"));
+                                      QStringLiteral("Host cannot be empty"));
   }
 
   IO::Drivers::Network::instance().lookup(host);
@@ -354,4 +365,3 @@ API::Handlers::NetworkHandler::getSocketTypes(const QString &id,
       = IO::Drivers::Network::instance().socketTypeIndex();
   return CommandResponse::makeSuccess(id, result);
 }
-

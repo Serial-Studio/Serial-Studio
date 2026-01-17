@@ -82,6 +82,7 @@ Make sure your system meets these requirements before running the AppImage.
 - **Modbus TCP/RTU:** Connect to industrial PLCs and equipment (Pro)
 - **CAN Bus Support:** Import DBC files for automotive and industrial applications (Pro)
 - **MQTT for IoT:** Connect to MQTT brokers for distributed sensors (Pro)
+- **TCP API:** Control Serial Studio programmatically with 116 API commands (see [API Client example](./examples/API%20Test))
 - **Dual Licensing:** Open-source GPL-3.0 core, proprietary Pro features (see [LICENSE.md](LICENSE.md))
 
 ## Quick Start
@@ -138,6 +139,7 @@ Upload to Arduino → Connect Serial Studio → Enable Quick Plot → Done!
 - 🎯 [Use Cases](USE-CASES.md) - Real-world examples: robotics, IoT, drones, education, research
 - ⚖️ [Comparison](COMPARISON.md) - Serial Studio vs. Arduino Plotter, MATLAB, Processing, LabVIEW, Python
 - 🤖 [AI Agent Guide](AGENTS.md) - For ChatGPT, Claude, and other AI assistants
+- 🔌 [API Reference](API_REFERENCE.md) - Complete TCP API documentation and automation guide
 - 💡 [Examples](./examples) - Arduino, ESP32, Python code with sample projects
 
 ### Key Topics
@@ -148,6 +150,7 @@ Upload to Arduino → Connect Serial Studio → Enable Quick Plot → Done!
 - **Frame Parsing:** Handle binary protocols, checksums, custom data formats
 - **CSV Export & Playback:** Log sensor data and replay CSV files for analysis
 - **MDF4 Playback & Export:** Play and export MDF4/MF4 files (CAN Bus, LIN, FlexRay, analog)
+- **TCP API:** Control Serial Studio programmatically with 116 API commands (see [API Client](./examples/API%20Test))
 
 ## Building Serial Studio
 

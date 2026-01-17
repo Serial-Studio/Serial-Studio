@@ -3,7 +3,7 @@
 Serial Studio API Client & Test Suite
 ======================================
 
-A versatile tool for interacting with the Serial Studio Plugin Server API.
+A versatile tool for interacting with the Serial Studio API Server.
 Can be used as a command-line client, interactive shell, or test suite.
 
 Usage:
@@ -25,6 +25,9 @@ Usage:
     # Interactive mode (REPL)
     python test_api.py interactive
 
+    # Live monitor (real-time status updates)
+    python test_api.py monitor [--interval 500] [--compact] [--show-raw-data]
+
     # Run test suite
     python test_api.py test [--verbose]
 
@@ -39,7 +42,7 @@ Common options for all modes:
     --port PORT    Server port (default: 7777)
 
 Requirements:
-    - Serial Studio running with Plugin Server enabled (port 7777)
+    - Serial Studio running with API Server enabled (port 7777)
     - Python 3.8+
 
 Copyright (C) 2020-2025 Alex Spataru
@@ -52,6 +55,8 @@ import argparse
 import sys
 import time
 import uuid
+import select
+import base64
 from typing import Any, Optional
 from dataclasses import dataclass
 from enum import Enum
@@ -145,16 +150,17 @@ class TestSuite:
 # =============================================================================
 
 class SerialStudioAPI:
-    """Client for communicating with Serial Studio Plugin Server API."""
+    """Client for communicating with Serial Studio API Server."""
 
     def __init__(self, host: str = DEFAULT_HOST, port: int = DEFAULT_PORT, verbose: bool = False):
         self.host = host
         self.port = port
         self.verbose = verbose
         self.socket: Optional[socket.socket] = None
+        self.receive_buffer = b""
 
     def connect(self) -> bool:
-        """Establish TCP connection to the plugin server."""
+        """Establish TCP connection to the API server."""
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.settimeout(SOCKET_TIMEOUT)
@@ -174,9 +180,53 @@ class SerialStudioAPI:
             except Exception:
                 pass
             self.socket = None
+        self.receive_buffer = b""
 
-    def send_raw(self, data: bytes) -> Optional[dict]:
-        """Send raw bytes and receive JSON response."""
+    def recv_message(self, timeout: float = SOCKET_TIMEOUT) -> Optional[dict]:
+        """
+        Receive a single JSON message from the socket.
+        Handles newline-delimited JSON messages and buffering.
+        Returns None on timeout or error.
+        """
+        if not self.socket:
+            return None
+
+        try:
+            end_time = time.time() + timeout
+            while True:
+                newline_pos = self.receive_buffer.find(b'\n')
+                if newline_pos != -1:
+                    line = self.receive_buffer[:newline_pos]
+                    self.receive_buffer = self.receive_buffer[newline_pos + 1:]
+
+                    if line.strip():
+                        if self.verbose:
+                            print(f"[RECV] {line.decode('utf-8', errors='replace')}")
+                        return json.loads(line.decode('utf-8'))
+                    continue
+
+                remaining_time = end_time - time.time()
+                if remaining_time <= 0:
+                    return None
+
+                ready = select.select([self.socket], [], [], min(remaining_time, 0.1))
+                if ready[0]:
+                    chunk = self.socket.recv(RECV_BUFFER_SIZE)
+                    if not chunk:
+                        return None
+                    self.receive_buffer += chunk
+        except Exception as e:
+            if self.verbose:
+                print(f"[ERROR] recv_message: {e}")
+            return None
+
+    def send_raw(self, data: bytes, expected_id: Optional[str] = None, timeout: float = SOCKET_TIMEOUT) -> Optional[dict]:
+        """
+        Send raw bytes and receive JSON response.
+
+        If expected_id is provided, will wait for a response with that ID,
+        discarding any push notifications (data/frames) in the meantime.
+        """
         if not self.socket:
             return None
 
@@ -185,12 +235,32 @@ class SerialStudioAPI:
                 print(f"[SEND] {data.decode('utf-8', errors='replace').strip()}")
 
             self.socket.sendall(data)
-            response_data = self.socket.recv(RECV_BUFFER_SIZE)
 
-            if self.verbose:
-                print(f"[RECV] {response_data.decode('utf-8', errors='replace').strip()}")
+            # If we're expecting a specific response ID, wait for it
+            if expected_id:
+                end_time = time.time() + timeout
+                while True:
+                    remaining = end_time - time.time()
+                    if remaining <= 0:
+                        if self.verbose:
+                            print(f"[ERROR] Timeout waiting for response ID {expected_id}")
+                        return None
 
-            return json.loads(response_data.decode('utf-8'))
+                    msg = self.recv_message(timeout=remaining)
+                    if not msg:
+                        return None
+
+                    # Check if this is the response we're waiting for
+                    if msg.get("type") == MessageType.RESPONSE and msg.get("id") == expected_id:
+                        return msg
+
+                    # Otherwise, it's a push notification - discard and continue waiting
+                    if self.verbose:
+                        print(f"[DEBUG] Discarding push notification while waiting for {expected_id}")
+            else:
+                # No expected ID, just return the next message
+                return self.recv_message(timeout=timeout)
+
         except Exception as e:
             if self.verbose:
                 print(f"[ERROR] {e}")
@@ -199,7 +269,8 @@ class SerialStudioAPI:
     def send_json(self, obj: dict) -> Optional[dict]:
         """Send JSON object and receive JSON response."""
         data = json.dumps(obj, separators=(',', ':')) + "\n"
-        return self.send_raw(data.encode('utf-8'))
+        expected_id = obj.get("id")
+        return self.send_raw(data.encode('utf-8'), expected_id=expected_id, timeout=SOCKET_TIMEOUT)
 
     def send_command(self, command: str, params: Optional[dict] = None,
                      request_id: Optional[str] = None) -> Optional[dict]:
@@ -221,6 +292,18 @@ class SerialStudioAPI:
             "commands": commands,
         }
         return self.send_json(msg)
+
+    def has_data_available(self, timeout: float = 0.0) -> bool:
+        """Check if data is available to read from the socket."""
+        if not self.socket:
+            return False
+        if self.receive_buffer:
+            return True
+        try:
+            ready = select.select([self.socket], [], [], timeout)
+            return bool(ready[0])
+        except Exception:
+            return False
 
 
 # =============================================================================
@@ -460,6 +543,11 @@ def test_io_manager(api: SerialStudioAPI, suite: TestSuite):
             return False, "No response"
         if response.get("type") != MessageType.RESPONSE:
             return False, f"Wrong response type: {response.get('type')}"
+
+        # Clean up: Disconnect if we connected successfully
+        if response.get("success"):
+            api.send_command("io.manager.disconnect")
+
         return True, ""
     run_test(suite, "io.manager.connect returns valid response", test_connect_not_configured)
 
@@ -641,6 +729,120 @@ def test_uart_handler(api: SerialStudioAPI, suite: TestSuite):
 # =============================================================================
 # Network Handler Tests
 # =============================================================================
+
+def test_bluetoothle_handler(api: SerialStudioAPI, suite: TestSuite):
+    """Test io.driver.ble.* commands."""
+    print("\n--- Bluetooth LE Handler Tests ---")
+
+    # Test: getStatus
+    def test_get_status():
+        response = api.send_command("io.driver.ble.getStatus")
+        passed, msg = assert_success(response, "getStatus")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["operatingSystemSupported", "adapterAvailable", "isOpen", "deviceCount"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "io.driver.ble.getStatus returns status", test_get_status)
+
+    # Test: getConfiguration
+    def test_get_configuration():
+        response = api.send_command("io.driver.ble.getConfiguration")
+        passed, msg = assert_success(response, "getConfiguration")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["deviceIndex", "characteristicIndex", "isOpen", "configurationOk"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "io.driver.ble.getConfiguration returns config", test_get_configuration)
+
+    # Test: getDeviceList
+    def test_get_device_list():
+        response = api.send_command("io.driver.ble.getDeviceList")
+        passed, msg = assert_success(response, "getDeviceList")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "deviceList" not in result:
+            return False, "Missing deviceList field"
+        return True, ""
+    run_test(suite, "io.driver.ble.getDeviceList returns device list", test_get_device_list)
+
+    # Test: getServiceList
+    def test_get_service_list():
+        response = api.send_command("io.driver.ble.getServiceList")
+        passed, msg = assert_success(response, "getServiceList")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "serviceList" not in result:
+            return False, "Missing serviceList field"
+        return True, ""
+    run_test(suite, "io.driver.ble.getServiceList returns service list", test_get_service_list)
+
+    # Test: getCharacteristicList
+    def test_get_characteristic_list():
+        response = api.send_command("io.driver.ble.getCharacteristicList")
+        passed, msg = assert_success(response, "getCharacteristicList")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "characteristicList" not in result:
+            return False, "Missing characteristicList field"
+        return True, ""
+    run_test(suite, "io.driver.ble.getCharacteristicList returns list", test_get_characteristic_list)
+
+
+def test_csv_export_handler(api: SerialStudioAPI, suite: TestSuite):
+    """Test csv.export.* commands."""
+    print("\n--- CSV Export Handler Tests ---")
+
+    # Test: getStatus
+    def test_get_status():
+        response = api.send_command("csv.export.getStatus")
+        passed, msg = assert_success(response, "getStatus")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["enabled", "isOpen"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "csv.export.getStatus returns status", test_get_status)
+
+    # Test: setEnabled
+    def test_set_enabled():
+        response = api.send_command("csv.export.setEnabled", {"enabled": True})
+        passed, msg = assert_success(response, "setEnabled")
+        if not passed:
+            return False, msg
+        # Restore to false
+        api.send_command("csv.export.setEnabled", {"enabled": False})
+        return True, ""
+    run_test(suite, "csv.export.setEnabled sets export state", test_set_enabled)
+
+    # Test: setEnabled missing param
+    def test_set_enabled_missing():
+        response = api.send_command("csv.export.setEnabled", {})
+        return assert_error(response, ErrorCode.MISSING_PARAM, "setEnabled_missing")
+    run_test(suite, "csv.export.setEnabled requires enabled param", test_set_enabled_missing)
+
+    # Test: close
+    def test_close():
+        response = api.send_command("csv.export.close")
+        passed, msg = assert_success(response, "close")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "csv.export.close executes", test_close)
+
 
 def test_network_handler(api: SerialStudioAPI, suite: TestSuite):
     """Test io.driver.network.* commands."""
@@ -1253,6 +1455,152 @@ Examples:
     return 0
 
 
+def cmd_monitor(api: SerialStudioAPI, args) -> int:
+    """Monitor Serial Studio in real-time."""
+    print("=" * 60)
+    print("Serial Studio Live Monitor")
+    print("=" * 60)
+    print("Press Ctrl+C to exit\n")
+
+    update_interval = args.interval / 1000.0
+    frame_count = 0
+    raw_data_count = 0
+    last_status = {}
+    last_update_time = time.time()
+
+    try:
+        while True:
+            current_time = time.time()
+
+            # Process any pending push notifications (raw data, frames)
+            while api.has_data_available(timeout=0.0):
+                msg = api.recv_message(timeout=0.1)
+                if msg:
+                    if "data" in msg and "frames" not in msg:
+                        raw_data_count += 1
+                        if args.show_raw_data:
+                            try:
+                                decoded = base64.b64decode(msg["data"]).decode('utf-8', errors='replace')
+                                display_text = decoded.replace('\n', '\\n').replace('\r', '\\r')
+                                if len(display_text) > 100:
+                                    display_text = display_text[:97] + "..."
+                                print(f"\rRaw [{raw_data_count}]: {display_text}".ljust(120), end='', flush=True)
+                            except Exception:
+                                pass
+                    elif "frames" in msg:
+                        frame_count += len(msg.get("frames", []))
+
+            # Send status query at regular intervals
+            if current_time - last_update_time >= update_interval:
+                last_update_time = current_time
+
+                response = api.send_command("io.manager.getStatus")
+                if response and response.get("success"):
+                    status = response.get("result", {})
+
+                    # Clear screen and reposition cursor (only on success)
+                    if not args.compact and not args.show_raw_data:
+                        print("\033[2J\033[H", end="")
+                    elif not args.show_raw_data:
+                        print()
+
+                    # Print header
+                    if not args.show_raw_data:
+                        print("=" * 60)
+                        print(f"Serial Studio Live Monitor (Update: {args.interval}ms)")
+                        print("=" * 60)
+                        print()
+
+                    # Connection status with color
+                    connected = status.get("isConnected", False)
+                    paused = status.get("paused", False)
+                    conn_icon = "🟢" if connected else "🔴"
+                    pause_icon = "⏸️ " if paused else ""
+
+                    if not args.show_raw_data:
+                        print(f"Status: {conn_icon} {'CONNECTED' if connected else 'DISCONNECTED'} {pause_icon}")
+                        print(f"Bus Type: {status.get('busTypeName', 'Unknown')}")
+                        print(f"Configuration: {'✓ OK' if status.get('configurationOk', False) else '✗ Not Ready'}")
+                        print(f"Mode: {'Read/Write' if status.get('readWrite', False) else 'Read-Only' if status.get('readOnly', False) else 'None'}")
+
+                        # Frame statistics (if connected)
+                        if connected:
+                            print()
+                            print("─" * 60)
+
+                            # Get driver-specific info based on bus type
+                            bus_type = status.get("busType", 0)
+
+                            if bus_type == 0:  # UART
+                                uart_resp = api.send_command("io.driver.uart.getConfiguration")
+                                if uart_resp and uart_resp.get("success"):
+                                    uart_cfg = uart_resp.get("result", {})
+                                    print(f"Port: {uart_cfg.get('port', 'N/A')}")
+                                    print(f"Baud Rate: {uart_cfg.get('baudRate', 'N/A')}")
+                                    print(f"Config: {uart_cfg.get('dataBits', '?')}{uart_cfg.get('parity', '?')[0]}{uart_cfg.get('stopBits', '?')}")
+
+                            elif bus_type == 1:  # Network
+                                net_resp = api.send_command("io.driver.network.getConfiguration")
+                                if net_resp and net_resp.get("success"):
+                                    net_cfg = net_resp.get("result", {})
+                                    socket_types = ["TCP", "UDP"]
+                                    socket_idx = net_cfg.get("socketTypeIndex", 0)
+                                    socket_type = socket_types[socket_idx] if socket_idx < len(socket_types) else "Unknown"
+                                    print(f"Type: {socket_type}")
+                                    print(f"Address: {net_cfg.get('remoteAddress', 'N/A')}")
+                                    if socket_idx == 0:
+                                        print(f"Port: {net_cfg.get('tcpPort', 'N/A')}")
+                                    else:
+                                        print(f"Local Port: {net_cfg.get('udpLocalPort', 'N/A')}")
+                                        print(f"Remote Port: {net_cfg.get('udpRemotePort', 'N/A')}")
+
+                            elif bus_type == 2:  # Bluetooth LE
+                                ble_resp = api.send_command("io.driver.ble.getConfiguration")
+                                if ble_resp and ble_resp.get("success"):
+                                    ble_cfg = ble_resp.get("result", {})
+                                    print(f"Device: {ble_cfg.get('deviceName', 'N/A')}")
+                                    print(f"Service: {ble_cfg.get('serviceName', 'N/A')}")
+                                    print(f"Characteristic: {ble_cfg.get('characteristicName', 'N/A')}")
+
+                        # Export status
+                        print()
+                        print("─" * 60)
+                        csv_resp = api.send_command("csv.export.getStatus")
+                        if csv_resp and csv_resp.get("success"):
+                            csv_status = csv_resp.get("result", {})
+                            csv_enabled = csv_status.get("enabled", False)
+                            csv_open = csv_status.get("isOpen", False)
+                            csv_icon = "📝" if csv_enabled and csv_open else "💾" if csv_enabled else "⏹️ "
+                            print(f"CSV Export: {csv_icon} {'Active' if csv_enabled and csv_open else 'Enabled' if csv_enabled else 'Disabled'}")
+
+                        # Detect changes
+                        if last_status and not args.compact:
+                            if status.get("isConnected") != last_status.get("isConnected"):
+                                print("\n🔔 Connection state changed!")
+                            if status.get("paused") != last_status.get("paused"):
+                                print("\n🔔 Pause state changed!")
+
+                        print()
+                        print("─" * 60)
+                        print(f"Frames: {frame_count} | Raw Data Packets: {raw_data_count} | Press Ctrl+C to exit")
+
+                    last_status = status
+
+                else:
+                    # Only show errors in compact mode or verbose to avoid screen clutter
+                    if api.verbose or args.compact:
+                        print("[ERROR] Failed to get status (will retry)")
+
+            # Small sleep to prevent CPU spinning
+            time.sleep(0.01)
+
+    except KeyboardInterrupt:
+        print("\n\nMonitoring stopped.")
+        print(f"Total frames: {frame_count}")
+        print(f"Total raw data packets: {raw_data_count}")
+        return 0
+
+
 def cmd_test(api: SerialStudioAPI, args) -> int:
     """Run the test suite."""
     print("=" * 60)
@@ -1268,6 +1616,8 @@ def cmd_test(api: SerialStudioAPI, args) -> int:
         test_io_manager(api, suite)
         test_uart_handler(api, suite)
         test_network_handler(api, suite)
+        test_bluetoothle_handler(api, suite)
+        test_csv_export_handler(api, suite)
         test_batch_commands(api, suite)
         test_stress(api, suite)
         test_configuration_workflow(api, suite)
@@ -1297,6 +1647,7 @@ Examples:
   %(prog)s send io.driver.uart.setDtrEnabled -p dtrEnabled=true # Boolean param
   %(prog)s list                                                 # List commands
   %(prog)s interactive                                          # Interactive mode
+  %(prog)s monitor --interval 500                               # Live monitor
   %(prog)s batch commands.json                                  # Batch from file
   %(prog)s test --verbose                                       # Run test suite
         """)
@@ -1324,6 +1675,15 @@ Examples:
     # interactive subcommand
     subparsers.add_parser("interactive", aliases=["i", "repl"], help="Interactive REPL mode")
 
+    # monitor subcommand
+    monitor_parser = subparsers.add_parser("monitor", aliases=["m", "live"], help="Live data monitor")
+    monitor_parser.add_argument("--interval", type=int, default=1000, metavar="MS",
+                                help="Update interval in milliseconds (default: 1000)")
+    monitor_parser.add_argument("--compact", action="store_true",
+                                help="Compact mode (append updates instead of clearing screen)")
+    monitor_parser.add_argument("--show-raw-data", action="store_true",
+                                help="Show raw device data on a single line (uses \\r for continuous update)")
+
     # test subcommand
     subparsers.add_parser("test", help="Run the API test suite")
 
@@ -1349,7 +1709,7 @@ Examples:
             print("\n[ERROR] Could not connect to Serial Studio.", file=sys.stderr)
             print("Please ensure:", file=sys.stderr)
             print("  1. Serial Studio is running", file=sys.stderr)
-            print("  2. Plugin Server is enabled (Settings > Extensions > Enable Plugin Server)", file=sys.stderr)
+            print("  2. API Server is enabled (Settings > Miscellaneous > Enable API Server)", file=sys.stderr)
             print(f"  3. The server is listening on port {args.port}", file=sys.stderr)
         return 1
 
@@ -1366,6 +1726,8 @@ Examples:
             return cmd_list(api, args)
         elif args.mode in ("interactive", "i", "repl"):
             return cmd_interactive(api, args)
+        elif args.mode in ("monitor", "m", "live"):
+            return cmd_monitor(api, args)
         elif args.mode == "test":
             return cmd_test(api, args)
         else:

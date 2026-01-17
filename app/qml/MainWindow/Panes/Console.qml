@@ -46,7 +46,7 @@ Widgets.Pane {
   Binding {
     target: Cpp_Console_Handler
     property: "colorTimestamps"
-    value: terminal.ansiColors
+    value: terminal.ansiColors && terminal.vt100emulation
   }
 
   //

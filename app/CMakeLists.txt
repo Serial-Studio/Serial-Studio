@@ -214,12 +214,14 @@ set(SOURCES
   src/UI/Widgets/MultiPlot.cpp
   src/UI/DeclarativeWidgets/DeclarativeWidget.cpp
   src/UI/DeclarativeWidgets/StaticTable.cpp
-  src/Plugins/Server.cpp
+  src/API/Server.cpp
   src/API/CommandRegistry.cpp
   src/API/CommandHandler.cpp
   src/API/Handlers/IOManagerHandler.cpp
   src/API/Handlers/UARTHandler.cpp
   src/API/Handlers/NetworkHandler.cpp
+  src/API/Handlers/BluetoothLEHandler.cpp
+  src/API/Handlers/CSVExportHandler.cpp
   src/IO/Drivers/Network.cpp
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
@@ -272,13 +274,15 @@ set(HEADERS
   src/UI/Widgets/Terminal.h
   src/UI/DeclarativeWidgets/DeclarativeWidget.h
   src/UI/DeclarativeWidgets/StaticTable.h
-  src/Plugins/Server.h
+  src/API/Server.h
   src/API/CommandProtocol.h
   src/API/CommandRegistry.h
   src/API/CommandHandler.h
   src/API/Handlers/IOManagerHandler.h
   src/API/Handlers/UARTHandler.h
   src/API/Handlers/NetworkHandler.h
+  src/API/Handlers/BluetoothLEHandler.h
+  src/API/Handlers/CSVExportHandler.h
   src/Platform/NativeWindow.h
   src/Console/Handler.h
   src/Console/Export.h
@@ -377,6 +381,10 @@ set(QML_SOURCES
 if(BUILD_COMMERCIAL)
   set(HEADERS
     ${HEADERS}
+    src/API/Handlers/ModbusHandler.h
+    src/API/Handlers/CANBusHandler.h
+    src/API/Handlers/MQTTHandler.h
+    src/API/Handlers/MDF4ExportHandler.h
     src/MQTT/Client.h
     src/IO/Drivers/Audio.h
     src/IO/Drivers/CANBus.h
@@ -391,6 +399,10 @@ if(BUILD_COMMERCIAL)
   )
   set(SOURCES
     ${SOURCES}
+    src/API/Handlers/ModbusHandler.cpp
+    src/API/Handlers/CANBusHandler.cpp
+    src/API/Handlers/MQTTHandler.cpp
+    src/API/Handlers/MDF4ExportHandler.cpp
     src/MQTT/Client.cpp
     src/IO/Drivers/Audio.cpp
     src/IO/Drivers/CANBus.cpp

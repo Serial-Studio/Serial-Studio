@@ -103,7 +103,7 @@ app/
 │   ├── Licensing/          # License validation (Pro features)
 │   ├── MQTT/               # MQTT client (Pro)
 │   ├── Platform/           # Platform-specific integrations
-│   ├── Plugins/            # Plugin server
+│   ├── API/                # API Server & command handlers
 │   ├── ThirdParty/         # Embedded libraries
 │   ├── SerialStudio.h      # Central enums and constants
 │   └── Concepts.h          # C++20 concepts for type constraints
@@ -198,7 +198,7 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame &frame)
   static auto &csvExport = CSV::Export::instance();      // Cached reference
   static auto &mdf4Export = MDF4::Export::instance();    // Cached reference
   static auto &dashboard = UI::Dashboard::instance();    // Cached reference
-  static auto &pluginsServer = Plugins::Server::instance(); // Cached reference
+  static auto &pluginsServer = API::Server::instance(); // Cached reference
 
   // HOTPATH: Dashboard receives frame by const reference (zero-copy, no allocation)
   dashboard.hotpathRxFrame(frame);
@@ -257,7 +257,7 @@ Template design for async export workers:
 **Usage Examples:**
 - `CSV::Export` - Config: {queueCapacity: 8192, flushThreshold: 1024, timerIntervalMs: 1000}
 - `MDF4::Export` - Config: {queueCapacity: 8192, flushThreshold: 1024, timerIntervalMs: 1000}
-- `Plugins::Server` - Config: {queueCapacity: 2048, flushThreshold: 512, timerIntervalMs: 1000}
+- `API::Server` - Config: {queueCapacity: 2048, flushThreshold: 512, timerIntervalMs: 1000}
 
 #### UI Module - Visualization
 
@@ -385,7 +385,7 @@ std::make_shared<TimestampedFrame>(frame)
     ↓ Single allocation: Frame embedded by value + steady_clock timestamp
     ↓ Nanosecond precision via std::chrono::steady_clock
 ┌───────────────────┬───────────────────┬───────────────────┐
-│  CSV::Export      │  MDF4::Export     │  Plugins::Server  │
+│  CSV::Export      │  MDF4::Export     │  API::Server  │
 │  (worker thread)  │  (worker thread)  │  (worker thread)  │
 │                   │                   │                   │
 │  Uses steady_clock│  Derives wall-    │  JSON serialize   │
@@ -454,7 +454,7 @@ std::make_shared<TimestampedFrame>(frame)
 **3. Lock-Free Producer-Consumer**
 - Template: `FrameConsumer<T>` (app/src/DataModel/FrameConsumer.h:406)
 - Dual-trigger flushing: time-based + threshold-based
-- Implementations: CSV::Export, MDF4::Export, Plugins::Server
+- Implementations: CSV::Export, MDF4::Export, API::Server
 - Graceful shutdown with blocking wait
 
 **4. Immutability-Based Thread Safety (FrameReader)**

@@ -20,6 +20,7 @@
  */
 
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Controls
 
@@ -46,6 +47,80 @@ Widgets.Pane {
   // Taskbar helper
   //
   property SS_UI.TaskBar taskBar: SS_UI.TaskBar {}
+
+  //
+  // API Server status indicator
+  //
+  actionComponent: Component {
+    Item {
+      implicitWidth: label.implicitWidth
+      implicitHeight: label.implicitHeight
+      opacity: Cpp_API_Server.enabled ?
+                 (Cpp_API_Server.clientCount > 0 ? 1 : 0.7) :
+                 0.3
+      Behavior on opacity { NumberAnimation { duration: 200 } }
+
+      MultiEffect {
+        id: glow
+        source: label
+        shadowBlur: 2.0
+        anchors.fill: label
+        shadowEnabled: true
+        shadowVerticalOffset: 0
+        shadowHorizontalOffset: 0
+        visible: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
+        shadowColor: Cpp_API_Server.enabled ? Cpp_ThemeManager.colors["highlight"] :
+                                              Cpp_ThemeManager.colors["pane_caption_border"]
+
+        SequentialAnimation on opacity {
+          loops: Animation.Infinite
+          running: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
+
+          NumberAnimation {
+            from: 0.4
+            to: 1.00
+            duration: 800
+            easing.type: Easing.InOutSine
+          }
+          NumberAnimation {
+            from: 1.00
+            to: 0.4
+            duration: 800
+            easing.type: Easing.InOutSine
+          }
+        }
+
+        SequentialAnimation on brightness {
+          loops: Animation.Infinite
+          running: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
+
+          NumberAnimation {
+            from: 0.15
+            to: 0.6
+            duration: 800
+            easing.type: Easing.InOutSine
+          }
+          NumberAnimation {
+            from: 0.6
+            to: 0.15
+            duration: 800
+            easing.type: Easing.InOutSine
+          }
+        }
+      }
+
+      Label {
+        id: label
+        visible: opacity > 0
+        font: Cpp_Misc_CommonFonts.customUiFont(0.85, true)
+        color: Cpp_ThemeManager.colors["pane_caption_foreground"]
+        text: Cpp_API_Server.enabled ?
+                (Cpp_API_Server.clientCount > 0 ? qsTr("API Server Active (%1)").arg(Cpp_API_Server.clientCount) :
+                                                  qsTr("API Server Ready")) :
+                qsTr("API Server Off")
+      }
+    }
+  }
 
   //
   // Default background

@@ -33,8 +33,8 @@ namespace API
  */
 namespace MessageType
 {
-constexpr const char *Command = "command";
 constexpr const char *Batch = "batch";
+constexpr const char *Command = "command";
 constexpr const char *Response = "response";
 } // namespace MessageType
 
@@ -44,11 +44,13 @@ constexpr const char *Response = "response";
 namespace ErrorCode
 {
 constexpr const char *InvalidJson = "INVALID_JSON";
-constexpr const char *InvalidMessageType = "INVALID_MESSAGE_TYPE";
-constexpr const char *UnknownCommand = "UNKNOWN_COMMAND";
 constexpr const char *InvalidParam = "INVALID_PARAM";
 constexpr const char *MissingParam = "MISSING_PARAM";
+constexpr const char *UnknownCommand = "UNKNOWN_COMMAND";
 constexpr const char *ExecutionError = "EXECUTION_ERROR";
+constexpr const char *OperationFailed = "OPERATION_FAILED";
+constexpr const char *InvalidMessageType = "INVALID_MESSAGE_TYPE";
+
 } // namespace ErrorCode
 
 /**
@@ -240,4 +242,3 @@ inline bool isApiMessage(const QByteArray &data)
 }
 
 } // namespace API
-

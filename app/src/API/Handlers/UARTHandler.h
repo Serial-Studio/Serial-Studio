@@ -55,12 +55,14 @@ public:
 
 private:
   // Mutation commands
-  static CommandResponse setDevice(const QString &id, const QJsonObject &params);
+  static CommandResponse setDevice(const QString &id,
+                                   const QJsonObject &params);
   static CommandResponse setPortIndex(const QString &id,
                                       const QJsonObject &params);
   static CommandResponse setBaudRate(const QString &id,
                                      const QJsonObject &params);
-  static CommandResponse setParity(const QString &id, const QJsonObject &params);
+  static CommandResponse setParity(const QString &id,
+                                   const QJsonObject &params);
   static CommandResponse setDataBits(const QString &id,
                                      const QJsonObject &params);
   static CommandResponse setStopBits(const QString &id,
@@ -83,4 +85,3 @@ private:
 
 } // namespace Handlers
 } // namespace API
-

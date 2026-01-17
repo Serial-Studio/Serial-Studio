@@ -25,7 +25,7 @@
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/BluetoothLE.h"
 
-#include "Plugins/Server.h"
+#include "API/Server.h"
 #include "Misc/Translator.h"
 #include "DataModel/FrameBuilder.h"
 
@@ -486,7 +486,7 @@ void IO::Manager::processPayload(const QByteArray &payload)
   if (!payload.isEmpty())
   {
     static auto &console = Console::Handler::instance();
-    static auto &server = Plugins::Server::instance();
+    static auto &server = API::Server::instance();
     static auto &frameBuilder = DataModel::FrameBuilder::instance();
 
     const auto data = makeByteArray(payload);
@@ -842,7 +842,7 @@ void IO::Manager::onReadyRead()
 void IO::Manager::onDataReceived(const ByteArrayPtr &data)
 {
   static auto &console = Console::Handler::instance();
-  static auto &server = Plugins::Server::instance();
+  static auto &server = API::Server::instance();
 
   if (!m_paused) [[likely]]
   {

@@ -41,9 +41,9 @@ void API::Handlers::UARTHandler::registerCommands()
       QStringLiteral("Set serial port by index (params: portIndex)"),
       &setPortIndex);
 
-  registry.registerCommand(
-      QStringLiteral("io.driver.uart.setBaudRate"),
-      QStringLiteral("Set baud rate (params: baudRate)"), &setBaudRate);
+  registry.registerCommand(QStringLiteral("io.driver.uart.setBaudRate"),
+                           QStringLiteral("Set baud rate (params: baudRate)"),
+                           &setBaudRate);
 
   registry.registerCommand(
       QStringLiteral("io.driver.uart.setParity"),
@@ -83,13 +83,13 @@ void API::Handlers::UARTHandler::registerCommands()
                            QStringLiteral("Get list of available serial ports"),
                            &getPortList);
 
-  registry.registerCommand(
-      QStringLiteral("io.driver.uart.getBaudRateList"),
-      QStringLiteral("Get list of common baud rates"), &getBaudRateList);
+  registry.registerCommand(QStringLiteral("io.driver.uart.getBaudRateList"),
+                           QStringLiteral("Get list of common baud rates"),
+                           &getBaudRateList);
 
-  registry.registerCommand(
-      QStringLiteral("io.driver.uart.getConfiguration"),
-      QStringLiteral("Get current UART configuration"), &getConfiguration);
+  registry.registerCommand(QStringLiteral("io.driver.uart.getConfiguration"),
+                           QStringLiteral("Get current UART configuration"),
+                           &getConfiguration);
 }
 
 /**
@@ -102,16 +102,18 @@ API::Handlers::UARTHandler::setDevice(const QString &id,
 {
   if (!params.contains(QStringLiteral("device")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "device"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "device"));
   }
 
   const QString device = params.value(QStringLiteral("device")).toString();
   if (device.isEmpty())
   {
-    return CommandResponse::makeError(id, ErrorCode::InvalidParam,
-                                  QStringLiteral("Device name cannot be empty"));
+    return CommandResponse::makeError(
+        id, ErrorCode::InvalidParam,
+        QStringLiteral("Device name cannot be empty"));
   }
 
   IO::Drivers::UART::instance().registerDevice(device);
@@ -131,9 +133,10 @@ API::Handlers::UARTHandler::setPortIndex(const QString &id,
 {
   if (!params.contains(QStringLiteral("portIndex")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "portIndex"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "portIndex"));
   }
 
   const int portIndex = params.value(QStringLiteral("portIndex")).toInt();
@@ -166,16 +169,18 @@ API::Handlers::UARTHandler::setBaudRate(const QString &id,
 {
   if (!params.contains(QStringLiteral("baudRate")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "baudRate"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "baudRate"));
   }
 
   const int baudRate = params.value(QStringLiteral("baudRate")).toInt();
   if (baudRate <= 0)
   {
-    return CommandResponse::makeError(id, ErrorCode::InvalidParam,
-                                  QStringLiteral("baudRate must be positive"));
+    return CommandResponse::makeError(
+        id, ErrorCode::InvalidParam,
+        QStringLiteral("baudRate must be positive"));
   }
 
   IO::Drivers::UART::instance().setBaudRate(baudRate);
@@ -196,9 +201,10 @@ API::Handlers::UARTHandler::setParity(const QString &id,
 {
   if (!params.contains(QStringLiteral("parityIndex")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "parityIndex"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "parityIndex"));
   }
 
   const int parityIndex = params.value(QStringLiteral("parityIndex")).toInt();
@@ -231,9 +237,10 @@ API::Handlers::UARTHandler::setDataBits(const QString &id,
 {
   if (!params.contains(QStringLiteral("dataBitsIndex")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "dataBitsIndex"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "dataBitsIndex"));
   }
 
   const int dataBitsIndex
@@ -267,9 +274,10 @@ API::Handlers::UARTHandler::setStopBits(const QString &id,
 {
   if (!params.contains(QStringLiteral("stopBitsIndex")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "stopBitsIndex"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "stopBitsIndex"));
   }
 
   const int stopBitsIndex
@@ -304,15 +312,15 @@ API::Handlers::UARTHandler::setFlowControl(const QString &id,
 {
   if (!params.contains(QStringLiteral("flowControlIndex")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "flowControlIndex"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "flowControlIndex"));
   }
 
   const int flowControlIndex
       = params.value(QStringLiteral("flowControlIndex")).toInt();
-  const auto &flowControlList
-      = IO::Drivers::UART::instance().flowControlList();
+  const auto &flowControlList = IO::Drivers::UART::instance().flowControlList();
 
   if (flowControlIndex < 0 || flowControlIndex >= flowControlList.count())
   {
@@ -343,9 +351,10 @@ API::Handlers::UARTHandler::setDtrEnabled(const QString &id,
 {
   if (!params.contains(QStringLiteral("dtrEnabled")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "dtrEnabled"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "dtrEnabled"));
   }
 
   const bool dtrEnabled = params.value(QStringLiteral("dtrEnabled")).toBool();
@@ -366,9 +375,10 @@ API::Handlers::UARTHandler::setAutoReconnect(const QString &id,
 {
   if (!params.contains(QStringLiteral("autoReconnect")))
   {
-    return CommandResponse::makeError(id, ErrorCode::MissingParam,
-                                  QStringLiteral("Missing required parameter: "
-                                                 "autoReconnect"));
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: "
+                       "autoReconnect"));
   }
 
   const bool autoReconnect
@@ -486,4 +496,3 @@ API::Handlers::UARTHandler::getConfiguration(const QString &id,
 
   return CommandResponse::makeSuccess(id, result);
 }
-

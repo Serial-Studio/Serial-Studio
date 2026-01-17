@@ -108,4 +108,3 @@ API::CommandRegistry::commands() const
 {
   return m_commands;
 }
-

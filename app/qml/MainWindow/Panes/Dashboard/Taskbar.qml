@@ -21,6 +21,7 @@
 
 import QtCore
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Controls
 
@@ -354,7 +355,9 @@ Item {
         taskBar.activeWindow = null
         taskBar.windowManager.autoLayoutEnabled = !taskBar.windowManager.autoLayoutEnabled
       }
-    } Item {
+    }
+
+    Item {
       implicitWidth: 4
     }
   }

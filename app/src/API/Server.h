@@ -27,6 +27,7 @@
 #include <QByteArray>
 #include <QHostAddress>
 
+#include "IO/HAL_Driver.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
 
@@ -34,9 +35,9 @@
  * Default TCP port to use for incoming connections, I choose 7777 because 7 is
  * one of my favourite numbers :)
  */
-#define PLUGINS_TCP_PORT 7777
+#define API_TCP_PORT 7777
 
-namespace Plugins
+namespace API
 {
 class Server;
 
@@ -54,10 +55,10 @@ public:
       DataModel::TimestampedFramePtr>::FrameConsumerWorker;
   ~ServerWorker() override;
 
-  void closeResources() override;
   bool isResourceOpen() const override;
 
 public slots:
+  void closeResources() override;
   void addSocket(QTcpSocket *socket);
   void removeSocket(QTcpSocket *socket);
   void writeRawData(const IO::ByteArrayPtr &data);
@@ -65,6 +66,7 @@ public slots:
 
 signals:
   void dataReceived(QTcpSocket *socket, const QByteArray &data);
+  void clientCountChanged(int count);
 
 protected:
   void processItems(
@@ -79,21 +81,23 @@ private:
 };
 
 /**
- * @class Plugins::Server
- * @brief TCP server interface for plugin communication in Serial Studio.
+ * @class API::Server
+ * @brief TCP server interface for API communication in Serial Studio.
  *
  * Implements a TCP server that listens on port 7777, allowing external
- * applications (referred to as "plugins") to exchange data with Serial Studio
+ * applications to control Serial Studio and exchange data with it
  * over the local network or localhost.
  *
- * Connected plugins can:
+ * Connected clients can:
  * - Receive real-time JSON data frames processed by Serial Studio.
+ * - Send API commands to control Serial Studio (configure devices, start/stop
+ *   connections, etc.)
  * - Transmit raw data directly to the underlying I/O device via the TCP socket.
  *
  * This design enables companion applications to be written in any language or
  * framework, without requiring integration with Qt or C++.
  *
- * The server supports multiple simultaneous plugin connections and handles
+ * The server supports multiple simultaneous client connections and handles
  * connection management, data serialization, and dispatch internally. It can
  * be enabled or disabled at runtime using setEnabled(), and will only accept
  * connections when enabled.
@@ -101,20 +105,22 @@ private:
  * **Performance:** JSON serialization and socket I/O are performed on a
  * background worker thread to prevent blocking the main UI thread. This
  * eliminates cross-thread communication overhead for high-frequency frame
- * transmission (writes >> reads in typical plugin usage).
+ * transmission (writes >> reads in typical usage).
  *
- * Example plugin: https://github.com/Kaan-Sat/CC2021-Control-Panel
+ * Example client: https://github.com/Kaan-Sat/CC2021-Control-Panel
  *
- * @note Accessed as a singleton via Plugins::Server::instance().
+ * @note Accessed as a singleton via API::Server::instance().
  * @note Socket management must be on the main Qt thread.
  */
 class Server : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr>
 {
   Q_OBJECT
+  Q_PROPERTY(int clientCount READ clientCount NOTIFY clientCountChanged)
   Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
 
 signals:
   void enabledChanged();
+  void clientCountChanged();
 
 private:
   explicit Server();
@@ -128,6 +134,7 @@ private:
 public:
   static Server &instance();
   [[nodiscard]] bool enabled() const;
+  [[nodiscard]] int clientCount() const;
 
 public slots:
   void removeConnection();
@@ -142,9 +149,11 @@ private slots:
   void acceptConnection();
   void onDataReceived(QTcpSocket *socket, const QByteArray &data);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
+  void onClientCountChanged(int count);
 
 private:
+  int m_clientCount;
   bool m_enabled;
   QTcpServer m_server;
 };
-} // namespace Plugins
+} // namespace API

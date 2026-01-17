@@ -53,7 +53,7 @@
 #include "Misc/ModuleManager.h"
 #include "Misc/WorkspaceManager.h"
 
-#include "Plugins/Server.h"
+#include "API/Server.h"
 
 #include "UI/Taskbar.h"
 #include "UI/Dashboard.h"
@@ -190,7 +190,7 @@ void Misc::ModuleManager::onQuit()
   CSV::Player::instance().closeFile();
   MDF4::Export::instance().closeFile();
   IO::Manager::instance().disconnectDevice();
-  Plugins::Server::instance().removeConnection();
+  API::Server::instance().removeConnection();
 }
 
 /**
@@ -277,7 +277,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto mdf4Player = &MDF4::Player::instance();
   auto uiDashboard = &UI::Dashboard::instance();
   auto ioSerial = &IO::Drivers::UART::instance();
-  auto pluginsBridge = &Plugins::Server::instance();
+  auto pluginsBridge = &API::Server::instance();
   auto miscUtilities = &Misc::Utilities::instance();
   auto consoleExport = &Console::Export::instance();
   auto ioNetwork = &IO::Drivers::Network::instance();
@@ -363,7 +363,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
   c->setContextProperty("Cpp_Console_Export", consoleExport);
   c->setContextProperty("Cpp_NativeWindow", &m_nativeWindow);
-  c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
+  c->setContextProperty("Cpp_API_Server", pluginsBridge);
   c->setContextProperty("Cpp_Misc_Utilities", miscUtilities);
   c->setContextProperty("Cpp_IO_Bluetooth_LE", ioBluetoothLE);
   c->setContextProperty("Cpp_ThemeManager", miscThemeManager);

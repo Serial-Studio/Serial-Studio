@@ -53,15 +53,17 @@ private:
   static CommandResponse connect(const QString &id, const QJsonObject &params);
   static CommandResponse disconnect(const QString &id,
                                     const QJsonObject &params);
-  static CommandResponse setPaused(const QString &id, const QJsonObject &params);
+  static CommandResponse setPaused(const QString &id,
+                                   const QJsonObject &params);
   static CommandResponse setBusType(const QString &id,
                                     const QJsonObject &params);
-  static CommandResponse writeData(const QString &id, const QJsonObject &params);
-  static CommandResponse getStatus(const QString &id, const QJsonObject &params);
+  static CommandResponse writeData(const QString &id,
+                                   const QJsonObject &params);
+  static CommandResponse getStatus(const QString &id,
+                                   const QJsonObject &params);
   static CommandResponse getAvailableBuses(const QString &id,
                                            const QJsonObject &params);
 };
 
 } // namespace Handlers
 } // namespace API
-

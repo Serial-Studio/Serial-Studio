@@ -24,6 +24,15 @@
 #include "API/Handlers/IOManagerHandler.h"
 #include "API/Handlers/NetworkHandler.h"
 #include "API/Handlers/UARTHandler.h"
+#include "API/Handlers/BluetoothLEHandler.h"
+#include "API/Handlers/CSVExportHandler.h"
+
+#ifdef BUILD_COMMERCIAL
+#  include "API/Handlers/ModbusHandler.h"
+#  include "API/Handlers/CANBusHandler.h"
+#  include "API/Handlers/MQTTHandler.h"
+#  include "API/Handlers/MDF4ExportHandler.h"
+#endif
 
 /**
  * @brief Constructs the CommandHandler
@@ -44,6 +53,7 @@ API::CommandHandler &API::CommandHandler::instance()
   static CommandHandler singleton;
   if (!singleton.m_initialized)
     singleton.initializeHandlers();
+
   return singleton;
 }
 
@@ -82,9 +92,9 @@ QByteArray API::CommandHandler::processMessage(const QByteArray &data)
     const auto request = CommandRequest::fromJson(json);
     if (!request.isValid())
     {
-      return CommandResponse::makeError(request.id,
-                                        ErrorCode::InvalidMessageType,
-                                        QStringLiteral("Missing 'command' field"))
+      return CommandResponse::makeError(
+                 request.id, ErrorCode::InvalidMessageType,
+                 QStringLiteral("Missing 'command' field"))
           .toJsonBytes();
     }
     return processCommand(request).toJsonBytes();
@@ -104,9 +114,9 @@ QByteArray API::CommandHandler::processMessage(const QByteArray &data)
   }
 
   // Unknown message type
-  return CommandResponse::makeError(QString(), ErrorCode::InvalidMessageType,
-                                    QStringLiteral("Unknown message type: %1")
-                                        .arg(type))
+  return CommandResponse::makeError(
+             QString(), ErrorCode::InvalidMessageType,
+             QStringLiteral("Unknown message type: %1").arg(type))
       .toJsonBytes();
 }
 
@@ -194,7 +204,15 @@ void API::CommandHandler::initializeHandlers()
   Handlers::IOManagerHandler::registerCommands();
   Handlers::UARTHandler::registerCommands();
   Handlers::NetworkHandler::registerCommands();
+  Handlers::BluetoothLEHandler::registerCommands();
+  Handlers::CSVExportHandler::registerCommands();
+
+#ifdef BUILD_COMMERCIAL
+  Handlers::ModbusHandler::registerCommands();
+  Handlers::CANBusHandler::registerCommands();
+  Handlers::MQTTHandler::registerCommands();
+  Handlers::MDF4ExportHandler::registerCommands();
+#endif
 
   m_initialized = true;
 }
-

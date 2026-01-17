@@ -24,7 +24,7 @@
 #include <QJsonDocument>
 
 #include "IO/Manager.h"
-#include "Plugins/Server.h"
+#include "API/Server.h"
 #include "Misc/Utilities.h"
 #include "API/CommandHandler.h"
 
@@ -35,12 +35,12 @@
 /**
  * @brief Destructor
  */
-Plugins::ServerWorker::~ServerWorker() = default;
+API::ServerWorker::~ServerWorker() = default;
 
 /**
  * @brief Returns false (no file resources to manage)
  */
-bool Plugins::ServerWorker::isResourceOpen() const
+bool API::ServerWorker::isResourceOpen() const
 {
   return false;
 }
@@ -48,9 +48,9 @@ bool Plugins::ServerWorker::isResourceOpen() const
 /**
  * @brief Closes all sockets and cleans up resources
  */
-void Plugins::ServerWorker::closeResources()
+void API::ServerWorker::closeResources()
 {
-  for (auto *socket : m_sockets)
+  for (auto *socket : std::as_const(m_sockets))
   {
     if (socket)
     {
@@ -58,7 +58,10 @@ void Plugins::ServerWorker::closeResources()
       socket->deleteLater();
     }
   }
+
   m_sockets.clear();
+
+  Q_EMIT clientCountChanged(0);
 }
 
 /**
@@ -66,37 +69,39 @@ void Plugins::ServerWorker::closeResources()
  *
  * The socket is moved to this thread and managed here for all I/O operations.
  */
-void Plugins::ServerWorker::addSocket(QTcpSocket *socket)
+void API::ServerWorker::addSocket(QTcpSocket *socket)
 {
   if (!socket)
     return;
 
-  // Socket is already moved to worker thread by Server::acceptConnection()
   m_sockets.append(socket);
-
   connect(socket, &QTcpSocket::readyRead, this,
           &ServerWorker::onSocketReadyRead);
   connect(socket, &QTcpSocket::disconnected, this,
           &ServerWorker::onSocketDisconnected);
+
+  Q_EMIT clientCountChanged(m_sockets.count());
 }
 
 /**
  * @brief Removes a socket from the worker thread
  */
-void Plugins::ServerWorker::removeSocket(QTcpSocket *socket)
+void API::ServerWorker::removeSocket(QTcpSocket *socket)
 {
   m_sockets.removeAll(socket);
   if (socket)
     socket->deleteLater();
+
+  Q_EMIT clientCountChanged(m_sockets.count());
 }
 
 /**
  * @brief Writes raw data to all connected sockets (worker thread)
  *
- * Handles transmission of raw I/O data to plugin clients.
+ * Handles transmission of raw I/O data to API clients.
  * The data is base64-encoded and wrapped in JSON format.
  */
-void Plugins::ServerWorker::writeRawData(const IO::ByteArrayPtr &data)
+void API::ServerWorker::writeRawData(const IO::ByteArrayPtr &data)
 {
   if (m_sockets.isEmpty())
     return;
@@ -116,7 +121,7 @@ void Plugins::ServerWorker::writeRawData(const IO::ByteArrayPtr &data)
 /**
  * @brief Handles incoming data from a socket (worker thread)
  */
-void Plugins::ServerWorker::onSocketReadyRead()
+void API::ServerWorker::onSocketReadyRead()
 {
   auto *socket = qobject_cast<QTcpSocket *>(sender());
   if (socket)
@@ -131,8 +136,8 @@ void Plugins::ServerWorker::onSocketReadyRead()
  * @param socket The socket to write to
  * @param data The data to write
  */
-void Plugins::ServerWorker::writeToSocket(QTcpSocket *socket,
-                                          const QByteArray &data)
+void API::ServerWorker::writeToSocket(QTcpSocket *socket,
+                                      const QByteArray &data)
 {
   if (socket && socket->isWritable() && m_sockets.contains(socket))
     socket->write(data);
@@ -141,7 +146,7 @@ void Plugins::ServerWorker::writeToSocket(QTcpSocket *socket,
 /**
  * @brief Handles socket disconnection (worker thread)
  */
-void Plugins::ServerWorker::onSocketDisconnected()
+void API::ServerWorker::onSocketDisconnected()
 {
   auto *socket = qobject_cast<QTcpSocket *>(sender());
   removeSocket(socket);
@@ -153,7 +158,7 @@ void Plugins::ServerWorker::onSocketDisconnected()
  * Both JSON serialization and socket writes happen on the worker thread,
  * eliminating cross-thread communication overhead for high-frequency writes.
  */
-void Plugins::ServerWorker::processItems(
+void API::ServerWorker::processItems(
     const std::vector<DataModel::TimestampedFramePtr> &items)
 {
   if (items.empty() || m_sockets.isEmpty())
@@ -184,14 +189,15 @@ void Plugins::ServerWorker::processItems(
 //------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the plugin server.
+ * @brief Constructs the API server.
  *
  * Initializes the worker thread for JSON serialization and socket I/O,
  * and prepares the TCP server for later activation via setEnabled().
  */
-Plugins::Server::Server()
+API::Server::Server()
   : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
         {.queueCapacity = 2048, .flushThreshold = 512, .timerIntervalMs = 1000})
+  , m_clientCount(0)
   , m_enabled(false)
 {
   initializeWorker();
@@ -199,6 +205,8 @@ Plugins::Server::Server()
   auto *worker = static_cast<ServerWorker *>(m_worker);
   connect(worker, &ServerWorker::dataReceived, this, &Server::onDataReceived,
           Qt::QueuedConnection);
+  connect(worker, &ServerWorker::clientCountChanged, this,
+          &Server::onClientCountChanged, Qt::QueuedConnection);
 
   connect(&m_server, &QTcpServer::newConnection, this,
           &Server::acceptConnection);
@@ -208,11 +216,11 @@ Plugins::Server::Server()
 }
 
 /**
- * @brief Destroys the plugin server.
+ * @brief Destroys the API server.
  *
  * Shuts down the TCP server and closes all existing connections.
  */
-Plugins::Server::~Server()
+API::Server::~Server()
 {
   m_server.close();
 }
@@ -220,31 +228,41 @@ Plugins::Server::~Server()
 /**
  * @brief Creates the server worker instance.
  */
-DataModel::FrameConsumerWorkerBase *Plugins::Server::createWorker()
+DataModel::FrameConsumerWorkerBase *API::Server::createWorker()
 {
   return new ServerWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
 }
 
 /**
- * @brief Gets the singleton instance of the plugin server.
+ * @brief Gets the singleton instance of the API server.
  *
- * @return Reference to the only instance of Plugins::Server.
+ * @return Reference to the only instance of API::Server.
  */
-Plugins::Server &Plugins::Server::instance()
+API::Server &API::Server::instance()
 {
   static Server singleton;
   return singleton;
 }
 
 /**
- * @brief Checks whether the plugin server is currently enabled.
+ * @brief Checks whether the API server is currently enabled.
  *
- * @return true if the plugin subsystem is active and serving connections;
+ * @return true if the API subsystem is active and serving connections;
  *         false otherwise.
  */
-bool Plugins::Server::enabled() const
+bool API::Server::enabled() const
 {
   return m_enabled;
+}
+
+/**
+ * @brief Gets the number of currently connected API clients.
+ *
+ * @return The count of active client connections.
+ */
+int API::Server::clientCount() const
+{
+  return m_clientCount;
 }
 
 /**
@@ -253,7 +271,7 @@ bool Plugins::Server::enabled() const
  * Forwards the removal request to the worker thread.
  * Triggered automatically when a client disconnects or encounters an error.
  */
-void Plugins::Server::removeConnection()
+void API::Server::removeConnection()
 {
   auto *socket = qobject_cast<QTcpSocket *>(sender());
   if (socket)
@@ -265,7 +283,7 @@ void Plugins::Server::removeConnection()
 }
 
 /**
- * @brief Enables or disables the TCP plugin server.
+ * @brief Enables or disables the TCP API server.
  *
  * When enabling, starts listening for incoming TCP connections.
  * When disabling, stops the server, closes all sockets, and clears
@@ -273,20 +291,19 @@ void Plugins::Server::removeConnection()
  *
  * @param enabled If true, activates the server. If false, deactivates it.
  */
-void Plugins::Server::setEnabled(const bool enabled)
+void API::Server::setEnabled(const bool enabled)
 {
-  // Change value
   m_enabled = enabled;
   Q_EMIT enabledChanged();
 
-  // Enable the TCP plugin server
+  // Enable the TCP API server
   if (enabled)
   {
     if (!m_server.isListening())
     {
-      if (!m_server.listen(QHostAddress::Any, PLUGINS_TCP_PORT))
+      if (!m_server.listen(QHostAddress::Any, API_TCP_PORT))
       {
-        Misc::Utilities::showMessageBox(tr("Unable to start plugin TCP server"),
+        Misc::Utilities::showMessageBox(tr("Unable to start API TCP server"),
                                         m_server.errorString(),
                                         QMessageBox::Warning);
         m_server.close();
@@ -294,7 +311,7 @@ void Plugins::Server::setEnabled(const bool enabled)
     }
   }
 
-  // Disable the TCP plugin server
+  // Disable the TCP API server
   else
   {
     m_server.close();
@@ -307,12 +324,12 @@ void Plugins::Server::setEnabled(const bool enabled)
 /**
  * @brief Sends raw binary data to all connected clients.
  *
- * Forwards raw I/O data to the worker thread for transmission to plugin
+ * Forwards raw I/O data to the worker thread for transmission to API
  * clients. The data will be base64-encoded and wrapped in JSON format.
  *
  * @param data Raw data bytes received from the I/O layer.
  */
-void Plugins::Server::hotpathTxData(const IO::ByteArrayPtr &data)
+void API::Server::hotpathTxData(const IO::ByteArrayPtr &data)
 {
   if (!enabled())
     return;
@@ -326,12 +343,11 @@ void Plugins::Server::hotpathTxData(const IO::ByteArrayPtr &data)
  * @brief Registers a new structured data frame.
  *
  * Enqueues the timestamped frame for background JSON serialization.
- * The serialized data will be transmitted to all connected plugin clients.
+ * The serialized data will be transmitted to all connected API clients.
  *
  * @param frame Timestamped frame object to register.
  */
-void Plugins::Server::hotpathTxFrame(
-    const DataModel::TimestampedFramePtr &frame)
+void API::Server::hotpathTxFrame(const DataModel::TimestampedFramePtr &frame)
 {
   if (enabled())
     enqueueData(frame);
@@ -347,19 +363,21 @@ void Plugins::Server::hotpathTxFrame(
  * @param socket The socket that sent the data (for sending responses)
  * @param data The received data
  */
-void Plugins::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
+void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
 {
   if (!enabled() || data.isEmpty())
     return;
 
-  // Check if this is an API command
-  auto &cmdHandler = API::CommandHandler::instance();
-  if (cmdHandler.isApiMessage(data))
-  {
-    // Process the API command and get response
-    const QByteArray response = cmdHandler.processMessage(data);
+  // Check if this looks like a JSON message attempt (starts with '{')
+  const auto trimmed = data.trimmed();
+  const bool looksLikeJson = !trimmed.isEmpty() && trimmed.at(0) == '{';
 
-    // Send response back to the requesting socket
+  // If it looks like JSON, always process as API message
+  // This ensures proper error responses for malformed API messages
+  if (looksLikeJson)
+  {
+    auto &cmdHandler = API::CommandHandler::instance();
+    const QByteArray response = cmdHandler.processMessage(data);
     auto *worker = static_cast<ServerWorker *>(m_worker);
     QMetaObject::invokeMethod(worker, "writeToSocket", Qt::QueuedConnection,
                               Q_ARG(QTcpSocket *, socket),
@@ -377,13 +395,13 @@ void Plugins::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
  * Creates the socket on the main thread, then moves it to the worker thread
  * for all I/O operations.
  */
-void Plugins::Server::acceptConnection()
+void API::Server::acceptConnection()
 {
   auto *socket = m_server.nextPendingConnection();
   if (!socket)
   {
     if (enabled())
-      Misc::Utilities::showMessageBox(tr("Plugin server"),
+      Misc::Utilities::showMessageBox(tr("API server"),
                                       tr("Invalid pending connection"),
                                       QMessageBox::Critical);
     return;
@@ -398,8 +416,6 @@ void Plugins::Server::acceptConnection()
 
   connect(socket, &QTcpSocket::errorOccurred, this, &Server::onErrorOccurred);
 
-  // Move socket to worker thread from main thread (where socket currently lives)
-  // Must be done BEFORE invoking addSocket on the worker thread
   socket->setParent(nullptr);
   socket->moveToThread(&m_workerThread);
 
@@ -416,7 +432,7 @@ void Plugins::Server::acceptConnection()
  *
  * @param socketError Error code provided by the QAbstractSocket.
  */
-void Plugins::Server::onErrorOccurred(
+void API::Server::onErrorOccurred(
     const QAbstractSocket::SocketError socketError)
 {
   auto socket = static_cast<QTcpSocket *>(QObject::sender());
@@ -424,4 +440,21 @@ void Plugins::Server::onErrorOccurred(
     qDebug() << socket->errorString();
   else
     qDebug() << socketError;
+}
+
+/**
+ * @brief Updates the client count from the worker thread.
+ *
+ * Called when the worker thread reports a change in the number of connected
+ * clients. Updates the local count and emits the clientCountChanged signal.
+ *
+ * @param count New number of connected clients
+ */
+void API::Server::onClientCountChanged(int count)
+{
+  if (m_clientCount != count)
+  {
+    m_clientCount = count;
+    Q_EMIT clientCountChanged();
+  }
 }

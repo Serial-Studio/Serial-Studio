@@ -39,7 +39,7 @@ Widgets.SmartDialog {
   //
   Settings {
     category: "Preferences"
-    property alias plugins: _tcpPlugins.checked
+    property alias plugins: _apiServer.checked
     property alias dashboardPoints: _points.value
     property alias dashboardActionPanel: _actionsPanel.checked
     property alias alwaysShowTaskbarBt: _taskbarButtons.checked
@@ -184,20 +184,20 @@ Widgets.SmartDialog {
           anchors.fill: parent
 
           //
-          // Plugins enabled
+          // API Server enabled
           //
           Label {
             color: Cpp_ThemeManager.colors["text"]
-            text: qsTr("Enable TCP Plugins (Port 7777)")
+            text: qsTr("Enable API Server (Port 7777)")
           } Switch {
-            id: _tcpPlugins
+            id: _apiServer
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
-            checked: Cpp_Plugins_Bridge.enabled
+            checked: Cpp_API_Server.enabled
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
             onCheckedChanged: {
-              if (checked !== Cpp_Plugins_Bridge.enabled)
-                Cpp_Plugins_Bridge.enabled = checked
+              if (checked !== Cpp_API_Server.enabled)
+                Cpp_API_Server.enabled = checked
             }
           }
 
@@ -450,7 +450,7 @@ Widgets.SmartDialog {
             Cpp_UI_Dashboard.points = 100
             Cpp_Misc_TimerEvents.fps = 60
             Cpp_UI_Dashboard.precision = 2
-            Cpp_Plugins_Bridge.enabled = false
+            Cpp_API_Server.enabled = false
             mainWindow.automaticUpdates  = true
             Cpp_UI_Dashboard.terminalEnabled = false
             Cpp_IO_Manager.threadedFrameExtraction = false
