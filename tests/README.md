@@ -82,6 +82,31 @@ Quantitative performance measurements:
 - **Checksum Overhead** - Performance impact of different algorithms
 - **Frame Size Impact** - Small (5), Medium (50), Large (200) dataset frames
 
+### Fuzzy Testing
+
+**Location:** `integration/test_fuzzy.py`
+
+Comprehensive fuzzy tests designed to identify bugs, crashes, and edge cases:
+
+- **Malformed JSON** - 28+ variations of invalid JSON syntax
+- **Binary Garbage** - Random bytes flood testing
+- **Frame Corruption** - Random bit flips with checksum validation
+- **Partial Frames** - Truncated/incomplete frame handling
+- **Buffer Overflow** - Extremely large frames (100KB-1MB+)
+- **Numeric Edge Cases** - Zero, infinity, max/min integers, scientific notation
+- **Unicode Stress** - Emojis, RTL text, Zalgo, combining characters, control chars
+- **Delimiter Confusion** - Nested, backwards, and malformed delimiters
+- **Rapid-Fire** - 1000 frames with zero delay
+- **Mixed Valid/Invalid** - Interleaved good and bad frames
+- **Null Byte Injection** - Null bytes at various positions
+- **Checksum Brute Force** - 50+ invalid checksums
+- **Rapid Reconnection** - 10 connect/disconnect cycles
+- **Memory Stress** - 50 large frames (20 groups × 50 datasets)
+- **Fragmented Frames** - 10-byte chunks
+- **JSON Depth Bomb** - 100-level nested structures
+- **Empty/Whitespace** - Various empty payload variations
+- **Random Chaos** - Combined fuzzing for ultimate stress test
+
 ## Prerequisites
 
 ### Required Software
@@ -160,6 +185,13 @@ pytest -m slow                 # Long-running tests
 pytest -m csv                  # CSV export tests
 pytest -m project              # Project configuration tests
 pytest -m network              # Network driver tests
+```
+
+**Fuzzy Testing:**
+```bash
+pytest integration/test_fuzzy.py -v            # Run all fuzzy tests
+pytest integration/test_fuzzy.py -m slow       # Run comprehensive fuzzy tests only
+pytest integration/test_fuzzy.py -m "not slow" # Run fast fuzzy tests only
 ```
 
 **Exclude Slow Tests:**
@@ -379,6 +411,7 @@ Generated files excluded from git:
 ```
 tests/
 ├── README.md                    # This file
+├── FUZZING.md                   # Fuzzy testing guide
 ├── requirements.txt             # Python dependencies
 ├── pytest.ini                   # Pytest configuration
 ├── .gitignore                   # Git ignore rules
@@ -387,6 +420,7 @@ tests/
 │   ├── conftest.py             # Shared fixtures
 │   ├── test_frame_parsing.py   # Frame parsing tests
 │   ├── test_csv_export.py      # CSV export tests
+│   ├── test_fuzzy.py           # Fuzzy testing suite
 │   ├── test_project_configuration.py
 │   ├── test_performance_concepts.py
 │   └── test_workflows.py       # End-to-end workflows
@@ -398,7 +432,7 @@ tests/
     ├── __init__.py
     ├── api_client.py           # Serial Studio API client
     ├── device_simulator.py     # Device simulator
-    ├── data_generator.py       # Telemetry data generation
+    ├── data_generator.py       # Telemetry data generation (+ fuzzing utilities)
     └── validators.py           # Validation helpers
 ```
 

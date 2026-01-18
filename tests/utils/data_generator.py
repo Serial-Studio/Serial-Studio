@@ -396,3 +396,224 @@ class DataGenerator:
             frames.append(frame)
 
         return frames
+
+    @staticmethod
+    def generate_malformed_json() -> list[str]:
+        """
+        Generate various malformed JSON payloads for fuzzy testing.
+
+        Returns:
+            List of malformed JSON strings
+        """
+        return [
+            "{",
+            "}",
+            "{{}",
+            '{"unclosed": "string',
+            '{"missing": }',
+            '{"trailing": "comma",}',
+            '{"duplicate":"key","duplicate":"key"}',
+            '{"nested": {"unclosed": }',
+            '{"unescaped": "quotes"inside"}',
+            '{"invalid\\escape": "sequence"}',
+            '{"number": 123.456.789}',
+            '{"array": [1, 2, 3,]}',
+            '{"array": [1, 2, , 3]}',
+            "{'single': 'quotes'}",
+            '{"null": null}{"extra":"object"}',
+            '{"comment": /* not allowed */ "value"}',
+            '{"unicode": "\uDEAD"}',
+            '{"control": "chars\x00\x01\x02"}',
+            '{"very_long_key_' + "x" * 10000 + '": "value"}',
+            '{"value": "very_long_' + "x" * 100000 + '"}',
+            "{" * 1000 + "}" * 1000,
+            '{"inf": Infinity}',
+            '{"nan": NaN}',
+            '{"undefined": undefined}',
+            "",
+            "null",
+            "[]",
+            "[[[[[",
+            '"\\"',
+        ]
+
+    @staticmethod
+    def generate_edge_case_values() -> list[dict]:
+        """
+        Generate JSON frames with edge case numeric values.
+
+        Returns:
+            List of JSON frame dicts with edge cases
+        """
+        edge_cases = []
+
+        edge_values = [
+            ("zero", "0"),
+            ("negative_zero", "-0"),
+            ("max_int", str(2**63 - 1)),
+            ("min_int", str(-(2**63))),
+            ("very_large", "1" + "0" * 308),
+            ("very_small", "1e-308"),
+            ("max_float", "1.7976931348623157e+308"),
+            ("negative", "-999999"),
+            ("scientific", "1.23e-10"),
+            ("many_decimals", "3.14159265358979323846"),
+        ]
+
+        for name, value in edge_values:
+            edge_cases.append(
+                {
+                    "title": f"Edge Case: {name}",
+                    "groups": [
+                        {
+                            "title": "Edge Values",
+                            "datasets": [
+                                {"title": name, "value": value, "units": "units"}
+                            ],
+                        }
+                    ],
+                }
+            )
+
+        return edge_cases
+
+    @staticmethod
+    def generate_random_garbage(min_size: int = 1, max_size: int = 1024) -> bytes:
+        """
+        Generate random binary garbage data.
+
+        Args:
+            min_size: Minimum size in bytes
+            max_size: Maximum size in bytes
+
+        Returns:
+            Random bytes
+        """
+        size = random.randint(min_size, max_size)
+        return bytes(random.randint(0, 255) for _ in range(size))
+
+    @staticmethod
+    def corrupt_frame(frame: bytes, corruption_rate: float = 0.1) -> bytes:
+        """
+        Corrupt a valid frame by randomly flipping bits.
+
+        Args:
+            frame: Valid frame bytes
+            corruption_rate: Probability of corrupting each byte (0.0 to 1.0)
+
+        Returns:
+            Corrupted frame
+        """
+        frame_array = bytearray(frame)
+        for i in range(len(frame_array)):
+            if random.random() < corruption_rate:
+                frame_array[i] = random.randint(0, 255)
+        return bytes(frame_array)
+
+    @staticmethod
+    def generate_partial_frame(complete_frame: bytes) -> bytes:
+        """
+        Generate a partial/truncated frame.
+
+        Args:
+            complete_frame: Complete valid frame
+
+        Returns:
+            Truncated frame
+        """
+        if len(complete_frame) <= 1:
+            return complete_frame
+
+        cut_point = random.randint(1, len(complete_frame) - 1)
+        return complete_frame[:cut_point]
+
+    @staticmethod
+    def generate_oversized_frame(multiplier: int = 100) -> bytes:
+        """
+        Generate an extremely large frame to test buffer limits.
+
+        Args:
+            multiplier: Size multiplier for groups/datasets
+
+        Returns:
+            Very large frame
+        """
+        groups = []
+        for i in range(multiplier):
+            datasets = [
+                {
+                    "title": f"Dataset_{j}_" + "x" * 100,
+                    "value": str(random.random() * 1000),
+                    "units": "unit_" + "y" * 50,
+                }
+                for j in range(multiplier)
+            ]
+            groups.append({"title": f"Group_{i}_" + "z" * 100, "datasets": datasets})
+
+        payload = json.dumps({"title": "Oversized Frame", "groups": groups})
+        return DataGenerator.wrap_frame(payload, checksum_type=ChecksumType.NONE)
+
+    @staticmethod
+    def generate_unicode_stress() -> list[str]:
+        """
+        Generate various Unicode edge cases.
+
+        Returns:
+            List of Unicode test strings
+        """
+        return [
+            "Simple ASCII",
+            "Émojis: 😀🎉🚀",
+            "中文字符",
+            "العربية",
+            "עברית",
+            "Кириллица",
+            "ΕλληνικÞ",
+            "🔥💯✨",
+            "\u0000\u0001\u0002",
+            "Zero\x00width",
+            "Right‏to‏Left‏",
+            "Combining: é vs é",
+            "Zalgo: H̷̡̢̨̛̛̖̣̗̰̮̦̬̺͚̯͓̰̣͔̮̲̤̼̭͕̗̝̹̘̪͉͚̗̳̗̘̼̟̞̼̜̻̫̪̱̥̤̝̦̱͓̮̰̠̳̗͖̮̻̲̥̼̭̪͖̾̂͋̊̐͊̇̓̓̀̾̄́̌̍̑̓́̐̔̾͒̊͂̎̈́̀̾̈̌̈́̌͂̑͘͘͝͝͝ͅͅͅę̸̢̧̛̪̯͚̟̬̣̰̼̤̞̗̩̙̪̰̘͉̳̟̻̺̺̰̼̗̣̦͔͚͇̟̹̬̩̦̗̖̹͚̰̞̼̖͓̫̦̰͚͉̟̣͙̮̟̰̪͓̺͉͉̤̻̻̏̆̈́̏͐̒̂̐̽̈́̾̈́̆̄̎̈́͊̇̇͋͑̋͗̀̿̏̈́͌̂̑͗̐̍͆̈́̌̄̾̋̔̾̀̿̎̄̾͛̕͜͜͝͝͝͠͝l̸̢̨̢̧̨̛͚̞͇̺̬̻̞͙͎̘̬̹͇̦͕̝͈̤̞̱̦̠̦̝̰̟͙͕͓̖̝̲̗̳̩̗͉̣̱̺̭̙̬̦͙̦͍̳̜̭̥̖͙̘̻̻̃̾̈͋̏̃̇̄̀̾̋̓͆̊́̆̍̆̽͑́̏̆͊̂͒̀̄̀̑͊͆̐̆̾̎̂̊́̍͋̑̽͌̌̎̇̆̑͋͐̀̍̎͒͗͊͂͘̚͘͜͜͝͝͠͝͝͝ͅͅl̴̡̨̢̧̧̧̛̛̛̛̛͖̬̤̯̖̩̖̙̥̠̤̤̻̼̼̺̼̻̰̹̮̳̙̯̪͚̥̪̜̫͓̟̜̺̦̻͍̹̩̮̠̜̩͖̩̦̭͚̩͙̰͇͖̫̮̘̬̖̮̮̠̠̝̙̤̍̋̈́͗̔̈́̀̈́̀̿͑̂͆̿̉̑͋̀͐̿͋̀̋͑̀͊̽̊̈́̂̈́̿̐̒̐̇̐̇͒̀̈́̍̿̄̂̆͐̓̿͂̂̾̎̒̅̏͗̄̕̚̕͘͜͜͜͝͠͝͝͝͝͠ͅǭ̸̢̧̢̡̢̨̧̛̛̛̞̯͈̦͓̩̻̯̩͙̙̪̹̰̫̤̞͓̣̬͕͖̦̙̦͙̥͈̹̞̪̤̪̹̪̗̗̥̺̥̮̭̺͍̖̲̪̬̞̠̯̺̝̖̳̖̦̱̆̓̇̀̀̉͛̐͑͑̉͐̄̔̑̓̀̌̎̆̐̓͂̈̔͂̐̎̋̆̎̊̄̌̓̔͂̎͋̌̽̈́͋̈́̐͊͗͌̌͋̏̾̐̈́̓̎̓̉̔̔͊̕͘̚̚͘͜͜͜͝͝͝͝͠͝͝",
+            "Byte Order Mark: \ufeff",
+        ]
+
+    @staticmethod
+    def generate_delimiter_confusion() -> list[bytes]:
+        """
+        Generate frames designed to confuse delimiter detection.
+
+        Returns:
+            List of confusing frame bytes
+        """
+        return [
+            b"/**//**//**/\n",
+            b"/*/*nested*/*/\n",
+            b"/*start*/middle/*end*/\n",
+            b"no delimiters at all\n",
+            b"*/backwards/*\n",
+            b"/**/\r\n/**/\n/**/\r",
+            b"/*" * 100 + b"\n",
+            b"*/" * 100 + b"\n",
+            b"/*mixed\r\nline\nendings\r*/\n",
+            b"/*binary\x00null\x00bytes*/\n",
+            b"/**/" + b"\x00" * 10 + b"\n",
+        ]
+
+    @staticmethod
+    def generate_rapid_frames(count: int = 1000) -> list[bytes]:
+        """
+        Generate many small frames for rapid-fire testing.
+
+        Args:
+            count: Number of frames to generate
+
+        Returns:
+            List of minimal frames
+        """
+        frames = []
+        for i in range(count):
+            payload = json.dumps({"title": f"F{i}", "groups": []})
+            frame = DataGenerator.wrap_frame(payload, checksum_type=ChecksumType.NONE)
+            frames.append(frame)
+        return frames
