@@ -222,6 +222,9 @@ set(SOURCES
   src/API/Handlers/NetworkHandler.cpp
   src/API/Handlers/BluetoothLEHandler.cpp
   src/API/Handlers/CSVExportHandler.cpp
+  src/API/Handlers/ProjectHandler.cpp
+  src/API/Handlers/ConsoleHandler.cpp
+  src/API/Handlers/CSVPlayerHandler.cpp
   src/IO/Drivers/Network.cpp
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
@@ -283,6 +286,9 @@ set(HEADERS
   src/API/Handlers/NetworkHandler.h
   src/API/Handlers/BluetoothLEHandler.h
   src/API/Handlers/CSVExportHandler.h
+  src/API/Handlers/ProjectHandler.h
+  src/API/Handlers/ConsoleHandler.h
+  src/API/Handlers/CSVPlayerHandler.h
   src/Platform/NativeWindow.h
   src/Console/Handler.h
   src/Console/Export.h
@@ -385,6 +391,8 @@ if(BUILD_COMMERCIAL)
     src/API/Handlers/CANBusHandler.h
     src/API/Handlers/MQTTHandler.h
     src/API/Handlers/MDF4ExportHandler.h
+    src/API/Handlers/AudioHandler.h
+    src/API/Handlers/MDF4PlayerHandler.h
     src/MQTT/Client.h
     src/IO/Drivers/Audio.h
     src/IO/Drivers/CANBus.h
@@ -403,6 +411,8 @@ if(BUILD_COMMERCIAL)
     src/API/Handlers/CANBusHandler.cpp
     src/API/Handlers/MQTTHandler.cpp
     src/API/Handlers/MDF4ExportHandler.cpp
+    src/API/Handlers/AudioHandler.cpp
+    src/API/Handlers/MDF4PlayerHandler.cpp
     src/MQTT/Client.cpp
     src/IO/Drivers/Audio.cpp
     src/IO/Drivers/CANBus.cpp

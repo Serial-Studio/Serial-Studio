@@ -131,10 +131,13 @@ ss> io.driver.uart.getConfiguration
 }
 
 ss> list
-Available commands (116 total):
+Available commands (158 total):
   api.getCommands - Get list of all available commands
   io.manager.connect - Connect to the currently configured device
   io.manager.disconnect - Disconnect from the current device
+  csv.player.open - Open CSV file for playback
+  console.send - Send data to device
+  project.file.open - Open project file
   ...
 
 ss> quit
@@ -228,22 +231,26 @@ python test_api.py test --verbose
 
 ## Available API Commands
 
-**Total: 116 API commands**
+**Total: 158 API commands**
 
-### Core API (GPL)
+### Core API (GPL) - 86 commands
 - `api.*` - API introspection (1 command)
 - `io.manager.*` - I/O manager control (12 commands)
 - `io.driver.uart.*` - UART/Serial configuration (12 commands)
 - `io.driver.network.*` - Network (TCP/UDP) configuration (10 commands)
 - `io.driver.ble.*` - Bluetooth Low Energy (9 commands)
 - `csv.export.*` - CSV file export control (3 commands)
+- `csv.player.*` - CSV file playback (9 commands)
+- `console.*` - Console/terminal control (11 commands)
+- `project.*` - Project management (19 commands)
 
-### Pro Features (Commercial License Required)
+### Pro Features (Commercial License Required) - 72 commands
 - `io.driver.modbus.*` - Modbus RTU/TCP configuration (21 commands)
 - `io.driver.canbus.*` - CAN Bus configuration (9 commands)
 - `mqtt.*` - MQTT client configuration (27 commands)
 - `mdf4.export.*` - MDF4 file export control (3 commands)
-- `io.driver.audio.*` - Audio input (9 commands)
+- `mdf4.player.*` - MDF4 file playback (9 commands)
+- `io.driver.audio.*` - Audio input/output (13 commands)
 
 For full command reference, see [API_REFERENCE.md](API_REFERENCE.md).
 
@@ -456,7 +463,7 @@ fi
 
 ```bash
 #!/bin/bash
-# configure_and_connect.sh
+# Example: Create a script to configure and connect to your device
 
 python test_api.py send io.manager.setBusType -p busType=0
 python test_api.py send io.driver.uart.setBaudRate -p baudRate=115200
@@ -464,17 +471,19 @@ python test_api.py send io.driver.uart.setPortIndex -p portIndex=0
 python test_api.py send csv.export.setEnabled -p enabled=true
 python test_api.py send io.manager.connect
 
-echo "Setup complete!"
+echo "Setup complete! Device connected and logging to CSV."
 ```
 
 ### Custom Integration
 
 ```python
 #!/usr/bin/env python3
+# Example: Create your own Python wrapper for the Serial Studio API
 import socket
 import json
 
 def send_command(command, params=None):
+    """Send a command to Serial Studio API and return the response."""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(("127.0.0.1", 7777))
 
@@ -497,6 +506,8 @@ status = send_command("io.manager.getStatus")
 print(f"Connected: {status['result']['isConnected']}")
 
 send_command("io.driver.uart.setBaudRate", {"baudRate": 115200})
+
+# Add your application logic here
 ```
 
 ## Security Considerations

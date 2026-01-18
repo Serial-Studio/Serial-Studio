@@ -26,12 +26,17 @@
 #include "API/Handlers/UARTHandler.h"
 #include "API/Handlers/BluetoothLEHandler.h"
 #include "API/Handlers/CSVExportHandler.h"
+#include "API/Handlers/ProjectHandler.h"
+#include "API/Handlers/ConsoleHandler.h"
+#include "API/Handlers/CSVPlayerHandler.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "API/Handlers/ModbusHandler.h"
 #  include "API/Handlers/CANBusHandler.h"
 #  include "API/Handlers/MQTTHandler.h"
 #  include "API/Handlers/MDF4ExportHandler.h"
+#  include "API/Handlers/AudioHandler.h"
+#  include "API/Handlers/MDF4PlayerHandler.h"
 #endif
 
 /**
@@ -206,12 +211,17 @@ void API::CommandHandler::initializeHandlers()
   Handlers::NetworkHandler::registerCommands();
   Handlers::BluetoothLEHandler::registerCommands();
   Handlers::CSVExportHandler::registerCommands();
+  Handlers::ProjectHandler::registerCommands();
+  Handlers::ConsoleHandler::registerCommands();
+  Handlers::CSVPlayerHandler::registerCommands();
 
 #ifdef BUILD_COMMERCIAL
   Handlers::ModbusHandler::registerCommands();
   Handlers::CANBusHandler::registerCommands();
   Handlers::MQTTHandler::registerCommands();
   Handlers::MDF4ExportHandler::registerCommands();
+  Handlers::AudioHandler::registerCommands();
+  Handlers::MDF4PlayerHandler::registerCommands();
 #endif
 
   m_initialized = true;
