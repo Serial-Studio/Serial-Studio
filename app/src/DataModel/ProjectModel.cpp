@@ -3916,6 +3916,49 @@ int DataModel::ProjectModel::nextDatasetIndex()
   return maxIndex;
 }
 
+/**
+ * @brief Serializes the current project configuration to a QJsonObject
+ *
+ * This method exports the complete project state including metadata, groups,
+ * actions, and frame parser settings. Used both for file saving and API export.
+ *
+ * @return QJsonObject containing the full project configuration
+ */
+QJsonObject DataModel::ProjectModel::serializeToJson() const
+{
+  QJsonObject json;
+
+  // Add project metadata
+  json.insert("title", m_title);
+  json.insert("decoder", m_frameDecoder);
+  json.insert("frameEnd", m_frameEndSequence);
+  json.insert("frameParser", m_frameParserCode);
+  json.insert("checksum", m_checksumAlgorithm);
+  json.insert("frameDetection", m_frameDetection);
+  json.insert("frameStart", m_frameStartSequence);
+  json.insert("hexadecimalDelimiters", m_hexadecimalDelimiters);
+
+  // Serialize groups
+  QJsonArray groupArray;
+  for (const auto &group : std::as_const(m_groups))
+    groupArray.append(DataModel::serialize(group));
+  json.insert("groups", groupArray);
+
+  // Serialize actions
+  QJsonArray actionsArray;
+  for (const auto &action : std::as_const(m_actions))
+    actionsArray.append(DataModel::serialize(action));
+  json.insert("actions", actionsArray);
+
+  // Add dashboard layout metadata (if available)
+  if (!m_dashboardLayout.isEmpty())
+    json.insert(Keys::DashboardLayout, m_dashboardLayout);
+  if (m_activeGroupId >= 0)
+    json.insert(Keys::ActiveGroupId, m_activeGroupId);
+
+  return json;
+}
+
 //------------------------------------------------------------------------------
 // Project writting
 //------------------------------------------------------------------------------
@@ -3949,38 +3992,8 @@ bool DataModel::ProjectModel::finalizeProjectSave()
     return false;
   }
 
-  // Create JSON document & add properties
-  QJsonObject json;
-  json.insert("title", m_title);
-  json.insert("decoder", m_frameDecoder);
-  json.insert("frameEnd", m_frameEndSequence);
-  json.insert("frameParser", m_frameParserCode);
-  json.insert("checksum", m_checksumAlgorithm);
-  json.insert("frameDetection", m_frameDetection);
-  json.insert("frameStart", m_frameStartSequence);
-  json.insert("hexadecimalDelimiters", m_hexadecimalDelimiters);
-
-  // Create group array
-  QJsonArray groupArray;
-  for (const auto &group : std::as_const(m_groups))
-    groupArray.append(DataModel::serialize(group));
-
-  // Add groups array to JSON
-  json.insert("groups", groupArray);
-
-  // Create actions array
-  QJsonArray actionsArray;
-  for (const auto &action : std::as_const(m_actions))
-    actionsArray.append(DataModel::serialize(action));
-
-  // Insert actions array to JSON
-  json.insert("actions", actionsArray);
-
-  // Insert dashboard layout metadata (if available)
-  if (!m_dashboardLayout.isEmpty())
-    json.insert(Keys::DashboardLayout, m_dashboardLayout);
-  if (m_activeGroupId >= 0)
-    json.insert(Keys::ActiveGroupId, m_activeGroupId);
+  // Serialize project to JSON using the shared method
+  const QJsonObject json = serializeToJson();
 
   // Write JSON data to file
   file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));

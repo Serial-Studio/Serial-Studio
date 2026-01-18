@@ -941,40 +941,6 @@ if(ENABLE_HARDENING)
 endif()
 
 #-------------------------------------------------------------------------------
-# Unit testing support
-#-------------------------------------------------------------------------------
-#
-# Enables unit test suite for automated testing:
-#
-# When BUILD_TESTS=ON:
-#   - Enables CTest integration (CMake's testing framework)
-#   - Builds test executables in tests/ subdirectory
-#   - Tests can be run with: ctest --output-on-failure
-#
-# Usage:
-#   cmake .. -DBUILD_TESTS=ON
-#   cmake --build .
-#   ctest --output-on-failure
-#
-# Test coverage:
-#   - Unit tests for JSON frame parsing
-#   - I/O driver tests (UART, Network, BluetoothLE)
-#   - CSV/MDF4 file format tests
-#   - Widget rendering tests (where applicable)
-#
-# Note: Tests are disabled by default to speed up regular builds
-#
-#-------------------------------------------------------------------------------
-
-option(BUILD_TESTS "Build unit tests" OFF)
-
-if(BUILD_TESTS)
-   message(STATUS "BUILD_TESTS=ON, enabling test suite")
-   enable_testing()
-   add_subdirectory(tests)
-endif()
-
-#-------------------------------------------------------------------------------
 # Subdirectory build order
 #-------------------------------------------------------------------------------
 #

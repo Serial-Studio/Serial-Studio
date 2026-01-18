@@ -264,14 +264,34 @@ void DataModel::FrameBuilder::loadJsonMap(const QString &path)
     return;
   }
 
-  // Read and validate JSON with security bounds checking
+  // Read JSON data and delegate to loadJsonMapFromData()
   const auto data = m_jsonMap.readAll();
-  const auto result = Misc::JsonValidator::parseAndValidate(data);
+  loadJsonMapFromData(data, path);
+}
+
+/**
+ * @brief Loads a JSON project from raw JSON data
+ *
+ * This method allows loading project configuration from in-memory JSON data
+ * instead of requiring a file on disk. Used by both file loading and API-based
+ * project loading.
+ *
+ * @param jsonData Raw JSON data as QByteArray
+ * @param sourcePath Optional path for tracking (empty for API-loaded projects)
+ *
+ * Security: Uses Misc::JsonValidator for DoS protection (depth/size limits)
+ */
+void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
+                                                  const QString &sourcePath)
+{
+  // Validate JSON with security bounds checking
+  const auto result = Misc::JsonValidator::parseAndValidate(jsonData);
 
   if (!result.valid) [[unlikely]]
   {
     clear_frame(m_frame);
-    m_jsonMap.close();
+    if (m_jsonMap.isOpen())
+      m_jsonMap.close();
     setJsonPathSetting("");
     Misc::Utilities::showMessageBox(tr("JSON validation error"),
                                     result.errorMessage, QMessageBox::Critical);
@@ -280,7 +300,7 @@ void DataModel::FrameBuilder::loadJsonMap(const QString &path)
   }
 
   // Parse the validated JSON document into frame structure
-  setJsonPathSetting(path);
+  setJsonPathSetting(sourcePath);
   clear_frame(m_frame);
 
   const auto document = result.document;
@@ -289,7 +309,8 @@ void DataModel::FrameBuilder::loadJsonMap(const QString &path)
   if (!ok) [[unlikely]]
   {
     clear_frame(m_frame);
-    m_jsonMap.close();
+    if (m_jsonMap.isOpen())
+      m_jsonMap.close();
     setJsonPathSetting("");
     Misc::Utilities::showMessageBox(
         tr("This file isn't a valid project file"),
@@ -311,7 +332,7 @@ void DataModel::FrameBuilder::loadJsonMap(const QString &path)
     IO::Manager::instance().resetFrameReader();
   }
 
-  // Notify UI that JSON file has been successfully loaded
+  // Notify UI that JSON has been successfully loaded
   Q_EMIT jsonFileMapChanged();
 }
 

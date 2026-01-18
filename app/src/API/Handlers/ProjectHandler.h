@@ -31,21 +31,24 @@ namespace Handlers
  * @class ProjectHandler
  * @brief Registers API commands for DataModel::ProjectModel operations
  *
- * Provides 19 commands for project/configuration management:
+ * Provides 24 commands for project/configuration management:
  *
- * File Operations (4):
+ * File Operations (7):
  * - project.file.new - Create new project
  * - project.file.open - Open project file
  * - project.file.save - Save project
+ * - project.loadFromJSON - Load project configuration from JSON object
  * - project.getStatus - Get project info
+ * - project.exportJson - Export current project as JSON
+ * - project.loadIntoFrameBuilder - Load current project into FrameBuilder
  *
  * Group Management (3):
- * - project.group.add - Add group
+ * - project.group.add - Add group (optional: title, widgetType)
  * - project.group.delete - Delete current group
  * - project.group.duplicate - Duplicate current group
  *
  * Dataset Management (4):
- * - project.dataset.add - Add dataset
+ * - project.dataset.add - Add dataset (optional: options)
  * - project.dataset.delete - Delete current dataset
  * - project.dataset.duplicate - Duplicate current dataset
  * - project.dataset.setOption - Toggle dataset option
@@ -55,9 +58,11 @@ namespace Handlers
  * - project.action.delete - Delete current action
  * - project.action.duplicate - Duplicate current action
  *
- * Frame Parser (2):
+ * Frame Parser (4):
  * - project.parser.setCode - Set frame parser code
  * - project.parser.getCode - Get frame parser code
+ * - project.frameParser.configure - Configure frame parser settings
+ * - project.frameParser.getConfig - Get frame parser configuration
  *
  * Queries (3):
  * - project.groups.list - List all groups with dataset counts
@@ -110,6 +115,18 @@ private:
                                        const QJsonObject &params);
   static CommandResponse parserGetCode(const QString &id,
                                        const QJsonObject &params);
+  static CommandResponse frameParserConfigure(const QString &id,
+                                              const QJsonObject &params);
+  static CommandResponse frameParserGetConfig(const QString &id,
+                                              const QJsonObject &params);
+
+  // Configuration loading
+  static CommandResponse loadFromJSON(const QString &id,
+                                      const QJsonObject &params);
+  static CommandResponse exportJson(const QString &id,
+                                    const QJsonObject &params);
+  static CommandResponse loadIntoFrameBuilder(const QString &id,
+                                              const QJsonObject &params);
 
   // List queries
   static CommandResponse groupsList(const QString &id,

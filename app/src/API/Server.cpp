@@ -435,11 +435,7 @@ void API::Server::acceptConnection()
 void API::Server::onErrorOccurred(
     const QAbstractSocket::SocketError socketError)
 {
-  auto socket = static_cast<QTcpSocket *>(QObject::sender());
-  if (socket)
-    qDebug() << socket->errorString();
-  else
-    qDebug() << socketError;
+  qDebug() << socketError;
 }
 
 /**

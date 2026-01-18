@@ -1,0 +1,27 @@
+# Serial Studio Integration Test Dependencies
+# Python 3.8+ required
+
+# Core testing framework
+pytest>=7.4.0
+pytest-timeout>=2.1.0
+pytest-xdist>=3.3.0  # Parallel test execution
+
+# Performance benchmarking
+pytest-benchmark>=4.0.0
+
+# Code coverage
+pytest-cov>=4.1.0
+
+# Network testing
+requests>=2.31.0
+
+# Data generation and validation
+faker>=19.0.0
+
+# CSV/JSON validation
+pandas>=2.0.0
+jsonschema>=4.19.0
+
+# Performance monitoring
+psutil>=5.9.0
+memory-profiler>=0.61.0

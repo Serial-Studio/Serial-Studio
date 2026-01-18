@@ -21,10 +21,16 @@
 
 #include "API/Handlers/ProjectHandler.h"
 #include "API/CommandRegistry.h"
+#include "DataModel/Frame.h"
+#include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
+#include "IO/Manager.h"
 #include "SerialStudio.h"
 
+#include <QFile>
 #include <QJsonArray>
+#include <QJsonDocument>
+#include <QTemporaryFile>
 
 /**
  * @brief Register all Project commands with the registry
@@ -43,6 +49,11 @@ void API::Handlers::ProjectHandler::registerCommands()
   registry.registerCommand(
       QStringLiteral("project.file.save"),
       QStringLiteral("Save project (params: askPath=false)"), &fileSave);
+
+  registry.registerCommand(
+      QStringLiteral("project.loadFromJSON"),
+      QStringLiteral("Load project from JSON object (params: config)"),
+      &loadFromJSON);
 
   registry.registerCommand(QStringLiteral("project.getStatus"),
                            QStringLiteral("Get project status"), &getStatus);
@@ -94,6 +105,26 @@ void API::Handlers::ProjectHandler::registerCommands()
   registry.registerCommand(QStringLiteral("project.parser.getCode"),
                            QStringLiteral("Get frame parser code"),
                            &parserGetCode);
+
+  registry.registerCommand(
+      QStringLiteral("project.frameParser.configure"),
+      QStringLiteral(
+          "Configure frame parser settings (params: startSequence, "
+          "endSequence, checksumAlgorithm, frameDetection, operationMode)"),
+      &frameParserConfigure);
+
+  registry.registerCommand(QStringLiteral("project.frameParser.getConfig"),
+                           QStringLiteral("Get frame parser configuration"),
+                           &frameParserGetConfig);
+
+  registry.registerCommand(QStringLiteral("project.exportJson"),
+                           QStringLiteral("Export project as JSON"),
+                           &exportJson);
+
+  registry.registerCommand(
+      QStringLiteral("project.loadIntoFrameBuilder"),
+      QStringLiteral("Load current project into FrameBuilder"),
+      &loadIntoFrameBuilder);
 
   registry.registerCommand(
       QStringLiteral("project.groups.list"),
@@ -472,6 +503,8 @@ API::Handlers::ProjectHandler::parserGetCode(const QString &id,
 
 /**
  * @brief List all groups with basic info
+ *
+ * Uses existing serialize() function from Frame.h
  */
 API::CommandResponse
 API::Handlers::ProjectHandler::groupsList(const QString &id,
@@ -483,15 +516,7 @@ API::Handlers::ProjectHandler::groupsList(const QString &id,
 
   QJsonArray groups_array;
   for (const auto &group : groups)
-  {
-    QJsonObject group_obj;
-    group_obj[QStringLiteral("groupId")] = group.groupId;
-    group_obj[QStringLiteral("title")] = group.title;
-    group_obj[QStringLiteral("widget")] = group.widget;
-    group_obj[QStringLiteral("datasetCount")]
-        = static_cast<int>(group.datasets.size());
-    groups_array.append(group_obj);
-  }
+    groups_array.append(DataModel::serialize(group));
 
   QJsonObject result;
   result[QStringLiteral("groups")] = groups_array;
@@ -501,6 +526,8 @@ API::Handlers::ProjectHandler::groupsList(const QString &id,
 
 /**
  * @brief List all datasets across all groups
+ *
+ * Uses existing serialize() function from Frame.h and adds groupId/groupTitle
  */
 API::CommandResponse
 API::Handlers::ProjectHandler::datasetsList(const QString &id,
@@ -517,14 +544,9 @@ API::Handlers::ProjectHandler::datasetsList(const QString &id,
   {
     for (const auto &dataset : group.datasets)
     {
-      QJsonObject dataset_obj;
+      QJsonObject dataset_obj = DataModel::serialize(dataset);
       dataset_obj[QStringLiteral("groupId")] = group.groupId;
       dataset_obj[QStringLiteral("groupTitle")] = group.title;
-      dataset_obj[QStringLiteral("index")] = dataset.index;
-      dataset_obj[QStringLiteral("title")] = dataset.title;
-      dataset_obj[QStringLiteral("units")] = dataset.units;
-      dataset_obj[QStringLiteral("widget")] = dataset.widget;
-      dataset_obj[QStringLiteral("value")] = dataset.value;
       datasets_array.append(dataset_obj);
       ++total_datasets;
     }
@@ -548,6 +570,196 @@ API::Handlers::ProjectHandler::actionsList(const QString &id,
   QJsonObject result;
   result[QStringLiteral("actions")] = QJsonArray();
   result[QStringLiteral("actionCount")] = 0;
+
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Load project configuration from JSON object
+ * @param params Requires "config" (JSON object with project configuration)
+ *
+ * Uses existing ProjectModel::openJsonFile() by writing to a temporary file.
+ */
+API::CommandResponse
+API::Handlers::ProjectHandler::loadFromJSON(const QString &id,
+                                            const QJsonObject &params)
+{
+  if (!params.contains(QStringLiteral("config")))
+  {
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: config"));
+  }
+
+  const QJsonObject config = params.value(QStringLiteral("config")).toObject();
+  if (config.isEmpty())
+  {
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam,
+                                      QStringLiteral("config cannot be empty"));
+  }
+
+  // Write to temporary file and use existing openJsonFile()
+  QTemporaryFile tempFile;
+  tempFile.setAutoRemove(false);
+
+  if (!tempFile.open())
+  {
+    return CommandResponse::makeError(
+        id, ErrorCode::OperationFailed,
+        QStringLiteral("Failed to create temporary file"));
+  }
+
+  const QJsonDocument doc(config);
+  tempFile.write(doc.toJson(QJsonDocument::Indented));
+  const QString tempPath = tempFile.fileName();
+  tempFile.close();
+
+  // Use existing infrastructure
+  DataModel::ProjectModel::instance().openJsonFile(tempPath);
+
+  // Clean up
+  QFile::remove(tempPath);
+
+  auto &project = DataModel::ProjectModel::instance();
+  QJsonObject result;
+  result[QStringLiteral("loaded")] = true;
+  result[QStringLiteral("title")] = project.title();
+  result[QStringLiteral("groupCount")] = project.groupCount();
+  result[QStringLiteral("datasetCount")] = project.datasetCount();
+
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Configure frame parser settings
+ * @param params Optional parameters: startSequence, endSequence,
+ * checksumAlgorithm (string or int), operationMode
+ */
+API::CommandResponse
+API::Handlers::ProjectHandler::frameParserConfigure(const QString &id,
+                                                    const QJsonObject &params)
+{
+  bool updated = false;
+  auto &manager = IO::Manager::instance();
+
+  if (params.contains(QStringLiteral("startSequence")))
+  {
+    const QString start
+        = params.value(QStringLiteral("startSequence")).toString();
+    manager.setStartSequence(start.toUtf8());
+    updated = true;
+  }
+
+  if (params.contains(QStringLiteral("endSequence")))
+  {
+    const QString end = params.value(QStringLiteral("endSequence")).toString();
+    manager.setFinishSequence(end.toUtf8());
+    updated = true;
+  }
+
+  if (params.contains(QStringLiteral("checksumAlgorithm")))
+  {
+    const QString checksumName
+        = params.value(QStringLiteral("checksumAlgorithm")).toString();
+    manager.setChecksumAlgorithm(checksumName);
+    updated = true;
+  }
+
+  if (params.contains(QStringLiteral("operationMode")))
+  {
+    const int modeIdx = params.value(QStringLiteral("operationMode")).toInt();
+    if (modeIdx >= 0 && modeIdx <= 2)
+    {
+      const auto mode = static_cast<SerialStudio::OperationMode>(modeIdx);
+      DataModel::FrameBuilder::instance().setOperationMode(mode);
+      updated = true;
+    }
+  }
+
+  if (updated)
+    manager.resetFrameReader();
+
+  QJsonObject result;
+  result[QStringLiteral("updated")] = updated;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Get current frame parser configuration
+ */
+API::CommandResponse
+API::Handlers::ProjectHandler::frameParserGetConfig(const QString &id,
+                                                    const QJsonObject &params)
+{
+  Q_UNUSED(params)
+
+  auto &manager = IO::Manager::instance();
+  auto &builder = DataModel::FrameBuilder::instance();
+
+  QJsonObject result;
+  result[QStringLiteral("startSequence")]
+      = QString::fromUtf8(manager.startSequence());
+  result[QStringLiteral("endSequence")]
+      = QString::fromUtf8(manager.finishSequence());
+  result[QStringLiteral("checksumAlgorithm")] = manager.checksumAlgorithm();
+  result[QStringLiteral("operationMode")]
+      = static_cast<int>(builder.operationMode());
+
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Export current project configuration as JSON
+ */
+API::CommandResponse
+API::Handlers::ProjectHandler::exportJson(const QString &id,
+                                          const QJsonObject &params)
+{
+  Q_UNUSED(params)
+
+  auto &project = DataModel::ProjectModel::instance();
+
+  // Serialize project using the public method
+  const QJsonObject json = project.serializeToJson();
+
+  // Return the project JSON
+  QJsonObject result;
+  result[QStringLiteral("project")] = json;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Load current project JSON into FrameBuilder
+ *
+ * This method exports the current ProjectModel configuration as JSON and loads
+ * it into FrameBuilder, enabling API-modified projects to be used without
+ * requiring a file on disk.
+ */
+API::CommandResponse
+API::Handlers::ProjectHandler::loadIntoFrameBuilder(const QString &id,
+                                                    const QJsonObject &params)
+{
+  Q_UNUSED(params)
+
+  auto &project = DataModel::ProjectModel::instance();
+  auto &builder = DataModel::FrameBuilder::instance();
+
+  // Serialize project using the public method
+  const QJsonObject json = project.serializeToJson();
+
+  // Convert to JSON document and load into FrameBuilder
+  const QJsonDocument document(json);
+  const QByteArray jsonData = document.toJson(QJsonDocument::Compact);
+
+  // Load into FrameBuilder using the new QByteArray-based method
+  builder.loadJsonMapFromData(jsonData, QStringLiteral("[API]"));
+
+  QJsonObject result;
+  result[QStringLiteral("loaded")] = true;
+  result[QStringLiteral("source")] = QStringLiteral("API");
+  result[QStringLiteral("title")] = project.title();
+  result[QStringLiteral("groupCount")] = project.groupCount();
+  result[QStringLiteral("datasetCount")] = project.datasetCount();
 
   return CommandResponse::makeSuccess(id, result);
 }

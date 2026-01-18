@@ -255,6 +255,7 @@ public:
 
   Q_INVOKABLE bool askSave();
   Q_INVOKABLE bool saveJsonFile(const bool askPath = false);
+  Q_INVOKABLE QJsonObject serializeToJson() const;
 
 public slots:
   void setupExternalConnections();

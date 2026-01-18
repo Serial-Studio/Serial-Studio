@@ -78,8 +78,8 @@ Widgets.Pane {
       implicitWidth: label.implicitWidth
       implicitHeight: label.implicitHeight
       opacity: Cpp_API_Server.enabled ?
-                 (Cpp_API_Server.clientCount > 0 ? 1 : 0.7) :
-                 0.3
+                 (Cpp_API_Server.clientCount > 0 ? 1 : 0.5) :
+                 0.0
       Behavior on opacity { NumberAnimation { duration: 200 } }
 
       MultiEffect {
