@@ -225,6 +225,7 @@ set(SOURCES
   src/API/Handlers/ProjectHandler.cpp
   src/API/Handlers/ConsoleHandler.cpp
   src/API/Handlers/CSVPlayerHandler.cpp
+  src/API/Handlers/DashboardHandler.cpp
   src/IO/Drivers/Network.cpp
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
@@ -289,6 +290,7 @@ set(HEADERS
   src/API/Handlers/ProjectHandler.h
   src/API/Handlers/ConsoleHandler.h
   src/API/Handlers/CSVPlayerHandler.h
+  src/API/Handlers/DashboardHandler.h
   src/Platform/NativeWindow.h
   src/Console/Handler.h
   src/Console/Export.h

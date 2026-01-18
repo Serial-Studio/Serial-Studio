@@ -139,7 +139,7 @@ void API::ServerWorker::onSocketReadyRead()
 void API::ServerWorker::writeToSocket(QTcpSocket *socket,
                                       const QByteArray &data)
 {
-  if (socket && socket->isWritable() && m_sockets.contains(socket))
+  if (socket && m_sockets.contains(socket) && socket->isWritable())
     socket->write(data);
 }
 

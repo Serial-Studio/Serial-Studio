@@ -78,11 +78,18 @@ Press `Ctrl+C` to exit the monitor.
 
 ## Interactive Mode (REPL)
 
-The interactive mode provides an easy way to explore and experiment with the API:
+The interactive mode provides an easy way to explore and experiment with the API with a full-featured shell:
 
 ```bash
 python test_api.py interactive
 ```
+
+### Features
+
+- **Command History**: Use ↑/↓ arrow keys to navigate through previous commands (requires readline)
+- **Tab Completion**: Press Tab to autocomplete command names
+- **Colored Output**: Syntax-highlighted responses and error messages
+- **Persistent History**: Commands are saved between sessions in `~/.serial_studio_api_history`
 
 ### REPL Commands
 
@@ -92,8 +99,8 @@ Inside the REPL, you can use these special commands:
 |---------|-------------|
 | `help` | Show help and available commands |
 | `list` | List all API commands with descriptions |
-| `quit` / `exit` | Exit the REPL |
 | `clear` | Clear the screen |
+| `quit` / `exit` | Exit the REPL |
 
 ### Example REPL Session
 
@@ -231,9 +238,9 @@ python test_api.py test --verbose
 
 ## Available API Commands
 
-**Total: 158 API commands**
+Use `python test_api.py list` to see all commands, or run `python test_api.py interactive` and type `list` in the REPL.
 
-### Core API (GPL) - 86 commands
+### Core API (GPL)
 - `api.*` - API introspection (1 command)
 - `io.manager.*` - I/O manager control (12 commands)
 - `io.driver.uart.*` - UART/Serial configuration (12 commands)
@@ -242,9 +249,16 @@ python test_api.py test --verbose
 - `csv.export.*` - CSV file export control (3 commands)
 - `csv.player.*` - CSV file playback (9 commands)
 - `console.*` - Console/terminal control (11 commands)
-- `project.*` - Project management (19 commands)
+- `dashboard.*` - Dashboard configuration (7 commands)
+- `project.*` - Project management (19+ commands)
+  - `project.file.*` - File operations (new, open, save)
+  - `project.group.*` - Group management (add, delete, duplicate)
+  - `project.dataset.*` - Dataset management (add, delete, duplicate, setOption)
+  - `project.action.*` - Action management (add, delete, duplicate)
+  - `project.parser.*` - Frame parser code (getCode, setCode)
+  - `project.*.list` - List operations (groups.list, datasets.list, actions.list)
 
-### Pro Features (Commercial License Required) - 72 commands
+### Pro Features (Commercial License Required)
 - `io.driver.modbus.*` - Modbus RTU/TCP configuration (21 commands)
 - `io.driver.canbus.*` - CAN Bus configuration (9 commands)
 - `mqtt.*` - MQTT client configuration (27 commands)
@@ -333,6 +347,27 @@ python test_api.py send csv.export.close
 python test_api.py send csv.export.setEnabled -p enabled=false
 ```
 
+### Example 7: Configure Dashboard Settings
+
+```bash
+# Get current dashboard configuration
+python test_api.py send dashboard.getStatus
+
+# Set operation mode (0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot)
+python test_api.py send dashboard.setOperationMode -p mode=2
+
+# Set visualization refresh rate (FPS)
+python test_api.py send dashboard.setFPS -p fps=60
+
+# Set data points per plot
+python test_api.py send dashboard.setPoints -p points=500
+
+# Query individual settings
+python test_api.py send dashboard.getOperationMode
+python test_api.py send dashboard.getFPS
+python test_api.py send dashboard.getPoints
+```
+
 ## API Protocol Reference
 
 ### Message Format
@@ -396,6 +431,14 @@ All messages are JSON objects terminated by a newline (`\n`).
 | 4 | Modbus (RTU/TCP) | Pro |
 | 5 | CAN Bus | Pro |
 | 6 | MQTT | Pro |
+
+### Operation Modes (for `dashboard.setOperationMode`)
+
+| Index | Name | Description |
+|-------|------|-------------|
+| 0 | ProjectFile | Uses a project file to define dashboard structure and data parsing |
+| 1 | DeviceSendsJSON | Device sends pre-formatted JSON data (no parsing needed) |
+| 2 | QuickPlot | Automatically detects and plots CSV-formatted data |
 
 ## Troubleshooting
 

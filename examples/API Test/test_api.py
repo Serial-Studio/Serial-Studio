@@ -57,9 +57,16 @@ import time
 import uuid
 import select
 import base64
+import os
 from typing import Any, Optional
 from dataclasses import dataclass
 from enum import Enum
+
+try:
+    import readline
+    READLINE_AVAILABLE = True
+except ImportError:
+    READLINE_AVAILABLE = False
 
 
 # =============================================================================
@@ -70,6 +77,28 @@ DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 7777
 SOCKET_TIMEOUT = 5.0
 RECV_BUFFER_SIZE = 65536
+
+# ANSI color codes for terminal output
+class Colors:
+    RESET = '\033[0m'
+    BOLD = '\033[1m'
+    DIM = '\033[2m'
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    MAGENTA = '\033[95m'
+    CYAN = '\033[96m'
+    WHITE = '\033[97m'
+    GRAY = '\033[90m'
+
+    @staticmethod
+    def is_supported():
+        """Check if terminal supports colors."""
+        return hasattr(sys.stdout, 'isatty') and sys.stdout.isatty() and os.name != 'nt' or 'ANSICON' in os.environ
+
+# Global color support flag
+COLORS_ENABLED = Colors.is_supported()
 
 
 # =============================================================================
@@ -89,6 +118,41 @@ class ErrorCode:
     INVALID_PARAM = "INVALID_PARAM"
     MISSING_PARAM = "MISSING_PARAM"
     EXECUTION_ERROR = "EXECUTION_ERROR"
+
+
+# =============================================================================
+# Color Helpers
+# =============================================================================
+
+def colorize(text: str, color: str) -> str:
+    """Apply color to text if colors are enabled."""
+    if COLORS_ENABLED:
+        return f"{color}{text}{Colors.RESET}"
+    return text
+
+def success(text: str) -> str:
+    """Return text in success color (green)."""
+    return colorize(text, Colors.GREEN)
+
+def error(text: str) -> str:
+    """Return text in error color (red)."""
+    return colorize(text, Colors.RED)
+
+def info(text: str) -> str:
+    """Return text in info color (blue)."""
+    return colorize(text, Colors.BLUE)
+
+def warning(text: str) -> str:
+    """Return text in warning color (yellow)."""
+    return colorize(text, Colors.YELLOW)
+
+def dim(text: str) -> str:
+    """Return text in dim style."""
+    return colorize(text, Colors.DIM)
+
+def bold(text: str) -> str:
+    """Return text in bold style."""
+    return colorize(text, Colors.BOLD)
 
 
 # =============================================================================
@@ -130,17 +194,23 @@ class TestSuite:
         return sum(1 for t in self.tests if t.result == TestResult.SKIPPED)
 
     def print_summary(self):
-        print(f"\n{'=' * 60}")
-        print(f"Test Suite: {self.name}")
-        print(f"{'=' * 60}")
-        print(f"Total: {len(self.tests)} | Passed: {self.passed} | Failed: {self.failed} | Skipped: {self.skipped}")
-        print(f"{'=' * 60}")
+        print(bold(f"\n{'=' * 60}"))
+        print(bold(f"Test Suite: {self.name}"))
+        print(bold(f"{'=' * 60}"))
+
+        total = len(self.tests)
+        passed_str = success(f"Passed: {self.passed}") if self.passed > 0 else dim(f"Passed: {self.passed}")
+        failed_str = error(f"Failed: {self.failed}") if self.failed > 0 else dim(f"Failed: {self.failed}")
+        skipped_str = warning(f"Skipped: {self.skipped}") if self.skipped > 0 else dim(f"Skipped: {self.skipped}")
+
+        print(f"Total: {total} | {passed_str} | {failed_str} | {skipped_str}")
+        print(bold(f"{'=' * 60}"))
 
         if self.failed > 0:
-            print("\nFailed Tests:")
+            print(error("\nFailed Tests:"))
             for test in self.tests:
                 if test.result == TestResult.FAILED:
-                    print(f"  ✗ {test.name}: {test.message}")
+                    print(f"  {error('✗')} {test.name}: {error(test.message)}")
 
         print()
 
@@ -347,13 +417,17 @@ def run_test(suite: TestSuite, name: str, test_fn) -> bool:
         result = TestResult.PASSED if passed else TestResult.FAILED
         suite.add_result(TestCase(name, result, message, duration_ms))
 
-        status = "✓" if passed else "✗"
-        print(f"  {status} {name} ({duration_ms:.1f}ms)" + (f" - {message}" if not passed else ""))
+        if passed:
+            status = success("✓")
+            print(f"  {status} {dim(name)} {dim(f'({duration_ms:.1f}ms)')}")
+        else:
+            status = error("✗")
+            print(f"  {status} {name} {dim(f'({duration_ms:.1f}ms)')} - {error(message)}")
         return passed
     except Exception as e:
         duration_ms = (time.time() - start_time) * 1000
         suite.add_result(TestCase(name, TestResult.FAILED, str(e), duration_ms))
-        print(f"  ✗ {name} ({duration_ms:.1f}ms) - Exception: {e}")
+        print(f"  {error('✗')} {name} {dim(f'({duration_ms:.1f}ms)')} - {error(f'Exception: {e}')}")
         return False
 
 
@@ -842,6 +916,200 @@ def test_csv_export_handler(api: SerialStudioAPI, suite: TestSuite):
             return False, msg
         return True, ""
     run_test(suite, "csv.export.close executes", test_close)
+
+
+def test_csv_player_handler(api: SerialStudioAPI, suite: TestSuite):
+    """Test csv.player.* commands."""
+    print("\n--- CSV Player Handler Tests ---")
+
+    # Test: getStatus
+    def test_get_status():
+        response = api.send_command("csv.player.getStatus")
+        passed, msg = assert_success(response, "getStatus")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["isOpen", "isPlaying"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "csv.player.getStatus returns status", test_get_status)
+
+    # Test: close (should succeed even if nothing is open)
+    def test_close():
+        response = api.send_command("csv.player.close")
+        passed, msg = assert_success(response, "close")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "csv.player.close executes", test_close)
+
+    # Test: pause (should work even if not playing)
+    def test_pause():
+        response = api.send_command("csv.player.pause")
+        passed, msg = assert_success(response, "pause")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "csv.player.pause executes", test_pause)
+
+
+def test_console_handler(api: SerialStudioAPI, suite: TestSuite):
+    """Test console.* commands."""
+    print("\n--- Console Handler Tests ---")
+
+    # Test: getConfiguration
+    def test_get_configuration():
+        response = api.send_command("console.getConfiguration")
+        passed, msg = assert_success(response, "getConfiguration")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["echo", "showTimestamp", "displayMode", "dataMode"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "console.getConfiguration returns config", test_get_configuration)
+
+    # Test: setEcho
+    def test_set_echo():
+        response = api.send_command("console.setEcho", {"enabled": True})
+        passed, msg = assert_success(response, "setEcho")
+        if not passed:
+            return False, msg
+        # Restore to default
+        api.send_command("console.setEcho", {"enabled": False})
+        return True, ""
+    run_test(suite, "console.setEcho sets echo mode", test_set_echo)
+
+    # Test: setEcho missing param
+    def test_set_echo_missing():
+        response = api.send_command("console.setEcho", {})
+        return assert_error(response, ErrorCode.MISSING_PARAM, "setEcho_missing")
+    run_test(suite, "console.setEcho requires enabled param", test_set_echo_missing)
+
+    # Test: setShowTimestamp
+    def test_set_show_timestamp():
+        response = api.send_command("console.setShowTimestamp", {"enabled": True})
+        passed, msg = assert_success(response, "setShowTimestamp")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "console.setShowTimestamp sets timestamp mode", test_set_show_timestamp)
+
+    # Test: setDisplayMode
+    def test_set_display_mode():
+        response = api.send_command("console.setDisplayMode", {"modeIndex": 0})
+        passed, msg = assert_success(response, "setDisplayMode")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "console.setDisplayMode sets display mode", test_set_display_mode)
+
+    # Test: setDisplayMode invalid
+    def test_set_display_mode_invalid():
+        response = api.send_command("console.setDisplayMode", {"modeIndex": 999})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setDisplayMode_invalid")
+    run_test(suite, "console.setDisplayMode rejects invalid index", test_set_display_mode_invalid)
+
+    # Test: setFontSize
+    def test_set_font_size():
+        response = api.send_command("console.setFontSize", {"fontSize": 12})
+        passed, msg = assert_success(response, "setFontSize")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "console.setFontSize sets font size", test_set_font_size)
+
+    # Test: clear
+    def test_clear():
+        response = api.send_command("console.clear")
+        passed, msg = assert_success(response, "clear")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "console.clear executes", test_clear)
+
+
+def test_project_handler(api: SerialStudioAPI, suite: TestSuite):
+    """Test project.* commands."""
+    print("\n--- Project Handler Tests ---")
+
+    # Test: getStatus
+    def test_get_status():
+        response = api.send_command("project.getStatus")
+        passed, msg = assert_success(response, "getStatus")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["title", "groupCount", "datasetCount"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "project.getStatus returns status", test_get_status)
+
+    # Test: file.new
+    def test_file_new():
+        response = api.send_command("project.file.new")
+        passed, msg = assert_success(response, "file.new")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "created" not in result:
+            return False, "Missing created field"
+        return True, ""
+    run_test(suite, "project.file.new creates new project", test_file_new)
+
+    # Test: groups.list
+    def test_groups_list():
+        response = api.send_command("project.groups.list")
+        passed, msg = assert_success(response, "groups.list")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "groups" not in result:
+            return False, "Missing groups field"
+        return True, ""
+    run_test(suite, "project.groups.list returns group list", test_groups_list)
+
+    # Test: datasets.list
+    def test_datasets_list():
+        response = api.send_command("project.datasets.list")
+        passed, msg = assert_success(response, "datasets.list")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "datasets" not in result:
+            return False, "Missing datasets field"
+        return True, ""
+    run_test(suite, "project.datasets.list returns dataset list", test_datasets_list)
+
+    # Test: actions.list
+    def test_actions_list():
+        response = api.send_command("project.actions.list")
+        passed, msg = assert_success(response, "actions.list")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "actions" not in result:
+            return False, "Missing actions field"
+        return True, ""
+    run_test(suite, "project.actions.list returns action list", test_actions_list)
+
+    # Test: parser.getCode
+    def test_parser_get_code():
+        response = api.send_command("project.parser.getCode")
+        passed, msg = assert_success(response, "parser.getCode")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "code" not in result:
+            return False, "Missing code field"
+        return True, ""
+    run_test(suite, "project.parser.getCode returns parser code", test_parser_get_code)
 
 
 def test_network_handler(api: SerialStudioAPI, suite: TestSuite):
@@ -1378,15 +1646,56 @@ def cmd_list(api: SerialStudioAPI, args) -> int:
 
 
 def cmd_interactive(api: SerialStudioAPI, args) -> int:
-    """Interactive REPL mode."""
-    print("Serial Studio Interactive Mode")
-    print("Type 'help' for commands, 'quit' to exit\n")
+    """Interactive REPL mode with command history and autocomplete."""
+
+    # Setup readline for command history and tab completion
+    history_file = os.path.expanduser("~/.serial_studio_api_history")
+    available_commands = []
+
+    if READLINE_AVAILABLE:
+        # Load command history
+        try:
+            readline.read_history_file(history_file)
+        except FileNotFoundError:
+            pass
+        readline.set_history_length(1000)
+
+        # Fetch available commands for autocomplete
+        response = api.send_command("api.getCommands")
+        if response and response.get("success"):
+            commands = response.get("result", {}).get("commands", [])
+            available_commands = [cmd.get("name", "") for cmd in commands]
+
+            # Setup tab completion
+            def completer(text, state):
+                options = [cmd for cmd in available_commands if cmd.startswith(text)]
+                if state < len(options):
+                    return options[state]
+                return None
+
+            readline.parse_and_bind("tab: complete")
+            readline.set_completer(completer)
+
+    # Print welcome banner
+    print(bold("\n╔══════════════════════════════════════════════════════════╗"))
+    print(bold("║") + info("      Serial Studio Interactive Mode (REPL)          ") + bold("║"))
+    print(bold("╚══════════════════════════════════════════════════════════╝\n"))
+
+    print(dim("Features:"))
+    if READLINE_AVAILABLE:
+        print(dim("  • " + success("✓") + " Command history (↑/↓ arrows)"))
+        print(dim("  • " + success("✓") + " Tab completion"))
+    else:
+        print(dim("  • " + warning("⚠") + " Install 'readline' for history & completion"))
+    print(dim("  • Type " + bold("help") + " for commands"))
+    print(dim("  • Type " + bold("list") + " to see all API commands"))
+    print(dim("  • Type " + bold("quit") + " to exit\n"))
 
     while True:
         try:
-            line = input("ss> ").strip()
+            line = input(info("ss> ")).strip()
         except (EOFError, KeyboardInterrupt):
-            print("\nGoodbye!")
+            print("\n" + dim("Goodbye!"))
             break
 
         if not line:
@@ -1394,33 +1703,56 @@ def cmd_interactive(api: SerialStudioAPI, args) -> int:
 
         # Built-in commands
         if line.lower() in ("quit", "exit", "q"):
-            print("Goodbye!")
+            print(dim("Goodbye!"))
             break
 
         if line.lower() == "help":
-            print("""
-Interactive Mode Commands:
-  help                          Show this help
-  quit, exit, q                 Exit interactive mode
-  list                          List all available API commands
-  <command>                     Execute a command (e.g., io.manager.getStatus)
-  <command> <json_params>       Execute with params (e.g., io.driver.uart.setBaudRate {"baudRate":115200})
+            print(bold("\n" + "=" * 60))
+            print(bold("Interactive Mode Commands"))
+            print(bold("=" * 60))
+            print(f"{info('  help')}                          Show this help")
+            print(f"{info('  quit, exit, q')}                 Exit interactive mode")
+            print(f"{info('  list')}                          List all available API commands")
+            print(f"{info('  clear')}                         Clear the screen")
+            print(f"{info('  <command>')}                     Execute a command")
+            print(f"{info('  <command> <json_params>')}       Execute with params")
+            print(bold("\nExamples:"))
+            print(dim('  io.manager.getStatus'))
+            print(dim('  io.driver.uart.setBaudRate {"baudRate": 115200}'))
+            print(dim('  io.driver.network.setRemoteAddress {"address": "192.168.1.100"}'))
+            print()
+            continue
 
-Examples:
-  io.manager.getStatus
-  io.driver.uart.setBaudRate {"baudRate": 115200}
-  io.driver.network.setRemoteAddress {"address": "192.168.1.100"}
-""")
+        if line.lower() == "clear":
+            os.system('clear' if os.name != 'nt' else 'cls')
             continue
 
         if line.lower() == "list":
             response = api.send_command("api.getCommands")
             if response and response.get("success"):
                 commands = response.get("result", {}).get("commands", [])
-                for cmd in sorted(commands, key=lambda c: c.get("name", "")):
-                    print(f"  {cmd.get('name')}")
+                print(bold(f"\n{len(commands)} Available Commands:\n"))
+
+                # Group commands by prefix
+                groups = {}
+                for cmd in commands:
+                    name = cmd.get("name", "")
+                    desc = cmd.get("description", "")
+                    parts = name.split(".")
+                    prefix = ".".join(parts[:-1]) if len(parts) > 1 else "other"
+                    if prefix not in groups:
+                        groups[prefix] = []
+                    groups[prefix].append((name, desc))
+
+                # Print grouped commands
+                for prefix in sorted(groups.keys()):
+                    print(info(f"  {prefix}.*"))
+                    for name, desc in sorted(groups[prefix]):
+                        desc_short = (desc[:40] + "...") if len(desc) > 40 else desc
+                        print(f"    {dim(name):<45} {dim(desc_short)}")
+                    print()
             else:
-                print("[ERROR] Could not fetch command list")
+                print(error("[ERROR] Could not fetch command list"))
             continue
 
         # Parse command and optional JSON params
@@ -1432,25 +1764,35 @@ Examples:
             try:
                 params = json.loads(parts[1])
             except json.JSONDecodeError as e:
-                print(f"[ERROR] Invalid JSON parameters: {e}")
+                print(error(f"[ERROR] Invalid JSON parameters: {e}"))
+                print(dim("Tip: Use double quotes for JSON: {\"key\": \"value\"}"))
                 continue
 
         # Send command
         response = api.send_command(command, params)
 
         if response is None:
-            print("[ERROR] No response received")
+            print(error("[ERROR] No response received"))
             continue
 
         if response.get("success"):
             result = response.get("result", {})
             if result:
-                print(json.dumps(result, indent=2))
+                # Pretty print with syntax highlighting
+                json_str = json.dumps(result, indent=2)
+                print(info(json_str))
             else:
-                print("[OK]")
+                print(success("[OK]"))
         else:
-            error = response.get("error", {})
-            print(f"[ERROR] {error.get('code')}: {error.get('message')}")
+            err = response.get("error", {})
+            print(error(f"[ERROR] {err.get('code')}: {err.get('message')}"))
+
+    # Save command history
+    if READLINE_AVAILABLE:
+        try:
+            readline.write_history_file(history_file)
+        except Exception:
+            pass
 
     return 0
 
@@ -1603,9 +1945,9 @@ def cmd_monitor(api: SerialStudioAPI, args) -> int:
 
 def cmd_test(api: SerialStudioAPI, args) -> int:
     """Run the test suite."""
-    print("=" * 60)
-    print("Serial Studio API Test Suite")
-    print("=" * 60)
+    print(bold("=" * 60))
+    print(bold("Serial Studio API Test Suite"))
+    print(bold("=" * 60))
     print()
 
     suite = TestSuite("Serial Studio API")
@@ -1618,13 +1960,16 @@ def cmd_test(api: SerialStudioAPI, args) -> int:
         test_network_handler(api, suite)
         test_bluetoothle_handler(api, suite)
         test_csv_export_handler(api, suite)
+        test_csv_player_handler(api, suite)
+        test_console_handler(api, suite)
+        test_project_handler(api, suite)
         test_batch_commands(api, suite)
         test_stress(api, suite)
         test_configuration_workflow(api, suite)
     except KeyboardInterrupt:
-        print("\n[INTERRUPTED] Tests cancelled by user")
+        print(error("\n[INTERRUPTED] Tests cancelled by user"))
     except Exception as e:
-        print(f"\n[FATAL] Unexpected error: {e}")
+        print(error(f"\n[FATAL] Unexpected error: {e}"))
         import traceback
         traceback.print_exc()
 

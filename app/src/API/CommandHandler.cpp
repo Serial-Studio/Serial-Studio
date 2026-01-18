@@ -29,6 +29,7 @@
 #include "API/Handlers/ProjectHandler.h"
 #include "API/Handlers/ConsoleHandler.h"
 #include "API/Handlers/CSVPlayerHandler.h"
+#include "API/Handlers/DashboardHandler.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "API/Handlers/ModbusHandler.h"
@@ -214,6 +215,7 @@ void API::CommandHandler::initializeHandlers()
   Handlers::ProjectHandler::registerCommands();
   Handlers::ConsoleHandler::registerCommands();
   Handlers::CSVPlayerHandler::registerCommands();
+  Handlers::DashboardHandler::registerCommands();
 
 #ifdef BUILD_COMMERCIAL
   Handlers::ModbusHandler::registerCommands();
