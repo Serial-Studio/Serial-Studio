@@ -26,7 +26,7 @@ This Python client provides:
 
 1. **Serial Studio** running with API Server enabled
    - Open Serial Studio
-   - Go to **Settings → Extensions**
+   - Go to **Settings → Miscellaneous**
    - Enable **API Server**
    - Default port: 7777 (configurable)
 
