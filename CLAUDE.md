@@ -329,6 +329,121 @@ Template design for async export workers:
 - `FrameDetection` - Frame parsing strategies (EndDelimiterOnly, StartAndEndDelimiter, NoDelimiters, StartDelimiterOnly)
 - Widget type enums for groups, datasets, and dashboards
 
+### Delimiter Types and Configuration
+
+Serial Studio uses **three distinct types of delimiters** that operate at different levels. Understanding these is critical for correct project configuration and debugging parsing issues.
+
+#### 1. Frame Delimiters (Stream-Level)
+
+**Purpose:** Define frame boundaries in the incoming byte stream.
+
+**Configuration:**
+- `frameStart` - Start delimiter (e.g., `/*`, `{`, `<frame>`)
+- `frameEnd` - End delimiter (e.g., `*/`, `}`, `</frame>`, `;`, `\n`)
+- `frameDetection` - Detection mode (enum FrameDetection):
+  - `0` - EndDelimiterOnly (most common)
+  - `1` - StartAndEndDelimiter
+  - `2` - NoDelimiters (fixed-length frames)
+  - `3` - StartDelimiterOnly
+
+**Implementation:**
+- File: `app/src/IO/FrameReader.cpp`
+- Algorithm: KMP pattern matching for delimiter detection
+- Processed BEFORE frame content parsing
+- The semicolon `;` or newline `\n` CAN be used as frame end delimiters
+
+**Example:**
+```json
+{
+  "frameStart": "/*",
+  "frameEnd": ";",
+  "frameDetection": 0
+}
+```
+
+Incoming stream: `/*{"value":123};/*{"value":456};`
+Extracted frames: `{"value":123}` and `{"value":456}`
+
+#### 2. Line Terminators (Stream-Level)
+
+**Purpose:** Optional suffixes after the frame end delimiter.
+
+**Configuration:**
+- `lineTerminator` - Suffix characters (e.g., `\r\n`, `\n`, `;`)
+
+**Implementation:**
+- File: `app/src/DataModel/Frame.cpp:37-63`
+- Used in combination with frame delimiters for compatibility
+- Common patterns:
+  - `frameEnd: "*/", lineTerminator: "\r\n"` → Frame ends with `*/\r\n`
+  - `frameEnd: ";", lineTerminator: "\n"` → Frame ends with `;\n`
+
+#### 3. CSV Field Delimiters (Data-Level)
+
+**Purpose:** Separate individual values within a CSV frame.
+
+**Configuration:**
+- **Default:** Comma `,` (hard-coded in C++ `parseCsvValues()`)
+- **Custom:** Requires JavaScript parser in `frameParserCode`
+
+**Implementation:**
+- File: `app/src/DataModel/FrameBuilder.cpp:44-67`
+- Function: `parseCsvValues(const QByteArray &data, QStringList &out, const int reserveHint)`
+- CSV delimiters are processed AFTER frame extraction
+- **Hard-coded to comma** - cannot be configured without JavaScript parser
+
+**Default Comma Example (QuickPlot mode):**
+```cpp
+// QuickPlot mode: Line-based parsing (like Arduino Serial Plotter)
+// NO frame delimiters - just line terminators (CR, LF, or CRLF)
+
+Incoming stream: 1.23,4.56,7.89\n1.11,2.22,3.33\r\n
+Extracted lines: "1.23,4.56,7.89" and "1.11,2.22,3.33"
+
+// CSV parsing (parseCsvValues)
+Values extracted: ["1.23", "4.56", "7.89"] and ["1.11", "2.22", "3.33"]
+```
+
+**Custom Semicolon Example (ProjectFile mode with JavaScript):**
+```json
+{
+  "operationMode": 0,
+  "frameStart": "/*",
+  "frameEnd": "*/",
+  "frameParserCode": "function parse(frame) { return frame.split(';'); }"
+}
+```
+
+#### Operation Modes and Delimiter Behavior
+
+| Mode | Value | Frame Delimiters | Line Terminators | CSV Delimiters | Custom Parser |
+|------|-------|-----------------|------------------|----------------|---------------|
+| **ProjectFile** | 0 | ✅ Configurable | ✅ Configurable | ✅ Via JavaScript | ✅ Supported |
+| **DeviceSendsJSON** | 1 | ❌ Fixed `/*` `*/` | ✅ Any | N/A (JSON mode) | ❌ Ignored |
+| **QuickPlot** | 2 | ❌ None (line-based) | ✅ CR/LF/CRLF only | ✅ Comma only | ❌ Ignored |
+
+**Critical Rules:**
+- **ProjectFile mode** (`operationMode: 0`) respects all custom delimiters and JavaScript parsers configured in the project JSON
+- **DeviceSendsJSON mode** (`operationMode: 1`) uses fixed `/*` and `*/` frame delimiters, expects JSON payloads
+- **QuickPlot mode** (`operationMode: 2`) works like Arduino Serial Plotter - NO frame delimiters, only line terminators (CR `\r`, LF `\n`, or CRLF `\r\n`), comma-separated values only
+
+#### Performance Considerations
+
+**Frame Delimiter Parsing:**
+- KMP algorithm: O(n+m) complexity for delimiter detection
+- Lock-free circular buffer with atomic operations
+- Zero-copy pattern matching in `CircularBuffer::findPattern()`
+
+**CSV Delimiter Parsing:**
+- Hard-coded comma parsing: Single-pass O(n) with string trimming
+- No heap allocation during parsing (uses QStringList with reserve)
+- JavaScript custom parsers: QuickJS engine overhead (slower but flexible)
+
+**When to Use Each Approach:**
+- **Default comma CSV:** Best performance, use when possible
+- **JavaScript parser:** Necessary for non-comma delimiters, more flexible but slower
+- **Custom frame delimiters:** Use ProjectFile mode, configure in project JSON
+
 ### Threading Architecture
 
 **Data Flow Threads:**

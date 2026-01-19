@@ -441,7 +441,7 @@ def test_protocol(api: SerialStudioAPI, suite: TestSuite):
 
     # Test: Invalid JSON
     def test_invalid_json():
-        response = api.send_raw(b"not valid json\n")
+        response = api.send_raw(b"{not valid json}\n")
         return assert_error(response, ErrorCode.INVALID_JSON, "invalid_json")
     run_test(suite, "Invalid JSON rejected", test_invalid_json)
 
@@ -1110,6 +1110,819 @@ def test_project_handler(api: SerialStudioAPI, suite: TestSuite):
             return False, "Missing code field"
         return True, ""
     run_test(suite, "project.parser.getCode returns parser code", test_parser_get_code)
+
+
+def test_audio_handler(api: SerialStudioAPI, suite: TestSuite):
+    """Test io.driver.audio.* commands (Pro feature)."""
+    print("\n--- Audio Handler Tests (Pro) ---")
+
+    # Test: getConfiguration
+    def test_get_configuration():
+        response = api.send_command("io.driver.audio.getConfiguration")
+        passed, msg = assert_success(response, "getConfiguration")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["selectedInputDevice", "selectedOutputDevice", "selectedSampleRate"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "io.driver.audio.getConfiguration returns config", test_get_configuration)
+
+    # Test: getInputDevices
+    def test_get_input_devices():
+        response = api.send_command("io.driver.audio.getInputDevices")
+        passed, msg = assert_success(response, "getInputDevices")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "devices" not in result:
+            return False, "Missing devices field"
+        if "selectedIndex" not in result:
+            return False, "Missing selectedIndex field"
+        return True, ""
+    run_test(suite, "io.driver.audio.getInputDevices returns device list", test_get_input_devices)
+
+    # Test: getOutputDevices
+    def test_get_output_devices():
+        response = api.send_command("io.driver.audio.getOutputDevices")
+        passed, msg = assert_success(response, "getOutputDevices")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "devices" not in result:
+            return False, "Missing devices field"
+        return True, ""
+    run_test(suite, "io.driver.audio.getOutputDevices returns device list", test_get_output_devices)
+
+    # Test: getSampleRates
+    def test_get_sample_rates():
+        response = api.send_command("io.driver.audio.getSampleRates")
+        passed, msg = assert_success(response, "getSampleRates")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "sampleRates" not in result:
+            return False, "Missing sampleRates field"
+        return True, ""
+    run_test(suite, "io.driver.audio.getSampleRates returns sample rates", test_get_sample_rates)
+
+    # Test: getInputFormats
+    def test_get_input_formats():
+        response = api.send_command("io.driver.audio.getInputFormats")
+        passed, msg = assert_success(response, "getInputFormats")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "formats" not in result:
+            return False, "Missing formats field"
+        return True, ""
+    run_test(suite, "io.driver.audio.getInputFormats returns formats", test_get_input_formats)
+
+    # Test: getOutputFormats
+    def test_get_output_formats():
+        response = api.send_command("io.driver.audio.getOutputFormats")
+        passed, msg = assert_success(response, "getOutputFormats")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "formats" not in result:
+            return False, "Missing formats field"
+        return True, ""
+    run_test(suite, "io.driver.audio.getOutputFormats returns formats", test_get_output_formats)
+
+    # Test: setInputDevice invalid
+    def test_set_input_device_invalid():
+        response = api.send_command("io.driver.audio.setInputDevice", {"deviceIndex": 999})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setInputDevice_invalid")
+    run_test(suite, "io.driver.audio.setInputDevice rejects invalid index", test_set_input_device_invalid)
+
+    # Test: setInputDevice missing param
+    def test_set_input_device_missing():
+        response = api.send_command("io.driver.audio.setInputDevice", {})
+        return assert_error(response, ErrorCode.MISSING_PARAM, "setInputDevice_missing")
+    run_test(suite, "io.driver.audio.setInputDevice requires deviceIndex param", test_set_input_device_missing)
+
+
+def test_canbus_handler(api: SerialStudioAPI, suite: TestSuite):
+    """Test io.driver.canbus.* commands (Pro feature)."""
+    print("\n--- CAN Bus Handler Tests (Pro) ---")
+
+    # Test: getConfiguration
+    def test_get_configuration():
+        response = api.send_command("io.driver.canbus.getConfiguration")
+        passed, msg = assert_success(response, "getConfiguration")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["pluginIndex", "interfaceIndex", "bitrate", "canFD", "isOpen", "configurationOk"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "io.driver.canbus.getConfiguration returns config", test_get_configuration)
+
+    # Test: getPluginList
+    def test_get_plugin_list():
+        response = api.send_command("io.driver.canbus.getPluginList")
+        passed, msg = assert_success(response, "getPluginList")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "pluginList" not in result:
+            return False, "Missing pluginList field"
+        return True, ""
+    run_test(suite, "io.driver.canbus.getPluginList returns plugin list", test_get_plugin_list)
+
+    # Test: getInterfaceList
+    def test_get_interface_list():
+        response = api.send_command("io.driver.canbus.getInterfaceList")
+        passed, msg = assert_success(response, "getInterfaceList")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "interfaceList" not in result:
+            return False, "Missing interfaceList field"
+        return True, ""
+    run_test(suite, "io.driver.canbus.getInterfaceList returns interface list", test_get_interface_list)
+
+    # Test: getBitrateList
+    def test_get_bitrate_list():
+        response = api.send_command("io.driver.canbus.getBitrateList")
+        passed, msg = assert_success(response, "getBitrateList")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "bitrateList" not in result:
+            return False, "Missing bitrateList field"
+        return True, ""
+    run_test(suite, "io.driver.canbus.getBitrateList returns bitrate list", test_get_bitrate_list)
+
+    # Test: getInterfaceError
+    def test_get_interface_error():
+        response = api.send_command("io.driver.canbus.getInterfaceError")
+        passed, msg = assert_success(response, "getInterfaceError")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "hasError" not in result:
+            return False, "Missing hasError field"
+        return True, ""
+    run_test(suite, "io.driver.canbus.getInterfaceError returns error status", test_get_interface_error)
+
+    # Test: setBitrate
+    def test_set_bitrate():
+        response = api.send_command("io.driver.canbus.setBitrate", {"bitrate": 500000})
+        passed, msg = assert_success(response, "setBitrate")
+        if not passed:
+            return False, msg
+        if response.get("result", {}).get("bitrate") != 500000:
+            return False, "Bitrate not set correctly"
+        return True, ""
+    run_test(suite, "io.driver.canbus.setBitrate sets bitrate", test_set_bitrate)
+
+    # Test: setBitrate invalid
+    def test_set_bitrate_invalid():
+        response = api.send_command("io.driver.canbus.setBitrate", {"bitrate": -1})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setBitrate_invalid")
+    run_test(suite, "io.driver.canbus.setBitrate rejects invalid bitrate", test_set_bitrate_invalid)
+
+    # Test: setCanFD
+    def test_set_can_fd():
+        response = api.send_command("io.driver.canbus.setCanFD", {"enabled": True})
+        passed, msg = assert_success(response, "setCanFD")
+        if not passed:
+            return False, msg
+        # Restore to false
+        api.send_command("io.driver.canbus.setCanFD", {"enabled": False})
+        return True, ""
+    run_test(suite, "io.driver.canbus.setCanFD sets CAN FD mode", test_set_can_fd)
+
+    # Test: setPluginIndex invalid
+    def test_set_plugin_index_invalid():
+        response = api.send_command("io.driver.canbus.setPluginIndex", {"pluginIndex": 999})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setPluginIndex_invalid")
+    run_test(suite, "io.driver.canbus.setPluginIndex rejects invalid index", test_set_plugin_index_invalid)
+
+
+def test_dashboard_handler(api: SerialStudioAPI, suite: TestSuite):
+    """Test dashboard.* commands."""
+    print("\n--- Dashboard Handler Tests ---")
+
+    # Test: getStatus
+    def test_get_status():
+        response = api.send_command("dashboard.getStatus")
+        passed, msg = assert_success(response, "getStatus")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["operationMode", "operationModeName", "fps", "points"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "dashboard.getStatus returns status", test_get_status)
+
+    # Test: getOperationMode
+    def test_get_operation_mode():
+        response = api.send_command("dashboard.getOperationMode")
+        passed, msg = assert_success(response, "getOperationMode")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "mode" not in result or "modeName" not in result:
+            return False, "Missing mode fields"
+        return True, ""
+    run_test(suite, "dashboard.getOperationMode returns mode", test_get_operation_mode)
+
+    # Test: setOperationMode
+    def test_set_operation_mode():
+        response = api.send_command("dashboard.setOperationMode", {"mode": 0})
+        passed, msg = assert_success(response, "setOperationMode")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if result.get("mode") != 0:
+            return False, f"Mode not set correctly: {result.get('mode')}"
+        return True, ""
+    run_test(suite, "dashboard.setOperationMode sets mode", test_set_operation_mode)
+
+    # Test: setOperationMode invalid
+    def test_set_operation_mode_invalid():
+        response = api.send_command("dashboard.setOperationMode", {"mode": 999})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setOperationMode_invalid")
+    run_test(suite, "dashboard.setOperationMode rejects invalid mode", test_set_operation_mode_invalid)
+
+    # Test: getFPS
+    def test_get_fps():
+        response = api.send_command("dashboard.getFPS")
+        passed, msg = assert_success(response, "getFPS")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "fps" not in result:
+            return False, "Missing fps field"
+        return True, ""
+    run_test(suite, "dashboard.getFPS returns FPS", test_get_fps)
+
+    # Test: setFPS
+    def test_set_fps():
+        response = api.send_command("dashboard.setFPS", {"fps": 30})
+        passed, msg = assert_success(response, "setFPS")
+        if not passed:
+            return False, msg
+        if response.get("result", {}).get("fps") != 30:
+            return False, "FPS not set correctly"
+        # Restore default
+        api.send_command("dashboard.setFPS", {"fps": 60})
+        return True, ""
+    run_test(suite, "dashboard.setFPS sets FPS", test_set_fps)
+
+    # Test: setFPS invalid (too low)
+    def test_set_fps_invalid_low():
+        response = api.send_command("dashboard.setFPS", {"fps": 0})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setFPS_invalid_low")
+    run_test(suite, "dashboard.setFPS rejects FPS < 1", test_set_fps_invalid_low)
+
+    # Test: setFPS invalid (too high)
+    def test_set_fps_invalid_high():
+        response = api.send_command("dashboard.setFPS", {"fps": 300})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setFPS_invalid_high")
+    run_test(suite, "dashboard.setFPS rejects FPS > 240", test_set_fps_invalid_high)
+
+    # Test: getPoints
+    def test_get_points():
+        response = api.send_command("dashboard.getPoints")
+        passed, msg = assert_success(response, "getPoints")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "points" not in result:
+            return False, "Missing points field"
+        return True, ""
+    run_test(suite, "dashboard.getPoints returns points", test_get_points)
+
+    # Test: setPoints
+    def test_set_points():
+        response = api.send_command("dashboard.setPoints", {"points": 100})
+        passed, msg = assert_success(response, "setPoints")
+        if not passed:
+            return False, msg
+        if response.get("result", {}).get("points") != 100:
+            return False, "Points not set correctly"
+        return True, ""
+    run_test(suite, "dashboard.setPoints sets points", test_set_points)
+
+    # Test: setPoints invalid
+    def test_set_points_invalid():
+        response = api.send_command("dashboard.setPoints", {"points": 0})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setPoints_invalid")
+    run_test(suite, "dashboard.setPoints rejects points < 1", test_set_points_invalid)
+
+
+def test_mdf4_export_handler(api: SerialStudioAPI, suite: TestSuite):
+    """Test mdf4.export.* commands (Pro feature)."""
+    print("\n--- MDF4 Export Handler Tests (Pro) ---")
+
+    # Test: getStatus
+    def test_get_status():
+        response = api.send_command("mdf4.export.getStatus")
+        passed, msg = assert_success(response, "getStatus")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["enabled", "isOpen"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "mdf4.export.getStatus returns status", test_get_status)
+
+    # Test: setEnabled
+    def test_set_enabled():
+        response = api.send_command("mdf4.export.setEnabled", {"enabled": True})
+        passed, msg = assert_success(response, "setEnabled")
+        if not passed:
+            return False, msg
+        # Restore to false
+        api.send_command("mdf4.export.setEnabled", {"enabled": False})
+        return True, ""
+    run_test(suite, "mdf4.export.setEnabled sets export state", test_set_enabled)
+
+    # Test: setEnabled missing param
+    def test_set_enabled_missing():
+        response = api.send_command("mdf4.export.setEnabled", {})
+        return assert_error(response, ErrorCode.MISSING_PARAM, "setEnabled_missing")
+    run_test(suite, "mdf4.export.setEnabled requires enabled param", test_set_enabled_missing)
+
+    # Test: close
+    def test_close():
+        response = api.send_command("mdf4.export.close")
+        passed, msg = assert_success(response, "close")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mdf4.export.close executes", test_close)
+
+
+def test_mdf4_player_handler(api: SerialStudioAPI, suite: TestSuite):
+    """Test mdf4.player.* commands (Pro feature)."""
+    print("\n--- MDF4 Player Handler Tests (Pro) ---")
+
+    # Test: getStatus
+    def test_get_status():
+        response = api.send_command("mdf4.player.getStatus")
+        passed, msg = assert_success(response, "getStatus")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["isOpen", "isPlaying", "frameCount", "framePosition", "progress", "timestamp", "filename"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "mdf4.player.getStatus returns status", test_get_status)
+
+    # Test: close (should succeed even if nothing is open)
+    def test_close():
+        response = api.send_command("mdf4.player.close")
+        passed, msg = assert_success(response, "close")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mdf4.player.close executes", test_close)
+
+    # Test: pause (should work even if not playing)
+    def test_pause():
+        response = api.send_command("mdf4.player.pause")
+        passed, msg = assert_success(response, "pause")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mdf4.player.pause executes", test_pause)
+
+    # Test: play (should work even if no file is open)
+    def test_play():
+        response = api.send_command("mdf4.player.play")
+        passed, msg = assert_success(response, "play")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mdf4.player.play executes", test_play)
+
+    # Test: toggle
+    def test_toggle():
+        response = api.send_command("mdf4.player.toggle")
+        passed, msg = assert_success(response, "toggle")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mdf4.player.toggle executes", test_toggle)
+
+    # Test: nextFrame
+    def test_next_frame():
+        response = api.send_command("mdf4.player.nextFrame")
+        passed, msg = assert_success(response, "nextFrame")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mdf4.player.nextFrame executes", test_next_frame)
+
+    # Test: previousFrame
+    def test_previous_frame():
+        response = api.send_command("mdf4.player.previousFrame")
+        passed, msg = assert_success(response, "previousFrame")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mdf4.player.previousFrame executes", test_previous_frame)
+
+    # Test: setProgress
+    def test_set_progress():
+        response = api.send_command("mdf4.player.setProgress", {"progress": 0.5})
+        passed, msg = assert_success(response, "setProgress")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mdf4.player.setProgress sets progress", test_set_progress)
+
+    # Test: setProgress invalid (> 1.0)
+    def test_set_progress_invalid_high():
+        response = api.send_command("mdf4.player.setProgress", {"progress": 1.5})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setProgress_invalid_high")
+    run_test(suite, "mdf4.player.setProgress rejects progress > 1.0", test_set_progress_invalid_high)
+
+    # Test: setProgress invalid (< 0.0)
+    def test_set_progress_invalid_low():
+        response = api.send_command("mdf4.player.setProgress", {"progress": -0.1})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setProgress_invalid_low")
+    run_test(suite, "mdf4.player.setProgress rejects progress < 0.0", test_set_progress_invalid_low)
+
+    # Test: open missing param
+    def test_open_missing():
+        response = api.send_command("mdf4.player.open", {})
+        return assert_error(response, ErrorCode.MISSING_PARAM, "open_missing")
+    run_test(suite, "mdf4.player.open requires filePath param", test_open_missing)
+
+    # Test: open empty path
+    def test_open_empty():
+        response = api.send_command("mdf4.player.open", {"filePath": ""})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "open_empty")
+    run_test(suite, "mdf4.player.open rejects empty filePath", test_open_empty)
+
+
+def test_modbus_handler(api: SerialStudioAPI, suite: TestSuite):
+    """Test io.driver.modbus.* commands (Pro feature)."""
+    print("\n--- Modbus Handler Tests (Pro) ---")
+
+    # Test: getConfiguration
+    def test_get_configuration():
+        response = api.send_command("io.driver.modbus.getConfiguration")
+        passed, msg = assert_success(response, "getConfiguration")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["protocolIndex", "slaveAddress", "pollInterval"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "io.driver.modbus.getConfiguration returns config", test_get_configuration)
+
+    # Test: getProtocolList
+    def test_get_protocol_list():
+        response = api.send_command("io.driver.modbus.getProtocolList")
+        passed, msg = assert_success(response, "getProtocolList")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "protocolList" not in result:
+            return False, "Missing protocolList field"
+        return True, ""
+    run_test(suite, "io.driver.modbus.getProtocolList returns protocol list", test_get_protocol_list)
+
+    # Test: getSerialPortList
+    def test_get_serial_port_list():
+        response = api.send_command("io.driver.modbus.getSerialPortList")
+        passed, msg = assert_success(response, "getSerialPortList")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "serialPortList" not in result:
+            return False, "Missing serialPortList field"
+        return True, ""
+    run_test(suite, "io.driver.modbus.getSerialPortList returns port list", test_get_serial_port_list)
+
+    # Test: getParityList
+    def test_get_parity_list():
+        response = api.send_command("io.driver.modbus.getParityList")
+        passed, msg = assert_success(response, "getParityList")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "io.driver.modbus.getParityList returns parity list", test_get_parity_list)
+
+    # Test: getDataBitsList
+    def test_get_data_bits_list():
+        response = api.send_command("io.driver.modbus.getDataBitsList")
+        passed, msg = assert_success(response, "getDataBitsList")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "io.driver.modbus.getDataBitsList returns data bits list", test_get_data_bits_list)
+
+    # Test: getStopBitsList
+    def test_get_stop_bits_list():
+        response = api.send_command("io.driver.modbus.getStopBitsList")
+        passed, msg = assert_success(response, "getStopBitsList")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "io.driver.modbus.getStopBitsList returns stop bits list", test_get_stop_bits_list)
+
+    # Test: getBaudRateList
+    def test_get_baud_rate_list():
+        response = api.send_command("io.driver.modbus.getBaudRateList")
+        passed, msg = assert_success(response, "getBaudRateList")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "io.driver.modbus.getBaudRateList returns baud rate list", test_get_baud_rate_list)
+
+    # Test: getRegisterTypeList
+    def test_get_register_type_list():
+        response = api.send_command("io.driver.modbus.getRegisterTypeList")
+        passed, msg = assert_success(response, "getRegisterTypeList")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "io.driver.modbus.getRegisterTypeList returns register types", test_get_register_type_list)
+
+    # Test: getRegisterGroups
+    def test_get_register_groups():
+        response = api.send_command("io.driver.modbus.getRegisterGroups")
+        passed, msg = assert_success(response, "getRegisterGroups")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "io.driver.modbus.getRegisterGroups returns register groups", test_get_register_groups)
+
+    # Test: setSlaveAddress
+    def test_set_slave_address():
+        response = api.send_command("io.driver.modbus.setSlaveAddress", {"address": 1})
+        passed, msg = assert_success(response, "setSlaveAddress")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "io.driver.modbus.setSlaveAddress sets address", test_set_slave_address)
+
+    # Test: setSlaveAddress invalid (too low)
+    def test_set_slave_address_invalid_low():
+        response = api.send_command("io.driver.modbus.setSlaveAddress", {"address": 0})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setSlaveAddress_invalid_low")
+    run_test(suite, "io.driver.modbus.setSlaveAddress rejects address < 1", test_set_slave_address_invalid_low)
+
+    # Test: setSlaveAddress invalid (too high)
+    def test_set_slave_address_invalid_high():
+        response = api.send_command("io.driver.modbus.setSlaveAddress", {"address": 300})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setSlaveAddress_invalid_high")
+    run_test(suite, "io.driver.modbus.setSlaveAddress rejects address > 247", test_set_slave_address_invalid_high)
+
+    # Test: setPollInterval
+    def test_set_poll_interval():
+        response = api.send_command("io.driver.modbus.setPollInterval", {"intervalMs": 100})
+        passed, msg = assert_success(response, "setPollInterval")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "io.driver.modbus.setPollInterval sets interval", test_set_poll_interval)
+
+    # Test: setPollInterval invalid
+    def test_set_poll_interval_invalid():
+        response = api.send_command("io.driver.modbus.setPollInterval", {"intervalMs": 5})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setPollInterval_invalid")
+    run_test(suite, "io.driver.modbus.setPollInterval rejects interval < 10", test_set_poll_interval_invalid)
+
+    # Test: setHost
+    def test_set_host():
+        response = api.send_command("io.driver.modbus.setHost", {"host": "192.168.1.100"})
+        passed, msg = assert_success(response, "setHost")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "io.driver.modbus.setHost sets host", test_set_host)
+
+    # Test: setHost empty
+    def test_set_host_empty():
+        response = api.send_command("io.driver.modbus.setHost", {"host": ""})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setHost_empty")
+    run_test(suite, "io.driver.modbus.setHost rejects empty host", test_set_host_empty)
+
+    # Test: setPort
+    def test_set_port():
+        response = api.send_command("io.driver.modbus.setPort", {"port": 502})
+        passed, msg = assert_success(response, "setPort")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "io.driver.modbus.setPort sets port", test_set_port)
+
+    # Test: setPort invalid (too high)
+    def test_set_port_invalid_high():
+        response = api.send_command("io.driver.modbus.setPort", {"port": 70000})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setPort_invalid_high")
+    run_test(suite, "io.driver.modbus.setPort rejects port > 65535", test_set_port_invalid_high)
+
+    # Test: clearRegisterGroups
+    def test_clear_register_groups():
+        response = api.send_command("io.driver.modbus.clearRegisterGroups")
+        passed, msg = assert_success(response, "clearRegisterGroups")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "io.driver.modbus.clearRegisterGroups executes", test_clear_register_groups)
+
+
+def test_mqtt_handler(api: SerialStudioAPI, suite: TestSuite):
+    """Test mqtt.* commands (Pro feature)."""
+    print("\n--- MQTT Handler Tests (Pro) ---")
+
+    # Test: getConfiguration
+    def test_get_configuration():
+        response = api.send_command("mqtt.getConfiguration")
+        passed, msg = assert_success(response, "getConfiguration")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        expected_fields = ["hostname", "port", "clientId", "topic"]
+        for field in expected_fields:
+            if field not in result:
+                return False, f"Missing field: {field}"
+        return True, ""
+    run_test(suite, "mqtt.getConfiguration returns config", test_get_configuration)
+
+    # Test: getConnectionStatus
+    def test_get_connection_status():
+        response = api.send_command("mqtt.getConnectionStatus")
+        passed, msg = assert_success(response, "getConnectionStatus")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "isConnected" not in result:
+            return False, "Missing isConnected field"
+        return True, ""
+    run_test(suite, "mqtt.getConnectionStatus returns status", test_get_connection_status)
+
+    # Test: getModes
+    def test_get_modes():
+        response = api.send_command("mqtt.getModes")
+        passed, msg = assert_success(response, "getModes")
+        if not passed:
+            return False, msg
+        result = response.get("result", {})
+        if "modes" not in result:
+            return False, "Missing modes field"
+        return True, ""
+    run_test(suite, "mqtt.getModes returns modes", test_get_modes)
+
+    # Test: getMqttVersions
+    def test_get_mqtt_versions():
+        response = api.send_command("mqtt.getMqttVersions")
+        passed, msg = assert_success(response, "getMqttVersions")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.getMqttVersions returns versions", test_get_mqtt_versions)
+
+    # Test: getSslProtocols
+    def test_get_ssl_protocols():
+        response = api.send_command("mqtt.getSslProtocols")
+        passed, msg = assert_success(response, "getSslProtocols")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.getSslProtocols returns protocols", test_get_ssl_protocols)
+
+    # Test: getPeerVerifyModes
+    def test_get_peer_verify_modes():
+        response = api.send_command("mqtt.getPeerVerifyModes")
+        passed, msg = assert_success(response, "getPeerVerifyModes")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.getPeerVerifyModes returns verify modes", test_get_peer_verify_modes)
+
+    # Test: setHostname
+    def test_set_hostname():
+        response = api.send_command("mqtt.setHostname", {"hostname": "broker.example.com"})
+        passed, msg = assert_success(response, "setHostname")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.setHostname sets hostname", test_set_hostname)
+
+    # Test: setHostname empty
+    def test_set_hostname_empty():
+        response = api.send_command("mqtt.setHostname", {"hostname": ""})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setHostname_empty")
+    run_test(suite, "mqtt.setHostname rejects empty hostname", test_set_hostname_empty)
+
+    # Test: setPort
+    def test_set_port():
+        response = api.send_command("mqtt.setPort", {"port": 1883})
+        passed, msg = assert_success(response, "setPort")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.setPort sets port", test_set_port)
+
+    # Test: setPort invalid (too high)
+    def test_set_port_invalid_high():
+        response = api.send_command("mqtt.setPort", {"port": 70000})
+        return assert_error(response, ErrorCode.INVALID_PARAM, "setPort_invalid_high")
+    run_test(suite, "mqtt.setPort rejects port > 65535", test_set_port_invalid_high)
+
+    # Test: setClientId
+    def test_set_client_id():
+        response = api.send_command("mqtt.setClientId", {"clientId": "test-client-123"})
+        passed, msg = assert_success(response, "setClientId")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.setClientId sets client ID", test_set_client_id)
+
+    # Test: setTopic
+    def test_set_topic():
+        response = api.send_command("mqtt.setTopic", {"topic": "test/topic"})
+        passed, msg = assert_success(response, "setTopic")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.setTopic sets topic", test_set_topic)
+
+    # Test: setUsername
+    def test_set_username():
+        response = api.send_command("mqtt.setUsername", {"username": "testuser"})
+        passed, msg = assert_success(response, "setUsername")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.setUsername sets username", test_set_username)
+
+    # Test: setPassword
+    def test_set_password():
+        response = api.send_command("mqtt.setPassword", {"password": "testpass"})
+        passed, msg = assert_success(response, "setPassword")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.setPassword sets password", test_set_password)
+
+    # Test: setCleanSession
+    def test_set_clean_session():
+        response = api.send_command("mqtt.setCleanSession", {"enabled": True})
+        passed, msg = assert_success(response, "setCleanSession")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.setCleanSession sets clean session", test_set_clean_session)
+
+    # Test: setKeepAlive
+    def test_set_keep_alive():
+        response = api.send_command("mqtt.setKeepAlive", {"seconds": 60})
+        passed, msg = assert_success(response, "setKeepAlive")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.setKeepAlive sets keep-alive", test_set_keep_alive)
+
+    # Test: setSslEnabled
+    def test_set_ssl_enabled():
+        response = api.send_command("mqtt.setSslEnabled", {"enabled": False})
+        passed, msg = assert_success(response, "setSslEnabled")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.setSslEnabled sets SSL state", test_set_ssl_enabled)
+
+    # Test: regenerateClientId
+    def test_regenerate_client_id():
+        response = api.send_command("mqtt.regenerateClientId")
+        passed, msg = assert_success(response, "regenerateClientId")
+        if not passed:
+            return False, msg
+        return True, ""
+    run_test(suite, "mqtt.regenerateClientId generates new client ID", test_regenerate_client_id)
+
+    # Test: disconnect when not connected
+    def test_disconnect_not_connected():
+        response = api.send_command("mqtt.disconnect")
+        # This should succeed or fail gracefully
+        if response is None:
+            return False, "No response"
+        return True, ""
+    run_test(suite, "mqtt.disconnect returns valid response", test_disconnect_not_connected)
 
 
 def test_network_handler(api: SerialStudioAPI, suite: TestSuite):
@@ -1963,6 +2776,13 @@ def cmd_test(api: SerialStudioAPI, args) -> int:
         test_csv_player_handler(api, suite)
         test_console_handler(api, suite)
         test_project_handler(api, suite)
+        test_dashboard_handler(api, suite)
+        test_audio_handler(api, suite)
+        test_canbus_handler(api, suite)
+        test_mdf4_export_handler(api, suite)
+        test_mdf4_player_handler(api, suite)
+        test_modbus_handler(api, suite)
+        test_mqtt_handler(api, suite)
         test_batch_commands(api, suite)
         test_stress(api, suite)
         test_configuration_workflow(api, suite)

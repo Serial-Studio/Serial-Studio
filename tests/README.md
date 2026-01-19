@@ -6,6 +6,120 @@ Automated integration and performance tests for Serial Studio using Python and p
 
 This test suite validates Serial Studio's core functionality through end-to-end integration tests that interact with the application via its TCP API. Tests simulate real devices sending telemetry data and verify correct behavior across frame parsing, CSV export, project configuration, and performance scenarios.
 
+## Understanding Delimiters in Serial Studio
+
+Serial Studio uses **three distinct types of delimiters** that operate at different levels. Understanding these is crucial for configuring projects correctly and interpreting test results.
+
+### 1. Frame Delimiters (Stream-Level)
+
+**Purpose:** Define frame boundaries in the incoming byte stream.
+
+**Configuration:**
+- `frameStart` - Start delimiter (e.g., `/*`, `{`, `<frame>`)
+- `frameEnd` - End delimiter (e.g., `*/`, `}`, `</frame>`, `;`, `\n`)
+- `frameDetection` - Detection mode:
+  - `0` - EndDelimiterOnly (most common)
+  - `1` - StartAndEndDelimiter
+  - `2` - NoDelimiters
+  - `3` - StartDelimiterOnly
+
+**How it works:**
+- `IO::FrameReader` extracts frames from the byte stream using KMP pattern matching
+- Frame delimiters are processed BEFORE parsing the frame content
+- The semicolon `;` or newline `\n` CAN be used as a frame end delimiter
+
+**Example:**
+```json
+{
+  "frameStart": "/*",
+  "frameEnd": ";",
+  "frameDetection": 0
+}
+```
+
+Incoming stream: `/*{"value":123};/*{"value":456};`
+Extracted frames: `{"value":123}` and `{"value":456}`
+
+### 2. Line Terminators (Stream-Level)
+
+**Purpose:** Optional suffixes after the frame end delimiter.
+
+**Configuration:**
+- `lineTerminator` - Suffix characters (e.g., `\r\n`, `\n`, `;`)
+
+**How it works:**
+- Used in combination with frame delimiters for compatibility
+- Common patterns:
+  - `frameEnd: "*/", lineTerminator: "\r\n"` → Frame ends with `*/\r\n`
+  - `frameEnd: ";", lineTerminator: "\n"` → Frame ends with `;\n`
+
+**Example:**
+```
+/*{"value":123}*/\r\n
+/*{"value":456}*/\r\n
+```
+
+### 3. CSV Field Delimiters (Data-Level)
+
+**Purpose:** Separate individual values within a CSV frame.
+
+**Configuration:**
+- **Default:** Comma `,` (hard-coded in C++ `parseCsvValues()`)
+- **Custom:** Requires JavaScript parser in `frameParserCode`
+
+**How it works:**
+- CSV delimiters are processed AFTER frame extraction
+- Default comma delimiter: Used in QuickPlot mode and ProjectFile mode without custom parser
+- Custom delimiters: Require JavaScript parser function
+
+**Default Comma Example (QuickPlot mode):**
+```
+QuickPlot mode: Line-based parsing (like Arduino Serial Plotter)
+NO frame delimiters - just line terminators (CR, LF, or CRLF)
+
+Incoming stream: 1.23,4.56,7.89\n
+Values extracted: ["1.23", "4.56", "7.89"]
+```
+
+**Custom Semicolon Example (ProjectFile mode with JavaScript):**
+```json
+{
+  "frameParserCode": "function parse(frame) { return frame.split(';'); }"
+}
+```
+```
+Frame: /*1.23;4.56;7.89*/\n
+Values extracted: ["1.23", "4.56", "7.89"]
+```
+
+### Operation Modes and Delimiter Behavior
+
+| Mode | Value | Frame Delimiters | Line Terminators | CSV Delimiters | Custom Parser |
+|------|-------|-----------------|------------------|----------------|---------------|
+| **ProjectFile** | 0 | ✅ Configurable | ✅ Configurable | ✅ Via JavaScript | ✅ Supported |
+| **DeviceSendsJSON** | 1 | ❌ Fixed `/*` `*/` | ✅ Any | N/A (JSON mode) | ❌ Ignored |
+| **QuickPlot** | 2 | ❌ None (line-based) | ✅ CR/LF/CRLF only | ✅ Comma only | ❌ Ignored |
+
+**Important:**
+- **ProjectFile mode** (`operationMode: 0`) respects all custom delimiters and JavaScript parsers
+- **QuickPlot mode** (`operationMode: 2`) works like Arduino Serial Plotter - NO frame delimiters, only line terminators (CR, LF, CRLF)
+
+### Test Coverage
+
+**Connection Stability Tests:**
+- `test_csv_delimiter_resilience` - Verifies Serial Studio doesn't crash with various CSV delimiters in JSON mode
+- `test_frame_delimiter_line_terminators` - Tests line terminators after frame end delimiter
+
+**Frame Extraction Tests:**
+- `test_frame_end_delimiters` - Tests custom frame end delimiters (`;`, `\n`, `|`)
+- `test_frame_start_end_delimiters` - Tests custom start+end delimiter pairs
+
+**CSV Parsing Verification Tests:**
+- `test_quickplot_comma_csv_parsing` - Verifies comma CSV parsing in QuickPlot mode
+- `test_csv_parsing_with_javascript_semicolon` - Verifies JavaScript parser with semicolon
+- `test_csv_parsing_with_javascript_tab` - Verifies JavaScript parser with tab
+- `test_csv_parsing_with_javascript_pipe` - Verifies JavaScript parser with pipe
+
 ## What is Tested
 
 ### Frame Parsing

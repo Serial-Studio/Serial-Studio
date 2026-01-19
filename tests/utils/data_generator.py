@@ -31,6 +31,33 @@ class ChecksumType(Enum):
 class DataGenerator:
     """Generates realistic telemetry data for testing."""
 
+    # Standard CSV parser template for ProjectFile mode tests
+    CSV_PARSER_TEMPLATE = """/**
+ * Comma-Separated Values (CSV) Parser
+ *
+ * Parses comma-separated data into an array of values.
+ *
+ * INPUT FORMAT: "a,b,c,d,e,f"
+ * OUTPUT ARRAY: ["a", "b", "c", "d", "e", "f"]
+ *
+ * Note: Frame delimiters are automatically removed by Serial Studio.
+ */
+
+//------------------------------------------------------------------------------
+// Frame Parser Function
+//------------------------------------------------------------------------------
+
+/**
+ * Parses a CSV frame into an array of values.
+ *
+ * @param {string} frame - The CSV data from the data source
+ * @returns {array} Array of string values
+ */
+function parse(frame) {
+  return frame.split(',');
+}
+"""
+
     @staticmethod
     def calculate_checksum(data: bytes, checksum_type: ChecksumType) -> int:
         """
@@ -422,7 +449,7 @@ class DataGenerator:
             "{'single': 'quotes'}",
             '{"null": null}{"extra":"object"}',
             '{"comment": /* not allowed */ "value"}',
-            '{"unicode": "\uDEAD"}',
+            '{"unicode": "\\uDEAD"}',
             '{"control": "chars\x00\x01\x02"}',
             '{"very_long_key_' + "x" * 10000 + '": "value"}',
             '{"value": "very_long_' + "x" * 100000 + '"}',
@@ -617,3 +644,49 @@ class DataGenerator:
             frame = DataGenerator.wrap_frame(payload, checksum_type=ChecksumType.NONE)
             frames.append(frame)
         return frames
+
+    @staticmethod
+    def generate_project_with_frame_delimiters(
+        start: str = "/*",
+        end: str = "*/",
+        detection_mode: int = 0,
+        title: str = "Test Project",
+        checksum_algorithm: str = "None",
+    ) -> dict:
+        """
+        Generate a complete project JSON configuration with custom frame delimiters.
+
+        Uses CSV parser and creates datasets with plot widgets enabled.
+
+        Args:
+            start: Frame start delimiter
+            end: Frame end delimiter
+            detection_mode: Frame detection mode (0=EndDelimiterOnly, 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly)
+            title: Project title
+            checksum_algorithm: Checksum algorithm name
+
+        Returns:
+            Project configuration dict suitable for load_project_from_json()
+        """
+        return {
+            "title": title,
+            "operationMode": 0,
+            "frameParser": {
+                "frameStart": start,
+                "frameEnd": end,
+                "frameDetection": detection_mode,
+                "checksumAlgorithm": checksum_algorithm,
+            },
+            "frameParserCode": DataGenerator.CSV_PARSER_TEMPLATE,
+            "groups": [
+                {
+                    "title": "Test Group",
+                    "widget": 0,
+                    "datasets": [
+                        {"title": f"Dataset{i}", "widget": 1, "graph": True, "units": ""}
+                        for i in range(6)
+                    ],
+                }
+            ],
+        }
+

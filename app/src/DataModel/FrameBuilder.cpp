@@ -41,6 +41,28 @@
 
 namespace
 {
+/**
+ * @brief Parse comma-separated values from data.
+ *
+ * IMPORTANT: This function ONLY supports comma (,) as the delimiter.
+ *
+ * For other delimiters (semicolon, tab, pipe), use a custom JavaScript
+ * parser in your project file. Example for semicolon delimiter:
+ *
+ * @code{.js}
+ * function parse(frame) {
+ *   return frame.split(';');
+ * }
+ * @endcode
+ *
+ * This limitation is intentional to keep the hotpath simple and fast.
+ * Custom parsers provide flexibility for non-standard formats without
+ * complicating the default CSV parsing logic.
+ *
+ * @param data UTF-8 encoded CSV data with comma separators
+ * @param out Output string list for parsed values (cleared before use)
+ * @param reserveHint Expected number of values (optimization hint)
+ */
 void parseCsvValues(const QByteArray &data, QStringList &out,
                     const int reserveHint)
 {

@@ -296,33 +296,6 @@ class SerialStudioClient:
         """Get dashboard configuration."""
         return self.command("dashboard.getStatus")
 
-    def configure_frame_parser(
-        self,
-        start_sequence: str = None,
-        end_sequence: str = None,
-        checksum_algorithm: str = None,
-        operation_mode: int = None
-    ) -> None:
-        """
-        Configure frame parser settings.
-
-        Args:
-            start_sequence: Frame start delimiter (e.g., "/*")
-            end_sequence: Frame end delimiter (e.g., "*/")
-            checksum_algorithm: Checksum algorithm name (e.g., "CRC-16")
-            operation_mode: Operation mode index (0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot)
-        """
-        params = {}
-        if start_sequence is not None:
-            params["startSequence"] = start_sequence
-        if end_sequence is not None:
-            params["endSequence"] = end_sequence
-        if checksum_algorithm is not None:
-            params["checksumAlgorithm"] = checksum_algorithm
-        if operation_mode is not None:
-            params["operationMode"] = operation_mode
-
-        self.command("project.frameParserConfigure", params)
 
     def set_operation_mode(self, mode: str) -> None:
         """
@@ -387,15 +360,17 @@ class SerialStudioClient:
         end_sequence: str = None,
         checksum_algorithm: str = None,
         operation_mode: int = None,
+        frame_detection: int = None,
     ) -> dict:
         """
         Configure frame parser settings.
 
         Args:
-            start_sequence: Frame start delimiter (e.g., "$")
-            end_sequence: Frame end delimiter (e.g., "\\r\\n")
+            start_sequence: Frame start delimiter (e.g., "$", "/*")
+            end_sequence: Frame end delimiter (e.g., "\\r\\n", "*/", ";")
             checksum_algorithm: Checksum name (e.g., "None", "CRC-16", "CRC-32", "Adler-32")
             operation_mode: Operation mode (0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot)
+            frame_detection: Frame detection mode (0=EndDelimiterOnly, 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly)
 
         Returns:
             Result dict
@@ -409,6 +384,8 @@ class SerialStudioClient:
             params["checksumAlgorithm"] = checksum_algorithm
         if operation_mode is not None:
             params["operationMode"] = operation_mode
+        if frame_detection is not None:
+            params["frameDetection"] = frame_detection
 
         return self.command("project.frameParser.configure", params)
 
@@ -420,3 +397,34 @@ class SerialStudioClient:
             Dict with startSequence, endSequence, checksumAlgorithm, operationMode
         """
         return self.command("project.frameParser.getConfig")
+
+    def get_dashboard_data(self) -> dict:
+        """
+        Get current dashboard dataset values.
+
+        Returns:
+            Dict with groups, datasets, and their current values
+        """
+        return self.command("dashboard.getData")
+
+    def get_dataset_count(self) -> int:
+        """
+        Get total number of datasets across all groups in current frame.
+
+        Returns:
+            Total dataset count
+        """
+        status = self.get_project_status()
+        return status.get("datasetCount", 0)
+
+    def get_widget_count(self) -> int:
+        """
+        Get total number of dashboard widgets currently active.
+
+        This works in all modes (ProjectFile, DeviceSendsJSON, QuickPlot).
+
+        Returns:
+            Total widget count
+        """
+        status = self.get_dashboard_status()
+        return status.get("widgetCount", 0)
