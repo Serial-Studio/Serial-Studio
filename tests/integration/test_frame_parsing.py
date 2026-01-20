@@ -115,12 +115,14 @@ def test_checksum_validation(
         start_sequence="/*",
         end_sequence="*/",
         checksum_algorithm=checksum_names[checksum_type],
+        operation_mode=0,
     )
     time.sleep(0.1)
 
     # Step 2: Set frame detection mode
     api_client.configure_frame_parser(
-        frame_detection=1
+        frame_detection=1,
+        operation_mode=0,
     )
     time.sleep(0.1)
 
@@ -206,12 +208,14 @@ def test_invalid_checksum_rejection(
         start_sequence="/*",
         end_sequence="*/",
         checksum_algorithm=checksum_name,
+        operation_mode=0,
     )
     time.sleep(0.1)
 
     # Step 2: Set frame detection mode
     api_client.configure_frame_parser(
-        frame_detection=1
+        frame_detection=1,
+        operation_mode=0,
     )
     time.sleep(0.1)
 

@@ -23,6 +23,16 @@ def _wait_for_console_length(api_client, minimum: int, timeout: float = 2.0) -> 
     return api_client.command("console.getConfiguration").get("bufferLength", 0)
 
 
+def _wait_for_console_empty(api_client, timeout: float = 2.0) -> int:
+    end_time = time.time() + timeout
+    while time.time() < end_time:
+        length = api_client.command("console.getConfiguration").get("bufferLength", 0)
+        if length == 0:
+            return length
+        time.sleep(0.05)
+    return api_client.command("console.getConfiguration").get("bufferLength", 0)
+
+
 @pytest.mark.integration
 def test_console_clear(api_client, device_simulator, clean_state):
     """Ensure console.clear resets the console buffer."""
@@ -35,10 +45,8 @@ def test_console_clear(api_client, device_simulator, clean_state):
     assert length > 0, "Console buffer should contain data"
 
     api_client.command("console.clear")
-    time.sleep(0.1)
-
-    config = api_client.command("console.getConfiguration")
-    assert config.get("bufferLength", 0) == 0, "Console buffer should be empty"
+    length = _wait_for_console_empty(api_client, timeout=2.0)
+    assert length == 0, "Console buffer should be empty"
 
 
 @pytest.mark.integration
