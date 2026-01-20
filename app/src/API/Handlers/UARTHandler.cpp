@@ -22,6 +22,7 @@
 #include "API/Handlers/UARTHandler.h"
 #include "API/CommandRegistry.h"
 #include "IO/Drivers/UART.h"
+#include <QMetaObject>
 
 /**
  * @brief Register all UART commands with the registry
@@ -116,7 +117,10 @@ API::Handlers::UARTHandler::setDevice(const QString &id,
         QStringLiteral("Device name cannot be empty"));
   }
 
-  IO::Drivers::UART::instance().registerDevice(device);
+  auto *uart = &IO::Drivers::UART::instance();
+  QMetaObject::invokeMethod(
+      uart, [uart, device]() { uart->registerDevice(device); },
+      Qt::AutoConnection);
 
   QJsonObject result;
   result[QStringLiteral("device")] = device;
@@ -151,7 +155,13 @@ API::Handlers::UARTHandler::setPortIndex(const QString &id,
             .arg(portList.count() - 1));
   }
 
-  IO::Drivers::UART::instance().setPortIndex(static_cast<quint8>(portIndex));
+  auto *uart = &IO::Drivers::UART::instance();
+  QMetaObject::invokeMethod(
+      uart,
+      [uart, portIndex]() {
+        uart->setPortIndex(static_cast<quint8>(portIndex));
+      },
+      Qt::AutoConnection);
 
   QJsonObject result;
   result[QStringLiteral("portIndex")] = portIndex;
@@ -183,7 +193,10 @@ API::Handlers::UARTHandler::setBaudRate(const QString &id,
         QStringLiteral("baudRate must be positive"));
   }
 
-  IO::Drivers::UART::instance().setBaudRate(baudRate);
+  auto *uart = &IO::Drivers::UART::instance();
+  QMetaObject::invokeMethod(
+      uart, [uart, baudRate]() { uart->setBaudRate(baudRate); },
+      Qt::AutoConnection);
 
   QJsonObject result;
   result[QStringLiteral("baudRate")] = baudRate;
@@ -219,7 +232,13 @@ API::Handlers::UARTHandler::setParity(const QString &id,
             .arg(parityList.count() - 1));
   }
 
-  IO::Drivers::UART::instance().setParity(static_cast<quint8>(parityIndex));
+  auto *uart = &IO::Drivers::UART::instance();
+  QMetaObject::invokeMethod(
+      uart,
+      [uart, parityIndex]() {
+        uart->setParity(static_cast<quint8>(parityIndex));
+      },
+      Qt::AutoConnection);
 
   QJsonObject result;
   result[QStringLiteral("parityIndex")] = parityIndex;
@@ -256,7 +275,13 @@ API::Handlers::UARTHandler::setDataBits(const QString &id,
             .arg(dataBitsList.count() - 1));
   }
 
-  IO::Drivers::UART::instance().setDataBits(static_cast<quint8>(dataBitsIndex));
+  auto *uart = &IO::Drivers::UART::instance();
+  QMetaObject::invokeMethod(
+      uart,
+      [uart, dataBitsIndex]() {
+        uart->setDataBits(static_cast<quint8>(dataBitsIndex));
+      },
+      Qt::AutoConnection);
 
   QJsonObject result;
   result[QStringLiteral("dataBitsIndex")] = dataBitsIndex;
@@ -293,7 +318,13 @@ API::Handlers::UARTHandler::setStopBits(const QString &id,
             .arg(stopBitsList.count() - 1));
   }
 
-  IO::Drivers::UART::instance().setStopBits(static_cast<quint8>(stopBitsIndex));
+  auto *uart = &IO::Drivers::UART::instance();
+  QMetaObject::invokeMethod(
+      uart,
+      [uart, stopBitsIndex]() {
+        uart->setStopBits(static_cast<quint8>(stopBitsIndex));
+      },
+      Qt::AutoConnection);
 
   QJsonObject result;
   result[QStringLiteral("stopBitsIndex")] = stopBitsIndex;
@@ -331,8 +362,13 @@ API::Handlers::UARTHandler::setFlowControl(const QString &id,
             .arg(flowControlList.count() - 1));
   }
 
-  IO::Drivers::UART::instance().setFlowControl(
-      static_cast<quint8>(flowControlIndex));
+  auto *uart = &IO::Drivers::UART::instance();
+  QMetaObject::invokeMethod(
+      uart,
+      [uart, flowControlIndex]() {
+        uart->setFlowControl(static_cast<quint8>(flowControlIndex));
+      },
+      Qt::AutoConnection);
 
   QJsonObject result;
   result[QStringLiteral("flowControlIndex")] = flowControlIndex;
@@ -358,7 +394,10 @@ API::Handlers::UARTHandler::setDtrEnabled(const QString &id,
   }
 
   const bool dtrEnabled = params.value(QStringLiteral("dtrEnabled")).toBool();
-  IO::Drivers::UART::instance().setDtrEnabled(dtrEnabled);
+  auto *uart = &IO::Drivers::UART::instance();
+  QMetaObject::invokeMethod(
+      uart, [uart, dtrEnabled]() { uart->setDtrEnabled(dtrEnabled); },
+      Qt::AutoConnection);
 
   QJsonObject result;
   result[QStringLiteral("dtrEnabled")] = dtrEnabled;
@@ -383,7 +422,10 @@ API::Handlers::UARTHandler::setAutoReconnect(const QString &id,
 
   const bool autoReconnect
       = params.value(QStringLiteral("autoReconnect")).toBool();
-  IO::Drivers::UART::instance().setAutoReconnect(autoReconnect);
+  auto *uart = &IO::Drivers::UART::instance();
+  QMetaObject::invokeMethod(
+      uart, [uart, autoReconnect]() { uart->setAutoReconnect(autoReconnect); },
+      Qt::AutoConnection);
 
   QJsonObject result;
   result[QStringLiteral("autoReconnect")] = autoReconnect;

@@ -670,23 +670,24 @@ function parse(frame) {
         """
         return {
             "title": title,
-            "operationMode": 0,
-            "frameParser": {
-                "frameStart": start,
-                "frameEnd": end,
-                "frameDetection": detection_mode,
-                "checksumAlgorithm": checksum_algorithm,
-            },
-            "frameParserCode": DataGenerator.CSV_PARSER_TEMPLATE,
+            "frameStart": start,
+            "frameEnd": end,
+            "frameDetection": detection_mode,
+            "checksum": checksum_algorithm if checksum_algorithm != "None" else "",
+            "frameParser": DataGenerator.CSV_PARSER_TEMPLATE,
             "groups": [
                 {
                     "title": "Test Group",
-                    "widget": 0,
+                    "widget": "datagrid",
                     "datasets": [
-                        {"title": f"Dataset{i}", "widget": 1, "graph": True, "units": ""}
+                        {
+                            "title": f"Dataset{i}",
+                            "graph": True,
+                            "units": "",
+                            "value": "0",
+                        }
                         for i in range(6)
                     ],
                 }
             ],
         }
-

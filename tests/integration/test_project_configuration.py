@@ -90,6 +90,18 @@ function parse(frame) {
     api_client.command("project.parser.setCode", {"code": parser_code})
     time.sleep(0.2)
 
+    api_client.configure_frame_parser(
+        start_sequence="/*",
+        end_sequence="*/",
+        checksum_algorithm="None",
+        operation_mode=0,
+        frame_detection=1,
+    )
+    time.sleep(0.2)
+
+    api_client.set_operation_mode("project")
+    time.sleep(0.1)
+
     # Load the project into FrameBuilder
     result = api_client.command("project.loadIntoFrameBuilder")
     time.sleep(0.2)
@@ -243,6 +255,18 @@ function parse(frame) {
 """
     api_client.command("project.parser.setCode", {"code": parser_code})
     time.sleep(0.2)
+
+    api_client.configure_frame_parser(
+        start_sequence="/*",
+        end_sequence="*/",
+        checksum_algorithm="None",
+        operation_mode=0,
+        frame_detection=1,
+    )
+    time.sleep(0.2)
+
+    api_client.set_operation_mode("project")
+    time.sleep(0.1)
 
     # Load into FrameBuilder
     result = api_client.command("project.loadIntoFrameBuilder")

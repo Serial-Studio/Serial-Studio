@@ -21,6 +21,7 @@
 
 #include "API/Handlers/ConsoleHandler.h"
 #include "API/CommandRegistry.h"
+#include "Console/Export.h"
 #include "Console/Handler.h"
 
 /**
@@ -75,6 +76,19 @@ void API::Handlers::ConsoleHandler::registerCommands()
   registry.registerCommand(QStringLiteral("console.send"),
                            QStringLiteral("Send data to device (params: data)"),
                            &send);
+
+  registry.registerCommand(
+      QStringLiteral("console.export.setEnabled"),
+      QStringLiteral("Enable/disable console export (params: enabled)"),
+      &exportSetEnabled);
+
+  registry.registerCommand(QStringLiteral("console.export.close"),
+                           QStringLiteral("Close console export file"),
+                           &exportClose);
+
+  registry.registerCommand(QStringLiteral("console.export.getStatus"),
+                           QStringLiteral("Get console export status"),
+                           &exportGetStatus);
 
   registry.registerCommand(QStringLiteral("console.getConfiguration"),
                            QStringLiteral("Get all console settings"),
@@ -402,6 +416,62 @@ API::Handlers::ConsoleHandler::getConfiguration(const QString &id,
   result[QStringLiteral("fontFamily")] = console.fontFamily();
   result[QStringLiteral("fontSize")] = console.fontSize();
   result[QStringLiteral("checksumMethod")] = console.checksumMethod();
+  result[QStringLiteral("bufferLength")] = console.bufferLength();
 
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Enable or disable console export
+ */
+API::CommandResponse
+API::Handlers::ConsoleHandler::exportSetEnabled(const QString &id,
+                                                const QJsonObject &params)
+{
+  if (!params.contains(QStringLiteral("enabled")))
+  {
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: enabled"));
+  }
+
+  const bool enabled = params.value(QStringLiteral("enabled")).toBool();
+  Console::Export::instance().setExportEnabled(enabled);
+
+  QJsonObject result;
+  result[QStringLiteral("enabled")] = enabled;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Close the console export file
+ */
+API::CommandResponse
+API::Handlers::ConsoleHandler::exportClose(const QString &id,
+                                           const QJsonObject &params)
+{
+  Q_UNUSED(params)
+
+  Console::Export::instance().closeFile();
+
+  QJsonObject result;
+  result[QStringLiteral("closed")] = true;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Get console export status
+ */
+API::CommandResponse
+API::Handlers::ConsoleHandler::exportGetStatus(const QString &id,
+                                               const QJsonObject &params)
+{
+  Q_UNUSED(params)
+
+  auto &exporter = Console::Export::instance();
+
+  QJsonObject result;
+  result[QStringLiteral("enabled")] = exporter.exportEnabled();
+  result[QStringLiteral("isOpen")] = exporter.isOpen();
   return CommandResponse::makeSuccess(id, result);
 }

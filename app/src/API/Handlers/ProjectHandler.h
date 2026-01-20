@@ -82,6 +82,7 @@ private:
   static CommandResponse fileNew(const QString &id, const QJsonObject &params);
   static CommandResponse fileOpen(const QString &id, const QJsonObject &params);
   static CommandResponse fileSave(const QString &id, const QJsonObject &params);
+  static CommandResponse setTitle(const QString &id, const QJsonObject &params);
   static CommandResponse getStatus(const QString &id,
                                    const QJsonObject &params);
 

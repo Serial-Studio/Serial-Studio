@@ -41,6 +41,9 @@ void API::Handlers::ProjectHandler::registerCommands()
 
   registry.registerCommand(QStringLiteral("project.file.new"),
                            QStringLiteral("Create new project"), &fileNew);
+  registry.registerCommand(QStringLiteral("project.setTitle"),
+                           QStringLiteral("Set project title (params: title)"),
+                           &setTitle);
 
   registry.registerCommand(
       QStringLiteral("project.file.open"),
@@ -151,6 +154,34 @@ API::Handlers::ProjectHandler::fileNew(const QString &id,
 
   QJsonObject result;
   result[QStringLiteral("created")] = true;
+  result[QStringLiteral("title")] = DataModel::ProjectModel::instance().title();
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Set project title
+ */
+API::CommandResponse
+API::Handlers::ProjectHandler::setTitle(const QString &id,
+                                        const QJsonObject &params)
+{
+  if (!params.contains(QStringLiteral("title")))
+  {
+    return CommandResponse::makeError(
+        id, ErrorCode::MissingParam,
+        QStringLiteral("Missing required parameter: title"));
+  }
+
+  const QString title = params.value(QStringLiteral("title")).toString();
+  if (title.isEmpty())
+  {
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam,
+                                      QStringLiteral("title cannot be empty"));
+  }
+
+  DataModel::ProjectModel::instance().setTitle(title);
+
+  QJsonObject result;
   result[QStringLiteral("title")] = DataModel::ProjectModel::instance().title();
   return CommandResponse::makeSuccess(id, result);
 }
@@ -619,6 +650,7 @@ API::Handlers::ProjectHandler::loadFromJSON(const QString &id,
 
   // Clean up
   QFile::remove(tempPath);
+  DataModel::ProjectModel::instance().clearJsonFilePath();
 
   auto &project = DataModel::ProjectModel::instance();
   QJsonObject result;
@@ -647,6 +679,7 @@ API::Handlers::ProjectHandler::frameParserConfigure(const QString &id,
     const QString start
         = params.value(QStringLiteral("startSequence")).toString();
     manager.setStartSequence(start.toUtf8());
+    DataModel::ProjectModel::instance().setFrameStartSequence(start);
     updated = true;
   }
 
@@ -654,6 +687,7 @@ API::Handlers::ProjectHandler::frameParserConfigure(const QString &id,
   {
     const QString end = params.value(QStringLiteral("endSequence")).toString();
     manager.setFinishSequence(end.toUtf8());
+    DataModel::ProjectModel::instance().setFrameEndSequence(end);
     updated = true;
   }
 
@@ -662,6 +696,7 @@ API::Handlers::ProjectHandler::frameParserConfigure(const QString &id,
     const QString checksumName
         = params.value(QStringLiteral("checksumAlgorithm")).toString();
     manager.setChecksumAlgorithm(checksumName);
+    DataModel::ProjectModel::instance().setChecksumAlgorithm(checksumName);
     updated = true;
   }
 
@@ -672,6 +707,19 @@ API::Handlers::ProjectHandler::frameParserConfigure(const QString &id,
     {
       const auto mode = static_cast<SerialStudio::OperationMode>(modeIdx);
       DataModel::FrameBuilder::instance().setOperationMode(mode);
+      updated = true;
+    }
+  }
+
+  if (params.contains(QStringLiteral("frameDetection")))
+  {
+    const int detectionIdx
+        = params.value(QStringLiteral("frameDetection")).toInt();
+    if (detectionIdx >= 0 && detectionIdx <= 3)
+    {
+      const auto detection
+          = static_cast<SerialStudio::FrameDetection>(detectionIdx);
+      DataModel::ProjectModel::instance().setFrameDetection(detection);
       updated = true;
     }
   }
@@ -743,6 +791,13 @@ API::Handlers::ProjectHandler::loadIntoFrameBuilder(const QString &id,
 
   auto &project = DataModel::ProjectModel::instance();
   auto &builder = DataModel::FrameBuilder::instance();
+
+  if (project.groupCount() == 0 || project.datasetCount() == 0)
+  {
+    return CommandResponse::makeError(
+        id, ErrorCode::InvalidParam,
+        QStringLiteral("Project has no groups or datasets"));
+  }
 
   // Serialize project using the public method
   const QJsonObject json = project.serializeToJson();

@@ -292,6 +292,14 @@ int Console::Handler::defaultCharHeight() const
 }
 
 /**
+ * Returns the number of bytes stored in the console buffer.
+ */
+qsizetype Console::Handler::bufferLength() const
+{
+  return m_textBuffer.size();
+}
+
+/**
  * Validates the given @a text to ensure it contains only valid HEX characters
  * and consists of complete byte pairs (even-length string).
  * Returns true if the input is valid, otherwise false.
@@ -348,6 +356,7 @@ void Console::Handler::clear()
   m_textBuffer.clear();
   m_isStartingLine = true;
   m_lastCharWasCR = false;
+  Q_EMIT cleared();
 }
 
 /**

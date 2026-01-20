@@ -22,6 +22,7 @@
 #include "API/Handlers/DashboardHandler.h"
 #include "API/CommandRegistry.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/Frame.h"
 #include "Misc/TimerEvents.h"
 #include "UI/Dashboard.h"
 
@@ -65,6 +66,11 @@ void API::Handlers::DashboardHandler::registerCommands()
   registry.registerCommand(
       QStringLiteral("dashboard.getStatus"),
       QStringLiteral("Get all dashboard configuration settings"), &getStatus);
+
+  registry.registerCommand(
+      QStringLiteral("dashboard.getData"),
+      QStringLiteral("Get dashboard widget counts and latest frame data"),
+      &getData);
 }
 
 /**
@@ -255,6 +261,30 @@ API::Handlers::DashboardHandler::getStatus(const QString &id,
   result[QStringLiteral("operationModeName")] = modeNames[modeIndex];
   result[QStringLiteral("fps")] = fps;
   result[QStringLiteral("points")] = points;
+  result[QStringLiteral("widgetCount")]
+      = UI::Dashboard::instance().totalWidgetCount();
+  result[QStringLiteral("datasetCount")]
+      = UI::Dashboard::instance().datasets().size();
+
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Get dashboard widget counts and latest processed frame data
+ */
+API::CommandResponse
+API::Handlers::DashboardHandler::getData(const QString &id,
+                                         const QJsonObject &params)
+{
+  Q_UNUSED(params)
+
+  auto &dashboard = UI::Dashboard::instance();
+
+  QJsonObject result;
+  result[QStringLiteral("widgetCount")] = dashboard.totalWidgetCount();
+  result[QStringLiteral("datasetCount")] = dashboard.datasets().size();
+  result[QStringLiteral("frame")]
+      = DataModel::serialize(dashboard.processedFrame());
 
   return CommandResponse::makeSuccess(id, result);
 }

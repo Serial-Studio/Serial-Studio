@@ -118,6 +118,8 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   // Receive data from the Console::Console handler
   connect(&Console::Handler::instance(), &Console::Handler::displayString, this,
           &Widgets::Terminal::append);
+  connect(&Console::Handler::instance(), &Console::Handler::cleared, this,
+          &Widgets::Terminal::clear);
 
   // Clear the screen when device is connected/disconnected
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,

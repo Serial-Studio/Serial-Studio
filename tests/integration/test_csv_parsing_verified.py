@@ -100,6 +100,9 @@ def test_csv_parsing_with_javascript_semicolon(api_client, device_simulator, cle
     )
     time.sleep(0.2)
 
+    api_client.set_operation_mode("project")
+    time.sleep(0.1)
+
     # Load project into FrameBuilder
     result = api_client.command("project.loadIntoFrameBuilder")
     time.sleep(0.2)
@@ -114,7 +117,11 @@ def test_csv_parsing_with_javascript_semicolon(api_client, device_simulator, cle
     for i in range(15):
         values = [v + i * 0.1 for v in test_values]
         payload = DataGenerator.generate_csv_frame(values=values, delimiter=";")
-        frame = DataGenerator.wrap_frame(payload, checksum_type=ChecksumType.NONE)
+        frame = DataGenerator.wrap_frame(
+            payload,
+            checksum_type=ChecksumType.NONE,
+            mode="project",
+        )
         frames.append(frame)
 
     api_client.connect_device()
@@ -166,6 +173,9 @@ def test_csv_parsing_with_javascript_tab(api_client, device_simulator, clean_sta
     )
     time.sleep(0.2)
 
+    api_client.set_operation_mode("project")
+    time.sleep(0.1)
+
     # Load project into FrameBuilder
     result = api_client.command("project.loadIntoFrameBuilder")
     time.sleep(0.2)
@@ -180,7 +190,11 @@ def test_csv_parsing_with_javascript_tab(api_client, device_simulator, clean_sta
     for i in range(15):
         values = [v + i * 0.1 for v in test_values]
         payload = DataGenerator.generate_csv_frame(values=values, delimiter="\t")
-        frame = DataGenerator.wrap_frame(payload, checksum_type=ChecksumType.NONE)
+        frame = DataGenerator.wrap_frame(
+            payload,
+            checksum_type=ChecksumType.NONE,
+            mode="project",
+        )
         frames.append(frame)
 
     api_client.connect_device()
@@ -232,6 +246,9 @@ def test_csv_parsing_with_javascript_pipe(api_client, device_simulator, clean_st
     )
     time.sleep(0.2)
 
+    api_client.set_operation_mode("project")
+    time.sleep(0.1)
+
     # Load project into FrameBuilder
     result = api_client.command("project.loadIntoFrameBuilder")
     time.sleep(0.2)
@@ -246,7 +263,11 @@ def test_csv_parsing_with_javascript_pipe(api_client, device_simulator, clean_st
     for i in range(15):
         values = [v + i * 0.1 for v in test_values]
         payload = DataGenerator.generate_csv_frame(values=values, delimiter="|")
-        frame = DataGenerator.wrap_frame(payload, checksum_type=ChecksumType.NONE)
+        frame = DataGenerator.wrap_frame(
+            payload,
+            checksum_type=ChecksumType.NONE,
+            mode="project",
+        )
         frames.append(frame)
 
     api_client.connect_device()

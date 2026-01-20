@@ -42,6 +42,9 @@ namespace Handlers
  * - console.setChecksumMethod - Set checksum method
  * - console.clear - Clear console
  * - console.send - Send data
+ * - console.export.setEnabled - Enable/disable console export
+ * - console.export.close - Close console export file
+ * - console.export.getStatus - Get console export status
  * - console.getConfiguration - Get all settings
  */
 class ConsoleHandler
@@ -75,6 +78,12 @@ private:
   static CommandResponse send(const QString &id, const QJsonObject &params);
 
   // Query commands
+  static CommandResponse exportSetEnabled(const QString &id,
+                                          const QJsonObject &params);
+  static CommandResponse exportClose(const QString &id,
+                                     const QJsonObject &params);
+  static CommandResponse exportGetStatus(const QString &id,
+                                         const QJsonObject &params);
   static CommandResponse getConfiguration(const QString &id,
                                           const QJsonObject &params);
 };

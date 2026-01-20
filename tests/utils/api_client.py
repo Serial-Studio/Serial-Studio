@@ -264,9 +264,15 @@ class SerialStudioClient:
         """Load a project file."""
         self.command("project.file.open", {"filePath": file_path})
 
-    def create_new_project(self) -> None:
+    def create_new_project(self, title: Optional[str] = None) -> None:
         """Create a new empty project."""
         self.command("project.file.new")
+        if title is None:
+            title = f"Test Project {time.time_ns()}"
+        try:
+            self.command("project.setTitle", {"title": title})
+        except Exception:
+            pass
 
     def get_project_status(self) -> dict:
         """Get project information."""
@@ -295,6 +301,16 @@ class SerialStudioClient:
     def get_dashboard_status(self) -> dict:
         """Get dashboard configuration."""
         return self.command("dashboard.getStatus")
+
+    def get_available_commands(self) -> list[dict]:
+        """Get list of available API commands."""
+        result = self.command("api.getCommands")
+        return result.get("commands", [])
+
+    def command_exists(self, name: str) -> bool:
+        """Check if a command exists in the API."""
+        commands = self.get_available_commands()
+        return any(cmd.get("name") == name for cmd in commands)
 
 
     def set_operation_mode(self, mode: str) -> None:
@@ -375,6 +391,8 @@ class SerialStudioClient:
         Returns:
             Result dict
         """
+        checksum_algorithm = self._normalize_checksum_algorithm(checksum_algorithm)
+
         params = {}
         if start_sequence is not None:
             params["startSequence"] = start_sequence
@@ -386,8 +404,27 @@ class SerialStudioClient:
             params["operationMode"] = operation_mode
         if frame_detection is not None:
             params["frameDetection"] = frame_detection
+        if not params:
+            return {}
 
         return self.command("project.frameParser.configure", params)
+
+    @staticmethod
+    def _normalize_checksum_algorithm(checksum_algorithm: Optional[str]) -> Optional[str]:
+        if checksum_algorithm is None:
+            return None
+
+        normalized = checksum_algorithm.strip()
+        lowered = normalized.lower()
+
+        if lowered in ("", "none", "no", "null"):
+            return ""
+        if lowered == "xor":
+            return "XOR-8"
+        if lowered in ("sum", "mod-256", "mod256"):
+            return "MOD-256"
+
+        return normalized
 
     def get_frame_parser_config(self) -> dict:
         """

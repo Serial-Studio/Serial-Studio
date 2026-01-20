@@ -124,6 +124,7 @@ signals:
   void colorTimestampsChanged();
   void checksumMethodChanged();
   void displayString(const QString &text);
+  void cleared();
 
 private:
   explicit Handler();
@@ -180,6 +181,7 @@ public:
 
   [[nodiscard]] int defaultCharWidth() const;
   [[nodiscard]] int defaultCharHeight() const;
+  [[nodiscard]] qsizetype bufferLength() const;
 
   Q_INVOKABLE bool validateUserHex(const QString &text);
   Q_INVOKABLE QString formatUserHex(const QString &text);

@@ -51,6 +51,7 @@ private:
                                    const QJsonObject &params);
   static CommandResponse getStatus(const QString &id,
                                    const QJsonObject &params);
+  static CommandResponse getData(const QString &id, const QJsonObject &params);
 };
 
 } // namespace API::Handlers

@@ -264,6 +264,14 @@ public slots:
   void openJsonFile();
   void openJsonFile(const QString &path);
 
+  void setTitle(const QString &title);
+  void clearJsonFilePath();
+
+  void setFrameStartSequence(const QString &sequence);
+  void setFrameEndSequence(const QString &sequence);
+  void setChecksumAlgorithm(const QString &algorithm);
+  void setFrameDetection(const SerialStudio::FrameDetection detection);
+
   void enableProjectMode();
 
   void deleteCurrentGroup();

@@ -934,6 +934,81 @@ void DataModel::ProjectModel::newJsonFile()
   setModified(false);
 }
 
+/**
+ * @brief Sets the project title.
+ */
+void DataModel::ProjectModel::setTitle(const QString &title)
+{
+  if (m_title != title)
+  {
+    m_title = title;
+    setModified(true);
+    Q_EMIT titleChanged();
+  }
+}
+
+/**
+ * @brief Clears the current project file path without modifying project data.
+ */
+void DataModel::ProjectModel::clearJsonFilePath()
+{
+  if (!m_filePath.isEmpty())
+  {
+    m_filePath.clear();
+    Q_EMIT jsonFileChanged();
+  }
+}
+
+/**
+ * @brief Sets the frame start sequence for the project.
+ */
+void DataModel::ProjectModel::setFrameStartSequence(const QString &sequence)
+{
+  if (m_frameStartSequence != sequence)
+  {
+    m_frameStartSequence = sequence;
+    setModified(true);
+  }
+}
+
+/**
+ * @brief Sets the frame end sequence for the project.
+ */
+void DataModel::ProjectModel::setFrameEndSequence(const QString &sequence)
+{
+  if (m_frameEndSequence != sequence)
+  {
+    m_frameEndSequence = sequence;
+    setModified(true);
+  }
+}
+
+/**
+ * @brief Sets the checksum algorithm for the project.
+ */
+void DataModel::ProjectModel::setChecksumAlgorithm(const QString &algorithm)
+{
+  if (m_checksumAlgorithm != algorithm)
+  {
+    m_checksumAlgorithm = algorithm;
+    setModified(true);
+  }
+}
+
+/**
+ * @brief Sets the frame detection method for the project.
+ */
+void DataModel::ProjectModel::setFrameDetection(
+    const SerialStudio::FrameDetection detection)
+{
+  if (m_frameDetection != detection)
+  {
+    m_frameDetection = detection;
+    setModified(true);
+    Q_EMIT frameDetectionChanged();
+  }
+}
+
 //------------------------------------------------------------------------------
 // Document loading/import
 //------------------------------------------------------------------------------
@@ -3659,13 +3734,13 @@ void DataModel::ProjectModel::onProjectItemChanged(QStandardItem *item)
       if (changed && m_hexadecimalDelimiters)
       {
         m_frameEndSequence = SerialStudio::stringToHex(m_frameEndSequence);
-        m_frameStartSequence = SerialStudio::stringToHex(m_frameEndSequence);
+        m_frameStartSequence = SerialStudio::stringToHex(m_frameStartSequence);
       }
 
       else if (changed)
       {
         m_frameEndSequence = SerialStudio::hexToString(m_frameEndSequence);
-        m_frameStartSequence = SerialStudio::hexToString(m_frameEndSequence);
+        m_frameStartSequence = SerialStudio::hexToString(m_frameStartSequence);
       }
 
       buildProjectModel();
