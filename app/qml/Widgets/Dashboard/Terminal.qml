@@ -30,8 +30,9 @@ Item {
   id: root
   implicitWidth: layout.implicitWidth + 32
   implicitHeight: layout.implicitHeight + 32
-  property alias vt100emulation: terminal.vt100emulation
+
   property alias ansiColors: terminal.ansiColors
+  property alias vt100emulation: terminal.vt100emulation
 
   //
   // Widget data inputs (unused)

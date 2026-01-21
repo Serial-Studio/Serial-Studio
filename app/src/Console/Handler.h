@@ -203,8 +203,9 @@ public slots:
   void setDisplayMode(const Console::Handler::DisplayMode &mode);
   void append(const QString &str, const bool addTimestamp = false);
 
-  void hotpathRxData(const IO::ByteArrayPtr &data);
   void displaySentData(QByteArrayView data);
+  void displayDebugData(const QString &data);
+  void hotpathRxData(const IO::ByteArrayPtr &data);
 
 private slots:
   void updateFont();

@@ -796,7 +796,7 @@ API::Handlers::ModbusHandler::getBaudRateList(const QString &id,
 
   QJsonArray baudRates;
   for (const auto &rate : baudRateList)
-    baudRates.append(rate);
+    baudRates.append(rate.toInt());
 
   QJsonObject result;
   result[QStringLiteral("baudRateList")] = baudRates;

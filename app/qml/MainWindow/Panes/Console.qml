@@ -37,8 +37,8 @@ Widgets.Pane {
   //
   // Custom properties
   //
-  property alias vt100emulation: terminal.vt100emulation
   property alias ansiColors: terminal.ansiColors
+  property alias vt100emulation: terminal.vt100emulation
 
   //
   // Bind terminal ANSI colors to console handler color timestamps

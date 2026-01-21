@@ -345,7 +345,7 @@ void Widgets::Terminal::paint(QPainter *painter)
 
     // Obtain color data for this line (only if ANSI colors enabled)
     const QList<CharColor> *colorLine = nullptr;
-    if (m_ansiColors && i < m_colorData.size())
+    if (ansiColors() && i < m_colorData.size())
       colorLine = &m_colorData[i];
 
     // Render line with word-wrapping
@@ -615,7 +615,7 @@ bool Widgets::Terminal::vt100emulation() const
  */
 bool Widgets::Terminal::ansiColors() const
 {
-  return m_ansiColors;
+  return m_ansiColors && m_emulateVt100;
 }
 
 /**
@@ -972,13 +972,9 @@ void Widgets::Terminal::setAnsiColors(const bool enabled)
 
   if (enabled)
   {
-    // Initialize color tracking when enabling
     m_currentColor = m_palette.color(QPalette::Text);
     m_colorData.reserve(MAX_LINES);
   }
-  // Note: We keep m_colorData when disabling so colors can be restored
-  // if the user re-enables. Memory is only used for text received while
-  // ANSI colors was enabled at some point.
 
   Q_EMIT ansiColorsChanged();
 }
@@ -1135,7 +1131,7 @@ void Widgets::Terminal::appendString(QStringView string)
   if (m_data.size() >= MAX_LINES && linesToDrop > 0)
   {
     m_data.erase(m_data.begin(), m_data.begin() + linesToDrop);
-    if (m_ansiColors && m_colorData.size() >= linesToDrop)
+    if (ansiColors() && m_colorData.size() >= linesToDrop)
       m_colorData.erase(m_colorData.begin(), m_colorData.begin() + linesToDrop);
 
     if (m_cursorPosition.y() >= linesToDrop)
@@ -1272,7 +1268,7 @@ void Widgets::Terminal::initBuffer()
   m_colorData.squeeze();
 
   // Only pre-allocate color memory if ANSI colors is currently enabled
-  if (m_ansiColors)
+  if (ansiColors())
   {
     m_colorData.reserve(MAX_LINES);
     m_currentColor = m_palette.color(QPalette::Text);
@@ -1414,8 +1410,9 @@ void Widgets::Terminal::processFormat(const QChar &byte, QString &text)
     else if (byte == 'm')
     {
       m_formatValues.append(m_currentFormatValue);
-      if (m_ansiColors)
+      if (ansiColors())
         applyAnsiColor(m_formatValues);
+
       m_state = Text;
     }
 
@@ -1894,7 +1891,7 @@ void Widgets::Terminal::replaceData(int x, int y, const QChar &byte)
   QString &line = m_data[y];
 
   // Only manage color data if ANSI colors is enabled
-  if (m_ansiColors)
+  if (ansiColors())
   {
     // Ensure color buffer line exists
     if (y >= m_colorData.size())

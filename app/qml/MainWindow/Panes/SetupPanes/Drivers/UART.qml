@@ -95,6 +95,8 @@ Item {
       editable: true
       Layout.fillWidth: true
 
+      property bool _initializing: true
+
       validator: IntValidator { bottom: 1 }
 
       Component.onCompleted: {
@@ -111,19 +113,39 @@ Item {
             _baudCombo.currentIndex = -1
             _baudCombo.editText = current
           }
+
+          _initializing = false
         })
       }
 
+      Connections {
+        target: Cpp_IO_Serial
+        function onBaudRateChanged() {
+          if (!_baudCombo._initializing) {
+            const current = String(Cpp_IO_Serial.baudRate)
+            const rates = Cpp_IO_Serial.baudRateList
+            const idx = rates.indexOf(current)
+            if (idx !== -1 && idx !== _baudCombo.currentIndex) {
+              _baudCombo.currentIndex = idx
+            } else if (idx === -1) {
+              _baudCombo.editText = current
+            }
+          }
+        }
+      }
+
       onEditTextChanged: {
-        const value = parseInt(editText)
-        if (!isNaN(value) && value > 0) {
-          if (Cpp_IO_Serial.baudRate !== value)
-            Cpp_IO_Serial.baudRate = value
+        if (!_initializing) {
+          const value = parseInt(editText)
+          if (!isNaN(value) && value > 0) {
+            if (Cpp_IO_Serial.baudRate !== value)
+              Cpp_IO_Serial.baudRate = value
+          }
         }
       }
 
       onCurrentIndexChanged: {
-        if (currentIndex >= 0 && currentIndex < model.length) {
+        if (!_initializing && currentIndex >= 0 && currentIndex < model.length) {
           const value = parseInt(model[currentIndex])
           if (!isNaN(value) && Cpp_IO_Serial.baudRate !== value) {
             Cpp_IO_Serial.baudRate = value

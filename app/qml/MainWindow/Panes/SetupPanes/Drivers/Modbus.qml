@@ -100,6 +100,8 @@ Item {
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 0
 
+      property bool _initializing: true
+
       validator: IntValidator { bottom: 1 }
 
       Component.onCompleted: {
@@ -113,19 +115,56 @@ Item {
             _baudRateCombo.currentIndex = -1
             _baudRateCombo.editText = current
           }
+
+          _initializing = false
         })
       }
 
+      Connections {
+        target: Cpp_IO_Modbus
+        function onBaudRateChanged() {
+          if (!_baudRateCombo._initializing && Cpp_IO_Modbus.protocolIndex === 0) {
+            const current = String(Cpp_IO_Modbus.baudRate)
+            const rates = Cpp_IO_Modbus.baudRateList
+            const idx = rates.indexOf(current)
+            if (idx !== -1 && idx !== _baudRateCombo.currentIndex) {
+              _baudRateCombo.currentIndex = idx
+            } else if (idx === -1) {
+              _baudRateCombo.editText = current
+            }
+          }
+        }
+      }
+
+      Connections {
+        target: Cpp_IO_Modbus
+        function onProtocolIndexChanged() {
+          if (Cpp_IO_Modbus.protocolIndex === 0 && !_baudRateCombo._initializing) {
+            const current = String(Cpp_IO_Modbus.baudRate)
+            const rates = Cpp_IO_Modbus.baudRateList
+            const idx = rates.indexOf(current)
+            if (idx !== -1) {
+              _baudRateCombo.currentIndex = idx
+            } else {
+              _baudRateCombo.currentIndex = -1
+              _baudRateCombo.editText = current
+            }
+          }
+        }
+      }
+
       onEditTextChanged: {
-        const value = parseInt(editText)
-        if (!isNaN(value) && value > 0) {
-          if (Cpp_IO_Modbus.baudRate !== value)
-            Cpp_IO_Modbus.baudRate = value
+        if (!_initializing) {
+          const value = parseInt(editText)
+          if (!isNaN(value) && value > 0) {
+            if (Cpp_IO_Modbus.baudRate !== value)
+              Cpp_IO_Modbus.baudRate = value
+          }
         }
       }
 
       onCurrentIndexChanged: {
-        if (currentIndex >= 0 && currentIndex < model.length) {
+        if (!_initializing && currentIndex >= 0 && currentIndex < model.length) {
           const value = parseInt(model[currentIndex])
           if (!isNaN(value) && Cpp_IO_Modbus.baudRate !== value) {
             Cpp_IO_Modbus.baudRate = value

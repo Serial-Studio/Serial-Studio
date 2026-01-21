@@ -135,8 +135,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
     output.append("\n");
 
     // Display data in console
-    Console::Handler::instance().hotpathRxData(
-        IO::makeByteArray(output.toUtf8()));
+    Console::Handler::instance().displayDebugData(output);
   }
 }
 

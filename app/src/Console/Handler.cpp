@@ -657,6 +657,14 @@ void Console::Handler::append(const QString &string, const bool addTimestamp)
 }
 
 /**
+ * Displays the given @a data in the console without Hex formatting
+ */
+void Console::Handler::displayDebugData(const QString &data)
+{
+  append(data, showTimestamp());
+}
+
+/**
  * Displays the given @a data in the console
  */
 void Console::Handler::hotpathRxData(const IO::ByteArrayPtr &data)
