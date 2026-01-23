@@ -86,9 +86,10 @@ public:
 
 public slots:
   void setupExternalConnections();
-  void loadJsonMap(const QString &path);
+  void loadJsonMap(const QString &path, const bool showMessageBoxes = true);
   void loadJsonMapFromData(const QByteArray &jsonData,
-                           const QString &sourcePath = QString());
+                           const QString &sourcePath = QString(),
+                           const bool showMessageBoxes = true);
   void setFrameParser(DataModel::FrameParser *editor);
   void registerQuickPlotHeaders(const QStringList &headers);
   void setOperationMode(const SerialStudio::OperationMode mode);

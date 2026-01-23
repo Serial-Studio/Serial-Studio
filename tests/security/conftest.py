@@ -196,8 +196,8 @@ def security_test_warning(request):
         print(
             "\n⚠️  WARNING: This test may crash or hang the server!\n"
         )
-        # Add delay before destructive tests to let server recover
-        time.sleep(2.0)
+        # Brief delay before destructive tests (reduced to prevent timeout)
+        time.sleep(0.5)
 
 
 @pytest.fixture(autouse=True)
@@ -210,12 +210,12 @@ def test_isolation(request):
     """
     yield  # Run the test
 
-    # Add delay after each test
-    time.sleep(0.5)
+    # Add brief delay after each test (reduced to prevent timeout issues)
+    time.sleep(0.2)
 
-    # Longer delay after stress/destructive tests
+    # Slightly longer delay after stress/destructive tests (reduced to fit within timeout)
     if any(mark.name in ["destructive", "dos", "exploit"] for mark in request.node.iter_markers()):
-        time.sleep(2.0)
+        time.sleep(0.5)
 
 
 def pytest_configure(config):

@@ -323,14 +323,20 @@ def test_batch_abuse(tester):
             results = client.batch(huge_batch, timeout=30.0)
             elapsed = time.time() - start
 
-            tester.log_vulnerability(
-                "MEDIUM",
-                "Batch Processing",
-                f"Server processed {len(results)} commands in {elapsed:.2f}s without limit",
-                f"{len(huge_batch)} commands",
-            )
-        except (APIError, TimeoutError):
-            print("    Server rejected or timed out (GOOD)")
+            # Check if server rejected the batch (error dict returned)
+            if isinstance(results, dict) and results.get("error"):
+                print(f"    Server rejected batch: {results.get('message')} (GOOD)")
+            elif isinstance(results, list) and len(results) > 0:
+                tester.log_vulnerability(
+                    "MEDIUM",
+                    "Batch Processing",
+                    f"Server processed {len(results)} commands in {elapsed:.2f}s without limit",
+                    f"{len(huge_batch)} commands",
+                )
+            else:
+                print("    Server rejected batch (GOOD)")
+        except (APIError, TimeoutError) as e:
+            print(f"    Server rejected or timed out: {e} (GOOD)")
 
         # Test 2: Nested batch requests (if possible)
         print("  - Testing recursive batch commands...")

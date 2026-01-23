@@ -169,6 +169,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_frameDetection(SerialStudio::EndDelimiterOnly)
   , m_modified(false)
   , m_filePath("")
+  , m_suppressMessageBoxes(false)
   , m_treeModel(nullptr)
   , m_selectionModel(nullptr)
   , m_groupModel(nullptr)
@@ -385,6 +386,25 @@ QStringList DataModel::ProjectModel::xDataSources() const
     list.append(it.value());
 
   return list;
+}
+
+/**
+ * @brief Sets whether to suppress messageboxes (for API calls).
+ *
+ * When suppressed, errors/warnings are logged via qWarning() instead
+ * of showing modal dialogs that could block the event loop.
+ */
+void DataModel::ProjectModel::setSuppressMessageBoxes(const bool suppress)
+{
+  m_suppressMessageBoxes = suppress;
+}
+
+/**
+ * @brief Returns whether messageboxes are currently suppressed.
+ */
+bool DataModel::ProjectModel::suppressMessageBoxes() const
+{
+  return m_suppressMessageBoxes;
 }
 
 /**
@@ -731,6 +751,17 @@ bool DataModel::ProjectModel::askSave()
   if (!modified())
     return true;
 
+  // In API mode, don't ask - just discard changes
+  if (m_suppressMessageBoxes)
+  {
+    qWarning() << "[ProjectModel] Discarding unsaved changes (API mode)";
+    if (jsonFilePath().isEmpty())
+      newJsonFile();
+    else
+      openJsonFile(jsonFilePath());
+    return true;
+  }
+
   auto ret = Misc::Utilities::showMessageBox(
       tr("Do you want to save your changes?"),
       tr("You have unsaved modifications in this project!"),
@@ -768,27 +799,47 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
   // Validate project title
   if (m_title.isEmpty())
   {
-    Misc::Utilities::showMessageBox(tr("Project error"),
-                                    tr("Project title cannot be empty!"),
-                                    QMessageBox::Warning);
+    if (m_suppressMessageBoxes)
+    {
+      qWarning() << "[ProjectModel] Project title cannot be empty";
+    }
+    else
+    {
+      Misc::Utilities::showMessageBox(tr("Project error"),
+                                      tr("Project title cannot be empty!"),
+                                      QMessageBox::Warning);
+    }
     return false;
   }
 
   // Validate group count
   if (groupCount() <= 0)
   {
-    Misc::Utilities::showMessageBox(tr("Project error"),
-                                    tr("You need to add at least one group!"),
-                                    QMessageBox::Warning);
+    if (m_suppressMessageBoxes)
+      qWarning() << "[ProjectModel] Project needs at least one group";
+
+    else
+    {
+      Misc::Utilities::showMessageBox(tr("Project error"),
+                                      tr("You need to add at least one group!"),
+                                      QMessageBox::Warning);
+    }
+
     return false;
   }
 
   // Validate dataset count
   if (datasetCount() <= 0)
   {
-    Misc::Utilities::showMessageBox(tr("Project error"),
-                                    tr("You need to add at least one dataset!"),
-                                    QMessageBox::Warning);
+    if (m_suppressMessageBoxes)
+      qWarning() << "[ProjectModel] Project needs at least one dataset";
+
+    else
+    {
+      Misc::Utilities::showMessageBox(tr("Project error"),
+                                      tr("You need to add at least one dataset!"),
+                                      QMessageBox::Warning);
+    }
     return false;
   }
 
@@ -1067,9 +1118,16 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
     auto result = Misc::JsonValidator::parseAndValidate(file.readAll());
     if (!result.valid) [[unlikely]]
     {
-      Misc::Utilities::showMessageBox(tr("JSON validation error"),
-                                      result.errorMessage,
-                                      QMessageBox::Critical);
+      if (m_suppressMessageBoxes)
+        qWarning() << "[ProjectModel] JSON validation error:" << result.errorMessage;
+
+      else
+      {
+        Misc::Utilities::showMessageBox(tr("JSON validation error"),
+                                        result.errorMessage,
+                                        QMessageBox::Critical);
+      }
+
       return;
     }
 
@@ -1165,13 +1223,21 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
                   "frame.split(\'%1\');\n}")
                   .arg(separator);
 
-      // Notify user about the change
-      Misc::Utilities::showMessageBox(
-          tr("Legacy frame parser function updated"),
-          tr("Your project used a legacy frame parser function with a "
-             "'separator' argument. It has been automatically migrated to "
-             "the new format."),
-          QMessageBox::Information);
+      // Notify user about the change (only in GUI mode)
+      if (!m_suppressMessageBoxes)
+      {
+        Misc::Utilities::showMessageBox(
+            tr("Legacy frame parser function updated"),
+            tr("Your project used a legacy frame parser function with a "
+               "'separator' argument. It has been automatically migrated to "
+               "the new format."),
+            QMessageBox::Information);
+      }
+      else
+      {
+        qWarning() << "[ProjectModel] Legacy frame parser function automatically "
+                      "migrated";
+      }
       saveJsonFile(false);
       return;
     }
@@ -1179,7 +1245,7 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
 
   // Let the generator use the given JSON file
   if (DataModel::FrameBuilder::instance().jsonMapFilepath() != path)
-    DataModel::FrameBuilder::instance().loadJsonMap(path);
+    DataModel::FrameBuilder::instance().loadJsonMap(path, !m_suppressMessageBoxes);
 
   // Update UI
   Q_EMIT titleChanged();
@@ -1205,16 +1271,26 @@ void DataModel::ProjectModel::enableProjectMode()
   const auto opMode = DataModel::FrameBuilder::instance().operationMode();
   if (opMode != SerialStudio::ProjectFile)
   {
-    auto answ = Misc::Utilities::showMessageBox(
-        tr("Switch Serial Studio to Project Mode?"),
-        tr("This operation mode is required to load and display dashboards "
-           "from project files."),
-        QMessageBox::Question, qApp->applicationDisplayName(),
-        QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    if (!m_suppressMessageBoxes)
+    {
+      auto answ = Misc::Utilities::showMessageBox(
+          tr("Switch Serial Studio to Project Mode?"),
+          tr("This operation mode is required to load and display dashboards "
+             "from project files."),
+          QMessageBox::Question, qApp->applicationDisplayName(),
+          QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
-    if (answ == QMessageBox::Yes)
+      if (answ == QMessageBox::Yes)
+        DataModel::FrameBuilder::instance().setOperationMode(
+            SerialStudio::ProjectFile);
+    }
+    else
+    {
+      // In API mode, automatically switch to ProjectFile mode
+      qWarning() << "[ProjectModel] Automatically switching to ProjectFile mode";
       DataModel::FrameBuilder::instance().setOperationMode(
           SerialStudio::ProjectFile);
+    }
   }
 }
 
@@ -4062,8 +4138,15 @@ bool DataModel::ProjectModel::finalizeProjectSave()
   QFile file(m_filePath);
   if (!file.open(QFile::WriteOnly))
   {
-    Misc::Utilities::showMessageBox(tr("File open error"), file.errorString(),
-                                    QMessageBox::Critical);
+    if (m_suppressMessageBoxes)
+    {
+      qWarning() << "[ProjectModel] File open error:" << file.errorString();
+    }
+    else
+    {
+      Misc::Utilities::showMessageBox(tr("File open error"), file.errorString(),
+                                      QMessageBox::Critical);
+    }
     return false;
   }
 
@@ -4079,7 +4162,8 @@ bool DataModel::ProjectModel::finalizeProjectSave()
 
   // Load JSON file to Serial Studio
   openJsonFile(file.fileName());
-  DataModel::FrameBuilder::instance().loadJsonMap(file.fileName());
+  DataModel::FrameBuilder::instance().loadJsonMap(file.fileName(),
+                                                  !m_suppressMessageBoxes);
   return true;
 }
 

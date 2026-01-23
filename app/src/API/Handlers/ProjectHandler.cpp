@@ -217,7 +217,10 @@ API::Handlers::ProjectHandler::fileOpen(const QString &id,
         QStringLiteral("filePath is not allowed"));
   }
 
+  // Suppress messageboxes during API call
+  DataModel::ProjectModel::instance().setSuppressMessageBoxes(true);
   DataModel::ProjectModel::instance().openJsonFile(file_path);
+  DataModel::ProjectModel::instance().setSuppressMessageBoxes(false);
 
   QJsonObject result;
   result[QStringLiteral("filePath")]
@@ -653,8 +656,10 @@ API::Handlers::ProjectHandler::loadFromJSON(const QString &id,
   const QString tempPath = tempFile.fileName();
   tempFile.close();
 
-  // Use existing infrastructure
+  // Suppress messageboxes during API call
+  DataModel::ProjectModel::instance().setSuppressMessageBoxes(true);
   DataModel::ProjectModel::instance().openJsonFile(tempPath);
+  DataModel::ProjectModel::instance().setSuppressMessageBoxes(false);
 
   // Clean up
   QFile::remove(tempPath);
@@ -814,8 +819,8 @@ API::Handlers::ProjectHandler::loadIntoFrameBuilder(const QString &id,
   const QJsonDocument document(json);
   const QByteArray jsonData = document.toJson(QJsonDocument::Compact);
 
-  // Load into FrameBuilder using the new QByteArray-based method
-  builder.loadJsonMapFromData(jsonData, QStringLiteral("[API]"));
+  // Load into FrameBuilder with messageboxes suppressed for API calls
+  builder.loadJsonMapFromData(jsonData, QStringLiteral("[API]"), false);
 
   QJsonObject result;
   result[QStringLiteral("loaded")] = true;

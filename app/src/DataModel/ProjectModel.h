@@ -233,6 +233,8 @@ public:
   [[nodiscard]] const QString &jsonFilePath() const;
   [[nodiscard]] const QString &frameParserCode() const;
 
+  [[nodiscard]] bool suppressMessageBoxes() const;
+
   [[nodiscard]] int activeGroupId() const;
   [[nodiscard]] const QJsonObject &dashboardLayout() const;
 
@@ -259,6 +261,7 @@ public:
 
 public slots:
   void setupExternalConnections();
+  void setSuppressMessageBoxes(const bool suppress);
 
   void newJsonFile();
   void openJsonFile();
@@ -338,6 +341,7 @@ private:
 
   bool m_modified;
   QString m_filePath;
+  bool m_suppressMessageBoxes;
 
   QMap<QStandardItem *, int> m_rootItems;
   QMap<QStandardItem *, DataModel::Group> m_groupItems;

@@ -160,6 +160,8 @@ private slots:
 private:
   struct ConnectionState
   {
+    QString peerAddress;
+    quint16 peerPort = 0;
     QByteArray buffer;
     QElapsedTimer window;
     int messageCount = 0;

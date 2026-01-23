@@ -159,7 +159,7 @@ class SerialStudioClient:
 
     def batch(
         self, commands: list[dict], timeout: Optional[float] = None
-    ) -> list[dict]:
+    ) -> list[dict] | dict:
         """
         Send batch of commands.
 
@@ -168,7 +168,7 @@ class SerialStudioClient:
             timeout: Optional timeout override
 
         Returns:
-            List of results (may include errors)
+            List of results (may include errors) on success, or error dict if batch rejected
 
         Raises:
             TimeoutError: If response not received in time
@@ -199,6 +199,15 @@ class SerialStudioClient:
             response = self._recv_message(remaining)
 
             if response.get("type") == "response" and response.get("id") == request_id:
+                # Check if batch was rejected (error response)
+                if not response.get("success", True):
+                    # Return error dict for caller to handle
+                    return {
+                        "error": True,
+                        "success": False,
+                        "message": response.get("error", {}).get("message", "Batch rejected"),
+                        "code": response.get("error", {}).get("code", "UNKNOWN")
+                    }
                 return response.get("results", [])
 
     def set_bus_type(self, bus_type: str) -> None:

@@ -58,7 +58,10 @@ public:
   [[nodiscard]] bool undoAvailable() const;
   [[nodiscard]] bool redoAvailable() const;
   [[nodiscard]] bool save(const bool silent = false);
-  [[nodiscard]] bool loadScript(const QString &script);
+  [[nodiscard]] bool loadScript(const QString &script,
+                                const bool showMessageBoxes = true);
+
+  void setSuppressMessageBoxes(const bool suppress);
 
 public slots:
   void cut();
@@ -106,6 +109,7 @@ private:
 
 private:
   int m_templateIdx;
+  bool m_suppressMessageBoxes;
 
   QPixmap m_pixmap;
   QJSEngine m_engine;

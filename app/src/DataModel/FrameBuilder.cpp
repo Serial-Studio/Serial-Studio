@@ -260,7 +260,8 @@ void DataModel::FrameBuilder::setupExternalConnections()
  *
  * @param path Absolute path to JSON project file
  */
-void DataModel::FrameBuilder::loadJsonMap(const QString &path)
+void DataModel::FrameBuilder::loadJsonMap(const QString &path,
+                                          const bool showMessageBoxes)
 {
   if (path.isEmpty())
     return;
@@ -278,9 +279,17 @@ void DataModel::FrameBuilder::loadJsonMap(const QString &path)
   if (!m_jsonMap.open(QFile::ReadOnly)) [[unlikely]]
   {
     setJsonPathSetting("");
-    Misc::Utilities::showMessageBox(
-        tr("Cannot read JSON file"),
-        tr("Please check file permissions & location"), QMessageBox::Critical);
+    if (showMessageBoxes)
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Cannot read JSON file"),
+          tr("Please check file permissions & location"),
+          QMessageBox::Critical);
+    }
+    else
+    {
+      qWarning() << "[FrameBuilder] Cannot read JSON file:" << path;
+    }
     m_jsonMap.close();
     Q_EMIT jsonFileMapChanged();
     return;
@@ -288,7 +297,7 @@ void DataModel::FrameBuilder::loadJsonMap(const QString &path)
 
   // Read JSON data and delegate to loadJsonMapFromData()
   const auto data = m_jsonMap.readAll();
-  loadJsonMapFromData(data, path);
+  loadJsonMapFromData(data, path, showMessageBoxes);
 }
 
 /**
@@ -304,8 +313,13 @@ void DataModel::FrameBuilder::loadJsonMap(const QString &path)
  * Security: Uses Misc::JsonValidator for DoS protection (depth/size limits)
  */
 void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
-                                                  const QString &sourcePath)
+                                                  const QString &sourcePath,
+                                                  const bool showMessageBoxes)
 {
+  // Suppress parser messageboxes for API calls
+  if (m_frameParser && !showMessageBoxes)
+    m_frameParser->setSuppressMessageBoxes(true);
+
   // Validate JSON with security bounds checking
   const auto result = Misc::JsonValidator::parseAndValidate(jsonData);
 
@@ -315,8 +329,21 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
     if (m_jsonMap.isOpen())
       m_jsonMap.close();
     setJsonPathSetting("");
-    Misc::Utilities::showMessageBox(tr("JSON validation error"),
-                                    result.errorMessage, QMessageBox::Critical);
+    if (showMessageBoxes)
+    {
+      Misc::Utilities::showMessageBox(tr("JSON validation error"),
+                                      result.errorMessage,
+                                      QMessageBox::Critical);
+    }
+    else
+    {
+      qWarning() << "[FrameBuilder] JSON validation error:" << result.errorMessage;
+    }
+
+    // Restore parser messagebox behavior before returning
+    if (m_frameParser && !showMessageBoxes)
+      m_frameParser->setSuppressMessageBoxes(false);
+
     Q_EMIT jsonFileMapChanged();
     return;
   }
@@ -334,10 +361,22 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
     if (m_jsonMap.isOpen())
       m_jsonMap.close();
     setJsonPathSetting("");
-    Misc::Utilities::showMessageBox(
-        tr("This file isn't a valid project file"),
-        tr("Make sure it's a properly formatted JSON project."),
-        QMessageBox::Warning);
+    if (showMessageBoxes)
+    {
+      Misc::Utilities::showMessageBox(
+          tr("This file isn't a valid project file"),
+          tr("Make sure it's a properly formatted JSON project."),
+          QMessageBox::Warning);
+    }
+    else
+    {
+      qWarning() << "[FrameBuilder] This file isn't a valid project file";
+    }
+
+    // Restore parser messagebox behavior before returning
+    if (m_frameParser && !showMessageBoxes)
+      m_frameParser->setSuppressMessageBoxes(false);
+
     Q_EMIT jsonFileMapChanged();
     return;
   }
@@ -353,6 +392,10 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
     IO::Manager::instance().setChecksumAlgorithm(m_checksum);
     IO::Manager::instance().resetFrameReader();
   }
+
+  // Restore parser messagebox behavior
+  if (m_frameParser && !showMessageBoxes)
+    m_frameParser->setSuppressMessageBoxes(false);
 
   // Notify UI that JSON has been successfully loaded
   Q_EMIT jsonFileMapChanged();

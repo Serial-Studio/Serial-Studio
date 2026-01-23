@@ -56,6 +56,7 @@
  */
 DataModel::FrameParser::FrameParser(QQuickItem *parent)
   : QQuickPaintedItem(parent)
+  , m_suppressMessageBoxes(false)
   , m_testDialog(this, nullptr)
 {
   // Disable mipmap & antialiasing, we don't need them
@@ -252,8 +253,7 @@ bool DataModel::FrameParser::redoAvailable() const
  */
 bool DataModel::FrameParser::save(const bool silent)
 {
-  // Update text edit
-  if (loadScript(text()))
+  if (loadScript(text(), !m_suppressMessageBoxes))
   {
     auto &model = ProjectModel::instance();
     bool prevModif = model.modified();
@@ -261,7 +261,6 @@ bool DataModel::FrameParser::save(const bool silent)
     m_widget.document()->setModified(false);
     m_widget.document()->clearUndoRedoStacks();
 
-    // Show save messagebox
     if (!silent)
       Misc::Utilities::showMessageBox(
           tr("Frame parser code updated successfully!"),
@@ -270,7 +269,6 @@ bool DataModel::FrameParser::save(const bool silent)
     else
       model.setModified(prevModif);
 
-    // Everything good
     Q_EMIT modifiedChanged();
     return true;
   }
@@ -298,6 +296,7 @@ bool DataModel::FrameParser::save(const bool silent)
  * If validation fails, displays an appropriate error message to the user.
  *
  * @param script The JavaScript parser code to validate and load
+ * @param showMessageBoxes If false, suppresses UI messageboxes (for API calls)
  *
  * @return true if the code is valid and the parse function is ready to use,
  *         false if validation failed
@@ -308,7 +307,8 @@ bool DataModel::FrameParser::save(const bool silent)
  * @see evaluate()
  * @see m_parseFunction
  */
-bool DataModel::FrameParser::loadScript(const QString &script)
+bool DataModel::FrameParser::loadScript(const QString &script,
+                                        const bool showMessageBoxes)
 {
   // Reset any previously loaded function
   m_parseFunction = QJSValue();
@@ -323,23 +323,39 @@ bool DataModel::FrameParser::loadScript(const QString &script)
   {
     QString errorMsg = result.property("message").toString();
     int lineNumber = result.property("lineNumber").toInt();
-    Misc::Utilities::showMessageBox(
-        tr("JavaScript Syntax Error"),
-        tr("The parser code contains a syntax error at line %1:\n\n%2")
-            .arg(lineNumber)
-            .arg(errorMsg),
-        QMessageBox::Critical);
+    if (showMessageBoxes)
+    {
+      Misc::Utilities::showMessageBox(
+          tr("JavaScript Syntax Error"),
+          tr("The parser code contains a syntax error at line %1:\n\n%2")
+              .arg(lineNumber)
+              .arg(errorMsg),
+          QMessageBox::Critical);
+    }
+    else
+    {
+      qWarning() << "[FrameParser] JavaScript syntax error at line" << lineNumber
+                 << ":" << errorMsg;
+    }
     return false;
   }
 
   // Get list of exceptions
   if (!exceptionStackTrace.isEmpty())
   {
-    Misc::Utilities::showMessageBox(
-        tr("JavaScript Exception Occurred"),
-        tr("The parser code triggered the following exceptions:\n\n%1")
-            .arg(exceptionStackTrace.join("\n")),
-        QMessageBox::Critical);
+    if (showMessageBoxes)
+    {
+      Misc::Utilities::showMessageBox(
+          tr("JavaScript Exception Occurred"),
+          tr("The parser code triggered the following exceptions:\n\n%1")
+              .arg(exceptionStackTrace.join("\n")),
+          QMessageBox::Critical);
+    }
+    else
+    {
+      qWarning() << "[FrameParser] JavaScript exceptions occurred:"
+                 << exceptionStackTrace.join(", ");
+    }
     return false;
   }
 
@@ -347,23 +363,37 @@ bool DataModel::FrameParser::loadScript(const QString &script)
   auto parseFunction = m_engine.globalObject().property("parse");
   if (parseFunction.isNull())
   {
-    Misc::Utilities::showMessageBox(
-        tr("Missing Parse Function"),
-        tr("The 'parse' function is not defined in the script.\n\n"
-           "Please ensure your code includes:\n"
-           "function parse(frame) { ... }"),
-        QMessageBox::Critical);
+    if (showMessageBoxes)
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Missing Parse Function"),
+          tr("The 'parse' function is not defined in the script.\n\n"
+             "Please ensure your code includes:\n"
+             "function parse(frame) { ... }"),
+          QMessageBox::Critical);
+    }
+    else
+    {
+      qWarning() << "[FrameParser] Missing parse function in script";
+    }
     return false;
   }
 
   // Verify that the 'parse' function is callable
   if (!parseFunction.isCallable())
   {
-    Misc::Utilities::showMessageBox(
-        tr("Invalid Parse Function"),
-        tr("The 'parse' property exists but is not a callable function.\n\n"
-           "Please ensure 'parse' is declared as a function."),
-        QMessageBox::Critical);
+    if (showMessageBoxes)
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Invalid Parse Function"),
+          tr("The 'parse' property exists but is not a callable function.\n\n"
+             "Please ensure 'parse' is declared as a function."),
+          QMessageBox::Critical);
+    }
+    else
+    {
+      qWarning() << "[FrameParser] Parse property is not a callable function";
+    }
     return false;
   }
 
@@ -373,12 +403,18 @@ bool DataModel::FrameParser::loadScript(const QString &script)
   auto match = functionRegex.match(script);
   if (!match.hasMatch())
   {
-    Misc::Utilities::showMessageBox(
-        tr("Invalid Function Declaration"),
-        tr("No valid 'parse' function declaration found.\n\n"
-           "Expected format:\n"
-           "function parse(frame) { ... }"),
-        QMessageBox::Critical);
+    if (showMessageBoxes)
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Invalid Function Declaration"),
+          tr("No valid 'parse' function declaration found.\n\n"
+             "Expected format:\n"
+             "function parse(frame) { ... }"),
+          QMessageBox::Critical);
+    }
+    else
+      qWarning() << "[FrameParser] No valid 'parse' function declaration found";
+
     return false;
   }
 
@@ -389,28 +425,44 @@ bool DataModel::FrameParser::loadScript(const QString &script)
   // Check for empty or invalid first argument
   if (firstArg.isEmpty())
   {
-    Misc::Utilities::showMessageBox(
-        tr("Invalid Function Parameter"),
-        tr("The 'parse' function must have at least one parameter.\n\n"
-           "Expected format:\n"
-           "function parse(frame) { ... }"),
-        QMessageBox::Critical);
+    if (showMessageBoxes)
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Invalid Function Parameter"),
+          tr("The 'parse' function must have at least one parameter.\n\n"
+             "Expected format:\n"
+             "function parse(frame) { ... }"),
+          QMessageBox::Critical);
+    }
+    else
+    {
+      qWarning() << "[FrameParser] Parse function must have at least one "
+                    "parameter";
+    }
     return false;
   }
 
   // Check for deprecated two-parameter format
   if (!secondArg.isEmpty())
   {
-    Misc::Utilities::showMessageBox(
-        tr("Deprecated Function Signature"),
-        tr("The 'parse' function uses the old two-parameter format: parse(%1, "
-           "%2)\n\n"
-           "This format is no longer supported. Please update to the new "
-           "single-parameter format:\n"
-           "function parse(%1) { ... }\n\n"
-           "The separator parameter is no longer needed.")
-            .arg(firstArg, secondArg),
-        QMessageBox::Warning);
+    if (showMessageBoxes)
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Deprecated Function Signature"),
+          tr("The 'parse' function uses the old two-parameter format: parse(%1, "
+             "%2)\n\n"
+             "This format is no longer supported. Please update to the new "
+             "single-parameter format:\n"
+             "function parse(%1) { ... }\n\n"
+             "The separator parameter is no longer needed.")
+              .arg(firstArg, secondArg),
+          QMessageBox::Warning);
+    }
+    else
+    {
+      qWarning() << "[FrameParser] Parse function uses deprecated two-parameter "
+                    "format";
+    }
     return false;
   }
 
@@ -423,13 +475,21 @@ bool DataModel::FrameParser::loadScript(const QString &script)
     QString errorMsg = testResult.property("message").toString();
     int lineNumber = testResult.property("lineNumber").toInt();
 
-    Misc::Utilities::showMessageBox(
-        tr("Parse Function Runtime Error"),
-        tr("The parse function contains an error at line %1:\n\n%2\n\n"
-           "Please fix the error in the function body.")
-            .arg(lineNumber)
-            .arg(errorMsg),
-        QMessageBox::Critical);
+    if (showMessageBoxes)
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Parse Function Runtime Error"),
+          tr("The parse function contains an error at line %1:\n\n%2\n\n"
+             "Please fix the error in the function body.")
+              .arg(lineNumber)
+              .arg(errorMsg),
+          QMessageBox::Critical);
+    }
+    else
+    {
+      qWarning() << "[FrameParser] Parse function runtime error at line"
+                 << lineNumber << ":" << errorMsg;
+    }
 
     return false;
   }
@@ -597,7 +657,7 @@ void DataModel::FrameParser::import()
  */
 void DataModel::FrameParser::evaluate()
 {
-  if (loadScript(text()))
+  if (loadScript(text(), !m_suppressMessageBoxes))
   {
     Misc::Utilities::showMessageBox(
         tr("Code Validation Successful"),
@@ -607,13 +667,21 @@ void DataModel::FrameParser::evaluate()
 }
 
 /**
+ * @brief Sets whether to suppress messageboxes temporarily (for API calls).
+ */
+void DataModel::FrameParser::setSuppressMessageBoxes(const bool suppress)
+{
+  m_suppressMessageBoxes = suppress;
+}
+
+/**
  * @brief Loads the code stored in the project file into the code editor.
  */
 void DataModel::FrameParser::readCode()
 {
   const auto code = ProjectModel::instance().frameParserCode();
 
-  (void)loadScript(code);
+  (void)loadScript(code, !m_suppressMessageBoxes);
   m_widget.setPlainText(code);
   m_widget.document()->clearUndoRedoStacks();
   m_widget.document()->setModified(false);
@@ -634,7 +702,8 @@ void DataModel::FrameParser::selectAll()
  */
 void DataModel::FrameParser::clearContext()
 {
-  (void)loadScript(text());
+  // Respect suppression flag
+  (void)loadScript(text(), !m_suppressMessageBoxes);
 }
 
 /**
@@ -671,7 +740,7 @@ void DataModel::FrameParser::selectTemplate()
  */
 void DataModel::FrameParser::testWithSampleData()
 {
-  if (loadScript(text()))
+  if (loadScript(text(), true))
   {
     m_testDialog.clear();
     m_testDialog.showNormal();
