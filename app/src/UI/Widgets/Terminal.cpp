@@ -703,6 +703,14 @@ QPoint Widgets::Terminal::positionToCursor(const QPoint &pos) const
   int localY = (pos.y() - m_borderY) / m_cHeight;
   int remainingY = localY;
 
+  // If mouse is above the terminal content area, return first valid position
+  if (localY < 0)
+  {
+    if (m_scrollOffsetY < m_data.size())
+      return QPoint(0, m_scrollOffsetY);
+    return QPoint(0, 0);
+  }
+
   for (int i = m_scrollOffsetY; i < m_data.size(); ++i)
   {
     const QString &line = m_data[i];
@@ -720,7 +728,7 @@ QPoint Widgets::Terminal::positionToCursor(const QPoint &pos) const
       int lines = (line.length() + maxCharsPerLine() - 1) / maxCharsPerLine();
       if (remainingY < lines)
       {
-        int segmentIndex = remainingY;
+        int segmentIndex = qMax(0, remainingY);
         int segmentStart = segmentIndex * maxCharsPerLine();
         int segmentEnd = qMin(segmentStart + maxCharsPerLine(), line.length());
 
