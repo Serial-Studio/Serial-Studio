@@ -334,8 +334,8 @@ bool DataModel::FrameParser::loadScript(const QString &script,
     }
     else
     {
-      qWarning() << "[FrameParser] JavaScript syntax error at line" << lineNumber
-                 << ":" << errorMsg;
+      qWarning() << "[FrameParser] JavaScript syntax error at line"
+                 << lineNumber << ":" << errorMsg;
     }
     return false;
   }
@@ -449,7 +449,8 @@ bool DataModel::FrameParser::loadScript(const QString &script,
     {
       Misc::Utilities::showMessageBox(
           tr("Deprecated Function Signature"),
-          tr("The 'parse' function uses the old two-parameter format: parse(%1, "
+          tr("The 'parse' function uses the old two-parameter format: "
+             "parse(%1, "
              "%2)\n\n"
              "This format is no longer supported. Please update to the new "
              "single-parameter format:\n"
@@ -460,8 +461,9 @@ bool DataModel::FrameParser::loadScript(const QString &script,
     }
     else
     {
-      qWarning() << "[FrameParser] Parse function uses deprecated two-parameter "
-                    "format";
+      qWarning()
+          << "[FrameParser] Parse function uses deprecated two-parameter "
+             "format";
     }
     return false;
   }

@@ -836,9 +836,9 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
 
     else
     {
-      Misc::Utilities::showMessageBox(tr("Project error"),
-                                      tr("You need to add at least one dataset!"),
-                                      QMessageBox::Warning);
+      Misc::Utilities::showMessageBox(
+          tr("Project error"), tr("You need to add at least one dataset!"),
+          QMessageBox::Warning);
     }
     return false;
   }
@@ -1119,7 +1119,8 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
     if (!result.valid) [[unlikely]]
     {
       if (m_suppressMessageBoxes)
-        qWarning() << "[ProjectModel] JSON validation error:" << result.errorMessage;
+        qWarning() << "[ProjectModel] JSON validation error:"
+                   << result.errorMessage;
 
       else
       {
@@ -1235,8 +1236,9 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
       }
       else
       {
-        qWarning() << "[ProjectModel] Legacy frame parser function automatically "
-                      "migrated";
+        qWarning()
+            << "[ProjectModel] Legacy frame parser function automatically "
+               "migrated";
       }
       saveJsonFile(false);
       return;
@@ -1245,7 +1247,8 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
 
   // Let the generator use the given JSON file
   if (DataModel::FrameBuilder::instance().jsonMapFilepath() != path)
-    DataModel::FrameBuilder::instance().loadJsonMap(path, !m_suppressMessageBoxes);
+    DataModel::FrameBuilder::instance().loadJsonMap(path,
+                                                    !m_suppressMessageBoxes);
 
   // Update UI
   Q_EMIT titleChanged();
@@ -1287,7 +1290,8 @@ void DataModel::ProjectModel::enableProjectMode()
     else
     {
       // In API mode, automatically switch to ProjectFile mode
-      qWarning() << "[ProjectModel] Automatically switching to ProjectFile mode";
+      qWarning()
+          << "[ProjectModel] Automatically switching to ProjectFile mode";
       DataModel::FrameBuilder::instance().setOperationMode(
           SerialStudio::ProjectFile);
     }

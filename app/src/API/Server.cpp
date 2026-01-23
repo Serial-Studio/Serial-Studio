@@ -495,8 +495,9 @@ void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
   // Check buffer size BEFORE appending to prevent allocation crashes
   if (state.buffer.size() + data.size() > kMaxApiBufferBytes)
   {
-    qWarning() << "[API] Buffer size limit exceeded:" << state.peerAddress << ":"
-               << state.peerPort << "- Buffer size:" << state.buffer.size()
+    qWarning() << "[API] Buffer size limit exceeded:" << state.peerAddress
+               << ":" << state.peerPort
+               << "- Buffer size:" << state.buffer.size()
                << "- Incoming data:" << data.size()
                << "- Limit:" << kMaxApiBufferBytes << "- Disconnecting client";
 

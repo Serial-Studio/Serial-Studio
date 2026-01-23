@@ -337,7 +337,8 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
     }
     else
     {
-      qWarning() << "[FrameBuilder] JSON validation error:" << result.errorMessage;
+      qWarning() << "[FrameBuilder] JSON validation error:"
+                 << result.errorMessage;
     }
 
     // Restore parser messagebox behavior before returning

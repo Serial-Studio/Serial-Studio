@@ -89,8 +89,7 @@ API::Handlers::CSVPlayerHandler::open(const QString &id,
   if (!API::isPathAllowed(file_path))
   {
     return CommandResponse::makeError(
-        id, ErrorCode::InvalidParam,
-        QStringLiteral("filePath is not allowed"));
+        id, ErrorCode::InvalidParam, QStringLiteral("filePath is not allowed"));
   }
 
   CSV::Player::instance().openFile(file_path);
