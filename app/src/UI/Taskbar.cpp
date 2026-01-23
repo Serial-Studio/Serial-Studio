@@ -23,6 +23,7 @@
 
 #include <QTimer>
 #include <QGuiApplication>
+#include <QSignalBlocker>
 
 #include "IO/Manager.h"
 #include "UI/Dashboard.h"
@@ -267,9 +268,9 @@ QVariantList UI::Taskbar::groupModel() const
 
     // Register the group in the model
     QVariantMap group;
-    group["id"] = groupItem->data(TaskbarModel::GroupIdRole);
-    group["text"] = groupItem->data(TaskbarModel::GroupNameRole);
-    group["icon"] = groupItem->data(TaskbarModel::WidgetIconRole);
+    group["id"] = groupItem->data(TaskbarModel::GroupIdRole).toInt();
+    group["text"] = groupItem->data(TaskbarModel::GroupNameRole).toString();
+    group["icon"] = groupItem->data(TaskbarModel::WidgetIconRole).toString();
     model.append(group);
   }
 
@@ -434,7 +435,7 @@ void UI::Taskbar::setActiveGroupId(int groupId)
     auto groupItem = fullModel()->item(i);
     if (groupItem)
     {
-      const auto type = groupItem->data(TaskbarModel::WidgetTypeRole);
+      const auto type = groupItem->data(TaskbarModel::WidgetTypeRole).toInt();
       if (type == SerialStudio::DashboardTerminal)
       {
         auto g = groupItem->clone();
@@ -749,18 +750,28 @@ void UI::Taskbar::setWindowState(const int id,
  */
 void UI::Taskbar::rebuildModel()
 {
-  // Clear the model
-  m_windowIDs.clear();
-  m_fullModel->clear();
-  m_activeWindow = nullptr;
+  if (m_rebuildInProgress)
+    return;
 
-  // Clear widget ID mappings
-  m_widgetIdToWindowId.clear();
-  m_windowIdToWidgetId.clear();
+  m_rebuildInProgress = true;
 
-  // Clear windows in window manager
-  if (m_windowManager)
-    m_windowManager->clear();
+  {
+    QSignalBlocker fullBlocker(m_fullModel);
+    QSignalBlocker taskbarBlocker(m_taskbarButtons);
+
+    // Clear the model
+    m_windowIDs.clear();
+    m_fullModel->clear();
+    m_activeWindow = nullptr;
+
+    // Clear widget ID mappings
+    m_widgetIdToWindowId.clear();
+    m_windowIdToWidgetId.clear();
+
+    // Clear windows in window manager
+    if (m_windowManager)
+      m_windowManager->clear();
+  }
 
   // Reduce calls to UI::Dashboard::instance()
   auto *db = &UI::Dashboard::instance();
@@ -774,6 +785,7 @@ void UI::Taskbar::rebuildModel()
     Q_EMIT fullModelChanged();
     Q_EMIT windowStatesChanged();
     Q_EMIT registeredWindowsChanged();
+    m_rebuildInProgress = false;
     return;
   }
 
@@ -962,6 +974,8 @@ void UI::Taskbar::rebuildModel()
       setActiveGroupId(firstId);
     }
   }
+
+  m_rebuildInProgress = false;
 }
 
 //------------------------------------------------------------------------------

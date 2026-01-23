@@ -217,6 +217,7 @@ set(SOURCES
   src/API/Server.cpp
   src/API/CommandRegistry.cpp
   src/API/CommandHandler.cpp
+  src/API/PathPolicy.cpp
   src/API/Handlers/IOManagerHandler.cpp
   src/API/Handlers/UARTHandler.cpp
   src/API/Handlers/NetworkHandler.cpp
@@ -282,6 +283,7 @@ set(HEADERS
   src/API/CommandProtocol.h
   src/API/CommandRegistry.h
   src/API/CommandHandler.h
+  src/API/PathPolicy.h
   src/API/Handlers/IOManagerHandler.h
   src/API/Handlers/UARTHandler.h
   src/API/Handlers/NetworkHandler.h

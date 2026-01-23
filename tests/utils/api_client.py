@@ -141,8 +141,14 @@ class SerialStudioClient:
 
         self._send_message(message)
 
+        deadline = time.time() + (timeout or self.timeout)
+
         while True:
-            response = self._recv_message(timeout)
+            remaining = deadline - time.time()
+            if remaining <= 0:
+                raise TimeoutError("Timeout waiting for response")
+
+            response = self._recv_message(remaining)
 
             if response.get("type") == "response" and response.get("id") == request_id:
                 if response.get("success"):
@@ -183,8 +189,14 @@ class SerialStudioClient:
 
         self._send_message(message)
 
+        deadline = time.time() + (timeout or self.timeout)
+
         while True:
-            response = self._recv_message(timeout)
+            remaining = deadline - time.time()
+            if remaining <= 0:
+                raise TimeoutError("Timeout waiting for response")
+
+            response = self._recv_message(remaining)
 
             if response.get("type") == "response" and response.get("id") == request_id:
                 return response.get("results", [])

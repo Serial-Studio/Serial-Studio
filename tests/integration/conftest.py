@@ -73,38 +73,46 @@ def clean_state(api_client):
 
     Disconnects device, disables exports, creates new project.
     Sets operation mode to "Device Sends JSON" for tests.
+
+    Handles server disconnections gracefully (e.g., from rate limiting).
     """
-    try:
-        api_client.disconnect_device()
-    except Exception:
-        pass
+    # Helper to retry operations if server disconnected
+    def safe_command(func, *args, max_retries=2, **kwargs):
+        for attempt in range(max_retries):
+            try:
+                return func(*args, **kwargs)
+            except ConnectionError:
+                if attempt < max_retries - 1:
+                    # Server might have disconnected us, try to reconnect
+                    time.sleep(1.0)
+                    try:
+                        api_client.disconnect()
+                        api_client.connect()
+                    except:
+                        pass
+                else:
+                    # Final attempt failed, ignore
+                    pass
+            except Exception:
+                pass
 
-    try:
-        api_client.disable_csv_export()
-    except Exception:
-        pass
+    # Clean up before test
+    safe_command(api_client.disconnect_device)
+    safe_command(api_client.disable_csv_export)
+    safe_command(api_client.create_new_project)
+    safe_command(api_client.set_operation_mode, "json")
 
-    try:
-        api_client.create_new_project()
-    except Exception:
-        pass
-
-    try:
-        api_client.set_operation_mode("json")
-    except Exception:
-        pass
+    # Add delay to let server recover from any rate limiting
+    time.sleep(0.5)
 
     yield
 
-    try:
-        api_client.disconnect_device()
-    except Exception:
-        pass
+    # Clean up after test
+    safe_command(api_client.disconnect_device)
+    safe_command(api_client.disable_csv_export)
 
-    try:
-        api_client.disable_csv_export()
-    except Exception:
-        pass
+    # Add delay before next test
+    time.sleep(0.5)
 
 
 @pytest.fixture

@@ -31,6 +31,11 @@
 #include "API/Handlers/CSVPlayerHandler.h"
 #include "API/Handlers/DashboardHandler.h"
 
+namespace
+{
+constexpr int kMaxBatchCommands = 256;
+} // namespace
+
 #ifdef BUILD_COMMERCIAL
 #  include "API/Handlers/ModbusHandler.h"
 #  include "API/Handlers/CANBusHandler.h"
@@ -108,14 +113,27 @@ QByteArray API::CommandHandler::processMessage(const QByteArray &data)
 
   else if (type == MessageType::Batch)
   {
-    const auto batch = BatchRequest::fromJson(json);
-    if (!batch.isValid())
+    // Check batch size BEFORE parsing all commands to prevent DoS
+    const QString batchId = json.value(QStringLiteral("id")).toString();
+    const auto commandsArray = json.value(QStringLiteral("commands")).toArray();
+
+    if (commandsArray.isEmpty())
     {
-      return CommandResponse::makeError(batch.id, ErrorCode::InvalidMessageType,
+      return CommandResponse::makeError(batchId, ErrorCode::InvalidMessageType,
                                         QStringLiteral("Empty or invalid "
                                                        "'commands' array"))
           .toJsonBytes();
     }
+
+    if (commandsArray.size() > kMaxBatchCommands)
+    {
+      return CommandResponse::makeError(
+                 batchId, ErrorCode::InvalidParam,
+                 QStringLiteral("Batch size exceeds limit"))
+          .toJsonBytes();
+    }
+
+    const auto batch = BatchRequest::fromJson(json);
     return processBatch(batch).toJsonBytes();
   }
 

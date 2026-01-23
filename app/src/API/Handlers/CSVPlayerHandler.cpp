@@ -21,6 +21,7 @@
 
 #include "API/Handlers/CSVPlayerHandler.h"
 #include "API/CommandRegistry.h"
+#include "API/PathPolicy.h"
 #include "CSV/Player.h"
 
 /**
@@ -83,6 +84,13 @@ API::Handlers::CSVPlayerHandler::open(const QString &id,
     return CommandResponse::makeError(
         id, ErrorCode::InvalidParam,
         QStringLiteral("filePath cannot be empty"));
+  }
+
+  if (!API::isPathAllowed(file_path))
+  {
+    return CommandResponse::makeError(
+        id, ErrorCode::InvalidParam,
+        QStringLiteral("filePath is not allowed"));
   }
 
   CSV::Player::instance().openFile(file_path);

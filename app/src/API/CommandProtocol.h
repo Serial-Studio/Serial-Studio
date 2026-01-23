@@ -35,6 +35,7 @@ namespace MessageType
 {
 constexpr const char *Batch = "batch";
 constexpr const char *Command = "command";
+constexpr const char *Raw = "raw";
 constexpr const char *Response = "response";
 } // namespace MessageType
 
@@ -238,7 +239,8 @@ inline bool isApiMessage(const QByteArray &data)
   if (!parseMessage(data, type, json))
     return false;
 
-  return type == MessageType::Command || type == MessageType::Batch;
+  return type == MessageType::Command || type == MessageType::Batch
+         || type == MessageType::Raw;
 }
 
 } // namespace API

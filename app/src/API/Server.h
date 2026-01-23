@@ -25,7 +25,9 @@
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QByteArray>
+#include <QElapsedTimer>
 #include <QHostAddress>
+#include <QHash>
 
 #include "IO/HAL_Driver.h"
 #include "DataModel/Frame.h"
@@ -63,10 +65,12 @@ public slots:
   void removeSocket(QTcpSocket *socket);
   void writeRawData(const IO::ByteArrayPtr &data);
   void writeToSocket(QTcpSocket *socket, const QByteArray &data);
+  void disconnectSocket(QTcpSocket *socket);
 
 signals:
   void dataReceived(QTcpSocket *socket, const QByteArray &data);
   void clientCountChanged(int count);
+  void socketRemoved(QTcpSocket *socket);
 
 protected:
   void processItems(
@@ -147,13 +151,24 @@ protected:
 
 private slots:
   void acceptConnection();
+  void onSocketDisconnected();
+  void onClientCountChanged(int count);
+  void onSocketDisconnected(QTcpSocket *socket);
   void onDataReceived(QTcpSocket *socket, const QByteArray &data);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
-  void onClientCountChanged(int count);
 
 private:
+  struct ConnectionState
+  {
+    QByteArray buffer;
+    QElapsedTimer window;
+    int messageCount = 0;
+    int byteCount = 0;
+  };
+
   int m_clientCount;
   bool m_enabled;
   QTcpServer m_server;
+  QHash<QTcpSocket *, ConnectionState> m_connections;
 };
 } // namespace API

@@ -13,6 +13,7 @@
 
 #  include "API/Handlers/MDF4PlayerHandler.h"
 #  include "API/CommandRegistry.h"
+#  include "API/PathPolicy.h"
 #  include "MDF4/Player.h"
 
 /**
@@ -75,6 +76,13 @@ API::Handlers::MDF4PlayerHandler::open(const QString &id,
     return CommandResponse::makeError(
         id, ErrorCode::InvalidParam,
         QStringLiteral("filePath cannot be empty"));
+  }
+
+  if (!API::isPathAllowed(file_path))
+  {
+    return CommandResponse::makeError(
+        id, ErrorCode::InvalidParam,
+        QStringLiteral("filePath is not allowed"));
   }
 
   MDF4::Player::instance().openFile(file_path);

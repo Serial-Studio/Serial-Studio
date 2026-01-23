@@ -659,7 +659,7 @@ void IO::Manager::setBusType(const SerialStudio::BusType driver)
   {
     auto *bleDriver = &Drivers::BluetoothLE::instance();
     connect(bleDriver, &IO::Drivers::BluetoothLE::deviceConnectedChanged, this,
-            &IO::Manager::connectedChanged);
+            &IO::Manager::connectedChanged, Qt::UniqueConnection);
 
     if (bleDriver->operatingSystemSupported())
     {

@@ -21,6 +21,7 @@
 
 #include "API/Handlers/ProjectHandler.h"
 #include "API/CommandRegistry.h"
+#include "API/PathPolicy.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
@@ -207,6 +208,13 @@ API::Handlers::ProjectHandler::fileOpen(const QString &id,
     return CommandResponse::makeError(
         id, ErrorCode::InvalidParam,
         QStringLiteral("filePath cannot be empty"));
+  }
+
+  if (!API::isPathAllowed(file_path))
+  {
+    return CommandResponse::makeError(
+        id, ErrorCode::InvalidParam,
+        QStringLiteral("filePath is not allowed"));
   }
 
   DataModel::ProjectModel::instance().openJsonFile(file_path);
