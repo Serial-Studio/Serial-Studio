@@ -18,4 +18,4 @@ Pro-Funktionen:
 → CANBus- & MODBUS-Treiber
 → Kommerzielle Lizenz (keine GPL-Verpflichtungen)
 
-→ Erfahren Sie mehr: https://serial-studio.com/
+→ Mehr erfahren: https://serial-studio.com/

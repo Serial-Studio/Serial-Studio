@@ -1,12 +1,11 @@
-版权所有 (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-您正在使用 Serial Studio Pro 的试用版。此版本
-功能齐全，仅供评估和个人非商业用途。
-试用结束后，您可以升级到付费计划或自行编译
+您正在使用 Serial Studio Pro 的试用版。此版本功能齐全，仅供评估和个人非商业用途。
+试用期结束后，要继续使用，请升级到付费计划或自行编译
 GPLv3 源代码。
 
-→ 技术支持: alex@serial-studio.com
-→ 预约电话: https://calendly.com/serial-studio
+→ 支持: alex@serial-studio.com
+→ 安排通话: https://calendly.com/serial-studio
 → 了解更多: https://serial-studio.com/
 
 可用的专业功能：

@@ -1,7 +1,7 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
 Serial Studio Pro를 사용해 주시고 오픈 소스 개발을 지원해 주셔서 감사합니다!
-귀하의 라이센스는 활성화되어 있으며 상업적 및 독점적 사용이 승인되었습니다.
+귀하의 라이선스는 활성화되어 있으며 상업적 및 독점적 사용이 승인되었습니다.
 
 → 지원: alex@serial-studio.com
 → 통화 일정 잡기: https://calendly.com/serial-studio

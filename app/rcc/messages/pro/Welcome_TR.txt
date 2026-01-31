@@ -1,11 +1,11 @@
-Telif hakkı (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
 Serial Studio Pro'yu kullandığınız ve açık kaynak geliştirmeyi desteklediğiniz
 için teşekkür ederiz! Lisansınız aktif ve ticari ve özel kullanım için
 onaylanmıştır.
 
 → Destek: alex@serial-studio.com
-→ Görüşme planlayın: https://calendly.com/serial-studio
+→ Çağrı planlayın: https://calendly.com/serial-studio
 → Müşteri portalı: https://store.serial-studio.com/billing
 → Daha fazla bilgi edinin: https://serial-studio.com/
 

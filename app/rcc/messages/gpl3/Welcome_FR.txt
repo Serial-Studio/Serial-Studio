@@ -1,13 +1,14 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Ce logiciel est libre et open source sous la licence GNU GPLv3.
-Vous pouvez l'utiliser, le modifier et le redistribuer, à condition
-que les œuvres dérivées restent open source sous les mêmes termes.
+Ce logiciel est gratuit et open source sous la licence GNU GPLv3.
+Vous pouvez l'utiliser, le modifier et le redistribuer, à condition que
+les œuvres dérivées restent open source sous les mêmes termes.
 
 → Licence : https://www.gnu.org/licenses/gpl-3.0.html
 → Source :  https://github.com/serial-studio/serial-studio
 
-Vous aimez ce projet ? Envisagez de soutenir le développement avec Serial Studio Pro :
+Vous aimez ce projet ? Envisagez de soutenir le développement avec
+Serial Studio Pro :
 → https://store.serial-studio.com/
 
 Fonctionnalités Pro :
@@ -15,6 +16,6 @@ Fonctionnalités Pro :
 → Visualisation XY et 3D
 → Entrée audio
 → Pilotes CANBus & MODBUS
-→ Licence commerciale (pas d'obligations GPL)
+→ Licence commerciale (sans obligations GPL)
 
 → En savoir plus : https://serial-studio.com/

@@ -1,4 +1,4 @@
-版权所有 (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
 感谢您使用 Serial Studio Pro 并支持开源开发！
 您的许可证已激活并批准用于商业和专有用途。
@@ -12,5 +12,5 @@
 → MQTT 集成
 → XY 和 3D 可视化
 → 音频输入
-→ CANBus 和 MODBUS 驱动
+→ CANBus & MODBUS 驱动
 → 优先支持

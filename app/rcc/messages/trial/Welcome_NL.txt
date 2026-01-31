@@ -3,7 +3,7 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 U gebruikt een proefversie van Serial Studio Pro. Deze versie is
 volledig functioneel voor evaluatie en persoonlijk, niet-commercieel
 gebruik. Om door te gaan na uw proefperiode, upgrade naar een betaald
-abonnement of compileer de GPLv3-broncode zelf.
+plan of compileer de GPLv3-broncode zelf.
 
 → Ondersteuning: alex@serial-studio.com
 → Plan een gesprek: https://calendly.com/serial-studio
@@ -12,5 +12,5 @@ abonnement of compileer de GPLv3-broncode zelf.
 Beschikbare Pro-functies:
 → MQTT-integratie
 → XY- en 3D-visualisatie
-→ Audio-ingang
-→ CANBus & MODBUS-stuurprogramma's
+→ Audio-invoer
+→ CANBus & MODBUS-drivers

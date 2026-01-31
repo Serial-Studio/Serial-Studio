@@ -1,14 +1,15 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Vă mulțumim că utilizați Serial Studio Pro și sprijiniți dezvoltarea open source!
-Licența dumneavoastră este activă și aprobată pentru utilizare comercială și proprietară.
+Vă mulțumim că utilizați Serial Studio Pro și sprijiniți dezvoltarea open
+source! Licența dumneavoastră este activă și aprobată pentru utilizare
+comercială și proprietară.
 
 → Suport: alex@serial-studio.com
 → Programați un apel: https://calendly.com/serial-studio
-→ Portalul clienților: https://store.serial-studio.com/billing
+→ Portal clienți: https://store.serial-studio.com/billing
 → Aflați mai multe: https://serial-studio.com/
 
-Funcționalități Pro:
+Funcții Pro:
 → Integrare MQTT
 → Vizualizare XY și 3D
 → Intrare audio

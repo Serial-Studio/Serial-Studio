@@ -12,5 +12,5 @@ Características Pro:
 → Integración MQTT
 → Visualización XY y 3D
 → Entrada de audio
-→ Controladores CANBus & MODBUS
+→ Controladores CANBus y MODBUS
 → Soporte prioritario

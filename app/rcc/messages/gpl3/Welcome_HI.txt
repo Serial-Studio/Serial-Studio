@@ -1,21 +1,20 @@
-कॉपीराइट (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
 यह सॉफ़्टवेयर GNU GPLv3 लाइसेंस के तहत मुफ्त और ओपन सोर्स है।
-आप इसका उपयोग, संशोधन और पुनर्वितरण कर सकते हैं, बशर्ते कि व्युत्पन्न
-कार्य समान शर्तों के तहत ओपन सोर्स बने रहें।
+आप इसका उपयोग, संशोधन और पुनर्वितरण कर सकते हैं, बशर्ते कि व्युत्पन्न कार्य
+उसी शर्तों के तहत ओपन सोर्स बने रहें।
 
 → लाइसेंस: https://www.gnu.org/licenses/gpl-3.0.html
 → स्रोत:  https://github.com/serial-studio/serial-studio
 
-इस परियोजना को पसंद करते हैं? Serial Studio Pro के साथ विकास का समर्थन
-करने पर विचार करें:
+क्या आपको यह प्रोजेक्ट पसंद है? Serial Studio Pro के साथ विकास का समर्थन करें:
 → https://store.serial-studio.com/
 
-प्रो सुविधाएँ:
+प्रो विशेषताएं:
 → MQTT एकीकरण
-→ XY और 3D विज़ुअलाइज़ेशन
+→ XY और 3D दृश्यांकन
 → ऑडियो इनपुट
 → CANBus और MODBUS ड्राइवर
 → वाणिज्यिक लाइसेंस (कोई GPL दायित्व नहीं)
 
-→ और जानें: https://serial-studio.com/
+→ अधिक जानें: https://serial-studio.com/

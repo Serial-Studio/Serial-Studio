@@ -1,16 +1,16 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Serial Studio Proの試用版を使用しています。このバージョンは、
-評価および個人的な非商業利用のみで完全に機能します。
+あなたはSerial Studio Proの試用版を使用しています。このバージョンは、
+評価および個人の非商業的使用のみで完全に機能します。
 試用期間後も続けるには、有料プランにアップグレードするか、
-GPLv3ソースコードを自分でコンパイルしてください。
+GPLv3のソースコードを自分でコンパイルしてください。
 
 → サポート: alex@serial-studio.com
 → 通話をスケジュール: https://calendly.com/serial-studio
-→ 詳細を見る: https://serial-studio.com/
+→ 詳細はこちら: https://serial-studio.com/
 
 利用可能なPro機能:
 → MQTT統合
 → XYおよび3Dビジュアライゼーション
 → オーディオ入力
-→ CANBus & MODBUSドライバー
+→ CANBus & MODBUSドライバ

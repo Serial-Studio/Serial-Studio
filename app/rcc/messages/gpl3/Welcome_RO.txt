@@ -5,7 +5,7 @@ Acest software este gratuit și open source sub licența GNU GPLv3.
 derivate să rămână open source sub aceleași condiții.
 
 → Licență: https://www.gnu.org/licenses/gpl-3.0.html
-→ Sursa:  https://github.com/serial-studio/serial-studio
+→ Sursă:   https://github.com/serial-studio/serial-studio
 
 Vă place acest proiect? Luați în considerare susținerea dezvoltării
 cu Serial Studio Pro:

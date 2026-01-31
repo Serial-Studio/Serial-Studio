@@ -15,6 +15,6 @@ Pro-funktioner:
 → XY- och 3D-visualisering
 → Ljudingång
 → CANBus & MODBUS-drivrutiner
-→ Kommersiell licens (inga GPL-förpliktelser)
+→ Kommersiell licens (inga GPL-åtaganden)
 
 → Läs mer: https://serial-studio.com/

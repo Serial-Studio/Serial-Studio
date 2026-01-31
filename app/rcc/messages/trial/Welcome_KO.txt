@@ -1,9 +1,9 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-귀하는 Serial Studio Pro의 평가판을 사용하고 있습니다. 이 버전은
-평가 및 개인적, 비상업적 용도로만 완전히 기능합니다.
-평가판 사용 후 계속 사용하려면 유료 플랜으로 업그레이드하거나
-GPLv3 소스 코드를 직접 컴파일하십시오.
+Serial Studio Pro의 평가판을 사용하고 있습니다. 이 버전은 평가 및
+개인적, 비상업적 용도로만 완전히 기능합니다. 평가판 사용 후 계속
+사용하려면 유료 플랜으로 업그레이드하거나 GPLv3 소스 코드를 직접
+컴파일하십시오.
 
 → 지원: alex@serial-studio.com
 → 통화 일정 잡기: https://calendly.com/serial-studio

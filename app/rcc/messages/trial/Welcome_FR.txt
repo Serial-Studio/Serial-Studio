@@ -1,12 +1,12 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
 Vous utilisez une version d'essai de Serial Studio Pro. Cette version est
-entièrement fonctionnelle pour une utilisation personnelle et non commerciale
-uniquement. Pour continuer après votre essai, passez à un plan payant ou
-compilez vous-même le code source GPLv3.
+entièrement fonctionnelle pour une utilisation personnelle et non
+commerciale uniquement. Pour continuer après votre essai, passez à un plan
+payant ou compilez vous-même le code source GPLv3.
 
 → Support : alex@serial-studio.com
-→ Planifiez un appel : https://calendly.com/serial-studio
+→ Programmer un appel : https://calendly.com/serial-studio
 → En savoir plus : https://serial-studio.com/
 
 Fonctionnalités Pro disponibles :

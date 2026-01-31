@@ -2,12 +2,12 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
 Utilizați o versiune de încercare a Serial Studio Pro. Această versiune
 este complet funcțională pentru evaluare și utilizare personală,
-necomercială. Pentru a continua după perioada de încercare, treceți la
-un plan plătit sau compilați singur codul sursă GPLv3.
+necomercială. Pentru a continua după perioada de încercare, faceți
+upgrade la un plan plătit sau compilați singur codul sursă GPLv3.
 
 → Suport: alex@serial-studio.com
-→ Programează un apel: https://calendly.com/serial-studio
-→ Află mai multe: https://serial-studio.com/
+→ Programați un apel: https://calendly.com/serial-studio
+→ Aflați mai multe: https://serial-studio.com/
 
 Funcționalități Pro disponibile:
 → Integrare MQTT

@@ -1,20 +1,20 @@
-Telif hakkı (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Bu yazılım, GNU GPLv3 lisansı altında ücretsiz ve açık kaynaklıdır.
+Bu yazılım, GNU GPLv3 lisansı altında ücretsiz ve açık kaynaktır.
 Türev çalışmaların aynı şartlar altında açık kaynak kalması koşuluyla
 kullanabilir, değiştirebilir ve yeniden dağıtabilirsiniz.
 
 → Lisans: https://www.gnu.org/licenses/gpl-3.0.html
 → Kaynak:  https://github.com/serial-studio/serial-studio
 
-Bu projeyi beğendiniz mi? Serial Studio Pro ile geliştirmeyi desteklemeyi düşünün:
-→ https://store.serial-studio.com/
+Bu projeyi beğendiniz mi? Serial Studio Pro ile geliştirmeyi desteklemeyi
+düşünün: → https://store.serial-studio.com/
 
 Pro özellikler:
 → MQTT entegrasyonu
 → XY ve 3D görselleştirme
 → Ses girişi
 → CANBus & MODBUS sürücüleri
-→ Ticari lisans (GPL yükümlülüğü yok)
+→ Ticari lisans (GPL yükümlülüğü yoktur)
 
 → Daha fazla bilgi edinin: https://serial-studio.com/

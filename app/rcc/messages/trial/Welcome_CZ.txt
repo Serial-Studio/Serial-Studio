@@ -6,7 +6,7 @@ pokračovat po skončení zkušební doby, upgradujte na placený plán
 nebo si sami zkompilujte zdrojový kód GPLv3.
 
 → Podpora: alex@serial-studio.com
-→ Naplánujte si hovor: https://calendly.com/serial-studio
+→ Naplánovat hovor: https://calendly.com/serial-studio
 → Více informací: https://serial-studio.com/
 
 Dostupné funkce Pro:

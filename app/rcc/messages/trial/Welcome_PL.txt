@@ -13,4 +13,4 @@ Dostępne funkcje Pro:
 → Integracja z MQTT
 → Wizualizacja XY i 3D
 → Wejście audio
-→ Sterowniki CANBus i MODBUS
+→ Sterowniki CANBus & MODBUS

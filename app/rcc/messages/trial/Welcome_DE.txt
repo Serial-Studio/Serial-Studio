@@ -1,13 +1,13 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
 Sie verwenden eine Testversion von Serial Studio Pro. Diese Version ist
-voll funktionsfähig zur Bewertung und für den persönlichen, nicht
+voll funktionsfähig zur Evaluierung und für den persönlichen, nicht
 kommerziellen Gebrauch. Um nach Ihrer Testphase fortzufahren, wechseln
 Sie zu einem kostenpflichtigen Plan oder kompilieren Sie den GPLv3-
 Quellcode selbst.
 
 → Support: alex@serial-studio.com
-→ Termin vereinbaren: https://calendly.com/serial-studio
+→ Vereinbaren Sie einen Anruf: https://calendly.com/serial-studio
 → Mehr erfahren: https://serial-studio.com/
 
 Verfügbare Pro-Funktionen:

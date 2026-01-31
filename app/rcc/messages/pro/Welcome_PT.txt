@@ -9,7 +9,7 @@ aberto! Sua licença está ativa e aprovada para uso comercial e proprietário.
 → Saiba mais: https://serial-studio.com/
 
 Recursos Pro:
-→ Integração com MQTT
+→ Integração MQTT
 → Visualização XY e 3D
 → Entrada de áudio
 → Drivers CANBus & MODBUS

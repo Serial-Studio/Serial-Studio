@@ -1,8 +1,7 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-Tack för att du använder Serial Studio Pro och stöder utvecklingen av öppen
-källkod! Din licens är aktiv och godkänd för kommersiellt och proprietärt
-bruk.
+Tack för att du använder Serial Studio Pro och stöder öppen källkodsutveckling!
+Din licens är aktiv och godkänd för kommersiell och proprietär användning.
 
 → Support: alex@serial-studio.com
 → Boka ett samtal: https://calendly.com/serial-studio
