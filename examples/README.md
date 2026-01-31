@@ -191,6 +191,26 @@ Python client for the Serial Studio API that allows external programs to control
   - **No Dependencies**: Uses only Python standard library
   - No hardware needed - software only
 
+### 13. NI DAQmx Example
+**Difficulty:** 🟡 Intermediate | **Time:** ~5 minutes | **License:** MIT
+
+High-performance Python bridge that streams real-time data from NI DAQ devices to Serial Studio via UDP. Supports voltage and current measurements with minimal latency.
+
+**Contents:**
+  - **daqbridge.py**: Main acquisition script with configurable channels and UDP streaming
+  - **README.md**: Complete setup guide and configuration reference
+
+**Features:**
+  - **Universal NI DAQ Support**: Works with USB-600x, USB-621x, PCIe-6xxx, CompactDAQ, and other DAQmx-compatible devices
+  - **Voltage & Current**: Direct voltage or current measurement via shunt resistor
+  - **Real-Time Streaming**: One UDP packet per sample for lowest latency
+  - **Configurable Channels**: Individual voltage ranges, terminal configs per channel
+  - **Custom Processing**: User-defined processing function for calibration, filtering, calculations
+  - **CSV Output**: Clean comma-separated format with configurable precision
+  - **Live Stats**: Real-time sample rate and packet count monitoring
+  - **Clean Shutdown**: Proper signal handling for Ctrl+C
+  - Requires NI-DAQmx driver and hardware
+
 ## Getting Started
 
 To use these examples:
