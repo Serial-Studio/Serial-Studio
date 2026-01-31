@@ -135,7 +135,6 @@ void Widgets::LEDPanel::updateData()
  */
 void Widgets::LEDPanel::onThemeChanged()
 {
-  const auto &colors = Misc::ThemeManager::instance().widgetColors();
   if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index))
   {
     const auto &group = GET_GROUP(SerialStudio::DashboardLED, m_index);
@@ -145,11 +144,7 @@ void Widgets::LEDPanel::onThemeChanged()
     for (size_t i = 0; i < group.datasets.size(); ++i)
     {
       const auto &dataset = group.datasets[i];
-      const auto index = dataset.index - 1;
-      const auto color = colors.count() > index
-                             ? colors.at(index)
-                             : colors.at(index % colors.count());
-
+      const auto color = SerialStudio::getDatasetColor(dataset.index);
       m_colors[i] = color.name();
     }
 

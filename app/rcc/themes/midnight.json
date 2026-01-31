@@ -144,17 +144,26 @@
     "plot_cursor_b":"#e06c75",
 
     "widget_colors":[
-      "#4A90E2",
-      "#50FA7B",
       "#FF5555",
-      "#FFB86C",
-      "#BD93F9",
-      "#F1FA8C",
+      "#50FAB2",
+      "#FF8C42",
+      "#4A90E2",
+      "#FFD93D",
+      "#7B68EE",
+      "#50FA7B",
       "#FF79C6",
+      "#FFB86C",
       "#8BE9FD",
-      "#CFCFCF",
+      "#F1FA8C",
+      "#5AA8FF",
+      "#69FF94",
+      "#BD93F9",
       "#FF6E6E",
-      "#5AF78E"
+      "#6FC8E8",
+      "#C39DFF",
+      "#FF6B9D",
+      "#FF5C8A",
+      "#FF92D0"
     ]
   }
 }

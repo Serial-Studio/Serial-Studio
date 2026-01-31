@@ -827,11 +827,8 @@ void Widgets::GPS::precacheWorld()
 void Widgets::GPS::onThemeChanged()
 {
   // Obtain color for latest line data
-  const auto &colors = Misc::ThemeManager::instance().widgetColors();
-  if (colors.count() > m_index)
-    m_lineHeadColor = colors.at(m_index);
-  else
-    m_lineHeadColor = colors.at(m_index % colors.count());
+  const auto color = SerialStudio::getDatasetColor(m_index + 1);
+  m_lineHeadColor = color;
 
   // Create gradient based on widget index
   QColor midCurve(m_lineHeadColor);

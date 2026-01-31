@@ -148,9 +148,9 @@ Item {
 
           Rectangle {
             x: 2
-            y: isHorizontal ? 2 : progressBar.visualPosition * (parent.height - 4) + 2
+            y: isHorizontal ? 2 : (1 - progressBar.visualPosition) * (parent.height - 4) + 2
             width: isHorizontal ? Math.max(0, progressBar.visualPosition * (parent.width - 4)) : parent.width - 4
-            height: isHorizontal ? parent.height - 4 : Math.max(0, (1 - progressBar.visualPosition) * (parent.height - 4))
+            height: isHorizontal ? parent.height - 4 : Math.max(0, progressBar.visualPosition * (parent.height - 4))
             radius: 1
 
             gradient: Gradient {
@@ -175,7 +175,7 @@ Item {
           delegate: Item {
             required property int index
             readonly property real frac: index / (tickCount - 1)
-            readonly property real tickValue: model.minValue + frac * (model.maxValue - model.minValue)
+            readonly property real tickValue: root.model.minValue + frac * (root.model.maxValue - root.model.minValue)
 
             Rectangle {
               x: isHorizontal ? (frac * progressBar.width - width / 2) : progressBar.width
@@ -194,6 +194,54 @@ Item {
               color: Cpp_ThemeManager.colors["widget_text"]
             }
           }
+        }
+
+        Rectangle {
+          visible: root.model.alarmsDefined
+          x: {
+            if (isHorizontal) {
+              const alarmFrac = (root.model.alarmLow - root.model.minValue) / (root.model.maxValue - root.model.minValue)
+              return alarmFrac * progressBar.width - width / 2
+            } else {
+              return progressBar.width
+            }
+          }
+          y: {
+            if (isHorizontal) {
+              return progressBar.height
+            } else {
+              const alarmFrac = (root.model.alarmLow - root.model.minValue) / (root.model.maxValue - root.model.minValue)
+              return (1 - alarmFrac) * progressBar.height - height / 2
+            }
+          }
+          width: isHorizontal ? 3 : 12
+          height: isHorizontal ? 12 : 3
+          color: Cpp_ThemeManager.colors["alarm"]
+          radius: 1
+        }
+
+        Rectangle {
+          visible: root.model.alarmsDefined
+          x: {
+            if (isHorizontal) {
+              const alarmFrac = (root.model.alarmHigh - root.model.minValue) / (root.model.maxValue - root.model.minValue)
+              return alarmFrac * progressBar.width - width / 2
+            } else {
+              return progressBar.width
+            }
+          }
+          y: {
+            if (isHorizontal) {
+              return progressBar.height
+            } else {
+              const alarmFrac = (root.model.alarmHigh - root.model.minValue) / (root.model.maxValue - root.model.minValue)
+              return (1 - alarmFrac) * progressBar.height - height / 2
+            }
+          }
+          width: isHorizontal ? 3 : 12
+          height: isHorizontal ? 12 : 3
+          color: Cpp_ThemeManager.colors["alarm"]
+          radius: 1
         }
       }
     }

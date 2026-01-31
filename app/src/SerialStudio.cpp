@@ -84,6 +84,15 @@ bool SerialStudio::commercialCfg(const QVector<DataModel::Group> &g)
   return false;
 }
 
+/**
+ * @brief Checks if a project configuration requires commercial features.
+ *
+ * This function inspects the provided list of JSON groups and determines
+ * if any of them use features that are exclusive to the commercial license.
+ *
+ * @param groups A vector of JSON::Group objects to analyze.
+ * @return true if any commercial-only features are detected; false otherwise.
+ */
 bool SerialStudio::commercialCfg(const std::vector<DataModel::Group> &g)
 {
   for (const auto &group : std::as_const(g))
@@ -479,10 +488,22 @@ QColor SerialStudio::getDatasetColor(const int index)
   static const auto *theme = &Misc::ThemeManager::instance();
   const auto idx = index - 1;
   const auto colors = theme->widgetColors();
-  const auto color
-      = colors.count() > idx ? colors.at(idx) : colors.at(idx % colors.count());
 
-  return color;
+  if (colors.isEmpty())
+    return QColor(Qt::gray);
+
+  const auto count = colors.count();
+  if (idx < count)
+    return colors.at(idx);
+
+  else
+  {
+    const auto cycle = idx / count;
+    const auto position = idx % count;
+    const auto offset = (cycle * 7) % count;
+    const auto colorIdx = (position + offset) % count;
+    return colors.at(colorIdx);
+  }
 }
 
 /**

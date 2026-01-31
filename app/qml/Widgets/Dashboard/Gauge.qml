@@ -44,6 +44,11 @@ Item {
   Behavior on normalizedValue {NumberAnimation{duration: 100}}
 
   //
+  // Helper properties
+  //
+  readonly property color fillColor: model.alarmTriggered ? Cpp_ThemeManager.colors["alarm"] : root.color
+
+  //
   // Gauge parameters
   //
   readonly property real endAngleDeg: 135
@@ -135,7 +140,7 @@ Item {
             height: parent.height
             anchors.centerIn: parent
             Behavior on border.color {ColorAnimation{duration: 300}}
-            border.color: model.alarmTriggered ? Cpp_ThemeManager.colors["alarm"] : root.color
+            border.color: fillColor
           }
 
           Repeater {
@@ -143,7 +148,7 @@ Item {
             delegate: Item {
               required property int index
               readonly property real frac: index / (tickCount - 1)
-              readonly property real tickValue: model.minValue + frac * (model.maxValue - model.minValue)
+              readonly property real tickValue: root.model.minValue + frac * (root.model.maxValue - root.model.minValue)
               readonly property real angleDeg: startAngleDeg + frac * angleRangeDeg
               readonly property real angleRad: (angleDeg - 90) * Math.PI / 180
               readonly property real tickRadius: gaugeFace.width / 2 - gaugeFace.border.width / 2
@@ -155,7 +160,7 @@ Item {
                 width: gaugeFace.border.width * 0.7
                 height: 2
                 radius: 1
-                color: Qt.darker(root.color, 1.3)
+                color: Qt.darker(fillColor, 1.3)
                 rotation: parent.angleDeg + 90
                 transformOrigin: Item.Center
                 antialiasing: true
@@ -174,6 +179,46 @@ Item {
                 style: Text.Raised
                 styleColor: Qt.rgba(0, 0, 0, 0.3)
               }
+            }
+          }
+
+          Item {
+            visible: root.model.alarmsDefined
+            readonly property real alarmLowFrac: (root.model.alarmLow - root.model.minValue) / (root.model.maxValue - root.model.minValue)
+            readonly property real angleDeg: startAngleDeg + alarmLowFrac * angleRangeDeg
+            readonly property real angleRad: (angleDeg - 90) * Math.PI / 180
+            readonly property real tickRadius: gaugeFace.width / 2 - gaugeFace.border.width / 2
+
+            Rectangle {
+              x: gaugeFace.width / 2 + Math.cos(parent.angleRad) * parent.tickRadius - width / 2
+              y: gaugeFace.height / 2 + Math.sin(parent.angleRad) * parent.tickRadius - height / 2
+              width: gaugeFace.border.width * 1.0
+              height: 4
+              radius: 2
+              color: Cpp_ThemeManager.colors["alarm"]
+              rotation: parent.angleDeg + 90
+              transformOrigin: Item.Center
+              antialiasing: true
+            }
+          }
+
+          Item {
+            visible: root.model.alarmsDefined
+            readonly property real alarmHighFrac: (root.model.alarmHigh - root.model.minValue) / (root.model.maxValue - root.model.minValue)
+            readonly property real angleDeg: startAngleDeg + alarmHighFrac * angleRangeDeg
+            readonly property real angleRad: (angleDeg - 90) * Math.PI / 180
+            readonly property real tickRadius: gaugeFace.width / 2 - gaugeFace.border.width / 2
+
+            Rectangle {
+              x: gaugeFace.width / 2 + Math.cos(parent.angleRad) * parent.tickRadius - width / 2
+              y: gaugeFace.height / 2 + Math.sin(parent.angleRad) * parent.tickRadius - height / 2
+              width: gaugeFace.border.width * 1.0
+              height: 4
+              radius: 2
+              color: Cpp_ThemeManager.colors["alarm"]
+              rotation: parent.angleDeg + 90
+              transformOrigin: Item.Center
+              antialiasing: true
             }
           }
 
@@ -211,7 +256,7 @@ Item {
             text: model.units
             font.pixelSize: fontSize
             font.family: Cpp_Misc_CommonFonts.monoFont.family
-            color: root.color
+            color: fillColor
             style: Text.Raised
             styleColor: Qt.rgba(0, 0, 0, 0.3)
           }
@@ -235,9 +280,9 @@ Item {
           rotation: control.angle
 
           gradient: Gradient {
-            GradientStop { position: 0.0; color: Qt.lighter(root.color, 1.3) }
-            GradientStop { position: 0.5; color: root.color }
-            GradientStop { position: 1.0; color: Qt.darker(root.color, 1.2) }
+            GradientStop { position: 0.0; color: Qt.lighter(fillColor, 1.3) }
+            GradientStop { position: 0.5; color: fillColor }
+            GradientStop { position: 1.0; color: Qt.darker(fillColor, 1.2) }
           }
 
           Rectangle {
