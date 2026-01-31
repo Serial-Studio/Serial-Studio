@@ -492,6 +492,9 @@ QColor SerialStudio::getDatasetColor(const int index)
   if (colors.isEmpty())
     return QColor(Qt::gray);
 
+  if (idx < 0)
+    return QColor(Qt::gray);
+
   const auto count = colors.count();
   if (idx < count)
     return colors.at(idx);

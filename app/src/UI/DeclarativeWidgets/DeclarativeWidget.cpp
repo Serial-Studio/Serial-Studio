@@ -211,6 +211,7 @@ void DeclarativeWidget::setPalette(const QPalette &palette)
   {
     m_widget->setPalette(palette);
     requestUpdate();
+    redraw();
 
     Q_EMIT paletteChanged();
   }

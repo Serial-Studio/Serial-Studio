@@ -188,4 +188,5 @@ void StaticTable::loadTheme()
 
   m_widget.setPalette(p);
   requestUpdate();
+  redraw();
 }
