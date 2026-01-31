@@ -114,29 +114,59 @@ Item {
         value: root.value
 
         anchors.centerIn: parent
-        width: isHorizontal ? parent.width - labelMetrics.width : Math.min(80, parent.width * 0.5)
-        height: isHorizontal ? Math.min(50, parent.height * 0.7) : parent.height - labelMetrics.height * 2
+        width: isHorizontal ? Math.max(100, parent.width - labelMetrics.width) : Math.min(80, parent.width * 0.5)
+        height: isHorizontal ? Math.min(50, parent.height * 0.7) : Math.max(100, parent.height - labelMetrics.height * 2)
 
         background: Rectangle {
           implicitWidth: 200
           implicitHeight: 30
-          color: Cpp_ThemeManager.colors["widget_base"]
+          radius: 3
           border.width: 2
           border.color: Cpp_ThemeManager.colors["widget_border"]
-          radius: 3
+
+          gradient: Gradient {
+            orientation: isHorizontal ? Gradient.Horizontal : Gradient.Vertical
+            GradientStop { position: 0.0; color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.05) }
+            GradientStop { position: 0.5; color: Cpp_ThemeManager.colors["widget_base"] }
+            GradientStop { position: 1.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.05) }
+          }
+
+          Rectangle {
+            anchors.fill: parent
+            anchors.margins: 1
+            radius: parent.radius - 1
+            color: "transparent"
+            border.width: 1
+            border.color: Qt.rgba(0, 0, 0, 0.1)
+          }
         }
 
         contentItem: Item {
           implicitWidth: 200
           implicitHeight: 30
+          clip: true
 
           Rectangle {
-            width: isHorizontal ? progressBar.visualPosition * parent.width : parent.width
-            height: isHorizontal ? parent.height : (1 - progressBar.visualPosition) * parent.height
-            y: isHorizontal ? 0 : progressBar.visualPosition * parent.height
-            radius: 2
-            color: fillColor
-            Behavior on color {ColorAnimation{duration: 200}}
+            x: 2
+            y: isHorizontal ? 2 : progressBar.visualPosition * (parent.height - 4) + 2
+            width: isHorizontal ? Math.max(0, progressBar.visualPosition * (parent.width - 4)) : parent.width - 4
+            height: isHorizontal ? parent.height - 4 : Math.max(0, (1 - progressBar.visualPosition) * (parent.height - 4))
+            radius: 1
+
+            gradient: Gradient {
+              orientation: isHorizontal ? Gradient.Horizontal : Gradient.Vertical
+              GradientStop { position: 0.0; color: Qt.lighter(fillColor, 1.2) }
+              GradientStop { position: 0.5; color: fillColor }
+              GradientStop { position: 1.0; color: Qt.darker(fillColor, 1.1) }
+            }
+
+            Rectangle {
+              anchors.left: parent.left
+              anchors.top: parent.top
+              anchors.bottom: parent.bottom
+              width: 1
+              color: Qt.rgba(1, 1, 1, 0.3)
+            }
           }
         }
 
