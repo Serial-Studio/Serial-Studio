@@ -71,7 +71,6 @@ public slots:
   void copy();
   void paste();
   void apply();
-  void reload();
   void import();
   void evaluate();
   void readCode();
@@ -79,7 +78,8 @@ public slots:
   void clearContext();
   void selectTemplate();
   void testWithSampleData();
-  void loadDefaultTemplate();
+  void reload(const bool guiTrigger = false);
+  void loadDefaultTemplate(const bool guiTrigger = false);
 
 private slots:
   void onThemeChanged();

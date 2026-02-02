@@ -50,7 +50,7 @@ Widgets.Pane {
     sequences: [StandardKey.SelectAll]
   } Shortcut {
     enabled: frameParser.activeFocus
-    onActivated: frameParser.reload()
+    onActivated: frameParser.reload(true)
     sequences: [StandardKey.New]
   } Shortcut {
     enabled: frameParser.activeFocus
@@ -196,7 +196,7 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Reset")
             toolbarButton: false
-            onClicked: frameParser.reload()
+            onClicked: frameParser.reload(true)
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/reload.svg"
             ToolTip.text: qsTr("Reset to the default parsing script")

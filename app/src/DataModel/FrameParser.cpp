@@ -577,8 +577,9 @@ void DataModel::FrameParser::apply()
 
 /**
  * @brief Loads the default frame parser function into the code editor.
+ * @param guiTrigger If true, marks the project as modified (user action)
  */
-void DataModel::FrameParser::reload()
+void DataModel::FrameParser::reload(const bool guiTrigger)
 {
   // Document has been modified, ask user if he/she wants to continue
   if (isModified())
@@ -592,7 +593,7 @@ void DataModel::FrameParser::reload()
   }
 
   // Load default template
-  loadDefaultTemplate();
+  loadDefaultTemplate(guiTrigger);
 }
 
 /**
@@ -761,6 +762,8 @@ void DataModel::FrameParser::testWithSampleData()
  * The CSV template is chosen as the default because it's one of the most common
  * and simple data formats for serial communication.
  *
+ * @param guiTrigger If true, marks the project as modified (user action)
+ *
  * @note If "comma_separated.js" is not found in m_templateFiles, the index will
  *       be -1, which may result in undefined behavior. Ensure loadTemplates()
  *       is called before this function.
@@ -768,11 +771,13 @@ void DataModel::FrameParser::testWithSampleData()
  * @see setTemplateIdx()
  * @see loadTemplates()
  */
-void DataModel::FrameParser::loadDefaultTemplate()
+void DataModel::FrameParser::loadDefaultTemplate(const bool guiTrigger)
 {
   const auto idx = m_templateFiles.indexOf("comma_separated.js");
   setTemplateIdx(idx);
-  DataModel::ProjectModel::instance().setModified(false);
+
+  if (!guiTrigger)
+    DataModel::ProjectModel::instance().setModified(false);
 }
 
 /**
