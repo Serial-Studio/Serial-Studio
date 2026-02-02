@@ -1146,6 +1146,9 @@ void UI::Taskbar::onBatchUpdateCompleted() {}
  *
  * This is called when a project file is loaded that contains a saved
  * dashboard layout. The layout is restored via the WindowManager.
+ *
+ * Note: Layout restoration is skipped when connected to avoid overwriting
+ * user-modified layouts during active streaming sessions.
  */
 void UI::Taskbar::onDashboardLayoutChanged()
 {
@@ -1163,7 +1166,11 @@ void UI::Taskbar::onDashboardLayoutChanged()
       {
         QTimer::singleShot(100, this, [this, layout] {
           if (m_windowManager)
-            m_windowManager->restoreLayout(layout);
+          {
+            const bool isConnected = IO::Manager::instance().isConnected();
+            if (!isConnected)
+              m_windowManager->restoreLayout(layout);
+          }
         });
       }
     }
