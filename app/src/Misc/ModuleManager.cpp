@@ -126,8 +126,10 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
   }
 #endif
 
-  // Format message with ANSI colors
-  QString output = Widgets::Terminal::formatDebugMessage(type, message, true);
+  // Format message with ANSI colors (only if enabled by user)
+  const bool useAnsiColors = Console::Handler::instance().ansiColorsEnabled();
+  QString output
+      = Widgets::Terminal::formatDebugMessage(type, message, useAnsiColors);
   if (!output.isEmpty())
   {
     // Add a newline at the end

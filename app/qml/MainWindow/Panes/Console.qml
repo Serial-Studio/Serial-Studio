@@ -41,11 +41,11 @@ Widgets.Pane {
   property alias vt100emulation: terminal.vt100emulation
 
   //
-  // Bind terminal ANSI colors to console handler color timestamps
+  // Bind terminal ANSI colors to console handler
   //
   Binding {
     target: Cpp_Console_Handler
-    property: "colorTimestamps"
+    property: "ansiColorsEnabled"
     value: terminal.ansiColors && terminal.vt100emulation
   }
 

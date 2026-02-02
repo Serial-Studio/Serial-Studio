@@ -44,7 +44,7 @@ Console::Handler::Handler()
   , m_checksumMethod(0)
   , m_echo(true)
   , m_showTimestamp(false)
-  , m_colorTimestamps(false)
+  , m_ansiColorsEnabled(false)
   , m_isStartingLine(true)
   , m_lastCharWasCR(false)
   , m_textBuffer(10 * 1024)
@@ -92,11 +92,11 @@ bool Console::Handler::showTimestamp() const
 }
 
 /**
- * Returns @c true if timestamps should be colored using ANSI escape codes.
+ * Returns @c true if ANSI color codes should be used in console output.
  */
-bool Console::Handler::colorTimestamps() const
+bool Console::Handler::ansiColorsEnabled() const
 {
-  return m_colorTimestamps;
+  return m_ansiColorsEnabled;
 }
 
 /**
@@ -466,14 +466,14 @@ void Console::Handler::setShowTimestamp(const bool enabled)
 }
 
 /**
- * Enables/disables coloring timestamps with ANSI escape codes.
+ * Enables/disables ANSI color codes in console output.
  */
-void Console::Handler::setColorTimestamps(const bool enabled)
+void Console::Handler::setAnsiColorsEnabled(const bool enabled)
 {
-  if (colorTimestamps() != enabled)
+  if (ansiColorsEnabled() != enabled)
   {
-    m_colorTimestamps = enabled;
-    Q_EMIT colorTimestampsChanged();
+    m_ansiColorsEnabled = enabled;
+    Q_EMIT ansiColorsEnabledChanged();
   }
 }
 
@@ -601,7 +601,7 @@ void Console::Handler::append(const QString &string, const bool addTimestamp)
     const QString timeStr
         = dateTime.toString(QStringLiteral("HH:mm:ss.zzz -> "));
 
-    if (colorTimestamps())
+    if (ansiColorsEnabled())
     {
       const QString ansiCyan = QStringLiteral("\033[36m");
       const QString ansiReset = QStringLiteral("\033[0m");
