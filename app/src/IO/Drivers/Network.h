@@ -173,6 +173,7 @@ private:
 
   QTcpSocket m_tcpSocket;
   QUdpSocket m_udpSocket;
+  QByteArray m_udpBuffer;
 };
 } // namespace Drivers
 } // namespace IO

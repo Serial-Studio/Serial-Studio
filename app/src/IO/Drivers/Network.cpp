@@ -490,10 +490,10 @@ void IO::Drivers::Network::onReadyRead()
   {
     while (udpSocket()->hasPendingDatagrams())
     {
-      QByteArray datagram;
-      datagram.resize(int(udpSocket()->pendingDatagramSize()));
-      udpSocket()->readDatagram(datagram.data(), datagram.size());
-      Q_EMIT dataReceived(makeByteArray(std::move(datagram)));
+      const qint64 size = udpSocket()->pendingDatagramSize();
+      m_udpBuffer.resize(size);
+      udpSocket()->readDatagram(m_udpBuffer.data(), m_udpBuffer.size());
+      Q_EMIT dataReceived(makeByteArray(m_udpBuffer));
     }
   }
 
