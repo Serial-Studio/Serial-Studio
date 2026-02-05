@@ -232,6 +232,77 @@
     </message>
 </context>
 <context>
+    <name>AxisRangeDialog</name>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="39"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="39"/>
+        <source>Axis Range Configuration</source>
+        <translation>축 범위 구성</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="117"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="117"/>
+        <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
+        <translation>플롯 축의 보이는 범위를 구성합니다. 입력하는 동안 값이 실시간으로 업데이트됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="131"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="131"/>
+        <source>X Axis</source>
+        <translation>X 축</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="154"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="154"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="223"/>
+        <source>Minimum:</source>
+        <translation>최소:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="165"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="234"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="165"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="234"/>
+        <source>Enter min value</source>
+        <translation>최소값 입력</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="174"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="243"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="174"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="243"/>
+        <source>Maximum:</source>
+        <translation>최대:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="185"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="254"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="185"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="254"/>
+        <source>Enter max value</source>
+        <translation>최대값 입력</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="200"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="200"/>
+        <source>Y Axis</source>
+        <translation>Y 축</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="275"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="275"/>
+        <source>Reset</source>
+        <translation>초기화</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="288"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="288"/>
+        <source>Close</source>
+        <translation>닫기</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothLE</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
@@ -819,29 +890,29 @@
         <translation>올바르게 형식화된 JSON 프로젝트인지 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="790"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="832"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="796"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="838"/>
         <source>Channel %1</source>
         <translation>채널 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="802"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="808"/>
         <source>Audio Input</source>
         <translation>오디오 입력</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="808"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="842"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="814"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="848"/>
         <source>Quick Plot</source>
         <translation>빠른 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="848"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="854"/>
         <source>Quick Plot Data</source>
         <translation>빠른 플롯 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="862"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="868"/>
         <source>Multiple Plots</source>
         <translation>다중 플롯</translation>
     </message>
@@ -987,179 +1058,179 @@ Please fix the error in the function body.</source>
 함수 본문에서 오류를 수정하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="587"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="588"/>
         <source>The document has been modified.</source>
         <translation>문서가 수정되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="588"/>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="608"/>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="925"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="589"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="609"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="930"/>
         <source>Are you sure you want to continue?</source>
         <translation>계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="607"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="608"/>
         <source>The document has been modified!</source>
         <translation>문서가 수정되었습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="615"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="616"/>
         <source>Select Javascript file to import</source>
         <translation>가져올 Javascript 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="665"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="666"/>
         <source>Code Validation Successful</source>
         <translation>코드 검증 성공</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="666"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="667"/>
         <source>No syntax errors detected in the parser code.</source>
         <translation>구문 분석 코드에 구문 오류가 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="720"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="721"/>
         <source>Select Frame Parser Template</source>
         <translation>프레임 구문 분석 템플릿 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="721"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="722"/>
         <source>Choose a template to load:</source>
         <translation>로드할 템플릿 선택:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="873"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="878"/>
         <source>AT command responses</source>
         <translation>AT 명령 응답</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="874"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="879"/>
         <source>Base64-encoded data</source>
         <translation>Base64로 인코딩된 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="875"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="880"/>
         <source>Binary TLV (Tag-Length-Value)</source>
         <translation>바이너리 TLV (태그-길이-값)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="876"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="881"/>
         <source>COBS-encoded frames</source>
         <translation>COBS로 인코딩된 프레임</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="877"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="882"/>
         <source>Comma-separated data</source>
         <translation>쉼표로 구분된 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="878"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="883"/>
         <source>Fixed-width fields</source>
         <translation>고정 폭 필드</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="879"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="884"/>
         <source>Hexadecimal bytes</source>
         <translation>16진수 바이트</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="880"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="885"/>
         <source>INI/config format</source>
         <translation>INI/설정 형식</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="881"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="886"/>
         <source>JSON data</source>
         <translation>JSON 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="882"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="887"/>
         <source>Key-value pairs</source>
         <translation>키-값 쌍</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="883"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="888"/>
         <source>MAVLink messages</source>
         <translation>MAVLink 메시지</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="884"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="889"/>
         <source>MessagePack data</source>
         <translation>MessagePack 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="885"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="890"/>
         <source>Modbus frames</source>
         <translation>Modbus 프레임</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="886"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="891"/>
         <source>NMEA 0183 sentences</source>
         <translation>NMEA 0183 문장</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="887"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="892"/>
         <source>NMEA 2000 messages</source>
         <translation>NMEA 2000 메시지</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="888"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="893"/>
         <source>Pipe-delimited data</source>
         <translation>파이프 구분 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="889"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="894"/>
         <source>Raw bytes</source>
         <translation>원시 바이트</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="890"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="895"/>
         <source>RTCM corrections</source>
         <translation>RTCM 보정</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="891"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="896"/>
         <source>Semicolon-separated data</source>
         <translation>세미콜론 구분 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="892"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="897"/>
         <source>SiRF binary protocol</source>
         <translation>SiRF 이진 프로토콜</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="893"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="898"/>
         <source>SLIP-encoded frames</source>
         <translation>SLIP 인코딩 프레임</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="894"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="899"/>
         <source>Tab-separated data</source>
         <translation>탭으로 구분된 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="895"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="900"/>
         <source>UBX protocol (u-blox)</source>
         <translation>UBX 프로토콜 (u-blox)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="896"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="901"/>
         <source>URL-encoded data</source>
         <translation>URL 인코딩된 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="897"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="902"/>
         <source>XML data</source>
         <translation>XML 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="898"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="903"/>
         <source>YAML data</source>
         <translation>YAML 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="924"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="929"/>
         <source>Loading a template will replace your current code.</source>
         <translation>템플릿을 로드하면 현재 코드를 대체합니다.</translation>
     </message>
@@ -2462,14 +2533,14 @@ Example (HEX):  48 65 6C 6C 6F</source>
 <context>
     <name>FFTPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
         <source>Magnitude (dB)</source>
         <translation>크기 (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
         <source>Frequency (Hz)</source>
         <translation>주파수 (Hz)</translation>
     </message>
@@ -6214,8 +6285,8 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
         <source>Samples</source>
         <translation>샘플</translation>
     </message>
@@ -6691,67 +6762,67 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="232"/>
+        <location filename="../../src/SerialStudio.cpp" line="241"/>
         <source>Data Grids</source>
         <translation>데이터 그리드</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="235"/>
+        <location filename="../../src/SerialStudio.cpp" line="244"/>
         <source>Multiple Data Plots</source>
         <translation>다중 데이터 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="238"/>
+        <location filename="../../src/SerialStudio.cpp" line="247"/>
         <source>Accelerometers</source>
         <translation>가속도계</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="241"/>
+        <location filename="../../src/SerialStudio.cpp" line="250"/>
         <source>Gyroscopes</source>
         <translation>자이로스코프</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="244"/>
+        <location filename="../../src/SerialStudio.cpp" line="253"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="247"/>
+        <location filename="../../src/SerialStudio.cpp" line="256"/>
         <source>FFT Plots</source>
         <translation>FFT 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="250"/>
+        <location filename="../../src/SerialStudio.cpp" line="259"/>
         <source>LED Panels</source>
         <translation>LED 패널</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="253"/>
+        <location filename="../../src/SerialStudio.cpp" line="262"/>
         <source>Data Plots</source>
         <translation>데이터 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="256"/>
+        <location filename="../../src/SerialStudio.cpp" line="265"/>
         <source>Bars</source>
         <translation>막대</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="259"/>
+        <location filename="../../src/SerialStudio.cpp" line="268"/>
         <source>Gauges</source>
         <translation>게이지</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="262"/>
+        <location filename="../../src/SerialStudio.cpp" line="271"/>
         <source>Terminal</source>
         <translation>터미널</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="265"/>
+        <location filename="../../src/SerialStudio.cpp" line="274"/>
         <source>Compasses</source>
         <translation>나침반</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="268"/>
+        <location filename="../../src/SerialStudio.cpp" line="277"/>
         <source>3D Plots</source>
         <translation>3D 플롯</translation>
     </message>
@@ -7867,7 +7938,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1197"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1194"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>그리드 간격: %1 단위</translation>
     </message>

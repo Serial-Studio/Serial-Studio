@@ -270,12 +270,12 @@ Widgets.SmartDialog {
       Layout.alignment: Qt.AlignRight
 
       Button {
-        text: qsTr("Reset to Auto")
         icon.width: 18
         icon.height: 18
+        text: qsTr("Reset")
+        onClicked: root.resetToAuto()
         icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        onClicked: root.resetToAuto()
       }
 
       Item {
@@ -283,12 +283,12 @@ Widgets.SmartDialog {
       }
 
       Button {
-        text: qsTr("Close")
         icon.width: 18
         icon.height: 18
+        text: qsTr("Close")
+        onClicked: root.close()
         icon.source: "qrc:/rcc/icons/buttons/close.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        onClicked: root.close()
       }
     }
   }

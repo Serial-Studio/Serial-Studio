@@ -232,6 +232,77 @@
     </message>
 </context>
 <context>
+    <name>AxisRangeDialog</name>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="39"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="39"/>
+        <source>Axis Range Configuration</source>
+        <translation>Налаштування Діапазону Вісі</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="117"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="117"/>
+        <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
+        <translation>Налаштуйте видимий діапазон для осей графіка. Значення оновлюються в режимі реального часу під час введення.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="131"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="131"/>
+        <source>X Axis</source>
+        <translation>Вісь X</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="154"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="154"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="223"/>
+        <source>Minimum:</source>
+        <translation>Мінімум:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="165"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="234"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="165"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="234"/>
+        <source>Enter min value</source>
+        <translation>Введіть мінімальне значення</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="174"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="243"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="174"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="243"/>
+        <source>Maximum:</source>
+        <translation>Максимум:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="185"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="254"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="185"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="254"/>
+        <source>Enter max value</source>
+        <translation>Введіть максимальне значення</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="200"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="200"/>
+        <source>Y Axis</source>
+        <translation>Вісь Y</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="275"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="275"/>
+        <source>Reset</source>
+        <translation>Скинути</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="288"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="288"/>
+        <source>Close</source>
+        <translation>Закрити</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothLE</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
@@ -819,29 +890,29 @@
         <translation>Переконайтеся, що це правильно відформатований JSON проект.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="790"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="832"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="796"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="838"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="802"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="808"/>
         <source>Audio Input</source>
         <translation>Аудіовхід</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="808"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="842"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="814"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="848"/>
         <source>Quick Plot</source>
         <translation>Швидкий Графік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="848"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="854"/>
         <source>Quick Plot Data</source>
         <translation>Дані Швидкого Графіка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="862"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="868"/>
         <source>Multiple Plots</source>
         <translation>Кілька Графіків</translation>
     </message>
@@ -987,179 +1058,179 @@ Please fix the error in the function body.</source>
 Будь ласка, виправте помилку в тілі функції.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="587"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="588"/>
         <source>The document has been modified.</source>
         <translation>Документ було змінено.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="588"/>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="608"/>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="925"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="589"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="609"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="930"/>
         <source>Are you sure you want to continue?</source>
         <translation>Ви впевнені, що хочете продовжити?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="607"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="608"/>
         <source>The document has been modified!</source>
         <translation>Документ було змінено!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="615"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="616"/>
         <source>Select Javascript file to import</source>
         <translation>Виберіть файл Javascript для імпорту</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="665"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="666"/>
         <source>Code Validation Successful</source>
         <translation>Перевірка Коду Успішна</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="666"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="667"/>
         <source>No syntax errors detected in the parser code.</source>
         <translation>Синтаксичних помилок у коді парсера не виявлено.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="720"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="721"/>
         <source>Select Frame Parser Template</source>
         <translation>Виберіть Шаблон Парсера Кадру</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="721"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="722"/>
         <source>Choose a template to load:</source>
         <translation>Виберіть шаблон для завантаження:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="873"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="878"/>
         <source>AT command responses</source>
         <translation>Відповіді на команди AT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="874"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="879"/>
         <source>Base64-encoded data</source>
         <translation>Дані, закодовані в Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="875"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="880"/>
         <source>Binary TLV (Tag-Length-Value)</source>
         <translation>Двійковий TLV (Tag-Length-Value)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="876"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="881"/>
         <source>COBS-encoded frames</source>
         <translation>Кадри, закодовані в COBS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="877"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="882"/>
         <source>Comma-separated data</source>
         <translation>Дані, розділені комами</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="878"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="883"/>
         <source>Fixed-width fields</source>
         <translation>Поля фіксованої ширини</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="879"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="884"/>
         <source>Hexadecimal bytes</source>
         <translation>Шістнадцяткові байти</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="880"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="885"/>
         <source>INI/config format</source>
         <translation>Формат INI/конфіг</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="881"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="886"/>
         <source>JSON data</source>
         <translation>Дані JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="882"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="887"/>
         <source>Key-value pairs</source>
         <translation>Пари ключ-значення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="883"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="888"/>
         <source>MAVLink messages</source>
         <translation>Повідомлення MAVLink</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="884"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="889"/>
         <source>MessagePack data</source>
         <translation>Дані MessagePack</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="885"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="890"/>
         <source>Modbus frames</source>
         <translation>Кадри Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="886"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="891"/>
         <source>NMEA 0183 sentences</source>
         <translation>Речення NMEA 0183</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="887"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="892"/>
         <source>NMEA 2000 messages</source>
         <translation>Повідомлення NMEA 2000</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="888"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="893"/>
         <source>Pipe-delimited data</source>
         <translation>Дані, розділені трубою</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="889"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="894"/>
         <source>Raw bytes</source>
         <translation>Сирі байти</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="890"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="895"/>
         <source>RTCM corrections</source>
         <translation>Корекції RTCM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="891"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="896"/>
         <source>Semicolon-separated data</source>
         <translation>Дані, розділені крапкою з комою</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="892"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="897"/>
         <source>SiRF binary protocol</source>
         <translation>Бінарний протокол SiRF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="893"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="898"/>
         <source>SLIP-encoded frames</source>
         <translation>Кадри, закодовані в SLIP</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="894"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="899"/>
         <source>Tab-separated data</source>
         <translation>Дані, розділені табуляцією</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="895"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="900"/>
         <source>UBX protocol (u-blox)</source>
         <translation>Протокол UBX (u-blox)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="896"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="901"/>
         <source>URL-encoded data</source>
         <translation>Дані, закодовані в URL</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="897"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="902"/>
         <source>XML data</source>
         <translation>Дані XML</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="898"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="903"/>
         <source>YAML data</source>
         <translation>Дані YAML</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="924"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="929"/>
         <source>Loading a template will replace your current code.</source>
         <translation>Завантаження шаблону замінить ваш поточний код.</translation>
     </message>
@@ -2462,14 +2533,14 @@ Example (HEX):  48 65 6C 6C 6F</source>
 <context>
     <name>FFTPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
         <source>Magnitude (dB)</source>
         <translation>Амплітуда (дБ)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
         <source>Frequency (Hz)</source>
         <translation>Частота (Гц)</translation>
     </message>
@@ -6211,8 +6282,8 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
         <source>Samples</source>
         <translation>Зразки</translation>
     </message>
@@ -6688,67 +6759,67 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="232"/>
+        <location filename="../../src/SerialStudio.cpp" line="241"/>
         <source>Data Grids</source>
         <translation>Таблиці Даних</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="235"/>
+        <location filename="../../src/SerialStudio.cpp" line="244"/>
         <source>Multiple Data Plots</source>
         <translation>Кілька Графіків Даних</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="238"/>
+        <location filename="../../src/SerialStudio.cpp" line="247"/>
         <source>Accelerometers</source>
         <translation>Акселерометри</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="241"/>
+        <location filename="../../src/SerialStudio.cpp" line="250"/>
         <source>Gyroscopes</source>
         <translation>Гіроскопи</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="244"/>
+        <location filename="../../src/SerialStudio.cpp" line="253"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="247"/>
+        <location filename="../../src/SerialStudio.cpp" line="256"/>
         <source>FFT Plots</source>
         <translation>Графіки FFT</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="250"/>
+        <location filename="../../src/SerialStudio.cpp" line="259"/>
         <source>LED Panels</source>
         <translation>Панелі Світлодіодів</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="253"/>
+        <location filename="../../src/SerialStudio.cpp" line="262"/>
         <source>Data Plots</source>
         <translation>Графіки Даних</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="256"/>
+        <location filename="../../src/SerialStudio.cpp" line="265"/>
         <source>Bars</source>
         <translation>Смуги</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="259"/>
+        <location filename="../../src/SerialStudio.cpp" line="268"/>
         <source>Gauges</source>
         <translation>Датчики</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="262"/>
+        <location filename="../../src/SerialStudio.cpp" line="271"/>
         <source>Terminal</source>
         <translation>Термінал</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="265"/>
+        <location filename="../../src/SerialStudio.cpp" line="274"/>
         <source>Compasses</source>
         <translation>Компаси</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="268"/>
+        <location filename="../../src/SerialStudio.cpp" line="277"/>
         <source>3D Plots</source>
         <translation>3D Графіки</translation>
     </message>
@@ -7864,7 +7935,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1197"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1194"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Інтервал сітки: %1 одиниця(і)</translation>
     </message>

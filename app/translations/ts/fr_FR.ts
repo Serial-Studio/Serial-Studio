@@ -232,6 +232,77 @@
     </message>
 </context>
 <context>
+    <name>AxisRangeDialog</name>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="39"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="39"/>
+        <source>Axis Range Configuration</source>
+        <translation>Configuration de Plage d'Axe</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="117"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="117"/>
+        <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
+        <translation>Configurez la plage visible pour les axes du graphique. Les valeurs se mettent à jour en temps réel à mesure que vous tapez.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="131"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="131"/>
+        <source>X Axis</source>
+        <translation>Axe X</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="154"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="223"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="154"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="223"/>
+        <source>Minimum:</source>
+        <translation>Minimum :</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="165"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="234"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="165"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="234"/>
+        <source>Enter min value</source>
+        <translation>Entrez la valeur min</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="174"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="243"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="174"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="243"/>
+        <source>Maximum:</source>
+        <translation>Maximum :</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="185"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="254"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="185"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="254"/>
+        <source>Enter max value</source>
+        <translation>Entrez la valeur max</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="200"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="200"/>
+        <source>Y Axis</source>
+        <translation>Axe Y</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="275"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="275"/>
+        <source>Reset</source>
+        <translation>Réinitialiser</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="288"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="288"/>
+        <source>Close</source>
+        <translation>Fermer</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothLE</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
@@ -819,29 +890,29 @@
         <translation>Assurez-vous qu'il s'agit d'un projet JSON correctement formaté.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="790"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="832"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="796"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="838"/>
         <source>Channel %1</source>
         <translation>Canal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="802"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="808"/>
         <source>Audio Input</source>
         <translation>Entrée Audio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="808"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="842"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="814"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="848"/>
         <source>Quick Plot</source>
         <translation>Tracé Rapide</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="848"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="854"/>
         <source>Quick Plot Data</source>
         <translation>Données de Tracé Rapide</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="862"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="868"/>
         <source>Multiple Plots</source>
         <translation>Tracés Multiples</translation>
     </message>
@@ -987,179 +1058,179 @@ Please fix the error in the function body.</source>
 Veuillez corriger l'erreur dans le corps de la fonction.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="587"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="588"/>
         <source>The document has been modified.</source>
         <translation>Le document a été modifié.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="588"/>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="608"/>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="925"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="589"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="609"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="930"/>
         <source>Are you sure you want to continue?</source>
         <translation>Êtes-vous sûr de vouloir continuer ?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="607"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="608"/>
         <source>The document has been modified!</source>
         <translation>Le document a été modifié !</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="615"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="616"/>
         <source>Select Javascript file to import</source>
         <translation>Sélectionnez le fichier Javascript à importer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="665"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="666"/>
         <source>Code Validation Successful</source>
         <translation>Validation du Code Réussie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="666"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="667"/>
         <source>No syntax errors detected in the parser code.</source>
         <translation>Aucune erreur de syntaxe détectée dans le code de l'analyseur.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="720"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="721"/>
         <source>Select Frame Parser Template</source>
         <translation>Sélectionnez le Modèle D'analyseur de Trame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="721"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="722"/>
         <source>Choose a template to load:</source>
         <translation>Choisissez un modèle à charger :</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="873"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="878"/>
         <source>AT command responses</source>
         <translation>Réponses aux commandes AT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="874"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="879"/>
         <source>Base64-encoded data</source>
         <translation>Données encodées en Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="875"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="880"/>
         <source>Binary TLV (Tag-Length-Value)</source>
         <translation>TLV Binaire (Tag-Length-Value)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="876"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="881"/>
         <source>COBS-encoded frames</source>
         <translation>Trames encodées en COBS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="877"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="882"/>
         <source>Comma-separated data</source>
         <translation>Données séparées par des virgules</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="878"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="883"/>
         <source>Fixed-width fields</source>
         <translation>Champs à largeur fixe</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="879"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="884"/>
         <source>Hexadecimal bytes</source>
         <translation>Octets hexadécimaux</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="880"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="885"/>
         <source>INI/config format</source>
         <translation>Format INI/config</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="881"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="886"/>
         <source>JSON data</source>
         <translation>Données JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="882"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="887"/>
         <source>Key-value pairs</source>
         <translation>Paires clé-valeur</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="883"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="888"/>
         <source>MAVLink messages</source>
         <translation>Messages MAVLink</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="884"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="889"/>
         <source>MessagePack data</source>
         <translation>Données MessagePack</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="885"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="890"/>
         <source>Modbus frames</source>
         <translation>Trames Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="886"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="891"/>
         <source>NMEA 0183 sentences</source>
         <translation>Phrases NMEA 0183</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="887"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="892"/>
         <source>NMEA 2000 messages</source>
         <translation>Messages NMEA 2000</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="888"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="893"/>
         <source>Pipe-delimited data</source>
         <translation>Données délimitées par des pipes</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="889"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="894"/>
         <source>Raw bytes</source>
         <translation>Octets bruts</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="890"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="895"/>
         <source>RTCM corrections</source>
         <translation>Corrections RTCM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="891"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="896"/>
         <source>Semicolon-separated data</source>
         <translation>Données séparées par des points-virgules</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="892"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="897"/>
         <source>SiRF binary protocol</source>
         <translation>Protocole binaire SiRF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="893"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="898"/>
         <source>SLIP-encoded frames</source>
         <translation>Trames encodées SLIP</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="894"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="899"/>
         <source>Tab-separated data</source>
         <translation>Données séparées par des tabulations</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="895"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="900"/>
         <source>UBX protocol (u-blox)</source>
         <translation>Protocole UBX (u-blox)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="896"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="901"/>
         <source>URL-encoded data</source>
         <translation>Données encodées en URL</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="897"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="902"/>
         <source>XML data</source>
         <translation>Données XML</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="898"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="903"/>
         <source>YAML data</source>
         <translation>Données YAML</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="924"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="929"/>
         <source>Loading a template will replace your current code.</source>
         <translation>Charger un modèle remplacera votre code actuel.</translation>
     </message>
@@ -2462,14 +2533,14 @@ Exemple (HEX) :  48 65 6C 6C 6F</translation>
 <context>
     <name>FFTPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="231"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
         <source>Magnitude (dB)</source>
         <translation>Magnitude (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="232"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
         <source>Frequency (Hz)</source>
         <translation>Fréquence (Hz)</translation>
     </message>
@@ -6211,8 +6282,8 @@ Ajoutez des groupes ci-dessus pour interroger plusieurs types de registres.</tra
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="265"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
         <source>Samples</source>
         <translation>Échantillons</translation>
     </message>
@@ -6688,67 +6759,67 @@ Ajoutez des groupes ci-dessus pour interroger plusieurs types de registres.</tra
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="232"/>
+        <location filename="../../src/SerialStudio.cpp" line="241"/>
         <source>Data Grids</source>
         <translation>Grilles de Données</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="235"/>
+        <location filename="../../src/SerialStudio.cpp" line="244"/>
         <source>Multiple Data Plots</source>
         <translation>Graphiques de Données Multiples</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="238"/>
+        <location filename="../../src/SerialStudio.cpp" line="247"/>
         <source>Accelerometers</source>
         <translation>Accéléromètres</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="241"/>
+        <location filename="../../src/SerialStudio.cpp" line="250"/>
         <source>Gyroscopes</source>
         <translation>Gyroscopes</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="244"/>
+        <location filename="../../src/SerialStudio.cpp" line="253"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="247"/>
+        <location filename="../../src/SerialStudio.cpp" line="256"/>
         <source>FFT Plots</source>
         <translation>Graphiques FFT</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="250"/>
+        <location filename="../../src/SerialStudio.cpp" line="259"/>
         <source>LED Panels</source>
         <translation>Panneaux LED</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="253"/>
+        <location filename="../../src/SerialStudio.cpp" line="262"/>
         <source>Data Plots</source>
         <translation>Graphiques de Données</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="256"/>
+        <location filename="../../src/SerialStudio.cpp" line="265"/>
         <source>Bars</source>
         <translation>Barres</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="259"/>
+        <location filename="../../src/SerialStudio.cpp" line="268"/>
         <source>Gauges</source>
         <translation>Jauges</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="262"/>
+        <location filename="../../src/SerialStudio.cpp" line="271"/>
         <source>Terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="265"/>
+        <location filename="../../src/SerialStudio.cpp" line="274"/>
         <source>Compasses</source>
         <translation>Boussoles</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="268"/>
+        <location filename="../../src/SerialStudio.cpp" line="277"/>
         <source>3D Plots</source>
         <translation>Graphiques 3D</translation>
     </message>
@@ -7864,7 +7935,7 @@ Je comprends qu'à la fin, je devrai acheter une licence ou construire la versio
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1197"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1194"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>Intervalle de grille : %1 unité(s)</translation>
     </message>
