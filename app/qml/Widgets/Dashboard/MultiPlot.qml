@@ -28,6 +28,7 @@ import SerialStudio
 import QtCore as QtCore
 
 import "../"
+import "../../Dialogs" as Dialogs
 
 Item {
   id: root
@@ -84,6 +85,13 @@ Item {
     plot.yLabelVisible = (root.width >= 196)
     plot.xLabelVisible = (root.height >= (196 * 2/3))
     root.hasToolbar = (root.width >= toolbar.implicitWidth) && (root.height >= 220)
+  }
+
+  //
+  // Axis range configuration dialog
+  //
+  Dialogs.AxisRangeDialog {
+    id: axisRangeDialog
   }
 
   //
@@ -231,7 +239,21 @@ Item {
         plot.yAxis.pan = 0
         plot.xAxis.zoom = 1
         plot.yAxis.zoom = 1
+        plot.xMin = Qt.binding(function() { return root.model.minX })
+        plot.xMax = Qt.binding(function() { return root.model.maxX })
+        plot.yMin = Qt.binding(function() { return root.model.minY })
+        plot.yMax = Qt.binding(function() { return root.model.maxY })
       }
+    }
+
+    ToolButton {
+      width: 24
+      height: 24
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
+      onClicked: axisRangeDialog.openDialog(plot, root.model)
     }
 
     Item {

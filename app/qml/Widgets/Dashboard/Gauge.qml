@@ -97,7 +97,7 @@ Item {
       from: model.minValue
       endAngle: endAngleDeg
       snapMode: Dial.NoSnap
-      inputMode: Dial.Vertical
+      inputMode: Dial.NoInput
       startAngle: startAngleDeg
 
       background: Item {

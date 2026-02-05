@@ -765,6 +765,12 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
         break;
     }
 
+    // Calculate optimal FFT samples based on sampling rate
+    const int targetSamples = static_cast<int>(sampleRate * 0.05);
+    int fftSamples = 256;
+    while (fftSamples < targetSamples && fftSamples < 8192)
+      fftSamples *= 2;
+
     // Obtain microphone values for each channel
     int index = 1;
     std::vector<DataModel::Dataset> datasets;
@@ -781,7 +787,7 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
       dataset.pltMin = minValue;
       dataset.fftMax = maxValue;
       dataset.fftMin = minValue;
-      dataset.fftSamples = 2048;
+      dataset.fftSamples = fftSamples;
       dataset.fftSamplingRate = sampleRate;
 
       if (m_quickPlotHasHeader && index - 1 < m_quickPlotChannelNames.size())
