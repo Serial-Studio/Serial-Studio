@@ -104,7 +104,7 @@ Item {
       Layout.fillWidth: true
       Layout.fillHeight: true
       Layout.preferredHeight: isHorizontal ? Math.min(80, root.height * 0.5) : root.height * 0.7
-      Layout.preferredWidth: !isHorizontal ? Math.min(root.width * 0.6, 300) : undefined
+      Layout.preferredWidth: !isHorizontal ? Math.min(root.width * 0.6, 300) : 30
       Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
       ProgressBar {
