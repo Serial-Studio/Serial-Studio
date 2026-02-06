@@ -88,6 +88,7 @@ Item {
     Dial {
       id: control
 
+      enabled: false
       Layout.fillWidth: true
       Layout.fillHeight: true
       Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -97,7 +98,7 @@ Item {
       from: model.minValue
       endAngle: endAngleDeg
       snapMode: Dial.NoSnap
-      inputMode: Dial.NoInput
+      inputMode: Dial.Vertical
       startAngle: startAngleDeg
 
       background: Item {
