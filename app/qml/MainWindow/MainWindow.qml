@@ -277,6 +277,8 @@ Widgets.SmartWindow {
         z: 2
         id: toolbar
         Layout.fillWidth: true
+        autoHide: Cpp_UI_Dashboard.autoHideToolbar
+        dashboardVisible: root.dashboardVisible
       }
 
       //

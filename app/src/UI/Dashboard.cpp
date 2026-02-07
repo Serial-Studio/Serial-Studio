@@ -59,6 +59,7 @@ UI::Dashboard::Dashboard()
   , m_showActionPanel(true)
   , m_terminalEnabled(false)
   , m_terminalWidgetId(kInvalidWidgetId)
+  , m_autoHideToolbar(false)
   , m_showTaskbarButtons(false)
   , m_updateRetryInProgress(false)
   , m_pltXAxis(kDefaultPlotPoints)
@@ -133,6 +134,15 @@ bool UI::Dashboard::available() const
 bool UI::Dashboard::showActionPanel() const
 {
   return m_showActionPanel;
+}
+
+/**
+ * @brief Returns @c true if the toolbar should automatically hide when the
+ *        dashboard is visible.
+ */
+bool UI::Dashboard::autoHideToolbar() const
+{
+  return m_autoHideToolbar;
 }
 
 /**
@@ -818,6 +828,18 @@ void UI::Dashboard::setShowActionPanel(const bool enabled)
   {
     m_showActionPanel = enabled;
     Q_EMIT showActionPanelChanged();
+  }
+}
+
+/**
+ * @brief Enables/disables auto-hiding the toolbar when the dashboard is shown.
+ */
+void UI::Dashboard::setAutoHideToolbar(const bool enabled)
+{
+  if (m_autoHideToolbar != enabled)
+  {
+    m_autoHideToolbar = enabled;
+    Q_EMIT autoHideToolbarChanged();
   }
 }
 

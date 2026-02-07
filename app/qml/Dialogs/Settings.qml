@@ -43,6 +43,7 @@ Widgets.SmartDialog {
     property alias dashboardPoints: _points.value
     property alias dashboardActionPanel: _actionsPanel.checked
     property alias alwaysShowTaskbarBt: _taskbarButtons.checked
+    property alias dashboardAutoHideToolbar: _autoHideToolbar.checked
   }
 
   //
@@ -308,7 +309,25 @@ Widgets.SmartDialog {
           }
 
           //
-          // Console
+          // Auto-hide toolbar
+          //
+          Label {
+            text: qsTr("Auto-Hide Toolbar on Dashboard")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            id: _autoHideToolbar
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_UI_Dashboard.autoHideToolbar
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_UI_Dashboard.autoHideToolbar)
+                Cpp_UI_Dashboard.autoHideToolbar = checked
+            }
+          }
+
+          //
+          // Taskbar buttons
           //
           Label {
             text: qsTr("Always Show Taskbar Buttons")
@@ -454,6 +473,7 @@ Widgets.SmartDialog {
             mainWindow.automaticUpdates  = true
             Cpp_UI_Dashboard.terminalEnabled = false
             Cpp_IO_Manager.threadedFrameExtraction = false
+            Cpp_UI_Dashboard.autoHideToolbar = false
             Cpp_UI_Dashboard.showTaskbarButtons = false
             Cpp_Console_Handler.setFontFamily(Cpp_Misc_CommonFonts.monoFont.family)
             Cpp_Console_Handler.setFontSize(Cpp_Misc_CommonFonts.monoFont.pointSize)

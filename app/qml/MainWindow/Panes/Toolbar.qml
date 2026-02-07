@@ -35,7 +35,10 @@ Rectangle {
   // Custom signals
   //
   signal projectEditorClicked()
+  property bool autoHide: false
+  property bool dashboardVisible: false
   property bool toolbarEnabled: true
+  readonly property bool showContent: toolbarEnabled && !(autoHide && dashboardVisible)
 
   //
   // Calculate offset based on platform
@@ -49,10 +52,18 @@ Rectangle {
   }
 
   //
-  // Set toolbar height
+  // Animated toolbar content height
   //
-  Layout.minimumHeight: titlebarHeight + (toolbarEnabled ? 64 + 16 : 0)
-  Layout.maximumHeight: titlebarHeight + (toolbarEnabled ? 64 + 16 : 0)
+  property int toolbarContentHeight: showContent ? 64 + 16 : 0
+  Behavior on toolbarContentHeight {
+    NumberAnimation {
+      duration: 250
+      easing.type: Easing.OutCubic
+    }
+  }
+
+  Layout.minimumHeight: titlebarHeight + toolbarContentHeight
+  Layout.maximumHeight: titlebarHeight + toolbarContentHeight
 
   //
   // Top toolbar section
@@ -133,8 +144,16 @@ Rectangle {
   RowLayout {
     id: layout
     spacing: 4
-    visible: root.toolbarEnabled
-    enabled: root.toolbarEnabled
+    visible: root.showContent
+    enabled: root.showContent
+
+    opacity: root.showContent ? 1 : 0
+    Behavior on opacity {
+      NumberAnimation {
+        duration: 200
+        easing.type: Easing.InOutQuad
+      }
+    }
 
     anchors {
       margins: 2

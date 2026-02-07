@@ -64,6 +64,7 @@ class Dashboard : public QObject
   Q_PROPERTY(bool terminalEnabled READ terminalEnabled WRITE setTerminalEnabled NOTIFY terminalEnabledChanged)
   Q_PROPERTY(bool containsCommercialFeatures READ containsCommercialFeatures NOTIFY containsCommercialFeaturesChanged)
   Q_PROPERTY(bool showTaskbarButtons READ showTaskbarButtons WRITE setShowTaskbarButtons NOTIFY showTaskbarButtonsChanged)
+  Q_PROPERTY(bool autoHideToolbar READ autoHideToolbar WRITE setAutoHideToolbar NOTIFY autoHideToolbarChanged)
   // clang-format on
 
 signals:
@@ -75,6 +76,7 @@ signals:
   void showActionPanelChanged();
   void terminalEnabledChanged();
   void showTaskbarButtonsChanged();
+  void autoHideToolbarChanged();
   void containsCommercialFeaturesChanged();
 
 private:
@@ -91,6 +93,7 @@ public:
   [[nodiscard]] bool showActionPanel() const;
   [[nodiscard]] bool streamAvailable() const;
   [[nodiscard]] bool terminalEnabled() const;
+  [[nodiscard]] bool autoHideToolbar() const;
   [[nodiscard]] bool showTaskbarButtons() const;
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool precisionWidgetVisible() const;
@@ -138,6 +141,7 @@ public slots:
   void clearPlotData();
   void setShowActionPanel(const bool enabled);
   void setTerminalEnabled(const bool enabled);
+  void setAutoHideToolbar(const bool enabled);
   void setShowTaskbarButtons(const bool enabled);
   void activateAction(const int index, const bool guiTrigger = false);
 
@@ -166,6 +170,7 @@ private:
   bool m_showActionPanel;
   bool m_terminalEnabled;
   WidgetID m_terminalWidgetId;
+  bool m_autoHideToolbar;
   bool m_showTaskbarButtons;
 
   bool m_updateRetryInProgress;
