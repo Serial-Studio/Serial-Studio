@@ -39,6 +39,7 @@ Rectangle {
   property bool dashboardVisible: false
   property bool toolbarEnabled: true
   readonly property bool showContent: toolbarEnabled && !(autoHide && dashboardVisible)
+  readonly property bool dashboardMode: !showContent && dashboardVisible
 
   //
   // Calculate offset based on platform
@@ -70,7 +71,14 @@ Rectangle {
   //
   Rectangle {
     height: root.titlebarHeight
-    color: Cpp_ThemeManager.colors["toolbar_top"]
+    color: root.dashboardMode
+           ? Cpp_ThemeManager.colors["dashboard_background"]
+           : Cpp_ThemeManager.colors["toolbar_top"]
+
+    Behavior on color {
+      ColorAnimation { duration: 250; easing.type: Easing.OutCubic }
+    }
+
     anchors {
       top: parent.top
       left: parent.left
@@ -84,8 +92,14 @@ Rectangle {
   Label {
     text: mainWindow.title
     visible: root.titlebarHeight > 0
-    color: Cpp_ThemeManager.colors["titlebar_text"]
     font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
+    color: root.dashboardMode
+           ? Cpp_ThemeManager.colors["text"]
+           : Cpp_ThemeManager.colors["titlebar_text"]
+
+    Behavior on color {
+      ColorAnimation { duration: 250; easing.type: Easing.OutCubic }
+    }
 
     anchors {
       topMargin: 6
@@ -103,12 +117,24 @@ Rectangle {
     gradient: Gradient {
       GradientStop {
         position: 0
-        color: Cpp_ThemeManager.colors["toolbar_top"]
+        color: root.dashboardMode
+               ? Cpp_ThemeManager.colors["dashboard_background"]
+               : Cpp_ThemeManager.colors["toolbar_top"]
+
+        Behavior on color {
+          ColorAnimation { duration: 250; easing.type: Easing.OutCubic }
+        }
       }
 
       GradientStop {
         position: 1
-        color: Cpp_ThemeManager.colors["toolbar_bottom"]
+        color: root.dashboardMode
+               ? Cpp_ThemeManager.colors["dashboard_background"]
+               : Cpp_ThemeManager.colors["toolbar_bottom"]
+
+        Behavior on color {
+          ColorAnimation { duration: 250; easing.type: Easing.OutCubic }
+        }
       }
     }
   }
@@ -118,6 +144,7 @@ Rectangle {
   //
   Rectangle {
     height: 1
+    visible: !root.dashboardMode
     color: Cpp_ThemeManager.colors["toolbar_border"]
 
     anchors {

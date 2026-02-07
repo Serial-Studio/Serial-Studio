@@ -337,6 +337,7 @@ set(QML_SOURCES
   qml/Dialogs/Settings.qml
   qml/Dialogs/Welcome.qml
   qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml
+  qml/MainWindow/Panes/Dashboard/DashboardLayout.qml
   qml/MainWindow/Panes/Dashboard/StartMenu.qml
   qml/MainWindow/Panes/Dashboard/Taskbar.qml
   qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml

@@ -91,8 +91,8 @@
     "window_caption_active_text": "#FFFFFF",
     "window_caption_inactive_top": "#252525",
     "window_caption_inactive_text": "#9A9A9A",
-    "window_caption_active_bottom": "#282828",
-    "window_caption_inactive_bottom": "#222222",
+    "window_caption_active_bottom": "#252525",
+    "window_caption_inactive_bottom": "#252525",
 
     "taskbar_top": "#2D2D2D",
     "taskbar_text": "#E0E0E0",
@@ -103,7 +103,7 @@
     "taskbar_indicator_active": "#FFFFFF",
     "taskbar_indicator_inactive": "#9A9A9A",
     "taskbar_checked_button_top": "#383838",
-    "taskbar_checked_button_border": "#0078D4",
+    "taskbar_checked_button_border": "#3D3D3D",
     "taskbar_checked_button_bottom": "#2D2D2D",
 
     "start_menu_text": "#F0F0F0",

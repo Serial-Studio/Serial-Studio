@@ -39,7 +39,7 @@ Item {
   // Autolayout
   //
   function loadLayout() {
-    canvas.windowManager.loadLayout()
+    _mainLayout.loadLayout()
   }
 
   //
@@ -47,119 +47,13 @@ Item {
   //
   property SS_UI.TaskBar taskBar: SS_UI.TaskBar {}
 
-
   //
-  // Default background
+  // Main dashboard layout
   //
-  Rectangle {
-    anchors.fill: parent
-    color: Cpp_ThemeManager.colors["dashboard_background"]
-  }
-
-  //
-  // User-selected background image
-  //
-  Image {
-    visible: source !== ""
-    anchors.fill: parent
-    source: canvas.backgroundImage
-    fillMode: Image.PreserveAspectCrop
-  }
-
-  //
-  // Desktop layout
-  //
-  ColumnLayout {
-    spacing: -1
-    implicitHeight: 0
-    anchors.fill: parent
-    anchors.topMargin: 2
-
-    //
-    // Actions rectangle
-    //
-    Rectangle {
-      z: 1000
-      border.width: 1
-      Layout.topMargin: -1
-      Layout.leftMargin: -1
-      Layout.rightMargin: -1
-      Layout.fillWidth: true
-      implicitHeight: _actions.implicitHeight + 20
-      color: Cpp_ThemeManager.colors["groupbox_background"]
-      border.color: Cpp_ThemeManager.colors["groupbox_border"]
-      visible: Cpp_UI_Dashboard.actionCount > 0 && Cpp_UI_Dashboard.showActionPanel
-
-      ListView {
-        id: _actions
-
-        spacing: 2
-        interactive: true
-        implicitHeight: 32
-        model: Cpp_UI_Dashboard.actions
-        orientation: ListView.Horizontal
-
-        anchors {
-          leftMargin: 8
-          left: parent.left
-          right: parent.right
-          verticalCenter: parent.verticalCenter
-        }
-
-        delegate: Widgets.ToolbarButton {
-          required property var model
-
-          iconSize: 24
-          implicitHeight: 32
-          maxButtonWidth: 256
-          text: model["text"]
-          toolbarButton: false
-          horizontalLayout: true
-          checked: model["checked"]
-          icon.source: model["icon"]
-          enabled: !Cpp_IO_Manager.paused && Cpp_IO_Manager.isConnected
-          onClicked: Cpp_UI_Dashboard.activateAction(model["id"], true)
-        }
-      }
-    }
-
-    //
-    // Widget windows
-    //
-    DbItems.DashboardCanvas {
-      id: canvas
-      taskBar: root.taskBar
-      Layout.topMargin: -1
-      Layout.leftMargin: -1
-      Layout.rightMargin: -1
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      Layout.minimumWidth: 480
-    }
-
-    //
-    // Task bar
-    //
-    DbItems.Taskbar {
-      id: _taskBar
-      taskBar: root.taskBar
-      Layout.fillWidth: true
-      onStartClicked: {
-        if (startMenu.visible)
-          startMenu.close()
-        else
-          startMenu.open()
-      }
-    }
-  }
-
-  //
-  // Start menu
-  //
-  DbItems.StartMenu {
-    id: startMenu
+  DbItems.DashboardLayout {
+    id: _mainLayout
     taskBar: root.taskBar
-    y: root.height - height - _taskBar.height + 2
+    anchors.fill: parent
     onExternalWindowClicked: root.openExternalWindow()
   }
 
@@ -170,8 +64,10 @@ Item {
   property var _extWindows: []
 
   function openExternalWindow() {
+    var num = ++_extWindowCounter
     var win = _extDashboardComponent.createObject(root, {
-      "category": "ExternalDashboard_" + (++_extWindowCounter)
+      "category": "ExternalDashboard_" + num,
+      "windowNumber": num
     })
 
     if (win) {
@@ -214,15 +110,97 @@ Item {
       minimumWidth: 640
       minimumHeight: 480
       transientParent: null
-      title: Application.displayName + " — " + qsTr("Dashboard")
+      title: qsTr("Dashboard %1").arg(windowNumber)
+      color: Cpp_ThemeManager.colors["dashboard_background"]
+
+      //
+      // Window number for title display
+      //
+      property int windowNumber: 1
+
+      //
+      // Titlebar height for native window integration
+      //
+      property int titlebarHeight: 0
 
       //
       // Independent taskbar for this external window
       //
       property SS_UI.TaskBar extTaskBar: SS_UI.TaskBar {}
 
+      //
+      // Register with native window system using dashboard background
+      //
+      onVisibleChanged: {
+        if (visible)
+          Cpp_NativeWindow.addWindow(
+            _extWindow,
+            Cpp_ThemeManager.colors["dashboard_background"])
+        else
+          Cpp_NativeWindow.removeWindow(_extWindow)
+
+        _extWindow.titlebarHeight
+            = Cpp_NativeWindow.titlebarHeight(_extWindow)
+      }
+
+      //
+      // Update native titlebar color on theme changes
+      //
+      Connections {
+        target: Cpp_ThemeManager
+        function onThemeChanged() {
+          if (_extWindow.visible) {
+            Cpp_NativeWindow.removeWindow(_extWindow)
+            Cpp_NativeWindow.addWindow(
+              _extWindow,
+              Cpp_ThemeManager.colors["dashboard_background"])
+          }
+        }
+      }
+
+      //
+      // Titlebar background
+      //
+      Rectangle {
+        height: _extWindow.titlebarHeight
+        color: Cpp_ThemeManager.colors["dashboard_background"]
+        anchors {
+          top: parent.top
+          left: parent.left
+          right: parent.right
+        }
+
+        DragHandler {
+          target: null
+          onActiveChanged: {
+            if (active)
+              _extWindow.startSystemMove()
+          }
+        }
+      }
+
+      //
+      // Titlebar text
+      //
+      Label {
+        text: _extWindow.title
+        visible: _extWindow.titlebarHeight > 0
+        color: Cpp_ThemeManager.colors["text"]
+        font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
+
+        anchors {
+          topMargin: 6
+          top: parent.top
+          horizontalCenter: parent.horizontalCenter
+        }
+      }
+
+      //
+      // Dashboard content
+      //
       Page {
         anchors.fill: parent
+        anchors.topMargin: _extWindow.titlebarHeight
         palette.mid: Cpp_ThemeManager.colors["mid"]
         palette.dark: Cpp_ThemeManager.colors["dark"]
         palette.text: Cpp_ThemeManager.colors["text"]
@@ -245,99 +223,10 @@ Item {
         palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
         palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
-        ColumnLayout {
-          spacing: -1
+        DbItems.DashboardLayout {
           anchors.fill: parent
-
-          //
-          // Actions panel
-          //
-          Rectangle {
-            z: 1000
-            border.width: 1
-            Layout.topMargin: -1
-            Layout.leftMargin: -1
-            Layout.rightMargin: -1
-            Layout.fillWidth: true
-            implicitHeight: _extActions.implicitHeight + 20
-            color: Cpp_ThemeManager.colors["groupbox_background"]
-            border.color: Cpp_ThemeManager.colors["groupbox_border"]
-            visible: Cpp_UI_Dashboard.actionCount > 0
-                     && Cpp_UI_Dashboard.showActionPanel
-
-            ListView {
-              id: _extActions
-
-              spacing: 2
-              interactive: true
-              implicitHeight: 32
-              model: Cpp_UI_Dashboard.actions
-              orientation: ListView.Horizontal
-
-              anchors {
-                leftMargin: 8
-                left: parent.left
-                right: parent.right
-                verticalCenter: parent.verticalCenter
-              }
-
-              delegate: Widgets.ToolbarButton {
-                required property var model
-
-                iconSize: 24
-                implicitHeight: 32
-                maxButtonWidth: 256
-                text: model["text"]
-                toolbarButton: false
-                horizontalLayout: true
-                checked: model["checked"]
-                icon.source: model["icon"]
-                enabled: !Cpp_IO_Manager.paused
-                         && Cpp_IO_Manager.isConnected
-                onClicked: Cpp_UI_Dashboard.activateAction(
-                             model["id"], true)
-              }
-            }
-          }
-
-          //
-          // Widget canvas
-          //
-          DbItems.DashboardCanvas {
-            id: _extCanvas
-            taskBar: _extWindow.extTaskBar
-            Layout.topMargin: -1
-            Layout.leftMargin: -1
-            Layout.rightMargin: -1
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.minimumWidth: 480
-          }
-
-          //
-          // Taskbar
-          //
-          DbItems.Taskbar {
-            id: _extTaskbar
-            taskBar: _extWindow.extTaskBar
-            Layout.fillWidth: true
-            onStartClicked: {
-              if (_extStartMenu.visible)
-                _extStartMenu.close()
-              else
-                _extStartMenu.open()
-            }
-          }
-        }
-
-        //
-        // Start menu (external window variant)
-        //
-        DbItems.StartMenu {
-          id: _extStartMenu
           isExternalWindow: true
           taskBar: _extWindow.extTaskBar
-          y: parent.height - height - _extTaskbar.height + 2
           onExternalWindowClicked: root.openExternalWindow()
         }
       }
