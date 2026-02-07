@@ -116,6 +116,7 @@ private:
   QSyntaxStyle m_style;
   QCodeEditor m_widget;
   QJSValue m_parseFunction;
+  QJSValue m_hexToArray;
   QStringList m_templateFiles;
   QStringList m_templateNames;
 

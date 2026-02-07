@@ -347,9 +347,9 @@ void IO::FrameReader::readStartDelimitedFrames()
       continue;
     }
 
-    // Build the frame byte array
-    const auto frame = m_circularBuffer.peek(frameEndPos)
-                           .mid(frameStart, frameLength - m_checksumLength);
+    // Build the frame byte array (single allocation via peekRange)
+    const auto frame = m_circularBuffer.peekRange(
+        frameStart, frameLength - m_checksumLength);
 
     // Validate the frame
     if (!frame.isEmpty())
@@ -414,8 +414,7 @@ void IO::FrameReader::readStartEndDelimitedFrames()
 
     const auto crcPosition = finishIndex + m_finishSequence.size();
     const auto frameEndPos = crcPosition + m_checksumLength;
-    const auto frame = m_circularBuffer.peek(frameStart + frameLength)
-                           .mid(frameStart, frameLength);
+    const auto frame = m_circularBuffer.peekRange(frameStart, frameLength);
 
     // Read frame
     if (!frame.isEmpty())
@@ -479,12 +478,13 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray &frame,
   if (calculated == received)
     return ValidationStatus::FrameOk;
 
+  static constexpr qsizetype kMaxLogBytes = 128;
   qWarning() << "\n"
-             << m_checksum.toStdString().c_str() << "failed:\n"
+             << m_checksum << "failed:\n"
              << "\t- Received:" << received.toHex(' ') << "\n"
              << "\t- Calculated:" << calculated.toHex(' ') << "\n"
-             << "\t- Frame:" << frame.toHex(' ') << "\n"
-             << "\t- Buffer:" << m_circularBuffer.peek(bufferSize).toHex(' ');
+             << "\t- Frame:" << frame.left(kMaxLogBytes).toHex(' ')
+             << (frame.size() > kMaxLogBytes ? "...(truncated)" : "");
 
   // Return error
   return ValidationStatus::ChecksumError;

@@ -72,16 +72,27 @@ void parseCsvValues(const QByteArray &data, QStringList &out,
   else
     out.reserve(64);
 
-  const QString str = QString::fromUtf8(data);
-  const int dataLength = str.size();
+  const char *raw = data.constData();
+  const int dataLength = data.size();
   int start = 0;
   for (int i = 0; i <= dataLength; ++i)
   {
-    if (i == dataLength || str[i] == ',')
+    if (i == dataLength || raw[i] == ',')
     {
-      const auto channel = str.mid(start, i - start).trimmed();
-      if (!channel.isEmpty())
-        out.append(channel);
+      // Trim whitespace directly on byte range
+      int s = start;
+      int e = i;
+      while (s < e
+             && (raw[s] == ' ' || raw[s] == '\t' || raw[s] == '\r'
+                 || raw[s] == '\n'))
+        ++s;
+      while (e > s
+             && (raw[e - 1] == ' ' || raw[e - 1] == '\t' || raw[e - 1] == '\r'
+                 || raw[e - 1] == '\n'))
+        --e;
+
+      if (e > s)
+        out.append(QString::fromUtf8(raw + s, e - s));
 
       start = i + 1;
     }
@@ -572,10 +583,10 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray &data)
     switch (decoderMethod)
     {
       case SerialStudio::Hexadecimal:
-        channels = m_frameParser->parse(QString::fromUtf8(data.toHex()));
+        channels = m_frameParser->parse(QString::fromLatin1(data.toHex()));
         break;
       case SerialStudio::Base64:
-        channels = m_frameParser->parse(QString::fromUtf8(data.toBase64()));
+        channels = m_frameParser->parse(QString::fromLatin1(data.toBase64()));
         break;
       case SerialStudio::Binary:
         channels = m_frameParser->parse(data);

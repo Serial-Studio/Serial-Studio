@@ -641,7 +641,7 @@ void Widgets::GPS::updateData()
     m_latitude = lat;
   if (!std::isnan(lon))
     m_longitude = lon;
-  if (std::isnan(alt))
+  if (!std::isnan(alt))
     m_altitude = alt;
 
   // Auto-center (redraws widget)

@@ -179,10 +179,22 @@ QStringList DataModel::FrameParser::parse(const QString &frame)
  */
 QStringList DataModel::FrameParser::parse(const QByteArray &frame)
 {
-  QJSValue jsArray = m_engine.newArray(frame.size());
-  const auto *data = reinterpret_cast<const quint8 *>(frame.constData());
-  for (int i = 0; i < frame.size(); ++i)
-    jsArray.setProperty(i, data[i]);
+  // Use cached JS helper to build the byte array in a single JS call,
+  // avoiding N individual C++→JS setProperty() boundary crossings.
+  QJSValue jsArray;
+  if (m_hexToArray.isCallable()) [[likely]]
+  {
+    QJSValueList hexArgs;
+    hexArgs << QString::fromLatin1(frame.toHex());
+    jsArray = m_hexToArray.call(hexArgs);
+  }
+  else
+  {
+    jsArray = m_engine.newArray(frame.size());
+    const auto *data = reinterpret_cast<const quint8 *>(frame.constData());
+    for (int i = 0; i < frame.size(); ++i)
+      jsArray.setProperty(i, data[i]);
+  }
 
   QJSValueList args;
   args << jsArray;
@@ -498,6 +510,18 @@ bool DataModel::FrameParser::loadScript(const QString &script,
 
   // All validations passed, store the function for use
   m_parseFunction = parseFunction;
+
+  // Install optimized hex-to-byte-array helper for binary frame parsing.
+  // This avoids N individual C++→JS setProperty() calls per frame by doing
+  // the conversion entirely on the JS side in a single function call.
+  m_engine.evaluate(QStringLiteral("function __ss_internal_hex_to_array__(h){"
+                                   "var n=h.length>>1,a=new Array(n);"
+                                   "for(var i=0,j=0;i<h.length;i+=2,j++)"
+                                   "a[j]=parseInt(h.substr(i,2),16);"
+                                   "return a;}"));
+  m_hexToArray
+      = m_engine.globalObject().property("__ss_internal_hex_to_array__");
+
   return true;
 }
 
