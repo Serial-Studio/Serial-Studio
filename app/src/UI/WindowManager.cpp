@@ -941,7 +941,26 @@ void UI::WindowManager::triggerLayoutUpdate()
   if (autoLayoutEnabled())
     autoLayout();
   else
-    constrainWindows();
+  {
+    // Check for windows that need initial layout (registered but not yet
+    // visible). This handles the case where cascadeLayout() was called before
+    // the canvas had valid dimensions, leaving windows invisible.
+    bool hasUninitializedWindows = false;
+    for (auto *win : std::as_const(m_windows))
+    {
+      if (win && !win->isVisible()
+          && (win->state() == "normal" || win->state() == "maximized"))
+      {
+        hasUninitializedWindows = true;
+        break;
+      }
+    }
+
+    if (hasUninitializedWindows)
+      cascadeLayout();
+    else
+      constrainWindows();
+  }
 }
 
 /**

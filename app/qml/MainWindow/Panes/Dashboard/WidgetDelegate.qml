@@ -31,6 +31,8 @@ import "../../../Widgets" as Widgets
 Widgets.MiniWindow {
   id: root
   visible: false
+  width: minimumWidth
+  height: minimumHeight
   implicitWidth: minimumWidth
   implicitHeight: minimumHeight
   focused: taskBar.activeWindow === root
