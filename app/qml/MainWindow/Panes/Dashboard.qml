@@ -19,7 +19,9 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+import QtCore
 import QtQuick
+import QtQuick.Window
 import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -30,11 +32,8 @@ import "Dashboard" as DbItems
 import "../../Widgets" as Widgets
 import "../../Dialogs" as Dialogs
 
-Widgets.Pane {
+Item {
   id: root
-  title: qsTr("Dashboard")
-  headerVisible: mainWindow.toolbarVisible
-  icon: "qrc:/rcc/icons/panes/dashboard.svg"
 
   //
   // Autolayout
@@ -48,89 +47,12 @@ Widgets.Pane {
   //
   property SS_UI.TaskBar taskBar: SS_UI.TaskBar {}
 
-  //
-  // API Server status indicator
-  //
-  actionComponent: Component {
-    Item {
-      implicitWidth: label.implicitWidth
-      implicitHeight: label.implicitHeight
-      opacity: Cpp_API_Server.enabled ?
-                 (Cpp_API_Server.clientCount > 0 ? 1 : 0.5) :
-                 0.0
-      Behavior on opacity { NumberAnimation { duration: 200 } }
-
-      MultiEffect {
-        id: glow
-        source: label
-        shadowBlur: 2.0
-        anchors.fill: label
-        shadowEnabled: true
-        shadowVerticalOffset: 0
-        shadowHorizontalOffset: 0
-        visible: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
-        shadowColor: Cpp_API_Server.enabled ? Cpp_ThemeManager.colors["highlight"] :
-                                              Cpp_ThemeManager.colors["pane_caption_border"]
-
-        SequentialAnimation on opacity {
-          loops: Animation.Infinite
-          running: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
-
-          NumberAnimation {
-            from: 0.4
-            to: 1.00
-            duration: 800
-            easing.type: Easing.InOutSine
-          }
-          NumberAnimation {
-            from: 1.00
-            to: 0.4
-            duration: 800
-            easing.type: Easing.InOutSine
-          }
-        }
-
-        SequentialAnimation on brightness {
-          loops: Animation.Infinite
-          running: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
-
-          NumberAnimation {
-            from: 0.15
-            to: 0.6
-            duration: 800
-            easing.type: Easing.InOutSine
-          }
-          NumberAnimation {
-            from: 0.6
-            to: 0.15
-            duration: 800
-            easing.type: Easing.InOutSine
-          }
-        }
-      }
-
-      Label {
-        id: label
-        visible: opacity > 0
-        font: Cpp_Misc_CommonFonts.customUiFont(0.85, true)
-        color: Cpp_ThemeManager.colors["pane_caption_foreground"]
-        text: Cpp_API_Server.enabled ?
-                (Cpp_API_Server.clientCount > 0 ? qsTr("API Server Active (%1)").arg(Cpp_API_Server.clientCount) :
-                                                  qsTr("API Server Ready")) :
-                qsTr("API Server Off")
-      }
-    }
-  }
 
   //
   // Default background
   //
   Rectangle {
     anchors.fill: parent
-    anchors.topMargin: -16
-    anchors.leftMargin: -9
-    anchors.rightMargin: -9
-    anchors.bottomMargin: -9
     color: Cpp_ThemeManager.colors["dashboard_background"]
   }
 
@@ -140,10 +62,6 @@ Widgets.Pane {
   Image {
     visible: source !== ""
     anchors.fill: parent
-    anchors.topMargin: -16
-    anchors.leftMargin: -9
-    anchors.rightMargin: -9
-    anchors.bottomMargin: -9
     source: canvas.backgroundImage
     fillMode: Image.PreserveAspectCrop
   }
@@ -155,10 +73,7 @@ Widgets.Pane {
     spacing: -1
     implicitHeight: 0
     anchors.fill: parent
-    anchors.topMargin: -16
-    anchors.leftMargin: -9
-    anchors.rightMargin: -9
-    anchors.bottomMargin: -9
+    anchors.topMargin: 2
 
     //
     // Actions rectangle
@@ -243,8 +158,191 @@ Widgets.Pane {
   //
   DbItems.StartMenu {
     id: startMenu
-    x: -9
     taskBar: root.taskBar
-    y: root.height - height - _taskBar.height - root.topPadding + 2
+    y: root.height - height - _taskBar.height + 2
+    onExternalWindowClicked: root.openExternalWindow()
+  }
+
+  //
+  // Track open external windows and provide a counter for unique categories
+  //
+  property int _extWindowCounter: 0
+  property var _extWindows: []
+
+  function openExternalWindow() {
+    var win = _extDashboardComponent.createObject(root, {
+      "category": "ExternalDashboard_" + (++_extWindowCounter)
+    })
+
+    if (win) {
+      _extWindows.push(win)
+      win.closing.connect(function() {
+        var idx = _extWindows.indexOf(win)
+        if (idx !== -1)
+          _extWindows.splice(idx, 1)
+
+        win.destroy()
+      })
+    }
+  }
+
+  //
+  // Close all external windows when dashboard data resets
+  //
+  Connections {
+    target: Cpp_UI_Dashboard
+    function onDataReset() {
+      for (var i = _extWindows.length - 1; i >= 0; --i)
+        _extWindows[i].close()
+
+      _extWindows = []
+    }
+  }
+
+  //
+  // External dashboard window component
+  //
+  Component {
+    id: _extDashboardComponent
+
+    Widgets.SmartWindow {
+      id: _extWindow
+
+      width: 1024
+      height: 600
+      visible: true
+      minimumWidth: 640
+      minimumHeight: 480
+      transientParent: null
+      title: Application.displayName + " — " + qsTr("Dashboard")
+
+      //
+      // Independent taskbar for this external window
+      //
+      property SS_UI.TaskBar extTaskBar: SS_UI.TaskBar {}
+
+      Page {
+        anchors.fill: parent
+        palette.mid: Cpp_ThemeManager.colors["mid"]
+        palette.dark: Cpp_ThemeManager.colors["dark"]
+        palette.text: Cpp_ThemeManager.colors["text"]
+        palette.base: Cpp_ThemeManager.colors["base"]
+        palette.link: Cpp_ThemeManager.colors["link"]
+        palette.light: Cpp_ThemeManager.colors["light"]
+        palette.window: Cpp_ThemeManager.colors["window"]
+        palette.shadow: Cpp_ThemeManager.colors["shadow"]
+        palette.accent: Cpp_ThemeManager.colors["accent"]
+        palette.button: Cpp_ThemeManager.colors["button"]
+        palette.midlight: Cpp_ThemeManager.colors["midlight"]
+        palette.highlight: Cpp_ThemeManager.colors["highlight"]
+        palette.windowText: Cpp_ThemeManager.colors["window_text"]
+        palette.brightText: Cpp_ThemeManager.colors["bright_text"]
+        palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+        palette.toolTipBase: Cpp_ThemeManager.colors["tooltip_base"]
+        palette.toolTipText: Cpp_ThemeManager.colors["tooltip_text"]
+        palette.linkVisited: Cpp_ThemeManager.colors["link_visited"]
+        palette.alternateBase: Cpp_ThemeManager.colors["alternate_base"]
+        palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+        palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
+
+        ColumnLayout {
+          spacing: -1
+          anchors.fill: parent
+
+          //
+          // Actions panel
+          //
+          Rectangle {
+            z: 1000
+            border.width: 1
+            Layout.topMargin: -1
+            Layout.leftMargin: -1
+            Layout.rightMargin: -1
+            Layout.fillWidth: true
+            implicitHeight: _extActions.implicitHeight + 20
+            color: Cpp_ThemeManager.colors["groupbox_background"]
+            border.color: Cpp_ThemeManager.colors["groupbox_border"]
+            visible: Cpp_UI_Dashboard.actionCount > 0
+                     && Cpp_UI_Dashboard.showActionPanel
+
+            ListView {
+              id: _extActions
+
+              spacing: 2
+              interactive: true
+              implicitHeight: 32
+              model: Cpp_UI_Dashboard.actions
+              orientation: ListView.Horizontal
+
+              anchors {
+                leftMargin: 8
+                left: parent.left
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+              }
+
+              delegate: Widgets.ToolbarButton {
+                required property var model
+
+                iconSize: 24
+                implicitHeight: 32
+                maxButtonWidth: 256
+                text: model["text"]
+                toolbarButton: false
+                horizontalLayout: true
+                checked: model["checked"]
+                icon.source: model["icon"]
+                enabled: !Cpp_IO_Manager.paused
+                         && Cpp_IO_Manager.isConnected
+                onClicked: Cpp_UI_Dashboard.activateAction(
+                             model["id"], true)
+              }
+            }
+          }
+
+          //
+          // Widget canvas
+          //
+          DbItems.DashboardCanvas {
+            id: _extCanvas
+            taskBar: _extWindow.extTaskBar
+            Layout.topMargin: -1
+            Layout.leftMargin: -1
+            Layout.rightMargin: -1
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.minimumWidth: 480
+          }
+
+          //
+          // Taskbar
+          //
+          DbItems.Taskbar {
+            id: _extTaskbar
+            taskBar: _extWindow.extTaskBar
+            Layout.fillWidth: true
+            onStartClicked: {
+              if (_extStartMenu.visible)
+                _extStartMenu.close()
+              else
+                _extStartMenu.open()
+            }
+          }
+        }
+
+        //
+        // Start menu (external window variant)
+        //
+        DbItems.StartMenu {
+          id: _extStartMenu
+          isExternalWindow: true
+          taskBar: _extWindow.extTaskBar
+          y: parent.height - height - _extTaskbar.height + 2
+          onExternalWindowClicked: root.openExternalWindow()
+        }
+      }
+
+      Component.onCompleted: _extWindow.displayWindow()
+    }
   }
 }

@@ -46,6 +46,7 @@ Popup {
   //
   // Custom properties
   //
+  property bool isExternalWindow: false
   readonly property real gradientWidth: _versionLabel.implicitHeight + 16
   readonly property real gradientHeight: _versionLabel.implicitWidth + 32
 
@@ -252,6 +253,17 @@ Popup {
       checked: !mainWindow.toolbarVisible
       icon.source: "qrc:/rcc/icons/start/full-screen.svg"
       onClicked: mainWindow.toolbarVisible = !mainWindow.toolbarVisible
+    }
+
+    Widgets.MenuButton {
+      expandable: false
+      Layout.fillWidth: true
+      text: qsTr("Add External Window")
+      icon.source: "qrc:/rcc/icons/start/external-window.svg"
+      onClicked: {
+        root.close()
+        root.externalWindowClicked()
+      }
     }
 
     Rectangle {
