@@ -157,6 +157,7 @@ protected:
 
 private:
   int m_zCounter;
+  bool m_layoutRestored;
   bool m_autoLayoutEnabled;
   QString m_backgroundImage;
 

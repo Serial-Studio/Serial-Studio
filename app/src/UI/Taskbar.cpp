@@ -130,8 +130,6 @@ UI::Taskbar::Taskbar(QQuickItem *parent)
   connect(io, &IO::Manager::connectedChanged, this, [this, io] {
     if (!io->isConnected())
       saveLayout();
-    else
-      onDashboardLayoutChanged();
   });
 
   rebuildModel();
@@ -690,7 +688,18 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem *window)
 
   // Trigger a layout update when the QML code created all the windows
   if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager)
+  {
+    const auto opMode = DataModel::FrameBuilder::instance().operationMode();
+    if (opMode == SerialStudio::ProjectFile)
+    {
+      const auto &layout
+          = DataModel::ProjectModel::instance().dashboardLayout();
+      if (!layout.isEmpty() && m_windowManager->restoreLayout(layout))
+        return;
+    }
+
     m_windowManager->loadLayout();
+  }
 }
 
 /**
@@ -963,16 +972,40 @@ void UI::Taskbar::rebuildModel()
   Q_EMIT windowStatesChanged();
   Q_EMIT registeredWindowsChanged();
 
-  // Select the first group
+  // Select the saved group (if available) or the first group
   auto model = groupModel();
-  if (!model.isEmpty() && model.first().canConvert<QVariantMap>())
+  if (!model.isEmpty())
   {
-    QVariantMap firstItem = model.first().toMap();
-    if (firstItem.contains("id"))
+    int targetGroupId = -1;
+    bool restored = false;
+
+    const auto opMode = DataModel::FrameBuilder::instance().operationMode();
+    if (opMode == SerialStudio::ProjectFile)
     {
-      int firstId = firstItem["id"].toInt();
-      setActiveGroupId(firstId);
+      auto *pm = &DataModel::ProjectModel::instance();
+      if (!pm->dashboardLayout().isEmpty())
+      {
+        const int savedId = pm->activeGroupId();
+        for (const auto &entry : std::as_const(model))
+        {
+          if (entry.toMap().value("id").toInt() == savedId)
+          {
+            targetGroupId = savedId;
+            restored = true;
+            break;
+          }
+        }
+      }
     }
+
+    if (!restored && model.first().canConvert<QVariantMap>())
+    {
+      QVariantMap firstItem = model.first().toMap();
+      if (firstItem.contains("id"))
+        targetGroupId = firstItem["id"].toInt();
+    }
+
+    setActiveGroupId(targetGroupId);
   }
 
   m_rebuildInProgress = false;
@@ -1187,6 +1220,9 @@ void UI::Taskbar::onDashboardLayoutChanged()
 void UI::Taskbar::saveLayout()
 {
   if (!m_windowManager)
+    return;
+
+  if (m_windowIDs.isEmpty())
     return;
 
   const auto opMode = DataModel::FrameBuilder::instance().operationMode();

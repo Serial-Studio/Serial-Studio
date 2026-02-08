@@ -35,6 +35,7 @@
 UI::WindowManager::WindowManager(QQuickItem *parent)
   : QQuickItem(parent)
   , m_zCounter(1)
+  , m_layoutRestored(false)
   , m_autoLayoutEnabled(true)
   , m_resizeEdge(ResizeEdge::None)
   , m_snapIndicatorVisible(false)
@@ -248,7 +249,16 @@ bool UI::WindowManager::restoreLayout(const QJsonObject &layout)
     constrainWindows();
   }
 
-  setAutoLayoutEnabled(autoLayout);
+  if (m_autoLayoutEnabled != autoLayout)
+  {
+    m_autoLayoutEnabled = autoLayout;
+    Q_EMIT autoLayoutEnabledChanged();
+  }
+
+  if (autoLayout)
+    loadLayout();
+  else
+    m_layoutRestored = true;
 
   return true;
 }
@@ -267,6 +277,7 @@ void UI::WindowManager::clear()
   m_targetWindow = nullptr;
   m_resizeWindow = nullptr;
   m_focusedWindow = nullptr;
+  m_layoutRestored = false;
   m_snapIndicatorVisible = false;
 
   Q_EMIT zCounterChanged();
@@ -285,7 +296,9 @@ void UI::WindowManager::clear()
  */
 void UI::WindowManager::loadLayout()
 {
-  if (autoLayoutEnabled())
+  if (m_layoutRestored)
+    constrainWindows();
+  else if (autoLayoutEnabled())
     autoLayout();
   else
     cascadeLayout();
@@ -807,6 +820,7 @@ void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)
 {
   if (m_autoLayoutEnabled != enabled)
   {
+    m_layoutRestored = false;
     m_autoLayoutEnabled = enabled;
     Q_EMIT autoLayoutEnabledChanged();
 
@@ -926,6 +940,15 @@ void UI::WindowManager::constrainWindows()
       Q_EMIT geometryChanged(win);
     }
   }
+
+  for (auto *win : std::as_const(m_windows))
+  {
+    if (win && !win->isVisible())
+    {
+      if (win->state() == "normal" || win->state() == "maximized")
+        win->setVisible(true);
+    }
+  }
 }
 
 /**
@@ -956,7 +979,7 @@ void UI::WindowManager::triggerLayoutUpdate()
       }
     }
 
-    if (hasUninitializedWindows)
+    if (hasUninitializedWindows && !m_layoutRestored)
       cascadeLayout();
     else
       constrainWindows();
