@@ -686,6 +686,17 @@ API::Handlers::ProjectHandler::frameParserConfigure(const QString &id,
   bool updated = false;
   auto &manager = IO::Manager::instance();
 
+  if (params.contains(QStringLiteral("operationMode")))
+  {
+    const int modeIdx = params.value(QStringLiteral("operationMode")).toInt();
+    if (modeIdx >= 0 && modeIdx <= 2)
+    {
+      const auto mode = static_cast<SerialStudio::OperationMode>(modeIdx);
+      DataModel::FrameBuilder::instance().setOperationMode(mode);
+      updated = true;
+    }
+  }
+
   if (params.contains(QStringLiteral("startSequence")))
   {
     const QString start
@@ -710,17 +721,6 @@ API::Handlers::ProjectHandler::frameParserConfigure(const QString &id,
     manager.setChecksumAlgorithm(checksumName);
     DataModel::ProjectModel::instance().setChecksumAlgorithm(checksumName);
     updated = true;
-  }
-
-  if (params.contains(QStringLiteral("operationMode")))
-  {
-    const int modeIdx = params.value(QStringLiteral("operationMode")).toInt();
-    if (modeIdx >= 0 && modeIdx <= 2)
-    {
-      const auto mode = static_cast<SerialStudio::OperationMode>(modeIdx);
-      DataModel::FrameBuilder::instance().setOperationMode(mode);
-      updated = true;
-    }
   }
 
   if (params.contains(QStringLiteral("frameDetection")))

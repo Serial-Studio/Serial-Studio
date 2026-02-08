@@ -333,7 +333,6 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
 
   // Validate JSON with security bounds checking
   const auto result = Misc::JsonValidator::parseAndValidate(jsonData);
-
   if (!result.valid) [[unlikely]]
   {
     clear_frame(m_frame);
@@ -363,15 +362,14 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
   // Parse the validated JSON document into frame structure
   setJsonPathSetting(sourcePath);
   clear_frame(m_frame);
-
   const auto document = result.document;
   const bool ok = read(m_frame, document.object());
-
   if (!ok) [[unlikely]]
   {
     clear_frame(m_frame);
     if (m_jsonMap.isOpen())
       m_jsonMap.close();
+
     setJsonPathSetting("");
     if (showMessageBoxes)
     {
@@ -380,10 +378,9 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
           tr("Make sure it's a properly formatted JSON project."),
           QMessageBox::Warning);
     }
+
     else
-    {
       qWarning() << "[FrameBuilder] This file isn't a valid project file";
-    }
 
     // Restore parser messagebox behavior before returning
     if (m_frameParser && !showMessageBoxes)
@@ -393,7 +390,7 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
     return;
   }
 
-  // Successfully parsed - update I/O manager with frame delimiters and checksum
+  // Successfully parsed...update I/O manager with frame delimiters and checksum
   if (operationMode() == SerialStudio::ProjectFile)
   {
     read_io_settings(m_frameStart, m_frameFinish, m_checksum,
@@ -403,6 +400,14 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
     IO::Manager::instance().setFinishSequence(m_frameFinish);
     IO::Manager::instance().setChecksumAlgorithm(m_checksum);
     IO::Manager::instance().resetFrameReader();
+  }
+
+  // Close any previously opened file if the new source differs
+  if (m_jsonMap.isOpen())
+  {
+    const auto currentPath = QFileInfo(m_jsonMap.fileName()).filePath();
+    if (currentPath != sourcePath)
+      m_jsonMap.close();
   }
 
   // Restore parser messagebox behavior
