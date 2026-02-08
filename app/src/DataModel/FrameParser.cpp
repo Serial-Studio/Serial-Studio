@@ -236,6 +236,28 @@ QString DataModel::FrameParser::templateCode() const
 }
 
 /**
+ * @brief Returns the source code of the default frame parser template.
+ *
+ * Reads the built-in comma-separated values parser script from the
+ * application resources and returns it as a string.
+ *
+ * @return The default template source code, or an empty string if the
+ *         resource could not be read.
+ */
+QString DataModel::FrameParser::defaultTemplateCode()
+{
+  QString code;
+  QFile file(":/rcc/scripts/comma_separated.js");
+  if (file.open(QFile::ReadOnly))
+  {
+    code = QString::fromUtf8(file.readAll());
+    file.close();
+  }
+
+  return code;
+}
+
+/**
  * @brief Returns @c true whenever if there are any actions that can be undone.
  */
 bool DataModel::FrameParser::undoAvailable() const

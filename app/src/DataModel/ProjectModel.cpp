@@ -949,21 +949,26 @@ void DataModel::ProjectModel::newJsonFile()
   m_actions.clear();
 
   // Reset project properties
-  m_frameDecoder = SerialStudio::PlainText;
-  m_frameDetection = SerialStudio::EndDelimiterOnly;
   m_frameEndSequence = "\\n";
   m_checksumAlgorithm = "";
   m_frameStartSequence = "$";
   m_hexadecimalDelimiters = false;
   m_title = tr("Untitled Project");
+  m_frameDecoder = SerialStudio::PlainText;
+  m_frameDetection = SerialStudio::EndDelimiterOnly;
+  m_frameParserCode = FrameParser::defaultTemplateCode();
 
   // Reset dashboard layout metadata
   m_activeGroupId = -1;
   m_dashboardLayout = QJsonObject();
 
-  // Load frame parser code into code editor
-  if (DataModel::FrameBuilder::instance().frameParser())
-    DataModel::FrameBuilder::instance().frameParser()->readCode();
+  // Reset frame parser to default template
+  auto *parser = DataModel::FrameBuilder::instance().frameParser();
+  if (parser)
+  {
+    parser->readCode();
+    parser->loadDefaultTemplate(false);
+  }
 
   // Update file path
   m_filePath = "";

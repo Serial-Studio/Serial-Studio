@@ -51,6 +51,7 @@ public:
   [[nodiscard]] QString text() const;
   [[nodiscard]] bool isModified() const;
   [[nodiscard]] QString templateCode() const;
+  [[nodiscard]] static QString defaultTemplateCode();
 
   [[nodiscard]] QStringList parse(const QString &frame);
   [[nodiscard]] QStringList parse(const QByteArray &frame);
