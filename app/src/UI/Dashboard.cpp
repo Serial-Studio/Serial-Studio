@@ -68,7 +68,10 @@ UI::Dashboard::Dashboard()
   // clang-format off
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
   connect(&MDF4::Player::instance(), &MDF4::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=, this] {
+    if (!IO::Manager::instance().isConnected())
+      resetData(true);
+  }, Qt::QueuedConnection);
   connect(&DataModel::FrameBuilder::instance(), &DataModel::FrameBuilder::jsonFileMapChanged, this, [=, this] { resetData(); }, Qt::QueuedConnection);
   // clang-format on
 

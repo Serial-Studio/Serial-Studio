@@ -81,7 +81,6 @@ Widgets.SmartWindow {
   //
   function showSetup()     { toolbar.setupClicked() }
   function showConsole()   { stack.pop()            }
-  function showDashboard() { dbTimer.start()        }
 
   //
   // Obtain document title
@@ -135,29 +134,6 @@ Widgets.SmartWindow {
   }
 
   //
-  // Wait a little before showing the dashboard to avoid UI glitches and/or
-  // overloading the rendering engine
-  //
-  Timer {
-    id: dbTimer
-    interval: 500
-    onTriggered: {
-      if (Cpp_UI_Dashboard.available) {
-        if (stack.currentItem != dashboard) {
-          stack.push(dashboard)
-          dashboard.loadLayout()
-
-          if (CLI_START_FULLSCREEN)
-            mainWindow.toolbarVisible = false
-        }
-      }
-
-      else
-        root.showConsole()
-    }
-  }
-
-  //
   // Update document title automatically
   //
   Connections {
@@ -197,8 +173,15 @@ Widgets.SmartWindow {
 
       if (Cpp_UI_Dashboard.available) {
         setup.hide()
-        root.showDashboard()
         root.firstValidFrame = true
+
+        if (stack.currentItem !== dashboard) {
+          stack.push(dashboard)
+          dashboard.loadLayout()
+
+          if (CLI_START_FULLSCREEN)
+            mainWindow.toolbarVisible = false
+        }
       }
 
       else {

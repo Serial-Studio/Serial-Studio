@@ -408,7 +408,7 @@ void CSV::Player::openFile(const QString &filePath)
     }
 
     // Begin reading data
-    if (m_csvData.count() >= 2)
+    if (m_csvData.count() >= 1)
     {
       updateData();
       Q_EMIT openChanged();
@@ -419,7 +419,7 @@ void CSV::Player::openFile(const QString &filePath)
     {
       Misc::Utilities::showMessageBox(
           tr("Insufficient Data in CSV File"),
-          tr("The CSV file must contain at least two frames (data rows) to "
+          tr("The CSV file must contain at least one data row to "
              "proceed. Please check the file and try again."),
           QMessageBox::Critical);
       closeFile();
