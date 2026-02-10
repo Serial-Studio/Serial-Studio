@@ -328,8 +328,8 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
                                                   const bool showMessageBoxes)
 {
   // Suppress parser messageboxes for API calls
-  if (m_frameParser && !showMessageBoxes)
-    m_frameParser->setSuppressMessageBoxes(true);
+  if (m_frameParser)
+    m_frameParser->setSuppressMessageBoxes(!showMessageBoxes);
 
   // Validate JSON with security bounds checking
   const auto result = Misc::JsonValidator::parseAndValidate(jsonData);

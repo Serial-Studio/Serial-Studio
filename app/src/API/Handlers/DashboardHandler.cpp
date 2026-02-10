@@ -206,11 +206,12 @@ API::Handlers::DashboardHandler::setPoints(const QString &id,
 
   const int points = params.value(QStringLiteral("points")).toInt();
 
-  if (points < 1)
+  if (points < 1 || points > 100000)
   {
     return CommandResponse::makeError(
         id, ErrorCode::InvalidParam,
-        QStringLiteral("Invalid points: %1. Must be at least 1").arg(points));
+        QStringLiteral("Invalid points: %1. Valid range: 1-100000")
+            .arg(points));
   }
 
   UI::Dashboard::instance().setPoints(points);

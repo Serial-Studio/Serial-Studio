@@ -730,7 +730,9 @@ void DataModel::FrameParser::readCode()
 {
   const auto code = ProjectModel::instance().frameParserCode();
 
-  (void)loadScript(code, !m_suppressMessageBoxes);
+  const bool suppress = m_suppressMessageBoxes
+                        || ProjectModel::instance().suppressMessageBoxes();
+  (void)loadScript(code, !suppress);
   m_widget.setPlainText(code);
   m_widget.document()->clearUndoRedoStacks();
   m_widget.document()->setModified(false);
