@@ -1,596 +1,159 @@
-# Serial Studio Integration Test Suite
+# Tests
 
-Automated integration and performance tests for Serial Studio using Python and pytest.
+Integration, security, and performance tests for Serial Studio's TCP API (port 7777).
 
-## Overview
+All tests are written in Python with pytest. They talk to a running Serial Studio instance over TCP, simulate devices sending telemetry, and verify that frames are parsed, exported, and displayed correctly.
 
-This test suite validates Serial Studio's core functionality through end-to-end integration tests that interact with the application via its TCP API. Tests simulate real devices sending telemetry data and verify correct behavior across frame parsing, CSV export, project configuration, and performance scenarios.
+## Setup
 
-## Framing, Modes, and Checksums (Accurate Summary)
+**Requirements:** Python 3.8+, a running Serial Studio instance with the API server enabled.
 
-Serial Studio behavior in tests depends on the **current operation mode** and whether the **project JSON has been loaded into FrameBuilder**. The rules below are what the tests are written against.
+To enable the API server: Settings > Miscellaneous > Enable API Server (port 7777).
 
-### Project Mode (ProjectFile, `operationMode: 0`)
-
-- **Frame delimiters are defined in the project JSON** via `frameStart`, `frameEnd`, and `frameDetection`.
-- **Project changes do not take effect** until you:
-  1) export or otherwise build the project JSON, and
-  2) load it into the `FrameBuilder` (`project.loadIntoFrameBuilder` in the API).
-- **Checksums apply to incoming frames** in ProjectFile mode only.
-- Custom CSV delimiters require a JS parser in `frameParser` (e.g., `frame.split(';')`).
-- If you want newline delimiters in project JSON, use escaped strings (`"\\n"`, `"\\r\\n"`). Raw newlines are now preserved too, but escaped is more portable.
-
-### DeviceSendsJSON (DeviceDefined, `operationMode: 1`)
-
-- The device sends complete JSON frames.
-- **Project configuration is ignored** (frame delimiters, parser code, checksum, etc.).
-- Framing uses fixed delimiters: start `"/*"` and end `"*/"` (hardcoded in IO manager).
-
-### QuickPlot (`operationMode: 2`)
-
-- No project configuration or JS parser is used.
-- Line-based framing only (`\n`, `\r`, `\r\n`).
-- CSV delimiter is comma only.
-
-### Console vs Project Checksums
-
-- **Console checksum** applies only to *outgoing* data sent from the console API.
-- **Project checksum** applies only to *incoming* frames in ProjectFile mode.
-
-### Test Coverage
-
-**Connection Stability Tests:**
-- `test_csv_delimiter_resilience` - Verifies Serial Studio doesn't crash with various CSV delimiters in ProjectFile mode
-- `test_frame_delimiter_line_terminators` - Tests line terminators after frame end delimiter in ProjectFile mode
-
-**Frame Extraction Tests:**
-- `test_frame_end_delimiters` - Tests custom frame end delimiters (`;`, `\n`, `|`)
-- `test_frame_start_end_delimiters` - Tests custom start+end delimiter pairs
-
-**CSV Parsing Verification Tests:**
-- `test_quickplot_comma_csv_parsing` - Verifies comma CSV parsing in QuickPlot mode
-- `test_csv_parsing_with_javascript_semicolon` - Verifies JavaScript parser with semicolon
-- `test_csv_parsing_with_javascript_tab` - Verifies JavaScript parser with tab
-- `test_csv_parsing_with_javascript_pipe` - Verifies JavaScript parser with pipe
-
-## What is Tested
-
-### Frame Parsing
-
-**Location:** `integration/test_frame_parsing.py`
-
-Tests frame parsing with all supported checksum algorithms and data formats:
-
-- **Checksum Validation** - All algorithms (None, XOR, SUM, CRC8, CRC16, CRC32, Fletcher16, Adler32)
-- **Invalid Checksum Rejection** - Ensures corrupted frames are rejected
-- **JSON Frame Parsing** - Validates JSON-formatted telemetry frames
-- **CSV Frame Parsing** - Tests CSV data with various delimiters (`,`, `;`, `\t`, `|`)
-- **Frame Delimiters** - Multiple line terminators (`\r\n`, `\n`, `\r`, `;`)
-- **High-Frequency Frames** - Stress test with 100 Hz data streams
-- **Error Handling** - Empty frames, malformed JSON, oversized frames (1000+ datasets)
-
-### CSV Export
-
-**Location:** `integration/test_csv_export.py`
-
-Tests CSV file export functionality:
-
-- **Basic Export** - Enable/disable CSV export
-- **Timestamp Validation** - Monotonic timestamps with 9 decimal precision
-- **Multiple Sessions** - Sequential export sessions
-- **High-Frequency Export** - 100 Hz sustained export (500 frames)
-- **Enable/Disable Cycling** - Rapid on/off transitions
-
-### Project Configuration
-
-**Location:** `integration/test_project_configuration.py`
-
-Tests project setup and configuration via API:
-
-- **Operation Modes** - ProjectFile, DeviceSendsJSON, QuickPlot
-- **Project Creation** - API-based group/dataset creation
-- **JavaScript Parser** - Custom frame parsing logic
-- **Action Configuration** - Dashboard action buttons
-- **Complete Workflows** - End-to-end project configuration
-
-### Performance Concepts
-
-**Location:** `integration/test_performance_concepts.py`
-
-Validates the decoupling of data processing rate from UI rendering rate:
-
-- **High Data Rate / Low Render FPS** - 1000 Hz data processing with 30 FPS UI rendering
-- **Rendering Independence** - Verify dashboard FPS doesn't affect data throughput
-- **Sustained Processing** - 50 Hz streaming for 10 seconds (500 frames)
-- **FPS Range Validation** - Dashboard rendering rates (10-120 FPS)
-
-### End-to-End Workflows
-
-**Location:** `integration/test_workflows.py`
-
-Complete user workflow scenarios:
-
-- **Monitoring Workflow** - Configure → Connect → Receive → Disconnect
-- **Export Workflow** - Enable export → Collect data → Verify files
-- **Reconnection Workflow** - Multiple connect/disconnect cycles
-- **Dashboard Configuration** - FPS and plot point settings
-- **Pause/Resume** - Stream control
-- **Error Recovery** - Graceful handling of disconnections
-- **Long-Running Sessions** - 30-second stability test
-
-### Performance Benchmarks
-
-**Location:** `performance/benchmark_frame_rate.py`
-
-Quantitative performance measurements:
-
-- **Frame Rate Throughput** - Benchmarks at 10, 50, 100, 200, 500, 1000 Hz
-- **Sustained High Frequency** - 1 kHz streaming for 10 seconds
-- **Checksum Overhead** - Performance impact of different algorithms
-- **Frame Size Impact** - Small (5), Medium (50), Large (200) dataset frames
-
-### Fuzzy Testing
-
-**Location:** `integration/test_fuzzy.py`
-
-Comprehensive fuzzy tests designed to identify bugs, crashes, and edge cases:
-
-- **Malformed JSON** - 28+ variations of invalid JSON syntax
-- **Binary Garbage** - Random bytes flood testing
-- **Frame Corruption** - Random bit flips with checksum validation
-- **Partial Frames** - Truncated/incomplete frame handling
-- **Buffer Overflow** - Extremely large frames (100KB-1MB+)
-- **Numeric Edge Cases** - Zero, infinity, max/min integers, scientific notation
-- **Unicode Stress** - Emojis, RTL text, Zalgo, combining characters, control chars
-- **Delimiter Confusion** - Nested, backwards, and malformed delimiters
-- **Rapid-Fire** - 1000 frames with zero delay
-- **Mixed Valid/Invalid** - Interleaved good and bad frames
-- **Null Byte Injection** - Null bytes at various positions
-- **Checksum Brute Force** - 50+ invalid checksums
-- **Rapid Reconnection** - 10 connect/disconnect cycles
-- **Memory Stress** - 50 large frames (20 groups × 50 datasets)
-- **Fragmented Frames** - 10-byte chunks
-- **JSON Depth Bomb** - 100-level nested structures
-- **Empty/Whitespace** - Various empty payload variations
-- **Random Chaos** - Combined fuzzing for ultimate stress test
-
-## Prerequisites
-
-### Required Software
-
-- **Python 3.8+** (tested with Python 3.14)
-- **Serial Studio** (GPL or Commercial version)
-- **Running Serial Studio Instance** with API Server enabled
-
-### Python Dependencies
-
-Install test dependencies:
+Install dependencies:
 
 ```bash
-pip install -r requirements.txt
+pip install -r tests/requirements.txt
 ```
-
-Dependencies include:
-- `pytest` - Core test framework
-- `pytest-timeout` - Prevent hanging tests
-- `pytest-xdist` - Parallel test execution
-- `pytest-benchmark` - Performance benchmarking
-- `pytest-cov` - Code coverage reporting
-- `requests` - HTTP client for API testing
-- `pandas` - CSV validation
-- `jsonschema` - JSON schema validation
-- `psutil` - Performance monitoring
-- `memory-profiler` - Memory leak detection
-
-### Serial Studio Setup
-
-1. **Start Serial Studio**
-2. **Enable API Server:**
-   - Go to Settings → Miscellaneous
-   - Check "Enable API Server"
-   - Ensure it's listening on port 7777 (default)
-3. **Verify Connection:**
-   ```bash
-   python3 verify_frame_format.py
-   ```
 
 ## Running Tests
 
-### Quick Start
-
-Run all integration tests:
+From the project root:
 
 ```bash
-pytest integration/
-```
+# All tests
+pytest tests/
 
-Run specific test file:
+# Just integration tests
+pytest tests/integration/
 
-```bash
-pytest integration/test_frame_parsing.py
-```
+# Just security tests
+pytest tests/security/
 
-Run specific test function:
+# Just performance benchmarks
+pytest tests/performance/
 
-```bash
-pytest integration/test_csv_export.py::test_csv_export_basic
-```
+# A single file
+pytest tests/integration/test_frame_parsing.py
 
-### Test Categories
+# A single test
+pytest tests/integration/test_csv_export.py::test_csv_export_basic
 
-Tests are organized with pytest markers for selective execution:
+# Skip slow tests
+pytest -m "not slow"
 
-**By Test Type:**
-```bash
-pytest -m integration          # All integration tests
-pytest -m performance          # Performance benchmarks only
-pytest -m slow                 # Long-running tests
-```
-
-**By Feature:**
-```bash
-pytest -m csv                  # CSV export tests
-pytest -m project              # Project configuration tests
-pytest -m network              # Network driver tests
-```
-
-**Fuzzy Testing:**
-```bash
-pytest integration/test_fuzzy.py -v            # Run all fuzzy tests
-pytest integration/test_fuzzy.py -m slow       # Run comprehensive fuzzy tests only
-pytest integration/test_fuzzy.py -m "not slow" # Run fast fuzzy tests only
-```
-
-**Exclude Slow Tests:**
-```bash
-pytest -m "not slow"           # Skip long-running tests
+# Verbose output
+pytest -v -s
 ```
 
 ### Parallel Execution
 
-Run tests in parallel for faster execution:
-
 ```bash
-pytest -n auto                 # Auto-detect CPU cores
-pytest -n 4                    # Use 4 workers
+pytest -n auto    # use all CPU cores
+pytest -n 4       # use 4 workers
 ```
 
-### Verbose Output
+### Markers
 
-```bash
-pytest -v                      # Verbose test names
-pytest -vv                     # Very verbose with full diffs
-pytest -s                      # Show print statements
-```
+Tests are tagged with markers you can filter on:
 
-### Coverage Reporting
+| Marker | Meaning |
+|--------|---------|
+| `integration` | Requires running Serial Studio |
+| `security` | Security and penetration tests |
+| `performance` | Benchmarks |
+| `slow` | Takes a while |
+| `csv` | CSV export tests |
+| `project` | Project configuration tests |
+| `network` | Network driver tests |
+| `fuzzing` | Fuzzing tests |
+| `dos` | Denial of service tests |
+| `exploit` | May crash the server |
+| `destructive` | May crash or hang the server |
 
-Generate code coverage report:
-
-```bash
-pytest --cov=utils --cov-report=html integration/
-```
-
-View coverage report:
-```bash
-open htmlcov/index.html        # macOS
-xdg-open htmlcov/index.html    # Linux
-```
-
-## Performance Benchmarking
-
-Run performance benchmarks:
-
-```bash
-pytest performance/
-```
-
-Run specific benchmark:
-
-```bash
-pytest performance/benchmark_frame_rate.py::test_frame_rate_throughput
-```
-
-Save benchmark results:
-
-```bash
-pytest performance/ --benchmark-json=benchmark.json
-```
-
-Compare benchmarks over time:
-
-```bash
-pytest performance/ --benchmark-compare
-```
-
-## Test Utilities
-
-### Device Simulator
-
-**Location:** `utils/device_simulator.py`
-
-Simulates devices sending telemetry over TCP/UDP:
-
-```python
-from utils import DeviceSimulator, DataGenerator, ChecksumType
-
-sim = DeviceSimulator(host="127.0.0.1", port=9000, protocol="tcp")
-sim.start()
-
-frames = DataGenerator.generate_realistic_telemetry(
-    duration_seconds=2.0,
-    frequency_hz=10.0,
-    frame_format="json",
-    checksum_type=ChecksumType.CRC16
-)
-
-sim.send_frames(frames, interval_seconds=0.1)
-sim.stop()
-```
-
-### API Client
-
-**Location:** `utils/api_client.py`
-
-Clean wrapper around Serial Studio's TCP API:
-
-```python
-from utils import SerialStudioClient
-
-with SerialStudioClient() as api:
-    api.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-    api.connect_device()
-
-    status = api.get_dashboard_status()
-    print(f"Connected: {api.is_connected()}")
-
-    api.disconnect_device()
-```
-
-### Data Generator
-
-**Location:** `utils/data_generator.py`
-
-Generates realistic telemetry data with proper checksums:
-
-```python
-from utils import DataGenerator, ChecksumType
-import json
-
-# Generate JSON frame
-frame_data = DataGenerator.generate_json_frame()
-payload = json.dumps(frame_data)
-
-# Wrap with delimiters and checksum
-frame = DataGenerator.wrap_frame(
-    payload,
-    checksum_type=ChecksumType.CRC16,
-    mode="project"  # or "json" for DeviceSendsJSON mode
-)
-```
-
-### Validators
-
-**Location:** `utils/validators.py`
-
-Validation helpers for test assertions:
-
-```python
-from utils import validate_csv_export, validate_frame_structure
-
-# Validate CSV export file
-validate_csv_export(
-    csv_path="export.csv",
-    min_rows=10,
-    check_timestamps=True
-)
-
-# Validate frame structure
-validate_frame_structure(frame_dict, expected_groups=2)
-```
-
-## Manual Testing Scripts
-
-### Manual Frame Sender
-
-**Location:** `test_manual_send.py`
-
-Interactively send frames to Serial Studio:
-
-```bash
-python3 test_manual_send.py
-```
-
-Sends 10 JSON frames with 1-second intervals.
-
-### Frame Format Verifier
-
-**Location:** `verify_frame_format.py`
-
-Verify frame format meets all requirements:
-
-```bash
-python3 verify_frame_format.py
-```
-
-Checks:
-- Start/end delimiters (`/*` and `*/`)
-- No checksums in DeviceSendsJSON mode
-- Newline termination
-- Valid JSON payload
-- Widget definitions present
-- GPS dataset ordering (lat, alt, lon)
-
-## Configuration
-
-### pytest.ini
-
-Test configuration is in `pytest.ini`:
-
-```ini
-[pytest]
-testpaths = integration performance
-timeout = 30
-console_output_style = progress
-```
-
-**Markers:**
-- `slow` - Long-running tests (deselect with `-m "not slow"`)
-- `integration` - Integration tests requiring running Serial Studio
-- `performance` - Performance benchmarks
-- `csv` - CSV export tests
-- `project` - Project configuration tests
-- `network` - Network driver tests
-
-### .gitignore
-
-Generated files excluded from git:
-- `__pycache__/` - Python bytecode
-- `.pytest_cache/` - Pytest cache
-- `htmlcov/` - Coverage reports
-- `*.csv`, `*.mdf`, `*.mf4` - Export files
-- `temp/`, `tmp/` - Temporary test outputs
-
-## Test Architecture
-
-### Directory Structure
+## What's Here
 
 ```
 tests/
-├── README.md                    # This file
-├── FUZZING.md                   # Fuzzy testing guide
-├── requirements.txt             # Python dependencies
-├── pytest.ini                   # Pytest configuration
-├── .gitignore                   # Git ignore rules
+├── integration/                  # Functional tests against the API
+│   ├── conftest.py               # Fixtures (api_client, device_simulator, etc.)
+│   ├── test_frame_parsing.py     # All checksum types, JSON/CSV parsing, delimiters
+│   ├── test_csv_export.py        # Export enable/disable, timestamps, high-frequency
+│   ├── test_csv_parsing_verified.py  # CSV delimiter verification (comma, semicolon, tab, pipe)
+│   ├── test_project_configuration.py # Operation modes, JS parsers, project creation
+│   ├── test_performance_concepts.py  # Data rate vs. render rate decoupling
+│   ├── test_workflows.py         # End-to-end: configure > connect > receive > export
+│   ├── test_fuzzy.py             # Malformed JSON, binary garbage, unicode stress, chaos
+│   ├── test_driver_api_comprehensive.py  # Every driver command (UART, Network, BLE, etc.)
+│   └── test_api_drivers.py       # Driver and console basics
 │
-├── integration/                 # Integration tests
-│   ├── conftest.py             # Shared fixtures
-│   ├── test_frame_parsing.py   # Frame parsing tests
-│   ├── test_csv_export.py      # CSV export tests
-│   ├── test_fuzzy.py           # Fuzzy testing suite
-│   ├── test_project_configuration.py
-│   ├── test_performance_concepts.py
-│   └── test_workflows.py       # End-to-end workflows
+├── security/                     # Penetration and adversarial tests
+│   ├── conftest.py               # Security fixtures (vuln_tracker, check_server_alive)
+│   ├── test_api_security.py      # JSON exploits, injection attacks, buffer abuse
+│   ├── test_api_vulnerabilities.py   # Input validation bypass, parsing exploits
+│   ├── test_denial_of_service.py # CPU/memory/connection exhaustion
+│   ├── test_protocol_fuzzing.py  # Malformed protocol messages, encoding confusion
+│   ├── test_exploit_techniques.py    # Race conditions, integer overflow, timing attacks
+│   ├── test_zero_day_adversarial.py  # Sandbox escape, prototype pollution, ReDoS
+│   ├── test_access_control.py    # Auth bypass, privilege escalation
+│   └── run_all_security_tests.sh # Run all security tests at once
 │
-├── performance/                 # Performance benchmarks
-│   └── benchmark_frame_rate.py
+├── performance/                  # Benchmarks
+│   └── benchmark_frame_rate.py   # Throughput at 10-1000 Hz, checksum overhead, frame sizes
 │
-└── utils/                       # Test utilities
-    ├── __init__.py
-    ├── api_client.py           # Serial Studio API client
-    ├── device_simulator.py     # Device simulator
-    ├── data_generator.py       # Telemetry data generation (+ fuzzing utilities)
-    └── validators.py           # Validation helpers
+└── utils/                        # Shared test utilities
+    ├── api_client.py             # SerialStudioClient - TCP API wrapper
+    ├── device_simulator.py       # Simulates TCP/UDP devices sending telemetry
+    ├── data_generator.py         # Generates frames with checksums (JSON, CSV, fuzzing)
+    └── validators.py             # Assertions for CSV files and frame structures
 ```
 
-### Pytest Fixtures
+## How Tests Work
 
-**Provided by `conftest.py`:**
+Every test follows the same pattern:
 
-- `serial_studio_running` - Verifies Serial Studio is running (session scope)
-- `api_client` - Connected API client (function scope)
-- `clean_state` - Ensures clean test state (disconnects, disables exports)
-- `device_simulator` - TCP device simulator (function scope)
-- `data_generator` - Data generation utilities
-- `temp_dir` - Temporary directory for test outputs
-- `checksum_types` - List of all checksum algorithms
+1. Connect to Serial Studio's API on `localhost:7777`
+2. Configure a project (operation mode, delimiters, checksums)
+3. Start a device simulator on `localhost:9000` that sends telemetry frames
+4. Tell Serial Studio to connect to that simulated device
+5. Assert that frames were parsed, dashboards updated, or files exported correctly
+6. Disconnect and clean up
+
+The `conftest.py` fixtures handle most of this boilerplate. A typical test just needs `api_client`, `device_simulator`, and `clean_state`.
+
+## Key Fixtures
+
+| Fixture | Scope | What it does |
+|---------|-------|-------------|
+| `api_client` | function | Connected `SerialStudioClient`, auto-disconnects after test |
+| `clean_state` | function | Disconnects devices, disables exports, creates fresh project |
+| `device_simulator` | function | TCP server on port 9000 that sends frames |
+| `data_generator` | function | Generates JSON/CSV telemetry with checksums |
+| `checksum_types` | session | List of all 8 checksum algorithms |
+| `temp_dir` | function | Temporary directory, cleaned up after test |
+
+Security tests have their own fixtures in `security/conftest.py`:
+
+| Fixture | What it does |
+|---------|-------------|
+| `security_client` | API client that does NOT reset state between tests |
+| `vuln_tracker` | Logs discovered vulnerabilities |
+| `check_server_alive` | Verifies the server didn't crash after a test |
+
+## Operation Modes
+
+Tests exercise three modes. Knowing which one you're in matters:
+
+- **ProjectFile** (`operationMode: 0`) - Frame delimiters, checksums, and JS parsers all come from the project JSON. Most integration tests use this.
+- **DeviceSendsJSON** (`operationMode: 1`) - The device sends complete JSON wrapped in `/*` ... `*/`. Project config is ignored.
+- **QuickPlot** (`operationMode: 2`) - Line-based, comma-separated values only. No project config, no JS parser.
 
 ## Troubleshooting
 
-### Connection Refused
+**"Connection refused" on port 7777** - Serial Studio isn't running or the API server isn't enabled. Check Settings > Miscellaneous.
 
-```
-ConnectionError: Could not connect to Serial Studio at 127.0.0.1:7777
-```
+**Tests hang for 30 seconds then timeout** - Port 9000 might be in use by another process, or Serial Studio stopped responding. Run with `pytest -s` to see what's happening.
 
-**Solution:**
-1. Ensure Serial Studio is running
-2. Go to Settings → Miscellaneous
-3. Enable "API Server"
-4. Verify port 7777 is not blocked by firewall
+**Frames not being parsed** - Make sure the operation mode matches what the test expects. ProjectFile mode needs a loaded project; QuickPlot mode ignores project config entirely.
 
-### Tests Hanging
-
-**Symptom:** Tests timeout after 30 seconds
-
-**Solution:**
-- Check if device simulator port (9000) is already in use
-- Verify Serial Studio is responding (check API Server status)
-- Run with `-s` flag to see print output: `pytest -s`
-
-### Frame Parsing Failures
-
-**Symptom:** Frames not being parsed correctly
-
-**Solution:**
-- Run `python3 verify_frame_format.py` to check frame format
-- Ensure operation mode matches frame format (DeviceSendsJSON vs ProjectFile)
-- Check delimiter configuration matches test expectations
-
-### Import Errors
-
-```
-ModuleNotFoundError: No module named 'pytest'
-```
-
-**Solution:**
-```bash
-pip install -r requirements.txt
-```
-
-## Contributing
-
-### Adding New Tests
-
-1. Create test file in `integration/` or `performance/`
-2. Use appropriate fixtures from `conftest.py`
-3. Add descriptive docstrings
-4. Mark tests with appropriate markers (e.g., `@pytest.mark.csv`)
-5. Ensure tests clean up state (disconnect, disable exports)
-
-### Test Naming Convention
-
-- Test files: `test_*.py`
-- Test classes: `Test*`
-- Test functions: `test_*`
-
-### Example Test
-
-```python
-import pytest
-from utils import ChecksumType, DataGenerator
-
-@pytest.mark.csv
-def test_csv_export_example(api_client, device_simulator, clean_state):
-    """Test CSV export with realistic telemetry."""
-    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-    api_client.enable_csv_export()
-
-    frames = DataGenerator.generate_realistic_telemetry(
-        duration_seconds=1.0,
-        frequency_hz=10.0,
-        frame_format="json",
-        checksum_type=ChecksumType.CRC16
-    )
-
-    api_client.connect_device()
-    assert device_simulator.wait_for_connection(timeout=5.0)
-
-    device_simulator.send_frames(frames, interval_seconds=0.1)
-    time.sleep(1.5)
-
-    api_client.disconnect_device()
-    api_client.disable_csv_export()
-```
-
-## License
-
-Copyright (C) 2020-2025 Alex Spataru
-
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
-
-## Support
-
-For issues or questions:
-- GitHub Issues: https://github.com/Serial-Studio/Serial-Studio/issues
-- Documentation: https://serial-studio.github.io/
+**Import errors** - Run `pip install -r tests/requirements.txt`.
