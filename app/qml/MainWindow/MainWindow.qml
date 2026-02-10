@@ -204,23 +204,6 @@ Widgets.SmartWindow {
   }
 
   //
-  // Update native titlebar color when entering/leaving dashboard mode
-  //
-  Connections {
-    target: toolbar
-    function onDashboardModeChanged() {
-      if (!root.visible)
-        return
-
-      Cpp_NativeWindow.removeWindow(root)
-      if (toolbar.dashboardMode)
-        Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["dashboard_background"])
-      else
-        Cpp_NativeWindow.addWindow(root)
-    }
-  }
-
-  //
   // Shortcuts
   //
   Shortcut {

@@ -326,7 +326,7 @@ void UI::WindowManager::loadLayout()
 void UI::WindowManager::autoLayout()
 {
   const int margin = 4;
-  const int spacing = 4;
+  const int spacing = -1;
 
   const int canvasW = static_cast<int>(width());
   const int canvasH = static_cast<int>(height());
