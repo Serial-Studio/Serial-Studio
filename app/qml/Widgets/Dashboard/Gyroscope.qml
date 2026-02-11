@@ -180,7 +180,7 @@ Item {
 
       transform: [
         Translate {
-          y: root.pitchAngle * root.height / 45
+          y: root.pitchAngle * pitchIndicator.pixelsPerDegree
         },
         Rotation {
           angle: -root.rollAngle
@@ -204,7 +204,9 @@ Item {
         right: parent.right
       }
 
+      readonly property int reticleSpacing: -4
       readonly property var reticleHeight: Math.max(16, pitchIndicator.height / 20)
+      readonly property real pixelsPerDegree: (reticleHeight + reticleSpacing) / 5.0
 
       Item {
         antialiasing: true
@@ -213,7 +215,7 @@ Item {
 
         Column {
           id: column
-          spacing: -4
+          spacing: pitchIndicator.reticleSpacing
           antialiasing: true
           anchors.centerIn: parent
 
@@ -287,7 +289,7 @@ Item {
         }
 
         transform: [Translate {
-            y: (root.pitchAngle * pitchIndicator.reticleHeight / 5) + (pitchIndicator.reticleHeight / 2)
+            y: (root.pitchAngle * pitchIndicator.pixelsPerDegree) + (4 + angles.height) / 2
           }
         ]
       }
