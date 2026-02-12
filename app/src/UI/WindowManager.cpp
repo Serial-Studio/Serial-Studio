@@ -175,6 +175,25 @@ QJsonObject UI::WindowManager::serializeLayout() const
   layout["windowOrder"] = orderArray;
   layout["autoLayout"] = m_autoLayoutEnabled;
 
+  // Save per-window visibility states (Normal/Minimized/Closed)
+  if (m_taskbar)
+  {
+    QJsonObject windowStates;
+    for (int id : m_windowOrder)
+    {
+      auto *win = m_windows.value(id);
+      if (!win)
+        continue;
+
+      const int state = m_taskbar->windowState(win);
+      if (state != TaskbarModel::WindowNormal)
+        windowStates[QString::number(id)] = state;
+    }
+
+    if (!windowStates.isEmpty())
+      layout["windowStates"] = windowStates;
+  }
+
   return layout;
 }
 
@@ -259,6 +278,22 @@ bool UI::WindowManager::restoreLayout(const QJsonObject &layout)
     loadLayout();
   else
     m_layoutRestored = true;
+
+  bool ok;
+  if (m_taskbar && layout.contains("windowStates"))
+  {
+    const QJsonObject windowStates = layout["windowStates"].toObject();
+    for (auto it = windowStates.begin(); it != windowStates.end(); ++it)
+    {
+      const int id = it.key().toInt(&ok, -1);
+      const int state = it.value().toInt(TaskbarModel::WindowNormal);
+      if (ok && id >= 0 && m_windows.contains(id))
+      {
+        const auto ws = static_cast<TaskbarModel::WindowState>(state);
+        m_taskbar->setWindowState(id, ws);
+      }
+    }
+  }
 
   return true;
 }

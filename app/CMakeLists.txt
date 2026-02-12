@@ -328,6 +328,7 @@ set(HEADERS
 set(QML_SOURCES
   qml/Dialogs/About.qml
   qml/Dialogs/Acknowledgements.qml
+  qml/Dialogs/AccelerometerConfigDialog.qml
   qml/Dialogs/AxisRangeDialog.qml
   qml/Dialogs/CsvPlayer.qml
   qml/Dialogs/Mdf4Player.qml

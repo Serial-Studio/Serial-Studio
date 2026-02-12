@@ -101,6 +101,9 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
   m_autoCenter = m_settings.value("gpsAutoCenter", true).toBool();
   m_showNasaWeather = m_settings.value("gpsNasaWeather", false).toBool();
   m_plotTrajectory = m_settings.value("gpsPlotTrajectory", true).toBool();
+  m_zoom = qBound(static_cast<double>(MIN_ZOOM),
+                   m_settings.value("gpsZoomLevel", MIN_ZOOM).toDouble(),
+                   18.0);
 
   // Only enable one of the weather overlays
   if (m_showNasaWeather && m_showWeather)
@@ -375,6 +378,9 @@ void Widgets::GPS::setZoomLevel(int zoom)
     center();
   }
 
+  // Persist zoom level
+  m_settings.setValue(QStringLiteral("gpsZoomLevel"), m_zoom);
+
   // Emit signal
   Q_EMIT zoomLevelChanged();
 }
@@ -429,6 +435,9 @@ void Widgets::GPS::setZoomLevelPrecise(double zoom)
     m_zoom = z;
     center();
   }
+
+  // Persist zoom level
+  m_settings.setValue(QStringLiteral("gpsZoomLevel"), m_zoom);
 
   // Emit signal
   Q_EMIT zoomLevelChanged();

@@ -92,9 +92,14 @@ private:
   double m_yaw;
   double m_roll;
   double m_pitch;
+  double m_filteredYawRate;
+  double m_filteredRollRate;
+  double m_filteredPitchRate;
   QElapsedTimer m_timer;
 
   bool m_integrateValues;
+  bool m_rateFilterInitialized;
+  bool m_displayFilterInitialized;
 };
 
 } // namespace Widgets

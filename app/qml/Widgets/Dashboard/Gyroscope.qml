@@ -19,6 +19,8 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Effects
 import QtQuick.Layouts
@@ -46,23 +48,29 @@ Item {
   property real yawAngle: root.model.yaw
   property real rollAngle: root.model.roll
   property real pitchAngle: root.model.pitch
+
   property bool integrateValues: root.model.integrateValues
   onIntegrateValuesChanged: {
     if (root.model)
       root.model.integrateValues = root.integrateValues
   }
 
+  readonly property real pitchStep: 5
+  readonly property real maxPitch: 180
+  readonly property int pitchMarkCount: Math.round((2 * maxPitch) / pitchStep) + 1
+
+  function normalize180(angle) {
+    var normalized = (angle + 180) % 360;
+    if (normalized < 0)
+      normalized += 360;
+
+    return normalized - 180;
+  }
+
   //
   // Window flags
   //
-  property bool hasToolbar: true
-
-  //
-  // Animations
-  //
-  Behavior on yawAngle {NumberAnimation{}}
-  Behavior on rollAngle {NumberAnimation{}}
-  Behavior on pitchAngle {NumberAnimation{}}
+  property bool hasToolbar: root.height >= 296
 
   //
   // Save settings
@@ -74,7 +82,7 @@ Item {
   }
 
   //
-  // Add toolbar
+  // Toolbar
   //
   RowLayout {
     id: toolbar
@@ -91,8 +99,7 @@ Item {
     }
 
     ToolButton {
-      width: 24
-      height: 24
+      icon.width: 18
       icon.height: 18
       icon.color: "transparent"
       checked: root.integrateValues
@@ -100,10 +107,14 @@ Item {
       onClicked: root.integrateValues = !root.integrateValues
       icon.source: "qrc:/rcc/icons/dashboard-buttons/integral.svg"
     }
+
+    Item {
+      Layout.fillWidth: true
+    }
   }
 
   //
-  // Container
+  // Main container
   //
   Item {
     id: container
@@ -117,354 +128,360 @@ Item {
     }
 
     //
-    // Artificial horizon
+    // Dark background fills the entire widget
     //
-    Item {
-      id: artificialHorizon
-
-      antialiasing: true
+    Rectangle {
       anchors.fill: parent
-      anchors.margins: -parent.height / 2
-
-      Rectangle {
-        id: sky
-        antialiasing: true
-        anchors.fill: parent
-        anchors.topMargin: -1 * parent.height
-        gradient: Gradient {
-          GradientStop {
-            position: 0
-            color: "#5759A6"
-          }
-
-          GradientStop {
-            position: 1
-            color: "#7A7BBB"
-          }
-        }
-      }
-
-      Rectangle {
-        antialiasing: true
-        height: parent.height * 1.5
-        anchors {
-          left: sky.left
-          right: sky.right
-          bottom: sky.bottom
-          bottomMargin: -parent.height
-        }
-
-        gradient: Gradient {
-          GradientStop {
-            position: 1
-            color: "#672122"
-          }
-
-          GradientStop {
-            position: 0
-            color: "#A63732"
-          }
-        }
-
-        Rectangle {
-          height: 2
-          color: "#fff"
-          antialiasing: true
-          anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-          }
-        }
-      }
-
-      transform: [
-        Translate {
-          y: root.pitchAngle * pitchIndicator.pixelsPerDegree
-        },
-        Rotation {
-          angle: -root.rollAngle
-          origin.x: artificialHorizon.width  / 2
-          origin.y: artificialHorizon.height / 2
-        }
-      ]
+      color: "#0e1117"
     }
 
     //
-    // Pitch reticles
+    // Attitude indicator fills entire container (extends behind angles)
     //
     Item {
-      id: pitchIndicator
+      id: instrument
+      clip: true
+      anchors.fill: parent
 
-      antialiasing: true
-      height: parent.height - 4 - angles.height
+      readonly property real instrumentHeight: height - (angles.visible ? angles.height + 4 : 0)
+      readonly property real pixelsPerDegree: instrumentHeight / 90
+      readonly property real dialSize: Math.min(width, instrumentHeight)
 
-      anchors {
-        left: parent.left
-        right: parent.right
-      }
-
-      readonly property int reticleSpacing: -4
-      readonly property var reticleHeight: Math.max(16, pitchIndicator.height / 20)
-      readonly property real pixelsPerDegree: (reticleHeight + reticleSpacing) / 5.0
-
-      Item {
-        antialiasing: true
-        width: parent.width
-        height: parent.height
-
-        Column {
-          id: column
-          spacing: pitchIndicator.reticleSpacing
+        //
+        // Moving sky + ground + pitch marks (transforms with pitch/roll)
+        //
+        Item {
+          id: movingLayer
+          width: Math.max(instrument.width, instrument.height) * 3
+          height: Math.max(instrument.width, instrument.height) * 3
+          x: (instrument.width - width) / 2
+          y: (instrument.instrumentHeight - height) / 2
           antialiasing: true
-          anchors.centerIn: parent
 
+          //
+          // Sky gradient (Garmin-style blue)
+          //
+          Rectangle {
+            width: parent.width
+            height: parent.height / 2
+            gradient: Gradient {
+              GradientStop { position: 0.0; color: "#1a3060" }
+              GradientStop { position: 0.4; color: "#3a6aaa" }
+              GradientStop { position: 0.8; color: "#5b93c5" }
+              GradientStop { position: 1.0; color: "#7eb3d8" }
+            }
+          }
+
+          //
+          // Ground gradient (warm brown)
+          //
+          Rectangle {
+            y: parent.height / 2
+            width: parent.width
+            height: parent.height / 2
+            gradient: Gradient {
+              GradientStop { position: 0.0; color: "#a06848" }
+              GradientStop { position: 0.2; color: "#7d5233" }
+              GradientStop { position: 0.6; color: "#5a3a22" }
+              GradientStop { position: 1.0; color: "#3a2415" }
+            }
+          }
+
+          //
+          // Horizon line
+          //
+          Rectangle {
+            y: parent.height / 2 - 1.5
+            width: parent.width
+            height: 3
+            color: "#e8e8e8"
+            antialiasing: true
+          }
+
+          //
+          // Pitch marks and degree labels
+          //
           Repeater {
-            model: 37
+            model: root.pitchMarkCount
             delegate: Item {
-              id: reticle
-              antialiasing: true
-              width: pitchIndicator.width
-              height: pitchIndicator.reticleHeight
+              id: mark
+              required property int index
+
+              readonly property real pitch: root.maxPitch - (index * root.pitchStep)
+              readonly property bool majorMark: Math.abs(pitch % 10) < 0.001
+              readonly property bool horizonMark: Math.abs(pitch) < 0.001
+
+              width: movingLayer.width
+              height: majorMark ? 24 : 16
+              y: (movingLayer.height / 2)
+                 - (pitch * instrument.pixelsPerDegree)
+                 - (height / 2)
 
               opacity: {
-                var reticleY = reticle.mapToItem(rollDial, 0, 0).y;
-                var distance = Math.abs(reticleY - rollDial.height / 2);
-                var fadeDistance = rollDial.height / 2;
-                return Math.max(0, Math.min(1, (fadeDistance - distance) / fadeDistance));
+                var dist = Math.abs(pitch - root.pitchAngle);
+                if (dist > 180)
+                  dist = 360 - dist;
+                return Math.max(0, 1.0 - dist / 45);
               }
-
-              onVisibleChanged: {
-                var reticleY = reticle.mapToItem(rollDial, 0, 0).y;
-                var distance = Math.abs(reticleY - rollDial.height / 2);
-                var fadeDistance = rollDial.height / 2;
-                opacity = Math.max(0, Math.min(1, (fadeDistance - distance) / fadeDistance));
-              }
-
-              onYChanged: {
-                var reticleY = reticle.mapToItem(rollDial, 0, 0).y;
-                var distance = Math.abs(reticleY - rollDial.height / 2);
-                var fadeDistance = rollDial.height / 2;
-                opacity = Math.max(0, Math.min(1, (fadeDistance - distance) / fadeDistance));
-              }
-
-              visible: Math.abs(pitch - root.pitchAngle) <= 20
-              readonly property int pitch: -(index * 5 - 90)
 
               Rectangle {
-                id: _line
-                height: 2
-                color: "#fff"
-                antialiasing: true
+                id: pitchLine
+                height: mark.horizonMark ? 3 : (mark.majorMark ? 2 : 1.5)
+                width: mark.horizonMark
+                       ? movingLayer.width
+                       : mark.majorMark
+                         ? instrument.dialSize * 0.22
+                         : instrument.dialSize * 0.12
+                color: "#e8e8e8"
                 anchors.centerIn: parent
-                opacity: (reticle.pitch % 10) === 0 ? 1 : 0.8
-                width: (reticle.pitch % 10) === 0 ? pitchIndicator.width / 4 :
-                                                    pitchIndicator.width / 8
+                antialiasing: true
               }
 
               Label {
-                id: leftLabel
-                color: "#fff"
-                antialiasing: true
-                text: reticle.pitch
-                anchors.centerIn: parent
-                font: Cpp_Misc_CommonFonts.monoFont
-                opacity: root.height >= 120 ? 1 : 0
-                visible: (reticle.pitch != 0) && (reticle.pitch % 10) === 0
-                anchors.horizontalCenterOffset: - 1 * (_line.width + 32) / 2
+                text: Math.round(Math.abs(mark.pitch)).toString()
+                color: "#e8e8e8"
+                visible: !mark.horizonMark && mark.majorMark
+                         && root.height >= 140
+                font.pixelSize: Math.max(9, instrument.dialSize / 22)
+                font.family: Cpp_Misc_CommonFonts.monoFont.family
+                anchors.verticalCenter: pitchLine.verticalCenter
+                anchors.right: pitchLine.left
+                anchors.rightMargin: 6
               }
 
               Label {
-                color: "#fff"
-                antialiasing: true
-                text: reticle.pitch
-                anchors.centerIn: parent
-                font: Cpp_Misc_CommonFonts.monoFont
-                opacity: root.height >= 120 ? 1 : 0
-                anchors.horizontalCenterOffset: (_line.width + 32) / 2
-                visible: (reticle.pitch != 0) && (reticle.pitch % 10) === 0
+                text: Math.round(Math.abs(mark.pitch)).toString()
+                color: "#e8e8e8"
+                visible: !mark.horizonMark && mark.majorMark
+                         && root.height >= 140
+                font.pixelSize: Math.max(9, instrument.dialSize / 22)
+                font.family: Cpp_Misc_CommonFonts.monoFont.family
+                anchors.verticalCenter: pitchLine.verticalCenter
+                anchors.left: pitchLine.right
+                anchors.leftMargin: 6
               }
             }
           }
+
+          transform: [
+            Translate {
+              y: root.pitchAngle * instrument.pixelsPerDegree
+            },
+            Rotation {
+              angle: -root.rollAngle
+              origin.x: movingLayer.width / 2
+              origin.y: movingLayer.height / 2
+            }
+          ]
         }
 
-        transform: [Translate {
-            y: (root.pitchAngle * pitchIndicator.pixelsPerDegree) + (4 + angles.height) / 2
+        //
+        // Instrument center point (offset up from full container center)
+        //
+        readonly property real centerY: instrument.instrumentHeight / 2
+
+        //
+        // Roll dial glow effect
+        //
+        MultiEffect {
+          blur: 1
+          blurMax: 64
+          brightness: 0.6
+          saturation: 0.1
+          blurEnabled: true
+          source: rollDial
+          anchors.fill: rollDial
+        }
+
+        //
+        // Roll pointer glow effect
+        //
+        MultiEffect {
+          blur: 1
+          blurMax: 64
+          brightness: 0.6
+          saturation: 0.1
+          blurEnabled: true
+          source: rollPointer
+          anchors.fill: rollPointer
+        }
+
+        //
+        // Crosshair glow effect
+        //
+        MultiEffect {
+          blur: 1
+          blurMax: 64
+          brightness: 0.6
+          saturation: 0.1
+          blurEnabled: true
+          source: crosshair
+          anchors.fill: crosshair
+        }
+
+        //
+        // Roll dial (square, centered on instrument area)
+        //
+        Image {
+          id: rollDial
+          width: instrument.dialSize
+          height: instrument.dialSize
+          x: (instrument.width - width) / 2
+          y: instrument.centerY - height / 2
+          sourceSize.height: instrument.dialSize
+          fillMode: Image.PreserveAspectFit
+          source: "qrc:/rcc/instruments/attitude_dial.svg"
+          antialiasing: true
+          smooth: true
+
+          transform: Rotation {
+            angle: -root.rollAngle
+            origin.x: rollDial.width / 2
+            origin.y: rollDial.height / 2
           }
-        ]
+        }
+
+        //
+        // Roll pointer (square, centered on instrument area)
+        //
+        Image {
+          id: rollPointer
+          width: instrument.dialSize
+          height: instrument.dialSize
+          x: (instrument.width - width) / 2
+          y: instrument.centerY - height / 2
+          sourceSize.height: instrument.dialSize
+          fillMode: Image.PreserveAspectFit
+          source: "qrc:/rcc/instruments/attitude_pointer.svg"
+          antialiasing: true
+          smooth: true
+        }
+
+        //
+        // Aircraft crosshair (centered on instrument area)
+        //
+        Image {
+          id: crosshair
+          width: instrument.dialSize * 0.75
+          sourceSize.width: width
+          x: (instrument.width - width) / 2
+          y: instrument.centerY - height / 2
+          fillMode: Image.PreserveAspectFit
+          source: "qrc:/rcc/instruments/attitude_crosshair.svg"
+          antialiasing: true
+          smooth: true
+        }
       }
 
-      transform: [
-        Rotation {
-          angle: -root.rollAngle
-          origin.x: root.width / 2
-          origin.y: root.height / 2
-        }
-      ]
-    }
-
     //
-    // Angles indicator
+    // Angles indicator strip
     //
     Item {
       id: angles
-      visible: parent.height >= 120
+      visible: container.height >= 120
 
-      width: parent.width
-      height: visible ? 24 : 0
+      height: visible ? 38 : 0
 
       anchors {
-        bottomMargin: 4
         left: parent.left
         right: parent.right
         bottom: parent.bottom
+        leftMargin: 4
+        rightMargin: 4
+        bottomMargin: 4
       }
 
       RowLayout {
         spacing: 4
         anchors.fill: parent
 
-        Item {
-          implicitWidth: 4
-        }
-
         Rectangle {
           color: "#333"
           border.width: 1
-          implicitHeight: 24
+          implicitHeight: 38
           border.color: "#fff"
           Layout.fillWidth: true
 
-          Text {
-            color: "#ffffff"
-            elide: Qt.ElideLeft
-            anchors.fill: parent
-            verticalAlignment: Qt.AlignVCenter
-            font: Cpp_Misc_CommonFonts.monoFont
-            horizontalAlignment: Qt.AlignHCenter
-            text: qsTr("Roll: %1").arg(root.rollAngle.toFixed(2) + "°")
+          Column {
+            anchors.centerIn: parent
+            spacing: 1
+
+            Text {
+              anchors.horizontalCenter: parent.horizontalCenter
+              text: qsTr("ROLL")
+              color: "#ffffff"
+              opacity: 0.6
+              font.pixelSize: 8
+              font.family: Cpp_Misc_CommonFonts.monoFont.family
+            }
+
+            Text {
+              anchors.horizontalCenter: parent.horizontalCenter
+              text: root.normalize180(root.rollAngle).toFixed(2) + "\u00B0"
+              color: "#ffffff"
+              font: Cpp_Misc_CommonFonts.monoFont
+            }
           }
         }
 
         Rectangle {
           color: "#333"
           border.width: 1
-          implicitHeight: 24
+          implicitHeight: 38
           border.color: "#fff"
           Layout.fillWidth: true
 
-          Text {
-            color: "#ffffff"
-            elide: Qt.ElideLeft
-            anchors.fill: parent
-            verticalAlignment: Qt.AlignVCenter
-            font: Cpp_Misc_CommonFonts.monoFont
-            horizontalAlignment: Qt.AlignHCenter
-            text: qsTr("Yaw: %1").arg(root.yawAngle.toFixed(2) + "°")
+          Column {
+            anchors.centerIn: parent
+            spacing: 1
+
+            Text {
+              anchors.horizontalCenter: parent.horizontalCenter
+              text: qsTr("YAW")
+              color: "#ffffff"
+              opacity: 0.6
+              font.pixelSize: 8
+              font.family: Cpp_Misc_CommonFonts.monoFont.family
+            }
+
+            Text {
+              anchors.horizontalCenter: parent.horizontalCenter
+              text: root.normalize180(root.yawAngle).toFixed(2) + "\u00B0"
+              color: "#ffffff"
+              font: Cpp_Misc_CommonFonts.monoFont
+            }
           }
         }
 
         Rectangle {
           color: "#333"
           border.width: 1
-          implicitHeight: 24
+          implicitHeight: 38
           border.color: "#fff"
           Layout.fillWidth: true
 
-          Text {
-            color: "#ffffff"
-            elide: Qt.ElideLeft
-            anchors.fill: parent
-            verticalAlignment: Qt.AlignVCenter
-            font: Cpp_Misc_CommonFonts.monoFont
-            horizontalAlignment: Qt.AlignHCenter
-            text: qsTr("Pitch: %1").arg(root.pitchAngle.toFixed(2) + "°")
-          }
-        }
+          Column {
+            anchors.centerIn: parent
+            spacing: 1
 
-        Item {
-          implicitWidth: 4
+            Text {
+              anchors.horizontalCenter: parent.horizontalCenter
+              text: qsTr("PITCH")
+              color: "#ffffff"
+              opacity: 0.6
+              font.pixelSize: 8
+              font.family: Cpp_Misc_CommonFonts.monoFont.family
+            }
+
+            Text {
+              anchors.horizontalCenter: parent.horizontalCenter
+              text: root.normalize180(root.pitchAngle).toFixed(2) + "\u00B0"
+              color: "#ffffff"
+              font: Cpp_Misc_CommonFonts.monoFont
+            }
+          }
         }
       }
-    }
-
-    //
-    // Roll dial visual effects
-    //
-    MultiEffect {
-      blur: 1
-      blurMax: 64
-      brightness: 0.6
-      saturation: 0.1
-      blurEnabled: true
-      source: rollDial
-      anchors.fill: rollDial
-    }
-
-    //
-    // Roll pointer visual effects
-    //
-    MultiEffect {
-      blur: 1
-      blurMax: 64
-      brightness: 0.6
-      saturation: 0.1
-      blurEnabled: true
-      source: rollPointer
-      anchors.fill: rollPointer
-    }
-
-    //
-    // Cross hair visual effects
-    //
-    MultiEffect {
-      blur: 1
-      blurMax: 64
-      brightness: 0.6
-      saturation: 0.1
-      blurEnabled: true
-      source: crosshair
-      anchors.fill: crosshair
-    }
-
-    //
-    // Roll dial
-    //
-    Image {
-      id: rollDial
-      anchors.fill: parent
-      sourceSize.height: parent.height
-      fillMode: Image.PreserveAspectFit
-      source: "qrc:/rcc/instruments/attitude_dial.svg"
-
-      transform: Rotation {
-        angle: -root.rollAngle
-        origin.x: root.width / 2
-        origin.y: root.height / 2
-      }
-    }
-
-    //
-    // Roll pointer
-    //
-    Image {
-      id: rollPointer
-      anchors.fill: parent
-      sourceSize.height: parent.height
-      fillMode: Image.PreserveAspectFit
-      source: "qrc:/rcc/instruments/attitude_pointer.svg"
-    }
-
-    //
-    // Crosshair
-    //
-    Image {
-      id: crosshair
-      sourceSize.width: width
-      anchors.centerIn: parent
-      width: parent.width * 0.75
-      fillMode: Image.PreserveAspectFit
-      source: "qrc:/rcc/instruments/attitude_crosshair.svg"
     }
   }
 }
