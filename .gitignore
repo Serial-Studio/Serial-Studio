@@ -20,6 +20,12 @@
 # General caches
 .cache
 
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
 # Build outputs
 /build*/        
 */build*/      
