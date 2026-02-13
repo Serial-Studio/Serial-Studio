@@ -535,20 +535,58 @@ void UI::WindowManager::autoLayout()
         rows++;
     }
 
-    int cellW = (availW - (cols - 1) * spacing) / cols;
-    int cellH = (availH - (rows - 1) * spacing) / rows;
+    const int spacingForSizing = qMax(spacing, 0);
+    const int totalSpacingW = (cols - 1) * spacingForSizing;
+    const int totalSpacingH = (rows - 1) * spacingForSizing;
+    const int totalCellsW = qMax(1, availW - totalSpacingW);
+    const int totalCellsH = qMax(1, availH - totalSpacingH);
 
-    int lastRowStart = (rows - 1) * cols;
-    int windowsInLastRow = n - lastRowStart;
-    int lastRowCellW = cellW;
-    int lastRowOffsetX = 0;
+    const int baseCellW = totalCellsW / cols;
+    const int baseCellH = totalCellsH / rows;
+    const int extraW = totalCellsW % cols;
+    const int extraH = totalCellsH % rows;
 
-    if (windowsInLastRow < cols && windowsInLastRow > 0)
+    QVector<int> colWidths(cols), colXs(cols);
+    QVector<int> rowHeights(rows), rowYs(rows);
+
+    int runningX = margin;
+    for (int c = 0; c < cols; ++c)
     {
-      int lastRowTotalW = availW;
-      lastRowCellW = (lastRowTotalW - (windowsInLastRow - 1) * spacing)
-                     / windowsInLastRow;
-      lastRowOffsetX = 0;
+      colWidths[c] = baseCellW + (c < extraW ? 1 : 0);
+      colXs[c] = runningX;
+      runningX += colWidths[c] + spacing;
+    }
+
+    int runningY = margin;
+    for (int r = 0; r < rows; ++r)
+    {
+      rowHeights[r] = baseCellH + (r < extraH ? 1 : 0);
+      rowYs[r] = runningY;
+      runningY += rowHeights[r] + spacing;
+    }
+
+    const int windowsInLastRow = n - (rows - 1) * cols;
+    const bool hasPartialLastRow
+        = windowsInLastRow > 0 && windowsInLastRow < cols;
+    QVector<int> lastRowWidths, lastRowXs;
+
+    if (hasPartialLastRow)
+    {
+      const int totalSpacingLast = (windowsInLastRow - 1) * spacingForSizing;
+      const int totalCellsLast = qMax(1, availW - totalSpacingLast);
+      const int baseLastW = totalCellsLast / windowsInLastRow;
+      const int extraLastW = totalCellsLast % windowsInLastRow;
+
+      lastRowWidths.resize(windowsInLastRow);
+      lastRowXs.resize(windowsInLastRow);
+
+      int runningLastX = margin;
+      for (int c = 0; c < windowsInLastRow; ++c)
+      {
+        lastRowWidths[c] = baseLastW + (c < extraLastW ? 1 : 0);
+        lastRowXs[c] = runningLastX;
+        runningLastX += lastRowWidths[c] + spacing;
+      }
     }
 
     for (int i = 0; i < n; ++i)
@@ -556,24 +594,16 @@ void UI::WindowManager::autoLayout()
       int row = i / cols;
       int col = i % cols;
 
-      int x, y, w, h;
-
-      if (row == rows - 1 && windowsInLastRow < cols)
+      if (hasPartialLastRow && row == rows - 1)
       {
-        int lastRowCol = i - lastRowStart;
-        x = margin + lastRowOffsetX + lastRowCol * (lastRowCellW + spacing);
-        w = lastRowCellW;
+        placeWindow(windows[i], lastRowXs[col], rowYs[row], lastRowWidths[col],
+                    rowHeights[row]);
       }
       else
       {
-        x = margin + col * (cellW + spacing);
-        w = cellW;
+        placeWindow(windows[i], colXs[col], rowYs[row], colWidths[col],
+                    rowHeights[row]);
       }
-
-      y = margin + row * (cellH + spacing);
-      h = cellH;
-
-      placeWindow(windows[i], x, y, w, h);
     }
   }
 

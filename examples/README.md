@@ -211,6 +211,24 @@ High-performance Python bridge that streams real-time data from NI DAQ devices t
   - **Clean Shutdown**: Proper signal handling for Ctrl+C
   - Requires NI-DAQmx driver and hardware
 
+### 14. RC Plane Simulator
+**Difficulty:** 🟢 Beginner | **Time:** ~5 minutes | **License:** GPL / Pro
+
+Simulates a small RC plane flying a complete flight profile with realistic telemetry data. Perfect for testing and demonstrating multiple Serial Studio widgets simultaneously without hardware.
+
+**Contents:**
+  - **rc_plane_simulator.py**: Python script that simulates RC plane flight telemetry
+  - **RC Plane Simulator.ssproj**: Serial Studio project file with dashboard widgets
+  - **README.md**: Setup guide and flight profile documentation
+
+**Features:**
+  - **Complete Flight Profile**: 170-second simulation with 20+ maneuvers (takeoff, turns, loops, rolls, inverted flight, landing)
+  - **Multi-Widget Testing**: Exercises gyroscope, accelerometer, GPS, compass, gauges, bars, and time plots
+  - **Realistic Physics**: Body-frame accelerations, rotation rates, GPS coordinates, battery drain, RSSI simulation
+  - **Configurable Options**: Single flight or continuous loop, adjustable update rate (10-50 Hz), custom UDP port
+  - **CSV Format**: Simple `$...,;` delimited data over UDP
+  - No hardware needed - software only
+
 ## Getting Started
 
 To use these examples:

@@ -144,27 +144,46 @@ Widgets.MiniWindow {
 
   //
   // Update window state automatically
+  // Only update if layout restoration is complete to prevent reading stale states
   //
   Connections {
     target: taskBar
 
     function onWindowStatesChanged() {
-      let state = taskBar.windowState(root)
-      switch (state) {
-      case SS_Ui.TaskbarModel.WindowNormal:
-        if (root.maximized)
-          root.state = "maximized"
-        else
-          root.state = "normal"
-        break
-      case SS_Ui.TaskbarModel.WindowClosed:
-        root.state = "closed"
-        break
-      case SS_Ui.TaskbarModel.WindowMinimized:
-        root.state = "minimized"
-        break
+      if (taskBar.layoutRestored) {
+        updateWindowState()
       }
     }
+  }
+
+  //
+  // Helper function to update window state from taskbar model
+  //
+  function updateWindowState() {
+    let state = taskBar.windowState(root)
+    console.log("[Widget", widgetIndex, "] updateWindowState called, state =", state, "layoutRestored =", taskBar.layoutRestored)
+    switch (state) {
+    case SS_Ui.TaskbarModel.WindowNormal:
+      if (root.maximized)
+        root.state = "maximized"
+      else
+        root.state = "normal"
+      break
+    case SS_Ui.TaskbarModel.WindowClosed:
+      root.state = "closed"
+      break
+    case SS_Ui.TaskbarModel.WindowMinimized:
+      root.state = "minimized"
+      break
+    }
+  }
+
+  //
+  // Initialize window state when component is created
+  //
+  Component.onCompleted: {
+    if (taskBar.layoutRestored)
+      updateWindowState()
   }
 
   //

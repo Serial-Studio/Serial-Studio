@@ -48,17 +48,22 @@ Item {
   property real yawAngle: root.model.yaw
   property real rollAngle: root.model.roll
   property real pitchAngle: root.model.pitch
-
   property bool integrateValues: root.model.integrateValues
   onIntegrateValuesChanged: {
     if (root.model)
       root.model.integrateValues = root.integrateValues
   }
 
+  //
+  // Constants
+  //
   readonly property real pitchStep: 5
   readonly property real maxPitch: 180
   readonly property int pitchMarkCount: Math.round((2 * maxPitch) / pitchStep) + 1
 
+  //
+  // Utility function to normalize angles from 0 to 360
+  //
   function normalize180(angle) {
     var normalized = (angle + 180) % 360;
     if (normalized < 0)
@@ -399,7 +404,7 @@ Item {
           color: "#333"
           border.width: 1
           implicitHeight: 38
-          border.color: "#fff"
+          border.color: "#bebebe"
           Layout.fillWidth: true
 
           Column {
@@ -407,19 +412,18 @@ Item {
             spacing: 1
 
             Text {
-              anchors.horizontalCenter: parent.horizontalCenter
+              opacity: 0.6
+              color: "#ffffff"
               text: qsTr("ROLL")
-              color: "#ffffff"
-              opacity: 0.6
-              font.pixelSize: 8
-              font.family: Cpp_Misc_CommonFonts.monoFont.family
+              font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
+              anchors.horizontalCenter: parent.horizontalCenter
             }
 
             Text {
-              anchors.horizontalCenter: parent.horizontalCenter
-              text: root.normalize180(root.rollAngle).toFixed(2) + "\u00B0"
               color: "#ffffff"
               font: Cpp_Misc_CommonFonts.monoFont
+              anchors.horizontalCenter: parent.horizontalCenter
+              text: (root.normalize180(root.rollAngle).toFixed(2) + "").padStart(7, ' ') + "\u00B0"
             }
           }
         }
@@ -428,7 +432,7 @@ Item {
           color: "#333"
           border.width: 1
           implicitHeight: 38
-          border.color: "#fff"
+          border.color: "#bebebe"
           Layout.fillWidth: true
 
           Column {
@@ -436,19 +440,18 @@ Item {
             spacing: 1
 
             Text {
-              anchors.horizontalCenter: parent.horizontalCenter
+              opacity: 0.6
+              color: "#ffffff"
               text: qsTr("YAW")
-              color: "#ffffff"
-              opacity: 0.6
-              font.pixelSize: 8
-              font.family: Cpp_Misc_CommonFonts.monoFont.family
+              font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
+              anchors.horizontalCenter: parent.horizontalCenter
             }
 
             Text {
-              anchors.horizontalCenter: parent.horizontalCenter
-              text: root.normalize180(root.yawAngle).toFixed(2) + "\u00B0"
               color: "#ffffff"
               font: Cpp_Misc_CommonFonts.monoFont
+              anchors.horizontalCenter: parent.horizontalCenter
+              text: (root.normalize180(root.yawAngle).toFixed(2) + "").padStart(7, ' ') + "\u00B0"
             }
           }
         }
@@ -457,7 +460,7 @@ Item {
           color: "#333"
           border.width: 1
           implicitHeight: 38
-          border.color: "#fff"
+          border.color: "#bebebe"
           Layout.fillWidth: true
 
           Column {
@@ -465,19 +468,18 @@ Item {
             spacing: 1
 
             Text {
-              anchors.horizontalCenter: parent.horizontalCenter
-              text: qsTr("PITCH")
-              color: "#ffffff"
               opacity: 0.6
-              font.pixelSize: 8
-              font.family: Cpp_Misc_CommonFonts.monoFont.family
+              color: "#ffffff"
+              text: qsTr("PITCH")
+              font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
+              anchors.horizontalCenter: parent.horizontalCenter
             }
 
             Text {
-              anchors.horizontalCenter: parent.horizontalCenter
-              text: root.normalize180(root.pitchAngle).toFixed(2) + "\u00B0"
               color: "#ffffff"
               font: Cpp_Misc_CommonFonts.monoFont
+              anchors.horizontalCenter: parent.horizontalCenter
+              text: (root.normalize180(root.pitchAngle).toFixed(2) + "").padStart(7, ' ') + "\u00B0"
             }
           }
         }
