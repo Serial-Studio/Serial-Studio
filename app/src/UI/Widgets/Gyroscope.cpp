@@ -241,11 +241,12 @@ void Widgets::Gyroscope::updateData()
       return state;
     };
 
-    const double yawRate = hasYaw ? filteredRate(yawInput, m_filteredYawRate) : 0.0;
-    const double rollRate =
-      hasRoll ? filteredRate(rollInput, m_filteredRollRate) : 0.0;
-    const double pitchRate =
-      hasPitch ? filteredRate(pitchInput, m_filteredPitchRate) : 0.0;
+    const double yawRate
+        = hasYaw ? filteredRate(yawInput, m_filteredYawRate) : 0.0;
+    const double rollRate
+        = hasRoll ? filteredRate(rollInput, m_filteredRollRate) : 0.0;
+    const double pitchRate
+        = hasPitch ? filteredRate(pitchInput, m_filteredPitchRate) : 0.0;
 
     if (hasYaw)
       m_yaw += yawRate * deltaT;

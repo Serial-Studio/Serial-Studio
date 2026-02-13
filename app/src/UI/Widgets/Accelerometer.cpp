@@ -199,10 +199,8 @@ void Widgets::Accelerometer::updateData()
   const double totalG = qSqrt(gx * gx + gy * gy + gz * gz);
 
   // Tilt angles
-  const double pitchVal
-      = qAtan2(gx, qSqrt(gy * gy + gz * gz)) * (180.0 / M_PI);
-  const double rollVal
-      = qAtan2(gy, qSqrt(gx * gx + gz * gz)) * (180.0 / M_PI);
+  const double pitchVal = qAtan2(gx, qSqrt(gy * gy + gz * gz)) * (180.0 / M_PI);
+  const double rollVal = qAtan2(gy, qSqrt(gx * gx + gz * gz)) * (180.0 / M_PI);
 
   // Store previous filtered values for change detection
   const double prevX = m_x;
@@ -252,10 +250,8 @@ void Widgets::Accelerometer::updateData()
   m_peakG = qMax(m_peakG, totalG);
 
   // Check for changes
-  const bool changed = DSP::notEqual(m_x, prevX)
-                       || DSP::notEqual(m_y, prevY)
-                       || DSP::notEqual(m_z, prevZ)
-                       || DSP::notEqual(m_g, prevG)
+  const bool changed = DSP::notEqual(m_x, prevX) || DSP::notEqual(m_y, prevY)
+                       || DSP::notEqual(m_z, prevZ) || DSP::notEqual(m_g, prevG)
                        || DSP::notEqual(m_magnitude, prevMag)
                        || DSP::notEqual(m_theta, prevTheta)
                        || DSP::notEqual(m_pitch, prevPitch)
