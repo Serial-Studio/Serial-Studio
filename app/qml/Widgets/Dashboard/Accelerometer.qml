@@ -33,6 +33,8 @@ Item {
   id: root
   clip: true
 
+
+
   //
   // Widget data inputs
   //
@@ -50,6 +52,7 @@ Item {
   property real currentTheta: root.model.theta
   property real displayMaxG: root.model.maxG
   property bool inputInG: root.model.inputInG
+  readonly property bool angleLabelsVisible: root.width >= 260 && root.height >= 260
 
   //
   // Window flags
@@ -67,6 +70,18 @@ Item {
     if (root.model)
       root.model.inputInG = root.inputInG
   }
+
+  //
+  // Utility function to normalize angles from 0 to 360
+  //
+  function normalize360(angle) {
+    var normalized = angle % 360;
+    if (normalized < 0)
+      normalized += 360;
+
+    return normalized;
+  }
+
 
   //
   // Save settings between sessions
@@ -117,47 +132,163 @@ Item {
   }
 
   //
-  // Main container
+  // Main container - Row layout with indicators on left, polar plot on right
   //
-  Item {
+  RowLayout {
     id: container
-    clip: true
+    spacing: 8
 
     anchors {
-      left: parent.left
+      topMargin: 8
+      leftMargin: 8
+      rightMargin: 8
+      bottomMargin: 8
       top: toolbar.bottom
+      left: parent.left
       right: parent.right
       bottom: parent.bottom
     }
 
     //
-    // Polar plot area (between toolbar and info strip)
+    // Vertical indicator strip on the left
+    //
+    ColumnLayout {
+      id: indicatorStrip
+      spacing: 4
+      Layout.maximumWidth: 120
+      Layout.alignment: Qt.AlignVCenter
+
+      Item {
+        Layout.fillHeight: true
+      }
+
+      Rectangle {
+        border.width: 1
+        implicitHeight: 38
+        Layout.fillWidth: true
+        color: Cpp_ThemeManager.colors["widget_base"]
+        border.color: root.currentG > (root.displayMaxG * 0.75)
+                      ? Cpp_ThemeManager.colors["alarm"]
+                      : Cpp_ThemeManager.colors["widget_border"]
+
+        Column {
+          anchors.fill: parent
+          anchors.margins: 4
+          spacing: 1
+
+          Label {
+            width: parent.width
+            opacity: 0.6
+            text: qsTr("G-FORCE")
+            color: Cpp_ThemeManager.colors["widget_text"]
+            font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
+            horizontalAlignment: Text.AlignHCenter
+          }
+
+          Label {
+            width: parent.width
+            color: Cpp_ThemeManager.colors["widget_text"]
+            font: Cpp_Misc_CommonFonts.monoFont
+            horizontalAlignment: Text.AlignHCenter
+            elide: Text.ElideRight
+            text: (root.currentG.toFixed(2) + "").padStart(5, ' ') + " @ " +
+                  (root.normalize360(root.currentTheta).toFixed(0) + "").padStart(3, ' ') + "°"
+          }
+        }
+      }
+
+      Rectangle {
+        border.width: 1
+        implicitHeight: 38
+        Layout.fillWidth: true
+        color: Cpp_ThemeManager.colors["widget_base"]
+        border.color: Cpp_ThemeManager.colors["widget_border"]
+
+        Column {
+          anchors.fill: parent
+          anchors.margins: 4
+          spacing: 1
+
+          Label {
+            width: parent.width
+            opacity: 0.6
+            text: qsTr("PITCH ↕")
+            color: Cpp_ThemeManager.colors["widget_text"]
+            font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
+            horizontalAlignment: Text.AlignHCenter
+          }
+
+          Label {
+            width: parent.width
+            font: Cpp_Misc_CommonFonts.monoFont
+            text: (root.currentPitch.toFixed(2) + "").padStart(7, ' ') + "°"
+            color: Cpp_ThemeManager.colors["widget_text"]
+            horizontalAlignment: Text.AlignHCenter
+            elide: Text.ElideRight
+          }
+        }
+      }
+
+      Rectangle {
+        border.width: 1
+        implicitHeight: 38
+        Layout.fillWidth: true
+        color: Cpp_ThemeManager.colors["widget_base"]
+        border.color: Cpp_ThemeManager.colors["widget_border"]
+
+        Column {
+          anchors.fill: parent
+          anchors.margins: 4
+          spacing: 1
+
+          Label {
+            width: parent.width
+            opacity: 0.6
+            text: qsTr("ROLL ↔")
+            color: Cpp_ThemeManager.colors["widget_text"]
+            font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
+            horizontalAlignment: Text.AlignHCenter
+          }
+
+          Label {
+            width: parent.width
+            font: Cpp_Misc_CommonFonts.monoFont
+            text: (root.currentRoll.toFixed(2) + "").padStart(7, ' ') + "°"
+            color: Cpp_ThemeManager.colors["widget_text"]
+            horizontalAlignment: Text.AlignHCenter
+            elide: Text.ElideRight
+          }
+        }
+      }
+
+      Item {
+        Layout.fillHeight: true
+      }
+    }
+
+    //
+    // Polar plot area on the right
     //
     Item {
       id: polarArea
-
-      anchors {
-        margins: 32
-        bottomMargin: 24
-        top: parent.top
-        left: parent.left
-        right: parent.right
-        bottom: infoStrip.top
-      }
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      property real margin: root.angleLabelsVisible ? 40 : 12
 
       //
       // The gauge is always square, centered in the polar area
       //
-      readonly property real gaugeSize: Math.min(width, height)
+      readonly property real gaugeSize: Math.min(width - margin * 2, height - margin * 2)
 
       //
       // Dark circular background
       //
       Rectangle {
+        id: polarCircle
         radius: width / 2
+        anchors.centerIn: parent
         width: polarArea.gaugeSize
         height: polarArea.gaugeSize
-        anchors.centerIn: parent
         color: Cpp_ThemeManager.colors["polar_background"]
       }
 
@@ -171,7 +302,47 @@ Item {
         anchors.centerIn: parent
 
         //
-        // Concentric grid circles
+        // Radial dotted lines for each 30° angle
+        //
+        Canvas {
+          anchors.fill: parent
+          opacity: 0.15
+
+          onPaint: {
+            var ctx = getContext("2d");
+            ctx.clearRect(0, 0, width, height);
+            ctx.strokeStyle = Cpp_ThemeManager.colors["polar_foreground"];
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 4]);
+
+            var centerX = width / 2;
+            var centerY = height / 2;
+            var radius = Math.min(width, height) / 2;
+
+            for (var i = 0; i < 12; i++) {
+              var angle = (i * 30) * Math.PI / 180;
+              var x = centerX + radius * Math.cos(angle);
+              var y = centerY - radius * Math.sin(angle);
+
+              ctx.beginPath();
+              ctx.moveTo(centerX, centerY);
+              ctx.lineTo(x, y);
+              ctx.stroke();
+            }
+          }
+
+          Connections {
+            target: Cpp_ThemeManager
+            function onColorsChanged() {
+              parent.requestPaint();
+            }
+          }
+
+          Component.onCompleted: requestPaint()
+        }
+
+        //
+        // Concentric grid circles (drawn over radial lines)
         //
         Repeater {
           model: 4
@@ -188,6 +359,7 @@ Item {
             width: rings.width * fraction
             height: rings.height * fraction
             anchors.centerIn: parent
+            z: 1
           }
         }
 
@@ -201,10 +373,11 @@ Item {
           height: 4
           opacity: 0.5
           color: Cpp_ThemeManager.colors["polar_foreground"]
+          z: 2
         }
 
         //
-        // Crosshair lines
+        // Crosshair lines (main axes)
         //
         Rectangle {
           width: 1
@@ -215,6 +388,7 @@ Item {
             bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
           }
+          z: 1
         }
 
         Rectangle {
@@ -226,64 +400,31 @@ Item {
             right: parent.right
             verticalCenter: parent.verticalCenter
           }
+          z: 1
         }
 
-        //
-        // Diagonal grid lines (45 degree intervals)
-        //
-        Rectangle {
-          width: 1
-          opacity: 0.15
-          color: Cpp_ThemeManager.colors["polar_foreground"]
-          height: rings.width * Math.SQRT2
-          anchors.centerIn: parent
-          rotation: 45
-        }
-
-        Rectangle {
-          width: 1
-          opacity: 0.15
-          color: Cpp_ThemeManager.colors["polar_foreground"]
-          height: rings.width * Math.SQRT2
-          anchors.centerIn: parent
-          rotation: -45
-        }
 
         //
-        // Ring labels at 25%, 50%, 75%, 100% of maxG
+        // Angle labels around the perimeter (every 30 degrees)
         //
         Repeater {
-          model: 4
+          model: 12
 
-          delegate: Item {
+          delegate: Text {
             required property int index
 
-            readonly property real fraction: (index + 1) / 4.0
-            readonly property real labelValue: root.displayMaxG * fraction
-            readonly property real ringRadius: rings.width / 2 * fraction
+            readonly property real angle: index * 30
+            readonly property real angleRad: angle * Math.PI / 180
+            readonly property real radius: rings.width / 2 + 18
 
-            x: rings.width / 2 + 4
-            y: rings.height / 2 - ringRadius - height / 2
-            width: labelText.width + 6
-            height: labelText.height + 2
-            visible: rings.width >= 100
+            x: rings.width / 2 + radius * Math.cos(angleRad) - width / 2
+            y: rings.height / 2 - radius * Math.sin(angleRad) - height / 2
+            visible: rings.width >= 180
 
-            Rectangle {
-              anchors.fill: parent
-              color: Cpp_ThemeManager.colors["polar_background"]
-              opacity: 0.85
-              radius: 2
-            }
-
-            Text {
-              id: labelText
-              anchors.centerIn: parent
-              text: parent.labelValue.toFixed(
-                parent.labelValue >= 10 ? 0 : 1)
-              color: Cpp_ThemeManager.colors["polar_foreground"]
-              font.pixelSize: Math.max(8, Math.min(11, rings.width / 22))
-              font.family: Cpp_Misc_CommonFonts.monoFont.family
-            }
+            text: angle + "°"
+            color: Cpp_ThemeManager.colors["polar_foreground"]
+            opacity: 0.5
+            font: Cpp_Misc_CommonFonts.customMonoFont(0.6)
           }
         }
       }
@@ -297,135 +438,119 @@ Item {
         color: Cpp_ThemeManager.colors["polar_indicator"]
 
         readonly property real dotSize: Math.max(
-          6, Math.min(14, polarArea.gaugeSize / 20))
+                                          6, Math.min(14, polarArea.gaugeSize / 20))
 
         width: dotSize
         height: dotSize
 
         property real halfGauge: polarArea.gaugeSize / 2
         property real normalizedMag: Math.min(
-          root.currentMagnitude / root.displayMaxG, 1.0)
+                                       root.currentMagnitude / root.displayMaxG, 1.0)
 
         x: polarArea.width / 2
            + normalizedMag * halfGauge
-             * Math.cos(root.currentTheta * Math.PI / 180)
+           * Math.cos(root.currentTheta * Math.PI / 180)
            - width / 2
         y: polarArea.height / 2
            - normalizedMag * halfGauge
-             * Math.sin(root.currentTheta * Math.PI / 180)
+           * Math.sin(root.currentTheta * Math.PI / 180)
            - height / 2
 
       }
-    }
 
-    //
-    // Info strip: Total G | Pitch | Roll
-    //
-    Item {
-      id: infoStrip
-      visible: root.height >= 120
+      //
+      // Mouse area for cursor tracking
+      //
+      MouseArea {
+        id: cursorTracker
+        anchors.fill: rings
+        hoverEnabled: true
+        acceptedButtons: Qt.NoButton
+        propagateComposedEvents: true
 
-      height: visible ? 38 : 0
+        property real cursorMagnitude: 0
+        property real cursorAngle: 0
+        property bool isInsideCircle: false
 
-      anchors {
-        left: parent.left
-        right: parent.right
-        bottom: parent.bottom
-        leftMargin: 4
-        rightMargin: 4
-        bottomMargin: 4
-      }
+        onPositionChanged: (mouse) => {
+          var centerX = rings.width / 2
+          var centerY = rings.height / 2
+          var dx = mouse.x - centerX
+          var dy = centerY - mouse.y
 
-      RowLayout {
-        spacing: 4
-        anchors.fill: parent
+          var distanceFromCenter = Math.sqrt(dx * dx + dy * dy)
+          var maxRadius = rings.width / 2
 
-        Rectangle {
-          color: Cpp_ThemeManager.colors["widget_base"]
-          border.width: 1
-          implicitHeight: 38
-          Layout.fillWidth: true
-          border.color: root.currentG > (root.displayMaxG * 0.75)
-                        ? Cpp_ThemeManager.colors["alarm"]
-                        : Cpp_ThemeManager.colors["widget_border"]
+          isInsideCircle = distanceFromCenter <= maxRadius
 
-          Column {
-            anchors.centerIn: parent
-            spacing: 1
-
-            Text {
-              anchors.horizontalCenter: parent.horizontalCenter
-              text: qsTr("G-FORCE")
-              color: Cpp_ThemeManager.colors["widget_text"]
-              opacity: 0.6
-              font.pixelSize: 8
-              font.family: Cpp_Misc_CommonFonts.monoFont.family
-            }
-
-            Text {
-              anchors.horizontalCenter: parent.horizontalCenter
-              text: root.currentG.toFixed(2)
-              color: Cpp_ThemeManager.colors["widget_text"]
-              font: Cpp_Misc_CommonFonts.monoFont
-            }
+          if (isInsideCircle) {
+            cursorMagnitude = (distanceFromCenter / maxRadius) * root.displayMaxG
+            cursorAngle = root.normalize360(Math.atan2(dy, dx) * 180 / Math.PI)
           }
         }
 
+        //
+        // Cursor crosshair (vertical arms)
+        //
         Rectangle {
-          color: Cpp_ThemeManager.colors["widget_base"]
-          border.width: 1
-          implicitHeight: 38
-          border.color: Cpp_ThemeManager.colors["widget_border"]
-          Layout.fillWidth: true
-
-          Column {
-            anchors.centerIn: parent
-            spacing: 1
-
-            Text {
-              anchors.horizontalCenter: parent.horizontalCenter
-              text: qsTr("PITCH")
-              color: Cpp_ThemeManager.colors["widget_text"]
-              opacity: 0.6
-              font.pixelSize: 8
-              font.family: Cpp_Misc_CommonFonts.monoFont.family
-            }
-
-            Text {
-              anchors.horizontalCenter: parent.horizontalCenter
-              text: root.currentPitch.toFixed(2) + "\u00B0"
-              color: Cpp_ThemeManager.colors["widget_text"]
-              font: Cpp_Misc_CommonFonts.monoFont
-            }
-          }
+          width: 1
+          height: 12
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
+          x: cursorTracker.mouseX - width / 2
+          y: cursorTracker.mouseY - height - 4
         }
 
         Rectangle {
-          color: Cpp_ThemeManager.colors["widget_base"]
+          width: 1
+          height: 12
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
+          x: cursorTracker.mouseX - width / 2
+          y: cursorTracker.mouseY + 4
+        }
+
+        //
+        // Cursor crosshair (horizontal arms)
+        //
+        Rectangle {
+          width: 12
+          height: 1
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
+          x: cursorTracker.mouseX - width - 4
+          y: cursorTracker.mouseY - height / 2
+        } Rectangle {
+          width: 12
+          height: 1
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
+          x: cursorTracker.mouseX + 4
+          y: cursorTracker.mouseY - height / 2
+        }
+
+        //
+        // Cursor value label (positioned below and right of cursor to stay visible)
+        //
+        Rectangle {
+          visible: cursorTracker.containsMouse && cursorTracker.isInsideCircle
+          x: Math.min(cursorTracker.mouseX + 16, rings.width - width - 4)
+          y: Math.max(4, Math.min(cursorTracker.mouseY + 16, rings.height - height - 4))
+          width: valueLabel.width + 8
+          height: valueLabel.height + 4
+          color: Cpp_ThemeManager.colors["tooltip_base"]
+          radius: 3
           border.width: 1
-          implicitHeight: 38
-          border.color: Cpp_ThemeManager.colors["widget_border"]
-          Layout.fillWidth: true
+          border.color: Cpp_ThemeManager.colors["tooltip_text"]
 
-          Column {
+          Label {
+            id: valueLabel
             anchors.centerIn: parent
-            spacing: 1
-
-            Text {
-              anchors.horizontalCenter: parent.horizontalCenter
-              text: qsTr("ROLL")
-              color: Cpp_ThemeManager.colors["widget_text"]
-              opacity: 0.6
-              font.pixelSize: 8
-              font.family: Cpp_Misc_CommonFonts.monoFont.family
-            }
-
-            Text {
-              anchors.horizontalCenter: parent.horizontalCenter
-              text: root.currentRoll.toFixed(2) + "\u00B0"
-              color: Cpp_ThemeManager.colors["widget_text"]
-              font: Cpp_Misc_CommonFonts.monoFont
-            }
+            text: cursorTracker.cursorMagnitude.toFixed(2) + "G @ " +
+                  cursorTracker.cursorAngle.toFixed(0) + "°"
+            color: Cpp_ThemeManager.colors["tooltip_text"]
+            font: Cpp_Misc_CommonFonts.customMonoFont(0.7)
+            elide: Text.ElideRight
           }
         }
       }

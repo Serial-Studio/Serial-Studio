@@ -318,6 +318,132 @@ Item {
           }
         }
       }
+
+      //
+      // Mouse area for cursor tooltip
+      //
+      MouseArea {
+        id: cursorTracker
+        anchors.fill: parent
+        hoverEnabled: true
+        acceptedButtons: Qt.NoButton
+        propagateComposedEvents: true
+
+        property real cursorValue: model.minValue
+        property real cursorAngleDeg: startAngleDeg
+        property bool isValidAngle: false
+
+        onPositionChanged: (mouse) => {
+          var centerX = width / 2
+          var centerY = height / 2
+          var dx = mouse.x - centerX
+          var dy = mouse.y - centerY
+
+          var screenAngleRad = Math.atan2(dy, dx)
+          var screenAngleDeg = screenAngleRad * 180 / Math.PI
+
+          var logicalAngleDeg = screenAngleDeg + 90
+          if (logicalAngleDeg > 180)
+            logicalAngleDeg -= 360
+
+          if (logicalAngleDeg >= startAngleDeg && logicalAngleDeg <= endAngleDeg) {
+            cursorAngleDeg = logicalAngleDeg
+            var normalizedAngle = (logicalAngleDeg - startAngleDeg) / angleRangeDeg
+            cursorValue = model.minValue + normalizedAngle * (model.maxValue - model.minValue)
+            isValidAngle = true
+          } else {
+            isValidAngle = false
+          }
+        }
+
+        //
+        // Cursor indicator line from gauge center to cursor position
+        //
+        Rectangle {
+          readonly property real gaugeSize: control.background.gaugeSize
+          readonly property real borderWidth: Math.max(8, gaugeSize / 18)
+          readonly property real tickRadius: gaugeSize / 2 - borderWidth / 2
+
+          width: 2
+          height: tickRadius
+          radius: 1
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse && cursorTracker.isValidAngle ? 0.6 : 0
+          antialiasing: true
+
+          x: cursorTracker.width / 2 - width / 2
+          y: cursorTracker.height / 2 - height
+
+          transformOrigin: Item.Bottom
+          rotation: cursorTracker.cursorAngleDeg
+        }
+
+        //
+        // Cursor crosshair (vertical arms)
+        //
+        Rectangle {
+          width: 1
+          height: 12
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          x: cursorTracker.mouseX - width / 2
+          y: cursorTracker.mouseY - height - 4
+        }
+
+        Rectangle {
+          width: 1
+          height: 12
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          x: cursorTracker.mouseX - width / 2
+          y: cursorTracker.mouseY + 4
+        }
+
+        //
+        // Cursor crosshair (horizontal arms)
+        //
+        Rectangle {
+          width: 12
+          height: 1
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          x: cursorTracker.mouseX - width - 4
+          y: cursorTracker.mouseY - height / 2
+        }
+
+        Rectangle {
+          width: 12
+          height: 1
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          x: cursorTracker.mouseX + 4
+          y: cursorTracker.mouseY - height / 2
+        }
+
+        //
+        // Cursor value label (tooltip style)
+        //
+        Rectangle {
+          visible: cursorTracker.containsMouse
+          x: Math.min(cursorTracker.mouseX + 16, cursorTracker.width - width - 4)
+          y: Math.max(4, Math.min(cursorTracker.mouseY + 16, cursorTracker.height - height - 4))
+          width: tooltipLabel.width + 8
+          height: tooltipLabel.height + 4
+          color: Cpp_ThemeManager.colors["tooltip_base"]
+          radius: 3
+          border.width: 1
+          border.color: Cpp_ThemeManager.colors["tooltip_text"]
+
+          Label {
+            id: tooltipLabel
+            anchors.centerIn: parent
+            text: formatValue(cursorTracker.cursorValue) + " " + model.units
+            color: Cpp_ThemeManager.colors["tooltip_text"]
+            font: Cpp_Misc_CommonFonts.customMonoFont(0.7)
+            elide: Text.ElideRight
+          }
+        }
+      }
     }
 
     Item {

@@ -244,6 +244,109 @@ Item {
           radius: 1
         }
       }
+
+      //
+      // Mouse area for cursor tooltip
+      //
+      MouseArea {
+        id: cursorTracker
+        anchors.fill: progressBar
+        hoverEnabled: true
+        acceptedButtons: Qt.NoButton
+        propagateComposedEvents: true
+
+        property real cursorValue: model.minValue
+
+        onPositionChanged: (mouse) => {
+          if (isHorizontal) {
+            var fraction = mouse.x / width
+            cursorValue = model.minValue + fraction * (model.maxValue - model.minValue)
+          } else {
+            var fraction = 1.0 - (mouse.y / height)
+            cursorValue = model.minValue + fraction * (model.maxValue - model.minValue)
+          }
+        }
+
+        //
+        // Measurement line (full height when horizontal, full width when vertical)
+        //
+        Rectangle {
+          width: isHorizontal ? 2 : cursorTracker.width
+          height: isHorizontal ? cursorTracker.height : 2
+          radius: 1
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          antialiasing: true
+          x: isHorizontal ? cursorTracker.mouseX - 1 : 0
+          y: isHorizontal ? 0 : cursorTracker.mouseY - 1
+        }
+
+        //
+        // Cursor crosshair (vertical arms)
+        //
+        Rectangle {
+          width: 1
+          height: 12
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          x: cursorTracker.mouseX - width / 2
+          y: cursorTracker.mouseY - height - 4
+        }
+
+        Rectangle {
+          width: 1
+          height: 12
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          x: cursorTracker.mouseX - width / 2
+          y: cursorTracker.mouseY + 4
+        }
+
+        //
+        // Cursor crosshair (horizontal arms)
+        //
+        Rectangle {
+          width: 12
+          height: 1
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          x: cursorTracker.mouseX - width - 4
+          y: cursorTracker.mouseY - height / 2
+        }
+
+        Rectangle {
+          width: 12
+          height: 1
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          x: cursorTracker.mouseX + 4
+          y: cursorTracker.mouseY - height / 2
+        }
+
+        //
+        // Cursor value label (tooltip style)
+        //
+        Rectangle {
+          visible: cursorTracker.containsMouse
+          x: Math.min(cursorTracker.mouseX + 16, cursorTracker.width - width - 4)
+          y: Math.max(4, Math.min(cursorTracker.mouseY + 16, cursorTracker.height - height - 4))
+          width: tooltipLabel.width + 8
+          height: tooltipLabel.height + 4
+          color: Cpp_ThemeManager.colors["tooltip_base"]
+          radius: 3
+          border.width: 1
+          border.color: Cpp_ThemeManager.colors["tooltip_text"]
+
+          Label {
+            id: tooltipLabel
+            anchors.centerIn: parent
+            text: formatValue(cursorTracker.cursorValue) + " " + model.units
+            color: Cpp_ThemeManager.colors["tooltip_text"]
+            font: Cpp_Misc_CommonFonts.customMonoFont(0.7)
+            elide: Text.ElideRight
+          }
+        }
+      }
     }
 
     Item {

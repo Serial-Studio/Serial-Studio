@@ -80,9 +80,9 @@ void Widgets::Compass::updateData()
       // Ensure that angle always has 3 characters to avoid jiggling
       const int deg = qCeil(m_value);
       if (deg < 10)
-        m_text.prepend(QStringLiteral("00"));
+        m_text.prepend(QStringLiteral("  "));
       else if (deg < 100)
-        m_text.prepend(QStringLiteral("0"));
+        m_text.prepend(QStringLiteral(" "));
 
       // Determine the direction based on the angle value
       QString direction;
