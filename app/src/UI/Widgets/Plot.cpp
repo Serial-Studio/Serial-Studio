@@ -415,12 +415,23 @@ bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
     // Loop through the plot data and update the min and max
     for (auto i = 0; i < m_data.size(); ++i)
     {
-      min = qMin(min, extractor(m_data[i]));
-      max = qMax(max, extractor(m_data[i]));
+      const double value = extractor(m_data[i]);
+      if (std::isfinite(value))
+      {
+        min = qMin(min, value);
+        max = qMax(max, value);
+      }
+    }
+
+    // If no finite values found, use default range
+    if (!std::isfinite(min) || !std::isfinite(max))
+    {
+      min = 0;
+      max = 1;
     }
 
     // If min and max are the same, adjust the range
-    if (DSP::almostEqual(min, max))
+    else if (DSP::almostEqual(min, max))
     {
       if (DSP::isZero(min))
       {

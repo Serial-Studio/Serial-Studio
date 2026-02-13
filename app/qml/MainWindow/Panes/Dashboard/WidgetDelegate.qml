@@ -30,12 +30,13 @@ import "../../../Widgets" as Widgets
 
 Widgets.MiniWindow {
   id: root
-  visible: false
+  state: "normal"
   width: minimumWidth
   height: minimumHeight
   implicitWidth: minimumWidth
   implicitHeight: minimumHeight
   focused: taskBar.activeWindow === root
+  visible: root.state === "normal" || root.state === "maximized"
   shadowEnabled: root.state === "normal" && !windowManager.autoLayoutEnabled
 
   //
@@ -150,9 +151,7 @@ Widgets.MiniWindow {
     target: taskBar
 
     function onWindowStatesChanged() {
-      if (taskBar.layoutRestored) {
-        updateWindowState()
-      }
+      updateWindowState()
     }
   }
 
@@ -161,13 +160,9 @@ Widgets.MiniWindow {
   //
   function updateWindowState() {
     let state = taskBar.windowState(root)
-    console.log("[Widget", widgetIndex, "] updateWindowState called, state =", state, "layoutRestored =", taskBar.layoutRestored)
     switch (state) {
     case SS_Ui.TaskbarModel.WindowNormal:
-      if (root.maximized)
-        root.state = "maximized"
-      else
-        root.state = "normal"
+      root.state = "normal"
       break
     case SS_Ui.TaskbarModel.WindowClosed:
       root.state = "closed"
@@ -176,14 +171,6 @@ Widgets.MiniWindow {
       root.state = "minimized"
       break
     }
-  }
-
-  //
-  // Initialize window state when component is created
-  //
-  Component.onCompleted: {
-    if (taskBar.layoutRestored)
-      updateWindowState()
   }
 
   //

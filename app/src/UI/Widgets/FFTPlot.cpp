@@ -122,16 +122,20 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
     double minVal = dataset.fftMin;
     double maxVal = dataset.fftMax;
 
-    // Fix inverted limits
-    if (maxVal < minVal)
-      std::swap(minVal, maxVal);
-
-    // Accept only if the range is positive and non-zero
-    if (maxVal - minVal > 0.0)
+    // Validate that values are finite
+    if (std::isfinite(minVal) && std::isfinite(maxVal))
     {
-      m_scaleIsValid = true;
-      m_center = (maxVal + minVal) * 0.5;
-      m_halfRange = qMax(1e-12, (maxVal - minVal) * 0.5);
+      // Fix inverted limits
+      if (maxVal < minVal)
+        std::swap(minVal, maxVal);
+
+      // Accept only if the range is positive and non-zero
+      if (maxVal - minVal > 0.0)
+      {
+        m_scaleIsValid = true;
+        m_center = (maxVal + minVal) * 0.5;
+        m_halfRange = qMax(1e-12, (maxVal - minVal) * 0.5);
+      }
     }
   }
 }
@@ -314,7 +318,10 @@ void Widgets::FFTPlot::updateData()
   const double scale = m_scaleIsValid ? (1.0 / m_halfRange) : 1.0;
   for (int i = 0; i < m_size; ++i)
   {
-    const float v = static_cast<float>((in[idx] + offset) * scale);
+    const double raw = in[idx];
+    const float v = std::isfinite(raw)
+                        ? static_cast<float>((raw + offset) * scale)
+                        : 0.0f;
     m_samples[i].r = v * m_window[i];
     m_samples[i].i = 0.0f;
     idx = (idx + 1) % cap;

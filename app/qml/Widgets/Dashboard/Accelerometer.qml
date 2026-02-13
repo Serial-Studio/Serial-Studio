@@ -33,8 +33,6 @@ Item {
   id: root
   clip: true
 
-
-
   //
   // Widget data inputs
   //
@@ -52,7 +50,48 @@ Item {
   property real currentTheta: root.model.theta
   property real displayMaxG: root.model.maxG
   property bool inputInG: root.model.inputInG
-  readonly property bool angleLabelsVisible: root.width >= 260 && root.height >= 260
+  readonly property bool angleLabelsVisible: {
+    const minGaugeSize = 200
+    const labelMargin = 40
+    const noLabelMargin = 12
+    const leftPanelMaxWidth = 120
+    const containerLeftMargin = 8
+    const containerRightMargin = 8
+    const containerTopMargin = 8
+    const containerBottomMargin = 8
+    const spacingWithLabels = 16
+    const toolbarHeight = 48
+
+    const totalHorizontalOverhead = containerLeftMargin + containerRightMargin +
+                                     leftPanelMaxWidth + spacingWithLabels
+    const totalVerticalOverhead = containerTopMargin + containerBottomMargin +
+                                   (root.hasToolbar ? toolbarHeight : 0)
+
+    const polarAreaWidth = root.width - totalHorizontalOverhead
+    const polarAreaHeight = root.height - totalVerticalOverhead
+
+    const widthWithLabels = polarAreaWidth - labelMargin * 2
+    const heightWithLabels = polarAreaHeight - labelMargin * 2
+    const gaugeSizeWithLabels = Math.min(widthWithLabels, heightWithLabels)
+
+    const widthWithoutLabels = polarAreaWidth - noLabelMargin * 2
+    const heightWithoutLabels = polarAreaHeight - noLabelMargin * 2
+    const gaugeSizeWithoutLabels = Math.min(widthWithoutLabels, heightWithoutLabels)
+
+    if (gaugeSizeWithLabels < minGaugeSize)
+      return false
+
+    if (polarAreaWidth < labelMargin * 2 + minGaugeSize ||
+        polarAreaHeight < labelMargin * 2 + minGaugeSize)
+      return false
+
+    const aspectRatioOk = (widthWithLabels / heightWithLabels) >= 0.75 &&
+                          (heightWithLabels / widthWithLabels) >= 0.75
+
+    const shrinkageAcceptable = gaugeSizeWithLabels >= (gaugeSizeWithoutLabels * 0.8)
+
+    return aspectRatioOk && shrinkageAcceptable && root.height >= 320 && root.width >= Math.min(380, Math.max(320, root.height * 0.8))
+  }
 
   //
   // Window flags
@@ -136,7 +175,7 @@ Item {
   //
   RowLayout {
     id: container
-    spacing: 8
+    spacing: root.angleLabelsVisible ? 16 : 8
 
     anchors {
       topMargin: 8
@@ -153,7 +192,6 @@ Item {
     // Vertical indicator strip on the left
     //
     ColumnLayout {
-      id: indicatorStrip
       spacing: 4
       Layout.maximumWidth: 120
       Layout.alignment: Qt.AlignVCenter
@@ -473,21 +511,21 @@ Item {
         property bool isInsideCircle: false
 
         onPositionChanged: (mouse) => {
-          var centerX = rings.width / 2
-          var centerY = rings.height / 2
-          var dx = mouse.x - centerX
-          var dy = centerY - mouse.y
+                             var centerX = rings.width / 2
+                             var centerY = rings.height / 2
+                             var dx = mouse.x - centerX
+                             var dy = centerY - mouse.y
 
-          var distanceFromCenter = Math.sqrt(dx * dx + dy * dy)
-          var maxRadius = rings.width / 2
+                             var distanceFromCenter = Math.sqrt(dx * dx + dy * dy)
+                             var maxRadius = rings.width / 2
 
-          isInsideCircle = distanceFromCenter <= maxRadius
+                             isInsideCircle = distanceFromCenter <= maxRadius
 
-          if (isInsideCircle) {
-            cursorMagnitude = (distanceFromCenter / maxRadius) * root.displayMaxG
-            cursorAngle = root.normalize360(Math.atan2(dy, dx) * 180 / Math.PI)
-          }
-        }
+                             if (isInsideCircle) {
+                               cursorMagnitude = (distanceFromCenter / maxRadius) * root.displayMaxG
+                               cursorAngle = root.normalize360(Math.atan2(dy, dx) * 180 / Math.PI)
+                             }
+                           }
 
         //
         // Cursor crosshair (vertical arms)

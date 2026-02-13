@@ -380,16 +380,27 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
       {
         for (auto i = 0; i < curve.count(); ++i)
         {
-          m_minY = qMin(m_minY, curve[i].y());
-          m_maxY = qMax(m_maxY, curve[i].y());
+          const double value = curve[i].y();
+          if (std::isfinite(value))
+          {
+            m_minY = qMin(m_minY, value);
+            m_maxY = qMax(m_maxY, value);
+          }
         }
       }
 
       ++index;
     }
 
+    // If no finite values found, use default range
+    if (!std::isfinite(m_minY) || !std::isfinite(m_maxY))
+    {
+      m_minY = 0;
+      m_maxY = 1;
+    }
+
     // If the min and max are the same, set the range to 0-1
-    if (DSP::almostEqual(m_minY, m_maxY))
+    else if (DSP::almostEqual(m_minY, m_maxY))
     {
       if (DSP::isZero(m_minY))
       {
