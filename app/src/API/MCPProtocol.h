@@ -264,13 +264,23 @@ inline bool isMCPMessage(const QByteArray &data)
     return false;
 
   const auto trimmed = data.trimmed();
-  if (trimmed.isEmpty() || trimmed.at(0) != '{')
+  if (trimmed.isEmpty())
+    return false;
+
+  const char firstChar = trimmed.at(0);
+  if (firstChar != '{' && firstChar != '[')
     return false;
 
   QJsonParseError error;
   const auto doc = QJsonDocument::fromJson(trimmed, &error);
 
-  if (error.error != QJsonParseError::NoError || !doc.isObject())
+  if (error.error != QJsonParseError::NoError)
+    return false;
+
+  if (doc.isArray())
+    return true;
+
+  if (!doc.isObject())
     return false;
 
   const auto json = doc.object();

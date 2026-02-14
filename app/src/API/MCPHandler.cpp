@@ -20,6 +20,7 @@
  */
 
 #include <QMutexLocker>
+#include <QJsonArray>
 #include <QJsonDocument>
 
 #include "AppInfo.h"
@@ -64,6 +65,8 @@ bool API::MCPHandler::isMCPMessage(const QByteArray &data) const
 QByteArray API::MCPHandler::processMessage(const QByteArray &data,
                                            const QString &sessionId)
 {
+  constexpr int kMaxBatchSize = 256;
+
   QJsonParseError error;
   const auto doc = QJsonDocument::fromJson(data, &error);
 
@@ -72,6 +75,74 @@ QByteArray API::MCPHandler::processMessage(const QByteArray &data,
     return MCP::MCPResponse::makeError(QVariant(), MCP::ErrorCode::ParseError,
                                        QStringLiteral("JSON parse error"))
         .toJsonBytes();
+  }
+
+  if (doc.isArray())
+  {
+    const auto batchArray = doc.array();
+
+    if (batchArray.isEmpty())
+    {
+      return MCP::MCPResponse::makeError(
+                 QVariant(), MCP::ErrorCode::InvalidRequest,
+                 QStringLiteral("Batch cannot be empty"))
+          .toJsonBytes();
+    }
+
+    if (batchArray.size() > kMaxBatchSize)
+    {
+      return MCP::MCPResponse::makeError(
+                 QVariant(), MCP::ErrorCode::InvalidRequest,
+                 QStringLiteral("Batch size exceeds limit of 256"))
+          .toJsonBytes();
+    }
+
+    QJsonArray responses;
+
+    for (const auto &item : batchArray)
+    {
+      if (!item.isObject())
+      {
+        const auto errorResponse
+            = MCP::MCPResponse::makeError(QVariant(),
+                                          MCP::ErrorCode::InvalidRequest,
+                                          QStringLiteral("Batch item must be "
+                                                         "object"))
+                  .toJson();
+        responses.append(errorResponse);
+        continue;
+      }
+
+      const auto request = MCP::MCPRequest::fromJson(item.toObject());
+
+      if (!request.isValid())
+      {
+        const auto errorResponse
+            = MCP::MCPResponse::makeError(request.id,
+                                          MCP::ErrorCode::InvalidRequest,
+                                          QStringLiteral("Invalid JSON-RPC "
+                                                         "request"))
+                  .toJson();
+        responses.append(errorResponse);
+        continue;
+      }
+
+      if (request.isNotification())
+      {
+        processRequest(request, sessionId);
+      }
+      else
+      {
+        const auto response = processRequest(request, sessionId);
+        responses.append(response.toJson());
+      }
+    }
+
+    if (responses.isEmpty())
+      return QByteArray();
+
+    const QJsonDocument batchResponse(responses);
+    return batchResponse.toJson(QJsonDocument::Compact) + "\n";
   }
 
   if (!doc.isObject())
