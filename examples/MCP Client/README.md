@@ -190,100 +190,29 @@ nc localhost 7777
 3. Enable **"Enable API Server (Port 7777)"**
 4. Keep Serial Studio running in the background
 
-#### Step 2: Create the MCP Bridge Script
+#### Step 2: Locate the Bridge Script
 
-Claude Desktop communicates via stdio (standard input/output), while Serial Studio uses TCP sockets. We need a bridge to translate between them.
+A ready-to-use MCP bridge script is included: `claude_desktop_bridge.py`
 
-Create a file named `serial_studio_bridge.py` anywhere on your system (recommended: `~/serial-studio-mcp/serial_studio_bridge.py`):
-
-```python
-#!/usr/bin/env python3
-"""
-MCP stdio ↔ TCP bridge for Claude Desktop → Serial Studio
-Connects Claude Desktop (stdio) to Serial Studio API (TCP port 7777)
-"""
-import sys
-import json
-import socket
-import select
-import threading
-
-# Configuration
-SERIAL_STUDIO_HOST = "localhost"
-SERIAL_STUDIO_PORT = 7777
-
-def log(message):
-    """Log to stderr (Claude Desktop shows this in logs)"""
-    print(f"[Serial Studio MCP] {message}", file=sys.stderr, flush=True)
-
-def tcp_to_stdout(sock):
-    """Forward messages from Serial Studio (TCP) to Claude Desktop (stdout)"""
-    buffer = b""
-    try:
-        while True:
-            chunk = sock.recv(4096)
-            if not chunk:
-                log("Serial Studio connection closed")
-                break
-
-            buffer += chunk
-            while b'\n' in buffer:
-                line, buffer = buffer.split(b'\n', 1)
-                if line.strip():
-                    # Send to Claude Desktop via stdout
-                    sys.stdout.buffer.write(line + b'\n')
-                    sys.stdout.buffer.flush()
-    except Exception as e:
-        log(f"TCP→stdout error: {e}")
-
-def stdin_to_tcp(sock):
-    """Forward messages from Claude Desktop (stdin) to Serial Studio (TCP)"""
-    try:
-        for line in sys.stdin.buffer:
-            if line.strip():
-                # Send to Serial Studio via TCP
-                sock.sendall(line)
-    except Exception as e:
-        log(f"stdin→TCP error: {e}")
-
-def main():
-    log("Starting Serial Studio MCP Bridge...")
-
-    # Connect to Serial Studio
-    try:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((SERIAL_STUDIO_HOST, SERIAL_STUDIO_PORT))
-        log(f"✓ Connected to Serial Studio at {SERIAL_STUDIO_HOST}:{SERIAL_STUDIO_PORT}")
-    except ConnectionRefusedError:
-        log("✗ Failed to connect to Serial Studio")
-        log("  Make sure Serial Studio is running and API server is enabled")
-        sys.exit(1)
-    except Exception as e:
-        log(f"✗ Connection error: {e}")
-        sys.exit(1)
-
-    # Start bidirectional forwarding
-    tcp_thread = threading.Thread(target=tcp_to_stdout, args=(sock,), daemon=True)
-    tcp_thread.start()
-
-    log("✓ Bridge active - Claude can now control Serial Studio")
-
-    try:
-        stdin_to_tcp(sock)
-    except KeyboardInterrupt:
-        log("Bridge stopped by user")
-    finally:
-        sock.close()
-        log("Bridge closed")
-
-if __name__ == "__main__":
-    main()
+The bridge is located at:
+```
+examples/MCP Client/claude_desktop_bridge.py
 ```
 
-Make it executable (Linux/macOS):
+This script connects Claude Desktop (stdio) to Serial Studio's TCP API (port 7777).
+
+**Features:**
+- Automatic reconnection with retry logic
+- Proper error handling and logging
+- Graceful shutdown
+- Detailed status messages in Claude Desktop logs
+
+**Make it executable (Linux/macOS):**
 ```bash
-chmod +x serial_studio_bridge.py
+chmod +x claude_desktop_bridge.py
 ```
+
+**No installation needed** - uses Python standard library only.
 
 #### Step 3: Configure Claude Desktop
 
@@ -311,13 +240,13 @@ Edit (or create) the file and add the Serial Studio MCP server:
   "mcpServers": {
     "serial-studio": {
       "command": "python3",
-      "args": ["/absolute/path/to/serial_studio_bridge.py"]
+      "args": ["/absolute/path/to/Serial-Studio/examples/MCP Client/claude_desktop_bridge.py"]
     }
   }
 }
 ```
 
-**Important:** Replace `/absolute/path/to/serial_studio_bridge.py` with the actual full path to your bridge script.
+**Important:** Replace `/absolute/path/to/Serial-Studio` with the actual path to your Serial Studio repository/installation.
 
 **Example (macOS/Linux):**
 ```json
@@ -325,7 +254,7 @@ Edit (or create) the file and add the Serial Studio MCP server:
   "mcpServers": {
     "serial-studio": {
       "command": "python3",
-      "args": ["/Users/YOUR_USERNAME/serial-studio-mcp/serial_studio_bridge.py"]
+      "args": ["/Users/YOUR_USERNAME/Documents/GitHub/Serial-Studio/examples/MCP Client/claude_desktop_bridge.py"]
     }
   }
 }
@@ -337,10 +266,21 @@ Edit (or create) the file and add the Serial Studio MCP server:
   "mcpServers": {
     "serial-studio": {
       "command": "python",
-      "args": ["C:\\Users\\YOUR_USERNAME\\serial-studio-mcp\\serial_studio_bridge.py"]
+      "args": ["C:\\Users\\YOUR_USERNAME\\Documents\\Serial-Studio\\examples\\MCP Client\\claude_desktop_bridge.py"]
     }
   }
 }
+```
+
+**Tip:** Use the full absolute path to avoid issues. You can get it with:
+```bash
+# macOS/Linux:
+cd examples/MCP\ Client && pwd
+# Then append /claude_desktop_bridge.py to the output
+
+# Windows (PowerShell):
+cd "examples\MCP Client"; (Get-Location).Path
+# Then append \claude_desktop_bridge.py to the output
 ```
 
 #### Step 4: Restart Claude Desktop
@@ -404,7 +344,17 @@ You can now ask Claude to:
    - Linux: `~/.config/Claude/logs/mcp*.log`
 2. Look for errors like "Failed to start" or "Connection refused"
 3. Verify the bridge script path in config is absolute (not relative)
-4. Test the bridge manually: `python3 /path/to/serial_studio_bridge.py`
+4. Test the bridge manually:
+   ```bash
+   python3 claude_desktop_bridge.py
+   # Should show: "✓ Connected to Serial Studio"
+   # Press Ctrl+C to stop
+   ```
+5. Check the path is correct:
+   ```bash
+   # Verify file exists
+   ls -l /path/to/claude_desktop_bridge.py
+   ```
 
 #### Bridge starts but Claude can't connect
 

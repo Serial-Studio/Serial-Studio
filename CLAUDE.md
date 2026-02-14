@@ -749,3 +749,135 @@ Commercial features (Pro) include: MQTT, Modbus TCP/RTU, CAN Bus (with DBC impor
 - `app/src/DataModel/FrameConsumer.h` - Lock-free worker pattern
 - `app/src/Concepts.h` - C++20 type constraints
 - `app/src/SerialStudio.h` - Central enums and constants
+
+## File Creation Policy
+
+**IMPORTANT: Do NOT create documentation or markdown files unless explicitly requested by the user.**
+
+This includes:
+- ❌ DO NOT create summary files (SUMMARY.md, IMPLEMENTATION_SUMMARY.md, etc.)
+- ❌ DO NOT create improvement files (IMPROVEMENTS.md, TODO.md, etc.)
+- ❌ DO NOT create status files (STATUS.md, PROGRESS.md, etc.)
+- ❌ DO NOT create design documents unless specifically asked
+- ❌ DO NOT create example files unless specifically asked
+
+**Only create files when:**
+- ✅ User explicitly asks for a file to be created
+- ✅ Implementing actual code (source files, headers, tests)
+- ✅ Updating existing documentation files
+- ✅ Creating configuration files as part of a feature
+
+**If you want to share information with the user:**
+- Use conversational responses instead of creating files
+- Ask if they want a file created before making one
+- Update existing documentation files rather than creating new ones
+
+## Testing Serial Studio via MCP
+
+Serial Studio has a Model Context Protocol (MCP) integration that allows AI agents like Claude to control and test the application programmatically.
+
+### Quick Start for Testing
+
+**1. Enable API Server:**
+```bash
+# Serial Studio must be running with API server enabled
+# Settings → Enable API Server (Port 7777)
+```
+
+**2. Connect via MCP:**
+```python
+cd examples/MCP\ Client
+python3 client.py
+```
+
+**3. Available MCP Capabilities:**
+- **182 Tools** - Every API command exposed as MCP tool
+  - Categories: io.uart, io.network, io.ble, io.canbus, io.modbus, project, export.csv, etc.
+  - Rich JSON schemas with parameter types, enums, ranges, defaults
+  - Tags for filtering: configuration, connection, query, export, etc.
+
+- **2 Resources** - Real-time telemetry data
+  - `serialstudio://frame/current` - Latest frame
+  - `serialstudio://frame/history` - Last 100 frames
+
+- **1 Prompt** - AI-friendly prompt template
+  - `analyze_telemetry` - Pre-built prompt for data analysis
+
+### Example Testing Workflows
+
+**Check connection status:**
+```python
+# Call tool: io.manager.getStatus
+# Returns: {"connected": true/false, "busType": 0, ...}
+```
+
+**List available serial ports:**
+```python
+# Call tool: io.driver.uart.getPortList
+# Returns: {list of serial ports with descriptions}
+```
+
+**Configure and connect to device:**
+```python
+# 1. Set bus type to UART: io.manager.setBusType {"busType": 0}
+# 2. Set baud rate: io.driver.uart.setBaudRate {"baudRate": 115200}
+# 3. Set port: io.driver.uart.setPortIndex {"portIndex": 0}
+# 4. Connect: io.manager.connect
+```
+
+**Read telemetry data:**
+```python
+# Read resource: serialstudio://frame/current
+# Returns: Full frame JSON with groups, datasets, values
+```
+
+**Start CSV export:**
+```python
+# Call tool: csv.export.start
+# Returns: Export path and status
+```
+
+### MCP Implementation Details
+
+**Files:**
+- `app/src/API/MCPProtocol.h` - MCP message structures
+- `app/src/API/MCPHandler.{h,cpp}` - MCP protocol implementation
+- `app/src/API/Server.cpp` - Hybrid protocol routing (MCP + legacy API)
+- `examples/MCP Client/` - Python client and documentation
+
+**Features:**
+- Hybrid protocol: MCP and legacy API coexist on port 7777
+- Auto-detection via message format (`"jsonrpc": "2.0"`)
+- Session management with per-socket state
+- Rich tool schemas with automatic categorization
+- Enhanced error messages with structured debugging data
+
+**Tool Schema Example:**
+```json
+{
+  "name": "io.driver.uart.setBaudRate",
+  "category": "io.uart",
+  "tags": ["uart", "configuration"],
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "baudRate": {
+        "type": "integer",
+        "description": "Baud rate in bits per second",
+        "enum": [110, 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600],
+        "default": 115200
+      }
+    },
+    "required": ["baudRate"]
+  }
+}
+```
+
+**When to Use MCP for Testing:**
+- Testing API commands without writing test scripts
+- Verifying Serial Studio functionality programmatically
+- Analyzing telemetry data with AI assistance
+- Debugging configuration issues
+- Automating repetitive testing tasks
+
+**See:** `examples/MCP Client/README.md` for complete documentation and Claude Desktop integration guide.
