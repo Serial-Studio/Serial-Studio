@@ -26,6 +26,8 @@
 #include "IO/Manager.h"
 #include "API/Server.h"
 #include "API/CommandProtocol.h"
+#include "API/MCPProtocol.h"
+#include "API/MCPHandler.h"
 #include "Misc/Utilities.h"
 #include "API/CommandHandler.h"
 
@@ -575,6 +577,20 @@ void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
     }
     ++state.messageCount;
 
+    // Check if this is an MCP (Model Context Protocol) message
+    if (MCP::isMCPMessage(jsonBytes))
+    {
+      auto &mcpHandler = API::MCPHandler::instance();
+      const QString sessionId
+          = QString::number(reinterpret_cast<quintptr>(socket));
+      const auto response = mcpHandler.processMessage(jsonBytes, sessionId);
+
+      if (!response.isEmpty())
+        sendResponse(response);
+
+      return;
+    }
+
     QString type;
     QJsonObject json;
 
@@ -908,6 +924,10 @@ void API::Server::onSocketDisconnected()
   if (!socket)
     return;
 
+  // Clean up MCP session
+  const QString sessionId = QString::number(reinterpret_cast<quintptr>(socket));
+  MCPHandler::instance().clearSession(sessionId);
+
   // Use cached peer info for safe logging
   if (m_connections.contains(socket))
   {
@@ -932,6 +952,10 @@ void API::Server::onSocketDisconnected(QTcpSocket *socket)
 {
   if (!socket)
     return;
+
+  // Clean up MCP session
+  const QString sessionId = QString::number(reinterpret_cast<quintptr>(socket));
+  MCPHandler::instance().clearSession(sessionId);
 
   if (m_connections.contains(socket))
   {

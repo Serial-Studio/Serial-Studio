@@ -211,7 +211,25 @@ High-performance Python bridge that streams real-time data from NI DAQ devices t
   - **Clean Shutdown**: Proper signal handling for Ctrl+C
   - Requires NI-DAQmx driver and hardware
 
-### 14. RC Plane Simulator
+### 14. MCP Client
+**Difficulty:** 🟡 Intermediate | **Time:** ~5 minutes | **License:** GPL / Pro
+
+Python client demonstrating **Model Context Protocol (MCP)** integration with Serial Studio. Enables AI models like Claude to control Serial Studio and analyze telemetry data through a standardized protocol.
+
+**Contents:**
+  - **client.py**: Full-featured MCP client with all protocol features
+  - **README.md**: Complete MCP guide with examples and Claude Desktop integration
+
+**Features:**
+  - **182 AI-Accessible Tools**: Every Serial Studio API command exposed via MCP
+  - **Real-Time Resources**: Live telemetry data (`serialstudio://frame/current`, `serialstudio://frame/history`)
+  - **AI Integration**: Connect Claude Desktop or custom AI workflows
+  - **Automatic Tool Generation**: New API commands instantly available to AI
+  - **Hybrid Protocol**: MCP and legacy API work simultaneously on port 7777
+  - **Use Cases**: AI-assisted debugging, automated testing, data analysis, remote configuration
+  - No hardware needed - software only
+
+### 15. RC Plane Simulator
 **Difficulty:** 🟢 Beginner | **Time:** ~5 minutes | **License:** GPL / Pro
 
 Simulates a small RC plane flying a complete flight profile with realistic telemetry data. Perfect for testing and demonstrating multiple Serial Studio widgets simultaneously without hardware.

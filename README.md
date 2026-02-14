@@ -82,7 +82,8 @@ Make sure your system meets these requirements before running the AppImage.
 - **Modbus TCP/RTU:** Connect to industrial PLCs and equipment (Pro)
 - **CAN Bus Support:** Import DBC files for automotive and industrial applications (Pro)
 - **MQTT for IoT:** Connect to MQTT brokers for distributed sensors (Pro)
-- **API Server (TCP port 7777):** Control Serial Studio programmatically with 116 API commands (see [API Client example](./examples/API%20Test))
+- **API Server (TCP port 7777):** Control Serial Studio programmatically with 182+ API commands (see [API Client example](./examples/API%20Test))
+- **AI Integration (MCP):** Connect AI models like Claude via Model Context Protocol for automated analysis and control (see [MCP Client](./examples/MCP%20Client))
 - **Dual Licensing:** Open-source GPL-3.0 core, proprietary Pro features (see [LICENSE.md](LICENSE.md))
 
 ## Quick Start

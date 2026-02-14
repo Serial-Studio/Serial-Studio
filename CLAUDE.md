@@ -291,6 +291,20 @@ Template design for async export workers:
 
 #### Additional Modules
 
+**API Module** (`app/src/API/`)
+- **Server**: TCP server on port 7777 for external API access
+- **Dual Protocol Support**:
+  - **Legacy JSON-RPC**: Custom protocol for existing clients (`{"type": "command", ...}`)
+  - **Model Context Protocol (MCP)**: Anthropic's standard for AI integration (`{"jsonrpc": "2.0", ...}`)
+- **CommandRegistry**: Central registry for all API commands (dot-notation, e.g., `io.manager.connect`)
+- **CommandHandler**: Routes legacy API messages to command handlers
+- **MCPHandler**: Routes MCP JSON-RPC 2.0 messages to command handlers
+- **Automatic Tool Generation**: All CommandRegistry commands are auto-exposed as MCP tools
+- **MCP Resources**: Real-time telemetry data accessible via `serialstudio://frame/current` and `serialstudio://frame/history`
+- **Session Management**: Per-socket MCP session state with automatic cleanup
+- **Security**: Rate limiting (10K msg/sec), buffer limits (4MB), depth limits (64 levels)
+- See `examples/MCP Client/README.md` for MCP examples and documentation
+
 **CSV Module** (`app/src/CSV/`)
 - **Player**: Timeline-based CSV file playback with speed control
 - **Export**: Real-time CSV export with configurable delimiters and 9 decimal timestamp precision
