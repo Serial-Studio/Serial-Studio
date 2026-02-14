@@ -1,13 +1,16 @@
 {
     "actions": [
     ],
-    "activeGroupId": 4,
     "checksum": "",
     "dashboardLayout": {
         "autoLayout": true,
         "windowOrder": [
             10,
-            11
+            11,
+            4,
+            2,
+            3,
+            12
         ]
     },
     "decoder": 0,

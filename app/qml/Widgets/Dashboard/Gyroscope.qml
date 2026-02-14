@@ -414,7 +414,7 @@ Item {
             Text {
               opacity: 0.6
               color: "#ffffff"
-              text: qsTr("ROLL")
+              text: qsTr("ROLL ↔")
               font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
               anchors.horizontalCenter: parent.horizontalCenter
             }
@@ -442,7 +442,7 @@ Item {
             Text {
               opacity: 0.6
               color: "#ffffff"
-              text: qsTr("YAW")
+              text: qsTr("YAW ↻")
               font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
               anchors.horizontalCenter: parent.horizontalCenter
             }
@@ -470,7 +470,7 @@ Item {
             Text {
               opacity: 0.6
               color: "#ffffff"
-              text: qsTr("PITCH")
+              text: qsTr("PITCH ↕")
               font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
               anchors.horizontalCenter: parent.horizontalCenter
             }

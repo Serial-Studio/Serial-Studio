@@ -189,8 +189,7 @@ void Widgets::Gyroscope::updateData()
     }
     else
     {
-      // Angle-aware EMA (handles wrapping at +/-180)
-      auto angleEma = [kAlpha](double input, double &state) {
+      auto angleEma = [](double input, double &state) {
         double delta = input - state;
         if (delta > 180.0)
           delta -= 360.0;

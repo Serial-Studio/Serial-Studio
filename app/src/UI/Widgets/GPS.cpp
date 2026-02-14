@@ -1498,11 +1498,26 @@ void Widgets::GPS::wheelEvent(QWheelEvent *event)
 
   event->accept();
 
-  const double zoomFactor = 1.15;
-  const double deltaNorm = -delta / 120.0;
-  const double factor = qPow(zoomFactor, -deltaNorm);
-  const double newZoom = qBound(static_cast<double>(MIN_ZOOM), m_zoom * factor,
-                                static_cast<double>(m_mapMaxZoom[m_mapType]));
+  const bool isTouchpad
+      = !event->pixelDelta().isNull()
+        || event->source() == Qt::MouseEventSynthesizedBySystem;
+
+  double newZoom;
+  if (isTouchpad)
+  {
+    const double zoomFactor = 1.05;
+    const double deltaNorm = -delta / 120.0;
+    const double factor = qPow(zoomFactor, -deltaNorm);
+    newZoom = m_zoom * factor;
+  }
+  else
+  {
+    const double zoomStep = 0.5;
+    newZoom = m_zoom + (delta > 0 ? zoomStep : -zoomStep);
+  }
+
+  newZoom = qBound(static_cast<double>(MIN_ZOOM), newZoom,
+                   static_cast<double>(m_mapMaxZoom[m_mapType]));
 
   if (qAbs(newZoom - m_zoom) < 0.001)
     return;

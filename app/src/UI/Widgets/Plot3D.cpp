@@ -1421,7 +1421,10 @@ void Widgets::Plot3D::wheelEvent(QWheelEvent *event)
   {
     event->accept();
 
-    const double zoomFactor = 1.15;
+    const bool isTouchpad
+        = !event->pixelDelta().isNull()
+          || event->source() == Qt::MouseEventSynthesizedBySystem;
+    const double zoomFactor = isTouchpad ? 1.05 : 1.06;
     const double delta = -event->angleDelta().y() / 120.0;
     const double factor = qPow(zoomFactor, -delta);
 
