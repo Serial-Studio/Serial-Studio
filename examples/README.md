@@ -247,6 +247,35 @@ Simulates a small RC plane flying a complete flight profile with realistic telem
   - **CSV Format**: Simple `$...,;` delimited data over UDP
   - No hardware needed - software only
 
+### 16. IMU Simulator
+**Difficulty:** 🟡 Intermediate | **Time:** ~5 minutes | **License:** GPL / Pro
+
+Demonstrates Serial Studio's **multi-frame parsing** feature by simulating an IMU sensor that batches high-frequency accelerometer readings before transmission. Shows how one data packet can automatically generate multiple visualization frames.
+
+**Why This Example Matters:**
+Many devices (especially IoT/embedded systems) batch sensor readings to reduce communication overhead. For example, a sensor might sample at 120 Hz but transmit only 1 packet per second containing all 120 samples. This example shows how Serial Studio automatically "unzips" batched data without requiring manual value duplication in JavaScript.
+
+**Contents:**
+  - **imu_simulator.py**: Python UDP simulator that generates realistic IMU motion patterns
+  - **imu_batched.ssproj**: Serial Studio project demonstrating multi-frame parsing
+  - **README.md**: Complete guide with customization examples
+
+**Features:**
+  - **Multi-Frame Parsing**: 1 packet/second → 120 frames/second automatically
+  - **Mixed Scalar/Vector Arrays**: Scalars (battery, temperature) automatically repeated; vectors (accelerometer samples) unzipped element-by-element
+  - **Realistic Motion Simulation**: Walking motion with gravity, sway, vibration
+  - **Zero JavaScript Duplication**: No need to manually repeat scalar values 120 times
+  - **Efficient Protocol**: Transmits 1 packet instead of 120 individual frames
+  - **Performance Testing**: Validated at 1200 frames/sec (120 samples × 10 Hz packets)
+  - No hardware needed - software only
+
+**Use Cases:**
+  - BLE/IoT devices batching sensor data
+  - Environmental sensors with periodic batch uploads
+  - GPS trackers with position history
+  - Audio devices sending sample chunks
+  - Any system where communication efficiency matters
+
 ## Getting Started
 
 To use these examples:
