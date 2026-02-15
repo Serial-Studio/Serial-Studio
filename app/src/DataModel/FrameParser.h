@@ -56,6 +56,9 @@ public:
   [[nodiscard]] QStringList parse(const QString &frame);
   [[nodiscard]] QStringList parse(const QByteArray &frame);
 
+  [[nodiscard]] QList<QStringList> parseMultiFrame(const QString &frame);
+  [[nodiscard]] QList<QStringList> parseMultiFrame(const QByteArray &frame);
+
   [[nodiscard]] bool undoAvailable() const;
   [[nodiscard]] bool redoAvailable() const;
   [[nodiscard]] bool save(const bool silent = false);

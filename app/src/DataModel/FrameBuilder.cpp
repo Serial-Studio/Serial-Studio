@@ -570,8 +570,15 @@ void DataModel::FrameBuilder::setJsonPathSetting(const QString &path)
  * Converts incoming binary data into structured field values based on the
  * decoder method defined in the project model (e.g., plain text, hex, base64,
  * binary). If CSV playback is active, skips decoding and parses the simplified
- * string directly. Updates all frame datasets with the parsed values and
- * triggers a UI update.
+ * string directly.
+ *
+ * Supports multi-frame parsing when JavaScript returns:
+ * - 2D arrays: [[1,2,3], [4,5,6]] generates 2 frames
+ * - Mixed scalar/vector: [s1, s2, [v1,v2,v3]] generates 3 frames with scalars
+ * repeated
+ *
+ * Updates all frame datasets with the parsed values and triggers a UI update
+ * for each frame.
  *
  * @param data Raw binary input to be decoded and assigned to frame datasets.
  *
@@ -579,59 +586,67 @@ void DataModel::FrameBuilder::setJsonPathSetting(const QString &path)
  */
 void DataModel::FrameBuilder::parseProjectFrame(const QByteArray &data)
 {
-  // Real-time data, parse data & perform conversion
-  auto &channels = m_channelScratch;
+  QList<QStringList> multiChannels;
+
   if (!SerialStudio::isAnyPlayerOpen() && m_frameParser) [[likely]]
   {
     const auto decoderMethod
         = DataModel::ProjectModel::instance().decoderMethod();
+
     switch (decoderMethod)
     {
       case SerialStudio::Hexadecimal:
-        channels = m_frameParser->parse(QString::fromLatin1(data.toHex()));
+        multiChannels
+            = m_frameParser->parseMultiFrame(QString::fromLatin1(data.toHex()));
         break;
       case SerialStudio::Base64:
-        channels = m_frameParser->parse(QString::fromLatin1(data.toBase64()));
+        multiChannels = m_frameParser->parseMultiFrame(
+            QString::fromLatin1(data.toBase64()));
         break;
       case SerialStudio::Binary:
-        channels = m_frameParser->parse(data);
+        multiChannels = m_frameParser->parseMultiFrame(data);
         break;
       case SerialStudio::PlainText:
       default:
-        channels = m_frameParser->parse(QString::fromUtf8(data));
+        multiChannels = m_frameParser->parseMultiFrame(QString::fromUtf8(data));
         break;
     }
   }
-
-  // CSV data, no need to perform conversions or use frame parser
   else
-    parseCsvValues(data, channels, 64);
-
-  // Process data
-  if (!channels.isEmpty())
   {
-    // Replace data in frame
-    auto *channelData = channels.data();
+    auto &channels = m_channelScratch;
+    parseCsvValues(data, channels, 64);
+    multiChannels.append(channels);
+  }
+
+  for (const auto &channels : std::as_const(multiChannels))
+  {
+    if (channels.isEmpty()) [[unlikely]]
+      continue;
+
+    const auto *channelData = channels.data();
     const int channelCount = channels.size();
     const size_t groupCount = m_frame.groups.size();
+
     for (size_t g = 0; g < groupCount; ++g)
     {
       auto &group = m_frame.groups[g];
       const size_t datasetCount = group.datasets.size();
+
       for (size_t d = 0; d < datasetCount; ++d)
       {
         auto &dataset = group.datasets[d];
         const int idx = dataset.index;
+
         if (idx > 0 && idx <= channelCount) [[likely]]
         {
-          QString &value = channelData[idx - 1];
-          dataset.value = std::move(value);
+          const QString &value = channelData[idx - 1];
+          dataset.value = value;
           dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
         }
       }
     }
 
-    // Update user interface
     hotpathTxFrame(m_frame);
   }
 }

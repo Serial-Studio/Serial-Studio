@@ -51,6 +51,201 @@
   };                                                                           \
   static_cast<PwnedWidget *>(pointer)->function(event);
 
+//------------------------------------------------------------------------------
+// Multi-frame parsing helper functions
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Enum to classify JavaScript return value types from the parse
+ * function.
+ */
+enum class ArrayType
+{
+  Scalar,
+  Array1D,
+  Array2D,
+  ArrayMixed
+};
+
+/**
+ * @brief Converts a JavaScript array to a QStringList.
+ *
+ * @param jsValue JavaScript array to convert.
+ * @return QStringList containing string representation of each element.
+ */
+static QStringList jsArrayToStringList(const QJSValue &jsValue)
+{
+  QStringList result;
+  const int length = jsValue.property("length").toInt();
+  result.reserve(length);
+
+  for (int i = 0; i < length; ++i)
+  {
+    const auto element = jsValue.property(i);
+    result.append(element.toString());
+  }
+
+  return result;
+}
+
+/**
+ * @brief Detects the type of JavaScript array returned by the parse function.
+ *
+ * Classifies the JavaScript value as:
+ * - Scalar: Not an array or empty
+ * - Array1D: Flat scalar array [1, 2, 3]
+ * - Array2D: Pure 2D array [[1,2], [3,4]]
+ * - ArrayMixed: Mixed scalar/vector [1, [2,3], [4,5]]
+ *
+ * @param jsValue JavaScript value to classify.
+ * @return ArrayType classification.
+ */
+static ArrayType detectArrayType(const QJSValue &jsValue)
+{
+  if (!jsValue.isArray())
+    return ArrayType::Scalar;
+
+  const int length = jsValue.property("length").toInt();
+  if (length == 0)
+    return ArrayType::Scalar;
+
+  bool hasArray = false;
+  bool hasScalar = false;
+
+  for (int i = 0; i < length; ++i)
+  {
+    const auto element = jsValue.property(i);
+    if (element.isArray())
+      hasArray = true;
+    else
+      hasScalar = true;
+  }
+
+  if (hasArray && hasScalar)
+    return ArrayType::ArrayMixed;
+  else if (hasArray && !hasScalar)
+    return ArrayType::Array2D;
+  else
+    return ArrayType::Array1D;
+}
+
+/**
+ * @brief Converts a pure 2D JavaScript array to multiple frames.
+ *
+ * Processes arrays like [[1,2,3], [4,5,6]] and generates one frame per row.
+ * Invalid rows (non-arrays) are skipped with a warning.
+ *
+ * @param jsValue JavaScript 2D array.
+ * @return List of QStringList, one per row/frame.
+ */
+static QList<QStringList> convert2DArray(const QJSValue &jsValue)
+{
+  QList<QStringList> results;
+  const int rowCount = jsValue.property("length").toInt();
+  results.reserve(rowCount);
+
+  for (int row = 0; row < rowCount; ++row)
+  {
+    const auto rowArray = jsValue.property(row);
+
+    if (!rowArray.isArray()) [[unlikely]]
+    {
+      qWarning() << "[FrameParser] Row" << row << "is not an array, skipping";
+      continue;
+    }
+
+    results.append(jsArrayToStringList(rowArray));
+  }
+
+  return results;
+}
+
+/**
+ * @brief Converts a mixed scalar/vector JavaScript array to multiple frames.
+ *
+ * Processes arrays like [scalar1, scalar2, [vec1, vec2, vec3]] and "unzips"
+ * vectors while repeating scalars across frames.
+ *
+ * Example:
+ *   Input:  [25.5, 60.0, [1.1, 2.2, 3.3]]
+ *   Output: [[25.5, 60.0, 1.1], [25.5, 60.0, 2.2], [25.5, 60.0, 3.3]]
+ *
+ * If multiple vectors have different lengths, shorter vectors are extended
+ * by repeating their last value.
+ *
+ * @param jsValue JavaScript mixed array.
+ * @return List of QStringList, one per frame.
+ */
+static QList<QStringList> convertMixedArray(const QJSValue &jsValue)
+{
+  const int elementCount = jsValue.property("length").toInt();
+
+  QStringList scalars;
+  QList<QStringList> vectors;
+  qsizetype maxVectorLength = 0;
+
+  for (int i = 0; i < elementCount; ++i)
+  {
+    const auto element = jsValue.property(i);
+
+    if (element.isArray())
+    {
+      const auto vec = jsArrayToStringList(element);
+      if (!vec.isEmpty())
+      {
+        vectors.append(vec);
+        maxVectorLength = std::max(maxVectorLength, vec.size());
+      }
+    }
+    else
+    {
+      scalars.append(element.toString());
+    }
+  }
+
+  if (vectors.isEmpty()) [[unlikely]]
+  {
+    QList<QStringList> results;
+    results.append(scalars);
+    return results;
+  }
+
+  for (auto &vec : vectors)
+  {
+    if (!vec.isEmpty() && vec.size() < maxVectorLength)
+    {
+      const QString lastValue = vec.last();
+      while (vec.size() < maxVectorLength)
+        vec.append(lastValue);
+    }
+  }
+
+  QList<QStringList> results;
+  results.reserve(maxVectorLength);
+
+  for (int i = 0; i < maxVectorLength; ++i)
+  {
+    QStringList frame;
+    frame.reserve(scalars.size() + vectors.size());
+
+    frame.append(scalars);
+
+    for (const auto &vec : std::as_const(vectors))
+    {
+      if (i < vec.size())
+        frame.append(vec[i]);
+    }
+
+    results.append(frame);
+  }
+
+  return results;
+}
+
+//------------------------------------------------------------------------------
+// FrameParser class implementation
+//------------------------------------------------------------------------------
+
 /**
  * @brief Constructor function for the code editor widget.
  */
@@ -200,6 +395,116 @@ QStringList DataModel::FrameParser::parse(const QByteArray &frame)
   args << jsArray;
 
   return m_parseFunction.call(args).toVariant().toStringList();
+}
+
+/**
+ * @brief Executes the frame parser function and returns one or more frames.
+ *
+ * This version handles UTF-8 text data and supports:
+ * - Flat arrays: [1, 2, 3] → single frame
+ * - 2D arrays: [[1,2], [3,4]] → multiple frames (one per row)
+ * - Mixed scalar/vector: [s1, s2, [v1,v2,v3]] → multiple frames with scalars
+ * repeated
+ *
+ * Enables efficient BLE packet parsing where batched samples are automatically
+ * expanded into individual frames without JavaScript code duplication.
+ *
+ * @param frame Decoded UTF-8 string frame.
+ * @return List of QStringList, each representing one frame.
+ */
+QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString &frame)
+{
+  QList<QStringList> results;
+
+  QJSValueList args;
+  args << frame;
+  const auto jsResult = m_parseFunction.call(args);
+
+  if (jsResult.isError()) [[unlikely]]
+  {
+    qWarning() << "[FrameParser] JS error:"
+               << jsResult.property("message").toString();
+    return results;
+  }
+
+  const auto arrayType = detectArrayType(jsResult);
+
+  switch (arrayType)
+  {
+    case ArrayType::Array2D:
+      return convert2DArray(jsResult);
+
+    case ArrayType::ArrayMixed:
+      return convertMixedArray(jsResult);
+
+    case ArrayType::Array1D:
+    case ArrayType::Scalar:
+    default:
+      results.append(jsResult.toVariant().toStringList());
+      return results;
+  }
+}
+
+/**
+ * @brief Executes the frame parser function over binary data and returns one or
+ * more frames.
+ *
+ * This version handles binary frame data and supports the same array types as
+ * parseMultiFrame(QString):
+ * - Flat arrays: single frame
+ * - 2D arrays: multiple frames (one per row)
+ * - Mixed scalar/vector: multiple frames with scalars repeated
+ *
+ * @param frame Binary frame data (e.g., from serial input).
+ * @return List of QStringList, each representing one frame.
+ */
+QList<QStringList>
+DataModel::FrameParser::parseMultiFrame(const QByteArray &frame)
+{
+  QList<QStringList> results;
+
+  QJSValue jsArray;
+  if (m_hexToArray.isCallable()) [[likely]]
+  {
+    QJSValueList hexArgs;
+    hexArgs << QString::fromLatin1(frame.toHex());
+    jsArray = m_hexToArray.call(hexArgs);
+  }
+  else
+  {
+    jsArray = m_engine.newArray(frame.size());
+    const auto *data = reinterpret_cast<const quint8 *>(frame.constData());
+    for (int i = 0; i < frame.size(); ++i)
+      jsArray.setProperty(i, data[i]);
+  }
+
+  QJSValueList args;
+  args << jsArray;
+  const auto jsResult = m_parseFunction.call(args);
+
+  if (jsResult.isError()) [[unlikely]]
+  {
+    qWarning() << "[FrameParser] JS error:"
+               << jsResult.property("message").toString();
+    return results;
+  }
+
+  const auto arrayType = detectArrayType(jsResult);
+
+  switch (arrayType)
+  {
+    case ArrayType::Array2D:
+      return convert2DArray(jsResult);
+
+    case ArrayType::ArrayMixed:
+      return convertMixedArray(jsResult);
+
+    case ArrayType::Array1D:
+    case ArrayType::Scalar:
+    default:
+      results.append(jsResult.toVariant().toStringList());
+      return results;
+  }
 }
 
 /**
@@ -897,6 +1202,7 @@ void DataModel::FrameParser::loadTemplateNames()
   m_templateFiles.clear();
   m_templateFiles = {"at_commands.js",
                      "base64_encoded.js",
+                     "batched_sensor_data.js",
                      "binary_tlv.js",
                      "cobs_encoded.js",
                      "comma_separated.js",
@@ -917,6 +1223,7 @@ void DataModel::FrameParser::loadTemplateNames()
                      "sirf_binary.js",
                      "slip_encoded.js",
                      "tab_separated.js",
+                     "time_series_2d.js",
                      "ubx_ublox.js",
                      "url_encoded.js",
                      "xml_data.js",
@@ -925,6 +1232,7 @@ void DataModel::FrameParser::loadTemplateNames()
   m_templateNames.clear();
   m_templateNames = {tr("AT command responses"),
                      tr("Base64-encoded data"),
+                     tr("Batched sensor data (multi-frame)"),
                      tr("Binary TLV (Tag-Length-Value)"),
                      tr("COBS-encoded frames"),
                      tr("Comma-separated data"),
@@ -945,6 +1253,7 @@ void DataModel::FrameParser::loadTemplateNames()
                      tr("SiRF binary protocol"),
                      tr("SLIP-encoded frames"),
                      tr("Tab-separated data"),
+                     tr("Time-series 2D arrays (multi-frame)"),
                      tr("UBX protocol (u-blox)"),
                      tr("URL-encoded data"),
                      tr("XML data"),

@@ -594,8 +594,7 @@ void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
     QString type;
     QJsonObject json;
 
-    // Wrap JSON parsing in try-catch to prevent crashes from malformed/deep
-    // JSON
+    // Wrap JSON parsing in try-catch to prevent crashes from malformed data
     try
     {
       if (!API::parseMessage(jsonBytes, type, json))
@@ -747,7 +746,6 @@ void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
                      << "- Buffer size:" << trimmed.size()
                      << "- Disconnecting client (malformed or too deep JSON)";
 
-          // Catch any exception from Qt's JSON parser
           sendResponse(
               CommandResponse::makeError(
                   QString(), ErrorCode::InvalidJson,
@@ -877,7 +875,6 @@ void API::Server::acceptConnection()
   connect(socket, &QTcpSocket::disconnected, this,
           [=, this]() { onSocketDisconnected(); });
 
-  // Cache peer address/port for safe logging on disconnect
   ConnectionState state;
   state.peerAddress = socket->peerAddress().toString();
   state.peerPort = socket->peerPort();
@@ -920,6 +917,7 @@ void API::Server::onErrorOccurred(
  */
 void API::Server::onSocketDisconnected()
 {
+  // Validate socket
   auto *socket = qobject_cast<QTcpSocket *>(sender());
   if (!socket)
     return;
@@ -953,10 +951,8 @@ void API::Server::onSocketDisconnected(QTcpSocket *socket)
   if (!socket)
     return;
 
-  // Clean up MCP session
   const QString sessionId = QString::number(reinterpret_cast<quintptr>(socket));
   MCPHandler::instance().clearSession(sessionId);
-
   if (m_connections.contains(socket))
   {
     qInfo() << "[API] Client disconnected (via worker):"

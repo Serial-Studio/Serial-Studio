@@ -324,7 +324,9 @@ Item {
       //
       MouseArea {
         id: cursorTracker
-        anchors.fill: parent
+        anchors.centerIn: parent
+        width: control.background.gaugeSize
+        height: control.background.gaugeSize
         hoverEnabled: true
         acceptedButtons: Qt.NoButton
         propagateComposedEvents: true
