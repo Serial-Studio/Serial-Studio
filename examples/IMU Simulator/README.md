@@ -27,16 +27,20 @@ Without multi-frame parsing, you'd need to manually duplicate scalar values (bat
 ### JavaScript Parser
 ```javascript
 function parse(frame) {
-    var data = JSON.parse(frame);
+    if (frame.length > 0) {
+        var data = JSON.parse(frame);
+    
+        // Return mixed scalar/vector array
+        return [
+            data.battery,      // Scalar - repeated across frames
+            data.temperature,  // Scalar - repeated across frames
+            data.accel_x,      // Vector - unzipped element-by-element
+            data.accel_y,      // Vector - unzipped element-by-element
+            data.accel_z       // Vector - unzipped element-by-element
+        ];
+    }
 
-    // Return mixed scalar/vector array
-    return [
-        data.battery,      // Scalar - repeated across frames
-        data.temperature,  // Scalar - repeated across frames
-        data.accel_x,      // Vector - unzipped element-by-element
-        data.accel_y,      // Vector - unzipped element-by-element
-        data.accel_z       // Vector - unzipped element-by-element
-    ];
+    return [];
 }
 ```
 
