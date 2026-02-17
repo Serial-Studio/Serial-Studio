@@ -19,9 +19,10 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "UI/Dashboard.h"
-#include "Misc/CommonFonts.h"
 #include "UI/Widgets/DataGrid.h"
+
+#include "Misc/CommonFonts.h"
+#include "UI/Dashboard.h"
 
 /**
  * @brief Constructs a DataGrid widget and initializes it with dashboard data.
@@ -32,27 +33,25 @@
  * @param index Index of the data grid group in the dashboard model.
  * @param parent Optional parent QQuickItem.
  */
-Widgets::DataGrid::DataGrid(const int index, QQuickItem *parent)
-  : StaticTable(parent)
-  , m_index(index)
-  , m_paused(false)
+Widgets::DataGrid::DataGrid(const int index, QQuickItem* parent)
+  : StaticTable(parent), m_index(index), m_paused(false)
 {
   if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index))
     return;
 
-  const auto &group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
+  const auto& group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
 
   QList<QStringList> rows;
   rows.append({tr("Title"), tr("Value")});
 
-  for (const auto &dataset : group.datasets)
+  for (const auto& dataset : group.datasets)
     rows.append(getRow(dataset));
 
   setData(rows);
   setFont(Misc::CommonFonts::instance().monoFont());
   setHeaderFont(Misc::CommonFonts::instance().boldUiFont());
-  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-          &Widgets::DataGrid::updateData);
+  connect(
+    &UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Widgets::DataGrid::updateData);
 
   updateData();
 }
@@ -79,8 +78,7 @@ bool Widgets::DataGrid::paused() const
  */
 void Widgets::DataGrid::setPaused(const bool paused)
 {
-  if (m_paused != paused)
-  {
+  if (m_paused != paused) {
     m_paused = paused;
 
     if (!m_paused)
@@ -104,19 +102,18 @@ void Widgets::DataGrid::updateData()
     return;
 
   // Obtain a reference to the datagrid group & copy current table data
-  const auto &group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
-  auto rows = data();
+  const auto& group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
+  auto rows         = data();
 
   // Initialize parameters
-  bool changed = false;
+  bool changed         = false;
   const int valueIndex = 1;
 
   // Update values for every dataset in the group
-  for (size_t i = 0; i < group.datasets.size(); ++i)
-  {
+  for (size_t i = 0; i < group.datasets.size(); ++i) {
     // Obtain a reference to the dataset object & read its value
-    const auto &dataset = group.datasets[i];
-    QString value = dataset.value;
+    const auto& dataset = group.datasets[i];
+    QString value       = dataset.value;
 
     // Convert the dataset to a number if needed
     bool isNumber;
@@ -132,11 +129,10 @@ void Widgets::DataGrid::updateData()
     const int rowIndex = i + 1;
 
     // Validate to table data to ensure we can update it (issue #307)
-    if (rows.count() <= rowIndex || rows[rowIndex].count() <= valueIndex)
-    {
+    if (rows.count() <= rowIndex || rows[rowIndex].count() <= valueIndex) {
       QList<QStringList> r;
       r.append({tr("Title"), tr("Value")});
-      for (const auto &ds : group.datasets)
+      for (const auto& ds : group.datasets)
         r.append(getRow(ds));
 
       setData(r);
@@ -144,11 +140,10 @@ void Widgets::DataGrid::updateData()
     }
 
     // Update dataset value in current row
-    auto &row = rows[rowIndex];
-    if (row[valueIndex] != value)
-    {
+    auto& row = rows[rowIndex];
+    if (row[valueIndex] != value) {
       row[valueIndex] = value;
-      changed = true;
+      changed         = true;
     }
   }
 
@@ -166,7 +161,7 @@ void Widgets::DataGrid::updateData()
  * @param dataset The dataset from which to generate the row.
  * @return A QStringList with two entries: title and value.
  */
-QStringList Widgets::DataGrid::getRow(const DataModel::Dataset &dataset)
+QStringList Widgets::DataGrid::getRow(const DataModel::Dataset& dataset)
 {
   const QString title = dataset.title;
   const QString units = dataset.units;

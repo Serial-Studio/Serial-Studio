@@ -26,8 +26,7 @@
 #include <QSettings>
 #include <QTranslator>
 
-namespace Misc
-{
+namespace Misc {
 /**
  * @brief The Translator class
  *
@@ -35,8 +34,7 @@ namespace Misc
  * translations, and loads the specified translation file during application
  * startup or when the user changes the language of the application.
  */
-class Translator : public QObject
-{
+class Translator : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(Language language
@@ -59,16 +57,15 @@ signals:
 
 private:
   explicit Translator();
-  Translator(Translator &&) = delete;
-  Translator(const Translator &) = delete;
-  Translator &operator=(Translator &&) = delete;
-  Translator &operator=(const Translator &) = delete;
+  Translator(Translator&&)                 = delete;
+  Translator(const Translator&)            = delete;
+  Translator& operator=(Translator&&)      = delete;
+  Translator& operator=(const Translator&) = delete;
 
 public:
-  static Translator &instance();
+  static Translator& instance();
 
-  enum Language
-  {
+  enum Language {
     English,
     Spanish,
     Chinese,
@@ -88,22 +85,23 @@ public:
     Romanian,
     Swedish
   };
+
   Q_ENUM(Language);
 
   [[nodiscard]] Language language() const;
   [[nodiscard]] Language systemLanguage() const;
-  [[nodiscard]] static QStringList &availableLanguages();
+  [[nodiscard]] static QStringList& availableLanguages();
 
   [[nodiscard]] QString welcomeConsoleText() const;
   [[nodiscard]] QString acknowledgementsText() const;
 
 public slots:
   void setLanguage(const Misc::Translator::Language language);
-  void setLanguage(const QLocale &locale, const QString &language);
+  void setLanguage(const QLocale& locale, const QString& language);
 
 private:
   Language m_language;
   QSettings m_settings;
   QTranslator m_translator;
 };
-} // namespace Misc
+}  // namespace Misc

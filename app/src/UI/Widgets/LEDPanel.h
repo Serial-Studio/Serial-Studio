@@ -21,11 +21,10 @@
 
 #pragma once
 
-#include <QVector>
 #include <QQuickItem>
+#include <QVector>
 
-namespace Widgets
-{
+namespace Widgets {
 /**
  * @class Widgets::LEDPanel
  * @brief Multi-LED status indicator panel widget.
@@ -53,8 +52,7 @@ namespace Widgets
  * @note The number of LEDs is determined by the associated dataset group and
  *       is fixed after initialization.
  */
-class LEDPanel : public QQuickItem
-{
+class LEDPanel : public QQuickItem {
   Q_OBJECT
   Q_PROPERTY(int count READ count CONSTANT)
   Q_PROPERTY(QStringList titles READ titles CONSTANT)
@@ -66,12 +64,12 @@ signals:
   void themeChanged();
 
 public:
-  explicit LEDPanel(const int index = -1, QQuickItem *parent = nullptr);
+  explicit LEDPanel(const int index = -1, QQuickItem* parent = nullptr);
 
   [[nodiscard]] int count() const;
-  [[nodiscard]] const QList<bool> &states() const;
-  [[nodiscard]] const QStringList &colors() const;
-  [[nodiscard]] const QStringList &titles() const;
+  [[nodiscard]] const QList<bool>& states() const;
+  [[nodiscard]] const QStringList& colors() const;
+  [[nodiscard]] const QStringList& titles() const;
 
 private slots:
   void updateData();
@@ -84,4 +82,4 @@ private:
   QStringList m_colors;
 };
 
-} // namespace Widgets
+}  // namespace Widgets

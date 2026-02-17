@@ -27,7 +27,7 @@
  * Configures item flags, sets fill color and connects signals/slots to
  * automatically resize the contained widget to the QML item's size.
  */
-DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
+DeclarativeWidget::DeclarativeWidget(QQuickItem* parent)
   : QQuickPaintedItem(parent)
   , m_widget(nullptr)
   , m_contentWidth(0)
@@ -48,10 +48,8 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
   redraw();
 
   // Resize widget when the item's size is changed
-  connect(this, &QQuickPaintedItem::widthChanged, this,
-          &DeclarativeWidget::resizeWidget);
-  connect(this, &QQuickPaintedItem::heightChanged, this,
-          &DeclarativeWidget::resizeWidget);
+  connect(this, &QQuickPaintedItem::widthChanged, this, &DeclarativeWidget::resizeWidget);
+  connect(this, &QQuickPaintedItem::heightChanged, this, &DeclarativeWidget::resizeWidget);
 
   // Redraw widget when visibility changes
   connect(this, &DeclarativeWidget::visibleChanged, [=, this]() {
@@ -69,7 +67,7 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
 /**
  * Returns a pointer to the contained widget
  */
-QWidget *DeclarativeWidget::widget() const
+QWidget* DeclarativeWidget::widget() const
 {
   return m_widget;
 }
@@ -110,24 +108,21 @@ int DeclarativeWidget::contentHeight() const
  * used to render the widget in the QML interface without causing signal/slot
  * interferences with the scenegraph render thread.
  */
-void DeclarativeWidget::redraw(const QRect &rect)
+void DeclarativeWidget::redraw(const QRect& rect)
 {
-  if (widget() != nullptr)
-  {
-    if (qobject_cast<QTableView *>(widget()) != nullptr)
-    {
-      class PwnedWidget : public QTableView
-      {
+  if (widget() != nullptr) {
+    if (qobject_cast<QTableView*>(widget()) != nullptr) {
+      class PwnedWidget : public QTableView {
       public:
         using QTableView::updateGeometries;
       };
-      reinterpret_cast<PwnedWidget *>(m_widget)->updateGeometries();
+
+      reinterpret_cast<PwnedWidget*>(m_widget)->updateGeometries();
     }
 
-    if (isVisible() && m_updateRequested)
-    {
+    if (isVisible() && m_updateRequested) {
       m_updateRequested = false;
-      m_image = m_widget->grab().toImage();
+      m_image           = m_widget->grab().toImage();
       QQuickPaintedItem::update(rect);
     }
   }
@@ -137,7 +132,7 @@ void DeclarativeWidget::redraw(const QRect &rect)
  * Displays the pixmap generated in the @c update() function in the QML
  * interface through the given @a painter pointer.
  */
-void DeclarativeWidget::paint(QPainter *painter)
+void DeclarativeWidget::paint(QPainter* painter)
 {
   if (painter != nullptr)
     painter->drawImage(0, 0, m_image);
@@ -148,10 +143,8 @@ void DeclarativeWidget::paint(QPainter *painter)
  */
 void DeclarativeWidget::resizeWidget()
 {
-  if (widget() != nullptr)
-  {
-    if (width() > 0 && height() > 0)
-    {
+  if (widget() != nullptr) {
+    if (width() > 0 && height() > 0) {
       widget()->setFixedSize(width(), height());
 
       requestUpdate();
@@ -171,10 +164,9 @@ void DeclarativeWidget::requestUpdate()
 /**
  * Changes the @param widget to be rendered in the QML interface.
  */
-void DeclarativeWidget::setWidget(QWidget *widget)
+void DeclarativeWidget::setWidget(QWidget* widget)
 {
-  if (widget != nullptr)
-  {
+  if (widget != nullptr) {
     m_widget = widget;
     Q_EMIT widgetChanged();
   }
@@ -205,10 +197,9 @@ void DeclarativeWidget::setContentHeight(const int height)
 /**
  * Modifies the palette used by the widget.
  */
-void DeclarativeWidget::setPalette(const QPalette &palette)
+void DeclarativeWidget::setPalette(const QPalette& palette)
 {
-  if (m_widget != nullptr)
-  {
+  if (m_widget != nullptr) {
     m_widget->setPalette(palette);
     requestUpdate();
     redraw();

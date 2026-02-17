@@ -25,18 +25,14 @@
  * @brief Constructor function
  */
 UI::WidgetRegistry::WidgetRegistry()
-  : QObject(nullptr)
-  , m_nextId(1)
-  , m_batchDepth(0)
-  , m_batchHadChanges(false)
-{
-}
+  : QObject(nullptr), m_nextId(1), m_batchDepth(0), m_batchHadChanges(false)
+{}
 
 /**
  * @brief Retrieves the singleton instance of the WidgetRegistry.
  * @return Reference to the singleton WidgetRegistry instance.
  */
-UI::WidgetRegistry &UI::WidgetRegistry::instance()
+UI::WidgetRegistry& UI::WidgetRegistry::instance()
 {
   static WidgetRegistry instance;
   return instance;
@@ -71,8 +67,7 @@ void UI::WidgetRegistry::endBatchUpdate()
   if (m_batchDepth > 0)
     --m_batchDepth;
 
-  if (m_batchDepth == 0 && m_batchHadChanges)
-  {
+  if (m_batchDepth == 0 && m_batchHadChanges) {
     m_batchHadChanges = false;
     Q_EMIT batchUpdateCompleted();
   }
@@ -99,17 +94,18 @@ bool UI::WidgetRegistry::isInBatchUpdate() const
  * @param isGroupWidget True if this is a group-level widget.
  * @return The newly assigned widget ID.
  */
-UI::WidgetID
-UI::WidgetRegistry::createWidget(SerialStudio::DashboardWidget type,
-                                 const QString &title, int groupId,
-                                 int datasetIndex, bool isGroupWidget)
+UI::WidgetID UI::WidgetRegistry::createWidget(SerialStudio::DashboardWidget type,
+                                              const QString& title,
+                                              int groupId,
+                                              int datasetIndex,
+                                              bool isGroupWidget)
 {
   WidgetInfo info;
-  info.id = m_nextId++;
-  info.type = type;
-  info.title = title;
-  info.groupId = groupId;
-  info.datasetIndex = datasetIndex;
+  info.id            = m_nextId++;
+  info.type          = type;
+  info.title         = title;
+  info.groupId       = groupId;
+  info.datasetIndex  = datasetIndex;
   info.isGroupWidget = isGroupWidget;
 
   m_widgetOrder.append(info.id);
@@ -157,15 +153,12 @@ QVector<UI::WidgetID> UI::WidgetRegistry::allWidgetIds() const
  * @param type The widget type to filter by.
  * @return Vector of matching widget IDs in creation order.
  */
-QVector<UI::WidgetID>
-UI::WidgetRegistry::widgetIdsByType(SerialStudio::DashboardWidget type) const
+QVector<UI::WidgetID> UI::WidgetRegistry::widgetIdsByType(SerialStudio::DashboardWidget type) const
 {
   QVector<WidgetID> result;
-  for (const auto &id : m_widgetOrder)
-  {
+  for (const auto& id : m_widgetOrder)
     if (m_widgets.value(id).type == type)
       result.append(id);
-  }
 
   return result;
 }
@@ -178,11 +171,9 @@ UI::WidgetRegistry::widgetIdsByType(SerialStudio::DashboardWidget type) const
 QVector<UI::WidgetID> UI::WidgetRegistry::widgetIdsByGroup(int groupId) const
 {
   QVector<WidgetID> result;
-  for (const auto &id : m_widgetOrder)
-  {
+  for (const auto& id : m_widgetOrder)
     if (m_widgets.value(id).groupId == groupId)
       result.append(id);
-  }
 
   return result;
 }
@@ -193,9 +184,8 @@ QVector<UI::WidgetID> UI::WidgetRegistry::widgetIdsByGroup(int groupId) const
  * @param relativeIndex The index among widgets of this type.
  * @return The widget ID, or kInvalidWidgetId if not found.
  */
-UI::WidgetID
-UI::WidgetRegistry::widgetIdByTypeAndIndex(SerialStudio::DashboardWidget type,
-                                           int relativeIndex) const
+UI::WidgetID UI::WidgetRegistry::widgetIdByTypeAndIndex(SerialStudio::DashboardWidget type,
+                                                        int relativeIndex) const
 {
   auto ids = widgetIdsByType(type);
   if (relativeIndex >= 0 && relativeIndex < ids.size())
@@ -223,8 +213,7 @@ void UI::WidgetRegistry::clear()
   auto idsToDestroy = m_widgetOrder;
   std::reverse(idsToDestroy.begin(), idsToDestroy.end());
 
-  for (const auto &id : idsToDestroy)
-  {
+  for (const auto& id : idsToDestroy) {
     Q_EMIT widgetDestroyed(id);
     m_widgets.remove(id);
   }
@@ -264,33 +253,31 @@ void UI::WidgetRegistry::destroyWidget(UI::WidgetID id)
  * @param icon New icon path (empty string keeps current icon).
  * @param userData Optional user data to associate with widget.
  */
-void UI::WidgetRegistry::updateWidget(UI::WidgetID id, const QString &title,
-                                      const QString &icon,
-                                      const QVariant &userData)
+void UI::WidgetRegistry::updateWidget(UI::WidgetID id,
+                                      const QString& title,
+                                      const QString& icon,
+                                      const QVariant& userData)
 {
   if (!m_widgets.contains(id))
     return;
 
-  WidgetInfo &info = m_widgets[id];
+  WidgetInfo& info = m_widgets[id];
 
   bool changed = false;
 
-  if (!title.isEmpty() && info.title != title)
-  {
+  if (!title.isEmpty() && info.title != title) {
     info.title = title;
-    changed = true;
+    changed    = true;
   }
 
-  if (!icon.isEmpty() && info.icon != icon)
-  {
+  if (!icon.isEmpty() && info.icon != icon) {
     info.icon = icon;
-    changed = true;
+    changed   = true;
   }
 
-  if (userData.isValid())
-  {
+  if (userData.isValid()) {
     info.userData = userData;
-    changed = true;
+    changed       = true;
   }
 
   if (changed)

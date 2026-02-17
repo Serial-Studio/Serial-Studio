@@ -23,10 +23,8 @@
 
 #include "API/CommandProtocol.h"
 
-namespace API
-{
-namespace Handlers
-{
+namespace API {
+namespace Handlers {
 /**
  * @class ConsoleHandler
  * @brief Registers API commands for Console::Handler operations
@@ -47,8 +45,7 @@ namespace Handlers
  * - console.export.getStatus - Get console export status
  * - console.getConfiguration - Get all settings
  */
-class ConsoleHandler
-{
+class ConsoleHandler {
 public:
   /**
    * @brief Register all Console commands with the CommandRegistry
@@ -57,36 +54,25 @@ public:
 
 private:
   // Settings commands
-  static CommandResponse setEcho(const QString &id, const QJsonObject &params);
-  static CommandResponse setShowTimestamp(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse setDisplayMode(const QString &id,
-                                        const QJsonObject &params);
-  static CommandResponse setDataMode(const QString &id,
-                                     const QJsonObject &params);
-  static CommandResponse setLineEnding(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse setFontFamily(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse setFontSize(const QString &id,
-                                     const QJsonObject &params);
-  static CommandResponse setChecksumMethod(const QString &id,
-                                           const QJsonObject &params);
+  static CommandResponse setEcho(const QString& id, const QJsonObject& params);
+  static CommandResponse setShowTimestamp(const QString& id, const QJsonObject& params);
+  static CommandResponse setDisplayMode(const QString& id, const QJsonObject& params);
+  static CommandResponse setDataMode(const QString& id, const QJsonObject& params);
+  static CommandResponse setLineEnding(const QString& id, const QJsonObject& params);
+  static CommandResponse setFontFamily(const QString& id, const QJsonObject& params);
+  static CommandResponse setFontSize(const QString& id, const QJsonObject& params);
+  static CommandResponse setChecksumMethod(const QString& id, const QJsonObject& params);
 
   // Operations
-  static CommandResponse clear(const QString &id, const QJsonObject &params);
-  static CommandResponse send(const QString &id, const QJsonObject &params);
+  static CommandResponse clear(const QString& id, const QJsonObject& params);
+  static CommandResponse send(const QString& id, const QJsonObject& params);
 
   // Query commands
-  static CommandResponse exportSetEnabled(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse exportClose(const QString &id,
-                                     const QJsonObject &params);
-  static CommandResponse exportGetStatus(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse getConfiguration(const QString &id,
-                                          const QJsonObject &params);
+  static CommandResponse exportSetEnabled(const QString& id, const QJsonObject& params);
+  static CommandResponse exportClose(const QString& id, const QJsonObject& params);
+  static CommandResponse exportGetStatus(const QString& id, const QJsonObject& params);
+  static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);
 };
 
-} // namespace Handlers
-} // namespace API
+}  // namespace Handlers
+}  // namespace API

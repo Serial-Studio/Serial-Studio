@@ -19,10 +19,10 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "Misc/CommonFonts.h"
+
 #include <QApplication>
 #include <QFontDatabase>
-
-#include "Misc/CommonFonts.h"
 
 /**
  * @brief Constructs the CommonFonts object, registering common fonts and
@@ -44,9 +44,8 @@ Misc::CommonFonts::CommonFonts()
 
   // Add custom mono font
   const auto path = QStringLiteral(":/rcc/fonts/JetBrainsMono-Regular.ttf");
-  const auto id = QFontDatabase::addApplicationFont(path);
-  if (id != -1)
-  {
+  const auto id   = QFontDatabase::addApplicationFont(path);
+  if (id != -1) {
     const auto families = QFontDatabase::applicationFontFamilies(id);
     if (!families.isEmpty())
       monoFont = families.at(0);
@@ -78,7 +77,7 @@ Misc::CommonFonts::CommonFonts()
  * @brief Provides the instance of CommonFonts.
  * @return A reference to the singleton instance of CommonFonts.
  */
-Misc::CommonFonts &Misc::CommonFonts::instance()
+Misc::CommonFonts& Misc::CommonFonts::instance()
 {
   static CommonFonts instance;
   return instance;
@@ -88,7 +87,7 @@ Misc::CommonFonts &Misc::CommonFonts::instance()
  * @brief Retrieves the UI font.
  * @return The UI font.
  */
-const QFont &Misc::CommonFonts::uiFont() const
+const QFont& Misc::CommonFonts::uiFont() const
 {
   return m_uiFont;
 }
@@ -97,7 +96,7 @@ const QFont &Misc::CommonFonts::uiFont() const
  * @brief Retrieves the monospace font.
  * @return The monospace font.
  */
-const QFont &Misc::CommonFonts::monoFont() const
+const QFont& Misc::CommonFonts::monoFont() const
 {
   return m_monoFont;
 }
@@ -106,7 +105,7 @@ const QFont &Misc::CommonFonts::monoFont() const
  * @brief Retrieves the bold UI font.
  * @return The bold UI font.
  */
-const QFont &Misc::CommonFonts::boldUiFont() const
+const QFont& Misc::CommonFonts::boldUiFont() const
 {
   return m_boldUiFont;
 }

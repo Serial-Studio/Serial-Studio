@@ -21,16 +21,15 @@
 
 #pragma once
 
-#include <QVector>
-#include <QQuickItem>
-#include <QLineSeries>
-
 #include <kiss_fft.h>
+
+#include <QLineSeries>
+#include <QQuickItem>
+#include <QVector>
 
 #include "DSP.h"
 
-namespace Widgets
-{
+namespace Widgets {
 /**
  * @class Widgets::FFTPlot
  * @brief Fast Fourier Transform visualization widget for frequency analysis.
@@ -61,8 +60,7 @@ namespace Widgets
  * @note Requires KissFFT library for FFT computation. The FFT size is
  *       automatically determined from the dataset configuration.
  */
-class FFTPlot : public QQuickItem
-{
+class FFTPlot : public QQuickItem {
   Q_OBJECT
   Q_PROPERTY(double minX READ minX CONSTANT)
   Q_PROPERTY(double maxX READ maxX CONSTANT)
@@ -77,11 +75,11 @@ signals:
   void dataSizeChanged();
 
 public:
-  explicit FFTPlot(const int index = -1, QQuickItem *parent = nullptr);
+  explicit FFTPlot(const int index = -1, QQuickItem* parent = nullptr);
+
   ~FFTPlot()
   {
-    if (m_plan)
-    {
+    if (m_plan) {
       kiss_fft_free(m_plan);
       m_plan = nullptr;
     }
@@ -96,7 +94,7 @@ public:
   [[nodiscard]] bool running() const;
 
 public slots:
-  void draw(QLineSeries *series);
+  void draw(QLineSeries* series);
   void setDataW(const int width);
   void setDataH(const int height);
   void setRunning(const bool enabled);
@@ -130,4 +128,4 @@ private:
   std::vector<kiss_fft_cpx> m_samples;
   std::vector<kiss_fft_cpx> m_fftOutput;
 };
-} // namespace Widgets
+}  // namespace Widgets

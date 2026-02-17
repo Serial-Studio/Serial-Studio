@@ -26,10 +26,8 @@
 
 #  include "API/CommandProtocol.h"
 
-namespace API
-{
-namespace Handlers
-{
+namespace API {
+namespace Handlers {
 /**
  * @class ModbusHandler
  * @brief Registers API commands for IO::Drivers::Modbus operations
@@ -58,8 +56,7 @@ namespace Handlers
  * - io.driver.modbus.getRegisterTypeList - Query register type names
  * - io.driver.modbus.getRegisterGroups - Query register groups
  */
-class ModbusHandler
-{
+class ModbusHandler {
 public:
   /**
    * @brief Register all Modbus commands with the CommandRegistry
@@ -68,53 +65,33 @@ public:
 
 private:
   // Mutation commands
-  static CommandResponse setProtocolIndex(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse setSlaveAddress(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse setPollInterval(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse setHost(const QString &id, const QJsonObject &params);
-  static CommandResponse setPort(const QString &id, const QJsonObject &params);
-  static CommandResponse setSerialPortIndex(const QString &id,
-                                            const QJsonObject &params);
-  static CommandResponse setBaudRate(const QString &id,
-                                     const QJsonObject &params);
-  static CommandResponse setParityIndex(const QString &id,
-                                        const QJsonObject &params);
-  static CommandResponse setDataBitsIndex(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse setStopBitsIndex(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse addRegisterGroup(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse removeRegisterGroup(const QString &id,
-                                             const QJsonObject &params);
-  static CommandResponse clearRegisterGroups(const QString &id,
-                                             const QJsonObject &params);
+  static CommandResponse setProtocolIndex(const QString& id, const QJsonObject& params);
+  static CommandResponse setSlaveAddress(const QString& id, const QJsonObject& params);
+  static CommandResponse setPollInterval(const QString& id, const QJsonObject& params);
+  static CommandResponse setHost(const QString& id, const QJsonObject& params);
+  static CommandResponse setPort(const QString& id, const QJsonObject& params);
+  static CommandResponse setSerialPortIndex(const QString& id, const QJsonObject& params);
+  static CommandResponse setBaudRate(const QString& id, const QJsonObject& params);
+  static CommandResponse setParityIndex(const QString& id, const QJsonObject& params);
+  static CommandResponse setDataBitsIndex(const QString& id, const QJsonObject& params);
+  static CommandResponse setStopBitsIndex(const QString& id, const QJsonObject& params);
+  static CommandResponse addRegisterGroup(const QString& id, const QJsonObject& params);
+  static CommandResponse removeRegisterGroup(const QString& id, const QJsonObject& params);
+  static CommandResponse clearRegisterGroups(const QString& id, const QJsonObject& params);
 
   // Query commands
-  static CommandResponse getConfiguration(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse getProtocolList(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse getSerialPortList(const QString &id,
-                                           const QJsonObject &params);
-  static CommandResponse getParityList(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse getDataBitsList(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse getStopBitsList(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse getBaudRateList(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse getRegisterTypeList(const QString &id,
-                                             const QJsonObject &params);
-  static CommandResponse getRegisterGroups(const QString &id,
-                                           const QJsonObject &params);
+  static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);
+  static CommandResponse getProtocolList(const QString& id, const QJsonObject& params);
+  static CommandResponse getSerialPortList(const QString& id, const QJsonObject& params);
+  static CommandResponse getParityList(const QString& id, const QJsonObject& params);
+  static CommandResponse getDataBitsList(const QString& id, const QJsonObject& params);
+  static CommandResponse getStopBitsList(const QString& id, const QJsonObject& params);
+  static CommandResponse getBaudRateList(const QString& id, const QJsonObject& params);
+  static CommandResponse getRegisterTypeList(const QString& id, const QJsonObject& params);
+  static CommandResponse getRegisterGroups(const QString& id, const QJsonObject& params);
 };
 
-} // namespace Handlers
-} // namespace API
+}  // namespace Handlers
+}  // namespace API
 
-#endif // BUILD_COMMERCIAL
+#endif  // BUILD_COMMERCIAL

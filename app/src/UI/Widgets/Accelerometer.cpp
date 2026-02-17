@@ -19,16 +19,17 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "UI/Widgets/Accelerometer.h"
+
 #include "DSP.h"
 #include "UI/Dashboard.h"
-#include "UI/Widgets/Accelerometer.h"
 
 /**
  * @brief Constructs an Accelerometer widget.
  * @param index The index of the accelerometer in the Dashboard.
  * @param parent The parent QQuickItem (optional).
  */
-Widgets::Accelerometer::Accelerometer(const int index, QQuickItem *parent)
+Widgets::Accelerometer::Accelerometer(const int index, QQuickItem* parent)
   : QQuickItem(parent)
   , m_index(index)
   , m_x(0)
@@ -45,8 +46,7 @@ Widgets::Accelerometer::Accelerometer(const int index, QQuickItem *parent)
   , m_filterInitialized(false)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardAccelerometer, m_index))
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-            &Accelerometer::updateData);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Accelerometer::updateData);
 }
 
 /**
@@ -168,15 +168,14 @@ void Widgets::Accelerometer::updateData()
   if (!VALIDATE_WIDGET(SerialStudio::DashboardAccelerometer, m_index))
     return;
 
-  const auto &acc = GET_GROUP(SerialStudio::DashboardAccelerometer, m_index);
+  const auto& acc = GET_GROUP(SerialStudio::DashboardAccelerometer, m_index);
   if (acc.datasets.size() != 3)
     return;
 
   // Read raw axis values
   double rawX = 0, rawY = 0, rawZ = 0;
-  for (int i = 0; i < 3; ++i)
-  {
-    const auto &dataset = acc.datasets[i];
+  for (int i = 0; i < 3; ++i) {
+    const auto& dataset = acc.datasets[i];
     if (dataset.widget == QStringLiteral("x"))
       rawX = dataset.numericValue;
     else if (dataset.widget == QStringLiteral("y"))
@@ -187,12 +186,12 @@ void Widgets::Accelerometer::updateData()
 
   // Convert to G-force
   const double factor = m_inputInG ? 1.0 : (1.0 / 9.81);
-  const double gx = rawX * factor;
-  const double gy = rawY * factor;
-  const double gz = rawZ * factor;
+  const double gx     = rawX * factor;
+  const double gy     = rawY * factor;
+  const double gz     = rawZ * factor;
 
   // 2D polar (X-Y plane)
-  const double mag = qSqrt(gx * gx + gy * gy);
+  const double mag   = qSqrt(gx * gx + gy * gy);
   const double theta = qAtan2(gy, gx) * (180.0 / M_PI);
 
   // 3D total G-force
@@ -200,42 +199,39 @@ void Widgets::Accelerometer::updateData()
 
   // Tilt angles
   const double pitchVal = qAtan2(gx, qSqrt(gy * gy + gz * gz)) * (180.0 / M_PI);
-  const double rollVal = qAtan2(gy, qSqrt(gx * gx + gz * gz)) * (180.0 / M_PI);
+  const double rollVal  = qAtan2(gy, qSqrt(gx * gx + gz * gz)) * (180.0 / M_PI);
 
   // Store previous filtered values for change detection
-  const double prevX = m_x;
-  const double prevY = m_y;
-  const double prevZ = m_z;
-  const double prevG = m_g;
-  const double prevMag = m_magnitude;
+  const double prevX     = m_x;
+  const double prevY     = m_y;
+  const double prevZ     = m_z;
+  const double prevG     = m_g;
+  const double prevMag   = m_magnitude;
   const double prevTheta = m_theta;
   const double prevPitch = m_pitch;
-  const double prevRoll = m_roll;
-  const double prevPeak = m_peakG;
+  const double prevRoll  = m_roll;
+  const double prevPeak  = m_peakG;
 
   // Apply EMA filter for smooth display
   constexpr double kAlpha = 0.4;
-  if (!m_filterInitialized)
-  {
-    m_x = gx;
-    m_y = gy;
-    m_z = gz;
-    m_g = totalG;
-    m_magnitude = mag;
-    m_theta = theta;
-    m_pitch = pitchVal;
-    m_roll = rollVal;
+  if (!m_filterInitialized) {
+    m_x                 = gx;
+    m_y                 = gy;
+    m_z                 = gz;
+    m_g                 = totalG;
+    m_magnitude         = mag;
+    m_theta             = theta;
+    m_pitch             = pitchVal;
+    m_roll              = rollVal;
     m_filterInitialized = true;
-  }
-  else
-  {
+  } else {
     m_x += kAlpha * (gx - m_x);
     m_y += kAlpha * (gy - m_y);
     m_z += kAlpha * (gz - m_z);
     m_g += kAlpha * (totalG - m_g);
-    m_magnitude += kAlpha * (mag - m_magnitude);
-    m_pitch += kAlpha * (pitchVal - m_pitch);
     m_roll += kAlpha * (rollVal - m_roll);
+    m_pitch += kAlpha * (pitchVal - m_pitch);
+    m_magnitude += kAlpha * (mag - m_magnitude);
 
     // Angle-aware EMA for theta (handles wrapping at +/-180)
     double thetaDelta = theta - m_theta;
@@ -251,12 +247,10 @@ void Widgets::Accelerometer::updateData()
 
   // Check for changes
   const bool changed = DSP::notEqual(m_x, prevX) || DSP::notEqual(m_y, prevY)
-                       || DSP::notEqual(m_z, prevZ) || DSP::notEqual(m_g, prevG)
-                       || DSP::notEqual(m_magnitude, prevMag)
-                       || DSP::notEqual(m_theta, prevTheta)
-                       || DSP::notEqual(m_pitch, prevPitch)
-                       || DSP::notEqual(m_roll, prevRoll)
-                       || DSP::notEqual(m_peakG, prevPeak);
+                    || DSP::notEqual(m_z, prevZ) || DSP::notEqual(m_g, prevG)
+                    || DSP::notEqual(m_magnitude, prevMag) || DSP::notEqual(m_theta, prevTheta)
+                    || DSP::notEqual(m_pitch, prevPitch) || DSP::notEqual(m_roll, prevRoll)
+                    || DSP::notEqual(m_peakG, prevPeak);
 
   if (changed)
     Q_EMIT updated();
@@ -270,8 +264,7 @@ void Widgets::Accelerometer::updateData()
 void Widgets::Accelerometer::setMaxG(const double maxG)
 {
   const double clamped = qMax(0.5, maxG);
-  if (DSP::notEqual(clamped, m_maxG))
-  {
+  if (DSP::notEqual(clamped, m_maxG)) {
     m_maxG = clamped;
     Q_EMIT configChanged();
   }
@@ -287,10 +280,9 @@ void Widgets::Accelerometer::setMaxG(const double maxG)
  */
 void Widgets::Accelerometer::setInputInG(const bool enabled)
 {
-  if (m_inputInG != enabled)
-  {
-    m_inputInG = enabled;
-    m_peakG = 0;
+  if (m_inputInG != enabled) {
+    m_inputInG          = enabled;
+    m_peakG             = 0;
     m_filterInitialized = false;
     Q_EMIT configChanged();
     Q_EMIT updated();

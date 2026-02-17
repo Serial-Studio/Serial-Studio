@@ -26,10 +26,8 @@
 
 #  include "API/CommandProtocol.h"
 
-namespace API
-{
-namespace Handlers
-{
+namespace API {
+namespace Handlers {
 /**
  * @class CANBusHandler
  * @brief Registers API commands for IO::Drivers::CANBus operations
@@ -45,8 +43,7 @@ namespace Handlers
  * - io.driver.canbus.getBitrateList - Query supported bitrates
  * - io.driver.canbus.getInterfaceError - Query interface error message
  */
-class CANBusHandler
-{
+class CANBusHandler {
 public:
   /**
    * @brief Register all CANBus commands with the CommandRegistry
@@ -55,28 +52,20 @@ public:
 
 private:
   // Mutation commands
-  static CommandResponse setPluginIndex(const QString &id,
-                                        const QJsonObject &params);
-  static CommandResponse setInterfaceIndex(const QString &id,
-                                           const QJsonObject &params);
-  static CommandResponse setBitrate(const QString &id,
-                                    const QJsonObject &params);
-  static CommandResponse setCanFD(const QString &id, const QJsonObject &params);
+  static CommandResponse setPluginIndex(const QString& id, const QJsonObject& params);
+  static CommandResponse setInterfaceIndex(const QString& id, const QJsonObject& params);
+  static CommandResponse setBitrate(const QString& id, const QJsonObject& params);
+  static CommandResponse setCanFD(const QString& id, const QJsonObject& params);
 
   // Query commands
-  static CommandResponse getConfiguration(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse getPluginList(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse getInterfaceList(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse getBitrateList(const QString &id,
-                                        const QJsonObject &params);
-  static CommandResponse getInterfaceError(const QString &id,
-                                           const QJsonObject &params);
+  static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);
+  static CommandResponse getPluginList(const QString& id, const QJsonObject& params);
+  static CommandResponse getInterfaceList(const QString& id, const QJsonObject& params);
+  static CommandResponse getBitrateList(const QString& id, const QJsonObject& params);
+  static CommandResponse getInterfaceError(const QString& id, const QJsonObject& params);
 };
 
-} // namespace Handlers
-} // namespace API
+}  // namespace Handlers
+}  // namespace API
 
-#endif // BUILD_COMMERCIAL
+#endif  // BUILD_COMMERCIAL

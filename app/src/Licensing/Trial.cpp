@@ -21,16 +21,17 @@
  */
 
 #include "Trial.h"
-#include "MachineID.h"
-#include "LemonSqueezy.h"
-#include "Misc/Utilities.h"
 
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QUrl>
 #include <QUrlQuery>
-#include <QJsonDocument>
-#include <QNetworkReply>
-#include <QJsonParseError>
-#include <QNetworkRequest>
+
+#include "LemonSqueezy.h"
+#include "MachineID.h"
+#include "Misc/Utilities.h"
 
 /**
  * @brief Constructs the Trial licensing system.
@@ -40,21 +41,20 @@
  * enabled, it automatically revalidates it with the backend server.
  */
 Licensing::Trial::Trial()
-  : m_trialEnabled(false)
-  , m_deviceRegistered(false)
-  , m_trialExpiry(QDateTime::currentDateTimeUtc())
+  : m_trialEnabled(false), m_deviceRegistered(false), m_trialExpiry(QDateTime::currentDateTimeUtc())
 {
   // Sync-activation dependent modules to trial module
-  connect(this, &Licensing::Trial::enabledChanged,
+  connect(this,
+          &Licensing::Trial::enabledChanged,
           &Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged);
   connect(&Licensing::LemonSqueezy::instance(),
-          &Licensing::LemonSqueezy::activatedChanged, this,
+          &Licensing::LemonSqueezy::activatedChanged,
+          this,
           &Licensing::Trial::availableChanged);
 
   // Read server responses
-  connect(&m_manager, &QNetworkAccessManager::finished, this,
-          &Licensing::Trial::onServerReply);
+  connect(&m_manager, &QNetworkAccessManager::finished, this, &Licensing::Trial::onServerReply);
 
   // Configure data encryption
   m_crypt.setKey(MachineID::instance().machineSpecificKey());
@@ -69,7 +69,7 @@ Licensing::Trial::Trial()
  * @brief Gets the singleton instance of the Trial licensing class.
  * @return Reference to the static Trial instance.
  */
-Licensing::Trial &Licensing::Trial::instance()
+Licensing::Trial& Licensing::Trial::instance()
 {
   static Trial instance;
   return instance;
@@ -101,8 +101,7 @@ bool Licensing::Trial::firstRun() const
  */
 bool Licensing::Trial::trialEnabled() const
 {
-  return m_deviceRegistered && m_trialEnabled && trialAvailable()
-         && daysRemaining() > 0;
+  return m_deviceRegistered && m_trialEnabled && trialAvailable() && daysRemaining() > 0;
 }
 
 /**
@@ -111,8 +110,7 @@ bool Licensing::Trial::trialEnabled() const
  */
 bool Licensing::Trial::trialExpired() const
 {
-  return m_deviceRegistered && trialAvailable()
-         && (!m_trialEnabled || daysRemaining() <= 0);
+  return m_deviceRegistered && trialAvailable() && (!m_trialEnabled || daysRemaining() <= 0);
 }
 
 /**
@@ -158,7 +156,7 @@ void Licensing::Trial::enableTrial()
 void Licensing::Trial::readSettings()
 {
   m_trialEnabled = false;
-  m_trialExpiry = QDateTime::currentDateTimeUtc();
+  m_trialExpiry  = QDateTime::currentDateTimeUtc();
 
   m_settings.beginGroup("trial");
   auto expStr = m_crypt.decryptToString(m_settings.value("expiry").toString());
@@ -166,19 +164,18 @@ void Licensing::Trial::readSettings()
   auto regStr = m_crypt.decryptToString(m_settings.value("registd").toString());
   m_settings.endGroup();
 
-  if (!expStr.isEmpty())
-  {
+  if (!expStr.isEmpty()) {
     QDateTime expiry = QDateTime::fromString(expStr, Qt::ISODate).toUTC();
     if (expiry.isValid())
       m_trialExpiry = expiry;
   }
 
-  const bool enabledStored = (enaStr == "true");
+  const bool enabledStored    = (enaStr == "true");
   const bool registeredStored = (regStr == "true");
-  const bool notExpired = QDateTime::currentDateTimeUtc() <= m_trialExpiry;
+  const bool notExpired       = QDateTime::currentDateTimeUtc() <= m_trialExpiry;
 
   m_deviceRegistered = registeredStored;
-  m_trialEnabled = enabledStored && notExpired && registeredStored;
+  m_trialEnabled     = enabledStored && notExpired && registeredStored;
 
   if (trialAvailable() && m_deviceRegistered)
     fetchTrialState();
@@ -221,13 +218,13 @@ void Licensing::Trial::fetchTrialState()
 
   // Generate timestamp and nonce
   qint64 timestamp = QDateTime::currentSecsSinceEpoch();
-  QString nonce = QUuid::createUuid().toString(QUuid::WithoutBraces);
+  QString nonce    = QUuid::createUuid().toString(QUuid::WithoutBraces);
 
   // Create JSON payload
   QJsonObject payload;
   payload["machine_id"] = MachineID::instance().appVerMachineId();
-  payload["timestamp"] = QString::number(timestamp);
-  payload["nonce"] = nonce;
+  payload["timestamp"]  = QString::number(timestamp);
+  payload["nonce"]      = nonce;
 
   // Convert JSON to string
   auto payloadData = QJsonDocument(payload).toJson(QJsonDocument::Compact);
@@ -259,17 +256,17 @@ void Licensing::Trial::fetchTrialState()
  *
  * @param reply The network reply object containing the server's response.
  */
-void Licensing::Trial::onServerReply(QNetworkReply *reply)
+void Licensing::Trial::onServerReply(QNetworkReply* reply)
 {
   // Unset busy flag
   m_busy = false;
   Q_EMIT busyChanged();
 
   // Check for network error
-  if (reply->error() != QNetworkReply::NoError)
-  {
+  if (reply->error() != QNetworkReply::NoError) {
     Misc::Utilities::showMessageBox(QObject::tr("Network error"),
-                                    reply->errorString(), QMessageBox::Critical,
+                                    reply->errorString(),
+                                    QMessageBox::Critical,
                                     QObject::tr("Trial Activation Error"));
     reply->deleteLater();
     Q_EMIT enabledChanged();
@@ -283,51 +280,48 @@ void Licensing::Trial::onServerReply(QNetworkReply *reply)
   // Attempt to parse JSON
   QJsonParseError parseError;
   QJsonDocument document = QJsonDocument::fromJson(data, &parseError);
-  if (parseError.error != QJsonParseError::NoError || !document.isObject())
-  {
+  if (parseError.error != QJsonParseError::NoError || !document.isObject()) {
     Misc::Utilities::showMessageBox(
-        QObject::tr("Invalid server response"),
-        QObject::tr("The server returned malformed data: %1")
-            .arg(parseError.errorString()),
-        QMessageBox::Warning, QObject::tr("Trial Activation Error"));
+      QObject::tr("Invalid server response"),
+      QObject::tr("The server returned malformed data: %1").arg(parseError.errorString()),
+      QMessageBox::Warning,
+      QObject::tr("Trial Activation Error"));
     Q_EMIT enabledChanged();
     return;
   }
 
   // Set default state
-  m_trialEnabled = false;
+  m_trialEnabled     = false;
   m_deviceRegistered = false;
-  m_trialExpiry = QDateTime::currentDateTimeUtc();
+  m_trialExpiry      = QDateTime::currentDateTimeUtc();
 
   // Parse keys
-  const auto object = document.object();
-  const auto expiryVal = object.value("expireAt");
-  const auto enabledVal = object.value("trialEnabled");
+  const auto object           = document.object();
+  const auto expiryVal        = object.value("expireAt");
+  const auto enabledVal       = object.value("trialEnabled");
   const auto deviceRegistered = object.value("registered");
-  if (expiryVal.isString() && enabledVal.isBool() && deviceRegistered.isBool())
-  {
-    // Accept only valid and reasonable expiry timestamps
+
+  // Accept only valid and reasonable expiry timestamps
+  if (expiryVal.isString() && enabledVal.isBool() && deviceRegistered.isBool()) {
     const QString expiryStr = expiryVal.toString();
-    QDateTime expiry = QDateTime::fromString(expiryStr, Qt::ISODate).toUTC();
-    if (expiry.isValid())
-    {
+    QDateTime expiry        = QDateTime::fromString(expiryStr, Qt::ISODate).toUTC();
+    if (expiry.isValid()) {
       const QDateTime now = QDateTime::currentDateTimeUtc();
       if (expiry > now.addDays(14))
         expiry = now.addDays(14);
 
-      m_trialExpiry = expiry;
-      m_trialEnabled = enabledVal.toBool() && (expiry > now);
+      m_trialExpiry      = expiry;
+      m_trialEnabled     = enabledVal.toBool() && (expiry > now);
       m_deviceRegistered = deviceRegistered.toBool();
     }
   }
 
   // Unexpected response
-  else
-  {
-    Misc::Utilities::showMessageBox(
-        QObject::tr("Unexpected server response"),
-        QObject::tr("The server response is missing required fields."),
-        QMessageBox::Warning, QObject::tr("Trial Activation Error"));
+  else {
+    Misc::Utilities::showMessageBox(QObject::tr("Unexpected server response"),
+                                    QObject::tr("The server response is missing required fields."),
+                                    QMessageBox::Warning,
+                                    QObject::tr("Trial Activation Error"));
   }
 
   // Save updated state and emit signal

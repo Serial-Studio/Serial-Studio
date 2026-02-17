@@ -19,19 +19,20 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include <QFile>
+#include "Console/Handler.h"
+
+#include <QApplication>
 #include <QDateTime>
+#include <QFile>
+#include <QFontDatabase>
 #include <QFontInfo>
 #include <QFontMetrics>
-#include <QApplication>
-#include <QFontDatabase>
 
-#include "IO/Manager.h"
 #include "IO/Checksum.h"
-#include "SerialStudio.h"
-#include "Console/Handler.h"
-#include "Misc/Translator.h"
+#include "IO/Manager.h"
 #include "Misc/CommonFonts.h"
+#include "Misc/Translator.h"
+#include "SerialStudio.h"
 
 /**
  * Constructor function
@@ -52,10 +53,8 @@ Console::Handler::Handler()
   clear();
 
   const auto defaultFont = Misc::CommonFonts::instance().monoFont();
-  m_fontFamily
-      = m_settings.value("Console/FontFamily", defaultFont.family()).toString();
-  m_fontSize
-      = m_settings.value("Console/FontSize", defaultFont.pointSize()).toInt();
+  m_fontFamily           = m_settings.value("Console/FontFamily", defaultFont.family()).toString();
+  m_fontSize             = m_settings.value("Console/FontSize", defaultFont.pointSize()).toInt();
 
   if (m_fontSize < 6)
     m_fontSize = 6;
@@ -68,7 +67,7 @@ Console::Handler::Handler()
 /**
  * Returns the only instance of the class
  */
-Console::Handler &Console::Handler::instance()
+Console::Handler& Console::Handler::instance()
 {
   static Handler singleton;
   return singleton;
@@ -212,9 +211,8 @@ QStringList Console::Handler::displayModes() const
 QStringList Console::Handler::checksumMethods() const
 {
   static QStringList list;
-  if (list.isEmpty())
-  {
-    list = IO::availableChecksums();
+  if (list.isEmpty()) {
+    list            = IO::availableChecksums();
     const int index = list.indexOf(QLatin1String(""));
     if (index >= 0)
       list[index] = tr("No Checksum");
@@ -254,10 +252,9 @@ QStringList Console::Handler::availableFonts() const
 {
   QStringList monospaceFonts;
   const auto allFonts = QFontDatabase::families();
-  auto defaultFamily = Misc::CommonFonts::instance().monoFont().family();
+  auto defaultFamily  = Misc::CommonFonts::instance().monoFont().family();
 
-  for (const auto &family : allFonts)
-  {
+  for (const auto& family : allFonts) {
     QFontInfo fontInfo(family);
     if (fontInfo.fixedPitch() && !monospaceFonts.contains(family))
       monospaceFonts.append(family);
@@ -304,7 +301,7 @@ qsizetype Console::Handler::bufferLength() const
  * and consists of complete byte pairs (even-length string).
  * Returns true if the input is valid, otherwise false.
  */
-bool Console::Handler::validateUserHex(const QString &text)
+bool Console::Handler::validateUserHex(const QString& text)
 {
   // Remove spaces to check the actual HEX content
   QString cleanText = text.simplified().remove(' ');
@@ -325,7 +322,7 @@ bool Console::Handler::validateUserHex(const QString &text)
  * Validates the given @a text and adds space to display the text in a
  * byte-oriented view
  */
-QString Console::Handler::formatUserHex(const QString &text)
+QString Console::Handler::formatUserHex(const QString& text)
 {
   // Remove spaces and ensure the input is a valid HEX string
   static QRegularExpression exp("[^0-9A-Fa-f]");
@@ -333,8 +330,7 @@ QString Console::Handler::formatUserHex(const QString &text)
 
   // Convert to hex string with spaces between bytes
   QString str;
-  for (int i = 0; i < data.length(); ++i)
-  {
+  for (int i = 0; i < data.length(); ++i) {
     str.append(data.at(i));
     if ((i + 1) % 2 == 0 && i > 0)
       str.append(" ");
@@ -355,7 +351,7 @@ void Console::Handler::clear()
 {
   m_textBuffer.clear();
   m_isStartingLine = true;
-  m_lastCharWasCR = false;
+  m_lastCharWasCR  = false;
   Q_EMIT cleared();
 }
 
@@ -368,8 +364,7 @@ void Console::Handler::clear()
  */
 void Console::Handler::historyUp()
 {
-  if (m_historyItem > 0)
-  {
+  if (m_historyItem > 0) {
     --m_historyItem;
     Q_EMIT historyItemChanged();
   }
@@ -384,8 +379,7 @@ void Console::Handler::historyUp()
  */
 void Console::Handler::historyDown()
 {
-  if (m_historyItem < m_historyItems.count() - 1)
-  {
+  if (m_historyItem < m_historyItems.count() - 1) {
     ++m_historyItem;
     Q_EMIT historyItemChanged();
   }
@@ -397,8 +391,10 @@ void Console::Handler::historyDown()
  */
 void Console::Handler::setupExternalConnections()
 {
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &Console::Handler::languageChanged);
+  connect(&Misc::Translator::instance(),
+          &Misc::Translator::languageChanged,
+          this,
+          &Console::Handler::languageChanged);
 }
 
 /**
@@ -408,7 +404,7 @@ void Console::Handler::setupExternalConnections()
  * @note @c data is added to the history of sent commands, regardless if the
  * data writing was successfull or not.
  */
-void Console::Handler::send(const QString &data)
+void Console::Handler::send(const QString& data)
 {
   // Check conditions
   if (!IO::Manager::instance().isConnected())
@@ -426,8 +422,7 @@ void Console::Handler::send(const QString &data)
     bin = SerialStudio::resolveEscapeSequences(data).toUtf8();
 
   // Add EOL character
-  switch (lineEnding())
-  {
+  switch (lineEnding()) {
     case LineEnding::NoLineEnding:
       break;
     case LineEnding::NewLine:
@@ -444,7 +439,7 @@ void Console::Handler::send(const QString &data)
 
   // Add checksum
   const auto checksumName = IO::availableChecksums().at(m_checksumMethod);
-  auto checksum = IO::checksum(checksumName, bin);
+  auto checksum           = IO::checksum(checksumName, bin);
   if (!checksum.isEmpty())
     bin.append(checksum);
 
@@ -458,8 +453,7 @@ void Console::Handler::send(const QString &data)
  */
 void Console::Handler::setShowTimestamp(const bool enabled)
 {
-  if (showTimestamp() != enabled)
-  {
+  if (showTimestamp() != enabled) {
     m_showTimestamp = enabled;
     Q_EMIT showTimestampChanged();
   }
@@ -470,8 +464,7 @@ void Console::Handler::setShowTimestamp(const bool enabled)
  */
 void Console::Handler::setAnsiColorsEnabled(const bool enabled)
 {
-  if (ansiColorsEnabled() != enabled)
-  {
+  if (ansiColorsEnabled() != enabled) {
     m_ansiColorsEnabled = enabled;
     Q_EMIT ansiColorsEnabledChanged();
   }
@@ -482,8 +475,7 @@ void Console::Handler::setAnsiColorsEnabled(const bool enabled)
  */
 void Console::Handler::setEcho(const bool enabled)
 {
-  if (echo() != enabled)
-  {
+  if (echo() != enabled) {
     m_echo = enabled;
     Q_EMIT echoChanged();
   }
@@ -495,8 +487,7 @@ void Console::Handler::setEcho(const bool enabled)
 void Console::Handler::setFontSize(const int size)
 {
   const int constrainedSize = qBound(6, size, 72);
-  if (m_fontSize != constrainedSize)
-  {
+  if (m_fontSize != constrainedSize) {
     m_fontSize = constrainedSize;
     m_settings.setValue("Console/FontSize", m_fontSize);
     updateFont();
@@ -514,9 +505,7 @@ void Console::Handler::setFontSize(const int size)
  */
 void Console::Handler::setChecksumMethod(const int method)
 {
-  if (checksumMethod() != method && method >= 0
-      && method < IO::availableChecksums().count())
-  {
+  if (checksumMethod() != method && method >= 0 && method < IO::availableChecksums().count()) {
     m_checksumMethod = method;
     Q_EMIT checksumMethodChanged();
   }
@@ -525,10 +514,9 @@ void Console::Handler::setChecksumMethod(const int method)
 /**
  * Sets the console font family
  */
-void Console::Handler::setFontFamily(const QString &family)
+void Console::Handler::setFontFamily(const QString& family)
 {
-  if (m_fontFamily != family)
-  {
+  if (m_fontFamily != family) {
     QFont testFont(family);
     QFontInfo fontInfo(testFont);
     if (!fontInfo.fixedPitch())
@@ -545,7 +533,7 @@ void Console::Handler::setFontFamily(const QString &family)
  * Changes the data mode for user commands. See @c dataMode() for more
  * information.
  */
-void Console::Handler::setDataMode(const Console::Handler::DataMode &mode)
+void Console::Handler::setDataMode(const Console::Handler::DataMode& mode)
 {
   m_dataMode = mode;
   Q_EMIT dataModeChanged();
@@ -555,7 +543,7 @@ void Console::Handler::setDataMode(const Console::Handler::DataMode &mode)
  * Changes line ending mode for sent user commands. See @c lineEnding() for more
  * information.
  */
-void Console::Handler::setLineEnding(const Console::Handler::LineEnding &mode)
+void Console::Handler::setLineEnding(const Console::Handler::LineEnding& mode)
 {
   m_lineEnding = mode;
   Q_EMIT lineEndingChanged();
@@ -565,7 +553,7 @@ void Console::Handler::setLineEnding(const Console::Handler::LineEnding &mode)
  * Changes the display mode of the console. See @c displayMode() for more
  * information.
  */
-void Console::Handler::setDisplayMode(const Console::Handler::DisplayMode &mode)
+void Console::Handler::setDisplayMode(const Console::Handler::DisplayMode& mode)
 {
   m_displayMode = mode;
   Q_EMIT displayModeChanged();
@@ -575,7 +563,7 @@ void Console::Handler::setDisplayMode(const Console::Handler::DisplayMode &mode)
  * Inserts the given @a string into the list of lines of the console, if @a
  * addTimestamp is set to @c true, an timestamp is added for each line.
  */
-void Console::Handler::append(const QString &string, const bool addTimestamp)
+void Console::Handler::append(const QString& string, const bool addTimestamp)
 {
   // Abort on empty strings
   if (string.isEmpty())
@@ -595,20 +583,15 @@ void Console::Handler::append(const QString &string, const bool addTimestamp)
 
   // Get timestamp with optional ANSI color codes
   QString timestamp;
-  if (addTimestamp)
-  {
-    QDateTime dateTime = QDateTime::currentDateTime();
-    const QString timeStr
-        = dateTime.toString(QStringLiteral("HH:mm:ss.zzz -> "));
+  if (addTimestamp) {
+    QDateTime dateTime    = QDateTime::currentDateTime();
+    const QString timeStr = dateTime.toString(QStringLiteral("HH:mm:ss.zzz -> "));
 
-    if (ansiColorsEnabled())
-    {
-      const QString ansiCyan = QStringLiteral("\033[36m");
+    if (ansiColorsEnabled()) {
+      const QString ansiCyan  = QStringLiteral("\033[36m");
       const QString ansiReset = QStringLiteral("\033[0m");
-      timestamp = QStringLiteral("%1%2%3").arg(ansiCyan, timeStr, ansiReset);
-    }
-    else
-    {
+      timestamp               = QStringLiteral("%1%2%3").arg(ansiCyan, timeStr, ansiReset);
+    } else {
       timestamp = timeStr;
     }
   }
@@ -621,9 +604,7 @@ void Console::Handler::append(const QString &string, const bool addTimestamp)
   QStringList tokens;
   QString currentToken;
   for (int i = 0; i < data.length(); ++i)
-  {
-    if (data.at(i) == '\n')
-    {
+    if (data.at(i) == '\n') {
       tokens.append(currentToken);
       tokens.append(QStringLiteral("\n"));
       currentToken.clear();
@@ -631,15 +612,13 @@ void Console::Handler::append(const QString &string, const bool addTimestamp)
 
     else
       currentToken += data.at(i);
-  }
 
   // Add last item to list
   if (!currentToken.isEmpty())
     tokens.append(currentToken);
 
   // Process lines
-  while (!tokens.isEmpty())
-  {
+  while (!tokens.isEmpty()) {
     auto token = tokens.first();
     if (m_isStartingLine && !token.simplified().isEmpty())
       processedString.append(timestamp);
@@ -659,7 +638,7 @@ void Console::Handler::append(const QString &string, const bool addTimestamp)
 /**
  * Displays the given @a data in the console without Hex formatting
  */
-void Console::Handler::displayDebugData(const QString &data)
+void Console::Handler::displayDebugData(const QString& data)
 {
   append(data, showTimestamp());
 }
@@ -667,7 +646,7 @@ void Console::Handler::displayDebugData(const QString &data)
 /**
  * Displays the given @a data in the console
  */
-void Console::Handler::hotpathRxData(const IO::ByteArrayPtr &data)
+void Console::Handler::hotpathRxData(const IO::ByteArrayPtr& data)
 {
   append(dataToString(*data), showTimestamp());
 }
@@ -691,11 +670,10 @@ void Console::Handler::updateFont()
   QFont testFont(m_fontFamily, m_fontSize);
   QFontInfo fontInfo(testFont);
 
-  if (!fontInfo.fixedPitch())
-  {
+  if (!fontInfo.fixedPitch()) {
     const auto defaultFont = Misc::CommonFonts::instance().monoFont();
-    m_fontFamily = defaultFont.family();
-    m_fontSize = defaultFont.pointSize();
+    m_fontFamily           = defaultFont.family();
+    m_fontSize             = defaultFont.pointSize();
     m_settings.setValue("Console/FontFamily", m_fontFamily);
     m_settings.setValue("Console/FontSize", m_fontSize);
     testFont = defaultFont;
@@ -709,7 +687,7 @@ void Console::Handler::updateFont()
 /**
  * Registers the given @a command to the list of sent commands.
  */
-void Console::Handler::addToHistory(const QString &command)
+void Console::Handler::addToHistory(const QString& command)
 {
   // Remove old commands from history
   while (m_historyItems.count() > 100)
@@ -727,8 +705,7 @@ void Console::Handler::addToHistory(const QString &command)
  */
 QString Console::Handler::dataToString(QByteArrayView data)
 {
-  switch (displayMode())
-  {
+  switch (displayMode()) {
     case DisplayMode::DisplayPlainText:
       return plainTextStr(data);
       break;
@@ -757,9 +734,8 @@ QString Console::Handler::plainTextStr(QByteArrayView data)
   QString filteredData;
   filteredData.reserve(utf8Data.size());
 
-  for (int i = 0; i < utf8Data.size(); ++i)
-  {
-    const QChar ch = utf8Data[i];
+  for (int i = 0; i < utf8Data.size(); ++i) {
+    const QChar ch       = utf8Data[i];
     const ushort unicode = ch.unicode();
 
     // clang-format off
@@ -788,19 +764,16 @@ QString Console::Handler::hexadecimalStr(QByteArrayView data)
   constexpr auto rowSize = 16;
 
   // Print hexadecimal row by row
-  for (int i = 0; i < data.length(); i += rowSize)
-  {
+  for (int i = 0; i < data.length(); i += rowSize) {
     // Add offset to output
     out += QStringLiteral("%1 | ").arg(i, 6, 16, QLatin1Char('0'));
 
     // Print hexadecimal bytes
-    for (int j = 0; j < rowSize; ++j)
-    {
+    for (int j = 0; j < rowSize; ++j) {
       // Print existing data
-      if (i + j < data.length())
-      {
+      if (i + j < data.length()) {
         out += QStringLiteral("%1 ").arg(
-            static_cast<unsigned char>(data[i + j]), 2, 16, QLatin1Char('0'));
+          static_cast<unsigned char>(data[i + j]), 2, 16, QLatin1Char('0'));
       }
 
       // Space out inexistent data
@@ -814,21 +787,17 @@ QString Console::Handler::hexadecimalStr(QByteArrayView data)
 
     // Add ASCII representation
     out += QStringLiteral("| ");
-    for (int j = 0; j < rowSize; ++j)
-    {
-      // Add existing data
-      if (i + j < data.length())
-      {
-        char c = data[i + j];
-        if (std::isprint(static_cast<unsigned char>(c)))
-          out += c;
-        else
-          out += '.';
+    for (int j = 0; j < rowSize; ++j) {
+      if (i + j >= data.length()) {
+        out += ' ';
+        continue;
       }
 
-      // Add space for inexisting data
+      const char c = data[i + j];
+      if (std::isprint(static_cast<unsigned char>(c)))
+        out += c;
       else
-        out += ' ';
+        out += '.';
     }
 
     // Add line break

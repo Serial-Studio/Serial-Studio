@@ -22,15 +22,14 @@
 
 #pragma once
 
-#include <QObject>
 #include <QDateTime>
-#include <QSettings>
 #include <QNetworkAccessManager>
+#include <QObject>
+#include <QSettings>
 
 #include "SimpleCrypt.h"
 
-namespace Licensing
-{
+namespace Licensing {
 /**
  * @class Licensing::Trial
  * @brief Handles activation and validation of a time-limited trial license.
@@ -53,8 +52,7 @@ namespace Licensing
  * - Trigger trial activation via `enableTrial()`
  * - Check trial eligibility via `trialAvailable()`
  */
-class Trial : public QObject
-{
+class Trial : public QObject {
   Q_OBJECT
   Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
   Q_PROPERTY(bool firstRun READ firstRun NOTIFY enabledChanged)
@@ -65,10 +63,10 @@ class Trial : public QObject
 
 private:
   explicit Trial();
-  Trial(Trial &&) = delete;
-  Trial(const Trial &) = delete;
-  Trial &operator=(Trial &&) = delete;
-  Trial &operator=(const Trial &) = delete;
+  Trial(Trial&&)                 = delete;
+  Trial(const Trial&)            = delete;
+  Trial& operator=(Trial&&)      = delete;
+  Trial& operator=(const Trial&) = delete;
 
 signals:
   void busyChanged();
@@ -76,7 +74,7 @@ signals:
   void availableChanged();
 
 public:
-  [[nodiscard]] static Trial &instance();
+  [[nodiscard]] static Trial& instance();
 
   [[nodiscard]] bool busy() const;
   [[nodiscard]] bool firstRun() const;
@@ -93,7 +91,7 @@ public slots:
   void fetchTrialState();
 
 private slots:
-  void onServerReply(QNetworkReply *reply);
+  void onServerReply(QNetworkReply* reply);
 
 private:
   bool m_busy;
@@ -105,4 +103,4 @@ private:
   QDateTime m_trialExpiry;
   QNetworkAccessManager m_manager;
 };
-} // namespace Licensing
+}  // namespace Licensing

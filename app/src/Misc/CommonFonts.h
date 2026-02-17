@@ -24,8 +24,7 @@
 #include <QFont>
 #include <QObject>
 
-namespace Misc
-{
+namespace Misc {
 /**
  * @class Misc::CommonFonts
  * @brief Centralized font management for consistent typography across the
@@ -62,8 +61,7 @@ namespace Misc
  * @note Fonts are loaded once during construction and remain constant for the
  *       application lifetime. Font changes trigger the fontsChanged() signal.
  */
-class CommonFonts : public QObject
-{
+class CommonFonts : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(const QFont& uiFont
@@ -82,17 +80,17 @@ signals:
 
 private:
   explicit CommonFonts();
-  CommonFonts(CommonFonts &&) = delete;
-  CommonFonts(const CommonFonts &) = delete;
-  CommonFonts &operator=(CommonFonts &&) = delete;
-  CommonFonts &operator=(const CommonFonts &) = delete;
+  CommonFonts(CommonFonts&&)                 = delete;
+  CommonFonts(const CommonFonts&)            = delete;
+  CommonFonts& operator=(CommonFonts&&)      = delete;
+  CommonFonts& operator=(const CommonFonts&) = delete;
 
 public:
-  static CommonFonts &instance();
+  static CommonFonts& instance();
 
-  [[nodiscard]] const QFont &uiFont() const;
-  [[nodiscard]] const QFont &monoFont() const;
-  [[nodiscard]] const QFont &boldUiFont() const;
+  [[nodiscard]] const QFont& uiFont() const;
+  [[nodiscard]] const QFont& monoFont() const;
+  [[nodiscard]] const QFont& boldUiFont() const;
 
   Q_INVOKABLE QFont customUiFont(double fraction = 1, bool bold = false);
   Q_INVOKABLE QFont customMonoFont(double fraction = 1, bool bold = false);
@@ -102,4 +100,4 @@ private:
   QFont m_monoFont;
   QFont m_boldUiFont;
 };
-} // namespace Misc
+}  // namespace Misc

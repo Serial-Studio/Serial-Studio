@@ -22,24 +22,21 @@
 #pragma once
 
 #include <map>
-#include <vector>
 #include <memory>
-
-#include <QObject>
-#include <QString>
-#include <QKeyEvent>
 #include <QByteArray>
 #include <QElapsedTimer>
+#include <QKeyEvent>
+#include <QObject>
+#include <QString>
+#include <vector>
 
-namespace mdf
-{
+namespace mdf {
 class MdfReader;
 class IChannel;
 class IChannelGroup;
-} // namespace mdf
+}  // namespace mdf
 
-namespace MDF4
-{
+namespace MDF4 {
 /**
  * @class Player
  * @brief MDF4 file player for Serial Studio
@@ -78,8 +75,7 @@ namespace MDF4
  * @see CSV::Player for similar functionality with CSV files
  * @see IO::Manager for data pipeline integration
  */
-class Player : public QObject
-{
+class Player : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool isOpen
@@ -109,15 +105,15 @@ signals:
 
 private:
   explicit Player();
-  Player(Player &&) = delete;
-  Player(const Player &) = delete;
-  Player &operator=(Player &&) = delete;
-  Player &operator=(const Player &) = delete;
+  Player(Player&&)                 = delete;
+  Player(const Player&)            = delete;
+  Player& operator=(Player&&)      = delete;
+  Player& operator=(const Player&) = delete;
 
   ~Player();
 
 public:
-  static Player &instance();
+  static Player& instance();
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] bool isPlaying() const;
@@ -125,7 +121,7 @@ public:
   [[nodiscard]] double progress() const;
   [[nodiscard]] QString filename() const;
   [[nodiscard]] int framePosition() const;
-  [[nodiscard]] const QString &timestamp() const;
+  [[nodiscard]] const QString& timestamp() const;
 
 public slots:
   void play();
@@ -135,7 +131,7 @@ public slots:
   void closeFile();
   void nextFrame();
   void previousFrame();
-  void openFile(const QString &filePath);
+  void openFile(const QString& filePath);
   void setProgress(const double progress);
 
 private slots:
@@ -150,15 +146,14 @@ private:
   QString formatTimestamp(double timestamp) const;
 
 protected:
-  bool handleKeyPress(QKeyEvent *keyEvent);
-  bool eventFilter(QObject *obj, QEvent *event) override;
+  bool handleKeyPress(QKeyEvent* keyEvent);
+  bool eventFilter(QObject* obj, QEvent* event) override;
 
 private:
-  struct FrameIndex
-  {
+  struct FrameIndex {
     double timestamp;
     uint64_t recordIndex;
-    mdf::IChannelGroup *channelGroup;
+    mdf::IChannelGroup* channelGroup;
   };
 
   int m_framePos;
@@ -168,11 +163,11 @@ private:
   QString m_timestamp;
   double m_startTimestamp;
   QElapsedTimer m_elapsedTimer;
-  mdf::IChannel *m_masterTimeChannel;
+  mdf::IChannel* m_masterTimeChannel;
   std::vector<FrameIndex> m_frameIndex;
-  std::vector<mdf::IChannel *> m_channels;
+  std::vector<mdf::IChannel*> m_channels;
   std::unique_ptr<mdf::MdfReader> m_reader;
   std::map<uint64_t, double> m_timestampCache;
   std::map<uint64_t, std::vector<double>> m_sampleCache;
 };
-} // namespace MDF4
+}  // namespace MDF4

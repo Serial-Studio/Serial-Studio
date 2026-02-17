@@ -28,8 +28,7 @@
 #include "SerialStudio.h"
 #include "UI/WidgetRegistry.h"
 
-namespace UI
-{
+namespace UI {
 /**
  * @class UI::Dashboard
  * @brief Real-time dashboard manager for displaying data-driven widgets.
@@ -48,8 +47,7 @@ namespace UI
  * @note This class is implemented as a singleton and is non-copyable and
  *       non-movable.
  */
-class Dashboard : public QObject
-{
+class Dashboard : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QString title READ title NOTIFY widgetCountChanged)
@@ -81,13 +79,13 @@ signals:
 
 private:
   explicit Dashboard();
-  Dashboard(Dashboard &&) = delete;
-  Dashboard(const Dashboard &) = delete;
-  Dashboard &operator=(Dashboard &&) = delete;
-  Dashboard &operator=(const Dashboard &) = delete;
+  Dashboard(Dashboard&&)                 = delete;
+  Dashboard(const Dashboard&)            = delete;
+  Dashboard& operator=(Dashboard&&)      = delete;
+  Dashboard& operator=(const Dashboard&) = delete;
 
 public:
-  static Dashboard &instance();
+  static Dashboard& instance();
 
   [[nodiscard]] bool available() const;
   [[nodiscard]] bool showActionPanel() const;
@@ -109,9 +107,9 @@ public:
   Q_INVOKABLE SerialStudio::DashboardWidget widgetType(const int widgetIndex);
   Q_INVOKABLE int widgetCount(const SerialStudio::DashboardWidget widget) const;
 
-  [[nodiscard]] const QString &title() const;
+  [[nodiscard]] const QString& title() const;
   [[nodiscard]] QVariantList actions() const;
-  [[nodiscard]] const SerialStudio::WidgetMap &widgetMap() const;
+  [[nodiscard]] const SerialStudio::WidgetMap& widgetMap() const;
 
   // clang-format off
   [[nodiscard]] const QMap<int, DataModel::Dataset> &datasets() const;
@@ -119,16 +117,15 @@ public:
   [[nodiscard]] const DataModel::Dataset &getDatasetWidget(const SerialStudio::DashboardWidget widget, const int index) const;
   // clang-format on
 
-  [[nodiscard]] const DataModel::Frame &rawFrame();
-  [[nodiscard]] const DataModel::Frame &processedFrame();
-  [[nodiscard]] const DSP::AxisData &fftData(const int index) const;
-  [[nodiscard]] const DSP::GpsSeries &gpsSeries(const int index) const;
-  [[nodiscard]] const DSP::LineSeries &plotData(const int index) const;
-  [[nodiscard]] const DSP::MultiLineSeries &
-  multiplotData(const int index) const;
+  [[nodiscard]] const DataModel::Frame& rawFrame();
+  [[nodiscard]] const DataModel::Frame& processedFrame();
+  [[nodiscard]] const DSP::AxisData& fftData(const int index) const;
+  [[nodiscard]] const DSP::GpsSeries& gpsSeries(const int index) const;
+  [[nodiscard]] const DSP::LineSeries& plotData(const int index) const;
+  [[nodiscard]] const DSP::MultiLineSeries& multiplotData(const int index) const;
 
 #ifdef BUILD_COMMERCIAL
-  [[nodiscard]] const DSP::LineSeries3D &plotData3D(const int index) const;
+  [[nodiscard]] const DSP::LineSeries3D& plotData3D(const int index) const;
 #endif
 
   [[nodiscard]] bool plotRunning(const int index);
@@ -149,11 +146,15 @@ public slots:
   void setFFTPlotRunning(const int index, const bool enabled);
   void setMultiplotRunning(const int index, const bool enabled);
 
-  void hotpathRxFrame(const DataModel::Frame &frame);
+  void hotpathRxFrame(const DataModel::Frame& frame);
 
 private:
-  void updateDashboardData(const DataModel::Frame &frame);
-  void reconfigureDashboard(const DataModel::Frame &frame);
+  void updateDashboardData(const DataModel::Frame& frame);
+  void reconfigureDashboard(const DataModel::Frame& frame);
+  void processDatasetIntoWidgetMaps(const DataModel::Dataset& dataset, DataModel::Group& ledPanel);
+  void removeTerminalWidget();
+  void handleMissingDataset(const DataModel::Frame& frame);
+  void registerXAxisIfNeeded(const DataModel::Dataset& dataset);
 
   void updateDataSeries();
   void configureGpsSeries();
@@ -161,7 +162,7 @@ private:
   void configureLineSeries();
   void configurePlot3DSeries();
   void configureMultiLineSeries();
-  void configureActions(const DataModel::Frame &frame);
+  void configureActions(const DataModel::Frame& frame);
 
 private:
   int m_points;
@@ -193,29 +194,28 @@ private:
   QVector<DSP::LineSeries3D> m_plotData3D;
 #endif
 
-  QMap<int, QTimer *> m_timers;
+  QMap<int, QTimer*> m_timers;
   QVector<DataModel::Action> m_actions;
   SerialStudio::WidgetMap m_widgetMap;
   QMap<int, DataModel::Dataset> m_datasets;
 
   // Maps unique dataset ID to all dataset refs for value updates
-  QMap<int, QVector<DataModel::Dataset *>> m_datasetReferences;
+  QMap<int, QVector<DataModel::Dataset*>> m_datasetReferences;
 
   // Groups by widgets type
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Group>> m_widgetGroups;
 
   // Datasets by widget type
-  QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>>
-      m_widgetDatasets;
+  QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>> m_widgetDatasets;
 
   DataModel::Frame m_rawFrame;
   DataModel::Frame m_lastFrame;
 };
-} // namespace UI
+}  // namespace UI
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Inline functions for widgets
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Formats a floating-point value with dynamic decimal precision based on
@@ -275,8 +275,7 @@ inline QString FMT_VAL(double val, double min, double max)
   if (DSP::isZero(min) && DSP::isZero(max))
     return QString::number(val, 'f', decPoints(val));
 
-  else
-  {
+  else {
     const int p = std::max(decPoints(min), decPoints(max));
     return QString::number(val, 'f', p);
   }
@@ -296,7 +295,7 @@ inline QString FMT_VAL(double val, double min, double max)
  *
  * @return QString Formatted number with appropriate decimal places.
  */
-inline QString FMT_VAL(double val, const DataModel::Dataset &dataset)
+inline QString FMT_VAL(double val, const DataModel::Dataset& dataset)
 {
   return FMT_VAL(val, dataset.pltMin, dataset.pltMax);
 }
@@ -314,8 +313,7 @@ inline QString FMT_VAL(double val, const DataModel::Dataset &dataset)
  *
  * @note Caller is responsible for ensuring the index is valid.
  */
-inline const DataModel::Group &
-GET_GROUP(const SerialStudio::DashboardWidget type, int index)
+inline const DataModel::Group& GET_GROUP(const SerialStudio::DashboardWidget type, int index)
 {
   return UI::Dashboard::instance().getGroupWidget(type, index);
 }
@@ -333,8 +331,7 @@ GET_GROUP(const SerialStudio::DashboardWidget type, int index)
  *
  * @note Caller is responsible for ensuring the index is valid.
  */
-inline const DataModel::Dataset &
-GET_DATASET(const SerialStudio::DashboardWidget type, int index)
+inline const DataModel::Dataset& GET_DATASET(const SerialStudio::DashboardWidget type, int index)
 {
   return UI::Dashboard::instance().getDatasetWidget(type, index);
 }

@@ -23,12 +23,11 @@
 
 #include <QCache>
 #include <QImage>
-#include <QSettings>
-#include <QQuickPaintedItem>
 #include <QNetworkAccessManager>
+#include <QQuickPaintedItem>
+#include <QSettings>
 
-namespace Widgets
-{
+namespace Widgets {
 /**
  * @class Widgets::GPS
  * @brief A custom QML widget for displaying GPS position on a tile-based map.
@@ -47,8 +46,7 @@ namespace Widgets
  * Designed to be lightweight, dependency-free (beyond QtNetwork),
  * and fully embeddable into any QML/QtQuick scene.
  */
-class GPS : public QQuickPaintedItem
-{
+class GPS : public QQuickPaintedItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int mapType
@@ -90,8 +88,8 @@ signals:
   void showNasaWeatherChanged();
 
 public:
-  GPS(const int index = -1, QQuickItem *parent = nullptr);
-  void paint(QPainter *painter) override;
+  GPS(const int index = -1, QQuickItem* parent = nullptr);
+  void paint(QPainter* painter) override;
 
   [[nodiscard]] double altitude() const;
   [[nodiscard]] double latitude() const;
@@ -106,7 +104,7 @@ public:
   [[nodiscard]] bool plotTrajectory() const;
   [[nodiscard]] bool showNasaWeather() const;
 
-  [[nodiscard]] const QStringList &mapTypes();
+  [[nodiscard]] const QStringList& mapTypes();
 
 public slots:
   void center();
@@ -123,27 +121,41 @@ private slots:
   void updateTiles();
   void precacheWorld();
   void onThemeChanged();
-  void onTileFetched(QNetworkReply *reply);
+  void onTileFetched(QNetworkReply* reply);
 
 private:
-  void paintMap(QPainter *painter, const QSize &view);
-  void paintPathData(QPainter *painter, const QSize &view);
-  void paintAttributionText(QPainter *painter, const QSize &view);
+  void paintMap(QPainter* painter, const QSize& view);
+  void paintPathData(QPainter* painter, const QSize& view);
+  void paintAttributionText(QPainter* painter, const QSize& view);
 
 private:
   QPointF clampCenterTile(QPointF tile) const;
-  QPointF tileToLatLon(const QPointF &tile, double zoom);
+  QPointF tileToLatLon(const QPointF& tile, double zoom);
   QPointF latLonToTile(double lat, double lon, double zoom);
 
   QString tileUrl(const int tx, const int ty, const int zoom) const;
   QString referenceUrl(const int tx, const int ty, const int zoom) const;
   QString nasaWeatherUrl(const int tx, const int ty, const int zoom) const;
 
+  void requestTileIfNeeded(const QString& url);
+  void preloadNextZoomTiles(int tx, int ty, int baseZoom);
+
+  bool renderFallbackTile(QPainter* painter,
+                          int tx,
+                          int ty,
+                          int baseZoom,
+                          const QRect& targetRect,
+                          double scaledTileSize);
+  void renderWeatherOverlay(
+    QPainter* painter, int wrappedTx, int ty, int baseZoom, const QRect& targetRect);
+  void renderReferenceOverlay(
+    QPainter* painter, int wrappedTx, int ty, int baseZoom, const QRect& targetRect);
+
 protected:
-  void wheelEvent(QWheelEvent *event) override;
-  void mouseMoveEvent(QMouseEvent *event) override;
-  void mousePressEvent(QMouseEvent *event) override;
-  void mouseReleaseEvent(QMouseEvent *event) override;
+  void wheelEvent(QWheelEvent* event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
   double m_zoom;
@@ -176,6 +188,6 @@ private:
 
   QNetworkAccessManager m_network;
   QCache<QString, QImage> m_tileCache;
-  QHash<QString, QNetworkReply *> m_pending;
+  QHash<QString, QNetworkReply*> m_pending;
 };
-} // namespace Widgets
+}  // namespace Widgets

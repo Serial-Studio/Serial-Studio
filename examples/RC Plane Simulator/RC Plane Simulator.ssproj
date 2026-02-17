@@ -5,11 +5,11 @@
     "dashboardLayout": {
         "autoLayout": true,
         "windowOrder": [
-            10,
-            11,
+            3,
             4,
             2,
-            3,
+            11,
+            10,
             12
         ]
     },

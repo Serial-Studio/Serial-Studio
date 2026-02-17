@@ -24,8 +24,7 @@
 #include "DataModel/Frame.h"
 #include "UI/DeclarativeWidgets/StaticTable.h"
 
-namespace Widgets
-{
+namespace Widgets {
 /**
  * @class Widgets::DataGrid
  * @brief Tabular data display widget for structured dataset visualization.
@@ -50,8 +49,7 @@ namespace Widgets
  * @note This widget inherits table rendering capabilities from StaticTable
  *       and adds data frame integration.
  */
-class DataGrid : public StaticTable
-{
+class DataGrid : public StaticTable {
   Q_OBJECT
   Q_PROPERTY(bool paused READ paused WRITE setPaused NOTIFY pausedChanged)
 
@@ -59,7 +57,7 @@ signals:
   void pausedChanged();
 
 public:
-  explicit DataGrid(const int index = -1, QQuickItem *parent = nullptr);
+  explicit DataGrid(const int index = -1, QQuickItem* parent = nullptr);
 
   [[nodiscard]] bool paused() const;
 
@@ -70,10 +68,10 @@ private slots:
   void updateData();
 
 private:
-  QStringList getRow(const DataModel::Dataset &dataset);
+  QStringList getRow(const DataModel::Dataset& dataset);
 
 private:
   int m_index;
   bool m_paused;
 };
-} // namespace Widgets
+}  // namespace Widgets

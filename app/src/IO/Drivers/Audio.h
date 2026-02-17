@@ -22,30 +22,26 @@
 
 #pragma once
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Class declaration & Qt Libs
-//------------------------------------------------------------------------------
-
-#include <QMap>
-#include <QMutex>
-#include <QTimer>
-#include <QThread>
-#include <QVector>
-#include <QObject>
-#include <QSettings>
+//--------------------------------------------------------------------------------------------------
 
 #include <QBuffer>
+#include <QMap>
+#include <QMutex>
+#include <QObject>
+#include <QSettings>
 #include <QTextStream>
+#include <QThread>
+#include <QTimer>
+#include <QVector>
 
 #include "IO/HAL_Driver.h"
 #include "ThirdParty/miniaudio.h"
 
-namespace IO
-{
-namespace Drivers
-{
-class Audio : public HAL_Driver
-{
+namespace IO {
+namespace Drivers {
+class Audio : public HAL_Driver {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int selectedInputDevice
@@ -105,22 +101,21 @@ signals:
 
 private:
   explicit Audio();
-  Audio(Audio &&) = delete;
-  Audio(const Audio &) = delete;
-  Audio &operator=(Audio &&) = delete;
-  Audio &operator=(const Audio &) = delete;
+  Audio(Audio&&)                 = delete;
+  Audio(const Audio&)            = delete;
+  Audio& operator=(Audio&&)      = delete;
+  Audio& operator=(const Audio&) = delete;
 
   ~Audio();
 
 public:
-  typedef struct
-  {
+  typedef struct {
     QList<int> supportedSampleRates;
     QList<ma_format> supportedFormats;
     QList<int> supportedChannelCounts;
   } AudioDeviceInfo;
 
-  static Audio &instance();
+  static Audio& instance();
 
   void closeDevice();
   void close() override;
@@ -129,13 +124,10 @@ public:
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
-  [[nodiscard]] quint64 write(const QByteArray &data) override;
+  [[nodiscard]] quint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 
-  [[nodiscard]] inline const ma_device_config &config() const
-  {
-    return m_config;
-  }
+  [[nodiscard]] inline const ma_device_config& config() const { return m_config; }
 
   [[nodiscard]] int selectedSampleRate() const;
   [[nodiscard]] QStringList sampleRates() const;
@@ -179,21 +171,18 @@ private slots:
 private:
   inline bool validateInput() const
   {
-    return m_init && m_selectedInputDevice >= 0
-           && m_selectedInputDevice < m_inputDevices.size()
-           && m_selectedInputDevice < m_inputCapabilities.size();
+    return m_init && m_selectedInputDevice >= 0 && m_selectedInputDevice < m_inputDevices.size()
+        && m_selectedInputDevice < m_inputCapabilities.size();
   }
 
   inline bool validateOutput() const
   {
-    return m_init && m_selectedOutputDevice >= 0
-           && m_selectedOutputDevice < m_outputDevices.size()
-           && m_selectedOutputDevice < m_outputCapabilities.size();
+    return m_init && m_selectedOutputDevice >= 0 && m_selectedOutputDevice < m_outputDevices.size()
+        && m_selectedOutputDevice < m_outputCapabilities.size();
   }
 
-  void handleCallback(void *output, const void *input, ma_uint32 frameCount);
-  static void callback(ma_device *device, void *output, const void *input,
-                       ma_uint32 frameCount);
+  void handleCallback(void* output, const void* input, ma_uint32 frameCount);
+  static void callback(ma_device* device, void* output, const void* input, ma_uint32 frameCount);
 
 private:
   bool m_init;
@@ -229,11 +218,11 @@ private:
   QMutex m_outputBufferLock;
   QVector<QVector<quint8>> m_outputQueue;
 
-  QTimer *m_inputWorkerTimer;
+  QTimer* m_inputWorkerTimer;
   QThread m_inputWorkerThread;
 
   QVector<AudioDeviceInfo> m_inputCapabilities;
   QVector<AudioDeviceInfo> m_outputCapabilities;
 };
-} // namespace Drivers
-} // namespace IO
+}  // namespace Drivers
+}  // namespace IO

@@ -54,6 +54,29 @@ done < "$tempfile"
 # Clean up the temporary file after use
 rm -f "$tempfile"
 
+# Rejoin broken C/C++ string literals that fit on one line
+#echo "Rejoining broken string literals..."
+#for dir in app doc examples; do
+#    if [[ -d "$dir" ]]; then
+#        find "$dir" -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.c' \) \
+#            ! -name 'miniaudio.h' \
+#            -print0 | while IFS= read -r -d '' file; do
+#            python3 -c "
+#import re, sys
+#with open(sys.argv[1], 'r') as f:
+#    content = f.read()
+## Rejoin adjacent string literals split across lines
+## Matches: \"...\" (optional whitespace/newline) \"...\"
+#joined = re.sub(r'\"\s*\n\s*\"', '', content)
+#if joined != content:
+#    with open(sys.argv[1], 'w') as f:
+#        f.write(joined)
+#    print(f'  Rejoined strings in {sys.argv[1]}')
+#" "$file"
+#        done
+#    fi
+#done
+
 # Format C/C++ files under known directories
 echo "Running clang-format..."
 for dir in app doc examples; do

@@ -20,19 +20,19 @@
  */
 
 #include "WindowManager.h"
-#include "UI/Taskbar.h"
 
-#include <QtMath>
-
-#include <QUrl>
 #include <QFile>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QtMath>
+#include <QUrl>
+
+#include "UI/Taskbar.h"
 
 /**
  * @brief Constructs the WindowManager singleton.
  */
-UI::WindowManager::WindowManager(QQuickItem *parent)
+UI::WindowManager::WindowManager(QQuickItem* parent)
   : QQuickItem(parent)
   , m_zCounter(1)
   , m_layoutRestored(false)
@@ -53,10 +53,8 @@ UI::WindowManager::WindowManager(QQuickItem *parent)
 
   m_backgroundImage = m_settings.value("WindowManager_Wallpaper").toString();
 
-  connect(this, &UI::WindowManager::widthChanged, this,
-          &UI::WindowManager::triggerLayoutUpdate);
-  connect(this, &UI::WindowManager::heightChanged, this,
-          &UI::WindowManager::triggerLayoutUpdate);
+  connect(this, &UI::WindowManager::widthChanged, this, &UI::WindowManager::triggerLayoutUpdate);
+  connect(this, &UI::WindowManager::heightChanged, this, &UI::WindowManager::triggerLayoutUpdate);
 }
 
 /**
@@ -85,7 +83,7 @@ bool UI::WindowManager::autoLayoutEnabled() const
  * @brief Returns the currently set background image path.
  * @return Background image URL as a QString.
  */
-const QString &UI::WindowManager::backgroundImage() const
+const QString& UI::WindowManager::backgroundImage() const
 {
   return m_backgroundImage;
 }
@@ -113,7 +111,7 @@ bool UI::WindowManager::snapIndicatorVisible() const
  * @return A const reference to the QRect representing the snap indicator's
  * geometry.
  */
-const QRect &UI::WindowManager::snapIndicator() const
+const QRect& UI::WindowManager::snapIndicator() const
 {
   return m_snapIndicator;
 }
@@ -123,7 +121,7 @@ const QRect &UI::WindowManager::snapIndicator() const
  * @param item Pointer to the QQuickItem representing the window.
  * @return Z-order value, or -1 if not registered.
  */
-int UI::WindowManager::zOrder(QQuickItem *item) const
+int UI::WindowManager::zOrder(QQuickItem* item) const
 {
   if (m_windowZ.contains(item))
     return m_windowZ.value(item);
@@ -146,22 +144,20 @@ int UI::WindowManager::zOrder(QQuickItem *item) const
 QJsonObject UI::WindowManager::serializeLayout() const
 {
   QJsonObject layout;
-  if (!m_autoLayoutEnabled)
-  {
+  if (!m_autoLayoutEnabled) {
     QJsonArray geometries;
-    for (int id : m_windowOrder)
-    {
-      auto *win = m_windows.value(id);
+    for (int id : m_windowOrder) {
+      auto* win = m_windows.value(id);
       if (!win)
         continue;
 
       QJsonObject winGeom;
-      winGeom["id"] = id;
-      winGeom["x"] = win->x();
-      winGeom["y"] = win->y();
-      winGeom["width"] = win->width();
+      winGeom["id"]     = id;
+      winGeom["x"]      = win->x();
+      winGeom["y"]      = win->y();
+      winGeom["width"]  = win->width();
       winGeom["height"] = win->height();
-      winGeom["state"] = win->state();
+      winGeom["state"]  = win->state();
       geometries.append(winGeom);
     }
 
@@ -173,7 +169,7 @@ QJsonObject UI::WindowManager::serializeLayout() const
     orderArray.append(id);
 
   layout["windowOrder"] = orderArray;
-  layout["autoLayout"] = m_autoLayoutEnabled;
+  layout["autoLayout"]  = m_autoLayoutEnabled;
 
   return layout;
 }
@@ -193,43 +189,37 @@ QJsonObject UI::WindowManager::serializeLayout() const
  * @param layout The JSON object containing the layout state.
  * @return True if the layout was successfully restored, false otherwise.
  */
-bool UI::WindowManager::restoreLayout(const QJsonObject &layout)
+bool UI::WindowManager::restoreLayout(const QJsonObject& layout)
 {
   if (layout.isEmpty())
     return false;
 
   bool autoLayout = layout["autoLayout"].toBool(true);
 
-  if (layout.contains("windowOrder"))
-  {
+  if (layout.contains("windowOrder")) {
     QJsonArray orderArray = layout["windowOrder"].toArray();
     QVector<int> newOrder;
 
-    for (const auto &val : std::as_const(orderArray))
-    {
+    for (const auto& val : std::as_const(orderArray)) {
       int id = val.toInt(-1);
       if (id >= 0 && m_windows.contains(id))
         newOrder.append(id);
     }
 
     for (int id : std::as_const(m_windowOrder))
-    {
       if (!newOrder.contains(id))
         newOrder.append(id);
-    }
 
     m_windowOrder = newOrder;
   }
 
-  if (!autoLayout && layout.contains("geometries"))
-  {
+  if (!autoLayout && layout.contains("geometries")) {
     QJsonArray geometries = layout["geometries"].toArray();
-    for (const auto &val : std::as_const(geometries))
-    {
+    for (const auto& val : std::as_const(geometries)) {
       QJsonObject winGeom = val.toObject();
-      int id = winGeom["id"].toInt(-1);
+      int id              = winGeom["id"].toInt(-1);
 
-      auto *win = m_windows.value(id);
+      auto* win = m_windows.value(id);
       if (!win)
         continue;
 
@@ -249,8 +239,7 @@ bool UI::WindowManager::restoreLayout(const QJsonObject &layout)
     constrainWindows();
   }
 
-  if (m_autoLayoutEnabled != autoLayout)
-  {
+  if (m_autoLayoutEnabled != autoLayout) {
     m_autoLayoutEnabled = autoLayout;
     Q_EMIT autoLayoutEnabledChanged();
   }
@@ -273,11 +262,11 @@ void UI::WindowManager::clear()
   m_windowZ.clear();
   m_windows.clear();
   m_windowOrder.clear();
-  m_dragWindow = nullptr;
-  m_targetWindow = nullptr;
-  m_resizeWindow = nullptr;
-  m_focusedWindow = nullptr;
-  m_layoutRestored = false;
+  m_dragWindow           = nullptr;
+  m_targetWindow         = nullptr;
+  m_resizeWindow         = nullptr;
+  m_focusedWindow        = nullptr;
+  m_layoutRestored       = false;
   m_snapIndicatorVisible = false;
 
   Q_EMIT zCounterChanged();
@@ -325,7 +314,7 @@ void UI::WindowManager::loadLayout()
  */
 void UI::WindowManager::autoLayout()
 {
-  const int margin = 4;
+  const int margin  = 4;
   const int spacing = -1;
 
   const int canvasW = static_cast<int>(width());
@@ -334,10 +323,9 @@ void UI::WindowManager::autoLayout()
   if (canvasW <= 0 || canvasH <= 0)
     return;
 
-  QList<QQuickItem *> windows;
-  for (int id : std::as_const(m_windowOrder))
-  {
-    auto *win = m_windows.value(id);
+  QList<QQuickItem*> windows;
+  for (int id : std::as_const(m_windowOrder)) {
+    auto* win = m_windows.value(id);
     if (win && win->state() == "normal")
       windows.append(win);
   }
@@ -345,12 +333,12 @@ void UI::WindowManager::autoLayout()
   if (windows.isEmpty())
     return;
 
-  const int n = windows.size();
-  const int availW = canvasW - 2 * margin;
-  const int availH = canvasH - 2 * margin;
+  const int n            = windows.size();
+  const int availW       = canvasW - 2 * margin;
+  const int availH       = canvasH - 2 * margin;
   const bool isLandscape = availW >= availH;
 
-  auto placeWindow = [&](QQuickItem *win, int x, int y, int w, int h) {
+  auto placeWindow = [&](QQuickItem* win, int x, int y, int w, int h) {
     win->setX(x);
     win->setY(y);
     win->setWidth(w);
@@ -361,52 +349,41 @@ void UI::WindowManager::autoLayout()
   if (n == 1)
     placeWindow(windows[0], margin, margin, availW, availH);
 
-  else if (n == 2)
-  {
-    if (isLandscape)
-    {
+  else if (n == 2) {
+    if (isLandscape) {
       int w = (availW - spacing) / 2;
       placeWindow(windows[0], margin, margin, w, availH);
       placeWindow(windows[1], margin + w + spacing, margin, w, availH);
-    }
-    else
-    {
+    } else {
       int h = (availH - spacing) / 2;
       placeWindow(windows[0], margin, margin, availW, h);
       placeWindow(windows[1], margin, margin + h + spacing, availW, h);
     }
   }
 
-  else if (n == 3)
-  {
-    if (isLandscape)
-    {
+  else if (n == 3) {
+    if (isLandscape) {
       int masterW = availW / 2;
-      int stackW = availW - masterW - spacing;
-      int stackH = (availH - spacing) / 2;
+      int stackW  = availW - masterW - spacing;
+      int stackH  = (availH - spacing) / 2;
 
       placeWindow(windows[0], margin, margin, masterW, availH);
-      placeWindow(windows[1], margin + masterW + spacing, margin, stackW,
-                  stackH);
-      placeWindow(windows[2], margin + masterW + spacing,
-                  margin + stackH + spacing, stackW, stackH);
-    }
-    else
-    {
+      placeWindow(windows[1], margin + masterW + spacing, margin, stackW, stackH);
+      placeWindow(
+        windows[2], margin + masterW + spacing, margin + stackH + spacing, stackW, stackH);
+    } else {
       int masterH = availH / 2;
-      int stackH = availH - masterH - spacing;
-      int stackW = (availW - spacing) / 2;
+      int stackH  = availH - masterH - spacing;
+      int stackW  = (availW - spacing) / 2;
 
       placeWindow(windows[0], margin, margin, availW, masterH);
-      placeWindow(windows[1], margin, margin + masterH + spacing, stackW,
-                  stackH);
-      placeWindow(windows[2], margin + stackW + spacing,
-                  margin + masterH + spacing, stackW, stackH);
+      placeWindow(windows[1], margin, margin + masterH + spacing, stackW, stackH);
+      placeWindow(
+        windows[2], margin + stackW + spacing, margin + masterH + spacing, stackW, stackH);
     }
   }
 
-  else if (n == 4)
-  {
+  else if (n == 4) {
     int w = (availW - spacing) / 2;
     int h = (availH - spacing) / 2;
 
@@ -416,166 +393,130 @@ void UI::WindowManager::autoLayout()
     placeWindow(windows[3], margin + w + spacing, margin + h + spacing, w, h);
   }
 
-  else if (n == 5)
-  {
-    if (isLandscape)
-    {
+  else if (n == 5) {
+    if (isLandscape) {
       int topW = (availW - spacing) / 2;
       int botW = (availW - 2 * spacing) / 3;
-      int h = (availH - spacing) / 2;
+      int h    = (availH - spacing) / 2;
 
       placeWindow(windows[0], margin, margin, topW, h);
       placeWindow(windows[1], margin + topW + spacing, margin, topW, h);
       placeWindow(windows[2], margin, margin + h + spacing, botW, h);
-      placeWindow(windows[3], margin + botW + spacing, margin + h + spacing,
-                  botW, h);
-      placeWindow(windows[4], margin + 2 * (botW + spacing),
-                  margin + h + spacing, botW, h);
-    }
-    else
-    {
-      int leftH = (availH - spacing) / 2;
+      placeWindow(windows[3], margin + botW + spacing, margin + h + spacing, botW, h);
+      placeWindow(windows[4], margin + 2 * (botW + spacing), margin + h + spacing, botW, h);
+    } else {
+      int leftH  = (availH - spacing) / 2;
       int rightH = (availH - 2 * spacing) / 3;
-      int w = (availW - spacing) / 2;
+      int w      = (availW - spacing) / 2;
 
       placeWindow(windows[0], margin, margin, w, leftH);
       placeWindow(windows[1], margin, margin + leftH + spacing, w, leftH);
       placeWindow(windows[2], margin + w + spacing, margin, w, rightH);
-      placeWindow(windows[3], margin + w + spacing, margin + rightH + spacing,
-                  w, rightH);
-      placeWindow(windows[4], margin + w + spacing,
-                  margin + 2 * (rightH + spacing), w, rightH);
+      placeWindow(windows[3], margin + w + spacing, margin + rightH + spacing, w, rightH);
+      placeWindow(windows[4], margin + w + spacing, margin + 2 * (rightH + spacing), w, rightH);
     }
   }
 
-  else if (n == 6)
-  {
-    if (isLandscape)
-    {
+  else if (n == 6) {
+    if (isLandscape) {
       int w = (availW - 2 * spacing) / 3;
       int h = (availH - spacing) / 2;
 
-      for (int i = 0; i < 6; ++i)
-      {
+      for (int i = 0; i < 6; ++i) {
         int col = i % 3;
         int row = i / 3;
-        placeWindow(windows[i], margin + col * (w + spacing),
-                    margin + row * (h + spacing), w, h);
+        placeWindow(windows[i], margin + col * (w + spacing), margin + row * (h + spacing), w, h);
       }
-    }
-    else
-    {
+    } else {
       int w = (availW - spacing) / 2;
       int h = (availH - 2 * spacing) / 3;
 
-      for (int i = 0; i < 6; ++i)
-      {
+      for (int i = 0; i < 6; ++i) {
         int col = i % 2;
         int row = i / 2;
-        placeWindow(windows[i], margin + col * (w + spacing),
-                    margin + row * (h + spacing), w, h);
+        placeWindow(windows[i], margin + col * (w + spacing), margin + row * (h + spacing), w, h);
       }
     }
   }
 
-  else
-  {
+  else {
     int cols, rows;
-    if (isLandscape)
-    {
+    if (isLandscape) {
       cols = qCeil(qSqrt(static_cast<double>(n) * availW / availH));
       rows = qCeil(static_cast<double>(n) / cols);
-    }
-    else
-    {
+    } else {
       rows = qCeil(qSqrt(static_cast<double>(n) * availH / availW));
       cols = qCeil(static_cast<double>(n) / rows);
     }
 
     while (cols * rows < n)
-    {
       if (isLandscape)
         cols++;
       else
         rows++;
-    }
 
     const int spacingForSizing = qMax(spacing, 0);
-    const int totalSpacingW = (cols - 1) * spacingForSizing;
-    const int totalSpacingH = (rows - 1) * spacingForSizing;
-    const int totalCellsW = qMax(1, availW - totalSpacingW);
-    const int totalCellsH = qMax(1, availH - totalSpacingH);
+    const int totalSpacingW    = (cols - 1) * spacingForSizing;
+    const int totalSpacingH    = (rows - 1) * spacingForSizing;
+    const int totalCellsW      = qMax(1, availW - totalSpacingW);
+    const int totalCellsH      = qMax(1, availH - totalSpacingH);
 
     const int baseCellW = totalCellsW / cols;
     const int baseCellH = totalCellsH / rows;
-    const int extraW = totalCellsW % cols;
-    const int extraH = totalCellsH % rows;
+    const int extraW    = totalCellsW % cols;
+    const int extraH    = totalCellsH % rows;
 
     QVector<int> colWidths(cols), colXs(cols);
     QVector<int> rowHeights(rows), rowYs(rows);
 
     int runningX = margin;
-    for (int c = 0; c < cols; ++c)
-    {
+    for (int c = 0; c < cols; ++c) {
       colWidths[c] = baseCellW + (c < extraW ? 1 : 0);
-      colXs[c] = runningX;
+      colXs[c]     = runningX;
       runningX += colWidths[c] + spacing;
     }
 
     int runningY = margin;
-    for (int r = 0; r < rows; ++r)
-    {
+    for (int r = 0; r < rows; ++r) {
       rowHeights[r] = baseCellH + (r < extraH ? 1 : 0);
-      rowYs[r] = runningY;
+      rowYs[r]      = runningY;
       runningY += rowHeights[r] + spacing;
     }
 
-    const int windowsInLastRow = n - (rows - 1) * cols;
-    const bool hasPartialLastRow
-        = windowsInLastRow > 0 && windowsInLastRow < cols;
+    const int windowsInLastRow   = n - (rows - 1) * cols;
+    const bool hasPartialLastRow = windowsInLastRow > 0 && windowsInLastRow < cols;
     QVector<int> lastRowWidths, lastRowXs;
 
-    if (hasPartialLastRow)
-    {
+    if (hasPartialLastRow) {
       const int totalSpacingLast = (windowsInLastRow - 1) * spacingForSizing;
-      const int totalCellsLast = qMax(1, availW - totalSpacingLast);
-      const int baseLastW = totalCellsLast / windowsInLastRow;
-      const int extraLastW = totalCellsLast % windowsInLastRow;
+      const int totalCellsLast   = qMax(1, availW - totalSpacingLast);
+      const int baseLastW        = totalCellsLast / windowsInLastRow;
+      const int extraLastW       = totalCellsLast % windowsInLastRow;
 
       lastRowWidths.resize(windowsInLastRow);
       lastRowXs.resize(windowsInLastRow);
 
       int runningLastX = margin;
-      for (int c = 0; c < windowsInLastRow; ++c)
-      {
+      for (int c = 0; c < windowsInLastRow; ++c) {
         lastRowWidths[c] = baseLastW + (c < extraLastW ? 1 : 0);
-        lastRowXs[c] = runningLastX;
+        lastRowXs[c]     = runningLastX;
         runningLastX += lastRowWidths[c] + spacing;
       }
     }
 
-    for (int i = 0; i < n; ++i)
-    {
+    for (int i = 0; i < n; ++i) {
       int row = i / cols;
       int col = i % cols;
 
       if (hasPartialLastRow && row == rows - 1)
-      {
-        placeWindow(windows[i], lastRowXs[col], rowYs[row], lastRowWidths[col],
-                    rowHeights[row]);
-      }
+        placeWindow(windows[i], lastRowXs[col], rowYs[row], lastRowWidths[col], rowHeights[row]);
       else
-      {
-        placeWindow(windows[i], colXs[col], rowYs[row], colWidths[col],
-                    rowHeights[row]);
-      }
+        placeWindow(windows[i], colXs[col], rowYs[row], colWidths[col], rowHeights[row]);
     }
   }
 
-  for (auto *win : std::as_const(m_windows))
-  {
-    if (win && !win->isVisible())
-    {
+  for (auto* win : std::as_const(m_windows)) {
+    if (win && !win->isVisible()) {
       if (win->state() == "normal" || win->state() == "maximized")
         win->setVisible(true);
     }
@@ -611,10 +552,9 @@ void UI::WindowManager::cascadeLayout()
   if (canvasW <= 0 || canvasH <= 0)
     return;
 
-  QList<QQuickItem *> visibleWindows;
-  for (int id : std::as_const(m_windowOrder))
-  {
-    auto *win = m_windows.value(id);
+  QList<QQuickItem*> visibleWindows;
+  for (int id : std::as_const(m_windowOrder)) {
+    auto* win = m_windows.value(id);
     if (win && win->state() == "normal")
       visibleWindows.append(win);
   }
@@ -622,16 +562,15 @@ void UI::WindowManager::cascadeLayout()
   if (visibleWindows.isEmpty())
     return;
 
-  const int margin = 8;
+  const int margin         = 8;
   const int cascadeOffsetX = 26;
   const int cascadeOffsetY = 26;
 
   const int availableW = canvasW - 2 * margin;
   const int availableH = canvasH - 2 * margin;
 
-  for (int i = 0; i < visibleWindows.size(); ++i)
-  {
-    QQuickItem *win = visibleWindows[i];
+  for (int i = 0; i < visibleWindows.size(); ++i) {
+    QQuickItem* win = visibleWindows[i];
     if (!win)
       continue;
 
@@ -651,15 +590,13 @@ void UI::WindowManager::cascadeLayout()
     int offsetY = i * cascadeOffsetY;
 
     int wrapCount = 0;
-    while (baseY + offsetY + winH > canvasH - margin && wrapCount < 10)
-    {
+    while (baseY + offsetY + winH > canvasH - margin && wrapCount < 10) {
       offsetY -= (availableH - winH);
       offsetX += cascadeOffsetX * 2;
       wrapCount++;
     }
 
-    while (baseX + offsetX + winW > canvasW - margin && wrapCount < 20)
-    {
+    while (baseX + offsetX + winW > canvasW - margin && wrapCount < 20) {
       offsetX -= (availableW - winW);
       wrapCount++;
     }
@@ -670,14 +607,12 @@ void UI::WindowManager::cascadeLayout()
     winX = qBound(margin, winX, canvasW - winW - margin);
     winY = qBound(margin, winY, canvasH - winH - margin);
 
-    if (winW > availableW)
-    {
+    if (winW > availableW) {
       winW = availableW;
       winX = margin;
     }
 
-    if (winH > availableH)
-    {
+    if (winH > availableH) {
       winH = availableH;
       winY = margin;
     }
@@ -689,10 +624,8 @@ void UI::WindowManager::cascadeLayout()
     Q_EMIT geometryChanged(win);
   }
 
-  for (auto *win : std::as_const(m_windows))
-  {
-    if (win && !win->isVisible())
-    {
+  for (auto* win : std::as_const(m_windows)) {
+    if (win && !win->isVisible()) {
       if (win->state() == "normal" || win->state() == "maximized")
         win->setVisible(true);
     }
@@ -712,21 +645,20 @@ void UI::WindowManager::clearBackgroundImage()
  */
 void UI::WindowManager::selectBackgroundImage()
 {
-  auto *dialog = new QFileDialog(
-      nullptr, tr("Select Background Image"),
-      QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
-      tr("Images (*.png *.jpg *.jpeg *.bmp)"));
+  auto* dialog = new QFileDialog(nullptr,
+                                 tr("Select Background Image"),
+                                 QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
+                                 tr("Images (*.png *.jpg *.jpeg *.bmp)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setOption(QFileDialog::DontUseNativeDialog);
 
-  connect(dialog, &QFileDialog::fileSelected, this,
-          [this, dialog](const QString &path) {
-            if (!path.isEmpty())
-              setBackgroundImage(QUrl::fromLocalFile(path).toString());
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    if (!path.isEmpty())
+      setBackgroundImage(QUrl::fromLocalFile(path).toString());
 
-            dialog->deleteLater();
-          });
+    dialog->deleteLater();
+  });
 
   dialog->open();
 }
@@ -735,7 +667,7 @@ void UI::WindowManager::selectBackgroundImage()
  * @brief Brings a window to the front by increasing its z-order.
  * @param item Pointer to the QQuickItem to promote in z-order.
  */
-void UI::WindowManager::bringToFront(QQuickItem *item)
+void UI::WindowManager::bringToFront(QQuickItem* item)
 {
   // Validate pointer
   if (!item)
@@ -762,9 +694,9 @@ void UI::WindowManager::bringToFront(QQuickItem *item)
  *
  * @param taskbar Pointer to the UI::Taskbar instance to associate.
  */
-void UI::WindowManager::setTaskbar(QQuickItem *taskbar)
+void UI::WindowManager::setTaskbar(QQuickItem* taskbar)
 {
-  m_taskbar = static_cast<UI::Taskbar *>(taskbar);
+  m_taskbar = static_cast<UI::Taskbar*>(taskbar);
 }
 
 /**
@@ -773,7 +705,7 @@ void UI::WindowManager::setTaskbar(QQuickItem *taskbar)
  *
  * @param item Pointer to the QQuickItem to register.
  */
-void UI::WindowManager::registerWindow(const int id, QQuickItem *item)
+void UI::WindowManager::registerWindow(const int id, QQuickItem* item)
 {
   // Validate item
   if (!item)
@@ -804,14 +736,12 @@ void UI::WindowManager::registerWindow(const int id, QQuickItem *item)
  *
  * @param item Pointer to the QQuickItem to remove.
  */
-void UI::WindowManager::unregisterWindow(QQuickItem *item)
+void UI::WindowManager::unregisterWindow(QQuickItem* item)
 {
   m_windowZ.remove(item);
   m_windowOrder.removeAll(getIdForWindow(item));
-  for (auto it = m_windows.begin(); it != m_windows.end(); ++it)
-  {
-    if (it.value() == item)
-    {
+  for (auto it = m_windows.begin(); it != m_windows.end(); ++it) {
+    if (it.value() == item) {
       m_windows.remove(it.key());
       break;
     }
@@ -825,10 +755,9 @@ void UI::WindowManager::unregisterWindow(QQuickItem *item)
  * @brief Sets the background image to be used for the container.
  * @param path URL string to the image file.
  */
-void UI::WindowManager::setBackgroundImage(const QString &path)
+void UI::WindowManager::setBackgroundImage(const QString& path)
 {
-  if (m_backgroundImage != path)
-  {
+  if (m_backgroundImage != path) {
     m_backgroundImage = path;
     m_settings.setValue("WindowManager_Wallpaper", path);
     Q_EMIT backgroundImageChanged();
@@ -848,17 +777,14 @@ void UI::WindowManager::setBackgroundImage(const QString &path)
  */
 void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)
 {
-  if (m_autoLayoutEnabled != enabled)
-  {
-    m_layoutRestored = false;
+  if (m_autoLayoutEnabled != enabled) {
+    m_layoutRestored    = false;
     m_autoLayoutEnabled = enabled;
     Q_EMIT autoLayoutEnabledChanged();
 
-    for (auto *win : std::as_const(m_windows))
-    {
+    for (auto* win : std::as_const(m_windows))
       if (win->state() == "maximized")
         QMetaObject::invokeMethod(win, "restoreClicked", Qt::DirectConnection);
-    }
 
     loadLayout();
   }
@@ -885,8 +811,7 @@ void UI::WindowManager::constrainWindows()
   if (canvasW <= 0 || canvasH <= 0)
     return;
 
-  for (auto *win : std::as_const(m_windows))
-  {
+  for (auto* win : std::as_const(m_windows)) {
     if (!win)
       continue;
 
@@ -903,66 +828,55 @@ void UI::WindowManager::constrainWindows()
 
     bool changed = false;
 
-    if (winW > canvasW)
-    {
-      winW = canvasW;
+    if (winW > canvasW) {
+      winW    = canvasW;
       changed = true;
     }
 
-    if (winH > canvasH)
-    {
-      winH = canvasH;
+    if (winH > canvasH) {
+      winH    = canvasH;
       changed = true;
     }
 
-    if (winW < minW && canvasW >= minW)
-    {
-      winW = minW;
+    if (winW < minW && canvasW >= minW) {
+      winW    = minW;
       changed = true;
     }
 
-    if (winH < minH && canvasH >= minH)
-    {
-      winH = minH;
+    if (winH < minH && canvasH >= minH) {
+      winH    = minH;
       changed = true;
     }
 
-    if (winX < 0)
-    {
-      winX = 0;
+    if (winX < 0) {
+      winX    = 0;
       changed = true;
     }
 
-    if (winY < 0)
-    {
-      winY = 0;
+    if (winY < 0) {
+      winY    = 0;
       changed = true;
     }
 
-    if (winX + winW > canvasW)
-    {
+    if (winX + winW > canvasW) {
       winX = canvasW - winW;
-      if (winX < 0)
-      {
+      if (winX < 0) {
         winX = 0;
         winW = canvasW;
       }
       changed = true;
     }
 
-    if (winY + winH > canvasH)
-    {
+    if (winY + winH > canvasH) {
       winY = canvasH - winH;
-      if (winY < 0)
-      {
+      if (winY < 0) {
         winY = 0;
         winH = canvasH;
       }
       changed = true;
     }
 
-    if (changed)
-    {
+    if (changed) {
       win->setX(winX);
       win->setY(winY);
       win->setWidth(winW);
@@ -971,10 +885,8 @@ void UI::WindowManager::constrainWindows()
     }
   }
 
-  for (auto *win : std::as_const(m_windows))
-  {
-    if (win && !win->isVisible())
-    {
+  for (auto* win : std::as_const(m_windows)) {
+    if (win && !win->isVisible()) {
       if (win->state() == "normal" || win->state() == "maximized")
         win->setVisible(true);
     }
@@ -993,17 +905,13 @@ void UI::WindowManager::triggerLayoutUpdate()
 {
   if (autoLayoutEnabled())
     autoLayout();
-  else
-  {
+  else {
     // Check for windows that need initial layout (registered but not yet
     // visible). This handles the case where cascadeLayout() was called before
     // the canvas had valid dimensions, leaving windows invisible.
     bool hasUninitializedWindows = false;
-    for (auto *win : std::as_const(m_windows))
-    {
-      if (win && !win->isVisible()
-          && (win->state() == "normal" || win->state() == "maximized"))
-      {
+    for (auto* win : std::as_const(m_windows)) {
+      if (win && !win->isVisible() && (win->state() == "normal" || win->state() == "maximized")) {
         hasUninitializedWindows = true;
         break;
       }
@@ -1025,13 +933,11 @@ void UI::WindowManager::triggerLayoutUpdate()
  * @param item Pointer to the window item.
  * @return The window ID if found, or -1 if not registered.
  */
-int UI::WindowManager::getIdForWindow(QQuickItem *item) const
+int UI::WindowManager::getIdForWindow(QQuickItem* item) const
 {
   for (auto it = m_windows.constBegin(); it != m_windows.constEnd(); ++it)
-  {
     if (it.value() == item)
       return it.key();
-  }
 
   return -1;
 }
@@ -1047,9 +953,9 @@ int UI::WindowManager::getIdForWindow(QQuickItem *item) const
  * @param pos Mouse position relative to the WindowManager.
  * @return Target index for reordering.
  */
-int UI::WindowManager::determineNewIndexFromMousePos(const QPoint &pos) const
+int UI::WindowManager::determineNewIndexFromMousePos(const QPoint& pos) const
 {
-  QQuickItem *hoveredWindow = getWindow(pos.x(), pos.y());
+  QQuickItem* hoveredWindow = getWindow(pos.x(), pos.y());
   if (!hoveredWindow)
     return m_windowOrder.size();
 
@@ -1071,9 +977,10 @@ int UI::WindowManager::determineNewIndexFromMousePos(const QPoint &pos) const
  * @return QRectF with x, y, width, and height, using implicit sizes as
  *         fallback.
  */
-QRect UI::WindowManager::extractGeometry(QQuickItem *item) const
+QRect UI::WindowManager::extractGeometry(QQuickItem* item) const
 {
-  return QRect(item->x(), item->y(),
+  return QRect(item->x(),
+               item->y(),
                item->width() > 0 ? item->width() : item->implicitWidth(),
                item->height() > 0 ? item->height() : item->implicitHeight());
 }
@@ -1091,21 +998,19 @@ QRect UI::WindowManager::extractGeometry(QQuickItem *item) const
  * @return The ResizeEdge enum value indicating which edge is active, or
  *         ResizeEdge::None.
  */
-UI::WindowManager::ResizeEdge
-UI::WindowManager::detectResizeEdge(QQuickItem *target) const
+UI::WindowManager::ResizeEdge UI::WindowManager::detectResizeEdge(QQuickItem* target) const
 {
-  if (target->state() == "normal")
-  {
+  if (target->state() == "normal") {
     const int kResizeMargin = 8;
-    QPointF localPos = target->mapFromItem(this, m_initialMousePos);
-    const int x = static_cast<int>(localPos.x());
-    const int y = static_cast<int>(localPos.y());
-    const int w = static_cast<int>(target->width());
-    const int h = static_cast<int>(target->height());
+    QPointF localPos        = target->mapFromItem(this, m_initialMousePos);
+    const int x             = static_cast<int>(localPos.x());
+    const int y             = static_cast<int>(localPos.y());
+    const int w             = static_cast<int>(target->width());
+    const int h             = static_cast<int>(target->height());
 
-    const bool nearLeft = x <= kResizeMargin;
-    const bool nearRight = x >= w - kResizeMargin;
-    const bool nearTop = y <= kResizeMargin;
+    const bool nearLeft   = x <= kResizeMargin;
+    const bool nearRight  = x >= w - kResizeMargin;
+    const bool nearTop    = y <= kResizeMargin;
     const bool nearBottom = y >= h - kResizeMargin;
 
     if (nearLeft && nearTop)
@@ -1142,15 +1047,14 @@ UI::WindowManager::detectResizeEdge(QQuickItem *target) const
  * @return A pointer to the topmost QQuickItem window at the given position, or
  *         nullptr if none found.
  */
-QQuickItem *UI::WindowManager::getWindow(const int x, const int y) const
+QQuickItem* UI::WindowManager::getWindow(const int x, const int y) const
 {
   QPointF point(x, y);
-  QList<QQuickItem *> windows = m_windows.values();
-  std::sort(windows.begin(), windows.end(),
-            [](QQuickItem *a, QQuickItem *b) { return a->z() > b->z(); });
+  QList<QQuickItem*> windows = m_windows.values();
+  std::sort(
+    windows.begin(), windows.end(), [](QQuickItem* a, QQuickItem* b) { return a->z() > b->z(); });
 
-  for (QQuickItem *window : std::as_const(windows))
-  {
+  for (QQuickItem* window : std::as_const(windows)) {
     if (!window || !window->isVisible() || window == m_dragWindow)
       continue;
 
@@ -1176,30 +1080,27 @@ QQuickItem *UI::WindowManager::getWindow(const int x, const int y) const
  * @param event Pointer to the QMouseEvent containing the current mouse
  *              position.
  */
-void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
+void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
 {
   // Obtain current mouse position and calculate XY differential
   const QPoint currentPos = event->pos();
-  const QPoint delta = currentPos - m_initialMousePos;
-  int dragDistance = delta.manhattanLength();
+  const QPoint delta      = currentPos - m_initialMousePos;
+  int dragDistance        = delta.manhattanLength();
 
   // No window has been clicked before, abort
-  if (!m_focusedWindow)
-  {
+  if (!m_focusedWindow) {
     QQuickItem::mouseMoveEvent(event);
     return;
   }
 
   // Only execute geometry changes when it makes sense
-  if (m_focusedWindow->state() != "normal")
-  {
+  if (m_focusedWindow->state() != "normal") {
     QQuickItem::mouseMoveEvent(event);
     return;
   }
 
   // Drag the window & change it's position
-  if (m_dragWindow && dragDistance >= 20)
-  {
+  if (m_dragWindow && dragDistance >= 20) {
     // Obtain new X/Y position
     int newX = m_initialGeometry.x() + delta.x();
     int newY = m_initialGeometry.y() + delta.y();
@@ -1213,8 +1114,7 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
     const int canvasH = static_cast<int>(height());
 
     // Restore window size if needed
-    if ((w >= canvasW - 20 || h >= canvasH - 20) && !autoLayoutEnabled())
-    {
+    if ((w >= canvasW - 20 || h >= canvasH - 20) && !autoLayoutEnabled()) {
       w = static_cast<int>(m_dragWindow->implicitWidth());
       h = static_cast<int>(m_dragWindow->implicitHeight());
       m_dragWindow->setWidth(w);
@@ -1231,121 +1131,98 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
 
     // On auto layout, display a snap indicator over the nearest window
     // near the mouse position
-    if (autoLayoutEnabled())
-    {
+    if (autoLayoutEnabled()) {
       // Detect the window under the cursor (excluding the window being dragged)
       int targetIndex = determineNewIndexFromMousePos(currentPos);
 
-      // Show indicator if target window is valid and we dragged the mouse
+      // Set target window pointer if index is valid
       if (targetIndex >= 0 && targetIndex < m_windowOrder.size())
-      {
-        // Get current window order for target window, and obtain a pointer
-        int targetId = m_windowOrder[targetIndex];
-        m_targetWindow = m_windows.value(targetId);
+        m_targetWindow = m_windows.value(m_windowOrder[targetIndex]);
 
-        // Resize the drag window if required, and display snap indicator
-        if (m_targetWindow && m_targetWindow != m_dragWindow)
-        {
-          // Resize drag window if needed
-          int nW = qMin(w, static_cast<int>(m_targetWindow->width()));
-          int nH = qMin(h, static_cast<int>(m_targetWindow->height()));
-          if (w != nW || h != nH)
-          {
-            m_dragWindow->setWidth(nW);
-            m_dragWindow->setHeight(nH);
-          }
+      // Resize the drag window if required, and display snap indicator
+      if (m_targetWindow && m_targetWindow != m_dragWindow) {
+        // Resize drag window to fit target if smaller
+        m_dragWindow->setWidth(qMin(w, static_cast<int>(m_targetWindow->width())));
+        m_dragWindow->setHeight(qMin(h, static_cast<int>(m_targetWindow->height())));
 
-          // Set snap indicator geometry to target window geometry
-          m_snapIndicator = extractGeometry(m_targetWindow);
-          m_snapIndicatorVisible = true;
-          Q_EMIT snapIndicatorChanged();
+        // Set snap indicator geometry to target window geometry
+        m_snapIndicator        = extractGeometry(m_targetWindow);
+        m_snapIndicatorVisible = true;
+        Q_EMIT snapIndicatorChanged();
 
-          // Accept the event and abort
-          event->accept();
-          return;
-        }
+        // Accept the event and abort
+        event->accept();
+        return;
       }
 
       // Something failed, hide the snap indicator and cancel the operation
-      if (m_snapIndicatorVisible)
-      {
+      if (m_snapIndicatorVisible) {
         m_snapIndicatorVisible = false;
         Q_EMIT snapIndicatorChanged();
       }
     }
 
     // No auto layout, show snap indicator on desktop edges
-    else
-    {
+    else {
       // Set window rect
-      const int top = newY;
-      const int left = newX;
-      const int right = newX + w;
+      const int top    = newY;
+      const int left   = newX;
+      const int right  = newX + w;
       const int bottom = newY + h;
 
       // Initialize snapped flag
       bool snapped = false;
 
       // Top-left corner
-      if (left <= 0 && top <= 0)
-      {
+      if (left <= 0 && top <= 0) {
         m_snapIndicator = QRect(0, 0, canvasW / 2, canvasH / 2);
-        snapped = true;
+        snapped         = true;
       }
 
       // Top-right corner
-      else if (right >= canvasW && top <= 0)
-      {
+      else if (right >= canvasW && top <= 0) {
         m_snapIndicator = QRect(canvasW / 2, 0, canvasW / 2, canvasH / 2);
-        snapped = true;
+        snapped         = true;
       }
 
       // Bottom-left corner
-      else if (left <= 0 && bottom >= canvasH)
-      {
+      else if (left <= 0 && bottom >= canvasH) {
         m_snapIndicator = QRect(0, canvasH / 2, canvasW / 2, canvasH / 2);
-        snapped = true;
+        snapped         = true;
       }
 
       // Bottom-right corner
-      else if (right >= canvasW && bottom >= canvasH)
-      {
-        m_snapIndicator
-            = QRect(canvasW / 2, canvasH / 2, canvasW / 2, canvasH / 2);
-        snapped = true;
+      else if (right >= canvasW && bottom >= canvasH) {
+        m_snapIndicator = QRect(canvasW / 2, canvasH / 2, canvasW / 2, canvasH / 2);
+        snapped         = true;
       }
 
       // Top edge = maximize
-      else if (top <= 0)
-      {
+      else if (top <= 0) {
         m_snapIndicator = QRect(0, 0, canvasW, canvasH);
-        snapped = true;
+        snapped         = true;
       }
 
       // Left edge = left half
-      else if (left <= 0)
-      {
+      else if (left <= 0) {
         m_snapIndicator = QRect(0, 0, canvasW / 2, canvasH);
-        snapped = true;
+        snapped         = true;
       }
 
       // Right edge = right half
-      else if (right >= canvasW)
-      {
+      else if (right >= canvasW) {
         m_snapIndicator = QRect(canvasW / 2, 0, canvasW / 2, canvasH);
-        snapped = true;
+        snapped         = true;
       }
 
       // Display the snap indicator
-      if (snapped)
-      {
+      if (snapped) {
         m_snapIndicatorVisible = true;
         Q_EMIT snapIndicatorChanged();
       }
 
       // Hide the snap indicator
-      else if (m_snapIndicatorVisible)
-      {
+      else if (m_snapIndicatorVisible) {
         m_snapIndicatorVisible = false;
         Q_EMIT snapIndicatorChanged();
       }
@@ -1357,13 +1234,11 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
   }
 
   // Resize window...not as easy as one might initially think
-  if (m_resizeWindow)
-  {
+  if (m_resizeWindow) {
     QRect geometry = m_initialGeometry;
     const int minW = m_resizeWindow->implicitWidth();
     const int minH = m_resizeWindow->implicitHeight();
-    switch (m_resizeEdge)
-    {
+    switch (m_resizeEdge) {
       case ResizeEdge::Right:
         geometry.setWidth(qMax(minW, m_initialGeometry.width() + delta.x()));
         break;
@@ -1431,8 +1306,7 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
       geometry.setHeight(int(height()) - geometry.y());
 
     // Apply geometry
-    if (geometry == unclamped)
-    {
+    if (geometry == unclamped) {
       m_resizeWindow->setX(geometry.x());
       m_resizeWindow->setY(geometry.y());
       m_resizeWindow->setWidth(geometry.width());
@@ -1459,27 +1333,25 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent *event)
  *
  * @param event Pointer to the QMouseEvent containing the press information.
  */
-void UI::WindowManager::mousePressEvent(QMouseEvent *event)
+void UI::WindowManager::mousePressEvent(QMouseEvent* event)
 {
   // Reset window tracking parameters
-  m_dragWindow = nullptr;
-  m_targetWindow = nullptr;
-  m_resizeWindow = nullptr;
-  m_focusedWindow = nullptr;
-  m_resizeEdge = ResizeEdge::None;
+  m_dragWindow      = nullptr;
+  m_targetWindow    = nullptr;
+  m_resizeWindow    = nullptr;
+  m_focusedWindow   = nullptr;
+  m_resizeEdge      = ResizeEdge::None;
   m_initialMousePos = event->pos();
 
   // Hide snapping rectangle
-  if (m_snapIndicatorVisible)
-  {
+  if (m_snapIndicatorVisible) {
     m_snapIndicatorVisible = false;
     Q_EMIT snapIndicatorChanged();
   }
 
   // Find the topmost window under the mouse
   m_focusedWindow = getWindow(m_initialMousePos.x(), m_initialMousePos.y());
-  if (!m_focusedWindow)
-  {
+  if (!m_focusedWindow) {
     m_taskbar->setActiveWindow(nullptr);
     if (event->button() == Qt::RightButton)
       Q_EMIT rightClicked(m_initialMousePos.x(), m_initialMousePos.y());
@@ -1492,36 +1364,30 @@ void UI::WindowManager::mousePressEvent(QMouseEvent *event)
     m_taskbar->setActiveWindow(m_focusedWindow);
 
   // Check if we're clicking the title bar (top area)
-  bool captionClick = false;
-  const int captionH = m_focusedWindow->property("captionHeight").toInt();
-  const int externcW = m_focusedWindow->property("externControlWidth").toInt();
-  const int buttonsW = m_focusedWindow->property("windowControlsWidth").toInt();
+  bool captionClick     = false;
+  const int captionH    = m_focusedWindow->property("captionHeight").toInt();
+  const int externcW    = m_focusedWindow->property("externControlWidth").toInt();
+  const int buttonsW    = m_focusedWindow->property("windowControlsWidth").toInt();
   const auto mouseClick = m_focusedWindow->mapFromItem(this, m_initialMousePos);
-  if (mouseClick.y() <= captionH)
-  {
+  if (mouseClick.y() <= captionH) {
     // User clicked on caption
-    if (mouseClick.x() <= m_focusedWindow->width() - buttonsW
-        && mouseClick.x() > externcW)
+    if (mouseClick.x() <= m_focusedWindow->width() - buttonsW && mouseClick.x() > externcW)
       captionClick = true;
 
     // User clicked on caption buttons, let QML process events
-    else
-    {
+    else {
       QQuickItem::mousePressEvent(event);
       return;
     }
   }
 
   // Only allow resizing & moving window when it makes sense
-  if (m_focusedWindow->state() == "normal")
-  {
+  if (m_focusedWindow->state() == "normal") {
     // Detect active resize edge & start resizing
     m_resizeEdge = detectResizeEdge(m_focusedWindow);
-    if (m_resizeEdge != ResizeEdge::None && !autoLayoutEnabled())
-    {
+    if (m_resizeEdge != ResizeEdge::None && !autoLayoutEnabled()) {
       grabMouse();
-      switch (m_resizeEdge)
-      {
+      switch (m_resizeEdge) {
         case ResizeEdge::Left:
         case ResizeEdge::Right:
           setCursor(Qt::SizeHorCursor);
@@ -1543,18 +1409,17 @@ void UI::WindowManager::mousePressEvent(QMouseEvent *event)
           break;
       }
 
-      m_resizeWindow = m_focusedWindow;
+      m_resizeWindow    = m_focusedWindow;
       m_initialGeometry = extractGeometry(m_focusedWindow);
       event->accept();
       return;
     }
 
     // Check if we're clicking the title bar (top area)
-    if (captionClick)
-    {
+    if (captionClick) {
       grabMouse();
       setCursor(Qt::ClosedHandCursor);
-      m_dragWindow = m_focusedWindow;
+      m_dragWindow      = m_focusedWindow;
       m_initialGeometry = extractGeometry(m_focusedWindow);
       event->accept();
     }
@@ -1573,30 +1438,24 @@ void UI::WindowManager::mousePressEvent(QMouseEvent *event)
  *
  * @param event Pointer to the QMouseEvent representing the release action.
  */
-void UI::WindowManager::mouseReleaseEvent(QMouseEvent *event)
+void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
 {
   // Finalize reordering after drag in auto-layout mode
-  if (autoLayoutEnabled())
-  {
-    if (m_dragWindow && m_targetWindow && m_snapIndicatorVisible)
-    {
-      const int draggedId = getIdForWindow(m_dragWindow);
-      const int targetId = getIdForWindow(m_targetWindow);
-      if (draggedId >= 0 && targetId >= 0)
-      {
-        const int newIndex = m_windowOrder.indexOf(targetId);
-        const int currentIndex = m_windowOrder.indexOf(draggedId);
-        if (newIndex >= 0 && newIndex != currentIndex)
-          std::swap(m_windowOrder[currentIndex], m_windowOrder[newIndex]);
-      }
+  if (autoLayoutEnabled()) {
+    if (m_dragWindow && m_targetWindow && m_snapIndicatorVisible) {
+      const int draggedId    = getIdForWindow(m_dragWindow);
+      const int targetId     = getIdForWindow(m_targetWindow);
+      const int newIndex     = m_windowOrder.indexOf(targetId);
+      const int currentIndex = m_windowOrder.indexOf(draggedId);
+      if (draggedId >= 0 && targetId >= 0 && newIndex >= 0 && newIndex != currentIndex)
+        std::swap(m_windowOrder[currentIndex], m_windowOrder[newIndex]);
     }
 
     loadLayout();
   }
 
   // No auto-layout, but user snapped the window
-  else if (m_dragWindow && m_snapIndicatorVisible)
-  {
+  else if (m_dragWindow && m_snapIndicatorVisible) {
     // Get snap area geometry
     auto x = m_snapIndicator.x();
     auto y = m_snapIndicator.y();
@@ -1604,15 +1463,12 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent *event)
     auto h = m_snapIndicator.height();
 
     // Maximize the window
-    if (x == 0 && y == 0 && w >= width() && h >= height())
-    {
-      QMetaObject::invokeMethod(m_dragWindow, "maximizeClicked",
-                                Qt::DirectConnection);
+    if (x == 0 && y == 0 && w >= width() && h >= height()) {
+      QMetaObject::invokeMethod(m_dragWindow, "maximizeClicked", Qt::DirectConnection);
     }
 
     // Update window geometry
-    else
-    {
+    else {
       m_dragWindow->setX(x);
       m_dragWindow->setY(y);
       m_dragWindow->setWidth(w);
@@ -1625,18 +1481,17 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent *event)
   unsetCursor();
 
   // Reset snap indicator
-  if (m_snapIndicatorVisible)
-  {
+  if (m_snapIndicatorVisible) {
     m_snapIndicatorVisible = false;
     Q_EMIT snapIndicatorChanged();
   }
 
   // Reset window tracking parameters
-  m_dragWindow = nullptr;
-  m_targetWindow = nullptr;
-  m_resizeWindow = nullptr;
-  m_focusedWindow = nullptr;
-  m_resizeEdge = ResizeEdge::None;
+  m_dragWindow      = nullptr;
+  m_targetWindow    = nullptr;
+  m_resizeWindow    = nullptr;
+  m_focusedWindow   = nullptr;
+  m_resizeEdge      = ResizeEdge::None;
   m_initialMousePos = event->pos();
 
   // Pass the event through
@@ -1659,41 +1514,32 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent *event)
  *
  * @param event Pointer to the QMouseEvent containing double-click information.
  */
-void UI::WindowManager::mouseDoubleClickEvent(QMouseEvent *event)
+void UI::WindowManager::mouseDoubleClickEvent(QMouseEvent* event)
 {
   // Check if there is a window there
   m_focusedWindow = getWindow(event->pos().x(), event->pos().y());
-  if (!m_focusedWindow)
-  {
+  if (!m_focusedWindow) {
     QQuickItem::mouseDoubleClickEvent(event);
     return;
   }
 
   // Check if double-click was in the title bar area (not on window buttons)
-  const int captionH = m_focusedWindow->property("captionHeight").toInt();
-  const int externcW = m_focusedWindow->property("externControlWidth").toInt();
-  const int buttonsW = m_focusedWindow->property("windowControlsWidth").toInt();
+  const int captionH  = m_focusedWindow->property("captionHeight").toInt();
+  const int externcW  = m_focusedWindow->property("externControlWidth").toInt();
+  const int buttonsW  = m_focusedWindow->property("windowControlsWidth").toInt();
   const auto localPos = m_focusedWindow->mapFromItem(this, event->pos());
-  if (localPos.y() <= captionH
-      && localPos.x() <= m_focusedWindow->width() - buttonsW
-      && localPos.x() > externcW)
-  {
+  if (localPos.y() <= captionH && localPos.x() <= m_focusedWindow->width() - buttonsW
+      && localPos.x() > externcW) {
     // Obtain current state
     const QString state = m_focusedWindow->property("state").toString();
 
     // Restore the window
     if (state == "maximized")
-    {
-      QMetaObject::invokeMethod(m_focusedWindow, "restoreClicked",
-                                Qt::DirectConnection);
-    }
+      QMetaObject::invokeMethod(m_focusedWindow, "restoreClicked", Qt::DirectConnection);
 
     // Maximize the window
     else if (state == "normal")
-    {
-      QMetaObject::invokeMethod(m_focusedWindow, "maximizeClicked",
-                                Qt::DirectConnection);
-    }
+      QMetaObject::invokeMethod(m_focusedWindow, "maximizeClicked", Qt::DirectConnection);
 
     // Block further processing of the event
     event->accept();

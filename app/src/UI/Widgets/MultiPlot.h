@@ -21,12 +21,11 @@
 
 #pragma once
 
+#include <QQuickItem>
 #include <QVector>
 #include <QXYSeries>
-#include <QQuickItem>
 
-namespace Widgets
-{
+namespace Widgets {
 /**
  * @class Widgets::MultiPlot
  * @brief Multi-curve plotting widget for visualizing multiple datasets on a
@@ -56,8 +55,7 @@ namespace Widgets
  * @note The curve count is determined by the associated dataset group and
  *       cannot be changed after initialization.
  */
-class MultiPlot : public QQuickItem
-{
+class MultiPlot : public QQuickItem {
   Q_OBJECT
   Q_PROPERTY(double count READ count CONSTANT)
   Q_PROPERTY(QString yLabel READ yLabel CONSTANT)
@@ -80,11 +78,11 @@ signals:
   void dataSizeChanged();
 
 public:
-  explicit MultiPlot(const int index = -1, QQuickItem *parent = nullptr);
+  explicit MultiPlot(const int index = -1, QQuickItem* parent = nullptr);
+
   ~MultiPlot()
   {
-    for (auto &curve : m_data)
-    {
+    for (auto& curve : m_data) {
       curve.clear();
       curve.squeeze();
     }
@@ -101,13 +99,13 @@ public:
   [[nodiscard]] double minY() const;
   [[nodiscard]] double maxY() const;
   [[nodiscard]] bool running() const;
-  [[nodiscard]] const QString &yLabel() const;
-  [[nodiscard]] const QStringList &colors() const;
-  [[nodiscard]] const QStringList &labels() const;
-  [[nodiscard]] const QList<bool> &visibleCurves() const;
+  [[nodiscard]] const QString& yLabel() const;
+  [[nodiscard]] const QStringList& colors() const;
+  [[nodiscard]] const QStringList& labels() const;
+  [[nodiscard]] const QList<bool>& visibleCurves() const;
 
 public slots:
-  void draw(QXYSeries *series, const int index);
+  void draw(QXYSeries* series, const int index);
 
   void setDataW(const int width);
   void setDataH(const int height);
@@ -136,4 +134,4 @@ private:
   QList<bool> m_visibleCurves;
   QList<QList<QPointF>> m_data;
 };
-} // namespace Widgets
+}  // namespace Widgets

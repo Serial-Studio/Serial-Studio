@@ -23,61 +23,54 @@
 
 #include <map>
 #include <memory>
-#include <vector>
-
 #include <QObject>
 #include <QSettings>
+#include <vector>
 
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
 
-namespace mdf
-{
+namespace mdf {
 class MdfWriter;
 class IChannel;
 class IChannelGroup;
-} // namespace mdf
+}  // namespace mdf
 
-namespace MDF4
-{
+namespace MDF4 {
 class Export;
 
 #ifdef BUILD_COMMERCIAL
 /**
  * @brief Worker that handles MDF4 export file I/O on background thread
  */
-class ExportWorker
-  : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>
-{
+class ExportWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
   Q_OBJECT
 
 public:
-  ExportWorker(
-      moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr> *queue,
-      std::atomic<bool> *enabled, std::atomic<size_t> *queueSize);
+  ExportWorker(moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* queue,
+               std::atomic<bool>* enabled,
+               std::atomic<size_t>* queueSize);
   ~ExportWorker() override;
 
   void closeResources() override;
   bool isResourceOpen() const override;
 
 protected:
-  void processItems(
-      const std::vector<DataModel::TimestampedFramePtr> &items) override;
+  void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
 
 private:
-  void createFile(const DataModel::Frame &frame);
+  void createFile(const DataModel::Frame& frame);
 
 private:
-  struct ChannelGroupInfo
-  {
-    mdf::IChannelGroup *channelGroup;
-    std::vector<mdf::IChannel *> channels;
+  struct ChannelGroupInfo {
+    mdf::IChannelGroup* channelGroup;
+    std::vector<mdf::IChannel*> channels;
     std::vector<bool> isNumeric;
   };
 
   bool m_fileOpen;
   QString m_filePath;
-  mdf::IChannel *m_masterTimeChannel;
+  mdf::IChannel* m_masterTimeChannel;
   std::unique_ptr<mdf::MdfWriter> m_writer;
   std::map<int, ChannelGroupInfo> m_groupMap;
 
@@ -138,15 +131,15 @@ signals:
 
 private:
   explicit Export();
-  Export(Export &&) = delete;
-  Export(const Export &) = delete;
-  Export &operator=(Export &&) = delete;
-  Export &operator=(const Export &) = delete;
+  Export(Export&&)                 = delete;
+  Export(const Export&)            = delete;
+  Export& operator=(Export&&)      = delete;
+  Export& operator=(const Export&) = delete;
 
   ~Export();
 
 public:
-  static Export &instance();
+  static Export& instance();
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] bool exportEnabled() const;
@@ -155,11 +148,11 @@ public slots:
   void closeFile();
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
-  void hotpathTxFrame(const DataModel::TimestampedFramePtr &frame);
+  void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
 
 protected:
 #ifdef BUILD_COMMERCIAL
-  DataModel::FrameConsumerWorkerBase *createWorker() override;
+  DataModel::FrameConsumerWorkerBase* createWorker() override;
 #endif
 
 private slots:
@@ -172,4 +165,4 @@ private:
   std::atomic<bool> m_isOpen;
   std::atomic<bool> m_exportEnabled;
 };
-} // namespace MDF4
+}  // namespace MDF4

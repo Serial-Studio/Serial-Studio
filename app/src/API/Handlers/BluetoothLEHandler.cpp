@@ -20,6 +20,7 @@
  */
 
 #include "API/Handlers/BluetoothLEHandler.h"
+
 #include "API/CommandRegistry.h"
 #include "IO/Drivers/BluetoothLE.h"
 
@@ -28,83 +29,70 @@
  */
 void API::Handlers::BluetoothLEHandler::registerCommands()
 {
-  auto &registry = CommandRegistry::instance();
+  auto& registry = CommandRegistry::instance();
 
   // Mutation commands
-  registry.registerCommand(
-      QStringLiteral("io.driver.ble.startDiscovery"),
-      QStringLiteral("Start scanning for Bluetooth LE devices"),
-      &startDiscovery);
+  registry.registerCommand(QStringLiteral("io.driver.ble.startDiscovery"),
+                           QStringLiteral("Start scanning for Bluetooth LE devices"),
+                           &startDiscovery);
+
+  registry.registerCommand(QStringLiteral("io.driver.ble.selectDevice"),
+                           QStringLiteral("Select BLE device by index (params: deviceIndex)"),
+                           &selectDevice);
+
+  registry.registerCommand(QStringLiteral("io.driver.ble.selectService"),
+                           QStringLiteral("Select BLE service by index (params: serviceIndex)"),
+                           &selectService);
 
   registry.registerCommand(
-      QStringLiteral("io.driver.ble.selectDevice"),
-      QStringLiteral("Select BLE device by index (params: deviceIndex)"),
-      &selectDevice);
-
-  registry.registerCommand(
-      QStringLiteral("io.driver.ble.selectService"),
-      QStringLiteral("Select BLE service by index (params: serviceIndex)"),
-      &selectService);
-
-  registry.registerCommand(
-      QStringLiteral("io.driver.ble.setCharacteristicIndex"),
-      QStringLiteral(
-          "Select BLE characteristic by index (params: characteristicIndex)"),
-      &setCharacteristicIndex);
+    QStringLiteral("io.driver.ble.setCharacteristicIndex"),
+    QStringLiteral("Select BLE characteristic by index (params: characteristicIndex)"),
+    &setCharacteristicIndex);
 
   // Query commands
-  registry.registerCommand(
-      QStringLiteral("io.driver.ble.getDeviceList"),
-      QStringLiteral("Get list of discovered Bluetooth LE devices"),
-      &getDeviceList);
+  registry.registerCommand(QStringLiteral("io.driver.ble.getDeviceList"),
+                           QStringLiteral("Get list of discovered Bluetooth LE devices"),
+                           &getDeviceList);
+
+  registry.registerCommand(QStringLiteral("io.driver.ble.getServiceList"),
+                           QStringLiteral("Get list of services for the selected BLE device"),
+                           &getServiceList);
 
   registry.registerCommand(
-      QStringLiteral("io.driver.ble.getServiceList"),
-      QStringLiteral("Get list of services for the selected BLE device"),
-      &getServiceList);
+    QStringLiteral("io.driver.ble.getCharacteristicList"),
+    QStringLiteral("Get list of characteristics for the selected BLE service"),
+    &getCharacteristicList);
+
+  registry.registerCommand(QStringLiteral("io.driver.ble.getConfiguration"),
+                           QStringLiteral("Get current Bluetooth LE configuration"),
+                           &getConfiguration);
 
   registry.registerCommand(
-      QStringLiteral("io.driver.ble.getCharacteristicList"),
-      QStringLiteral(
-          "Get list of characteristics for the selected BLE service"),
-      &getCharacteristicList);
-
-  registry.registerCommand(
-      QStringLiteral("io.driver.ble.getConfiguration"),
-      QStringLiteral("Get current Bluetooth LE configuration"),
-      &getConfiguration);
-
-  registry.registerCommand(
-      QStringLiteral("io.driver.ble.getStatus"),
-      QStringLiteral(
-          "Get Bluetooth adapter availability and connection status"),
-      &getStatus);
+    QStringLiteral("io.driver.ble.getStatus"),
+    QStringLiteral("Get Bluetooth adapter availability and connection status"),
+    &getStatus);
 }
 
 /**
  * @brief Start scanning for Bluetooth LE devices
  */
-API::CommandResponse
-API::Handlers::BluetoothLEHandler::startDiscovery(const QString &id,
-                                                  const QJsonObject &params)
+API::CommandResponse API::Handlers::BluetoothLEHandler::startDiscovery(const QString& id,
+                                                                       const QJsonObject& params)
 {
   Q_UNUSED(params)
 
-  auto &ble = IO::Drivers::BluetoothLE::instance();
+  auto& ble = IO::Drivers::BluetoothLE::instance();
 
-  if (!ble.operatingSystemSupported())
-  {
+  if (!ble.operatingSystemSupported()) {
     return CommandResponse::makeError(
-        id, ErrorCode::OperationFailed,
-        QStringLiteral("Bluetooth LE is not supported on this operating "
-                       "system"));
+      id,
+      ErrorCode::OperationFailed,
+      QStringLiteral("Bluetooth LE is not supported on this operating system"));
   }
 
-  if (!ble.adapterAvailable())
-  {
+  if (!ble.adapterAvailable()) {
     return CommandResponse::makeError(
-        id, ErrorCode::OperationFailed,
-        QStringLiteral("No Bluetooth adapter available"));
+      id, ErrorCode::OperationFailed, QStringLiteral("No Bluetooth adapter available"));
   }
 
   ble.startDiscovery();
@@ -118,34 +106,30 @@ API::Handlers::BluetoothLEHandler::startDiscovery(const QString &id,
  * @brief Select BLE device by index
  * @param params Requires "deviceIndex" (int)
  */
-API::CommandResponse
-API::Handlers::BluetoothLEHandler::selectDevice(const QString &id,
-                                                const QJsonObject &params)
+API::CommandResponse API::Handlers::BluetoothLEHandler::selectDevice(const QString& id,
+                                                                     const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("deviceIndex")))
-  {
+  if (!params.contains(QStringLiteral("deviceIndex"))) {
     return CommandResponse::makeError(
-        id, ErrorCode::MissingParam,
-        QStringLiteral("Missing required parameter: deviceIndex"));
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: deviceIndex"));
   }
 
   const int deviceIndex = params.value(QStringLiteral("deviceIndex")).toInt();
-  auto &ble = IO::Drivers::BluetoothLE::instance();
+  auto& ble             = IO::Drivers::BluetoothLE::instance();
 
-  if (deviceIndex < 0 || deviceIndex >= ble.deviceCount())
-  {
-    return CommandResponse::makeError(
-        id, ErrorCode::InvalidParam,
-        QStringLiteral("Invalid deviceIndex: %1. Valid range: 0-%2")
-            .arg(deviceIndex)
-            .arg(ble.deviceCount() - 1));
+  if (deviceIndex < 0 || deviceIndex >= ble.deviceCount()) {
+    return CommandResponse::makeError(id,
+                                      ErrorCode::InvalidParam,
+                                      QStringLiteral("Invalid deviceIndex: %1. Valid range: 0-%2")
+                                        .arg(deviceIndex)
+                                        .arg(ble.deviceCount() - 1));
   }
 
   ble.selectDevice(deviceIndex);
 
   QJsonObject result;
   result[QStringLiteral("deviceIndex")] = deviceIndex;
-  const auto &deviceNames = ble.deviceNames();
+  const auto& deviceNames               = ble.deviceNames();
   if (deviceIndex < deviceNames.count())
     result[QStringLiteral("deviceName")] = deviceNames.at(deviceIndex);
 
@@ -156,35 +140,31 @@ API::Handlers::BluetoothLEHandler::selectDevice(const QString &id,
  * @brief Select BLE service by index
  * @param params Requires "serviceIndex" (int)
  */
-API::CommandResponse
-API::Handlers::BluetoothLEHandler::selectService(const QString &id,
-                                                 const QJsonObject &params)
+API::CommandResponse API::Handlers::BluetoothLEHandler::selectService(const QString& id,
+                                                                      const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("serviceIndex")))
-  {
+  if (!params.contains(QStringLiteral("serviceIndex"))) {
     return CommandResponse::makeError(
-        id, ErrorCode::MissingParam,
-        QStringLiteral("Missing required parameter: serviceIndex"));
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: serviceIndex"));
   }
 
-  const int serviceIndex = params.value(QStringLiteral("serviceIndex")).toInt();
-  auto &ble = IO::Drivers::BluetoothLE::instance();
-  const auto &serviceNames = ble.serviceNames();
+  const int serviceIndex   = params.value(QStringLiteral("serviceIndex")).toInt();
+  auto& ble                = IO::Drivers::BluetoothLE::instance();
+  const auto& serviceNames = ble.serviceNames();
 
-  if (serviceIndex < 0 || serviceIndex >= serviceNames.count())
-  {
-    return CommandResponse::makeError(
-        id, ErrorCode::InvalidParam,
-        QStringLiteral("Invalid serviceIndex: %1. Valid range: 0-%2")
-            .arg(serviceIndex)
-            .arg(serviceNames.count() - 1));
+  if (serviceIndex < 0 || serviceIndex >= serviceNames.count()) {
+    return CommandResponse::makeError(id,
+                                      ErrorCode::InvalidParam,
+                                      QStringLiteral("Invalid serviceIndex: %1. Valid range: 0-%2")
+                                        .arg(serviceIndex)
+                                        .arg(serviceNames.count() - 1));
   }
 
   ble.selectService(serviceIndex);
 
   QJsonObject result;
   result[QStringLiteral("serviceIndex")] = serviceIndex;
-  result[QStringLiteral("serviceName")] = serviceNames.at(serviceIndex);
+  result[QStringLiteral("serviceName")]  = serviceNames.at(serviceIndex);
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -193,62 +173,57 @@ API::Handlers::BluetoothLEHandler::selectService(const QString &id,
  * @param params Requires "characteristicIndex" (int)
  */
 API::CommandResponse API::Handlers::BluetoothLEHandler::setCharacteristicIndex(
-    const QString &id, const QJsonObject &params)
+  const QString& id, const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("characteristicIndex")))
-  {
+  if (!params.contains(QStringLiteral("characteristicIndex"))) {
     return CommandResponse::makeError(
-        id, ErrorCode::MissingParam,
-        QStringLiteral("Missing required parameter: characteristicIndex"));
+      id,
+      ErrorCode::MissingParam,
+      QStringLiteral("Missing required parameter: characteristicIndex"));
   }
 
-  const int characteristicIndex
-      = params.value(QStringLiteral("characteristicIndex")).toInt();
-  auto &ble = IO::Drivers::BluetoothLE::instance();
-  const auto &characteristicNames = ble.characteristicNames();
+  const int characteristicIndex   = params.value(QStringLiteral("characteristicIndex")).toInt();
+  auto& ble                       = IO::Drivers::BluetoothLE::instance();
+  const auto& characteristicNames = ble.characteristicNames();
 
-  if (characteristicIndex < 0
-      || characteristicIndex >= characteristicNames.count())
-  {
+  if (characteristicIndex < 0 || characteristicIndex >= characteristicNames.count()) {
     return CommandResponse::makeError(
-        id, ErrorCode::InvalidParam,
-        QStringLiteral("Invalid characteristicIndex: %1. Valid range: 0-%2")
-            .arg(characteristicIndex)
-            .arg(characteristicNames.count() - 1));
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Invalid characteristicIndex: %1. Valid range: 0-%2")
+        .arg(characteristicIndex)
+        .arg(characteristicNames.count() - 1));
   }
 
   ble.setCharacteristicIndex(characteristicIndex);
 
   QJsonObject result;
   result[QStringLiteral("characteristicIndex")] = characteristicIndex;
-  result[QStringLiteral("characteristicName")]
-      = characteristicNames.at(characteristicIndex);
+  result[QStringLiteral("characteristicName")]  = characteristicNames.at(characteristicIndex);
   return CommandResponse::makeSuccess(id, result);
 }
 
 /**
  * @brief Get list of discovered Bluetooth LE devices
  */
-API::CommandResponse
-API::Handlers::BluetoothLEHandler::getDeviceList(const QString &id,
-                                                 const QJsonObject &params)
+API::CommandResponse API::Handlers::BluetoothLEHandler::getDeviceList(const QString& id,
+                                                                      const QJsonObject& params)
 {
   Q_UNUSED(params)
 
-  auto &ble = IO::Drivers::BluetoothLE::instance();
-  const auto &deviceNames = ble.deviceNames();
+  auto& ble               = IO::Drivers::BluetoothLE::instance();
+  const auto& deviceNames = ble.deviceNames();
 
   QJsonArray devices;
-  for (int i = 0; i < deviceNames.count(); ++i)
-  {
+  for (int i = 0; i < deviceNames.count(); ++i) {
     QJsonObject device;
     device[QStringLiteral("index")] = i;
-    device[QStringLiteral("name")] = deviceNames.at(i);
+    device[QStringLiteral("name")]  = deviceNames.at(i);
     devices.append(device);
   }
 
   QJsonObject result;
-  result[QStringLiteral("deviceList")] = devices;
+  result[QStringLiteral("deviceList")]         = devices;
   result[QStringLiteral("currentDeviceIndex")] = ble.deviceIndex();
   return CommandResponse::makeSuccess(id, result);
 }
@@ -256,21 +231,19 @@ API::Handlers::BluetoothLEHandler::getDeviceList(const QString &id,
 /**
  * @brief Get list of services for the selected BLE device
  */
-API::CommandResponse
-API::Handlers::BluetoothLEHandler::getServiceList(const QString &id,
-                                                  const QJsonObject &params)
+API::CommandResponse API::Handlers::BluetoothLEHandler::getServiceList(const QString& id,
+                                                                       const QJsonObject& params)
 {
   Q_UNUSED(params)
 
-  auto &ble = IO::Drivers::BluetoothLE::instance();
-  const auto &serviceNames = ble.serviceNames();
+  auto& ble                = IO::Drivers::BluetoothLE::instance();
+  const auto& serviceNames = ble.serviceNames();
 
   QJsonArray services;
-  for (int i = 0; i < serviceNames.count(); ++i)
-  {
+  for (int i = 0; i < serviceNames.count(); ++i) {
     QJsonObject service;
     service[QStringLiteral("index")] = i;
-    service[QStringLiteral("name")] = serviceNames.at(i);
+    service[QStringLiteral("name")]  = serviceNames.at(i);
     services.append(service);
   }
 
@@ -283,58 +256,54 @@ API::Handlers::BluetoothLEHandler::getServiceList(const QString &id,
  * @brief Get list of characteristics for the selected BLE service
  */
 API::CommandResponse API::Handlers::BluetoothLEHandler::getCharacteristicList(
-    const QString &id, const QJsonObject &params)
+  const QString& id, const QJsonObject& params)
 {
   Q_UNUSED(params)
 
-  auto &ble = IO::Drivers::BluetoothLE::instance();
-  const auto &characteristicNames = ble.characteristicNames();
+  auto& ble                       = IO::Drivers::BluetoothLE::instance();
+  const auto& characteristicNames = ble.characteristicNames();
 
   QJsonArray characteristics;
-  for (int i = 0; i < characteristicNames.count(); ++i)
-  {
+  for (int i = 0; i < characteristicNames.count(); ++i) {
     QJsonObject characteristic;
     characteristic[QStringLiteral("index")] = i;
-    characteristic[QStringLiteral("name")] = characteristicNames.at(i);
+    characteristic[QStringLiteral("name")]  = characteristicNames.at(i);
     characteristics.append(characteristic);
   }
 
   QJsonObject result;
-  result[QStringLiteral("characteristicList")] = characteristics;
-  result[QStringLiteral("currentCharacteristicIndex")]
-      = ble.characteristicIndex();
+  result[QStringLiteral("characteristicList")]         = characteristics;
+  result[QStringLiteral("currentCharacteristicIndex")] = ble.characteristicIndex();
   return CommandResponse::makeSuccess(id, result);
 }
 
 /**
  * @brief Get current Bluetooth LE configuration
  */
-API::CommandResponse
-API::Handlers::BluetoothLEHandler::getConfiguration(const QString &id,
-                                                    const QJsonObject &params)
+API::CommandResponse API::Handlers::BluetoothLEHandler::getConfiguration(const QString& id,
+                                                                         const QJsonObject& params)
 {
   Q_UNUSED(params)
 
-  auto &ble = IO::Drivers::BluetoothLE::instance();
+  auto& ble = IO::Drivers::BluetoothLE::instance();
 
   QJsonObject result;
 
   // Device info
   result[QStringLiteral("deviceIndex")] = ble.deviceIndex();
-  const auto &deviceNames = ble.deviceNames();
+  const auto& deviceNames               = ble.deviceNames();
   if (ble.deviceIndex() >= 0 && ble.deviceIndex() < deviceNames.count())
     result[QStringLiteral("deviceName")] = deviceNames.at(ble.deviceIndex());
 
   // Characteristic info
   result[QStringLiteral("characteristicIndex")] = ble.characteristicIndex();
-  const auto &characteristicNames = ble.characteristicNames();
-  if (ble.characteristicIndex() >= 0
-      && ble.characteristicIndex() < characteristicNames.count())
-    result[QStringLiteral("characteristicName")]
-        = characteristicNames.at(ble.characteristicIndex());
+  const auto& characteristicNames               = ble.characteristicNames();
+  if (ble.characteristicIndex() >= 0 && ble.characteristicIndex() < characteristicNames.count())
+    result[QStringLiteral("characteristicName")] =
+      characteristicNames.at(ble.characteristicIndex());
 
   // Connection status
-  result[QStringLiteral("isOpen")] = ble.isOpen();
+  result[QStringLiteral("isOpen")]          = ble.isOpen();
   result[QStringLiteral("configurationOk")] = ble.configurationOk();
 
   return CommandResponse::makeSuccess(id, result);
@@ -343,20 +312,18 @@ API::Handlers::BluetoothLEHandler::getConfiguration(const QString &id,
 /**
  * @brief Get Bluetooth adapter availability and connection status
  */
-API::CommandResponse
-API::Handlers::BluetoothLEHandler::getStatus(const QString &id,
-                                             const QJsonObject &params)
+API::CommandResponse API::Handlers::BluetoothLEHandler::getStatus(const QString& id,
+                                                                  const QJsonObject& params)
 {
   Q_UNUSED(params)
 
-  auto &ble = IO::Drivers::BluetoothLE::instance();
+  auto& ble = IO::Drivers::BluetoothLE::instance();
 
   QJsonObject result;
-  result[QStringLiteral("operatingSystemSupported")]
-      = ble.operatingSystemSupported();
-  result[QStringLiteral("adapterAvailable")] = ble.adapterAvailable();
-  result[QStringLiteral("isOpen")] = ble.isOpen();
-  result[QStringLiteral("deviceCount")] = ble.deviceCount();
+  result[QStringLiteral("operatingSystemSupported")] = ble.operatingSystemSupported();
+  result[QStringLiteral("adapterAvailable")]         = ble.adapterAvailable();
+  result[QStringLiteral("isOpen")]                   = ble.isOpen();
+  result[QStringLiteral("deviceCount")]              = ble.deviceCount();
 
   return CommandResponse::makeSuccess(id, result);
 }

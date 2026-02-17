@@ -23,10 +23,8 @@
 
 #include "API/CommandProtocol.h"
 
-namespace API
-{
-namespace Handlers
-{
+namespace API {
+namespace Handlers {
 /**
  * @class NetworkHandler
  * @brief Registers API commands for IO::Drivers::Network operations
@@ -42,8 +40,7 @@ namespace Handlers
  * - io.driver.network.getConfiguration - Query current configuration
  * - io.driver.network.getSocketTypes - Query available socket types
  */
-class NetworkHandler
-{
+class NetworkHandler {
 public:
   /**
    * @brief Register all Network commands with the CommandRegistry
@@ -52,26 +49,18 @@ public:
 
 private:
   // Mutation commands
-  static CommandResponse setRemoteAddress(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse setTcpPort(const QString &id,
-                                    const QJsonObject &params);
-  static CommandResponse setUdpLocalPort(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse setUdpRemotePort(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse setSocketType(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse setUdpMulticast(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse lookup(const QString &id, const QJsonObject &params);
+  static CommandResponse setRemoteAddress(const QString& id, const QJsonObject& params);
+  static CommandResponse setTcpPort(const QString& id, const QJsonObject& params);
+  static CommandResponse setUdpLocalPort(const QString& id, const QJsonObject& params);
+  static CommandResponse setUdpRemotePort(const QString& id, const QJsonObject& params);
+  static CommandResponse setSocketType(const QString& id, const QJsonObject& params);
+  static CommandResponse setUdpMulticast(const QString& id, const QJsonObject& params);
+  static CommandResponse lookup(const QString& id, const QJsonObject& params);
 
   // Query commands
-  static CommandResponse getConfiguration(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse getSocketTypes(const QString &id,
-                                        const QJsonObject &params);
+  static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);
+  static CommandResponse getSocketTypes(const QString& id, const QJsonObject& params);
 };
 
-} // namespace Handlers
-} // namespace API
+}  // namespace Handlers
+}  // namespace API

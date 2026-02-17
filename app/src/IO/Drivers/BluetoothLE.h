@@ -21,23 +21,20 @@
 
 #pragma once
 
-#include <QObject>
-#include <QLowEnergyController>
 #include <QBluetoothDeviceDiscoveryAgent>
 #include <QBluetoothLocalDevice>
+#include <QLowEnergyController>
+#include <QObject>
 
 #include "IO/HAL_Driver.h"
 
-namespace IO
-{
-namespace Drivers
-{
+namespace IO {
+namespace Drivers {
 /**
  * @brief The BluetoothLE class
  * Serial Studio driver class to interact with Bluetooth Low Energy devices.
  */
-class BluetoothLE : public HAL_Driver
-{
+class BluetoothLE : public HAL_Driver {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int deviceCount
@@ -79,17 +76,17 @@ signals:
   void deviceConnectedChanged();
   void characteristicIndexChanged();
   void adapterAvailabilityChanged();
-  void error(const QString &message);
+  void error(const QString& message);
 
 private:
   explicit BluetoothLE();
-  BluetoothLE(BluetoothLE &&) = delete;
-  BluetoothLE(const BluetoothLE &) = delete;
-  BluetoothLE &operator=(BluetoothLE &&) = delete;
-  BluetoothLE &operator=(const BluetoothLE &) = delete;
+  BluetoothLE(BluetoothLE&&)                 = delete;
+  BluetoothLE(const BluetoothLE&)            = delete;
+  BluetoothLE& operator=(BluetoothLE&&)      = delete;
+  BluetoothLE& operator=(const BluetoothLE&) = delete;
 
 public:
-  static BluetoothLE &instance();
+  static BluetoothLE& instance();
 
   void close() override;
 
@@ -97,7 +94,7 @@ public:
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
-  [[nodiscard]] quint64 write(const QByteArray &data) override;
+  [[nodiscard]] quint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 
   [[nodiscard]] bool ignoreDataDelimeters() const;
@@ -121,12 +118,11 @@ public slots:
 private slots:
   void configureCharacteristics();
   void onServiceDiscoveryFinished();
-  void onDeviceDiscovered(const QBluetoothDeviceInfo &device);
+  void onDeviceDiscovered(const QBluetoothDeviceInfo& device);
   void onServiceError(QLowEnergyService::ServiceError serviceError);
   void onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error error);
   void onServiceStateChanged(QLowEnergyService::ServiceState serviceState);
-  void onCharacteristicChanged(const QLowEnergyCharacteristic &info,
-                               const QByteArray &value);
+  void onCharacteristicChanged(const QLowEnergyCharacteristic& info, const QByteArray& value);
   void onHostModeStateChanged(QBluetoothLocalDevice::HostMode state);
 
 private:
@@ -138,10 +134,10 @@ private:
   bool m_adapterAvailable;
   int m_selectedCharacteristic;
 
-  QLowEnergyService *m_service;
-  QLowEnergyController *m_controller;
-  QBluetoothLocalDevice *m_localDevice;
-  QBluetoothDeviceDiscoveryAgent *m_discoveryAgent;
+  QLowEnergyService* m_service;
+  QLowEnergyController* m_controller;
+  QBluetoothLocalDevice* m_localDevice;
+  QBluetoothDeviceDiscoveryAgent* m_discoveryAgent;
 
   QStringList m_deviceNames;
   QStringList m_serviceNames;
@@ -150,5 +146,5 @@ private:
   QList<QBluetoothDeviceInfo> m_devices;
   QList<QLowEnergyCharacteristic> m_characteristics;
 };
-} // namespace Drivers
-} // namespace IO
+}  // namespace Drivers
+}  // namespace IO

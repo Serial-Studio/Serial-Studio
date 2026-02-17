@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD-3-Clause
 /*
  * Copyright (c) 2011, Andre Somers
  * All rights reserved.
@@ -31,16 +32,16 @@
 
 #include "Licensing/SimpleCrypt.h"
 
-#include <QIODevice>
-#include <QDateTime>
 #include <QByteArray>
-#include <QDataStream>
-#include <QRandomGenerator>
 #include <QCryptographicHash>
+#include <QDataStream>
+#include <QDateTime>
+#include <QIODevice>
+#include <QRandomGenerator>
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constructors
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Constructs a SimpleCrypt instance without a valid key set on it.
@@ -50,8 +51,7 @@ Licensing::SimpleCrypt::SimpleCrypt()
   , m_lastError(ErrorNoError)
   , m_compressionMode(CompressionAuto)
   , m_protectionMode(ProtectionChecksum)
-{
-}
+{}
 
 /**
  * Constructs a SimpleCrypt instance and initializes it with the given key.
@@ -65,9 +65,9 @@ Licensing::SimpleCrypt::SimpleCrypt(quint64 key)
   splitKey();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Property getters
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Returns true if SimpleCrypt has been initialized with a key.
@@ -88,8 +88,7 @@ Licensing::SimpleCrypt::Error Licensing::SimpleCrypt::lastError() const
 /**
  * Returns the CompressionMode that is currently in use.
  */
-Licensing::SimpleCrypt::CompressionMode
-Licensing::SimpleCrypt::compressionMode() const
+Licensing::SimpleCrypt::CompressionMode Licensing::SimpleCrypt::compressionMode() const
 {
   return m_compressionMode;
 }
@@ -97,15 +96,15 @@ Licensing::SimpleCrypt::compressionMode() const
 /**
  * Returns the IntegrityProtectionMode that is currently in use.
  */
-Licensing::SimpleCrypt::IntegrityProtectionMode
-Licensing::SimpleCrypt::integrityProtectionMode() const
+Licensing::SimpleCrypt::IntegrityProtectionMode Licensing::SimpleCrypt::integrityProtectionMode()
+  const
 {
   return m_protectionMode;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Property setters
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * (Re-) initializes the key with the given @arg key.
@@ -134,15 +133,14 @@ void Licensing::SimpleCrypt::setCompressionMode(CompressionMode mode)
  *  * Note that decryption is not influenced by this mode, as the decryption
  * recognizes what mode was used when encrypting.
  */
-void Licensing::SimpleCrypt::setIntegrityProtectionMode(
-    IntegrityProtectionMode mode)
+void Licensing::SimpleCrypt::setIntegrityProtectionMode(IntegrityProtectionMode mode)
 {
   m_protectionMode = mode;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Data encryption
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Encrypts the @arg plaintext string with the key the class was initialized
@@ -150,11 +148,11 @@ void Licensing::SimpleCrypt::setIntegrityProtectionMode(
  * version of the binary array that is the actual result of the string, so it
  * can be stored easily in a text format.
  */
-QString Licensing::SimpleCrypt::encryptToString(const QString &plaintext)
+QString Licensing::SimpleCrypt::encryptToString(const QString& plaintext)
 {
   QByteArray plaintextArray = plaintext.toUtf8();
-  QByteArray cypher = encryptToByteArray(plaintextArray);
-  QString cypherString = QString::fromLatin1(cypher.toBase64());
+  QByteArray cypher         = encryptToByteArray(plaintextArray);
+  QString cypherString      = QString::fromLatin1(cypher.toBase64());
   return cypherString;
 }
 
@@ -164,9 +162,9 @@ QString Licensing::SimpleCrypt::encryptToString(const QString &plaintext)
  * base64 encoded version of the binary array that is the actual result of the
  * encryption, so it can be stored easily in a text format.
  */
-QString Licensing::SimpleCrypt::encryptToString(const QByteArray &plaintext)
+QString Licensing::SimpleCrypt::encryptToString(const QByteArray& plaintext)
 {
-  QByteArray cypher = encryptToByteArray(plaintext);
+  QByteArray cypher    = encryptToByteArray(plaintext);
   QString cypherString = QString::fromLatin1(cypher.toBase64());
   return cypherString;
 }
@@ -179,7 +177,7 @@ QString Licensing::SimpleCrypt::encryptToString(const QByteArray &plaintext)
  * format. If you need a string you can store in a text file, use
  * encryptToString() instead.
  */
-QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QString &plaintext)
+QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QString& plaintext)
 {
   QByteArray plaintextArray = plaintext.toUtf8();
   return encryptToByteArray(plaintextArray);
@@ -194,11 +192,9 @@ QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QString &plaintext)
  * format. If you need a string you can store in a text file, use
  * encryptToString() instead.
  */
-QByteArray
-Licensing::SimpleCrypt::encryptToByteArray(const QByteArray &plaintext)
+QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QByteArray& plaintext)
 {
-  if (m_keyParts.isEmpty())
-  {
+  if (m_keyParts.isEmpty()) {
     qWarning() << "No key set.";
     m_lastError = ErrorNoKeySet;
     return QByteArray();
@@ -207,32 +203,27 @@ Licensing::SimpleCrypt::encryptToByteArray(const QByteArray &plaintext)
   QByteArray ba = plaintext;
 
   CryptoFlags flags = CryptoFlagNone;
-  if (m_compressionMode == CompressionAlways)
-  {
+  if (m_compressionMode == CompressionAlways) {
     ba = qCompress(ba, 9);
     flags |= CryptoFlagCompression;
   }
 
-  else if (m_compressionMode == CompressionAuto)
-  {
+  else if (m_compressionMode == CompressionAuto) {
     QByteArray compressed = qCompress(ba, 9);
-    if (compressed.size() < ba.size())
-    {
+    if (compressed.size() < ba.size()) {
       ba = compressed;
       flags |= CryptoFlagCompression;
     }
   }
 
   QByteArray integrityProtection;
-  if (m_protectionMode == ProtectionChecksum)
-  {
+  if (m_protectionMode == ProtectionChecksum) {
     flags |= CryptoFlagChecksum;
     QDataStream s(&integrityProtection, QIODevice::WriteOnly);
     s << qChecksum(ba, Qt::ChecksumIso3309);
   }
 
-  else if (m_protectionMode == ProtectionHash)
-  {
+  else if (m_protectionMode == ProtectionHash) {
     flags |= CryptoFlagHash;
     QCryptographicHash hash(QCryptographicHash::Sha1);
     hash.addData(ba);
@@ -242,16 +233,15 @@ Licensing::SimpleCrypt::encryptToByteArray(const QByteArray &plaintext)
 
   // prepend a random char to the string
   char randomChar = char(QRandomGenerator::securelySeeded().generate() & 0xFF);
-  ba = randomChar + integrityProtection + ba;
+  ba              = randomChar + integrityProtection + ba;
 
   int pos(0);
   char lastChar(0);
 
   int cnt = ba.size();
 
-  while (pos < cnt)
-  {
-    ba[pos] = ba.at(pos) ^ m_keyParts.at(pos % 8) ^ lastChar;
+  while (pos < cnt) {
+    ba[pos]  = ba.at(pos) ^ m_keyParts.at(pos % 8) ^ lastChar;
     lastChar = ba.at(pos);
     ++pos;
   }
@@ -265,9 +255,9 @@ Licensing::SimpleCrypt::encryptToByteArray(const QByteArray &plaintext)
   return resultArray;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Data decryption
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Decrypts a cyphertext binary encrypted with this class with the set key
@@ -277,9 +267,9 @@ Licensing::SimpleCrypt::encryptToByteArray(const QByteArray &plaintext)
  * decryption, an empty string or a string containing nonsense may be
  * returned.
  */
-QString Licensing::SimpleCrypt::decryptToString(const QByteArray &cypher)
+QString Licensing::SimpleCrypt::decryptToString(const QByteArray& cypher)
 {
-  QByteArray ba = decryptToByteArray(cypher);
+  QByteArray ba     = decryptToByteArray(cypher);
   QString plaintext = QString::fromUtf8(ba, ba.size());
 
   return plaintext;
@@ -293,11 +283,11 @@ QString Licensing::SimpleCrypt::decryptToString(const QByteArray &cypher)
  * decryption, an empty string or a string containing nonsense may be
  * returned.
  */
-QString Licensing::SimpleCrypt::decryptToString(const QString &cyphertext)
+QString Licensing::SimpleCrypt::decryptToString(const QString& cyphertext)
 {
   QByteArray cyphertextArray = QByteArray::fromBase64(cyphertext.toLatin1());
-  QByteArray plaintextArray = decryptToByteArray(cyphertextArray);
-  QString plaintext = QString::fromUtf8(plaintextArray, plaintextArray.size());
+  QByteArray plaintextArray  = decryptToByteArray(cyphertextArray);
+  QString plaintext          = QString::fromUtf8(plaintextArray, plaintextArray.size());
 
   return plaintext;
 }
@@ -310,10 +300,9 @@ QString Licensing::SimpleCrypt::decryptToString(const QString &cyphertext)
  * decryption, an empty string or a string containing nonsense may be
  * returned.
  */
-QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray &cypher)
+QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray& cypher)
 {
-  if (m_keyParts.isEmpty())
-  {
+  if (m_keyParts.isEmpty()) {
     qWarning() << "No key set.";
     m_lastError = ErrorNoKeySet;
     return QByteArray();
@@ -327,8 +316,7 @@ QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray &cypher)
   char version = ba.at(0);
 
   // we only work with version 3
-  if (version != 3)
-  {
+  if (version != 3) {
     m_lastError = ErrorUnknownVersion;
     return QByteArray();
   }
@@ -340,11 +328,10 @@ QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray &cypher)
   int cnt(ba.size());
   char lastChar = 0;
 
-  while (pos < cnt)
-  {
+  while (pos < cnt) {
     char currentChar = ba[pos];
-    ba[pos] = ba.at(pos) ^ lastChar ^ m_keyParts.at(pos % 8);
-    lastChar = currentChar;
+    ba[pos]          = ba.at(pos) ^ lastChar ^ m_keyParts.at(pos % 8);
+    lastChar         = currentChar;
     ++pos;
   }
 
@@ -352,10 +339,8 @@ QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray &cypher)
   ba = ba.mid(1);
 
   bool integrityOk(true);
-  if (flags.testFlag(CryptoFlagChecksum))
-  {
-    if (ba.length() < 2)
-    {
+  if (flags.testFlag(CryptoFlagChecksum)) {
+    if (ba.length() < 2) {
       m_lastError = ErrorIntegrityFailed;
       return QByteArray();
     }
@@ -365,28 +350,25 @@ QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray &cypher)
       s >> storedChecksum;
     }
 
-    ba = ba.mid(2);
+    ba               = ba.mid(2);
     quint16 checksum = qChecksum(ba, Qt::ChecksumIso3309);
-    integrityOk = (checksum == storedChecksum);
+    integrityOk      = (checksum == storedChecksum);
   }
 
-  else if (flags.testFlag(CryptoFlagHash))
-  {
-    if (ba.length() < 20)
-    {
+  else if (flags.testFlag(CryptoFlagHash)) {
+    if (ba.length() < 20) {
       m_lastError = ErrorIntegrityFailed;
       return QByteArray();
     }
 
     QByteArray storedHash = ba.left(20);
-    ba = ba.mid(20);
+    ba                    = ba.mid(20);
     QCryptographicHash hash(QCryptographicHash::Sha1);
     hash.addData(ba);
     integrityOk = (hash.result() == storedHash);
   }
 
-  if (!integrityOk)
-  {
+  if (!integrityOk) {
     m_lastError = ErrorIntegrityFailed;
     return QByteArray();
   }
@@ -406,17 +388,17 @@ QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray &cypher)
  * decryption, an empty string or a string containing nonsense may be
  * returned.
  */
-QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QString &cyphertext)
+QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QString& cyphertext)
 {
   QByteArray cyphertextArray = QByteArray::fromBase64(cyphertext.toLatin1());
-  QByteArray ba = decryptToByteArray(cyphertextArray);
+  QByteArray ba              = decryptToByteArray(cyphertextArray);
 
   return ba;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Utility functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Splits the key into 8 bytes, extracting each subsequent lower-order
@@ -431,13 +413,12 @@ void Licensing::SimpleCrypt::splitKey()
   m_keyParts.clear();
   m_keyParts.resize(8);
 
-  for (int i = 0; i < 8; i++)
-  {
+  for (int i = 0; i < 8; i++) {
     quint64 part = m_key;
     for (int j = i; j > 0; j--)
       part = part >> 8;
 
-    part = part & 0xff;
+    part          = part & 0xff;
     m_keyParts[i] = static_cast<char>(part);
   }
 }

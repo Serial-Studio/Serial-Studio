@@ -19,22 +19,21 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "MQTT/Client.h"
+
 #include <QFile>
 #include <QFileDialog>
 #include <QInputDialog>
 
 #include "IO/Manager.h"
-#include "MQTT/Client.h"
-#include "Misc/Utilities.h"
 #include "Licensing/LemonSqueezy.h"
+#include "Misc/Utilities.h"
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
-MQTT::Client::Client()
-  : m_publisher(false)
-  , m_sslEnabled(false)
+MQTT::Client::Client() : m_publisher(false), m_sslEnabled(false)
 {
   // Set initial random client ID
   regenerateClientId();
@@ -64,20 +63,21 @@ MQTT::Client::Client()
   m_sslConfiguration.setPeerVerifyMode(QSslSocket::QueryPeer);
 
   // Configure signals/slots between QtMQTT and this module
-  connect(&m_client, &QMqttClient::stateChanged, this,
-          &MQTT::Client::onStateChanged);
-  connect(&m_client, &QMqttClient::errorChanged, this,
-          &MQTT::Client::onErrorChanged);
-  connect(&m_client, &QMqttClient::authenticationFinished, this,
-          &MQTT::Client::onAuthenticationFinished);
-  connect(&m_client, &QMqttClient::authenticationRequested, this,
+  connect(&m_client, &QMqttClient::stateChanged, this, &MQTT::Client::onStateChanged);
+  connect(&m_client, &QMqttClient::errorChanged, this, &MQTT::Client::onErrorChanged);
+  connect(
+    &m_client, &QMqttClient::authenticationFinished, this, &MQTT::Client::onAuthenticationFinished);
+  connect(&m_client,
+          &QMqttClient::authenticationRequested,
+          this,
           &MQTT::Client::onAuthenticationRequested);
-  connect(&m_client, &QMqttClient::messageReceived, this,
-          &MQTT::Client::onMessageReceived);
+  connect(&m_client, &QMqttClient::messageReceived, this, &MQTT::Client::onMessageReceived);
 
   // Disconnect from MQTT server when Serial Studio is deactivated
   connect(&Licensing::LemonSqueezy::instance(),
-          &Licensing::LemonSqueezy::activatedChanged, this, [=, this] {
+          &Licensing::LemonSqueezy::activatedChanged,
+          this,
+          [=, this] {
             if (isConnected() && !SerialStudio::activated())
               closeConnection();
           });
@@ -92,15 +92,15 @@ MQTT::Client::Client()
  * @brief Returns the singleton instance of the MQTT Client.
  * @return Reference to the shared MQTT::Client instance.
  */
-MQTT::Client &MQTT::Client::instance()
+MQTT::Client& MQTT::Client::instance()
 {
   static Client instance;
   return instance;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Member access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the current client mode (publisher or subscriber).
@@ -244,8 +244,7 @@ bool MQTT::Client::autoKeepAlive() const
 quint8 MQTT::Client::mqttVersion() const
 {
   quint8 index = 0;
-  for (auto i = m_mqttVersions.begin(); i != m_mqttVersions.end(); ++i)
-  {
+  for (auto i = m_mqttVersions.begin(); i != m_mqttVersions.end(); ++i) {
     if (i.value() == m_client.protocolVersion())
       break;
 
@@ -258,14 +257,12 @@ quint8 MQTT::Client::mqttVersion() const
 /**
  * @brief Returns the list of supported MQTT protocol version names.
  */
-const QStringList &MQTT::Client::mqttVersions() const
+const QStringList& MQTT::Client::mqttVersions() const
 {
   static QStringList list;
   if (list.isEmpty())
-  {
     for (auto i = m_mqttVersions.begin(); i != m_mqttVersions.end(); ++i)
       list.append(i.key());
-  }
 
   return list;
 }
@@ -284,8 +281,7 @@ bool MQTT::Client::sslEnabled() const
 quint8 MQTT::Client::sslProtocol() const
 {
   quint8 index = 0;
-  for (auto i = m_sslProtocols.begin(); i != m_sslProtocols.end(); ++i)
-  {
+  for (auto i = m_sslProtocols.begin(); i != m_sslProtocols.end(); ++i) {
     if (i.value() == m_sslConfiguration.protocol())
       break;
 
@@ -309,8 +305,7 @@ int MQTT::Client::peerVerifyDepth() const
 quint8 MQTT::Client::peerVerifyMode() const
 {
   quint8 index = 0;
-  for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i)
-  {
+  for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i) {
     if (i.value() == m_sslConfiguration.peerVerifyMode())
       break;
 
@@ -323,11 +318,10 @@ quint8 MQTT::Client::peerVerifyMode() const
 /**
  * @brief Returns the available certificate authority (CA) options.
  */
-const QStringList &MQTT::Client::caCertificates() const
+const QStringList& MQTT::Client::caCertificates() const
 {
   static QStringList list;
-  if (list.isEmpty())
-  {
+  if (list.isEmpty()) {
     list.append(tr("Use System Database"));
     list.append(tr("Load From Folder..."));
   }
@@ -338,11 +332,10 @@ const QStringList &MQTT::Client::caCertificates() const
 /**
  * @brief Returns the list of supported client modes (Publisher/Subscriber).
  */
-const QStringList &MQTT::Client::modes() const
+const QStringList& MQTT::Client::modes() const
 {
   static QStringList list;
-  if (list.isEmpty())
-  {
+  if (list.isEmpty()) {
     list.append(tr("MQTT Subscriber"));
     list.append(tr("MQTT Publisher"));
   }
@@ -353,14 +346,12 @@ const QStringList &MQTT::Client::modes() const
 /**
  * @brief Returns the list of supported SSL protocols.
  */
-const QStringList &MQTT::Client::sslProtocols() const
+const QStringList& MQTT::Client::sslProtocols() const
 {
   static QStringList list;
   if (list.isEmpty())
-  {
     for (auto i = m_sslProtocols.begin(); i != m_sslProtocols.end(); ++i)
       list.append(i.key());
-  }
 
   return list;
 }
@@ -368,14 +359,12 @@ const QStringList &MQTT::Client::sslProtocols() const
 /**
  * @brief Returns the list of supported SSL peer verification modes.
  */
-const QStringList &MQTT::Client::peerVerifyModes() const
+const QStringList& MQTT::Client::peerVerifyModes() const
 {
   static QStringList list;
   if (list.isEmpty())
-  {
     for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i)
       list.append(i.key());
-  }
 
   return list;
 }
@@ -383,14 +372,14 @@ const QStringList &MQTT::Client::peerVerifyModes() const
 /**
  * @brief Provides direct access to the underlying QMqttClient instance.
  */
-QMqttClient &MQTT::Client::client()
+QMqttClient& MQTT::Client::client()
 {
   return m_client;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Public slots
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Opens a connection to the MQTT broker.
@@ -406,51 +395,45 @@ void MQTT::Client::openConnection()
     return;
 
   // Stop if Serial Studio is not activated
-  if (!SerialStudio::activated())
-  {
+  if (!SerialStudio::activated()) {
     Misc::Utilities::showMessageBox(
-        tr("MQTT Feature Requires a Commercial License"),
-        tr("Connecting to MQTT brokers is only available with a valid Serial "
-           "Studio commercial license.\n\n"
-           "To unlock this feature, please activate your license or visit the "
-           "store."),
-        QMessageBox::Warning);
+      tr("MQTT Feature Requires a Commercial License"),
+      tr("Connecting to MQTT brokers is only available with a valid Serial Studio commercial "
+         "license.\n\nTo unlock this feature, please activate your license or visit the store."),
+      QMessageBox::Warning);
     return;
   }
 
   // Verify that MQTT topic is set
-  if (m_topicFilter.isEmpty())
-  {
-    if (isPublisher())
-    {
+  if (m_topicFilter.isEmpty()) {
+    if (isPublisher()) {
       Misc::Utilities::showMessageBox(
-          tr("Missing MQTT Topic"),
-          tr("You must specify a topic before connecting as a publisher."),
-          QMessageBox::Critical, tr("Configuration Error"));
+        tr("Missing MQTT Topic"),
+        tr("You must specify a topic before connecting as a publisher."),
+        QMessageBox::Critical,
+        tr("Configuration Error"));
       Q_EMIT highlightMqttTopicControl();
       return;
     }
 
-    else
-    {
+    else {
       Misc::Utilities::showMessageBox(
-          tr("MQTT Topic Not Set"),
-          tr("You won't receive any messages until a topic is configured."),
-          QMessageBox::Warning, tr("Configuration Warning"));
+        tr("MQTT Topic Not Set"),
+        tr("You won't receive any messages until a topic is configured."),
+        QMessageBox::Warning,
+        tr("Configuration Warning"));
       Q_EMIT highlightMqttTopicControl();
     }
   }
 
   // Apply topic name if in publisher mode
-  if (isPublisher())
-  {
+  if (isPublisher()) {
     m_topicName.setName(m_topicFilter);
-    if (!m_topicName.isValid())
-    {
-      Misc::Utilities::showMessageBox(
-          tr("Invalid MQTT Topic"),
-          tr("The topic \"%1\" is not valid.").arg(m_topicFilter),
-          QMessageBox::Critical, tr("Configuration Error"));
+    if (!m_topicName.isValid()) {
+      Misc::Utilities::showMessageBox(tr("Invalid MQTT Topic"),
+                                      tr("The topic \"%1\" is not valid.").arg(m_topicFilter),
+                                      QMessageBox::Critical,
+                                      tr("Configuration Error"));
       Q_EMIT highlightMqttTopicControl();
       return;
     }
@@ -507,10 +490,9 @@ void MQTT::Client::toggleConnection()
 void MQTT::Client::regenerateClientId()
 {
   QString clientId;
-  constexpr int length = 16;
+  constexpr int length  = 16;
   const QString charset = "abcdefghijklmnopqrstuvwxyz0123456789";
-  for (int i = 0; i < length; ++i)
-  {
+  for (int i = 0; i < length; ++i) {
     int index = QRandomGenerator::global()->bounded(charset.length());
     clientId.append(charset.at(index));
   }
@@ -533,7 +515,7 @@ void MQTT::Client::setMode(const quint8 mode)
  * @brief Sets the topic for subscription or publishing.
  * @param topic Topic name string.
  */
-void MQTT::Client::setTopic(const QString &topic)
+void MQTT::Client::setTopic(const QString& topic)
 {
   m_topicFilter = topic;
   m_topicName.setName(topic);
@@ -543,7 +525,7 @@ void MQTT::Client::setTopic(const QString &topic)
 /**
  * @brief Sets the MQTT client ID.
  */
-void MQTT::Client::setClientId(const QString &id)
+void MQTT::Client::setClientId(const QString& id)
 {
   m_clientId = id;
   m_client.setClientId(id);
@@ -553,7 +535,7 @@ void MQTT::Client::setClientId(const QString &id)
 /**
  * @brief Sets the broker hostname.
  */
-void MQTT::Client::setHostname(const QString &hostname)
+void MQTT::Client::setHostname(const QString& hostname)
 {
   m_client.setHostname(hostname);
   Q_EMIT mqttConfigurationChanged();
@@ -562,7 +544,7 @@ void MQTT::Client::setHostname(const QString &hostname)
 /**
  * @brief Sets the username for authentication.
  */
-void MQTT::Client::setUsername(const QString &username)
+void MQTT::Client::setUsername(const QString& username)
 {
   m_client.setUsername(username);
   Q_EMIT mqttConfigurationChanged();
@@ -571,7 +553,7 @@ void MQTT::Client::setUsername(const QString &username)
 /**
  * @brief Sets the password for authentication.
  */
-void MQTT::Client::setPassword(const QString &password)
+void MQTT::Client::setPassword(const QString& password)
 {
   m_client.setPassword(password);
   Q_EMIT mqttConfigurationChanged();
@@ -607,7 +589,7 @@ void MQTT::Client::setWillRetain(const bool retain)
 /**
  * @brief Sets the topic for the "Will" message.
  */
-void MQTT::Client::setWillTopic(const QString &topic)
+void MQTT::Client::setWillTopic(const QString& topic)
 {
   m_client.setWillTopic(topic);
   Q_EMIT mqttConfigurationChanged();
@@ -616,7 +598,7 @@ void MQTT::Client::setWillTopic(const QString &topic)
 /**
  * @brief Sets the message content for the "Will" message.
  */
-void MQTT::Client::setWillMessage(const QString &message)
+void MQTT::Client::setWillMessage(const QString& message)
 {
   m_client.setWillMessage(message.toUtf8());
   Q_EMIT mqttConfigurationChanged();
@@ -655,10 +637,8 @@ void MQTT::Client::setAutoKeepAlive(const bool keepAlive)
 void MQTT::Client::setMqttVersion(const quint8 version)
 {
   quint8 index = 0;
-  for (auto i = m_mqttVersions.begin(); i != m_mqttVersions.end(); ++i)
-  {
-    if (index == version)
-    {
+  for (auto i = m_mqttVersions.begin(); i != m_mqttVersions.end(); ++i) {
+    if (index == version) {
       m_client.setProtocolVersion(i.value());
       Q_EMIT mqttConfigurationChanged();
       break;
@@ -673,21 +653,21 @@ void MQTT::Client::setMqttVersion(const quint8 version)
  */
 void MQTT::Client::addCaCertificates()
 {
-  auto *dialog = new QFileDialog(
-      nullptr, tr("Select PEM Certificates Directory"),
-      QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+  auto* dialog =
+    new QFileDialog(nullptr,
+                    tr("Select PEM Certificates Directory"),
+                    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
 
   dialog->setFileMode(QFileDialog::Directory);
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
   dialog->setOption(QFileDialog::DontUseNativeDialog);
 
-  connect(dialog, &QFileDialog::fileSelected, this,
-          [this, dialog](const QString &path) {
-            dialog->deleteLater();
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    dialog->deleteLater();
 
-            if (!path.isEmpty())
-              m_sslConfiguration.addCaCertificates(path);
-          });
+    if (!path.isEmpty())
+      m_sslConfiguration.addCaCertificates(path);
+  });
 
   dialog->open();
 }
@@ -716,10 +696,8 @@ void MQTT::Client::setPeerVerifyDepth(const int depth)
 void MQTT::Client::setSslProtocol(const quint8 protocol)
 {
   quint8 index = 0;
-  for (auto i = m_sslProtocols.begin(); i != m_sslProtocols.end(); ++i)
-  {
-    if (index == protocol)
-    {
+  for (auto i = m_sslProtocols.begin(); i != m_sslProtocols.end(); ++i) {
+    if (index == protocol) {
       m_sslConfiguration.setProtocol(i.value());
       Q_EMIT sslConfigurationChanged();
       break;
@@ -735,10 +713,8 @@ void MQTT::Client::setSslProtocol(const quint8 protocol)
 void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
 {
   quint8 index = 0;
-  for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i)
-  {
-    if (index == verifyMode)
-    {
+  for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i) {
+    if (index == verifyMode) {
       m_sslConfiguration.setPeerVerifyMode(i.value());
       Q_EMIT sslConfigurationChanged();
       break;
@@ -748,23 +724,22 @@ void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Hotpath functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Publishes a message to the broker if connected and in publisher mode.
  */
-void MQTT::Client::hotpathTxFrame(const QByteArray &data)
+void MQTT::Client::hotpathTxFrame(const QByteArray& data)
 {
-  if (isConnected() && isPublisher() && m_topicName.isValid()
-      && SerialStudio::activated())
+  if (isConnected() && isPublisher() && m_topicName.isValid() && SerialStudio::activated())
     m_client.publish(m_topicName, data);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Private slots
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Handles changes in the client's connection state.
@@ -779,19 +754,15 @@ void MQTT::Client::hotpathTxFrame(const QByteArray &data)
 void MQTT::Client::onStateChanged(QMqttClient::ClientState state)
 {
   Q_EMIT connectedChanged();
-  if (state == QMqttClient::Connected && isSubscriber()
-      && !m_topicFilter.isEmpty())
-  {
+  if (state == QMqttClient::Connected && isSubscriber() && !m_topicFilter.isEmpty()) {
     QMqttTopicFilter filter;
     filter.setFilter(m_topicFilter);
 
-    auto *sub = m_client.subscribe(filter, 0);
-    if (!sub || sub->state() == QMqttSubscription::Error)
-    {
-      Misc::Utilities::showMessageBox(
-          tr("Subscription Error"),
-          tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter),
-          QMessageBox::Critical);
+    auto* sub = m_client.subscribe(filter, 0);
+    if (!sub || sub->state() == QMqttSubscription::Error) {
+      Misc::Utilities::showMessageBox(tr("Subscription Error"),
+                                      tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter),
+                                      QMessageBox::Critical);
     }
   }
 }
@@ -803,69 +774,64 @@ void MQTT::Client::onErrorChanged(QMqttClient::ClientError error)
 {
   QString title;
   QString message;
-  switch (error)
-  {
+  switch (error) {
     case QMqttClient::NoError:
       break;
 
     case QMqttClient::InvalidProtocolVersion:
-      title = tr("Invalid MQTT Protocol Version");
-      message = tr("The MQTT broker rejected the connection due to an "
-                   "unsupported protocol version. Ensure that your client and "
-                   "broker support the same protocol version.");
+      title   = tr("Invalid MQTT Protocol Version");
+      message = tr("The MQTT broker rejected the connection due to an unsupported protocol "
+                   "version. Ensure that your client and broker support the same "
+                   "protocol version.");
       break;
 
     case QMqttClient::IdRejected:
-      title = tr("Client ID Rejected");
-      message = tr("The broker rejected the client ID. It may be malformed, "
-                   "too long, or already in use. Try using a different client "
-                   "ID.");
+      title   = tr("Client ID Rejected");
+      message = tr("The broker rejected the client ID. It may be malformed, too long, or "
+                   "already in use. Try using a different client ID.");
       break;
 
     case QMqttClient::ServerUnavailable:
-      title = tr("MQTT Server Unavailable");
-      message = tr("The network connection was established, but the broker is "
-                   "currently unavailable. Verify the broker status and try "
-                   "again later.");
+      title   = tr("MQTT Server Unavailable");
+      message = tr("The network connection was established, but the broker is currently "
+                   "unavailable. Verify the broker status and try again later.");
       break;
 
     case QMqttClient::BadUsernameOrPassword:
-      title = tr("Authentication Error");
-      message = tr("The username or password provided is incorrect or "
-                   "malformed. Double-check your credentials and try again.");
+      title   = tr("Authentication Error");
+      message = tr("The username or password provided is incorrect or malformed. "
+                   "Double-check your credentials and try again.");
       break;
 
     case QMqttClient::NotAuthorized:
-      title = tr("Authorization Error");
-      message = tr("The MQTT broker denied the connection due to insufficient "
-                   "permissions. Ensure that your account has the necessary "
-                   "access rights.");
+      title   = tr("Authorization Error");
+      message = tr("The MQTT broker denied the connection due to insufficient permissions. "
+                   "Ensure that your account has the necessary access rights.");
       break;
 
     case QMqttClient::TransportInvalid:
-      title = tr("Network or Transport Error");
-      message = tr("A network or transport layer issue occurred, causing an "
-                   "unexpected connection failure. "
-                   "Check your network connection and broker settings.");
+      title   = tr("Network or Transport Error");
+      message = tr("A network or transport layer issue occurred, causing an unexpected connection "
+                   "failure. Check your network connection and broker settings.");
       break;
 
     case QMqttClient::ProtocolViolation:
       title = tr("MQTT Protocol Violation");
-      message = tr("The client detected a violation of the MQTT protocol and "
-                   "closed the connection. Check your MQTT implementation for "
-                   "compliance.");
+      message =
+        tr("The client detected a violation of the MQTT protocol and closed the connection. "
+           "Check your MQTT implementation for compliance.");
       break;
 
     case QMqttClient::UnknownError:
-      title = tr("Unknown Error");
-      message = tr("An unexpected error occurred. Check the logs for more "
-                   "details or restart the application.");
+      title   = tr("Unknown Error");
+      message = tr("An unexpected error occurred. Check the logs for more details or "
+                   "restart the application.");
       break;
 
     case QMqttClient::Mqtt5SpecificError:
-      title = tr("MQTT 5 Error");
-      message = tr("An MQTT protocol level 5 error occurred. "
-                   "Check the broker logs or reason codes for more details.");
+      title   = tr("MQTT 5 Error");
+      message = tr("An MQTT protocol level 5 error occurred. Check the broker logs or reason "
+                   "codes for more details.");
       break;
 
     default:
@@ -879,31 +845,26 @@ void MQTT::Client::onErrorChanged(QMqttClient::ClientError error)
 /**
  * @brief Handles the result of an authentication attempt.
  */
-void MQTT::Client::onAuthenticationFinished(
-    const QMqttAuthenticationProperties &p)
+void MQTT::Client::onAuthenticationFinished(const QMqttAuthenticationProperties& p)
 {
-
-  if (!p.reason().isEmpty())
-  {
-    Misc::Utilities::showMessageBox(
-        tr("MQTT Authentication Failed"),
-        tr("Authentication failed: %.").arg(p.reason()), QMessageBox::Warning);
+  if (!p.reason().isEmpty()) {
+    Misc::Utilities::showMessageBox(tr("MQTT Authentication Failed"),
+                                    tr("Authentication failed: %.").arg(p.reason()),
+                                    QMessageBox::Warning);
   }
 }
 
 /**
  * @brief Handles extended authentication requests from the broker.
  */
-void MQTT::Client::onAuthenticationRequested(
-    const QMqttAuthenticationProperties &p)
+void MQTT::Client::onAuthenticationRequested(const QMqttAuthenticationProperties& p)
 {
   // Ensure MQTT 5.0 is used for extended authentication
-  if (m_client.protocolVersion() != QMqttClient::MQTT_5_0)
-  {
-    Misc::Utilities::showMessageBox(tr("Authentication Error"),
-                                    tr("Extended authentication is required, "
-                                       "but MQTT 5.0 is not enabled."),
-                                    QMessageBox::Warning);
+  if (m_client.protocolVersion() != QMqttClient::MQTT_5_0) {
+    Misc::Utilities::showMessageBox(
+      tr("Authentication Error"),
+      tr("Extended authentication is required, but MQTT 5.0 is not enabled."),
+      QMessageBox::Warning);
     return;
   }
 
@@ -914,32 +875,29 @@ void MQTT::Client::onAuthenticationRequested(
 
   // Alert user
   Misc::Utilities::showMessageBox(
-      tr("MQTT Authentication Required"),
-      tr("The MQTT broker requires authentication using method: \"%1\".\n\n"
-         "Please provide the necessary credentials.")
-          .arg(authMethod),
-      QMessageBox::Information);
+    tr("MQTT Authentication Required"),
+    tr("The MQTT broker requires authentication using method: \"%1\".\n\n"
+       "Please provide the necessary credentials.")
+      .arg(authMethod),
+    QMessageBox::Information);
 
   // Get user name
   bool ok;
-  const auto username
-      = QInputDialog::getText(nullptr, tr("Enter MQTT Username"),
-                              tr("Username:"), QLineEdit::Normal, "", &ok);
+  const auto username = QInputDialog::getText(
+    nullptr, tr("Enter MQTT Username"), tr("Username:"), QLineEdit::Normal, "", &ok);
   if (!ok || username.isEmpty())
     return;
 
   // Get password
-  const auto password
-      = QInputDialog::getText(nullptr, tr("Enter MQTT Password"),
-                              tr("Password:"), QLineEdit::Password, "", &ok);
+  const auto password = QInputDialog::getText(
+    nullptr, tr("Enter MQTT Password"), tr("Password:"), QLineEdit::Password, "", &ok);
   if (!ok || password.isEmpty())
     return;
 
   // Fill authentication properties
   QMqttAuthenticationProperties authProps;
   authProps.setAuthenticationMethod(authMethod);
-  authProps.setAuthenticationData(
-      QString("%1:%2").arg(username, password).toUtf8().toBase64());
+  authProps.setAuthenticationData(QString("%1:%2").arg(username, password).toUtf8().toBase64());
 
   // Try authentication again
   m_client.authenticate(authProps);
@@ -960,25 +918,20 @@ void MQTT::Client::onAuthenticationRequested(
  * @param message The received MQTT message payload.
  * @param topic The topic associated with the received message.
  */
-void MQTT::Client::onMessageReceived(const QByteArray &message,
-                                     const QMqttTopicName &topic)
+void MQTT::Client::onMessageReceived(const QByteArray& message, const QMqttTopicName& topic)
 {
   // Stop if Serial Studio is not activated
   if (!SerialStudio::activated())
     return;
 
   // Only process if data is not empty
-  if (!message.isEmpty())
-  {
-    // Ignore if client mode is not set to suscriber
+  if (!message.isEmpty()) {
     if (!isSubscriber())
       return;
 
-    // Ignore if topic is not equal to current topic
     if (m_topicName != topic)
       return;
 
-    // Let IO manager process incoming data
     IO::Manager::instance().processPayload(message);
   }
 }

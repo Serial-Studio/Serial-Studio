@@ -28,8 +28,7 @@
 #include "IO/CircularBuffer.h"
 #include "IO/HAL_Driver.h"
 
-namespace Console
-{
+namespace Console {
 /**
  * @brief The Console::Handler class
  *
@@ -40,8 +39,7 @@ namespace Console
  * format of the data (e.g. ASCII or HEX), history of sent commands and
  * exporting of the RX data.
  */
-class Handler : public QObject
-{
+class Handler : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool echo
@@ -123,33 +121,30 @@ signals:
   void showTimestampChanged();
   void ansiColorsEnabledChanged();
   void checksumMethodChanged();
-  void displayString(const QString &text);
+  void displayString(const QString& text);
   void cleared();
 
 private:
   explicit Handler();
-  Handler(Handler &&) = delete;
-  Handler(const Handler &) = delete;
-  Handler &operator=(Handler &&) = delete;
-  Handler &operator=(const Handler &) = delete;
+  Handler(Handler&&)                 = delete;
+  Handler(const Handler&)            = delete;
+  Handler& operator=(Handler&&)      = delete;
+  Handler& operator=(const Handler&) = delete;
 
 public:
-  enum class DisplayMode
-  {
+  enum class DisplayMode {
     DisplayPlainText,
     DisplayHexadecimal
   };
   Q_ENUM(DisplayMode)
 
-  enum class DataMode
-  {
+  enum class DataMode {
     DataUTF8,
     DataHexadecimal
   };
   Q_ENUM(DataMode)
 
-  enum class LineEnding
-  {
+  enum class LineEnding {
     NoLineEnding,
     NewLine,
     CarriageReturn,
@@ -157,7 +152,7 @@ public:
   };
   Q_ENUM(LineEnding)
 
-  static Handler &instance();
+  static Handler& instance();
 
   [[nodiscard]] bool echo() const;
   [[nodiscard]] bool showTimestamp() const;
@@ -183,33 +178,33 @@ public:
   [[nodiscard]] int defaultCharHeight() const;
   [[nodiscard]] qsizetype bufferLength() const;
 
-  Q_INVOKABLE bool validateUserHex(const QString &text);
-  Q_INVOKABLE QString formatUserHex(const QString &text);
+  Q_INVOKABLE bool validateUserHex(const QString& text);
+  Q_INVOKABLE QString formatUserHex(const QString& text);
 
 public slots:
   void clear();
   void historyUp();
   void historyDown();
   void setupExternalConnections();
-  void send(const QString &data);
+  void send(const QString& data);
   void setEcho(const bool enabled);
   void setFontSize(const int size);
   void setChecksumMethod(const int method);
-  void setFontFamily(const QString &family);
+  void setFontFamily(const QString& family);
   void setShowTimestamp(const bool enabled);
   void setAnsiColorsEnabled(const bool enabled);
-  void setDataMode(const Console::Handler::DataMode &mode);
-  void setLineEnding(const Console::Handler::LineEnding &mode);
-  void setDisplayMode(const Console::Handler::DisplayMode &mode);
-  void append(const QString &str, const bool addTimestamp = false);
+  void setDataMode(const Console::Handler::DataMode& mode);
+  void setLineEnding(const Console::Handler::LineEnding& mode);
+  void setDisplayMode(const Console::Handler::DisplayMode& mode);
+  void append(const QString& str, const bool addTimestamp = false);
 
   void displaySentData(QByteArrayView data);
-  void displayDebugData(const QString &data);
-  void hotpathRxData(const IO::ByteArrayPtr &data);
+  void displayDebugData(const QString& data);
+  void hotpathRxData(const IO::ByteArrayPtr& data);
 
 private slots:
   void updateFont();
-  void addToHistory(const QString &command);
+  void addToHistory(const QString& command);
 
 private:
   QString dataToString(QByteArrayView data);
@@ -238,4 +233,4 @@ private:
   QStringList m_historyItems;
   IO::CircularBuffer<QByteArray, char> m_textBuffer;
 };
-} // namespace Console
+}  // namespace Console

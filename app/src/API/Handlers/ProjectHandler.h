@@ -23,10 +23,8 @@
 
 #include "API/CommandProtocol.h"
 
-namespace API
-{
-namespace Handlers
-{
+namespace API {
+namespace Handlers {
 /**
  * @class ProjectHandler
  * @brief Registers API commands for DataModel::ProjectModel operations
@@ -69,8 +67,7 @@ namespace Handlers
  * - project.datasets.list - List all datasets across all groups
  * - project.actions.list - List all actions
  */
-class ProjectHandler
-{
+class ProjectHandler {
 public:
   /**
    * @brief Register all Project commands with the CommandRegistry
@@ -79,64 +76,44 @@ public:
 
 private:
   // File operations
-  static CommandResponse fileNew(const QString &id, const QJsonObject &params);
-  static CommandResponse fileOpen(const QString &id, const QJsonObject &params);
-  static CommandResponse fileSave(const QString &id, const QJsonObject &params);
-  static CommandResponse setTitle(const QString &id, const QJsonObject &params);
-  static CommandResponse getStatus(const QString &id,
-                                   const QJsonObject &params);
+  static CommandResponse fileNew(const QString& id, const QJsonObject& params);
+  static CommandResponse fileOpen(const QString& id, const QJsonObject& params);
+  static CommandResponse fileSave(const QString& id, const QJsonObject& params);
+  static CommandResponse setTitle(const QString& id, const QJsonObject& params);
+  static CommandResponse getStatus(const QString& id, const QJsonObject& params);
 
   // Group management
-  static CommandResponse groupAdd(const QString &id, const QJsonObject &params);
-  static CommandResponse groupDelete(const QString &id,
-                                     const QJsonObject &params);
-  static CommandResponse groupDuplicate(const QString &id,
-                                        const QJsonObject &params);
+  static CommandResponse groupAdd(const QString& id, const QJsonObject& params);
+  static CommandResponse groupDelete(const QString& id, const QJsonObject& params);
+  static CommandResponse groupDuplicate(const QString& id, const QJsonObject& params);
 
   // Dataset management
-  static CommandResponse datasetAdd(const QString &id,
-                                    const QJsonObject &params);
-  static CommandResponse datasetDelete(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse datasetDuplicate(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse datasetSetOption(const QString &id,
-                                          const QJsonObject &params);
+  static CommandResponse datasetAdd(const QString& id, const QJsonObject& params);
+  static CommandResponse datasetDelete(const QString& id, const QJsonObject& params);
+  static CommandResponse datasetDuplicate(const QString& id, const QJsonObject& params);
+  static CommandResponse datasetSetOption(const QString& id, const QJsonObject& params);
 
   // Action management
-  static CommandResponse actionAdd(const QString &id,
-                                   const QJsonObject &params);
-  static CommandResponse actionDelete(const QString &id,
-                                      const QJsonObject &params);
-  static CommandResponse actionDuplicate(const QString &id,
-                                         const QJsonObject &params);
+  static CommandResponse actionAdd(const QString& id, const QJsonObject& params);
+  static CommandResponse actionDelete(const QString& id, const QJsonObject& params);
+  static CommandResponse actionDuplicate(const QString& id, const QJsonObject& params);
 
   // Frame parser
-  static CommandResponse parserSetCode(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse parserGetCode(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse frameParserConfigure(const QString &id,
-                                              const QJsonObject &params);
-  static CommandResponse frameParserGetConfig(const QString &id,
-                                              const QJsonObject &params);
+  static CommandResponse parserSetCode(const QString& id, const QJsonObject& params);
+  static CommandResponse parserGetCode(const QString& id, const QJsonObject& params);
+  static CommandResponse frameParserConfigure(const QString& id, const QJsonObject& params);
+  static CommandResponse frameParserGetConfig(const QString& id, const QJsonObject& params);
 
   // Configuration loading
-  static CommandResponse loadFromJSON(const QString &id,
-                                      const QJsonObject &params);
-  static CommandResponse exportJson(const QString &id,
-                                    const QJsonObject &params);
-  static CommandResponse loadIntoFrameBuilder(const QString &id,
-                                              const QJsonObject &params);
+  static CommandResponse loadFromJSON(const QString& id, const QJsonObject& params);
+  static CommandResponse exportJson(const QString& id, const QJsonObject& params);
+  static CommandResponse loadIntoFrameBuilder(const QString& id, const QJsonObject& params);
 
   // List queries
-  static CommandResponse groupsList(const QString &id,
-                                    const QJsonObject &params);
-  static CommandResponse datasetsList(const QString &id,
-                                      const QJsonObject &params);
-  static CommandResponse actionsList(const QString &id,
-                                     const QJsonObject &params);
+  static CommandResponse groupsList(const QString& id, const QJsonObject& params);
+  static CommandResponse datasetsList(const QString& id, const QJsonObject& params);
+  static CommandResponse actionsList(const QString& id, const QJsonObject& params);
 };
 
-} // namespace Handlers
-} // namespace API
+}  // namespace Handlers
+}  // namespace API

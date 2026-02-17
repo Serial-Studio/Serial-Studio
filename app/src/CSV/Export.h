@@ -22,15 +22,14 @@
 #pragma once
 
 #include <QFile>
-#include <QVector>
 #include <QObject>
 #include <QTextStream>
+#include <QVector>
 
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
 
-namespace CSV
-{
+namespace CSV {
 class Export;
 
 /**
@@ -39,24 +38,20 @@ class Export;
  * This class owns all file-related resources and performs disk writes
  * entirely on a dedicated worker thread to avoid blocking the main UI thread.
  */
-class ExportWorker
-  : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>
-{
+class ExportWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
   Q_OBJECT
 
 public:
-  using DataModel::FrameConsumerWorker<
-      DataModel::TimestampedFramePtr>::FrameConsumerWorker;
+  using DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>::FrameConsumerWorker;
 
   void closeResources() override;
   bool isResourceOpen() const override;
 
 protected:
-  void processItems(
-      const std::vector<DataModel::TimestampedFramePtr> &items) override;
+  void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
 
 private:
-  QVector<QPair<int, QString>> createCsvFile(const DataModel::Frame &frame);
+  QVector<QPair<int, QString>> createCsvFile(const DataModel::Frame& frame);
 
 private:
   QFile m_csvFile;
@@ -76,8 +71,7 @@ private:
  * to offload file I/O operations. It supports enabling/disabling export
  * dynamically and integrates with external modules (IO manager, MQTT, etc.).
  */
-class Export : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr>
-{
+class Export : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr> {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool isOpen
@@ -95,15 +89,15 @@ signals:
 
 private:
   explicit Export();
-  Export(Export &&) = delete;
-  Export(const Export &) = delete;
-  Export &operator=(Export &&) = delete;
-  Export &operator=(const Export &) = delete;
+  Export(Export&&)                 = delete;
+  Export(const Export&)            = delete;
+  Export& operator=(Export&&)      = delete;
+  Export& operator=(const Export&) = delete;
 
   ~Export();
 
 public:
-  static Export &instance();
+  static Export& instance();
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] bool exportEnabled() const;
@@ -113,10 +107,10 @@ public slots:
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
 
-  void hotpathTxFrame(const DataModel::TimestampedFramePtr &frame);
+  void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
 
 protected:
-  DataModel::FrameConsumerWorkerBase *createWorker() override;
+  DataModel::FrameConsumerWorkerBase* createWorker() override;
 
 private slots:
   void onWorkerOpenChanged();
@@ -124,4 +118,4 @@ private slots:
 private:
   std::atomic<bool> m_isOpen;
 };
-} // namespace CSV
+}  // namespace CSV

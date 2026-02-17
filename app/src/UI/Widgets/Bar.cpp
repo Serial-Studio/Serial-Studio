@@ -19,9 +19,10 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "UI/Widgets/Bar.h"
+
 #include "DSP.h"
 #include "UI/Dashboard.h"
-#include "UI/Widgets/Bar.h"
 
 /**
  * @brief Constructs a Bar widget.
@@ -36,8 +37,7 @@
  *        Set to false if subclass wants to handle dataset manually (e.g.,
  *        Gauge).
  */
-Widgets::Bar::Bar(const int index, QQuickItem *parent,
-                  bool autoInitFromBarDataset)
+Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDataset)
   : QQuickItem(parent)
   , m_index(index)
   , m_value(std::nan(""))
@@ -47,31 +47,26 @@ Widgets::Bar::Bar(const int index, QQuickItem *parent,
   , m_alarmHigh(std::nan(""))
   , m_alarmsDefined(false)
 {
-  if (autoInitFromBarDataset
-      && VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index))
-  {
-    const auto &dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
+  if (autoInitFromBarDataset && VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
+    const auto& dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
 
-    m_units = dataset.units;
-    m_minValue = qMin(dataset.wgtMin, dataset.wgtMax);
-    m_maxValue = qMax(dataset.wgtMin, dataset.wgtMax);
-    m_alarmLow = qMin(dataset.alarmLow, dataset.alarmHigh);
+    m_units     = dataset.units;
+    m_minValue  = qMin(dataset.wgtMin, dataset.wgtMax);
+    m_maxValue  = qMax(dataset.wgtMin, dataset.wgtMax);
+    m_alarmLow  = qMin(dataset.alarmLow, dataset.alarmHigh);
     m_alarmHigh = qMax(dataset.alarmLow, dataset.alarmHigh);
-    m_alarmLow = qBound(m_minValue, m_alarmLow, m_maxValue);
+    m_alarmLow  = qBound(m_minValue, m_alarmLow, m_maxValue);
     m_alarmHigh = qBound(m_minValue, m_alarmHigh, m_maxValue);
 
-    if (dataset.alarmEnabled)
-    {
+    if (dataset.alarmEnabled) {
       if (m_alarmHigh == m_alarmLow)
         m_alarmLow = m_minValue;
 
-      m_alarmsDefined
-          = (m_alarmLow > m_minValue && m_alarmLow < m_maxValue)
-            || (m_alarmHigh < m_maxValue && m_alarmHigh > m_minValue);
+      m_alarmsDefined = (m_alarmLow > m_minValue && m_alarmLow < m_maxValue)
+                     || (m_alarmHigh < m_maxValue && m_alarmHigh > m_minValue);
     }
 
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-            &Bar::updateData);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Bar::updateData);
   }
 }
 
@@ -100,16 +95,13 @@ bool Widgets::Bar::alarmsDefined() const
  */
 bool Widgets::Bar::alarmTriggered() const
 {
-  if (m_alarmsDefined)
-  {
-    if (!std::isnan(m_alarmLow) && m_alarmLow > m_minValue)
-    {
+  if (m_alarmsDefined) {
+    if (!std::isnan(m_alarmLow) && m_alarmLow > m_minValue) {
       if (m_value <= m_alarmLow)
         return true;
     }
 
-    if (!std::isnan(m_alarmHigh) && m_alarmHigh < m_maxValue)
-    {
+    if (!std::isnan(m_alarmHigh) && m_alarmHigh < m_maxValue) {
       if (m_value >= m_alarmHigh)
         return true;
     }
@@ -125,7 +117,7 @@ bool Widgets::Bar::alarmTriggered() const
  *
  * @return A constant reference to the units string.
  */
-const QString &Widgets::Bar::units() const
+const QString& Widgets::Bar::units() const
 {
   return m_units;
 }
@@ -245,12 +237,10 @@ void Widgets::Bar::updateData()
   if (!isEnabled())
     return;
 
-  if (VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index))
-  {
-    const auto &dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
-    auto value = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
-    if (DSP::notEqual(value, m_value))
-    {
+  if (VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
+    const auto& dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
+    auto value          = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
+    if (DSP::notEqual(value, m_value)) {
       m_value = value;
       Q_EMIT updated();
     }

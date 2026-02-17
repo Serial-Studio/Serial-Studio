@@ -21,17 +21,17 @@
 
 #include "Player.h"
 
-#include <QtMath>
-#include <QTimer>
+#include <QApplication>
 #include <QFileDialog>
 #include <QInputDialog>
-#include <QApplication>
+#include <QTimer>
+#include <QtMath>
 
+#include "DataModel/FrameBuilder.h"
 #include "IO/Manager.h"
-#include "UI/Dashboard.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
-#include "DataModel/FrameBuilder.h"
+#include "UI/Dashboard.h"
 
 /**
  * Constructor function
@@ -44,14 +44,13 @@ CSV::Player::Player()
   , m_useHighPrecisionTimestamps(false)
 {
   qApp->installEventFilter(this);
-  connect(this, &CSV::Player::playerStateChanged, this,
-          &CSV::Player::updateData);
+  connect(this, &CSV::Player::playerStateChanged, this, &CSV::Player::updateData);
 }
 
 /**
  * Returns the only instance of the class
  */
-CSV::Player &CSV::Player::instance()
+CSV::Player& CSV::Player::instance()
 {
   static Player singleton;
   return singleton;
@@ -110,8 +109,7 @@ int CSV::Player::framePosition() const
  */
 QString CSV::Player::filename() const
 {
-  if (isOpen())
-  {
+  if (isOpen()) {
     auto fileInfo = QFileInfo(m_csvFile.fileName());
     return fileInfo.fileName();
   }
@@ -122,7 +120,7 @@ QString CSV::Player::filename() const
 /**
  * Returns the timestamp of the current data frame / row.
  */
-const QString &CSV::Player::timestamp() const
+const QString& CSV::Player::timestamp() const
 {
   return m_timestamp;
 }
@@ -174,20 +172,20 @@ void CSV::Player::toggle()
  */
 void CSV::Player::openFile()
 {
-  auto *dialog = new QFileDialog(nullptr, tr("Select CSV file"),
+  auto* dialog = new QFileDialog(nullptr,
+                                 tr("Select CSV file"),
                                  Misc::WorkspaceManager::instance().path("CSV"),
                                  tr("CSV files (*.csv)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setOption(QFileDialog::DontUseNativeDialog);
 
-  connect(dialog, &QFileDialog::fileSelected, this,
-          [this, dialog](const QString &path) {
-            if (!path.isEmpty())
-              openFile(path);
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    if (!path.isEmpty())
+      openFile(path);
 
-            dialog->deleteLater();
-          });
+    dialog->deleteLater();
+  });
 
   connect(dialog, &QFileDialog::rejected, dialog, &QFileDialog::deleteLater);
 
@@ -203,7 +201,7 @@ void CSV::Player::closeFile()
   if (!isOpen())
     return;
 
-  m_playing = false;
+  m_playing  = false;
   m_framePos = 0;
   m_csvFile.close();
   m_csvData.clear();
@@ -211,7 +209,7 @@ void CSV::Player::closeFile()
   m_timestamp = "--.--";
   m_timestampCache.clear();
   m_useHighPrecisionTimestamps = false;
-  m_startTimestampSeconds = 0.0;
+  m_startTimestampSeconds      = 0.0;
 
   DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
@@ -229,8 +227,7 @@ void CSV::Player::closeFile()
  */
 void CSV::Player::nextFrame()
 {
-  if (framePosition() < frameCount() - 1)
-  {
+  if (framePosition() < frameCount() - 1) {
     // Increase the frame position
     ++m_framePos;
 
@@ -239,7 +236,7 @@ void CSV::Player::nextFrame()
 
     // Populate the dashboard with a range of frames up to the new position
     int framesToLoad = UI::Dashboard::instance().points();
-    int startFrame = std::max(1, m_framePos - framesToLoad);
+    int startFrame   = std::max(1, m_framePos - framesToLoad);
     processFrameBatch(startFrame, m_framePos);
 
     // Keep timestamp and data in sync
@@ -256,8 +253,7 @@ void CSV::Player::nextFrame()
  */
 void CSV::Player::previousFrame()
 {
-  if (framePosition() > 0)
-  {
+  if (framePosition() > 0) {
     // Decrease the frame position
     --m_framePos;
 
@@ -266,7 +262,7 @@ void CSV::Player::previousFrame()
 
     // Populate the dashboard with a range of frames up to the new position
     int framesToLoad = UI::Dashboard::instance().points();
-    int startFrame = std::max(1, m_framePos - framesToLoad);
+    int startFrame   = std::max(1, m_framePos - framesToLoad);
     processFrameBatch(startFrame, m_framePos);
 
     // Keep timestamp and data in sync
@@ -296,7 +292,7 @@ void CSV::Player::previousFrame()
  *
  * @param filePath The file path of the CSV file to be opened.
  */
-void CSV::Player::openFile(const QString &filePath)
+void CSV::Player::openFile(const QString& filePath)
 {
   // File name empty, abort
   if (filePath.isEmpty())
@@ -306,13 +302,13 @@ void CSV::Player::openFile(const QString &filePath)
   closeFile();
 
   // Device is connected, warn user & disconnect
-  if (IO::Manager::instance().isConnected())
-  {
+  if (IO::Manager::instance().isConnected()) {
     auto response = Misc::Utilities::showMessageBox(
-        tr("Device Connection Active"),
-        tr("To use this feature, you must disconnect from the device. "
-           "Do you want to proceed?"),
-        QMessageBox::Warning, qAppName(), QMessageBox::No | QMessageBox::Yes);
+      tr("Device Connection Active"),
+      tr("To use this feature, you must disconnect from the device. Do you want to proceed?"),
+      QMessageBox::Warning,
+      qAppName(),
+      QMessageBox::No | QMessageBox::Yes);
     if (response == QMessageBox::Yes)
       IO::Manager::instance().disconnectDevice();
     else
@@ -321,27 +317,24 @@ void CSV::Player::openFile(const QString &filePath)
 
   // Try to open the current file
   m_csvFile.setFileName(filePath);
-  if (m_csvFile.open(QIODevice::ReadOnly))
-  {
+  if (m_csvFile.open(QIODevice::ReadOnly)) {
     // Read CSV file into string matrix
     QTextStream in(&m_csvFile);
-    while (!in.atEnd())
-    {
+    while (!in.atEnd()) {
       // Read a line and split it into a list of items
       QStringList row = in.readLine().split(',');
 
       // Remove surrounding quotes and trim whitespace from each item
-      for (auto &item : row)
-      {
+      for (auto& item : row) {
         item = item.simplified();
         item.remove(QStringLiteral("\""));
       }
 
       // Filter out rows that are empty or contain only empty items
-      bool isRowValid
-          = !row.isEmpty()
-            && std::any_of(row.cbegin(), row.cend(),
-                           [](const QString &item) { return !item.isEmpty(); });
+      bool isRowValid =
+        !row.isEmpty() && std::any_of(row.cbegin(), row.cend(), [](const QString& item) {
+          return !item.isEmpty();
+        });
 
       // Only register valid rows
       if (isRowValid)
@@ -350,43 +343,38 @@ void CSV::Player::openFile(const QString &filePath)
 
     // Detect timestamp format and validate
     // First try high-precision format (fractional seconds)
-    bool error = false;
-    QString firstCell = getCellValue(1, 0, error);
+    bool error            = false;
+    QString firstCell     = getCellValue(1, 0, error);
     double firstTimestamp = error ? -1.0 : getTimestampSeconds(firstCell);
 
-    if (firstTimestamp >= 0.0)
-    {
+    if (firstTimestamp >= 0.0) {
       // High-precision timestamps detected - build cache
       m_timestampCache.clear();
       m_timestampCache.reserve(m_csvData.count());
 
       // Cache all timestamps for efficient playback
-      for (int i = 0; i < m_csvData.count(); ++i)
-      {
-        bool err = false;
+      for (int i = 0; i < m_csvData.count(); ++i) {
+        bool err     = false;
         QString cell = getCellValue(i, 0, err);
-        double ts = err ? 0.0 : getTimestampSeconds(cell);
+        double ts    = err ? 0.0 : getTimestampSeconds(cell);
         m_timestampCache.append(ts);
       }
 
-      m_startTimestampSeconds = m_timestampCache[1];
+      m_startTimestampSeconds      = m_timestampCache[1];
       m_useHighPrecisionTimestamps = true;
     }
     // Fall back to legacy date/time format
-    else if (getDateTime(1).isValid())
-    {
+    else if (getDateTime(1).isValid()) {
       m_useHighPrecisionTimestamps = false;
       m_timestampCache.clear();
     }
     // Neither format worked - prompt user
-    else
-    {
+    else {
       m_useHighPrecisionTimestamps = false;
       m_timestampCache.clear();
 
       // Ask user to select date/time column or set interval manually
-      if (!promptUserForDateTimeOrInterval())
-      {
+      if (!promptUserForDateTimeOrInterval()) {
         closeFile();
         return;
       }
@@ -400,38 +388,34 @@ void CSV::Player::openFile(const QString &filePath)
     m_csvData.removeFirst();
 
     // Adjust cached timestamps if header was removed
-    if (m_useHighPrecisionTimestamps && !m_timestampCache.isEmpty())
-    {
+    if (m_useHighPrecisionTimestamps && !m_timestampCache.isEmpty()) {
       m_timestampCache.removeFirst();
       if (!m_timestampCache.isEmpty())
         m_startTimestampSeconds = m_timestampCache[0];
     }
 
     // Begin reading data
-    if (m_csvData.count() >= 1)
-    {
+    if (m_csvData.count() >= 1) {
       updateData();
       Q_EMIT openChanged();
     }
 
     // Handle case where CSV file does not contain at least two frames
-    else
-    {
+    else {
       Misc::Utilities::showMessageBox(
-          tr("Insufficient Data in CSV File"),
-          tr("The CSV file must contain at least one data row to "
-             "proceed. Please check the file and try again."),
-          QMessageBox::Critical);
+        tr("Insufficient Data in CSV File"),
+        tr(
+          "The CSV file must contain at least one data row to proceed. Please check the file and try again."),
+        QMessageBox::Critical);
       closeFile();
     }
   }
 
   // Open error
-  else
-  {
-    Misc::Utilities::showMessageBox(
-        tr("Cannot read CSV file"),
-        tr("Please check file permissions & location"), QMessageBox::Critical);
+  else {
+    Misc::Utilities::showMessageBox(tr("Cannot read CSV file"),
+                                    tr("Please check file permissions & location"),
+                                    QMessageBox::Critical);
     closeFile();
   }
 }
@@ -484,8 +468,7 @@ void CSV::Player::setProgress(const double progress)
   int newFramePos = qMin(frameCount() - 1, qCeil(frameCount() * validProgress));
 
   // Only process if position changes
-  if (newFramePos != m_framePos)
-  {
+  if (newFramePos != m_framePos) {
     // Update frame position
     m_framePos = newFramePos;
 
@@ -494,8 +477,8 @@ void CSV::Player::setProgress(const double progress)
 
     // Calculate frames to load around the new frame position
     int framesToLoad = UI::Dashboard::instance().points();
-    int startFrame = std::max(1, m_framePos - framesToLoad);
-    int endFrame = std::min(frameCount() - 1, m_framePos);
+    int startFrame   = std::max(1, m_framePos - framesToLoad);
+    int endFrame     = std::min(frameCount() - 1, m_framePos);
 
     // Populate dashboard with frames within capped range
     processFrameBatch(startFrame, endFrame);
@@ -511,7 +494,7 @@ void CSV::Player::setProgress(const double progress)
 void CSV::Player::updateTimestampDisplay()
 {
   bool err = true;
-  auto ts = getCellValue(m_framePos, 0, err);
+  auto ts  = getCellValue(m_framePos, 0, err);
   if (err)
     return;
 
@@ -519,13 +502,11 @@ void CSV::Player::updateTimestampDisplay()
   if (seconds >= 0.0)
     m_timestamp = formatTimestamp(seconds);
 
-  else
-  {
+  else {
     auto frameTime = getDateTime(ts);
-    if (frameTime.isValid() && m_startTimestamp.isValid())
-    {
+    if (frameTime.isValid() && m_startTimestamp.isValid()) {
       qint64 elapsedMs = m_startTimestamp.msecsTo(frameTime);
-      m_timestamp = formatTimestamp(elapsedMs / 1000.0);
+      m_timestamp      = formatTimestamp(elapsedMs / 1000.0);
     }
 
     else
@@ -549,35 +530,29 @@ void CSV::Player::updateData()
 
   IO::Manager::instance().processPayload(getFrame(framePosition()));
 
-  if (framePosition() >= frameCount() - 1)
-  {
+  if (framePosition() >= frameCount() - 1) {
     pause();
     return;
   }
 
   const qint64 elapsedMs = m_elapsedTimer.elapsed();
-  qint64 msUntilNext = 0;
+  qint64 msUntilNext     = 0;
 
-  if (m_useHighPrecisionTimestamps)
-  {
-    if (framePosition() + 1 >= m_timestampCache.size())
-    {
+  if (m_useHighPrecisionTimestamps) {
+    if (framePosition() + 1 >= m_timestampCache.size()) {
       pause();
       return;
     }
 
     const double targetTime = m_startTimestampSeconds + (elapsedMs / 1000.0);
-    const double nextTime = m_timestampCache[framePosition() + 1];
-    msUntilNext
-        = qMax(0LL, static_cast<qint64>((nextTime - targetTime) * 1000.0));
+    const double nextTime   = m_timestampCache[framePosition() + 1];
+    msUntilNext             = qMax(0LL, static_cast<qint64>((nextTime - targetTime) * 1000.0));
   }
 
-  else
-  {
+  else {
     const QDateTime targetTime = m_startTimestamp.addMSecs(elapsedMs);
-    const auto nextTime = getDateTime(framePosition() + 1);
-    if (!nextTime.isValid())
-    {
+    const auto nextTime        = getDateTime(framePosition() + 1);
+    if (!nextTime.isValid()) {
       pause();
       return;
     }
@@ -585,33 +560,25 @@ void CSV::Player::updateData()
     msUntilNext = targetTime.msecsTo(nextTime);
   }
 
-  if (msUntilNext <= 0)
-  {
+  if (msUntilNext <= 0) {
     constexpr int kMaxBatchSize = 100;
-    int processed = 0;
-    while (m_framePos < frameCount() - 1 && processed < kMaxBatchSize
-           && msUntilNext <= 0)
-    {
+    int processed               = 0;
+    while (m_framePos < frameCount() - 1 && processed < kMaxBatchSize && msUntilNext <= 0) {
       ++m_framePos;
       IO::Manager::instance().processPayload(getFrame(m_framePos));
       ++processed;
 
-      if (m_useHighPrecisionTimestamps)
-      {
-        if (m_framePos < m_timestampCache.size())
-        {
-          const double target
-              = m_startTimestampSeconds + (m_elapsedTimer.elapsed() / 1000.0);
-          const double next = m_timestampCache[m_framePos];
-          msUntilNext
-              = qMax(0LL, static_cast<qint64>((next - target) * 1000.0));
+      if (m_useHighPrecisionTimestamps) {
+        if (m_framePos < m_timestampCache.size()) {
+          const double target = m_startTimestampSeconds + (m_elapsedTimer.elapsed() / 1000.0);
+          const double next   = m_timestampCache[m_framePos];
+          msUntilNext         = qMax(0LL, static_cast<qint64>((next - target) * 1000.0));
         }
       }
 
-      else
-      {
+      else {
         auto target = m_startTimestamp.addMSecs(m_elapsedTimer.elapsed());
-        auto next = getDateTime(m_framePos);
+        auto next   = getDateTime(m_framePos);
         if (next.isValid())
           msUntilNext = target.msecsTo(next);
       }
@@ -620,17 +587,15 @@ void CSV::Player::updateData()
     updateTimestampDisplay();
 
     if (m_framePos < frameCount() - 1)
-      QTimer::singleShot(qMax(0LL, msUntilNext), Qt::PreciseTimer, this,
-                         [this] {
-                           if (isOpen() && isPlaying())
-                             updateData();
-                         });
+      QTimer::singleShot(qMax(0LL, msUntilNext), Qt::PreciseTimer, this, [this] {
+        if (isOpen() && isPlaying())
+          updateData();
+      });
     else
       pause();
   }
 
-  else
-  {
+  else {
     QTimer::singleShot(msUntilNext, Qt::PreciseTimer, this, [this] {
       if (!isOpen() || !isPlaying())
         return;
@@ -673,7 +638,7 @@ void CSV::Player::sendHeaderFrame()
   if (m_csvData.isEmpty())
     return;
 
-  const auto &headerRow = m_csvData.first();
+  const auto& headerRow = m_csvData.first();
   if (headerRow.size() <= 1)
     return;
 
@@ -699,12 +664,10 @@ void CSV::Player::sendHeaderFrame()
 bool CSV::Player::promptUserForDateTimeOrInterval()
 {
   // Check if there are headers available for the combobox
-  if (m_csvData.isEmpty() || m_csvData.first().isEmpty())
-  {
-    Misc::Utilities::showMessageBox(
-        tr("Invalid CSV"),
-        tr("The CSV file does not contain any data or headers."),
-        QMessageBox::Critical);
+  if (m_csvData.isEmpty() || m_csvData.first().isEmpty()) {
+    Misc::Utilities::showMessageBox(tr("Invalid CSV"),
+                                    tr("The CSV file does not contain any data or headers."),
+                                    QMessageBox::Critical);
     return false;
   }
 
@@ -715,46 +678,53 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
   bool ok;
   QStringList options;
   options << tr("Select a date/time column") << tr("Set interval manually");
-  QString choice = QInputDialog::getItem(
-      nullptr, tr("CSV Date/Time Selection"),
-      tr("Choose how to handle the date/time data:"), options, 0, false, &ok);
+  QString choice = QInputDialog::getItem(nullptr,
+                                         tr("CSV Date/Time Selection"),
+                                         tr("Choose how to handle the date/time data:"),
+                                         options,
+                                         0,
+                                         false,
+                                         &ok);
 
   // Check if user cancelled
   if (!ok)
     return false;
 
   // Ask the user to input the interval in milliseconds
-  if (choice == tr("Set interval manually"))
-  {
-    const auto interval = QInputDialog::getInt(
-        nullptr, tr("Set Interval"),
-        tr("Please enter the interval between rows in milliseconds:"), 1000, 1,
-        1000000, 1, &ok);
+  if (choice == tr("Set interval manually")) {
+    const auto interval =
+      QInputDialog::getInt(nullptr,
+                           tr("Set Interval"),
+                           tr("Please enter the interval between rows in milliseconds:"),
+                           1000,
+                           1,
+                           1000000,
+                           1,
+                           &ok);
 
-    if (ok)
-    {
+    if (ok) {
       generateDateTimeForRows(interval);
       return true;
     }
   }
 
   // Ask user to pick a date/time column
-  else
-  {
-    const auto column = QInputDialog::getItem(
-        nullptr, tr("Select Date/Time Column"),
-        tr("Please select the column that contains the date/time data:"),
-        headerLabels, 0, false, &ok);
+  else {
+    const auto column =
+      QInputDialog::getItem(nullptr,
+                            tr("Select Date/Time Column"),
+                            tr("Please select the column that contains the date/time data:"),
+                            headerLabels,
+                            0,
+                            false,
+                            &ok);
 
-    if (ok)
-    {
+    if (ok) {
       // Find the index of the selected column
       int columnIndex = headerLabels.indexOf(column);
-      if (columnIndex == -1)
-      {
-        Misc::Utilities::showMessageBox(tr("Invalid Selection"),
-                                        tr("The selected column is not valid."),
-                                        QMessageBox::Critical);
+      if (columnIndex == -1) {
+        Misc::Utilities::showMessageBox(
+          tr("Invalid Selection"), tr("The selected column is not valid."), QMessageBox::Critical);
         return false;
       }
 
@@ -780,10 +750,9 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
 void CSV::Player::generateDateTimeForRows(int interval)
 {
   const auto startTime = QDateTime::currentDateTime();
-  const auto format = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
+  const auto format    = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
 
-  for (int i = 0; i < m_csvData.size(); ++i)
-  {
+  for (int i = 0; i < m_csvData.size(); ++i) {
     QString dateTimeString = startTime.addMSecs(i * interval).toString(format);
     m_csvData[i].prepend(dateTimeString);
   }
@@ -809,8 +778,7 @@ void CSV::Player::generateDateTimeForRows(int interval)
 void CSV::Player::convertColumnToDateTime(int columnIndex)
 {
   const auto format = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
-  for (int i = 1; i < m_csvData.size(); ++i)
-  {
+  for (int i = 1; i < m_csvData.size(); ++i) {
     // Parse the date/time from the specified column
     auto dateTime = getDateTime(i);
     if (!dateTime.isValid())
@@ -863,7 +831,7 @@ QDateTime CSV::Player::getDateTime(const int row)
  * @return QDateTime The parsed `QDateTime` object. If no valid date/time format
  *                   is found, an invalid `QDateTime` is returned.
  */
-QDateTime CSV::Player::getDateTime(const QString &cell)
+QDateTime CSV::Player::getDateTime(const QString& cell)
 {
   // If the cell is a pure number (fractional seconds), don't try to parse as
   // date
@@ -876,15 +844,13 @@ QDateTime CSV::Player::getDateTime(const QString &cell)
   QDateTime dateTime;
 
   // Create a list of available date/time formats
-  static const QStringList formats
-      = {QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz"),
-         QStringLiteral("yyyy/MM/dd/ HH:mm:ss::zzz"),
-         QStringLiteral("yyyy/MM/dd HH:mm:ss"),
-         QStringLiteral("yyyy/MM/dd/ HH:mm:ss")};
+  static const QStringList formats = {QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz"),
+                                      QStringLiteral("yyyy/MM/dd/ HH:mm:ss::zzz"),
+                                      QStringLiteral("yyyy/MM/dd HH:mm:ss"),
+                                      QStringLiteral("yyyy/MM/dd/ HH:mm:ss")};
 
   // Try to obtain date/time string
-  for (const auto &format : formats)
-  {
+  for (const auto& format : formats) {
     dateTime = QDateTime::fromString(cell, format);
     if (dateTime.isValid())
       break;
@@ -907,7 +873,7 @@ double CSV::Player::getTimestampSeconds(int row)
     return m_timestampCache[row];
 
   // Fallback to parsing from cell
-  bool error = false;
+  bool error   = false;
   QString cell = getCellValue(row, 0, error);
   if (error)
     return -1.0;
@@ -925,9 +891,9 @@ double CSV::Player::getTimestampSeconds(int row)
  * @param cell The cell string to parse.
  * @return The timestamp in seconds, or -1.0 if invalid.
  */
-double CSV::Player::getTimestampSeconds(const QString &cell)
+double CSV::Player::getTimestampSeconds(const QString& cell)
 {
-  bool ok = false;
+  bool ok          = false;
   double timestamp = cell.toDouble(&ok);
 
   if (ok && timestamp >= 0.0)
@@ -944,14 +910,14 @@ double CSV::Player::getTimestampSeconds(const QString &cell)
  */
 QString CSV::Player::formatTimestamp(double seconds) const
 {
-  int hours = static_cast<int>(seconds / 3600.0);
+  int hours   = static_cast<int>(seconds / 3600.0);
   int minutes = static_cast<int>((seconds - hours * 3600.0) / 60.0);
   double secs = seconds - hours * 3600.0 - minutes * 60.0;
 
   return QString("%1:%2:%3")
-      .arg(hours, 2, 10, QChar('0'))
-      .arg(minutes, 2, 10, QChar('0'))
-      .arg(secs, 6, 'f', 3, QChar('0'));
+    .arg(hours, 2, 10, QChar('0'))
+    .arg(minutes, 2, 10, QChar('0'))
+    .arg(secs, 6, 'f', 3, QChar('0'));
 }
 
 /**
@@ -963,11 +929,9 @@ QByteArray CSV::Player::getFrame(const int row)
 {
   QByteArray frame;
 
-  if (m_csvData.count() > row)
-  {
-    const auto &list = m_csvData[row];
-    for (int i = 1; i < list.count(); ++i)
-    {
+  if (m_csvData.count() > row) {
+    const auto& list = m_csvData[row];
+    for (int i = 1; i < list.count(); ++i) {
       frame.append(list[i].toUtf8());
       if (i < list.count() - 1)
         frame.append(',');
@@ -984,16 +948,13 @@ QByteArray CSV::Player::getFrame(const int row)
  * error occurs or the cell does not exist, the value of @a error shall be set
  * to @c true.
  */
-const QString CSV::Player::getCellValue(const int row, const int column,
-                                        bool &error)
+const QString CSV::Player::getCellValue(const int row, const int column, bool& error)
 {
   static auto defaultValue = QLatin1String("");
 
-  if (m_csvData.count() > row)
-  {
-    const auto &list = m_csvData[row];
-    if (list.count() > column)
-    {
+  if (m_csvData.count() > row) {
+    const auto& list = m_csvData[row];
+    if (list.count() > column) {
       error = false;
       return list[column];
     }
@@ -1015,11 +976,10 @@ const QString CSV::Player::getCellValue(const int row, const int column,
  * @param event The event being processed.
  * @return true if the event was handled, false otherwise.
  */
-bool CSV::Player::eventFilter(QObject *obj, QEvent *event)
+bool CSV::Player::eventFilter(QObject* obj, QEvent* event)
 {
-  if (isOpen() && event->type() == QEvent::KeyPress)
-  {
-    auto *keyEvent = static_cast<QKeyEvent *>(event);
+  if (isOpen() && event->type() == QEvent::KeyPress) {
+    auto* keyEvent = static_cast<QKeyEvent*>(event);
     return handleKeyPress(keyEvent);
   }
 
@@ -1042,11 +1002,10 @@ bool CSV::Player::eventFilter(QObject *obj, QEvent *event)
  * @param keyEvent The key event to handle.
  * @return true if the event was handled, false otherwise.
  */
-bool CSV::Player::handleKeyPress(QKeyEvent *keyEvent)
+bool CSV::Player::handleKeyPress(QKeyEvent* keyEvent)
 {
   bool handled;
-  switch (keyEvent->key())
-  {
+  switch (keyEvent->key()) {
     case Qt::Key_Space:
     case Qt::Key_MediaPlay:
     case Qt::Key_MediaPause:

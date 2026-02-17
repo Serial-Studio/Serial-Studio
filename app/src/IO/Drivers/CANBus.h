@@ -22,19 +22,17 @@
 
 #pragma once
 
-#include <QObject>
-#include <QString>
-#include <QSettings>
 #include <QByteArray>
 #include <QCanBusDevice>
 #include <QCanBusFrame>
+#include <QObject>
+#include <QSettings>
+#include <QString>
 
 #include "IO/HAL_Driver.h"
 
-namespace IO
-{
-namespace Drivers
-{
+namespace IO {
+namespace Drivers {
 /**
  * @class CANBus
  * @brief Serial Studio driver for CAN bus communication
@@ -84,8 +82,7 @@ namespace Drivers
  * @see IO::Manager
  * @see QCanBusDevice
  */
-class CANBus : public HAL_Driver
-{
+class CANBus : public HAL_Driver {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(quint8 pluginIndex
@@ -126,19 +123,19 @@ signals:
   void availablePluginsChanged();
   void availableInterfacesChanged();
   void interfaceErrorChanged();
-  void connectionError(const QString &error);
+  void connectionError(const QString& error);
 
 private:
   explicit CANBus();
-  CANBus(CANBus &&) = delete;
-  CANBus(const CANBus &) = delete;
-  CANBus &operator=(CANBus &&) = delete;
-  CANBus &operator=(const CANBus &) = delete;
+  CANBus(CANBus&&)                 = delete;
+  CANBus(const CANBus&)            = delete;
+  CANBus& operator=(CANBus&&)      = delete;
+  CANBus& operator=(const CANBus&) = delete;
 
   ~CANBus();
 
 public:
-  static CANBus &instance();
+  static CANBus& instance();
 
   void close() override;
 
@@ -146,7 +143,7 @@ public:
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
-  [[nodiscard]] quint64 write(const QByteArray &data) override;
+  [[nodiscard]] quint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 
   [[nodiscard]] bool canFD() const;
@@ -159,7 +156,7 @@ public:
   [[nodiscard]] QStringList bitrateList() const;
   [[nodiscard]] QString interfaceError() const;
 
-  Q_INVOKABLE QString pluginDisplayName(const QString &plugin) const;
+  Q_INVOKABLE QString pluginDisplayName(const QString& plugin) const;
 
 public slots:
   void setupExternalConnections();
@@ -179,7 +176,7 @@ private:
   [[nodiscard]] bool canSupportAvailable() const;
 
 private:
-  QCanBusDevice *m_device;
+  QCanBusDevice* m_device;
 
   bool m_canFD;
   quint8 m_pluginIndex;
@@ -191,5 +188,5 @@ private:
   QStringList m_pluginList;
   QStringList m_interfaceList;
 };
-} // namespace Drivers
-} // namespace IO
+}  // namespace Drivers
+}  // namespace IO

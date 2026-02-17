@@ -19,17 +19,18 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "DSP.h"
-#include "UI/Dashboard.h"
-#include "Misc/ThemeManager.h"
 #include "UI/Widgets/MultiPlot.h"
+
+#include "DSP.h"
+#include "Misc/ThemeManager.h"
+#include "UI/Dashboard.h"
 
 /**
  * @brief Constructs a MultiPlot widget.
  * @param index The index of the multiplot in the Dashboard.
  * @param parent The parent QQuickItem (optional).
  */
-Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
+Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   : QQuickItem(parent)
   , m_index(index)
   , m_dataW(0)
@@ -40,17 +41,15 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
   , m_maxY(0)
 {
   // Obtain group information
-  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
-  {
+  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index)) {
     // Obtain min/max values from datasets
-    const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
-    m_minY = std::numeric_limits<double>::max();
-    m_maxY = std::numeric_limits<double>::lowest();
+    const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+    m_minY            = std::numeric_limits<double>::max();
+    m_maxY            = std::numeric_limits<double>::lowest();
 
     // Populate data from datasets
-    for (size_t i = 0; i < group.datasets.size(); ++i)
-    {
-      const auto &dataset = group.datasets[i];
+    for (size_t i = 0; i < group.datasets.size(); ++i) {
+      const auto& dataset = group.datasets[i];
 
       m_drawOrders.append(i);
       m_visibleCurves.append(true);
@@ -66,13 +65,15 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
     m_data.resize(group.datasets.size());
 
     // Connect to the dashboard signals
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this,
-            &MultiPlot::updateRange);
+    connect(
+      &UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this, &MultiPlot::updateRange);
 
     // Connect to the theme manager to update the curve colors
     onThemeChanged();
-    connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-            this, &MultiPlot::onThemeChanged);
+    connect(&Misc::ThemeManager::instance(),
+            &Misc::ThemeManager::themeChanged,
+            this,
+            &MultiPlot::onThemeChanged);
 
     // Update the range
     calculateAutoScaleRange();
@@ -156,7 +157,7 @@ bool Widgets::MultiPlot::running() const
  * @brief Returns the Y-axis label.
  * @return The Y-axis label.
  */
-const QString &Widgets::MultiPlot::yLabel() const
+const QString& Widgets::MultiPlot::yLabel() const
 {
   return m_yLabel;
 }
@@ -165,7 +166,7 @@ const QString &Widgets::MultiPlot::yLabel() const
  * @brief Returns the colors of the datasets.
  * @return The colors of the datasets.
  */
-const QStringList &Widgets::MultiPlot::colors() const
+const QStringList& Widgets::MultiPlot::colors() const
 {
   return m_colors;
 }
@@ -174,7 +175,7 @@ const QStringList &Widgets::MultiPlot::colors() const
  * @brief Returns the labels of the datasets.
  * @return The labels of the datasets.
  */
-const QStringList &Widgets::MultiPlot::labels() const
+const QStringList& Widgets::MultiPlot::labels() const
 {
   return m_labels;
 }
@@ -187,7 +188,7 @@ const QStringList &Widgets::MultiPlot::labels() const
  *
  * @return Reference to a QList of booleans representing curve visibility.
  */
-const QList<bool> &Widgets::MultiPlot::visibleCurves() const
+const QList<bool>& Widgets::MultiPlot::visibleCurves() const
 {
   return m_visibleCurves;
 }
@@ -197,10 +198,9 @@ const QList<bool> &Widgets::MultiPlot::visibleCurves() const
  * @param series The QXYSeries to draw the data on.
  * @param index The index of the dataset to draw.
  */
-void Widgets::MultiPlot::draw(QXYSeries *series, const int index)
+void Widgets::MultiPlot::draw(QXYSeries* series, const int index)
 {
-  if (series && index >= 0 && index < count() && m_visibleCurves[index])
-  {
+  if (series && index >= 0 && index < count() && m_visibleCurves[index]) {
     series->replace(m_data[index]);
     Q_EMIT series->update();
   }
@@ -212,8 +212,7 @@ void Widgets::MultiPlot::draw(QXYSeries *series, const int index)
  */
 void Widgets::MultiPlot::setDataW(const int width)
 {
-  if (m_dataW != width)
-  {
+  if (m_dataW != width) {
     m_dataW = width;
     updateData();
 
@@ -227,8 +226,7 @@ void Widgets::MultiPlot::setDataW(const int width)
  */
 void Widgets::MultiPlot::setDataH(const int height)
 {
-  if (m_dataH != height)
-  {
+  if (m_dataH != height) {
     m_dataH = height;
     updateData();
 
@@ -259,20 +257,17 @@ void Widgets::MultiPlot::updateData()
     return;
 
   // Only obtain data if widget data is still valid
-  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
-  {
+  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index)) {
     // Fetch multiplot source data (shared X axis, multiple Y series)
-    const auto &data = UI::Dashboard::instance().multiplotData(m_index);
-    const auto &X = *data.x;
+    const auto& data = UI::Dashboard::instance().multiplotData(m_index);
+    const auto& X    = *data.x;
 
     // Ensure output container has one QVector<QPointF> per series
     // Only reallocate if size significantly different to avoid thrashing
     const qsizetype plotCount = data.y.size();
-    if (m_data.size() != plotCount)
-    {
+    if (m_data.size() != plotCount) {
       // Only squeeze if we're shrinking significantly (>20% waste)
-      if (m_data.size() > plotCount && m_data.size() > plotCount * 1.2)
-      {
+      if (m_data.size() > plotCount && m_data.size() > plotCount * 1.2) {
         m_data.clear();
         m_data.squeeze();
       }
@@ -280,8 +275,7 @@ void Widgets::MultiPlot::updateData()
     }
 
     // Populate data for each plot
-    for (qsizetype i = 0; i < plotCount; ++i)
-    {
+    for (qsizetype i = 0; i < plotCount; ++i) {
       // Skip if curve is not visible
       if (!m_visibleCurves[i])
         continue;
@@ -305,7 +299,7 @@ void Widgets::MultiPlot::updateRange()
     return;
 
   // Get the multiplot data
-  const auto &data = UI::Dashboard::instance().multiplotData(m_index);
+  const auto& data = UI::Dashboard::instance().multiplotData(m_index);
 
   // Resize the container structure
   m_data.clear();
@@ -326,37 +320,32 @@ void Widgets::MultiPlot::updateRange()
 void Widgets::MultiPlot::calculateAutoScaleRange()
 {
   // Store previous values
-  bool ok = true;
+  bool ok             = true;
   const auto prevMinY = m_minY;
   const auto prevMaxY = m_maxY;
 
   // If the data is empty, set the range to 0-1
-  if (m_data.isEmpty())
-  {
+  if (m_data.isEmpty()) {
     m_minY = 0;
     m_maxY = 1;
   }
 
   // Obtain min/max values from datasets
-  else if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
-  {
-    const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+  else if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index)) {
+    const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
 
     m_minY = std::numeric_limits<double>::max();
     m_maxY = std::numeric_limits<double>::lowest();
 
     int index = 0;
-    for (const auto &dataset : group.datasets)
-    {
+    for (const auto& dataset : group.datasets) {
       ok &= DSP::notEqual(dataset.pltMin, dataset.pltMax);
-      if (ok && m_visibleCurves[index])
-      {
+      if (ok && m_visibleCurves[index]) {
         m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
         m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
       }
 
-      else
-      {
+      else {
         ok = false;
         break;
       }
@@ -366,61 +355,51 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
   }
 
   // Set the min and max to the lowest and highest values
-  if (!ok)
-  {
+  if (!ok) {
     // Initialize values to ensure that min/max are set
     m_minY = std::numeric_limits<double>::max();
     m_maxY = std::numeric_limits<double>::lowest();
 
     // Loop through each dataset and find the min and max values
-    int index = 0;
-    for (const auto &curve : std::as_const(m_data))
-    {
-      if (m_visibleCurves[index])
-      {
-        for (auto i = 0; i < curve.count(); ++i)
-        {
-          const double value = curve[i].y();
-          if (std::isfinite(value))
-          {
-            m_minY = qMin(m_minY, value);
-            m_maxY = qMax(m_maxY, value);
-          }
-        }
+    auto accumulate = [this](const DSP::LineSeries& curve) {
+      for (auto i = 0; i < curve.count(); ++i) {
+        const double value = curve[i].y();
+        if (!std::isfinite(value))
+          continue;
+        m_minY = qMin(m_minY, value);
+        m_maxY = qMax(m_maxY, value);
       }
+    };
 
-      ++index;
-    }
+    int index = 0;
+    for (const auto& curve : std::as_const(m_data))
+      if (m_visibleCurves[index++])
+        accumulate(curve);
 
     // If no finite values found, use default range
-    if (!std::isfinite(m_minY) || !std::isfinite(m_maxY))
-    {
+    if (!std::isfinite(m_minY) || !std::isfinite(m_maxY)) {
       m_minY = 0;
       m_maxY = 1;
     }
 
     // If the min and max are the same, set the range to 0-1
-    else if (DSP::almostEqual(m_minY, m_maxY))
-    {
-      if (DSP::isZero(m_minY))
-      {
+    else if (DSP::almostEqual(m_minY, m_maxY)) {
+      if (DSP::isZero(m_minY)) {
         m_minY = -1;
         m_maxY = 1;
       }
 
-      else
-      {
+      else {
         double absValue = qAbs(m_minY);
-        m_minY = m_minY - absValue * 0.1;
-        m_maxY = m_maxY + absValue * 0.1;
+        m_minY          = m_minY - absValue * 0.1;
+        m_maxY          = m_maxY + absValue * 0.1;
       }
     }
 
     // Expand range symmetrically around midY, with a 10% padding
-    else
-    {
+    else {
       // Calculate center and half-range
-      const double midY = (m_minY + m_maxY) / 2.0;
+      const double midY      = (m_minY + m_maxY) / 2.0;
       const double halfRange = (m_maxY - m_minY) / 2.0;
 
       // Expand range symmetrically around midY, with a 10% padding
@@ -432,8 +411,7 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
       m_maxY = std::ceil(midY + paddedRange);
 
       // Safety check to avoid zero-range
-      if (DSP::almostEqual(m_minY, m_maxY))
-      {
+      if (DSP::almostEqual(m_minY, m_maxY)) {
         m_minY -= 1;
         m_maxY += 1;
       }
@@ -442,8 +420,7 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     // Round to integer numbers
     m_maxY = std::ceil(m_maxY);
     m_minY = std::floor(m_minY);
-    if (DSP::almostEqual(m_maxY, m_minY))
-    {
+    if (DSP::almostEqual(m_maxY, m_minY)) {
       m_minY -= 1;
       m_maxY += 1;
     }
@@ -464,14 +441,11 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
  * @param index   Index of the curve to modify.
  * @param visible True to show the curve, false to hide it.
  */
-void Widgets::MultiPlot::modifyCurveVisibility(const int index,
-                                               const bool visible)
+void Widgets::MultiPlot::modifyCurveVisibility(const int index, const bool visible)
 {
-  if (index >= 0 && index < m_visibleCurves.count())
-  {
+  if (index >= 0 && index < m_visibleCurves.count()) {
     m_visibleCurves[index] = visible;
-    if (visible)
-    {
+    if (visible) {
       m_drawOrders.removeAll(index);
       m_drawOrders.append(index);
     }
@@ -485,17 +459,15 @@ void Widgets::MultiPlot::modifyCurveVisibility(const int index,
  */
 void Widgets::MultiPlot::onThemeChanged()
 {
-  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
-  {
-    const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index)) {
+    const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
 
     m_colors.clear();
     m_colors.resize(group.datasets.size());
-    for (size_t i = 0; i < group.datasets.size(); ++i)
-    {
-      const auto &dataset = group.datasets[i];
-      const auto color = SerialStudio::getDatasetColor(dataset.index);
-      m_colors[i] = color.name();
+    for (size_t i = 0; i < group.datasets.size(); ++i) {
+      const auto& dataset = group.datasets[i];
+      const auto color    = SerialStudio::getDatasetColor(dataset.index);
+      m_colors[i]         = color.name();
     }
 
     Q_EMIT themeChanged();

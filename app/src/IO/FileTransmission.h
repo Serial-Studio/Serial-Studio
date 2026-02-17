@@ -22,12 +22,11 @@
 #pragma once
 
 #include <QFile>
-#include <QTimer>
 #include <QObject>
 #include <QTextStream>
+#include <QTimer>
 
-namespace IO
-{
+namespace IO {
 /**
  * @class FileTransmission
  * @brief Manages line-by-line file transmission through the active I/O device.
@@ -58,8 +57,7 @@ namespace IO
  *       The file selection and transmission state are exposed as Qt properties
  *       for easy QML integration.
  */
-class FileTransmission : public QObject
-{
+class FileTransmission : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool fileOpen
@@ -89,13 +87,13 @@ signals:
 private:
   explicit FileTransmission();
   ~FileTransmission();
-  FileTransmission(FileTransmission &&) = delete;
-  FileTransmission(const FileTransmission &) = delete;
-  FileTransmission &operator=(FileTransmission &&) = delete;
-  FileTransmission &operator=(const FileTransmission &) = delete;
+  FileTransmission(FileTransmission&&)                 = delete;
+  FileTransmission(const FileTransmission&)            = delete;
+  FileTransmission& operator=(FileTransmission&&)      = delete;
+  FileTransmission& operator=(const FileTransmission&) = delete;
 
 public:
-  static FileTransmission &instance();
+  static FileTransmission& instance();
 
   [[nodiscard]] bool active() const;
   [[nodiscard]] bool fileOpen() const;
@@ -117,6 +115,6 @@ private slots:
 private:
   QFile m_file;
   QTimer m_timer;
-  QTextStream *m_stream;
+  QTextStream* m_stream;
 };
-} // namespace IO
+}  // namespace IO

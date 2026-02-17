@@ -21,20 +21,21 @@
 
 #include "Taskbar.h"
 
-#include <QTimer>
+#include <algorithm>
 #include <QGuiApplication>
 #include <QSignalBlocker>
+#include <QTimer>
 
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
 #include "IO/Manager.h"
 #include "UI/Dashboard.h"
-#include "UI/WindowManager.h"
 #include "UI/WidgetRegistry.h"
-#include "DataModel/ProjectModel.h"
-#include "DataModel/FrameBuilder.h"
+#include "UI/WindowManager.h"
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Taskbar model implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the taskbar model for representing dashboard widgets.
@@ -47,10 +48,7 @@
  *
  * @param parent Optional QObject parent.
  */
-UI::TaskbarModel::TaskbarModel(QObject *parent)
-  : QStandardItemModel(parent)
-{
-}
+UI::TaskbarModel::TaskbarModel(QObject* parent) : QStandardItemModel(parent) {}
 
 /**
  * @brief Returns the role names used for QML data binding.
@@ -88,9 +86,9 @@ QHash<int, QByteArray> UI::TaskbarModel::roleNames() const
   return names;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Taskbar class implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Private constructor for the Taskbar singleton.
@@ -100,7 +98,7 @@ QHash<int, QByteArray> UI::TaskbarModel::roleNames() const
  * the widget layout changes. Also registers `TaskbarModel` to QML for enum
  * access and role usage.
  */
-UI::Taskbar::Taskbar(QQuickItem *parent)
+UI::Taskbar::Taskbar(QQuickItem* parent)
   : QQuickItem(parent)
   , m_activeWindow(nullptr)
   , m_windowManager(nullptr)
@@ -108,25 +106,28 @@ UI::Taskbar::Taskbar(QQuickItem *parent)
   , m_taskbarButtons(new TaskbarModel(this))
 {
   qmlRegisterUncreatableType<UI::TaskbarModel>(
-      "SerialStudio.UI", 1, 0, "TaskbarModel",
-      "TaskbarModel is exposed by Taskbar singleton");
+    "SerialStudio.UI", 1, 0, "TaskbarModel", "TaskbarModel is exposed by Taskbar singleton");
 
   connectToRegistry();
 
-  connect(&UI::Dashboard::instance(), &UI::Dashboard::dataReset, this,
-          &UI::Taskbar::rebuildModel);
-  connect(&UI::Dashboard::instance(), &UI::Dashboard::widgetCountChanged, this,
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::dataReset, this, &UI::Taskbar::rebuildModel);
+  connect(&UI::Dashboard::instance(),
+          &UI::Dashboard::widgetCountChanged,
+          this,
           &UI::Taskbar::rebuildModel);
 
-  auto *pm = &DataModel::ProjectModel::instance();
-  connect(pm, &DataModel::ProjectModel::dashboardLayoutChanged, this,
+  auto* pm = &DataModel::ProjectModel::instance();
+  connect(pm,
+          &DataModel::ProjectModel::dashboardLayoutChanged,
+          this,
           &UI::Taskbar::onDashboardLayoutChanged);
-  connect(pm, &DataModel::ProjectModel::activeGroupIdChanged, this,
-          [this, pm] { setActiveGroupId(pm->activeGroupId()); });
+  connect(pm, &DataModel::ProjectModel::activeGroupIdChanged, this, [this, pm] {
+    setActiveGroupId(pm->activeGroupId());
+  });
 
   connect(qApp, &QGuiApplication::aboutToQuit, this, &UI::Taskbar::saveLayout);
 
-  auto *io = &IO::Manager::instance();
+  auto* io = &IO::Manager::instance();
   connect(io, &IO::Manager::connectedChanged, this, [this, io] {
     if (!io->isConnected())
       saveLayout();
@@ -143,21 +144,17 @@ UI::Taskbar::Taskbar(QQuickItem *parent)
  */
 void UI::Taskbar::connectToRegistry()
 {
-  auto &registry = WidgetRegistry::instance();
+  auto& registry = WidgetRegistry::instance();
 
-  connect(&registry, &WidgetRegistry::widgetCreated, this,
-          &Taskbar::onWidgetCreated);
-  connect(&registry, &WidgetRegistry::widgetDestroyed, this,
-          &Taskbar::onWidgetDestroyed);
-  connect(&registry, &WidgetRegistry::registryCleared, this,
-          &Taskbar::onRegistryCleared);
-  connect(&registry, &WidgetRegistry::batchUpdateCompleted, this,
-          &Taskbar::onBatchUpdateCompleted);
+  connect(&registry, &WidgetRegistry::widgetCreated, this, &Taskbar::onWidgetCreated);
+  connect(&registry, &WidgetRegistry::widgetDestroyed, this, &Taskbar::onWidgetDestroyed);
+  connect(&registry, &WidgetRegistry::registryCleared, this, &Taskbar::onRegistryCleared);
+  connect(&registry, &WidgetRegistry::batchUpdateCompleted, this, &Taskbar::onBatchUpdateCompleted);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Taskbar class getter functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the currently active group ID.
@@ -184,13 +181,11 @@ int UI::Taskbar::activeGroupId() const
  */
 int UI::Taskbar::activeGroupIndex() const
 {
-  int index = 0;
+  int index        = 0;
   const auto model = groupModel();
-  for (auto it = model.begin(); it != model.end(); ++it)
-  {
+  for (auto it = model.begin(); it != model.end(); ++it) {
     auto map = it->toMap();
-    if (map.contains("id"))
-    {
+    if (map.contains("id")) {
       auto id = map.value("id").toInt();
       if (id == m_activeGroupId)
         break;
@@ -220,53 +215,47 @@ QVariantList UI::Taskbar::groupModel() const
   QVariantList model;
 
   // Count number of widgets for overview section
-  int groupCount = 0;
+  int groupCount   = 0;
   int widgetGroups = 0;
-  for (const auto &group : UI::Dashboard::instance().rawFrame().groups)
-  {
+  for (const auto& group : UI::Dashboard::instance().rawFrame().groups) {
     ++groupCount;
     auto widget = SerialStudio::getDashboardWidget(group);
     if (widget != SerialStudio::DashboardNoWidget)
       ++widgetGroups;
 
-    for (const auto &dataset : group.datasets)
-    {
+    for (const auto& dataset : group.datasets)
       if (dataset.overviewDisplay)
         ++widgetGroups;
-    }
   }
 
   // Create overview group
-  if (widgetGroups > 1)
-  {
+  if (widgetGroups > 1) {
     QVariantMap main;
-    main["id"] = -1;
+    main["id"]   = -1;
     main["text"] = tr("Overview");
     main["icon"] = QStringLiteral("qrc:/rcc/icons/panes/overview.svg");
     model.append(main);
   }
 
   // Create all data group
-  if (groupCount > 1)
-  {
+  if (groupCount > 1) {
     QVariantMap main;
-    main["id"] = -2;
+    main["id"]   = -2;
     main["text"] = tr("All Data");
     main["icon"] = QStringLiteral("qrc:/rcc/icons/panes/dashboard.svg");
     model.append(main);
   }
 
   // Append frame groups
-  for (int i = 0; i < m_fullModel->rowCount(); ++i)
-  {
+  for (int i = 0; i < m_fullModel->rowCount(); ++i) {
     // Validate that the group is valid
-    const QStandardItem *groupItem = m_fullModel->item(i);
+    const QStandardItem* groupItem = m_fullModel->item(i);
     if (!groupItem)
       continue;
 
     // Register the group in the model
     QVariantMap group;
-    group["id"] = groupItem->data(TaskbarModel::GroupIdRole).toInt();
+    group["id"]   = groupItem->data(TaskbarModel::GroupIdRole).toInt();
     group["text"] = groupItem->data(TaskbarModel::GroupNameRole).toString();
     group["icon"] = groupItem->data(TaskbarModel::WidgetIconRole).toString();
     model.append(group);
@@ -283,7 +272,7 @@ QVariantList UI::Taskbar::groupModel() const
  *
  * @return Pointer to the active QQuickItem window, or nullptr if none.
  */
-QQuickItem *UI::Taskbar::activeWindow() const
+QQuickItem* UI::Taskbar::activeWindow() const
 {
   return m_activeWindow;
 }
@@ -297,7 +286,7 @@ QQuickItem *UI::Taskbar::activeWindow() const
  *
  * @return Pointer to the full TaskbarModel.
  */
-UI::TaskbarModel *UI::Taskbar::fullModel() const
+UI::TaskbarModel* UI::Taskbar::fullModel() const
 {
   return m_fullModel;
 }
@@ -311,7 +300,7 @@ UI::TaskbarModel *UI::Taskbar::fullModel() const
  *
  * @return Pointer to the filtered TaskbarModel.
  */
-UI::TaskbarModel *UI::Taskbar::taskbarButtons() const
+UI::TaskbarModel* UI::Taskbar::taskbarButtons() const
 {
   return m_taskbarButtons;
 }
@@ -319,7 +308,7 @@ UI::TaskbarModel *UI::Taskbar::taskbarButtons() const
 /**
  * @brief Returns a pointer to the window manager object.
  */
-UI::WindowManager *UI::Taskbar::windowManager() const
+UI::WindowManager* UI::Taskbar::windowManager() const
 {
   return m_windowManager;
 }
@@ -335,10 +324,8 @@ UI::WindowManager *UI::Taskbar::windowManager() const
 bool UI::Taskbar::hasMaximizedWindow() const
 {
   for (auto it = m_windowIDs.begin(); it != m_windowIDs.end(); ++it)
-  {
     if (it.key()->state() == QStringLiteral("maximized"))
       return true;
-  }
 
   return false;
 }
@@ -352,13 +339,11 @@ bool UI::Taskbar::hasMaximizedWindow() const
  * @param id The windowId of the widget.
  * @return The corresponding QQuickItem pointer, or nullptr if not found.
  */
-QQuickItem *UI::Taskbar::windowData(const int id) const
+QQuickItem* UI::Taskbar::windowData(const int id) const
 {
   for (auto it = m_windowIDs.begin(); it != m_windowIDs.end(); ++it)
-  {
     if (it.value() == id)
       return it.key();
-  }
 
   return nullptr;
 }
@@ -377,18 +362,15 @@ QQuickItem *UI::Taskbar::windowData(const int id) const
  * @param window Pointer to the QML window (QQuickItem).
  * @return The window's state from the taskbar model.
  */
-UI::TaskbarModel::WindowState UI::Taskbar::windowState(QQuickItem *window) const
+UI::TaskbarModel::WindowState UI::Taskbar::windowState(QQuickItem* window) const
 {
-  if (window)
-  {
+  if (window) {
     const int id = m_windowIDs.value(window, -1);
-    if (id > -1)
-    {
+    if (id > -1) {
       auto item = findItemByWindowId(id);
-      if (item)
-      {
+      if (item) {
         return static_cast<TaskbarModel::WindowState>(
-            item->data(TaskbarModel::WindowStateRole).toInt());
+          item->data(TaskbarModel::WindowStateRole).toInt());
       }
     }
   }
@@ -396,9 +378,9 @@ UI::TaskbarModel::WindowState UI::Taskbar::windowState(QQuickItem *window) const
   return TaskbarModel::WindowClosed;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Taskbar group selection code (e.g. when a tab is selected in the tab bar)
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the active group and updates taskbar buttons accordingly.
@@ -424,21 +406,17 @@ void UI::Taskbar::setActiveGroupId(int groupId)
     m_windowManager->clear();
 
   // Reset active window
-  m_activeWindow = nullptr;
+  m_activeWindow  = nullptr;
   m_activeGroupId = groupId;
 
   // Add console first
-  for (int i = 0; i < fullModel()->rowCount(); ++i)
-  {
+  for (int i = 0; i < fullModel()->rowCount(); ++i) {
     auto groupItem = fullModel()->item(i);
-    if (groupItem)
-    {
+    if (groupItem) {
       const auto type = groupItem->data(TaskbarModel::WidgetTypeRole).toInt();
-      if (type == SerialStudio::DashboardTerminal)
-      {
+      if (type == SerialStudio::DashboardTerminal) {
         auto g = groupItem->clone();
-        setWindowState(g->data(TaskbarModel::WindowIdRole).toInt(),
-                       TaskbarModel::WindowNormal);
+        setWindowState(g->data(TaskbarModel::WindowIdRole).toInt(), TaskbarModel::WindowNormal);
         m_taskbarButtons->appendRow(g);
         break;
       }
@@ -446,8 +424,7 @@ void UI::Taskbar::setActiveGroupId(int groupId)
   }
 
   // Add group children as taskbar buttons
-  for (int i = 0; i < fullModel()->rowCount(); ++i)
-  {
+  for (int i = 0; i < fullModel()->rowCount(); ++i) {
     // Get & validate group item
     auto groupItem = fullModel()->item(i);
     if (!groupItem)
@@ -459,59 +436,48 @@ void UI::Taskbar::setActiveGroupId(int groupId)
       continue;
 
     // Verify if group item matches group ID
-    if (groupId > -1)
-    {
+    if (groupId > -1) {
       if (groupItem->data(TaskbarModel::GroupIdRole).toInt() != groupId)
         continue;
     }
 
     // Clone the group
     auto group = groupItem->clone();
-    if (type != SerialStudio::DashboardNoWidget)
-    {
-      setWindowState(group->data(TaskbarModel::WindowIdRole).toInt(),
-                     TaskbarModel::WindowNormal);
+    if (type != SerialStudio::DashboardNoWidget) {
+      setWindowState(group->data(TaskbarModel::WindowIdRole).toInt(), TaskbarModel::WindowNormal);
       m_taskbarButtons->appendRow(group);
     }
 
     // Append group children
     const auto groupName = group->data(TaskbarModel::WidgetNameRole).toString();
-    for (int j = 0; j < groupItem->rowCount(); ++j)
-    {
-      if (groupItem->child(j))
-      {
-        auto child = groupItem->child(j)->clone();
-        auto name = child->data(TaskbarModel::WidgetNameRole).toString();
-        auto overview = child->data(TaskbarModel::OverviewRole).toBool();
+    for (int j = 0; j < groupItem->rowCount(); ++j) {
+      if (!groupItem->child(j))
+        continue;
 
-        if (groupId > -1)
-        {
-          setWindowState(child->data(TaskbarModel::WindowIdRole).toInt(),
-                         TaskbarModel::WindowNormal);
-          m_taskbarButtons->appendRow(child);
-        }
+      auto child    = groupItem->child(j)->clone();
+      auto name     = child->data(TaskbarModel::WidgetNameRole).toString();
+      auto overview = child->data(TaskbarModel::OverviewRole).toBool();
 
-        else if (overview || groupId == -2)
-        {
-          child->setData(QStringLiteral("%1 (%2)").arg(name, groupName),
-                         TaskbarModel::WidgetNameRole);
-          setWindowState(child->data(TaskbarModel::WindowIdRole).toInt(),
-                         TaskbarModel::WindowNormal);
-          m_taskbarButtons->appendRow(child);
-        }
+      if (groupId > -1) {
+        setWindowState(child->data(TaskbarModel::WindowIdRole).toInt(), TaskbarModel::WindowNormal);
+        m_taskbarButtons->appendRow(child);
+      }
+
+      else if (overview || groupId == -2) {
+        child->setData(QStringLiteral("%1 (%2)").arg(name, groupName),
+                       TaskbarModel::WidgetNameRole);
+        setWindowState(child->data(TaskbarModel::WindowIdRole).toInt(), TaskbarModel::WindowNormal);
+        m_taskbarButtons->appendRow(child);
       }
     }
   }
 
   // Focus the first window
-  if (m_taskbarButtons->rowCount() > 0)
-  {
+  if (m_taskbarButtons->rowCount() > 0) {
     auto firstGroup = m_taskbarButtons->item(0);
-    auto windowId = firstGroup->data(TaskbarModel::WindowIdRole).toInt();
-    for (auto it = m_windowIDs.begin(); it != m_windowIDs.end(); ++it)
-    {
-      if (it.value() == windowId)
-      {
+    auto windowId   = firstGroup->data(TaskbarModel::WindowIdRole).toInt();
+    for (auto it = m_windowIDs.begin(); it != m_windowIDs.end(); ++it) {
+      if (it.value() == windowId) {
         setActiveWindow(it.key());
         break;
       }
@@ -536,17 +502,16 @@ void UI::Taskbar::setActiveGroupId(int groupId)
 void UI::Taskbar::setActiveGroupIndex(int index)
 {
   auto model = groupModel();
-  if (model.count() > index && index >= 0)
-  {
+  if (model.count() > index && index >= 0) {
     auto item = model[index];
-    auto id = item.toMap().value("id", -1).toInt();
+    auto id   = item.toMap().value("id", -1).toInt();
     setActiveGroupId(id);
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Window state management functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Restores a window to its normal (visible) state.
@@ -555,13 +520,11 @@ void UI::Taskbar::setActiveGroupIndex(int index)
  *
  * @param window Pointer to the QML widget.
  */
-void UI::Taskbar::showWindow(QQuickItem *window)
+void UI::Taskbar::showWindow(QQuickItem* window)
 {
-  if (window)
-  {
+  if (window) {
     const auto id = m_windowIDs.value(window, -1);
-    if (id > -1)
-    {
+    if (id > -1) {
       setWindowState(id, UI::TaskbarModel::WindowNormal);
       setActiveWindow(window);
     }
@@ -575,13 +538,11 @@ void UI::Taskbar::showWindow(QQuickItem *window)
  *
  * @param window Pointer to the QML widget.
  */
-void UI::Taskbar::closeWindow(QQuickItem *window)
+void UI::Taskbar::closeWindow(QQuickItem* window)
 {
-  if (window)
-  {
+  if (window) {
     const auto id = m_windowIDs.value(window, -1);
-    if (id > -1)
-    {
+    if (id > -1) {
       setWindowState(id, UI::TaskbarModel::WindowClosed);
       setActiveWindow(nullptr);
     }
@@ -596,13 +557,11 @@ void UI::Taskbar::closeWindow(QQuickItem *window)
  *
  * @param window Pointer to the QML widget.
  */
-void UI::Taskbar::minimizeWindow(QQuickItem *window)
+void UI::Taskbar::minimizeWindow(QQuickItem* window)
 {
-  if (window)
-  {
+  if (window) {
     const auto id = m_windowIDs.value(window, -1);
-    if (id > -1)
-    {
+    if (id > -1) {
       setWindowState(id, UI::TaskbarModel::WindowMinimized);
       setActiveWindow(nullptr);
     }
@@ -617,7 +576,7 @@ void UI::Taskbar::minimizeWindow(QQuickItem *window)
  *
  * @param window Pointer to the QML window that should become active.
  */
-void UI::Taskbar::setActiveWindow(QQuickItem *window)
+void UI::Taskbar::setActiveWindow(QQuickItem* window)
 {
   m_activeWindow = window;
   if (m_windowManager)
@@ -639,10 +598,9 @@ void UI::Taskbar::setActiveWindow(QQuickItem *window)
  *
  * @param window Pointer to the QML window to unregister.
  */
-void UI::Taskbar::unregisterWindow(QQuickItem *window)
+void UI::Taskbar::unregisterWindow(QQuickItem* window)
 {
-  if (m_windowIDs.contains(window))
-  {
+  if (m_windowIDs.contains(window)) {
     disconnect(window);
     m_windowIDs.remove(window);
     if (m_windowManager)
@@ -656,11 +614,10 @@ void UI::Taskbar::unregisterWindow(QQuickItem *window)
  * @brief Sets the window manager object, which is used to syncronize taskbar
  *        events with window manager events.
  */
-void UI::Taskbar::setWindowManager(UI::WindowManager *manager)
+void UI::Taskbar::setWindowManager(UI::WindowManager* manager)
 {
-  if (manager)
-  {
-    m_windowManager = static_cast<UI::WindowManager *>(manager);
+  if (manager) {
+    m_windowManager = static_cast<UI::WindowManager*>(manager);
     m_windowManager->setTaskbar(this);
     Q_EMIT windowManagerChanged();
   }
@@ -675,7 +632,7 @@ void UI::Taskbar::setWindowManager(UI::WindowManager *manager)
  * @param id Internal window identifier.
  * @param window Pointer to the QML window.
  */
-void UI::Taskbar::registerWindow(const int id, QQuickItem *window)
+void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
 {
   // Register the window
   m_windowIDs.insert(window, id);
@@ -683,17 +640,13 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem *window)
   Q_EMIT registeredWindowsChanged();
 
   // Keep track of window state
-  connect(window, &QQuickItem::stateChanged, this,
-          [=, this] { Q_EMIT statesChanged(); });
+  connect(window, &QQuickItem::stateChanged, this, [=, this] { Q_EMIT statesChanged(); });
 
   // Trigger a layout update when the QML code created all the windows
-  if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager)
-  {
+  if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager) {
     const auto opMode = DataModel::FrameBuilder::instance().operationMode();
-    if (opMode == SerialStudio::ProjectFile)
-    {
-      const auto &layout
-          = DataModel::ProjectModel::instance().dashboardLayout();
+    if (opMode == SerialStudio::ProjectFile) {
+      const auto& layout = DataModel::ProjectModel::instance().dashboardLayout();
       if (!layout.isEmpty() && m_windowManager->restoreLayout(layout))
         return;
     }
@@ -711,11 +664,10 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem *window)
  * @param id Internal window ID.
  * @param state Desired window state.
  */
-void UI::Taskbar::setWindowState(const int id,
-                                 const UI::TaskbarModel::WindowState state)
+void UI::Taskbar::setWindowState(const int id, const UI::TaskbarModel::WindowState state)
 {
   // Validate that the item exists
-  QStandardItem *item = findItemByWindowId(id);
+  QStandardItem* item = findItemByWindowId(id);
   if (!item)
     return;
 
@@ -728,9 +680,9 @@ void UI::Taskbar::setWindowState(const int id,
     m_windowManager->triggerLayoutUpdate();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // General (full) model generation function
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Rebuilds the internal full model to reflect the current dashboard
@@ -757,13 +709,21 @@ void UI::Taskbar::setWindowState(const int id,
  * This is the authoritative source for all UI view models like tabs and
  * taskbars.
  */
+void UI::Taskbar::mapWidgetToWindow(UI::WidgetID wid, int windowId)
+{
+  if (wid == kInvalidWidgetId)
+    return;
+
+  m_widgetIdToWindowId.insert(wid, windowId);
+  m_windowIdToWidgetId.insert(windowId, wid);
+}
+
 void UI::Taskbar::rebuildModel()
 {
   if (m_rebuildInProgress)
     return;
 
   m_rebuildInProgress = true;
-
   {
     QSignalBlocker fullBlocker(m_fullModel);
     QSignalBlocker taskbarBlocker(m_taskbarButtons);
@@ -783,13 +743,12 @@ void UI::Taskbar::rebuildModel()
   }
 
   // Reduce calls to UI::Dashboard::instance()
-  auto *db = &UI::Dashboard::instance();
-  auto &registry = WidgetRegistry::instance();
+  auto* db       = &UI::Dashboard::instance();
+  auto& registry = WidgetRegistry::instance();
 
   // Obtain and validate latest frame
-  const auto &frame = db->processedFrame();
-  if (frame.title.isEmpty() || frame.groups.size() <= 0)
-  {
+  const auto& frame = db->processedFrame();
+  if (frame.title.isEmpty() || frame.groups.size() <= 0) {
     setActiveGroupId(-1);
     Q_EMIT fullModelChanged();
     Q_EMIT windowStatesChanged();
@@ -800,11 +759,10 @@ void UI::Taskbar::rebuildModel()
 
   // Loop through the groups in the dashboard
   QSet<int> groupIds;
-  const auto &widgetMap = db->widgetMap();
-  for (const DataModel::Group &group : frame.groups)
-  {
+  const auto& widgetMap = db->widgetMap();
+  for (const DataModel::Group& group : frame.groups) {
     // Obtain group parameters
-    const auto groupId = group.groupId;
+    const auto groupId   = group.groupId;
     const auto groupName = group.title;
     const auto groupType = SerialStudio::getDashboardWidget(group);
     const auto groupIcon = SerialStudio::dashboardWidgetIcon(groupType, true);
@@ -813,41 +771,34 @@ void UI::Taskbar::rebuildModel()
     QList<int> windowIds;
     QList<int> relativeIds;
     QList<SerialStudio::DashboardWidget> widgetTypes;
-    for (auto it = widgetMap.begin(); it != widgetMap.end(); ++it)
-    {
-      const auto windowId = it.key();
-      const auto widgetType = it.value().first;
+    for (auto it = widgetMap.begin(); it != widgetMap.end(); ++it) {
+      const auto windowId      = it.key();
+      const auto widgetType    = it.value().first;
       const auto relativeIndex = it.value().second;
 
-      if (SerialStudio::isGroupWidget(widgetType))
-      {
+      if (SerialStudio::isGroupWidget(widgetType)) {
         const auto dbGroup = db->getGroupWidget(widgetType, relativeIndex);
-        if (dbGroup.groupId == groupId)
-        {
-          windowIds.append(windowId);
-          widgetTypes.append(widgetType);
-          relativeIds.append(relativeIndex);
-        }
+        if (dbGroup.groupId != groupId)
+          continue;
+        windowIds.append(windowId);
+        widgetTypes.append(widgetType);
+        relativeIds.append(relativeIndex);
       }
 
-      else if (SerialStudio::isDatasetWidget(widgetType))
-      {
+      else if (SerialStudio::isDatasetWidget(widgetType)) {
         const auto dbDataset = db->getDatasetWidget(widgetType, relativeIndex);
-        if (dbDataset.groupId == groupId)
-        {
-          windowIds.append(windowId);
-          widgetTypes.append(widgetType);
-          relativeIds.append(relativeIndex);
-        }
+        if (dbDataset.groupId != groupId)
+          continue;
+        windowIds.append(windowId);
+        widgetTypes.append(widgetType);
+        relativeIds.append(relativeIndex);
       }
     }
 
     // Obtain main window ID and remove it from the lists
     int mainWindowId = 0;
-    for (int i = 0; i < windowIds.count(); ++i)
-    {
-      if (widgetTypes[i] == groupType)
-      {
+    for (int i = 0; i < windowIds.count(); ++i) {
+      if (widgetTypes[i] == groupType) {
         mainWindowId = windowIds[i];
 
         windowIds.removeAt(i);
@@ -858,7 +809,7 @@ void UI::Taskbar::rebuildModel()
     }
 
     // Register item to the model
-    auto *groupItem = new QStandardItem();
+    auto* groupItem        = new QStandardItem();
     bool alreadyRegistered = groupIds.contains(groupId);
     groupItem->setData(groupId, TaskbarModel::GroupIdRole);
     groupItem->setData(groupName, TaskbarModel::GroupNameRole);
@@ -867,35 +818,30 @@ void UI::Taskbar::rebuildModel()
     groupItem->setData(groupIcon, TaskbarModel::WidgetIconRole);
     groupItem->setData(mainWindowId, TaskbarModel::WindowIdRole);
     groupItem->setData(!alreadyRegistered, TaskbarModel::IsGroupRole);
-    groupItem->setData(TaskbarModel::WindowNormal,
-                       TaskbarModel::WindowStateRole);
+    groupItem->setData(TaskbarModel::WindowNormal, TaskbarModel::WindowStateRole);
     if (!alreadyRegistered)
       groupItem->setData(true, TaskbarModel::OverviewRole);
 
     // Map widget ID to window ID for the main group widget
-    if (groupType != SerialStudio::DashboardNoWidget)
-    {
+    if (groupType != SerialStudio::DashboardNoWidget) {
       auto widgetIds = registry.widgetIdsByType(groupType);
-      for (const auto &wid : std::as_const(widgetIds))
-      {
+      for (const auto& wid : std::as_const(widgetIds)) {
         auto info = registry.widgetInfo(wid);
-        if (info.groupId == groupId && info.isGroupWidget)
-        {
-          m_widgetIdToWindowId.insert(wid, mainWindowId);
-          m_windowIdToWidgetId.insert(mainWindowId, wid);
-          break;
-        }
+        if (info.groupId != groupId || !info.isGroupWidget)
+          continue;
+        m_widgetIdToWindowId.insert(wid, mainWindowId);
+        m_windowIdToWidgetId.insert(mainWindowId, wid);
+        break;
       }
     }
 
     // Append group children (including any automatically generated groups)
-    for (int i = 0; i < windowIds.count(); ++i)
-    {
+    for (int i = 0; i < windowIds.count(); ++i) {
       // Get group icon
       auto icon = SerialStudio::dashboardWidgetIcon(widgetTypes[i], true);
 
       // Create the child item
-      auto *child = new QStandardItem();
+      auto* child = new QStandardItem();
       child->setData(false, TaskbarModel::IsGroupRole);
       child->setData(icon, TaskbarModel::WidgetIconRole);
       child->setData(groupId, TaskbarModel::GroupIdRole);
@@ -905,37 +851,25 @@ void UI::Taskbar::rebuildModel()
       child->setData(TaskbarModel::WindowNormal, TaskbarModel::WindowStateRole);
 
       // Register window title for sub-groups
-      if (SerialStudio::isGroupWidget(widgetTypes[i]))
-      {
-        auto &dbGroup = db->getGroupWidget(widgetTypes[i], relativeIds[i]);
+      if (SerialStudio::isGroupWidget(widgetTypes[i])) {
+        auto& dbGroup = db->getGroupWidget(widgetTypes[i], relativeIds[i]);
         child->setData(dbGroup.title, TaskbarModel::WidgetNameRole);
         child->setData(false, TaskbarModel::OverviewRole);
 
         // Map widget ID to window ID
-        auto wid
-            = registry.widgetIdByTypeAndIndex(widgetTypes[i], relativeIds[i]);
-        if (wid != kInvalidWidgetId)
-        {
-          m_widgetIdToWindowId.insert(wid, windowIds[i]);
-          m_windowIdToWidgetId.insert(windowIds[i], wid);
-        }
+        mapWidgetToWindow(registry.widgetIdByTypeAndIndex(widgetTypes[i], relativeIds[i]),
+                          windowIds[i]);
       }
 
       // Register window title for datasets
-      else if (SerialStudio::isDatasetWidget(widgetTypes[i]))
-      {
-        auto &dbDataset = db->getDatasetWidget(widgetTypes[i], relativeIds[i]);
+      else if (SerialStudio::isDatasetWidget(widgetTypes[i])) {
+        auto& dbDataset = db->getDatasetWidget(widgetTypes[i], relativeIds[i]);
         child->setData(dbDataset.title, TaskbarModel::WidgetNameRole);
         child->setData(dbDataset.overviewDisplay, TaskbarModel::OverviewRole);
 
         // Map widget ID to window ID
-        auto wid
-            = registry.widgetIdByTypeAndIndex(widgetTypes[i], relativeIds[i]);
-        if (wid != kInvalidWidgetId)
-        {
-          m_widgetIdToWindowId.insert(wid, windowIds[i]);
-          m_windowIdToWidgetId.insert(windowIds[i], wid);
-        }
+        mapWidgetToWindow(registry.widgetIdByTypeAndIndex(widgetTypes[i], relativeIds[i]),
+                          windowIds[i]);
       }
 
       // Register the child
@@ -943,25 +877,18 @@ void UI::Taskbar::rebuildModel()
     }
 
     // Append the group to the model
-    if (!alreadyRegistered)
-    {
+    if (!alreadyRegistered) {
       groupIds.insert(groupId);
       m_fullModel->appendRow(groupItem);
     }
 
     // Append group as subgroup
-    else
-    {
-      for (int i = 0; i < m_fullModel->rowCount(); ++i)
-      {
+    else {
+      for (int i = 0; i < m_fullModel->rowCount(); ++i) {
         auto g = m_fullModel->item(i);
-        if (g)
-        {
-          if (g->data(TaskbarModel::GroupIdRole).toInt() == group.groupId)
-          {
-            g->appendRow(groupItem);
-            break;
-          }
+        if (g && g->data(TaskbarModel::GroupIdRole).toInt() == group.groupId) {
+          g->appendRow(groupItem);
+          break;
         }
       }
     }
@@ -974,32 +901,26 @@ void UI::Taskbar::rebuildModel()
 
   // Select the saved group (if available) or the first group
   auto model = groupModel();
-  if (!model.isEmpty())
-  {
+  if (!model.isEmpty()) {
     int targetGroupId = -1;
-    bool restored = false;
+    bool restored     = false;
 
     const auto opMode = DataModel::FrameBuilder::instance().operationMode();
-    if (opMode == SerialStudio::ProjectFile)
-    {
-      auto *pm = &DataModel::ProjectModel::instance();
-      if (!pm->dashboardLayout().isEmpty())
-      {
+    if (opMode == SerialStudio::ProjectFile) {
+      auto* pm = &DataModel::ProjectModel::instance();
+      if (!pm->dashboardLayout().isEmpty()) {
         const int savedId = pm->activeGroupId();
-        for (const auto &entry : std::as_const(model))
-        {
-          if (entry.toMap().value("id").toInt() == savedId)
-          {
-            targetGroupId = savedId;
-            restored = true;
-            break;
-          }
+        const bool found  = std::any_of(model.begin(), model.end(), [savedId](const QVariant& v) {
+          return v.toMap().value("id").toInt() == savedId;
+        });
+        if (found) {
+          targetGroupId = savedId;
+          restored      = true;
         }
       }
     }
 
-    if (!restored && model.first().canConvert<QVariantMap>())
-    {
+    if (!restored && model.first().canConvert<QVariantMap>()) {
       QVariantMap firstItem = model.first().toMap();
       if (firstItem.contains("id"))
         targetGroupId = firstItem["id"].toInt();
@@ -1011,9 +932,9 @@ void UI::Taskbar::rebuildModel()
   m_rebuildInProgress = false;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Utility functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Recursively searches the full model for an item by its window ID.
@@ -1027,16 +948,13 @@ void UI::Taskbar::rebuildModel()
  * @param parentItem Optional parent item to limit search scope.
  * @return Pointer to the matching QStandardItem, or nullptr if not found.
  */
-QStandardItem *UI::Taskbar::findItemByWindowId(int windowId,
-                                               QStandardItem *parentItem) const
+QStandardItem* UI::Taskbar::findItemByWindowId(int windowId, QStandardItem* parentItem) const
 {
   // Get total number of items & loop over them
   int count = parentItem ? parentItem->rowCount() : fullModel()->rowCount();
-  for (int i = 0; i < count; ++i)
-  {
+  for (int i = 0; i < count; ++i) {
     // Check if item is valid
-    QStandardItem *item
-        = parentItem ? parentItem->child(i) : fullModel()->item(i);
+    QStandardItem* item = parentItem ? parentItem->child(i) : fullModel()->item(i);
     if (!item)
       continue;
 
@@ -1045,9 +963,8 @@ QStandardItem *UI::Taskbar::findItemByWindowId(int windowId,
       return item;
 
     // Recurse if it's a group
-    if (item->data(TaskbarModel::IsGroupRole).toBool())
-    {
-      QStandardItem *found = findItemByWindowId(windowId, item);
+    if (item->data(TaskbarModel::IsGroupRole).toBool()) {
+      QStandardItem* found = findItemByWindowId(windowId, item);
       if (found)
         return found;
     }
@@ -1066,8 +983,8 @@ QStandardItem *UI::Taskbar::findItemByWindowId(int windowId,
  * @param parentItem Optional parent item to limit search scope.
  * @return Pointer to the matching QStandardItem, or nullptr if not found.
  */
-QStandardItem *UI::Taskbar::findItemByWidgetId(UI::WidgetID widgetId,
-                                               QStandardItem *parentItem) const
+QStandardItem* UI::Taskbar::findItemByWidgetId(UI::WidgetID widgetId,
+                                               QStandardItem* parentItem) const
 {
   if (!m_widgetIdToWindowId.contains(widgetId))
     return nullptr;
@@ -1082,11 +999,10 @@ QStandardItem *UI::Taskbar::findItemByWidgetId(UI::WidgetID widgetId,
  * @param groupId The group ID to search for.
  * @return Pointer to the group item, or nullptr if not found.
  */
-QStandardItem *UI::Taskbar::findGroupItemByGroupId(int groupId) const
+QStandardItem* UI::Taskbar::findGroupItemByGroupId(int groupId) const
 {
-  for (int i = 0; i < fullModel()->rowCount(); ++i)
-  {
-    QStandardItem *item = fullModel()->item(i);
+  for (int i = 0; i < fullModel()->rowCount(); ++i) {
+    QStandardItem* item = fullModel()->item(i);
     if (item && item->data(TaskbarModel::GroupIdRole).toInt() == groupId)
       return item;
   }
@@ -1100,10 +1016,10 @@ QStandardItem *UI::Taskbar::findGroupItemByGroupId(int groupId) const
  * @param info The widget info from the registry.
  * @return A new QStandardItem populated with the widget's data.
  */
-QStandardItem *UI::Taskbar::createItemFromWidgetInfo(const UI::WidgetInfo &info)
+QStandardItem* UI::Taskbar::createItemFromWidgetInfo(const UI::WidgetInfo& info)
 {
-  auto *item = new QStandardItem();
-  auto icon = SerialStudio::dashboardWidgetIcon(info.type, true);
+  auto* item = new QStandardItem();
+  auto icon  = SerialStudio::dashboardWidgetIcon(info.type, true);
 
   item->setData(info.groupId, TaskbarModel::GroupIdRole);
   item->setData(info.title, TaskbarModel::WidgetNameRole);
@@ -1115,9 +1031,9 @@ QStandardItem *UI::Taskbar::createItemFromWidgetInfo(const UI::WidgetInfo &info)
   return item;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Registry event handlers
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Handles widget creation events from the registry.
@@ -1131,7 +1047,7 @@ QStandardItem *UI::Taskbar::createItemFromWidgetInfo(const UI::WidgetInfo &info)
  * @param id The stable widget ID.
  * @param info Complete information about the new widget.
  */
-void UI::Taskbar::onWidgetCreated(UI::WidgetID id, const UI::WidgetInfo &info)
+void UI::Taskbar::onWidgetCreated(UI::WidgetID id, const UI::WidgetInfo& info)
 {
   Q_UNUSED(id)
   Q_UNUSED(info)
@@ -1189,17 +1105,13 @@ void UI::Taskbar::onDashboardLayoutChanged()
     return;
 
   const auto opMode = DataModel::FrameBuilder::instance().operationMode();
-  if (opMode == SerialStudio::ProjectFile)
-  {
-    auto *model = &DataModel::ProjectModel::instance();
-    if (!model->jsonFilePath().isEmpty())
-    {
-      const auto &layout = model->dashboardLayout();
-      if (!layout.isEmpty())
-      {
+  if (opMode == SerialStudio::ProjectFile) {
+    auto* model = &DataModel::ProjectModel::instance();
+    if (!model->jsonFilePath().isEmpty()) {
+      const auto& layout = model->dashboardLayout();
+      if (!layout.isEmpty()) {
         QTimer::singleShot(100, this, [this, layout] {
-          if (m_windowManager)
-          {
+          if (m_windowManager) {
             const bool isConnected = IO::Manager::instance().isConnected();
             if (!isConnected)
               m_windowManager->restoreLayout(layout);
@@ -1226,11 +1138,9 @@ void UI::Taskbar::saveLayout()
     return;
 
   const auto opMode = DataModel::FrameBuilder::instance().operationMode();
-  if (opMode == SerialStudio::ProjectFile)
-  {
-    auto *model = &DataModel::ProjectModel::instance();
-    if (!model->jsonFilePath().isEmpty())
-    {
+  if (opMode == SerialStudio::ProjectFile) {
+    auto* model = &DataModel::ProjectModel::instance();
+    if (!model->jsonFilePath().isEmpty()) {
       auto layout = m_windowManager->serializeLayout();
       model->setDashboardLayout(layout);
       model->setActiveGroupId(m_activeGroupId);

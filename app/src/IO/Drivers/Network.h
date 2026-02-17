@@ -21,27 +21,24 @@
 
 #pragma once
 
-#include <QSettings>
-#include <QHostInfo>
-#include <QTcpSocket>
-#include <QUdpSocket>
+#include <QAbstractSocket>
 #include <QByteArray>
 #include <QHostAddress>
-#include <QAbstractSocket>
+#include <QHostInfo>
+#include <QSettings>
+#include <QTcpSocket>
+#include <QUdpSocket>
 
 #include "IO/HAL_Driver.h"
 
-namespace IO
-{
-namespace Drivers
-{
+namespace IO {
+namespace Drivers {
 /**
  * @brief The Network class
  *
  * Serial Studio "driver" class to interact with UDP/TCP network ports.
  */
-class Network : public HAL_Driver
-{
+class Network : public HAL_Driver {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QString remoteAddress
@@ -101,13 +98,13 @@ signals:
 
 private:
   explicit Network();
-  Network(Network &&) = delete;
-  Network(const Network &) = delete;
-  Network &operator=(Network &&) = delete;
-  Network &operator=(const Network &) = delete;
+  Network(Network&&)                 = delete;
+  Network(const Network&)            = delete;
+  Network& operator=(Network&&)      = delete;
+  Network& operator=(const Network&) = delete;
 
 public:
-  static Network &instance();
+  static Network& instance();
 
   void close() override;
 
@@ -115,7 +112,7 @@ public:
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
-  [[nodiscard]] quint64 write(const QByteArray &data) override;
+  [[nodiscard]] quint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 
   [[nodiscard]] quint16 tcpPort() const;
@@ -127,16 +124,20 @@ public:
   [[nodiscard]] int socketTypeIndex() const;
   [[nodiscard]] QAbstractSocket::SocketType socketType() const;
 
-  [[nodiscard]] QTcpSocket *tcpSocket() { return &m_tcpSocket; }
-  [[nodiscard]] QUdpSocket *udpSocket() { return &m_udpSocket; }
+  [[nodiscard]] QTcpSocket* tcpSocket() { return &m_tcpSocket; }
 
-  [[nodiscard]] const QString &remoteAddress() const;
+  [[nodiscard]] QUdpSocket* udpSocket() { return &m_udpSocket; }
+
+  [[nodiscard]] const QString& remoteAddress() const;
   [[nodiscard]] QStringList socketTypes() const;
 
   static quint16 defaultTcpPort() { return 23; }
+
   static quint16 defaultUdpLocalPort() { return 0; }
+
   static quint16 defaultUdpRemotePort() { return 53; }
-  static const QString &defaultAddress()
+
+  static const QString& defaultAddress()
   {
     static QString addr = QStringLiteral("127.0.0.1");
     return addr;
@@ -145,18 +146,18 @@ public:
 public slots:
   void setTcpSocket();
   void setUdpSocket();
-  void lookup(const QString &host);
+  void lookup(const QString& host);
   void setTcpPort(const quint16 port);
   void setUdpLocalPort(const quint16 port);
   void setUdpMulticast(const bool enabled);
   void setSocketTypeIndex(const int index);
   void setUdpRemotePort(const quint16 port);
-  void setRemoteAddress(const QString &address);
+  void setRemoteAddress(const QString& address);
   void setSocketType(const QAbstractSocket::SocketType type);
 
 private slots:
   void onReadyRead();
-  void lookupFinished(const QHostInfo &info);
+  void lookupFinished(const QHostInfo& info);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:
@@ -175,5 +176,5 @@ private:
   QUdpSocket m_udpSocket;
   QByteArray m_udpBuffer;
 };
-} // namespace Drivers
-} // namespace IO
+}  // namespace Drivers
+}  // namespace IO

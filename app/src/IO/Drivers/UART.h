@@ -21,24 +21,21 @@
 
 #pragma once
 
-#include <QObject>
-#include <QString>
-#include <QSettings>
 #include <QByteArray>
+#include <QObject>
+#include <QSettings>
+#include <QString>
 #include <QtSerialPort>
 
 #include "IO/HAL_Driver.h"
 
-namespace IO
-{
-namespace Drivers
-{
+namespace IO {
+namespace Drivers {
 /**
  * @brief The UART class
  * Serial Studio "driver" class to interact with serial port devices.
  */
-class UART : public HAL_Driver
-{
+class UART : public HAL_Driver {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool autoReconnect
@@ -107,19 +104,19 @@ signals:
   void autoReconnectChanged();
   void baudRateIndexChanged();
   void availablePortsChanged();
-  void connectionError(const QString &name);
+  void connectionError(const QString& name);
 
 private:
   explicit UART();
-  UART(UART &&) = delete;
-  UART(const UART &) = delete;
-  UART &operator=(UART &&) = delete;
-  UART &operator=(const UART &) = delete;
+  UART(UART&&)                 = delete;
+  UART(const UART&)            = delete;
+  UART& operator=(UART&&)      = delete;
+  UART& operator=(const UART&) = delete;
 
   ~UART();
 
 public:
-  static UART &instance();
+  static UART& instance();
 
   void close() override;
 
@@ -127,10 +124,10 @@ public:
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
-  [[nodiscard]] quint64 write(const QByteArray &data) override;
+  [[nodiscard]] quint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 
-  [[nodiscard]] QSerialPort *port() const;
+  [[nodiscard]] QSerialPort* port() const;
   [[nodiscard]] bool autoReconnect() const;
 
   [[nodiscard]] bool dtrEnabled() const;
@@ -161,7 +158,7 @@ public slots:
   void setDtrEnabled(const bool enabled);
   void setParity(const quint8 parityIndex);
   void setPortIndex(const quint8 portIndex);
-  void registerDevice(const QString &device);
+  void registerDevice(const QString& device);
   void setDataBits(const quint8 dataBitsIndex);
   void setStopBits(const quint8 stopBitsIndex);
   void setAutoReconnect(const bool autoreconnect);
@@ -177,7 +174,7 @@ private:
   QVector<QSerialPortInfo> validPorts() const;
 
 private:
-  QSerialPort *m_port;
+  QSerialPort* m_port;
 
   bool m_dtrEnabled;
   bool m_autoReconnect;
@@ -205,5 +202,5 @@ private:
   QMutex m_errorHandlerMutex;
   QMap<QSerialPort::SerialPortError, QString> m_errorDescriptions;
 };
-} // namespace Drivers
-} // namespace IO
+}  // namespace Drivers
+}  // namespace IO

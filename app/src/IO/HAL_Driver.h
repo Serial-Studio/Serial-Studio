@@ -22,12 +22,10 @@
 #pragma once
 
 #include <memory>
-
-#include <QObject>
 #include <QIODevice>
+#include <QObject>
 
-namespace IO
-{
+namespace IO {
 /**
  * @brief Type alias for shared byte array pointers used in data hotpath.
  *
@@ -65,7 +63,7 @@ typedef std::shared_ptr<const QByteArray> ByteArrayPtr;
  *
  * @note Consider using the rvalue overload if source is temporary
  */
-[[nodiscard]] inline ByteArrayPtr makeByteArray(const QByteArray &data) noexcept
+[[nodiscard]] inline ByteArrayPtr makeByteArray(const QByteArray& data) noexcept
 {
   return std::make_shared<const QByteArray>(data);
 }
@@ -87,7 +85,7 @@ typedef std::shared_ptr<const QByteArray> ByteArrayPtr;
  * @note After this call, `data` is in a valid but unspecified state
  *       (typically empty)
  */
-[[nodiscard]] inline ByteArrayPtr makeByteArray(QByteArray &&data) noexcept
+[[nodiscard]] inline ByteArrayPtr makeByteArray(QByteArray&& data) noexcept
 {
   return std::make_shared<const QByteArray>(std::move(data));
 }
@@ -141,8 +139,7 @@ typedef std::shared_ptr<const QByteArray> ByteArrayPtr;
  * @see setBufferSize(), processData(), flushBuffer()
  * @see IO::Manager for the central I/O orchestration layer
  */
-class HAL_Driver : public QObject
-{
+class HAL_Driver : public QObject {
   Q_OBJECT
 
 signals:
@@ -155,23 +152,20 @@ signals:
    * @brief Emitted after data is sent.
    * @param data The raw data that was sent.
    */
-  void dataSent(const QByteArray &data);
+  void dataSent(const QByteArray& data);
 
   /**
    * @brief Emitted when buffered data is ready.
    * @param data The buffered data (shared pointer for zero-copy distribution).
    */
-  void dataReceived(const IO::ByteArrayPtr &data);
+  void dataReceived(const IO::ByteArrayPtr& data);
 
 public:
   /**
    * @brief Constructor.
    * @param parent Optional QObject parent.
    */
-  explicit HAL_Driver(QObject *parent = nullptr)
-    : QObject(parent)
-  {
-  }
+  explicit HAL_Driver(QObject* parent = nullptr) : QObject(parent) {}
 
   /**
    * @brief Virtual destructor.
@@ -243,7 +237,7 @@ public:
    * @param data The data to write.
    * @return Number of bytes successfully written.
    */
-  [[nodiscard]] virtual quint64 write(const QByteArray &data) = 0;
+  [[nodiscard]] virtual quint64 write(const QByteArray& data) = 0;
 
   /**
    * @brief Open the device with the given mode.
@@ -252,4 +246,4 @@ public:
    */
   [[nodiscard]] virtual bool open(const QIODevice::OpenMode mode) = 0;
 };
-} // namespace IO
+}  // namespace IO

@@ -19,13 +19,14 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include <QFileInfo>
-#include <QFileDialog>
+#include "IO/FileTransmission.h"
+
 #include <QApplication>
+#include <QFileDialog>
+#include <QFileInfo>
 
 #include "IO/Manager.h"
 #include "Misc/Translator.h"
-#include "IO/FileTransmission.h"
 
 /**
  * Constructor function
@@ -52,7 +53,7 @@ IO::FileTransmission::~FileTransmission()
 /**
  * Returns the only instance of the class
  */
-IO::FileTransmission &IO::FileTransmission::instance()
+IO::FileTransmission& IO::FileTransmission::instance()
 {
   static FileTransmission instance;
   return instance;
@@ -116,35 +117,30 @@ int IO::FileTransmission::lineTransmissionInterval() const
  */
 void IO::FileTransmission::openFile()
 {
-  auto *dialog = new QFileDialog(nullptr, tr("Select file to transmit"),
-                                 QDir::homePath());
+  auto* dialog = new QFileDialog(nullptr, tr("Select file to transmit"), QDir::homePath());
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setOption(QFileDialog::DontUseNativeDialog);
 
-  connect(dialog, &QFileDialog::fileSelected, this,
-          [this, dialog](const QString &path) {
-            dialog->deleteLater();
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    dialog->deleteLater();
 
-            if (path.isEmpty())
-              return;
+    if (path.isEmpty())
+      return;
 
-            if (fileOpen())
-              closeFile();
+    if (fileOpen())
+      closeFile();
 
-            m_file.setFileName(path);
-            if (m_file.open(QFile::ReadOnly))
-            {
-              m_stream = new QTextStream(&m_file);
+    m_file.setFileName(path);
+    if (m_file.open(QFile::ReadOnly)) {
+      m_stream = new QTextStream(&m_file);
 
-              emit fileChanged();
-              emit transmissionProgressChanged();
-            }
-            else
-            {
-              qWarning() << "File open error:" << m_file.errorString();
-            }
-          });
+      emit fileChanged();
+      emit transmissionProgressChanged();
+    } else {
+      qWarning() << "File open error:" << m_file.errorString();
+    }
+  });
 
   dialog->open();
 }
@@ -162,8 +158,7 @@ void IO::FileTransmission::closeFile()
     m_file.close();
 
   // Reset text stream handler
-  if (m_stream)
-  {
+  if (m_stream) {
     delete m_stream;
     m_stream = nullptr;
   }
@@ -191,11 +186,9 @@ void IO::FileTransmission::stopTransmission()
 void IO::FileTransmission::beginTransmission()
 {
   // Only allow transmission if serial device is open
-  if (IO::Manager::instance().isConnected())
-  {
+  if (IO::Manager::instance().isConnected()) {
     // If file has already been sent, reset text stream position
-    if (transmissionProgress() == 100)
-    {
+    if (transmissionProgress() == 100) {
       m_stream->seek(0);
       emit transmissionProgressChanged();
     }
@@ -216,19 +209,23 @@ void IO::FileTransmission::beginTransmission()
 void IO::FileTransmission::setupExternalConnections()
 {
   // Stop transmission if device is disconnected
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
+  connect(&IO::Manager::instance(),
+          &IO::Manager::connectedChanged,
+          this,
           &FileTransmission::stopTransmission);
 
   // Refresh UI when serial device connection status changes
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
-          &FileTransmission::fileChanged);
+  connect(
+    &IO::Manager::instance(), &IO::Manager::connectedChanged, this, &FileTransmission::fileChanged);
 
   // Close file before application quits
   connect(qApp, &QApplication::aboutToQuit, this, &FileTransmission::closeFile);
 
   // Retranslate text automatically
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &IO::FileTransmission::fileChanged);
+  connect(&Misc::Translator::instance(),
+          &Misc::Translator::languageChanged,
+          this,
+          &IO::FileTransmission::fileChanged);
 }
 
 /**
@@ -257,14 +254,11 @@ void IO::FileTransmission::sendLine()
     return;
 
   // Send next line to device
-  if (m_stream && !m_stream->atEnd())
-  {
+  if (m_stream && !m_stream->atEnd()) {
     QMetaObject::invokeMethod(this, [=, this] {
-      if (m_stream)
-      {
+      if (m_stream) {
         auto line = m_stream->readLine();
-        if (!line.isEmpty())
-        {
+        if (!line.isEmpty()) {
           if (!line.endsWith("\n"))
             line.append("\n");
 

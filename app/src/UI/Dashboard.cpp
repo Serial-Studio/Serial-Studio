@@ -20,13 +20,13 @@
  */
 
 #include "UI/Dashboard.h"
-#include "UI/WidgetRegistry.h"
 
-#include "IO/Manager.h"
 #include "CSV/Player.h"
+#include "DataModel/FrameBuilder.h"
+#include "IO/Manager.h"
 #include "MDF4/Player.h"
 #include "Misc/TimerEvents.h"
-#include "DataModel/FrameBuilder.h"
+#include "UI/WidgetRegistry.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Client.h"
@@ -34,18 +34,17 @@
 
 #include <QTimer>
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constants
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
-namespace
-{
+namespace {
 constexpr int kDefaultPlotPoints = 100;
-} // namespace
+}  // namespace
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the Dashboard object and establishes connections for
@@ -78,46 +77,45 @@ UI::Dashboard::Dashboard()
   // Reset dashboard data if MQTT client is subscribed
 #ifdef BUILD_COMMERCIAL
   connect(
-      &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this,
-      [=, this] {
-        const bool subscribed = MQTT::Client::instance().isSubscriber();
-        const bool wasSubscribed = !MQTT::Client::instance().isConnected()
-                                   && MQTT::Client::instance().isSubscriber();
+    &MQTT::Client::instance(),
+    &MQTT::Client::connectedChanged,
+    this,
+    [=, this] {
+      const bool subscribed = MQTT::Client::instance().isSubscriber();
+      const bool wasSubscribed =
+        !MQTT::Client::instance().isConnected() && MQTT::Client::instance().isSubscriber();
 
-        if (subscribed || wasSubscribed)
-          resetData(true);
-      },
-      Qt::QueuedConnection);
+      if (subscribed || wasSubscribed)
+        resetData(true);
+    },
+    Qt::QueuedConnection);
 #endif
 
   // Update the dashboard widgets at defined refresh rate
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this,
-          [=, this] {
-            if (m_updateRequired)
-            {
-              m_updateRequired = false;
-              Q_EMIT updated();
-            }
-          });
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this, [=, this] {
+    if (m_updateRequired) {
+      m_updateRequired = false;
+      Q_EMIT updated();
+    }
+  });
 
   // Update action items when frame format changes
-  connect(this, &UI::Dashboard::widgetCountChanged, this,
-          &UI::Dashboard::actionStatusChanged);
+  connect(this, &UI::Dashboard::widgetCountChanged, this, &UI::Dashboard::actionStatusChanged);
 }
 
 /**
  * @brief Retrieves the singleton instance of the Dashboard.
  * @return Reference to the singleton Dashboard instance.
  */
-UI::Dashboard &UI::Dashboard::instance()
+UI::Dashboard& UI::Dashboard::instance()
 {
   static Dashboard instance;
   return instance;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Dashboard features getters
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Checks if the dashboard is currently available, determined by the
@@ -156,16 +154,16 @@ bool UI::Dashboard::autoHideToolbar() const
  */
 bool UI::Dashboard::streamAvailable() const
 {
-  static auto &manager = IO::Manager::instance();
-  static auto &csvPlayer = CSV::Player::instance();
-  static auto &mf4Player = MDF4::Player::instance();
+  static auto& manager   = IO::Manager::instance();
+  static auto& csvPlayer = CSV::Player::instance();
+  static auto& mf4Player = MDF4::Player::instance();
 
   const bool csvOpen = csvPlayer.isOpen();
   const bool mf4Open = mf4Player.isOpen();
   const bool devOpen = manager.isConnected();
 
 #ifdef BUILD_COMMERCIAL
-  static auto &mqtt = MQTT::Client::instance();
+  static auto& mqtt        = MQTT::Client::instance();
   const bool mqttConnected = mqtt.isConnected() && mqtt.isSubscriber();
   return devOpen || csvOpen || mqttConnected || mf4Open;
 #else
@@ -208,11 +206,11 @@ bool UI::Dashboard::pointsWidgetVisible() const
 {
 #ifdef BUILD_COMMERCIAL
   return m_widgetGroups.contains(SerialStudio::DashboardMultiPlot)
-         || m_widgetDatasets.contains(SerialStudio::DashboardPlot)
-         || m_widgetGroups.contains(SerialStudio::DashboardPlot3D);
+      || m_widgetDatasets.contains(SerialStudio::DashboardPlot)
+      || m_widgetGroups.contains(SerialStudio::DashboardPlot3D);
 #else
   return m_widgetGroups.contains(SerialStudio::DashboardMultiPlot)
-         || m_widgetDatasets.contains(SerialStudio::DashboardPlot);
+      || m_widgetDatasets.contains(SerialStudio::DashboardPlot);
 #endif
 }
 
@@ -225,11 +223,11 @@ bool UI::Dashboard::pointsWidgetVisible() const
 bool UI::Dashboard::precisionWidgetVisible() const
 {
   return m_widgetGroups.contains(SerialStudio::DashboardAccelerometer)
-         || m_widgetGroups.contains(SerialStudio::DashboardGyroscope)
-         || m_widgetGroups.contains(SerialStudio::DashboardDataGrid)
-         || m_widgetDatasets.contains(SerialStudio::DashboardBar)
-         || m_widgetDatasets.contains(SerialStudio::DashboardGauge)
-         || m_widgetDatasets.contains(SerialStudio::DashboardCompass);
+      || m_widgetGroups.contains(SerialStudio::DashboardGyroscope)
+      || m_widgetGroups.contains(SerialStudio::DashboardDataGrid)
+      || m_widgetDatasets.contains(SerialStudio::DashboardBar)
+      || m_widgetDatasets.contains(SerialStudio::DashboardGauge)
+      || m_widgetDatasets.contains(SerialStudio::DashboardCompass);
 }
 
 /**
@@ -241,9 +239,9 @@ bool UI::Dashboard::containsCommercialFeatures() const
   return m_rawFrame.containsCommercialFeatures;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Dashboard getters
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Gets the current point/sample count setting for the dashboard plots.
@@ -272,9 +270,9 @@ int UI::Dashboard::totalWidgetCount() const
   return m_widgetCount;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // QML-callable status functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Checks if the current frame is valid for processing.
@@ -341,14 +339,12 @@ SerialStudio::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex)
  */
 int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
 {
-  if (SerialStudio::isGroupWidget(widget))
-  {
+  if (SerialStudio::isGroupWidget(widget)) {
     auto it = m_widgetGroups.constFind(widget);
     return it != m_widgetGroups.cend() ? it->count() : 0;
   }
 
-  if (SerialStudio::isDatasetWidget(widget))
-  {
+  if (SerialStudio::isDatasetWidget(widget)) {
     auto it = m_widgetDatasets.constFind(widget);
     return it != m_widgetDatasets.cend() ? it->count() : 0;
   }
@@ -356,15 +352,15 @@ int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
   return 0;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Model access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Retrieves the title of the current frame in the dashboard.
  * @return A reference to a QString containing the current frame title.
  */
-const QString &UI::Dashboard::title() const
+const QString& UI::Dashboard::title() const
 {
   return m_lastFrame.title;
 }
@@ -389,17 +385,15 @@ const QString &UI::Dashboard::title() const
 QVariantList UI::Dashboard::actions() const
 {
   QVariantList actions;
-  for (int i = 0; i < m_actions.count(); ++i)
-  {
-    const auto &action = m_actions[i];
+  for (int i = 0; i < m_actions.count(); ++i) {
+    const auto& action = m_actions[i];
 
     QVariantMap m;
-    m["id"] = i;
+    m["id"]      = i;
     m["checked"] = false;
-    m["text"] = action.title;
-    m["icon"] = QStringLiteral("qrc:/rcc/actions/%1.svg").arg(action.icon);
-    if (action.timerMode == DataModel::TimerMode::ToggleOnTrigger)
-    {
+    m["text"]    = action.title;
+    m["icon"]    = QStringLiteral("qrc:/rcc/actions/%1.svg").arg(action.icon);
+    if (action.timerMode == DataModel::TimerMode::ToggleOnTrigger) {
       if (m_timers.contains(i) && m_timers[i] && m_timers[i]->isActive())
         m["checked"] = true;
     }
@@ -430,14 +424,14 @@ QVariantList UI::Dashboard::actions() const
  *         - DashboardWidget: Enum/type identifying the widget type
  *         - int: Index relative to its widget type
  */
-const SerialStudio::WidgetMap &UI::Dashboard::widgetMap() const
+const SerialStudio::WidgetMap& UI::Dashboard::widgetMap() const
 {
   return m_widgetMap;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Dataset & group access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Provides access to the map of dataset objects.
@@ -450,7 +444,7 @@ const SerialStudio::WidgetMap &UI::Dashboard::widgetMap() const
  *
  * @note The map can be used to retrieve datasets by their index.
  */
-const QMap<int, DataModel::Dataset> &UI::Dashboard::datasets() const
+const QMap<int, DataModel::Dataset>& UI::Dashboard::datasets() const
 {
   return m_datasets;
 }
@@ -473,23 +467,19 @@ const QMap<int, DataModel::Dataset> &UI::Dashboard::datasets() const
  *       arguments are provided. It logs warnings for missing widget types or
  *       out-of-bounds indices.
  */
-const DataModel::Group &
-UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
-                              const int index) const
+const DataModel::Group& UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
+                                                      const int index) const
 {
   static const DataModel::Group emptyGroup;
   const auto it = m_widgetGroups.constFind(widget);
 
-  if (it == m_widgetGroups.cend()) [[unlikely]]
-  {
+  if (it == m_widgetGroups.cend()) [[unlikely]] {
     qWarning() << "getGroupWidget: widget type not found:" << widget;
     return emptyGroup;
   }
 
-  if (index < 0 || index >= it->size()) [[unlikely]]
-  {
-    qWarning() << "getGroupWidget: index out of bounds:" << index
-               << "for widget" << widget;
+  if (index < 0 || index >= it->size()) [[unlikely]] {
+    qWarning() << "getGroupWidget: index out of bounds:" << index << "for widget" << widget;
     return emptyGroup;
   }
 
@@ -514,38 +504,34 @@ UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
  *       arguments are provided. It logs warnings for missing widget types or
  *       out-of-bounds indices.
  */
-const DataModel::Dataset &
-UI::Dashboard::getDatasetWidget(const SerialStudio::DashboardWidget widget,
-                                const int index) const
+const DataModel::Dataset& UI::Dashboard::getDatasetWidget(
+  const SerialStudio::DashboardWidget widget, const int index) const
 {
   static const DataModel::Dataset emptyDataset;
   const auto it = m_widgetDatasets.constFind(widget);
 
-  if (it == m_widgetDatasets.cend()) [[unlikely]]
-  {
+  if (it == m_widgetDatasets.cend()) [[unlikely]] {
     qWarning() << "getDatasetWidget: widget type not found:" << widget;
     return emptyDataset;
   }
 
-  if (index < 0 || index >= it->size()) [[unlikely]]
-  {
-    qWarning() << "getDatasetWidget: index out of bounds:" << index
-               << "for widget" << widget;
+  if (index < 0 || index >= it->size()) [[unlikely]] {
+    qWarning() << "getDatasetWidget: index out of bounds:" << index << "for widget" << widget;
     return emptyDataset;
   }
 
   return it->at(index);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Frame access
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Retrieves the last unmodified DataModel frame for the dashboard.
  * @return A reference to the current DataModel::Frame.
  */
-const DataModel::Frame &UI::Dashboard::rawFrame()
+const DataModel::Frame& UI::Dashboard::rawFrame()
 {
   return m_rawFrame;
 }
@@ -557,14 +543,14 @@ const DataModel::Frame &UI::Dashboard::rawFrame()
  *
  * @return A reference to the current DataModel::Frame.
  */
-const DataModel::Frame &UI::Dashboard::processedFrame()
+const DataModel::Frame& UI::Dashboard::processedFrame()
 {
   return m_lastFrame;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Time-series data access
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the FFT plot data currently displayed on the dashboard.
@@ -572,7 +558,7 @@ const DataModel::Frame &UI::Dashboard::processedFrame()
  * @param index The widget index for the FFT plot.
  * @return Reference to the corresponding AxisData buffer.
  */
-const DSP::AxisData &UI::Dashboard::fftData(const int index) const
+const DSP::AxisData& UI::Dashboard::fftData(const int index) const
 {
   return m_fftValues[index];
 }
@@ -583,7 +569,7 @@ const DSP::AxisData &UI::Dashboard::fftData(const int index) const
  * @param index The widget index for the GPS display.
  * @return Reference to the corresponding GpsSeries structure.
  */
-const DSP::GpsSeries &UI::Dashboard::gpsSeries(const int index) const
+const DSP::GpsSeries& UI::Dashboard::gpsSeries(const int index) const
 {
   return m_gpsValues[index];
 }
@@ -594,7 +580,7 @@ const DSP::GpsSeries &UI::Dashboard::gpsSeries(const int index) const
  * @param index The widget index for the linear plot.
  * @return Reference to the corresponding LineSeries buffer.
  */
-const DSP::LineSeries &UI::Dashboard::plotData(const int index) const
+const DSP::LineSeries& UI::Dashboard::plotData(const int index) const
 {
   return m_pltValues[index];
 }
@@ -605,7 +591,7 @@ const DSP::LineSeries &UI::Dashboard::plotData(const int index) const
  * @param index The widget index for the multiplot.
  * @return Reference to the corresponding MultiLineSeries container.
  */
-const DSP::MultiLineSeries &UI::Dashboard::multiplotData(const int index) const
+const DSP::MultiLineSeries& UI::Dashboard::multiplotData(const int index) const
 {
   return m_multipltValues[index];
 }
@@ -617,15 +603,15 @@ const DSP::MultiLineSeries &UI::Dashboard::multiplotData(const int index) const
  * @param index The widget index for the 3D plot.
  * @return Reference to the corresponding LineSeries3D buffer.
  */
-const DSP::LineSeries3D &UI::Dashboard::plotData3D(const int index) const
+const DSP::LineSeries3D& UI::Dashboard::plotData3D(const int index) const
 {
   return m_plotData3D[index];
 }
 #endif
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Plot active status getters
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Checks whether a plot is currently active.
@@ -672,9 +658,9 @@ bool UI::Dashboard::multiplotRunning(const int index)
   return false;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Setter functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the number of data points for the dashboard plots.
@@ -687,8 +673,7 @@ bool UI::Dashboard::multiplotRunning(const int index)
  */
 void UI::Dashboard::setPoints(const int points)
 {
-  if (m_points != points)
-  {
+  if (m_points != points) {
     // Update number of points
     m_points = points;
 
@@ -751,18 +736,17 @@ void UI::Dashboard::resetData(const bool notify)
   m_activeMultiplots.clear();
 
   // Reset frame data
-  m_rawFrame = DataModel::Frame();
-  m_lastFrame = DataModel::Frame();
+  m_rawFrame              = DataModel::Frame();
+  m_lastFrame             = DataModel::Frame();
   m_updateRetryInProgress = false;
 
   // Configure actions
-  auto *frameBuilder = &DataModel::FrameBuilder::instance();
+  auto* frameBuilder = &DataModel::FrameBuilder::instance();
   if (frameBuilder->operationMode() == SerialStudio::ProjectFile)
     configureActions(frameBuilder->frame());
 
   // Notify user interface
-  if (notify)
-  {
+  if (notify) {
     m_updateRequired = true;
 
     Q_EMIT updated();
@@ -789,7 +773,7 @@ void UI::Dashboard::resetData(const bool notify)
 void UI::Dashboard::clearPlotData()
 {
   // Clear FFT plot data
-  for (auto &fft : m_fftValues)
+  for (auto& fft : m_fftValues)
     fft.clear();
 
   // Clear line plot Y-axis data
@@ -801,15 +785,12 @@ void UI::Dashboard::clearPlotData()
     it.value().clear();
 
   // Clear multiplot Y-axis data
-  for (auto &multiSeries : m_multipltValues)
-  {
-    for (auto &yAxis : multiSeries.y)
+  for (auto& multiSeries : m_multipltValues)
+    for (auto& yAxis : multiSeries.y)
       yAxis.clear();
-  }
 
   // Clear GPS trajectory data
-  for (auto &gps : m_gpsValues)
-  {
+  for (auto& gps : m_gpsValues) {
     gps.latitudes.clear();
     gps.longitudes.clear();
     gps.altitudes.clear();
@@ -817,7 +798,7 @@ void UI::Dashboard::clearPlotData()
 
 #ifdef BUILD_COMMERCIAL
   // Clear 3D plot data
-  for (auto &plot3d : m_plotData3D)
+  for (auto& plot3d : m_plotData3D)
     plot3d.clear();
 #endif
 }
@@ -827,8 +808,7 @@ void UI::Dashboard::clearPlotData()
  */
 void UI::Dashboard::setShowActionPanel(const bool enabled)
 {
-  if (m_showActionPanel != enabled)
-  {
+  if (m_showActionPanel != enabled) {
     m_showActionPanel = enabled;
     Q_EMIT showActionPanelChanged();
   }
@@ -839,10 +819,47 @@ void UI::Dashboard::setShowActionPanel(const bool enabled)
  */
 void UI::Dashboard::setAutoHideToolbar(const bool enabled)
 {
-  if (m_autoHideToolbar != enabled)
-  {
+  if (m_autoHideToolbar != enabled) {
     m_autoHideToolbar = enabled;
     Q_EMIT autoHideToolbarChanged();
+  }
+}
+
+/**
+ * @brief Removes the terminal widget from the registry and internal structures.
+ *
+ * Destroys the terminal's widget registry entry, purges it from
+ * m_widgetGroups and m_lastFrame.groups, then rebuilds the widget map
+ * so all widget indices remain contiguous.
+ */
+void UI::Dashboard::removeTerminalWidget()
+{
+  auto& registry = WidgetRegistry::instance();
+
+  if (m_terminalWidgetId != kInvalidWidgetId) {
+    registry.destroyWidget(m_terminalWidgetId);
+    m_terminalWidgetId = kInvalidWidgetId;
+  }
+
+  m_widgetGroups.remove(SerialStudio::DashboardTerminal);
+
+  auto& groups = m_lastFrame.groups;
+  groups.erase(std::remove_if(groups.begin(),
+                              groups.end(),
+                              [](const DataModel::Group& g) { return g.widget == "terminal"; }),
+               groups.end());
+
+  m_widgetMap.clear();
+  m_widgetCount = 0;
+  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
+    const auto count = widgetCount(i.key());
+    for (int j = 0; j < count; ++j)
+      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
+  }
+  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
+    const auto count = widgetCount(i.key());
+    for (int j = 0; j < count; ++j)
+      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
   }
 }
 
@@ -855,20 +872,17 @@ void UI::Dashboard::setAutoHideToolbar(const bool enabled)
  */
 void UI::Dashboard::setTerminalEnabled(const bool enabled)
 {
-  if (m_terminalEnabled != enabled)
-  {
+  if (m_terminalEnabled != enabled) {
     m_terminalEnabled = enabled;
-    auto &registry = WidgetRegistry::instance();
+    auto& registry    = WidgetRegistry::instance();
 
     // Use incremental update if we have an active dashboard with widgets
-    if (m_rawFrame.groups.size() > 0 && m_widgetCount > 0)
-    {
-      if (enabled)
-      {
+    if (m_rawFrame.groups.size() > 0 && m_widgetCount > 0) {
+      if (enabled) {
         // Create terminal group and add to internal structures
         DataModel::Group terminal;
-        terminal.widget = "terminal";
-        terminal.title = tr("Console");
+        terminal.widget  = "terminal";
+        terminal.title   = tr("Console");
         terminal.groupId = static_cast<int>(m_lastFrame.groups.size());
 
         // Add to processed frame and widget groups
@@ -876,51 +890,13 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
         m_widgetGroups[SerialStudio::DashboardTerminal].append(terminal);
 
         // Register in widget registry and widget map
-        m_terminalWidgetId
-            = registry.createWidget(SerialStudio::DashboardTerminal,
-                                    terminal.title, terminal.groupId, -1, true);
-        m_widgetMap.insert(m_widgetCount++,
-                           qMakePair(SerialStudio::DashboardTerminal, 0));
+        m_terminalWidgetId = registry.createWidget(
+          SerialStudio::DashboardTerminal, terminal.title, terminal.groupId, -1, true);
+        m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardTerminal, 0));
 
         Q_EMIT widgetCountChanged();
-      }
-      else
-      {
-        // Remove terminal from registry
-        if (m_terminalWidgetId != kInvalidWidgetId)
-        {
-          registry.destroyWidget(m_terminalWidgetId);
-          m_terminalWidgetId = kInvalidWidgetId;
-        }
-
-        // Remove from internal structures
-        m_widgetGroups.remove(SerialStudio::DashboardTerminal);
-
-        // Remove terminal from processed frame
-        auto &groups = m_lastFrame.groups;
-        groups.erase(std::remove_if(groups.begin(), groups.end(),
-                                    [](const DataModel::Group &g) {
-                                      return g.widget == "terminal";
-                                    }),
-                     groups.end());
-
-        // Rebuild widget map without terminal
-        m_widgetMap.clear();
-        m_widgetCount = 0;
-        for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i)
-        {
-          const auto count = widgetCount(i.key());
-          for (int j = 0; j < count; ++j)
-            m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
-        }
-        for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end();
-             ++i)
-        {
-          const auto count = widgetCount(i.key());
-          for (int j = 0; j < count; ++j)
-            m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
-        }
-
+      } else {
+        removeTerminalWidget();
         Q_EMIT widgetCountChanged();
       }
     }
@@ -935,16 +911,15 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
  */
 void UI::Dashboard::setShowTaskbarButtons(const bool enabled)
 {
-  if (m_showTaskbarButtons != enabled)
-  {
+  if (m_showTaskbarButtons != enabled) {
     m_showTaskbarButtons = enabled;
     Q_EMIT showTaskbarButtonsChanged();
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Action activation, more complex that it seems...
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Activates a dashboard action by transmitting its associated data and
@@ -977,40 +952,30 @@ void UI::Dashboard::setShowTaskbarButtons(const bool enabled)
 void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 {
   // Validate index
-  if (index < 0 || index >= m_actions.count())
-  {
+  if (index < 0 || index >= m_actions.count()) {
     qWarning() << "Invalid action index:" << index;
     return;
   }
 
   // Obtain action data
-  const auto &action = m_actions[index];
+  const auto& action = m_actions[index];
 
   // Handle timer behavior
-  if (m_timers.contains(index))
-  {
-    auto *timer = m_timers[index];
+  if (m_timers.contains(index)) {
+    auto* timer = m_timers[index];
     if (!timer)
       qWarning() << "Invalid timer pointer for action" << action.title;
 
-    else
-    {
-      if (action.timerMode == DataModel::TimerMode::StartOnTrigger)
-      {
-        if (!timer->isActive())
-          timer->start();
-      }
+    else if (action.timerMode == DataModel::TimerMode::StartOnTrigger) {
+      if (!timer->isActive())
+        timer->start();
+    }
 
-      else if (action.timerMode == DataModel::TimerMode::ToggleOnTrigger)
-      {
-        if (guiTrigger)
-        {
-          if (timer->isActive())
-            timer->stop();
-          else
-            timer->start();
-        }
-      }
+    else if (action.timerMode == DataModel::TimerMode::ToggleOnTrigger && guiTrigger) {
+      if (timer->isActive())
+        timer->stop();
+      else
+        timer->start();
     }
   }
 
@@ -1022,9 +987,9 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
   Q_EMIT actionStatusChanged();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Plot activation status setters
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the active state of a plot.
@@ -1068,9 +1033,9 @@ void UI::Dashboard::setMultiplotRunning(const int index, const bool enabled)
     m_activeMultiplots[index] = enabled;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Hotpath data processing
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Processes an incoming data frame and updates the dashboard
@@ -1082,16 +1047,14 @@ void UI::Dashboard::setMultiplotRunning(const int index, const bool enabled)
  *
  * @param frame The new DataModel data frame to process.
  */
-void UI::Dashboard::hotpathRxFrame(const DataModel::Frame &frame)
+void UI::Dashboard::hotpathRxFrame(const DataModel::Frame& frame)
 {
   // Validate frame
   if (frame.groups.size() <= 0 || !streamAvailable()) [[unlikely]]
     return;
 
   // Regenerate dashboard model if frame structure changed
-  if (!DataModel::compare_frames(frame, m_rawFrame)
-      || m_datasetReferences.isEmpty()) [[unlikely]]
-  {
+  if (!DataModel::compare_frames(frame, m_rawFrame) || m_datasetReferences.isEmpty()) [[unlikely]] {
     const bool hadProFeatures = m_rawFrame.containsCommercialFeatures;
     reconfigureDashboard(frame);
     if (hadProFeatures != frame.containsCommercialFeatures)
@@ -1105,9 +1068,43 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::Frame &frame)
   m_updateRequired = true;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Frame processing & dashboard model generation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Handles the case where a dataset UID is not in m_datasetReferences.
+ *
+ * Either aborts with a warning (if already in a retry) or regenerates the
+ * dashboard model and retries the update once.
+ *
+ * @param frame Frame that triggered the missing-dataset condition.
+ */
+void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
+{
+  if (m_updateRetryInProgress) {
+    qWarning() << "Failed to build dashboard widget model";
+
+    if (IO::Manager::instance().isConnected())
+      IO::Manager::instance().disconnectDevice();
+    else if (CSV::Player::instance().isOpen())
+      CSV::Player::instance().closeFile();
+    else if (MDF4::Player::instance().isOpen())
+      MDF4::Player::instance().closeFile();
+#ifdef BUILD_COMMERCIAL
+    else if (MQTT::Client::instance().isConnected())
+      MQTT::Client::instance().closeConnection();
+#endif
+    return;
+  }
+
+  reconfigureDashboard(frame);
+
+  m_updateRetryInProgress          = true;
+  const DataModel::Frame frameCopy = frame;
+  updateDashboardData(frameCopy);
+  m_updateRetryInProgress = false;
+}
 
 /**
  * @brief Updates dataset values and plot data based on the given frame.
@@ -1117,59 +1114,26 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::Frame &frame)
  *
  * @param frame The JSON frame containing new dataset values.
  */
-void UI::Dashboard::updateDashboardData(const DataModel::Frame &frame)
+void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
 {
   // Update all datasets of the frame
-  for (const auto &group : frame.groups)
-  {
-    for (const auto &dataset : group.datasets)
-    {
+  for (const auto& group : frame.groups) {
+    for (const auto& dataset : group.datasets) {
       // Get the unique ID of the dataset
       const auto uid = dataset.uniqueId;
-      const auto it = m_datasetReferences.find(uid);
+      const auto it  = m_datasetReferences.find(uid);
 
-      // Cannot find dataset UID
-      if (it == m_datasetReferences.end()) [[unlikely]]
-      {
-        // Break recursion
-        if (m_updateRetryInProgress)
-        {
-          qWarning() << "Failed to build dashboard widget model";
-
-          // Disconnect from data source
-          if (IO::Manager::instance().isConnected())
-            IO::Manager::instance().disconnectDevice();
-          else if (CSV::Player::instance().isOpen())
-            CSV::Player::instance().closeFile();
-          else if (MDF4::Player::instance().isOpen())
-            MDF4::Player::instance().closeFile();
-#ifdef BUILD_COMMERCIAL
-          else if (MQTT::Client::instance().isConnected())
-            MQTT::Client::instance().closeConnection();
-#endif
-
-          return;
-        }
-
-        // Re-generate dashboard model
-        reconfigureDashboard(frame);
-
-        // Try running the update again with a copy to avoid use-after-free
-        // if reconfigureDashboard invalidated the frame reference
-        m_updateRetryInProgress = true;
-        const DataModel::Frame frameCopy = frame;
-        updateDashboardData(frameCopy);
-        m_updateRetryInProgress = false;
-
+      // Cannot find dataset UID; regenerate model and retry (once)
+      if (it == m_datasetReferences.end()) [[unlikely]] {
+        handleMissingDataset(frame);
         return;
       }
 
       // Update all datasets for the given UID
-      const auto &datasets = it.value();
-      for (auto *ptr : datasets)
-      {
-        ptr->value = dataset.value;
-        ptr->isNumeric = dataset.isNumeric;
+      const auto& datasets = it.value();
+      for (auto* ptr : datasets) {
+        ptr->value        = dataset.value;
+        ptr->isNumeric    = dataset.isNumeric;
         ptr->numericValue = dataset.numericValue;
       }
     }
@@ -1177,6 +1141,43 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame &frame)
 
   // Update plots & time-series widgets
   updateDataSeries();
+}
+
+/**
+ * @brief Registers a dataset's index and per-widget-key mappings.
+ *
+ * Inserts or updates the dataset in m_datasets (preserving min/max across
+ * frames), then routes the dataset into m_widgetDatasets for every applicable
+ * key, and into ledPanel for LED keys.
+ *
+ * @param dataset  Dataset to process.
+ * @param ledPanel Group accumulating LED-panel datasets for the current group.
+ */
+void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& dataset,
+                                                 DataModel::Group& ledPanel)
+{
+  if (!m_datasets.contains(dataset.index)) {
+    m_datasets.insert(dataset.index, dataset);
+  } else {
+    auto prev     = m_datasets.value(dataset.index);
+    double newMin = qMin(prev.pltMin, dataset.pltMin);
+    double newMax = qMax(prev.pltMax, dataset.pltMax);
+
+    auto d   = dataset;
+    d.pltMin = newMin;
+    d.pltMax = newMax;
+    m_datasets.insert(dataset.index, d);
+  }
+
+  auto keys = SerialStudio::getDashboardWidgets(dataset);
+  for (const auto& widgetKey : std::as_const(keys)) {
+    if (widgetKey == SerialStudio::DashboardLED) {
+      ledPanel.datasets.push_back(dataset);
+      continue;
+    }
+    if (widgetKey != SerialStudio::DashboardNoWidget)
+      m_widgetDatasets[widgetKey].append(dataset);
+  }
 }
 
 /**
@@ -1190,7 +1191,7 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame &frame)
  * @param frame The JSON frame with the new structure to configure.
  * @param pro Indicates whether commercial (pro) features are enabled.
  */
-void UI::Dashboard::reconfigureDashboard(const DataModel::Frame &frame)
+void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 {
   // Check if we can use pro features
   const bool pro = SerialStudio::activated();
@@ -1199,49 +1200,43 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame &frame)
   resetData(false);
 
   // Save frame structure
-  m_rawFrame = frame;
+  m_rawFrame  = frame;
   m_lastFrame = frame;
 
   // Add terminal group
-  if (m_terminalEnabled)
-  {
+  if (m_terminalEnabled) {
     DataModel::Group terminal;
-    terminal.widget = "terminal";
-    terminal.title = tr("Console");
+    terminal.widget  = "terminal";
+    terminal.title   = tr("Console");
     terminal.groupId = m_lastFrame.groups.size();
 
     m_lastFrame.groups.push_back(terminal);
   }
 
   // Parse frame groups
-  for (const auto &group : m_lastFrame.groups)
-  {
+  for (const auto& group : m_lastFrame.groups) {
     // Append group widgets
     const auto key = SerialStudio::getDashboardWidget(group);
     if (key != SerialStudio::DashboardNoWidget)
       m_widgetGroups[key].append(group);
 
     // Append fallback 3D plot widget
-    if (key == SerialStudio::DashboardPlot3D && !pro)
-    {
+    if (key == SerialStudio::DashboardPlot3D && !pro) {
       m_widgetGroups.remove(key);
-      auto copy = group;
+      auto copy  = group;
       copy.title = tr("%1 (Fallback)").arg(group.title);
       m_widgetGroups[SerialStudio::DashboardMultiPlot].append(copy);
-      for (size_t i = 0; i < m_lastFrame.groups.size(); ++i)
-      {
-        if (m_lastFrame.groups[i].groupId == group.groupId)
-        {
-          m_lastFrame.groups[i].title = copy.title;
-          m_lastFrame.groups[i].widget = "multiplot";
-          break;
-        }
+      for (size_t i = 0; i < m_lastFrame.groups.size(); ++i) {
+        if (m_lastFrame.groups[i].groupId != group.groupId)
+          continue;
+        m_lastFrame.groups[i].title  = copy.title;
+        m_lastFrame.groups[i].widget = "multiplot";
+        break;
       }
     }
 
     // Append multiplot & 3D plot to accelerometer widget
-    if (key == SerialStudio::DashboardAccelerometer)
-    {
+    if (key == SerialStudio::DashboardAccelerometer) {
       m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
       if (pro)
         m_widgetGroups[SerialStudio::DashboardPlot3D].append(group);
@@ -1253,64 +1248,32 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame &frame)
 
     // Parse group datasets
     DataModel::Group ledPanel;
-    for (const auto &dataset : group.datasets)
-    {
-      // Register a new dataset
-      if (!m_datasets.contains(dataset.index))
-        m_datasets.insert(dataset.index, dataset);
-
-      // Dataset already registered, update min/max values
-      else
-      {
-        auto prev = m_datasets.value(dataset.index);
-        double newMin = qMin(prev.pltMin, dataset.pltMin);
-        double newMax = qMax(prev.pltMax, dataset.pltMax);
-
-        auto d = dataset;
-        d.pltMin = newMin;
-        d.pltMax = newMax;
-        m_datasets.insert(dataset.index, d);
-      }
-
-      // Register dataset widgets
-      auto keys = SerialStudio::getDashboardWidgets(dataset);
-      for (const auto &widgetKeys : std::as_const(keys))
-      {
-        if (widgetKeys == SerialStudio::DashboardLED)
-          ledPanel.datasets.push_back(dataset);
-
-        else if (widgetKeys != SerialStudio::DashboardNoWidget)
-          m_widgetDatasets[widgetKeys].append(dataset);
-      }
-    }
+    for (const auto& dataset : group.datasets)
+      processDatasetIntoWidgetMaps(dataset, ledPanel);
 
     // Add group-level LED panel
-    if (ledPanel.datasets.size() > 0)
-    {
-      ledPanel.widget = "led-panel";
+    if (ledPanel.datasets.size() > 0) {
+      ledPanel.widget  = "led-panel";
       ledPanel.groupId = group.groupId;
-      ledPanel.title = tr("LED Panel (%1)").arg(group.title);
+      ledPanel.title   = tr("LED Panel (%1)").arg(group.title);
       m_widgetGroups[SerialStudio::DashboardLED].append(ledPanel);
     }
   }
 
   // Begin batch update on the registry (defers batchUpdateCompleted signal)
-  auto &registry = WidgetRegistry::instance();
+  auto& registry = WidgetRegistry::instance();
   registry.beginBatchUpdate();
 
   // Reset terminal widget ID
   m_terminalWidgetId = kInvalidWidgetId;
 
   // Generate group model map and register widgets
-  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i)
-  {
-    const auto key = i.key();
+  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
+    const auto key   = i.key();
     const auto count = widgetCount(key);
-    for (int j = 0; j < count; ++j)
-    {
-      const auto &group = i.value().at(j);
-      auto widgetId
-          = registry.createWidget(key, group.title, group.groupId, -1, true);
+    for (int j = 0; j < count; ++j) {
+      const auto& group = i.value().at(j);
+      auto widgetId     = registry.createWidget(key, group.title, group.groupId, -1, true);
 
       // Store terminal widget ID for incremental updates
       if (key == SerialStudio::DashboardTerminal)
@@ -1321,15 +1284,12 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame &frame)
   }
 
   // Generate dataset model map and register widgets
-  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
-  {
-    const auto key = i.key();
+  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
+    const auto key   = i.key();
     const auto count = widgetCount(key);
-    for (int j = 0; j < count; ++j)
-    {
-      const auto &dataset = i.value().at(j);
-      (void)registry.createWidget(key, dataset.title, dataset.groupId,
-                                  dataset.index, false);
+    for (int j = 0; j < count; ++j) {
+      const auto& dataset = i.value().at(j);
+      (void)registry.createWidget(key, dataset.title, dataset.groupId, dataset.index, false);
       m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
     }
   }
@@ -1338,44 +1298,27 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame &frame)
   registry.endBatchUpdate();
 
   // Traverse all group-level datasets
-  for (auto &groupList : m_widgetGroups)
-  {
-    for (auto &group : groupList)
-    {
-      for (auto &dataset : group.datasets)
+  for (auto& groupList : m_widgetGroups) {
+    for (auto& group : groupList)
+      for (auto& dataset : group.datasets)
         m_datasetReferences[dataset.uniqueId].append(&dataset);
-    }
   }
 
   // Traverse all widget-level datasets
-  for (auto &datasetList : m_widgetDatasets)
-  {
-    for (auto &dataset : datasetList)
+  for (auto& datasetList : m_widgetDatasets)
+    for (auto& dataset : datasetList)
       m_datasetReferences[dataset.uniqueId].append(&dataset);
-  }
 
   // Transverse all datasets
-  for (auto &dataset : m_datasets)
+  for (auto& dataset : m_datasets)
     m_datasetReferences[dataset.uniqueId].append(&dataset);
 
   // For edge cases, register any dataset that has not been added
-  for (auto &group : m_lastFrame.groups)
-  {
-    for (auto &dataset : group.datasets)
-    {
-      bool registered = false;
-      auto &list = m_datasetReferences[dataset.uniqueId];
-      for (auto &d : list)
-      {
-        if (d == &dataset)
-        {
-          registered = true;
-          break;
-        }
-      }
-
-      if (!registered)
-        m_datasetReferences[dataset.uniqueId].append(&dataset);
+  for (auto& group : m_lastFrame.groups) {
+    for (auto& dataset : group.datasets) {
+      auto& list = m_datasetReferences[dataset.uniqueId];
+      if (!list.contains(&dataset))
+        list.append(&dataset);
     }
   }
 
@@ -1387,9 +1330,9 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame &frame)
   Q_EMIT widgetCountChanged();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Time series data processing
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates time-series data for all dashboard widgets that require
@@ -1417,9 +1360,9 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame &frame)
 void UI::Dashboard::updateDataSeries()
 {
   // Cache widget counts
-  const int gpsCount = widgetCount(SerialStudio::DashboardGPS);
-  const int fftCount = widgetCount(SerialStudio::DashboardFFT);
-  const int plotCount = widgetCount(SerialStudio::DashboardPlot);
+  const int gpsCount   = widgetCount(SerialStudio::DashboardGPS);
+  const int fftCount   = widgetCount(SerialStudio::DashboardFFT);
+  const int plotCount  = widgetCount(SerialStudio::DashboardPlot);
   const int multiCount = widgetCount(SerialStudio::DashboardMultiPlot);
 #ifdef BUILD_COMMERCIAL
   const int plot3DCount = widgetCount(SerialStudio::DashboardPlot3D);
@@ -1440,15 +1383,13 @@ void UI::Dashboard::updateDataSeries()
 #endif
 
   // Update GPS data
-  for (int i = 0; i < gpsCount; ++i)
-  {
-    const auto &group = getGroupWidget(SerialStudio::DashboardGPS, i);
-    auto &series = m_gpsValues[i];
+  for (int i = 0; i < gpsCount; ++i) {
+    const auto& group = getGroupWidget(SerialStudio::DashboardGPS, i);
+    auto& series      = m_gpsValues[i];
 
     double lat = -1, lon = -1, alt = -1;
-    for (const auto &dataset : group.datasets)
-    {
-      const QString &id = dataset.widget;
+    for (const auto& dataset : group.datasets) {
+      const QString& id = dataset.widget;
       if (id == "lat")
         lat = dataset.numericValue;
       else if (id == "lon")
@@ -1463,65 +1404,58 @@ void UI::Dashboard::updateDataSeries()
   }
 
   // Update FFT plots
-  for (int i = 0; i < fftCount; ++i)
-  {
+  for (int i = 0; i < fftCount; ++i) {
     if (!m_activeFFTPlots[i])
       continue;
 
-    const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
+    const auto& dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
     m_fftValues[i].push(dataset.numericValue);
   }
 
   // Append latest values to linear plots data
   QSet<int> xAxesMoved;
   QSet<int> yAxesMoved;
-  for (int i = 0; i < plotCount; ++i)
-  {
+  for (int i = 0; i < plotCount; ++i) {
     // Stop if plot widget is not enabled
     if (!m_activePlots[i])
       continue;
 
     // Shift Y-axis points
-    const auto &yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
-    if (!yAxesMoved.contains(yDataset.index))
-    {
+    const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
+    if (!yAxesMoved.contains(yDataset.index)) {
       yAxesMoved.insert(yDataset.index);
       m_yAxisData[yDataset.index].push(yDataset.numericValue);
     }
 
     // Shift X-axis points
     auto xAxisId = SerialStudio::activated() ? yDataset.xAxisId : 0;
-    if (m_datasets.contains(xAxisId) && !xAxesMoved.contains(xAxisId))
-    {
+    if (m_datasets.contains(xAxisId) && !xAxesMoved.contains(xAxisId)) {
       xAxesMoved.insert(xAxisId);
-      const auto &xDataset = m_datasets[xAxisId];
+      const auto& xDataset = m_datasets[xAxisId];
       m_xAxisData[xAxisId].push(xDataset.numericValue);
     }
   }
 
   // Update Multi-plots
-  for (int i = 0; i < multiCount; ++i)
-  {
+  for (int i = 0; i < multiCount; ++i) {
     if (!m_activeMultiplots[i])
       continue;
 
-    const auto &group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
-    auto &multiSeries = m_multipltValues[i];
+    const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
+    auto& multiSeries = m_multipltValues[i];
     for (size_t j = 0; j < group.datasets.size(); ++j)
       multiSeries.y[j].push(group.datasets[j].numericValue);
   }
 
   // Update 3D plots
 #ifdef BUILD_COMMERCIAL
-  for (int i = 0; i < plot3DCount; ++i)
-  {
-    auto &plotData = m_plotData3D[i];
+  for (int i = 0; i < plot3DCount; ++i) {
+    auto& plotData = m_plotData3D[i];
 
     QVector3D point;
-    const auto &group = getGroupWidget(SerialStudio::DashboardPlot3D, i);
-    for (const auto &dataset : group.datasets)
-    {
-      const QString &id = dataset.widget;
+    const auto& group = getGroupWidget(SerialStudio::DashboardPlot3D, i);
+    for (const auto& dataset : group.datasets) {
+      const QString& id = dataset.widget;
       if (id == "x" || id == "X")
         point.setX(dataset.numericValue);
       else if (id == "y" || id == "Y")
@@ -1559,21 +1493,19 @@ void UI::Dashboard::configureGpsSeries()
   m_gpsValues.squeeze();
 
   // Construct GPS data structure
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardGPS); ++i)
-  {
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardGPS); ++i) {
     DSP::GpsSeries series;
-    const auto &group = getGroupWidget(SerialStudio::DashboardGPS, i);
-    const QMap<QString, DSP::FixedQueue<double> *> fieldMap
-        = {{"lat", &series.latitudes},
-           {"lon", &series.longitudes},
-           {"alt", &series.altitudes}};
+    const auto& group = getGroupWidget(SerialStudio::DashboardGPS, i);
+    const QMap<QString, DSP::FixedQueue<double>*> fieldMap = {
+      {"lat",  &series.latitudes},
+      {"lon", &series.longitudes},
+      {"alt",  &series.altitudes}
+    };
 
-    for (size_t j = 0; j < group.datasets.size(); ++j)
-    {
-      const auto &dataset = group.datasets[j];
-      if (fieldMap.contains(dataset.widget))
-      {
-        auto *vector = fieldMap[dataset.widget];
+    for (size_t j = 0; j < group.datasets.size(); ++j) {
+      const auto& dataset = group.datasets[j];
+      if (fieldMap.contains(dataset.widget)) {
+        auto* vector = fieldMap[dataset.widget];
         vector->resize(points() + 1);
         vector->fill(std::nan(""));
       }
@@ -1601,9 +1533,8 @@ void UI::Dashboard::configureFftSeries()
   m_activeFFTPlots.clear();
 
   // Construct FFT plot data structure
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i)
-  {
-    const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i) {
+    const auto& dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
     m_fftValues.append(DSP::AxisData(dataset.fftSamples));
     m_activeFFTPlots.insert(i, true);
   }
@@ -1623,6 +1554,32 @@ void UI::Dashboard::configureFftSeries()
  * @note Typically called during dashboard setup or reset to prepare plot
  *       widgets for rendering.
  */
+
+/**
+ * @brief Registers an X-axis data buffer for a dataset's custom X source.
+ *
+ * Only runs when pro features are active. Skips datasets whose X-axis
+ * source is already registered or is not found in m_datasets.
+ *
+ * @param dataset Dataset whose xAxisId specifies the X data source.
+ */
+void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
+{
+  if (!SerialStudio::activated())
+    return;
+
+  const int xSource = dataset.xAxisId;
+  if (m_xAxisData.contains(xSource))
+    return;
+
+  if (!m_datasets.contains(xSource))
+    return;
+
+  DSP::AxisData xAxis(points() + 1);
+  m_xAxisData.insert(xSource, xAxis);
+  m_xAxisData[xSource].fill(0);
+}
+
 void UI::Dashboard::configureLineSeries()
 {
   // Clear memory
@@ -1637,49 +1594,33 @@ void UI::Dashboard::configureLineSeries()
   m_pltXAxis.fillRange(0, 1);
 
   // Construct X/Y axis data arrays
-  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
-  {
+  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
     // Obtain list of datasets for a widget type
-    const auto &datasets = i.value();
+    const auto& datasets = i.value();
 
     // Iterate over all the datasets
-    for (auto d = datasets.begin(); d != datasets.end(); ++d)
-    {
-      if (d->plt)
-      {
-        // Register Y-axis
-        DSP::AxisData yAxis(points() + 1);
-        m_yAxisData.insert(d->index, yAxis);
-        m_yAxisData[d->index].fill(0);
+    for (auto d = datasets.begin(); d != datasets.end(); ++d) {
+      if (!d->plt)
+        continue;
 
-        // Register X-axis
-        if (SerialStudio::activated())
-        {
-          int xSource = d->xAxisId;
-          if (!m_xAxisData.contains(xSource))
-          {
-            DSP::AxisData xAxis(points() + 1);
-            if (m_datasets.contains(xSource))
-            {
-              m_xAxisData.insert(xSource, xAxis);
-              m_xAxisData[xSource].fill(0);
-            }
-          }
-        }
-      }
+      // Register Y-axis
+      DSP::AxisData yAxis(points() + 1);
+      m_yAxisData.insert(d->index, yAxis);
+      m_yAxisData[d->index].fill(0);
+
+      // Register X-axis
+      registerXAxisIfNeeded(*d);
     }
   }
 
   // Construct plot values structure
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i)
-  {
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i) {
     // Obtain Y-axis data
-    const auto &yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
+    const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
 
     // Add X-axis data & generate a line series with X/Y data
-    if (m_datasets.contains(yDataset.xAxisId) && SerialStudio::activated())
-    {
-      const auto &xDataset = m_datasets[yDataset.xAxisId];
+    if (m_datasets.contains(yDataset.xAxisId) && SerialStudio::activated()) {
+      const auto& xDataset = m_datasets[yDataset.xAxisId];
       DSP::LineSeries series;
       series.x = &m_xAxisData[xDataset.index];
       series.y = &m_yAxisData[yDataset.index];
@@ -1687,8 +1628,7 @@ void UI::Dashboard::configureLineSeries()
     }
 
     // Only use Y-axis data, use samples/points as X-axis
-    else
-    {
+    else {
       DSP::LineSeries series;
       series.x = &m_pltXAxis;
       series.y = &m_yAxisData[yDataset.index];
@@ -1719,8 +1659,7 @@ void UI::Dashboard::configurePlot3DSeries()
   m_plotData3D.clear();
   m_plotData3D.squeeze();
   m_plotData3D.resize(widgetCount(SerialStudio::DashboardPlot3D));
-  for (int i = 0; i < m_plotData3D.count(); ++i)
-  {
+  for (int i = 0; i < m_plotData3D.count(); ++i) {
     m_plotData3D[i].clear();
     m_plotData3D[i].shrink_to_fit();
   }
@@ -1749,14 +1688,12 @@ void UI::Dashboard::configureMultiLineSeries()
   m_multipltXAxis.fillRange(0, 1);
 
   // Construct multi-plot values structure
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i)
-  {
-    const auto &group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i) {
+    const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
 
     DSP::MultiLineSeries series;
     series.x = &m_multipltXAxis;
-    for (size_t j = 0; j < group.datasets.size(); ++j)
-    {
+    for (size_t j = 0; j < group.datasets.size(); ++j) {
       series.y.push_back(DSP::AxisData(points() + 1));
       series.y.back().fill(0);
     }
@@ -1766,9 +1703,9 @@ void UI::Dashboard::configureMultiLineSeries()
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Action configuration
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Configures dashboard actions and associated timers from the
@@ -1794,7 +1731,7 @@ void UI::Dashboard::configureMultiLineSeries()
  * @warning If a timer-based action has an interval of 0 milliseconds, a warning
  *          is logged and the timer is not created.
  */
-void UI::Dashboard::configureActions(const DataModel::Frame &frame)
+void UI::Dashboard::configureActions(const DataModel::Frame& frame)
 {
   // Stop if frame is not valid
   if (frame.groups.size() <= 0)
@@ -1805,12 +1742,8 @@ void UI::Dashboard::configureActions(const DataModel::Frame &frame)
   m_actions.squeeze();
 
   // Stop and delete all timers
-  // Delete immediately instead of using deleteLater() to prevent memory leaks
-  // when the map is cleared before the event loop processes pending deletions
-  for (auto it = m_timers.begin(); it != m_timers.end(); ++it)
-  {
-    if (it.value())
-    {
+  for (auto it = m_timers.begin(); it != m_timers.end(); ++it) {
+    if (it.value()) {
       disconnect(it.value());
       it.value()->stop();
       delete it.value();
@@ -1821,39 +1754,31 @@ void UI::Dashboard::configureActions(const DataModel::Frame &frame)
   m_timers.clear();
 
   // Update actions
-  for (const auto &action : frame.actions)
+  for (const auto& action : frame.actions)
     m_actions.append(action);
 
   // Configure timers
-  if (IO::Manager::instance().isConnected())
-  {
-    for (int i = 0; i < m_actions.count(); ++i)
-    {
-      const auto &action = m_actions[i];
-      if (action.timerMode != DataModel::TimerMode::Off)
-      {
-        auto interval = action.timerIntervalMs;
-        if (interval > 0)
-        {
-          auto *timer = new QTimer(this);
-          timer->setInterval(interval);
-          timer->setTimerType(Qt::PreciseTimer);
-          connect(timer, &QTimer::timeout, this,
-                  [this, i]() { activateAction(i, false); });
+  if (IO::Manager::instance().isConnected()) {
+    for (int i = 0; i < m_actions.count(); ++i) {
+      const auto& action = m_actions[i];
+      if (action.timerMode == DataModel::TimerMode::Off)
+        continue;
 
-          if (action.timerMode == DataModel::TimerMode::AutoStart
-              || action.autoExecuteOnConnect)
-            timer->start();
-
-          m_timers.insert(i, timer);
-        }
-
-        else
-        {
-          qWarning() << "Interval for action" << action.title
-                     << "must be greater than 0!";
-        }
+      const auto interval = action.timerIntervalMs;
+      if (interval <= 0) {
+        qWarning() << "Interval for action" << action.title << "must be greater than 0!";
+        continue;
       }
+
+      auto* timer = new QTimer(this);
+      timer->setInterval(interval);
+      timer->setTimerType(Qt::PreciseTimer);
+      connect(timer, &QTimer::timeout, this, [this, i]() { activateAction(i, false); });
+
+      if (action.timerMode == DataModel::TimerMode::AutoStart || action.autoExecuteOnConnect)
+        timer->start();
+
+      m_timers.insert(i, timer);
     }
   }
 

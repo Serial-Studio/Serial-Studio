@@ -20,16 +20,17 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#include "Misc/Utilities.h"
-#include "Misc/TimerEvents.h"
 #include "IO/Drivers/CANBus.h"
 
 #include <QCanBus>
 #include <QLoggingCategory>
 
-//------------------------------------------------------------------------------
+#include "Misc/TimerEvents.h"
+#include "Misc/Utilities.h"
+
+//--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructor function
@@ -38,31 +39,30 @@
  * the list of available CAN bus plugins.
  */
 IO::Drivers::CANBus::CANBus()
-  : m_device(nullptr)
-  , m_canFD(false)
-  , m_pluginIndex(0)
-  , m_interfaceIndex(0)
-  , m_bitrate(500000)
+  : m_device(nullptr), m_canFD(false), m_pluginIndex(0), m_interfaceIndex(0), m_bitrate(500000)
 {
   m_pluginList = QCanBus::instance()->plugins();
 
-  m_canFD = m_settings.value("CanBusDriver/canFD", false).toBool();
-  m_bitrate = m_settings.value("CanBusDriver/bitrate", 500000).toUInt();
-  m_pluginIndex = m_settings.value("CanBusDriver/pluginIndex", 0).toUInt();
-  m_interfaceIndex
-      = m_settings.value("CanBusDriver/interfaceIndex", 0).toUInt();
+  m_canFD          = m_settings.value("CanBusDriver/canFD", false).toBool();
+  m_bitrate        = m_settings.value("CanBusDriver/bitrate", 500000).toUInt();
+  m_pluginIndex    = m_settings.value("CanBusDriver/pluginIndex", 0).toUInt();
+  m_interfaceIndex = m_settings.value("CanBusDriver/interfaceIndex", 0).toUInt();
 
   if (!m_pluginList.isEmpty() && m_pluginIndex < m_pluginList.count())
     refreshInterfaces();
 
-  connect(this, &IO::Drivers::CANBus::pluginIndexChanged, this,
+  connect(this,
+          &IO::Drivers::CANBus::pluginIndexChanged,
+          this,
           &IO::Drivers::CANBus::configurationChanged);
-  connect(this, &IO::Drivers::CANBus::interfaceIndexChanged, this,
+  connect(this,
+          &IO::Drivers::CANBus::interfaceIndexChanged,
+          this,
           &IO::Drivers::CANBus::configurationChanged);
-  connect(this, &IO::Drivers::CANBus::bitrateChanged, this,
-          &IO::Drivers::CANBus::configurationChanged);
-  connect(this, &IO::Drivers::CANBus::canFDChanged, this,
-          &IO::Drivers::CANBus::configurationChanged);
+  connect(
+    this, &IO::Drivers::CANBus::bitrateChanged, this, &IO::Drivers::CANBus::configurationChanged);
+  connect(
+    this, &IO::Drivers::CANBus::canFDChanged, this, &IO::Drivers::CANBus::configurationChanged);
 
   QLoggingCategory::setFilterRules("qt.canbus* = false");
 }
@@ -78,8 +78,7 @@ IO::Drivers::CANBus::CANBus()
  */
 IO::Drivers::CANBus::~CANBus()
 {
-  if (m_device)
-  {
+  if (m_device) {
     disconnect(m_device, nullptr, this, nullptr);
 
     if (m_device->state() == QCanBusDevice::ConnectedState)
@@ -93,15 +92,15 @@ IO::Drivers::CANBus::~CANBus()
 /**
  * @brief Returns the only instance of the class
  */
-IO::Drivers::CANBus &IO::Drivers::CANBus::instance()
+IO::Drivers::CANBus& IO::Drivers::CANBus::instance()
 {
   static CANBus singleton;
   return singleton;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // HAL-driver implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Closes the current CAN bus connection
@@ -118,8 +117,7 @@ IO::Drivers::CANBus &IO::Drivers::CANBus::instance()
  */
 void IO::Drivers::CANBus::close()
 {
-  if (m_device)
-  {
+  if (m_device) {
     disconnect(m_device, nullptr, this, nullptr);
 
     if (m_device->state() != QCanBusDevice::UnconnectedState)
@@ -171,7 +169,7 @@ bool IO::Drivers::CANBus::configurationOk() const noexcept
     return false;
 
   return m_pluginIndex < m_pluginList.count() && !m_interfaceList.isEmpty()
-         && m_interfaceIndex < m_interfaceList.count();
+      && m_interfaceIndex < m_interfaceList.count();
 }
 
 /**
@@ -201,7 +199,7 @@ bool IO::Drivers::CANBus::configurationOk() const noexcept
  * @note DLC values exceeding valid range are automatically clamped
  * @note Emits dataSent signal only on successful transmission
  */
-quint64 IO::Drivers::CANBus::write(const QByteArray &data)
+quint64 IO::Drivers::CANBus::write(const QByteArray& data)
 {
   if (!m_device)
     return 0;
@@ -212,12 +210,10 @@ quint64 IO::Drivers::CANBus::write(const QByteArray &data)
   if (data.length() < 3)
     return 0;
 
-  try
-  {
-    quint32 can_id
-        = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
+  try {
+    quint32 can_id = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
 
-    quint8 dlc = static_cast<quint8>(data[2]);
+    quint8 dlc     = static_cast<quint8>(data[2]);
     quint8 max_dlc = m_canFD ? 64 : 8;
 
     if (dlc > max_dlc)
@@ -228,14 +224,11 @@ quint64 IO::Drivers::CANBus::write(const QByteArray &data)
     QCanBusFrame frame(can_id, payload);
     frame.setExtendedFrameFormat(m_canFD);
 
-    if (m_device->writeFrame(frame))
-    {
+    if (m_device->writeFrame(frame)) {
       Q_EMIT dataSent(data);
       return data.length();
     }
-  }
-  catch (...)
-  {
+  } catch (...) {
   }
 
   return 0;
@@ -267,80 +260,72 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
 
   close();
 
-  if (!canSupportAvailable())
-  {
+  if (!canSupportAvailable()) {
 #if defined(Q_OS_LINUX)
     Misc::Utilities::showMessageBox(
-        tr("CAN Bus Not Available"),
-        tr("No CAN bus plugins found on this system.\n\nOn Linux, please "
-           "ensure SocketCAN kernel modules are loaded."),
-        QMessageBox::Critical);
+      tr("CAN Bus Not Available"),
+      tr(
+        "No CAN bus plugins found on this system.\n\nOn Linux, please ensure SocketCAN kernel modules are loaded."),
+      QMessageBox::Critical);
 #elif defined(Q_OS_WIN)
     Misc::Utilities::showMessageBox(
-        tr("CAN Bus Not Available"),
-        tr("No CAN bus plugins found on this system.\n\nOn Windows, please "
-           "install CAN hardware drivers (PEAK, Vector, etc.)."),
-        QMessageBox::Critical);
+      tr("CAN Bus Not Available"),
+      tr(
+        "No CAN bus plugins found on this system.\n\nOn Windows, please install CAN hardware drivers (PEAK, Vector, etc.)."),
+      QMessageBox::Critical);
 #elif defined(Q_OS_MAC)
     Misc::Utilities::showMessageBox(
-        tr("CAN Bus Not Available"),
-        tr("No CAN bus plugins found on this system.\n\nCAN bus support on "
-           "macOS is limited and may require third-party hardware drivers."),
-        QMessageBox::Critical);
+      tr("CAN Bus Not Available"),
+      tr(
+        "No CAN bus plugins found on this system.\n\nCAN bus support on macOS is limited and may require third-party hardware drivers."),
+      QMessageBox::Critical);
 #else
-    Misc::Utilities::showMessageBox(
-        tr("CAN Bus Not Available"),
-        tr("No CAN bus plugins are available on this platform."),
-        QMessageBox::Critical);
+    Misc::Utilities::showMessageBox(tr("CAN Bus Not Available"),
+                                    tr("No CAN bus plugins are available on this platform."),
+                                    QMessageBox::Critical);
 #endif
     return false;
   }
 
-  if (!configurationOk())
-  {
+  if (!configurationOk()) {
     Misc::Utilities::showMessageBox(
-        tr("Invalid CAN Configuration"),
-        tr("The CAN bus configuration is incomplete. Please select a valid "
-           "plugin and interface."),
-        QMessageBox::Critical);
+      tr("Invalid CAN Configuration"),
+      tr("The CAN bus configuration is incomplete. Please select a valid plugin and interface."),
+      QMessageBox::Critical);
     return false;
   }
 
-  if (m_pluginIndex >= m_pluginList.count()
-      || m_interfaceIndex >= m_interfaceList.count())
-  {
+  if (m_pluginIndex >= m_pluginList.count() || m_interfaceIndex >= m_interfaceList.count()) {
     Misc::Utilities::showMessageBox(
-        tr("Invalid Selection"),
-        tr("The selected plugin or interface is no longer available. Please "
-           "refresh the lists and try again."),
-        QMessageBox::Critical);
+      tr("Invalid Selection"),
+      tr(
+        "The selected plugin or interface is no longer available. Please refresh the lists and try again."),
+      QMessageBox::Critical);
     return false;
   }
 
-  if (m_pluginList.isEmpty() || m_interfaceList.isEmpty())
-  {
+  if (m_pluginList.isEmpty() || m_interfaceList.isEmpty()) {
     Misc::Utilities::showMessageBox(
-        tr("No Devices Available"),
-        tr("The plugin or interface list is empty. Please refresh the lists "
-           "and ensure your CAN hardware is connected."),
-        QMessageBox::Critical);
+      tr("No Devices Available"),
+      tr(
+        "The plugin or interface list is empty. Please refresh the lists and ensure your CAN hardware is connected."),
+      QMessageBox::Critical);
     return false;
   }
 
-  QString plugin = m_pluginList.at(m_pluginIndex);
+  QString plugin    = m_pluginList.at(m_pluginIndex);
   QString interface = m_interfaceList.at(m_interfaceIndex);
 
   QString error;
   m_device = QCanBus::instance()->createDevice(plugin, interface, &error);
 
-  if (!m_device)
-  {
+  if (!m_device) {
     Misc::Utilities::showMessageBox(
-        tr("CAN Device Creation Failed"),
-        error.isEmpty() ? tr("Unable to create CAN bus device. Please check "
-                             "your hardware and drivers.")
-                        : error,
-        QMessageBox::Critical);
+      tr("CAN Device Creation Failed"),
+      error.isEmpty()
+        ? tr("Unable to create CAN bus device. Please check your hardware and drivers.")
+        : error,
+      QMessageBox::Critical);
     return false;
   }
 
@@ -348,25 +333,33 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
   if (m_canFD)
     m_device->setConfigurationParameter(QCanBusDevice::CanFdKey, true);
 
-  connect(m_device, &QCanBusDevice::framesReceived, this,
-          &IO::Drivers::CANBus::onFramesReceived, Qt::UniqueConnection);
-  connect(m_device, &QCanBusDevice::stateChanged, this,
-          &IO::Drivers::CANBus::onStateChanged, Qt::UniqueConnection);
-  connect(m_device, &QCanBusDevice::errorOccurred, this,
-          &IO::Drivers::CANBus::onErrorOccurred, Qt::UniqueConnection);
+  connect(m_device,
+          &QCanBusDevice::framesReceived,
+          this,
+          &IO::Drivers::CANBus::onFramesReceived,
+          Qt::UniqueConnection);
+  connect(m_device,
+          &QCanBusDevice::stateChanged,
+          this,
+          &IO::Drivers::CANBus::onStateChanged,
+          Qt::UniqueConnection);
+  connect(m_device,
+          &QCanBusDevice::errorOccurred,
+          this,
+          &IO::Drivers::CANBus::onErrorOccurred,
+          Qt::UniqueConnection);
 
-  if (!m_device->connectDevice())
-  {
+  if (!m_device->connectDevice()) {
     error = m_device->errorString();
     m_device->deleteLater();
     m_device = nullptr;
     Misc::Utilities::showMessageBox(
-        tr("CAN Connection Failed"),
-        error.isEmpty()
-            ? tr("Unable to connect to CAN bus device. Please check your "
-                 "hardware connection and settings.")
-            : error,
-        QMessageBox::Critical);
+      tr("CAN Connection Failed"),
+      error.isEmpty()
+        ? tr(
+            "Unable to connect to CAN bus device. Please check your hardware connection and settings.")
+        : error,
+      QMessageBox::Critical);
     return false;
   }
 
@@ -374,9 +367,9 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
   return true;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Property getters
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns true if CAN FD mode is enabled
@@ -458,7 +451,7 @@ QStringList IO::Drivers::CANBus::bitrateList() const
  * @param plugin The Qt plugin identifier
  * @return User-friendly display name
  */
-QString IO::Drivers::CANBus::pluginDisplayName(const QString &plugin) const
+QString IO::Drivers::CANBus::pluginDisplayName(const QString& plugin) const
 {
   if (plugin == "socketcan")
     return "SocketCAN";
@@ -478,9 +471,9 @@ QString IO::Drivers::CANBus::pluginDisplayName(const QString &plugin) const
     return plugin;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Property setters
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets whether CAN FD mode is enabled
@@ -507,8 +500,7 @@ void IO::Drivers::CANBus::setBitrate(const quint32 bitrate)
  */
 void IO::Drivers::CANBus::setPluginIndex(const quint8 index)
 {
-  if (index < m_pluginList.count())
-  {
+  if (index < m_pluginList.count()) {
     m_pluginIndex = index;
     m_settings.setValue("CanBusDriver/pluginIndex", index);
     refreshInterfaces();
@@ -521,8 +513,7 @@ void IO::Drivers::CANBus::setPluginIndex(const quint8 index)
  */
 void IO::Drivers::CANBus::setInterfaceIndex(const quint8 index)
 {
-  if (index < m_interfaceList.count())
-  {
+  if (index < m_interfaceList.count()) {
     m_interfaceIndex = index;
     m_settings.setValue("CanBusDriver/interfaceIndex", index);
     Q_EMIT interfaceIndexChanged();
@@ -537,13 +528,15 @@ void IO::Drivers::CANBus::setInterfaceIndex(const quint8 index)
  */
 void IO::Drivers::CANBus::setupExternalConnections()
 {
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
+  connect(&Misc::TimerEvents::instance(),
+          &Misc::TimerEvents::timeout1Hz,
+          this,
           &IO::Drivers::CANBus::refreshPlugins);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Private slots
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Handles incoming CAN bus frames
@@ -576,10 +569,8 @@ void IO::Drivers::CANBus::onFramesReceived()
   if (!isOpen())
     return;
 
-  try
-  {
-    while (m_device->framesAvailable() > 0)
-    {
+  try {
+    while (m_device->framesAvailable() > 0) {
       const QCanBusFrame frame = m_device->readFrame();
 
       if (!frame.isValid())
@@ -606,9 +597,7 @@ void IO::Drivers::CANBus::onFramesReceived()
 
       Q_EMIT dataReceived(makeByteArray(std::move(data)));
     }
-  }
-  catch (...)
-  {
+  } catch (...) {
   }
 }
 
@@ -673,12 +662,11 @@ void IO::Drivers::CANBus::onErrorOccurred(QCanBusDevice::CanBusError error)
   if (error == QCanBusDevice::NoError)
     return;
 
-  if (!m_device)
-  {
+  if (!m_device) {
     Misc::Utilities::showMessageBox(
-        tr("CAN Bus Error"),
-        tr("An error occurred but the CAN device is no longer available."),
-        QMessageBox::Warning);
+      tr("CAN Bus Error"),
+      tr("An error occurred but the CAN device is no longer available."),
+      QMessageBox::Warning);
     return;
   }
 
@@ -686,13 +674,13 @@ void IO::Drivers::CANBus::onErrorOccurred(QCanBusDevice::CanBusError error)
   if (error_string.isEmpty())
     error_string = tr("Error code: %1").arg(error);
 
-  Misc::Utilities::showMessageBox(tr("CAN Bus Communication Error"),
-                                  error_string, QMessageBox::Warning);
+  Misc::Utilities::showMessageBox(
+    tr("CAN Bus Communication Error"), error_string, QMessageBox::Warning);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Private methods
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Refreshes the list of available CAN bus interfaces
@@ -704,8 +692,7 @@ void IO::Drivers::CANBus::refreshInterfaces()
   m_interfaceList.clear();
   m_interfaceError.clear();
 
-  if (m_pluginList.isEmpty() || m_pluginIndex >= m_pluginList.count())
-  {
+  if (m_pluginList.isEmpty() || m_pluginIndex >= m_pluginList.count()) {
     m_interfaceError = tr("No CAN driver selected");
     Q_EMIT interfaceErrorChanged();
     Q_EMIT availableInterfacesChanged();
@@ -715,17 +702,15 @@ void IO::Drivers::CANBus::refreshInterfaces()
   QString plugin = m_pluginList[m_pluginIndex];
   QString error;
 
-  const QList<QCanBusDeviceInfo> interfaces
-      = QCanBus::instance()->availableDevices(plugin, &error);
+  const QList<QCanBusDeviceInfo> interfaces = QCanBus::instance()->availableDevices(plugin, &error);
 
   if (!error.isEmpty())
     qWarning() << "CAN plugin error:" << plugin << error;
 
-  for (const QCanBusDeviceInfo &info : interfaces)
+  for (const QCanBusDeviceInfo& info : interfaces)
     m_interfaceList.append(info.name());
 
-  if (m_interfaceList.isEmpty() && m_interfaceError.isEmpty())
-  {
+  if (m_interfaceList.isEmpty() && m_interfaceError.isEmpty()) {
     const QString driverName = pluginDisplayName(plugin);
 
 #if defined(Q_OS_LINUX)
@@ -737,27 +722,16 @@ void IO::Drivers::CANBus::refreshInterfaces()
       m_interfaceError = tr("No interfaces found for %1").arg(driverName);
 
 #elif defined(Q_OS_WIN)
-    if (plugin == "peakcan")
-    {
+    if (plugin == "peakcan") {
       m_interfaceError = tr(
-          "Install <a href='https://www.peak-system.com/Drivers.523.0.html?"
-          "&L=1'>PEAK CAN drivers</a>");
-    }
-    else if (plugin == "vectorcan")
-    {
-      m_interfaceError
-          = tr("Install <a "
-               "href='https://www.vector.com/us/en/products/products-a-z/"
-               "libraries-drivers/'>Vector CAN drivers</a>");
-    }
-    else if (plugin == "systeccan")
-    {
+        "Install <a href='https://www.peak-system.com/Drivers.523.0.html?&L=1'>PEAK CAN drivers</a>");
+    } else if (plugin == "vectorcan") {
       m_interfaceError = tr(
-          "Install <a "
-          "href='https://www.systec-electronic.com/en/company/support/driver'>"
-          "SysTec CAN drivers</a>");
-    }
-    else
+        "Install <a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'>Vector CAN drivers</a>");
+    } else if (plugin == "systeccan") {
+      m_interfaceError = tr(
+        "Install <a href='https://www.systec-electronic.com/en/company/support/driver'>SysTec CAN drivers</a>");
+    } else
       m_interfaceError = tr("Install %1 drivers").arg(driverName);
 
 #elif defined(Q_OS_MAC)
@@ -768,8 +742,7 @@ void IO::Drivers::CANBus::refreshInterfaces()
     Q_EMIT interfaceErrorChanged();
   }
 
-  if (m_interfaceIndex >= m_interfaceList.count())
-  {
+  if (m_interfaceIndex >= m_interfaceList.count()) {
     m_interfaceIndex = 0;
     m_settings.setValue("CanBusDriver/interfaceIndex", 0);
   }
@@ -787,16 +760,13 @@ void IO::Drivers::CANBus::refreshPlugins()
 {
   const QStringList currentPlugins = QCanBus::instance()->plugins();
 
-  if (m_pluginList != currentPlugins)
-  {
+  if (m_pluginList != currentPlugins) {
     m_pluginList = currentPlugins;
 
-    if (m_pluginIndex >= m_pluginList.count())
-    {
+    if (m_pluginIndex >= m_pluginList.count()) {
       m_pluginIndex = m_pluginList.isEmpty()
-                          ? 0
-                          : qMin(m_pluginIndex,
-                                 static_cast<quint8>(m_pluginList.count() - 1));
+                      ? 0
+                      : qMin(m_pluginIndex, static_cast<quint8>(m_pluginList.count() - 1));
       m_settings.setValue("CanBusDriver/pluginIndex", m_pluginIndex);
       Q_EMIT pluginIndexChanged();
     }

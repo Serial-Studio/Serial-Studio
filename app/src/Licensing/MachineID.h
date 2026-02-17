@@ -24,8 +24,7 @@
 
 #include <QObject>
 
-namespace Licensing
-{
+namespace Licensing {
 /**
  * @class MachineID
  * @brief Provides a consistent, hashed machine identifier for licensing
@@ -49,23 +48,22 @@ namespace Licensing
  * This class guarantees that each machine returns the same ID across sessions,
  * while remaining secure and non-reversible.
  */
-class MachineID : public QObject
-{
+class MachineID : public QObject {
   Q_OBJECT
   Q_PROPERTY(QString machineId READ machineId CONSTANT)
   Q_PROPERTY(quint64 machineSpecificKey READ machineSpecificKey CONSTANT)
 
 private:
   explicit MachineID();
-  MachineID(MachineID &&) = delete;
-  MachineID(const MachineID &) = delete;
-  MachineID &operator=(MachineID &&) = delete;
-  MachineID &operator=(const MachineID &) = delete;
+  MachineID(MachineID&&)                 = delete;
+  MachineID(const MachineID&)            = delete;
+  MachineID& operator=(MachineID&&)      = delete;
+  MachineID& operator=(const MachineID&) = delete;
 
 public:
-  [[nodiscard]] static MachineID &instance();
-  [[nodiscard]] const QString &machineId() const;
-  [[nodiscard]] const QString &appVerMachineId() const;
+  [[nodiscard]] static MachineID& instance();
+  [[nodiscard]] const QString& machineId() const;
+  [[nodiscard]] const QString& appVerMachineId() const;
 
   [[nodiscard]] quint64 machineSpecificKey() const;
 
@@ -77,4 +75,4 @@ private:
   QString m_appVerMachineId;
   quint64 m_machineSpecificKey;
 };
-} // namespace Licensing
+}  // namespace Licensing

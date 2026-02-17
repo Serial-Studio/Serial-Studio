@@ -22,18 +22,17 @@
 #pragma once
 
 #include <atomic>
-#include <QThread>
-#include <QObject>
-#include <QSettings>
-#include <QPointer>
 #include <QKeyEvent>
+#include <QObject>
+#include <QPointer>
+#include <QSettings>
+#include <QThread>
 
-#include "SerialStudio.h"
-#include "IO/HAL_Driver.h"
 #include "IO/FrameReader.h"
+#include "IO/HAL_Driver.h"
+#include "SerialStudio.h"
 
-namespace IO
-{
+namespace IO {
 /**
  * @class IO::Manager
  * @brief Central manager for I/O operations across multiple protocols.
@@ -44,8 +43,7 @@ namespace IO
  * Integrates with `FrameReader` for parsing data streams and ensures
  * thread-safe operation using a dedicated worker thread.
  */
-class Manager : public QObject
-{
+class Manager : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool readOnly
@@ -105,15 +103,15 @@ signals:
 
 private:
   explicit Manager();
-  Manager(Manager &&) = delete;
-  Manager(const Manager &) = delete;
-  Manager &operator=(Manager &&) = delete;
-  Manager &operator=(const Manager &) = delete;
+  Manager(Manager&&)                 = delete;
+  Manager(const Manager&)            = delete;
+  Manager& operator=(Manager&&)      = delete;
+  Manager& operator=(const Manager&) = delete;
 
   ~Manager();
 
 public:
-  static Manager &instance();
+  static Manager& instance();
 
   [[nodiscard]] bool paused();
   [[nodiscard]] bool readOnly();
@@ -122,15 +120,15 @@ public:
   [[nodiscard]] bool configurationOk();
   [[nodiscard]] bool threadedFrameExtraction();
 
-  [[nodiscard]] HAL_Driver *driver();
+  [[nodiscard]] HAL_Driver* driver();
   [[nodiscard]] SerialStudio::BusType busType() const;
 
-  [[nodiscard]] const QByteArray &startSequence() const;
-  [[nodiscard]] const QByteArray &finishSequence() const;
-  [[nodiscard]] const QString &checksumAlgorithm() const;
+  [[nodiscard]] const QByteArray& startSequence() const;
+  [[nodiscard]] const QByteArray& finishSequence() const;
+  [[nodiscard]] const QString& checksumAlgorithm() const;
 
   [[nodiscard]] QStringList availableBuses() const;
-  Q_INVOKABLE qint64 writeData(const QByteArray &data);
+  Q_INVOKABLE qint64 writeData(const QByteArray& data);
 
 public slots:
   void connectDevice();
@@ -139,12 +137,12 @@ public slots:
   void resetFrameReader();
   void setupExternalConnections();
   void setPaused(const bool paused);
-  void setDriver(IO::HAL_Driver *driver);
+  void setDriver(IO::HAL_Driver* driver);
   void setWriteEnabled(const bool enabled);
-  void processPayload(const QByteArray &payload);
-  void setStartSequence(const QByteArray &sequence);
-  void setFinishSequence(const QByteArray &sequence);
-  void setChecksumAlgorithm(const QString &algorithm);
+  void processPayload(const QByteArray& payload);
+  void setStartSequence(const QByteArray& sequence);
+  void setFinishSequence(const QByteArray& sequence);
+  void setChecksumAlgorithm(const QString& algorithm);
   void setThreadedFrameExtraction(const bool enabled);
   void setBusType(const SerialStudio::BusType driver);
 
@@ -153,7 +151,7 @@ private:
   void startFrameReader();
 
   void onReadyRead();
-  void onDataReceived(const ByteArrayPtr &data);
+  void onDataReceived(const ByteArrayPtr& data);
 
 private:
   std::atomic<bool> m_paused;
@@ -161,7 +159,7 @@ private:
   bool m_thrFrameExtr;
   SerialStudio::BusType m_busType;
 
-  HAL_Driver *m_driver;
+  HAL_Driver* m_driver;
   QThread m_workerThread;
   QPointer<FrameReader> m_frameReader;
 
@@ -172,4 +170,4 @@ private:
   QSettings m_settings;
   QString m_checksumAlgorithm;
 };
-} // namespace IO
+}  // namespace IO

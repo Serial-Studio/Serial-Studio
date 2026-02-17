@@ -21,12 +21,11 @@
 
 #pragma once
 
+#include <QBasicTimer>
 #include <QObject>
 #include <QSettings>
-#include <QBasicTimer>
 
-namespace Misc
-{
+namespace Misc {
 /**
  * @class TimerEvents
  * @brief Singleton class providing multiple periodic timer signals.
@@ -56,8 +55,7 @@ namespace Misc
  * Misc::TimerEvents::instance().startTimers();
  * @endcode
  */
-class TimerEvents : public QObject
-{
+class TimerEvents : public QObject {
   Q_OBJECT
   Q_PROPERTY(int fps READ fps WRITE setFPS NOTIFY fpsChanged)
 
@@ -70,18 +68,18 @@ signals:
 
 private:
   TimerEvents();
-  TimerEvents(TimerEvents &&) = delete;
-  TimerEvents(const TimerEvents &) = delete;
-  TimerEvents &operator=(TimerEvents &&) = delete;
-  TimerEvents &operator=(const TimerEvents &) = delete;
+  TimerEvents(TimerEvents&&)                 = delete;
+  TimerEvents(const TimerEvents&)            = delete;
+  TimerEvents& operator=(TimerEvents&&)      = delete;
+  TimerEvents& operator=(const TimerEvents&) = delete;
 
 public:
-  static TimerEvents &instance();
+  static TimerEvents& instance();
 
   [[nodiscard]] int fps() const;
 
 protected:
-  void timerEvent(QTimerEvent *event) override;
+  void timerEvent(QTimerEvent* event) override;
 
 public slots:
   void stopTimers();
@@ -97,4 +95,4 @@ private:
   QBasicTimer m_timer10Hz;
   QBasicTimer m_timer20Hz;
 };
-} // namespace Misc
+}  // namespace Misc

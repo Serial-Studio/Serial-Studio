@@ -21,20 +21,19 @@
 
 #pragma once
 
-#include <QLabel>
-#include <QDialog>
-#include <QLineEdit>
 #include <QCheckBox>
+#include <QDialog>
 #include <QGroupBox>
-#include <QStringList>
-#include <QPushButton>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QTableWidget>
+#include <QLabel>
+#include <QLineEdit>
 #include <QPlainTextEdit>
+#include <QPushButton>
+#include <QStringList>
+#include <QTableWidget>
+#include <QVBoxLayout>
 
-namespace DataModel
-{
+namespace DataModel {
 class FrameParser;
 
 /**
@@ -46,13 +45,11 @@ class FrameParser;
  * - View the parsed output in a table
  * - Test multiple frames sequentially
  */
-class FrameParserTestDialog : public QDialog
-{
+class FrameParserTestDialog : public QDialog {
   Q_OBJECT
 
 public:
-  explicit FrameParserTestDialog(FrameParser *parser,
-                                 QWidget *parent = nullptr);
+  explicit FrameParserTestDialog(FrameParser* parser, QWidget* parent = nullptr);
 
 public slots:
   void clear();
@@ -62,25 +59,25 @@ private slots:
   void onThemeChanged();
   void onLanguageChanged();
   void onInputModeChanged(Qt::CheckState state);
-  void onInputDataChanged(const QString &text);
+  void onInputDataChanged(const QString& text);
 
 private:
-  bool validateHexInput(const QString &text);
-  QString formatHexInput(const QString &text);
-  void displayOutput(const QString &input, const QStringList &output);
+  bool validateHexInput(const QString& text);
+  QString formatHexInput(const QString& text);
+  void displayOutput(const QString& input, const QStringList& output);
 
 private:
-  QLabel *m_inputTitle;
-  QLabel *m_outputTitle;
-  FrameParser *m_parser;
-  QTableWidget *m_table;
-  QLineEdit *m_userInput;
-  QGroupBox *m_inputGroup;
-  QGroupBox *m_outputGroup;
-  QCheckBox *m_hexCheckBox;
-  QPushButton *m_parseButton;
-  QPushButton *m_clearButton;
-  QPlainTextEdit *m_inputDisplay;
+  QLabel* m_inputTitle;
+  QLabel* m_outputTitle;
+  FrameParser* m_parser;
+  QTableWidget* m_table;
+  QLineEdit* m_userInput;
+  QGroupBox* m_inputGroup;
+  QGroupBox* m_outputGroup;
+  QCheckBox* m_hexCheckBox;
+  QPushButton* m_parseButton;
+  QPushButton* m_clearButton;
+  QPlainTextEdit* m_inputDisplay;
 };
 
-} // namespace DataModel
+}  // namespace DataModel

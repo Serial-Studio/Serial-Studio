@@ -21,28 +21,26 @@
 
 #include "Player.h"
 
-#include <QtMath>
-#include <QTimer>
+#include <algorithm>
+#include <map>
+#include <mdf/ichannel.h>
+#include <mdf/ichannelgroup.h>
+#include <mdf/idatagroup.h>
+#include <mdf/isampleobserver.h>
+#include <mdf/mdffile.h>
+#include <mdf/mdfreader.h>
+#include <QApplication>
+#include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
-#include <QFileDialog>
-#include <QApplication>
+#include <QTimer>
+#include <QtMath>
 
-#include <map>
-#include <algorithm>
-
-#include <mdf/mdffile.h>
-#include <mdf/ichannel.h>
-#include <mdf/mdfreader.h>
-#include <mdf/idatagroup.h>
-#include <mdf/ichannelgroup.h>
-#include <mdf/isampleobserver.h>
-
-#include "IO/Manager.h"
-#include "UI/Dashboard.h"
-#include "Misc/Utilities.h"
 #include "DataModel/FrameBuilder.h"
+#include "IO/Manager.h"
+#include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
+#include "UI/Dashboard.h"
 
 /**
  * @class SampleCacheObserver
@@ -52,24 +50,20 @@
  * It extracts channel values from incoming sample records and stores them
  * in a cache for efficient random-access playback.
  */
-class SampleCacheObserver : public mdf::ISampleObserver
-{
+class SampleCacheObserver : public mdf::ISampleObserver {
 public:
-  SampleCacheObserver(const mdf::IDataGroup &dataGroup,
-                      std::map<uint64_t, std::vector<double>> &cache,
-                      const std::vector<mdf::IChannel *> &allChannels,
-                      const std::vector<mdf::IChannel *> &groupChannels)
+  SampleCacheObserver(const mdf::IDataGroup& dataGroup,
+                      std::map<uint64_t, std::vector<double>>& cache,
+                      const std::vector<mdf::IChannel*>& allChannels,
+                      const std::vector<mdf::IChannel*>& groupChannels)
     : mdf::ISampleObserver(dataGroup)
     , m_cache(cache)
     , m_allChannels(allChannels)
     , m_groupChannels(groupChannels)
   {
-    for (size_t i = 0; i < m_allChannels.size(); ++i)
-    {
-      for (auto *ch : m_groupChannels)
-      {
-        if (m_allChannels[i] == ch)
-        {
+    for (size_t i = 0; i < m_allChannels.size(); ++i) {
+      for (auto* ch : m_groupChannels) {
+        if (m_allChannels[i] == ch) {
           m_channelIndexMap[ch] = i;
           break;
         }
@@ -77,16 +71,14 @@ public:
     }
   }
 
-  bool OnSample(uint64_t sample, uint64_t record_id,
-                const std::vector<uint8_t> &record) override
+  bool OnSample(uint64_t sample, uint64_t record_id, const std::vector<uint8_t>& record) override
   {
     if (m_cache.find(sample) != m_cache.end())
       return true;
 
     std::vector<double> values(m_allChannels.size(), 0.0);
 
-    for (auto *channel : m_groupChannels)
-    {
+    for (auto* channel : m_groupChannels) {
       if (!channel)
         continue;
 
@@ -94,13 +86,11 @@ public:
       if (it == m_channelIndexMap.end())
         continue;
 
-      double value = 0.0;
+      double value       = 0.0;
       const bool success = GetEngValue(*channel, record_id, record, value);
 
-      if (!success)
-      {
-        const bool channelSuccess
-            = GetChannelValue(*channel, record_id, record, value);
+      if (!success) {
+        const bool channelSuccess = GetChannelValue(*channel, record_id, record, value);
         if (!channelSuccess)
           value = 0.0;
       }
@@ -113,10 +103,10 @@ public:
   }
 
 private:
-  std::map<uint64_t, std::vector<double>> &m_cache;
-  const std::vector<mdf::IChannel *> &m_allChannels;
-  const std::vector<mdf::IChannel *> &m_groupChannels;
-  std::map<mdf::IChannel *, size_t> m_channelIndexMap;
+  std::map<uint64_t, std::vector<double>>& m_cache;
+  const std::vector<mdf::IChannel*>& m_allChannels;
+  const std::vector<mdf::IChannel*>& m_groupChannels;
+  std::map<mdf::IChannel*, size_t> m_channelIndexMap;
 };
 
 /**
@@ -126,33 +116,27 @@ private:
  * This observer extracts timestamp values from the master time channel
  * for Serial Studio-generated MDF4 files.
  */
-class TimestampCacheObserver : public mdf::ISampleObserver
-{
+class TimestampCacheObserver : public mdf::ISampleObserver {
 public:
-  TimestampCacheObserver(const mdf::IDataGroup &dataGroup,
-                         std::map<uint64_t, double> &timestampCache,
-                         mdf::IChannel *masterTimeChannel)
+  TimestampCacheObserver(const mdf::IDataGroup& dataGroup,
+                         std::map<uint64_t, double>& timestampCache,
+                         mdf::IChannel* masterTimeChannel)
     : mdf::ISampleObserver(dataGroup)
     , m_timestampCache(timestampCache)
     , m_masterTimeChannel(masterTimeChannel)
-  {
-  }
+  {}
 
-  bool OnSample(uint64_t sample, uint64_t record_id,
-                const std::vector<uint8_t> &record) override
+  bool OnSample(uint64_t sample, uint64_t record_id, const std::vector<uint8_t>& record) override
   {
-    if (!m_masterTimeChannel
-        || m_timestampCache.find(sample) != m_timestampCache.end())
+    if (!m_masterTimeChannel || m_timestampCache.find(sample) != m_timestampCache.end())
       return true;
 
-    double timestamp = 0.0;
-    const bool success
-        = GetEngValue(*m_masterTimeChannel, record_id, record, timestamp);
+    double timestamp   = 0.0;
+    const bool success = GetEngValue(*m_masterTimeChannel, record_id, record, timestamp);
 
-    if (!success)
-    {
-      const bool channelSuccess
-          = GetChannelValue(*m_masterTimeChannel, record_id, record, timestamp);
+    if (!success) {
+      const bool channelSuccess =
+        GetChannelValue(*m_masterTimeChannel, record_id, record, timestamp);
       if (!channelSuccess)
         timestamp = 0.0;
     }
@@ -162,8 +146,8 @@ public:
   }
 
 private:
-  std::map<uint64_t, double> &m_timestampCache;
-  mdf::IChannel *m_masterTimeChannel;
+  std::map<uint64_t, double>& m_timestampCache;
+  mdf::IChannel* m_masterTimeChannel;
 };
 
 /**
@@ -182,8 +166,7 @@ MDF4::Player::Player()
   , m_reader(nullptr)
 {
   qApp->installEventFilter(this);
-  connect(this, &MDF4::Player::playerStateChanged, this,
-          &MDF4::Player::updateData);
+  connect(this, &MDF4::Player::playerStateChanged, this, &MDF4::Player::updateData);
 }
 
 /**
@@ -195,7 +178,7 @@ MDF4::Player::~Player() {}
  * @brief Returns the singleton instance of the MDF4 player
  * @return Reference to the player instance
  */
-MDF4::Player &MDF4::Player::instance()
+MDF4::Player& MDF4::Player::instance()
 {
   static Player singleton;
   return singleton;
@@ -246,8 +229,7 @@ double MDF4::Player::progress() const
  */
 QString MDF4::Player::filename() const
 {
-  if (isOpen())
-  {
+  if (isOpen()) {
     auto fileInfo = QFileInfo(m_filePath);
     return fileInfo.fileName();
   }
@@ -268,7 +250,7 @@ int MDF4::Player::framePosition() const
  * @brief Returns the current playback timestamp
  * @return Formatted timestamp string (HH:MM:SS.mmm)
  */
-const QString &MDF4::Player::timestamp() const
+const QString& MDF4::Player::timestamp() const
 {
   return m_timestamp;
 }
@@ -327,21 +309,20 @@ void MDF4::Player::toggle()
  */
 void MDF4::Player::openFile()
 {
-  auto *dialog
-      = new QFileDialog(nullptr, tr("Select MDF4 file"),
-                        Misc::WorkspaceManager::instance().path("MDF4"),
-                        tr("MDF4 files (*.mf4 *.dat)"));
+  auto* dialog = new QFileDialog(nullptr,
+                                 tr("Select MDF4 file"),
+                                 Misc::WorkspaceManager::instance().path("MDF4"),
+                                 tr("MDF4 files (*.mf4 *.dat)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setOption(QFileDialog::DontUseNativeDialog);
 
-  connect(dialog, &QFileDialog::fileSelected, this,
-          [this, dialog](const QString &path) {
-            if (!path.isEmpty())
-              openFile(path);
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    if (!path.isEmpty())
+      openFile(path);
 
-            dialog->deleteLater();
-          });
+    dialog->deleteLater();
+  });
 
   connect(dialog, &QFileDialog::rejected, dialog, &QFileDialog::deleteLater);
 
@@ -359,15 +340,15 @@ void MDF4::Player::openFile()
  * 4. Builds frame index and reads measurement data
  * 5. Extracts file metadata (author, project, subject)
  */
-void MDF4::Player::openFile(const QString &filePath)
+void MDF4::Player::openFile(const QString& filePath)
 {
-  if (IO::Manager::instance().isConnected())
-  {
+  if (IO::Manager::instance().isConnected()) {
     int response = Misc::Utilities::showMessageBox(
-        tr("Disconnect from device?"),
-        tr("You must disconnect from the current device before opening a "
-           "MDF4 file."),
-        QMessageBox::Question, "", QMessageBox::Yes | QMessageBox::No);
+      tr("Disconnect from device?"),
+      tr("You must disconnect from the current device before opening a MDF4 file."),
+      QMessageBox::Question,
+      "",
+      QMessageBox::Yes | QMessageBox::No);
 
     if (response == QMessageBox::Yes)
       IO::Manager::instance().disconnectDevice();
@@ -379,41 +360,34 @@ void MDF4::Player::openFile(const QString &filePath)
 
   m_reader = std::make_unique<mdf::MdfReader>(filePath.toStdString());
 
-  if (!m_reader->IsOk())
-  {
-    Misc::Utilities::showMessageBox(
-        tr("Cannot open MDF4 file"),
-        tr("The file may be corrupted or in an unsupported format."),
-        QMessageBox::Critical);
+  if (!m_reader->IsOk()) {
+    Misc::Utilities::showMessageBox(tr("Cannot open MDF4 file"),
+                                    tr("The file may be corrupted or in an unsupported format."),
+                                    QMessageBox::Critical);
     closeFile();
     return;
   }
 
-  if (!m_reader->ReadEverythingButData())
-  {
-    Misc::Utilities::showMessageBox(
-        tr("Invalid MDF4 file"),
-        tr("Failed to read file structure. The file may be corrupted."),
-        QMessageBox::Critical);
+  if (!m_reader->ReadEverythingButData()) {
+    Misc::Utilities::showMessageBox(tr("Invalid MDF4 file"),
+                                    tr("Failed to read file structure. The file may be corrupted."),
+                                    QMessageBox::Critical);
     closeFile();
     return;
   }
 
-  auto *header = m_reader->GetHeader();
-  if (header)
-  {
-    QString author = QString::fromStdString(header->Author());
+  auto* header = m_reader->GetHeader();
+  if (header) {
+    QString author       = QString::fromStdString(header->Author());
     m_isSerialStudioFile = (author == "Serial Studio");
   }
 
   buildFrameIndex();
 
-  if (m_frameIndex.empty())
-  {
-    Misc::Utilities::showMessageBox(
-        tr("No data in file"),
-        tr("The MDF4 file contains no measurement data."),
-        QMessageBox::Critical);
+  if (m_frameIndex.empty()) {
+    Misc::Utilities::showMessageBox(tr("No data in file"),
+                                    tr("The MDF4 file contains no measurement data."),
+                                    QMessageBox::Critical);
     closeFile();
     return;
   }
@@ -447,7 +421,7 @@ void MDF4::Player::closeFile()
   m_sampleCache.clear();
   m_timestampCache.clear();
   m_isSerialStudioFile = false;
-  m_masterTimeChannel = nullptr;
+  m_masterTimeChannel  = nullptr;
 
   DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
@@ -469,13 +443,12 @@ void MDF4::Player::nextFrame()
   if (isPlaying())
     pause();
 
-  if (m_framePos < frameCount() - 1)
-  {
+  if (m_framePos < frameCount() - 1) {
     ++m_framePos;
 
     int framesToLoad = UI::Dashboard::instance().points();
-    int startFrame = std::max(0, m_framePos - framesToLoad);
-    int endFrame = m_framePos - 1;
+    int startFrame   = std::max(0, m_framePos - framesToLoad);
+    int endFrame     = m_framePos - 1;
 
     if (endFrame >= startFrame)
       processFrameBatch(startFrame, endFrame);
@@ -498,13 +471,12 @@ void MDF4::Player::previousFrame()
   if (isPlaying())
     pause();
 
-  if (m_framePos > 0)
-  {
+  if (m_framePos > 0) {
     --m_framePos;
 
     int framesToLoad = UI::Dashboard::instance().points();
-    int startFrame = std::max(0, m_framePos - framesToLoad);
-    int endFrame = m_framePos - 1;
+    int startFrame   = std::max(0, m_framePos - framesToLoad);
+    int endFrame     = m_framePos - 1;
 
     UI::Dashboard::instance().clearPlotData();
 
@@ -530,18 +502,16 @@ void MDF4::Player::setProgress(const double progress)
   if (isPlaying())
     pause();
 
-  int newFramePos
-      = qBound(0, static_cast<int>(progress * frameCount()), frameCount() - 1);
+  int newFramePos = qBound(0, static_cast<int>(progress * frameCount()), frameCount() - 1);
 
-  if (newFramePos != m_framePos)
-  {
+  if (newFramePos != m_framePos) {
     m_framePos = newFramePos;
 
     UI::Dashboard::instance().clearPlotData();
 
     int framesToLoad = UI::Dashboard::instance().points();
-    int startFrame = std::max(0, m_framePos - framesToLoad);
-    int endFrame = std::min(frameCount() - 1, m_framePos);
+    int startFrame   = std::max(0, m_framePos - framesToLoad);
+    int endFrame     = std::min(frameCount() - 1, m_framePos);
 
     processFrameBatch(startFrame, endFrame);
 
@@ -567,34 +537,29 @@ void MDF4::Player::updateData()
   if (!isOpen())
     return;
 
-  if (m_framePos >= 0 && m_framePos < frameCount())
-  {
+  if (m_framePos >= 0 && m_framePos < frameCount()) {
     m_timestamp = formatTimestamp(m_frameIndex[m_framePos].timestamp);
     Q_EMIT timestampChanged();
   }
 
-  if (isPlaying())
-  {
-    if (framePosition() >= frameCount() - 1)
-    {
+  if (isPlaying()) {
+    if (framePosition() >= frameCount() - 1) {
       pause();
       return;
     }
 
     sendFrame(m_framePos);
 
-    const qint64 elapsedMs = m_elapsedTimer.elapsed();
+    const qint64 elapsedMs  = m_elapsedTimer.elapsed();
     const double targetTime = m_startTimestamp + (elapsedMs / 1000.0);
 
     const double nextTime = m_frameIndex[framePosition() + 1].timestamp;
 
-    if (nextTime <= targetTime)
-    {
+    if (nextTime <= targetTime) {
       constexpr int kMaxBatchSize = 100;
-      int processed = 0;
+      int processed               = 0;
 
-      while (m_framePos < frameCount() - 1 && processed < kMaxBatchSize)
-      {
+      while (m_framePos < frameCount() - 1 && processed < kMaxBatchSize) {
         if (!isOpen() || !isPlaying())
           break;
 
@@ -610,24 +575,18 @@ void MDF4::Player::updateData()
           break;
       }
 
-      if (isOpen() && static_cast<size_t>(m_framePos) < m_frameIndex.size())
-      {
+      if (isOpen() && static_cast<size_t>(m_framePos) < m_frameIndex.size()) {
         m_timestamp = formatTimestamp(m_frameIndex[m_framePos].timestamp);
         Q_EMIT timestampChanged();
       }
 
       if (isPlaying())
-        QTimer::singleShot(1, Qt::PreciseTimer, this,
-                           &MDF4::Player::updateData);
-    }
-    else
-    {
-      qint64 delayMs
-          = qMax(0LL, static_cast<qint64>((nextTime - targetTime) * 1000.0));
+        QTimer::singleShot(1, Qt::PreciseTimer, this, &MDF4::Player::updateData);
+    } else {
+      qint64 delayMs = qMax(0LL, static_cast<qint64>((nextTime - targetTime) * 1000.0));
 
       QTimer::singleShot(delayMs, Qt::PreciseTimer, this, [this]() {
-        if (isOpen() && isPlaying())
-        {
+        if (isOpen() && isPlaying()) {
           ++m_framePos;
           updateData();
         }
@@ -665,7 +624,7 @@ void MDF4::Player::buildFrameIndex()
   if (!m_reader || !m_reader->IsOk())
     return;
 
-  auto *file = m_reader->GetFile();
+  auto* file = m_reader->GetFile();
   if (!file)
     return;
 
@@ -675,10 +634,19 @@ void MDF4::Player::buildFrameIndex()
   if (dataGroups.empty())
     return;
 
-  std::vector<mdf::IChannel *> allChannels;
+  std::vector<mdf::IChannel*> allChannels;
 
-  for (auto *dg : dataGroups)
-  {
+  auto collectChannel = [this, &allChannels](mdf::IChannel* ch) {
+    if (!ch || std::find(allChannels.begin(), allChannels.end(), ch) != allChannels.end())
+      return;
+    if (m_isSerialStudioFile && ch->Type() == mdf::ChannelType::Master) {
+      m_masterTimeChannel = ch;
+      return;
+    }
+    allChannels.push_back(ch);
+  };
+
+  for (auto* dg : dataGroups) {
     if (!dg)
       continue;
 
@@ -686,8 +654,7 @@ void MDF4::Player::buildFrameIndex()
     if (channelGroups.empty())
       continue;
 
-    for (auto *cg : channelGroups)
-    {
+    for (auto* cg : channelGroups) {
       if (!cg)
         continue;
 
@@ -695,28 +662,14 @@ void MDF4::Player::buildFrameIndex()
       if (cgChannels.empty())
         continue;
 
-      for (auto *ch : cgChannels)
-      {
-        if (ch
-            && std::find(allChannels.begin(), allChannels.end(), ch)
-                   == allChannels.end())
-        {
-          if (m_isSerialStudioFile && ch->Type() == mdf::ChannelType::Master)
-          {
-            m_masterTimeChannel = ch;
-            continue;
-          }
-
-          allChannels.push_back(ch);
-        }
-      }
+      for (auto* ch : cgChannels)
+        collectChannel(ch);
     }
   }
 
   m_channels = allChannels;
 
-  for (auto *dg : dataGroups)
-  {
+  for (auto* dg : dataGroups) {
     if (!dg)
       continue;
 
@@ -724,12 +677,11 @@ void MDF4::Player::buildFrameIndex()
     if (channelGroups.empty())
       continue;
 
-    for (auto *cg : channelGroups)
-    {
+    for (auto* cg : channelGroups) {
       if (!cg)
         continue;
 
-      auto cgChannels = cg->Channels();
+      auto cgChannels      = cg->Channels();
       uint64_t recordCount = cg->NofSamples();
 
       if (cgChannels.empty() || recordCount == 0)
@@ -738,16 +690,12 @@ void MDF4::Player::buildFrameIndex()
       SampleCacheObserver observer(*dg, m_sampleCache, m_channels, cgChannels);
       observer.AttachObserver();
 
-      if (m_isSerialStudioFile && m_masterTimeChannel)
-      {
-        TimestampCacheObserver timeObserver(*dg, m_timestampCache,
-                                            m_masterTimeChannel);
+      if (m_isSerialStudioFile && m_masterTimeChannel) {
+        TimestampCacheObserver timeObserver(*dg, m_timestampCache, m_masterTimeChannel);
         timeObserver.AttachObserver();
         m_reader->ReadData(*dg);
         timeObserver.DetachObserver();
-      }
-      else
-      {
+      } else {
         m_reader->ReadData(*dg);
       }
 
@@ -759,28 +707,23 @@ void MDF4::Player::buildFrameIndex()
     return;
 
   constexpr int kSampleInterval = 1;
-  uint64_t sampleIndex = 0;
+  uint64_t sampleIndex          = 0;
 
-  for (const auto &cachePair : m_sampleCache)
-  {
-    if (sampleIndex % kSampleInterval == 0)
-    {
+  for (const auto& cachePair : m_sampleCache) {
+    if (sampleIndex % kSampleInterval == 0) {
       FrameIndex frameIdx;
 
-      if (m_isSerialStudioFile && !m_timestampCache.empty())
-      {
+      if (m_isSerialStudioFile && !m_timestampCache.empty()) {
         auto timeIt = m_timestampCache.find(cachePair.first);
         if (timeIt != m_timestampCache.end())
           frameIdx.timestamp = timeIt->second;
         else
           frameIdx.timestamp = static_cast<double>(sampleIndex) * 0.001;
-      }
-      else
-      {
+      } else {
         frameIdx.timestamp = static_cast<double>(sampleIndex) * 0.001;
       }
 
-      frameIdx.recordIndex = cachePair.first;
+      frameIdx.recordIndex  = cachePair.first;
       frameIdx.channelGroup = nullptr;
 
       m_frameIndex.push_back(frameIdx);
@@ -788,10 +731,9 @@ void MDF4::Player::buildFrameIndex()
     ++sampleIndex;
   }
 
-  std::sort(m_frameIndex.begin(), m_frameIndex.end(),
-            [](const FrameIndex &a, const FrameIndex &b) {
-              return a.recordIndex < b.recordIndex;
-            });
+  std::sort(m_frameIndex.begin(), m_frameIndex.end(), [](const FrameIndex& a, const FrameIndex& b) {
+    return a.recordIndex < b.recordIndex;
+  });
 }
 
 /**
@@ -805,10 +747,8 @@ void MDF4::Player::buildFrameIndex()
 void MDF4::Player::processFrameBatch(int startFrame, int endFrame)
 {
   for (int i = startFrame; i <= endFrame; ++i)
-  {
     if (i >= 0 && i < frameCount())
       sendFrame(i);
-  }
 }
 
 /**
@@ -840,11 +780,9 @@ void MDF4::Player::sendHeaderFrame()
     return;
 
   QStringList headers;
-  for (size_t i = 0; i < m_channels.size(); ++i)
-  {
-    auto *channel = m_channels[i];
-    if (channel)
-    {
+  for (size_t i = 0; i < m_channels.size(); ++i) {
+    auto* channel = m_channels[i];
+    if (channel) {
       QString name = QString::fromStdString(channel->Name());
       if (name.isEmpty())
         name = QString("Channel_%1").arg(i + 1);
@@ -866,14 +804,14 @@ void MDF4::Player::sendHeaderFrame()
  */
 QString MDF4::Player::formatTimestamp(double timestamp) const
 {
-  int hours = static_cast<int>(timestamp / 3600.0);
-  int minutes = static_cast<int>((timestamp - hours * 3600.0) / 60.0);
+  int hours      = static_cast<int>(timestamp / 3600.0);
+  int minutes    = static_cast<int>((timestamp - hours * 3600.0) / 60.0);
   double seconds = timestamp - hours * 3600.0 - minutes * 60.0;
 
   return QString("%1:%2:%3")
-      .arg(qMax(hours, 0), 2, 10, QChar('0'))
-      .arg(qMax(minutes, 0), 2, 10, QChar('0'))
-      .arg(qMax(seconds, 0.0), 6, 'f', 3, QChar('0'));
+    .arg(qMax(hours, 0), 2, 10, QChar('0'))
+    .arg(qMax(minutes, 0), 2, 10, QChar('0'))
+    .arg(qMax(seconds, 0.0), 6, 'f', 3, QChar('0'));
 }
 
 /**
@@ -896,25 +834,20 @@ QByteArray MDF4::Player::getFrame(const int index)
   if (!isOpen() || index < 0 || index >= frameCount())
     return QByteArray();
 
-  const auto &frameIdx = m_frameIndex[index];
+  const auto& frameIdx = m_frameIndex[index];
   QByteArray frame;
 
   auto it = m_sampleCache.find(frameIdx.recordIndex);
-  if (it != m_sampleCache.end())
-  {
-    const auto &values = it->second;
-    for (size_t i = 0; i < values.size(); ++i)
-    {
+  if (it != m_sampleCache.end()) {
+    const auto& values = it->second;
+    for (size_t i = 0; i < values.size(); ++i) {
       frame.append(QString::number(values[i], 'g', 10).toUtf8());
 
       if (i < values.size() - 1)
         frame.append(',');
     }
-  }
-  else
-  {
-    for (size_t i = 0; i < m_channels.size(); ++i)
-    {
+  } else {
+    for (size_t i = 0; i < m_channels.size(); ++i) {
       frame.append("0");
       if (i < m_channels.size() - 1)
         frame.append(',');
@@ -935,25 +868,22 @@ QByteArray MDF4::Player::getFrame(const int index)
  * - Left Arrow: Previous frame
  * - Right Arrow: Next frame
  */
-bool MDF4::Player::handleKeyPress(QKeyEvent *keyEvent)
+bool MDF4::Player::handleKeyPress(QKeyEvent* keyEvent)
 {
   if (!isOpen())
     return false;
 
-  if (keyEvent->key() == Qt::Key_Space)
-  {
+  if (keyEvent->key() == Qt::Key_Space) {
     toggle();
     return true;
   }
 
-  else if (keyEvent->key() == Qt::Key_Left)
-  {
+  else if (keyEvent->key() == Qt::Key_Left) {
     previousFrame();
     return true;
   }
 
-  else if (keyEvent->key() == Qt::Key_Right)
-  {
+  else if (keyEvent->key() == Qt::Key_Right) {
     nextFrame();
     return true;
   }
@@ -969,11 +899,10 @@ bool MDF4::Player::handleKeyPress(QKeyEvent *keyEvent)
  *
  * Filters keyboard events to provide playback shortcuts when a file is open.
  */
-bool MDF4::Player::eventFilter(QObject *obj, QEvent *event)
+bool MDF4::Player::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == QEvent::KeyPress)
-  {
-    auto *keyEvent = static_cast<QKeyEvent *>(event);
+  if (event->type() == QEvent::KeyPress) {
+    auto* keyEvent = static_cast<QKeyEvent*>(event);
     return handleKeyPress(keyEvent);
   }
 

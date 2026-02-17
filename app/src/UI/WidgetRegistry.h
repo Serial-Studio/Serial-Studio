@@ -29,20 +29,18 @@
 
 #include "SerialStudio.h"
 
-namespace UI
-{
-using WidgetID = quint64;
+namespace UI {
+using WidgetID                      = quint64;
 constexpr WidgetID kInvalidWidgetId = 0;
 
-struct WidgetInfo
-{
-  WidgetID id = kInvalidWidgetId;
+struct WidgetInfo {
+  WidgetID id                        = kInvalidWidgetId;
   SerialStudio::DashboardWidget type = SerialStudio::DashboardNoWidget;
 
   QString title;
   QString icon;
 
-  int groupId = -1;
+  int groupId      = -1;
   int datasetIndex = -1;
 
   bool isGroupWidget = false;
@@ -74,25 +72,24 @@ struct WidgetInfo
  * where window IDs are assigned by the display server and remain stable
  * throughout the window's lifetime.
  */
-class WidgetRegistry : public QObject
-{
+class WidgetRegistry : public QObject {
   Q_OBJECT
 
 signals:
   void registryCleared();
   void batchUpdateCompleted();
   void widgetDestroyed(UI::WidgetID id);
-  void widgetCreated(UI::WidgetID id, const UI::WidgetInfo &info);
-  void widgetUpdated(UI::WidgetID id, const UI::WidgetInfo &info);
+  void widgetCreated(UI::WidgetID id, const UI::WidgetInfo& info);
+  void widgetUpdated(UI::WidgetID id, const UI::WidgetInfo& info);
 
 private:
   WidgetRegistry();
-  ~WidgetRegistry() = default;
-  WidgetRegistry(const WidgetRegistry &) = delete;
-  WidgetRegistry &operator=(const WidgetRegistry &) = delete;
+  ~WidgetRegistry()                                = default;
+  WidgetRegistry(const WidgetRegistry&)            = delete;
+  WidgetRegistry& operator=(const WidgetRegistry&) = delete;
 
 public:
-  static WidgetRegistry &instance();
+  static WidgetRegistry& instance();
 
   // clang-format off
   [[nodiscard]] int widgetCount() const;
@@ -115,9 +112,10 @@ public slots:
   void endBatchUpdate();
   void beginBatchUpdate();
   void destroyWidget(WidgetID id);
-  void updateWidget(WidgetID id, const QString &title = QString(),
-                    const QString &icon = QString(),
-                    const QVariant &userData = QVariant());
+  void updateWidget(WidgetID id,
+                    const QString& title     = QString(),
+                    const QString& icon      = QString(),
+                    const QVariant& userData = QVariant());
 
 private:
   WidgetID m_nextId;
@@ -128,4 +126,4 @@ private:
   QHash<WidgetID, WidgetInfo> m_widgets;
 };
 
-} // namespace UI
+}  // namespace UI

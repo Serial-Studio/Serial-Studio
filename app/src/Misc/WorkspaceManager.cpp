@@ -33,17 +33,15 @@
  */
 Misc::WorkspaceManager::WorkspaceManager()
 {
-  auto def = QString("%1/%2").arg(
-      QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-      QStringLiteral("Serial Studio"));
+  auto def =
+    QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+                         QStringLiteral("Serial Studio"));
   m_path = m_settings.value(QStringLiteral("Workspace"), def).toString();
 
   QDir dir(m_path);
-  if (!dir.exists() && !dir.mkpath("."))
-  {
+  if (!dir.exists() && !dir.mkpath(".")) {
     qWarning() << "Failed to create workspace directory:" << m_path;
-    m_path = QStandardPaths::writableLocation(QStandardPaths::TempLocation)
-             + "/Serial Studio";
+    m_path = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/Serial Studio";
     qWarning() << "Using fallback workspace:" << m_path;
   }
 }
@@ -53,7 +51,7 @@ Misc::WorkspaceManager::WorkspaceManager()
  *
  * @return Reference to the WorkspaceManager instance.
  */
-Misc::WorkspaceManager &Misc::WorkspaceManager::instance()
+Misc::WorkspaceManager& Misc::WorkspaceManager::instance()
 {
   static WorkspaceManager instance;
   return instance;
@@ -87,13 +85,12 @@ QString Misc::WorkspaceManager::shortPath() const
  * @param subdirectory Name of the subdirectory under the workspace.
  * @return Full path to the subdirectory.
  */
-QString Misc::WorkspaceManager::path(const QString &subdirectory) const
+QString Misc::WorkspaceManager::path(const QString& subdirectory) const
 {
   QString path = QStringLiteral("%1/%2").arg(m_path, subdirectory);
 
   QDir dir(path);
-  if (!dir.exists())
-  {
+  if (!dir.exists()) {
     if (!dir.mkpath("."))
       qCritical() << "Failed to create workspace subdirectory:" << path;
   }
@@ -109,9 +106,8 @@ QString Misc::WorkspaceManager::path(const QString &subdirectory) const
  */
 void Misc::WorkspaceManager::reset()
 {
-  m_path = QString("%1/%2").arg(
-      QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-      QStringLiteral("Serial Studio"));
+  m_path = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+                                QStringLiteral("Serial Studio"));
   m_settings.setValue(QStringLiteral("Workspace"), m_path);
 
   Q_EMIT pathChanged();
@@ -124,25 +120,23 @@ void Misc::WorkspaceManager::reset()
  */
 void Misc::WorkspaceManager::selectPath()
 {
-  auto *dialog
-      = new QFileDialog(nullptr, tr("Select Workspace Location"), m_path);
+  auto* dialog = new QFileDialog(nullptr, tr("Select Workspace Location"), m_path);
 
   dialog->setFileMode(QFileDialog::Directory);
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
   dialog->setOption(QFileDialog::DontUseNativeDialog);
 
-  connect(dialog, &QFileDialog::fileSelected, this,
-          [this, dialog](const QString &path) {
-            dialog->deleteLater();
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    dialog->deleteLater();
 
-            if (path.isEmpty())
-              return;
+    if (path.isEmpty())
+      return;
 
-            m_path = path;
-            m_settings.setValue(QStringLiteral("Workspace"), path);
+    m_path = path;
+    m_settings.setValue(QStringLiteral("Workspace"), path);
 
-            emit pathChanged();
-          });
+    emit pathChanged();
+  });
 
   dialog->open();
 }

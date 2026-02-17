@@ -21,20 +21,18 @@
 
 #pragma once
 
-#include <QEvent>
-#include <QPainter>
-#include <QJSValue>
-#include <QJSEngine>
 #include <QCodeEditor>
-#include <QSyntaxStyle>
+#include <QEvent>
+#include <QJSEngine>
+#include <QJSValue>
+#include <QPainter>
 #include <QQuickPaintedItem>
+#include <QSyntaxStyle>
 
 #include "DataModel/FrameParserTestDialog.h"
 
-namespace DataModel
-{
-class FrameParser : public QQuickPaintedItem
-{
+namespace DataModel {
+class FrameParser : public QQuickPaintedItem {
   Q_OBJECT
   Q_PROPERTY(QString text READ text NOTIFY textChanged)
   Q_PROPERTY(bool isModified READ isModified NOTIFY modifiedChanged)
@@ -46,24 +44,23 @@ signals:
   void modifiedChanged();
 
 public:
-  FrameParser(QQuickItem *parent = 0);
+  FrameParser(QQuickItem* parent = 0);
 
   [[nodiscard]] QString text() const;
   [[nodiscard]] bool isModified() const;
   [[nodiscard]] QString templateCode() const;
   [[nodiscard]] static QString defaultTemplateCode();
 
-  [[nodiscard]] QStringList parse(const QString &frame);
-  [[nodiscard]] QStringList parse(const QByteArray &frame);
+  [[nodiscard]] QStringList parse(const QString& frame);
+  [[nodiscard]] QStringList parse(const QByteArray& frame);
 
-  [[nodiscard]] QList<QStringList> parseMultiFrame(const QString &frame);
-  [[nodiscard]] QList<QStringList> parseMultiFrame(const QByteArray &frame);
+  [[nodiscard]] QList<QStringList> parseMultiFrame(const QString& frame);
+  [[nodiscard]] QList<QStringList> parseMultiFrame(const QByteArray& frame);
 
   [[nodiscard]] bool undoAvailable() const;
   [[nodiscard]] bool redoAvailable() const;
   [[nodiscard]] bool save(const bool silent = false);
-  [[nodiscard]] bool loadScript(const QString &script,
-                                const bool showMessageBoxes = true);
+  [[nodiscard]] bool loadScript(const QString& script, const bool showMessageBoxes = true);
 
   void setSuppressMessageBoxes(const bool suppress);
 
@@ -95,21 +92,21 @@ private slots:
   void setTemplateIdx(const int idx);
 
 private:
-  virtual void paint(QPainter *painter) override;
-  virtual void keyPressEvent(QKeyEvent *event) override;
-  virtual void keyReleaseEvent(QKeyEvent *event) override;
-  virtual void inputMethodEvent(QInputMethodEvent *event) override;
-  virtual void focusInEvent(QFocusEvent *event) override;
-  virtual void focusOutEvent(QFocusEvent *event) override;
-  virtual void mousePressEvent(QMouseEvent *event) override;
-  virtual void mouseMoveEvent(QMouseEvent *event) override;
-  virtual void mouseReleaseEvent(QMouseEvent *event) override;
-  virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
-  virtual void wheelEvent(QWheelEvent *event) override;
-  virtual void dragEnterEvent(QDragEnterEvent *event) override;
-  virtual void dragMoveEvent(QDragMoveEvent *event) override;
-  virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
-  virtual void dropEvent(QDropEvent *event) override;
+  virtual void paint(QPainter* painter) override;
+  virtual void keyPressEvent(QKeyEvent* event) override;
+  virtual void keyReleaseEvent(QKeyEvent* event) override;
+  virtual void inputMethodEvent(QInputMethodEvent* event) override;
+  virtual void focusInEvent(QFocusEvent* event) override;
+  virtual void focusOutEvent(QFocusEvent* event) override;
+  virtual void mousePressEvent(QMouseEvent* event) override;
+  virtual void mouseMoveEvent(QMouseEvent* event) override;
+  virtual void mouseReleaseEvent(QMouseEvent* event) override;
+  virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
+  virtual void wheelEvent(QWheelEvent* event) override;
+  virtual void dragEnterEvent(QDragEnterEvent* event) override;
+  virtual void dragMoveEvent(QDragMoveEvent* event) override;
+  virtual void dragLeaveEvent(QDragLeaveEvent* event) override;
+  virtual void dropEvent(QDropEvent* event) override;
 
 private:
   int m_templateIdx;
@@ -126,4 +123,4 @@ private:
 
   FrameParserTestDialog m_testDialog;
 };
-} // namespace DataModel
+}  // namespace DataModel

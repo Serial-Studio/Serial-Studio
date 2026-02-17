@@ -23,9 +23,9 @@
 
 #include <cstdint>
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Endianess detection
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 #if defined(_MSC_VER)
 #  include <stdlib.h>
@@ -37,9 +37,9 @@
 #  define IS_LITTLE_ENDIAN (__BYTE_ORDER == __LITTLE_ENDIAN)
 #endif
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Endian-correct memory utilities for checksum formatting
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 //
 // These helpers write multibyte checksum values (e.g., CRCs, Adler, Fletcher)
@@ -69,10 +69,10 @@
  * @pre `frame` and `data` must not be null.
  * @pre `size` must be greater than 0.
  */
-static void big_endian_memcpy(uint8_t *frame, const void *data, size_t size)
+static void big_endian_memcpy(uint8_t* frame, const void* data, size_t size)
 {
   assert(frame && data && size > 0);
-  const uint8_t *raw_data = static_cast<const uint8_t *>(data);
+  const uint8_t* raw_data = static_cast<const uint8_t*>(data);
 
 #if IS_LITTLE_ENDIAN
   for (size_t i = 0; i < size; ++i)
@@ -96,10 +96,10 @@ static void big_endian_memcpy(uint8_t *frame, const void *data, size_t size)
  * @pre `frame` and `data` must not be null.
  * @pre `size` must be greater than 0.
  */
-static void little_endian_memcpy(uint8_t *frame, const void *data, size_t size)
+static void little_endian_memcpy(uint8_t* frame, const void* data, size_t size)
 {
   assert(frame && data && size > 0);
-  const uint8_t *raw_data = static_cast<const uint8_t *>(data);
+  const uint8_t* raw_data = static_cast<const uint8_t*>(data);
 
 #if IS_LITTLE_ENDIAN
   memcpy(frame, raw_data, size);
@@ -109,12 +109,11 @@ static void little_endian_memcpy(uint8_t *frame, const void *data, size_t size)
 #endif
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Checksum implementations
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
-namespace IO
-{
+namespace IO {
 /**
  * @brief Computes an 8-bit XOR checksum.
  *
@@ -129,7 +128,7 @@ namespace IO
  * @param length Length of the input data array
  * @return The computed 8-bit XOR checksum
  */
-static constexpr uint8_t xor8(const char *data, const int length) noexcept
+static constexpr uint8_t xor8(const char* data, const int length) noexcept
 {
   uint8_t checksum = 0;
   for (int i = 0; i < length; ++i)
@@ -151,19 +150,16 @@ static constexpr uint8_t xor8(const char *data, const int length) noexcept
  * @param length Length of the input data array
  * @return The computed 8-bit CRC checksum
  */
-static constexpr uint8_t crc8(const char *data, const int length) noexcept
+static constexpr uint8_t crc8(const char* data, const int length) noexcept
 {
   uint8_t crc = 0xFF;
-  for (int i = 0; i < length; ++i)
-  {
+  for (int i = 0; i < length; ++i) {
     crc ^= static_cast<uint8_t>(data[i]);
     for (int j = 0; j < 8; ++j)
-    {
       if (crc & 0x80)
         crc = (crc << 1) ^ 0x31;
       else
         crc <<= 1;
-    }
   }
   return crc;
 }
@@ -180,7 +176,7 @@ static constexpr uint8_t crc8(const char *data, const int length) noexcept
  * @param length Length of the input data array
  * @return The computed 8-bit additive checksum
  */
-static constexpr uint8_t mod256(const char *data, const int length) noexcept
+static constexpr uint8_t mod256(const char* data, const int length) noexcept
 {
   uint16_t sum = 0;
   for (int i = 0; i < length; ++i)
@@ -200,13 +196,12 @@ static constexpr uint8_t mod256(const char *data, const int length) noexcept
  * @param length Length of the input data array
  * @return The computed 16-bit CRC checksum
  */
-static constexpr uint16_t crc16(const char *data, const int length) noexcept
+static constexpr uint16_t crc16(const char* data, const int length) noexcept
 {
   uint8_t x;
   uint16_t crc = 0xFFFF;
 
-  for (int i = 0; i < length; ++i)
-  {
+  for (int i = 0; i < length; ++i) {
     x = crc >> 8 ^ static_cast<uint8_t>(data[i]);
     x ^= x >> 4;
     crc = (crc << 8) ^ ((uint16_t)(x << 12)) ^ ((uint16_t)(x << 5)) ^ x;
@@ -229,20 +224,17 @@ static constexpr uint16_t crc16(const char *data, const int length) noexcept
  * @param length Length of the input data array
  * @return The computed 32-bit CRC checksum
  */
-static constexpr uint32_t crc32(const char *data, const int length) noexcept
+static constexpr uint32_t crc32(const char* data, const int length) noexcept
 {
   uint32_t crc = 0xFFFFFFFF;
 
-  for (int i = 0; i < length; ++i)
-  {
+  for (int i = 0; i < length; ++i) {
     crc ^= static_cast<uint8_t>(data[i]);
     for (int j = 0; j < 8; ++j)
-    {
       if (crc & 1)
         crc = (crc >> 1) ^ 0xEDB88320;
       else
         crc >>= 1;
-    }
   }
 
   return ~crc;
@@ -262,13 +254,12 @@ static constexpr uint32_t crc32(const char *data, const int length) noexcept
  * @param length Length of the input data array
  * @return The computed 32-bit Adler-32 checksum
  */
-static constexpr uint32_t adler32(const char *data, const int length) noexcept
+static constexpr uint32_t adler32(const char* data, const int length) noexcept
 {
   constexpr uint32_t kModAdler = 65521;
   uint32_t a = 1, b = 0;
 
-  for (int i = 0; i < length; ++i)
-  {
+  for (int i = 0; i < length; ++i) {
     a = (a + static_cast<uint8_t>(data[i])) % kModAdler;
     b = (b + a) % kModAdler;
   }
@@ -290,14 +281,12 @@ static constexpr uint32_t adler32(const char *data, const int length) noexcept
  * @param length Length of the input data array
  * @return The computed Fletcher-16 checksum
  */
-static constexpr uint16_t fletcher16(const char *data,
-                                     const int length) noexcept
+static constexpr uint16_t fletcher16(const char* data, const int length) noexcept
 {
   uint16_t sum1 = 0;
   uint16_t sum2 = 0;
 
-  for (int i = 0; i < length; ++i)
-  {
+  for (int i = 0; i < length; ++i) {
     sum1 = (sum1 + static_cast<uint8_t>(data[i])) % 255;
     sum2 = (sum2 + sum1) % 255;
   }
@@ -320,21 +309,17 @@ static constexpr uint16_t fletcher16(const char *data,
  * @param length Length of the input data array
  * @return The computed 16-bit CRC-MODBUS checksum
  */
-static constexpr uint16_t crc16_modbus(const char *data,
-                                       const int length) noexcept
+static constexpr uint16_t crc16_modbus(const char* data, const int length) noexcept
 {
   uint16_t crc = 0xFFFF;
 
-  for (int i = 0; i < length; ++i)
-  {
+  for (int i = 0; i < length; ++i) {
     crc ^= static_cast<uint8_t>(data[i]);
     for (int j = 0; j < 8; ++j)
-    {
       if (crc & 0x0001)
         crc = (crc >> 1) ^ 0xA001;
       else
         crc >>= 1;
-    }
   }
 
   return crc;
@@ -356,30 +341,56 @@ static constexpr uint16_t crc16_modbus(const char *data,
  * @param length Length of the input data array
  * @return The computed CRC-16-CCITT checksum
  */
-static constexpr uint16_t crc16_ccitt(const char *data,
-                                      const int length) noexcept
+static constexpr uint16_t crc16_ccitt(const char* data, const int length) noexcept
 {
   uint16_t crc = 0x0000;
 
-  for (int i = 0; i < length; ++i)
-  {
+  for (int i = 0; i < length; ++i) {
     crc ^= static_cast<uint8_t>(data[i]) << 8;
     for (int j = 0; j < 8; ++j)
-    {
       if (crc & 0x8000)
         crc = (crc << 1) ^ 0x1021;
       else
         crc <<= 1;
-    }
   }
 
   return crc;
 }
-} // namespace IO
+}  // namespace IO
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// Checksum byte-packing helpers
+//--------------------------------------------------------------------------------------------------
+
+static QByteArray packByte(uint8_t v)
+{
+  return QByteArray(reinterpret_cast<const char*>(&v), sizeof(v));
+}
+
+static QByteArray packU16BE(uint16_t v)
+{
+  uint8_t out[2];
+  big_endian_memcpy(out, &v, sizeof(v));
+  return QByteArray(reinterpret_cast<char*>(out), sizeof(out));
+}
+
+static QByteArray packU16LE(uint16_t v)
+{
+  uint8_t out[2];
+  little_endian_memcpy(out, &v, sizeof(v));
+  return QByteArray(reinterpret_cast<char*>(out), sizeof(out));
+}
+
+static QByteArray packU32BE(uint32_t v)
+{
+  uint8_t out[4];
+  big_endian_memcpy(out, &v, sizeof(v));
+  return QByteArray(reinterpret_cast<char*>(out), sizeof(out));
+}
+
+//--------------------------------------------------------------------------------------------------
 // Utility functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns a list of supported checksum and CRC algorithm names.
@@ -390,12 +401,11 @@ static constexpr uint16_t crc16_ccitt(const char *data,
  * @return A reference to a static QStringList containing supported algorithm
  * names.
  */
-const QStringList &IO::availableChecksums()
+const QStringList& IO::availableChecksums()
 {
   static QStringList list;
-  if (list.isEmpty())
-  {
-    const auto &map = checksumFunctionMap();
+  if (list.isEmpty()) {
+    const auto& map = checksumFunctionMap();
     for (auto it = map.begin(); it != map.end(); ++it)
       list.append(it.key());
   }
@@ -417,74 +427,28 @@ const QStringList &IO::availableChecksums()
  * @return A reference to the static QMap of checksum algorithm names to
  *         functions.
  */
-const QMap<QString, IO::ChecksumFunc> &IO::checksumFunctionMap()
+const QMap<QString, IO::ChecksumFunc>& IO::checksumFunctionMap()
 {
+  // clang-format off
   static const QMap<QString, IO::ChecksumFunc> map = {
-      {QLatin1String(""), [](const char *, int) { return QByteArray(); }},
+    {QLatin1String(""),            [](const char*, int) { return QByteArray(); }},
 
-      // 8-bit checksums
-      {QStringLiteral("XOR-8"),
-       [](const char *d, int l) {
-         uint8_t v = xor8(d, l);
-         return QByteArray(reinterpret_cast<const char *>(&v), sizeof(v));
-       }},
-      {QStringLiteral("MOD-256"),
-       [](const char *d, int l) {
-         uint8_t v = mod256(d, l);
-         return QByteArray(reinterpret_cast<const char *>(&v), sizeof(v));
-       }},
-      {QStringLiteral("CRC-8"),
-       [](const char *d, int l) {
-         uint8_t v = crc8(d, l);
-         return QByteArray(reinterpret_cast<const char *>(&v), sizeof(v));
-       }},
+    // 8-bit checksums
+    {QStringLiteral("XOR-8"),    [](const char* d, int l) { return packByte(xor8(d, l)); }},
+    {QStringLiteral("MOD-256"),  [](const char* d, int l) { return packByte(mod256(d, l)); }},
+    {QStringLiteral("CRC-8"),    [](const char* d, int l) { return packByte(crc8(d, l)); }},
 
-      // 16-bit checksums
-      {QStringLiteral("CRC-16"),
-       [](const char *d, int l) {
-         uint8_t out[2];
-         uint16_t v = crc16(d, l);
-         big_endian_memcpy(out, &v, sizeof(v));
-         return QByteArray(reinterpret_cast<char *>(out), sizeof(out));
-       }},
-      {QStringLiteral("CRC-16-MODBUS"),
-       [](const char *d, int l) {
-         uint8_t out[2];
-         uint16_t v = crc16_modbus(d, l);
-         little_endian_memcpy(out, &v, sizeof(v));
-         return QByteArray(reinterpret_cast<char *>(out), sizeof(out));
-       }},
-      {QStringLiteral("CRC-16-CCITT"),
-       [](const char *d, int l) {
-         uint8_t out[2];
-         uint16_t v = crc16_ccitt(d, l);
-         big_endian_memcpy(out, &v, sizeof(v));
-         return QByteArray(reinterpret_cast<char *>(out), sizeof(out));
-       }},
-      {QStringLiteral("Fletcher-16"),
-       [](const char *d, int l) {
-         uint8_t out[2];
-         uint16_t v = fletcher16(d, l);
-         big_endian_memcpy(out, &v, sizeof(v));
-         return QByteArray(reinterpret_cast<char *>(out), sizeof(out));
-       }},
+    // 16-bit checksums
+    {QStringLiteral("CRC-16"),        [](const char* d, int l) { return packU16BE(crc16(d, l)); }},
+    {QStringLiteral("CRC-16-MODBUS"), [](const char* d, int l) { return packU16LE(crc16_modbus(d, l)); }},
+    {QStringLiteral("CRC-16-CCITT"),  [](const char* d, int l) { return packU16BE(crc16_ccitt(d, l)); }},
+    {QStringLiteral("Fletcher-16"),   [](const char* d, int l) { return packU16BE(fletcher16(d, l)); }},
 
-      // 32-bit checksums
-      {QStringLiteral("CRC-32"),
-       [](const char *d, int l) {
-         uint8_t out[4];
-         uint32_t v = crc32(d, l);
-         big_endian_memcpy(out, &v, sizeof(v));
-         return QByteArray(reinterpret_cast<char *>(out), sizeof(out));
-       }},
-      {QStringLiteral("Adler-32"),
-       [](const char *d, int l) {
-         uint8_t out[4];
-         uint32_t v = adler32(d, l);
-         big_endian_memcpy(out, &v, sizeof(v));
-         return QByteArray(reinterpret_cast<char *>(out), sizeof(out));
-       }},
+    // 32-bit checksums
+    {QStringLiteral("CRC-32"),   [](const char* d, int l) { return packU32BE(crc32(d, l)); }},
+    {QStringLiteral("Adler-32"), [](const char* d, int l) { return packU32BE(adler32(d, l)); }},
   };
+  // clang-format on
 
   return map;
 }
@@ -505,10 +469,10 @@ const QMap<QString, IO::ChecksumFunc> &IO::checksumFunctionMap()
  * @return Raw checksum result as a QByteArray, returns an empty QByteArray if
  *         the algorithm is unknown.
  */
-QByteArray IO::checksum(const QString &name, const QByteArray &data)
+QByteArray IO::checksum(const QString& name, const QByteArray& data)
 {
-  const auto &map = checksumFunctionMap();
-  const auto it = map.find(name);
+  const auto& map = checksumFunctionMap();
+  const auto it   = map.find(name);
   if (it != map.end())
     return it.value()(data.constData(), data.size());
 

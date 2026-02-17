@@ -22,14 +22,14 @@
 #pragma once
 
 #include <QColor>
+#include <QJsonObject>
 #include <QObject>
 #include <QPalette>
 #include <QSettings>
-#include <QJsonObject>
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Qt Stylesheet utilties...not used on Serial Studio, but useful reference...
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Generates a styled QString using a format string and a variable number
@@ -59,7 +59,7 @@
  * @endcode
  */
 template<typename... Colors>
-inline QString QSS(const QString &style, const Colors &...colors)
+inline QString QSS(const QString& style, const Colors&... colors)
 {
   QStringList colorNames;
   (colorNames << ... << colors.name());
@@ -70,9 +70,9 @@ inline QString QSS(const QString &style, const Colors &...colors)
   return result;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // ThemeManager class declaration
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @class ThemeManager
@@ -96,10 +96,8 @@ inline QString QSS(const QString &style, const Colors &...colors)
  *
  * @extends QObject
  */
-namespace Misc
-{
-class ThemeManager : public QObject
-{
+namespace Misc {
+class ThemeManager : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int theme
@@ -126,24 +124,24 @@ signals:
 
 private:
   explicit ThemeManager();
-  ThemeManager(ThemeManager &&) = delete;
-  ThemeManager(const ThemeManager &) = delete;
-  ThemeManager &operator=(ThemeManager &&) = delete;
-  ThemeManager &operator=(const ThemeManager &) = delete;
+  ThemeManager(ThemeManager&&)                 = delete;
+  ThemeManager(const ThemeManager&)            = delete;
+  ThemeManager& operator=(ThemeManager&&)      = delete;
+  ThemeManager& operator=(const ThemeManager&) = delete;
 
 public:
-  static ThemeManager &instance();
+  static ThemeManager& instance();
 
   [[nodiscard]] int theme() const;
-  [[nodiscard]] const QString &themeName() const;
-  [[nodiscard]] const QVariantMap &colors() const;
-  [[nodiscard]] const QVariantMap &parameters() const;
-  [[nodiscard]] const QVector<QColor> &widgetColors() const;
+  [[nodiscard]] const QString& themeName() const;
+  [[nodiscard]] const QVariantMap& colors() const;
+  [[nodiscard]] const QVariantMap& parameters() const;
+  [[nodiscard]] const QVector<QColor>& widgetColors() const;
 
-  [[nodiscard]] const QStringList &availableThemes() const;
-  [[nodiscard]] QColor getColor(const QString &name) const;
+  [[nodiscard]] const QStringList& availableThemes() const;
+  [[nodiscard]] QColor getColor(const QString& name) const;
 
-  [[nodiscard]] const QPalette &palette() const { return m_palette; }
+  [[nodiscard]] const QPalette& palette() const { return m_palette; }
 
 public slots:
   void setTheme(int index);
@@ -153,7 +151,7 @@ private slots:
   void updateLocalizedThemeNames();
 
 protected:
-  bool eventFilter(QObject *watched, QEvent *event) override;
+  bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
   int m_theme;
@@ -169,4 +167,4 @@ private:
 
   QVector<QColor> m_widgetColors;
 };
-} // namespace Misc
+}  // namespace Misc

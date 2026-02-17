@@ -25,8 +25,7 @@
 
 #include "SerialStudio.h"
 
-namespace UI
-{
+namespace UI {
 /**
  * @class DashboardWidget
  * @brief QML-exposed widget container that dynamically instantiates and
@@ -63,8 +62,7 @@ namespace UI
  *       project configuration. This class should not be instantiated directly
  *       outside of the dashboard system.
  */
-class DashboardWidget : public QQuickItem
-{
+class DashboardWidget : public QQuickItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int widgetIndex
@@ -96,7 +94,7 @@ signals:
   void widgetColorChanged();
 
 public:
-  DashboardWidget(QQuickItem *parent = 0);
+  DashboardWidget(QQuickItem* parent = 0);
   ~DashboardWidget();
 
   [[nodiscard]] int widgetIndex() const;
@@ -106,7 +104,7 @@ public:
   [[nodiscard]] SerialStudio::DashboardWidget widgetType() const;
 
   [[nodiscard]] QString widgetQmlPath() const;
-  [[nodiscard]] QQuickItem *widgetModel() const;
+  [[nodiscard]] QQuickItem* widgetModel() const;
 
 public slots:
   void setWidgetIndex(const int index);
@@ -117,6 +115,6 @@ private:
   SerialStudio::DashboardWidget m_widgetType;
 
   QString m_qmlPath;
-  QQuickItem *m_dbWidget;
+  QQuickItem* m_dbWidget;
 };
-} // namespace UI
+}  // namespace UI

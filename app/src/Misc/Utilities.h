@@ -21,14 +21,13 @@
 
 #pragma once
 
-#include <QObject>
-#include <QMessageBox>
 #include <QApplication>
+#include <QMessageBox>
+#include <QObject>
 
 typedef QMap<QMessageBox::StandardButton, QString> ButtonTextMap;
 
-namespace Misc
-{
+namespace Misc {
 /**
  * @class Misc::Utilities
  * @brief Application-wide utility functions for common UI and system
@@ -59,17 +58,16 @@ namespace Misc
  * @note Most methods are static utilities; instance() is provided for QML
  *       integration purposes.
  */
-class Utilities : public QObject
-{
+class Utilities : public QObject {
   Q_OBJECT
 
 public:
-  static Utilities &instance();
+  static Utilities& instance();
   static void rebootApplication();
-  static QPixmap getHiDpiPixmap(const QString &path);
+  static QPixmap getHiDpiPixmap(const QString& path);
 
   Q_INVOKABLE static bool askAutomaticUpdates();
-  Q_INVOKABLE static QString hdpiImagePath(const QString &path);
+  Q_INVOKABLE static QString hdpiImagePath(const QString& path);
 
   // clang-format off
   static int showMessageBox(const QString& text,
@@ -83,6 +81,6 @@ public:
 
 public slots:
   static void aboutQt();
-  static void revealFile(const QString &pathToReveal);
+  static void revealFile(const QString& pathToReveal);
 };
-} // namespace Misc
+}  // namespace Misc

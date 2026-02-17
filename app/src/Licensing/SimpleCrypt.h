@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD-3-Clause
 /*
  * Copyright (c) 2011, Andre Somers
  * All rights reserved.
@@ -35,8 +36,7 @@
 #include <QString>
 #include <QVector>
 
-namespace Licensing
-{
+namespace Licensing {
 /**
  * @short Simple encryption and decryption of strings and byte arrays
  *
@@ -63,15 +63,13 @@ namespace Licensing
  * algorithm is changed in a later version, by prepending a version identifier
  * to the cypertext.
  */
-class SimpleCrypt
-{
+class SimpleCrypt {
 public:
   /**
    * CompressionMode describes if compression will be applied to the data to be
    * encrypted.
    */
-  enum CompressionMode
-  {
+  enum CompressionMode {
     CompressionAuto,
     CompressionAlways,
     CompressionNever
@@ -86,8 +84,7 @@ public:
    * makes it possible to check if the plaintext appears to be valid after
    * decryption.
    */
-  enum IntegrityProtectionMode
-  {
+  enum IntegrityProtectionMode {
     ProtectionNone,
     ProtectionChecksum,
     ProtectionHash
@@ -96,8 +93,7 @@ public:
   /**
    * Error describes the type of error that occured.
    */
-  enum Error
-  {
+  enum Error {
     ErrorNoError,
     ErrorNoKeySet,
     ErrorUnknownVersion,
@@ -109,12 +105,11 @@ public:
    * Currently only one, but that leaves room for future extensions like
    * adding a cryptographic hash...
    */
-  enum CryptoFlag
-  {
-    CryptoFlagNone = 0,
+  enum CryptoFlag {
+    CryptoFlagNone        = 0,
     CryptoFlagCompression = 0x01,
-    CryptoFlagChecksum = 0x02,
-    CryptoFlagHash = 0x04
+    CryptoFlagChecksum    = 0x02,
+    CryptoFlagHash        = 0x04
   };
   Q_DECLARE_FLAGS(CryptoFlags, CryptoFlag)
 
@@ -126,15 +121,15 @@ public:
   [[nodiscard]] CompressionMode compressionMode() const;
   [[nodiscard]] IntegrityProtectionMode integrityProtectionMode() const;
 
-  [[nodiscard]] QString encryptToString(const QString &plaintext);
-  [[nodiscard]] QString encryptToString(const QByteArray &plaintext);
-  [[nodiscard]] QByteArray encryptToByteArray(const QString &plaintext);
-  [[nodiscard]] QByteArray encryptToByteArray(const QByteArray &plaintext);
+  [[nodiscard]] QString encryptToString(const QString& plaintext);
+  [[nodiscard]] QString encryptToString(const QByteArray& plaintext);
+  [[nodiscard]] QByteArray encryptToByteArray(const QString& plaintext);
+  [[nodiscard]] QByteArray encryptToByteArray(const QByteArray& plaintext);
 
-  [[nodiscard]] QString decryptToString(const QByteArray &cypher);
-  [[nodiscard]] QString decryptToString(const QString &cyphertext);
-  [[nodiscard]] QByteArray decryptToByteArray(const QByteArray &cypher);
-  [[nodiscard]] QByteArray decryptToByteArray(const QString &cyphertext);
+  [[nodiscard]] QString decryptToString(const QByteArray& cypher);
+  [[nodiscard]] QString decryptToString(const QString& cyphertext);
+  [[nodiscard]] QByteArray decryptToByteArray(const QByteArray& cypher);
+  [[nodiscard]] QByteArray decryptToByteArray(const QString& cyphertext);
 
   void setKey(quint64 key);
   void setCompressionMode(CompressionMode mode);
@@ -150,4 +145,4 @@ private:
   IntegrityProtectionMode m_protectionMode;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(SimpleCrypt::CryptoFlags)
-} // namespace Licensing
+}  // namespace Licensing

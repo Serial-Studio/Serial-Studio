@@ -27,18 +27,18 @@
 #endif
 
 #include "CSD.h"
-#include "NativeWindow.h"
 #include "Misc/ThemeManager.h"
+#include "NativeWindow.h"
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Static storage for window decorators
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
-static QHash<QWindow *, CSD::Window *> s_decorators;
+static QHash<QWindow*, CSD::Window*> s_decorators;
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Helper function to detect Windows 11
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 static bool isWindows11()
 {
@@ -50,9 +50,9 @@ static bool isWindows11()
 #endif
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // NativeWindow Implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructor for NativeWindow class.
@@ -61,11 +61,12 @@ static bool isWindows11()
  * Connects theme change signals to the appropriate slot for handling UI theme
  * updates across all managed windows.
  */
-NativeWindow::NativeWindow(QObject *parent)
-  : QObject(parent)
+NativeWindow::NativeWindow(QObject* parent) : QObject(parent)
 {
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &NativeWindow::onThemeChanged);
+  connect(&Misc::ThemeManager::instance(),
+          &Misc::ThemeManager::themeChanged,
+          this,
+          &NativeWindow::onThemeChanged);
 }
 
 /**
@@ -75,7 +76,7 @@ NativeWindow::NativeWindow(QObject *parent)
  *         implementation, since the client does not need to move the window
  *         elements (e.g. the caption/titlebar is not transparent, as in macOS).
  */
-int NativeWindow::titlebarHeight(QObject *window)
+int NativeWindow::titlebarHeight(QObject* window)
 {
   (void)window;
   return 0;
@@ -85,9 +86,9 @@ int NativeWindow::titlebarHeight(QObject *window)
  * @brief Removes a window from the management list of NativeWindow.
  * @param window Pointer to the window object to be removed.
  */
-void NativeWindow::removeWindow(QObject *window)
+void NativeWindow::removeWindow(QObject* window)
 {
-  auto *w = qobject_cast<QWindow *>(window);
+  auto* w = qobject_cast<QWindow*>(window);
   if (!w)
     return;
 
@@ -100,9 +101,8 @@ void NativeWindow::removeWindow(QObject *window)
 
   disconnect(w, nullptr, this, nullptr);
 
-  auto *decorator = s_decorators.value(w, nullptr);
-  if (decorator)
-  {
+  auto* decorator = s_decorators.value(w, nullptr);
+  if (decorator) {
     s_decorators.remove(w);
     delete decorator;
   }
@@ -122,15 +122,14 @@ void NativeWindow::removeWindow(QObject *window)
  *
  * If a window is already registered, this method updates its color.
  */
-void NativeWindow::addWindow(QObject *window, const QString &color)
+void NativeWindow::addWindow(QObject* window, const QString& color)
 {
-  auto *w = qobject_cast<QWindow *>(window);
+  auto* w = qobject_cast<QWindow*>(window);
   if (!w)
     return;
 
   // If window is already registered, update its color
-  if (m_windows.contains(w))
-  {
+  if (m_windows.contains(w)) {
     m_colors.insert(w, color);
 
     // Windows 11: Trigger color update via activeChanged signal
@@ -138,9 +137,8 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
       Q_EMIT w->activeChanged();
 
     // Windows 10 / Linux: Update CSD decorator theme
-    else
-    {
-      auto *decorator = s_decorators.value(w, nullptr);
+    else {
+      auto* decorator = s_decorators.value(w, nullptr);
       if (decorator)
         decorator->updateTheme();
     }
@@ -153,13 +151,11 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
   m_colors.insert(w, color);
 
   // Windows 11: Use native caption coloring instead of CSD
-  if (isWindows11())
-  {
+  if (isWindows11()) {
     connect(w, &QWindow::activeChanged, this, &NativeWindow::onActiveChanged);
     connect(w, &QObject::destroyed, this, [this, w]() {
       auto index = m_windows.indexOf(w);
-      if (index != -1 && index >= 0)
-      {
+      if (index != -1 && index >= 0) {
         m_windows.removeAt(index);
         m_colors.remove(w);
       }
@@ -168,15 +164,13 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
   }
 
   // Windows 10 / Linux: Create CSD decorator for this window
-  else
-  {
-    auto *decorator = new CSD::Window(w, color, this);
+  else {
+    auto* decorator = new CSD::Window(w, color, this);
     s_decorators.insert(w, decorator);
     connect(w, &QObject::destroyed, this, [this, w]() {
       s_decorators.remove(w);
       auto index = m_windows.indexOf(w);
-      if (index != -1 && index >= 0)
-      {
+      if (index != -1 && index >= 0) {
         m_windows.removeAt(index);
         m_colors.remove(w);
       }
@@ -196,18 +190,15 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
 void NativeWindow::onThemeChanged()
 {
   // Trigger active changed to update caption colors
-  if (isWindows11())
-  {
-    for (auto *window : std::as_const(m_windows))
+  if (isWindows11()) {
+    for (auto* window : std::as_const(m_windows))
       Q_EMIT window->activeChanged();
   }
 
   // Update CSD decorators
-  else
-  {
-    for (auto *window : std::as_const(m_windows))
-    {
-      auto *decorator = s_decorators.value(window, nullptr);
+  else {
+    for (auto* window : std::as_const(m_windows)) {
+      auto* decorator = s_decorators.value(window, nullptr);
       if (decorator)
         decorator->updateTheme();
     }
@@ -238,12 +229,12 @@ void NativeWindow::onActiveChanged()
     return;
 
   // Get caller window
-  auto *window = static_cast<QWindow *>(sender());
+  auto* window = static_cast<QWindow*>(sender());
   if (!window || !m_windows.contains(window))
     return;
 
   // Get color name based on active state
-  const auto &colors = Misc::ThemeManager::instance().colors();
+  const auto& colors = Misc::ThemeManager::instance().colors();
   QString colorName;
 
   // Use custom color if provided
@@ -251,23 +242,18 @@ void NativeWindow::onActiveChanged()
     colorName = m_colors[window];
 
   // Use theme colors
+  else if (window->isActive())
+    colorName = colors.value("toolbar_top").toString();
   else
-  {
-    if (window->isActive())
-      colorName = colors.value("toolbar_top").toString();
-    else
-      colorName = colors.value("toolbar_top").toString();
-  }
+    colorName = colors.value("toolbar_top").toString();
 
   // Convert hex string to native Windows COLORREF
   const QColor color(colorName);
-  const COLORREF colorref
-      = color.red() | (color.green() << 8) | (color.blue() << 16);
+  const COLORREF colorref = color.red() | (color.green() << 8) | (color.blue() << 16);
 
   // Change color of the caption using DWM API
   const DWORD attribute = 35;
-  DwmSetWindowAttribute((HWND)window->winId(), attribute, &colorref,
-                        sizeof(colorref));
+  DwmSetWindowAttribute((HWND)window->winId(), attribute, &colorref, sizeof(colorref));
 #else
   Q_UNUSED(this);
 #endif

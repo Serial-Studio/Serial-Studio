@@ -21,28 +21,26 @@
 
 #pragma once
 
+#include <functional>
 #include <QMap>
 #include <QString>
-#include <functional>
 
 #include "API/CommandProtocol.h"
 
-namespace API
-{
+namespace API {
 /**
  * @brief Function signature for command handlers
  *
  * Takes params as input, returns a CommandResponse
  */
-using CommandFunction = std::function<CommandResponse(
-    const QString &id, const QJsonObject &params)>;
+using CommandFunction =
+  std::function<CommandResponse(const QString& id, const QJsonObject& params)>;
 
 /**
  * @struct CommandDefinition
  * @brief Describes a registered command
  */
-struct CommandDefinition
-{
+struct CommandDefinition {
   QString name;
   QString description;
   CommandFunction handler;
@@ -61,20 +59,19 @@ struct CommandDefinition
  * - io.driver.uart.setBaudRate -> IO::Drivers::UART operations
  * - io.driver.network.setTcpPort -> IO::Drivers::Network operations
  */
-class CommandRegistry
-{
+class CommandRegistry {
 private:
-  CommandRegistry() = default;
-  CommandRegistry(CommandRegistry &&) = delete;
-  CommandRegistry(const CommandRegistry &) = delete;
-  CommandRegistry &operator=(CommandRegistry &&) = delete;
-  CommandRegistry &operator=(const CommandRegistry &) = delete;
+  CommandRegistry()                                  = default;
+  CommandRegistry(CommandRegistry&&)                 = delete;
+  CommandRegistry(const CommandRegistry&)            = delete;
+  CommandRegistry& operator=(CommandRegistry&&)      = delete;
+  CommandRegistry& operator=(const CommandRegistry&) = delete;
 
 public:
   /**
    * @brief Gets the singleton instance
    */
-  static CommandRegistry &instance();
+  static CommandRegistry& instance();
 
   /**
    * @brief Register a new command
@@ -82,15 +79,14 @@ public:
    * @param description Human-readable description
    * @param handler Function to execute when command is invoked
    */
-  void registerCommand(const QString &name, const QString &description,
-                       CommandFunction handler);
+  void registerCommand(const QString& name, const QString& description, CommandFunction handler);
 
   /**
    * @brief Check if a command is registered
    * @param name Command name to check
    * @return true if command exists
    */
-  [[nodiscard]] bool hasCommand(const QString &name) const;
+  [[nodiscard]] bool hasCommand(const QString& name) const;
 
   /**
    * @brief Execute a command by name
@@ -99,8 +95,9 @@ public:
    * @param params Command parameters
    * @return CommandResponse with result or error
    */
-  [[nodiscard]] CommandResponse execute(const QString &name, const QString &id,
-                                        const QJsonObject &params);
+  [[nodiscard]] CommandResponse execute(const QString& name,
+                                        const QString& id,
+                                        const QJsonObject& params);
 
   /**
    * @brief Get list of all registered command names
@@ -112,10 +109,10 @@ public:
    * @brief Get all command definitions
    * @return Map of command name to definition
    */
-  [[nodiscard]] const QMap<QString, CommandDefinition> &commands() const;
+  [[nodiscard]] const QMap<QString, CommandDefinition>& commands() const;
 
 private:
   QMap<QString, CommandDefinition> m_commands;
 };
 
-} // namespace API
+}  // namespace API

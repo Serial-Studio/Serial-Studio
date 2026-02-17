@@ -40,18 +40,17 @@
  * platform-specific window customizations such as transparent title bars on
  * macOS or caption colorization on Windows.
  */
-class NativeWindow : public QObject
-{
+class NativeWindow : public QObject {
   Q_OBJECT
 
 public:
-  explicit NativeWindow(QObject *parent = nullptr);
+  explicit NativeWindow(QObject* parent = nullptr);
 
-  Q_INVOKABLE int titlebarHeight(QObject *window);
+  Q_INVOKABLE int titlebarHeight(QObject* window);
 
 public slots:
-  void removeWindow(QObject *window);
-  void addWindow(QObject *window, const QString &color = "");
+  void removeWindow(QObject* window);
+  void addWindow(QObject* window, const QString& color = "");
 
 private slots:
   void onThemeChanged();
@@ -59,6 +58,6 @@ private slots:
   void onWindowStateChanged(Qt::WindowState state);
 
 private:
-  QList<QWindow *> m_windows;
-  QMap<QWindow *, QString> m_colors;
+  QList<QWindow*> m_windows;
+  QMap<QWindow*, QString> m_colors;
 };

@@ -19,9 +19,9 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
 #
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Application module setup
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Configures the main Serial Studio application module:
 #
@@ -32,14 +32,14 @@
 # This is a subproject of the main Serial-Studio CMake project
 # and inherits configuration from the root CMakeLists.txt
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.20)
 project(app LANGUAGES CXX VERSION ${PROJECT_VERSION})
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Qt automation and C++ standard
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Qt Meta-Object Compiler (MOC) automation:
 #   CMAKE_AUTOMOC=ON  - Auto-run moc on files with Q_OBJECT/Q_GADGET
@@ -55,7 +55,7 @@ project(app LANGUAGES CXX VERSION ${PROJECT_VERSION})
 #   - Designated initializers, constexpr improvements
 #   - <=> three-way comparison operator
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -63,9 +63,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Qt 6 module dependencies
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Configures required Qt 6 modules for GPL and commercial builds:
 #
@@ -93,7 +93,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #   QTP0002=NEW - Use new Qt translation system (qt_add_translations)
 #   QTP0004=NEW - Use new Qt QML module system (qt_add_qml_module)
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 # Specify required modules for FOSS version
 set(QT_MODULES
@@ -155,9 +155,9 @@ qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0002 NEW)
 qt_policy(SET QTP0004 NEW)
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Source file organization
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Defines the application source files, headers, and QML files:
 #
@@ -182,7 +182,7 @@ qt_policy(SET QTP0004 NEW)
 # Note: include_directories(src) makes all headers accessible without
 # relative paths (e.g., #include "IO/Manager.h" instead of "../IO/Manager.h")
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 include_directories(src)
 
@@ -448,9 +448,9 @@ if(BUILD_COMMERCIAL)
   )
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Platform-specific source files and resources
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Adds platform-specific code and resources for each target OS:
 #
@@ -475,7 +475,7 @@ endif()
 #   - macOS: NSWindow with custom title bar, Info.plist for bundle info
 #   - Linux: Custom CSD for GNOME/KDE, .desktop file for app menu integration
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if(WIN32)
   set(SOURCES
@@ -526,9 +526,9 @@ elseif(UNIX)
   )
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Qt resource compilation
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Compiles Qt resource files (.qrc) into C++ code embedded in the executable:
 #
@@ -550,14 +550,14 @@ endif()
 #
 # Note: Resources are compiled into the binary, increasing executable size
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 qt_add_resources(RES_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
 qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Executable target and library linking
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Creates the main Serial Studio executable and links all dependencies:
 #
@@ -581,7 +581,7 @@ qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.q
 #   - Platform-specific: libssl.a, libcrypto.a (or .lib on Windows)
 #   - Ensures secure communications and license validation work
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 qt_add_executable(
   ${PROJECT_EXECUTABLE}
@@ -611,9 +611,9 @@ target_link_openssl(
   ${CMAKE_CURRENT_SOURCE_DIR}/../lib/OpenSSL
 )
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Executable-specific hardening flags (Linux)
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Applies security hardening link flags directly to the executable:
 #
@@ -638,7 +638,7 @@ target_link_openssl(
 #   - NX stack: Prevents shellcode execution on stack
 #   - PIE: Enables ASLR (randomizes executable base address)
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if(ENABLE_HARDENING AND UNIX AND NOT APPLE)
   target_link_options(
@@ -650,9 +650,9 @@ if(ENABLE_HARDENING AND UNIX AND NOT APPLE)
   )
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # QML module compilation and caching
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Compiles QML files into a Qt Quick module with ahead-of-time compilation:
 #
@@ -680,7 +680,7 @@ endif()
 #   - Smaller memory footprint (cached bytecode)
 #   - Better error detection at build time
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 qt_add_qml_module(
   ${PROJECT_EXECUTABLE}
@@ -690,9 +690,9 @@ qt_add_qml_module(
   RESOURCE_PREFIX /serial-studio.com/
 )
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # MiniAudio audio input library configuration (Pro only)
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Configures miniaudio.h for audio device input in commercial builds:
 #
@@ -724,7 +724,7 @@ qt_add_qml_module(
 #   - Faster compilation (less template instantiation)
 #   - Only need raw PCM capture for oscilloscope/FFT features
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if (BUILD_COMMERCIAL)
   target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE
@@ -754,9 +754,9 @@ if (BUILD_COMMERCIAL)
   endif()
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Platform-specific deployment configuration
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Configures executable properties and installation for each platform:
 #
@@ -785,7 +785,7 @@ endif()
 #   - .metainfo.xml: Screenshots, description, changelog for app stores
 #   - .svg: Scalable icon for HiDPI displays
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if(WIN32)
   target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE Dwmapi.lib)
@@ -815,9 +815,9 @@ elseif(UNIX)
   )
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Qt automatic deployment (macdeployqt, windeployqt, linuxdeploy)
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Finalizes the Qt executable and generates deployment scripts:
 #
@@ -855,7 +855,7 @@ endif()
 #   - Runs at install time: cmake --install build --prefix /path
 #   - Creates a self-contained deployment package
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 qt_finalize_executable(${PROJECT_EXECUTABLE})
 
@@ -883,9 +883,9 @@ qt_generate_deploy_qml_app_script(
 
 install(SCRIPT ${deploy_script})
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # CPack installer/package generation
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Configures CPack to generate platform-specific installers:
 #
@@ -928,7 +928,7 @@ install(SCRIPT ${deploy_script})
 #   #          Serial-Studio-GPL3-v3.2.3.dmg (macOS)
 #   #          Serial-Studio-GPL3-v3.2.3.tar.gz (Linux)
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 set(CPACK_MONOLITHIC_INSTALL              ON)
 set(CPACK_PACKAGE_NAME                    ${PROJECT_DISPNAME})

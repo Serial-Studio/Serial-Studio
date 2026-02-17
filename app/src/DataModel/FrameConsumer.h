@@ -21,28 +21,25 @@
 
 #pragma once
 
-#include <QTimer>
+#include <atomic>
 #include <QObject>
 #include <QThread>
-
-#include <atomic>
+#include <QTimer>
 #include <vector>
 
 #include "ThirdParty/readerwriterqueue.h"
 
-namespace DataModel
-{
+namespace DataModel {
 /**
  * @brief Configuration parameters for frame consumers.
  *
  * This struct defines the tuning parameters for the threaded frame consumer
  * architecture. These values balance throughput, latency, and resource usage.
  */
-struct FrameConsumerConfig
-{
-  size_t queueCapacity = 8192;
+struct FrameConsumerConfig {
+  size_t queueCapacity  = 8192;
   size_t flushThreshold = 1024;
-  int timerIntervalMs = 1000;
+  int timerIntervalMs   = 1000;
 };
 
 /**
@@ -51,20 +48,19 @@ struct FrameConsumerConfig
  * Provides Q_OBJECT functionality (signals, slots, meta-object) without
  * template parameters. Template classes cannot use Q_OBJECT directly.
  */
-class FrameConsumerWorkerBase : public QObject
-{
+class FrameConsumerWorkerBase : public QObject {
   Q_OBJECT
 
 signals:
   void resourceOpenChanged();
 
 public:
-  explicit FrameConsumerWorkerBase(QObject *parent = nullptr);
+  explicit FrameConsumerWorkerBase(QObject* parent = nullptr);
   virtual ~FrameConsumerWorkerBase();
 
 public slots:
   virtual void processData() = 0;
-  virtual void close() = 0;
+  virtual void close()       = 0;
 };
 
 /**
@@ -104,8 +100,7 @@ public slots:
  * };
  */
 template<typename T>
-class FrameConsumerWorker : public FrameConsumerWorkerBase
-{
+class FrameConsumerWorker : public FrameConsumerWorkerBase {
 public:
   /**
    * @brief Constructs a frame consumer worker.
@@ -114,15 +109,11 @@ public:
    * @param enabled Pointer to atomic flag controlling processing
    * @param queueSize Pointer to atomic counter tracking queue depth
    */
-  FrameConsumerWorker(moodycamel::ReaderWriterQueue<T> *queue,
-                      std::atomic<bool> *enabled,
-                      std::atomic<size_t> *queueSize)
-    : FrameConsumerWorkerBase(nullptr)
-    , m_queue(queue)
-    , m_enabled(enabled)
-    , m_queueSize(queueSize)
-  {
-  }
+  FrameConsumerWorker(moodycamel::ReaderWriterQueue<T>* queue,
+                      std::atomic<bool>* enabled,
+                      std::atomic<size_t>* queueSize)
+    : FrameConsumerWorkerBase(nullptr), m_queue(queue), m_enabled(enabled), m_queueSize(queueSize)
+  {}
 
   ~FrameConsumerWorker() override = default;
 
@@ -188,7 +179,7 @@ protected:
    * @note This method runs on the worker thread. It may open resources lazily
    *       on first call (e.g., create CSV file when first frame arrives).
    */
-  virtual void processItems(const std::vector<T> &items) = 0;
+  virtual void processItems(const std::vector<T>& items) = 0;
 
   /**
    * @brief Closes all resources managed by this worker.
@@ -212,9 +203,9 @@ protected:
 
 private:
   std::vector<T> m_writeBuffer;
-  moodycamel::ReaderWriterQueue<T> *m_queue;
-  std::atomic<bool> *m_enabled;
-  std::atomic<size_t> *m_queueSize;
+  moodycamel::ReaderWriterQueue<T>* m_queue;
+  std::atomic<bool>* m_enabled;
+  std::atomic<size_t>* m_queueSize;
 };
 
 /**
@@ -259,8 +250,7 @@ private:
  * };
  */
 template<typename T>
-class FrameConsumer : public QObject
-{
+class FrameConsumer : public QObject {
 public:
   /**
    * @brief Constructs a frame consumer with the given configuration.
@@ -270,14 +260,13 @@ public:
    *
    * @param config Configuration parameters for queue and timer
    */
-  explicit FrameConsumer(const FrameConsumerConfig &config = {})
+  explicit FrameConsumer(const FrameConsumerConfig& config = {})
     : m_config(config)
     , m_pendingQueue(config.queueCapacity)
     , m_consumerEnabled(true)
     , m_queueSize(0)
     , m_worker(nullptr)
-  {
-  }
+  {}
 
   /**
    * @brief Initializes the worker thread and timer.
@@ -290,20 +279,17 @@ public:
     m_worker = createWorker();
     m_worker->moveToThread(&m_workerThread);
 
-    QObject::connect(&m_workerThread, &QThread::finished, m_worker,
-                     &QObject::deleteLater);
+    QObject::connect(&m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
 
     m_workerThread.start();
 
-    auto *timer = new QTimer();
+    auto* timer = new QTimer();
     timer->setInterval(m_config.timerIntervalMs);
     timer->setTimerType(Qt::PreciseTimer);
     timer->moveToThread(&m_workerThread);
 
-    QObject::connect(timer, &QTimer::timeout, m_worker,
-                     &FrameConsumerWorkerBase::processData);
-    QObject::connect(&m_workerThread, &QThread::finished, timer,
-                     &QObject::deleteLater);
+    QObject::connect(timer, &QTimer::timeout, m_worker, &FrameConsumerWorkerBase::processData);
+    QObject::connect(&m_workerThread, &QThread::finished, timer, &QObject::deleteLater);
 
     QMetaObject::invokeMethod(timer, "start", Qt::QueuedConnection);
   }
@@ -316,10 +302,9 @@ public:
    */
   virtual ~FrameConsumer()
   {
-    if (m_worker)
-    {
-      QMetaObject::invokeMethod(m_worker, &FrameConsumerWorkerBase::close,
-                                Qt::BlockingQueuedConnection);
+    if (m_worker) {
+      QMetaObject::invokeMethod(
+        m_worker, &FrameConsumerWorkerBase::close, Qt::BlockingQueuedConnection);
 
       m_workerThread.quit();
       m_workerThread.wait();
@@ -364,7 +349,7 @@ protected:
    *   return new MyWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
    * }
    */
-  virtual FrameConsumerWorkerBase *createWorker() = 0;
+  virtual FrameConsumerWorkerBase* createWorker() = 0;
 
   /**
    * @brief Enqueues a data item for processing on the worker thread.
@@ -378,19 +363,16 @@ protected:
    * @note If the queue is full, the item is silently dropped (wait-free
    * guarantee).
    */
-  void enqueueData(const T &item)
+  void enqueueData(const T& item)
   {
     if (!m_consumerEnabled.load(std::memory_order_relaxed))
       return;
 
-    if (m_pendingQueue.try_enqueue(item))
-    {
+    if (m_pendingQueue.try_enqueue(item)) {
       const auto size = m_queueSize.fetch_add(1, std::memory_order_relaxed) + 1;
-      if (size >= m_config.flushThreshold)
-      {
-        QMetaObject::invokeMethod(m_worker,
-                                  &FrameConsumerWorkerBase::processData,
-                                  Qt::QueuedConnection);
+      if (size >= m_config.flushThreshold) {
+        QMetaObject::invokeMethod(
+          m_worker, &FrameConsumerWorkerBase::processData, Qt::QueuedConnection);
       }
     }
   }
@@ -400,7 +382,7 @@ protected:
   std::atomic<bool> m_consumerEnabled;
   std::atomic<size_t> m_queueSize;
   QThread m_workerThread;
-  FrameConsumerWorkerBase *m_worker;
+  FrameConsumerWorkerBase* m_worker;
 };
 
-} // namespace DataModel
+}  // namespace DataModel

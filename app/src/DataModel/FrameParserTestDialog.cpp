@@ -19,20 +19,21 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "DataModel/FrameParserTestDialog.h"
+
 #include <QGroupBox>
 #include <QHeaderView>
 #include <QMessageBox>
 
-#include "SerialStudio.h"
-#include "Misc/Translator.h"
-#include "Misc/CommonFonts.h"
 #include "DataModel/FrameParser.h"
+#include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
-#include "DataModel/FrameParserTestDialog.h"
+#include "Misc/Translator.h"
+#include "SerialStudio.h"
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constructor function
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the frame parser test dialog
@@ -40,34 +41,32 @@
  * @param parser Pointer to the FrameParser instance to test
  * @param parent Parent widget
  */
-DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
-                                                        QWidget *parent)
-  : QDialog(parent)
-  , m_parser(parser)
+DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWidget* parent)
+  : QDialog(parent), m_parser(parser)
 {
   // Set window geometry and title
   resize(640, 480);
   setMinimumSize(640, 480);
 
   // Get pointer to fonts module
-  auto *commonFonts = &Misc::CommonFonts::instance();
+  auto* commonFonts = &Misc::CommonFonts::instance();
 
   // Initialize widgets
-  m_inputTitle = new QLabel(this);
-  m_outputTitle = new QLabel(this);
-  m_table = new QTableWidget(this);
-  m_userInput = new QLineEdit(this);
-  m_inputGroup = new QGroupBox(this);
-  m_outputGroup = new QGroupBox(this);
-  m_hexCheckBox = new QCheckBox(this);
-  m_clearButton = new QPushButton(this);
-  m_parseButton = new QPushButton(this);
+  m_inputTitle   = new QLabel(this);
+  m_outputTitle  = new QLabel(this);
+  m_table        = new QTableWidget(this);
+  m_userInput    = new QLineEdit(this);
+  m_inputGroup   = new QGroupBox(this);
+  m_outputGroup  = new QGroupBox(this);
+  m_hexCheckBox  = new QCheckBox(this);
+  m_clearButton  = new QPushButton(this);
+  m_parseButton  = new QPushButton(this);
   m_inputDisplay = new QPlainTextEdit(this);
 
   // Create layout objects
-  auto *mainLayout = new QVBoxLayout(this);
-  auto *inputLayout = new QHBoxLayout(m_inputGroup);
-  auto *outputLayout = new QVBoxLayout(m_outputGroup);
+  auto* mainLayout   = new QVBoxLayout(this);
+  auto* inputLayout  = new QHBoxLayout(m_inputGroup);
+  auto* outputLayout = new QVBoxLayout(m_outputGroup);
 
   // Configure buttons
   m_parseButton->setDefault(true);
@@ -116,24 +115,24 @@ DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
   mainLayout->addWidget(m_outputGroup);
 
   // Connect signals
-  connect(m_parseButton, &QPushButton::clicked, this,
-          &FrameParserTestDialog::parseData);
-  connect(m_clearButton, &QPushButton::clicked, this,
-          &FrameParserTestDialog::clear);
-  connect(m_hexCheckBox, &QCheckBox::checkStateChanged, this,
-          &FrameParserTestDialog::onInputModeChanged);
-  connect(m_userInput, &QLineEdit::returnPressed, this,
-          &FrameParserTestDialog::parseData);
+  connect(m_parseButton, &QPushButton::clicked, this, &FrameParserTestDialog::parseData);
+  connect(m_clearButton, &QPushButton::clicked, this, &FrameParserTestDialog::clear);
+  connect(
+    m_hexCheckBox, &QCheckBox::checkStateChanged, this, &FrameParserTestDialog::onInputModeChanged);
+  connect(m_userInput, &QLineEdit::returnPressed, this, &FrameParserTestDialog::parseData);
 
   // Add hex formatting and validation
-  connect(m_userInput, &QLineEdit::textChanged, this,
-          &FrameParserTestDialog::onInputDataChanged);
+  connect(m_userInput, &QLineEdit::textChanged, this, &FrameParserTestDialog::onInputDataChanged);
 
   // Singleton module connections
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &FrameParserTestDialog::onThemeChanged);
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &FrameParserTestDialog::onLanguageChanged);
+  connect(&Misc::ThemeManager::instance(),
+          &Misc::ThemeManager::themeChanged,
+          this,
+          &FrameParserTestDialog::onThemeChanged);
+  connect(&Misc::Translator::instance(),
+          &Misc::Translator::languageChanged,
+          this,
+          &FrameParserTestDialog::onLanguageChanged);
 
   // Load theme & translations
   onThemeChanged();
@@ -143,9 +142,9 @@ DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser *parser,
   setWindowFlag(Qt::WindowStaysOnTopHint, true);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Button actions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Clears all results from the table
@@ -170,11 +169,10 @@ void DataModel::FrameParserTestDialog::parseData()
   if (input.isEmpty())
     return;
 
-  if (m_hexCheckBox->isChecked() && !validateHexInput(input))
-  {
-    QMessageBox::warning(this, tr("Invalid Hex Input"),
-                         tr("Please enter valid hexadecimal bytes.\n\n"
-                            "Valid format: 01 A2 FF 3C"));
+  if (m_hexCheckBox->isChecked() && !validateHexInput(input)) {
+    QMessageBox::warning(this,
+                         tr("Invalid Hex Input"),
+                         tr("Please enter valid hexadecimal bytes.\n\nValid format: 01 A2 FF 3C"));
     return;
   }
 
@@ -189,9 +187,9 @@ void DataModel::FrameParserTestDialog::parseData()
   m_userInput->setFocus();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Singleton module slot functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the dialog palette when the application theme changes.
@@ -203,15 +201,12 @@ void DataModel::FrameParserTestDialog::onThemeChanged()
   onInputModeChanged(m_hexCheckBox->checkState());
 
   // Define QSS for groupboxes
-  const auto *tm = &Misc::ThemeManager::instance();
-  const auto groupBoxStyle
-      = QStringLiteral("QGroupBox {"
-                       "  border: 1px solid %1;"
-                       "  border-radius: 2px;"
-                       "  background-color: %2;"
-                       "}")
-            .arg(tm->getColor("groupbox_border").name())
-            .arg(tm->getColor("groupbox_background").name());
+  const auto* tm = &Misc::ThemeManager::instance();
+  const auto groupBoxStyle =
+    QStringLiteral(
+      "QGroupBox {  border: 1px solid %1;  border-radius: 2px;  background-color: %2;}")
+      .arg(tm->getColor("groupbox_border").name())
+      .arg(tm->getColor("groupbox_background").name());
 
   // Set groupbox style
   m_inputGroup->setStyleSheet(groupBoxStyle);
@@ -233,11 +228,8 @@ void DataModel::FrameParserTestDialog::onLanguageChanged()
   m_outputTitle->setText(tr("Frame Parser Results"));
   m_userInput->setPlaceholderText(tr("Enter frame data here..."));
   m_table->setHorizontalHeaderLabels({tr("Dataset Index"), tr("Value")});
-  m_inputDisplay->setPlaceholderText(
-      tr("Enter frame data above, enable HEX mode if needed, then click "
-         "\"Evaluate\" to run the frame parser.\n\n"
-         "Example (Text): a,b,c,d,e,f\n"
-         "Example (HEX):  48 65 6C 6C 6F"));
+  m_inputDisplay->setPlaceholderText(tr(
+    "Enter frame data above, enable HEX mode if needed, then click \"Evaluate\" to run the frame parser.\n\nExample (Text): a,b,c,d,e,f\nExample (HEX):  48 65 6C 6C 6F"));
 
   onInputModeChanged(m_hexCheckBox->checkState());
   if (m_table->rowCount() > 0)
@@ -246,9 +238,9 @@ void DataModel::FrameParserTestDialog::onLanguageChanged()
   setWindowTitle(tr("Test Frame Parser"));
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Widget slot functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Handles hex mode checkbox state changes, updating placeholder text
@@ -262,18 +254,15 @@ void DataModel::FrameParserTestDialog::onLanguageChanged()
  */
 void DataModel::FrameParserTestDialog::onInputModeChanged(Qt::CheckState state)
 {
-  if (state == Qt::Checked)
-  {
+  if (state == Qt::Checked) {
     m_userInput->setPlaceholderText(tr("Enter hex bytes (e.g., 01 A2 FF)"));
-    if (!m_userInput->text().isEmpty())
-    {
+    if (!m_userInput->text().isEmpty()) {
       QString formatted = formatHexInput(m_userInput->text());
       m_userInput->setText(formatted);
     }
   }
 
-  else
-  {
+  else {
     m_userInput->setPlaceholderText(tr("Enter frame data here..."));
     m_userInput->setPalette(QPalette());
   }
@@ -290,20 +279,18 @@ void DataModel::FrameParserTestDialog::onInputModeChanged(Qt::CheckState state)
  *
  * @param t The new input text from the line edit
  */
-void DataModel::FrameParserTestDialog::onInputDataChanged(const QString &t)
+void DataModel::FrameParserTestDialog::onInputDataChanged(const QString& t)
 {
   // Automatically add spaces & highlight invalid hex data
-  if (m_hexCheckBox->isChecked())
-  {
+  if (m_hexCheckBox->isChecked()) {
     // Block signals to prevent recursive calls
     m_userInput->blockSignals(true);
 
     // Update text if formatting changed
-    const auto fmt = formatHexInput(t);
+    const auto fmt     = formatHexInput(t);
     const auto isValid = validateHexInput(fmt);
-    if (t != fmt)
-    {
-      const int pos = m_userInput->cursorPosition();
+    if (t != fmt) {
+      const int pos  = m_userInput->cursorPosition();
       const int diff = fmt.left(pos).count(' ') - t.left(pos).count(' ');
 
       m_userInput->setText(fmt);
@@ -326,9 +313,9 @@ void DataModel::FrameParserTestDialog::onInputDataChanged(const QString &t)
     m_userInput->setPalette(QPalette());
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // HEX string validation & formatting functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Formats user input text into properly spaced hexadecimal byte pairs
@@ -355,18 +342,15 @@ void DataModel::FrameParserTestDialog::onInputDataChanged(const QString &t)
  *
  * @see validateHexInput()
  */
-QString DataModel::FrameParserTestDialog::formatHexInput(const QString &text)
+QString DataModel::FrameParserTestDialog::formatHexInput(const QString& text)
 {
   QString cleaned;
-  for (const QChar &c : text)
-  {
+  for (const QChar& c : text)
     if (c.isLetterOrNumber())
       cleaned.append(c.toUpper());
-  }
 
   QString formatted;
-  for (int i = 0; i < cleaned.length(); ++i)
-  {
+  for (int i = 0; i < cleaned.length(); ++i) {
     formatted.append(cleaned[i]);
     if (i % 2 == 1 && i < cleaned.length() - 1)
       formatted.append(' ');
@@ -400,7 +384,7 @@ QString DataModel::FrameParserTestDialog::formatHexInput(const QString &text)
  *
  * @see formatHexInput()
  */
-bool DataModel::FrameParserTestDialog::validateHexInput(const QString &text)
+bool DataModel::FrameParserTestDialog::validateHexInput(const QString& text)
 {
   if (text.isEmpty())
     return true;
@@ -408,18 +392,16 @@ bool DataModel::FrameParserTestDialog::validateHexInput(const QString &text)
   QString cleaned = text;
   cleaned.remove(' ');
 
-  for (const QChar &c : cleaned)
-  {
+  for (const QChar& c : cleaned)
     if (!c.isDigit() && (c.toUpper() < 'A' || c.toUpper() > 'F'))
       return false;
-  }
 
   return cleaned.length() % 2 == 0;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Script output display function
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Adds a result row to the results table
@@ -427,8 +409,8 @@ bool DataModel::FrameParserTestDialog::validateHexInput(const QString &text)
  * @param input The input frame data
  * @param output The parsed output array
  */
-void DataModel::FrameParserTestDialog::displayOutput(const QString &input,
-                                                     const QStringList &output)
+void DataModel::FrameParserTestDialog::displayOutput(const QString& input,
+                                                     const QStringList& output)
 {
   m_table->setRowCount(0);
   m_inputDisplay->setPlainText(input);
@@ -437,23 +419,19 @@ void DataModel::FrameParserTestDialog::displayOutput(const QString &input,
   else
     m_inputDisplay->setFont(Misc::CommonFonts::instance().monoFont());
 
-  if (output.isEmpty())
-  {
+  if (output.isEmpty()) {
     m_table->insertRow(0);
     m_table->setItem(0, 0, new QTableWidgetItem(tr("(empty)")));
     m_table->setItem(0, 1, new QTableWidgetItem(tr("No data returned")));
     m_table->item(0, 1)->setForeground(Qt::gray);
   }
 
-  else
-  {
-    for (int i = 0; i < output.size(); ++i)
-    {
+  else {
+    for (int i = 0; i < output.size(); ++i) {
       int row = m_table->rowCount();
       m_table->insertRow(row);
-      if (i == 0)
-      {
-        auto *inputItem = new QTableWidgetItem(input);
+      if (i == 0) {
+        auto* inputItem = new QTableWidgetItem(input);
         inputItem->setData(Qt::UserRole, output.size());
         m_table->setItem(row, 0, inputItem);
       }

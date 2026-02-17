@@ -20,24 +20,24 @@
  */
 
 #include "StaticTable.h"
-#include "Misc/ThemeManager.h"
 
 #include <QHeaderView>
 #include <QLabel>
 #include <QScrollBar>
 #include <QToolButton>
 
+#include "Misc/ThemeManager.h"
+
 /**
  * Constructor function
  */
-StaticTable::StaticTable(QQuickItem *parent)
-  : DeclarativeWidget(parent)
+StaticTable::StaticTable(QQuickItem* parent) : DeclarativeWidget(parent)
 {
   // Set widget to render
   setWidget(&m_widget);
 
   // Get fonts
-  m_font = m_widget.font();
+  m_font       = m_widget.font();
   m_headerFont = m_widget.horizontalHeader()->font();
 
   // Configure widget style
@@ -51,8 +51,11 @@ StaticTable::StaticTable(QQuickItem *parent)
   m_widget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
   // React to theme changes
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &StaticTable::loadTheme, Qt::DirectConnection);
+  connect(&Misc::ThemeManager::instance(),
+          &Misc::ThemeManager::themeChanged,
+          this,
+          &StaticTable::loadTheme,
+          Qt::DirectConnection);
 
   // Redraw UI
   loadTheme();
@@ -62,7 +65,7 @@ StaticTable::StaticTable(QQuickItem *parent)
 /**
  * Returns the font used by the table widget to display data
  */
-const QFont &StaticTable::font() const
+const QFont& StaticTable::font() const
 {
   return m_font;
 }
@@ -70,7 +73,7 @@ const QFont &StaticTable::font() const
 /**
  * Returns the font used by the table widget's header items
  */
-const QFont &StaticTable::headerFont() const
+const QFont& StaticTable::headerFont() const
 {
   return m_headerFont;
 }
@@ -78,7 +81,7 @@ const QFont &StaticTable::headerFont() const
 /**
  * Returns the data model used to generate the widget.
  */
-const QList<QStringList> &StaticTable::data() const
+const QList<QStringList>& StaticTable::data() const
 {
   return m_data;
 }
@@ -86,7 +89,7 @@ const QList<QStringList> &StaticTable::data() const
 /**
  * Updates the font used for the table widget to display data
  */
-void StaticTable::setFont(const QFont &font)
+void StaticTable::setFont(const QFont& font)
 {
   m_font = font;
   m_widget.setFont(font);
@@ -97,7 +100,7 @@ void StaticTable::setFont(const QFont &font)
 /**
  * Updates the font used for the table widget's column headers
  */
-void StaticTable::setHeaderFont(const QFont &font)
+void StaticTable::setHeaderFont(const QFont& font)
 {
   m_headerFont = font;
   m_widget.horizontalHeader()->setFont(font);
@@ -107,7 +110,7 @@ void StaticTable::setHeaderFont(const QFont &font)
 /**
  * Updates the data visualized by the widget.
  */
-void StaticTable::setData(const QList<QStringList> &data)
+void StaticTable::setData(const QList<QStringList>& data)
 {
   // Clear data
   m_data = data;
@@ -115,28 +118,21 @@ void StaticTable::setData(const QList<QStringList> &data)
   m_widget.setColumnCount(0);
 
   // Import data into table
-  if (data.count() > 0)
-  {
+  if (data.count() > 0) {
     m_widget.setColumnCount(data.first().count());
     m_widget.setHorizontalHeaderLabels(data.first());
     m_widget.horizontalHeader()->setMinimumSectionSize(128);
     for (int i = 0; i < m_widget.columnCount(); ++i)
-    {
       if (i < m_widget.columnCount() - 1)
-        m_widget.horizontalHeader()->setSectionResizeMode(
-            i, QHeaderView::ResizeToContents);
+        m_widget.horizontalHeader()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
       else
-        m_widget.horizontalHeader()->setSectionResizeMode(i,
-                                                          QHeaderView::Stretch);
-    }
+        m_widget.horizontalHeader()->setSectionResizeMode(i, QHeaderView::Stretch);
 
-    for (int i = 0; i < data.count() - 1; ++i)
-    {
+    for (int i = 0; i < data.count() - 1; ++i) {
       m_widget.insertRow(i);
-      const auto &row = data[i + 1];
-      for (int j = 0; j < row.count(); ++j)
-      {
-        auto *item = new QTableWidgetItem(" " + row[j] + " ");
+      const auto& row = data[i + 1];
+      for (int j = 0; j < row.count(); ++j) {
+        auto* item = new QTableWidgetItem(" " + row[j] + " ");
         item->setTextAlignment(Qt::AlignCenter);
         item->setFont(m_font);
         m_widget.setItem(i, j, item);

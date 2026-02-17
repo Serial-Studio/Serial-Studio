@@ -21,11 +21,11 @@
 
 #pragma once
 
-#include "DSP.h"
 #include <QQuickItem>
 
-namespace Widgets
-{
+#include "DSP.h"
+
+namespace Widgets {
 /**
  * @class Widgets::Bar
  * @brief Data model for a normalized value display (e.g. bar or gauge).
@@ -35,8 +35,7 @@ namespace Widgets
  *
  * Designed for use in real-time UI components like bar or gauge widgets.
  */
-class Bar : public QQuickItem
-{
+class Bar : public QQuickItem {
   Q_OBJECT
   Q_PROPERTY(QString units READ units CONSTANT)
   Q_PROPERTY(double value READ value NOTIFY updated)
@@ -54,12 +53,13 @@ signals:
   void updated();
 
 public:
-  explicit Bar(const int index = -1, QQuickItem *parent = nullptr,
+  explicit Bar(const int index             = -1,
+               QQuickItem* parent          = nullptr,
                bool autoInitFromBarDataset = true);
 
   [[nodiscard]] bool alarmsDefined() const;
   [[nodiscard]] bool alarmTriggered() const;
-  [[nodiscard]] const QString &units() const;
+  [[nodiscard]] const QString& units() const;
 
   [[nodiscard]] double value() const;
   [[nodiscard]] double minValue() const;
@@ -76,8 +76,8 @@ protected slots:
 private:
   inline double computeFractional(double value) const
   {
-    const double min = qMin(m_minValue, m_maxValue);
-    const double max = qMax(m_minValue, m_maxValue);
+    const double min   = qMin(m_minValue, m_maxValue);
+    const double max   = qMax(m_minValue, m_maxValue);
     const double range = max - min;
 
     if (DSP::isZero(range))
@@ -99,4 +99,4 @@ protected:
 
   bool m_alarmsDefined;
 };
-} // namespace Widgets
+}  // namespace Widgets

@@ -19,14 +19,15 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "IO/Drivers/BluetoothLE.h"
+
 #include <QOperatingSystemVersion>
 
 #include "Misc/Utilities.h"
-#include "IO/Drivers/BluetoothLE.h"
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Constructor function, configures the signals/slots of the BLE module
@@ -40,28 +41,28 @@ IO::Drivers::BluetoothLE::BluetoothLE()
   , m_localDevice(nullptr)
   , m_discoveryAgent(nullptr)
 {
-  connect(this, &IO::Drivers::BluetoothLE::deviceIndexChanged, this,
+  connect(this,
+          &IO::Drivers::BluetoothLE::deviceIndexChanged,
+          this,
           &IO::Drivers::BluetoothLE::configurationChanged);
 
-  connect(this, &IO::Drivers::BluetoothLE::error, this,
-          [=](const QString &message) {
-            Misc::Utilities::showMessageBox(tr("BLE I/O Module Error"), message,
-                                            QMessageBox::Critical);
-          });
+  connect(this, &IO::Drivers::BluetoothLE::error, this, [=](const QString& message) {
+    Misc::Utilities::showMessageBox(tr("BLE I/O Module Error"), message, QMessageBox::Critical);
+  });
 }
 
 /**
  * Returns the only instance of the class
  */
-IO::Drivers::BluetoothLE &IO::Drivers::BluetoothLE::instance()
+IO::Drivers::BluetoothLE& IO::Drivers::BluetoothLE::instance()
 {
   static BluetoothLE singleton;
   return singleton;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // HAL driver implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Closes the Bluetooth LE connection.
@@ -81,16 +82,14 @@ void IO::Drivers::BluetoothLE::close()
   m_selectedCharacteristic = -1;
 
   // Delete previous service
-  if (m_service)
-  {
+  if (m_service) {
     disconnect(m_service);
     delete m_service;
     m_service = nullptr;
   }
 
   // Delete previous controller
-  if (m_controller)
-  {
+  if (m_controller) {
     disconnect(m_controller);
     m_controller->disconnectFromDevice();
 
@@ -153,28 +152,23 @@ bool IO::Drivers::BluetoothLE::configurationOk() const noexcept
  * @param data The data to be written to the BLE device.
  * @return The number of bytes written, or -1 if an error occurs.
  */
-quint64 IO::Drivers::BluetoothLE::write(const QByteArray &data)
+quint64 IO::Drivers::BluetoothLE::write(const QByteArray& data)
 {
-  if (m_service && m_selectedCharacteristic >= 0)
-  {
-    const auto &characteristic = m_characteristics.at(m_selectedCharacteristic);
-    if (characteristic.isValid())
-    {
-      m_service->writeCharacteristic(characteristic, data,
-                                     QLowEnergyService::WriteWithResponse);
+  if (m_service && m_selectedCharacteristic >= 0) {
+    const auto& characteristic = m_characteristics.at(m_selectedCharacteristic);
+    if (characteristic.isValid()) {
+      m_service->writeCharacteristic(characteristic, data, QLowEnergyService::WriteWithResponse);
       return data.length();
     }
 
-    else
-    {
+    else {
       qWarning() << "Failed to write to BLE device: invalid characteristic";
 
       return 0;
     }
   }
 
-  qWarning() << "Failed to write data to BLE device: ensure that a "
-                "characteristic is selected";
+  qWarning() << "Failed to write data to BLE device: ensure that a characteristic is selected";
 
   return 0;
 }
@@ -205,11 +199,13 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
   close();
 
   // Initialize a BLE controller for the current deveice
-  auto device = m_devices.at(m_deviceIndex);
+  auto device  = m_devices.at(m_deviceIndex);
   m_controller = QLowEnergyController::createCentral(device, this);
 
   // Configure controller signals/slots
-  connect(m_controller, &QLowEnergyController::discoveryFinished, this,
+  connect(m_controller,
+          &QLowEnergyController::discoveryFinished,
+          this,
           &IO::Drivers::BluetoothLE::onServiceDiscoveryFinished);
 
   // React to connection event with BLE device
@@ -220,8 +216,8 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
   });
 
   // React to disconnection event with BLE device
-  connect(m_controller, &QLowEnergyController::disconnected, this,
-          &IO::Drivers::BluetoothLE::close);
+  connect(
+    m_controller, &QLowEnergyController::disconnected, this, &IO::Drivers::BluetoothLE::close);
 
   // Pair with the BLE device
   m_controller->connectToDevice();
@@ -254,9 +250,9 @@ bool IO::Drivers::BluetoothLE::adapterAvailable() const
   return m_adapterAvailable;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Driver specifics
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @return The total number of discovered devices.
@@ -342,8 +338,7 @@ void IO::Drivers::BluetoothLE::startDiscovery()
   Q_EMIT devicesChanged();
 
   // Delete previous discovery agent
-  if (m_discoveryAgent)
-  {
+  if (m_discoveryAgent) {
     disconnect(m_discoveryAgent);
     m_discoveryAgent->deleteLater();
     m_discoveryAgent = nullptr;
@@ -353,19 +348,24 @@ void IO::Drivers::BluetoothLE::startDiscovery()
   m_discoveryAgent = new QBluetoothDeviceDiscoveryAgent(this);
 
   // Register discovered devices
-  connect(m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
-          this, &IO::Drivers::BluetoothLE::onDeviceDiscovered);
+  connect(m_discoveryAgent,
+          &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
+          this,
+          &IO::Drivers::BluetoothLE::onDeviceDiscovered);
 
   // Report BLE discovery errors
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-  connect(&m_discoveryAgent,
-          static_cast<void (QBluetoothDeviceDiscoveryAgent::*)(
-              QBluetoothDeviceDiscoveryAgent::Error)>(
-              &QBluetoothDeviceDiscoveryAgent::error),
-          this, &IO::Drivers::BluetoothLE::onDiscoveryError);
+  connect(
+    &m_discoveryAgent,
+    static_cast<void (QBluetoothDeviceDiscoveryAgent::*)(QBluetoothDeviceDiscoveryAgent::Error)>(
+      &QBluetoothDeviceDiscoveryAgent::error),
+    this,
+    &IO::Drivers::BluetoothLE::onDiscoveryError);
 #else
-  connect(m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::errorOccurred,
-          this, &IO::Drivers::BluetoothLE::onDiscoveryError);
+  connect(m_discoveryAgent,
+          &QBluetoothDeviceDiscoveryAgent::errorOccurred,
+          this,
+          &IO::Drivers::BluetoothLE::onDiscoveryError);
 #endif
 
   // Start device discovery process
@@ -409,8 +409,7 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
     return;
 
   // Delete previous service
-  if (m_service)
-  {
+  if (m_service) {
     disconnect(m_service);
     m_service->deleteLater();
     m_service = nullptr;
@@ -422,24 +421,30 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
   m_selectedCharacteristic = -1;
 
   // Ensure that index is valid
-  if (index >= 1 && index <= m_serviceNames.count())
-  {
+  if (index >= 1 && index <= m_serviceNames.count()) {
     // Additional bounds check against actual services list
     if (!m_controller || index - 1 >= m_controller->services().count())
       return;
 
     // Generate service handler & connect signals/slots
     auto serviceUuid = m_controller->services().at(index - 1);
-    m_service = m_controller->createServiceObject(serviceUuid, this);
-    if (m_service)
-    {
-      connect(m_service, &QLowEnergyService::characteristicChanged, this,
+    m_service        = m_controller->createServiceObject(serviceUuid, this);
+    if (m_service) {
+      connect(m_service,
+              &QLowEnergyService::characteristicChanged,
+              this,
               &IO::Drivers::BluetoothLE::onCharacteristicChanged);
-      connect(m_service, &QLowEnergyService::characteristicRead, this,
+      connect(m_service,
+              &QLowEnergyService::characteristicRead,
+              this,
               &IO::Drivers::BluetoothLE::onCharacteristicChanged);
-      connect(m_service, &QLowEnergyService::stateChanged, this,
+      connect(m_service,
+              &QLowEnergyService::stateChanged,
+              this,
               &IO::Drivers::BluetoothLE::onServiceStateChanged);
-      connect(m_service, &QLowEnergyService::errorOccurred, this,
+      connect(m_service,
+              &QLowEnergyService::errorOccurred,
+              this,
               &IO::Drivers::BluetoothLE::onServiceError);
 
       if (m_service->state() == QLowEnergyService::RemoteService)
@@ -478,17 +483,14 @@ void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
     m_selectedCharacteristic = -1;
 
   // Query characteristic for information
-  if (m_selectedCharacteristic >= 0
-      && m_selectedCharacteristic < m_characteristics.count())
-  {
+  if (m_selectedCharacteristic >= 0 && m_selectedCharacteristic < m_characteristics.count()) {
     // Obtain the characteristic
-    const auto &c = m_characteristics.at(m_selectedCharacteristic);
+    const auto& c = m_characteristics.at(m_selectedCharacteristic);
 
     // Enable notifications for the CCCD
-    const auto &cccd = c.clientCharacteristicConfiguration();
+    const auto& cccd = c.clientCharacteristicConfiguration();
     if (cccd.isValid())
-      m_service->writeDescriptor(
-          cccd, QLowEnergyCharacteristic::CCCDEnableNotification);
+      m_service->writeDescriptor(cccd, QLowEnergyCharacteristic::CCCDEnableNotification);
 
     // Display current value
     if (!c.value().isEmpty())
@@ -515,8 +517,7 @@ void IO::Drivers::BluetoothLE::configureCharacteristics()
   m_selectedCharacteristic = -1;
 
   // Test & validate all service characteristics
-  foreach (const QLowEnergyCharacteristic &c, m_service->characteristics())
-  {
+  foreach (const QLowEnergyCharacteristic& c, m_service->characteristics()) {
     // Validate characteristic
     if (!c.isValid())
       continue;
@@ -546,7 +547,7 @@ void IO::Drivers::BluetoothLE::onServiceDiscoveryFinished()
 
   // Generate services list
   m_serviceNames.clear();
-  for (const auto &service : m_controller->services())
+  for (const auto& service : m_controller->services())
     m_serviceNames.append(service.toString());
 
   // Update UI
@@ -556,24 +557,20 @@ void IO::Drivers::BluetoothLE::onServiceDiscoveryFinished()
 /**
  * Registers the device (@c device) found in the list of BLE devices.
  */
-void IO::Drivers::BluetoothLE::onDeviceDiscovered(
-    const QBluetoothDeviceInfo &device)
+void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo& device)
 {
   // Stop if BLE controller is already connected or user selected a device
   if (m_controller || m_deviceIndex > 0)
     return;
 
   // Only register BLE devices
-  if (device.coreConfigurations()
-      & QBluetoothDeviceInfo::LowEnergyCoreConfiguration)
-  {
+  if (device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration) {
     // Validate device name (we don't want to show hidden devices...)
     if (!device.isValid() || device.name().isEmpty())
       return;
 
     // Add the device to the list of found devices
-    if (!m_devices.contains(device) && !m_deviceNames.contains(device.name()))
-    {
+    if (!m_devices.contains(device) && !m_deviceNames.contains(device.name())) {
       m_devices.append(device);
       m_deviceNames.append(device.name());
       Q_EMIT devicesChanged();
@@ -584,11 +581,9 @@ void IO::Drivers::BluetoothLE::onDeviceDiscovered(
 /**
  * Notifies any service error that occurs
  */
-void IO::Drivers::BluetoothLE::onServiceError(
-    QLowEnergyService::ServiceError serviceError)
+void IO::Drivers::BluetoothLE::onServiceError(QLowEnergyService::ServiceError serviceError)
 {
-  switch (serviceError)
-  {
+  switch (serviceError) {
     case QLowEnergyService::OperationError:
       Q_EMIT error(tr("Operation error"));
       break;
@@ -616,11 +611,9 @@ void IO::Drivers::BluetoothLE::onServiceError(
  * Notifies the user of any errors detected in the Bluetooth adapter of the
  * computer.
  */
-void IO::Drivers::BluetoothLE::onDiscoveryError(
-    QBluetoothDeviceDiscoveryAgent::Error e)
+void IO::Drivers::BluetoothLE::onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error e)
 {
-  switch (e)
-  {
+  switch (e) {
     case QBluetoothDeviceDiscoveryAgent::InvalidBluetoothAdapterError:
       Q_EMIT error(tr("Invalid Bluetooth adapter!"));
       break;
@@ -642,8 +635,7 @@ void IO::Drivers::BluetoothLE::onDiscoveryError(
  * Configures the characteristics of the services found on the paired BLE
  * device.
  */
-void IO::Drivers::BluetoothLE::onServiceStateChanged(
-    QLowEnergyService::ServiceState serviceState)
+void IO::Drivers::BluetoothLE::onServiceStateChanged(QLowEnergyService::ServiceState serviceState)
 {
   if (serviceState == QLowEnergyService::RemoteServiceDiscovered)
     configureCharacteristics();
@@ -652,11 +644,11 @@ void IO::Drivers::BluetoothLE::onServiceStateChanged(
 /**
  * Reads the transmitted data from the BLE service.
  */
-void IO::Drivers::BluetoothLE::onCharacteristicChanged(
-    const QLowEnergyCharacteristic &info, const QByteArray &value)
+void IO::Drivers::BluetoothLE::onCharacteristicChanged(const QLowEnergyCharacteristic& info,
+                                                       const QByteArray& value)
 {
   const bool anyCharacteristic = (m_selectedCharacteristic == -1);
-  const bool current = (info == m_characteristics.at(m_selectedCharacteristic));
+  const bool current           = (info == m_characteristics.at(m_selectedCharacteristic));
   if (anyCharacteristic || current)
     Q_EMIT dataReceived(makeByteArray(value));
 }
@@ -666,18 +658,15 @@ void IO::Drivers::BluetoothLE::onCharacteristicChanged(
  * This is called when the adapter is powered on/off or physically
  * connected/disconnected (e.g., USB Bluetooth dongles).
  */
-void IO::Drivers::BluetoothLE::onHostModeStateChanged(
-    QBluetoothLocalDevice::HostMode state)
+void IO::Drivers::BluetoothLE::onHostModeStateChanged(QBluetoothLocalDevice::HostMode state)
 {
-  bool wasAvailable = m_adapterAvailable;
+  bool wasAvailable  = m_adapterAvailable;
   m_adapterAvailable = (state != QBluetoothLocalDevice::HostPoweredOff);
 
-  if (wasAvailable != m_adapterAvailable)
-  {
+  if (wasAvailable != m_adapterAvailable) {
     Q_EMIT adapterAvailabilityChanged();
 
-    if (!m_adapterAvailable)
-    {
+    if (!m_adapterAvailable) {
       // If adapter becomes unavailable while scanning, stop scanning
       if (m_discoveryAgent && m_discoveryAgent->isActive())
         m_discoveryAgent->stop();
@@ -687,9 +676,7 @@ void IO::Drivers::BluetoothLE::onHostModeStateChanged(
       m_deviceIndex = -1;
       m_deviceNames.clear();
       Q_EMIT devicesChanged();
-    }
-    else
-    {
+    } else {
       // Adapter became available, automatically start discovery
       startDiscovery();
     }
@@ -710,11 +697,13 @@ void IO::Drivers::BluetoothLE::initializeBluetoothAdapter()
   m_localDevice = new QBluetoothLocalDevice(this);
 
   // Check initial adapter state
-  auto hostMode = m_localDevice->hostMode();
+  auto hostMode      = m_localDevice->hostMode();
   m_adapterAvailable = (hostMode != QBluetoothLocalDevice::HostPoweredOff);
 
   // Monitor adapter state changes
-  connect(m_localDevice, &QBluetoothLocalDevice::hostModeStateChanged, this,
+  connect(m_localDevice,
+          &QBluetoothLocalDevice::hostModeStateChanged,
+          this,
           &IO::Drivers::BluetoothLE::onHostModeStateChanged);
 
   // Notify QML of initial state

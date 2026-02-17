@@ -23,8 +23,7 @@
 
 #include <QString>
 
-namespace API
-{
+namespace API {
 /**
  * @brief Validate a file path against the API allowlist, if configured.
  *
@@ -35,5 +34,5 @@ namespace API
  * @param allowNonexistent Allow non-existent paths (for save operations)
  * @return true if the path is allowed
  */
-bool isPathAllowed(const QString &filePath, bool allowNonexistent = false);
-} // namespace API
+bool isPathAllowed(const QString& filePath, bool allowNonexistent = false);
+}  // namespace API

@@ -22,14 +22,13 @@
 #pragma once
 
 #include <atomic>
-#include <vector>
 #include <cstring>
 #include <QByteArray>
+#include <vector>
 
 #include "Concepts.h"
 
-namespace IO
-{
+namespace IO {
 /**
  * @brief A lock-free circular buffer for high-throughput data streaming.
  *
@@ -55,47 +54,41 @@ namespace IO
  * @tparam StorageType The type of elements used internally (default: uint8_t).
  */
 template<typename T, Concepts::ByteLike StorageType = uint8_t>
-class CircularBuffer
-{
+class CircularBuffer {
 public:
   explicit CircularBuffer(qsizetype capacity = 1024 * 1024 * 10);
 
-  [[nodiscard]] StorageType &operator[](qsizetype index);
+  [[nodiscard]] StorageType& operator[](qsizetype index);
 
   void clear();
-  void append(const T &data);
+  void append(const T& data);
   void setCapacity(const qsizetype capacity);
 
   [[nodiscard]] qsizetype size() const noexcept;
   [[nodiscard]] qsizetype freeSpace() const noexcept;
+
   [[nodiscard]] qsizetype capacity() const noexcept { return m_capacity; }
 
   [[nodiscard]] T read(qsizetype size);
   [[nodiscard]] T peek(qsizetype size) const;
   [[nodiscard]] T peekRange(qsizetype offset, qsizetype size) const;
 
-  [[nodiscard]] int findPatternKMP(const T &pattern, const int pos = 0);
-  [[nodiscard]] int findPatternKMP(const T &pattern,
-                                   const std::vector<int> &lps,
+  [[nodiscard]] int findPatternKMP(const T& pattern, const int pos = 0);
+  [[nodiscard]] int findPatternKMP(const T& pattern,
+                                   const std::vector<int>& lps,
                                    const int pos = 0);
 
-  [[nodiscard]] std::vector<int> buildKMPTable(const T &p) const
-  {
-    return computeKMPTable(p);
-  }
+  [[nodiscard]] std::vector<int> buildKMPTable(const T& p) const { return computeKMPTable(p); }
 
   [[nodiscard]] qsizetype overflowCount() const noexcept
   {
     return m_overflowCount.load(std::memory_order_relaxed);
   }
 
-  void resetOverflowCount() noexcept
-  {
-    m_overflowCount.store(0, std::memory_order_relaxed);
-  }
+  void resetOverflowCount() noexcept { m_overflowCount.store(0, std::memory_order_relaxed); }
 
 private:
-  [[nodiscard]] std::vector<int> computeKMPTable(const T &p) const;
+  [[nodiscard]] std::vector<int> computeKMPTable(const T& p) const;
 
 private:
   std::atomic<qsizetype> m_head;
@@ -104,7 +97,7 @@ private:
   qsizetype m_capacity;
   std::vector<StorageType> m_buffer;
 };
-} // namespace IO
+}  // namespace IO
 
 /**
  * @brief Constructs a CircularBuffer object with a given capacity.
@@ -116,10 +109,7 @@ private:
  */
 template<typename T, Concepts::ByteLike StorageType>
 IO::CircularBuffer<T, StorageType>::CircularBuffer(qsizetype capacity)
-  : m_head(0)
-  , m_tail(0)
-  , m_overflowCount(0)
-  , m_capacity(capacity)
+  : m_head(0), m_tail(0), m_overflowCount(0), m_capacity(capacity)
 {
   m_buffer.resize(capacity);
 }
@@ -139,13 +129,13 @@ IO::CircularBuffer<T, StorageType>::CircularBuffer(qsizetype capacity)
  * @throws std::out_of_range If the index is out of bounds.
  */
 template<typename T, Concepts::ByteLike StorageType>
-StorageType &IO::CircularBuffer<T, StorageType>::operator[](qsizetype index)
+StorageType& IO::CircularBuffer<T, StorageType>::operator[](qsizetype index)
 {
   const qsizetype current_size = size();
   if (index < 0 || index >= current_size)
     throw std::out_of_range("Index out of range");
 
-  const qsizetype head = m_head.load(std::memory_order_acquire);
+  const qsizetype head           = m_head.load(std::memory_order_acquire);
   const qsizetype effectiveIndex = (head + index) % m_capacity;
   return m_buffer[effectiveIndex];
 }
@@ -180,17 +170,16 @@ void IO::CircularBuffer<T, StorageType>::clear()
  * @param data The data to append to the buffer.
  */
 template<typename T, Concepts::ByteLike StorageType>
-void IO::CircularBuffer<T, StorageType>::append(const T &data)
+void IO::CircularBuffer<T, StorageType>::append(const T& data)
 {
   const qsizetype dataSize = data.size();
   if (dataSize == 0) [[unlikely]]
     return;
 
-  const uint8_t *src = reinterpret_cast<const uint8_t *>(data.data());
+  const uint8_t* src = reinterpret_cast<const uint8_t*>(data.data());
 
   qsizetype copySize = dataSize;
-  if (copySize > m_capacity) [[unlikely]]
-  {
+  if (copySize > m_capacity) [[unlikely]] {
     src += (copySize - m_capacity);
     copySize = m_capacity;
     m_overflowCount.fetch_add(dataSize - m_capacity, std::memory_order_relaxed);
@@ -199,12 +188,10 @@ void IO::CircularBuffer<T, StorageType>::append(const T &data)
   const qsizetype head = m_head.load(std::memory_order_acquire);
   const qsizetype tail = m_tail.load(std::memory_order_relaxed);
 
-  qsizetype current_size
-      = (tail >= head) ? (tail - head) : (m_capacity - head + tail);
-  qsizetype free_space = m_capacity - current_size;
+  qsizetype current_size = (tail >= head) ? (tail - head) : (m_capacity - head + tail);
+  qsizetype free_space   = m_capacity - current_size;
 
-  if (copySize > free_space) [[unlikely]]
-  {
+  if (copySize > free_space) [[unlikely]] {
     const qsizetype overwrite = copySize - free_space;
     m_overflowCount.fetch_add(overwrite, std::memory_order_relaxed);
 
@@ -295,7 +282,7 @@ T IO::CircularBuffer<T, StorageType>::read(qsizetype size)
   T result;
   result.resize(size);
 
-  const qsizetype head = m_head.load(std::memory_order_relaxed);
+  const qsizetype head       = m_head.load(std::memory_order_relaxed);
   const qsizetype firstChunk = std::min(size, m_capacity - head);
   std::memcpy(result.data(), &m_buffer[head], firstChunk);
 
@@ -338,8 +325,7 @@ T IO::CircularBuffer<T, StorageType>::peek(qsizetype size) const
  *         than requested, the returned data will be smaller.
  */
 template<typename T, Concepts::ByteLike StorageType>
-T IO::CircularBuffer<T, StorageType>::peekRange(qsizetype offset,
-                                                qsizetype size) const
+T IO::CircularBuffer<T, StorageType>::peekRange(qsizetype offset, qsizetype size) const
 {
   const qsizetype current_size = this->size();
   if (offset >= current_size)
@@ -350,13 +336,12 @@ T IO::CircularBuffer<T, StorageType>::peekRange(qsizetype offset,
   T result;
   result.resize(size);
 
-  const qsizetype head = m_head.load(std::memory_order_acquire);
-  const qsizetype start = (head + offset) % m_capacity;
+  const qsizetype head       = m_head.load(std::memory_order_acquire);
+  const qsizetype start      = (head + offset) % m_capacity;
   const qsizetype firstChunk = std::min(size, m_capacity - start);
   std::memcpy(result.data(), &m_buffer[start], firstChunk);
 
-  if (size > firstChunk) [[unlikely]]
-  {
+  if (size > firstChunk) [[unlikely]] {
     const qsizetype secondChunk = size - firstChunk;
     std::memcpy(result.data() + firstChunk, &m_buffer[0], secondChunk);
   }
@@ -387,34 +372,31 @@ T IO::CircularBuffer<T, StorageType>::peekRange(qsizetype offset,
  *          the buffer, the function returns -1 immediately.
  */
 template<typename T, Concepts::ByteLike StorageType>
-int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T &pattern,
-                                                       const int pos)
+int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern, const int pos)
 {
   return findPatternKMP(pattern, computeKMPTable(pattern), pos);
 }
 
 template<typename T, Concepts::ByteLike StorageType>
-int IO::CircularBuffer<T, StorageType>::findPatternKMP(
-    const T &pattern, const std::vector<int> &lps, const int pos)
+int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern,
+                                                       const std::vector<int>& lps,
+                                                       const int pos)
 {
   const qsizetype current_size = size();
   if (pattern.isEmpty() || current_size < pattern.size()) [[unlikely]]
     return -1;
 
   const qsizetype head = m_head.load(std::memory_order_acquire);
-  qsizetype bufferIdx = (head + pos) % m_capacity;
+  qsizetype bufferIdx  = (head + pos) % m_capacity;
   int i = pos, j = 0;
 
-  while (i < current_size)
-  {
-    if (m_buffer[bufferIdx] == pattern[j])
-    {
+  while (i < current_size) {
+    if (m_buffer[bufferIdx] == pattern[j]) {
       i++;
       j++;
       bufferIdx = (bufferIdx + 1) % m_capacity;
 
-      if (j == pattern.size()) [[unlikely]]
-      {
+      if (j == pattern.size()) [[unlikely]] {
         int matchStart = i - j;
         return matchStart;
       }
@@ -423,8 +405,7 @@ int IO::CircularBuffer<T, StorageType>::findPatternKMP(
     else if (j != 0) [[likely]]
       j = lps[j - 1];
 
-    else
-    {
+    else {
       i++;
       bufferIdx = (bufferIdx + 1) % m_capacity;
     }
@@ -442,19 +423,16 @@ int IO::CircularBuffer<T, StorageType>::findPatternKMP(
  * @return A vector of integers representing the LPS table.
  */
 template<typename T, Concepts::ByteLike StorageType>
-std::vector<int>
-IO::CircularBuffer<T, StorageType>::computeKMPTable(const T &p) const
+std::vector<int> IO::CircularBuffer<T, StorageType>::computeKMPTable(const T& p) const
 {
   qsizetype m = p.size();
   std::vector<int> lps(m, 0);
 
   qsizetype len = 0;
-  qsizetype i = 1;
+  qsizetype i   = 1;
 
   while (i < m)
-  {
-    if (p[i] == p[len])
-    {
+    if (p[i] == p[len]) {
       len++;
       lps[i++] = len;
     }
@@ -464,7 +442,6 @@ IO::CircularBuffer<T, StorageType>::computeKMPTable(const T &p) const
 
     else
       lps[i++] = 0;
-  }
 
   return lps;
 }

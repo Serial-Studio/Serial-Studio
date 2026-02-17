@@ -21,8 +21,8 @@
 
 #pragma once
 
-#include <QTableWidget>
 #include <QStyledItemDelegate>
+#include <QTableWidget>
 
 #include "DeclarativeWidget.h"
 
@@ -57,8 +57,7 @@
  * @note This class uses DeclarativeWidget's image-based rendering to bridge
  *       QWidget (QTableWidget) into the QML scene graph.
  */
-class StaticTable : public DeclarativeWidget
-{
+class StaticTable : public DeclarativeWidget {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(const QFont& font
@@ -76,16 +75,16 @@ Q_SIGNALS:
   void headerFontChanged();
 
 public:
-  explicit StaticTable(QQuickItem *parent = nullptr);
+  explicit StaticTable(QQuickItem* parent = nullptr);
 
-  [[nodiscard]] const QFont &font() const;
-  [[nodiscard]] const QFont &headerFont() const;
-  [[nodiscard]] const QList<QStringList> &data() const;
+  [[nodiscard]] const QFont& font() const;
+  [[nodiscard]] const QFont& headerFont() const;
+  [[nodiscard]] const QList<QStringList>& data() const;
 
 public Q_SLOTS:
-  void setFont(const QFont &font);
-  void setHeaderFont(const QFont &font);
-  void setData(const QList<QStringList> &data);
+  void setFont(const QFont& font);
+  void setHeaderFont(const QFont& font);
+  void setData(const QList<QStringList>& data);
 
 private Q_SLOTS:
   void loadTheme();

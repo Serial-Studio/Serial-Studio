@@ -28,27 +28,22 @@
 
 #include "DataModel/FrameConsumer.h"
 
-namespace Console
-{
+namespace Console {
 
 /**
  * @brief Represents a single console data item for export
  */
-struct ExportData
-{
+struct ExportData {
   QString data;
 
   ExportData() = default;
 
-  ExportData(QString &&d)
-    : data(std::move(d))
-  {
-  }
+  ExportData(QString&& d) : data(std::move(d)) {}
 
-  ExportData(ExportData &&) = default;
-  ExportData(const ExportData &) = delete;
-  ExportData &operator=(ExportData &&) = default;
-  ExportData &operator=(const ExportData &) = delete;
+  ExportData(ExportData&&)                 = default;
+  ExportData(const ExportData&)            = delete;
+  ExportData& operator=(ExportData&&)      = default;
+  ExportData& operator=(const ExportData&) = delete;
 };
 
 /**
@@ -62,8 +57,7 @@ class Export;
 /**
  * @brief Worker that handles console export file I/O on background thread
  */
-class ExportWorker : public DataModel::FrameConsumerWorker<ExportDataPtr>
-{
+class ExportWorker : public DataModel::FrameConsumerWorker<ExportDataPtr> {
   Q_OBJECT
 
 public:
@@ -74,7 +68,7 @@ public:
   bool isResourceOpen() const override;
 
 protected:
-  void processItems(const std::vector<ExportDataPtr> &items) override;
+  void processItems(const std::vector<ExportDataPtr>& items) override;
 
 private:
   void createFile();
@@ -135,15 +129,15 @@ signals:
 
 private:
   explicit Export();
-  Export(Export &&) = delete;
-  Export(const Export &) = delete;
-  Export &operator=(Export &&) = delete;
-  Export &operator=(const Export &) = delete;
+  Export(Export&&)                 = delete;
+  Export(const Export&)            = delete;
+  Export& operator=(Export&&)      = delete;
+  Export& operator=(const Export&) = delete;
 
   ~Export();
 
 public:
-  static Export &instance();
+  static Export& instance();
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] bool exportEnabled() const;
@@ -157,7 +151,7 @@ public slots:
 
 protected:
 #ifdef BUILD_COMMERCIAL
-  DataModel::FrameConsumerWorkerBase *createWorker() override;
+  DataModel::FrameConsumerWorkerBase* createWorker() override;
 #endif
 
 private slots:
@@ -170,4 +164,4 @@ private:
   std::atomic<bool> m_isOpen;
   std::atomic<bool> m_exportEnabled;
 };
-} // namespace Console
+}  // namespace Console

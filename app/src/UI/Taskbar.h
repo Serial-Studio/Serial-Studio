@@ -23,14 +23,13 @@
 
 #include <QObject>
 #include <QQuickItem>
-#include <QVariantList>
 #include <QStandardItemModel>
+#include <QVariantList>
 
-#include "UI/WindowManager.h"
 #include "UI/WidgetRegistry.h"
+#include "UI/WindowManager.h"
 
-namespace UI
-{
+namespace UI {
 /**
  * @brief QStandardItemModel used to represent dashboard widgets in a
  *        hierarchical UI.
@@ -50,13 +49,11 @@ namespace UI
  * Custom enum `WindowState` defines whether a widget is shown, minimized, or
  * closed.
  */
-class TaskbarModel : public QStandardItemModel
-{
+class TaskbarModel : public QStandardItemModel {
   Q_OBJECT
 
 public:
-  enum Roles
-  {
+  enum Roles {
     WindowIdRole = Qt::UserRole + 1,
     WidgetTypeRole,
     WidgetNameRole,
@@ -68,15 +65,14 @@ public:
     OverviewRole,
   };
 
-  enum WindowState
-  {
-    WindowNormal = 0,
+  enum WindowState {
+    WindowNormal    = 0,
     WindowMinimized = 1,
-    WindowClosed = 2
+    WindowClosed    = 2
   };
   Q_ENUM(WindowState)
 
-  explicit TaskbarModel(QObject *parent = nullptr);
+  explicit TaskbarModel(QObject* parent = nullptr);
   QHash<int, QByteArray> roleNames() const override;
 };
 
@@ -107,8 +103,7 @@ public:
  * - Exposed as a singleton via context property
  * - Interacts closely with UI::Dashboard and QML taskbar UI
  */
-class Taskbar : public QQuickItem
-{
+class Taskbar : public QQuickItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(TaskbarModel* fullModel
@@ -152,65 +147,65 @@ signals:
   void registeredWindowsChanged();
 
 public:
-  Taskbar(QQuickItem *parent = nullptr);
+  Taskbar(QQuickItem* parent = nullptr);
 
   [[nodiscard]] int activeGroupId() const;
   [[nodiscard]] int activeGroupIndex() const;
   [[nodiscard]] QVariantList groupModel() const;
-  [[nodiscard]] QQuickItem *activeWindow() const;
+  [[nodiscard]] QQuickItem* activeWindow() const;
 
-  [[nodiscard]] TaskbarModel *fullModel() const;
-  [[nodiscard]] TaskbarModel *taskbarButtons() const;
-  [[nodiscard]] WindowManager *windowManager() const;
+  [[nodiscard]] TaskbarModel* fullModel() const;
+  [[nodiscard]] TaskbarModel* taskbarButtons() const;
+  [[nodiscard]] WindowManager* windowManager() const;
 
   [[nodiscard]] bool hasMaximizedWindow() const;
 
-  Q_INVOKABLE QQuickItem *windowData(const int id) const;
-  Q_INVOKABLE TaskbarModel::WindowState windowState(QQuickItem *window) const;
+  Q_INVOKABLE QQuickItem* windowData(const int id) const;
+  Q_INVOKABLE TaskbarModel::WindowState windowState(QQuickItem* window) const;
 
 public slots:
   void saveLayout();
   void setActiveGroupId(int groupId);
   void setActiveGroupIndex(int index);
-  void showWindow(QQuickItem *window);
-  void closeWindow(QQuickItem *window);
-  void minimizeWindow(QQuickItem *window);
-  void setActiveWindow(QQuickItem *window);
-  void unregisterWindow(QQuickItem *window);
-  void setWindowManager(UI::WindowManager *manager);
-  void registerWindow(const int id, QQuickItem *window);
+  void showWindow(QQuickItem* window);
+  void closeWindow(QQuickItem* window);
+  void minimizeWindow(QQuickItem* window);
+  void setActiveWindow(QQuickItem* window);
+  void unregisterWindow(QQuickItem* window);
+  void setWindowManager(UI::WindowManager* manager);
+  void registerWindow(const int id, QQuickItem* window);
   void setWindowState(const int id, const UI::TaskbarModel::WindowState state);
 
 private slots:
   void onRegistryCleared();
   void onBatchUpdateCompleted();
   void onDashboardLayoutChanged();
-  void onWidgetCreated(UI::WidgetID id, const UI::WidgetInfo &info);
+  void onWidgetCreated(UI::WidgetID id, const UI::WidgetInfo& info);
   void onWidgetDestroyed(UI::WidgetID id);
 
 private:
   void rebuildModel();
   void connectToRegistry();
-  QStandardItem *findItemByWindowId(int windowId,
-                                    QStandardItem *parentItem = nullptr) const;
-  QStandardItem *findItemByWidgetId(UI::WidgetID widgetId,
-                                    QStandardItem *parentItem = nullptr) const;
-  QStandardItem *findGroupItemByGroupId(int groupId) const;
-  QStandardItem *createItemFromWidgetInfo(const UI::WidgetInfo &info);
+  void mapWidgetToWindow(UI::WidgetID wid, int windowId);
+  QStandardItem* findItemByWindowId(int windowId, QStandardItem* parentItem = nullptr) const;
+  QStandardItem* findItemByWidgetId(UI::WidgetID widgetId,
+                                    QStandardItem* parentItem = nullptr) const;
+  QStandardItem* findGroupItemByGroupId(int groupId) const;
+  QStandardItem* createItemFromWidgetInfo(const UI::WidgetInfo& info);
 
-  int m_activeGroupId = -1;
-  bool m_rebuildInProgress = false;
+  int m_activeGroupId          = -1;
+  bool m_rebuildInProgress     = false;
   bool m_batchUpdateInProgress = false;
 
-  QQuickItem *m_activeWindow;
-  UI::WindowManager *m_windowManager;
-  QMap<QQuickItem *, int> m_windowIDs;
+  QQuickItem* m_activeWindow;
+  UI::WindowManager* m_windowManager;
+  QMap<QQuickItem*, int> m_windowIDs;
 
   QMap<UI::WidgetID, int> m_widgetIdToWindowId;
   QMap<int, UI::WidgetID> m_windowIdToWidgetId;
 
-  TaskbarModel *m_fullModel;
-  TaskbarModel *m_taskbarButtons;
+  TaskbarModel* m_fullModel;
+  TaskbarModel* m_taskbarButtons;
 };
 
-} // namespace UI
+}  // namespace UI

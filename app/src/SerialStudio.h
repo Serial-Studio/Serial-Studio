@@ -64,8 +64,7 @@
  * - **DashboardWidget**: Enumerates visualization widget types for dashboards.
  * - **DatasetOption**: Bit-flag options for dataset configurations.
  */
-class SerialStudio : public QObject
-{
+class SerialStudio : public QObject {
   Q_OBJECT
 
 public:
@@ -77,8 +76,7 @@ public:
    * This enum defines different decoding strategies that can be applied to
    * interpret incoming data. Each value represents a specific decoding format.
    */
-  enum DecoderMethod
-  {
+  enum DecoderMethod {
     PlainText,   /**< Standard decoding, interprets data as plain text. */
     Hexadecimal, /**< Decodes data assuming a hexadecimal-encoded format. */
     Base64,      /**< Decodes data assuming a Base64-encoded format. */
@@ -119,9 +117,8 @@ public:
    * based on the data source or project configuration. Each mode represents
    * a different approach to interpreting and visualizing the incoming data.
    */
-  enum OperationMode
-  {
-    ProjectFile, /**< Builds the dashboard using a predefined project file. */
+  enum OperationMode {
+    ProjectFile,     /**< Builds the dashboard using a predefined project file. */
     DeviceSendsJSON, /**< Builds the dashboard from device-sent JSON. */
     QuickPlot,       /**< Quick and simple data plotting mode. */
     /* IMPORTANT: When adding other modes, please don't modify the order of the
@@ -138,8 +135,7 @@ public:
    * sources used for receiving data streams. Each bus type corresponds to a
    * specific hardware or network interface.
    */
-  enum class BusType
-  {
+  enum class BusType {
     UART,        /**< Serial port communication. */
     Network,     /**< Network socket communication. */
     BluetoothLE, /**< Bluetooth Low Energy communication. */
@@ -154,8 +150,7 @@ public:
   /**
    * @brief Enum representing the different widget types available for groups.
    */
-  enum GroupWidget
-  {
+  enum GroupWidget {
     DataGrid,
     Accelerometer,
     Gyroscope,
@@ -169,8 +164,7 @@ public:
   /**
    * @brief Enum representing the different widget types available for datasets.
    */
-  enum DatasetWidget
-  {
+  enum DatasetWidget {
     Bar,
     Gauge,
     Compass,
@@ -184,8 +178,7 @@ public:
    *
    * @warning Window order in dashboard depends on this!
    */
-  enum DashboardWidget
-  {
+  enum DashboardWidget {
     DashboardTerminal,
     DashboardDataGrid,
     DashboardMultiPlot,
@@ -252,9 +245,8 @@ public:
   // Commercial-related functions
   //
   [[nodiscard]] static bool activated();
-  [[nodiscard]] static bool commercialCfg(const QVector<DataModel::Group> &g);
-  [[nodiscard]] static bool
-  commercialCfg(const std::vector<DataModel::Group> &g);
+  [[nodiscard]] static bool commercialCfg(const QVector<DataModel::Group>& g);
+  [[nodiscard]] static bool commercialCfg(const std::vector<DataModel::Group>& g);
 
   //
   // Dashboard logic
@@ -272,9 +264,9 @@ public:
   // Parsing & project model logic
   //
   [[nodiscard]] static QString groupWidgetId(const GroupWidget widget);
-  [[nodiscard]] static GroupWidget groupWidgetFromId(const QString &id);
+  [[nodiscard]] static GroupWidget groupWidgetFromId(const QString& id);
   [[nodiscard]] static QString datasetWidgetId(const DatasetWidget widget);
-  [[nodiscard]] static DatasetWidget datasetWidgetFromId(const QString &id);
+  [[nodiscard]] static DatasetWidget datasetWidgetFromId(const QString& id);
 
   //
   // Utility functions
@@ -285,9 +277,9 @@ public:
   //
   // String processing
   //
-  [[nodiscard]] static QString hexToString(const QString &hex);
-  [[nodiscard]] static QString stringToHex(const QString &str);
-  [[nodiscard]] static QByteArray hexToBytes(const QString &data);
-  [[nodiscard]] static QString resolveEscapeSequences(const QString &str);
-  [[nodiscard]] static QString escapeControlCharacters(const QString &str);
+  [[nodiscard]] static QString hexToString(const QString& hex);
+  [[nodiscard]] static QString stringToHex(const QString& str);
+  [[nodiscard]] static QByteArray hexToBytes(const QString& data);
+  [[nodiscard]] static QString resolveEscapeSequences(const QString& str);
+  [[nodiscard]] static QString escapeControlCharacters(const QString& str);
 };

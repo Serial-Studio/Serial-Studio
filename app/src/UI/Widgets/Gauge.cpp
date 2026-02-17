@@ -19,9 +19,10 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "UI/Widgets/Gauge.h"
+
 #include "DSP.h"
 #include "UI/Dashboard.h"
-#include "UI/Widgets/Gauge.h"
 
 /**
  * @brief Constructs a Gauge widget.
@@ -35,33 +36,28 @@
  * @param index Dataset index for the gauge.
  * @param parent Optional QML parent item.
  */
-Widgets::Gauge::Gauge(const int index, QQuickItem *parent)
-  : Bar(index, parent, false)
+Widgets::Gauge::Gauge(const int index, QQuickItem* parent) : Bar(index, parent, false)
 {
-  if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index))
-  {
-    const auto &dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
+  if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index)) {
+    const auto& dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
 
-    m_units = dataset.units;
-    m_minValue = qMin(dataset.wgtMin, dataset.wgtMax);
-    m_maxValue = qMax(dataset.wgtMin, dataset.wgtMax);
-    m_alarmLow = qMin(dataset.alarmLow, dataset.alarmHigh);
+    m_units     = dataset.units;
+    m_minValue  = qMin(dataset.wgtMin, dataset.wgtMax);
+    m_maxValue  = qMax(dataset.wgtMin, dataset.wgtMax);
+    m_alarmLow  = qMin(dataset.alarmLow, dataset.alarmHigh);
     m_alarmHigh = qMax(dataset.alarmLow, dataset.alarmHigh);
-    m_alarmLow = qBound(m_minValue, m_alarmLow, m_maxValue);
+    m_alarmLow  = qBound(m_minValue, m_alarmLow, m_maxValue);
     m_alarmHigh = qBound(m_minValue, m_alarmHigh, m_maxValue);
 
-    if (dataset.alarmEnabled)
-    {
+    if (dataset.alarmEnabled) {
       if (m_alarmHigh == m_alarmLow)
         m_alarmLow = m_minValue;
 
-      m_alarmsDefined
-          = (m_alarmLow > m_minValue && m_alarmLow < m_maxValue)
-            || (m_alarmHigh < m_maxValue && m_alarmHigh > m_minValue);
+      m_alarmsDefined = (m_alarmLow > m_minValue && m_alarmLow < m_maxValue)
+                     || (m_alarmHigh < m_maxValue && m_alarmHigh > m_minValue);
     }
 
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-            &Gauge::updateData);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Gauge::updateData);
   }
 }
 
@@ -78,12 +74,10 @@ void Widgets::Gauge::updateData()
   if (!isEnabled())
     return;
 
-  if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index))
-  {
-    const auto &dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
-    auto value = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
-    if (DSP::notEqual(value, m_value))
-    {
+  if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index)) {
+    const auto& dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
+    auto value          = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
+    if (DSP::notEqual(value, m_value)) {
       m_value = value;
       Q_EMIT updated();
     }

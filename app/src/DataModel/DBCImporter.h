@@ -22,17 +22,16 @@
 
 #pragma once
 
-#include <QObject>
-#include <QString>
-#include <QJsonObject>
 #include <QCanDbcFileParser>
 #include <QCanMessageDescription>
 #include <QCanSignalDescription>
+#include <QJsonObject>
+#include <QObject>
+#include <QString>
 
 #include "Frame.h"
 
-namespace DataModel
-{
+namespace DataModel {
 /**
  * @brief Imports CAN Database (DBC) files and converts them to Serial Studio
  *        projects.
@@ -61,8 +60,7 @@ namespace DataModel
  *
  * @note This is a Pro-only feature (commercial license required).
  */
-class DBCImporter : public QObject
-{
+class DBCImporter : public QObject {
   Q_OBJECT
   Q_PROPERTY(int signalCount READ signalCount NOTIFY messagesChanged)
   Q_PROPERTY(int messageCount READ messageCount NOTIFY messagesChanged)
@@ -75,13 +73,13 @@ signals:
 
 private:
   explicit DBCImporter();
-  DBCImporter(DBCImporter &&) = delete;
-  DBCImporter(const DBCImporter &) = delete;
-  DBCImporter &operator=(DBCImporter &&) = delete;
-  DBCImporter &operator=(const DBCImporter &) = delete;
+  DBCImporter(DBCImporter&&)                 = delete;
+  DBCImporter(const DBCImporter&)            = delete;
+  DBCImporter& operator=(DBCImporter&&)      = delete;
+  DBCImporter& operator=(const DBCImporter&) = delete;
 
 public:
-  static DBCImporter &instance();
+  static DBCImporter& instance();
 
   [[nodiscard]] int signalCount() const;
   [[nodiscard]] int messageCount() const;
@@ -93,11 +91,10 @@ public slots:
   void importDBC();
   void cancelImport();
   void confirmImport();
-  void showPreview(const QString &filePath);
+  void showPreview(const QString& filePath);
 
 private:
-  enum SignalFamily
-  {
+  enum SignalFamily {
     WheelSpeeds,
     TirePressures,
     Temperatures,
@@ -108,37 +105,34 @@ private:
     None
   };
 
-  std::vector<Group>
-  generateGroups(const QList<QCanMessageDescription> &messages);
-  QJsonObject generateProject(const QList<QCanMessageDescription> &messages);
-  QString generateFrameParser(const QList<QCanMessageDescription> &messages);
+  std::vector<Group> generateGroups(const QList<QCanMessageDescription>& messages);
+  QJsonObject generateProject(const QList<QCanMessageDescription>& messages);
+  QString generateFrameParser(const QList<QCanMessageDescription>& messages);
 
-  QString sanitizeJavaScriptString(const QString &str);
-  QString selectGroupWidget(const QCanMessageDescription &message);
-  QString selectWidgetForSignal(const QCanSignalDescription &signal);
-  QString generateSignalExtraction(const QCanSignalDescription &signal);
-  QString generateMessageDecoder(const QCanMessageDescription &message,
-                                 int &datasetIndex);
+  QString sanitizeJavaScriptString(const QString& str);
+  QString selectGroupWidget(const QCanMessageDescription& message);
+  QString selectWidgetForSignal(const QCanSignalDescription& signal);
+  QString generateSignalExtraction(const QCanSignalDescription& signal);
+  QString generateMessageDecoder(const QCanMessageDescription& message, int& datasetIndex);
 
-  SignalFamily
-  detectSignalFamily(const QList<QCanSignalDescription> &signalList) const;
-  bool hasPositionalPattern(const QList<QCanSignalDescription> &signalList,
-                            const QStringList &positions) const;
-  bool hasNumberedPattern(const QList<QCanSignalDescription> &signalList) const;
-  bool allSimilarUnits(const QList<QCanSignalDescription> &signalList) const;
-  bool hasBatterySignals(const QList<QCanSignalDescription> &signalList) const;
-  bool allStatusSignals(const QList<QCanSignalDescription> &signalList) const;
-  int countPlottable(const QList<QCanSignalDescription> &signalList) const;
-  bool isCriticalSignal(const QCanSignalDescription &signal) const;
-  bool shouldAssignIndividualWidget(const QString &groupWidget,
-                                    const QCanSignalDescription &signal,
+  SignalFamily detectSignalFamily(const QList<QCanSignalDescription>& signalList) const;
+  bool hasPositionalPattern(const QList<QCanSignalDescription>& signalList,
+                            const QStringList& positions) const;
+  bool hasNumberedPattern(const QList<QCanSignalDescription>& signalList) const;
+  bool allSimilarUnits(const QList<QCanSignalDescription>& signalList) const;
+  bool hasBatterySignals(const QList<QCanSignalDescription>& signalList) const;
+  bool allStatusSignals(const QList<QCanSignalDescription>& signalList) const;
+  int countPlottable(const QList<QCanSignalDescription>& signalList) const;
+  bool isCriticalSignal(const QCanSignalDescription& signal) const;
+  bool shouldAssignIndividualWidget(const QString& groupWidget,
+                                    const QCanSignalDescription& signal,
                                     bool isSingleBit) const;
 
-  int countTotalSignals(const QList<QCanMessageDescription> &messages) const;
+  int countTotalSignals(const QList<QCanMessageDescription>& messages) const;
 
 private:
   QString m_dbcFilePath;
   QList<QCanMessageDescription> m_messages;
 };
 
-} // namespace DataModel
+}  // namespace DataModel

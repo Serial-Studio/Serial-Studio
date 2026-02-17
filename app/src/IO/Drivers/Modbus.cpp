@@ -20,21 +20,22 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#include "Misc/Utilities.h"
-#include "Misc/Translator.h"
-#include "Misc/TimerEvents.h"
 #include "IO/Drivers/Modbus.h"
 
-#include <QTimer>
+#include <QModbusDataUnit>
+#include <QModbusRtuSerialClient>
+#include <QModbusTcpClient>
 #include <QSerialPort>
 #include <QSerialPortInfo>
-#include <QModbusDataUnit>
-#include <QModbusTcpClient>
-#include <QModbusRtuSerialClient>
+#include <QTimer>
 
-//------------------------------------------------------------------------------
+#include "Misc/TimerEvents.h"
+#include "Misc/Translator.h"
+#include "Misc/Utilities.h"
+
+//--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructor function
@@ -58,9 +59,9 @@ IO::Drivers::Modbus::Modbus()
   , m_serialPortIndex(0)
 {
   // Read basic settings
-  m_slaveAddress = m_settings.value("ModbusDriver/slaveAddress", 1).toUInt();
+  m_slaveAddress  = m_settings.value("ModbusDriver/slaveAddress", 1).toUInt();
   m_protocolIndex = m_settings.value("ModbusDriver/protocolIndex", 1).toUInt();
-  m_pollInterval = m_settings.value("ModbusDriver/pollInterval", 100).toUInt();
+  m_pollInterval  = m_settings.value("ModbusDriver/pollInterval", 100).toUInt();
 
   // Read Modbus TCP settings
   m_port = m_settings.value("ModbusDriver/port", 5020).toUInt();
@@ -92,13 +93,16 @@ IO::Drivers::Modbus::Modbus()
   // clang-format on
 
   // Configure poll timer callback function
-  connect(m_pollTimer, &QTimer::timeout, this,
-          &IO::Drivers::Modbus::pollRegisters);
+  connect(m_pollTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::pollRegisters);
 
   // Connect signals/slots for IO manager connect button
-  connect(this, &IO::Drivers::Modbus::protocolIndexChanged, this,
+  connect(this,
+          &IO::Drivers::Modbus::protocolIndexChanged,
+          this,
           &IO::Drivers::Modbus::configurationChanged);
-  connect(this, &IO::Drivers::Modbus::serialPortIndexChanged, this,
+  connect(this,
+          &IO::Drivers::Modbus::serialPortIndexChanged,
+          this,
           &IO::Drivers::Modbus::configurationChanged);
 }
 
@@ -114,22 +118,19 @@ IO::Drivers::Modbus::Modbus()
  */
 IO::Drivers::Modbus::~Modbus()
 {
-  if (m_pollTimer)
-  {
+  if (m_pollTimer) {
     m_pollTimer->stop();
     m_pollTimer->deleteLater();
     m_pollTimer = nullptr;
   }
 
-  if (m_lastReply)
-  {
+  if (m_lastReply) {
     disconnect(m_lastReply, nullptr, this, nullptr);
     m_lastReply->deleteLater();
     m_lastReply = nullptr;
   }
 
-  if (m_device)
-  {
+  if (m_device) {
     disconnect(m_device, nullptr, this, nullptr);
 
     if (m_device->state() == QModbusDevice::ConnectedState)
@@ -143,15 +144,15 @@ IO::Drivers::Modbus::~Modbus()
 /**
  * @brief Returns the only instance of the class
  */
-IO::Drivers::Modbus &IO::Drivers::Modbus::instance()
+IO::Drivers::Modbus& IO::Drivers::Modbus::instance()
 {
   static Modbus singleton;
   return singleton;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // HAL-driver implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Closes the current Modbus connection
@@ -172,15 +173,13 @@ void IO::Drivers::Modbus::close()
   if (m_pollTimer)
     m_pollTimer->stop();
 
-  if (m_lastReply)
-  {
+  if (m_lastReply) {
     disconnect(m_lastReply, nullptr, this, nullptr);
     m_lastReply->deleteLater();
     m_lastReply = nullptr;
   }
 
-  if (m_device)
-  {
+  if (m_device) {
     disconnect(m_device, nullptr, this, nullptr);
 
     if (m_device->state() != QModbusDevice::UnconnectedState)
@@ -245,31 +244,22 @@ bool IO::Drivers::Modbus::configurationOk() const noexcept
  * @param data The data to write
  * @return Number of bytes successfully written
  */
-quint64 IO::Drivers::Modbus::write(const QByteArray &data)
+quint64 IO::Drivers::Modbus::write(const QByteArray& data)
 {
   if (!isWritable() || data.length() < 4)
     return 0;
 
-  quint16 register_address
-      = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
-  quint16 register_value
-      = (static_cast<quint8>(data[2]) << 8) | static_cast<quint8>(data[3]);
+  quint16 register_address = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
+  quint16 register_value   = (static_cast<quint8>(data[2]) << 8) | static_cast<quint8>(data[3]);
 
-  QModbusDataUnit write_unit(QModbusDataUnit::HoldingRegisters,
-                             register_address, 1);
+  QModbusDataUnit write_unit(QModbusDataUnit::HoldingRegisters, register_address, 1);
   write_unit.setValue(0, register_value);
 
-  if (auto *reply = m_device->sendWriteRequest(write_unit, m_slaveAddress))
-  {
+  if (auto* reply = m_device->sendWriteRequest(write_unit, m_slaveAddress)) {
     if (!reply->isFinished())
-    {
-      connect(reply, &QModbusReply::finished, reply,
-              &QModbusReply::deleteLater);
-    }
+      connect(reply, &QModbusReply::finished, reply, &QModbusReply::deleteLater);
     else
-    {
       reply->deleteLater();
-    }
 
     Q_EMIT dataSent(data);
     return data.length();
@@ -318,20 +308,18 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
   if (!configurationOk())
     return false;
 
-  if (m_protocolIndex == 0)
-  {
-    auto ports = serialPortList();
+  if (m_protocolIndex == 0) {
+    auto ports  = serialPortList();
     auto portId = serialPortIndex();
     if (portId < 1 || portId >= ports.count())
       return false;
 
-    if (portId >= m_serialPortLocations.count())
-    {
+    if (portId >= m_serialPortLocations.count()) {
       Misc::Utilities::showMessageBox(
-          tr("Invalid Serial Port"),
-          tr("The selected serial port is no longer available. Please refresh "
-             "the port list and try again."),
-          QMessageBox::Critical);
+        tr("Invalid Serial Port"),
+        tr(
+          "The selected serial port is no longer available. Please refresh the port list and try again."),
+        QMessageBox::Critical);
       return false;
     }
 
@@ -365,57 +353,52 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
     else if (m_stopBitsIndex == 2)
       stopBits = QSerialPort::TwoStop;
 
-    m_device->setConnectionParameter(QModbusDevice::SerialPortNameParameter,
-                                     portName);
-    m_device->setConnectionParameter(QModbusDevice::SerialBaudRateParameter,
-                                     m_baudRate);
-    m_device->setConnectionParameter(QModbusDevice::SerialParityParameter,
-                                     parity);
-    m_device->setConnectionParameter(QModbusDevice::SerialDataBitsParameter,
-                                     dataBits);
-    m_device->setConnectionParameter(QModbusDevice::SerialStopBitsParameter,
-                                     stopBits);
+    m_device->setConnectionParameter(QModbusDevice::SerialPortNameParameter, portName);
+    m_device->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, m_baudRate);
+    m_device->setConnectionParameter(QModbusDevice::SerialParityParameter, parity);
+    m_device->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, dataBits);
+    m_device->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, stopBits);
   }
 
-  else if (m_protocolIndex == 1)
-  {
-    auto *tcp_device = new QModbusTcpClient(this);
-    tcp_device->setConnectionParameter(QModbusDevice::NetworkAddressParameter,
-                                       m_host);
-    tcp_device->setConnectionParameter(QModbusDevice::NetworkPortParameter,
-                                       m_port);
+  else if (m_protocolIndex == 1) {
+    auto* tcp_device = new QModbusTcpClient(this);
+    tcp_device->setConnectionParameter(QModbusDevice::NetworkAddressParameter, m_host);
+    tcp_device->setConnectionParameter(QModbusDevice::NetworkPortParameter, m_port);
     m_device = tcp_device;
   }
 
-  if (!m_device)
-  {
+  if (!m_device) {
     Misc::Utilities::showMessageBox(
-        tr("Modbus Initialization Failed"),
-        tr("Unable to create Modbus device. Please check your system "
-           "configuration and try again."),
-        QMessageBox::Critical);
+      tr("Modbus Initialization Failed"),
+      tr("Unable to create Modbus device. Please check your system configuration and try again."),
+      QMessageBox::Critical);
     return false;
   }
 
   m_device->setTimeout(1000);
   m_device->setNumberOfRetries(3);
 
-  connect(m_device, &QModbusClient::stateChanged, this,
-          &IO::Drivers::Modbus::onStateChanged, Qt::UniqueConnection);
-  connect(m_device, &QModbusClient::errorOccurred, this,
-          &IO::Drivers::Modbus::onErrorOccurred, Qt::UniqueConnection);
+  connect(m_device,
+          &QModbusClient::stateChanged,
+          this,
+          &IO::Drivers::Modbus::onStateChanged,
+          Qt::UniqueConnection);
+  connect(m_device,
+          &QModbusClient::errorOccurred,
+          this,
+          &IO::Drivers::Modbus::onErrorOccurred,
+          Qt::UniqueConnection);
 
-  if (!m_device->connectDevice())
-  {
+  if (!m_device->connectDevice()) {
     QString error = m_device->errorString();
     m_device->deleteLater();
     m_device = nullptr;
     Misc::Utilities::showMessageBox(
-        tr("Modbus Connection Failed"),
-        error.isEmpty() ? tr("Unable to connect to the Modbus device. Please "
-                             "check your connection settings.")
-                        : error,
-        QMessageBox::Critical);
+      tr("Modbus Connection Failed"),
+      error.isEmpty()
+        ? tr("Unable to connect to the Modbus device. Please check your connection settings.")
+        : error,
+      QMessageBox::Critical);
     return false;
   }
 
@@ -426,9 +409,9 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
   return true;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Property getters
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the current protocol index (0 = RTU, 1 = TCP)
@@ -598,14 +581,14 @@ QStringList IO::Drivers::Modbus::registerTypeList() const
   return list;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Property setters
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the TCP host address
  */
-void IO::Drivers::Modbus::setHost(const QString &host)
+void IO::Drivers::Modbus::setHost(const QString& host)
 {
   m_host = host;
   m_settings.setValue("ModbusDriver/host", host);
@@ -627,8 +610,7 @@ void IO::Drivers::Modbus::setPort(const quint16 port)
  */
 void IO::Drivers::Modbus::setProtocolIndex(const quint8 index)
 {
-  if (index < 2)
-  {
+  if (index < 2) {
     m_protocolIndex = index;
     m_settings.setValue("ModbusDriver/protocolIndex", index);
     Q_EMIT protocolIndexChanged();
@@ -653,8 +635,7 @@ void IO::Drivers::Modbus::setPollInterval(const quint16 interval)
   m_pollInterval = interval;
   m_settings.setValue("ModbusDriver/pollInterval", interval);
 
-  if (m_pollTimer->isActive())
-  {
+  if (m_pollTimer->isActive()) {
     m_pollTimer->stop();
     m_pollTimer->start(m_pollInterval);
   }
@@ -669,22 +650,15 @@ void IO::Drivers::Modbus::addRegisterGroup(const quint8 type,
                                            const quint16 start,
                                            const quint16 count)
 {
-  if (count > 0 && count <= 125)
-  {
-    for (const auto &group : std::as_const(m_registerGroups))
-    {
-      if (group.registerType == type && group.startAddress == start
-          && group.count == count)
-      {
+  if (count > 0 && count <= 125) {
+    for (const auto& group : std::as_const(m_registerGroups))
+      if (group.registerType == type && group.startAddress == start && group.count == count)
         return;
-      }
-    }
 
     m_registerGroups.append(ModbusRegisterGroup(type, start, count));
 
     m_settings.beginWriteArray("ModbusDriver/registerGroups");
-    for (int i = 0; i < m_registerGroups.size(); ++i)
-    {
+    for (int i = 0; i < m_registerGroups.size(); ++i) {
       m_settings.setArrayIndex(i);
       m_settings.setValue("type", m_registerGroups[i].registerType);
       m_settings.setValue("start", m_registerGroups[i].startAddress);
@@ -701,15 +675,13 @@ void IO::Drivers::Modbus::addRegisterGroup(const quint8 type,
  */
 void IO::Drivers::Modbus::removeRegisterGroup(const int index)
 {
-  if (index >= 0 && index < m_registerGroups.count())
-  {
+  if (index >= 0 && index < m_registerGroups.count()) {
     m_registerGroups.removeAt(index);
     if (m_currentGroupIndex >= m_registerGroups.count())
       m_currentGroupIndex = 0;
 
     m_settings.beginWriteArray("ModbusDriver/registerGroups");
-    for (int i = 0; i < m_registerGroups.size(); ++i)
-    {
+    for (int i = 0; i < m_registerGroups.size(); ++i) {
       m_settings.setArrayIndex(i);
       m_settings.setValue("type", m_registerGroups[i].registerType);
       m_settings.setValue("start", m_registerGroups[i].startAddress);
@@ -758,10 +730,10 @@ QString IO::Drivers::Modbus::registerGroupInfo(const int index) const
   // clang-format on
 
   return QString("%1: %2 @ %3 (count: %4)")
-      .arg(index + 1)
-      .arg(typeName)
-      .arg(group.startAddress)
-      .arg(group.count);
+    .arg(index + 1)
+    .arg(typeName)
+    .arg(group.startAddress)
+    .arg(group.count);
 }
 
 /**
@@ -769,8 +741,7 @@ QString IO::Drivers::Modbus::registerGroupInfo(const int index) const
  */
 void IO::Drivers::Modbus::setBaudRate(const qint32 rate)
 {
-  if (m_baudRate != rate && rate > 0)
-  {
+  if (m_baudRate != rate && rate > 0) {
     m_baudRate = rate;
     m_settings.setValue("ModbusDriver/baudRate", rate);
     Q_EMIT baudRateChanged();
@@ -782,8 +753,7 @@ void IO::Drivers::Modbus::setBaudRate(const qint32 rate)
  */
 void IO::Drivers::Modbus::setSerialPortIndex(const quint8 index)
 {
-  if (index < m_serialPortNames.count())
-  {
+  if (index < m_serialPortNames.count()) {
     m_serialPortIndex = index;
     m_settings.setValue("ModbusDriver/serialPortIndex", index);
     Q_EMIT serialPortIndexChanged();
@@ -795,8 +765,7 @@ void IO::Drivers::Modbus::setSerialPortIndex(const quint8 index)
  */
 void IO::Drivers::Modbus::setParityIndex(const quint8 index)
 {
-  if (index < 5)
-  {
+  if (index < 5) {
     m_parityIndex = index;
     m_settings.setValue("ModbusDriver/parityIndex", index);
     Q_EMIT parityIndexChanged();
@@ -808,8 +777,7 @@ void IO::Drivers::Modbus::setParityIndex(const quint8 index)
  */
 void IO::Drivers::Modbus::setDataBitsIndex(const quint8 index)
 {
-  if (index < 4)
-  {
+  if (index < 4) {
     m_dataBitsIndex = index;
     m_settings.setValue("ModbusDriver/dataBitsIndex", index);
     Q_EMIT dataBitsIndexChanged();
@@ -821,8 +789,7 @@ void IO::Drivers::Modbus::setDataBitsIndex(const quint8 index)
  */
 void IO::Drivers::Modbus::setStopBitsIndex(const quint8 index)
 {
-  if (index < 3)
-  {
+  if (index < 3) {
     m_stopBitsIndex = index;
     m_settings.setValue("ModbusDriver/stopBitsIndex", index);
     Q_EMIT stopBitsIndexChanged();
@@ -834,16 +801,20 @@ void IO::Drivers::Modbus::setStopBitsIndex(const quint8 index)
  */
 void IO::Drivers::Modbus::setupExternalConnections()
 {
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
+  connect(&Misc::TimerEvents::instance(),
+          &Misc::TimerEvents::timeout1Hz,
+          this,
           &IO::Drivers::Modbus::refreshSerialPorts);
 
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &IO::Drivers::Modbus::languageChanged);
+  connect(&Misc::Translator::instance(),
+          &Misc::Translator::languageChanged,
+          this,
+          &IO::Drivers::Modbus::languageChanged);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Private slots
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Polls Modbus registers at the configured interval
@@ -891,11 +862,10 @@ void IO::Drivers::Modbus::pollNextGroup()
   if (m_currentGroupIndex >= m_registerGroups.count())
     return;
 
-  const auto &group = m_registerGroups[m_currentGroupIndex];
+  const auto& group = m_registerGroups[m_currentGroupIndex];
 
   QModbusDataUnit::RegisterType registerType;
-  switch (group.registerType)
-  {
+  switch (group.registerType) {
     case 0:
       registerType = QModbusDataUnit::HoldingRegisters;
       break;
@@ -915,14 +885,14 @@ void IO::Drivers::Modbus::pollNextGroup()
 
   QModbusDataUnit read_unit(registerType, group.startAddress, group.count);
 
-  auto *reply = m_device->sendReadRequest(read_unit, m_slaveAddress);
+  auto* reply = m_device->sendReadRequest(read_unit, m_slaveAddress);
   if (!reply)
     return;
 
   m_lastReply = reply;
 
-  connect(reply, &QModbusReply::finished, this,
-          &IO::Drivers::Modbus::onReadReady, Qt::UniqueConnection);
+  connect(
+    reply, &QModbusReply::finished, this, &IO::Drivers::Modbus::onReadReady, Qt::UniqueConnection);
 }
 
 /**
@@ -948,97 +918,85 @@ void IO::Drivers::Modbus::pollNextGroup()
  */
 void IO::Drivers::Modbus::onReadReady()
 {
-  auto *reply = qobject_cast<QModbusReply *>(sender());
-  if (!reply)
-  {
+  auto* reply = qobject_cast<QModbusReply*>(sender());
+  if (!reply) {
     m_lastReply = nullptr;
     return;
   }
 
-  if (reply != m_lastReply)
-  {
+  if (reply != m_lastReply) {
     reply->deleteLater();
     return;
   }
 
   m_lastReply = nullptr;
 
-  if (reply->error() != QModbusDevice::NoError)
-  {
+  if (reply->error() != QModbusDevice::NoError) {
     reply->deleteLater();
     return;
   }
 
   const QModbusDataUnit unit = reply->result();
-  if (!unit.isValid() || unit.valueCount() == 0)
-  {
+  if (!unit.isValid() || unit.valueCount() == 0) {
     reply->deleteLater();
     return;
   }
 
-  try
-  {
+  try {
     const QModbusDataUnit::RegisterType registerType = unit.registerType();
 
     quint8 functionCode;
     bool isRegisterType = false;
 
-    switch (registerType)
-    {
+    switch (registerType) {
       case QModbusDataUnit::HoldingRegisters:
-        functionCode = 0x03;
+        functionCode   = 0x03;
         isRegisterType = true;
         break;
       case QModbusDataUnit::InputRegisters:
-        functionCode = 0x04;
+        functionCode   = 0x04;
         isRegisterType = true;
         break;
       case QModbusDataUnit::Coils:
-        functionCode = 0x01;
+        functionCode   = 0x01;
         isRegisterType = false;
         break;
       case QModbusDataUnit::DiscreteInputs:
-        functionCode = 0x02;
+        functionCode   = 0x02;
         isRegisterType = false;
         break;
       default:
-        functionCode = 0x03;
+        functionCode   = 0x03;
         isRegisterType = true;
         break;
     }
 
     QByteArray data;
-    if (isRegisterType)
-    {
+    if (isRegisterType) {
       data.reserve(3 + unit.valueCount() * 2);
       data.append(static_cast<char>(m_slaveAddress));
       data.append(static_cast<char>(functionCode));
       data.append(static_cast<char>(unit.valueCount() * 2));
 
-      for (int i = 0; i < unit.valueCount(); ++i)
-      {
+      for (int i = 0; i < unit.valueCount(); ++i) {
         quint16 value = unit.value(i);
         data.append(static_cast<char>((value >> 8) & 0xFF));
         data.append(static_cast<char>(value & 0xFF));
       }
     }
 
-    else
-    {
+    else {
       const int byteCount = (unit.valueCount() + 7) / 8;
       data.reserve(3 + byteCount);
       data.append(static_cast<char>(m_slaveAddress));
       data.append(static_cast<char>(functionCode));
       data.append(static_cast<char>(byteCount));
 
-      for (int i = 0; i < byteCount; ++i)
-      {
+      for (int i = 0; i < byteCount; ++i) {
         quint8 byte = 0;
         for (int bit = 0; bit < 8 && (i * 8 + bit) < unit.valueCount(); ++bit)
-        {
           if (unit.value(i * 8 + bit))
             byte |= (1 << bit);
-        }
         data.append(static_cast<char>(byte));
       }
     }
@@ -1046,8 +1004,7 @@ void IO::Drivers::Modbus::onReadReady()
     Q_EMIT dataReceived(makeByteArray(std::move(data)));
   }
 
-  catch (...)
-  {
+  catch (...) {
   }
 
   reply->deleteLater();
@@ -1089,14 +1046,12 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
   if (!m_device)
     return;
 
-  if (state == QModbusDevice::ConnectedState)
-  {
+  if (state == QModbusDevice::ConnectedState) {
     if (m_pollTimer && !m_pollTimer->isActive())
       m_pollTimer->start(m_pollInterval);
   }
 
-  else if (state == QModbusDevice::UnconnectedState)
-  {
+  else if (state == QModbusDevice::UnconnectedState) {
     if (m_pollTimer)
       m_pollTimer->stop();
   }
@@ -1133,8 +1088,8 @@ void IO::Drivers::Modbus::onErrorOccurred(QModbusDevice::Error error)
   if (errorString.isEmpty())
     errorString = tr("Error code: %1").arg(static_cast<int>(error));
 
-  Misc::Utilities::showMessageBox(tr("Modbus Communication Error"), errorString,
-                                  QMessageBox::Warning);
+  Misc::Utilities::showMessageBox(
+    tr("Modbus Communication Error"), errorString, QMessageBox::Warning);
 }
 
 /**
@@ -1160,10 +1115,8 @@ void IO::Drivers::Modbus::refreshSerialPorts()
   names.append(tr("Select Port"));
 
   const auto ports = QSerialPortInfo::availablePorts();
-  for (const auto &info : ports)
-  {
-    if (!info.isNull())
-    {
+  for (const auto& info : ports) {
+    if (!info.isNull()) {
 #ifdef Q_OS_MACOS
       if (info.portName().toLower().startsWith("tty."))
         continue;
@@ -1178,14 +1131,12 @@ void IO::Drivers::Modbus::refreshSerialPorts()
     }
   }
 
-  if (m_serialPortNames != names)
-  {
-    m_serialPortNames = names;
+  if (m_serialPortNames != names) {
+    m_serialPortNames     = names;
     m_serialPortLocations = locations;
     Q_EMIT availableSerialPortsChanged();
 
-    if (m_serialPortIndex >= m_serialPortNames.count())
-    {
+    if (m_serialPortIndex >= m_serialPortNames.count()) {
       m_serialPortIndex = 0;
       m_settings.setValue("ModbusDriver/serialPortIndex", 0);
       Q_EMIT serialPortIndexChanged();

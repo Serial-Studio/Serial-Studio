@@ -21,26 +21,26 @@
 
 #include "Export.h"
 
-#include <QDir>
-#include <QUrl>
-#include <QTimer>
-#include <QFileInfo>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QDir>
+#include <QFileInfo>
+#include <QTimer>
+#include <QUrl>
 
 #include "Misc/Utilities.h"
 
 #ifdef BUILD_COMMERCIAL
-#  include "IO/Manager.h"
-#  include "SerialStudio.h"
 #  include "Console/Handler.h"
-#  include "Misc/WorkspaceManager.h"
+#  include "IO/Manager.h"
 #  include "Licensing/LemonSqueezy.h"
+#  include "Misc/WorkspaceManager.h"
+#  include "SerialStudio.h"
 #endif
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // ExportWorker implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 #ifdef BUILD_COMMERCIAL
 
@@ -60,8 +60,7 @@ bool Console::ExportWorker::isResourceOpen() const
 /**
  * @brief Processes a batch of console data items
  */
-void Console::ExportWorker::processItems(
-    const std::vector<ExportDataPtr> &items)
+void Console::ExportWorker::processItems(const std::vector<ExportDataPtr>& items)
 {
   if (items.empty())
     return;
@@ -72,9 +71,8 @@ void Console::ExportWorker::processItems(
   if (!isResourceOpen())
     createFile();
 
-  if (m_textStream.device())
-  {
-    for (const auto &dataPtr : items)
+  if (m_textStream.device()) {
+    for (const auto& dataPtr : items)
       m_textStream << dataPtr->data;
 
     m_textStream.flush();
@@ -86,8 +84,7 @@ void Console::ExportWorker::processItems(
  */
 void Console::ExportWorker::closeResources()
 {
-  if (isResourceOpen())
-  {
+  if (isResourceOpen()) {
     m_file.close();
     m_textStream.setDevice(nullptr);
     Q_EMIT resourceOpenChanged();
@@ -99,24 +96,21 @@ void Console::ExportWorker::closeResources()
  */
 void Console::ExportWorker::createFile()
 {
-  if (SerialStudio::activated())
-  {
+  if (SerialStudio::activated()) {
     if (isResourceOpen())
       closeResources();
 
     const auto dateTime = QDateTime::currentDateTime();
-    const auto fileName
-        = dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss"))
-          + QStringLiteral(".txt");
+    const auto fileName =
+      dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss")) + QStringLiteral(".txt");
 
     QDir dir(Misc::WorkspaceManager::instance().path("Console"));
 
     m_file.setFileName(dir.filePath(fileName));
-    if (!m_file.open(QIODeviceBase::WriteOnly | QIODevice::Text))
-    {
-      Misc::Utilities::showMessageBox(
-          QObject::tr("Console Output File Error"),
-          QObject::tr("Cannot open file for writing!"), QMessageBox::Critical);
+    if (!m_file.open(QIODeviceBase::WriteOnly | QIODevice::Text)) {
+      Misc::Utilities::showMessageBox(QObject::tr("Console Output File Error"),
+                                      QObject::tr("Cannot open file for writing!"),
+                                      QMessageBox::Critical);
       closeResources();
       return;
     }
@@ -131,9 +125,9 @@ void Console::ExportWorker::createFile()
 
 #endif
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Export implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Constructor function, configures the path in which Serial Studio shall
@@ -141,23 +135,26 @@ void Console::ExportWorker::createFile()
  */
 Console::Export::Export()
 #ifdef BUILD_COMMERCIAL
-  : DataModel::FrameConsumer<ExportDataPtr>({.queueCapacity = 8192,
-                                             .flushThreshold = 1024,
-                                             .timerIntervalMs = 1000})
+  : DataModel::FrameConsumer<ExportDataPtr>(
+      {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
   , m_isOpen(false)
   , m_exportEnabled(false)
 #else
-  : m_isOpen(false)
-  , m_exportEnabled(false)
+  : m_isOpen(false), m_exportEnabled(false)
 #endif
 {
 #ifdef BUILD_COMMERCIAL
   initializeWorker();
-  connect(m_worker, &ExportWorker::resourceOpenChanged, this,
-          &Export::onWorkerOpenChanged, Qt::QueuedConnection);
+  connect(m_worker,
+          &ExportWorker::resourceOpenChanged,
+          this,
+          &Export::onWorkerOpenChanged,
+          Qt::QueuedConnection);
 
   connect(&Licensing::LemonSqueezy::instance(),
-          &Licensing::LemonSqueezy::activatedChanged, this, [=, this] {
+          &Licensing::LemonSqueezy::activatedChanged,
+          this,
+          [=, this] {
             if (exportEnabled() && !SerialStudio::activated())
               setExportEnabled(false);
           });
@@ -175,7 +172,7 @@ Console::Export::~Export() = default;
 /**
  * @brief Creates the console export worker instance.
  */
-DataModel::FrameConsumerWorkerBase *Console::Export::createWorker()
+DataModel::FrameConsumerWorkerBase* Console::Export::createWorker()
 {
   return new ExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
 }
@@ -184,7 +181,7 @@ DataModel::FrameConsumerWorkerBase *Console::Export::createWorker()
 /**
  * Returns a pointer to the only instance of this class.
  */
-Console::Export &Console::Export::instance()
+Console::Export& Console::Export::instance()
 {
   static Export instance;
   return instance;
@@ -223,7 +220,7 @@ bool Console::Export::exportEnabled() const
 void Console::Export::closeFile()
 {
 #ifdef BUILD_COMMERCIAL
-  auto *worker = static_cast<ExportWorker *>(m_worker);
+  auto* worker = static_cast<ExportWorker*>(m_worker);
   QMetaObject::invokeMethod(worker, "close", Qt::QueuedConnection);
 #endif
 }
@@ -235,10 +232,12 @@ void Console::Export::closeFile()
 void Console::Export::setupExternalConnections()
 {
 #ifdef BUILD_COMMERCIAL
-  connect(&Console::Handler::instance(), &Console::Handler::displayString, this,
+  connect(&Console::Handler::instance(),
+          &Console::Handler::displayString,
+          this,
           &Console::Export::registerData);
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
-          &Console::Export::closeFile);
+  connect(
+    &IO::Manager::instance(), &IO::Manager::connectedChanged, this, &Console::Export::closeFile);
 #endif
 }
 
@@ -248,8 +247,7 @@ void Console::Export::setupExternalConnections()
 void Console::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
-  if (SerialStudio::activated())
-  {
+  if (SerialStudio::activated()) {
     if (!enabled && isOpen())
       closeFile();
 
@@ -272,9 +270,8 @@ void Console::Export::setExportEnabled(const bool enabled)
 
   if (enabled)
     Misc::Utilities::showMessageBox(
-        tr("Console Export is a Pro feature."),
-        tr("This feature requires a license. Please "
-           "purchase one to enable console export."));
+      tr("Console Export is a Pro feature."),
+      tr("This feature requires a license. Please purchase one to enable console export."));
 }
 
 /**
@@ -296,7 +293,7 @@ void Console::Export::registerData(QStringView data)
 #ifdef BUILD_COMMERCIAL
 void Console::Export::onWorkerOpenChanged()
 {
-  auto *worker = static_cast<ExportWorker *>(m_worker);
+  auto* worker = static_cast<ExportWorker*>(m_worker);
   m_isOpen.store(worker->isResourceOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();
 }

@@ -22,44 +22,33 @@
 
 #pragma once
 
-#include <QTimer>
-#include <QObject>
-#include <QString>
-#include <QSettings>
 #include <QByteArray>
-#include <QModbusReply>
 #include <QModbusClient>
 #include <QModbusDevice>
+#include <QModbusReply>
+#include <QObject>
+#include <QSettings>
+#include <QString>
+#include <QTimer>
 
 #include "IO/HAL_Driver.h"
 
-namespace IO
-{
-namespace Drivers
-{
+namespace IO {
+namespace Drivers {
 /**
  * @struct ModbusRegisterGroup
  * @brief Defines a group of registers to poll
  */
-struct ModbusRegisterGroup
-{
+struct ModbusRegisterGroup {
   quint8 registerType;
   quint16 startAddress;
   quint16 count;
 
-  ModbusRegisterGroup()
-    : registerType(0)
-    , startAddress(0)
-    , count(0)
-  {
-  }
+  ModbusRegisterGroup() : registerType(0), startAddress(0), count(0) {}
 
   ModbusRegisterGroup(quint8 type, quint16 start, quint16 cnt)
-    : registerType(type)
-    , startAddress(start)
-    , count(cnt)
-  {
-  }
+    : registerType(type), startAddress(start), count(cnt)
+  {}
 };
 
 /**
@@ -97,8 +86,7 @@ struct ModbusRegisterGroup
  * @see HAL_Driver
  * @see IO::Manager
  */
-class Modbus : public HAL_Driver
-{
+class Modbus : public HAL_Driver {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(quint8 protocolIndex
@@ -181,19 +169,19 @@ signals:
   void availableSerialPortsChanged();
   void registerGroupsChanged();
   void languageChanged();
-  void connectionError(const QString &error);
+  void connectionError(const QString& error);
 
 private:
   explicit Modbus();
-  Modbus(Modbus &&) = delete;
-  Modbus(const Modbus &) = delete;
-  Modbus &operator=(Modbus &&) = delete;
-  Modbus &operator=(const Modbus &) = delete;
+  Modbus(Modbus&&)                 = delete;
+  Modbus(const Modbus&)            = delete;
+  Modbus& operator=(Modbus&&)      = delete;
+  Modbus& operator=(const Modbus&) = delete;
 
   ~Modbus();
 
 public:
-  static Modbus &instance();
+  static Modbus& instance();
 
   void close() override;
 
@@ -201,7 +189,7 @@ public:
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
-  [[nodiscard]] quint64 write(const QByteArray &data) override;
+  [[nodiscard]] quint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 
   [[nodiscard]] quint8 protocolIndex() const;
@@ -231,7 +219,7 @@ public slots:
   void clearRegisterGroups();
   void setupExternalConnections();
   void setPort(const quint16 port);
-  void setHost(const QString &host);
+  void setHost(const QString& host);
   void setBaudRate(const qint32 rate);
   void setParityIndex(const quint8 index);
   void setProtocolIndex(const quint8 index);
@@ -241,8 +229,7 @@ public slots:
   void setSlaveAddress(const quint8 address);
   void setSerialPortIndex(const quint8 index);
   void setPollInterval(const quint16 interval);
-  void addRegisterGroup(const quint8 type, const quint16 start,
-                        const quint16 count);
+  void addRegisterGroup(const quint8 type, const quint16 start, const quint16 count);
 
 private slots:
   void onReadReady();
@@ -253,9 +240,9 @@ private slots:
   void onErrorOccurred(QModbusDevice::Error error);
 
 private:
-  QTimer *m_pollTimer;
-  QModbusClient *m_device;
-  QModbusReply *m_lastReply;
+  QTimer* m_pollTimer;
+  QModbusClient* m_device;
+  QModbusReply* m_lastReply;
 
   quint16 m_port;
   QString m_host;
@@ -274,5 +261,5 @@ private:
 
   QSettings m_settings;
 };
-} // namespace Drivers
-} // namespace IO
+}  // namespace Drivers
+}  // namespace IO

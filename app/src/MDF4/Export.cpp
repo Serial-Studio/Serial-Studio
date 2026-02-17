@@ -21,32 +21,32 @@
 
 #include "Export.h"
 
+#include <QDateTime>
 #include <QDir>
 #include <QTimer>
-#include <QDateTime>
 
-#include "SerialStudio.h"
 #include "Misc/Utilities.h"
+#include "SerialStudio.h"
 
 #ifdef BUILD_COMMERCIAL
-#  include "IO/Manager.h"
-#  include "CSV/Player.h"
-#  include "MDF4/Player.h"
-#  include "MQTT/Client.h"
-#  include "Misc/WorkspaceManager.h"
-#  include "Licensing/LemonSqueezy.h"
-
-#  include <mdf/mdffactory.h>
-#  include <mdf/mdfwriter.h>
 #  include <mdf/ichannel.h>
 #  include <mdf/ichannelgroup.h>
 #  include <mdf/idatagroup.h>
 #  include <mdf/iheader.h>
+#  include <mdf/mdffactory.h>
+#  include <mdf/mdfwriter.h>
+
+#  include "CSV/Player.h"
+#  include "IO/Manager.h"
+#  include "Licensing/LemonSqueezy.h"
+#  include "MDF4/Player.h"
+#  include "Misc/WorkspaceManager.h"
+#  include "MQTT/Client.h"
 #endif
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // ExportWorker implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 #ifdef BUILD_COMMERCIAL
 
@@ -54,13 +54,11 @@
  * @brief Constructor for the MDF4 export worker
  */
 MDF4::ExportWorker::ExportWorker(
-    moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr> *queue,
-    std::atomic<bool> *enabled, std::atomic<size_t> *queueSize)
-  : FrameConsumerWorker(queue, enabled, queueSize)
-  , m_fileOpen(false)
-  , m_masterTimeChannel(nullptr)
-{
-}
+  moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* queue,
+  std::atomic<bool>* enabled,
+  std::atomic<size_t>* queueSize)
+  : FrameConsumerWorker(queue, enabled, queueSize), m_fileOpen(false), m_masterTimeChannel(nullptr)
+{}
 
 /**
  * @brief Destructor for the MDF4 export worker
@@ -83,8 +81,7 @@ bool MDF4::ExportWorker::isResourceOpen() const
  *
  * @param items Vector of timestamped frames to process.
  */
-void MDF4::ExportWorker::processItems(
-    const std::vector<DataModel::TimestampedFramePtr> &items)
+void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
 {
   if (items.empty())
     return;
@@ -92,8 +89,7 @@ void MDF4::ExportWorker::processItems(
   if (!IO::Manager::instance().isConnected())
     return;
 
-  if (!isResourceOpen() && !items.empty())
-  {
+  if (!isResourceOpen() && !items.empty()) {
     createFile(items.front()->data);
     m_steadyBaseline = items.front()->timestamp;
     m_systemBaseline = std::chrono::system_clock::now();
@@ -102,46 +98,38 @@ void MDF4::ExportWorker::processItems(
   if (!isResourceOpen() || !m_writer)
     return;
 
-  for (const auto &frame : items)
-  {
-    const auto steadyOffset = frame->timestamp - m_steadyBaseline;
-    const auto systemTime = m_systemBaseline + steadyOffset;
-    const auto timestamp_ns
-        = std::chrono::duration_cast<std::chrono::nanoseconds>(
-              systemTime.time_since_epoch())
-              .count();
-    const double timestamp_s
-        = static_cast<double>(timestamp_ns) / 1'000'000'000.0;
+  auto writeDatasets = [](const DataModel::Group& group, ChannelGroupInfo& info) {
+    for (size_t i = 0; i < group.datasets.size(); ++i) {
+      const auto& dataset = group.datasets.at(i);
+      auto* channel       = info.channels[i];
+      if (info.isNumeric[i])
+        channel->SetChannelValue(dataset.numericValue);
+      else
+        channel->SetChannelValue(dataset.value.toStdString());
+    }
+  };
 
-    for (const auto &group : frame->data.groups)
-    {
+  for (const auto& frame : items) {
+    const auto steadyOffset = frame->timestamp - m_steadyBaseline;
+    const auto systemTime   = m_systemBaseline + steadyOffset;
+    const auto timestamp_ns =
+      std::chrono::duration_cast<std::chrono::nanoseconds>(systemTime.time_since_epoch()).count();
+    const double timestamp_s = static_cast<double>(timestamp_ns) / 1'000'000'000.0;
+
+    for (const auto& group : frame->data.groups) {
       auto it = m_groupMap.find(group.groupId);
       if (it == m_groupMap.end())
         continue;
 
-      auto &info = it->second;
+      auto& info = it->second;
       if (group.datasets.size() != info.channels.size())
         continue;
 
       if (m_masterTimeChannel)
         m_masterTimeChannel->SetChannelValue(timestamp_s);
 
-      for (size_t i = 0; i < group.datasets.size(); ++i)
-      {
-        if (i < info.channels.size() && i < info.isNumeric.size())
-        {
-          const auto &dataset = group.datasets.at(i);
-          auto *channel = info.channels[i];
-
-          if (info.isNumeric[i])
-            channel->SetChannelValue(dataset.numericValue);
-          else
-            channel->SetChannelValue(dataset.value.toStdString());
-        }
-      }
-
-      m_writer->SaveSample(*info.channelGroup,
-                           static_cast<uint64_t>(timestamp_ns));
+      writeDatasets(group, info);
+      m_writer->SaveSample(*info.channelGroup, static_cast<uint64_t>(timestamp_ns));
     }
   }
 }
@@ -151,14 +139,12 @@ void MDF4::ExportWorker::processItems(
  */
 void MDF4::ExportWorker::closeResources()
 {
-  if (isResourceOpen() && m_writer)
-  {
-    const auto steadyNow = DataModel::TimestampedFrame::SteadyClock::now();
+  if (isResourceOpen() && m_writer) {
+    const auto steadyNow    = DataModel::TimestampedFrame::SteadyClock::now();
     const auto steadyOffset = steadyNow - m_steadyBaseline;
-    const auto systemTime = m_systemBaseline + steadyOffset;
-    const auto stop_time = std::chrono::duration_cast<std::chrono::nanoseconds>(
-                               systemTime.time_since_epoch())
-                               .count();
+    const auto systemTime   = m_systemBaseline + steadyOffset;
+    const auto stop_time =
+      std::chrono::duration_cast<std::chrono::nanoseconds>(systemTime.time_since_epoch()).count();
 
     m_writer->StopMeasurement(static_cast<uint64_t>(stop_time));
     m_writer->FinalizeMeasurement();
@@ -173,7 +159,7 @@ void MDF4::ExportWorker::closeResources()
 /**
  * @brief Creates a new MDF4 file with hierarchical structure
  */
-void MDF4::ExportWorker::createFile(const DataModel::Frame &frame)
+void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
 {
   if (isResourceOpen())
     closeResources();
@@ -182,11 +168,10 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame &frame)
     return;
 
   const auto dateTime = QDateTime::currentDateTime();
-  const auto fileName = dateTime.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss"))
-                        + QStringLiteral(".mf4");
+  const auto fileName =
+    dateTime.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss")) + QStringLiteral(".mf4");
 
-  const auto frameName
-      = frame.title.isEmpty() ? QStringLiteral("SerialStudio") : frame.title;
+  const auto frameName = frame.title.isEmpty() ? QStringLiteral("SerialStudio") : frame.title;
   QDir dir(Misc::WorkspaceManager::instance().path("MDF4"));
   if (!dir.exists(frameName))
     dir.mkpath(frameName);
@@ -194,35 +179,32 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame &frame)
   dir.cd(frameName);
   m_filePath = dir.filePath(fileName);
 
-  try
-  {
+  try {
     m_writer = mdf::MdfFactory::CreateMdfWriter(mdf::MdfWriterType::Mdf4Basic);
     if (!m_writer)
       return;
 
     m_writer->Init(m_filePath.toStdString());
 
-    auto *header = m_writer->Header();
+    auto* header = m_writer->Header();
     if (!header)
       return;
 
     header->Author("Serial Studio");
-    header->Description(
-        "Generated by Serial Studio - https://serial-studio.com/");
+    header->Description("Generated by Serial Studio - https://serial-studio.com/");
     header->Subject(frameName.toStdString());
     header->Project("Telemetry Data");
     header->StartTime(dateTime.toMSecsSinceEpoch() * 1000000);
 
-    auto *dataGroup = m_writer->CreateDataGroup();
+    auto* dataGroup = m_writer->CreateDataGroup();
     if (!dataGroup)
       return;
 
     dataGroup->Description("Serial Studio Data");
 
     bool firstGroup = true;
-    for (const auto &group : frame.groups)
-    {
-      auto *channelGroup = dataGroup->CreateChannelGroup();
+    for (const auto& group : frame.groups) {
+      auto* channelGroup = dataGroup->CreateChannelGroup();
       if (!channelGroup)
         continue;
 
@@ -231,9 +213,8 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame &frame)
       ChannelGroupInfo info;
       info.channelGroup = channelGroup;
 
-      if (firstGroup)
-      {
-        auto *timeChannel = channelGroup->CreateChannel();
+      if (firstGroup) {
+        auto* timeChannel = channelGroup->CreateChannel();
         if (!timeChannel)
           continue;
 
@@ -247,9 +228,8 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame &frame)
         firstGroup = false;
       }
 
-      for (const auto &dataset : group.datasets)
-      {
-        auto *channel = channelGroup->CreateChannel();
+      for (const auto& dataset : group.datasets) {
+        auto* channel = channelGroup->CreateChannel();
         if (!channel)
           continue;
 
@@ -257,13 +237,10 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame &frame)
         channel->Unit(dataset.units.toStdString());
         channel->Type(mdf::ChannelType::FixedLength);
 
-        if (dataset.isNumeric)
-        {
+        if (dataset.isNumeric) {
           channel->DataType(mdf::ChannelDataType::FloatLe);
           channel->DataBytes(8);
-        }
-        else
-        {
+        } else {
           channel->DataType(mdf::ChannelDataType::StringAscii);
           channel->DataBytes(256);
         }
@@ -282,8 +259,7 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame &frame)
     Q_EMIT resourceOpenChanged();
   }
 
-  catch (const std::exception &e)
-  {
+  catch (const std::exception& e) {
     qWarning() << "MDF4 Export: Failed to create file:" << e.what();
     m_fileOpen = false;
     m_writer.reset();
@@ -292,9 +268,9 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame &frame)
 
 #endif
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Export implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Constructor function, configures the export settings
@@ -302,23 +278,25 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame &frame)
 MDF4::Export::Export()
 #ifdef BUILD_COMMERCIAL
   : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
-        {.queueCapacity = 8192,
-         .flushThreshold = 1024,
-         .timerIntervalMs = 1000})
+      {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
   , m_isOpen(false)
   , m_exportEnabled(false)
 #else
-  : m_isOpen(false)
-  , m_exportEnabled(false)
+  : m_isOpen(false), m_exportEnabled(false)
 #endif
 {
 #ifdef BUILD_COMMERCIAL
   initializeWorker();
-  connect(m_worker, &ExportWorker::resourceOpenChanged, this,
-          &Export::onWorkerOpenChanged, Qt::QueuedConnection);
+  connect(m_worker,
+          &ExportWorker::resourceOpenChanged,
+          this,
+          &Export::onWorkerOpenChanged,
+          Qt::QueuedConnection);
 
   connect(&Licensing::LemonSqueezy::instance(),
-          &Licensing::LemonSqueezy::activatedChanged, this, [=, this] {
+          &Licensing::LemonSqueezy::activatedChanged,
+          this,
+          [=, this] {
             if (exportEnabled() && !SerialStudio::activated())
               setExportEnabled(false);
           });
@@ -338,7 +316,7 @@ MDF4::Export::~Export() = default;
  *
  * @return Pointer to newly created ExportWorker.
  */
-DataModel::FrameConsumerWorkerBase *MDF4::Export::createWorker()
+DataModel::FrameConsumerWorkerBase* MDF4::Export::createWorker()
 {
   return new ExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
 }
@@ -347,7 +325,7 @@ DataModel::FrameConsumerWorkerBase *MDF4::Export::createWorker()
 /**
  * Returns a pointer to the only instance of this class.
  */
-MDF4::Export &MDF4::Export::instance()
+MDF4::Export& MDF4::Export::instance()
 {
   static Export instance;
   return instance;
@@ -386,7 +364,7 @@ bool MDF4::Export::exportEnabled() const
 void MDF4::Export::closeFile()
 {
 #ifdef BUILD_COMMERCIAL
-  auto *worker = static_cast<ExportWorker *>(m_worker);
+  auto* worker = static_cast<ExportWorker*>(m_worker);
   QMetaObject::invokeMethod(worker, "close", Qt::QueuedConnection);
 #endif
 }
@@ -398,8 +376,7 @@ void MDF4::Export::closeFile()
 void MDF4::Export::setupExternalConnections()
 {
 #ifdef BUILD_COMMERCIAL
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
-          &Export::closeFile);
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, &Export::closeFile);
   connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this, [this] {
     if (IO::Manager::instance().paused())
       closeFile();
@@ -413,8 +390,7 @@ void MDF4::Export::setupExternalConnections()
 void MDF4::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
-  if (SerialStudio::activated())
-  {
+  if (SerialStudio::activated()) {
     if (!enabled && isOpen())
       closeFile();
 
@@ -437,15 +413,14 @@ void MDF4::Export::setExportEnabled(const bool enabled)
 
   if (enabled)
     Misc::Utilities::showMessageBox(
-        tr("MDF4 Export is a Pro feature."),
-        tr("This feature requires a license. Please purchase one to enable "
-           "MDF4 export."));
+      tr("MDF4 Export is a Pro feature."),
+      tr("This feature requires a license. Please purchase one to enable MDF4 export."));
 }
 
 /**
  * Receives timestamped frame data and enqueues it for export
  */
-void MDF4::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr &frame)
+void MDF4::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
 {
 #ifdef BUILD_COMMERCIAL
   if (!exportEnabled() || SerialStudio::isAnyPlayerOpen())
@@ -463,7 +438,7 @@ void MDF4::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr &frame)
  */
 void MDF4::Export::onWorkerOpenChanged()
 {
-  auto *worker = static_cast<ExportWorker *>(m_worker);
+  auto* worker = static_cast<ExportWorker*>(m_worker);
   m_isOpen.store(worker->isResourceOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();
 }

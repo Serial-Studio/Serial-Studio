@@ -22,17 +22,16 @@
 
 #pragma once
 
-#include <QObject>
-#include <QString>
-#include <QSettings>
 #include <QDateTime>
 #include <QJsonObject>
 #include <QNetworkAccessManager>
+#include <QObject>
+#include <QSettings>
+#include <QString>
 
 #include "Licensing/SimpleCrypt.h"
 
-namespace Licensing
-{
+namespace Licensing {
 /**
  * @class Licensing::LemonSqueezy
  * @brief Handles software activation, validation, and deactivation using the
@@ -59,8 +58,7 @@ namespace Licensing
  * environments, where security and local enforcement are handled client-side
  * without exposing API keys or backend logic.
  */
-class LemonSqueezy : public QObject
-{
+class LemonSqueezy : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool busy
@@ -110,27 +108,27 @@ signals:
 
 private:
   explicit LemonSqueezy();
-  LemonSqueezy(LemonSqueezy &&) = delete;
-  LemonSqueezy(const LemonSqueezy &) = delete;
-  LemonSqueezy &operator=(LemonSqueezy &&) = delete;
-  LemonSqueezy &operator=(const LemonSqueezy &) = delete;
+  LemonSqueezy(LemonSqueezy&&)                 = delete;
+  LemonSqueezy(const LemonSqueezy&)            = delete;
+  LemonSqueezy& operator=(LemonSqueezy&&)      = delete;
+  LemonSqueezy& operator=(const LemonSqueezy&) = delete;
 
 public:
-  [[nodiscard]] static LemonSqueezy &instance();
+  [[nodiscard]] static LemonSqueezy& instance();
 
   [[nodiscard]] bool busy() const;
   [[nodiscard]] int seatLimit() const;
   [[nodiscard]] int seatUsage() const;
   [[nodiscard]] bool isActivated() const;
   [[nodiscard]] bool canActivate() const;
-  [[nodiscard]] const QString &appName() const;
-  [[nodiscard]] const QString &license() const;
-  [[nodiscard]] const QString &instanceId() const;
-  [[nodiscard]] const QString &variantName() const;
-  [[nodiscard]] const QString &instanceName() const;
-  [[nodiscard]] const QString &customerName() const;
-  [[nodiscard]] const QString &customerEmail() const;
-  [[nodiscard]] const QJsonObject &licensingData() const;
+  [[nodiscard]] const QString& appName() const;
+  [[nodiscard]] const QString& license() const;
+  [[nodiscard]] const QString& instanceId() const;
+  [[nodiscard]] const QString& variantName() const;
+  [[nodiscard]] const QString& instanceName() const;
+  [[nodiscard]] const QString& customerName() const;
+  [[nodiscard]] const QString& customerEmail() const;
+  [[nodiscard]] const QJsonObject& licensingData() const;
 
 public slots:
   void buy();
@@ -138,7 +136,7 @@ public slots:
   void validate();
   void deactivate();
   void openCustomerPortal();
-  void setLicense(const QString &license);
+  void setLicense(const QString& license);
 
 private slots:
   void readSettings();
@@ -146,10 +144,9 @@ private slots:
   void clearLicenseCache(const bool clearLicense = false);
 
 private:
-  void readActivationResponse(const QByteArray &data);
-  void readDeactivationResponse(const QByteArray &data);
-  void readValidationResponse(const QByteArray &data,
-                              const bool cachedResponse);
+  void readActivationResponse(const QByteArray& data);
+  void readDeactivationResponse(const QByteArray& data);
+  void readValidationResponse(const QByteArray& data, const bool cachedResponse);
 
 private:
   bool m_busy;
@@ -173,4 +170,4 @@ private:
   QJsonObject m_licensingData;
   QNetworkAccessManager m_manager;
 };
-} // namespace Licensing
+}  // namespace Licensing

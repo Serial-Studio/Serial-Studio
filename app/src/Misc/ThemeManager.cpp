@@ -22,17 +22,17 @@
 #include "ThemeManager.h"
 
 #include <QDir>
-#include <QPalette>
-#include <QJsonArray>
-#include <QStyleHints>
-#include <QJsonDocument>
 #include <QGuiApplication>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QPalette>
+#include <QStyleHints>
 
 #include "Misc/Translator.h"
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Utility functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Converts a QJsonObject to a QVariantMap.
@@ -44,7 +44,7 @@
  * @return A QVariantMap with the same keys as the input object and
  *         QVariant-converted values.
  */
-static QVariantMap jsonObjectToVariantMap(const QJsonObject &obj)
+static QVariantMap jsonObjectToVariantMap(const QJsonObject& obj)
 {
   QVariantMap map;
   for (auto it = obj.constBegin(); it != obj.constEnd(); ++it)
@@ -63,24 +63,22 @@ static QVariantMap jsonObjectToVariantMap(const QJsonObject &obj)
  * @return QVector<QColor> containing a QColor for each valid string in
  *                         the "widget_colors" array.
  */
-static QVector<QColor> extractWidgetColors(const QJsonObject &colorsObject)
+static QVector<QColor> extractWidgetColors(const QJsonObject& colorsObject)
 {
   QVector<QColor> result;
   const QJsonArray array = colorsObject.value("widget_colors").toArray();
   result.reserve(array.size());
 
-  for (const auto &val : array)
-  {
+  for (const auto& val : array)
     if (val.isString())
       result.append(QColor(val.toString()));
-  }
 
   return result;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the ThemeManager object and initializes theme loading.
@@ -91,8 +89,7 @@ static QVector<QColor> extractWidgetColors(const QJsonObject &colorsObject)
  * It installs an event filter to listen for system-wide palette changes,
  * responding to changes by updating the application theme accordingly.
  */
-Misc::ThemeManager::ThemeManager()
-  : m_theme(0)
+Misc::ThemeManager::ThemeManager() : m_theme(0)
 {
   // Set theme files
   // clang-format off
@@ -109,38 +106,31 @@ Misc::ThemeManager::ThemeManager()
   // clang-format on
 
   // Load theme files
-  for (const auto &theme : std::as_const(themes))
-  {
+  for (const auto& theme : std::as_const(themes)) {
     QFile file(QStringLiteral(":/rcc/themes/%1.json").arg(theme));
-    if (file.open(QFile::ReadOnly))
-    {
-      QJsonParseError parseError;
-      const auto document
-          = QJsonDocument::fromJson(file.readAll(), &parseError);
-
-      if (parseError.error == QJsonParseError::NoError && !document.isNull())
-      {
-        const auto title = document.object().value("title").toString();
-        if (!title.isEmpty())
-        {
-          m_themes.insert(title, document.object());
-          m_availableThemes.append(title);
-        }
-        else
-          qWarning() << "Theme" << theme << "has no title, skipping";
-      }
-      else
-        qWarning() << "Failed to parse theme" << theme << ":"
-                   << parseError.errorString();
-
-      file.close();
-    }
-    else
+    if (!file.open(QFile::ReadOnly)) {
       qWarning() << "Failed to open theme resource:" << theme;
+      continue;
+    }
+
+    QJsonParseError parseError;
+    const auto document = QJsonDocument::fromJson(file.readAll(), &parseError);
+    if (parseError.error != QJsonParseError::NoError || document.isNull()) {
+      qWarning() << "Failed to parse theme" << theme << ":" << parseError.errorString();
+      continue;
+    }
+
+    const auto title = document.object().value("title").toString();
+    if (title.isEmpty()) {
+      qWarning() << "Theme" << theme << "has no title, skipping";
+      continue;
+    }
+
+    m_themes.insert(title, document.object());
+    m_availableThemes.append(title);
   }
 
-  if (m_availableThemes.isEmpty())
-  {
+  if (m_availableThemes.isEmpty()) {
     qCritical() << "No themes loaded! Adding fallback";
     m_availableThemes.append("Fallback");
   }
@@ -149,8 +139,7 @@ Misc::ThemeManager::ThemeManager()
   m_availableThemes.append(QStringLiteral("System"));
 
   int themeIndex = m_settings.value("ApplicationTheme", 0).toInt();
-  if (themeIndex < 0 || themeIndex >= m_availableThemes.count())
-  {
+  if (themeIndex < 0 || themeIndex >= m_availableThemes.count()) {
     qWarning() << "Invalid theme index" << themeIndex << ", using 0";
     themeIndex = 0;
   }
@@ -159,8 +148,10 @@ Misc::ThemeManager::ThemeManager()
 
   // Load localized theme names
   updateLocalizedThemeNames();
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &Misc::ThemeManager::updateLocalizedThemeNames);
+  connect(&Misc::Translator::instance(),
+          &Misc::Translator::languageChanged,
+          this,
+          &Misc::ThemeManager::updateLocalizedThemeNames);
 
   // Install event filter only once
   qApp->installEventFilter(this);
@@ -170,15 +161,15 @@ Misc::ThemeManager::ThemeManager()
  * @brief Provides a reference to the singleton instance of the ThemeManager.
  * @return Reference to the static instance of the ThemeManager.
  */
-Misc::ThemeManager &Misc::ThemeManager::instance()
+Misc::ThemeManager& Misc::ThemeManager::instance()
 {
   static ThemeManager instance;
   return instance;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Class member access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Retrieves the current theme index.
@@ -193,7 +184,7 @@ int Misc::ThemeManager::theme() const
  * @brief Retrieves the current name of the loaded theme.
  * @return The index of the currently active theme.
  */
-const QString &Misc::ThemeManager::themeName() const
+const QString& Misc::ThemeManager::themeName() const
 {
   return m_themeName;
 }
@@ -206,7 +197,7 @@ const QString &Misc::ThemeManager::themeName() const
  *
  * @return const reference to a QVariantMap of color definitions.
  */
-const QVariantMap &Misc::ThemeManager::colors() const
+const QVariantMap& Misc::ThemeManager::colors() const
 {
   return m_colors;
 }
@@ -219,7 +210,7 @@ const QVariantMap &Misc::ThemeManager::colors() const
  *
  * @return const reference to a QVariantMap of theme parameters.
  */
-const QVariantMap &Misc::ThemeManager::parameters() const
+const QVariantMap& Misc::ThemeManager::parameters() const
 {
   return m_parameters;
 }
@@ -235,7 +226,7 @@ const QVariantMap &Misc::ThemeManager::parameters() const
  * @return const reference to a QVector of QColor objects representing the
  * widget colors.
  */
-const QVector<QColor> &Misc::ThemeManager::widgetColors() const
+const QVector<QColor>& Misc::ThemeManager::widgetColors() const
 {
   return m_widgetColors;
 }
@@ -244,7 +235,7 @@ const QVector<QColor> &Misc::ThemeManager::widgetColors() const
  * @brief Returns a list of theme names that are available.
  * @return QStringList containing the names of all loaded themes.
  */
-const QStringList &Misc::ThemeManager::availableThemes() const
+const QStringList& Misc::ThemeManager::availableThemes() const
 {
   return m_availableThemeNames;
 }
@@ -254,7 +245,7 @@ const QStringList &Misc::ThemeManager::availableThemes() const
  * @param name
  * @return QColor
  */
-QColor Misc::ThemeManager::getColor(const QString &name) const
+QColor Misc::ThemeManager::getColor(const QString& name) const
 {
   if (colors().contains(name))
     return QColor(colors()[name].toString());
@@ -262,9 +253,9 @@ QColor Misc::ThemeManager::getColor(const QString &name) const
   return QColor(qRgb(0xff, 0x00, 0xff));
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Theme loading
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the current theme to the theme at the specified index.
@@ -282,22 +273,21 @@ void Misc::ThemeManager::setTheme(const int index)
     filteredIndex = 0;
 
   // Update the theme name
-  m_theme = filteredIndex;
+  m_theme     = filteredIndex;
   m_themeName = m_availableThemes.at(filteredIndex);
   m_settings.setValue("ApplicationTheme", filteredIndex);
 
   // Load theme (dark/light) automagically
-  if (m_themeName == QStringLiteral("System"))
-  {
+  if (m_themeName == QStringLiteral("System")) {
     loadSystemTheme();
     return;
   }
 
   // Load actual theme data
-  auto data = m_themes.value(m_themeName);
-  m_colors = jsonObjectToVariantMap(data.value("colors").toObject());
+  auto data      = m_themes.value(m_themeName);
+  m_colors       = jsonObjectToVariantMap(data.value("colors").toObject());
   m_widgetColors = extractWidgetColors(data.value("colors").toObject());
-  m_parameters = jsonObjectToVariantMap(data.value("parameters").toObject());
+  m_parameters   = jsonObjectToVariantMap(data.value("parameters").toObject());
 
   // Set application palette
   m_palette.setColor(QPalette::Mid, getColor("mid"));
@@ -325,23 +315,23 @@ void Misc::ThemeManager::setTheme(const int index)
 
   // Hint Qt about the effective color scheme and update user interface
   QMetaObject::invokeMethod(
-      this,
-      [this]() {
-        const auto bg = getColor(QStringLiteral("base"));
-        const auto fg = getColor(QStringLiteral("text"));
-        if (fg.lightness() > bg.lightness())
-          qApp->styleHints()->setColorScheme(Qt::ColorScheme::Dark);
-        else
-          qApp->styleHints()->setColorScheme(Qt::ColorScheme::Light);
+    this,
+    [this]() {
+      const auto bg = getColor(QStringLiteral("base"));
+      const auto fg = getColor(QStringLiteral("text"));
+      if (fg.lightness() > bg.lightness())
+        qApp->styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+      else
+        qApp->styleHints()->setColorScheme(Qt::ColorScheme::Light);
 
-        Q_EMIT themeChanged();
-      },
-      Qt::QueuedConnection);
+      Q_EMIT themeChanged();
+    },
+    Qt::QueuedConnection);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Automatic theme detection based on system theme
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Applies the system-resolved theme (Light or Dark) without changing
@@ -381,20 +371,19 @@ void Misc::ThemeManager::loadSystemTheme()
   const auto data = m_themes.value(resolved);
 
   // Set theme data
-  m_themeName = QStringLiteral("System");
-  m_theme = m_availableThemes.indexOf(m_themeName);
-  m_colors = jsonObjectToVariantMap(data.value("colors").toObject());
+  m_themeName    = QStringLiteral("System");
+  m_theme        = m_availableThemes.indexOf(m_themeName);
+  m_colors       = jsonObjectToVariantMap(data.value("colors").toObject());
   m_widgetColors = extractWidgetColors(data.value("colors").toObject());
-  m_parameters = jsonObjectToVariantMap(data.value("parameters").toObject());
+  m_parameters   = jsonObjectToVariantMap(data.value("parameters").toObject());
 
   // Update user interface
-  QMetaObject::invokeMethod(
-      this, [this]() { Q_EMIT themeChanged(); }, Qt::QueuedConnection);
+  QMetaObject::invokeMethod(this, [this]() { Q_EMIT themeChanged(); }, Qt::QueuedConnection);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // i18n utilities
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the localized names of available themes based on current UI
@@ -421,20 +410,17 @@ void Misc::ThemeManager::updateLocalizedThemeNames()
   m_availableThemeNames.clear();
   const auto lang = Translator::instance().language();
 
-  for (const auto &themeName : std::as_const(m_availableThemes))
-  {
-    if (themeName == QStringLiteral("System"))
-    {
+  for (const auto& themeName : std::as_const(m_availableThemes)) {
+    if (themeName == QStringLiteral("System")) {
       m_availableThemeNames.append(tr("System"));
       continue;
     }
 
-    const auto themeObj = m_themes.value(themeName);
+    const auto themeObj     = m_themes.value(themeName);
     const auto translations = themeObj.value("translations").toObject();
 
     QString localized;
-    switch (lang)
-    {
+    switch (lang) {
       case Translator::Spanish:
         localized = translations.value("es_MX").toString();
         break;
@@ -489,9 +475,9 @@ void Misc::ThemeManager::updateLocalizedThemeNames()
   Q_EMIT languageChanged();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Event filter for detecting OS theme changes
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Event filter to intercept application-wide events.
@@ -507,11 +493,10 @@ void Misc::ThemeManager::updateLocalizedThemeNames()
  * @return true if the event was handled and should not be processed further
  */
 
-bool Misc::ThemeManager::eventFilter(QObject *watched, QEvent *event)
+bool Misc::ThemeManager::eventFilter(QObject* watched, QEvent* event)
 {
   if (event->type() == QEvent::ApplicationPaletteChange
-      && m_themeName == QStringLiteral("System"))
-  {
+      && m_themeName == QStringLiteral("System")) {
     loadSystemTheme();
     return true;
   }

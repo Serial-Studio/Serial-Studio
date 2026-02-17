@@ -26,10 +26,7 @@
  *
  * @param parent Optional parent QObject.
  */
-DataModel::FrameConsumerWorkerBase::FrameConsumerWorkerBase(QObject *parent)
-  : QObject(parent)
-{
-}
+DataModel::FrameConsumerWorkerBase::FrameConsumerWorkerBase(QObject* parent) : QObject(parent) {}
 
 /**
  * @brief Destructor for the frame consumer worker base.

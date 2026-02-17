@@ -19,22 +19,19 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "IO/Manager.h"
 #include "IO/Drivers/Network.h"
 
+#include "IO/Manager.h"
 #include "Misc/Utilities.h"
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Constructor function
  */
-IO::Drivers::Network::Network()
-  : m_hostExists(false)
-  , m_udpMulticast(false)
-  , m_lookupActive(false)
+IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_lookupActive(false)
 {
   // Read settings
   // clang-format off
@@ -55,45 +52,49 @@ IO::Drivers::Network::Network()
   setSocketType(static_cast<QAbstractSocket::SocketType>(socketType));
 
   // Update connect button status when the configuration is changed
-  connect(this, &IO::Drivers::Network::addressChanged, this,
+  connect(
+    this, &IO::Drivers::Network::addressChanged, this, &IO::Drivers::Network::configurationChanged);
+  connect(this,
+          &IO::Drivers::Network::socketTypeChanged,
+          this,
           &IO::Drivers::Network::configurationChanged);
-  connect(this, &IO::Drivers::Network::socketTypeChanged, this,
-          &IO::Drivers::Network::configurationChanged);
-  connect(this, &IO::Drivers::Network::portChanged, this,
-          &IO::Drivers::Network::configurationChanged);
+  connect(
+    this, &IO::Drivers::Network::portChanged, this, &IO::Drivers::Network::configurationChanged);
 
   // Update open state when socket states change
-  connect(&m_tcpSocket, &QUdpSocket::stateChanged, this,
-          [=, this] { Q_EMIT configurationChanged(); });
-  connect(&m_udpSocket, &QUdpSocket::stateChanged, this,
-          [=, this] { Q_EMIT configurationChanged(); });
+  connect(
+    &m_tcpSocket, &QUdpSocket::stateChanged, this, [=, this] { Q_EMIT configurationChanged(); });
+  connect(
+    &m_udpSocket, &QUdpSocket::stateChanged, this, [=, this] { Q_EMIT configurationChanged(); });
 
   // Report socket errors
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-  connect(&m_tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
+  connect(&m_tcpSocket,
+          SIGNAL(error(QAbstractSocket::SocketError)),
+          this,
           SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
-  connect(&m_udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
+  connect(&m_udpSocket,
+          SIGNAL(error(QAbstractSocket::SocketError)),
+          this,
           SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
 #else
-  connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this,
-          &IO::Drivers::Network::onErrorOccurred);
-  connect(&m_udpSocket, &QUdpSocket::errorOccurred, this,
-          &IO::Drivers::Network::onErrorOccurred);
+  connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
+  connect(&m_udpSocket, &QUdpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
 #endif
 }
 
 /**
  * Returns the only instance of this class
  */
-IO::Drivers::Network &IO::Drivers::Network::instance()
+IO::Drivers::Network& IO::Drivers::Network::instance()
 {
   static Network singleton;
   return singleton;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // HAL driver implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Closes the current network connection and discards signals/slots with the
@@ -103,11 +104,9 @@ void IO::Drivers::Network::close()
 {
   // Disconnect signals/slots
   if (socketType() == QAbstractSocket::TcpSocket)
-    disconnect(&m_tcpSocket, &QTcpSocket::readyRead, this,
-               &IO::Drivers::Network::onReadyRead);
+    disconnect(&m_tcpSocket, &QTcpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
   else if (socketType() == QAbstractSocket::UdpSocket)
-    disconnect(&m_udpSocket, &QUdpSocket::readyRead, this,
-               &IO::Drivers::Network::onReadyRead);
+    disconnect(&m_udpSocket, &QUdpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
 
   // Abort network connections
   m_tcpSocket.abort();
@@ -123,24 +122,20 @@ void IO::Drivers::Network::close()
  */
 bool IO::Drivers::Network::isOpen() const noexcept
 {
-  bool open = false;
+  bool open  = false;
   auto state = QAbstractSocket::UnconnectedState;
 
-  if (socketType() == QAbstractSocket::UdpSocket)
-  {
-    open = m_udpSocket.isOpen();
+  if (socketType() == QAbstractSocket::UdpSocket) {
+    open  = m_udpSocket.isOpen();
     state = m_udpSocket.state();
   }
 
-  else if (socketType() == QAbstractSocket::TcpSocket)
-  {
-    open = m_tcpSocket.isOpen();
+  else if (socketType() == QAbstractSocket::TcpSocket) {
+    open  = m_tcpSocket.isOpen();
     state = m_tcpSocket.state();
   }
 
-  return open
-         && (state == QUdpSocket::ConnectedState
-             || state == QUdpSocket::BoundState);
+  return open && (state == QUdpSocket::ConnectedState || state == QUdpSocket::BoundState);
 }
 
 /**
@@ -186,10 +181,9 @@ bool IO::Drivers::Network::configurationOk() const noexcept
  * @return The number of bytes written on success, or `-1` if the socket is not
  *         writable.
  */
-quint64 IO::Drivers::Network::write(const QByteArray &data)
+quint64 IO::Drivers::Network::write(const QByteArray& data)
 {
-  if (isWritable())
-  {
+  if (isWritable()) {
     if (socketType() == QAbstractSocket::UdpSocket)
       return m_udpSocket.write(data);
     else if (socketType() == QAbstractSocket::TcpSocket)
@@ -220,38 +214,32 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
     hostAddr = defaultAddress();
 
   // Init socket pointer
-  QIODevice *socket = nullptr;
+  QIODevice* socket = nullptr;
 
   // TCP connection, assign socket pointer & connect to host
-  if (socketType() == QAbstractSocket::TcpSocket)
-  {
-    socket = static_cast<QIODevice *>(&m_tcpSocket);
+  if (socketType() == QAbstractSocket::TcpSocket) {
+    socket = static_cast<QIODevice*>(&m_tcpSocket);
     m_tcpSocket.connectToHost(hostAddr, tcpPort());
   }
 
   // UDP connection, assign socket pointer & bind to host
-  else if (socketType() == QAbstractSocket::UdpSocket)
-  {
+  else if (socketType() == QAbstractSocket::UdpSocket) {
     // Bind the UDP socket
-    m_udpSocket.bind(udpLocalPort(), QAbstractSocket::ShareAddress
-                                         | QAbstractSocket::ReuseAddressHint);
+    m_udpSocket.bind(udpLocalPort(),
+                     QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint);
 
     // Join the multicast group (if required)
     if (udpMulticast())
-      m_udpSocket.joinMulticastGroup(
-          QHostAddress(QHostAddress(m_address).toIPv6Address()));
+      m_udpSocket.joinMulticastGroup(QHostAddress(QHostAddress(m_address).toIPv6Address()));
 
     // Set socket pointer
-    socket = static_cast<QIODevice *>(&m_udpSocket);
+    socket = static_cast<QIODevice*>(&m_udpSocket);
   }
 
   // Open network socket
-  if (socket)
-  {
-    if (socket->open(mode))
-    {
-      connect(socket, &QIODevice::readyRead, this,
-              &IO::Drivers::Network::onReadyRead);
+  if (socket) {
+    if (socket->open(mode)) {
+      connect(socket, &QIODevice::readyRead, this, &IO::Drivers::Network::onReadyRead);
       return true;
     }
   }
@@ -261,9 +249,9 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
   return false;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Driver specifics
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Returns the TCP port number
@@ -312,8 +300,7 @@ bool IO::Drivers::Network::lookupActive() const
  */
 int IO::Drivers::Network::socketTypeIndex() const
 {
-  switch (socketType())
-  {
+  switch (socketType()) {
     case QAbstractSocket::TcpSocket:
       return 0;
       break;
@@ -329,7 +316,7 @@ int IO::Drivers::Network::socketTypeIndex() const
 /**
  * Returns the host address
  */
-const QString &IO::Drivers::Network::remoteAddress() const
+const QString& IO::Drivers::Network::remoteAddress() const
 {
   return m_address;
 }
@@ -407,11 +394,10 @@ void IO::Drivers::Network::setUdpRemotePort(const quint16 port)
 /**
  * Sets the IPv4 or IPv6 address specified by the input string representation
  */
-void IO::Drivers::Network::setRemoteAddress(const QString &address)
+void IO::Drivers::Network::setRemoteAddress(const QString& address)
 {
   // Check if host name exists
-  if (!address.isEmpty() && QHostAddress(address).isNull())
-  {
+  if (!address.isEmpty() && QHostAddress(address).isNull()) {
     m_hostExists = false;
     lookup(address);
   }
@@ -429,12 +415,11 @@ void IO::Drivers::Network::setRemoteAddress(const QString &address)
 /**
  * Performs a DNS lookup for the given @a host name
  */
-void IO::Drivers::Network::lookup(const QString &host)
+void IO::Drivers::Network::lookup(const QString& host)
 {
   m_lookupActive = true;
   Q_EMIT lookupActiveChanged();
-  QHostInfo::lookupHost(host.simplified(), this,
-                        &IO::Drivers::Network::lookupFinished);
+  QHostInfo::lookupHost(host.simplified(), this, &IO::Drivers::Network::lookupFinished);
 }
 
 /**
@@ -453,8 +438,7 @@ void IO::Drivers::Network::setUdpMulticast(const bool enabled)
  */
 void IO::Drivers::Network::setSocketTypeIndex(const int index)
 {
-  switch (index)
-  {
+  switch (index) {
     case 0:
       setTcpSocket();
       break;
@@ -486,10 +470,8 @@ void IO::Drivers::Network::setSocketType(const QAbstractSocket::SocketType type)
 void IO::Drivers::Network::onReadyRead()
 {
   // Check if we need to use UDP socket functions
-  if (socketType() == QAbstractSocket::UdpSocket)
-  {
-    while (udpSocket()->hasPendingDatagrams())
-    {
+  if (socketType() == QAbstractSocket::UdpSocket) {
+    while (udpSocket()->hasPendingDatagrams()) {
       const qint64 size = udpSocket()->pendingDatagramSize();
       m_udpBuffer.resize(size);
       udpSocket()->readDatagram(m_udpBuffer.data(), m_udpBuffer.size());
@@ -507,15 +489,13 @@ void IO::Drivers::Network::onReadyRead()
  * If the lookup fails, the error code/string shall be shown to the user in a
  * messagebox.
  */
-void IO::Drivers::Network::lookupFinished(const QHostInfo &info)
+void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
 {
   m_lookupActive = false;
 
-  if (info.error() == QHostInfo::NoError)
-  {
+  if (info.error() == QHostInfo::NoError) {
     auto addresses = info.addresses();
-    if (addresses.count() >= 1)
-    {
+    if (addresses.count() >= 1) {
       m_hostExists = true;
       Q_EMIT addressChanged();
       return;
@@ -529,8 +509,7 @@ void IO::Drivers::Network::lookupFinished(const QHostInfo &info)
  * This function is called whenever a socket error occurs, it disconnects the
  * socket from the host and displays the error in a message box.
  */
-void IO::Drivers::Network::onErrorOccurred(
-    const QAbstractSocket::SocketError socketError)
+void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
   QString error;
   if (socketType() == QAbstractSocket::TcpSocket)
@@ -541,6 +520,5 @@ void IO::Drivers::Network::onErrorOccurred(
     error = QString::number(socketError);
 
   Manager::instance().disconnectDevice();
-  Misc::Utilities::showMessageBox(tr("Network socket error"), error,
-                                  QMessageBox::Critical);
+  Misc::Utilities::showMessageBox(tr("Network socket error"), error, QMessageBox::Critical);
 }

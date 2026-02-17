@@ -21,9 +21,9 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Project definition and C++ standard
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Sets up the project name and C++ language standard requirements:
 # - Project name: Serial-Studio
@@ -34,7 +34,7 @@ cmake_minimum_required(VERSION 3.20)
 # Qt6 Core and Qml packages are found early to ensure correct CPack calls
 # when generating installers and packages later in the build process.
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 project(Serial-Studio LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
@@ -47,9 +47,9 @@ find_package(
    Qml
 )
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Build configuration options
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Available build options and their default values:
 #
@@ -73,7 +73,7 @@ find_package(
 #
 # Note: USE_SYSTEM_ZLIB or USE_SYSTEM_EXPAT auto-enables ENABLE_HARDENING
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 option(BUILD_GPL3              "Force GPLv3-only build"                 ON)
 option(DEBUG_SANITIZER         "Enable sanitizers for debug builds"    OFF)
@@ -84,9 +84,9 @@ option(BUILD_COMMERCIAL        "Enable commercial features"            OFF)
 option(USE_SYSTEM_ZLIB         "Use system-provided zlib"              OFF)
 option(USE_SYSTEM_EXPAT        "Use system-provided expat"             OFF)
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Commercial build credentials
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Commercial builds require valid API keys and license credentials:
 #
@@ -109,7 +109,7 @@ option(USE_SYSTEM_EXPAT        "Use system-provided expat"             OFF)
 #   - Environment variables: export SERIAL_STUDIO_LICENSE_KEY="..."
 #   - CMake flags: -DSERIAL_STUDIO_LICENSE_KEY="..."
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 set(ARCGIS_API_KEY
   $ENV{ARCGIS_API_KEY}
@@ -121,9 +121,9 @@ set(SERIAL_STUDIO_INSTANCE_ID
   $ENV{SERIAL_STUDIO_INSTANCE_ID}
   CACHE STRING "Instance ID for license validation")
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Project metadata and branding
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Configures project metadata used throughout the build system:
 #
@@ -153,7 +153,7 @@ set(SERIAL_STUDIO_INSTANCE_ID
 #
 # Note: Linux uses lowercase executable names following FHS conventions
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 set(PROJECT_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
 
@@ -186,9 +186,9 @@ set(PROJECT_APPCAST             "https://raw.githubusercontent.com/Serial-Studio
 set(PROJECT_DESCRIPTION_FILE    "${PROJECT_ROOT_DIR}/README.md")
 set(PROJECT_FILE_NAME           "${PROJECT_EXECUTABLE}-v${PROJECT_VERSION}")
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Expose project metadata to source code
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Makes project metadata available as preprocessor definitions in C++ code:
 #
@@ -204,7 +204,7 @@ set(PROJECT_FILE_NAME           "${PROJECT_EXECUTABLE}-v${PROJECT_VERSION}")
 #   const char *version = PROJECT_VERSION;
 #   const char *name = PROJECT_DISPNAME;
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 add_definitions(-DPROJECT_VENDOR="${PROJECT_VENDOR}")
 add_definitions(-DPROJECT_CONTACT="${PROJECT_CONTACT}")
@@ -213,9 +213,9 @@ add_definitions(-DPROJECT_APPCAST="${PROJECT_APPCAST}")
 add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 add_definitions(-DPROJECT_DESCRIPTION_SUMMARY="${PROJECT_DESCRIPTION_SUMMARY}")
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # License enforcement and validation
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Enforces dual-licensing model and validates commercial licenses:
 #
@@ -240,7 +240,7 @@ add_definitions(-DPROJECT_DESCRIPTION_SUMMARY="${PROJECT_DESCRIPTION_SUMMARY}")
 # API endpoint: https://api.lemonsqueezy.com/v1/licenses/validate
 # Documentation: https://docs.lemonsqueezy.com/api/license-keys
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if(BUILD_GPL3)
    if(BUILD_COMMERCIAL)
@@ -293,9 +293,9 @@ if(BUILD_COMMERCIAL)
     message(STATUS "License validation succeeded, building with commercial features")
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # System architecture detection
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Logs the target CPU architecture for debugging and optimization reference:
 #   - x86_64 / amd64: 64-bit Intel/AMD processors
@@ -305,13 +305,13 @@ endif()
 # This information is used later to select appropriate optimization flags
 # (e.g., -march=x86-64-v2, -march=armv8-a, SSE4.1, NEON)
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Linux toolchain configuration
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Configures archiver and ranlib paths for Linux builds:
 #
@@ -329,7 +329,7 @@ message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
 # Only applied to Linux (UNIX AND NOT APPLE) to avoid breaking macOS builds
 # which use different archiver tools (libtool, ar with different flags)
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if (UNIX AND NOT APPLE)
    set(CMAKE_C_COMPILER_AR "/usr/bin/ar")
@@ -338,9 +338,9 @@ if (UNIX AND NOT APPLE)
    set(CMAKE_CXX_COMPILER_RANLIB "/usr/bin/ranlib")
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Compiler warnings configuration
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Configures compiler warnings to catch potential bugs while avoiding noise:
 #
@@ -363,7 +363,7 @@ endif()
 #
 # Note: Third-party libraries in lib/ use -w to suppress all warnings
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if(MSVC)
   add_compile_options(
@@ -379,9 +379,9 @@ else()
   )
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Production optimization flags
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # High-performance compilation flags for release builds:
 #
@@ -418,7 +418,7 @@ endif()
 # Expected performance gain: 20-40% compared to -O2 without LTO
 # Build time impact: +50-100% due to LTO (can be disabled if needed)
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if(PRODUCTION_OPTIMIZATION)
    # Detect sandboxed build environments (Flathub) and enable hardening
@@ -605,9 +605,9 @@ else()
    message("Disabling production optimization flags...")
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Platform-specific SIMD instructions
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Enables SIMD (Single Instruction Multiple Data) optimizations for x86-64:
 #
@@ -630,16 +630,16 @@ endif()
 #   - ~20-30% performance boost for FFT calculations
 #   - ~10-15% improvement in signal processing pipelines
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if(NOT MSVC AND CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
   message(STATUS "Enabling SSE4.1 optimizations")
   add_compile_options(-msse4.1)
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Debug sanitizers (AddressSanitizer + UndefinedBehaviorSanitizer)
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Runtime error detection for debug builds:
 #
@@ -666,7 +666,7 @@ endif()
 # Note: Only supported on GCC/Clang. Not compatible with MSVC.
 # Not recommended for production builds due to performance overhead.
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if(DEBUG_SANITIZER)
    add_compile_options(
@@ -681,9 +681,9 @@ if(DEBUG_SANITIZER)
    )
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Profile-Guided Optimization (PGO)
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # PGO is a two-stage optimization process:
 #
@@ -700,7 +700,7 @@ endif()
 #   cmake --build . -j$(nproc)
 #
 # Expected performance gain: 10-20% for typical workloads
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 set(PGO_STAGE "GENERATE" CACHE STRING "PGO stage: GENERATE or USE")
 set(PGO_PROFILE_DIR "${CMAKE_BINARY_DIR}/pgo-profiles" CACHE STRING "Directory for PGO profile data")
@@ -815,9 +815,9 @@ if(ENABLE_PGO)
    endif()
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Security hardening flags
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Enables defense-in-depth security features for production builds:
 #
@@ -860,7 +860,7 @@ endif()
 #
 # Note: Some flags require optimization (-O1 or higher) to be effective
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if(ENABLE_HARDENING)
    message(STATUS "Enabling security hardening flags for production builds")
@@ -940,9 +940,9 @@ if(ENABLE_HARDENING)
    endif()
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Subdirectory build order
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Builds project components in dependency order:
 #
@@ -962,14 +962,14 @@ endif()
 #
 # Note: lib/ must be built first because app/ depends on its targets
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 add_subdirectory(lib)
 add_subdirectory(app)
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Build configuration summary
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Logs active compiler flags for debugging and verification:
 #
@@ -989,7 +989,7 @@ add_subdirectory(app)
 #
 # Check CMake output during configuration to see these flags
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 get_directory_property(SUBDIRECTORY_COMPILE_OPTIONS DIRECTORY lib COMPILE_OPTIONS)
 message(STATUS "LIB Compile Options: ${SUBDIRECTORY_COMPILE_OPTIONS}")

@@ -20,23 +20,22 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
+#include "UI/Widgets/Plot3D.h"
+
 #include <QCursor>
 
 #include "DSP.h"
-#include "UI/Dashboard.h"
-
-#include "Misc/TimerEvents.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
-
-#include "UI/Widgets/Plot3D.h"
+#include "Misc/TimerEvents.h"
+#include "UI/Dashboard.h"
 
 /**
  * @brief Constructs a Plot3D widget.
  * @param index The index of the Plot3D in the Dashboard.
  * @param parent The parent QQuickItem (optional).
  */
-Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
+Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   : QQuickPaintedItem(parent)
   , m_index(index)
   , m_minX(INT_MAX)
@@ -62,9 +61,9 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   , m_dirtyCameraIndicator(true)
 {
   // Read settings
-  m_anaglyph = m_settings.value("Plot3D_Anaglyph", false).toBool();
-  m_interpolate = m_settings.value("Plot3D_Interpolate", true).toBool();
-  m_eyeSeparation = m_settings.value("Plot3D_EyeSeparation", 0.069).toFloat();
+  m_anaglyph           = m_settings.value("Plot3D_Anaglyph", false).toBool();
+  m_interpolate        = m_settings.value("Plot3D_Interpolate", true).toBool();
+  m_eyeSeparation      = m_settings.value("Plot3D_EyeSeparation", 0.069).toFloat();
   m_invertEyePositions = m_settings.value("Plot3D_InvertEyes", false).toBool();
 
   // Configure QML item behavior
@@ -83,31 +82,27 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   setAntialiasing(false);
 
   // Update the plot data
-  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-          &Widgets::Plot3D::updateData);
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Widgets::Plot3D::updateData);
 
   // Mark everything as dirty when widget size changes
-  connect(this, &Widgets::Plot3D::widthChanged, this,
-          &Widgets::Plot3D::updateSize);
-  connect(this, &Widgets::Plot3D::heightChanged, this,
-          &Widgets::Plot3D::updateSize);
-  connect(this, &Widgets::Plot3D::scaleChanged, this,
-          &Widgets::Plot3D::updateSize);
+  connect(this, &Widgets::Plot3D::widthChanged, this, &Widgets::Plot3D::updateSize);
+  connect(this, &Widgets::Plot3D::heightChanged, this, &Widgets::Plot3D::updateSize);
+  connect(this, &Widgets::Plot3D::scaleChanged, this, &Widgets::Plot3D::updateSize);
 
   // Obtain group information
-  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot3D, m_index))
-  {
-    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this,
-            [=, this] {
-              if (isVisible() && dirty())
-                update();
-            });
+  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot3D, m_index)) {
+    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this, [=, this] {
+      if (isVisible() && dirty())
+        update();
+    });
   }
 
   // Connect to the theme manager to update the curve colors
   onThemeChanged();
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Widgets::Plot3D::onThemeChanged);
+  connect(&Misc::ThemeManager::instance(),
+          &Misc::ThemeManager::themeChanged,
+          this,
+          &Widgets::Plot3D::onThemeChanged);
 
   // Set zoom automatically
   connect(this, &Widgets::Plot3D::rangeChanged, this, [=, this] {
@@ -116,9 +111,9 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
   });
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Main rendering/painting code
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Renders the complete 3D plot scene, including optional anaglyph.
@@ -137,7 +132,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem *parent)
  *
  * @param painter The QPainter to render the scene onto.
  */
-void Widgets::Plot3D::paint(QPainter *painter)
+void Widgets::Plot3D::paint(QPainter* painter)
 {
   // Configure render hints
   painter->setBackground(m_outerBackgroundColor);
@@ -159,19 +154,17 @@ void Widgets::Plot3D::paint(QPainter *painter)
     drawBackground();
 
   // Generate list of images
-  QList<QImage *> images;
+  QList<QImage*> images;
   images.append(m_bgImg);
 
   // User is below axis/plane...draw plot first then grid
-  if (m_cameraAngleX <= 270 && m_cameraAngleX > 90.0)
-  {
+  if (m_cameraAngleX <= 270 && m_cameraAngleX > 90.0) {
     images.append(m_plotImg);
     images.append(m_gridImg);
   }
 
   // User is above axis/plane...draw grid first then plot
-  else
-  {
+  else {
     images.append(m_gridImg);
     images.append(m_plotImg);
   }
@@ -180,8 +173,7 @@ void Widgets::Plot3D::paint(QPainter *painter)
   images.append(m_cameraIndicatorImg);
 
   // Anaglyph processing
-  if (anaglyphEnabled())
-  {
+  if (anaglyphEnabled()) {
     // Initialize left eye pixmap
     QImage left(widgetSize(), QImage::Format_ARGB32_Premultiplied);
     left.setDevicePixelRatio(qApp->devicePixelRatio());
@@ -194,21 +186,19 @@ void Widgets::Plot3D::paint(QPainter *painter)
 
     // Compose the left eye scene
     QPainter leftScene(&left);
-    for (const auto *p : images)
+    for (const auto* p : images)
       leftScene.drawImage(0, 0, p[0]);
 
     // Compose the right eye scene
     QPainter rightScene(&right);
-    for (const auto *p : images)
+    for (const auto* p : images)
       rightScene.drawImage(0, 0, p[1]);
 
     // Build the anaglyph manually
     QImage finalImage(widgetSize(), QImage::Format_RGB32);
     finalImage.setDevicePixelRatio(qApp->devicePixelRatio());
-    for (int y = 0; y < left.height(); ++y)
-    {
-      for (int x = 0; x < left.width(); ++x)
-      {
+    for (int y = 0; y < left.height(); ++y) {
+      for (int x = 0; x < left.width(); ++x) {
         // Obtain pixels from both left and right image
         const auto lRgb = left.pixel(x, y);
         const auto rRgb = right.pixel(x, y);
@@ -226,16 +216,15 @@ void Widgets::Plot3D::paint(QPainter *painter)
   }
 
   // Standard processing
-  else
-  {
-    for (const auto *p : images)
+  else {
+    for (const auto* p : images)
       painter->drawImage(0, 0, p[0]);
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Member access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the current worldScale level of the 3D plot.
@@ -309,25 +298,23 @@ double Widgets::Plot3D::idealWorldScale() const
   const double dy = m_maxPoint.y() - m_minPoint.y();
   const double dz = m_maxPoint.z() - m_minPoint.z();
 
-  const double distance = qMax(1e-9, std::sqrt(dx * dx + dy * dy + dz * dz));
+  const double distance        = qMax(1e-9, std::sqrt(dx * dx + dy * dy + dz * dz));
   const double targetWorldSize = distance * 2.0;
-  const double targetStep = targetWorldSize / 10.0;
+  const double targetStep      = targetWorldSize / 10.0;
 
   const double estimatedScale = 1.0 / targetStep;
-  const int base = static_cast<int>(std::log(estimatedScale) / std::log(0.95));
+  const int base              = static_cast<int>(std::log(estimatedScale) / std::log(0.95));
 
   const int minIndex = base - 20;
   const int maxIndex = base + 20;
 
   double scale = 1e-9;
-  for (int i = minIndex; i <= maxIndex; ++i)
-  {
-    scale = std::pow(0.95, i);
-    const double step = gridStep(scale);
+  for (int i = minIndex; i <= maxIndex; ++i) {
+    scale                          = std::pow(0.95, i);
+    const double step              = gridStep(scale);
     const double totalVisibleWorld = 10.0 * step;
 
-    if (totalVisibleWorld >= targetWorldSize)
-    {
+    if (totalVisibleWorld >= targetWorldSize) {
       scale = qBound(1e-9, scale, 1e9);
       break;
     }
@@ -335,6 +322,7 @@ double Widgets::Plot3D::idealWorldScale() const
 
   return scale;
 }
+
 /**
  * @brief Checks if any part of the plot needs to be redrawn.
  *
@@ -418,14 +406,14 @@ bool Widgets::Plot3D::interpolationEnabled() const
  *
  * @return QSize representing the width and height in device pixels.
  */
-const QSize &Widgets::Plot3D::widgetSize() const
+const QSize& Widgets::Plot3D::widgetSize() const
 {
   return m_size;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Public slots
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the zoom level of the 3D plot.
@@ -437,8 +425,7 @@ const QSize &Widgets::Plot3D::widgetSize() const
 void Widgets::Plot3D::setWorldScale(const double z)
 {
   auto limited = qBound(idealWorldScale(), z, 10e9);
-  if (m_worldScale != limited)
-  {
+  if (m_worldScale != limited) {
     m_worldScale = limited;
     markDirty();
 
@@ -454,8 +441,7 @@ void Widgets::Plot3D::setWorldScale(const double z)
  */
 void Widgets::Plot3D::setCameraAngleX(const double angle)
 {
-  if (m_cameraAngleX != angle)
-  {
+  if (m_cameraAngleX != angle) {
     m_cameraAngleX = angle;
     markDirty();
 
@@ -471,8 +457,7 @@ void Widgets::Plot3D::setCameraAngleX(const double angle)
  */
 void Widgets::Plot3D::setCameraAngleY(const double angle)
 {
-  if (m_cameraAngleY != angle)
-  {
+  if (m_cameraAngleY != angle) {
     m_cameraAngleY = angle;
     markDirty();
 
@@ -488,8 +473,7 @@ void Widgets::Plot3D::setCameraAngleY(const double angle)
  */
 void Widgets::Plot3D::setCameraAngleZ(const double angle)
 {
-  if (m_cameraAngleZ != angle)
-  {
+  if (m_cameraAngleZ != angle) {
     m_cameraAngleZ = angle;
     markDirty();
 
@@ -503,8 +487,7 @@ void Widgets::Plot3D::setCameraAngleZ(const double angle)
  */
 void Widgets::Plot3D::setCameraOffsetX(const double offset)
 {
-  if (m_cameraOffsetX != offset)
-  {
+  if (m_cameraOffsetX != offset) {
     m_cameraOffsetX = offset;
     markDirty();
     Q_EMIT cameraChanged();
@@ -517,8 +500,7 @@ void Widgets::Plot3D::setCameraOffsetX(const double offset)
  */
 void Widgets::Plot3D::setCameraOffsetY(const double offset)
 {
-  if (m_cameraOffsetY != offset)
-  {
+  if (m_cameraOffsetY != offset) {
     m_cameraOffsetY = offset;
     markDirty();
     Q_EMIT cameraChanged();
@@ -531,8 +513,7 @@ void Widgets::Plot3D::setCameraOffsetY(const double offset)
  */
 void Widgets::Plot3D::setCameraOffsetZ(const double offset)
 {
-  if (m_cameraOffsetZ != offset)
-  {
+  if (m_cameraOffsetZ != offset) {
     m_cameraOffsetZ = offset;
     markDirty();
     Q_EMIT cameraChanged();
@@ -550,8 +531,7 @@ void Widgets::Plot3D::setCameraOffsetZ(const double offset)
  */
 void Widgets::Plot3D::setAnaglyphEnabled(const bool enabled)
 {
-  if (m_anaglyph != enabled)
-  {
+  if (m_anaglyph != enabled) {
     m_anaglyph = enabled;
     m_settings.setValue("Plot3D_Anaglyph", enabled);
 
@@ -574,8 +554,7 @@ void Widgets::Plot3D::setAnaglyphEnabled(const bool enabled)
  */
 void Widgets::Plot3D::setOrbitNavigation(const bool enabled)
 {
-  if (m_orbitNavigation != enabled)
-  {
+  if (m_orbitNavigation != enabled) {
     m_orbitNavigation = enabled;
     Q_EMIT orbitNavigationChanged();
   }
@@ -612,8 +591,7 @@ void Widgets::Plot3D::setEyeSeparation(const float separation)
  */
 void Widgets::Plot3D::setInvertEyePositions(const bool enabled)
 {
-  if (m_invertEyePositions != enabled)
-  {
+  if (m_invertEyePositions != enabled) {
     m_invertEyePositions = enabled;
     m_settings.setValue("Plot3D_InvertEyes", enabled);
     markDirty();
@@ -636,8 +614,7 @@ void Widgets::Plot3D::setInvertEyePositions(const bool enabled)
  */
 void Widgets::Plot3D::setInterpolationEnabled(const bool enabled)
 {
-  if (m_interpolate != enabled)
-  {
+  if (m_interpolate != enabled) {
     m_interpolate = enabled;
     m_settings.setValue("Plot3D_Interpolate", enabled);
     markDirty();
@@ -646,9 +623,9 @@ void Widgets::Plot3D::setInterpolationEnabled(const bool enabled)
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Private slots
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the 3D plot data and prepares it for rendering.
@@ -680,7 +657,7 @@ void Widgets::Plot3D::onThemeChanged()
 {
   // Obtain color for latest line data
   const auto color = SerialStudio::getDatasetColor(m_index + 1);
-  m_lineHeadColor = color;
+  m_lineHeadColor  = color;
 
   // Create gradient based on widget index
   QColor midCurve(m_lineHeadColor);
@@ -705,9 +682,9 @@ void Widgets::Plot3D::onThemeChanged()
   markDirty();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // High-level scene rendering code
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Marks all plot layers as dirty and requests a repaint.
@@ -718,9 +695,9 @@ void Widgets::Plot3D::onThemeChanged()
  */
 void Widgets::Plot3D::markDirty()
 {
-  m_dirtyGrid = true;
-  m_dirtyData = true;
-  m_dirtyBackground = true;
+  m_dirtyGrid            = true;
+  m_dirtyData            = true;
+  m_dirtyBackground      = true;
   m_dirtyCameraIndicator = true;
   update();
 }
@@ -735,8 +712,7 @@ void Widgets::Plot3D::markDirty()
 void Widgets::Plot3D::updateSize()
 {
   auto dpr = qApp->devicePixelRatio();
-  m_size = QSize(static_cast<int>(width() * dpr),
-                 static_cast<int>(height() * dpr));
+  m_size   = QSize(static_cast<int>(width() * dpr), static_cast<int>(height() * dpr));
 
   markDirty();
 }
@@ -751,14 +727,13 @@ void Widgets::Plot3D::updateSize()
 void Widgets::Plot3D::drawData()
 {
   // Obtain data from dashboard
-  const auto &data = UI::Dashboard::instance().plotData3D(m_index);
+  const auto& data = UI::Dashboard::instance().plotData3D(m_index);
   if (data.size() <= 0)
     return;
 
   // Get min/max values
   QVector3D min, max;
-  for (const auto &p : data)
-  {
+  for (const auto& p : data) {
     min.setX(qMin(m_minPoint.x(), p.x()));
     min.setY(qMin(m_minPoint.y(), p.y()));
     min.setZ(qMin(m_minPoint.z(), p.z()));
@@ -768,8 +743,7 @@ void Widgets::Plot3D::drawData()
   }
 
   // Min/max values changed
-  if (m_minPoint != min || m_maxPoint != max)
-  {
+  if (m_minPoint != min || m_maxPoint != max) {
     m_minPoint = min;
     m_maxPoint = max;
     Q_EMIT rangeChanged();
@@ -781,8 +755,7 @@ void Widgets::Plot3D::drawData()
   matrix.translate(m_cameraOffsetX, m_cameraOffsetY, m_cameraOffsetZ);
 
   // Render 3D pixmaps
-  if (anaglyphEnabled())
-  {
+  if (anaglyphEnabled()) {
     // Slightly rotate & shift view for each eye
     auto eyes = eyeTransformations(matrix);
 
@@ -804,8 +777,7 @@ void Widgets::Plot3D::drawData()
   }
 
   // Render single pixmap
-  else
-  {
+  else {
     // Apply world transformations
     matrix.rotate(m_cameraAngleX, 1, 0, 0);
     matrix.rotate(m_cameraAngleY, 0, 1, 0);
@@ -834,8 +806,7 @@ void Widgets::Plot3D::drawGrid()
   matrix.translate(m_cameraOffsetX, m_cameraOffsetY, m_cameraOffsetZ);
 
   // Render 3D pixmaps
-  if (anaglyphEnabled())
-  {
+  if (anaglyphEnabled()) {
     // Slightly rotate & shift view for each eye
     auto eyes = eyeTransformations(matrix);
 
@@ -857,8 +828,7 @@ void Widgets::Plot3D::drawGrid()
   }
 
   // Render 2D pixmap
-  else
-  {
+  else {
     // Apply world transformations
     matrix.rotate(m_cameraAngleX, 1, 0, 0);
     matrix.rotate(m_cameraAngleY, 0, 1, 0);
@@ -925,8 +895,7 @@ void Widgets::Plot3D::drawCameraIndicator()
   QMatrix4x4 matrix;
 
   // Render 3D pixmaps
-  if (anaglyphEnabled())
-  {
+  if (anaglyphEnabled()) {
     // Slightly rotate & shift view for each eye
     auto eyes = eyeTransformations(matrix);
 
@@ -946,8 +915,7 @@ void Widgets::Plot3D::drawCameraIndicator()
   }
 
   // Render 2D pixmap
-  else
-  {
+  else {
     matrix.rotate(m_cameraAngleX, 1, 0, 0);
     matrix.rotate(m_cameraAngleY, 0, 1, 0);
     matrix.rotate(m_cameraAngleZ, 0, 0, 1);
@@ -958,9 +926,9 @@ void Widgets::Plot3D::drawCameraIndicator()
   m_dirtyCameraIndicator = false;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Low-level 3D->2D projection code
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Computes a clean grid step based on current world scale.
@@ -982,9 +950,9 @@ double Widgets::Plot3D::gridStep(const double scale) const
   if (s == -1)
     s = m_worldScale;
 
-  const float rawStep = 1.0f / s;
+  const float rawStep  = 1.0f / s;
   const float exponent = std::floor(std::log10(rawStep));
-  const float base = std::pow(10.0f, exponent);
+  const float base     = std::pow(10.0f, exponent);
 
   if (rawStep >= base * 5)
     return base * 5;
@@ -1008,9 +976,8 @@ double Widgets::Plot3D::gridStep(const double scale) const
  * @param matrix The combined MVP matrix.
  * @return Vector of 2D QPointF in screen coordinates.
  */
-std::vector<QPointF>
-Widgets::Plot3D::screenProjection(const DSP::LineSeries3D &points,
-                                  const QMatrix4x4 &matrix)
+std::vector<QPointF> Widgets::Plot3D::screenProjection(const DSP::LineSeries3D& points,
+                                                       const QMatrix4x4& matrix)
 {
   std::vector<QPointF> projected;
   projected.reserve(points.size());
@@ -1018,8 +985,7 @@ Widgets::Plot3D::screenProjection(const DSP::LineSeries3D &points,
   const float halfW = width() * 0.5f;
   const float halfH = height() * 0.5f;
 
-  for (const QVector3D &p : points)
-  {
+  for (const QVector3D& p : points) {
     // Project the point
     QVector4D v = matrix * QVector4D(p, 1.0f);
 
@@ -1057,17 +1023,20 @@ Widgets::Plot3D::screenProjection(const DSP::LineSeries3D &points,
  * @param lineWidth The width of the rendered line in pixels.
  * @param style The pen style used for the rendered segments.
  */
-void Widgets::Plot3D::drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
-                                 const QVector3D &p1, const QVector3D &p2,
-                                 QColor color, float lineWidth,
+void Widgets::Plot3D::drawLine3D(QPainter& painter,
+                                 const QMatrix4x4& matrix,
+                                 const QVector3D& p1,
+                                 const QVector3D& p2,
+                                 QColor color,
+                                 float lineWidth,
                                  Qt::PenStyle style)
 {
   // Define number of segments per line
   constexpr int segmentCount = 40;
 
   // Calculate drawable area and center
-  const float w = width();
-  const float h = height();
+  const float w     = width();
+  const float h     = height();
   const float halfW = w * 0.5f;
   const float halfH = h * 0.5f;
   const QPointF center(halfW, halfH);
@@ -1075,15 +1044,14 @@ void Widgets::Plot3D::drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
 
   // Define screen region beyond which we skip segments
   const float screenRatio = 0.4f;
-  const float xLimit = w * screenRatio;
-  const float yLimit = h * screenRatio;
+  const float xLimit      = w * screenRatio;
+  const float yLimit      = h * screenRatio;
 
   // Subdivide and render the line with fading
-  for (int i = 0; i < segmentCount; ++i)
-  {
+  for (int i = 0; i < segmentCount; ++i) {
     // Interpolate points along the 3D line
-    float t1 = float(i) / segmentCount;
-    float t2 = float(i + 1) / segmentCount;
+    float t1    = float(i) / segmentCount;
+    float t2    = float(i + 1) / segmentCount;
     QVector3D a = (1.0f - t1) * p1 + t1 * p2;
     QVector3D b = (1.0f - t2) * p1 + t2 * p2;
 
@@ -1093,8 +1061,8 @@ void Widgets::Plot3D::drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
       continue;
 
     // Obtain start & end points
-    const QPointF &pA = projected[0];
-    const QPointF &pB = projected[1];
+    const QPointF& pA = projected[0];
+    const QPointF& pB = projected[1];
 
     // Discard segments far from center horizontally or vertically
     const bool exceedPAx = std::abs(pA.x() - halfW) > xLimit;
@@ -1106,7 +1074,7 @@ void Widgets::Plot3D::drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
 
     // Compute fade factor based on distance from center
     QPointF mid = 0.5f * (pA + pB);
-    float dist = QLineF(mid, center).length();
+    float dist  = QLineF(mid, center).length();
     float alpha = 1.0f - std::clamp(dist / maxDist, 0.0f, 1.0f);
 
     // Apply fade and draw the segment
@@ -1119,9 +1087,9 @@ void Widgets::Plot3D::drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Scene rendering code
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Renders the infinite grid overlay as a 2D pixmap.
@@ -1135,7 +1103,7 @@ void Widgets::Plot3D::drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
  * @param matrix The camera view-projection matrix used for 3D to 2D projection.
  * @return A QPixmap containing the rendered grid overlay.
  */
-QImage Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
+QImage Widgets::Plot3D::renderGrid(const QMatrix4x4& matrix)
 {
   // Create the image and initialize it to the widget's size
   QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
@@ -1148,18 +1116,17 @@ QImage Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
 
   // Obtain grid interval
   const double numSteps = 10;
-  const double step = gridStep();
-  const double l = numSteps * step;
+  const double step     = gridStep();
+  const double l        = numSteps * step;
 
   // Construct grid lines
   QVector<QPair<QVector3D, QVector3D>> gridLines;
-  for (int i = -numSteps; i <= numSteps; ++i)
-  {
+  for (int i = -numSteps; i <= numSteps; ++i) {
     if (i == 0)
       continue;
 
-    float y = i * step;
-    float x = i * step;
+    float y       = i * step;
+    float x       = i * step;
     const auto x1 = QVector3D(x, l, 0);
     const auto x2 = QVector3D(x, -l, 0);
     const auto y1 = QVector3D(l, y, 0);
@@ -1176,17 +1143,12 @@ QImage Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
   // Render horizontal & vertical lines
   auto color = m_gridMinorColor;
   color.setAlpha(100);
-  for (const auto &line : gridLines)
-  {
-    drawLine3D(painter, matrix, line.first, line.second, color, 1,
-               Qt::DashLine);
-  }
+  for (const auto& line : gridLines)
+    drawLine3D(painter, matrix, line.first, line.second, color, 1, Qt::DashLine);
 
   // Render axis lines
-  drawLine3D(painter, matrix, xAxis.first, xAxis.second, m_xAxisColor, 1.5,
-             Qt::SolidLine);
-  drawLine3D(painter, matrix, yAxis.first, yAxis.second, m_yAxisColor, 1.5,
-             Qt::SolidLine);
+  drawLine3D(painter, matrix, xAxis.first, xAxis.second, m_xAxisColor, 1.5, Qt::SolidLine);
+  drawLine3D(painter, matrix, yAxis.first, yAxis.second, m_yAxisColor, 1.5, Qt::SolidLine);
   // drawLine3D(painter, matrix, zAxis.first, zAxis.second, m_zAxisColor, 1.5,
   //            Qt::SolidLine);
 
@@ -1209,19 +1171,17 @@ QImage Widgets::Plot3D::renderGrid(const QMatrix4x4 &matrix)
  * @param matrix Transform matrix for projection.
  * @return Rendered camera indicator pixmap.
  */
-QImage Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
+QImage Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4& matrix)
 {
   // Define a structure to hold axis data
-  struct Axis
-  {
+  struct Axis {
     QVector3D dir;
     QColor color;
     QString label;
   };
 
   // Define a structure to hold transformed axis data
-  struct TransformedAxis
-  {
+  struct TransformedAxis {
     Axis axis;
     QVector4D transformed;
   };
@@ -1240,26 +1200,28 @@ QImage Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
   painter.setRenderHint(QPainter::Antialiasing, true);
 
   // Define widget constants & set origin to bottom left
-  const float lineScale = 18;
+  const float lineScale  = 18;
   const float axisLength = 2;
   const QPointF origin(50, 50);
 
   // Define axes names & colors
-  QVector<Axis> axes = {{{1, 0, 0}, m_xAxisColor, QStringLiteral("X")},
-                        {{0, 1, 0}, m_yAxisColor, QStringLiteral("Y")},
-                        {{0, 0, 1}, m_zAxisColor, QStringLiteral("Z")}};
+  QVector<Axis> axes = {
+    {{1, 0, 0}, m_xAxisColor, QStringLiteral("X")},
+    {{0, 1, 0}, m_yAxisColor, QStringLiteral("Y")},
+    {{0, 0, 1}, m_zAxisColor, QStringLiteral("Z")}
+  };
 
   // Apply projection transformations to the axes
   QVector<TransformedAxis> transformedAxes;
-  for (const auto &ax : axes)
-  {
+  for (const auto& ax : axes) {
     QVector4D t = matrix * QVector4D(ax.dir * axisLength, 1.0f);
     transformedAxes.append({ax, t});
   }
 
   // Sort axes so we avoid drawing items that should go back in the front
-  std::sort(transformedAxes.begin(), transformedAxes.end(),
-            [](const TransformedAxis &a, const TransformedAxis &b) {
+  std::sort(transformedAxes.begin(),
+            transformedAxes.end(),
+            [](const TransformedAxis& a, const TransformedAxis& b) {
               return a.transformed.z() < b.transformed.z();
             });
 
@@ -1268,15 +1230,14 @@ QImage Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
 
   // Calculate size of circles
   QFontMetrics fm(painter.font());
-  int textWidth = fm.horizontalAdvance("X");
-  int textHeight = fm.height();
+  int textWidth      = fm.horizontalAdvance("X");
+  int textHeight     = fm.height();
   float circleRadius = std::max(textWidth, textHeight) * 0.7f;
 
   // Draw widget
-  for (const auto &ta : transformedAxes)
-  {
+  for (const auto& ta : transformedAxes) {
     // Obtain en position of axis
-    const QVector4D &t = ta.transformed;
+    const QVector4D& t = ta.transformed;
     QPointF endpoint(origin.x() + (t.x() / t.w()) * lineScale,
                      origin.y() - (t.y() / t.w()) * lineScale);
 
@@ -1290,8 +1251,8 @@ QImage Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
     painter.drawEllipse(endpoint, circleRadius, circleRadius);
 
     // Find where to draw the text
-    QRectF textRect(endpoint.x() - circleRadius, endpoint.y() - circleRadius,
-                    circleRadius * 2, circleRadius * 2);
+    QRectF textRect(
+      endpoint.x() - circleRadius, endpoint.y() - circleRadius, circleRadius * 2, circleRadius * 2);
 
     // Draw axis label in circle
     painter.setPen(m_axisTextColor);
@@ -1312,8 +1273,7 @@ QImage Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4 &matrix)
  * @param data 3D plot points.
  * @return Rendered foreground pixmap.
  */
-QImage Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
-                                   const DSP::LineSeries3D &data)
+QImage Widgets::Plot3D::renderData(const QMatrix4x4& matrix, const DSP::LineSeries3D& data)
 {
   // Create the pixmap and initialize it to the widget's size
   QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
@@ -1328,13 +1288,11 @@ QImage Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
   auto points = screenProjection(data, matrix);
 
   // Interpolate points by generated a gradient line
-  if (m_interpolate)
-  {
-    const auto &endColor = m_lineHeadColor;
-    const auto &startColor = m_lineTailColor;
-    const auto numPoints = static_cast<qsizetype>(points.size());
-    for (qsizetype i = 1; i < numPoints; ++i)
-    {
+  if (m_interpolate) {
+    const auto& endColor   = m_lineHeadColor;
+    const auto& startColor = m_lineTailColor;
+    const auto numPoints   = static_cast<qsizetype>(points.size());
+    for (qsizetype i = 1; i < numPoints; ++i) {
       QColor c;
       double t = double(i) / numPoints;
       c.setRedF(startColor.redF() * (1 - t) + endColor.redF() * t);
@@ -1347,11 +1305,10 @@ QImage Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
   }
 
   // Draw individual points only
-  else
-  {
+  else {
     painter.setPen(Qt::NoPen);
     painter.setBrush(m_lineHeadColor);
-    for (const QPointF &pt : std::as_const(points))
+    for (const QPointF& pt : std::as_const(points))
       painter.drawEllipse(pt, 1, 1);
   }
 
@@ -1359,9 +1316,9 @@ QImage Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
   return img;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Stereoscopic rendering eye position calculations
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Calculates the left and right eye transformation matrices for 3D
@@ -1379,8 +1336,7 @@ QImage Widgets::Plot3D::renderData(const QMatrix4x4 &matrix,
  * @param staticView If true, disables zoom scaling for eye separation.
  * @return A QPair with the left and right eye matrices.
  */
-QPair<QMatrix4x4, QMatrix4x4>
-Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix)
+QPair<QMatrix4x4, QMatrix4x4> Widgets::Plot3D::eyeTransformations(const QMatrix4x4& matrix)
 {
   // Calculate horizontal eye separation
   float shift = m_eyeSeparation / (2.0f) * (m_invertEyePositions ? -1 : 1);
@@ -1404,9 +1360,9 @@ Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix)
   return qMakePair(lMatrix, rMatrix);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Event handling
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Handles mouse wheel events to worldScale in or out of the 3D plot.
@@ -1415,18 +1371,16 @@ Widgets::Plot3D::eyeTransformations(const QMatrix4x4 &matrix)
  * Applies smooth continuous zoom using the same approach as PlotWidget.
  * Normalizes scroll delta to fractional ticks for touchpad compatibility.
  */
-void Widgets::Plot3D::wheelEvent(QWheelEvent *event)
+void Widgets::Plot3D::wheelEvent(QWheelEvent* event)
 {
-  if (event->angleDelta().y() != 0)
-  {
+  if (event->angleDelta().y() != 0) {
     event->accept();
 
-    const bool isTouchpad
-        = !event->pixelDelta().isNull()
-          || event->source() == Qt::MouseEventSynthesizedBySystem;
+    const bool isTouchpad =
+      !event->pixelDelta().isNull() || event->source() == Qt::MouseEventSynthesizedBySystem;
     const double zoomFactor = isTouchpad ? 1.05 : 1.06;
-    const double delta = -event->angleDelta().y() / 120.0;
-    const double factor = qPow(zoomFactor, -delta);
+    const double delta      = -event->angleDelta().y() / 120.0;
+    const double factor     = qPow(zoomFactor, -delta);
 
     setWorldScale(worldScale() * factor);
   }
@@ -1443,15 +1397,14 @@ void Widgets::Plot3D::wheelEvent(QWheelEvent *event)
  *
  * @param event The mouse move event containing the current cursor position.
  */
-void Widgets::Plot3D::mouseMoveEvent(QMouseEvent *event)
+void Widgets::Plot3D::mouseMoveEvent(QMouseEvent* event)
 {
   // Calculate delta & update last postion
-  QPointF delta = event->pos() - m_lastMousePos;
+  QPointF delta  = event->pos() - m_lastMousePos;
   m_lastMousePos = event->pos();
 
   // Orbit mode
-  if (m_orbitNavigation)
-  {
+  if (m_orbitNavigation) {
     m_cameraOffsetX = m_orbitOffsetX;
     m_cameraOffsetY = m_orbitOffsetY;
     m_cameraAngleZ += delta.x() * 0.5;
@@ -1467,8 +1420,7 @@ void Widgets::Plot3D::mouseMoveEvent(QMouseEvent *event)
   }
 
   // Pan mode
-  else
-  {
+  else {
     m_cameraOffsetX += delta.x() * 0.01;
     m_cameraOffsetY -= delta.y() * 0.01;
   }
@@ -1485,22 +1437,20 @@ void Widgets::Plot3D::mouseMoveEvent(QMouseEvent *event)
  * @brief Handles mouse press events to start dragging and change cursor.
  * @param event The mouse press event containing the cursor position.
  */
-void Widgets::Plot3D::mousePressEvent(QMouseEvent *event)
+void Widgets::Plot3D::mousePressEvent(QMouseEvent* event)
 {
   m_lastMousePos = event->pos();
 
-  if (m_orbitNavigation)
-  {
+  if (m_orbitNavigation) {
     float offsetFactor = 0.25;
-    float biasX = ((m_lastMousePos.x() / width()) - 0.5f) * 2.0f;
-    float biasY = (0.5f - (m_lastMousePos.y() / height())) * 2.0f;
+    float biasX        = ((m_lastMousePos.x() / width()) - 0.5f) * 2.0f;
+    float biasY        = (0.5f - (m_lastMousePos.y() / height())) * 2.0f;
 
     m_orbitOffsetX = m_cameraOffsetX - biasX * offsetFactor;
     m_orbitOffsetY = m_cameraOffsetY - biasY * offsetFactor;
   }
 
-  else
-  {
+  else {
     m_orbitOffsetX = m_cameraOffsetX;
     m_orbitOffsetY = m_cameraOffsetY;
   }
@@ -1514,7 +1464,7 @@ void Widgets::Plot3D::mousePressEvent(QMouseEvent *event)
  * @brief Handles mouse release events to stop dragging and reset cursor.
  * @param event The mouse release event.
  */
-void Widgets::Plot3D::mouseReleaseEvent(QMouseEvent *event)
+void Widgets::Plot3D::mouseReleaseEvent(QMouseEvent* event)
 {
   unsetCursor();
   ungrabMouse();

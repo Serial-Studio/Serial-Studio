@@ -24,9 +24,8 @@
 #include <QDir>
 #include <QFileInfo>
 
-namespace
-{
-QString normalizedPath(const QString &path, bool allowNonexistent)
+namespace {
+QString normalizedPath(const QString& path, bool allowNonexistent)
 {
   QFileInfo info(path);
   if (info.exists())
@@ -37,7 +36,7 @@ QString normalizedPath(const QString &path, bool allowNonexistent)
 
   return QString();
 }
-} // namespace
+}  // namespace
 
 /**
  * @brief Validate a file path against the API allowlist, if configured.
@@ -49,16 +48,14 @@ QString normalizedPath(const QString &path, bool allowNonexistent)
  * @param allowNonexistent Allow non-existent paths (for save operations)
  * @return true if the path is allowed
  */
-bool API::isPathAllowed(const QString &filePath, const bool allowNonexistent)
+bool API::isPathAllowed(const QString& filePath, const bool allowNonexistent)
 {
   // Create a list of allowed paths
   QStringList roots;
 
   // Extract data from environment variables
-  if (qEnvironmentVariableIsSet("SERIAL_STUDIO_API_ALLOWED_PATHS"))
-  {
-    const QString envValue
-        = QString::fromLocal8Bit(qgetenv("SERIAL_STUDIO_API_ALLOWED_PATHS"));
+  if (qEnvironmentVariableIsSet("SERIAL_STUDIO_API_ALLOWED_PATHS")) {
+    const QString envValue = QString::fromLocal8Bit(qgetenv("SERIAL_STUDIO_API_ALLOWED_PATHS"));
     if (envValue.trimmed().isEmpty())
       return false;
 
@@ -75,8 +72,7 @@ bool API::isPathAllowed(const QString &filePath, const bool allowNonexistent)
     return false;
 
   // Verify if path is inside allowed paths
-  for (const auto &root : std::as_const(roots))
-  {
+  for (const auto& root : std::as_const(roots)) {
     // Get clean path for allowed paths
     const QString rootPath = normalizedPath(root.trimmed(), true);
     if (rootPath.isEmpty())

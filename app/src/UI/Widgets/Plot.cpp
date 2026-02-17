@@ -19,16 +19,17 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "UI/Widgets/Plot.h"
+
 #include "DSP.h"
 #include "UI/Dashboard.h"
-#include "UI/Widgets/Plot.h"
 
 /**
  * @brief Constructs a Plot widget.
  * @param index The index of the plot in the Dashboard.
  * @param parent The parent QQuickItem (optional).
  */
-Widgets::Plot::Plot(const int index, QQuickItem *parent)
+Widgets::Plot::Plot(const int index, QQuickItem* parent)
   : QQuickItem(parent)
   , m_index(index)
   , m_dataW(0)
@@ -39,35 +40,31 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
   , m_maxY(0)
   , m_monotonicData(true)
 {
-  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
-  {
-    const auto &yDataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
+  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
+    const auto& yDataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
 
     m_minY = qMin(yDataset.pltMin, yDataset.pltMax);
     m_maxY = qMax(yDataset.pltMin, yDataset.pltMax);
 
     const auto xAxisId = SerialStudio::activated() ? yDataset.xAxisId : 0;
-    if (UI::Dashboard::instance().datasets().contains(xAxisId))
-    {
-      m_monotonicData = false;
-      const auto &xDataset = UI::Dashboard::instance().datasets()[xAxisId];
-      m_xLabel = xDataset.title;
+    if (UI::Dashboard::instance().datasets().contains(xAxisId)) {
+      m_monotonicData      = false;
+      const auto& xDataset = UI::Dashboard::instance().datasets()[xAxisId];
+      m_xLabel             = xDataset.title;
       if (!xDataset.units.isEmpty())
         m_xLabel += " (" + xDataset.units + ")";
     }
 
-    else
-    {
+    else {
       m_monotonicData = true;
-      m_xLabel = tr("Samples");
+      m_xLabel        = tr("Samples");
     }
 
     m_yLabel = yDataset.title;
     if (!yDataset.units.isEmpty())
       m_yLabel += " (" + yDataset.units + ")";
 
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this,
-            &Plot::updateRange);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this, &Plot::updateRange);
 
     calculateAutoScaleRange();
     updateRange();
@@ -141,7 +138,7 @@ bool Widgets::Plot::running() const
  * @brief Returns the Y-axis label.
  * @return The Y-axis label.
  */
-const QString &Widgets::Plot::yLabel() const
+const QString& Widgets::Plot::yLabel() const
 {
   return m_yLabel;
 }
@@ -150,7 +147,7 @@ const QString &Widgets::Plot::yLabel() const
  * @brief Returns the X-axis label.
  * @return The X-axis label.
  */
-const QString &Widgets::Plot::xLabel() const
+const QString& Widgets::Plot::xLabel() const
 {
   return m_xLabel;
 }
@@ -159,10 +156,9 @@ const QString &Widgets::Plot::xLabel() const
  * @brief Draws the data on the given QLineSeries.
  * @param series The QLineSeries to draw the data on.
  */
-void Widgets::Plot::draw(QXYSeries *series)
+void Widgets::Plot::draw(QXYSeries* series)
 {
-  if (series)
-  {
+  if (series) {
     updateData();
     series->replace(m_data);
     calculateAutoScaleRange();
@@ -176,8 +172,7 @@ void Widgets::Plot::draw(QXYSeries *series)
  */
 void Widgets::Plot::setDataW(const int width)
 {
-  if (m_dataW != width)
-  {
+  if (m_dataW != width) {
     m_dataW = width;
     updateData();
 
@@ -191,8 +186,7 @@ void Widgets::Plot::setDataW(const int width)
  */
 void Widgets::Plot::setDataH(const int height)
 {
-  if (m_dataH != height)
-  {
+  if (m_dataH != height) {
     m_dataH = height;
     updateData();
 
@@ -223,21 +217,19 @@ void Widgets::Plot::updateData()
     return;
 
   // Only obtain data if widget data is still valid
-  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
-  {
+  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
     // Obtain plot data
-    const auto &plotData = UI::Dashboard::instance().plotData(m_index);
+    const auto& plotData = UI::Dashboard::instance().plotData(m_index);
 
     // Downsample data that only has one Y point per X point
     if (m_monotonicData)
       (void)DSP::downsampleMonotonic(plotData, m_dataW, m_dataH, m_data, &ws);
 
     // Draw directly on complex plots (such as Lorenz Attractor)
-    else
-    {
+    else {
       // Get X/Y axis
-      const auto &X = *plotData.x;
-      const auto &Y = *plotData.y;
+      const auto& X = *plotData.x;
+      const auto& Y = *plotData.y;
 
       // Resize series array if needed
       const qsizetype count = std::min(X.size(), Y.size());
@@ -245,9 +237,9 @@ void Widgets::Plot::updateData()
         m_data.resize(count);
 
       // Obtain raw pointers
-      QPointF *out = m_data.data();
-      const auto *xData = X.raw();
-      const auto *yData = Y.raw();
+      QPointF* out      = m_data.data();
+      const auto* xData = X.raw();
+      const auto* yData = Y.raw();
 
       // Get queue states for faster iteration
       std::size_t xIdx = X.frontIndex();
@@ -256,10 +248,8 @@ void Widgets::Plot::updateData()
       // Update plot data points, avoid queue operations overhead
       const auto xCapacity = X.capacity();
       const auto yCapacity = Y.capacity();
-      if (xCapacity > 0 && yCapacity > 0)
-      {
-        for (qsizetype i = 0; i < count; ++i)
-        {
+      if (xCapacity > 0 && yCapacity > 0) {
+        for (qsizetype i = 0; i < count; ++i) {
           out[i].setX(xData[xIdx]);
           out[i].setY(yData[yIdx]);
           xIdx = (xIdx + 1) % xCapacity;
@@ -276,18 +266,15 @@ void Widgets::Plot::updateData()
 void Widgets::Plot::updateRange()
 {
   // Obtain dataset information
-  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
-  {
-    const auto &yD = GET_DATASET(SerialStudio::DashboardPlot, m_index);
-    if (yD.xAxisId > 0)
-    {
-      const auto &xD = UI::Dashboard::instance().datasets()[yD.xAxisId];
-      m_minX = xD.pltMin;
-      m_maxX = xD.pltMax;
+  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
+    const auto& yD = GET_DATASET(SerialStudio::DashboardPlot, m_index);
+    if (yD.xAxisId > 0) {
+      const auto& xD = UI::Dashboard::instance().datasets()[yD.xAxisId];
+      m_minX         = xD.pltMin;
+      m_maxX         = xD.pltMax;
     }
 
-    else
-    {
+    else {
       m_minX = 0;
       m_maxX = UI::Dashboard::instance().points();
     }
@@ -320,30 +307,25 @@ void Widgets::Plot::calculateAutoScaleRange()
   bool yChanged = false;
 
   // Obtain scale range for Y-axis
-  const auto &dy = GET_DATASET(SerialStudio::DashboardPlot, m_index);
-  yChanged = computeMinMaxValues(m_minY, m_maxY, dy, true,
-                                 [](const QPointF &p) { return p.y(); });
+  const auto& dy = GET_DATASET(SerialStudio::DashboardPlot, m_index);
+  yChanged = computeMinMaxValues(m_minY, m_maxY, dy, true, [](const QPointF& p) { return p.y(); });
 
   // Obtain range scale for X-axis
-  if (SerialStudio::activated())
-  {
-    if (UI::Dashboard::instance().datasets().contains(dy.xAxisId))
-    {
-      const auto &dx = UI::Dashboard::instance().datasets()[dy.xAxisId];
-      xChanged = computeMinMaxValues(m_minX, m_maxX, dx, false,
-                                     [](const QPointF &p) { return p.x(); });
+  if (SerialStudio::activated()) {
+    if (UI::Dashboard::instance().datasets().contains(dy.xAxisId)) {
+      const auto& dx = UI::Dashboard::instance().datasets()[dy.xAxisId];
+      xChanged =
+        computeMinMaxValues(m_minX, m_maxX, dx, false, [](const QPointF& p) { return p.x(); });
     }
   }
 
   // X-axis data source set to samples, use [0, points] as range
-  else
-  {
+  else {
     const auto points = UI::Dashboard::instance().points();
 
-    if (m_minX != 0 || m_maxX != points)
-    {
-      m_minX = 0;
-      m_maxX = points;
+    if (m_minX != 0 || m_maxX != points) {
+      m_minX   = 0;
+      m_maxX   = points;
       xChanged = true;
     }
   }
@@ -377,79 +359,69 @@ void Widgets::Plot::calculateAutoScaleRange()
  * adjusted to provide a better display.
  */
 template<typename Extractor>
-bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
-                                        const DataModel::Dataset &dataset,
+bool Widgets::Plot::computeMinMaxValues(double& min,
+                                        double& max,
+                                        const DataModel::Dataset& dataset,
                                         const bool addPadding,
                                         Extractor extractor)
 {
   // Store previous values
-  bool ok = true;
+  bool ok             = true;
   const auto prevMinY = min;
   const auto prevMaxY = max;
 
   // If the data is empty, set the range to 0-1
-  if (m_data.isEmpty())
-  {
+  if (m_data.isEmpty()) {
     min = 0;
     max = 1;
   }
 
   // Obtain min/max values from datasets
-  else
-  {
+  else {
     ok &= DSP::notEqual(dataset.pltMin, dataset.pltMax);
-    if (ok)
-    {
+    if (ok) {
       min = qMin(dataset.pltMin, dataset.pltMax);
       max = qMax(dataset.pltMin, dataset.pltMax);
     }
   }
 
   // Set the min and max to the lowest and highest values
-  if (!ok)
-  {
+  if (!ok) {
     // Get minimum and maximum values from data
     min = std::numeric_limits<double>::max();
     max = std::numeric_limits<double>::lowest();
 
     // Loop through the plot data and update the min and max
-    for (auto i = 0; i < m_data.size(); ++i)
-    {
+    for (auto i = 0; i < m_data.size(); ++i) {
       const double value = extractor(m_data[i]);
-      if (std::isfinite(value))
-      {
+      if (std::isfinite(value)) {
         min = qMin(min, value);
         max = qMax(max, value);
       }
     }
 
     // If no finite values found, use default range
-    if (!std::isfinite(min) || !std::isfinite(max))
-    {
+    if (!std::isfinite(min) || !std::isfinite(max)) {
       min = 0;
       max = 1;
     }
 
     // If min and max are the same, adjust the range
-    else if (DSP::almostEqual(min, max))
-    {
-      if (DSP::isZero(min))
-      {
+    else if (DSP::almostEqual(min, max)) {
+      if (DSP::isZero(min)) {
         min = -1;
         max = 1;
       }
 
-      else
-      {
+      else {
         double absValue = qAbs(min);
-        min = min - absValue * 0.1;
-        max = max + absValue * 0.1;
+        min             = min - absValue * 0.1;
+        max             = max + absValue * 0.1;
       }
     }
 
     // If the min and max are not the same, set the range to 10% more
-    else if (addPadding)
-    {
+    else if (addPadding) {
       double range = max - min;
       min -= range * 0.1;
       max += range * 0.1;
@@ -458,8 +430,7 @@ bool Widgets::Plot::computeMinMaxValues(double &min, double &max,
     // Round to integer numbers
     max = std::ceil(max);
     min = std::floor(min);
-    if (DSP::almostEqual(max, min) && addPadding)
-    {
+    if (DSP::almostEqual(max, min) && addPadding) {
       min -= 1;
       max += 1;
     }

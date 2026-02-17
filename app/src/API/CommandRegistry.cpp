@@ -25,7 +25,7 @@
  * @brief Gets the singleton instance of the CommandRegistry
  * @return Reference to the singleton instance
  */
-API::CommandRegistry &API::CommandRegistry::instance()
+API::CommandRegistry& API::CommandRegistry::instance()
 {
   static CommandRegistry singleton;
   return singleton;
@@ -37,14 +37,14 @@ API::CommandRegistry &API::CommandRegistry::instance()
  * @param description Human-readable description of what the command does
  * @param handler Function to call when the command is executed
  */
-void API::CommandRegistry::registerCommand(const QString &name,
-                                           const QString &description,
+void API::CommandRegistry::registerCommand(const QString& name,
+                                           const QString& description,
                                            CommandFunction handler)
 {
   CommandDefinition def;
-  def.name = name;
+  def.name        = name;
   def.description = description;
-  def.handler = std::move(handler);
+  def.handler     = std::move(handler);
   m_commands.insert(name, def);
 }
 
@@ -53,7 +53,7 @@ void API::CommandRegistry::registerCommand(const QString &name,
  * @param name Command name to look up
  * @return true if the command exists in the registry
  */
-bool API::CommandRegistry::hasCommand(const QString &name) const
+bool API::CommandRegistry::hasCommand(const QString& name) const
 {
   return m_commands.contains(name);
 }
@@ -65,26 +65,20 @@ bool API::CommandRegistry::hasCommand(const QString &name) const
  * @param params JSON parameters to pass to the command handler
  * @return CommandResponse containing success/failure and any result data
  */
-API::CommandResponse API::CommandRegistry::execute(const QString &name,
-                                                   const QString &id,
-                                                   const QJsonObject &params)
+API::CommandResponse API::CommandRegistry::execute(const QString& name,
+                                                   const QString& id,
+                                                   const QJsonObject& params)
 {
-  if (!hasCommand(name))
-  {
+  if (!hasCommand(name)) {
     return CommandResponse::makeError(
-        id, ErrorCode::UnknownCommand,
-        QStringLiteral("Unknown command: %1").arg(name));
+      id, ErrorCode::UnknownCommand, QStringLiteral("Unknown command: %1").arg(name));
   }
 
-  try
-  {
+  try {
     return m_commands[name].handler(id, params);
-  }
-  catch (const std::exception &e)
-  {
+  } catch (const std::exception& e) {
     return CommandResponse::makeError(
-        id, ErrorCode::ExecutionError,
-        QStringLiteral("Command execution failed: %1").arg(e.what()));
+      id, ErrorCode::ExecutionError, QStringLiteral("Command execution failed: %1").arg(e.what()));
   }
 }
 
@@ -103,8 +97,7 @@ QStringList API::CommandRegistry::availableCommands() const
  * @brief Get direct access to all command definitions
  * @return Const reference to the internal command map
  */
-const QMap<QString, API::CommandDefinition> &
-API::CommandRegistry::commands() const
+const QMap<QString, API::CommandDefinition>& API::CommandRegistry::commands() const
 {
   return m_commands;
 }

@@ -20,6 +20,7 @@
  */
 
 #include "API/Handlers/CSVExportHandler.h"
+
 #include "API/CommandRegistry.h"
 #include "CSV/Export.h"
 
@@ -28,36 +29,31 @@
  */
 void API::Handlers::CSVExportHandler::registerCommands()
 {
-  auto &registry = CommandRegistry::instance();
+  auto& registry = CommandRegistry::instance();
 
   // Mutation commands
-  registry.registerCommand(
-      QStringLiteral("csv.export.setEnabled"),
-      QStringLiteral("Enable or disable CSV export (params: enabled)"),
-      &setEnabled);
+  registry.registerCommand(QStringLiteral("csv.export.setEnabled"),
+                           QStringLiteral("Enable or disable CSV export (params: enabled)"),
+                           &setEnabled);
 
-  registry.registerCommand(QStringLiteral("csv.export.close"),
-                           QStringLiteral("Close the current CSV file"),
-                           &close);
+  registry.registerCommand(
+    QStringLiteral("csv.export.close"), QStringLiteral("Close the current CSV file"), &close);
 
   // Query commands
-  registry.registerCommand(QStringLiteral("csv.export.getStatus"),
-                           QStringLiteral("Get CSV export status"), &getStatus);
+  registry.registerCommand(
+    QStringLiteral("csv.export.getStatus"), QStringLiteral("Get CSV export status"), &getStatus);
 }
 
 /**
  * @brief Enable or disable CSV export
  * @param params Requires "enabled" (bool)
  */
-API::CommandResponse
-API::Handlers::CSVExportHandler::setEnabled(const QString &id,
-                                            const QJsonObject &params)
+API::CommandResponse API::Handlers::CSVExportHandler::setEnabled(const QString& id,
+                                                                 const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled")))
-  {
+  if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
-        id, ErrorCode::MissingParam,
-        QStringLiteral("Missing required parameter: enabled"));
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
   }
 
   const bool enabled = params.value(QStringLiteral("enabled")).toBool();
@@ -71,9 +67,8 @@ API::Handlers::CSVExportHandler::setEnabled(const QString &id,
 /**
  * @brief Close the current CSV file
  */
-API::CommandResponse
-API::Handlers::CSVExportHandler::close(const QString &id,
-                                       const QJsonObject &params)
+API::CommandResponse API::Handlers::CSVExportHandler::close(const QString& id,
+                                                            const QJsonObject& params)
 {
   Q_UNUSED(params)
 
@@ -87,17 +82,16 @@ API::Handlers::CSVExportHandler::close(const QString &id,
 /**
  * @brief Get CSV export status
  */
-API::CommandResponse
-API::Handlers::CSVExportHandler::getStatus(const QString &id,
-                                           const QJsonObject &params)
+API::CommandResponse API::Handlers::CSVExportHandler::getStatus(const QString& id,
+                                                                const QJsonObject& params)
 {
   Q_UNUSED(params)
 
-  auto &csvExport = CSV::Export::instance();
+  auto& csvExport = CSV::Export::instance();
 
   QJsonObject result;
   result[QStringLiteral("enabled")] = csvExport.exportEnabled();
-  result[QStringLiteral("isOpen")] = csvExport.isOpen();
+  result[QStringLiteral("isOpen")]  = csvExport.isOpen();
 
   return CommandResponse::makeSuccess(id, result);
 }

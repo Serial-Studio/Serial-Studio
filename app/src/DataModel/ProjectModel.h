@@ -21,16 +21,15 @@
 
 #pragma once
 
-#include <QObject>
-#include <QJsonObject>
-#include <QStandardItemModel>
 #include <QItemSelectionModel>
+#include <QJsonObject>
+#include <QObject>
+#include <QStandardItemModel>
 
 #include "DataModel/Frame.h"
 #include "SerialStudio.h"
 
-namespace DataModel
-{
+namespace DataModel {
 class CustomModel;
 
 /**
@@ -61,8 +60,7 @@ class CustomModel;
  * the tree view for project navigation and data parsing mechanisms for frame
  * analysis.
  */
-class ProjectModel : public QObject
-{
+class ProjectModel : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool modified
@@ -149,20 +147,19 @@ signals:
 
 private:
   explicit ProjectModel();
-  ProjectModel(ProjectModel &&) = delete;
-  ProjectModel(const ProjectModel &) = delete;
-  ProjectModel &operator=(ProjectModel &&) = delete;
-  ProjectModel &operator=(const ProjectModel &) = delete;
+  ProjectModel(ProjectModel&&)                 = delete;
+  ProjectModel(const ProjectModel&)            = delete;
+  ProjectModel& operator=(ProjectModel&&)      = delete;
+  ProjectModel& operator=(const ProjectModel&) = delete;
 
 public:
-  static ProjectModel &instance();
+  static ProjectModel& instance();
 
   /**
    * @brief Enum representing the different views available in the project
    *        editor.
    */
-  enum CurrentView
-  {
+  enum CurrentView {
     ProjectView,
     GroupView,
     DatasetView,
@@ -175,8 +172,7 @@ public:
    * @brief Enum representing the different types of editor widgets available
    *        for editing parameters.
    */
-  enum EditorWidget
-  {
+  enum EditorWidget {
     TextField,
     HexTextField,
     IntField,
@@ -192,23 +188,22 @@ public:
    * @brief Enum representing custom roles used in the tree view for data
    *        access.
    */
-  enum CustomRoles
-  {
+  enum CustomRoles {
     Active = Qt::UserRole,
 
-    TreeViewIcon = Qt::UserRole + 1,
-    TreeViewText = Qt::UserRole + 2,
-    TreeViewExpanded = Qt::UserRole + 3,
+    TreeViewIcon       = Qt::UserRole + 1,
+    TreeViewText       = Qt::UserRole + 2,
+    TreeViewExpanded   = Qt::UserRole + 3,
     TreeViewFrameIndex = Qt::UserRole + 4,
 
-    ParameterName = Qt::UserRole + 5,
-    EditableValue = Qt::UserRole + 6,
-    ParameterType = Qt::UserRole + 7,
-    PlaceholderValue = Qt::UserRole + 8,
+    ParameterName        = Qt::UserRole + 5,
+    EditableValue        = Qt::UserRole + 6,
+    ParameterType        = Qt::UserRole + 7,
+    PlaceholderValue     = Qt::UserRole + 8,
     ParameterDescription = Qt::UserRole + 9,
-    ParameterIcon = Qt::UserRole + 10,
+    ParameterIcon        = Qt::UserRole + 10,
 
-    WidgetType = Qt::UserRole + 11,
+    WidgetType   = Qt::UserRole + 11,
     ComboBoxData = Qt::UserRole + 12,
   };
   Q_ENUM(CustomRoles)
@@ -227,16 +222,16 @@ public:
   [[nodiscard]] QStringList xDataSources() const;
 
   [[nodiscard]] const QString actionIcon() const;
-  [[nodiscard]] const QStringList &availableActionIcons() const;
+  [[nodiscard]] const QStringList& availableActionIcons() const;
 
-  [[nodiscard]] const QString &title() const;
-  [[nodiscard]] const QString &jsonFilePath() const;
-  [[nodiscard]] const QString &frameParserCode() const;
+  [[nodiscard]] const QString& title() const;
+  [[nodiscard]] const QString& jsonFilePath() const;
+  [[nodiscard]] const QString& frameParserCode() const;
 
   [[nodiscard]] bool suppressMessageBoxes() const;
 
   [[nodiscard]] int activeGroupId() const;
-  [[nodiscard]] const QJsonObject &dashboardLayout() const;
+  [[nodiscard]] const QJsonObject& dashboardLayout() const;
 
   [[nodiscard]] bool currentGroupIsEditable() const;
   [[nodiscard]] bool currentDatasetIsEditable() const;
@@ -245,15 +240,15 @@ public:
   [[nodiscard]] int groupCount() const;
   [[nodiscard]] int datasetCount() const;
   [[nodiscard]] quint8 datasetOptions() const;
-  [[nodiscard]] const std::vector<Group> &groups() const;
+  [[nodiscard]] const std::vector<Group>& groups() const;
 
-  [[nodiscard]] CustomModel *treeModel() const;
-  [[nodiscard]] QItemSelectionModel *selectionModel() const;
+  [[nodiscard]] CustomModel* treeModel() const;
+  [[nodiscard]] QItemSelectionModel* selectionModel() const;
 
-  [[nodiscard]] CustomModel *groupModel() const;
-  [[nodiscard]] CustomModel *actionModel() const;
-  [[nodiscard]] CustomModel *projectModel() const;
-  [[nodiscard]] CustomModel *datasetModel() const;
+  [[nodiscard]] CustomModel* groupModel() const;
+  [[nodiscard]] CustomModel* actionModel() const;
+  [[nodiscard]] CustomModel* projectModel() const;
+  [[nodiscard]] CustomModel* datasetModel() const;
 
   Q_INVOKABLE bool askSave();
   Q_INVOKABLE bool saveJsonFile(const bool askPath = false);
@@ -265,14 +260,14 @@ public slots:
 
   void newJsonFile();
   void openJsonFile();
-  void openJsonFile(const QString &path);
+  void openJsonFile(const QString& path);
 
-  void setTitle(const QString &title);
+  void setTitle(const QString& title);
   void clearJsonFilePath();
 
-  void setFrameStartSequence(const QString &sequence);
-  void setFrameEndSequence(const QString &sequence);
-  void setChecksumAlgorithm(const QString &algorithm);
+  void setFrameStartSequence(const QString& sequence);
+  void setFrameEndSequence(const QString& sequence);
+  void setChecksumAlgorithm(const QString& algorithm);
   void setFrameDetection(const SerialStudio::FrameDetection detection);
 
   void enableProjectMode();
@@ -287,45 +282,43 @@ public slots:
 
   void ensureValidGroup();
   void addDataset(const SerialStudio::DatasetOption options);
-  void changeDatasetOption(const SerialStudio::DatasetOption option,
-                           const bool checked);
+  void changeDatasetOption(const SerialStudio::DatasetOption option, const bool checked);
 
   void addAction();
-  void addGroup(const QString &title, const SerialStudio::GroupWidget widget);
+  void addGroup(const QString& title, const SerialStudio::GroupWidget widget);
   bool setGroupWidget(const int group, const SerialStudio::GroupWidget widget);
 
   void setModified(const bool modified);
-  void setFrameParserCode(const QString &code);
+  void setFrameParserCode(const QString& code);
   void setActiveGroupId(const int groupId);
-  void setDashboardLayout(const QJsonObject &layout);
+  void setDashboardLayout(const QJsonObject& layout);
 
   void displayFrameParserView();
 
   void buildTreeModel();
   void buildProjectModel();
-  void buildGroupModel(const DataModel::Group &group);
-  void buildActionModel(const DataModel::Action &action);
-  void buildDatasetModel(const DataModel::Dataset &dataset);
+  void buildGroupModel(const DataModel::Group& group);
+  void buildActionModel(const DataModel::Action& action);
+  void buildDatasetModel(const DataModel::Dataset& dataset);
 
 private slots:
   void onJsonLoaded();
   void generateComboBoxModels();
-  void onGroupItemChanged(QStandardItem *item);
-  void onActionItemChanged(QStandardItem *item);
-  void onProjectItemChanged(QStandardItem *item);
-  void onDatasetItemChanged(QStandardItem *item);
+  void onGroupItemChanged(QStandardItem* item);
+  void onActionItemChanged(QStandardItem* item);
+  void onProjectItemChanged(QStandardItem* item);
+  void onDatasetItemChanged(QStandardItem* item);
   void setCurrentView(const DataModel::ProjectModel::CurrentView view);
-  void onCurrentSelectionChanged(const QModelIndex &current,
-                                 const QModelIndex &previous);
+  void onCurrentSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
 
 private:
   int nextDatasetIndex();
   bool finalizeProjectSave();
 
-  void saveExpandedStateMap(QStandardItem *item, QHash<QString, bool> &map,
-                            const QString &title);
-  void restoreExpandedStateMap(QStandardItem *item, QHash<QString, bool> &map,
-                               const QString &title);
+  void saveExpandedStateMap(QStandardItem* item, QHash<QString, bool>& map, const QString& title);
+  void restoreExpandedStateMap(QStandardItem* item,
+                               QHash<QString, bool>& map,
+                               const QString& title);
 
 private:
   QString m_title;
@@ -343,21 +336,21 @@ private:
   QString m_filePath;
   bool m_suppressMessageBoxes;
 
-  QMap<QStandardItem *, int> m_rootItems;
-  QMap<QStandardItem *, DataModel::Group> m_groupItems;
-  QMap<QStandardItem *, DataModel::Action> m_actionItems;
-  QMap<QStandardItem *, DataModel::Dataset> m_datasetItems;
+  QMap<QStandardItem*, int> m_rootItems;
+  QMap<QStandardItem*, DataModel::Group> m_groupItems;
+  QMap<QStandardItem*, DataModel::Action> m_actionItems;
+  QMap<QStandardItem*, DataModel::Dataset> m_datasetItems;
 
   std::vector<DataModel::Group> m_groups;
   std::vector<DataModel::Action> m_actions;
 
-  CustomModel *m_treeModel;
-  QItemSelectionModel *m_selectionModel;
+  CustomModel* m_treeModel;
+  QItemSelectionModel* m_selectionModel;
 
-  CustomModel *m_groupModel;
-  CustomModel *m_actionModel;
-  CustomModel *m_projectModel;
-  CustomModel *m_datasetModel;
+  CustomModel* m_groupModel;
+  CustomModel* m_actionModel;
+  CustomModel* m_projectModel;
+  CustomModel* m_datasetModel;
 
   QStringList m_fftSamples;
   QStringList m_timerModes;
@@ -394,13 +387,9 @@ private:
  * QML frontend. It supports common Qt item model functionalities, allowing data
  * to be set, modified, and accessed within the project structure.
  */
-class CustomModel : public QStandardItemModel
-{
+class CustomModel : public QStandardItemModel {
 public:
-  explicit CustomModel(QObject *parent = 0)
-    : QStandardItemModel(parent)
-  {
-  }
+  explicit CustomModel(QObject* parent = 0) : QStandardItemModel(parent) {}
 
   QHash<int, QByteArray> roleNames() const override
   {
@@ -427,4 +416,4 @@ public:
     return names;
   }
 };
-} // namespace DataModel
+}  // namespace DataModel

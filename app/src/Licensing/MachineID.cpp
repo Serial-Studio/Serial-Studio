@@ -22,14 +22,14 @@
 
 #include "MachineID.h"
 
-#include <QProcess>
 #include <QApplication>
-#include <QtCore/qendian.h>
 #include <QCryptographicHash>
+#include <QProcess>
+#include <QtCore/qendian.h>
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructs a MachineID instance and initializes system information.
@@ -51,15 +51,15 @@ Licensing::MachineID::MachineID()
  *
  * @return Reference to the singleton instance of MachineID.
  */
-Licensing::MachineID &Licensing::MachineID::instance()
+Licensing::MachineID& Licensing::MachineID::instance()
 {
   static MachineID instance;
   return instance;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Member access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the hashed, base64-encoded machine identifier.
@@ -71,7 +71,7 @@ Licensing::MachineID &Licensing::MachineID::instance()
  *
  * @return A reference to the machine-specific ID string (Base64-encoded).
  */
-const QString &Licensing::MachineID::machineId() const
+const QString& Licensing::MachineID::machineId() const
 {
   return m_machineId;
 }
@@ -87,7 +87,7 @@ const QString &Licensing::MachineID::machineId() const
  *
  * @return A reference to the app-version machine ID string (Base64-encoded).
  */
-const QString &Licensing::MachineID::appVerMachineId() const
+const QString& Licensing::MachineID::appVerMachineId() const
 {
   return m_appVerMachineId;
 }
@@ -108,9 +108,9 @@ quint64 Licensing::MachineID::machineSpecificKey() const
   return m_machineSpecificKey;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Information gathering and processing
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Collects system-specific data to generate a unique machine identifier
@@ -147,8 +147,7 @@ void Licensing::MachineID::readInformation()
   process.waitForFinished();
   id = process.readAllStandardOutput().trimmed();
 
-  if (id.isEmpty())
-  {
+  if (id.isEmpty()) {
     process.start("cat", {"/etc/machine-id"});
     process.waitForFinished();
     id = process.readAllStandardOutput().trimmed();
@@ -163,10 +162,8 @@ void Licensing::MachineID::readInformation()
   QString output = process.readAllStandardOutput();
 
   QStringList lines = output.split("\n");
-  for (const QString &line : std::as_const(lines))
-  {
-    if (line.contains("IOPlatformUUID"))
-    {
+  for (const QString& line : std::as_const(lines)) {
+    if (line.contains("IOPlatformUUID")) {
       id = line.split("=").last().trimmed();
       id.remove("\"");
       break;
@@ -180,16 +177,13 @@ void Licensing::MachineID::readInformation()
   QString machineGuid, uuid;
 
   // Get MachineGuid from Registry
-  process.start("reg", {"query",
-                        "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography",
-                        "/v", "MachineGuid"});
+  process.start(
+    "reg", {"query", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography", "/v", "MachineGuid"});
   process.waitForFinished();
-  QString output = process.readAllStandardOutput();
+  QString output    = process.readAllStandardOutput();
   QStringList lines = output.split("\n");
-  for (const QString &line : std::as_const(lines))
-  {
-    if (line.contains("MachineGuid"))
-    {
+  for (const QString& line : std::as_const(lines)) {
+    if (line.contains("MachineGuid")) {
       machineGuid = line.split(" ").last().trimmed();
       break;
     }
@@ -197,7 +191,9 @@ void Licensing::MachineID::readInformation()
 
   // Get UUID using PowerShell
   process.start("powershell",
-                {"-ExecutionPolicy", "Bypass", "-command",
+                {"-ExecutionPolicy",
+                 "Bypass",
+                 "-command",
                  "(Get-CimInstance -Class Win32_ComputerSystemProduct).UUID"});
   process.waitForFinished();
   uuid = process.readAllStandardOutput().trimmed();
@@ -213,8 +209,7 @@ void Licensing::MachineID::readInformation()
   process.waitForFinished();
   id = process.readAllStandardOutput().trimmed();
 
-  if (id.isEmpty())
-  {
+  if (id.isEmpty()) {
     process.start("kenv", {"-q", "smbios.system.uuid"});
     process.waitForFinished();
     id = process.readAllStandardOutput().trimmed();
@@ -223,18 +218,15 @@ void Licensing::MachineID::readInformation()
 
   // Generate a hash based on the machine ID, application name and OS
   auto data = QString("%1@%2:%3").arg(qApp->applicationName(), id, os);
-  auto hash = QCryptographicHash::hash(data.toUtf8(),
-                                       QCryptographicHash::Blake2s_128);
+  auto hash = QCryptographicHash::hash(data.toUtf8(), QCryptographicHash::Blake2s_128);
 
   // Obtain the machine ID and encryption key as a base64 string
-  m_machineId = QString::fromUtf8(hash.toBase64());
+  m_machineId          = QString::fromUtf8(hash.toBase64());
   m_machineSpecificKey = qFromBigEndian<quint64>(hash.left(8));
 
   // Generate application version machine ID
-  auto appVerData
-      = QString("%1_%2@%3:%4")
-            .arg(qApp->applicationName(), qApp->applicationVersion(), id, os);
-  auto appVerHash = QCryptographicHash::hash(appVerData.toUtf8(),
-                                             QCryptographicHash::Blake2s_128);
+  auto appVerData =
+    QString("%1_%2@%3:%4").arg(qApp->applicationName(), qApp->applicationVersion(), id, os);
+  auto appVerHash = QCryptographicHash::hash(appVerData.toUtf8(), QCryptographicHash::Blake2s_128);
   m_appVerMachineId = QString::fromUtf8(appVerHash.toBase64());
 }

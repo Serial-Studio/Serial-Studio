@@ -26,23 +26,21 @@
 
 #include "Platform/NativeWindow.h"
 
-namespace Misc
-{
+namespace Misc {
 /**
  * @brief The ModuleManager class
  *
  * The @c ModuleManager class is in charge of initializing all the C++ modules
  * that are part of Serial Studio in the correct order.
  */
-class ModuleManager : public QObject
-{
+class ModuleManager : public QObject {
   Q_OBJECT
   Q_PROPERTY(bool autoUpdaterEnabled READ autoUpdaterEnabled CONSTANT)
 
 public:
   ModuleManager();
   [[nodiscard]] bool autoUpdaterEnabled() const;
-  [[nodiscard]] const QQmlApplicationEngine &engine() const;
+  [[nodiscard]] const QQmlApplicationEngine& engine() const;
 
 public slots:
   void onQuit();
@@ -54,4 +52,4 @@ private:
   NativeWindow m_nativeWindow;
   QQmlApplicationEngine m_engine;
 };
-} // namespace Misc
+}  // namespace Misc

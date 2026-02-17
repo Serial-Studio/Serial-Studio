@@ -19,12 +19,13 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "DSP.h"
-#include "UI/Dashboard.h"
 #include "UI/Widgets/Gyroscope.h"
 
 #include <algorithm>
 #include <cmath>
+
+#include "DSP.h"
+#include "UI/Dashboard.h"
 
 /**
  * @brief Constructs a Gyroscope widget.
@@ -35,7 +36,7 @@
  * @param index Index of the gyroscope in the Dashboard.
  * @param parent Optional parent QQuickItem.
  */
-Widgets::Gyroscope::Gyroscope(const int index, QQuickItem *parent)
+Widgets::Gyroscope::Gyroscope(const int index, QQuickItem* parent)
   : QQuickItem(parent)
   , m_index(index)
   , m_yaw(0)
@@ -48,11 +49,9 @@ Widgets::Gyroscope::Gyroscope(const int index, QQuickItem *parent)
   , m_rateFilterInitialized(false)
   , m_displayFilterInitialized(false)
 {
-  if (VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index))
-  {
+  if (VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index)) {
     m_timer.start();
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-            &Gyroscope::updateData);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Gyroscope::updateData);
   }
 }
 
@@ -114,23 +113,23 @@ void Widgets::Gyroscope::updateData()
     return;
 
   // Obtain group data from dashboard & validate widget count
-  const auto &gyro = GET_GROUP(SerialStudio::DashboardGyroscope, m_index);
+  const auto& gyro = GET_GROUP(SerialStudio::DashboardGyroscope, m_index);
   if (gyro.datasets.size() != 3)
     return;
 
   // Store previous orientation values
-  const double previousYaw = m_yaw;
-  const double previousRoll = m_roll;
+  const double previousYaw   = m_yaw;
+  const double previousRoll  = m_roll;
   const double previousPitch = m_pitch;
 
   // Axis detection helpers
-  auto isYaw = [](const QString &w) {
+  auto isYaw = [](const QString& w) {
     return w == QStringLiteral("z") || w == QStringLiteral("yaw");
   };
-  auto isRoll = [](const QString &w) {
+  auto isRoll = [](const QString& w) {
     return w == QStringLiteral("y") || w == QStringLiteral("roll");
   };
-  auto isPitch = [](const QString &w) {
+  auto isPitch = [](const QString& w) {
     return w == QStringLiteral("x") || w == QStringLiteral("pitch");
   };
 
@@ -143,42 +142,34 @@ void Widgets::Gyroscope::updateData()
   };
 
   // Collect current axis values before integration/assignment
-  double yawInput = 0;
-  double rollInput = 0;
+  double yawInput   = 0;
+  double rollInput  = 0;
   double pitchInput = 0;
-  bool hasYaw = false;
-  bool hasRoll = false;
-  bool hasPitch = false;
+  bool hasYaw       = false;
+  bool hasRoll      = false;
+  bool hasPitch     = false;
 
-  for (int i = 0; i < 3; ++i)
-  {
-    const auto &dataset = gyro.datasets[i];
-    const auto widget = dataset.widget.trimmed().toLower();
-    const auto value = dataset.numericValue;
+  for (int i = 0; i < 3; ++i) {
+    const auto& dataset = gyro.datasets[i];
+    const auto widget   = dataset.widget.trimmed().toLower();
+    const auto value    = dataset.numericValue;
 
-    if (isYaw(widget))
-    {
+    if (isYaw(widget)) {
       yawInput = value;
-      hasYaw = true;
-    }
-    else if (isRoll(widget))
-    {
+      hasYaw   = true;
+    } else if (isRoll(widget)) {
       rollInput = value;
-      hasRoll = true;
-    }
-    else if (isPitch(widget))
-    {
+      hasRoll   = true;
+    } else if (isPitch(widget)) {
       pitchInput = value;
-      hasPitch = true;
+      hasPitch   = true;
     }
   }
 
   // Update the values with EMA filtering for smooth display
-  if (!m_integrateValues)
-  {
+  if (!m_integrateValues) {
     constexpr double kAlpha = 0.4;
-    if (!m_displayFilterInitialized)
-    {
+    if (!m_displayFilterInitialized) {
       if (hasYaw)
         m_yaw = yawInput;
       if (hasRoll)
@@ -186,10 +177,8 @@ void Widgets::Gyroscope::updateData()
       if (hasPitch)
         m_pitch = pitchInput;
       m_displayFilterInitialized = true;
-    }
-    else
-    {
-      auto angleEma = [](double input, double &state) {
+    } else {
+      auto angleEma = [](double input, double& state) {
         double delta = input - state;
         if (delta > 180.0)
           delta -= 360.0;
@@ -211,8 +200,7 @@ void Widgets::Gyroscope::updateData()
   }
 
   // Integrate incoming angular rates into absolute orientation
-  else
-  {
+  else {
     double deltaT = m_timer.nsecsElapsed() / 1e9;
     m_timer.restart();
     if (!std::isfinite(deltaT) || deltaT <= 0.0)
@@ -222,13 +210,12 @@ void Widgets::Gyroscope::updateData()
 
     // Low-pass filter rates to reduce high-frequency vibration jitter.
     constexpr double kCutoffHz = 6.0;
-    constexpr double kTwoPi = 6.28318530717958647692;
-    const double rc = 1.0 / (kTwoPi * kCutoffHz);
-    const double alpha = deltaT / (rc + deltaT);
+    constexpr double kTwoPi    = 6.28318530717958647692;
+    const double rc            = 1.0 / (kTwoPi * kCutoffHz);
+    const double alpha         = deltaT / (rc + deltaT);
 
-    auto filteredRate = [&](const double input, double &state) {
-      if (!m_rateFilterInitialized)
-      {
+    auto filteredRate = [&](const double input, double& state) {
+      if (!m_rateFilterInitialized) {
         state = input;
         return state;
       }
@@ -240,12 +227,9 @@ void Widgets::Gyroscope::updateData()
       return state;
     };
 
-    const double yawRate
-        = hasYaw ? filteredRate(yawInput, m_filteredYawRate) : 0.0;
-    const double rollRate
-        = hasRoll ? filteredRate(rollInput, m_filteredRollRate) : 0.0;
-    const double pitchRate
-        = hasPitch ? filteredRate(pitchInput, m_filteredPitchRate) : 0.0;
+    const double yawRate   = hasYaw ? filteredRate(yawInput, m_filteredYawRate) : 0.0;
+    const double rollRate  = hasRoll ? filteredRate(rollInput, m_filteredRollRate) : 0.0;
+    const double pitchRate = hasPitch ? filteredRate(pitchInput, m_filteredPitchRate) : 0.0;
 
     if (hasYaw)
       m_yaw += yawRate * deltaT;
@@ -258,13 +242,13 @@ void Widgets::Gyroscope::updateData()
   }
 
   // Normalize all angles between -180 and 180
-  m_yaw = normalizeAngle(m_yaw);
-  m_roll = normalizeAngle(m_roll);
+  m_yaw   = normalizeAngle(m_yaw);
+  m_roll  = normalizeAngle(m_roll);
   m_pitch = normalizeAngle(m_pitch);
 
   // Emit signal if orientation changed
-  const bool yawChanged = DSP::notEqual(m_yaw, previousYaw);
-  const bool rollChanged = DSP::notEqual(m_roll, previousRoll);
+  const bool yawChanged   = DSP::notEqual(m_yaw, previousYaw);
+  const bool rollChanged  = DSP::notEqual(m_roll, previousRoll);
   const bool pitchChanged = DSP::notEqual(m_pitch, previousPitch);
   if (yawChanged || rollChanged || pitchChanged)
     Q_EMIT updated();
@@ -280,15 +264,14 @@ void Widgets::Gyroscope::updateData()
  */
 void Widgets::Gyroscope::setIntegrateValues(const bool enabled)
 {
-  if (m_integrateValues != enabled)
-  {
-    m_yaw = 0;
-    m_roll = 0;
-    m_pitch = 0;
-    m_filteredYawRate = 0;
-    m_filteredRollRate = 0;
-    m_filteredPitchRate = 0;
-    m_rateFilterInitialized = false;
+  if (m_integrateValues != enabled) {
+    m_yaw                      = 0;
+    m_roll                     = 0;
+    m_pitch                    = 0;
+    m_filteredYawRate          = 0;
+    m_filteredRollRate         = 0;
+    m_filteredPitchRate        = 0;
+    m_rateFilterInitialized    = false;
     m_displayFilterInitialized = false;
     m_timer.restart();
     m_integrateValues = enabled;

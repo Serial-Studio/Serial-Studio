@@ -19,38 +19,37 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "UI/Dashboard.h"
-#include "Misc/ThemeManager.h"
 #include "UI/Widgets/LEDPanel.h"
+
+#include "Misc/ThemeManager.h"
+#include "UI/Dashboard.h"
 
 /**
  * @brief Constructs an LEDPanel widget.
  * @param index The index of the LED panel in the Dashboard.
  * @param parent The parent QQuickItem (optional).
  */
-Widgets::LEDPanel::LEDPanel(const int index, QQuickItem *parent)
-  : QQuickItem(parent)
-  , m_index(index)
+Widgets::LEDPanel::LEDPanel(const int index, QQuickItem* parent)
+  : QQuickItem(parent), m_index(index)
 {
-  if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index))
-  {
-    const auto &group = GET_GROUP(SerialStudio::DashboardLED, m_index);
+  if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index)) {
+    const auto& group = GET_GROUP(SerialStudio::DashboardLED, m_index);
     m_states.resize(group.datasets.size());
     m_titles.resize(group.datasets.size());
     m_colors.resize(group.datasets.size());
 
-    for (size_t i = 0; i < group.datasets.size(); ++i)
-    {
+    for (size_t i = 0; i < group.datasets.size(); ++i) {
       m_states[i] = false;
       m_titles[i] = group.datasets[i].title;
     }
 
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-            &LEDPanel::updateData);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &LEDPanel::updateData);
 
     onThemeChanged();
-    connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-            this, &Widgets::LEDPanel::onThemeChanged);
+    connect(&Misc::ThemeManager::instance(),
+            &Misc::ThemeManager::themeChanged,
+            this,
+            &Widgets::LEDPanel::onThemeChanged);
   }
 }
 
@@ -67,7 +66,7 @@ int Widgets::LEDPanel::count() const
  * @brief Returns the states of the LEDs in the panel.
  * @return A vector of boolean values representing the states of the LEDs.
  */
-const QList<bool> &Widgets::LEDPanel::states() const
+const QList<bool>& Widgets::LEDPanel::states() const
 {
   return m_states;
 }
@@ -76,7 +75,7 @@ const QList<bool> &Widgets::LEDPanel::states() const
  * @brief Returns the colors of the LEDs in the panel.
  * @return A vector of strings representing the activated colors of the LEDs.
  */
-const QStringList &Widgets::LEDPanel::colors() const
+const QStringList& Widgets::LEDPanel::colors() const
 {
   return m_colors;
 }
@@ -85,7 +84,7 @@ const QStringList &Widgets::LEDPanel::colors() const
  * @brief Returns the titles of the LEDs in the panel.
  * @return A vector of strings representing the titles of the LEDs.
  */
-const QStringList &Widgets::LEDPanel::titles() const
+const QStringList& Widgets::LEDPanel::titles() const
 {
   return m_titles;
 }
@@ -101,24 +100,21 @@ void Widgets::LEDPanel::updateData()
   if (!isEnabled())
     return;
 
-  if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index))
-  {
+  if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index)) {
     // Get the LED group and update the LED states
-    bool changed = false;
-    const auto &group = GET_GROUP(SerialStudio::DashboardLED, m_index);
-    for (size_t i = 0; i < group.datasets.size(); ++i)
-    {
+    bool changed      = false;
+    const auto& group = GET_GROUP(SerialStudio::DashboardLED, m_index);
+    for (size_t i = 0; i < group.datasets.size(); ++i) {
       // Get the dataset and its values
-      const auto &dataset = group.datasets[i];
-      const auto value = dataset.numericValue;
+      const auto& dataset = group.datasets[i];
+      const auto value    = dataset.numericValue;
 
       // Obtain the LED state
       const bool enabled = (value >= dataset.ledHigh);
 
       // Update the LED state
-      if (m_states[i] != enabled)
-      {
-        changed = true;
+      if (m_states[i] != enabled) {
+        changed     = true;
         m_states[i] = enabled;
       }
     }
@@ -135,17 +131,15 @@ void Widgets::LEDPanel::updateData()
  */
 void Widgets::LEDPanel::onThemeChanged()
 {
-  if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index))
-  {
-    const auto &group = GET_GROUP(SerialStudio::DashboardLED, m_index);
+  if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index)) {
+    const auto& group = GET_GROUP(SerialStudio::DashboardLED, m_index);
 
     m_colors.clear();
     m_colors.resize(group.datasets.size());
-    for (size_t i = 0; i < group.datasets.size(); ++i)
-    {
-      const auto &dataset = group.datasets[i];
-      const auto color = SerialStudio::getDatasetColor(dataset.index);
-      m_colors[i] = color.name();
+    for (size_t i = 0; i < group.datasets.size(); ++i) {
+      const auto& dataset = group.datasets[i];
+      const auto color    = SerialStudio::getDatasetColor(dataset.index);
+      m_colors[i]         = color.name();
     }
 
     Q_EMIT themeChanged();

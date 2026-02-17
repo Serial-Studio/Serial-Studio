@@ -19,49 +19,45 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonDocument>
-
-#include "IO/Manager.h"
 #include "API/Server.h"
-#include "API/CommandProtocol.h"
-#include "API/MCPProtocol.h"
-#include "API/MCPHandler.h"
-#include "Misc/Utilities.h"
+
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+
 #include "API/CommandHandler.h"
+#include "API/CommandProtocol.h"
+#include "API/MCPHandler.h"
+#include "API/MCPProtocol.h"
+#include "IO/Manager.h"
+#include "Misc/Utilities.h"
 
-namespace
-{
-constexpr int kMaxApiClients = 32;
-constexpr int kApiWindowMs = 1000;
-constexpr int kMaxApiJsonDepth = 64;
-constexpr int kMaxApiRawBytes = 1024 * 1024;
+namespace {
+constexpr int kMaxApiClients           = 32;
+constexpr int kApiWindowMs             = 1000;
+constexpr int kMaxApiJsonDepth         = 64;
+constexpr int kMaxApiRawBytes          = 1024 * 1024;
 constexpr int kMaxApiMessagesPerWindow = 200;
-constexpr int kMaxApiMessageBytes = 1024 * 1024;
-constexpr int kMaxApiBufferBytes = 4 * 1024 * 1024;
-constexpr int kMaxApiBytesPerWindow = 128 * 1024 * 1024;
+constexpr int kMaxApiMessageBytes      = 1024 * 1024;
+constexpr int kMaxApiBufferBytes       = 4 * 1024 * 1024;
+constexpr int kMaxApiBytesPerWindow    = 128 * 1024 * 1024;
 
-bool exceedsJsonDepthLimit(const QByteArray &data, int maxDepth)
+bool exceedsJsonDepthLimit(const QByteArray& data, int maxDepth)
 {
-  int depth = 0;
+  int depth     = 0;
   bool inString = false;
-  bool escaped = false;
+  bool escaped  = false;
 
-  for (const auto byte : data)
-  {
+  for (const auto byte : data) {
     const char ch = static_cast<char>(byte);
 
-    if (inString)
-    {
-      if (escaped)
-      {
+    if (inString) {
+      if (escaped) {
         escaped = false;
         continue;
       }
 
-      if (ch == '\\')
-      {
+      if (ch == '\\') {
         escaped = true;
         continue;
       }
@@ -72,20 +68,16 @@ bool exceedsJsonDepthLimit(const QByteArray &data, int maxDepth)
       continue;
     }
 
-    if (ch == '"')
-    {
+    if (ch == '"') {
       inString = true;
       continue;
     }
 
-    if (ch == '{' || ch == '[')
-    {
+    if (ch == '{' || ch == '[') {
       ++depth;
       if (depth > maxDepth)
         return true;
-    }
-    else if (ch == '}' || ch == ']')
-    {
+    } else if (ch == '}' || ch == ']') {
       if (depth > 0)
         --depth;
     }
@@ -93,11 +85,11 @@ bool exceedsJsonDepthLimit(const QByteArray &data, int maxDepth)
 
   return false;
 }
-} // namespace
+}  // namespace
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // ServerWorker implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Destructor
@@ -117,10 +109,8 @@ bool API::ServerWorker::isResourceOpen() const
  */
 void API::ServerWorker::closeResources()
 {
-  for (auto *socket : std::as_const(m_sockets))
-  {
-    if (socket)
-    {
+  for (auto* socket : std::as_const(m_sockets)) {
+    if (socket) {
       socket->abort();
       socket->deleteLater();
     }
@@ -136,16 +126,14 @@ void API::ServerWorker::closeResources()
  *
  * The socket is moved to this thread and managed here for all I/O operations.
  */
-void API::ServerWorker::addSocket(QTcpSocket *socket)
+void API::ServerWorker::addSocket(QTcpSocket* socket)
 {
   if (!socket)
     return;
 
   m_sockets.append(socket);
-  connect(socket, &QTcpSocket::readyRead, this,
-          &ServerWorker::onSocketReadyRead);
-  connect(socket, &QTcpSocket::disconnected, this,
-          &ServerWorker::onSocketDisconnected);
+  connect(socket, &QTcpSocket::readyRead, this, &ServerWorker::onSocketReadyRead);
+  connect(socket, &QTcpSocket::disconnected, this, &ServerWorker::onSocketDisconnected);
 
   Q_EMIT clientCountChanged(m_sockets.count());
 }
@@ -153,7 +141,7 @@ void API::ServerWorker::addSocket(QTcpSocket *socket)
 /**
  * @brief Removes a socket from the worker thread
  */
-void API::ServerWorker::removeSocket(QTcpSocket *socket)
+void API::ServerWorker::removeSocket(QTcpSocket* socket)
 {
   m_sockets.removeAll(socket);
 
@@ -170,7 +158,7 @@ void API::ServerWorker::removeSocket(QTcpSocket *socket)
  * Handles transmission of raw I/O data to API clients.
  * The data is base64-encoded and wrapped in JSON format.
  */
-void API::ServerWorker::writeRawData(const IO::ByteArrayPtr &data)
+void API::ServerWorker::writeRawData(const IO::ByteArrayPtr& data)
 {
   if (m_sockets.isEmpty())
     return;
@@ -180,11 +168,9 @@ void API::ServerWorker::writeRawData(const IO::ByteArrayPtr &data)
   const QJsonDocument document(object);
   const auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
-  for (auto *socket : std::as_const(m_sockets))
-  {
+  for (auto* socket : std::as_const(m_sockets))
     if (socket && socket->isWritable())
       socket->write(json);
-  }
 }
 
 /**
@@ -192,7 +178,7 @@ void API::ServerWorker::writeRawData(const IO::ByteArrayPtr &data)
  */
 void API::ServerWorker::onSocketReadyRead()
 {
-  auto *socket = qobject_cast<QTcpSocket *>(sender());
+  auto* socket = qobject_cast<QTcpSocket*>(sender());
   if (socket)
     Q_EMIT dataReceived(socket, socket->readAll());
 }
@@ -205,8 +191,7 @@ void API::ServerWorker::onSocketReadyRead()
  * @param socket The socket to write to
  * @param data The data to write
  */
-void API::ServerWorker::writeToSocket(QTcpSocket *socket,
-                                      const QByteArray &data)
+void API::ServerWorker::writeToSocket(QTcpSocket* socket, const QByteArray& data)
 {
   if (socket && m_sockets.contains(socket) && socket->isWritable())
     socket->write(data);
@@ -219,10 +204,9 @@ void API::ServerWorker::writeToSocket(QTcpSocket *socket,
  *
  * @param socket The socket to disconnect
  */
-void API::ServerWorker::disconnectSocket(QTcpSocket *socket)
+void API::ServerWorker::disconnectSocket(QTcpSocket* socket)
 {
-  if (socket && m_sockets.contains(socket))
-  {
+  if (socket && m_sockets.contains(socket)) {
     socket->flush();
     socket->disconnectFromHost();
   }
@@ -233,7 +217,7 @@ void API::ServerWorker::disconnectSocket(QTcpSocket *socket)
  */
 void API::ServerWorker::onSocketDisconnected()
 {
-  auto *socket = qobject_cast<QTcpSocket *>(sender());
+  auto* socket = qobject_cast<QTcpSocket*>(sender());
   removeSocket(socket);
 }
 
@@ -243,15 +227,13 @@ void API::ServerWorker::onSocketDisconnected()
  * Both JSON serialization and socket writes happen on the worker thread,
  * eliminating cross-thread communication overhead for high-frequency writes.
  */
-void API::ServerWorker::processItems(
-    const std::vector<DataModel::TimestampedFramePtr> &items)
+void API::ServerWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
 {
   if (items.empty() || m_sockets.isEmpty())
     return;
 
   QJsonArray array;
-  for (const auto &timestampedFrame : items)
-  {
+  for (const auto& timestampedFrame : items) {
     QJsonObject object;
     object.insert(QStringLiteral("data"), serialize(timestampedFrame->data));
     array.append(object);
@@ -262,16 +244,14 @@ void API::ServerWorker::processItems(
   const QJsonDocument document(object);
   const auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
-  for (auto *socket : std::as_const(m_sockets))
-  {
+  for (auto* socket : std::as_const(m_sockets))
     if (socket && socket->isWritable())
       socket->write(json);
-  }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Server implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the API server.
@@ -281,23 +261,26 @@ void API::ServerWorker::processItems(
  */
 API::Server::Server()
   : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
-        {.queueCapacity = 2048, .flushThreshold = 512, .timerIntervalMs = 1000})
+      {.queueCapacity = 2048, .flushThreshold = 512, .timerIntervalMs = 1000})
   , m_clientCount(0)
   , m_enabled(false)
 {
   initializeWorker();
 
-  auto *worker = static_cast<ServerWorker *>(m_worker);
-  connect(worker, &ServerWorker::dataReceived, this, &Server::onDataReceived,
+  auto* worker = static_cast<ServerWorker*>(m_worker);
+  connect(worker, &ServerWorker::dataReceived, this, &Server::onDataReceived, Qt::QueuedConnection);
+  connect(worker,
+          &ServerWorker::clientCountChanged,
+          this,
+          &Server::onClientCountChanged,
           Qt::QueuedConnection);
-  connect(worker, &ServerWorker::clientCountChanged, this,
-          &Server::onClientCountChanged, Qt::QueuedConnection);
-  connect(worker, &ServerWorker::socketRemoved, this,
-          qOverload<QTcpSocket *>(&Server::onSocketDisconnected),
+  connect(worker,
+          &ServerWorker::socketRemoved,
+          this,
+          qOverload<QTcpSocket*>(&Server::onSocketDisconnected),
           Qt::QueuedConnection);
 
-  connect(&m_server, &QTcpServer::newConnection, this,
-          &Server::acceptConnection);
+  connect(&m_server, &QTcpServer::newConnection, this, &Server::acceptConnection);
 
   // Initialize API command handlers
   API::CommandHandler::instance();
@@ -316,7 +299,7 @@ API::Server::~Server()
 /**
  * @brief Creates the server worker instance.
  */
-DataModel::FrameConsumerWorkerBase *API::Server::createWorker()
+DataModel::FrameConsumerWorkerBase* API::Server::createWorker()
 {
   return new ServerWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
 }
@@ -326,7 +309,7 @@ DataModel::FrameConsumerWorkerBase *API::Server::createWorker()
  *
  * @return Reference to the only instance of API::Server.
  */
-API::Server &API::Server::instance()
+API::Server& API::Server::instance()
 {
   static Server singleton;
   return singleton;
@@ -361,12 +344,11 @@ int API::Server::clientCount() const
  */
 void API::Server::removeConnection()
 {
-  auto *socket = qobject_cast<QTcpSocket *>(sender());
-  if (socket)
-  {
-    auto *worker = static_cast<ServerWorker *>(m_worker);
-    QMetaObject::invokeMethod(worker, "removeSocket", Qt::QueuedConnection,
-                              Q_ARG(QTcpSocket *, socket));
+  auto* socket = qobject_cast<QTcpSocket*>(sender());
+  if (socket) {
+    auto* worker = static_cast<ServerWorker*>(m_worker);
+    QMetaObject::invokeMethod(
+      worker, "removeSocket", Qt::QueuedConnection, Q_ARG(QTcpSocket*, socket));
   }
 }
 
@@ -385,28 +367,23 @@ void API::Server::setEnabled(const bool enabled)
   Q_EMIT enabledChanged();
 
   // Enable the TCP API server
-  if (enabled)
-  {
-    if (!m_server.isListening())
-    {
+  if (enabled) {
+    if (!m_server.isListening()) {
       m_server.setMaxPendingConnections(kMaxApiClients);
-      if (!m_server.listen(QHostAddress::LocalHost, API_TCP_PORT))
-      {
-        Misc::Utilities::showMessageBox(tr("Unable to start API TCP server"),
-                                        m_server.errorString(),
-                                        QMessageBox::Warning);
+      if (!m_server.listen(QHostAddress::LocalHost, API_TCP_PORT)) {
+        Misc::Utilities::showMessageBox(
+          tr("Unable to start API TCP server"), m_server.errorString(), QMessageBox::Warning);
         m_server.close();
       }
     }
   }
 
   // Disable the TCP API server
-  else
-  {
+  else {
     m_server.close();
     m_connections.clear();
 
-    auto *worker = static_cast<ServerWorker *>(m_worker);
+    auto* worker = static_cast<ServerWorker*>(m_worker);
     QMetaObject::invokeMethod(worker, "closeResources", Qt::QueuedConnection);
   }
 }
@@ -419,14 +396,14 @@ void API::Server::setEnabled(const bool enabled)
  *
  * @param data Raw data bytes received from the I/O layer.
  */
-void API::Server::hotpathTxData(const IO::ByteArrayPtr &data)
+void API::Server::hotpathTxData(const IO::ByteArrayPtr& data)
 {
   if (!enabled())
     return;
 
-  auto *worker = static_cast<ServerWorker *>(m_worker);
-  QMetaObject::invokeMethod(worker, "writeRawData", Qt::QueuedConnection,
-                            Q_ARG(IO::ByteArrayPtr, data));
+  auto* worker = static_cast<ServerWorker*>(m_worker);
+  QMetaObject::invokeMethod(
+    worker, "writeRawData", Qt::QueuedConnection, Q_ARG(IO::ByteArrayPtr, data));
 }
 
 /**
@@ -437,7 +414,7 @@ void API::Server::hotpathTxData(const IO::ByteArrayPtr &data)
  *
  * @param frame Timestamped frame object to register.
  */
-void API::Server::hotpathTxFrame(const DataModel::TimestampedFramePtr &frame)
+void API::Server::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
 {
   if (enabled())
     enqueueData(frame);
@@ -453,7 +430,7 @@ void API::Server::hotpathTxFrame(const DataModel::TimestampedFramePtr &frame)
  * @param socket The socket that sent the data (for sending responses)
  * @param data The received data
  */
-void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
+void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
 {
   if (!enabled() || data.isEmpty() || !socket)
     return;
@@ -461,58 +438,56 @@ void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
   if (!m_connections.contains(socket))
     return;
 
-  auto &state = m_connections[socket];
+  auto& state = m_connections[socket];
   if (!state.window.isValid())
     state.window.start();
 
-  if (state.window.elapsed() > kApiWindowMs)
-  {
+  if (state.window.elapsed() > kApiWindowMs) {
     state.window.restart();
     state.messageCount = 0;
-    state.byteCount = 0;
+    state.byteCount    = 0;
   }
 
   state.byteCount += data.size();
-  if (state.byteCount > kMaxApiBytesPerWindow)
-  {
-    qWarning() << "[API] Byte rate limit exceeded:" << state.peerAddress << ":"
-               << state.peerPort << "- Bytes in window:" << state.byteCount
-               << "- Limit:" << kMaxApiBytesPerWindow
+  if (state.byteCount > kMaxApiBytesPerWindow) {
+    qWarning() << "[API] Byte rate limit exceeded:" << state.peerAddress << ":" << state.peerPort
+               << "- Bytes in window:" << state.byteCount << "- Limit:" << kMaxApiBytesPerWindow
                << "- Disconnecting client";
 
-    auto *worker = static_cast<ServerWorker *>(m_worker);
-    const QByteArray response
-        = CommandResponse::makeError(QString(), ErrorCode::ExecutionError,
-                                     QStringLiteral("API rate limit exceeded"))
-              .toJsonBytes();
-    QMetaObject::invokeMethod(worker, "writeToSocket", Qt::QueuedConnection,
-                              Q_ARG(QTcpSocket *, socket),
+    auto* worker = static_cast<ServerWorker*>(m_worker);
+    const QByteArray response =
+      CommandResponse::makeError(
+        QString(), ErrorCode::ExecutionError, QStringLiteral("API rate limit exceeded"))
+        .toJsonBytes();
+    QMetaObject::invokeMethod(worker,
+                              "writeToSocket",
+                              Qt::QueuedConnection,
+                              Q_ARG(QTcpSocket*, socket),
                               Q_ARG(QByteArray, response));
-    QMetaObject::invokeMethod(worker, "disconnectSocket", Qt::QueuedConnection,
-                              Q_ARG(QTcpSocket *, socket));
+    QMetaObject::invokeMethod(
+      worker, "disconnectSocket", Qt::QueuedConnection, Q_ARG(QTcpSocket*, socket));
     state.buffer.clear();
     return;
   }
 
   // Check buffer size BEFORE appending to prevent allocation crashes
-  if (state.buffer.size() + data.size() > kMaxApiBufferBytes)
-  {
-    qWarning() << "[API] Buffer size limit exceeded:" << state.peerAddress
-               << ":" << state.peerPort
-               << "- Buffer size:" << state.buffer.size()
-               << "- Incoming data:" << data.size()
+  if (state.buffer.size() + data.size() > kMaxApiBufferBytes) {
+    qWarning() << "[API] Buffer size limit exceeded:" << state.peerAddress << ":" << state.peerPort
+               << "- Buffer size:" << state.buffer.size() << "- Incoming data:" << data.size()
                << "- Limit:" << kMaxApiBufferBytes << "- Disconnecting client";
 
-    auto *worker = static_cast<ServerWorker *>(m_worker);
-    const QByteArray response = CommandResponse::makeError(
-                                    QString(), ErrorCode::ExecutionError,
-                                    QStringLiteral("API buffer limit exceeded"))
-                                    .toJsonBytes();
-    QMetaObject::invokeMethod(worker, "writeToSocket", Qt::QueuedConnection,
-                              Q_ARG(QTcpSocket *, socket),
+    auto* worker = static_cast<ServerWorker*>(m_worker);
+    const QByteArray response =
+      CommandResponse::makeError(
+        QString(), ErrorCode::ExecutionError, QStringLiteral("API buffer limit exceeded"))
+        .toJsonBytes();
+    QMetaObject::invokeMethod(worker,
+                              "writeToSocket",
+                              Qt::QueuedConnection,
+                              Q_ARG(QTcpSocket*, socket),
                               Q_ARG(QByteArray, response));
-    QMetaObject::invokeMethod(worker, "disconnectSocket", Qt::QueuedConnection,
-                              Q_ARG(QTcpSocket *, socket));
+    QMetaObject::invokeMethod(
+      worker, "disconnectSocket", Qt::QueuedConnection, Q_ARG(QTcpSocket*, socket));
     state.buffer.clear();
     return;
   }
@@ -520,70 +495,63 @@ void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
   // Now safe to append - buffer won't exceed limit
   state.buffer.append(data);
 
-  auto *worker = static_cast<ServerWorker *>(m_worker);
-  auto sendResponse = [&](const QByteArray &response) {
-    QMetaObject::invokeMethod(worker, "writeToSocket", Qt::QueuedConnection,
-                              Q_ARG(QTcpSocket *, socket),
+  auto* worker      = static_cast<ServerWorker*>(m_worker);
+  auto sendResponse = [&](const QByteArray& response) {
+    QMetaObject::invokeMethod(worker,
+                              "writeToSocket",
+                              Qt::QueuedConnection,
+                              Q_ARG(QTcpSocket*, socket),
                               Q_ARG(QByteArray, response));
   };
 
   auto rejectOversize = [&](int messageSize) {
-    qWarning() << "[API] Message size limit exceeded:" << state.peerAddress
-               << ":" << state.peerPort << "- Message size:" << messageSize
-               << "- Limit:" << kMaxApiMessageBytes;
+    qWarning() << "[API] Message size limit exceeded:" << state.peerAddress << ":" << state.peerPort
+               << "- Message size:" << messageSize << "- Limit:" << kMaxApiMessageBytes;
 
-    sendResponse(CommandResponse::makeError(
-                     QString(), ErrorCode::ExecutionError,
-                     QStringLiteral("API message exceeds size limit"))
-                     .toJsonBytes());
+    sendResponse(CommandResponse::makeError(QString(),
+                                            ErrorCode::ExecutionError,
+                                            QStringLiteral("API message exceeds size limit"))
+                   .toJsonBytes());
   };
 
-  auto handleJson = [&](const QByteArray &jsonBytes) {
-    if (jsonBytes.size() > kMaxApiMessageBytes)
-    {
+  auto handleJson = [&](const QByteArray& jsonBytes) {
+    if (jsonBytes.size() > kMaxApiMessageBytes) {
       rejectOversize(jsonBytes.size());
       return;
     }
 
-    if (exceedsJsonDepthLimit(jsonBytes, kMaxApiJsonDepth))
-    {
-      qWarning() << "[API] JSON depth limit exceeded:" << state.peerAddress
-                 << ":" << state.peerPort << "- Max depth:" << kMaxApiJsonDepth;
+    if (exceedsJsonDepthLimit(jsonBytes, kMaxApiJsonDepth)) {
+      qWarning() << "[API] JSON depth limit exceeded:" << state.peerAddress << ":" << state.peerPort
+                 << "- Max depth:" << kMaxApiJsonDepth;
 
-      sendResponse(CommandResponse::makeError(
-                       QString(), ErrorCode::ExecutionError,
-                       QStringLiteral("JSON nesting depth exceeds limit"))
-                       .toJsonBytes());
+      sendResponse(CommandResponse::makeError(QString(),
+                                              ErrorCode::ExecutionError,
+                                              QStringLiteral("JSON nesting depth exceeds limit"))
+                     .toJsonBytes());
       return;
     }
 
-    if (state.messageCount >= kMaxApiMessagesPerWindow)
-    {
-      qWarning() << "[API] Message rate limit exceeded:" << state.peerAddress
-                 << ":" << state.peerPort
-                 << "- Messages in window:" << state.messageCount
-                 << "- Limit:" << kMaxApiMessagesPerWindow
-                 << "- Disconnecting client";
+    if (state.messageCount >= kMaxApiMessagesPerWindow) {
+      qWarning() << "[API] Message rate limit exceeded:" << state.peerAddress << ":"
+                 << state.peerPort << "- Messages in window:" << state.messageCount
+                 << "- Limit:" << kMaxApiMessagesPerWindow << "- Disconnecting client";
 
-      sendResponse(
-          CommandResponse::makeError(QString(), ErrorCode::ExecutionError,
-                                     QStringLiteral("API rate limit exceeded"))
-              .toJsonBytes());
-      QMetaObject::invokeMethod(worker, "disconnectSocket",
-                                Qt::QueuedConnection,
-                                Q_ARG(QTcpSocket *, socket));
+      sendResponse(CommandResponse::makeError(QString(),
+                                              ErrorCode::ExecutionError,
+                                              QStringLiteral("API rate limit exceeded"))
+                     .toJsonBytes());
+      QMetaObject::invokeMethod(
+        worker, "disconnectSocket", Qt::QueuedConnection, Q_ARG(QTcpSocket*, socket));
       state.buffer.clear();
       return;
     }
     ++state.messageCount;
 
     // Check if this is an MCP (Model Context Protocol) message
-    if (MCP::isMCPMessage(jsonBytes))
-    {
-      auto &mcpHandler = API::MCPHandler::instance();
-      const QString sessionId
-          = QString::number(reinterpret_cast<quintptr>(socket));
-      const auto response = mcpHandler.processMessage(jsonBytes, sessionId);
+    if (MCP::isMCPMessage(jsonBytes)) {
+      auto& mcpHandler        = API::MCPHandler::instance();
+      const QString sessionId = QString::number(reinterpret_cast<quintptr>(socket));
+      const auto response     = mcpHandler.processMessage(jsonBytes, sessionId);
 
       if (!response.isEmpty())
         sendResponse(response);
@@ -595,87 +563,73 @@ void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
     QJsonObject json;
 
     // Wrap JSON parsing in try-catch to prevent crashes from malformed data
-    try
-    {
-      if (!API::parseMessage(jsonBytes, type, json))
-      {
-        sendResponse(
-            CommandResponse::makeError(QString(), ErrorCode::InvalidJson,
-                                       QStringLiteral("Failed to parse "
-                                                      "JSON message"))
-                .toJsonBytes());
+    try {
+      if (!API::parseMessage(jsonBytes, type, json)) {
+        sendResponse(CommandResponse::makeError(QString(),
+                                                ErrorCode::InvalidJson,
+                                                QStringLiteral("Failed to parse JSON message"))
+                       .toJsonBytes());
         return;
       }
-    }
-    catch (...)
-    {
-      qWarning() << "[API] JSON parsing exception:" << state.peerAddress << ":"
-                 << state.peerPort << "- Message size:" << jsonBytes.size()
+    } catch (...) {
+      qWarning() << "[API] JSON parsing exception:" << state.peerAddress << ":" << state.peerPort
+                 << "- Message size:" << jsonBytes.size()
                  << "- Disconnecting client (malformed or too deep JSON)";
 
       // Catch any exception from Qt's JSON parser (stack overflow, etc.)
       sendResponse(
-          CommandResponse::makeError(QString(), ErrorCode::InvalidJson,
-                                     QStringLiteral("JSON parsing failed "
-                                                    "(malformed or too deep)"))
-              .toJsonBytes());
-      QMetaObject::invokeMethod(worker, "disconnectSocket",
-                                Qt::QueuedConnection,
-                                Q_ARG(QTcpSocket *, socket));
+        CommandResponse::makeError(QString(),
+                                   ErrorCode::InvalidJson,
+                                   QStringLiteral("JSON parsing failed (malformed or too deep)"))
+          .toJsonBytes());
+      QMetaObject::invokeMethod(
+        worker, "disconnectSocket", Qt::QueuedConnection, Q_ARG(QTcpSocket*, socket));
       state.buffer.clear();
       return;
     }
 
-    if (type == MessageType::Raw)
-    {
+    if (type == MessageType::Raw) {
       const QString id = json.value(QStringLiteral("id")).toString();
-      if (!json.contains(QStringLiteral("data")))
-      {
-        sendResponse(CommandResponse::makeError(
-                         id, ErrorCode::MissingParam,
-                         QStringLiteral("Missing required parameter: data"))
-                         .toJsonBytes());
+      if (!json.contains(QStringLiteral("data"))) {
+        sendResponse(CommandResponse::makeError(id,
+                                                ErrorCode::MissingParam,
+                                                QStringLiteral("Missing required parameter: data"))
+                       .toJsonBytes());
         return;
       }
 
-      const QString dataStr = json.value(QStringLiteral("data")).toString();
+      const QString dataStr    = json.value(QStringLiteral("data")).toString();
       const QByteArray rawData = QByteArray::fromBase64(dataStr.toUtf8());
 
-      if (rawData.isEmpty() && !dataStr.isEmpty())
-      {
-        sendResponse(
-            CommandResponse::makeError(id, ErrorCode::InvalidParam,
-                                       QStringLiteral("Invalid base64 data"))
-                .toJsonBytes());
+      if (rawData.isEmpty() && !dataStr.isEmpty()) {
+        sendResponse(CommandResponse::makeError(
+                       id, ErrorCode::InvalidParam, QStringLiteral("Invalid base64 data"))
+                       .toJsonBytes());
         return;
       }
 
-      if (rawData.size() > kMaxApiRawBytes)
-      {
-        qWarning() << "[API] Raw data size limit exceeded:" << state.peerAddress
-                   << ":" << state.peerPort
-                   << "- Raw data size:" << rawData.size()
+      if (rawData.size() > kMaxApiRawBytes) {
+        qWarning() << "[API] Raw data size limit exceeded:" << state.peerAddress << ":"
+                   << state.peerPort << "- Raw data size:" << rawData.size()
                    << "- Limit:" << kMaxApiRawBytes;
 
-        sendResponse(CommandResponse::makeError(
-                         id, ErrorCode::ExecutionError,
-                         QStringLiteral("Raw payload exceeds size limit"))
-                         .toJsonBytes());
+        sendResponse(CommandResponse::makeError(id,
+                                                ErrorCode::ExecutionError,
+                                                QStringLiteral("Raw payload exceeds size limit"))
+                       .toJsonBytes());
         return;
       }
 
-      auto &manager = IO::Manager::instance();
-      if (!manager.isConnected())
-      {
-        sendResponse(CommandResponse::makeError(id, ErrorCode::ExecutionError,
-                                                QStringLiteral("Not connected"))
-                         .toJsonBytes());
+      auto& manager = IO::Manager::instance();
+      if (!manager.isConnected()) {
+        sendResponse(
+          CommandResponse::makeError(id, ErrorCode::ExecutionError, QStringLiteral("Not connected"))
+            .toJsonBytes());
         return;
       }
 
       const qint64 bytesWritten = manager.writeData(rawData);
-      if (!id.isEmpty())
-      {
+      if (!id.isEmpty()) {
         QJsonObject result;
         result[QStringLiteral("bytesWritten")] = bytesWritten;
         sendResponse(CommandResponse::makeSuccess(id, result).toJsonBytes());
@@ -684,101 +638,92 @@ void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
       return;
     }
 
-    auto &cmdHandler = API::CommandHandler::instance();
+    auto& cmdHandler = API::CommandHandler::instance();
     sendResponse(cmdHandler.processMessage(jsonBytes));
   };
 
-  auto &buffer = state.buffer;
-  while (!buffer.isEmpty())
-  {
-    const int newlineIndex = buffer.indexOf('\n');
+  auto& buffer = state.buffer;
 
-    if (newlineIndex < 0)
-    {
-      const auto trimmed = buffer.trimmed();
-      if (!trimmed.isEmpty() && trimmed.at(0) == '{')
-      {
-        if (trimmed.size() > kMaxApiMessageBytes)
-        {
-          rejectOversize(trimmed.size());
-          buffer.clear();
-          return;
-        }
+  // Handles the entire buffer when no newline delimiter is present.
+  // Returns true if the caller (while loop) should stop processing.
+  auto processNoNewlineBuffer = [&]() {
+    const auto trimmed = buffer.trimmed();
 
-        if (exceedsJsonDepthLimit(trimmed, kMaxApiJsonDepth))
-        {
-          qWarning() << "[API] JSON depth limit exceeded (buffered):"
-                     << state.peerAddress << ":" << state.peerPort
-                     << "- Max depth:" << kMaxApiJsonDepth;
-
-          sendResponse(CommandResponse::makeError(
-                           QString(), ErrorCode::ExecutionError,
-                           QStringLiteral("JSON nesting depth exceeds limit"))
-                           .toJsonBytes());
-          buffer.clear();
-          return;
-        }
-
-        QString type;
-        QJsonObject json;
-
-        // Wrap JSON parsing in try-catch to prevent crashes
-        try
-        {
-          if (API::parseMessage(trimmed, type, json))
-          {
-            handleJson(trimmed);
-            buffer.clear();
-          }
-          else if (trimmed.endsWith('}'))
-          {
-            sendResponse(CommandResponse::makeError(
-                             QString(), ErrorCode::InvalidJson,
-                             QStringLiteral("Failed to parse JSON message"))
-                             .toJsonBytes());
-            buffer.clear();
-          }
-        }
-        catch (...)
-        {
-          qWarning() << "[API] JSON parsing exception (buffered):"
-                     << state.peerAddress << ":" << state.peerPort
-                     << "- Buffer size:" << trimmed.size()
-                     << "- Disconnecting client (malformed or too deep JSON)";
-
-          sendResponse(
-              CommandResponse::makeError(
-                  QString(), ErrorCode::InvalidJson,
-                  QStringLiteral("JSON parsing failed (malformed or too deep)"))
-                  .toJsonBytes());
-          QMetaObject::invokeMethod(worker, "disconnectSocket",
-                                    Qt::QueuedConnection,
-                                    Q_ARG(QTcpSocket *, socket));
-          buffer.clear();
-        }
-        return;
-      }
-
-      if (buffer.size() > kMaxApiRawBytes)
-      {
-        qWarning() << "[API] Raw buffer size limit exceeded:"
-                   << state.peerAddress << ":" << state.peerPort
-                   << "- Buffer size:" << buffer.size()
-                   << "- Limit:" << kMaxApiRawBytes << "- Disconnecting client";
-
-        sendResponse(CommandResponse::makeError(
-                         QString(), ErrorCode::ExecutionError,
-                         QStringLiteral("Raw payload exceeds size limit"))
-                         .toJsonBytes());
-        QMetaObject::invokeMethod(worker, "disconnectSocket",
-                                  Qt::QueuedConnection,
-                                  Q_ARG(QTcpSocket *, socket));
+    if (!trimmed.isEmpty() && trimmed.at(0) == '{') {
+      if (trimmed.size() > kMaxApiMessageBytes) {
+        rejectOversize(trimmed.size());
         buffer.clear();
         return;
       }
 
-      IO::Manager::instance().writeData(buffer);
+      if (exceedsJsonDepthLimit(trimmed, kMaxApiJsonDepth)) {
+        qWarning() << "[API] JSON depth limit exceeded (buffered):" << state.peerAddress << ":"
+                   << state.peerPort << "- Max depth:" << kMaxApiJsonDepth;
+
+        sendResponse(CommandResponse::makeError(QString(),
+                                                ErrorCode::ExecutionError,
+                                                QStringLiteral("JSON nesting depth exceeds limit"))
+                       .toJsonBytes());
+        buffer.clear();
+        return;
+      }
+
+      QString type;
+      QJsonObject json;
+
+      // Wrap JSON parsing in try-catch to prevent crashes
+      try {
+        if (API::parseMessage(trimmed, type, json)) {
+          handleJson(trimmed);
+          buffer.clear();
+        } else if (trimmed.endsWith('}')) {
+          sendResponse(CommandResponse::makeError(QString(),
+                                                  ErrorCode::InvalidJson,
+                                                  QStringLiteral("Failed to parse JSON message"))
+                         .toJsonBytes());
+          buffer.clear();
+        }
+      } catch (...) {
+        qWarning() << "[API] JSON parsing exception (buffered):" << state.peerAddress << ":"
+                   << state.peerPort << "- Buffer size:" << trimmed.size()
+                   << "- Disconnecting client (malformed or too deep JSON)";
+
+        sendResponse(
+          CommandResponse::makeError(QString(),
+                                     ErrorCode::InvalidJson,
+                                     QStringLiteral("JSON parsing failed (malformed or too deep)"))
+            .toJsonBytes());
+        QMetaObject::invokeMethod(
+          worker, "disconnectSocket", Qt::QueuedConnection, Q_ARG(QTcpSocket*, socket));
+        buffer.clear();
+      }
+      return;
+    }
+
+    if (buffer.size() > kMaxApiRawBytes) {
+      qWarning() << "[API] Raw buffer size limit exceeded:" << state.peerAddress << ":"
+                 << state.peerPort << "- Buffer size:" << buffer.size()
+                 << "- Limit:" << kMaxApiRawBytes << "- Disconnecting client";
+
+      sendResponse(CommandResponse::makeError(QString(),
+                                              ErrorCode::ExecutionError,
+                                              QStringLiteral("Raw payload exceeds size limit"))
+                     .toJsonBytes());
+      QMetaObject::invokeMethod(
+        worker, "disconnectSocket", Qt::QueuedConnection, Q_ARG(QTcpSocket*, socket));
       buffer.clear();
+      return;
+    }
+
+    IO::Manager::instance().writeData(buffer);
+    buffer.clear();
+  };
+
+  while (!buffer.isEmpty()) {
+    const int newlineIndex = buffer.indexOf('\n');
+
+    if (newlineIndex < 0) {
+      processNoNewlineBuffer();
       return;
     }
 
@@ -789,21 +734,18 @@ void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
     if (trimmedLine.isEmpty())
       continue;
 
-    if (trimmedLine.at(0) != '{')
-    {
-      if (line.size() > kMaxApiRawBytes)
-      {
-        qWarning() << "[API] Raw line size limit exceeded:" << state.peerAddress
-                   << ":" << state.peerPort << "- Line size:" << line.size()
+    if (trimmedLine.at(0) != '{') {
+      if (line.size() > kMaxApiRawBytes) {
+        qWarning() << "[API] Raw line size limit exceeded:" << state.peerAddress << ":"
+                   << state.peerPort << "- Line size:" << line.size()
                    << "- Limit:" << kMaxApiRawBytes << "- Disconnecting client";
 
-        sendResponse(CommandResponse::makeError(
-                         QString(), ErrorCode::ExecutionError,
-                         QStringLiteral("Raw payload exceeds size limit"))
-                         .toJsonBytes());
-        QMetaObject::invokeMethod(worker, "disconnectSocket",
-                                  Qt::QueuedConnection,
-                                  Q_ARG(QTcpSocket *, socket));
+        sendResponse(CommandResponse::makeError(QString(),
+                                                ErrorCode::ExecutionError,
+                                                QStringLiteral("Raw payload exceeds size limit"))
+                       .toJsonBytes());
+        QMetaObject::invokeMethod(
+          worker, "disconnectSocket", Qt::QueuedConnection, Q_ARG(QTcpSocket*, socket));
         continue;
       }
 
@@ -811,22 +753,19 @@ void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
       continue;
     }
 
-    if (trimmedLine.size() > kMaxApiMessageBytes)
-    {
+    if (trimmedLine.size() > kMaxApiMessageBytes) {
       rejectOversize(trimmedLine.size());
       continue;
     }
 
-    if (exceedsJsonDepthLimit(trimmedLine, kMaxApiJsonDepth))
-    {
-      qWarning() << "[API] JSON depth limit exceeded (line):"
-                 << state.peerAddress << ":" << state.peerPort
-                 << "- Max depth:" << kMaxApiJsonDepth;
+    if (exceedsJsonDepthLimit(trimmedLine, kMaxApiJsonDepth)) {
+      qWarning() << "[API] JSON depth limit exceeded (line):" << state.peerAddress << ":"
+                 << state.peerPort << "- Max depth:" << kMaxApiJsonDepth;
 
-      sendResponse(CommandResponse::makeError(
-                       QString(), ErrorCode::ExecutionError,
-                       QStringLiteral("JSON nesting depth exceeds limit"))
-                       .toJsonBytes());
+      sendResponse(CommandResponse::makeError(QString(),
+                                              ErrorCode::ExecutionError,
+                                              QStringLiteral("JSON nesting depth exceeds limit"))
+                     .toJsonBytes());
       continue;
     }
 
@@ -842,28 +781,23 @@ void API::Server::onDataReceived(QTcpSocket *socket, const QByteArray &data)
  */
 void API::Server::acceptConnection()
 {
-  auto *socket = m_server.nextPendingConnection();
-  if (!socket)
-  {
+  auto* socket = m_server.nextPendingConnection();
+  if (!socket) {
     if (enabled())
-      Misc::Utilities::showMessageBox(tr("API server"),
-                                      tr("Invalid pending connection"),
-                                      QMessageBox::Critical);
+      Misc::Utilities::showMessageBox(
+        tr("API server"), tr("Invalid pending connection"), QMessageBox::Critical);
     return;
   }
 
-  if (!enabled())
-  {
+  if (!enabled()) {
     socket->close();
     socket->deleteLater();
     return;
   }
 
-  if (m_connections.size() >= kMaxApiClients)
-  {
-    qWarning() << "[API] Max clients limit exceeded:"
-               << socket->peerAddress().toString() << ":" << socket->peerPort()
-               << "- Current clients:" << m_connections.size()
+  if (m_connections.size() >= kMaxApiClients) {
+    qWarning() << "[API] Max clients limit exceeded:" << socket->peerAddress().toString() << ":"
+               << socket->peerPort() << "- Current clients:" << m_connections.size()
                << "- Limit:" << kMaxApiClients << "- Rejecting connection";
 
     socket->close();
@@ -872,23 +806,21 @@ void API::Server::acceptConnection()
   }
 
   connect(socket, &QTcpSocket::errorOccurred, this, &Server::onErrorOccurred);
-  connect(socket, &QTcpSocket::disconnected, this,
-          [=, this]() { onSocketDisconnected(); });
+  connect(socket, &QTcpSocket::disconnected, this, [=, this]() { onSocketDisconnected(); });
 
   ConnectionState state;
   state.peerAddress = socket->peerAddress().toString();
-  state.peerPort = socket->peerPort();
+  state.peerPort    = socket->peerPort();
   m_connections.insert(socket, state);
 
-  qInfo() << "[API] New client connected:" << state.peerAddress << ":"
-          << state.peerPort << "- Total clients:" << m_connections.size();
+  qInfo() << "[API] New client connected:" << state.peerAddress << ":" << state.peerPort
+          << "- Total clients:" << m_connections.size();
 
   socket->setParent(nullptr);
   socket->moveToThread(&m_workerThread);
 
-  auto *worker = static_cast<ServerWorker *>(m_worker);
-  QMetaObject::invokeMethod(worker, "addSocket", Qt::QueuedConnection,
-                            Q_ARG(QTcpSocket *, socket));
+  auto* worker = static_cast<ServerWorker*>(m_worker);
+  QMetaObject::invokeMethod(worker, "addSocket", Qt::QueuedConnection, Q_ARG(QTcpSocket*, socket));
 }
 
 /**
@@ -899,8 +831,7 @@ void API::Server::acceptConnection()
  *
  * @param socketError Error code provided by the QAbstractSocket.
  */
-void API::Server::onErrorOccurred(
-    const QAbstractSocket::SocketError socketError)
+void API::Server::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
   qDebug() << socketError;
 }
@@ -918,7 +849,7 @@ void API::Server::onErrorOccurred(
 void API::Server::onSocketDisconnected()
 {
   // Validate socket
-  auto *socket = qobject_cast<QTcpSocket *>(sender());
+  auto* socket = qobject_cast<QTcpSocket*>(sender());
   if (!socket)
     return;
 
@@ -927,12 +858,10 @@ void API::Server::onSocketDisconnected()
   MCPHandler::instance().clearSession(sessionId);
 
   // Use cached peer info for safe logging
-  if (m_connections.contains(socket))
-  {
-    const auto &state = m_connections[socket];
-    qInfo() << "[API] Client disconnected (via signal):" << state.peerAddress
-            << ":" << state.peerPort
-            << "- Remaining clients:" << (m_connections.size() - 1);
+  if (m_connections.contains(socket)) {
+    const auto& state = m_connections[socket];
+    qInfo() << "[API] Client disconnected (via signal):" << state.peerAddress << ":"
+            << state.peerPort << "- Remaining clients:" << (m_connections.size() - 1);
   }
 
   m_connections.remove(socket);
@@ -946,15 +875,14 @@ void API::Server::onSocketDisconnected()
  *
  * @param socket The socket pointer being removed
  */
-void API::Server::onSocketDisconnected(QTcpSocket *socket)
+void API::Server::onSocketDisconnected(QTcpSocket* socket)
 {
   if (!socket)
     return;
 
   const QString sessionId = QString::number(reinterpret_cast<quintptr>(socket));
   MCPHandler::instance().clearSession(sessionId);
-  if (m_connections.contains(socket))
-  {
+  if (m_connections.contains(socket)) {
     qInfo() << "[API] Client disconnected (via worker):"
             << "- Remaining clients:" << (m_connections.size() - 1);
 
@@ -972,8 +900,7 @@ void API::Server::onSocketDisconnected(QTcpSocket *socket)
  */
 void API::Server::onClientCountChanged(int count)
 {
-  if (m_clientCount != count)
-  {
+  if (m_clientCount != count) {
     m_clientCount = count;
     Q_EMIT clientCountChanged();
   }

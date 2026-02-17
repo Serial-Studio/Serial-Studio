@@ -19,8 +19,9 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "UI/Dashboard.h"
 #include "UI/Widgets/FFTPlot.h"
+
+#include "UI/Dashboard.h"
 
 /**
  * @brief Computes a single coefficient of the 4-term Blackman-Harris window.
@@ -55,11 +56,10 @@ inline float blackman_harris_coeff(unsigned int i, unsigned int N)
   constexpr float a3 = 0.01168f;
 
   const float two_pi = 6.28318530717958647692f;
-  const float k = two_pi / static_cast<float>(N - 1);
-  const float x = k * static_cast<float>(i);
+  const float k      = two_pi / static_cast<float>(N - 1);
+  const float x      = k * static_cast<float>(i);
 
-  return a0 - a1 * std::cos(x) + a2 * std::cos(2.0f * x)
-         - a3 * std::cos(3.0f * x);
+  return a0 - a1 * std::cos(x) + a2 * std::cos(2.0f * x) - a3 * std::cos(3.0f * x);
 }
 
 /**
@@ -67,7 +67,7 @@ inline float blackman_harris_coeff(unsigned int i, unsigned int N)
  * @param index The index of the FFT plot in the Dashboard.
  * @param parent The parent QQuickItem.
  */
-Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
+Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
   : QQuickItem(parent)
   , m_size(0)
   , m_index(index)
@@ -83,10 +83,9 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
   , m_scaleIsValid(false)
   , m_plan(nullptr)
 {
-  if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index))
-  {
+  if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index)) {
     // Get FFT dataset
-    const auto &dataset = GET_DATASET(SerialStudio::DashboardFFT, m_index);
+    const auto& dataset = GET_DATASET(SerialStudio::DashboardFFT, m_index);
 
     // Initialize FFT size, force power of two for better performance
     m_size = 1 << static_cast<int>(std::log2(qMax(8, dataset.fftSamples)));
@@ -112,8 +111,7 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
 
     // Create FFT plan
     m_plan = kiss_fft_alloc(m_size, 0, nullptr, nullptr);
-    if (!m_plan)
-    {
+    if (!m_plan) {
       qWarning() << "FFT plan allocation failed for size:" << m_size;
       return;
     }
@@ -123,18 +121,16 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
     double maxVal = dataset.fftMax;
 
     // Validate that values are finite
-    if (std::isfinite(minVal) && std::isfinite(maxVal))
-    {
+    if (std::isfinite(minVal) && std::isfinite(maxVal)) {
       // Fix inverted limits
       if (maxVal < minVal)
         std::swap(minVal, maxVal);
 
       // Accept only if the range is positive and non-zero
-      if (maxVal - minVal > 0.0)
-      {
+      if (maxVal - minVal > 0.0) {
         m_scaleIsValid = true;
-        m_center = (maxVal + minVal) * 0.5;
-        m_halfRange = qMax(1e-12, (maxVal - minVal) * 0.5);
+        m_center       = (maxVal + minVal) * 0.5;
+        m_halfRange    = qMax(1e-12, (maxVal - minVal) * 0.5);
       }
     }
   }
@@ -207,10 +203,9 @@ bool Widgets::FFTPlot::running() const
  * @brief Draws the FFT data on the given QLineSeries.
  * @param series The QLineSeries to draw the data on.
  */
-void Widgets::FFTPlot::draw(QLineSeries *series)
+void Widgets::FFTPlot::draw(QLineSeries* series)
 {
-  if (series)
-  {
+  if (series) {
     updateData();
     series->replace(m_data);
     Q_EMIT series->update();
@@ -223,8 +218,7 @@ void Widgets::FFTPlot::draw(QLineSeries *series)
  */
 void Widgets::FFTPlot::setDataW(const int width)
 {
-  if (m_dataW != width)
-  {
+  if (m_dataW != width) {
     m_dataW = width;
     updateData();
 
@@ -238,8 +232,7 @@ void Widgets::FFTPlot::setDataW(const int width)
  */
 void Widgets::FFTPlot::setDataH(const int height)
 {
-  if (m_dataH != height)
-  {
+  if (m_dataH != height) {
     m_dataH = height;
     updateData();
 
@@ -274,12 +267,11 @@ void Widgets::FFTPlot::updateData()
     return;
 
   // Fetch time-domain data
-  const auto &data = UI::Dashboard::instance().fftData(m_index);
+  const auto& data = UI::Dashboard::instance().fftData(m_index);
 
   // Re-initialize FFT structures if data size changes
   const int newSize = static_cast<int>(data.size());
-  if (newSize != m_size)
-  {
+  if (newSize != m_size) {
     m_size = newSize;
 
     m_window.resize(m_size);
@@ -290,15 +282,13 @@ void Widgets::FFTPlot::updateData()
     for (unsigned int i = 0; i < windowSize; ++i)
       m_window[i] = blackman_harris_coeff(i, windowSize);
 
-    if (m_plan)
-    {
+    if (m_plan) {
       kiss_fft_free(m_plan);
       m_plan = nullptr;
     }
 
     m_plan = kiss_fft_alloc(m_size, 0, nullptr, nullptr);
-    if (!m_plan)
-    {
+    if (!m_plan) {
       qWarning() << "FFT plan allocation failed for size:" << m_size;
       return;
     }
@@ -309,32 +299,29 @@ void Widgets::FFTPlot::updateData()
     return;
 
   // Access the internal buffer and state of the circular queue
-  const double *in = data.raw();
-  std::size_t idx = data.frontIndex();
+  const double* in      = data.raw();
+  std::size_t idx       = data.frontIndex();
   const std::size_t cap = data.capacity();
 
   // Normalize time-domain input samples into [-1, 1] range
   const double offset = m_scaleIsValid ? -m_center : 0.0;
-  const double scale = m_scaleIsValid ? (1.0 / m_halfRange) : 1.0;
-  for (int i = 0; i < m_size; ++i)
-  {
+  const double scale  = m_scaleIsValid ? (1.0 / m_halfRange) : 1.0;
+  for (int i = 0; i < m_size; ++i) {
     const double raw = in[idx];
-    const float v = std::isfinite(raw)
-                        ? static_cast<float>((raw + offset) * scale)
-                        : 0.0f;
-    m_samples[i].r = v * m_window[i];
-    m_samples[i].i = 0.0f;
-    idx = (idx + 1) % cap;
+    const float v    = std::isfinite(raw) ? static_cast<float>((raw + offset) * scale) : 0.0f;
+    m_samples[i].r   = v * m_window[i];
+    m_samples[i].i   = 0.0f;
+    idx              = (idx + 1) % cap;
   }
 
   // Run FFT
   kiss_fft(m_plan, m_samples.data(), m_fftOutput.data());
 
   // Constants
-  constexpr float floorDB = -100.0f;
+  constexpr float floorDB       = -100.0f;
   constexpr int smoothingWindow = 3;
-  constexpr float eps_squared = 1e-24f;
-  constexpr int halfWindow = smoothingWindow / 2;
+  constexpr float eps_squared   = 1e-24f;
+  constexpr int halfWindow      = smoothingWindow / 2;
 
   // Compute number of frequency bins (Nyquist rate)
   const int spectrumSize = static_cast<size_t>(m_size) / 2;
@@ -345,33 +332,28 @@ void Widgets::FFTPlot::updateData()
     dbCache.resize(spectrumSize);
 
   // Precompute dB values
-  const float normFactor
-      = static_cast<float>(m_size) * static_cast<float>(m_size);
-  for (int i = 0; i < spectrumSize; ++i)
-  {
-    const float re = m_fftOutput[i].r;
-    const float im = m_fftOutput[i].i;
+  const float normFactor = static_cast<float>(m_size) * static_cast<float>(m_size);
+  for (int i = 0; i < spectrumSize; ++i) {
+    const float re    = m_fftOutput[i].r;
+    const float im    = m_fftOutput[i].i;
     const float power = std::max((re * re + im * im) / normFactor, eps_squared);
-    dbCache[i] = std::max(10.0f * std::log10(power), floorDB);
+    dbCache[i]        = std::max(10.0f * std::log10(power), floorDB);
   }
 
   // Resize X buffer if needed
-  if (m_xData.size() != static_cast<size_t>(spectrumSize))
-  {
+  if (m_xData.size() != static_cast<size_t>(spectrumSize)) {
     m_xData.resize(spectrumSize);
     m_xData.clear();
   }
 
   // Resize Y buffer if needed
-  if (m_yData.size() != static_cast<size_t>(spectrumSize))
-  {
+  if (m_yData.size() != static_cast<size_t>(spectrumSize)) {
     m_yData.resize(spectrumSize);
     m_yData.clear();
   }
 
   // Smoothing and XY point generation
-  for (int i = 0; i < spectrumSize; ++i)
-  {
+  for (int i = 0; i < spectrumSize; ++i) {
     const int minIdx = std::max(0, i - halfWindow);
     const int maxIdx = std::min(spectrumSize - 1, i + halfWindow);
 
@@ -380,7 +362,7 @@ void Widgets::FFTPlot::updateData()
       sum += dbCache[k];
 
     const float smoothedDB = sum / (maxIdx - minIdx + 1);
-    const float freq = static_cast<float>(i) * m_samplingRate / m_size;
+    const float freq       = static_cast<float>(i) * m_samplingRate / m_size;
 
     m_xData.push(freq);
     m_yData.push(smoothedDB);

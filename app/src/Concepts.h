@@ -21,13 +21,11 @@
 
 #pragma once
 
-#include <QString>
-#include <QIODevice>
-
 #include <concepts>
+#include <QIODevice>
+#include <QString>
 
-namespace Concepts
-{
+namespace Concepts {
 /**
  * @concept Numeric
  * @brief Constrains template parameter to numeric types (integral or floating
@@ -129,7 +127,7 @@ concept Hashable = requires(T a) {
 template<typename T>
 concept Serializable = requires(T obj) {
   { serialize(obj) };
-  { read(obj, std::declval<const QJsonObject &>()) } -> std::same_as<bool>;
+  { read(obj, std::declval<const QJsonObject&>()) } -> std::same_as<bool>;
 };
 
 /**
@@ -174,9 +172,7 @@ concept Driver = requires(T driver) {
   { driver.isOpen() } -> std::same_as<bool>;
   { driver.isReadable() } -> std::same_as<bool>;
   { driver.isWritable() } -> std::same_as<bool>;
-  {
-    driver.write(std::declval<const QByteArray &>())
-  } -> std::convertible_to<quint64>;
+  { driver.write(std::declval<const QByteArray&>()) } -> std::convertible_to<quint64>;
 };
 
-} // namespace Concepts
+}  // namespace Concepts

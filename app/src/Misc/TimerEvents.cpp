@@ -19,8 +19,9 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include <QTimerEvent>
 #include "Misc/TimerEvents.h"
+
+#include <QTimerEvent>
 
 /**
  * @brief Constructs the TimerEvents singleton instance.
@@ -29,8 +30,7 @@
  * The value is read from the key "uiRefreshRate" with a default of 60 Hz.
  * The frequency is clamped between 1 and 240 Hz.
  */
-Misc::TimerEvents::TimerEvents()
-  : m_uiTimerHz(60)
+Misc::TimerEvents::TimerEvents() : m_uiTimerHz(60)
 {
   m_uiTimerHz = m_settings.value("uiRefreshRate", 60).toInt();
   m_uiTimerHz = qBound(1, m_uiTimerHz, 240);
@@ -40,7 +40,7 @@ Misc::TimerEvents::TimerEvents()
  * @brief Returns a reference to the singleton instance.
  * @return Reference to the only instance of TimerEvents.
  */
-Misc::TimerEvents &Misc::TimerEvents::instance()
+Misc::TimerEvents& Misc::TimerEvents::instance()
 {
   static TimerEvents singleton;
   return singleton;
@@ -80,7 +80,7 @@ void Misc::TimerEvents::stopTimers()
  *
  * @param event Pointer to the timer event.
  */
-void Misc::TimerEvents::timerEvent(QTimerEvent *event)
+void Misc::TimerEvents::timerEvent(QTimerEvent* event)
 {
   if (event->timerId() == m_timer1Hz.timerId())
     Q_EMIT timeout1Hz();
@@ -126,13 +126,11 @@ void Misc::TimerEvents::setFPS(int hz)
 {
   hz = qBound(1, hz, 240);
 
-  if (m_uiTimerHz != hz)
-  {
+  if (m_uiTimerHz != hz) {
     m_uiTimerHz = hz;
     m_settings.setValue("uiTimerHz", hz);
 
-    if (m_uiTimer.isActive())
-    {
+    if (m_uiTimer.isActive()) {
       m_uiTimer.stop();
       m_uiTimer.start(1000 / m_uiTimerHz, Qt::PreciseTimer, this);
     }

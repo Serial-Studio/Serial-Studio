@@ -21,23 +21,21 @@
 
 #pragma once
 
-#include <QFile>
-#include <QObject>
-#include <QVector>
-#include <QKeyEvent>
 #include <QDateTime>
 #include <QElapsedTimer>
+#include <QFile>
+#include <QKeyEvent>
+#include <QObject>
+#include <QVector>
 
-namespace CSV
-{
+namespace CSV {
 /**
  * @brief The Player class
  *
  * The CSV player class allows users to select a CSV file and "re-play" it
  * with Serial Studio.
  */
-class Player : public QObject
-{
+class Player : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool isOpen
@@ -67,13 +65,13 @@ signals:
 
 private:
   explicit Player();
-  Player(Player &&) = delete;
-  Player(const Player &) = delete;
-  Player &operator=(Player &&) = delete;
-  Player &operator=(const Player &) = delete;
+  Player(Player&&)                 = delete;
+  Player(const Player&)            = delete;
+  Player& operator=(Player&&)      = delete;
+  Player& operator=(const Player&) = delete;
 
 public:
-  static Player &instance();
+  static Player& instance();
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] double progress() const;
@@ -82,7 +80,7 @@ public:
   [[nodiscard]] int framePosition() const;
 
   [[nodiscard]] QString filename() const;
-  [[nodiscard]] const QString &timestamp() const;
+  [[nodiscard]] const QString& timestamp() const;
 
 public slots:
   void play();
@@ -92,7 +90,7 @@ public slots:
   void closeFile();
   void nextFrame();
   void previousFrame();
-  void openFile(const QString &filePath);
+  void openFile(const QString& filePath);
   void setProgress(const double progress);
 
 private slots:
@@ -109,18 +107,18 @@ private:
   void convertColumnToDateTime(int columnIndex);
 
   QDateTime getDateTime(int row);
-  QDateTime getDateTime(const QString &cell);
+  QDateTime getDateTime(const QString& cell);
   double getTimestampSeconds(int row);
-  double getTimestampSeconds(const QString &cell);
+  double getTimestampSeconds(const QString& cell);
   QString formatTimestamp(double seconds) const;
 
   QByteArray getFrame(const int row);
 
-  const QString getCellValue(const int row, const int column, bool &error);
+  const QString getCellValue(const int row, const int column, bool& error);
 
 protected:
-  bool eventFilter(QObject *obj, QEvent *event) override;
-  bool handleKeyPress(QKeyEvent *keyEvent);
+  bool eventFilter(QObject* obj, QEvent* event) override;
+  bool handleKeyPress(QKeyEvent* keyEvent);
 
 private:
   int m_framePos;
@@ -135,4 +133,4 @@ private:
   bool m_useHighPrecisionTimestamps;
   QVector<double> m_timestampCache;
 };
-} // namespace CSV
+}  // namespace CSV

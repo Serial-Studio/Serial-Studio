@@ -20,46 +20,42 @@
  */
 
 #include "API/CommandHandler.h"
+
 #include "API/CommandRegistry.h"
-#include "API/Handlers/IOManagerHandler.h"
-#include "API/Handlers/NetworkHandler.h"
-#include "API/Handlers/UARTHandler.h"
 #include "API/Handlers/BluetoothLEHandler.h"
-#include "API/Handlers/CSVExportHandler.h"
-#include "API/Handlers/ProjectHandler.h"
 #include "API/Handlers/ConsoleHandler.h"
+#include "API/Handlers/CSVExportHandler.h"
 #include "API/Handlers/CSVPlayerHandler.h"
 #include "API/Handlers/DashboardHandler.h"
+#include "API/Handlers/IOManagerHandler.h"
+#include "API/Handlers/NetworkHandler.h"
+#include "API/Handlers/ProjectHandler.h"
+#include "API/Handlers/UARTHandler.h"
 
-namespace
-{
+namespace {
 constexpr int kMaxBatchCommands = 256;
-} // namespace
+}  // namespace
 
 #ifdef BUILD_COMMERCIAL
-#  include "API/Handlers/ModbusHandler.h"
-#  include "API/Handlers/CANBusHandler.h"
-#  include "API/Handlers/MQTTHandler.h"
-#  include "API/Handlers/MDF4ExportHandler.h"
 #  include "API/Handlers/AudioHandler.h"
+#  include "API/Handlers/CANBusHandler.h"
+#  include "API/Handlers/MDF4ExportHandler.h"
 #  include "API/Handlers/MDF4PlayerHandler.h"
+#  include "API/Handlers/ModbusHandler.h"
+#  include "API/Handlers/MQTTHandler.h"
 #endif
 
 /**
  * @brief Constructs the CommandHandler
  * @param parent Optional parent QObject
  */
-API::CommandHandler::CommandHandler(QObject *parent)
-  : QObject(parent)
-  , m_initialized(false)
-{
-}
+API::CommandHandler::CommandHandler(QObject* parent) : QObject(parent), m_initialized(false) {}
 
 /**
  * @brief Gets the singleton instance of the CommandHandler
  * @return Reference to the singleton instance
  */
-API::CommandHandler &API::CommandHandler::instance()
+API::CommandHandler& API::CommandHandler::instance()
 {
   static CommandHandler singleton;
   if (!singleton.m_initialized)
@@ -73,7 +69,7 @@ API::CommandHandler &API::CommandHandler::instance()
  * @param data Raw bytes to check
  * @return true if data looks like a JSON API command
  */
-bool API::CommandHandler::isApiMessage(const QByteArray &data) const
+bool API::CommandHandler::isApiMessage(const QByteArray& data) const
 {
   return API::isApiMessage(data);
 }
@@ -83,54 +79,45 @@ bool API::CommandHandler::isApiMessage(const QByteArray &data) const
  * @param data Raw JSON message bytes
  * @return JSON response bytes ready to send to client
  */
-QByteArray API::CommandHandler::processMessage(const QByteArray &data)
+QByteArray API::CommandHandler::processMessage(const QByteArray& data)
 {
   QString type;
   QJsonObject json;
 
   // Parse the incoming JSON
-  if (!parseMessage(data, type, json))
-  {
-    return CommandResponse::makeError(QString(), ErrorCode::InvalidJson,
-                                      QStringLiteral("Failed to parse JSON "
-                                                     "message"))
-        .toJsonBytes();
+  if (!parseMessage(data, type, json)) {
+    return CommandResponse::makeError(
+             QString(), ErrorCode::InvalidJson, QStringLiteral("Failed to parse JSON message"))
+      .toJsonBytes();
   }
 
   // Route based on message type
-  if (type == MessageType::Command)
-  {
+  if (type == MessageType::Command) {
     const auto request = CommandRequest::fromJson(json);
-    if (!request.isValid())
-    {
+    if (!request.isValid()) {
       return CommandResponse::makeError(
-                 request.id, ErrorCode::InvalidMessageType,
-                 QStringLiteral("Missing 'command' field"))
-          .toJsonBytes();
+               request.id, ErrorCode::InvalidMessageType, QStringLiteral("Missing 'command' field"))
+        .toJsonBytes();
     }
     return processCommand(request).toJsonBytes();
   }
 
-  else if (type == MessageType::Batch)
-  {
+  else if (type == MessageType::Batch) {
     // Check batch size BEFORE parsing all commands to prevent DoS
-    const QString batchId = json.value(QStringLiteral("id")).toString();
+    const QString batchId    = json.value(QStringLiteral("id")).toString();
     const auto commandsArray = json.value(QStringLiteral("commands")).toArray();
 
-    if (commandsArray.isEmpty())
-    {
-      return CommandResponse::makeError(batchId, ErrorCode::InvalidMessageType,
-                                        QStringLiteral("Empty or invalid "
-                                                       "'commands' array"))
-          .toJsonBytes();
+    if (commandsArray.isEmpty()) {
+      return CommandResponse::makeError(batchId,
+                                        ErrorCode::InvalidMessageType,
+                                        QStringLiteral("Empty or invalid 'commands' array"))
+        .toJsonBytes();
     }
 
-    if (commandsArray.size() > kMaxBatchCommands)
-    {
+    if (commandsArray.size() > kMaxBatchCommands) {
       return CommandResponse::makeError(
-                 batchId, ErrorCode::InvalidParam,
-                 QStringLiteral("Batch size exceeds limit"))
-          .toJsonBytes();
+               batchId, ErrorCode::InvalidParam, QStringLiteral("Batch size exceeds limit"))
+        .toJsonBytes();
     }
 
     const auto batch = BatchRequest::fromJson(json);
@@ -138,10 +125,10 @@ QByteArray API::CommandHandler::processMessage(const QByteArray &data)
   }
 
   // Unknown message type
-  return CommandResponse::makeError(
-             QString(), ErrorCode::InvalidMessageType,
-             QStringLiteral("Unknown message type: %1").arg(type))
-      .toJsonBytes();
+  return CommandResponse::makeError(QString(),
+                                    ErrorCode::InvalidMessageType,
+                                    QStringLiteral("Unknown message type: %1").arg(type))
+    .toJsonBytes();
 }
 
 /**
@@ -149,11 +136,9 @@ QByteArray API::CommandHandler::processMessage(const QByteArray &data)
  * @param request The parsed command request
  * @return CommandResponse with result or error
  */
-API::CommandResponse
-API::CommandHandler::processCommand(const CommandRequest &request)
+API::CommandResponse API::CommandHandler::processCommand(const CommandRequest& request)
 {
-  return CommandRegistry::instance().execute(request.command, request.id,
-                                             request.params);
+  return CommandRegistry::instance().execute(request.command, request.id, request.params);
 }
 
 /**
@@ -164,14 +149,13 @@ API::CommandHandler::processCommand(const CommandRequest &request)
  * Commands are executed in the order they appear in the batch.
  * Execution continues even if individual commands fail.
  */
-API::BatchResponse API::CommandHandler::processBatch(const BatchRequest &batch)
+API::BatchResponse API::CommandHandler::processBatch(const BatchRequest& batch)
 {
   BatchResponse response;
-  response.id = batch.id;
+  response.id      = batch.id;
   response.success = true;
 
-  for (const auto &cmd : batch.commands)
-  {
+  for (const auto& cmd : batch.commands) {
     const auto result = processCommand(cmd);
     response.results.append(result);
 
@@ -192,11 +176,10 @@ QJsonObject API::CommandHandler::getAvailableCommands() const
   QJsonObject result;
   QJsonArray commandList;
 
-  const auto &commands = CommandRegistry::instance().commands();
-  for (auto it = commands.constBegin(); it != commands.constEnd(); ++it)
-  {
+  const auto& commands = CommandRegistry::instance().commands();
+  for (auto it = commands.constBegin(); it != commands.constEnd(); ++it) {
     QJsonObject cmdInfo;
-    cmdInfo[QStringLiteral("name")] = it.key();
+    cmdInfo[QStringLiteral("name")]        = it.key();
     cmdInfo[QStringLiteral("description")] = it.value().description;
     commandList.append(cmdInfo);
   }
@@ -217,12 +200,12 @@ void API::CommandHandler::initializeHandlers()
     return;
 
   // Register built-in api.* commands
-  CommandRegistry::instance().registerCommand(
-      QStringLiteral("api.getCommands"),
-      QStringLiteral("Get list of all available commands"),
-      [this](const QString &id, const QJsonObject &) {
-        return CommandResponse::makeSuccess(id, getAvailableCommands());
-      });
+  CommandRegistry::instance().registerCommand(QStringLiteral("api.getCommands"),
+                                              QStringLiteral("Get list of all available commands"),
+                                              [this](const QString& id, const QJsonObject&) {
+                                                return CommandResponse::makeSuccess(
+                                                  id, getAvailableCommands());
+                                              });
 
   // Initialize all handler modules
   Handlers::IOManagerHandler::registerCommands();

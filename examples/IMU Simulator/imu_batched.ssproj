@@ -5,8 +5,6 @@
     "dashboardLayout": {
         "autoLayout": true,
         "windowOrder": [
-            3,
-            4,
             0,
             1,
             2
@@ -95,7 +93,7 @@
                     "plotMin": 0,
                     "title": "X",
                     "units": "m/s²",
-                    "value": "",
+                    "value": "--.--",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": 0,
@@ -120,7 +118,7 @@
                     "plotMin": 0,
                     "title": "Y",
                     "units": "m/s²",
-                    "value": "",
+                    "value": "--.--",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": 0,
@@ -145,7 +143,7 @@
                     "plotMin": 0,
                     "title": "Z",
                     "units": "m/s²",
-                    "value": "",
+                    "value": "--.--",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": 0,

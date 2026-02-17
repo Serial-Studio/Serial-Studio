@@ -21,14 +21,13 @@
 
 #pragma once
 
-#include <QObject>
-#include <QSettings>
-#include <QQuickItem>
-#include <QJsonObject>
 #include <QJsonArray>
+#include <QJsonObject>
+#include <QObject>
+#include <QQuickItem>
+#include <QSettings>
 
-namespace UI
-{
+namespace UI {
 /**
  * @class WindowManager
  * @brief Manages layout, geometry, z-ordering, and interactive manipulation of
@@ -66,8 +65,8 @@ namespace UI
  *       windows.
  */
 class Taskbar;
-class WindowManager : public QQuickItem
-{
+
+class WindowManager : public QQuickItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int zCounter
@@ -95,25 +94,24 @@ signals:
   void backgroundImageChanged();
   void autoLayoutEnabledChanged();
   void rightClicked(int x, int y);
-  void zOrderChanged(QQuickItem *item);
-  void geometryChanged(QQuickItem *item);
+  void zOrderChanged(QQuickItem* item);
+  void geometryChanged(QQuickItem* item);
 
 public:
-  WindowManager(QQuickItem *parent = nullptr);
+  WindowManager(QQuickItem* parent = nullptr);
 
   [[nodiscard]] int zCounter() const;
   [[nodiscard]] bool autoLayoutEnabled() const;
-  [[nodiscard]] const QString &backgroundImage() const;
+  [[nodiscard]] const QString& backgroundImage() const;
 
   [[nodiscard]] bool snapIndicatorVisible() const;
-  [[nodiscard]] const QRect &snapIndicator() const;
+  [[nodiscard]] const QRect& snapIndicator() const;
 
-  Q_INVOKABLE int zOrder(QQuickItem *item) const;
+  Q_INVOKABLE int zOrder(QQuickItem* item) const;
   Q_INVOKABLE QJsonObject serializeLayout() const;
-  Q_INVOKABLE bool restoreLayout(const QJsonObject &layout);
+  Q_INVOKABLE bool restoreLayout(const QJsonObject& layout);
 
-  enum class ResizeEdge
-  {
+  enum class ResizeEdge {
     None,
     Left,
     Right,
@@ -134,26 +132,26 @@ public slots:
   void triggerLayoutUpdate();
   void clearBackgroundImage();
   void selectBackgroundImage();
-  void bringToFront(QQuickItem *item);
-  void setTaskbar(QQuickItem *taskbar);
-  void unregisterWindow(QQuickItem *item);
-  void setBackgroundImage(const QString &path);
+  void bringToFront(QQuickItem* item);
+  void setTaskbar(QQuickItem* taskbar);
+  void unregisterWindow(QQuickItem* item);
+  void setBackgroundImage(const QString& path);
   void setAutoLayoutEnabled(const bool enabled);
-  void registerWindow(const int id, QQuickItem *item);
+  void registerWindow(const int id, QQuickItem* item);
 
 private:
-  int getIdForWindow(QQuickItem *item) const;
-  int determineNewIndexFromMousePos(const QPoint &pos) const;
+  int getIdForWindow(QQuickItem* item) const;
+  int determineNewIndexFromMousePos(const QPoint& pos) const;
 
-  QRect extractGeometry(QQuickItem *item) const;
-  ResizeEdge detectResizeEdge(QQuickItem *target) const;
-  QQuickItem *getWindow(const int x, const int y) const;
+  QRect extractGeometry(QQuickItem* item) const;
+  ResizeEdge detectResizeEdge(QQuickItem* target) const;
+  QQuickItem* getWindow(const int x, const int y) const;
 
 protected:
-  void mouseMoveEvent(QMouseEvent *event) override;
-  void mousePressEvent(QMouseEvent *event) override;
-  void mouseReleaseEvent(QMouseEvent *event) override;
-  void mouseDoubleClickEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
+  void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 private:
   int m_zCounter;
@@ -162,8 +160,8 @@ private:
   QString m_backgroundImage;
 
   QVector<int> m_windowOrder;
-  QMap<int, QQuickItem *> m_windows;
-  QMap<QQuickItem *, int> m_windowZ;
+  QMap<int, QQuickItem*> m_windows;
+  QMap<QQuickItem*, int> m_windowZ;
 
   ResizeEdge m_resizeEdge;
 
@@ -173,12 +171,12 @@ private:
   QRect m_initialGeometry;
   QPoint m_initialMousePos;
 
-  Taskbar *m_taskbar;
-  QQuickItem *m_dragWindow;
-  QQuickItem *m_targetWindow;
-  QQuickItem *m_resizeWindow;
-  QQuickItem *m_focusedWindow;
+  Taskbar* m_taskbar;
+  QQuickItem* m_dragWindow;
+  QQuickItem* m_targetWindow;
+  QQuickItem* m_resizeWindow;
+  QQuickItem* m_focusedWindow;
 
   QSettings m_settings;
 };
-} // namespace UI
+}  // namespace UI

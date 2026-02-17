@@ -22,20 +22,18 @@
 #pragma once
 
 #include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 #include <QObject>
 #include <QSettings>
-#include <QJsonArray>
-#include <QJsonValue>
-#include <QJsonObject>
-#include <QJsonDocument>
-
-#include "SerialStudio.h"
 
 #include "DataModel/Frame.h"
 #include "DataModel/FrameParser.h"
+#include "SerialStudio.h"
 
-namespace DataModel
-{
+namespace DataModel {
 /**
  * @brief The FrameBuilder class
  *
@@ -47,8 +45,7 @@ namespace DataModel
  * This frame is later shared with the rest of the modules, and is updated
  * automatically with new incoming raw data.
  */
-class FrameBuilder : public QObject
-{
+class FrameBuilder : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QString jsonMapFilename
@@ -66,47 +63,47 @@ class FrameBuilder : public QObject
 signals:
   void jsonFileMapChanged();
   void operationModeChanged();
-  void frameChanged(const DataModel::Frame &frame);
+  void frameChanged(const DataModel::Frame& frame);
 
 private:
   explicit FrameBuilder();
-  FrameBuilder(FrameBuilder &&) = delete;
-  FrameBuilder(const FrameBuilder &) = delete;
-  FrameBuilder &operator=(FrameBuilder &&) = delete;
-  FrameBuilder &operator=(const FrameBuilder &) = delete;
+  FrameBuilder(FrameBuilder&&)                 = delete;
+  FrameBuilder(const FrameBuilder&)            = delete;
+  FrameBuilder& operator=(FrameBuilder&&)      = delete;
+  FrameBuilder& operator=(const FrameBuilder&) = delete;
 
 public:
-  static FrameBuilder &instance();
+  static FrameBuilder& instance();
 
   [[nodiscard]] QString jsonMapFilepath() const;
   [[nodiscard]] QString jsonMapFilename() const;
-  [[nodiscard]] const DataModel::Frame &frame() const;
-  [[nodiscard]] DataModel::FrameParser *frameParser() const;
+  [[nodiscard]] const DataModel::Frame& frame() const;
+  [[nodiscard]] DataModel::FrameParser* frameParser() const;
   [[nodiscard]] SerialStudio::OperationMode operationMode() const;
 
 public slots:
   void setupExternalConnections();
-  void loadJsonMap(const QString &path, const bool showMessageBoxes = true);
-  void loadJsonMapFromData(const QByteArray &jsonData,
-                           const QString &sourcePath = QString(),
+  void loadJsonMap(const QString& path, const bool showMessageBoxes = true);
+  void loadJsonMapFromData(const QByteArray& jsonData,
+                           const QString& sourcePath   = QString(),
                            const bool showMessageBoxes = true);
-  void setFrameParser(DataModel::FrameParser *editor);
-  void registerQuickPlotHeaders(const QStringList &headers);
+  void setFrameParser(DataModel::FrameParser* editor);
+  void registerQuickPlotHeaders(const QStringList& headers);
   void setOperationMode(const SerialStudio::OperationMode mode);
 
-  void hotpathRxFrame(const QByteArray &data);
+  void hotpathRxFrame(const QByteArray& data);
 
 private slots:
   void onConnectedChanged();
 
 private:
-  void setJsonPathSetting(const QString &path);
+  void setJsonPathSetting(const QString& path);
 
-  void parseProjectFrame(const QByteArray &data);
-  void parseQuickPlotFrame(const QByteArray &data);
-  void buildQuickPlotFrame(const QStringList &channels);
+  void parseProjectFrame(const QByteArray& data);
+  void parseQuickPlotFrame(const QByteArray& data);
+  void buildQuickPlotFrame(const QStringList& channels);
 
-  void hotpathTxFrame(const DataModel::Frame &frame);
+  void hotpathTxFrame(const DataModel::Frame& frame);
 
 private slots:
   void updateTimestampedFramesEnabled();
@@ -129,9 +126,9 @@ private:
   QStringList m_quickPlotChannelNames;
   QStringList m_channelScratch;
 
-  DataModel::FrameParser *m_frameParser;
+  DataModel::FrameParser* m_frameParser;
   SerialStudio::OperationMode m_opMode;
 
   bool m_timestampedFramesEnabled;
 };
-} // namespace DataModel
+}  // namespace DataModel

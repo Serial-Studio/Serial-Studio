@@ -33,27 +33,28 @@
 /// Press Ctrl+C to terminate the program.
 ///
 
-#include <time.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #ifdef _WIN32
-#  include <winsock2.h>
 #  include <windows.h>
+#  include <winsock2.h>
 #  pragma comment(lib, "ws2_32.lib")
 #else
 #  include <time.h>
 #  include <unistd.h>
+
 #  include <arpa/inet.h>
 #endif
 
 #define MAX_BUFFER_SIZE 128
-#define TWO_PI 6.28318530718
+#define TWO_PI          6.28318530718
 
-#define DEFAULT_UDP_PORT 9000
-#define DEFAULT_NUM_FUNCTIONS 1
+#define DEFAULT_UDP_PORT         9000
+#define DEFAULT_NUM_FUNCTIONS    1
 #define DEFAULT_SEND_INTERVAL_MS 1.0
 
 /**
@@ -70,7 +71,7 @@ void sleep_ms(double milliseconds)
   Sleep((DWORD)(milliseconds));
 #else
   struct timespec ts;
-  ts.tv_sec = (time_t)(milliseconds / 1000);
+  ts.tv_sec  = (time_t)(milliseconds / 1000);
   ts.tv_nsec = (long)((milliseconds - (ts.tv_sec * 1000)) * 1e6);
   nanosleep(&ts, NULL);
 #endif
@@ -85,7 +86,7 @@ void sleep_ms(double milliseconds)
  * @param wave_type The type of waveform to validate.
  * @return 1 if the waveform type is valid, 0 otherwise.
  */
-int validate_wave_type(const char *wave_type)
+int validate_wave_type(const char* wave_type)
 {
   return (strcmp(wave_type, "sine") == 0 || strcmp(wave_type, "triangle") == 0
           || strcmp(wave_type, "saw") == 0 || strcmp(wave_type, "square") == 0);
@@ -102,7 +103,7 @@ int validate_wave_type(const char *wave_type)
  * @param phase Current phase of the waveform in radians.
  * @return Generated waveform value in the 0-5V range.
  */
-float generate_wave_value(const char *wave_type, float frequency, float phase)
+float generate_wave_value(const char* wave_type, float frequency, float phase)
 {
   if (strcmp(wave_type, "sine") == 0)
     return (sinf(phase) + 1.0) * 2.5;
@@ -154,22 +155,21 @@ void print_tutorial()
 void validate_frequency(float frequency, double send_interval_ms)
 {
   double nyquist_rate = 1.0 / (2.0 * (send_interval_ms / 1000.0));
-  double safe_rate = 0.8 * nyquist_rate;
+  double safe_rate    = 0.8 * nyquist_rate;
 
-  if (frequency >= nyquist_rate)
-  {
-    printf("Warning: Frequency %.2f Hz equals or exceeds the Nyquist rate "
-           "(%.2f Hz). "
-           "Waveform will be severely distorted.\n",
-           frequency, nyquist_rate);
+  if (frequency >= nyquist_rate) {
+    printf(
+      "Warning: Frequency %.2f Hz equals or exceeds the Nyquist rate (%.2f Hz). Waveform will be severely distorted.\n",
+      frequency,
+      nyquist_rate);
   }
 
-  else if (frequency > safe_rate)
-  {
-    printf("Warning: Frequency %.2f Hz approaches the Nyquist rate (%.2f Hz). "
-           "Consider reducing it below %.2f Hz to ensure smooth waveform "
-           "reconstruction.\n",
-           frequency, nyquist_rate, safe_rate);
+  else if (frequency > safe_rate) {
+    printf(
+      "Warning: Frequency %.2f Hz approaches the Nyquist rate (%.2f Hz). Consider reducing it below %.2f Hz to ensure smooth waveform reconstruction.\n",
+      frequency,
+      nyquist_rate,
+      safe_rate);
   }
 }
 
@@ -192,22 +192,19 @@ void validate_frequency(float frequency, double send_interval_ms)
  * @param verbose Pointer to an integer where the verbose flag will be stored
  *                (1 for enabled, 0 for disabled).
  */
-void parse_arguments(int argc, char *argv[], int *udp_port,
-                     double *send_interval_ms, int *num_functions, int *verbose)
+void parse_arguments(
+  int argc, char* argv[], int* udp_port, double* send_interval_ms, int* num_functions, int* verbose)
 {
-  for (int i = 1; i < argc; i++)
-  {
+  for (int i = 1; i < argc; i++) {
     if (strcmp(argv[i], "-p") == 0 && i + 1 < argc)
       *udp_port = atoi(argv[++i]);
 
     else if (strcmp(argv[i], "-i") == 0 && i + 1 < argc)
       *send_interval_ms = atof(argv[++i]);
 
-    else if (strcmp(argv[i], "-n") == 0 && i + 1 < argc)
-    {
+    else if (strcmp(argv[i], "-n") == 0 && i + 1 < argc) {
       *num_functions = atoi(argv[++i]);
-      if (*num_functions < 1)
-      {
+      if (*num_functions < 1) {
         fprintf(stderr, "Number of functions must be at least 1\n");
         exit(1);
       }
@@ -216,11 +213,8 @@ void parse_arguments(int argc, char *argv[], int *udp_port,
     else if (strcmp(argv[i], "-v") == 0)
       *verbose = 1;
 
-    else
-    {
-      fprintf(stderr,
-              "Usage: %s [-p port] [-i interval] [-n num_functions] [-v]\n",
-              argv[0]);
+    else {
+      fprintf(stderr, "Usage: %s [-p port] [-i interval] [-n num_functions] [-v]\n", argv[0]);
       exit(1);
     }
   }
@@ -237,12 +231,11 @@ void parse_arguments(int argc, char *argv[], int *udp_port,
  * @param argv Argument vector.
  * @return Exit status of the program.
  */
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 #ifdef _WIN32
   WSADATA wsa_data;
-  if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
-  {
+  if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0) {
     fprintf(stderr, "WSAStartup failed\n");
     return 1;
   }
@@ -250,10 +243,8 @@ int main(int argc, char *argv[])
 
   // Parse command-line arguments
   double send_interval_ms = DEFAULT_SEND_INTERVAL_MS;
-  int udp_port = DEFAULT_UDP_PORT, num_functions = DEFAULT_NUM_FUNCTIONS,
-      verbose = 0;
-  parse_arguments(argc, argv, &udp_port, &send_interval_ms, &num_functions,
-                  &verbose);
+  int udp_port = DEFAULT_UDP_PORT, num_functions = DEFAULT_NUM_FUNCTIONS, verbose = 0;
+  parse_arguments(argc, argv, &udp_port, &send_interval_ms, &num_functions, &verbose);
 
   print_tutorial();
   printf("Program started with the following options:\n");
@@ -265,20 +256,17 @@ int main(int argc, char *argv[])
   char wave_types[num_functions][16];
   float frequencies[num_functions];
   float phases[num_functions];
-  for (int i = 0; i < num_functions; i++)
-  {
-    while (1)
-    {
+  for (int i = 0; i < num_functions; i++) {
+    while (1) {
       printf("Enter details for waveform %d:\n", i + 1);
       printf("- Wave type (sine, triangle, saw, square): ");
       scanf("%s", wave_types[i]);
       if (validate_wave_type(wave_types[i]))
         break;
 
-      else
-      {
-        printf("Error: Invalid waveform type. Please enter 'sine', 'triangle', "
-               "'saw', or 'square'.\n");
+      else {
+        printf(
+          "Error: Invalid waveform type. Please enter 'sine', 'triangle', 'saw', or 'square'.\n");
       }
     }
 
@@ -296,8 +284,7 @@ int main(int argc, char *argv[])
 #else
   int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 #endif
-  if (sockfd < 0)
-  {
+  if (sockfd < 0) {
     perror("Socket creation failed");
 #ifdef _WIN32
     WSACleanup();
@@ -308,8 +295,8 @@ int main(int argc, char *argv[])
   // Set up destination address
   struct sockaddr_in dest_addr;
   memset(&dest_addr, 0, sizeof(dest_addr));
-  dest_addr.sin_family = AF_INET;
-  dest_addr.sin_port = htons(udp_port);
+  dest_addr.sin_family      = AF_INET;
+  dest_addr.sin_port        = htons(udp_port);
   dest_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
   // Calculate phase increments for each waveform
@@ -328,11 +315,9 @@ int main(int argc, char *argv[])
   printf("Enjoy your testing experience! :)\n\n");
 
   // Main loop: Generate and send waveforms
-  while (1)
-  {
+  while (1) {
     float values[num_functions];
-    for (int i = 0; i < num_functions; i++)
-    {
+    for (int i = 0; i < num_functions; i++) {
       values[i] = generate_wave_value(wave_types[i], frequencies[i], phases[i]);
       phases[i] += phase_increment[i];
       if (phases[i] > TWO_PI)
@@ -342,10 +327,8 @@ int main(int argc, char *argv[])
     // Format data as a comma-separated string
     char buffer[MAX_BUFFER_SIZE];
     int offset = 0;
-    for (int i = 0; i < num_functions; i++)
-    {
-      offset += snprintf(buffer + offset, sizeof(buffer) - offset, "%.2f",
-                         values[i]);
+    for (int i = 0; i < num_functions; i++) {
+      offset += snprintf(buffer + offset, sizeof(buffer) - offset, "%.2f", values[i]);
 
       if (i < num_functions - 1)
         offset += snprintf(buffer + offset, sizeof(buffer) - offset, ",");
@@ -356,8 +339,7 @@ int main(int argc, char *argv[])
     // clang-format off
     ssize_t sent_bytes = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
     // clang-format on
-    if (sent_bytes < 0)
-    {
+    if (sent_bytes < 0) {
 #ifdef _WIN32
       fprintf(stderr, "Send failed: %d\n", WSAGetLastError());
       closesocket(sockfd);

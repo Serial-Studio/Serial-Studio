@@ -20,8 +20,9 @@
  */
 
 #include "Export.h"
-#include "IO/Manager.h"
+
 #include "CSV/Player.h"
+#include "IO/Manager.h"
 #include "MDF4/Player.h"
 #include "Misc/WorkspaceManager.h"
 
@@ -29,12 +30,12 @@
 #  include "MQTT/Client.h"
 #endif
 
-#include <QDir>
 #include <QDateTime>
+#include <QDir>
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // ExportWorker implementation
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Checks whether a CSV file is currently open.
@@ -69,14 +70,12 @@ void CSV::ExportWorker::closeResources()
  *
  * @param items Vector of timestamped frames to process.
  */
-void CSV::ExportWorker::processItems(
-    const std::vector<DataModel::TimestampedFramePtr> &items)
+void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
 {
   if (items.empty())
     return;
 
-  if (!m_csvFile.isOpen())
-  {
+  if (!m_csvFile.isOpen()) {
     m_indexHeaderPairs = createCsvFile((*items.begin())->data);
     if (m_indexHeaderPairs.isEmpty())
       return;
@@ -84,24 +83,19 @@ void CSV::ExportWorker::processItems(
     m_referenceTimestamp = (*items.begin())->timestamp;
   }
 
-  for (const auto &i : items)
-  {
-    const auto elapsed = i->timestamp - m_referenceTimestamp;
-    const auto nanoseconds
-        = std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count();
-    const double seconds = static_cast<double>(nanoseconds) / 1'000'000'000.0;
+  for (const auto& i : items) {
+    const auto elapsed     = i->timestamp - m_referenceTimestamp;
+    const auto nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count();
+    const double seconds   = static_cast<double>(nanoseconds) / 1'000'000'000.0;
 
     m_textStream << QString::number(seconds, 'f', 9) << QStringLiteral(",");
 
     QMap<int, QString> fieldValues;
-    for (const auto &g : i->data.groups)
-    {
-      for (const auto &d : g.datasets)
+    for (const auto& g : i->data.groups)
+      for (const auto& d : g.datasets)
         fieldValues[d.index] = d.value.simplified();
-    }
 
-    for (int j = 0; j < m_indexHeaderPairs.count(); ++j)
-    {
+    for (int j = 0; j < m_indexHeaderPairs.count(); ++j) {
       m_textStream << fieldValues.value(m_indexHeaderPairs[j].first, "");
       m_textStream << (j < m_indexHeaderPairs.count() - 1 ? "," : "\n");
     }
@@ -119,25 +113,22 @@ void CSV::ExportWorker::processItems(
  * @param frame The frame used to extract header information.
  * @return List of index-title pairs for each dataset.
  */
-QVector<QPair<int, QString>>
-CSV::ExportWorker::createCsvFile(const DataModel::Frame &frame)
+QVector<QPair<int, QString>> CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
 {
-  const auto dt = QDateTime::currentDateTime();
+  const auto dt       = QDateTime::currentDateTime();
   const auto fileName = dt.toString("yyyy-MM-dd_HH-mm-ss") + ".csv";
 
-  const auto subdir = Misc::WorkspaceManager::instance().path("CSV");
+  const auto subdir  = Misc::WorkspaceManager::instance().path("CSV");
   const QString path = QString("%1/%2/").arg(subdir, frame.title);
 
   QDir dir(path);
-  if (!dir.exists() && !dir.mkpath("."))
-  {
+  if (!dir.exists() && !dir.mkpath(".")) {
     qWarning() << "Failed to create directory:" << path;
     return {};
   }
 
   m_csvFile.setFileName(dir.filePath(fileName));
-  if (!m_csvFile.open(QIODevice::WriteOnly | QIODevice::Text))
-  {
+  if (!m_csvFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
     qWarning() << "Cannot open CSV file for writing:" << dir.filePath(fileName);
     return {};
   }
@@ -152,10 +143,8 @@ CSV::ExportWorker::createCsvFile(const DataModel::Frame &frame)
 
   QSet<int> seenIndexes;
   QVector<QPair<int, QString>> pairs;
-  for (const auto &g : frame.groups)
-  {
-    for (const auto &d : g.datasets)
-    {
+  for (const auto& g : frame.groups) {
+    for (const auto& d : g.datasets) {
       const int idx = d.index;
       if (seenIndexes.contains(idx))
         continue;
@@ -166,11 +155,11 @@ CSV::ExportWorker::createCsvFile(const DataModel::Frame &frame)
     }
   }
 
-  std::sort(pairs.begin(), pairs.end(),
-            [](const auto &a, const auto &b) { return a.first < b.first; });
+  std::sort(
+    pairs.begin(), pairs.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
 
   m_textStream << "RX Date/Time";
-  for (const auto &pair : pairs)
+  for (const auto& pair : pairs)
     m_textStream << ',' << pair.second;
 
   m_textStream << '\n';
@@ -179,9 +168,9 @@ CSV::ExportWorker::createCsvFile(const DataModel::Frame &frame)
   return pairs;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Export constructor, destructor & singleton access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the CSV export manager.
@@ -191,14 +180,15 @@ CSV::ExportWorker::createCsvFile(const DataModel::Frame &frame)
  */
 CSV::Export::Export()
   : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
-        {.queueCapacity = 8192,
-         .flushThreshold = 1024,
-         .timerIntervalMs = 1000})
+      {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
   , m_isOpen(false)
 {
   initializeWorker();
-  connect(m_worker, &ExportWorker::resourceOpenChanged, this,
-          &Export::onWorkerOpenChanged, Qt::QueuedConnection);
+  connect(m_worker,
+          &ExportWorker::resourceOpenChanged,
+          this,
+          &Export::onWorkerOpenChanged,
+          Qt::QueuedConnection);
 }
 
 /**
@@ -213,7 +203,7 @@ CSV::Export::~Export() = default;
  *
  * @return Reference to the global instance.
  */
-CSV::Export &CSV::Export::instance()
+CSV::Export& CSV::Export::instance()
 {
   static Export singleton;
   return singleton;
@@ -224,14 +214,14 @@ CSV::Export &CSV::Export::instance()
  *
  * @return Pointer to newly created ExportWorker.
  */
-DataModel::FrameConsumerWorkerBase *CSV::Export::createWorker()
+DataModel::FrameConsumerWorkerBase* CSV::Export::createWorker()
 {
   return new ExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // State access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Checks whether a CSV file is currently open.
@@ -253,9 +243,9 @@ bool CSV::Export::exportEnabled() const
   return consumerEnabled();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Public slots
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Closes the currently open CSV file.
@@ -265,7 +255,7 @@ bool CSV::Export::exportEnabled() const
  */
 void CSV::Export::closeFile()
 {
-  auto *worker = static_cast<ExportWorker *>(m_worker);
+  auto* worker = static_cast<ExportWorker*>(m_worker);
   QMetaObject::invokeMethod(worker, "close", Qt::QueuedConnection);
 }
 
@@ -276,7 +266,7 @@ void CSV::Export::closeFile()
  */
 void CSV::Export::onWorkerOpenChanged()
 {
-  auto *worker = static_cast<ExportWorker *>(m_worker);
+  auto* worker = static_cast<ExportWorker*>(m_worker);
   m_isOpen.store(worker->isResourceOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();
 }
@@ -288,8 +278,7 @@ void CSV::Export::onWorkerOpenChanged()
  */
 void CSV::Export::setupExternalConnections()
 {
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
-          &Export::closeFile);
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, &Export::closeFile);
   connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this, [this] {
     if (IO::Manager::instance().paused())
       closeFile();
@@ -312,9 +301,9 @@ void CSV::Export::setExportEnabled(const bool enabled)
   Q_EMIT enabledChanged();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Hotpath data processing
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Registers a new data frame for export.
@@ -325,7 +314,7 @@ void CSV::Export::setExportEnabled(const bool enabled)
  *
  * @param frame The timestamped frame to export (shared pointer).
  */
-void CSV::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr &frame)
+void CSV::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
 {
   if (!exportEnabled() || SerialStudio::isAnyPlayerOpen())
     return;

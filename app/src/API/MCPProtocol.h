@@ -21,14 +21,13 @@
 
 #pragma once
 
-#include <QString>
 #include <QJsonArray>
-#include <QJsonObject>
 #include <QJsonDocument>
+#include <QJsonObject>
+#include <QString>
 #include <QVariant>
 
-namespace API
-{
+namespace API {
 /**
  * @brief Model Context Protocol (MCP) message types and structures
  *
@@ -38,70 +37,62 @@ namespace API
  *
  * Specification: https://spec.modelcontextprotocol.io/
  */
-namespace MCP
-{
+namespace MCP {
 /**
  * @brief MCP protocol version
  */
-constexpr const char *kProtocolVersion = "2024-11-05";
+constexpr const char* kProtocolVersion = "2024-11-05";
 
 /**
  * @brief MCP method names
  */
-namespace Method
-{
-constexpr const char *Initialize = "initialize";
-constexpr const char *Ping = "ping";
-constexpr const char *ToolsList = "tools/list";
-constexpr const char *ToolsCall = "tools/call";
-constexpr const char *ResourcesList = "resources/list";
-constexpr const char *ResourcesRead = "resources/read";
-constexpr const char *ResourcesSubscribe = "resources/subscribe";
-constexpr const char *ResourcesUnsubscribe = "resources/unsubscribe";
-constexpr const char *PromptsList = "prompts/list";
-constexpr const char *PromptsGet = "prompts/get";
-} // namespace Method
+namespace Method {
+constexpr const char* Initialize           = "initialize";
+constexpr const char* Ping                 = "ping";
+constexpr const char* ToolsList            = "tools/list";
+constexpr const char* ToolsCall            = "tools/call";
+constexpr const char* ResourcesList        = "resources/list";
+constexpr const char* ResourcesRead        = "resources/read";
+constexpr const char* ResourcesSubscribe   = "resources/subscribe";
+constexpr const char* ResourcesUnsubscribe = "resources/unsubscribe";
+constexpr const char* PromptsList          = "prompts/list";
+constexpr const char* PromptsGet           = "prompts/get";
+}  // namespace Method
 
 /**
  * @brief MCP error codes
  */
-namespace ErrorCode
-{
-constexpr int ParseError = -32700;
+namespace ErrorCode {
+constexpr int ParseError     = -32700;
 constexpr int InvalidRequest = -32600;
 constexpr int MethodNotFound = -32601;
-constexpr int InvalidParams = -32602;
-constexpr int InternalError = -32603;
-} // namespace ErrorCode
+constexpr int InvalidParams  = -32602;
+constexpr int InternalError  = -32603;
+}  // namespace ErrorCode
 
 /**
  * @struct MCPRequest
  * @brief Represents an MCP JSON-RPC 2.0 request
  */
-struct MCPRequest
-{
+struct MCPRequest {
   QString jsonrpc;
   QVariant id;
   QString method;
   QJsonObject params;
 
-  bool isValid() const
-  {
-    return jsonrpc == QStringLiteral("2.0") && !method.isEmpty();
-  }
+  bool isValid() const { return jsonrpc == QStringLiteral("2.0") && !method.isEmpty(); }
 
   bool isNotification() const { return id.isNull(); }
 
-  static MCPRequest fromJson(const QJsonObject &json)
+  static MCPRequest fromJson(const QJsonObject& json)
   {
     MCPRequest req;
     req.jsonrpc = json.value(QStringLiteral("jsonrpc")).toString();
-    req.method = json.value(QStringLiteral("method")).toString();
-    req.params = json.value(QStringLiteral("params")).toObject();
+    req.method  = json.value(QStringLiteral("method")).toString();
+    req.params  = json.value(QStringLiteral("params")).toObject();
 
     const auto idValue = json.value(QStringLiteral("id"));
-    if (!idValue.isNull() && !idValue.isUndefined())
-    {
+    if (!idValue.isNull() && !idValue.isUndefined()) {
       if (idValue.isDouble())
         req.id = idValue.toInt();
       else
@@ -116,8 +107,7 @@ struct MCPRequest
  * @struct MCPResponse
  * @brief Represents an MCP JSON-RPC 2.0 response
  */
-struct MCPResponse
-{
+struct MCPResponse {
   QString jsonrpc;
   QVariant id;
   QJsonValue result;
@@ -150,25 +140,26 @@ struct MCPResponse
     return QJsonDocument(toJson()).toJson(QJsonDocument::Compact) + "\n";
   }
 
-  static MCPResponse makeSuccess(const QVariant &id, const QJsonValue &result)
+  static MCPResponse makeSuccess(const QVariant& id, const QJsonValue& result)
   {
     MCPResponse resp;
     resp.jsonrpc = QStringLiteral("2.0");
-    resp.id = id;
-    resp.result = result;
+    resp.id      = id;
+    resp.result  = result;
     return resp;
   }
 
-  static MCPResponse makeError(const QVariant &id, int code,
-                               const QString &message,
-                               const QJsonValue &data = QJsonValue::Undefined)
+  static MCPResponse makeError(const QVariant& id,
+                               int code,
+                               const QString& message,
+                               const QJsonValue& data = QJsonValue::Undefined)
   {
     MCPResponse resp;
     resp.jsonrpc = QStringLiteral("2.0");
-    resp.id = id;
+    resp.id      = id;
 
     QJsonObject errorObj;
-    errorObj[QStringLiteral("code")] = code;
+    errorObj[QStringLiteral("code")]    = code;
     errorObj[QStringLiteral("message")] = message;
     if (!data.isUndefined())
       errorObj[QStringLiteral("data")] = data;
@@ -182,8 +173,7 @@ struct MCPResponse
  * @struct Tool
  * @brief Represents an MCP tool definition
  */
-struct Tool
-{
+struct Tool {
   QString name;
   QString description;
   QJsonObject inputSchema;
@@ -193,7 +183,7 @@ struct Tool
   QJsonObject toJson() const
   {
     QJsonObject json;
-    json[QStringLiteral("name")] = name;
+    json[QStringLiteral("name")]        = name;
     json[QStringLiteral("description")] = description;
     json[QStringLiteral("inputSchema")] = inputSchema;
 
@@ -211,8 +201,7 @@ struct Tool
  * @struct Resource
  * @brief Represents an MCP resource
  */
-struct Resource
-{
+struct Resource {
   QString uri;
   QString name;
   QString description;
@@ -221,7 +210,7 @@ struct Resource
   QJsonObject toJson() const
   {
     QJsonObject json;
-    json[QStringLiteral("uri")] = uri;
+    json[QStringLiteral("uri")]  = uri;
     json[QStringLiteral("name")] = name;
     if (!description.isEmpty())
       json[QStringLiteral("description")] = description;
@@ -235,8 +224,7 @@ struct Resource
  * @struct Prompt
  * @brief Represents an MCP prompt template
  */
-struct Prompt
-{
+struct Prompt {
   QString name;
   QString description;
   QJsonArray arguments;
@@ -258,7 +246,7 @@ struct Prompt
  * @param data Raw data to check
  * @return true if data appears to be an MCP JSON-RPC 2.0 message
  */
-inline bool isMCPMessage(const QByteArray &data)
+inline bool isMCPMessage(const QByteArray& data)
 {
   if (data.isEmpty())
     return false;
@@ -286,10 +274,10 @@ inline bool isMCPMessage(const QByteArray &data)
   const auto json = doc.object();
 
   const auto jsonrpc = json.value(QStringLiteral("jsonrpc")).toString();
-  const auto method = json.value(QStringLiteral("method")).toString();
+  const auto method  = json.value(QStringLiteral("method")).toString();
 
   return jsonrpc == QStringLiteral("2.0") && !method.isEmpty();
 }
 
-} // namespace MCP
-} // namespace API
+}  // namespace MCP
+}  // namespace API

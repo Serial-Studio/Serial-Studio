@@ -21,10 +21,10 @@
 
 #pragma once
 
-#include <QTimer>
-#include <QWidget>
 #include <QPainter>
 #include <QQuickPaintedItem>
+#include <QTimer>
+#include <QWidget>
 
 /**
  * @class DeclarativeWidget
@@ -39,8 +39,7 @@
  * rendering vs. GPU-accelerated rendering—which makes direct embedding
  * normally impossible. This class works around that by bridging the two.
  */
-class DeclarativeWidget : public QQuickPaintedItem
-{
+class DeclarativeWidget : public QQuickPaintedItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QPalette palette
@@ -64,28 +63,28 @@ Q_SIGNALS:
   void geometryChanged();
 
 public:
-  explicit DeclarativeWidget(QQuickItem *parent = nullptr);
+  explicit DeclarativeWidget(QQuickItem* parent = nullptr);
 
-  [[nodiscard]] QWidget *widget() const;
+  [[nodiscard]] QWidget* widget() const;
   [[nodiscard]] QPalette palette() const;
 
   [[nodiscard]] int contentWidth() const;
   [[nodiscard]] int contentHeight() const;
 
-  void redraw(const QRect &rect = QRect());
-  void paint(QPainter *painter) override;
+  void redraw(const QRect& rect = QRect());
+  void paint(QPainter* painter) override;
 
 public Q_SLOTS:
   void resizeWidget();
   void requestUpdate();
-  void setWidget(QWidget *widget);
+  void setWidget(QWidget* widget);
   void setContentWidth(const int width);
   void setContentHeight(const int height);
-  void setPalette(const QPalette &palette);
+  void setPalette(const QPalette& palette);
 
 private:
   QImage m_image;
-  QWidget *m_widget;
+  QWidget* m_widget;
   int m_contentWidth;
   int m_contentHeight;
   bool m_updateRequested;

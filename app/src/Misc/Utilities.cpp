@@ -19,27 +19,27 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "Misc/Utilities.h"
+
+#include <QAbstractButton>
+#include <QApplication>
+#include <QDesktopServices>
 #include <QDir>
-#include <QUrl>
+#include <QFileInfo>
+#include <QGridLayout>
+#include <QMessageBox>
 #include <QPalette>
 #include <QProcess>
-#include <QFileInfo>
-#include <QMessageBox>
-#include <QApplication>
-#include <QAbstractButton>
-#include <QDesktopServices>
-
 #include <QSettings>
 #include <QSpacerItem>
-#include <QGridLayout>
+#include <QUrl>
 
 #include "AppInfo.h"
-#include "Misc/Utilities.h"
 
 /**
  * Returns a pointer to the only instance of the class
  */
-Misc::Utilities &Misc::Utilities::instance()
+Misc::Utilities& Misc::Utilities::instance()
 {
   static Utilities singleton;
   return singleton;
@@ -55,7 +55,7 @@ void Misc::Utilities::rebootApplication()
   QSettings().sync();
 
   // Relaunch executable
-  QString exe = QCoreApplication::applicationFilePath();
+  QString exe      = QCoreApplication::applicationFilePath();
   QStringList args = QCoreApplication::arguments();
   QProcess::startDetached(exe, args);
 
@@ -73,7 +73,7 @@ void Misc::Utilities::rebootApplication()
  *
  * @param path location of the image to load
  */
-QPixmap Misc::Utilities::getHiDpiPixmap(const QString &path)
+QPixmap Misc::Utilities::getHiDpiPixmap(const QString& path)
 {
   return QPixmap(hdpiImagePath(path));
 }
@@ -85,12 +85,13 @@ QPixmap Misc::Utilities::getHiDpiPixmap(const QString &path)
 bool Misc::Utilities::askAutomaticUpdates()
 {
   const int result = showMessageBox(
-      tr("Check for updates automatically?"),
-      tr("Should %1 automatically check for updates? "
-         "You can always check for updates manually from "
-         "the \"About\" dialog")
-          .arg(APP_NAME),
-      QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
+    tr("Check for updates automatically?"),
+    tr(
+      "Should %1 automatically check for updates? You can always check for updates manually from the \"About\" dialog")
+      .arg(APP_NAME),
+    QMessageBox::Question,
+    APP_NAME,
+    QMessageBox::Yes | QMessageBox::No);
   return result == QMessageBox::Yes;
 }
 
@@ -103,13 +104,13 @@ bool Misc::Utilities::askAutomaticUpdates()
  *
  * @param path location of the image to load
  */
-QString Misc::Utilities::hdpiImagePath(const QString &path)
+QString Misc::Utilities::hdpiImagePath(const QString& path)
 {
-  const auto dpr = qApp->devicePixelRatio();
+  const auto dpr  = qApp->devicePixelRatio();
   const int ratio = qMin<int>(2, static_cast<int>(ceil(dpr)));
 
   QString filename;
-  auto list = path.split(".");
+  auto list            = path.split(".");
   const auto extension = list.last();
   for (int i = 0; i < list.count() - 1; ++i)
     filename.append(list.at(i));
@@ -125,12 +126,14 @@ QString Misc::Utilities::hdpiImagePath(const QString &path)
 /**
  * Shows a macOS-like message box with the given properties
  */
-int Misc::Utilities::showMessageBox(
-    const QString &text, const QString &informativeText, QMessageBox::Icon icon,
-    const QString &windowTitle, QMessageBox::StandardButtons bt,
-    QMessageBox::StandardButton defaultButton, const ButtonTextMap &buttonTexts)
+int Misc::Utilities::showMessageBox(const QString& text,
+                                    const QString& informativeText,
+                                    QMessageBox::Icon icon,
+                                    const QString& windowTitle,
+                                    QMessageBox::StandardButtons bt,
+                                    QMessageBox::StandardButton defaultButton,
+                                    const ButtonTextMap& buttonTexts)
 {
-
   // Create message box & set options
   QMessageBox box;
   box.setStandardButtons(bt);
@@ -218,7 +221,7 @@ void Misc::Utilities::aboutQt()
  * Hacking details:
  * http://stackoverflow.com/questions/3490336/how-to-reveal-in-finder-or-show-in-explorer-with-qt
  */
-void Misc::Utilities::revealFile(const QString &pathToReveal)
+void Misc::Utilities::revealFile(const QString& pathToReveal)
 {
 #if defined(Q_OS_WIN)
   QStringList param;
@@ -230,13 +233,11 @@ void Misc::Utilities::revealFile(const QString &pathToReveal)
 #elif defined(Q_OS_MAC)
   QStringList scriptArgs;
   scriptArgs << QLatin1String("-e")
-             << QString::fromLatin1(
-                    "tell application \"Finder\" to reveal POSIX file \"%1\"")
-                    .arg(pathToReveal);
+             << QString::fromLatin1("tell application \"Finder\" to reveal POSIX file \"%1\"")
+                  .arg(pathToReveal);
   QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
   scriptArgs.clear();
-  scriptArgs << QLatin1String("-e")
-             << QLatin1String("tell application \"Finder\" to activate");
+  scriptArgs << QLatin1String("-e") << QLatin1String("tell application \"Finder\" to activate");
   QProcess::execute("/usr/bin/osascript", scriptArgs);
 #else
   QDesktopServices::openUrl(QUrl::fromLocalFile(pathToReveal));

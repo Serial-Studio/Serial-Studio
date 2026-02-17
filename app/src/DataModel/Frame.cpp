@@ -20,49 +20,48 @@
  */
 
 #include "DataModel/Frame.h"
+
 #include "SerialStudio.h"
 
-void DataModel::finalize_frame(DataModel::Frame &frame)
+void DataModel::finalize_frame(DataModel::Frame& frame)
 {
   frame.containsCommercialFeatures = SerialStudio::commercialCfg(frame.groups);
 
   int id = 1;
-  for (auto &group : frame.groups)
-  {
-    for (auto &dataset : group.datasets)
+  for (auto& group : frame.groups)
+    for (auto& dataset : group.datasets)
       dataset.uniqueId = id++;
-  }
 }
 
-void DataModel::read_io_settings(QByteArray &frameStart, QByteArray &frameEnd,
-                                 QString &checksum, const QJsonObject &obj)
+void DataModel::read_io_settings(QByteArray& frameStart,
+                                 QByteArray& frameEnd,
+                                 QString& checksum,
+                                 const QJsonObject& obj)
 {
   // Obtain frame delimiters
-  auto fEndStr = ss_jsr(obj, "frameEnd", "").toString();
+  auto fEndStr   = ss_jsr(obj, "frameEnd", "").toString();
   auto fStartStr = ss_jsr(obj, "frameStart", "").toString();
-  auto isHex = ss_jsr(obj, "hexadecimalDelimiters", false).toBool();
+  auto isHex     = ss_jsr(obj, "hexadecimalDelimiters", false).toBool();
 
   // Read checksum method
   checksum = ss_jsr(obj, "checksum", "").toString();
 
   // Convert hex + escape strings (e.g. "0A 0D", or "\\n0D") to raw bytes
-  if (isHex)
-  {
-    QString resolvedEnd = SerialStudio::resolveEscapeSequences(fEndStr);
+  if (isHex) {
+    QString resolvedEnd   = SerialStudio::resolveEscapeSequences(fEndStr);
     QString resolvedStart = SerialStudio::resolveEscapeSequences(fStartStr);
-    frameStart = QByteArray::fromHex(resolvedStart.remove(' ').toUtf8());
-    frameEnd = QByteArray::fromHex(resolvedEnd.remove(' ').toUtf8());
+    frameStart            = QByteArray::fromHex(resolvedStart.remove(' ').toUtf8());
+    frameEnd              = QByteArray::fromHex(resolvedEnd.remove(' ').toUtf8());
   }
 
   // Resolve escape sequences (e.g. "\\n") and encode to UTF-8 bytes
-  else
-  {
-    frameEnd = SerialStudio::resolveEscapeSequences(fEndStr).toUtf8();
+  else {
+    frameEnd   = SerialStudio::resolveEscapeSequences(fEndStr).toUtf8();
     frameStart = SerialStudio::resolveEscapeSequences(fStartStr).toUtf8();
   }
 }
 
-QByteArray DataModel::get_tx_bytes(const Action &action)
+QByteArray DataModel::get_tx_bytes(const Action& action)
 {
   QByteArray b;
   if (action.binaryData)

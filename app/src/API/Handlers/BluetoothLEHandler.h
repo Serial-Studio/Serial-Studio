@@ -23,10 +23,8 @@
 
 #include "API/CommandProtocol.h"
 
-namespace API
-{
-namespace Handlers
-{
+namespace API {
+namespace Handlers {
 /**
  * @class BluetoothLEHandler
  * @brief Registers API commands for IO::Drivers::BluetoothLE operations
@@ -42,8 +40,7 @@ namespace Handlers
  * - io.driver.ble.getConfiguration - Query current BLE configuration
  * - io.driver.ble.getStatus - Query adapter and connection status
  */
-class BluetoothLEHandler
-{
+class BluetoothLEHandler {
 public:
   /**
    * @brief Register all BluetoothLE commands with the CommandRegistry
@@ -52,27 +49,18 @@ public:
 
 private:
   // Mutation commands
-  static CommandResponse startDiscovery(const QString &id,
-                                        const QJsonObject &params);
-  static CommandResponse selectDevice(const QString &id,
-                                      const QJsonObject &params);
-  static CommandResponse selectService(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse setCharacteristicIndex(const QString &id,
-                                                const QJsonObject &params);
+  static CommandResponse startDiscovery(const QString& id, const QJsonObject& params);
+  static CommandResponse selectDevice(const QString& id, const QJsonObject& params);
+  static CommandResponse selectService(const QString& id, const QJsonObject& params);
+  static CommandResponse setCharacteristicIndex(const QString& id, const QJsonObject& params);
 
   // Query commands
-  static CommandResponse getDeviceList(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse getServiceList(const QString &id,
-                                        const QJsonObject &params);
-  static CommandResponse getCharacteristicList(const QString &id,
-                                               const QJsonObject &params);
-  static CommandResponse getConfiguration(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse getStatus(const QString &id,
-                                   const QJsonObject &params);
+  static CommandResponse getDeviceList(const QString& id, const QJsonObject& params);
+  static CommandResponse getServiceList(const QString& id, const QJsonObject& params);
+  static CommandResponse getCharacteristicList(const QString& id, const QJsonObject& params);
+  static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);
+  static CommandResponse getStatus(const QString& id, const QJsonObject& params);
 };
 
-} // namespace Handlers
-} // namespace API
+}  // namespace Handlers
+}  // namespace API

@@ -21,9 +21,9 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Save and clear global link flags
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # PIE (-pie) and other hardening link flags are meant for executables, not
 # static libraries. Save them here and restore at the end so they only apply
@@ -39,9 +39,9 @@ set(CMAKE_SHARED_LINKER_FLAGS "")
 set(CMAKE_MODULE_LINKER_FLAGS "")
 set(CMAKE_STATIC_LINKER_FLAGS "")
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # FetchContent module setup
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Configures CMake's FetchContent module for downloading dependencies:
 #
@@ -68,7 +68,7 @@ set(CMAKE_STATIC_LINKER_FLAGS "")
 # Note: USE_SYSTEM_ZLIB and USE_SYSTEM_EXPAT override FetchContent for
 # those libraries when building in sandboxed environments
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 include(FetchContent)
 set(FETCHCONTENT_QUIET ON)
@@ -76,9 +76,9 @@ if(UNIX)
   set(CMAKE_FIND_LIBRARY_SUFFIXES ".a" ${CMAKE_FIND_LIBRARY_SUFFIXES})
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Third-party library compilation flags
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Defines compiler flags specifically for third-party libraries:
 #
@@ -113,7 +113,7 @@ endif()
 # These flags are applied to: KissFFT, QCodeEditor, QSimpleUpdater, mdflib,
 # ZLIB, and EXPAT (when not using system libraries)
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if(MSVC)
   set(LIB_FLAGS
@@ -141,9 +141,9 @@ else()
   )
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # ZLIB compression library
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # ZLIB is required for:
 #   - MDF4 file decompression (compressed data blocks)
@@ -175,7 +175,7 @@ endif()
 #   - Creates ZLIB::ZLIB alias for both system and FetchContent builds
 #   - Allows uniform linking: target_link_libraries(target ZLIB::ZLIB)
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if(USE_SYSTEM_ZLIB)
   message(STATUS "Using system-provided ZLIB")
@@ -219,9 +219,9 @@ else()
   message(STATUS "ZLIB 1.3.1 fetched and configured")
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # EXPAT XML parser library
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # EXPAT is required for:
 #   - MDF4 file parsing (XML metadata in MDF4 files)
@@ -262,7 +262,7 @@ endif()
 #   - Handles EXPAT::EXPAT → expat::expat alias for system packages
 #   - Allows uniform linking: target_link_libraries(target expat::expat)
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 if(USE_SYSTEM_EXPAT)
   message(STATUS "Using system-provided EXPAT")
@@ -315,9 +315,9 @@ else()
   message(STATUS "EXPAT 2.6.4 fetched and configured")
 endif()
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Internal third-party libraries
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Builds local third-party libraries from lib/ subdirectories:
 #
@@ -358,7 +358,7 @@ endif()
 #   QSimpleUpdater → Qt6::Network
 #   mdflib → ZLIB::ZLIB, expat::expat
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 add_subdirectory(OpenSSL)
 add_subdirectory(KissFFT)
@@ -366,9 +366,9 @@ add_subdirectory(QCodeEditor)
 add_subdirectory(QSimpleUpdater)
 add_subdirectory(mdflib)
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Apply third-party library flags
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Applies warning suppression and visibility flags to internal libraries:
 #
@@ -402,7 +402,7 @@ add_subdirectory(mdflib)
 #   - Smaller binaries (hidden symbols)
 #   - Faster linking (fewer exported symbols)
 #
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 # Helper function to apply library flags and mark includes as SYSTEM
 # This suppresses warnings when app code includes third-party headers
@@ -429,9 +429,9 @@ configure_third_party_lib(QCodeEditor)
 configure_third_party_lib(QSimpleUpdater)
 configure_third_party_lib(mdf)
 
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Restore global link flags
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #
 # Restore the hardening link flags saved at the top of this file so they
 # apply to the main application executable in app/.

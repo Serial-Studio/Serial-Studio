@@ -28,8 +28,7 @@
 #include <QSslConfiguration>
 // clang-format on
 
-namespace MQTT
-{
+namespace MQTT {
 /**
  * @class MQTT::Client
  * @brief Singleton wrapper around QMqttClient for managing MQTT connections.
@@ -44,8 +43,7 @@ namespace MQTT
  * Modes, protocols, and options are exposed via QStringLists to integrate with
  * Qt model/view components. Single instance, use via Client::instance().
  */
-class Client : public QObject
-{
+class Client : public QObject {
   // clang-format off
   Q_OBJECT
 
@@ -98,17 +96,17 @@ signals:
   void sslConfigurationChanged();
   void mqttConfigurationChanged();
   void highlightMqttTopicControl();
-  void messageReceived(const QByteArray &data);
+  void messageReceived(const QByteArray& data);
 
 private:
   explicit Client();
-  Client(Client &&) = delete;
-  Client(const Client &) = delete;
-  Client &operator=(Client &&) = delete;
-  Client &operator=(const Client &) = delete;
+  Client(Client&&)                 = delete;
+  Client(const Client&)            = delete;
+  Client& operator=(Client&&)      = delete;
+  Client& operator=(const Client&) = delete;
 
 public:
-  static Client &instance();
+  static Client& instance();
 
   [[nodiscard]] quint8 mode() const;
   [[nodiscard]] bool isConnected() const;
@@ -132,19 +130,19 @@ public:
   [[nodiscard]] bool autoKeepAlive() const;
 
   [[nodiscard]] quint8 mqttVersion() const;
-  [[nodiscard]] const QStringList &mqttVersions() const;
+  [[nodiscard]] const QStringList& mqttVersions() const;
 
   [[nodiscard]] bool sslEnabled() const;
   [[nodiscard]] quint8 sslProtocol() const;
   [[nodiscard]] int peerVerifyDepth() const;
   [[nodiscard]] quint8 peerVerifyMode() const;
-  [[nodiscard]] const QStringList &caCertificates() const;
+  [[nodiscard]] const QStringList& caCertificates() const;
 
-  [[nodiscard]] const QStringList &modes() const;
-  [[nodiscard]] const QStringList &sslProtocols() const;
-  [[nodiscard]] const QStringList &peerVerifyModes() const;
+  [[nodiscard]] const QStringList& modes() const;
+  [[nodiscard]] const QStringList& sslProtocols() const;
+  [[nodiscard]] const QStringList& peerVerifyModes() const;
 
-  [[nodiscard]] QMqttClient &client();
+  [[nodiscard]] QMqttClient& client();
 
 public slots:
   void openConnection();
@@ -152,17 +150,17 @@ public slots:
   void toggleConnection();
   void regenerateClientId();
   void setMode(const quint8 mode);
-  void setTopic(const QString &topic);
-  void setClientId(const QString &id);
-  void setHostname(const QString &hostname);
-  void setUsername(const QString &username);
-  void setPassword(const QString &password);
+  void setTopic(const QString& topic);
+  void setClientId(const QString& id);
+  void setHostname(const QString& hostname);
+  void setUsername(const QString& username);
+  void setPassword(const QString& password);
   void setCleanSession(const bool cleanSession);
 
   void setWillQoS(const quint8 qos);
   void setWillRetain(const bool retain);
-  void setWillTopic(const QString &topic);
-  void setWillMessage(const QString &message);
+  void setWillTopic(const QString& topic);
+  void setWillMessage(const QString& message);
 
   void setPort(const quint16 port);
   void setKeepAlive(const quint16 keepAlive);
@@ -176,15 +174,14 @@ public slots:
   void setSslProtocol(const quint8 protocol);
   void setPeerVerifyMode(const quint8 verifyMode);
 
-  void hotpathTxFrame(const QByteArray &data);
+  void hotpathTxFrame(const QByteArray& data);
 
 private slots:
   void onStateChanged(QMqttClient::ClientState state);
   void onErrorChanged(QMqttClient::ClientError error);
-  void onAuthenticationFinished(const QMqttAuthenticationProperties &p);
-  void onAuthenticationRequested(const QMqttAuthenticationProperties &p);
-  void onMessageReceived(const QByteArray &message,
-                         const QMqttTopicName &topic = QMqttTopicName());
+  void onAuthenticationFinished(const QMqttAuthenticationProperties& p);
+  void onAuthenticationRequested(const QMqttAuthenticationProperties& p);
+  void onMessageReceived(const QByteArray& message, const QMqttTopicName& topic = QMqttTopicName());
 
 private:
   quint8 m_mode;
@@ -202,4 +199,4 @@ private:
   QMap<QString, QMqttClient::ProtocolVersion> m_mqttVersions;
   QMap<QString, QSslSocket::PeerVerifyMode> m_peerVerifyModes;
 };
-} // namespace MQTT
+}  // namespace MQTT

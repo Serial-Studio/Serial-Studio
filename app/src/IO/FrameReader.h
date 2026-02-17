@@ -22,20 +22,18 @@
 #pragma once
 
 #include <memory>
-#include <vector>
+#include <QByteArray>
 #include <QObject>
 #include <QString>
-#include <QByteArray>
+#include <vector>
 
 #include "HAL_Driver.h"
-#include "SerialStudio.h"
 #include "IO/CircularBuffer.h"
+#include "SerialStudio.h"
 #include "ThirdParty/readerwriterqueue.h"
 
-namespace IO
-{
-enum class ValidationStatus
-{
+namespace IO {
+enum class ValidationStatus {
   FrameOk,
   ChecksumError,
   ChecksumIncomplete
@@ -67,17 +65,16 @@ enum class ValidationStatus
  *
  * @see IO::Manager::resetFrameReader()
  */
-class FrameReader : public QObject
-{
+class FrameReader : public QObject {
   Q_OBJECT
 
 signals:
   void readyRead();
 
 public:
-  explicit FrameReader(QObject *parent = nullptr);
+  explicit FrameReader(QObject* parent = nullptr);
 
-  inline moodycamel::ReaderWriterQueue<QByteArray> &queue() { return m_queue; }
+  inline moodycamel::ReaderWriterQueue<QByteArray>& queue() { return m_queue; }
 
   [[nodiscard]] qsizetype overflowCount() const noexcept
   {
@@ -87,11 +84,11 @@ public:
   void resetOverflowCount() noexcept { m_circularBuffer.resetOverflowCount(); }
 
 public slots:
-  void processData(const IO::ByteArrayPtr &data);
+  void processData(const IO::ByteArrayPtr& data);
 
-  void setChecksum(const QString &checksum);
-  void setStartSequence(const QByteArray &start);
-  void setFinishSequence(const QByteArray &finish);
+  void setChecksum(const QString& checksum);
+  void setStartSequence(const QByteArray& start);
+  void setFinishSequence(const QByteArray& finish);
   void setOperationMode(const SerialStudio::OperationMode mode);
   void setFrameDetectionMode(const SerialStudio::FrameDetection mode);
 
@@ -100,7 +97,7 @@ private:
   void readStartDelimitedFrames();
   void readStartEndDelimitedFrames();
 
-  ValidationStatus checksum(const QByteArray &frame, qsizetype crcPosition);
+  ValidationStatus checksum(const QByteArray& frame, qsizetype crcPosition);
 
 private:
   QString m_checksum;
@@ -116,4 +113,4 @@ private:
   CircularBuffer<QByteArray, char> m_circularBuffer;
   moodycamel::ReaderWriterQueue<QByteArray> m_queue{4096};
 };
-} // namespace IO
+}  // namespace IO

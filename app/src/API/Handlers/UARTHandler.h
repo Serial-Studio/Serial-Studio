@@ -23,10 +23,8 @@
 
 #include "API/CommandProtocol.h"
 
-namespace API
-{
-namespace Handlers
-{
+namespace API {
+namespace Handlers {
 /**
  * @class UARTHandler
  * @brief Registers API commands for IO::Drivers::UART operations
@@ -45,8 +43,7 @@ namespace Handlers
  * - io.driver.uart.getBaudRateList - Query available baud rates
  * - io.driver.uart.getConfiguration - Query current configuration
  */
-class UARTHandler
-{
+class UARTHandler {
 public:
   /**
    * @brief Register all UART commands with the CommandRegistry
@@ -55,33 +52,21 @@ public:
 
 private:
   // Mutation commands
-  static CommandResponse setDevice(const QString &id,
-                                   const QJsonObject &params);
-  static CommandResponse setPortIndex(const QString &id,
-                                      const QJsonObject &params);
-  static CommandResponse setBaudRate(const QString &id,
-                                     const QJsonObject &params);
-  static CommandResponse setParity(const QString &id,
-                                   const QJsonObject &params);
-  static CommandResponse setDataBits(const QString &id,
-                                     const QJsonObject &params);
-  static CommandResponse setStopBits(const QString &id,
-                                     const QJsonObject &params);
-  static CommandResponse setFlowControl(const QString &id,
-                                        const QJsonObject &params);
-  static CommandResponse setDtrEnabled(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse setAutoReconnect(const QString &id,
-                                          const QJsonObject &params);
+  static CommandResponse setDevice(const QString& id, const QJsonObject& params);
+  static CommandResponse setPortIndex(const QString& id, const QJsonObject& params);
+  static CommandResponse setBaudRate(const QString& id, const QJsonObject& params);
+  static CommandResponse setParity(const QString& id, const QJsonObject& params);
+  static CommandResponse setDataBits(const QString& id, const QJsonObject& params);
+  static CommandResponse setStopBits(const QString& id, const QJsonObject& params);
+  static CommandResponse setFlowControl(const QString& id, const QJsonObject& params);
+  static CommandResponse setDtrEnabled(const QString& id, const QJsonObject& params);
+  static CommandResponse setAutoReconnect(const QString& id, const QJsonObject& params);
 
   // Query commands
-  static CommandResponse getPortList(const QString &id,
-                                     const QJsonObject &params);
-  static CommandResponse getBaudRateList(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse getConfiguration(const QString &id,
-                                          const QJsonObject &params);
+  static CommandResponse getPortList(const QString& id, const QJsonObject& params);
+  static CommandResponse getBaudRateList(const QString& id, const QJsonObject& params);
+  static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);
 };
 
-} // namespace Handlers
-} // namespace API
+}  // namespace Handlers
+}  // namespace API

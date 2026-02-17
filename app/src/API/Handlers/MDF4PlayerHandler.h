@@ -15,10 +15,8 @@
 
 #  include "API/CommandProtocol.h"
 
-namespace API
-{
-namespace Handlers
-{
+namespace API {
+namespace Handlers {
 /**
  * @class MDF4PlayerHandler
  * @brief Registers API commands for MDF4::Player operations (Pro feature)
@@ -34,8 +32,7 @@ namespace Handlers
  * - mdf4.player.setProgress - Seek to position
  * - mdf4.player.getStatus - Query player status
  */
-class MDF4PlayerHandler
-{
+class MDF4PlayerHandler {
 public:
   /**
    * @brief Register all MDF4 Player commands with the CommandRegistry
@@ -44,26 +41,22 @@ public:
 
 private:
   // File operations
-  static CommandResponse open(const QString &id, const QJsonObject &params);
-  static CommandResponse close(const QString &id, const QJsonObject &params);
+  static CommandResponse open(const QString& id, const QJsonObject& params);
+  static CommandResponse close(const QString& id, const QJsonObject& params);
 
   // Playback control
-  static CommandResponse play(const QString &id, const QJsonObject &params);
-  static CommandResponse pause(const QString &id, const QJsonObject &params);
-  static CommandResponse toggle(const QString &id, const QJsonObject &params);
-  static CommandResponse nextFrame(const QString &id,
-                                   const QJsonObject &params);
-  static CommandResponse previousFrame(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse setProgress(const QString &id,
-                                     const QJsonObject &params);
+  static CommandResponse play(const QString& id, const QJsonObject& params);
+  static CommandResponse pause(const QString& id, const QJsonObject& params);
+  static CommandResponse toggle(const QString& id, const QJsonObject& params);
+  static CommandResponse nextFrame(const QString& id, const QJsonObject& params);
+  static CommandResponse previousFrame(const QString& id, const QJsonObject& params);
+  static CommandResponse setProgress(const QString& id, const QJsonObject& params);
 
   // Query commands
-  static CommandResponse getStatus(const QString &id,
-                                   const QJsonObject &params);
+  static CommandResponse getStatus(const QString& id, const QJsonObject& params);
 };
 
-} // namespace Handlers
-} // namespace API
+}  // namespace Handlers
+}  // namespace API
 
-#endif // BUILD_COMMERCIAL
+#endif  // BUILD_COMMERCIAL

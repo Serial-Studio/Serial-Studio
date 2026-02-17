@@ -21,30 +21,27 @@
 
 #pragma once
 
-#include <QList>
-#include <QPointF>
-#include <QObject>
-#include <QVector>
-#include <QVector3D>
-
 #include <cmath>
-#include <cstddef>
-#include <cstring>
-#include <cstdlib>
-
-#include <memory>
-#include <vector>
-#include <limits>
 #include <concepts>
+#include <cstddef>
+#include <cstdlib>
+#include <cstring>
+#include <limits>
+#include <memory>
+#include <QList>
+#include <QObject>
+#include <QPointF>
+#include <QVector3D>
+#include <QVector>
 #include <stdexcept>
+#include <vector>
 
 #include "Concepts.h"
 
-namespace DSP
-{
-//------------------------------------------------------------------------------
+namespace DSP {
+//--------------------------------------------------------------------------------------------------
 // Fixed queue implementation with a circular buffer
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief A fixed-capacity, auto-overwriting circular buffer (FIFO queue).
@@ -64,20 +61,15 @@ namespace DSP
  */
 template<typename T>
   requires std::copy_constructible<T> && std::is_copy_assignable_v<T>
-class FixedQueue
-{
+class FixedQueue {
 public:
   /**
    * @brief Constructs a FixedQueue with a given capacity.
    * @param capacity Maximum number of elements the queue can hold.
    */
   explicit FixedQueue(std::size_t capacity = 100)
-    : m_capacity(capacity)
-    , m_data(std::shared_ptr<T[]>(new T[capacity]))
-    , m_start(0)
-    , m_size(0)
-  {
-  }
+    : m_capacity(capacity), m_data(std::shared_ptr<T[]>(new T[capacity])), m_start(0), m_size(0)
+  {}
 
   /**
    * @brief Copy constructor.
@@ -87,7 +79,7 @@ public:
    *
    * @param other The FixedQueue to copy from.
    */
-  FixedQueue(const FixedQueue &) = default;
+  FixedQueue(const FixedQueue&) = default;
 
   /**
    * @brief Copy assignment operator.
@@ -98,7 +90,7 @@ public:
    * @param other The FixedQueue to assign from.
    * @return Reference to this FixedQueue.
    */
-  FixedQueue &operator=(const FixedQueue &) = default;
+  FixedQueue& operator=(const FixedQueue&) = default;
 
   /**
    * @brief Move constructor.
@@ -107,7 +99,7 @@ public:
    *
    * @param other The FixedQueue to move from.
    */
-  FixedQueue(FixedQueue &&) noexcept = default;
+  FixedQueue(FixedQueue&&) noexcept = default;
 
   /**
    * @brief Move assignment operator.
@@ -117,7 +109,7 @@ public:
    * @param other The FixedQueue to move from.
    * @return Reference to this FixedQueue.
    */
-  FixedQueue &operator=(FixedQueue &&) noexcept = default;
+  FixedQueue& operator=(FixedQueue&&) noexcept = default;
 
   /**
    * @brief Provides read-only access to an element at a given index.
@@ -126,7 +118,7 @@ public:
    * @return Reference to the element at the specified index.
    * @throws std::out_of_range if index is invalid.
    */
-  [[nodiscard]] const T &operator[](std::size_t index) const
+  [[nodiscard]] const T& operator[](std::size_t index) const
   {
     if (index >= m_size)
       throw std::out_of_range("FixedQueue index out of bounds");
@@ -141,7 +133,7 @@ public:
    * @return Reference to the element at the specified index.
    * @throws std::out_of_range if index is invalid.
    */
-  [[nodiscard]] T &operator[](std::size_t index)
+  [[nodiscard]] T& operator[](std::size_t index)
   {
     if (index >= m_size)
       throw std::out_of_range("FixedQueue index out of bounds");
@@ -189,7 +181,7 @@ public:
    * @return Reference to the element at the specified index.
    * @throws std::out_of_range if index is invalid.
    */
-  [[nodiscard]] const T &at(std::size_t index) const
+  [[nodiscard]] const T& at(std::size_t index) const
   {
     if (index >= m_capacity)
       throw std::out_of_range("FixedQueue index out of bounds");
@@ -205,7 +197,7 @@ public:
    * @return Reference to the oldest element in the buffer.
    * @throws std::out_of_range if the queue is empty.
    */
-  [[nodiscard]] const T &front() const
+  [[nodiscard]] const T& front() const
   {
     if (m_size == 0)
       throw std::out_of_range("FixedQueue::front() called on empty queue");
@@ -221,7 +213,7 @@ public:
    * @return Reference to the most recently inserted element in the buffer.
    * @throws std::out_of_range if the queue is empty.
    */
-  [[nodiscard]] const T &back() const
+  [[nodiscard]] const T& back() const
   {
     if (m_size == 0)
       throw std::out_of_range("FixedQueue::back() called on empty queue");
@@ -233,13 +225,13 @@ public:
    * @brief Returns a raw pointer to the internal buffer (read-only).
    * @return Pointer to the beginning of the internal array.
    */
-  [[nodiscard]] const T *raw() const { return m_data.get(); }
+  [[nodiscard]] const T* raw() const { return m_data.get(); }
 
   /**
    * @brief Returns a raw pointer to the internal buffer (mutable).
    * @return Pointer to the beginning of the internal array.
    */
-  [[nodiscard]] T *raw() { return m_data.get(); }
+  [[nodiscard]] T* raw() { return m_data.get(); }
 
   /**
    * @brief Clears all elements from the queue.
@@ -247,14 +239,14 @@ public:
   void clear()
   {
     m_start = 0;
-    m_size = 0;
+    m_size  = 0;
   }
 
   /**
    * @brief Fills the queue with a repeated value, overwriting all contents.
    * @param value The value to fill.
    */
-  void fill(const T &value)
+  void fill(const T& value)
   {
     clear();
     for (std::size_t i = 0; i < m_capacity; ++i)
@@ -271,7 +263,7 @@ public:
    * @param start Starting value.
    * @param step  Increment step (default: 1).
    */
-  void fillRange(const T &start, const T &step = 1)
+  void fillRange(const T& start, const T& step = 1)
     requires Concepts::Numeric<T>
   {
     clear();
@@ -283,7 +275,7 @@ public:
    * @brief Inserts an element by copy. Overwrites oldest element if full.
    * @param item The element to insert.
    */
-  void push(const T &item)
+  void push(const T& item)
   {
     m_data[endIndex()] = item;
     advance();
@@ -293,7 +285,7 @@ public:
    * @brief Inserts an element by move. Overwrites oldest element if full.
    * @param item The element to insert.
    */
-  void push(T &&item)
+  void push(T&& item)
   {
     m_data[endIndex()] = std::move(item);
     advance();
@@ -318,10 +310,10 @@ public:
     for (std::size_t i = 0; i < elementsToCopy; ++i)
       newData[i] = std::move((*this)[m_size - elementsToCopy + i]);
 
-    m_start = 0;
-    m_size = elementsToCopy;
+    m_start    = 0;
+    m_size     = elementsToCopy;
     m_capacity = newCapacity;
-    m_data = std::move(newData);
+    m_data     = std::move(newData);
   }
 
 private:
@@ -336,10 +328,7 @@ private:
    * @param index Logical index (0 = front of queue).
    * @return Physical index in the underlying array.
    */
-  std::size_t wrappedIndex(std::size_t index) const
-  {
-    return (m_start + index) % m_capacity;
-  }
+  std::size_t wrappedIndex(std::size_t index) const { return (m_start + index) % m_capacity; }
 
   /**
    * @brief Advances the internal index after an insertion.
@@ -354,15 +343,15 @@ private:
   }
 
 private:
-  std::size_t m_capacity;      ///< Maximum number of elements.
-  std::shared_ptr<T[]> m_data; ///< Shared pointer to the internal buffer.
-  std::size_t m_start;         ///< Index of the oldest element.
-  std::size_t m_size;          ///< Current number of elements.
+  std::size_t m_capacity;       ///< Maximum number of elements.
+  std::shared_ptr<T[]> m_data;  ///< Shared pointer to the internal buffer.
+  std::size_t m_start;          ///< Index of the oldest element.
+  std::size_t m_size;           ///< Current number of elements.
 };
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Type Aliases
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Data type to use for all Serial Studio mathematical structures.
@@ -385,9 +374,9 @@ typedef FixedQueue<ssfp_t> AxisData;
  */
 typedef std::vector<AxisData> MultiPlotDataY;
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Composite Data Structures
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @typedef LineSeries
@@ -400,10 +389,9 @@ typedef std::vector<AxisData> MultiPlotDataY;
  * This type simplifies data processing by tightly coupling the related X and Y
  * data for a plot, ensuring that they are always accessed and managed together.
  */
-typedef struct
-{
-  AxisData *x; ///< X-axis data (e.g., time or samples)
-  AxisData *y; ///< Y-axis data (e.g., sensor readings)
+typedef struct {
+  AxisData* x;  ///< X-axis data (e.g., time or samples)
+  AxisData* y;  ///< Y-axis data (e.g., sensor readings)
 } LineSeries;
 
 /**
@@ -419,10 +407,9 @@ typedef struct
  * All Y-series are expected to align with the length and indexing of the
  * shared X-axis.
  */
-typedef struct
-{
-  AxisData *x;             ///< Shared X-axis data (e.g., time or index)
-  std::vector<AxisData> y; ///< Y-axis data for each individual curve
+typedef struct {
+  AxisData* x;              ///< Shared X-axis data (e.g., time or index)
+  std::vector<AxisData> y;  ///< Y-axis data for each individual curve
 } MultiLineSeries;
 
 #ifdef BUILD_COMMERCIAL
@@ -446,16 +433,15 @@ typedef std::vector<QVector3D> LineSeries3D;
  * recorded GPS point in time. This format is optimized for
  * visualization, analysis, and storage of path-based geospatial data.
  */
-typedef struct
-{
-  FixedQueue<ssfp_t> latitudes;  ///< Latitude values (degrees)
-  FixedQueue<ssfp_t> longitudes; ///< Longitude values (degrees)
-  FixedQueue<ssfp_t> altitudes;  ///< Altitude values (meters)
+typedef struct {
+  FixedQueue<ssfp_t> latitudes;   ///< Latitude values (degrees)
+  FixedQueue<ssfp_t> longitudes;  ///< Longitude values (degrees)
+  FixedQueue<ssfp_t> altitudes;   ///< Altitude values (meters)
 } GpsSeries;
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Downsampling workspace
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Scratch buffers for column-wise downsampling.
@@ -485,8 +471,7 @@ typedef struct
  *       You can keep a workspace as a member of your widget and pass it
  *       on every call. The downsampler will resize and reset it as needed.
  */
-struct DownsampleWorkspace
-{
+struct DownsampleWorkspace {
   // Number of valid samples that landed in each column
   std::vector<unsigned int> cnt;
 
@@ -516,8 +501,7 @@ struct DownsampleWorkspace
    */
   void reset(std::size_t C)
   {
-    if (cnt.size() != C)
-    {
+    if (cnt.size() != C) {
       cnt.resize(C);
       minY.resize(C);
       maxY.resize(C);
@@ -529,16 +513,14 @@ struct DownsampleWorkspace
 
     // Clear per-column tallies and extrema
     std::fill(cnt.begin(), cnt.end(), 0u);
-    std::fill(minY.begin(), minY.end(),
-              std::numeric_limits<ssfp_t>::infinity());
-    std::fill(maxY.begin(), maxY.end(),
-              -std::numeric_limits<ssfp_t>::infinity());
+    std::fill(minY.begin(), minY.end(), std::numeric_limits<ssfp_t>::infinity());
+    std::fill(maxY.begin(), maxY.end(), -std::numeric_limits<ssfp_t>::infinity());
   }
 };
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Ring helper
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get two contiguous spans from a ring-buffered queue.
@@ -578,14 +560,14 @@ struct DownsampleWorkspace
  */
 template<typename T>
   requires std::copy_constructible<T> && std::is_copy_assignable_v<T>
-inline void spanFromFixedQueue(const FixedQueue<T> &q, const T *&p0,
-                               std::size_t &n0, const T *&p1, std::size_t &n1)
+inline void spanFromFixedQueue(
+  const FixedQueue<T>& q, const T*& p0, std::size_t& n0, const T*& p1, std::size_t& n1)
 {
-  const T *base = q.raw();
+  const T* base = q.raw();
 
-  const std::size_t n = q.size();
-  const std::size_t cap = q.capacity();
-  const std::size_t i0 = q.frontIndex();
+  const std::size_t n    = q.size();
+  const std::size_t cap  = q.capacity();
+  const std::size_t i0   = q.frontIndex();
   const std::size_t tail = std::min<std::size_t>(n, cap - i0);
 
   p0 = base + i0;
@@ -595,9 +577,9 @@ inline void spanFromFixedQueue(const FixedQueue<T> &q, const T *&p0,
   n1 = n - tail;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Downsample 2D series into screen-space pixels
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Downsample a 2D series (X,Y) into screen-space pixels, preserving
@@ -632,9 +614,8 @@ inline void spanFromFixedQueue(const FixedQueue<T> &q, const T *&p0,
  *
  * @return true always, false only if inputs invalid.
  */
-inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
-                                int h, QList<QPointF> &out,
-                                DownsampleWorkspace *ws)
+inline bool downsampleMonotonic(
+  const AxisData& X, const AxisData& Y, int w, int h, QList<QPointF>& out, DownsampleWorkspace* ws)
 {
   // Clear the buffer and validate input data
   out.clear();
@@ -657,14 +638,13 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
   };
 
   // Find data bounds
-  std::size_t lastFinite = n;
+  std::size_t lastFinite  = n;
   std::size_t firstFinite = n;
-  ssfp_t xmin = std::numeric_limits<ssfp_t>::infinity();
-  ssfp_t ymin = std::numeric_limits<ssfp_t>::infinity();
-  ssfp_t xmax = -std::numeric_limits<ssfp_t>::infinity();
-  ssfp_t ymax = -std::numeric_limits<ssfp_t>::infinity();
-  for (std::size_t i = 0; i < n; ++i)
-  {
+  ssfp_t xmin             = std::numeric_limits<ssfp_t>::infinity();
+  ssfp_t ymin             = std::numeric_limits<ssfp_t>::infinity();
+  ssfp_t xmax             = -std::numeric_limits<ssfp_t>::infinity();
+  ssfp_t ymax             = -std::numeric_limits<ssfp_t>::infinity();
+  for (std::size_t i = 0; i < n; ++i) {
     // Get & validate raw points
     const ssfp_t xv = xAt(i);
     const ssfp_t yv = yAt(i);
@@ -695,8 +675,7 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
 
   // Fallback to index-based sampling when X range is zero or invalid
   // (e.g., all X values are identical)
-  if (!(xmin < xmax))
-  {
+  if (!(xmin < xmax)) {
     // Calculate step size
     std::size_t step = n / (std::max(1, w));
     if (step < 1)
@@ -735,8 +714,7 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
   };
 
   // Fill buckets
-  for (std::size_t i = 0; i < n; ++i)
-  {
+  for (std::size_t i = 0; i < n; ++i) {
     // Obtain raw points & validate them
     const ssfp_t xv = xAt(i);
     const ssfp_t yv = yAt(i);
@@ -747,25 +725,21 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
     const std::size_t c = getColFromX(xv);
 
     // Register first point for column
-    if (ws->cnt[c] == 0)
-    {
+    if (ws->cnt[c] == 0) {
       ws->firstI[c] = ws->lastI[c] = i;
       ws->minI[c] = ws->maxI[c] = i;
       ws->minY[c] = ws->maxY[c] = yv;
-      ws->cnt[c] = 1;
+      ws->cnt[c]                = 1;
     }
 
     // Register min/max values for column
-    else
-    {
-      if (yv < ws->minY[c])
-      {
+    else {
+      if (yv < ws->minY[c]) {
         ws->minY[c] = yv;
         ws->minI[c] = i;
       }
 
-      if (yv > ws->maxY[c])
-      {
+      if (yv > ws->maxY[c]) {
         ws->maxY[c] = yv;
         ws->maxI[c] = i;
       }
@@ -777,8 +751,7 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
 
   // Register time-ordered points per column: first, min, max, last
   out.reserve(w * 3 / 2 + 8);
-  for (std::size_t c = 0; c < C; ++c)
-  {
+  for (std::size_t c = 0; c < C; ++c) {
     // Skip columns widhout data
     if (ws->cnt[c] == 0)
       continue;
@@ -799,8 +772,7 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
 
     // Add minimum & maximum points (if needed)
     const ssfp_t vspan_px = (ws->maxY[c] - ws->minY[c]) * scaleY;
-    if (vspan_px >= 1.0)
-    {
+    if (vspan_px >= 1.0) {
       push_unique(ws->minI[c]);
       push_unique(ws->maxI[c]);
     }
@@ -809,12 +781,10 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
     push_unique(ws->lastI[c]);
 
     // Sort the column points into ascending order
-    for (int a = 1; a < k; ++a)
-    {
-      int b = a - 1;
+    for (int a = 1; a < k; ++a) {
+      int b         = a - 1;
       std::size_t v = tmp[a];
-      while (b >= 0 && tmp[b] > v)
-      {
+      while (b >= 0 && tmp[b] > v) {
         tmp[b + 1] = tmp[b];
         --b;
       }
@@ -846,9 +816,8 @@ inline bool downsampleMonotonic(const AxisData &X, const AxisData &Y, int w,
  *
  * @return true on success, false on parameter mismatch.
  */
-[[nodiscard]] inline bool downsampleMonotonic(const LineSeries &in, int width,
-                                              int height, QList<QPointF> &out,
-                                              DownsampleWorkspace *ws)
+[[nodiscard]] inline bool downsampleMonotonic(
+  const LineSeries& in, int width, int height, QList<QPointF>& out, DownsampleWorkspace* ws)
 {
   return downsampleMonotonic(*in.x, *in.y, width, height, out, ws);
 }
@@ -913,12 +882,10 @@ template<Concepts::Numeric T>
  * infinity (handled naturally by the checks below).
  */
 template<Concepts::Numeric T>
-[[nodiscard]] inline bool almostEqual(T a, T b, T relEps = T(1e-12),
-                                      T absEps = T(1e-12)) noexcept
+[[nodiscard]] inline bool almostEqual(T a, T b, T relEps = T(1e-12), T absEps = T(1e-12)) noexcept
 {
   // Fast reject for NaNs (only applicable to floating-point types)
-  if constexpr (std::floating_point<T>)
-  {
+  if constexpr (std::floating_point<T>) {
     if (!std::isfinite(a) || !std::isfinite(b))
       return a == b;
   }
@@ -951,10 +918,9 @@ template<Concepts::Numeric T>
  * @return true if the values are not approximately equal, otherwise false.
  */
 template<Concepts::Numeric T>
-[[nodiscard]] inline bool notEqual(T a, T b, T relEps = T(1e-12),
-                                   T absEps = T(1e-12)) noexcept
+[[nodiscard]] inline bool notEqual(T a, T b, T relEps = T(1e-12), T absEps = T(1e-12)) noexcept
 {
   return !almostEqual(a, b, relEps, absEps);
 }
 
-} // namespace DSP
+}  // namespace DSP

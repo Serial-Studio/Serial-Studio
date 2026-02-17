@@ -21,17 +21,16 @@
 
 #pragma once
 
+#include <QHash>
 #include <QImage>
-#include <QWindow>
 #include <QObject>
 #include <QPointer>
-#include <QHash>
 #include <QQuickItem>
-#include <QQuickWindow>
 #include <QQuickPaintedItem>
+#include <QQuickWindow>
+#include <QWindow>
 
-namespace CSD
-{
+namespace CSD {
 /**
  * @class Titlebar
  * @brief Custom title bar widget with window controls for CSD windows.
@@ -43,8 +42,7 @@ namespace CSD
  * - Window dragging support
  * - Double-click to maximize/restore
  */
-class Titlebar : public QQuickPaintedItem
-{
+class Titlebar : public QQuickPaintedItem {
   Q_OBJECT
 
 signals:
@@ -56,31 +54,30 @@ signals:
   void backgroundColorChanged();
 
 public:
-  explicit Titlebar(QQuickItem *parent = nullptr);
+  explicit Titlebar(QQuickItem* parent = nullptr);
 
-  void paint(QPainter *painter) override;
+  void paint(QPainter* painter) override;
 
   [[nodiscard]] QString title() const;
   [[nodiscard]] bool windowActive() const;
   [[nodiscard]] QColor backgroundColor() const;
 
 public slots:
-  void setTitle(const QString &title);
+  void setTitle(const QString& title);
   void setWindowActive(bool active);
-  void setBackgroundColor(const QColor &color);
+  void setBackgroundColor(const QColor& color);
 
 protected:
   void mouseUngrabEvent() override;
-  void mouseMoveEvent(QMouseEvent *event) override;
-  void hoverMoveEvent(QHoverEvent *event) override;
-  void hoverLeaveEvent(QHoverEvent *event) override;
-  void mousePressEvent(QMouseEvent *event) override;
-  void mouseReleaseEvent(QMouseEvent *event) override;
-  void mouseDoubleClickEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void hoverMoveEvent(QHoverEvent* event) override;
+  void hoverLeaveEvent(QHoverEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
+  void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 private:
-  enum class Button
-  {
+  enum class Button {
     None,
     Minimize,
     Maximize,
@@ -89,7 +86,7 @@ private:
 
   [[nodiscard]] QColor foregroundColor() const;
   [[nodiscard]] QRectF buttonRect(Button button) const;
-  [[nodiscard]] Button buttonAt(const QPointF &pos) const;
+  [[nodiscard]] Button buttonAt(const QPointF& pos) const;
   [[nodiscard]] bool shouldShowButton(Button button) const;
   [[nodiscard]] QRectF buttonBackgroundRect(Button button) const;
 
@@ -103,7 +100,7 @@ private:
     return m || f;
   }
 
-  void drawButton(QPainter *painter, Button button, const QString &svgPath);
+  void drawButton(QPainter* painter, Button button, const QString& svgPath);
 
 private:
   QString m_title;
@@ -123,13 +120,12 @@ private:
  * Renders a thin border on top of all content, including the titlebar.
  * Hidden when window is maximized or fullscreen.
  */
-class Border : public QQuickPaintedItem
-{
+class Border : public QQuickPaintedItem {
   Q_OBJECT
 
 public:
-  explicit Border(QQuickItem *parent = nullptr);
-  void paint(QPainter *painter) override;
+  explicit Border(QQuickItem* parent = nullptr);
+  void paint(QPainter* painter) override;
 };
 
 /**
@@ -141,8 +137,7 @@ public:
  *
  * Shadow is automatically disabled when window is maximized or fullscreen.
  */
-class Frame : public QQuickPaintedItem
-{
+class Frame : public QQuickPaintedItem {
   Q_OBJECT
 
 signals:
@@ -151,9 +146,9 @@ signals:
   void shadowEnabledChanged();
 
 public:
-  explicit Frame(QQuickItem *parent = nullptr);
+  explicit Frame(QQuickItem* parent = nullptr);
 
-  void paint(QPainter *painter) override;
+  void paint(QPainter* painter) override;
 
   [[nodiscard]] int shadowRadius() const;
   [[nodiscard]] bool shadowEnabled() const;
@@ -199,25 +194,23 @@ private:
  * QML content is automatically reparented into a container that
  * respects shadow margins and title bar height.
  */
-class Window : public QObject
-{
+class Window : public QObject {
   Q_OBJECT
 
 public:
-  explicit Window(QWindow *window, const QString &color = QString(),
-                  QObject *parent = nullptr);
+  explicit Window(QWindow* window, const QString& color = QString(), QObject* parent = nullptr);
   ~Window() override;
 
-  [[nodiscard]] Frame *frame() const;
-  [[nodiscard]] QWindow *window() const;
-  [[nodiscard]] Titlebar *titleBar() const;
+  [[nodiscard]] Frame* frame() const;
+  [[nodiscard]] QWindow* window() const;
+  [[nodiscard]] Titlebar* titleBar() const;
 
   [[nodiscard]] int shadowMargin() const;
   [[nodiscard]] int titleBarHeight() const;
 
 public slots:
   void updateTheme();
-  void setColor(const QString &color);
+  void setColor(const QString& color);
 
 private slots:
   void setupFrame();
@@ -235,37 +228,36 @@ private:
   QSize preferredSize() const;
 
 private:
-  enum class ResizeEdge
-  {
-    None = 0,
-    Left = 1,
-    Right = 2,
-    Top = 4,
-    Bottom = 8,
-    TopLeft = Top | Left,
-    TopRight = Top | Right,
-    BottomLeft = Bottom | Left,
+  enum class ResizeEdge {
+    None        = 0,
+    Left        = 1,
+    Right       = 2,
+    Top         = 4,
+    Bottom      = 8,
+    TopLeft     = Top | Left,
+    TopRight    = Top | Right,
+    BottomLeft  = Bottom | Left,
     BottomRight = Bottom | Right
   };
 
-  [[nodiscard]] ResizeEdge edgeAt(const QPointF &pos) const;
+  [[nodiscard]] ResizeEdge edgeAt(const QPointF& pos) const;
   [[nodiscard]] Qt::CursorShape cursorForEdge(ResizeEdge edge) const;
   [[nodiscard]] Qt::Edges qtEdgesFromResizeEdge(ResizeEdge edge) const;
 
-  void reparentChildToContainer(QQuickItem *child);
+  void reparentChildToContainer(QQuickItem* child);
 
 protected:
-  bool eventFilter(QObject *watched, QEvent *event) override;
+  bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
   bool m_resizing;
-  Frame *m_frame;
-  Border *m_border;
+  Frame* m_frame;
+  Border* m_border;
   QString m_color;
-  Titlebar *m_titleBar;
+  Titlebar* m_titleBar;
   ResizeEdge m_resizeEdge;
   QSize m_minSize;
   QPointer<QWindow> m_window;
-  QQuickItem *m_contentContainer;
+  QQuickItem* m_contentContainer;
 };
-} // namespace CSD
+}  // namespace CSD

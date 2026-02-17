@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include <utility>
-#include <chrono>
-#include <memory>
-#include <cstdlib>
-#include <cstdint>
 #include <cassert>
+#include <chrono>
+#include <cstdint>
+#include <cstdlib>
+#include <memory>
+#include <utility>
 
 // Note that this implementation is fully modern C++11 (not compatible with old
 // MSVC versions) but we still include atomicops.h for its LightweightSemaphore
@@ -23,12 +23,10 @@
 #  define MOODYCAMEL_CACHE_LINE_SIZE 64
 #endif
 
-namespace moodycamel
-{
+namespace moodycamel {
 
 template<typename T>
-class BlockingReaderWriterCircularBuffer
-{
+class BlockingReaderWriterCircularBuffer {
 public:
   typedef T value_type;
 
@@ -39,7 +37,7 @@ public:
     , rawData()
     , data()
     , slots_(new spsc_sema::LightweightSemaphore(
-          static_cast<spsc_sema::LightweightSemaphore::ssize_t>(capacity)))
+        static_cast<spsc_sema::LightweightSemaphore::ssize_t>(capacity)))
     , items(new spsc_sema::LightweightSemaphore(0))
     , nextSlot(0)
     , nextItem(0)
@@ -54,12 +52,12 @@ public:
     for (std::size_t i = 1; i < sizeof(std::size_t); i <<= 1)
       capacity |= capacity >> (i << 3);
     mask = capacity++;
-    rawData = static_cast<char *>(
-        std::malloc(capacity * sizeof(T) + std::alignment_of<T>::value - 1));
+    rawData =
+      static_cast<char*>(std::malloc(capacity * sizeof(T) + std::alignment_of<T>::value - 1));
     data = align_for<T>(rawData);
   }
 
-  BlockingReaderWriterCircularBuffer(BlockingReaderWriterCircularBuffer &&other)
+  BlockingReaderWriterCircularBuffer(BlockingReaderWriterCircularBuffer&& other)
     : maxcap(0)
     , mask(0)
     , rawData(nullptr)
@@ -72,32 +70,28 @@ public:
     swap(other);
   }
 
-  BlockingReaderWriterCircularBuffer(BlockingReaderWriterCircularBuffer const &)
-      = delete;
+  BlockingReaderWriterCircularBuffer(BlockingReaderWriterCircularBuffer const&) = delete;
 
   // Note: The queue should not be accessed concurrently while it's
   // being deleted. It's up to the user to synchronize this.
   ~BlockingReaderWriterCircularBuffer()
   {
     for (std::size_t i = 0, n = items->availableApprox(); i != n; ++i)
-      reinterpret_cast<T *>(data)[(nextItem + i) & mask].~T();
+      reinterpret_cast<T*>(data)[(nextItem + i) & mask].~T();
     std::free(rawData);
   }
 
-  BlockingReaderWriterCircularBuffer &
-  operator=(BlockingReaderWriterCircularBuffer &&other) noexcept
+  BlockingReaderWriterCircularBuffer& operator=(BlockingReaderWriterCircularBuffer&& other) noexcept
   {
     swap(other);
     return *this;
   }
 
-  BlockingReaderWriterCircularBuffer &
-  operator=(BlockingReaderWriterCircularBuffer const &)
-      = delete;
+  BlockingReaderWriterCircularBuffer& operator=(BlockingReaderWriterCircularBuffer const&) = delete;
 
   // Swaps the contents of this buffer with the contents of another.
   // Not thread-safe.
-  void swap(BlockingReaderWriterCircularBuffer &other) noexcept
+  void swap(BlockingReaderWriterCircularBuffer& other) noexcept
   {
     std::swap(maxcap, other.maxcap);
     std::swap(mask, other.mask);
@@ -114,7 +108,7 @@ public:
   // Thread-safe when called by producer thread.
   // No exception guarantee (state will be corrupted) if constructor of T
   // throws.
-  bool try_enqueue(T const &item)
+  bool try_enqueue(T const& item)
   {
     if (!slots_->tryWait())
       return false;
@@ -127,7 +121,7 @@ public:
   // Thread-safe when called by producer thread.
   // No exception guarantee (state will be corrupted) if constructor of T
   // throws.
-  bool try_enqueue(T &&item)
+  bool try_enqueue(T&& item)
   {
     if (!slots_->tryWait())
       return false;
@@ -139,7 +133,7 @@ public:
   // item, then enqueues it (via copy). Thread-safe when called by producer
   // thread. No exception guarantee (state will be corrupted) if constructor of
   // T throws.
-  void wait_enqueue(T const &item)
+  void wait_enqueue(T const& item)
   {
     while (!slots_->wait())
       ;
@@ -150,7 +144,7 @@ public:
   // item, then enqueues it (via move, if possible). Thread-safe when called by
   // producer thread. No exception guarantee (state will be corrupted) if
   // constructor of T throws.
-  void wait_enqueue(T &&item)
+  void wait_enqueue(T&& item)
   {
     while (!slots_->wait())
       ;
@@ -162,7 +156,7 @@ public:
   // the timeout expires, otherwise enqueues the item (via copy) and returns
   // true. Thread-safe when called by producer thread. No exception guarantee
   // (state will be corrupted) if constructor of T throws.
-  bool wait_enqueue_timed(T const &item, std::int64_t timeout_usecs)
+  bool wait_enqueue_timed(T const& item, std::int64_t timeout_usecs)
   {
     if (!slots_->wait(timeout_usecs))
       return false;
@@ -175,7 +169,7 @@ public:
   // the timeout expires, otherwise enqueues the item (via move, if possible)
   // and returns true. Thread-safe when called by producer thread. No exception
   // guarantee (state will be corrupted) if constructor of T throws.
-  bool wait_enqueue_timed(T &&item, std::int64_t timeout_usecs)
+  bool wait_enqueue_timed(T&& item, std::int64_t timeout_usecs)
   {
     if (!slots_->wait(timeout_usecs))
       return false;
@@ -189,13 +183,10 @@ public:
   // true. Thread-safe when called by producer thread. No exception guarantee
   // (state will be corrupted) if constructor of T throws.
   template<typename Rep, typename Period>
-  inline bool
-  wait_enqueue_timed(T const &item,
-                     std::chrono::duration<Rep, Period> const &timeout)
+  inline bool wait_enqueue_timed(T const& item, std::chrono::duration<Rep, Period> const& timeout)
   {
     return wait_enqueue_timed(
-        item,
-        std::chrono::duration_cast<std::chrono::microseconds>(timeout).count());
+      item, std::chrono::duration_cast<std::chrono::microseconds>(timeout).count());
   }
 
   // Blocks the current thread until there's enough space to enqueue the given
@@ -204,13 +195,10 @@ public:
   // and returns true. Thread-safe when called by producer thread. No exception
   // guarantee (state will be corrupted) if constructor of T throws.
   template<typename Rep, typename Period>
-  inline bool
-  wait_enqueue_timed(T &&item,
-                     std::chrono::duration<Rep, Period> const &timeout)
+  inline bool wait_enqueue_timed(T&& item, std::chrono::duration<Rep, Period> const& timeout)
   {
     return wait_enqueue_timed(
-        std::move(item),
-        std::chrono::duration_cast<std::chrono::microseconds>(timeout).count());
+      std::move(item), std::chrono::duration_cast<std::chrono::microseconds>(timeout).count());
   }
 
   // Attempts to dequeue a single item.
@@ -219,7 +207,7 @@ public:
   // No exception guarantee (state will be corrupted) if assignment operator of
   // U throws.
   template<typename U>
-  bool try_dequeue(U &item)
+  bool try_dequeue(U& item)
   {
     if (!items->tryWait())
       return false;
@@ -231,7 +219,7 @@ public:
   // it. Thread-safe when called by consumer thread. No exception guarantee
   // (state will be corrupted) if assignment operator of U throws.
   template<typename U>
-  void wait_dequeue(U &item)
+  void wait_dequeue(U& item)
   {
     while (!items->wait())
       ;
@@ -245,7 +233,7 @@ public:
   // No exception guarantee (state will be corrupted) if assignment operator of
   // U throws.
   template<typename U>
-  bool wait_dequeue_timed(U &item, std::int64_t timeout_usecs)
+  bool wait_dequeue_timed(U& item, std::int64_t timeout_usecs)
   {
     if (!items->wait(timeout_usecs))
       return false;
@@ -260,19 +248,17 @@ public:
   // No exception guarantee (state will be corrupted) if assignment operator of
   // U throws.
   template<typename U, typename Rep, typename Period>
-  inline bool
-  wait_dequeue_timed(U &item, std::chrono::duration<Rep, Period> const &timeout)
+  inline bool wait_dequeue_timed(U& item, std::chrono::duration<Rep, Period> const& timeout)
   {
     return wait_dequeue_timed(
-        item,
-        std::chrono::duration_cast<std::chrono::microseconds>(timeout).count());
+      item, std::chrono::duration_cast<std::chrono::microseconds>(timeout).count());
   }
 
   // Returns a pointer to the next element in the queue (the one that would
   // be removed next by a call to `try_dequeue` or `try_pop`). If the queue
   // appears empty at the time the method is called, returns nullptr instead.
   // Thread-safe when called by consumer thread.
-  inline T *peek()
+  inline T* peek()
   {
     if (!items->availableApprox())
       return nullptr;
@@ -299,57 +285,53 @@ public:
 
 private:
   template<typename U>
-  void inner_enqueue(U &&item)
+  void inner_enqueue(U&& item)
   {
     std::size_t i = nextSlot++;
-    new (reinterpret_cast<T *>(data) + (i & mask)) T(std::forward<U>(item));
+    new (reinterpret_cast<T*>(data) + (i & mask)) T(std::forward<U>(item));
     items->signal();
   }
 
   template<typename U>
-  void inner_dequeue(U &item)
+  void inner_dequeue(U& item)
   {
     std::size_t i = nextItem++;
-    T &element = reinterpret_cast<T *>(data)[i & mask];
-    item = std::move(element);
+    T& element    = reinterpret_cast<T*>(data)[i & mask];
+    item          = std::move(element);
     element.~T();
     slots_->signal();
   }
 
-  T *inner_peek() { return reinterpret_cast<T *>(data) + (nextItem & mask); }
+  T* inner_peek() { return reinterpret_cast<T*>(data) + (nextItem & mask); }
 
   void inner_pop()
   {
     std::size_t i = nextItem++;
-    reinterpret_cast<T *>(data)[i & mask].~T();
+    reinterpret_cast<T*>(data)[i & mask].~T();
     slots_->signal();
   }
 
   template<typename U>
-  static inline char *align_for(char *ptr)
+  static inline char* align_for(char* ptr)
   {
     const std::size_t alignment = std::alignment_of<U>::value;
-    return ptr
-           + (alignment - (reinterpret_cast<std::uintptr_t>(ptr) % alignment))
-                 % alignment;
+    return ptr + (alignment - (reinterpret_cast<std::uintptr_t>(ptr) % alignment)) % alignment;
   }
 
 private:
-  std::size_t maxcap; // actual (non-power-of-two) capacity
-  std::size_t mask;   // circular buffer capacity mask (for cheap modulo)
-  char *rawData;      // raw circular buffer memory
-  char *data;         // circular buffer memory aligned to element alignment
+  std::size_t maxcap;  // actual (non-power-of-two) capacity
+  std::size_t mask;    // circular buffer capacity mask (for cheap modulo)
+  char* rawData;       // raw circular buffer memory
+  char* data;          // circular buffer memory aligned to element alignment
   std::unique_ptr<spsc_sema::LightweightSemaphore>
-      slots_; // number of slots currently free (named with underscore to
-              // accommodate Qt's 'slots' macro)
-  std::unique_ptr<spsc_sema::LightweightSemaphore>
-      items; // number of elements currently enqueued
-  char cachelineFiller0
-      [MOODYCAMEL_CACHE_LINE_SIZE - sizeof(char *) * 2 - sizeof(std::size_t) * 2
-       - sizeof(std::unique_ptr<spsc_sema::LightweightSemaphore>) * 2];
-  std::size_t nextSlot; // index of next free slot to enqueue into
+    slots_;  // number of slots currently free (named with underscore to
+             // accommodate Qt's 'slots' macro)
+  std::unique_ptr<spsc_sema::LightweightSemaphore> items;  // number of elements currently enqueued
+  char cachelineFiller0[MOODYCAMEL_CACHE_LINE_SIZE - sizeof(char*) * 2 - sizeof(std::size_t) * 2
+                        - sizeof(std::unique_ptr<spsc_sema::LightweightSemaphore>) * 2];
+  std::size_t nextSlot;  // index of next free slot to enqueue into
   char cachelineFiller1[MOODYCAMEL_CACHE_LINE_SIZE - sizeof(std::size_t)];
-  std::size_t nextItem; // index of next element to dequeue from
+  std::size_t nextItem;  // index of next element to dequeue from
 };
 
-} // namespace moodycamel
+}  // namespace moodycamel

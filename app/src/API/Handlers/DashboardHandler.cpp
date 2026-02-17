@@ -20,9 +20,10 @@
  */
 
 #include "API/Handlers/DashboardHandler.h"
+
 #include "API/CommandRegistry.h"
-#include "DataModel/FrameBuilder.h"
 #include "DataModel/Frame.h"
+#include "DataModel/FrameBuilder.h"
 #include "Misc/TimerEvents.h"
 #include "UI/Dashboard.h"
 
@@ -31,46 +32,43 @@
  */
 void API::Handlers::DashboardHandler::registerCommands()
 {
-  auto &registry = CommandRegistry::instance();
+  auto& registry = CommandRegistry::instance();
 
   registry.registerCommand(
-      QStringLiteral("dashboard.setOperationMode"),
-      QStringLiteral("Set the operation mode (params: mode - 0=ProjectFile, "
-                     "1=DeviceSendsJSON, 2=QuickPlot)"),
-      &setOperationMode);
+    QStringLiteral("dashboard.setOperationMode"),
+    QStringLiteral(
+      "Set the operation mode (params: mode - 0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot)"),
+    &setOperationMode);
 
   registry.registerCommand(QStringLiteral("dashboard.getOperationMode"),
                            QStringLiteral("Get the current operation mode"),
                            &getOperationMode);
 
   registry.registerCommand(
-      QStringLiteral("dashboard.setFPS"),
-      QStringLiteral("Set the visualization refresh rate (params: fps - "
-                     "1-240 Hz)"),
-      &setFPS);
+    QStringLiteral("dashboard.setFPS"),
+    QStringLiteral("Set the visualization refresh rate (params: fps - 1-240 Hz)"),
+    &setFPS);
+
+  registry.registerCommand(QStringLiteral("dashboard.getFPS"),
+                           QStringLiteral("Get the current visualization refresh rate"),
+                           &getFPS);
 
   registry.registerCommand(
-      QStringLiteral("dashboard.getFPS"),
-      QStringLiteral("Get the current visualization refresh rate"), &getFPS);
+    QStringLiteral("dashboard.setPoints"),
+    QStringLiteral("Set the number of data points per plot (params: points)"),
+    &setPoints);
 
-  registry.registerCommand(
-      QStringLiteral("dashboard.setPoints"),
-      QStringLiteral("Set the number of data points per plot (params: points)"),
-      &setPoints);
+  registry.registerCommand(QStringLiteral("dashboard.getPoints"),
+                           QStringLiteral("Get the current number of data points per plot"),
+                           &getPoints);
 
-  registry.registerCommand(
-      QStringLiteral("dashboard.getPoints"),
-      QStringLiteral("Get the current number of data points per plot"),
-      &getPoints);
+  registry.registerCommand(QStringLiteral("dashboard.getStatus"),
+                           QStringLiteral("Get all dashboard configuration settings"),
+                           &getStatus);
 
-  registry.registerCommand(
-      QStringLiteral("dashboard.getStatus"),
-      QStringLiteral("Get all dashboard configuration settings"), &getStatus);
-
-  registry.registerCommand(
-      QStringLiteral("dashboard.getData"),
-      QStringLiteral("Get dashboard widget counts and latest frame data"),
-      &getData);
+  registry.registerCommand(QStringLiteral("dashboard.getData"),
+                           QStringLiteral("Get dashboard widget counts and latest frame data"),
+                           &getData);
 }
 
 /**
@@ -78,27 +76,23 @@ void API::Handlers::DashboardHandler::registerCommands()
  * @param params Requires "mode" (int: 0=ProjectFile, 1=DeviceSendsJSON,
  * 2=QuickPlot)
  */
-API::CommandResponse
-API::Handlers::DashboardHandler::setOperationMode(const QString &id,
-                                                  const QJsonObject &params)
+API::CommandResponse API::Handlers::DashboardHandler::setOperationMode(const QString& id,
+                                                                       const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("mode")))
-  {
+  if (!params.contains(QStringLiteral("mode"))) {
     return CommandResponse::makeError(
-        id, ErrorCode::MissingParam,
-        QStringLiteral("Missing required parameter: "
-                       "mode"));
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: mode"));
   }
 
   const int mode = params.value(QStringLiteral("mode")).toInt();
 
-  if (mode < 0 || mode > 2)
-  {
+  if (mode < 0 || mode > 2) {
     return CommandResponse::makeError(
-        id, ErrorCode::InvalidParam,
-        QStringLiteral("Invalid mode: %1. Valid range: 0-2 "
-                       "(0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot)")
-            .arg(mode));
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral(
+        "Invalid mode: %1. Valid range: 0-2 (0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot)")
+        .arg(mode));
   }
 
   const auto operationMode = static_cast<SerialStudio::OperationMode>(mode);
@@ -107,9 +101,8 @@ API::Handlers::DashboardHandler::setOperationMode(const QString &id,
   QJsonObject result;
   result[QStringLiteral("mode")] = mode;
 
-  const QStringList modeNames
-      = {QStringLiteral("ProjectFile"), QStringLiteral("DeviceSendsJSON"),
-         QStringLiteral("QuickPlot")};
+  const QStringList modeNames = {
+    QStringLiteral("ProjectFile"), QStringLiteral("DeviceSendsJSON"), QStringLiteral("QuickPlot")};
   result[QStringLiteral("modeName")] = modeNames[mode];
 
   return CommandResponse::makeSuccess(id, result);
@@ -118,21 +111,19 @@ API::Handlers::DashboardHandler::setOperationMode(const QString &id,
 /**
  * @brief Get the current operation mode
  */
-API::CommandResponse
-API::Handlers::DashboardHandler::getOperationMode(const QString &id,
-                                                  const QJsonObject &params)
+API::CommandResponse API::Handlers::DashboardHandler::getOperationMode(const QString& id,
+                                                                       const QJsonObject& params)
 {
   Q_UNUSED(params)
 
-  const auto mode = DataModel::FrameBuilder::instance().operationMode();
+  const auto mode     = DataModel::FrameBuilder::instance().operationMode();
   const int modeIndex = static_cast<int>(mode);
 
   QJsonObject result;
   result[QStringLiteral("mode")] = modeIndex;
 
-  const QStringList modeNames
-      = {QStringLiteral("ProjectFile"), QStringLiteral("DeviceSendsJSON"),
-         QStringLiteral("QuickPlot")};
+  const QStringList modeNames = {
+    QStringLiteral("ProjectFile"), QStringLiteral("DeviceSendsJSON"), QStringLiteral("QuickPlot")};
   result[QStringLiteral("modeName")] = modeNames[modeIndex];
 
   return CommandResponse::makeSuccess(id, result);
@@ -142,25 +133,19 @@ API::Handlers::DashboardHandler::getOperationMode(const QString &id,
  * @brief Set the visualization refresh rate (FPS)
  * @param params Requires "fps" (int: 1-240 Hz)
  */
-API::CommandResponse
-API::Handlers::DashboardHandler::setFPS(const QString &id,
-                                        const QJsonObject &params)
+API::CommandResponse API::Handlers::DashboardHandler::setFPS(const QString& id,
+                                                             const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("fps")))
-  {
+  if (!params.contains(QStringLiteral("fps"))) {
     return CommandResponse::makeError(
-        id, ErrorCode::MissingParam,
-        QStringLiteral("Missing required parameter: "
-                       "fps"));
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: fps"));
   }
 
   const int fps = params.value(QStringLiteral("fps")).toInt();
 
-  if (fps < 1 || fps > 240)
-  {
+  if (fps < 1 || fps > 240) {
     return CommandResponse::makeError(
-        id, ErrorCode::InvalidParam,
-        QStringLiteral("Invalid fps: %1. Valid range: 1-240").arg(fps));
+      id, ErrorCode::InvalidParam, QStringLiteral("Invalid fps: %1. Valid range: 1-240").arg(fps));
   }
 
   Misc::TimerEvents::instance().setFPS(fps);
@@ -174,9 +159,8 @@ API::Handlers::DashboardHandler::setFPS(const QString &id,
 /**
  * @brief Get the current visualization refresh rate
  */
-API::CommandResponse
-API::Handlers::DashboardHandler::getFPS(const QString &id,
-                                        const QJsonObject &params)
+API::CommandResponse API::Handlers::DashboardHandler::getFPS(const QString& id,
+                                                             const QJsonObject& params)
 {
   Q_UNUSED(params)
 
@@ -192,26 +176,21 @@ API::Handlers::DashboardHandler::getFPS(const QString &id,
  * @brief Set the number of data points per plot
  * @param params Requires "points" (int)
  */
-API::CommandResponse
-API::Handlers::DashboardHandler::setPoints(const QString &id,
-                                           const QJsonObject &params)
+API::CommandResponse API::Handlers::DashboardHandler::setPoints(const QString& id,
+                                                                const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("points")))
-  {
+  if (!params.contains(QStringLiteral("points"))) {
     return CommandResponse::makeError(
-        id, ErrorCode::MissingParam,
-        QStringLiteral("Missing required parameter: "
-                       "points"));
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: points"));
   }
 
   const int points = params.value(QStringLiteral("points")).toInt();
 
-  if (points < 1 || points > 100000)
-  {
+  if (points < 1 || points > 100000) {
     return CommandResponse::makeError(
-        id, ErrorCode::InvalidParam,
-        QStringLiteral("Invalid points: %1. Valid range: 1-100000")
-            .arg(points));
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Invalid points: %1. Valid range: 1-100000").arg(points));
   }
 
   UI::Dashboard::instance().setPoints(points);
@@ -225,9 +204,8 @@ API::Handlers::DashboardHandler::setPoints(const QString &id,
 /**
  * @brief Get the current number of data points per plot
  */
-API::CommandResponse
-API::Handlers::DashboardHandler::getPoints(const QString &id,
-                                           const QJsonObject &params)
+API::CommandResponse API::Handlers::DashboardHandler::getPoints(const QString& id,
+                                                                const QJsonObject& params)
 {
   Q_UNUSED(params)
 
@@ -242,30 +220,26 @@ API::Handlers::DashboardHandler::getPoints(const QString &id,
 /**
  * @brief Get all dashboard configuration settings
  */
-API::CommandResponse
-API::Handlers::DashboardHandler::getStatus(const QString &id,
-                                           const QJsonObject &params)
+API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& id,
+                                                                const QJsonObject& params)
 {
   Q_UNUSED(params)
 
-  const auto mode = DataModel::FrameBuilder::instance().operationMode();
+  const auto mode     = DataModel::FrameBuilder::instance().operationMode();
   const int modeIndex = static_cast<int>(mode);
-  const int fps = Misc::TimerEvents::instance().fps();
-  const int points = UI::Dashboard::instance().points();
+  const int fps       = Misc::TimerEvents::instance().fps();
+  const int points    = UI::Dashboard::instance().points();
 
   QJsonObject result;
   result[QStringLiteral("operationMode")] = modeIndex;
 
-  const QStringList modeNames
-      = {QStringLiteral("ProjectFile"), QStringLiteral("DeviceSendsJSON"),
-         QStringLiteral("QuickPlot")};
+  const QStringList modeNames = {
+    QStringLiteral("ProjectFile"), QStringLiteral("DeviceSendsJSON"), QStringLiteral("QuickPlot")};
   result[QStringLiteral("operationModeName")] = modeNames[modeIndex];
-  result[QStringLiteral("fps")] = fps;
-  result[QStringLiteral("points")] = points;
-  result[QStringLiteral("widgetCount")]
-      = UI::Dashboard::instance().totalWidgetCount();
-  result[QStringLiteral("datasetCount")]
-      = UI::Dashboard::instance().datasets().size();
+  result[QStringLiteral("fps")]               = fps;
+  result[QStringLiteral("points")]            = points;
+  result[QStringLiteral("widgetCount")]       = UI::Dashboard::instance().totalWidgetCount();
+  result[QStringLiteral("datasetCount")]      = UI::Dashboard::instance().datasets().size();
 
   return CommandResponse::makeSuccess(id, result);
 }
@@ -273,19 +247,17 @@ API::Handlers::DashboardHandler::getStatus(const QString &id,
 /**
  * @brief Get dashboard widget counts and latest processed frame data
  */
-API::CommandResponse
-API::Handlers::DashboardHandler::getData(const QString &id,
-                                         const QJsonObject &params)
+API::CommandResponse API::Handlers::DashboardHandler::getData(const QString& id,
+                                                              const QJsonObject& params)
 {
   Q_UNUSED(params)
 
-  auto &dashboard = UI::Dashboard::instance();
+  auto& dashboard = UI::Dashboard::instance();
 
   QJsonObject result;
-  result[QStringLiteral("widgetCount")] = dashboard.totalWidgetCount();
+  result[QStringLiteral("widgetCount")]  = dashboard.totalWidgetCount();
   result[QStringLiteral("datasetCount")] = dashboard.datasets().size();
-  result[QStringLiteral("frame")]
-      = DataModel::serialize(dashboard.processedFrame());
+  result[QStringLiteral("frame")]        = DataModel::serialize(dashboard.processedFrame());
 
   return CommandResponse::makeSuccess(id, result);
 }

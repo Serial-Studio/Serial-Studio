@@ -26,10 +26,8 @@
 
 #  include "API/CommandProtocol.h"
 
-namespace API
-{
-namespace Handlers
-{
+namespace API {
+namespace Handlers {
 /**
  * @class MDF4ExportHandler
  * @brief Registers API commands for MDF4::Export operations
@@ -39,8 +37,7 @@ namespace Handlers
  * - mdf4.export.close - Close current MDF4 file
  * - mdf4.export.getStatus - Query export status
  */
-class MDF4ExportHandler
-{
+class MDF4ExportHandler {
 public:
   /**
    * @brief Register all MDF4 Export commands with the CommandRegistry
@@ -49,16 +46,14 @@ public:
 
 private:
   // Mutation commands
-  static CommandResponse setEnabled(const QString &id,
-                                    const QJsonObject &params);
-  static CommandResponse close(const QString &id, const QJsonObject &params);
+  static CommandResponse setEnabled(const QString& id, const QJsonObject& params);
+  static CommandResponse close(const QString& id, const QJsonObject& params);
 
   // Query commands
-  static CommandResponse getStatus(const QString &id,
-                                   const QJsonObject &params);
+  static CommandResponse getStatus(const QString& id, const QJsonObject& params);
 };
 
-} // namespace Handlers
-} // namespace API
+}  // namespace Handlers
+}  // namespace API
 
-#endif // BUILD_COMMERCIAL
+#endif  // BUILD_COMMERCIAL

@@ -20,39 +20,38 @@
  */
 
 #include "IO/Manager.h"
-#include "Console/Handler.h"
-#include "IO/Drivers/UART.h"
-#include "IO/Drivers/Network.h"
-#include "IO/Drivers/BluetoothLE.h"
-
-#include "API/Server.h"
-#include "Misc/Translator.h"
-#include "DataModel/FrameBuilder.h"
 
 #include <QApplication>
 
+#include "API/Server.h"
+#include "Console/Handler.h"
+#include "DataModel/FrameBuilder.h"
+#include "IO/Drivers/BluetoothLE.h"
+#include "IO/Drivers/Network.h"
+#include "IO/Drivers/UART.h"
+#include "Misc/Translator.h"
+
 #ifdef BUILD_COMMERCIAL
-#  include "MQTT/Client.h"
-#  include "Misc/Utilities.h"
-#  include "Licensing/Trial.h"
 #  include "IO/Drivers/Audio.h"
 #  include "IO/Drivers/CANBus.h"
 #  include "IO/Drivers/Modbus.h"
 #  include "Licensing/LemonSqueezy.h"
+#  include "Licensing/Trial.h"
+#  include "Misc/Utilities.h"
+#  include "MQTT/Client.h"
 #endif
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constants
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
-namespace
-{
+namespace {
 constexpr int kFrameBufferSize = 4096;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constructor, destructor & singleton access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the `Manager` instance.
@@ -81,12 +80,9 @@ IO::Manager::Manager()
 
   setBusType(static_cast<SerialStudio::BusType>(busType));
 
-  connect(this, &IO::Manager::busTypeChanged, this,
-          &IO::Manager::configurationChanged);
-  connect(this, &IO::Manager::configurationChanged, this,
-          &IO::Manager::connectedChanged);
-  connect(qApp, &QApplication::aboutToQuit, this,
-          &IO::Manager::killFrameReader);
+  connect(this, &IO::Manager::busTypeChanged, this, &IO::Manager::configurationChanged);
+  connect(this, &IO::Manager::configurationChanged, this, &IO::Manager::connectedChanged);
+  connect(qApp, &QApplication::aboutToQuit, this, &IO::Manager::killFrameReader);
 }
 
 /**
@@ -107,15 +103,15 @@ IO::Manager::~Manager()
  *
  * @return A reference to the `Manager` instance.
  */
-IO::Manager &IO::Manager::instance()
+IO::Manager& IO::Manager::instance()
 {
   static Manager instance;
   return instance;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Member & status access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Indicates whether data streaming is currently paused while the data
@@ -208,7 +204,7 @@ bool IO::Manager::threadedFrameExtraction()
  * @return A pointer to the active `HAL_Driver` instance, or nullptr if none is
  * active.
  */
-IO::HAL_Driver *IO::Manager::driver()
+IO::HAL_Driver* IO::Manager::driver()
 {
   return m_driver;
 }
@@ -234,7 +230,7 @@ SerialStudio::BusType IO::Manager::busType() const
  *
  * @return A reference to the start sequence string.
  */
-const QByteArray &IO::Manager::startSequence() const
+const QByteArray& IO::Manager::startSequence() const
 {
   return m_startSequence;
 }
@@ -246,7 +242,7 @@ const QByteArray &IO::Manager::startSequence() const
  *
  * @return A reference to the finish sequence string.
  */
-const QByteArray &IO::Manager::finishSequence() const
+const QByteArray& IO::Manager::finishSequence() const
 {
   return m_finishSequence;
 }
@@ -259,14 +255,14 @@ const QByteArray &IO::Manager::finishSequence() const
  *
  * @return Reference to the selected checksum algorithm name.
  */
-const QString &IO::Manager::checksumAlgorithm() const
+const QString& IO::Manager::checksumAlgorithm() const
 {
   return m_checksumAlgorithm;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Bus/Driver UI list helper
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Retrieves a list of available bus types.
@@ -290,9 +286,9 @@ QStringList IO::Manager::availableBuses() const
   return list;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // IO <-> Driver data writting
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Writes data to the isConnected device.
@@ -304,14 +300,12 @@ QStringList IO::Manager::availableBuses() const
  * @return The number of bytes written, or -1 if an error occurs or no device is
  *         isConnected.
  */
-qint64 IO::Manager::writeData(const QByteArray &data)
+qint64 IO::Manager::writeData(const QByteArray& data)
 {
-  if (isConnected())
-  {
+  if (isConnected()) {
     const auto bytes = driver()->write(data);
 
-    if (bytes > 0)
-    {
+    if (bytes > 0) {
       auto writtenData = data;
       writtenData.chop(data.length() - bytes);
       Console::Handler::instance().displaySentData(writtenData);
@@ -323,9 +317,9 @@ qint64 IO::Manager::writeData(const QByteArray &data)
   return -1;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Device connection setters
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Toggles the connection state of the Manager.
@@ -352,29 +346,26 @@ void IO::Manager::connectDevice()
 {
   // Stop if trial expired
 #ifdef BUILD_COMMERCIAL
-  bool expired = Licensing::Trial::instance().trialExpired();
+  bool expired   = Licensing::Trial::instance().trialExpired();
   bool activated = Licensing::LemonSqueezy::instance().isActivated();
-  if (expired && !activated)
-  {
+  if (expired && !activated) {
     disconnectDevice();
     Misc::Utilities::showMessageBox(
-        tr("Your trial period has ended."),
-        tr("To continue using Serial Studio, please activate your license."));
+      tr("Your trial period has ended."),
+      tr("To continue using Serial Studio, please activate your license."));
     return;
   }
 #endif
 
   // Configure current device
-  if (driver())
-  {
+  if (driver()) {
     // Set open flag
     QIODevice::OpenMode mode = QIODevice::ReadOnly;
     if (m_writeEnabled)
       mode = QIODevice::ReadWrite;
 
     // Open device & instruct frame reader to obtain data from it
-    if (driver()->open(mode))
-    {
+    if (driver()->open(mode)) {
       setPaused(false);
       startFrameReader();
     }
@@ -397,8 +388,7 @@ void IO::Manager::connectDevice()
  */
 void IO::Manager::disconnectDevice()
 {
-  if (driver())
-  {
+  if (driver()) {
     // Close driver device
     driver()->close();
     setPaused(false);
@@ -424,16 +414,15 @@ void IO::Manager::disconnectDevice()
  */
 void IO::Manager::resetFrameReader()
 {
-  if (isConnected())
-  {
+  if (isConnected()) {
     killFrameReader();
     startFrameReader();
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // External module interface setup
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets up external connections for the Manager.
@@ -441,13 +430,15 @@ void IO::Manager::resetFrameReader()
  */
 void IO::Manager::setupExternalConnections()
 {
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &IO::Manager::busListChanged);
+  connect(&Misc::Translator::instance(),
+          &Misc::Translator::languageChanged,
+          this,
+          &IO::Manager::busListChanged);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Member/status modification slots
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Enables or disables real time data streaming to other modules of
@@ -481,13 +472,12 @@ void IO::Manager::setWriteEnabled(const bool enabled)
  *
  * @param payload The data payload to process.
  */
-void IO::Manager::processPayload(const QByteArray &payload)
+void IO::Manager::processPayload(const QByteArray& payload)
 {
-  if (!payload.isEmpty())
-  {
-    static auto &console = Console::Handler::instance();
-    static auto &server = API::Server::instance();
-    static auto &frameBuilder = DataModel::FrameBuilder::instance();
+  if (!payload.isEmpty()) {
+    static auto& console      = Console::Handler::instance();
+    static auto& server       = API::Server::instance();
+    static auto& frameBuilder = DataModel::FrameBuilder::instance();
 
     const auto data = makeByteArray(payload);
     server.hotpathTxData(data);
@@ -495,7 +485,7 @@ void IO::Manager::processPayload(const QByteArray &payload)
     frameBuilder.hotpathRxFrame(payload);
 
 #ifdef BUILD_COMMERCIAL
-    static auto &mqtt = MQTT::Client::instance();
+    static auto& mqtt = MQTT::Client::instance();
     mqtt.hotpathTxFrame(payload);
 #endif
   }
@@ -510,7 +500,7 @@ void IO::Manager::processPayload(const QByteArray &payload)
  *
  * @param sequence The new start sequence as a QByteArray.
  */
-void IO::Manager::setStartSequence(const QByteArray &sequence)
+void IO::Manager::setStartSequence(const QByteArray& sequence)
 {
   m_startSequence = sequence;
   if (m_startSequence.isEmpty())
@@ -531,7 +521,7 @@ void IO::Manager::setStartSequence(const QByteArray &sequence)
  *
  * @param sequence The new finish sequence as a QByteArray.
  */
-void IO::Manager::setFinishSequence(const QByteArray &sequence)
+void IO::Manager::setFinishSequence(const QByteArray& sequence)
 {
   m_finishSequence = sequence;
   if (m_finishSequence.isEmpty())
@@ -554,7 +544,7 @@ void IO::Manager::setFinishSequence(const QByteArray &sequence)
  *                  in IO::availableChecksums(). An empty string disables
  *                  checksum validation.
  */
-void IO::Manager::setChecksumAlgorithm(const QString &algorithm)
+void IO::Manager::setChecksumAlgorithm(const QString& algorithm)
 {
   m_checksumAlgorithm = algorithm;
 
@@ -578,8 +568,7 @@ void IO::Manager::setChecksumAlgorithm(const QString &algorithm)
  */
 void IO::Manager::setThreadedFrameExtraction(const bool enabled)
 {
-  if (!isConnected())
-  {
+  if (!isConnected()) {
     m_thrFrameExtr = enabled;
     m_settings.setValue("thrFrameExtr", enabled);
 
@@ -587,9 +576,9 @@ void IO::Manager::setThreadedFrameExtraction(const bool enabled)
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Driver configuration functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the hardware abstraction layer (HAL) driver.
@@ -601,16 +590,13 @@ void IO::Manager::setThreadedFrameExtraction(const bool enabled)
  * @param driver A pointer to the new `HAL_Driver` instance, or nullptr if no
  *               driver is to be set.
  */
-void IO::Manager::setDriver(HAL_Driver *driver)
+void IO::Manager::setDriver(HAL_Driver* driver)
 {
-  if (m_driver != driver)
-  {
-    if (driver)
-    {
-      connect(driver, &IO::HAL_Driver::dataReceived, this,
-              &IO::Manager::onDataReceived);
-      connect(driver, &IO::HAL_Driver::configurationChanged, this,
-              &IO::Manager::configurationChanged);
+  if (m_driver != driver) {
+    if (driver) {
+      connect(driver, &IO::HAL_Driver::dataReceived, this, &IO::Manager::onDataReceived);
+      connect(
+        driver, &IO::HAL_Driver::configurationChanged, this, &IO::Manager::configurationChanged);
     }
 
     if (m_driver)
@@ -648,22 +634,23 @@ void IO::Manager::setBusType(const SerialStudio::BusType driver)
 
   // Try to open a serial port connection
   if (busType() == SerialStudio::BusType::UART)
-    setDriver(static_cast<HAL_Driver *>(&(Drivers::UART::instance())));
+    setDriver(static_cast<HAL_Driver*>(&(Drivers::UART::instance())));
 
   // Try to open a network connection
   else if (busType() == SerialStudio::BusType::Network)
-    setDriver(static_cast<HAL_Driver *>(&(Drivers::Network::instance())));
+    setDriver(static_cast<HAL_Driver*>(&(Drivers::Network::instance())));
 
   // Try to open a BLE connection
-  else if (busType() == SerialStudio::BusType::BluetoothLE)
-  {
-    auto *bleDriver = &Drivers::BluetoothLE::instance();
-    connect(bleDriver, &IO::Drivers::BluetoothLE::deviceConnectedChanged, this,
-            &IO::Manager::connectedChanged, Qt::UniqueConnection);
+  else if (busType() == SerialStudio::BusType::BluetoothLE) {
+    auto* bleDriver = &Drivers::BluetoothLE::instance();
+    connect(bleDriver,
+            &IO::Drivers::BluetoothLE::deviceConnectedChanged,
+            this,
+            &IO::Manager::connectedChanged,
+            Qt::UniqueConnection);
 
-    if (bleDriver->operatingSystemSupported())
-    {
-      setDriver(static_cast<HAL_Driver *>(bleDriver));
+    if (bleDriver->operatingSystemSupported()) {
+      setDriver(static_cast<HAL_Driver*>(bleDriver));
       bleDriver->startDiscovery();
     }
   }
@@ -671,15 +658,15 @@ void IO::Manager::setBusType(const SerialStudio::BusType driver)
 #ifdef BUILD_COMMERCIAL
   // Try to open an Audio connection
   else if (busType() == SerialStudio::BusType::Audio)
-    setDriver(static_cast<HAL_Driver *>(&(Drivers::Audio::instance())));
+    setDriver(static_cast<HAL_Driver*>(&(Drivers::Audio::instance())));
 
   // Try to open a Modbus connection
   else if (busType() == SerialStudio::BusType::ModBus)
-    setDriver(static_cast<HAL_Driver *>(&(Drivers::Modbus::instance())));
+    setDriver(static_cast<HAL_Driver*>(&(Drivers::Modbus::instance())));
 
   // Try to open a CAN Bus connection
   else if (busType() == SerialStudio::BusType::CanBus)
-    setDriver(static_cast<HAL_Driver *>(&(Drivers::CANBus::instance())));
+    setDriver(static_cast<HAL_Driver*>(&(Drivers::CANBus::instance())));
 #endif
 
   // Invalid driver
@@ -690,9 +677,9 @@ void IO::Manager::setBusType(const SerialStudio::BusType driver)
   Q_EMIT busTypeChanged();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Threaded frame reading/extraction setup
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Stops and cleans up the frame reader and its worker thread.
@@ -705,33 +692,26 @@ void IO::Manager::setBusType(const SerialStudio::BusType driver)
  */
 void IO::Manager::killFrameReader()
 {
-  if (m_frameReader)
-  {
+  if (m_frameReader) {
     m_frameReader->disconnect();
-    if (driver())
-    {
-      QObject::disconnect(driver(), &IO::HAL_Driver::dataReceived,
-                          m_frameReader, &IO::FrameReader::processData);
+    if (driver()) {
+      QObject::disconnect(
+        driver(), &IO::HAL_Driver::dataReceived, m_frameReader, &IO::FrameReader::processData);
     }
 
-    if (m_thrFrameExtr && m_workerThread.isRunning())
-    {
-      QMetaObject::invokeMethod(m_frameReader, &QObject::deleteLater,
-                                Qt::BlockingQueuedConnection);
+    if (m_thrFrameExtr && m_workerThread.isRunning()) {
+      QMetaObject::invokeMethod(m_frameReader, &QObject::deleteLater, Qt::BlockingQueuedConnection);
       m_frameReader.clear();
 
       m_workerThread.quit();
       m_workerThread.wait();
-    }
-    else
-    {
+    } else {
       m_frameReader->deleteLater();
       m_frameReader.clear();
     }
   }
 
-  else if (m_workerThread.isRunning())
-  {
+  else if (m_workerThread.isRunning()) {
     m_workerThread.quit();
     m_workerThread.wait();
   }
@@ -752,8 +732,7 @@ void IO::Manager::killFrameReader()
  */
 void IO::Manager::startFrameReader()
 {
-  if (!driver())
-  {
+  if (!driver()) {
     qCritical() << "Cannot start frame reader: no driver set";
     return;
   }
@@ -763,8 +742,7 @@ void IO::Manager::startFrameReader()
 
   // Create new thread and frame reader instance
   m_frameReader = new FrameReader();
-  if (!m_frameReader)
-  {
+  if (!m_frameReader) {
     qCritical() << "Failed to allocate memory for frame reader";
     return;
   }
@@ -776,24 +754,29 @@ void IO::Manager::startFrameReader()
   // Always use Qt::QueuedConnection to ensure thread safety regardless of
   // whether the frame reader is in a separate thread or not. This prevents
   // issues if the driver emits signals from different threads.
-  QObject::connect(driver(), &IO::HAL_Driver::dataReceived, m_frameReader,
-                   &IO::FrameReader::processData, Qt::QueuedConnection);
+  QObject::connect(driver(),
+                   &IO::HAL_Driver::dataReceived,
+                   m_frameReader,
+                   &IO::FrameReader::processData,
+                   Qt::QueuedConnection);
 
   // Connect frame reader events to IO::Manager
-  connect(m_frameReader, &IO::FrameReader::readyRead, this,
-          &IO::Manager::onReadyRead, Qt::QueuedConnection);
+  connect(m_frameReader,
+          &IO::FrameReader::readyRead,
+          this,
+          &IO::Manager::onReadyRead,
+          Qt::QueuedConnection);
 
   // Start the worker thread
-  if (m_thrFrameExtr)
-  {
+  if (m_thrFrameExtr) {
     if (!m_workerThread.isRunning())
       m_workerThread.start();
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Hotpath data publishing functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Processes dequeued frames and routes them to consumers.
@@ -807,16 +790,14 @@ void IO::Manager::startFrameReader()
  */
 void IO::Manager::onReadyRead()
 {
-  static auto &frameBuilder = DataModel::FrameBuilder::instance();
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
 #ifdef BUILD_COMMERCIAL
-  static auto &mqtt = MQTT::Client::instance();
+  static auto& mqtt = MQTT::Client::instance();
 #endif
 
-  if (!m_paused && m_frameReader) [[likely]]
-  {
-    auto &queue = m_frameReader->queue();
-    while (queue.try_dequeue(m_frame))
-    {
+  if (!m_paused && m_frameReader) [[likely]] {
+    auto& queue = m_frameReader->queue();
+    while (queue.try_dequeue(m_frame)) {
       if (!m_frameReader)
         break;
 
@@ -839,13 +820,12 @@ void IO::Manager::onReadyRead()
  *
  * @param data Raw input bytes from the communication channel.
  */
-void IO::Manager::onDataReceived(const ByteArrayPtr &data)
+void IO::Manager::onDataReceived(const ByteArrayPtr& data)
 {
-  static auto &console = Console::Handler::instance();
-  static auto &server = API::Server::instance();
+  static auto& console = Console::Handler::instance();
+  static auto& server  = API::Server::instance();
 
-  if (!m_paused) [[likely]]
-  {
+  if (!m_paused) [[likely]] {
     server.hotpathTxData(data);
     console.hotpathRxData(data);
   }

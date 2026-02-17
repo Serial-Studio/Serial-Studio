@@ -19,28 +19,26 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include <QFileInfo>
-#include <QDateTime>
-
-#include "IO/Manager.h"
-#include "CSV/Player.h"
-#include "CSV/Export.h"
-#include "MDF4/Export.h"
-#include "MDF4/Player.h"
-#include "UI/Dashboard.h"
-#include "API/Server.h"
-#include "Misc/Utilities.h"
-#include "Misc/JsonValidator.h"
-#include "DataModel/ProjectModel.h"
 #include "DataModel/FrameBuilder.h"
+
+#include <QDateTime>
+#include <QFileInfo>
+
+#include "API/Server.h"
+#include "CSV/Export.h"
+#include "DataModel/ProjectModel.h"
+#include "IO/Manager.h"
+#include "MDF4/Export.h"
+#include "Misc/JsonValidator.h"
+#include "Misc/Utilities.h"
+#include "UI/Dashboard.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "IO/Drivers/Audio.h"
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
-namespace
-{
+namespace {
 /**
  * @brief Parse comma-separated values from data.
  *
@@ -63,8 +61,7 @@ namespace
  * @param out Output string list for parsed values (cleared before use)
  * @param reserveHint Expected number of values (optimization hint)
  */
-void parseCsvValues(const QByteArray &data, QStringList &out,
-                    const int reserveHint)
+void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveHint)
 {
   out.clear();
   if (reserveHint > 0)
@@ -72,23 +69,19 @@ void parseCsvValues(const QByteArray &data, QStringList &out,
   else
     out.reserve(64);
 
-  const char *raw = data.constData();
+  const char* raw      = data.constData();
   const int dataLength = data.size();
-  int start = 0;
-  for (int i = 0; i <= dataLength; ++i)
-  {
-    if (i == dataLength || raw[i] == ',')
-    {
+  int start            = 0;
+  for (int i = 0; i <= dataLength; ++i) {
+    if (i == dataLength || raw[i] == ',') {
       // Trim whitespace directly on byte range
       int s = start;
       int e = i;
-      while (s < e
-             && (raw[s] == ' ' || raw[s] == '\t' || raw[s] == '\r'
-                 || raw[s] == '\n'))
+      while (s < e && (raw[s] == ' ' || raw[s] == '\t' || raw[s] == '\r' || raw[s] == '\n'))
         ++s;
-      while (e > s
-             && (raw[e - 1] == ' ' || raw[e - 1] == '\t' || raw[e - 1] == '\r'
-                 || raw[e - 1] == '\n'))
+      while (
+        e > s
+        && (raw[e - 1] == ' ' || raw[e - 1] == '\t' || raw[e - 1] == '\r' || raw[e - 1] == '\n'))
         --e;
 
       if (e > s)
@@ -98,11 +91,11 @@ void parseCsvValues(const QByteArray &data, QStringList &out,
     }
   }
 }
-} // namespace
+}  // namespace
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constants
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Initializes the DataModel Parser class and connects appropiate SIGNALS/SLOTS
@@ -116,13 +109,11 @@ DataModel::FrameBuilder::FrameBuilder()
 {
   // Read JSON map location
   auto path = m_settings.value("json_map_location", "").toString();
-  if (!path.isEmpty())
-  {
+  if (!path.isEmpty()) {
     QFileInfo fileInfo(path);
     if (fileInfo.exists() && fileInfo.isFile())
       loadJsonMap(path);
-    else
-    {
+    else {
       qWarning() << "Saved JSON map path does not exist:" << path;
       m_settings.setValue("json_map_location", "");
     }
@@ -135,18 +126,26 @@ DataModel::FrameBuilder::FrameBuilder()
   // Reload JSON map file when license is activated
 #ifdef BUILD_COMMERCIAL
   connect(&Licensing::LemonSqueezy::instance(),
-          &Licensing::LemonSqueezy::activatedChanged, this, [=, this] {
+          &Licensing::LemonSqueezy::activatedChanged,
+          this,
+          [=, this] {
             if (!jsonMapFilepath().isEmpty())
               loadJsonMap(jsonMapFilepath());
           });
 #endif
 
   // Connect to consumer enabled state changes
-  connect(&CSV::Export::instance(), &CSV::Export::enabledChanged, this,
+  connect(&CSV::Export::instance(),
+          &CSV::Export::enabledChanged,
+          this,
           &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
-  connect(&MDF4::Export::instance(), &MDF4::Export::enabledChanged, this,
+  connect(&MDF4::Export::instance(),
+          &MDF4::Export::enabledChanged,
+          this,
           &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
-  connect(&API::Server::instance(), &API::Server::enabledChanged, this,
+  connect(&API::Server::instance(),
+          &API::Server::enabledChanged,
+          this,
           &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
 
   // Initialize timestamped frames enabled flag
@@ -156,7 +155,7 @@ DataModel::FrameBuilder::FrameBuilder()
 /**
  * Returns the only instance of the class
  */
-DataModel::FrameBuilder &DataModel::FrameBuilder::instance()
+DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 {
   static FrameBuilder singleton;
   return singleton;
@@ -167,8 +166,7 @@ DataModel::FrameBuilder &DataModel::FrameBuilder::instance()
  */
 QString DataModel::FrameBuilder::jsonMapFilepath() const
 {
-  if (m_jsonMap.isOpen())
-  {
+  if (m_jsonMap.isOpen()) {
     auto fileInfo = QFileInfo(m_jsonMap.fileName());
     return fileInfo.filePath();
   }
@@ -181,8 +179,7 @@ QString DataModel::FrameBuilder::jsonMapFilepath() const
  */
 QString DataModel::FrameBuilder::jsonMapFilename() const
 {
-  if (m_jsonMap.isOpen())
-  {
+  if (m_jsonMap.isOpen()) {
     auto fileInfo = QFileInfo(m_jsonMap.fileName());
     return fileInfo.fileName();
   }
@@ -199,7 +196,7 @@ QString DataModel::FrameBuilder::jsonMapFilename() const
  *
  * @return A constant reference to the current DataModel::Frame.
  */
-const DataModel::Frame &DataModel::FrameBuilder::frame() const
+const DataModel::Frame& DataModel::FrameBuilder::frame() const
 {
   return m_frame;
 }
@@ -207,7 +204,7 @@ const DataModel::Frame &DataModel::FrameBuilder::frame() const
 /**
  * Returns a pointer to the currently loaded frame parser editor.
  */
-DataModel::FrameParser *DataModel::FrameBuilder::frameParser() const
+DataModel::FrameParser* DataModel::FrameBuilder::frameParser() const
 {
   return m_frameParser;
 }
@@ -229,17 +226,14 @@ SerialStudio::OperationMode DataModel::FrameBuilder::operationMode() const
  *
  * @param headers List of channel names to use
  */
-void DataModel::FrameBuilder::registerQuickPlotHeaders(
-    const QStringList &headers)
+void DataModel::FrameBuilder::registerQuickPlotHeaders(const QStringList& headers)
 {
-  if (!headers.isEmpty())
-  {
-    m_quickPlotHasHeader = true;
+  if (!headers.isEmpty()) {
+    m_quickPlotHasHeader    = true;
     m_quickPlotChannelNames = headers;
   }
 
-  else
-  {
+  else {
     m_quickPlotHasHeader = false;
     m_quickPlotChannelNames.clear();
   }
@@ -251,7 +245,9 @@ void DataModel::FrameBuilder::registerQuickPlotHeaders(
  */
 void DataModel::FrameBuilder::setupExternalConnections()
 {
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
+  connect(&IO::Manager::instance(),
+          &IO::Manager::connectedChanged,
+          this,
           &DataModel::FrameBuilder::onConnectedChanged);
 }
 
@@ -271,15 +267,13 @@ void DataModel::FrameBuilder::setupExternalConnections()
  *
  * @param path Absolute path to JSON project file
  */
-void DataModel::FrameBuilder::loadJsonMap(const QString &path,
-                                          const bool showMessageBoxes)
+void DataModel::FrameBuilder::loadJsonMap(const QString& path, const bool showMessageBoxes)
 {
   if (path.isEmpty())
     return;
 
   // Close and cleanup any previously loaded JSON file
-  if (m_jsonMap.isOpen())
-  {
+  if (m_jsonMap.isOpen()) {
     clear_frame(m_frame);
     m_jsonMap.close();
     Q_EMIT jsonFileMapChanged();
@@ -287,20 +281,15 @@ void DataModel::FrameBuilder::loadJsonMap(const QString &path,
 
   // Attempt to open the new file
   m_jsonMap.setFileName(path);
-  if (!m_jsonMap.open(QFile::ReadOnly)) [[unlikely]]
-  {
+  if (!m_jsonMap.open(QFile::ReadOnly)) [[unlikely]] {
     setJsonPathSetting("");
-    if (showMessageBoxes)
-    {
-      Misc::Utilities::showMessageBox(
-          tr("Cannot read JSON file"),
-          tr("Please check file permissions & location"),
-          QMessageBox::Critical);
-    }
-    else
-    {
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(tr("Cannot read JSON file"),
+                                      tr("Please check file permissions & location"),
+                                      QMessageBox::Critical);
+    } else
       qWarning() << "[FrameBuilder] Cannot read JSON file:" << path;
-    }
+
     m_jsonMap.close();
     Q_EMIT jsonFileMapChanged();
     return;
@@ -323,8 +312,8 @@ void DataModel::FrameBuilder::loadJsonMap(const QString &path,
  *
  * Security: Uses Misc::JsonValidator for DoS protection (depth/size limits)
  */
-void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
-                                                  const QString &sourcePath,
+void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray& jsonData,
+                                                  const QString& sourcePath,
                                                   const bool showMessageBoxes)
 {
   // Suppress parser messageboxes for API calls
@@ -333,23 +322,16 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
 
   // Validate JSON with security bounds checking
   const auto result = Misc::JsonValidator::parseAndValidate(jsonData);
-  if (!result.valid) [[unlikely]]
-  {
+  if (!result.valid) [[unlikely]] {
     clear_frame(m_frame);
     if (m_jsonMap.isOpen())
       m_jsonMap.close();
     setJsonPathSetting("");
-    if (showMessageBoxes)
-    {
-      Misc::Utilities::showMessageBox(tr("JSON validation error"),
-                                      result.errorMessage,
-                                      QMessageBox::Critical);
-    }
-    else
-    {
-      qWarning() << "[FrameBuilder] JSON validation error:"
-                 << result.errorMessage;
-    }
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(
+        tr("JSON validation error"), result.errorMessage, QMessageBox::Critical);
+    } else
+      qWarning() << "[FrameBuilder] JSON validation error:" << result.errorMessage;
 
     // Restore parser messagebox behavior before returning
     if (m_frameParser && !showMessageBoxes)
@@ -363,20 +345,17 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
   setJsonPathSetting(sourcePath);
   clear_frame(m_frame);
   const auto document = result.document;
-  const bool ok = read(m_frame, document.object());
-  if (!ok) [[unlikely]]
-  {
+  const bool ok       = read(m_frame, document.object());
+  if (!ok) [[unlikely]] {
     clear_frame(m_frame);
     if (m_jsonMap.isOpen())
       m_jsonMap.close();
 
     setJsonPathSetting("");
-    if (showMessageBoxes)
-    {
-      Misc::Utilities::showMessageBox(
-          tr("This file isn't a valid project file"),
-          tr("Make sure it's a properly formatted JSON project."),
-          QMessageBox::Warning);
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(tr("This file isn't a valid project file"),
+                                      tr("Make sure it's a properly formatted JSON project."),
+                                      QMessageBox::Warning);
     }
 
     else
@@ -391,10 +370,8 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
   }
 
   // Successfully parsed...update I/O manager with frame delimiters and checksum
-  if (operationMode() == SerialStudio::ProjectFile)
-  {
-    read_io_settings(m_frameStart, m_frameFinish, m_checksum,
-                     document.object());
+  if (operationMode() == SerialStudio::ProjectFile) {
+    read_io_settings(m_frameStart, m_frameFinish, m_checksum, document.object());
 
     IO::Manager::instance().setStartSequence(m_frameStart);
     IO::Manager::instance().setFinishSequence(m_frameFinish);
@@ -403,8 +380,7 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
   }
 
   // Close any previously opened file if the new source differs
-  if (m_jsonMap.isOpen())
-  {
+  if (m_jsonMap.isOpen()) {
     const auto currentPath = QFileInfo(m_jsonMap.fileName()).filePath();
     if (currentPath != sourcePath)
       m_jsonMap.close();
@@ -422,7 +398,7 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray &jsonData,
  * @brief Assigns an instance to the frame parser to be used to split frame
  *        data/elements into individual parts.
  */
-void DataModel::FrameBuilder::setFrameParser(DataModel::FrameParser *parser)
+void DataModel::FrameBuilder::setFrameParser(DataModel::FrameParser* parser)
 {
   m_frameParser = parser;
 }
@@ -439,13 +415,11 @@ void DataModel::FrameBuilder::setFrameParser(DataModel::FrameParser *parser)
  * @c kAutomatic serial data contains the DataModel data frame, good for simple
  *               applications or for prototyping.
  */
-void DataModel::FrameBuilder::setOperationMode(
-    const SerialStudio::OperationMode mode)
+void DataModel::FrameBuilder::setOperationMode(const SerialStudio::OperationMode mode)
 {
   m_opMode = mode;
 
-  switch (mode)
-  {
+  switch (mode) {
     case SerialStudio::DeviceSendsJSON:
       IO::Manager::instance().setStartSequence("");
       IO::Manager::instance().setFinishSequence("");
@@ -470,9 +444,9 @@ void DataModel::FrameBuilder::setOperationMode(
   Q_EMIT operationModeChanged();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Hotpath data processing functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Dispatches raw data to the appropriate frame parser based on the
@@ -487,10 +461,9 @@ void DataModel::FrameBuilder::setOperationMode(
  *
  * @param data Raw binary input data to be processed.
  */
-void DataModel::FrameBuilder::hotpathRxFrame(const QByteArray &data)
+void DataModel::FrameBuilder::hotpathRxFrame(const QByteArray& data)
 {
-  switch (operationMode())
-  {
+  switch (operationMode()) {
     case SerialStudio::QuickPlot:
       parseQuickPlotFrame(data);
       break;
@@ -505,9 +478,9 @@ void DataModel::FrameBuilder::hotpathRxFrame(const QByteArray &data)
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Private slots
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Handles device connection events and triggers auto-execute actions.
@@ -543,26 +516,24 @@ void DataModel::FrameBuilder::onConnectedChanged()
     m_frameParser->readCode();
 
   // Auto-execute actions if required
-  const auto &actions = m_frame.actions;
-  for (const auto &action : actions)
-  {
+  const auto& actions = m_frame.actions;
+  for (const auto& action : actions)
     if (action.autoExecuteOnConnect)
       IO::Manager::instance().writeData(get_tx_bytes(action));
-  }
 }
 
 /**
  * Saves the location of the last valid DataModel map file that was opened (if
  * any)
  */
-void DataModel::FrameBuilder::setJsonPathSetting(const QString &path)
+void DataModel::FrameBuilder::setJsonPathSetting(const QString& path)
 {
   m_settings.setValue(QStringLiteral("json_map_location"), path);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Frame parsing
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Parses a project frame using the configured decoding method.
@@ -584,24 +555,19 @@ void DataModel::FrameBuilder::setJsonPathSetting(const QString &path)
  *
  * @note This function is part of the high-frequency data path. Optimize later.
  */
-void DataModel::FrameBuilder::parseProjectFrame(const QByteArray &data)
+void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
 {
   QList<QStringList> multiChannels;
 
-  if (!SerialStudio::isAnyPlayerOpen() && m_frameParser) [[likely]]
-  {
-    const auto decoderMethod
-        = DataModel::ProjectModel::instance().decoderMethod();
+  if (!SerialStudio::isAnyPlayerOpen() && m_frameParser) [[likely]] {
+    const auto decoderMethod = DataModel::ProjectModel::instance().decoderMethod();
 
-    switch (decoderMethod)
-    {
+    switch (decoderMethod) {
       case SerialStudio::Hexadecimal:
-        multiChannels
-            = m_frameParser->parseMultiFrame(QString::fromLatin1(data.toHex()));
+        multiChannels = m_frameParser->parseMultiFrame(QString::fromLatin1(data.toHex()));
         break;
       case SerialStudio::Base64:
-        multiChannels = m_frameParser->parseMultiFrame(
-            QString::fromLatin1(data.toBase64()));
+        multiChannels = m_frameParser->parseMultiFrame(QString::fromLatin1(data.toBase64()));
         break;
       case SerialStudio::Binary:
         multiChannels = m_frameParser->parseMultiFrame(data);
@@ -611,42 +577,30 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray &data)
         multiChannels = m_frameParser->parseMultiFrame(QString::fromUtf8(data));
         break;
     }
-  }
-  else
-  {
-    auto &channels = m_channelScratch;
+  } else {
+    auto& channels = m_channelScratch;
     parseCsvValues(data, channels, 64);
     multiChannels.append(channels);
   }
 
-  for (const auto &channels : std::as_const(multiChannels))
-  {
-    if (channels.isEmpty()) [[unlikely]]
-      continue;
-
-    const auto *channelData = channels.data();
-    const int channelCount = channels.size();
-    const size_t groupCount = m_frame.groups.size();
-
-    for (size_t g = 0; g < groupCount; ++g)
-    {
-      auto &group = m_frame.groups[g];
-      const size_t datasetCount = group.datasets.size();
-
-      for (size_t d = 0; d < datasetCount; ++d)
-      {
-        auto &dataset = group.datasets[d];
+  auto applyChannelData = [this](const QStringList& chs) {
+    const auto* channelData = chs.data();
+    const int channelCount  = chs.size();
+    for (auto& group : m_frame.groups) {
+      for (auto& dataset : group.datasets) {
         const int idx = dataset.index;
-
-        if (idx > 0 && idx <= channelCount) [[likely]]
-        {
-          const QString &value = channelData[idx - 1];
-          dataset.value = value;
-          dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
-        }
+        if (idx <= 0 || idx > channelCount) [[unlikely]]
+          continue;
+        dataset.value        = channelData[idx - 1];
+        dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
       }
     }
+  };
 
+  for (const auto& channels : std::as_const(multiChannels)) {
+    if (channels.isEmpty()) [[unlikely]]
+      continue;
+    applyChannelData(channels);
     hotpathTxFrame(m_frame);
   }
 }
@@ -664,74 +618,66 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray &data)
  *
  * @note This function is part of the high-frequency data path. Optimize later.
  */
-void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
+void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray& data)
 {
   // Parse comma-separated values
-  auto &channels = m_channelScratch;
+  auto& channels        = m_channelScratch;
   const int reserveHint = (m_quickPlotChannels > 0) ? m_quickPlotChannels : 64;
   parseCsvValues(data, channels, reserveHint);
 
   // Process data
   const int channelCount = channels.size();
-  if (channelCount > 0)
-  {
-    if (m_quickPlotChannels == -1)
-    {
-      bool allNonNumeric = true;
-      for (const auto &channel : std::as_const(channels))
-      {
-        bool isNumeric = false;
-        channel.toDouble(&isNumeric);
-        if (isNumeric)
-        {
-          allNonNumeric = false;
-          break;
-        }
-      }
+  if (channelCount <= 0)
+    return;
 
-      if (allNonNumeric)
-      {
-        m_quickPlotHasHeader = true;
-        m_quickPlotChannelNames = channels;
-        return;
-      }
+  if (m_quickPlotChannels == -1) {
+    bool allNonNumeric = true;
+    for (const auto& channel : std::as_const(channels)) {
+      bool isNumeric = false;
+      channel.toDouble(&isNumeric);
+      if (!isNumeric)
+        continue;
+      allNonNumeric = false;
+      break;
     }
 
-    // Rebuild frame if channel count changed
-    if (channelCount != m_quickPlotChannels) [[unlikely]]
-    {
-      buildQuickPlotFrame(channels);
-      m_quickPlotChannels = channelCount;
+    if (allNonNumeric) {
+      m_quickPlotHasHeader    = true;
+      m_quickPlotChannelNames = channels;
+      return;
     }
-
-    // Replace data in frame
-    auto *channelData = channels.data();
-    const size_t groupCount = m_quickPlotFrame.groups.size();
-    for (size_t g = 0; g < groupCount; ++g)
-    {
-      auto &group = m_quickPlotFrame.groups[g];
-      const size_t datasetCount = group.datasets.size();
-      for (size_t d = 0; d < datasetCount; ++d)
-      {
-        auto &dataset = group.datasets[d];
-        const int idx = dataset.index;
-        if (idx > 0 && idx <= channelCount) [[likely]]
-        {
-          QString &value = channelData[idx - 1];
-          dataset.value = std::move(value);
-          dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
-        }
-      }
-    }
-
-    // Process the frame
-    hotpathTxFrame(m_quickPlotFrame);
   }
+
+  // Rebuild frame if channel count changed
+  if (channelCount != m_quickPlotChannels) [[unlikely]] {
+    buildQuickPlotFrame(channels);
+    m_quickPlotChannels = channelCount;
+  }
+
+  // Replace data in frame
+  auto* channelData       = channels.data();
+  const size_t groupCount = m_quickPlotFrame.groups.size();
+  for (size_t g = 0; g < groupCount; ++g) {
+    auto& group               = m_quickPlotFrame.groups[g];
+    const size_t datasetCount = group.datasets.size();
+    for (size_t d = 0; d < datasetCount; ++d) {
+      auto& dataset = group.datasets[d];
+      const int idx = dataset.index;
+      if (idx > 0 && idx <= channelCount) [[likely]] {
+        QString& value       = channelData[idx - 1];
+        dataset.value        = std::move(value);
+        dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+      }
+    }
+  }
+
+  // Process the frame
+  hotpathTxFrame(m_quickPlotFrame);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Quick-plot project generation functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Rebuilds the internal frame structure for Quick Plot mode based on
@@ -755,23 +701,21 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray &data)
  *       of channels changes. Avoid calling this in the real-time path unless
  *       necessary.
  */
-void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
+void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
 {
   // Parse audio data
 #ifdef BUILD_COMMERCIAL
   const auto busType = IO::Manager::instance().busType();
-  if (busType == SerialStudio::BusType::Audio)
-  {
+  if (busType == SerialStudio::BusType::Audio) {
     // Get reference to Audio driver
-    const auto &audio = IO::Drivers::Audio::instance();
-    const auto format = audio.config().capture.format;
+    const auto& audio     = IO::Drivers::Audio::instance();
+    const auto format     = audio.config().capture.format;
     const auto sampleRate = audio.config().sampleRate;
 
     // Compute audio parameters
     double maxValue = 1.0;
     double minValue = 0.0;
-    switch (format)
-    {
+    switch (format) {
       case ma_format_u8:
         maxValue = 255;
         minValue = 0;
@@ -798,7 +742,7 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
 
     // Calculate optimal FFT samples based on sampling rate
     const int targetSamples = static_cast<int>(sampleRate * 0.05);
-    int fftSamples = 256;
+    int fftSamples          = 256;
     while (fftSamples < targetSamples && fftSamples < 8192)
       fftSamples *= 2;
 
@@ -806,19 +750,18 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
     int index = 1;
     std::vector<DataModel::Dataset> datasets;
     datasets.reserve(channels.count());
-    for (const auto &channel : std::as_const(channels))
-    {
+    for (const auto& channel : std::as_const(channels)) {
       DataModel::Dataset dataset;
-      dataset.fft = true;
-      dataset.plt = true;
-      dataset.groupId = 0;
-      dataset.index = index;
-      dataset.value = channel;
-      dataset.pltMax = maxValue;
-      dataset.pltMin = minValue;
-      dataset.fftMax = maxValue;
-      dataset.fftMin = minValue;
-      dataset.fftSamples = fftSamples;
+      dataset.fft             = true;
+      dataset.plt             = true;
+      dataset.groupId         = 0;
+      dataset.index           = index;
+      dataset.value           = channel;
+      dataset.pltMax          = maxValue;
+      dataset.pltMin          = minValue;
+      dataset.fftMax          = maxValue;
+      dataset.fftMin          = minValue;
+      dataset.fftSamples      = fftSamples;
       dataset.fftSamplingRate = sampleRate;
 
       if (m_quickPlotHasHeader && index - 1 < m_quickPlotChannelNames.size())
@@ -834,9 +777,9 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
 
     // Create the holder group
     DataModel::Group group;
-    group.groupId = 0;
+    group.groupId  = 0;
     group.datasets = datasets;
-    group.title = tr("Audio Input");
+    group.title    = tr("Audio Input");
     if (index > 2)
       group.widget = QStringLiteral("multiplot");
 
@@ -855,13 +798,12 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
   int idx = 1;
   std::vector<DataModel::Dataset> datasets;
   datasets.reserve(channels.count());
-  for (const auto &channel : std::as_const(channels))
-  {
+  for (const auto& channel : std::as_const(channels)) {
     DataModel::Dataset dataset;
     dataset.groupId = 0;
-    dataset.index = idx;
-    dataset.plt = false;
-    dataset.value = channel;
+    dataset.index   = idx;
+    dataset.plt     = false;
+    dataset.value   = channel;
 
     if (m_quickPlotHasHeader && idx - 1 < m_quickPlotChannelNames.size())
       dataset.title = m_quickPlotChannelNames[idx - 1];
@@ -880,10 +822,10 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
 
   // Create a datagrid group from the dataset array
   DataModel::Group datagrid;
-  datagrid.groupId = 0;
+  datagrid.groupId  = 0;
   datagrid.datasets = datasets;
-  datagrid.title = tr("Quick Plot Data");
-  datagrid.widget = QStringLiteral("datagrid");
+  datagrid.title    = tr("Quick Plot Data");
+  datagrid.widget   = QStringLiteral("datagrid");
   for (size_t i = 0; i < datagrid.datasets.size(); ++i)
     datagrid.datasets[i].plt = true;
 
@@ -891,13 +833,12 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
   m_quickPlotFrame.groups.push_back(datagrid);
 
   // Create a multiplot group when multiple datasets are found
-  if (datasets.size() > 1)
-  {
+  if (datasets.size() > 1) {
     DataModel::Group multiplot;
-    multiplot.groupId = 1;
+    multiplot.groupId  = 1;
     multiplot.datasets = datasets;
-    multiplot.title = tr("Multiple Plots");
-    multiplot.widget = QStringLiteral("multiplot");
+    multiplot.title    = tr("Multiple Plots");
+    multiplot.widget   = QStringLiteral("multiplot");
     for (size_t i = 0; i < multiplot.datasets.size(); ++i)
       multiplot.datasets[i].groupId = 1;
 
@@ -908,9 +849,9 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
   finalize_frame(m_quickPlotFrame);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Hotpath data publishing functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the cached flag indicating if any timestamped frame consumer
@@ -923,8 +864,8 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList &channels)
 void DataModel::FrameBuilder::updateTimestampedFramesEnabled()
 {
   m_timestampedFramesEnabled = CSV::Export::instance().exportEnabled()
-                               || MDF4::Export::instance().exportEnabled()
-                               || API::Server::instance().enabled();
+                            || MDF4::Export::instance().exportEnabled()
+                            || API::Server::instance().enabled();
 }
 
 /**
@@ -947,19 +888,17 @@ void DataModel::FrameBuilder::updateTimestampedFramesEnabled()
  *       Do not call it in tight loops unless you're sure the frame is
  *       finalized.
  */
-void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame &frame)
+void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame& frame)
 {
-  static auto &csvExport = CSV::Export::instance();
-  static auto &mdf4Export = MDF4::Export::instance();
-  static auto &dashboard = UI::Dashboard::instance();
-  static auto &pluginsServer = API::Server::instance();
+  static auto& csvExport     = CSV::Export::instance();
+  static auto& mdf4Export    = MDF4::Export::instance();
+  static auto& dashboard     = UI::Dashboard::instance();
+  static auto& pluginsServer = API::Server::instance();
 
   dashboard.hotpathRxFrame(frame);
 
-  if (m_timestampedFramesEnabled) [[unlikely]]
-  {
-    auto timestampedFrame
-        = std::make_shared<DataModel::TimestampedFrame>(frame);
+  if (m_timestampedFramesEnabled) [[unlikely]] {
+    auto timestampedFrame = std::make_shared<DataModel::TimestampedFrame>(frame);
     csvExport.hotpathTxFrame(timestampedFrame);
     mdf4Export.hotpathTxFrame(timestampedFrame);
     pluginsServer.hotpathTxFrame(timestampedFrame);

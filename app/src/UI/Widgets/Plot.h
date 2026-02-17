@@ -21,14 +21,13 @@
 
 #pragma once
 
+#include <QQuickItem>
 #include <QVector>
 #include <QXYSeries>
-#include <QQuickItem>
 
 #include "DataModel/Frame.h"
 
-namespace Widgets
-{
+namespace Widgets {
 /**
  * @class Widgets::Plot
  * @brief Real-time 2D plotting widget for visualizing time-series data.
@@ -54,8 +53,7 @@ namespace Widgets
  * @note This widget is designed to work with JSON::Dataset objects from the
  *       Serial Studio data frame system.
  */
-class Plot : public QQuickItem
-{
+class Plot : public QQuickItem {
   Q_OBJECT
   Q_PROPERTY(QString yLabel READ yLabel CONSTANT)
   Q_PROPERTY(QString xLabel READ xLabel CONSTANT)
@@ -73,7 +71,8 @@ signals:
   void dataSizeChanged();
 
 public:
-  explicit Plot(const int index = -1, QQuickItem *parent = nullptr);
+  explicit Plot(const int index = -1, QQuickItem* parent = nullptr);
+
   ~Plot()
   {
     m_data.clear();
@@ -87,11 +86,11 @@ public:
   [[nodiscard]] double minY() const;
   [[nodiscard]] double maxY() const;
   [[nodiscard]] bool running() const;
-  [[nodiscard]] const QString &yLabel() const;
-  [[nodiscard]] const QString &xLabel() const;
+  [[nodiscard]] const QString& yLabel() const;
+  [[nodiscard]] const QString& xLabel() const;
 
 public slots:
-  void draw(QXYSeries *series);
+  void draw(QXYSeries* series);
   void setDataW(const int width);
   void setDataH(const int height);
   void setRunning(const bool enabled);
@@ -103,9 +102,11 @@ private slots:
 
 private:
   template<typename Extractor>
-  bool computeMinMaxValues(double &min, double &max,
-                           const DataModel::Dataset &dataset,
-                           const bool addPadding, Extractor extractor);
+  bool computeMinMaxValues(double& min,
+                           double& max,
+                           const DataModel::Dataset& dataset,
+                           const bool addPadding,
+                           Extractor extractor);
 
 private:
   int m_index;
@@ -121,4 +122,4 @@ private:
   bool m_monotonicData;
   QList<QPointF> m_data;
 };
-} // namespace Widgets
+}  // namespace Widgets

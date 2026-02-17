@@ -21,33 +21,23 @@
 
 #pragma once
 
-#include <QTimer>
 #include <QColor>
 #include <QPalette>
 #include <QQuickPaintedItem>
+#include <QTimer>
 
-namespace Widgets
-{
+namespace Widgets {
 /**
  * @struct CharColor
  * @brief Stores foreground and background colors for a character.
  */
-struct CharColor
-{
+struct CharColor {
   QColor foreground;
   QColor background;
 
-  CharColor()
-    : foreground()
-    , background()
-  {
-  }
+  CharColor() : foreground(), background() {}
 
-  CharColor(const QColor &fg, const QColor &bg = QColor())
-    : foreground(fg)
-    , background(bg)
-  {
-  }
+  CharColor(const QColor& fg, const QColor& bg = QColor()) : foreground(fg), background(bg) {}
 };
 
 /**
@@ -63,8 +53,7 @@ struct CharColor
  * This class is suitable for embedding a terminal interface in QML-based GUI
  * applications, with multiple customizable features exposed as properties.
  */
-class Terminal : public QQuickPaintedItem
-{
+class Terminal : public QQuickPaintedItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QFont font
@@ -114,30 +103,30 @@ signals:
   void ansiColorsChanged();
 
 public:
-  Terminal(QQuickItem *parent = 0);
-  void paint(QPainter *painter) override;
+  Terminal(QQuickItem* parent = 0);
+  void paint(QPainter* painter) override;
 
-  enum Direction
-  {
+  enum Direction {
     LeftDirection,
     RightDirection
   };
+
   Q_ENUM(Direction);
 
-  enum State
-  {
+  enum State {
     Text,
     Escape,
     Format,
     ResetFont
   };
+
   Q_ENUM(State);
 
   [[nodiscard]] int charWidth() const;
   [[nodiscard]] int charHeight() const;
 
-  [[nodiscard]] const QFont &font() const;
-  [[nodiscard]] const QPalette &palette() const;
+  [[nodiscard]] const QFont& font() const;
+  [[nodiscard]] const QPalette& palette() const;
 
   [[nodiscard]] bool autoscroll() const;
   [[nodiscard]] bool ansiColors() const;
@@ -149,20 +138,19 @@ public:
   [[nodiscard]] int scrollOffsetY() const;
   [[nodiscard]] int maxCharsPerLine() const;
 
-  [[nodiscard]] const QPoint &cursorPosition() const;
-  [[nodiscard]] QPoint positionToCursor(const QPoint &pos) const;
+  [[nodiscard]] const QPoint& cursorPosition() const;
+  [[nodiscard]] QPoint positionToCursor(const QPoint& pos) const;
 
-  static QString formatDebugMessage(QtMsgType type, const QString &message,
-                                    bool useAnsiColors);
+  static QString formatDebugMessage(QtMsgType type, const QString& message, bool useAnsiColors);
 
 public slots:
   void copy();
   void clear();
   void selectAll();
-  void setFont(const QFont &font);
+  void setFont(const QFont& font);
   void setAutoscroll(const bool enabled);
   void setScrollOffsetY(const int offset);
-  void setPalette(const QPalette &palette);
+  void setPalette(const QPalette& palette);
   void setAnsiColors(const bool enabled);
   void setVt100Emulation(const bool enabled);
 
@@ -170,34 +158,49 @@ private slots:
   void toggleCursor();
   void onThemeChanged();
   void loadWelcomeGuide();
-  void append(const QString &data);
+  void append(const QString& data);
   void appendString(QStringView string);
-  void removeStringFromCursor(const Widgets::Terminal::Direction direction
-                              = RightDirection,
-                              int len = INT_MAX);
+  void removeStringFromCursor(const Widgets::Terminal::Direction direction = RightDirection,
+                              int len                                      = INT_MAX);
 
 private:
   void initBuffer();
-  void processText(const QChar &byte, QString &text);
-  void processEscape(const QChar &byte, QString &text);
-  void processFormat(const QChar &byte, QString &text);
-  void processResetFont(const QChar &byte, QString &text);
+  void processText(const QChar& byte, QString& text);
+  void processEscape(const QChar& byte, QString& text);
+  void processFormat(const QChar& byte, QString& text);
+  void processResetFont(const QChar& byte, QString& text);
 
-  void setCursorPosition(const QPoint &position);
+  void setCursorPosition(const QPoint& position);
   void setCursorPosition(const int x, const int y);
-  void replaceData(int x, int y, const QChar &byte);
-  void applyAnsiColor(const QList<int> &codes);
+  void replaceData(int x, int y, const QChar& byte);
+  void applyAnsiColor(const QList<int>& codes);
   void updateAnsiColorPalette();
   QColor getColor256(int index) const;
   static QColor getColor256Static(int index);
 
+  int findCharAtPixelX(const QString& line, int segStart, int segEnd, int pixelX) const;
+  int calcCursorPixelX(
+    QPainter* painter, const QString& line, int segStart, int cursorCol, int segEnd) const;
+  void drawCursor(QPainter* painter, int firstLine, int lastVLine, int lineHeight);
+  void drawSegmentSelection(
+    QPainter* painter, const QString& line, int lineIndex, int segStart, int segEnd, int y);
+  void renderFastSegment(
+    QPainter* painter, const QString& segment, const QColor& textColor, int x, int y);
+  void renderAnsiSegment(QPainter* painter,
+                         const QString& segment,
+                         int segStart,
+                         const QList<CharColor>* colorLine,
+                         const QColor& defaultFg,
+                         int x,
+                         int y);
+
 protected:
-  bool shouldEndSelection(const QChar &c);
-  void wheelEvent(QWheelEvent *event) override;
-  void mouseMoveEvent(QMouseEvent *event) override;
-  void mousePressEvent(QMouseEvent *event) override;
-  void mouseReleaseEvent(QMouseEvent *event) override;
-  void mouseDoubleClickEvent(QMouseEvent *event) override;
+  bool shouldEndSelection(const QChar& c);
+  void wheelEvent(QWheelEvent* event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
+  void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 private:
   QPalette m_palette;
@@ -236,4 +239,4 @@ private:
   QColor m_ansiStandardColors[8];
   QColor m_ansiBrightColors[8];
 };
-} // namespace Widgets
+}  // namespace Widgets

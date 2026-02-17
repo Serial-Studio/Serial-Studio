@@ -20,20 +20,20 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#include "SerialStudio.h"
-#include "Misc/Utilities.h"
-#include "DataModel/Frame.h"
 #include "DataModel/DBCImporter.h"
-#include "DataModel/FrameBuilder.h"
-#include "DataModel/ProjectModel.h"
 
 #include <QFile>
+#include <QFileDialog>
 #include <QFileInfo>
 #include <QJsonArray>
-#include <QFileDialog>
 #include <QJsonDocument>
-#include <QStandardPaths>
 #include <QRegularExpression>
+#include <QStandardPaths>
+
+#include "DataModel/Frame.h"
+#include "DataModel/ProjectModel.h"
+#include "Misc/Utilities.h"
+#include "SerialStudio.h"
 
 /**
  * @brief Private constructor for the singleton pattern.
@@ -44,7 +44,7 @@ DataModel::DBCImporter::DBCImporter() {}
  * @brief Returns the singleton instance of the DBC importer.
  * @return Reference to the DBCImporter singleton.
  */
-DataModel::DBCImporter &DataModel::DBCImporter::instance()
+DataModel::DBCImporter& DataModel::DBCImporter::instance()
 {
   static DBCImporter instance;
   return instance;
@@ -92,15 +92,15 @@ QString DataModel::DBCImporter::messageInfo(int index) const
   if (index < 0 || index >= m_messages.count())
     return QString();
 
-  const auto &message = m_messages.at(index);
-  const auto msgId = static_cast<quint32>(message.uniqueId());
+  const auto& message    = m_messages.at(index);
+  const auto msgId       = static_cast<quint32>(message.uniqueId());
   const auto signalCount = message.signalDescriptions().count();
 
   return QString("%1: %2 @ 0x%3 (%4 signals)")
-      .arg(index + 1)
-      .arg(message.name())
-      .arg(QString::number(msgId, 16).toUpper())
-      .arg(signalCount);
+    .arg(index + 1)
+    .arg(message.name())
+    .arg(QString::number(msgId, 16).toUpper())
+    .arg(signalCount);
 }
 
 /**
@@ -113,18 +113,17 @@ QString DataModel::DBCImporter::messageInfo(int index) const
 void DataModel::DBCImporter::importDBC()
 {
   const auto p = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-  auto *dialog = new QFileDialog(nullptr, tr("Import DBC File"), p,
-                                 tr("DBC Files (*.dbc);;All Files (*)"));
+  auto* dialog =
+    new QFileDialog(nullptr, tr("Import DBC File"), p, tr("DBC Files (*.dbc);;All Files (*)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setOption(QFileDialog::DontUseNativeDialog);
-  connect(dialog, &QFileDialog::fileSelected, this,
-          [this, dialog](const QString &path) {
-            if (!path.isEmpty())
-              showPreview(path);
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    if (!path.isEmpty())
+      showPreview(path);
 
-            dialog->deleteLater();
-          });
+    dialog->deleteLater();
+  });
 
   dialog->open();
 }
@@ -154,36 +153,35 @@ void DataModel::DBCImporter::cancelImport()
  *
  * @param filePath Absolute path to the DBC file to parse.
  */
-void DataModel::DBCImporter::showPreview(const QString &filePath)
+void DataModel::DBCImporter::showPreview(const QString& filePath)
 {
   QCanDbcFileParser parser;
-  if (!parser.parse(filePath))
-  {
-    Misc::Utilities::showMessageBox(
-        tr("Failed to parse DBC file: %1").arg(parser.errorString()),
-        tr("Please verify the file format and try again."),
-        QMessageBox::Critical, tr("DBC Import Error"));
+  if (!parser.parse(filePath)) {
+    Misc::Utilities::showMessageBox(tr("Failed to parse DBC file: %1").arg(parser.errorString()),
+                                    tr("Please verify the file format and try again."),
+                                    QMessageBox::Critical,
+                                    tr("DBC Import Error"));
     return;
   }
 
   m_messages = parser.messageDescriptions();
-  if (m_messages.isEmpty())
-  {
+  if (m_messages.isEmpty()) {
     Misc::Utilities::showMessageBox(
-        tr("DBC file contains no messages"),
-        tr("The selected file does not contain any CAN message definitions."),
-        QMessageBox::Warning, tr("DBC Import Warning"));
+      tr("DBC file contains no messages"),
+      tr("The selected file does not contain any CAN message definitions."),
+      QMessageBox::Warning,
+      tr("DBC Import Warning"));
     return;
   }
 
   // Sort messages by CAN ID to keep everything in sync.
   // This ensures dataset indices match between the UI groups and the JavaScript
   // parser.
-  std::sort(
-      m_messages.begin(), m_messages.end(),
-      [](const QCanMessageDescription &a, const QCanMessageDescription &b) {
-        return a.uniqueId() < b.uniqueId();
-      });
+  std::sort(m_messages.begin(),
+            m_messages.end(),
+            [](const QCanMessageDescription& a, const QCanMessageDescription& b) {
+              return a.uniqueId() < b.uniqueId();
+            });
 
   m_dbcFilePath = filePath;
   Q_EMIT messagesChanged();
@@ -210,21 +208,19 @@ void DataModel::DBCImporter::confirmImport()
   if (m_messages.isEmpty())
     return;
 
-  const auto project = generateProject(m_messages);
-  const auto dbcInfo = QFileInfo(m_dbcFilePath);
+  const auto project     = generateProject(m_messages);
+  const auto dbcInfo     = QFileInfo(m_dbcFilePath);
   const auto projectName = dbcInfo.baseName();
-  const auto tempDir
-      = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-  const auto tempPath = tempDir + "/" + projectName + "_temp.ssproj";
+  const auto tempDir     = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+  const auto tempPath    = tempDir + "/" + projectName + "_temp.ssproj";
 
   QFile file(tempPath);
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-  {
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
     Misc::Utilities::showMessageBox(
-        tr("Failed to create temporary project file"),
-        tr("Check if the application has write permissions to the "
-           "temporary directory."),
-        QMessageBox::Critical, tr("DBC Import Error"));
+      tr("Failed to create temporary project file"),
+      tr("Check if the application has write permissions to the temporary directory."),
+      QMessageBox::Critical,
+      tr("DBC Import Error"));
     return;
   }
 
@@ -234,8 +230,7 @@ void DataModel::DBCImporter::confirmImport()
 
   ProjectModel::instance().openJsonFile(tempPath);
 
-  if (ProjectModel::instance().saveJsonFile(true))
-  {
+  if (ProjectModel::instance().saveJsonFile(true)) {
     QFile::remove(tempPath);
 
     // clang-format off
@@ -247,9 +242,7 @@ void DataModel::DBCImporter::confirmImport()
         QMessageBox::Information,
         tr("DBC Import Complete"));
     // clang-format on
-  }
-  else
-  {
+  } else {
     QFile::remove(tempPath);
   }
 }
@@ -271,25 +264,24 @@ void DataModel::DBCImporter::confirmImport()
  * @param messages List of CAN message descriptions from the DBC file.
  * @return QJsonObject containing the complete project structure.
  */
-QJsonObject DataModel::DBCImporter::generateProject(
-    const QList<QCanMessageDescription> &messages)
+QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescription>& messages)
 {
   QJsonObject project;
 
-  const auto dbcInfo = QFileInfo(m_dbcFilePath);
+  const auto dbcInfo      = QFileInfo(m_dbcFilePath);
   const auto projectTitle = dbcInfo.baseName();
 
-  project["title"] = projectTitle;
-  project["frameStart"] = QString("");
-  project["frameEnd"] = QString("");
-  project["frameParser"] = generateFrameParser(messages);
-  project["decoder"] = static_cast<int>(SerialStudio::Binary);
+  project["title"]          = projectTitle;
+  project["frameStart"]     = QString("");
+  project["frameEnd"]       = QString("");
+  project["frameParser"]    = generateFrameParser(messages);
+  project["decoder"]        = static_cast<int>(SerialStudio::Binary);
   project["frameDetection"] = static_cast<int>(SerialStudio::NoDelimiters);
-  project["actions"] = QJsonArray();
+  project["actions"]        = QJsonArray();
 
   const auto groups = generateGroups(messages);
   QJsonArray groupArray;
-  for (const auto &group : groups)
+  for (const auto& group : groups)
     groupArray.append(serialize(group));
 
   project["groups"] = groupArray;
@@ -328,25 +320,23 @@ QJsonObject DataModel::DBCImporter::generateProject(
  * @return Vector of Group structures ready for serialization.
  */
 std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
-    const QList<QCanMessageDescription> &messages)
+  const QList<QCanMessageDescription>& messages)
 {
   std::vector<DataModel::Group> groups;
-  int groupId = 0;
+  int groupId      = 0;
   int datasetIndex = 1;
 
-  for (const auto &message : messages)
-  {
+  for (const auto& message : messages) {
     const auto signalList = message.signalDescriptions();
     if (signalList.isEmpty())
       continue;
 
     DataModel::Group group;
     group.groupId = groupId;
-    group.title = message.name();
-    group.widget = selectGroupWidget(message);
+    group.title   = message.name();
+    group.widget  = selectGroupWidget(message);
 
-    for (const auto &signal : signalList)
-    {
+    for (const auto& signal : signalList) {
       DataModel::Dataset dataset;
       dataset.index = datasetIndex++;
       dataset.title = signal.name();
@@ -355,8 +345,7 @@ std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
       double minVal = signal.minimum();
       double maxVal = signal.maximum();
 
-      if (std::isnan(minVal) || std::isnan(maxVal) || minVal >= maxVal)
-      {
+      if (std::isnan(minVal) || std::isnan(maxVal) || minVal >= maxVal) {
         minVal = 0.0;
         maxVal = 100.0;
       }
@@ -370,24 +359,21 @@ std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
 
       const auto isSingleBit = (signal.bitLength() == 1);
 
-      if (isSingleBit)
-      {
-        dataset.widget = QString("");
-        dataset.plt = false;
-        dataset.fft = false;
-        dataset.led = true;
+      if (isSingleBit) {
+        dataset.widget  = QString("");
+        dataset.plt     = false;
+        dataset.fft     = false;
+        dataset.led     = true;
         dataset.ledHigh = 1;
-      }
-      else
-      {
+      } else {
         if (shouldAssignIndividualWidget(group.widget, signal, isSingleBit))
           dataset.widget = selectWidgetForSignal(signal);
         else
           dataset.widget = QString("");
 
-        dataset.plt = false;
-        dataset.fft = false;
-        dataset.led = false;
+        dataset.plt     = false;
+        dataset.fft     = false;
+        dataset.led     = false;
         dataset.ledHigh = 0;
       }
 
@@ -428,8 +414,7 @@ std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
  * @param messages List of CAN message descriptions from the DBC file.
  * @return JavaScript code as a QString ready for embedding in the project.
  */
-QString DataModel::DBCImporter::generateFrameParser(
-    const QList<QCanMessageDescription> &messages)
+QString DataModel::DBCImporter::generateFrameParser(const QList<QCanMessageDescription>& messages)
 {
   QString code;
 
@@ -482,14 +467,12 @@ QString DataModel::DBCImporter::generateFrameParser(
   // clang-format on
 
   int datasetIndex = 0;
-  for (const auto &message : messages)
-  {
+  for (const auto& message : messages) {
     if (message.signalDescriptions().isEmpty())
       continue;
 
     const auto msgId = static_cast<quint32>(message.uniqueId());
-    code += QString("    case 0x%1:\n")
-                .arg(QString::number(msgId, 16).toUpper());
+    code += QString("    case 0x%1:\n").arg(QString::number(msgId, 16).toUpper());
     code += QString("      decode_%1(data);\n").arg(QString::number(msgId, 16));
     code += "      break;\n";
   }
@@ -499,8 +482,7 @@ QString DataModel::DBCImporter::generateFrameParser(
   code += "}\n\n";
 
   datasetIndex = 1;
-  for (const auto &message : messages)
-  {
+  for (const auto& message : messages) {
     if (message.signalDescriptions().isEmpty())
       continue;
 
@@ -598,44 +580,40 @@ QString DataModel::DBCImporter::generateFrameParser(
  *                     indexing.
  * @return JavaScript function code as a QString.
  */
-QString DataModel::DBCImporter::generateMessageDecoder(
-    const QCanMessageDescription &message, int &datasetIndex)
+QString DataModel::DBCImporter::generateMessageDecoder(const QCanMessageDescription& message,
+                                                       int& datasetIndex)
 {
   QString code;
-  const auto msgId = static_cast<quint32>(message.uniqueId());
+  const auto msgId      = static_cast<quint32>(message.uniqueId());
   const auto signalList = message.signalDescriptions();
   const auto startIndex = datasetIndex;
 
   code += "/**\n";
   code += QString(" * Decodes CAN message: %1 (ID: 0x%2)\n")
-              .arg(message.name())
-              .arg(QString::number(msgId, 16).toUpper());
+            .arg(message.name())
+            .arg(QString::number(msgId, 16).toUpper());
   code += " *\n";
   code += QString(" * Signals (%1):\n").arg(signalList.count());
 
   int idx = startIndex;
-  for (const auto &signal : signalList)
-  {
+  for (const auto& signal : signalList) {
     code += QString(" *   [%1] %2 (%3)\n")
-                .arg(idx)
-                .arg(signal.name())
-                .arg(signal.physicalUnit().isEmpty() ? "no unit"
-                                                     : signal.physicalUnit());
+              .arg(idx)
+              .arg(signal.name())
+              .arg(signal.physicalUnit().isEmpty() ? "no unit" : signal.physicalUnit());
     ++idx;
   }
 
   code += " *\n";
   code += " * @param {Uint8Array} data - CAN message data payload\n";
   code += " */\n";
-  code += QString("function decode_%1(data) {\n")
-              .arg(QString::number(msgId, 16));
+  code += QString("function decode_%1(data) {\n").arg(QString::number(msgId, 16));
 
-  for (const auto &signal : signalList)
-  {
+  for (const auto& signal : signalList) {
     code += generateSignalExtraction(signal);
     code += QString("  values[%1] = value_%2;\n")
-                .arg(datasetIndex - 1)
-                .arg(sanitizeJavaScriptString(signal.name()));
+              .arg(datasetIndex - 1)
+              .arg(sanitizeJavaScriptString(signal.name()));
     ++datasetIndex;
   }
 
@@ -659,8 +637,7 @@ QString DataModel::DBCImporter::generateMessageDecoder(
  * @param signal CAN signal description from the DBC file.
  * @return JavaScript code for extracting and scaling the signal.
  */
-QString DataModel::DBCImporter::generateSignalExtraction(
-    const QCanSignalDescription &signal)
+QString DataModel::DBCImporter::generateSignalExtraction(const QCanSignalDescription& signal)
 {
   // clang-format off
   QString code;
@@ -717,20 +694,17 @@ QString DataModel::DBCImporter::generateSignalExtraction(
  * @param message CAN message description from the DBC file.
  * @return Group widget type string.
  */
-QString
-DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
+QString DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription& message)
 {
   const auto signalDescriptions = message.signalDescriptions();
-  const auto signalCount = signalDescriptions.count();
+  const auto signalCount        = signalDescriptions.count();
 
   if (signalCount == 1)
     return SerialStudio::groupWidgetId(SerialStudio::NoGroupWidget);
 
   bool allBoolean = true;
-  for (const auto &signal : signalDescriptions)
-  {
-    if (signal.bitLength() != 1)
-    {
+  for (const auto& signal : signalDescriptions) {
+    if (signal.bitLength() != 1) {
       allBoolean = false;
       break;
     }
@@ -741,8 +715,7 @@ DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
 
   const auto family = detectSignalFamily(signalDescriptions);
 
-  switch (family)
-  {
+  switch (family) {
     case WheelSpeeds:
     case TirePressures:
       return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
@@ -760,8 +733,7 @@ DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
       return SerialStudio::groupWidgetId(SerialStudio::NoGroupWidget);
 
     case GenericRelated:
-      if (signalCount >= 2 && signalCount <= 8)
-      {
+      if (signalCount >= 2 && signalCount <= 8) {
         const int plottableCount = countPlottable(signalDescriptions);
         if (plottableCount >= 2)
           return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
@@ -773,13 +745,11 @@ DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
       break;
   }
 
-  if (signalCount >= 2)
-  {
+  if (signalCount >= 2) {
     bool hasLat = false;
     bool hasLon = false;
 
-    for (const auto &signal : signalDescriptions)
-    {
+    for (const auto& signal : signalDescriptions) {
       const auto name = signal.name().toLower();
       if (name.contains("lat"))
         hasLat = true;
@@ -791,11 +761,9 @@ DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
       return SerialStudio::groupWidgetId(SerialStudio::GPS);
   }
 
-  if (signalCount == 3)
-  {
+  if (signalCount == 3) {
     int accelCount = 0;
-    for (const auto &signal : signalDescriptions)
-    {
+    for (const auto& signal : signalDescriptions) {
       const auto name = signal.name().toLower();
       const auto unit = signal.physicalUnit().toLower();
       if (name.contains("accel") || unit.contains("m/s") || unit.contains("g"))
@@ -806,13 +774,11 @@ DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
       return SerialStudio::groupWidgetId(SerialStudio::Accelerometer);
 
     int gyroCount = 0;
-    for (const auto &signal : signalDescriptions)
-    {
+    for (const auto& signal : signalDescriptions) {
       const auto name = signal.name().toLower();
       const auto unit = signal.physicalUnit().toLower();
-      if (name.contains("gyro") || name.contains("roll")
-          || name.contains("pitch") || name.contains("yaw")
-          || unit.contains("deg/s") || unit.contains("rad/s"))
+      if (name.contains("gyro") || name.contains("roll") || name.contains("pitch")
+          || name.contains("yaw") || unit.contains("deg/s") || unit.contains("rad/s"))
         gyroCount++;
     }
 
@@ -820,8 +786,7 @@ DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
       return SerialStudio::groupWidgetId(SerialStudio::Gyroscope);
   }
 
-  if (signalCount >= 2 && signalCount <= 8)
-  {
+  if (signalCount >= 2 && signalCount <= 8) {
     const int plottableCount = countPlottable(signalDescriptions);
     if (plottableCount >= 2)
       return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
@@ -840,7 +805,7 @@ DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription &message)
  * @param str Input string (e.g., signal name from DBC).
  * @return Sanitized string safe for use in JavaScript code.
  */
-QString DataModel::DBCImporter::sanitizeJavaScriptString(const QString &str)
+QString DataModel::DBCImporter::sanitizeJavaScriptString(const QString& str)
 {
   QString result = str;
   result.replace(QRegularExpression("[^a-zA-Z0-9_]"), "_");
@@ -867,29 +832,26 @@ QString DataModel::DBCImporter::sanitizeJavaScriptString(const QString &str)
  * @param signal CAN signal description from the DBC file.
  * @return Widget type string ("bar", "gauge", or empty).
  */
-QString DataModel::DBCImporter::selectWidgetForSignal(
-    const QCanSignalDescription &signal)
+QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescription& signal)
 {
   const auto name = signal.name().toLower();
   const auto unit = signal.physicalUnit().toLower();
 
-  if (name.contains("odometer") || name.contains("trip")
-      || name.contains("counter") || name.contains("timestamp")
-      || name.contains("status"))
+  if (name.contains("odometer") || name.contains("trip") || name.contains("counter")
+      || name.contains("timestamp") || name.contains("status"))
     return QString("");
 
   if (unit == "%" || (signal.minimum() == 0 && signal.maximum() == 100))
     return SerialStudio::datasetWidgetId(SerialStudio::Bar);
 
-  if (unit.contains("°c") || unit.contains("°f") || unit.contains("degc")
-      || unit.contains("degf") || name.contains("temp")
-      || name.contains("temperature"))
+  if (unit.contains("°c") || unit.contains("°f") || unit.contains("degc") || unit.contains("degf")
+      || name.contains("temp") || name.contains("temperature"))
     return SerialStudio::datasetWidgetId(SerialStudio::Bar);
 
-  if (unit.contains("rpm") || unit.contains("km/h") || unit.contains("mph")
-      || unit.contains("v") || unit.contains("a") || unit.contains("psi")
-      || unit.contains("bar") || unit.contains("nm") || unit.contains("kpa")
-      || unit.contains("mbar") || unit.contains("kg") || unit.contains("deg"))
+  if (unit.contains("rpm") || unit.contains("km/h") || unit.contains("mph") || unit.contains("v")
+      || unit.contains("a") || unit.contains("psi") || unit.contains("bar") || unit.contains("nm")
+      || unit.contains("kpa") || unit.contains("mbar") || unit.contains("kg")
+      || unit.contains("deg"))
     return SerialStudio::datasetWidgetId(SerialStudio::Gauge);
 
   const auto range = signal.maximum() - signal.minimum();
@@ -908,11 +870,10 @@ QString DataModel::DBCImporter::selectWidgetForSignal(
  * @param messages List of CAN message descriptions.
  * @return Total number of signals across all messages.
  */
-int DataModel::DBCImporter::countTotalSignals(
-    const QList<QCanMessageDescription> &messages) const
+int DataModel::DBCImporter::countTotalSignals(const QList<QCanMessageDescription>& messages) const
 {
   int count = 0;
-  for (const auto &message : messages)
+  for (const auto& message : messages)
     count += message.signalDescriptions().count();
 
   return count;
@@ -929,18 +890,14 @@ int DataModel::DBCImporter::countTotalSignals(
  * @param positions List of position identifiers to look for.
  * @return true if at least 2 signals match the positional pattern.
  */
-bool DataModel::DBCImporter::hasPositionalPattern(
-    const QList<QCanSignalDescription> &signalList,
-    const QStringList &positions) const
+bool DataModel::DBCImporter::hasPositionalPattern(const QList<QCanSignalDescription>& signalList,
+                                                  const QStringList& positions) const
 {
   int matchCount = 0;
-  for (const auto &signal : signalList)
-  {
+  for (const auto& signal : signalList) {
     const auto name = signal.name().toLower();
-    for (const auto &pos : positions)
-    {
-      if (name.contains(pos))
-      {
+    for (const auto& pos : positions) {
+      if (name.contains(pos)) {
         matchCount++;
         break;
       }
@@ -960,7 +917,7 @@ bool DataModel::DBCImporter::hasPositionalPattern(
  * @return true if at least 2 signals have numbered suffixes.
  */
 bool DataModel::DBCImporter::hasNumberedPattern(
-    const QList<QCanSignalDescription> &signalList) const
+  const QList<QCanSignalDescription>& signalList) const
 {
   if (signalList.count() < 2)
     return false;
@@ -968,8 +925,7 @@ bool DataModel::DBCImporter::hasNumberedPattern(
   QRegularExpression numberPattern("[_\\s]?\\d+$|\\d+[_\\s]?");
   int numberedCount = 0;
 
-  for (const auto &signal : signalList)
-  {
+  for (const auto& signal : signalList) {
     const auto name = signal.name();
     if (numberPattern.match(name).hasMatch())
       numberedCount++;
@@ -987,15 +943,13 @@ bool DataModel::DBCImporter::hasNumberedPattern(
  * @param signalList List of signal descriptions to check.
  * @return true if all non-empty units are similar.
  */
-bool DataModel::DBCImporter::allSimilarUnits(
-    const QList<QCanSignalDescription> &signalList) const
+bool DataModel::DBCImporter::allSimilarUnits(const QList<QCanSignalDescription>& signalList) const
 {
   if (signalList.isEmpty())
     return false;
 
   QStringList units;
-  for (const auto &signal : signalList)
-  {
+  for (const auto& signal : signalList) {
     const auto unit = signal.physicalUnit().toLower().trimmed();
     if (!unit.isEmpty() && !units.contains(unit))
       units.append(unit);
@@ -1014,18 +968,16 @@ bool DataModel::DBCImporter::allSimilarUnits(
  * @param signalList List of signal descriptions to check.
  * @return true if signals match battery cluster pattern.
  */
-bool DataModel::DBCImporter::hasBatterySignals(
-    const QList<QCanSignalDescription> &signalList) const
+bool DataModel::DBCImporter::hasBatterySignals(const QList<QCanSignalDescription>& signalList) const
 {
   if (signalList.count() < 2)
     return false;
 
   bool hasVoltage = false;
   bool hasCurrent = false;
-  bool hasSoC = false;
+  bool hasSoC     = false;
 
-  for (const auto &signal : signalList)
-  {
+  for (const auto& signal : signalList) {
     const auto name = signal.name().toLower();
     const auto unit = signal.physicalUnit().toLower();
 
@@ -1037,8 +989,7 @@ bool DataModel::DBCImporter::hasBatterySignals(
       hasSoC = true;
   }
 
-  return (hasVoltage && hasCurrent) || (hasVoltage && hasSoC)
-         || (hasCurrent && hasSoC);
+  return (hasVoltage && hasCurrent) || (hasVoltage && hasSoC) || (hasCurrent && hasSoC);
 }
 
 /**
@@ -1050,16 +1001,13 @@ bool DataModel::DBCImporter::hasBatterySignals(
  * @param signalList List of signal descriptions to check.
  * @return true if all signals are 1-bit or status indicators.
  */
-bool DataModel::DBCImporter::allStatusSignals(
-    const QList<QCanSignalDescription> &signalList) const
+bool DataModel::DBCImporter::allStatusSignals(const QList<QCanSignalDescription>& signalList) const
 {
-  for (const auto &signal : signalList)
-  {
-    if (signal.bitLength() > 1)
-    {
+  for (const auto& signal : signalList) {
+    if (signal.bitLength() > 1) {
       const auto name = signal.name().toLower();
-      if (!name.contains("status") && !name.contains("state")
-          && !name.contains("mode") && !name.contains("flag"))
+      if (!name.contains("status") && !name.contains("state") && !name.contains("mode")
+          && !name.contains("flag"))
         return false;
     }
   }
@@ -1076,19 +1024,16 @@ bool DataModel::DBCImporter::allStatusSignals(
  * @param signalList List of signal descriptions to check.
  * @return Number of signals suitable for plotting.
  */
-int DataModel::DBCImporter::countPlottable(
-    const QList<QCanSignalDescription> &signalList) const
+int DataModel::DBCImporter::countPlottable(const QList<QCanSignalDescription>& signalList) const
 {
   int count = 0;
-  for (const auto &signal : signalList)
-  {
+  for (const auto& signal : signalList) {
     if (signal.bitLength() <= 1)
       continue;
 
     const auto name = signal.name().toLower();
-    if (name.contains("odometer") || name.contains("trip")
-        || name.contains("counter") || name.contains("timestamp")
-        || name.contains("status") || name.contains("state"))
+    if (name.contains("odometer") || name.contains("trip") || name.contains("counter")
+        || name.contains("timestamp") || name.contains("status") || name.contains("state"))
       continue;
 
     count++;
@@ -1108,15 +1053,13 @@ int DataModel::DBCImporter::countPlottable(
  * @return SignalFamily enum indicating the detected signal category.
  */
 DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
-    const QList<QCanSignalDescription> &signalList) const
+  const QList<QCanSignalDescription>& signalList) const
 {
   if (signalList.isEmpty())
     return None;
 
-  if (hasPositionalPattern(signalList, {"fl", "fr", "rl", "rr"}))
-  {
-    for (const auto &signal : signalList)
-    {
+  if (hasPositionalPattern(signalList, {"fl", "fr", "rl", "rr"})) {
+    for (const auto& signal : signalList) {
       const auto unit = signal.physicalUnit().toLower();
       if (unit.contains("km/h") || unit.contains("mph") || unit.contains("m/s"))
         return WheelSpeeds;
@@ -1125,10 +1068,8 @@ DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
     }
   }
 
-  if (hasNumberedPattern(signalList) && allSimilarUnits(signalList))
-  {
-    if (!signalList.isEmpty())
-    {
+  if (hasNumberedPattern(signalList) && allSimilarUnits(signalList)) {
+    if (!signalList.isEmpty()) {
       const auto unit = signalList.first().physicalUnit().toLower();
       if (unit.contains("°") || unit.contains("deg"))
         return Temperatures;
@@ -1160,8 +1101,7 @@ DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
  * @param signal The signal description to check.
  * @return true if the signal is critical and should always get a widget.
  */
-bool DataModel::DBCImporter::isCriticalSignal(
-    const QCanSignalDescription &signal) const
+bool DataModel::DBCImporter::isCriticalSignal(const QCanSignalDescription& signal) const
 {
   const auto name = signal.name().toLower();
   const auto unit = signal.physicalUnit().toLower();
@@ -1178,8 +1118,7 @@ bool DataModel::DBCImporter::isCriticalSignal(
   if (name.contains("temp") || name.contains("temperature"))
     return true;
 
-  if (unit.contains("°c") || unit.contains("°f") || unit.contains("degc")
-      || unit.contains("degf"))
+  if (unit.contains("°c") || unit.contains("°f") || unit.contains("degc") || unit.contains("degf"))
     return true;
 
   if ((name.contains("volt") || unit.contains("v")) && !unit.contains("rev"))
@@ -1192,8 +1131,7 @@ bool DataModel::DBCImporter::isCriticalSignal(
       || unit.contains("kpa") || unit.contains("pa"))
     return true;
 
-  if (name.contains("throttle") || name.contains("brake")
-      || name.contains("accelerator"))
+  if (name.contains("throttle") || name.contains("brake") || name.contains("accelerator"))
     return true;
 
   if (name.contains("fuel") || name.contains("battery") || name.contains("soc")
@@ -1203,8 +1141,7 @@ bool DataModel::DBCImporter::isCriticalSignal(
   if (name.contains("torque") || unit.contains("nm") || unit.contains("n.m"))
     return true;
 
-  if (name.contains("power") || unit.contains("kw") || unit.contains("hp")
-      || unit.contains("w"))
+  if (name.contains("power") || unit.contains("kw") || unit.contains("hp") || unit.contains("w"))
     return true;
 
   return false;
@@ -1232,15 +1169,14 @@ bool DataModel::DBCImporter::isCriticalSignal(
  * @param isSingleBit Whether the signal is a 1-bit boolean.
  * @return true if an individual widget should be assigned.
  */
-bool DataModel::DBCImporter::shouldAssignIndividualWidget(
-    const QString &groupWidget, const QCanSignalDescription &signal,
-    bool isSingleBit) const
+bool DataModel::DBCImporter::shouldAssignIndividualWidget(const QString& groupWidget,
+                                                          const QCanSignalDescription& signal,
+                                                          bool isSingleBit) const
 {
   if (isSingleBit)
     return true;
 
-  if (groupWidget.isEmpty()
-      || groupWidget == SerialStudio::groupWidgetId(SerialStudio::DataGrid))
+  if (groupWidget.isEmpty() || groupWidget == SerialStudio::groupWidgetId(SerialStudio::DataGrid))
     return true;
 
   if (isCriticalSignal(signal))

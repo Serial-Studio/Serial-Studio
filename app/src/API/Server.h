@@ -21,17 +21,17 @@
 
 #pragma once
 
-#include <QObject>
-#include <QTcpSocket>
-#include <QTcpServer>
 #include <QByteArray>
 #include <QElapsedTimer>
-#include <QHostAddress>
 #include <QHash>
+#include <QHostAddress>
+#include <QObject>
+#include <QTcpServer>
+#include <QTcpSocket>
 
-#include "IO/HAL_Driver.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
+#include "IO/HAL_Driver.h"
 
 /**
  * Default TCP port to use for incoming connections, I choose 7777 because 7 is
@@ -39,49 +39,44 @@
  */
 #define API_TCP_PORT 7777
 
-namespace API
-{
+namespace API {
 class Server;
 
 /**
  * @brief Worker that handles JSON serialization and socket I/O on background
  * thread
  */
-class ServerWorker
-  : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>
-{
+class ServerWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
   Q_OBJECT
 
 public:
-  using DataModel::FrameConsumerWorker<
-      DataModel::TimestampedFramePtr>::FrameConsumerWorker;
+  using DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>::FrameConsumerWorker;
   ~ServerWorker() override;
 
   bool isResourceOpen() const override;
 
 public slots:
   void closeResources() override;
-  void addSocket(QTcpSocket *socket);
-  void removeSocket(QTcpSocket *socket);
-  void writeRawData(const IO::ByteArrayPtr &data);
-  void writeToSocket(QTcpSocket *socket, const QByteArray &data);
-  void disconnectSocket(QTcpSocket *socket);
+  void addSocket(QTcpSocket* socket);
+  void removeSocket(QTcpSocket* socket);
+  void writeRawData(const IO::ByteArrayPtr& data);
+  void writeToSocket(QTcpSocket* socket, const QByteArray& data);
+  void disconnectSocket(QTcpSocket* socket);
 
 signals:
-  void dataReceived(QTcpSocket *socket, const QByteArray &data);
+  void dataReceived(QTcpSocket* socket, const QByteArray& data);
   void clientCountChanged(int count);
-  void socketRemoved(QTcpSocket *socket);
+  void socketRemoved(QTcpSocket* socket);
 
 protected:
-  void processItems(
-      const std::vector<DataModel::TimestampedFramePtr> &items) override;
+  void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
 
 private slots:
   void onSocketReadyRead();
   void onSocketDisconnected();
 
 private:
-  QVector<QTcpSocket *> m_sockets;
+  QVector<QTcpSocket*> m_sockets;
 };
 
 /**
@@ -116,8 +111,7 @@ private:
  * @note Accessed as a singleton via API::Server::instance().
  * @note Socket management must be on the main Qt thread.
  */
-class Server : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr>
-{
+class Server : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr> {
   Q_OBJECT
   Q_PROPERTY(int clientCount READ clientCount NOTIFY clientCountChanged)
   Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
@@ -128,49 +122,48 @@ signals:
 
 private:
   explicit Server();
-  Server(Server &&) = delete;
-  Server(const Server &) = delete;
-  Server &operator=(Server &&) = delete;
-  Server &operator=(const Server &) = delete;
+  Server(Server&&)                 = delete;
+  Server(const Server&)            = delete;
+  Server& operator=(Server&&)      = delete;
+  Server& operator=(const Server&) = delete;
 
   ~Server();
 
 public:
-  static Server &instance();
+  static Server& instance();
   [[nodiscard]] bool enabled() const;
   [[nodiscard]] int clientCount() const;
 
 public slots:
   void removeConnection();
   void setEnabled(const bool enabled);
-  void hotpathTxData(const IO::ByteArrayPtr &data);
-  void hotpathTxFrame(const DataModel::TimestampedFramePtr &frame);
+  void hotpathTxData(const IO::ByteArrayPtr& data);
+  void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
 
 protected:
-  DataModel::FrameConsumerWorkerBase *createWorker() override;
+  DataModel::FrameConsumerWorkerBase* createWorker() override;
 
 private slots:
   void acceptConnection();
   void onSocketDisconnected();
   void onClientCountChanged(int count);
-  void onSocketDisconnected(QTcpSocket *socket);
-  void onDataReceived(QTcpSocket *socket, const QByteArray &data);
+  void onSocketDisconnected(QTcpSocket* socket);
+  void onDataReceived(QTcpSocket* socket, const QByteArray& data);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:
-  struct ConnectionState
-  {
+  struct ConnectionState {
     QString peerAddress;
     quint16 peerPort = 0;
     QByteArray buffer;
     QElapsedTimer window;
     int messageCount = 0;
-    int byteCount = 0;
+    int byteCount    = 0;
   };
 
   int m_clientCount;
   bool m_enabled;
   QTcpServer m_server;
-  QHash<QTcpSocket *, ConnectionState> m_connections;
+  QHash<QTcpSocket*, ConnectionState> m_connections;
 };
-} // namespace API
+}  // namespace API

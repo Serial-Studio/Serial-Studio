@@ -23,6 +23,7 @@
 #ifdef BUILD_COMMERCIAL
 
 #  include "API/Handlers/MDF4ExportHandler.h"
+
 #  include "API/CommandRegistry.h"
 #  include "MDF4/Export.h"
 
@@ -31,37 +32,31 @@
  */
 void API::Handlers::MDF4ExportHandler::registerCommands()
 {
-  auto &registry = CommandRegistry::instance();
+  auto& registry = CommandRegistry::instance();
 
   // Mutation commands
-  registry.registerCommand(
-      QStringLiteral("mdf4.export.setEnabled"),
-      QStringLiteral("Enable or disable MDF4 export (params: enabled)"),
-      &setEnabled);
+  registry.registerCommand(QStringLiteral("mdf4.export.setEnabled"),
+                           QStringLiteral("Enable or disable MDF4 export (params: enabled)"),
+                           &setEnabled);
 
-  registry.registerCommand(QStringLiteral("mdf4.export.close"),
-                           QStringLiteral("Close the current MDF4 file"),
-                           &close);
+  registry.registerCommand(
+    QStringLiteral("mdf4.export.close"), QStringLiteral("Close the current MDF4 file"), &close);
 
   // Query commands
-  registry.registerCommand(QStringLiteral("mdf4.export.getStatus"),
-                           QStringLiteral("Get MDF4 export status"),
-                           &getStatus);
+  registry.registerCommand(
+    QStringLiteral("mdf4.export.getStatus"), QStringLiteral("Get MDF4 export status"), &getStatus);
 }
 
 /**
  * @brief Enable or disable MDF4 export
  * @param params Requires "enabled" (bool)
  */
-API::CommandResponse
-API::Handlers::MDF4ExportHandler::setEnabled(const QString &id,
-                                             const QJsonObject &params)
+API::CommandResponse API::Handlers::MDF4ExportHandler::setEnabled(const QString& id,
+                                                                  const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled")))
-  {
+  if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
-        id, ErrorCode::MissingParam,
-        QStringLiteral("Missing required parameter: enabled"));
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
   }
 
   const bool enabled = params.value(QStringLiteral("enabled")).toBool();
@@ -75,9 +70,8 @@ API::Handlers::MDF4ExportHandler::setEnabled(const QString &id,
 /**
  * @brief Close the current MDF4 file
  */
-API::CommandResponse
-API::Handlers::MDF4ExportHandler::close(const QString &id,
-                                        const QJsonObject &params)
+API::CommandResponse API::Handlers::MDF4ExportHandler::close(const QString& id,
+                                                             const QJsonObject& params)
 {
   Q_UNUSED(params)
 
@@ -91,19 +85,18 @@ API::Handlers::MDF4ExportHandler::close(const QString &id,
 /**
  * @brief Get MDF4 export status
  */
-API::CommandResponse
-API::Handlers::MDF4ExportHandler::getStatus(const QString &id,
-                                            const QJsonObject &params)
+API::CommandResponse API::Handlers::MDF4ExportHandler::getStatus(const QString& id,
+                                                                 const QJsonObject& params)
 {
   Q_UNUSED(params)
 
-  auto &mdf4Export = MDF4::Export::instance();
+  auto& mdf4Export = MDF4::Export::instance();
 
   QJsonObject result;
   result[QStringLiteral("enabled")] = mdf4Export.exportEnabled();
-  result[QStringLiteral("isOpen")] = mdf4Export.isOpen();
+  result[QStringLiteral("isOpen")]  = mdf4Export.isOpen();
 
   return CommandResponse::makeSuccess(id, result);
 }
 
-#endif // BUILD_COMMERCIAL
+#endif  // BUILD_COMMERCIAL

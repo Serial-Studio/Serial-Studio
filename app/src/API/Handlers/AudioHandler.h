@@ -15,10 +15,8 @@
 
 #  include "API/CommandProtocol.h"
 
-namespace API
-{
-namespace Handlers
-{
+namespace API {
+namespace Handlers {
 /**
  * @class AudioHandler
  * @brief Registers API commands for IO::Drivers::Audio operations (Pro feature)
@@ -42,8 +40,7 @@ namespace Handlers
  * - io.driver.audio.getOutputFormats - List output formats
  * - io.driver.audio.getConfiguration - Get complete config
  */
-class AudioHandler
-{
+class AudioHandler {
 public:
   /**
    * @brief Register all Audio driver commands with the CommandRegistry
@@ -52,37 +49,24 @@ public:
 
 private:
   // Configuration commands
-  static CommandResponse setInputDevice(const QString &id,
-                                        const QJsonObject &params);
-  static CommandResponse setOutputDevice(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse setSampleRate(const QString &id,
-                                       const QJsonObject &params);
-  static CommandResponse setInputSampleFormat(const QString &id,
-                                              const QJsonObject &params);
-  static CommandResponse setInputChannelConfig(const QString &id,
-                                               const QJsonObject &params);
-  static CommandResponse setOutputSampleFormat(const QString &id,
-                                               const QJsonObject &params);
-  static CommandResponse setOutputChannelConfig(const QString &id,
-                                                const QJsonObject &params);
+  static CommandResponse setInputDevice(const QString& id, const QJsonObject& params);
+  static CommandResponse setOutputDevice(const QString& id, const QJsonObject& params);
+  static CommandResponse setSampleRate(const QString& id, const QJsonObject& params);
+  static CommandResponse setInputSampleFormat(const QString& id, const QJsonObject& params);
+  static CommandResponse setInputChannelConfig(const QString& id, const QJsonObject& params);
+  static CommandResponse setOutputSampleFormat(const QString& id, const QJsonObject& params);
+  static CommandResponse setOutputChannelConfig(const QString& id, const QJsonObject& params);
 
   // Query commands
-  static CommandResponse getInputDevices(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse getOutputDevices(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse getSampleRates(const QString &id,
-                                        const QJsonObject &params);
-  static CommandResponse getInputFormats(const QString &id,
-                                         const QJsonObject &params);
-  static CommandResponse getOutputFormats(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse getConfiguration(const QString &id,
-                                          const QJsonObject &params);
+  static CommandResponse getInputDevices(const QString& id, const QJsonObject& params);
+  static CommandResponse getOutputDevices(const QString& id, const QJsonObject& params);
+  static CommandResponse getSampleRates(const QString& id, const QJsonObject& params);
+  static CommandResponse getInputFormats(const QString& id, const QJsonObject& params);
+  static CommandResponse getOutputFormats(const QString& id, const QJsonObject& params);
+  static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);
 };
 
-} // namespace Handlers
-} // namespace API
+}  // namespace Handlers
+}  // namespace API
 
-#endif // BUILD_COMMERCIAL
+#endif  // BUILD_COMMERCIAL

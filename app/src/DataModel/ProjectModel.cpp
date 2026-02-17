@@ -19,27 +19,27 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "DataModel/ProjectModel.h"
+
+#include <QDirIterator>
 #include <QFile>
-#include <QTimer>
+#include <QFileDialog>
 #include <QFileInfo>
 #include <QJsonArray>
-#include <QFileDialog>
-#include <QJsonObject>
-#include <QDirIterator>
 #include <QJsonDocument>
+#include <QJsonObject>
+#include <QTimer>
 
 #include "AppInfo.h"
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/FrameParser.h"
 #include "IO/Checksum.h"
-#include "Misc/Utilities.h"
 #include "Misc/JsonValidator.h"
 #include "Misc/Translator.h"
+#include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
 
-#include "DataModel/FrameParser.h"
-#include "DataModel/ProjectModel.h"
-#include "DataModel/FrameBuilder.h"
-
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // ProjectModel.cpp - Core data model for Serial Studio projects
 //
 // 4000+ lines of conditionally stable logic supporting project structures,
@@ -53,11 +53,11 @@
 //          The QStandardItemModel is not. Every change risks unleashing UI
 //          behavior so cursed, even the debugger won't follow you in.
 //          Handle with precision, patience, and possibly a therapist.
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Private enums to keep track of which item the user selected/modified
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Enum representing top-level items in the project structure.
@@ -68,6 +68,7 @@ typedef enum
   kRootItem,     /**< Represents the root item of the project. */
   kFrameParser,  /**< Represents the frame parser function item. */
 } TopLevelItem;
+
 // clang-format on
 
 /**
@@ -84,6 +85,7 @@ typedef enum
   kProjectView_FrameDetection,      /**< Represents the frame detection item */
   kProjectView_ChecksumFunction     /**< Represents the frame checksum item */
 } ProjectItem;
+
 // clang-format on
 
 /**
@@ -114,6 +116,7 @@ typedef enum
   kDatasetView_xAxis,            /**< Plot X axis item. */
   kDatasetView_Overview          /**< Display in Overview workspace. */
 } DatasetItem;
+
 // clang-format on
 
 /**
@@ -131,6 +134,7 @@ typedef enum
   kActionView_TimerMode,    /**< The timer behavior mode. */
   kActionView_TimerInterval /**< The timer interval in milliseconds. */
 } ActionItem;
+
 // clang-format on
 
 /**
@@ -142,11 +146,12 @@ typedef enum
   kGroupView_Title,  /**< Represents the group title item. */
   kGroupView_Widget  /**< Represents the group widget item. */
 } GroupItem;
+
 // clang-format on
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton instance access function
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructor for the DataModel::ProjectModel class.
@@ -182,20 +187,24 @@ DataModel::ProjectModel::ProjectModel()
 
   // Clear selection model when JSON file is changed
   connect(this, &DataModel::ProjectModel::jsonFileChanged, this, [=, this] {
-    if (m_selectionModel)
-    {
+    if (m_selectionModel) {
       auto index = m_treeModel->index(0, 0);
-      m_selectionModel->setCurrentIndex(index,
-                                        QItemSelectionModel::ClearAndSelect);
+      m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
     }
   });
 
   // Ensure toolbar actions are synched with models
-  connect(this, &DataModel::ProjectModel::groupModelChanged, this,
+  connect(this,
+          &DataModel::ProjectModel::groupModelChanged,
+          this,
           &DataModel::ProjectModel::editableOptionsChanged);
-  connect(this, &DataModel::ProjectModel::datasetModelChanged, this,
+  connect(this,
+          &DataModel::ProjectModel::datasetModelChanged,
+          this,
           &DataModel::ProjectModel::editableOptionsChanged);
-  connect(this, &DataModel::ProjectModel::datasetModelChanged, this,
+  connect(this,
+          &DataModel::ProjectModel::datasetModelChanged,
+          this,
           &DataModel::ProjectModel::datasetOptionsChanged);
 
   // Load current JSON map file into C++ model
@@ -212,15 +221,15 @@ DataModel::ProjectModel::ProjectModel()
  *
  * @return Reference to the singleton instance of DataModel::ProjectModel.
  */
-DataModel::ProjectModel &DataModel::ProjectModel::instance()
+DataModel::ProjectModel& DataModel::ProjectModel::instance()
 {
   static ProjectModel singleton;
   return singleton;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Document status access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Checks if the document has been modified.
@@ -233,8 +242,7 @@ bool DataModel::ProjectModel::modified() const
 {
   bool parserModified = false;
   if (DataModel::FrameBuilder::instance().frameParser())
-    parserModified
-        = DataModel::FrameBuilder::instance().frameParser()->isModified();
+    parserModified = DataModel::FrameBuilder::instance().frameParser()->isModified();
 
   return m_modified || parserModified;
 }
@@ -247,8 +255,7 @@ bool DataModel::ProjectModel::modified() const
  *
  * @return The current view as a value from the CurrentView enum.
  */
-DataModel::ProjectModel::CurrentView
-DataModel::ProjectModel::currentView() const
+DataModel::ProjectModel::CurrentView DataModel::ProjectModel::currentView() const
 {
   return m_currentView;
 }
@@ -280,9 +287,9 @@ SerialStudio::FrameDetection DataModel::ProjectModel::frameDetection() const
   return m_frameDetection;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Document information functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Retrieves the name of the DataModel file associated with the project.
@@ -295,8 +302,7 @@ SerialStudio::FrameDetection DataModel::ProjectModel::frameDetection() const
  */
 QString DataModel::ProjectModel::jsonFileName() const
 {
-  if (!jsonFilePath().isEmpty())
-  {
+  if (!jsonFilePath().isEmpty()) {
     auto fileInfo = QFileInfo(m_filePath);
     return fileInfo.fileName();
   }
@@ -331,7 +337,7 @@ QString DataModel::ProjectModel::selectedText() const
     return "";
 
   const auto index = m_selectionModel->currentIndex();
-  const auto data = m_treeModel->data(index, TreeViewText);
+  const auto data  = m_treeModel->data(index, TreeViewText);
   return data.toString();
 }
 
@@ -349,7 +355,7 @@ QString DataModel::ProjectModel::selectedIcon() const
     return "";
 
   const auto index = m_selectionModel->currentIndex();
-  const auto data = m_treeModel->data(index, TreeViewIcon);
+  const auto data  = m_treeModel->data(index, TreeViewIcon);
   return data.toString();
 }
 
@@ -369,13 +375,10 @@ QStringList DataModel::ProjectModel::xDataSources() const
   list.append(tr("Samples"));
 
   QMap<int, QString> datasets;
-  for (const auto &group : m_groups)
-  {
-    for (const auto &dataset : group.datasets)
-    {
+  for (const auto& group : m_groups) {
+    for (const auto& dataset : group.datasets) {
       const auto index = dataset.index;
-      if (!datasets.contains(index))
-      {
+      if (!datasets.contains(index)) {
         const auto t = QString("%1 (%2)").arg(dataset.title, group.title);
         datasets.insert(index, t);
       }
@@ -414,7 +417,7 @@ bool DataModel::ProjectModel::suppressMessageBoxes() const
  *
  * @return A reference to the project title.
  */
-const QString &DataModel::ProjectModel::title() const
+const QString& DataModel::ProjectModel::title() const
 {
   return m_title;
 }
@@ -438,16 +441,14 @@ const QString DataModel::ProjectModel::actionIcon() const
  * @return A QStringList containing the base names of all available action
  * icons.
  */
-const QStringList &DataModel::ProjectModel::availableActionIcons() const
+const QStringList& DataModel::ProjectModel::availableActionIcons() const
 {
   static QStringList icons;
 
-  if (icons.isEmpty())
-  {
+  if (icons.isEmpty()) {
     const auto path = QStringLiteral(":/rcc/actions/");
     QDirIterator it(path, QStringList() << "*.svg", QDir::Files);
-    while (it.hasNext())
-    {
+    while (it.hasNext()) {
       const auto filePath = it.next();
       const QFileInfo fileInfo(filePath);
       icons.append(fileInfo.baseName());
@@ -456,6 +457,7 @@ const QStringList &DataModel::ProjectModel::availableActionIcons() const
 
   return icons;
 }
+
 /**
  * @brief Retrieves the file path of the DataModel file.
  *
@@ -464,7 +466,7 @@ const QStringList &DataModel::ProjectModel::availableActionIcons() const
  *
  * @return A reference to the file path of the DataModel file.
  */
-const QString &DataModel::ProjectModel::jsonFilePath() const
+const QString& DataModel::ProjectModel::jsonFilePath() const
 {
   return m_filePath;
 }
@@ -476,7 +478,7 @@ const QString &DataModel::ProjectModel::jsonFilePath() const
  *
  * @return A reference to the frame parser code.
  */
-const QString &DataModel::ProjectModel::frameParserCode() const
+const QString& DataModel::ProjectModel::frameParserCode() const
 {
   return m_frameParserCode;
 }
@@ -503,7 +505,7 @@ int DataModel::ProjectModel::activeGroupId() const
  *
  * @return A reference to the dashboard layout DataModel object.
  */
-const QJsonObject &DataModel::ProjectModel::dashboardLayout() const
+const QJsonObject& DataModel::ProjectModel::dashboardLayout() const
 {
   return m_dashboardLayout;
 }
@@ -522,8 +524,7 @@ const QJsonObject &DataModel::ProjectModel::dashboardLayout() const
  */
 bool DataModel::ProjectModel::currentGroupIsEditable() const
 {
-  if (m_currentView == GroupView)
-  {
+  if (m_currentView == GroupView) {
     const auto widget = m_selectedGroup.widget;
     if (widget != "" && widget != "multiplot" && widget != "datagrid")
       return false;
@@ -547,11 +548,9 @@ bool DataModel::ProjectModel::currentGroupIsEditable() const
  */
 bool DataModel::ProjectModel::currentDatasetIsEditable() const
 {
-  if (m_currentView == DatasetView)
-  {
+  if (m_currentView == DatasetView) {
     const auto groupId = m_selectedDataset.groupId;
-    if (m_groups.size() > static_cast<size_t>(groupId))
-    {
+    if (m_groups.size() > static_cast<size_t>(groupId)) {
       const auto widget = m_groups[groupId].widget;
       if (widget != "" && widget != "multiplot" && widget != "datagrid")
         return false;
@@ -594,7 +593,7 @@ int DataModel::ProjectModel::groupCount() const
 int DataModel::ProjectModel::datasetCount() const
 {
   int count = 0;
-  for (const auto &group : m_groups)
+  for (const auto& group : m_groups)
     count += group.datasets.size();
 
   return count;
@@ -642,14 +641,14 @@ quint8 DataModel::ProjectModel::datasetOptions() const
  *
  * @return A reference to the vector of groups.
  */
-const std::vector<DataModel::Group> &DataModel::ProjectModel::groups() const
+const std::vector<DataModel::Group>& DataModel::ProjectModel::groups() const
 {
   return m_groups;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Model access functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Retrieves the tree model used in the project.
@@ -659,7 +658,7 @@ const std::vector<DataModel::Group> &DataModel::ProjectModel::groups() const
  *
  * @return A pointer to the tree model.
  */
-DataModel::CustomModel *DataModel::ProjectModel::treeModel() const
+DataModel::CustomModel* DataModel::ProjectModel::treeModel() const
 {
   return m_treeModel;
 }
@@ -672,7 +671,7 @@ DataModel::CustomModel *DataModel::ProjectModel::treeModel() const
  *
  * @return A pointer to the selection model.
  */
-QItemSelectionModel *DataModel::ProjectModel::selectionModel() const
+QItemSelectionModel* DataModel::ProjectModel::selectionModel() const
 {
   return m_selectionModel;
 }
@@ -685,7 +684,7 @@ QItemSelectionModel *DataModel::ProjectModel::selectionModel() const
  *
  * @return A pointer to the group model.
  */
-DataModel::CustomModel *DataModel::ProjectModel::groupModel() const
+DataModel::CustomModel* DataModel::ProjectModel::groupModel() const
 {
   return m_groupModel;
 }
@@ -698,7 +697,7 @@ DataModel::CustomModel *DataModel::ProjectModel::groupModel() const
  *
  * @return A pointer to the action model.
  */
-DataModel::CustomModel *DataModel::ProjectModel::actionModel() const
+DataModel::CustomModel* DataModel::ProjectModel::actionModel() const
 {
   return m_actionModel;
 }
@@ -712,7 +711,7 @@ DataModel::CustomModel *DataModel::ProjectModel::actionModel() const
  *
  * @return A pointer to the project model.
  */
-DataModel::CustomModel *DataModel::ProjectModel::projectModel() const
+DataModel::CustomModel* DataModel::ProjectModel::projectModel() const
 {
   return m_projectModel;
 }
@@ -725,14 +724,14 @@ DataModel::CustomModel *DataModel::ProjectModel::projectModel() const
  *
  * @return A pointer to the dataset model.
  */
-DataModel::CustomModel *DataModel::ProjectModel::datasetModel() const
+DataModel::CustomModel* DataModel::ProjectModel::datasetModel() const
 {
   return m_datasetModel;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Document saving/export
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Prompts the user to save unsaved changes in the project.
@@ -752,8 +751,7 @@ bool DataModel::ProjectModel::askSave()
     return true;
 
   // In API mode, don't ask - just discard changes
-  if (m_suppressMessageBoxes)
-  {
+  if (m_suppressMessageBoxes) {
     qWarning() << "[ProjectModel] Discarding unsaved changes (API mode)";
     if (jsonFilePath().isEmpty())
       newJsonFile();
@@ -762,17 +760,17 @@ bool DataModel::ProjectModel::askSave()
     return true;
   }
 
-  auto ret = Misc::Utilities::showMessageBox(
-      tr("Do you want to save your changes?"),
-      tr("You have unsaved modifications in this project!"),
-      QMessageBox::Question, APP_NAME,
-      QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+  auto ret =
+    Misc::Utilities::showMessageBox(tr("Do you want to save your changes?"),
+                                    tr("You have unsaved modifications in this project!"),
+                                    QMessageBox::Question,
+                                    APP_NAME,
+                                    QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 
   if (ret == QMessageBox::Cancel)
     return false;
 
-  if (ret == QMessageBox::Discard)
-  {
+  if (ret == QMessageBox::Discard) {
     if (jsonFilePath().isEmpty())
       newJsonFile();
     else
@@ -797,82 +795,68 @@ bool DataModel::ProjectModel::askSave()
 bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
 {
   // Validate project title
-  if (m_title.isEmpty())
-  {
-    if (m_suppressMessageBoxes)
-    {
+  if (m_title.isEmpty()) {
+    if (m_suppressMessageBoxes) {
       qWarning() << "[ProjectModel] Project title cannot be empty";
-    }
-    else
-    {
-      Misc::Utilities::showMessageBox(tr("Project error"),
-                                      tr("Project title cannot be empty!"),
-                                      QMessageBox::Warning);
+    } else {
+      Misc::Utilities::showMessageBox(
+        tr("Project error"), tr("Project title cannot be empty!"), QMessageBox::Warning);
     }
     return false;
   }
 
   // Validate group count
-  if (groupCount() <= 0)
-  {
+  if (groupCount() <= 0) {
     if (m_suppressMessageBoxes)
       qWarning() << "[ProjectModel] Project needs at least one group";
 
-    else
-    {
-      Misc::Utilities::showMessageBox(tr("Project error"),
-                                      tr("You need to add at least one group!"),
-                                      QMessageBox::Warning);
+    else {
+      Misc::Utilities::showMessageBox(
+        tr("Project error"), tr("You need to add at least one group!"), QMessageBox::Warning);
     }
 
     return false;
   }
 
   // Validate dataset count
-  if (datasetCount() <= 0)
-  {
+  if (datasetCount() <= 0) {
     if (m_suppressMessageBoxes)
       qWarning() << "[ProjectModel] Project needs at least one dataset";
 
-    else
-    {
+    else {
       Misc::Utilities::showMessageBox(
-          tr("Project error"), tr("You need to add at least one dataset!"),
-          QMessageBox::Warning);
+        tr("Project error"), tr("You need to add at least one dataset!"), QMessageBox::Warning);
     }
     return false;
   }
 
   // Save and validate javascript code
-  auto *parser = DataModel::FrameBuilder::instance().frameParser();
-  if (parser && parser->isModified())
-  {
+  auto* parser = DataModel::FrameBuilder::instance().frameParser();
+  if (parser && parser->isModified()) {
     if (!parser->save(true))
       return false;
   }
 
   // Get file save path
-  if (jsonFilePath().isEmpty() || askPath)
-  {
-    auto *dialog
-        = new QFileDialog(nullptr, tr("Save Serial Studio Project"),
-                          jsonProjectsPath() + "/" + title() + ".ssproj",
-                          tr("Serial Studio Project Files (*.ssproj)"));
+  if (jsonFilePath().isEmpty() || askPath) {
+    auto* dialog = new QFileDialog(nullptr,
+                                   tr("Save Serial Studio Project"),
+                                   jsonProjectsPath() + "/" + title() + ".ssproj",
+                                   tr("Serial Studio Project Files (*.ssproj)"));
 
     dialog->setAcceptMode(QFileDialog::AcceptSave);
     dialog->setFileMode(QFileDialog::AnyFile);
     dialog->setOption(QFileDialog::DontUseNativeDialog);
 
-    connect(dialog, &QFileDialog::fileSelected, this,
-            [this, dialog](const QString &path) {
-              dialog->deleteLater();
+    connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+      dialog->deleteLater();
 
-              if (path.isEmpty())
-                return;
+      if (path.isEmpty())
+        return;
 
-              m_filePath = path;
-              (void)finalizeProjectSave();
-            });
+      m_filePath = path;
+      (void)finalizeProjectSave();
+    });
 
     dialog->open();
     return false;
@@ -883,9 +867,9 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
   return false;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Signal/slot handling
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Configures the signal/slot connections with the rest of the modules of the
@@ -895,38 +879,37 @@ void DataModel::ProjectModel::setupExternalConnections()
 {
   // Re-load JSON map file into C++ model
   connect(&DataModel::FrameBuilder::instance(),
-          &DataModel::FrameBuilder::jsonFileMapChanged, this,
+          &DataModel::FrameBuilder::jsonFileMapChanged,
+          this,
           &DataModel::ProjectModel::onJsonLoaded);
 
   // Generate combo-boxes again when app is translated
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, [=, this] {
-            generateComboBoxModels();
-            buildTreeModel();
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged, this, [=, this] {
+    generateComboBoxModels();
+    buildTreeModel();
 
-            switch (currentView())
-            {
-              case ProjectView:
-                buildProjectModel();
-                break;
-              case GroupView:
-                buildGroupModel(m_selectedGroup);
-                break;
-              case ActionView:
-                buildActionModel(m_selectedAction);
-                break;
-              case DatasetView:
-                buildDatasetModel(m_selectedDataset);
-                break;
-              default:
-                break;
-            }
-          });
+    switch (currentView()) {
+      case ProjectView:
+        buildProjectModel();
+        break;
+      case GroupView:
+        buildGroupModel(m_selectedGroup);
+        break;
+      case ActionView:
+        buildActionModel(m_selectedAction);
+        break;
+      case DatasetView:
+        buildDatasetModel(m_selectedDataset);
+        break;
+      default:
+        break;
+    }
+  });
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Document initialization
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Initializes a new DataModel project.
@@ -949,23 +932,22 @@ void DataModel::ProjectModel::newJsonFile()
   m_actions.clear();
 
   // Reset project properties
-  m_frameEndSequence = "\\n";
-  m_checksumAlgorithm = "";
-  m_frameStartSequence = "$";
+  m_frameEndSequence      = "\\n";
+  m_checksumAlgorithm     = "";
+  m_frameStartSequence    = "$";
   m_hexadecimalDelimiters = false;
-  m_title = tr("Untitled Project");
-  m_frameDecoder = SerialStudio::PlainText;
-  m_frameDetection = SerialStudio::EndDelimiterOnly;
-  m_frameParserCode = FrameParser::defaultTemplateCode();
+  m_title                 = tr("Untitled Project");
+  m_frameDecoder          = SerialStudio::PlainText;
+  m_frameDetection        = SerialStudio::EndDelimiterOnly;
+  m_frameParserCode       = FrameParser::defaultTemplateCode();
 
   // Reset dashboard layout metadata
-  m_activeGroupId = -1;
+  m_activeGroupId   = -1;
   m_dashboardLayout = QJsonObject();
 
   // Reset frame parser to default template
-  auto *parser = DataModel::FrameBuilder::instance().frameParser();
-  if (parser)
-  {
+  auto* parser = DataModel::FrameBuilder::instance().frameParser();
+  if (parser) {
     parser->readCode();
     parser->loadDefaultTemplate(false);
   }
@@ -993,10 +975,9 @@ void DataModel::ProjectModel::newJsonFile()
 /**
  * @brief Sets the project title.
  */
-void DataModel::ProjectModel::setTitle(const QString &title)
+void DataModel::ProjectModel::setTitle(const QString& title)
 {
-  if (m_title != title)
-  {
+  if (m_title != title) {
     m_title = title;
     setModified(true);
     Q_EMIT titleChanged();
@@ -1008,8 +989,7 @@ void DataModel::ProjectModel::setTitle(const QString &title)
  */
 void DataModel::ProjectModel::clearJsonFilePath()
 {
-  if (!m_filePath.isEmpty())
-  {
+  if (!m_filePath.isEmpty()) {
     m_filePath.clear();
     Q_EMIT jsonFileChanged();
   }
@@ -1018,10 +998,9 @@ void DataModel::ProjectModel::clearJsonFilePath()
 /**
  * @brief Sets the frame start sequence for the project.
  */
-void DataModel::ProjectModel::setFrameStartSequence(const QString &sequence)
+void DataModel::ProjectModel::setFrameStartSequence(const QString& sequence)
 {
-  if (m_frameStartSequence != sequence)
-  {
+  if (m_frameStartSequence != sequence) {
     m_frameStartSequence = sequence;
     setModified(true);
   }
@@ -1030,10 +1009,9 @@ void DataModel::ProjectModel::setFrameStartSequence(const QString &sequence)
 /**
  * @brief Sets the frame end sequence for the project.
  */
-void DataModel::ProjectModel::setFrameEndSequence(const QString &sequence)
+void DataModel::ProjectModel::setFrameEndSequence(const QString& sequence)
 {
-  if (m_frameEndSequence != sequence)
-  {
+  if (m_frameEndSequence != sequence) {
     m_frameEndSequence = sequence;
     setModified(true);
   }
@@ -1042,10 +1020,9 @@ void DataModel::ProjectModel::setFrameEndSequence(const QString &sequence)
 /**
  * @brief Sets the checksum algorithm for the project.
  */
-void DataModel::ProjectModel::setChecksumAlgorithm(const QString &algorithm)
+void DataModel::ProjectModel::setChecksumAlgorithm(const QString& algorithm)
 {
-  if (m_checksumAlgorithm != algorithm)
-  {
+  if (m_checksumAlgorithm != algorithm) {
     m_checksumAlgorithm = algorithm;
     setModified(true);
   }
@@ -1054,20 +1031,18 @@ void DataModel::ProjectModel::setChecksumAlgorithm(const QString &algorithm)
 /**
  * @brief Sets the frame detection method for the project.
  */
-void DataModel::ProjectModel::setFrameDetection(
-    const SerialStudio::FrameDetection detection)
+void DataModel::ProjectModel::setFrameDetection(const SerialStudio::FrameDetection detection)
 {
-  if (m_frameDetection != detection)
-  {
+  if (m_frameDetection != detection) {
     m_frameDetection = detection;
     setModified(true);
     Q_EMIT frameDetectionChanged();
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Document loading/import
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Opens a DataModel file by prompting the user to select a file.
@@ -1079,19 +1054,17 @@ void DataModel::ProjectModel::setFrameDetection(
  */
 void DataModel::ProjectModel::openJsonFile()
 {
-  auto *dialog
-      = new QFileDialog(nullptr, tr("Select Project File"), jsonProjectsPath(),
-                        tr("Project Files (*.json *.ssproj)"));
+  auto* dialog = new QFileDialog(
+    nullptr, tr("Select Project File"), jsonProjectsPath(), tr("Project Files (*.json *.ssproj)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setOption(QFileDialog::DontUseNativeDialog);
-  connect(dialog, &QFileDialog::fileSelected, this,
-          [this, dialog](const QString &path) {
-            if (!path.isEmpty())
-              openJsonFile(path);
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    if (!path.isEmpty())
+      openJsonFile(path);
 
-            dialog->deleteLater();
-          });
+    dialog->deleteLater();
+  });
 
   dialog->open();
 }
@@ -1109,7 +1082,7 @@ void DataModel::ProjectModel::openJsonFile()
  *
  * @param path The file path of the DataModel project to load.
  */
-void DataModel::ProjectModel::openJsonFile(const QString &path)
+void DataModel::ProjectModel::openJsonFile(const QString& path)
 {
   // Validate path
   if (path.isEmpty())
@@ -1118,20 +1091,15 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
   // Open file
   QFile file(path);
   QJsonDocument document;
-  if (file.open(QFile::ReadOnly))
-  {
+  if (file.open(QFile::ReadOnly)) {
     auto result = Misc::JsonValidator::parseAndValidate(file.readAll());
-    if (!result.valid) [[unlikely]]
-    {
+    if (!result.valid) [[unlikely]] {
       if (m_suppressMessageBoxes)
-        qWarning() << "[ProjectModel] JSON validation error:"
-                   << result.errorMessage;
+        qWarning() << "[ProjectModel] JSON validation error:" << result.errorMessage;
 
-      else
-      {
-        Misc::Utilities::showMessageBox(tr("JSON validation error"),
-                                        result.errorMessage,
-                                        QMessageBox::Critical);
+      else {
+        Misc::Utilities::showMessageBox(
+          tr("JSON validation error"), result.errorMessage, QMessageBox::Critical);
       }
 
       return;
@@ -1152,17 +1120,16 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
   m_filePath = path;
 
   // Read data from JSON document
-  auto json = document.object();
-  m_title = json.value("title").toString();
-  m_frameEndSequence = json.value("frameEnd").toString();
-  m_checksumAlgorithm = json.value("checksum").toString();
-  m_frameParserCode = json.value("frameParser").toString();
-  m_frameStartSequence = json.value("frameStart").toString();
+  auto json               = document.object();
+  m_title                 = json.value("title").toString();
+  m_frameEndSequence      = json.value("frameEnd").toString();
+  m_checksumAlgorithm     = json.value("checksum").toString();
+  m_frameParserCode       = json.value("frameParser").toString();
+  m_frameStartSequence    = json.value("frameStart").toString();
   m_hexadecimalDelimiters = json.value("hexadecimalDelimiters").toBool();
-  m_frameDecoder
-      = static_cast<SerialStudio::DecoderMethod>(json.value("decoder").toInt());
-  m_frameDetection = static_cast<SerialStudio::FrameDetection>(
-      json.value("frameDetection").toInt());
+  m_frameDecoder          = static_cast<SerialStudio::DecoderMethod>(json.value("decoder").toInt());
+  m_frameDetection =
+    static_cast<SerialStudio::FrameDetection>(json.value("frameDetection").toInt());
 
   // Preserve compatibility with previous projects
   if (!json.contains("frameDetection"))
@@ -1170,8 +1137,7 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
 
   // Read groups from JSON document
   auto groups = json.value("groups").toArray();
-  for (int g = 0; g < groups.count(); ++g)
-  {
+  for (int g = 0; g < groups.count(); ++g) {
     DataModel::Group group;
     group.groupId = g;
     if (DataModel::read(group, groups.at(g).toObject()))
@@ -1180,8 +1146,7 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
 
   // Read actions from JSON document
   auto actions = json.value("actions").toArray();
-  for (int a = 0; a < actions.count(); ++a)
-  {
+  for (int a = 0; a < actions.count(); ++a) {
     DataModel::Action action;
     action.actionId = a;
     if (DataModel::read(action, actions.at(a).toObject()))
@@ -1189,7 +1154,7 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
   }
 
   // Read dashboard layout metadata (if available)
-  m_activeGroupId = json.value(Keys::ActiveGroupId).toInt(-1);
+  m_activeGroupId   = json.value(Keys::ActiveGroupId).toInt(-1);
   m_dashboardLayout = json.value(Keys::DashboardLayout).toObject();
 
   // Regenerate the tree model
@@ -1203,47 +1168,35 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
   setModified(false);
 
   // Detect legacy frame parser function
-  if (json.contains("separator"))
-  {
+  if (json.contains("separator")) {
     // Obtain separator value from project file
     const auto separator = json.value("separator").toString();
 
     // Detect if it's a simple legacy default function
     static QRegularExpression legacyRegex(
-        R"(function\s+parse\s*\(\s*frame\s*,\s*separator\s*\)\s*\{\s*return\s+frame\.split\(separator\);\s*\})");
-    if (legacyRegex.match(m_frameParserCode).hasMatch())
-    {
+      R"(function\s+parse\s*\(\s*frame\s*,\s*separator\s*\)\s*\{\s*return\s+frame\.split\(separator\);\s*\})");
+    if (legacyRegex.match(m_frameParserCode).hasMatch()) {
       // Migrate to new format
       if (separator.length() > 1)
-        m_frameParserCode
-            = QStringLiteral(
-                  "/**\n * Automatically migrated frame parser function.\n "
-                  "*/\nfunction parse(frame) {\n    return "
-                  "frame.split(\"%1\");\n}")
-                  .arg(separator);
+        m_frameParserCode =
+          QStringLiteral(
+            "/**\n * Automatically migrated frame parser function.\n */\nfunction parse(frame) {\n    return frame.split(\"%1\");\n}")
+            .arg(separator);
       else
-        m_frameParserCode
-            = QStringLiteral(
-                  "/**\n * Automatically migrated frame parser function.\n "
-                  "*/\nfunction parse(frame) {\n    return "
-                  "frame.split(\'%1\');\n}")
-                  .arg(separator);
+        m_frameParserCode =
+          QStringLiteral(
+            "/**\n * Automatically migrated frame parser function.\n */\nfunction parse(frame) {\n    return frame.split(\'%1\');\n}")
+            .arg(separator);
 
       // Notify user about the change (only in GUI mode)
-      if (!m_suppressMessageBoxes)
-      {
+      if (!m_suppressMessageBoxes) {
         Misc::Utilities::showMessageBox(
-            tr("Legacy frame parser function updated"),
-            tr("Your project used a legacy frame parser function with a "
-               "'separator' argument. It has been automatically migrated to "
-               "the new format."),
-            QMessageBox::Information);
-      }
-      else
-      {
-        qWarning()
-            << "[ProjectModel] Legacy frame parser function automatically "
-               "migrated";
+          tr("Legacy frame parser function updated"),
+          tr(
+            "Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format."),
+          QMessageBox::Information);
+      } else {
+        qWarning() << "[ProjectModel] Legacy frame parser function automatically migrated";
       }
       saveJsonFile(false);
       return;
@@ -1252,8 +1205,7 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
 
   // Let the generator use the given JSON file
   if (DataModel::FrameBuilder::instance().jsonMapFilepath() != path)
-    DataModel::FrameBuilder::instance().loadJsonMap(path,
-                                                    !m_suppressMessageBoxes);
+    DataModel::FrameBuilder::instance().loadJsonMap(path, !m_suppressMessageBoxes);
 
   // Update UI
   Q_EMIT titleChanged();
@@ -1277,35 +1229,29 @@ void DataModel::ProjectModel::openJsonFile(const QString &path)
 void DataModel::ProjectModel::enableProjectMode()
 {
   const auto opMode = DataModel::FrameBuilder::instance().operationMode();
-  if (opMode != SerialStudio::ProjectFile)
-  {
-    if (!m_suppressMessageBoxes)
-    {
+  if (opMode != SerialStudio::ProjectFile) {
+    if (!m_suppressMessageBoxes) {
       auto answ = Misc::Utilities::showMessageBox(
-          tr("Switch Serial Studio to Project Mode?"),
-          tr("This operation mode is required to load and display dashboards "
-             "from project files."),
-          QMessageBox::Question, qApp->applicationDisplayName(),
-          QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        tr("Switch Serial Studio to Project Mode?"),
+        tr("This operation mode is required to load and display dashboards from project files."),
+        QMessageBox::Question,
+        qApp->applicationDisplayName(),
+        QMessageBox::Yes | QMessageBox::No,
+        QMessageBox::Yes);
 
       if (answ == QMessageBox::Yes)
-        DataModel::FrameBuilder::instance().setOperationMode(
-            SerialStudio::ProjectFile);
-    }
-    else
-    {
+        DataModel::FrameBuilder::instance().setOperationMode(SerialStudio::ProjectFile);
+    } else {
       // In API mode, automatically switch to ProjectFile mode
-      qWarning()
-          << "[ProjectModel] Automatically switching to ProjectFile mode";
-      DataModel::FrameBuilder::instance().setOperationMode(
-          SerialStudio::ProjectFile);
+      qWarning() << "[ProjectModel] Automatically switching to ProjectFile mode";
+      DataModel::FrameBuilder::instance().setOperationMode(SerialStudio::ProjectFile);
     }
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Group/dataset operations
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Deletes the currently selected group.
@@ -1320,9 +1266,11 @@ void DataModel::ProjectModel::deleteCurrentGroup()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
-      tr("Do you want to delete group \"%1\"?").arg(m_selectedGroup.title),
-      tr("This action cannot be undone. Do you wish to proceed?"),
-      QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
+    tr("Do you want to delete group \"%1\"?").arg(m_selectedGroup.title),
+    tr("This action cannot be undone. Do you wish to proceed?"),
+    QMessageBox::Question,
+    APP_NAME,
+    QMessageBox::Yes | QMessageBox::No);
 
   // Validate the user input
   if (ret != QMessageBox::Yes)
@@ -1333,8 +1281,7 @@ void DataModel::ProjectModel::deleteCurrentGroup()
 
   // Regenerate group IDs
   int id = 0;
-  for (auto g = m_groups.begin(); g != m_groups.end(); ++g, ++id)
-  {
+  for (auto g = m_groups.begin(); g != m_groups.end(); ++g, ++id) {
     g->groupId = id;
     for (auto d = g->datasets.begin(); d != g->datasets.end(); ++d)
       d->groupId = id;
@@ -1361,9 +1308,11 @@ void DataModel::ProjectModel::deleteCurrentAction()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
-      tr("Do you want to delete action \"%1\"?").arg(m_selectedAction.title),
-      tr("This action cannot be undone. Do you wish to proceed?"),
-      QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
+    tr("Do you want to delete action \"%1\"?").arg(m_selectedAction.title),
+    tr("This action cannot be undone. Do you wish to proceed?"),
+    QMessageBox::Question,
+    APP_NAME,
+    QMessageBox::Yes | QMessageBox::No);
 
   // Validate the user input
   if (ret != QMessageBox::Yes)
@@ -1399,25 +1348,26 @@ void DataModel::ProjectModel::deleteCurrentDataset()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
-      tr("Do you want to delete dataset \"%1\"?").arg(m_selectedDataset.title),
-      tr("This action cannot be undone. Do you wish to proceed?"),
-      QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
+    tr("Do you want to delete dataset \"%1\"?").arg(m_selectedDataset.title),
+    tr("This action cannot be undone. Do you wish to proceed?"),
+    QMessageBox::Question,
+    APP_NAME,
+    QMessageBox::Yes | QMessageBox::No);
 
   // Validate the user input
   if (ret != QMessageBox::Yes)
     return;
 
   // Get group ID & dataset ID
-  const auto groupId = m_selectedDataset.groupId;
+  const auto groupId   = m_selectedDataset.groupId;
   const auto datasetId = m_selectedDataset.datasetId;
 
   // Remove dataset
-  m_groups[groupId].datasets.erase(m_groups[groupId].datasets.begin()
-                                   + datasetId);
+  m_groups[groupId].datasets.erase(m_groups[groupId].datasets.begin() + datasetId);
 
   // Reassign dataset IDs
-  int id = 0;
-  auto end = m_groups[groupId].datasets.end();
+  int id     = 0;
+  auto end   = m_groups[groupId].datasets.end();
   auto begin = m_groups[groupId].datasets.begin();
   for (auto dataset = begin; dataset != end; ++dataset, ++id)
     dataset->datasetId = id;
@@ -1427,12 +1377,9 @@ void DataModel::ProjectModel::deleteCurrentDataset()
   setModified(true);
 
   // Select parent group
-  for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
-  {
-    if (i.value().groupId == groupId)
-    {
-      m_selectionModel->setCurrentIndex(i.key()->index(),
-                                        QItemSelectionModel::ClearAndSelect);
+  for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i) {
+    if (i.value().groupId == groupId) {
+      m_selectionModel->setCurrentIndex(i.key()->index(), QItemSelectionModel::ClearAndSelect);
       break;
     }
   }
@@ -1450,13 +1397,12 @@ void DataModel::ProjectModel::duplicateCurrentGroup()
   // Initialize a new group
   DataModel::Group group;
   group.groupId = m_groups.size();
-  group.widget = m_selectedGroup.widget;
-  group.title = tr("%1 (Copy)").arg(m_selectedGroup.title);
-  for (size_t i = 0; i < m_selectedGroup.datasets.size(); ++i)
-  {
-    auto &dataset = m_selectedGroup.datasets[i];
+  group.widget  = m_selectedGroup.widget;
+  group.title   = tr("%1 (Copy)").arg(m_selectedGroup.title);
+  for (size_t i = 0; i < m_selectedGroup.datasets.size(); ++i) {
+    auto& dataset   = m_selectedGroup.datasets[i];
     dataset.groupId = group.groupId;
-    dataset.index = nextDatasetIndex() + i;
+    dataset.index   = nextDatasetIndex() + i;
     group.datasets.push_back(dataset);
   }
 
@@ -1468,12 +1414,9 @@ void DataModel::ProjectModel::duplicateCurrentGroup()
   setModified(true);
 
   // Select the group
-  for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
-  {
-    if (i.value().groupId == group.groupId)
-    {
-      m_selectionModel->setCurrentIndex(i.key()->index(),
-                                        QItemSelectionModel::ClearAndSelect);
+  for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i) {
+    if (i.value().groupId == group.groupId) {
+      m_selectionModel->setCurrentIndex(i.key()->index(), QItemSelectionModel::ClearAndSelect);
       break;
     }
   }
@@ -1490,13 +1433,13 @@ void DataModel::ProjectModel::duplicateCurrentAction()
 {
   // Initialize a new group
   DataModel::Action action;
-  action.actionId = m_actions.size();
-  action.icon = m_selectedAction.icon;
-  action.txData = m_selectedAction.txData;
-  action.timerMode = m_selectedAction.timerMode;
-  action.eolSequence = m_selectedAction.eolSequence;
-  action.timerIntervalMs = m_selectedAction.timerIntervalMs;
-  action.title = tr("%1 (Copy)").arg(m_selectedAction.title);
+  action.actionId             = m_actions.size();
+  action.icon                 = m_selectedAction.icon;
+  action.txData               = m_selectedAction.txData;
+  action.timerMode            = m_selectedAction.timerMode;
+  action.eolSequence          = m_selectedAction.eolSequence;
+  action.timerIntervalMs      = m_selectedAction.timerIntervalMs;
+  action.title                = tr("%1 (Copy)").arg(m_selectedAction.title);
   action.autoExecuteOnConnect = m_selectedAction.autoExecuteOnConnect;
 
   // Register the group
@@ -1507,12 +1450,9 @@ void DataModel::ProjectModel::duplicateCurrentAction()
   setModified(true);
 
   // Select the action
-  for (auto i = m_actionItems.constBegin(); i != m_actionItems.constEnd(); ++i)
-  {
-    if (i.value().actionId == action.actionId)
-    {
-      m_selectionModel->setCurrentIndex(i.key()->index(),
-                                        QItemSelectionModel::ClearAndSelect);
+  for (auto i = m_actionItems.constBegin(); i != m_actionItems.constEnd(); ++i) {
+    if (i.value().actionId == action.actionId) {
+      m_selectionModel->setCurrentIndex(i.key()->index(), QItemSelectionModel::ClearAndSelect);
       break;
     }
   }
@@ -1529,9 +1469,9 @@ void DataModel::ProjectModel::duplicateCurrentAction()
 void DataModel::ProjectModel::duplicateCurrentDataset()
 {
   // Initialize a new dataset
-  auto dataset = m_selectedDataset;
-  dataset.index = nextDatasetIndex();
-  dataset.title = tr("%1 (Copy)").arg(dataset.title);
+  auto dataset      = m_selectedDataset;
+  dataset.index     = nextDatasetIndex();
+  dataset.title     = tr("%1 (Copy)").arg(dataset.title);
   dataset.datasetId = m_groups[dataset.groupId].datasets.size();
 
   // Register the dataset to the group
@@ -1542,13 +1482,9 @@ void DataModel::ProjectModel::duplicateCurrentDataset()
   setModified(true);
 
   // Select dataset
-  for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i)
-  {
-    if (i.value().groupId == dataset.groupId
-        && i.value().datasetId == dataset.datasetId)
-    {
-      m_selectionModel->setCurrentIndex(i.key()->index(),
-                                        QItemSelectionModel::ClearAndSelect);
+  for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i) {
+    if (i.value().groupId == dataset.groupId && i.value().datasetId == dataset.datasetId) {
+      m_selectionModel->setCurrentIndex(i.key()->index(), QItemSelectionModel::ClearAndSelect);
       break;
     }
   }
@@ -1573,9 +1509,8 @@ void DataModel::ProjectModel::ensureValidGroup()
     addGroup(tr("Group"), SerialStudio::NoGroupWidget);
 
   // Lambda to check if a group is compatible
-  const auto isValidGroup = [](const QString &widgetId) -> bool {
-    switch (SerialStudio::groupWidgetFromId(widgetId))
-    {
+  const auto isValidGroup = [](const QString& widgetId) -> bool {
+    switch (SerialStudio::groupWidgetFromId(widgetId)) {
       case SerialStudio::MultiPlot:
       case SerialStudio::DataGrid:
       case SerialStudio::NoGroupWidget:
@@ -1587,46 +1522,37 @@ void DataModel::ProjectModel::ensureValidGroup()
 
   // Check if a valid group is currently selected
   bool hasGroupSelected = false;
-  if (m_selectionModel && m_selectionModel->currentIndex().isValid())
-  {
+  if (m_selectionModel && m_selectionModel->currentIndex().isValid()) {
     auto index = m_selectionModel->currentIndex();
-    auto *item = m_treeModel->itemFromIndex(index);
+    auto* item = m_treeModel->itemFromIndex(index);
     if (!item && index.parent().isValid())
       item = m_treeModel->itemFromIndex(index.parent());
 
-    if (item && m_groupItems.contains(item))
-    {
+    if (item && m_groupItems.contains(item)) {
       if (isValidGroup(m_groupItems.value(item).widget))
         hasGroupSelected = true;
     }
 
-    else if (item && m_datasetItems.contains(item))
-    {
+    else if (item && m_datasetItems.contains(item)) {
       auto groupId = m_selectedDataset.groupId;
-      for (const auto &group : std::as_const(m_groups))
-      {
-        if (group.groupId == groupId)
-        {
-          if (isValidGroup(group.widget))
-          {
-            m_selectedGroup = group;
-            hasGroupSelected = true;
-            break;
-          }
-        }
+      for (const auto& group : std::as_const(m_groups)) {
+        if (group.groupId != groupId)
+          continue;
+        if (!isValidGroup(group.widget))
+          continue;
+        m_selectedGroup  = group;
+        hasGroupSelected = true;
+        break;
       }
     }
   }
 
   // Select the first compatible group if none is selected
-  if (!hasGroupSelected)
-  {
-    for (const auto &group : std::as_const(m_groups))
-    {
-      if (isValidGroup(group.widget))
-      {
+  if (!hasGroupSelected) {
+    for (const auto& group : std::as_const(m_groups)) {
+      if (isValidGroup(group.widget)) {
         hasGroupSelected = true;
-        m_selectedGroup = group;
+        m_selectedGroup  = group;
         break;
       }
     }
@@ -1647,8 +1573,7 @@ void DataModel::ProjectModel::ensureValidGroup()
  * @param option The dataset option that defines the type of dataset to add
  *               (e.g., Plot, FFT, Bar, Gauge, Compass).
  */
-void DataModel::ProjectModel::addDataset(
-    const SerialStudio::DatasetOption option)
+void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
 {
   // Initialize a new dataset
   ensureValidGroup();
@@ -1658,37 +1583,36 @@ void DataModel::ProjectModel::addDataset(
 
   // Configure dataset options
   QString title;
-  switch (option)
-  {
+  switch (option) {
     case SerialStudio::DatasetGeneric:
       title = tr("New Dataset");
       break;
     case SerialStudio::DatasetPlot:
-      title = tr("New Plot");
+      title       = tr("New Plot");
       dataset.plt = true;
       break;
     case SerialStudio::DatasetFFT:
-      title = tr("New FFT Plot");
+      title       = tr("New FFT Plot");
       dataset.fft = true;
       break;
     case SerialStudio::DatasetBar:
-      title = tr("New Level Indicator");
+      title          = tr("New Level Indicator");
       dataset.widget = QStringLiteral("bar");
       break;
     case SerialStudio::DatasetGauge:
-      title = tr("New Gauge");
+      title          = tr("New Gauge");
       dataset.widget = QStringLiteral("gauge");
       break;
     case SerialStudio::DatasetCompass:
-      title = tr("New Compass");
-      dataset.wgtMin = 0;
-      dataset.wgtMax = 360;
-      dataset.alarmLow = 0;
+      title             = tr("New Compass");
+      dataset.wgtMin    = 0;
+      dataset.wgtMax    = 360;
+      dataset.alarmLow  = 0;
       dataset.alarmHigh = 0;
-      dataset.widget = QStringLiteral("compass");
+      dataset.widget    = QStringLiteral("compass");
       break;
     case SerialStudio::DatasetLED:
-      title = tr("New LED Indicator");
+      title       = tr("New LED Indicator");
       dataset.led = true;
       break;
     default:
@@ -1696,27 +1620,22 @@ void DataModel::ProjectModel::addDataset(
   }
 
   // Check if any existing dataset has the same title
-  int count = 1;
+  int count        = 1;
   QString newTitle = title;
-  for (const auto &d : std::as_const(m_groups[groupId].datasets))
-  {
-    if (d.title == newTitle)
-    {
+  for (const auto& d : std::as_const(m_groups[groupId].datasets)) {
+    if (d.title == newTitle) {
       count++;
       newTitle = QString("%1 (%2)").arg(title).arg(count);
     }
   }
 
   // If the title was modified, ensure it is unique
-  while (count > 1)
-  {
+  while (count > 1) {
     bool titleExists = false;
-    for (const auto &d : std::as_const(m_groups[groupId].datasets))
-    {
-      if (d.title == newTitle)
-      {
+    for (const auto& d : std::as_const(m_groups[groupId].datasets)) {
+      if (d.title == newTitle) {
         count++;
-        newTitle = QString("%1 (%2)").arg(title).arg(count);
+        newTitle    = QString("%1 (%2)").arg(title).arg(count);
         titleExists = true;
         break;
       }
@@ -1727,8 +1646,8 @@ void DataModel::ProjectModel::addDataset(
   }
 
   // Assign dataset title, ID & frame index
-  dataset.title = newTitle;
-  dataset.index = nextDatasetIndex();
+  dataset.title     = newTitle;
+  dataset.index     = nextDatasetIndex();
   dataset.datasetId = m_groups[groupId].datasets.size();
 
   // Add dataset to group
@@ -1739,13 +1658,9 @@ void DataModel::ProjectModel::addDataset(
   setModified(true);
 
   // Select newly added dataset item
-  for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i)
-  {
-    if (i.value().datasetId == dataset.datasetId
-        && i.value().groupId == dataset.groupId)
-    {
-      m_selectionModel->setCurrentIndex(i.key()->index(),
-                                        QItemSelectionModel::ClearAndSelect);
+  for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i) {
+    if (i.value().datasetId == dataset.datasetId && i.value().groupId == dataset.groupId) {
+      m_selectionModel->setCurrentIndex(i.key()->index(), QItemSelectionModel::ClearAndSelect);
       break;
     }
   }
@@ -1763,12 +1678,11 @@ void DataModel::ProjectModel::addDataset(
  * @param checked A boolean indicating whether the option should be enabled
  *                (true) or disabled (false).
  */
-void DataModel::ProjectModel::changeDatasetOption(
-    const SerialStudio::DatasetOption option, const bool checked)
+void DataModel::ProjectModel::changeDatasetOption(const SerialStudio::DatasetOption option,
+                                                  const bool checked)
 {
   // Modify dataset options
-  switch (option)
-  {
+  switch (option) {
     case SerialStudio::DatasetPlot:
       m_selectedDataset.plt = checked;
       break;
@@ -1792,8 +1706,8 @@ void DataModel::ProjectModel::changeDatasetOption(
   }
 
   // Replace dataset
-  const auto groupId = m_selectedDataset.groupId;
-  const auto datasetId = m_selectedDataset.datasetId;
+  const auto groupId                    = m_selectedDataset.groupId;
+  const auto datasetId                  = m_selectedDataset.datasetId;
   m_groups[groupId].datasets[datasetId] = m_selectedDataset;
 
   // Build tree model & set modification flag
@@ -1801,12 +1715,9 @@ void DataModel::ProjectModel::changeDatasetOption(
   setModified(true);
 
   // Select dataset item again to rebuild dataset model
-  for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i)
-  {
-    if (i.value().datasetId == datasetId && i.value().groupId == groupId)
-    {
-      m_selectionModel->setCurrentIndex(i.key()->index(),
-                                        QItemSelectionModel::ClearAndSelect);
+  for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i) {
+    if (i.value().datasetId == datasetId && i.value().groupId == groupId) {
+      m_selectionModel->setCurrentIndex(i.key()->index(), QItemSelectionModel::ClearAndSelect);
       break;
     }
   }
@@ -1823,27 +1734,22 @@ void DataModel::ProjectModel::changeDatasetOption(
 void DataModel::ProjectModel::addAction()
 {
   // Check if any existing group has the same title
-  int count = 1;
+  int count     = 1;
   QString title = tr("New Action");
-  for (const auto &action : std::as_const(m_actions))
-  {
-    if (action.title == title)
-    {
+  for (const auto& action : std::as_const(m_actions)) {
+    if (action.title == title) {
       count++;
       title = QString("%1 (%2)").arg(title).arg(count);
     }
   }
 
   // If the title was modified, ensure it is unique
-  while (count > 1)
-  {
+  while (count > 1) {
     bool titleExists = false;
-    for (const auto &action : std::as_const(m_actions))
-    {
-      if (action.title == title)
-      {
+    for (const auto& action : std::as_const(m_actions)) {
+      if (action.title == title) {
         count++;
-        title = QString("%1 (%2)").arg(title).arg(count);
+        title       = QString("%1 (%2)").arg(title).arg(count);
         titleExists = true;
         break;
       }
@@ -1855,7 +1761,7 @@ void DataModel::ProjectModel::addAction()
 
   // Create a new action
   DataModel::Action action;
-  action.title = title;
+  action.title    = title;
   action.actionId = m_actions.size();
 
   // Register the action
@@ -1866,12 +1772,9 @@ void DataModel::ProjectModel::addAction()
   setModified(true);
 
   // Select action
-  for (auto i = m_actionItems.constBegin(); i != m_actionItems.constEnd(); ++i)
-  {
-    if (i.value().actionId == action.actionId)
-    {
-      m_selectionModel->setCurrentIndex(i.key()->index(),
-                                        QItemSelectionModel::ClearAndSelect);
+  for (auto i = m_actionItems.constBegin(); i != m_actionItems.constEnd(); ++i) {
+    if (i.value().actionId == action.actionId) {
+      m_selectionModel->setCurrentIndex(i.key()->index(), QItemSelectionModel::ClearAndSelect);
       break;
     }
   }
@@ -1888,31 +1791,25 @@ void DataModel::ProjectModel::addAction()
  * @param title The desired title for the new group.
  * @param widget The widget type associated with the group.
  */
-void DataModel::ProjectModel::addGroup(const QString &title,
-                                       const SerialStudio::GroupWidget widget)
+void DataModel::ProjectModel::addGroup(const QString& title, const SerialStudio::GroupWidget widget)
 {
   // Check if any existing group has the same title
-  int count = 1;
+  int count        = 1;
   QString newTitle = title;
-  for (const auto &group : std::as_const(m_groups))
-  {
-    if (group.title == newTitle)
-    {
+  for (const auto& group : std::as_const(m_groups)) {
+    if (group.title == newTitle) {
       count++;
       newTitle = QString("%1 (%2)").arg(title).arg(count);
     }
   }
 
   // If the title was modified, ensure it is unique
-  while (count > 1)
-  {
+  while (count > 1) {
     bool titleExists = false;
-    for (const auto &group : std::as_const(m_groups))
-    {
-      if (group.title == newTitle)
-      {
+    for (const auto& group : std::as_const(m_groups)) {
+      if (group.title == newTitle) {
         count++;
-        newTitle = QString("%1 (%2)").arg(title).arg(count);
+        newTitle    = QString("%1 (%2)").arg(title).arg(count);
         titleExists = true;
         break;
       }
@@ -1924,7 +1821,7 @@ void DataModel::ProjectModel::addGroup(const QString &title,
 
   // Create a new group
   DataModel::Group group;
-  group.title = newTitle;
+  group.title   = newTitle;
   group.groupId = m_groups.size();
 
   // Register the group & add the widget
@@ -1936,12 +1833,9 @@ void DataModel::ProjectModel::addGroup(const QString &title,
   setModified(true);
 
   // Select group
-  for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
-  {
-    if (i.value().groupId == group.groupId)
-    {
-      m_selectionModel->setCurrentIndex(i.key()->index(),
-                                        QItemSelectionModel::ClearAndSelect);
+  for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i) {
+    if (i.value().groupId == group.groupId) {
+      m_selectionModel->setCurrentIndex(i.key()->index(), QItemSelectionModel::ClearAndSelect);
       break;
     }
   }
@@ -1964,28 +1858,27 @@ void DataModel::ProjectModel::addGroup(const QString &title,
  * @param widget The type of widget to assign to the group.
  * @return True if the widget was successfully assigned, false otherwise.
  */
-bool DataModel::ProjectModel::setGroupWidget(
-    const int group, const SerialStudio::GroupWidget widget)
+bool DataModel::ProjectModel::setGroupWidget(const int group,
+                                             const SerialStudio::GroupWidget widget)
 {
   // Get group data
-  auto &grp = m_groups[group];
+  auto& grp          = m_groups[group];
   const auto groupId = grp.groupId;
 
   // Warn user if group contains existing datasets
-  if (!grp.datasets.empty())
-  {
+  if (!grp.datasets.empty()) {
     if ((widget == SerialStudio::DataGrid || widget == SerialStudio::MultiPlot
          || widget == SerialStudio::NoGroupWidget)
-        && (grp.widget == "multiplot" || grp.widget == "datagrid"
-            || grp.widget == ""))
+        && (grp.widget == "multiplot" || grp.widget == "datagrid" || grp.widget == ""))
       grp.widget = "";
 
-    else
-    {
+    else {
       auto ret = Misc::Utilities::showMessageBox(
-          tr("Are you sure you want to change the group-level widget?"),
-          tr("Existing datasets for this group will be deleted"),
-          QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
+        tr("Are you sure you want to change the group-level widget?"),
+        tr("Existing datasets for this group will be deleted"),
+        QMessageBox::Question,
+        APP_NAME,
+        QMessageBox::Yes | QMessageBox::No);
       if (ret == QMessageBox::No)
         return false;
       else
@@ -2006,8 +1899,7 @@ bool DataModel::ProjectModel::setGroupWidget(
     grp.widget = "multiplot";
 
   // Accelerometer widget
-  else if (widget == SerialStudio::Accelerometer)
-  {
+  else if (widget == SerialStudio::Accelerometer) {
     // Set widget type
     grp.widget = "accelerometer";
 
@@ -2035,27 +1927,27 @@ bool DataModel::ProjectModel::setGroupWidget(
     z.units = "m/s²";
 
     // Set dataset properties
-    x.wgtMin = 0;
-    x.wgtMax = 0;
-    y.wgtMin = 0;
-    y.wgtMax = 0;
-    z.wgtMin = 0;
-    z.wgtMax = 0;
-    x.plt = true;
-    y.plt = true;
-    z.plt = true;
-    x.widget = "x";
-    y.widget = "y";
-    z.widget = "z";
-    x.alarmLow = 0;
-    y.alarmLow = 0;
-    z.alarmLow = 0;
+    x.wgtMin    = 0;
+    x.wgtMax    = 0;
+    y.wgtMin    = 0;
+    y.wgtMax    = 0;
+    z.wgtMin    = 0;
+    z.wgtMax    = 0;
+    x.plt       = true;
+    y.plt       = true;
+    z.plt       = true;
+    x.widget    = "x";
+    y.widget    = "y";
+    z.widget    = "z";
+    x.alarmLow  = 0;
+    y.alarmLow  = 0;
+    z.alarmLow  = 0;
     x.alarmHigh = 0;
     y.alarmHigh = 0;
     z.alarmHigh = 0;
-    x.title = tr("Accelerometer %1").arg("X");
-    y.title = tr("Accelerometer %1").arg("Y");
-    z.title = tr("Accelerometer %1").arg("Z");
+    x.title     = tr("Accelerometer %1").arg("X");
+    y.title     = tr("Accelerometer %1").arg("Y");
+    z.title     = tr("Accelerometer %1").arg("Z");
 
     // Add datasets to group
     grp.datasets.push_back(x);
@@ -2064,8 +1956,7 @@ bool DataModel::ProjectModel::setGroupWidget(
   }
 
   // Gyroscope widget
-  else if (widget == SerialStudio::Gyroscope)
-  {
+  else if (widget == SerialStudio::Gyroscope) {
     // Set widget type
     grp.widget = "gyro";
 
@@ -2093,27 +1984,27 @@ bool DataModel::ProjectModel::setGroupWidget(
     z.units = "deg/s";
 
     // Set dataset properties
-    x.wgtMin = 0;
-    x.wgtMax = 0;
-    y.wgtMin = 0;
-    y.wgtMax = 0;
-    z.wgtMin = 0;
-    z.wgtMax = 0;
-    x.plt = true;
-    y.plt = true;
-    z.plt = true;
-    x.widget = "x";
-    y.widget = "y";
-    z.widget = "z";
-    x.alarmLow = 0;
-    y.alarmLow = 0;
-    z.alarmLow = 0;
+    x.wgtMin    = 0;
+    x.wgtMax    = 0;
+    y.wgtMin    = 0;
+    y.wgtMax    = 0;
+    z.wgtMin    = 0;
+    z.wgtMax    = 0;
+    x.plt       = true;
+    y.plt       = true;
+    z.plt       = true;
+    x.widget    = "x";
+    y.widget    = "y";
+    z.widget    = "z";
+    x.alarmLow  = 0;
+    y.alarmLow  = 0;
+    z.alarmLow  = 0;
     x.alarmHigh = 0;
     y.alarmHigh = 0;
     z.alarmHigh = 0;
-    x.title = tr("Gyro %1").arg("X");
-    y.title = tr("Gyro %1").arg("Y");
-    z.title = tr("Gyro %1").arg("Z");
+    x.title     = tr("Gyro %1").arg("X");
+    y.title     = tr("Gyro %1").arg("Y");
+    z.title     = tr("Gyro %1").arg("Z");
 
     // Add datasets to group
     grp.datasets.push_back(x);
@@ -2122,8 +2013,7 @@ bool DataModel::ProjectModel::setGroupWidget(
   }
 
   // Map widget
-  else if (widget == SerialStudio::GPS)
-  {
+  else if (widget == SerialStudio::GPS) {
     // Set widget type
     grp.widget = "map";
 
@@ -2151,24 +2041,24 @@ bool DataModel::ProjectModel::setGroupWidget(
     alt.units = "m";
 
     // Set dataset properties
-    lat.widget = "lat";
-    lon.widget = "lon";
-    alt.widget = "alt";
-    lat.alarmLow = 0;
-    lon.alarmLow = 0;
-    alt.alarmLow = 0;
+    lat.widget    = "lat";
+    lon.widget    = "lon";
+    alt.widget    = "alt";
+    lat.alarmLow  = 0;
+    lon.alarmLow  = 0;
+    alt.alarmLow  = 0;
     lat.alarmHigh = 0;
     lon.alarmHigh = 0;
     alt.alarmHigh = 0;
-    lat.wgtMax = 90.0;
-    lat.wgtMin = -90.0;
-    lon.wgtMax = 180.0;
-    lon.wgtMin = -180.0;
-    alt.wgtMin = -500.0;
-    alt.wgtMax = 1000000.0;
-    lat.title = tr("Latitude");
-    lon.title = tr("Longitude");
-    alt.title = tr("Altitude");
+    lat.wgtMax    = 90.0;
+    lat.wgtMin    = -90.0;
+    lon.wgtMax    = 180.0;
+    lon.wgtMin    = -180.0;
+    alt.wgtMin    = -500.0;
+    alt.wgtMax    = 1000000.0;
+    lat.title     = tr("Latitude");
+    lon.title     = tr("Longitude");
+    alt.title     = tr("Altitude");
 
     // Add datasets to group
     grp.datasets.push_back(lat);
@@ -2177,8 +2067,7 @@ bool DataModel::ProjectModel::setGroupWidget(
   }
 
   // 3D plot widget
-  else if (widget == SerialStudio::Plot3D)
-  {
+  else if (widget == SerialStudio::Plot3D) {
     // Set widget type
     grp.widget = "plot3d";
 
@@ -2201,24 +2090,24 @@ bool DataModel::ProjectModel::setGroupWidget(
     z.index = nextDatasetIndex() + 2;
 
     // Set dataset properties
-    x.wgtMin = 0;
-    x.wgtMax = 0;
-    y.wgtMin = 0;
-    y.wgtMax = 0;
-    z.wgtMin = 0;
-    z.wgtMax = 0;
-    x.widget = "x";
-    y.widget = "y";
-    z.widget = "z";
-    x.alarmLow = 0;
-    y.alarmLow = 0;
-    z.alarmLow = 0;
+    x.wgtMin    = 0;
+    x.wgtMax    = 0;
+    y.wgtMin    = 0;
+    y.wgtMax    = 0;
+    z.wgtMin    = 0;
+    z.wgtMax    = 0;
+    x.widget    = "x";
+    y.widget    = "y";
+    z.widget    = "z";
+    x.alarmLow  = 0;
+    y.alarmLow  = 0;
+    z.alarmLow  = 0;
     x.alarmHigh = 0;
     y.alarmHigh = 0;
     z.alarmHigh = 0;
-    x.title = tr("X");
-    y.title = tr("Y");
-    z.title = tr("Z");
+    x.title     = tr("X");
+    y.title     = tr("Y");
+    z.title     = tr("Z");
 
     // Add datasets to group
     grp.datasets.push_back(x);
@@ -2233,9 +2122,9 @@ bool DataModel::ProjectModel::setGroupWidget(
   return true;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Frame parser code modification
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the frame parser code for the project.
@@ -2246,10 +2135,9 @@ bool DataModel::ProjectModel::setGroupWidget(
  *
  * @param code The new frame parser code to set.
  */
-void DataModel::ProjectModel::setFrameParserCode(const QString &code)
+void DataModel::ProjectModel::setFrameParserCode(const QString& code)
 {
-  if (code != m_frameParserCode)
-  {
+  if (code != m_frameParserCode) {
     m_frameParserCode = code;
     setModified(true);
 
@@ -2267,8 +2155,7 @@ void DataModel::ProjectModel::setFrameParserCode(const QString &code)
  */
 void DataModel::ProjectModel::setActiveGroupId(const int groupId)
 {
-  if (m_activeGroupId != groupId)
-  {
+  if (m_activeGroupId != groupId) {
     m_activeGroupId = groupId;
     Q_EMIT activeGroupIdChanged();
   }
@@ -2283,10 +2170,9 @@ void DataModel::ProjectModel::setActiveGroupId(const int groupId)
  *
  * @param layout The DataModel object containing the layout configuration.
  */
-void DataModel::ProjectModel::setDashboardLayout(const QJsonObject &layout)
+void DataModel::ProjectModel::setDashboardLayout(const QJsonObject& layout)
 {
-  if (m_dashboardLayout != layout)
-  {
+  if (m_dashboardLayout != layout) {
     m_dashboardLayout = layout;
     Q_EMIT dashboardLayoutChanged();
   }
@@ -2297,14 +2183,11 @@ void DataModel::ProjectModel::setDashboardLayout(const QJsonObject &layout)
  */
 void DataModel::ProjectModel::displayFrameParserView()
 {
-  for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it)
-  {
-    if (it.value() == kFrameParser)
-    {
+  for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it) {
+    if (it.value() == kFrameParser) {
       QTimer::singleShot(100, this, [=, this] {
         if (m_selectionModel)
-          m_selectionModel->setCurrentIndex(
-              it.key()->index(), QItemSelectionModel::ClearAndSelect);
+          m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
       });
 
       break;
@@ -2312,9 +2195,9 @@ void DataModel::ProjectModel::displayFrameParserView()
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Model generation code
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Builds the tree model that represents the hierarchical structure of
@@ -2345,16 +2228,14 @@ void DataModel::ProjectModel::buildTreeModel()
     saveExpandedStateMap(m_treeModel->invisibleRootItem(), expandedStates, "");
 
   // Delete the existing selection model
-  if (m_selectionModel)
-  {
+  if (m_selectionModel) {
     disconnect(m_selectionModel);
     m_selectionModel->deleteLater();
     m_selectionModel = nullptr;
   }
 
   // Delete the existing tree model
-  if (m_treeModel)
-  {
+  if (m_treeModel) {
     disconnect(m_treeModel);
     m_treeModel->deleteLater();
     m_treeModel = nullptr;
@@ -2364,11 +2245,11 @@ void DataModel::ProjectModel::buildTreeModel()
   m_treeModel = new CustomModel(this);
 
   // Add project information section
-  auto *root = new QStandardItem(title());
+  auto* root = new QStandardItem(title());
   root->setData(root->text(), TreeViewText);
 
   // Add "root" project items
-  auto *frameParsingCode = new QStandardItem(tr("Frame Parser Code"));
+  auto* frameParsingCode = new QStandardItem(tr("Frame Parser Code"));
 
   // Set display roles for root project items
   frameParsingCode->setData(frameParsingCode->text(), TreeViewText);
@@ -2391,10 +2272,9 @@ void DataModel::ProjectModel::buildTreeModel()
   m_rootItems.insert(frameParsingCode, kFrameParser);
 
   // Iterare through the actions and add them to the model
-  for (const auto &action : m_actions)
-  {
+  for (const auto& action : m_actions) {
     // Create action item
-    auto *actionItem = new QStandardItem(action.title);
+    auto* actionItem = new QStandardItem(action.title);
 
     // Configure action item
     const auto icon = "qrc:/rcc/icons/project-editor/treeview/action.svg";
@@ -2408,14 +2288,13 @@ void DataModel::ProjectModel::buildTreeModel()
   }
 
   // Iterate through the groups and add them to the model
-  for (const auto &group : m_groups)
-  {
+  for (const auto& group : m_groups) {
     // Get group item
-    auto *groupItem = new QStandardItem(group.title);
+    auto* groupItem = new QStandardItem(group.title);
 
     // Get which icon to use for the group
     auto widget = SerialStudio::getDashboardWidget(group);
-    auto icon = SerialStudio::dashboardWidgetIcon(widget, false);
+    auto icon   = SerialStudio::dashboardWidgetIcon(widget, false);
 
     // Set metadata for the group item
     groupItem->setData(icon, TreeViewIcon);
@@ -2423,13 +2302,12 @@ void DataModel::ProjectModel::buildTreeModel()
     groupItem->setData(group.title, TreeViewText);
 
     // Iterate through the datasets within this group and add them as children
-    for (const auto &dataset : group.datasets)
-    {
+    for (const auto& dataset : group.datasets) {
       // Create dataset item
-      auto *datasetItem = new QStandardItem(dataset.title);
+      auto* datasetItem = new QStandardItem(dataset.title);
 
       // Get which icon to use for the DATASET
-      auto widgets = SerialStudio::getDashboardWidgets(dataset);
+      auto widgets  = SerialStudio::getDashboardWidgets(dataset);
       QString dIcon = "qrc:/rcc/icons/project-editor/treeview/dataset.svg";
       if (widgets.count() > 0)
         dIcon = SerialStudio::dashboardWidgetIcon(widgets.first(), false);
@@ -2447,8 +2325,7 @@ void DataModel::ProjectModel::buildTreeModel()
     }
 
     // Restore expanded states for the group
-    restoreExpandedStateMap(groupItem, expandedStates,
-                            root->text() + "/" + group.title);
+    restoreExpandedStateMap(groupItem, expandedStates, root->text() + "/" + group.title);
 
     // Add the group item to the root
     root->appendRow(groupItem);
@@ -2458,7 +2335,7 @@ void DataModel::ProjectModel::buildTreeModel()
   }
 
   // Add invisible spacer at the bottom for comfortable scrolling
-  auto *spacer = new QStandardItem(" ");
+  auto* spacer = new QStandardItem(" ");
   spacer->setData(" ", TreeViewText);
   spacer->setData("", TreeViewIcon);
   spacer->setData(-1, TreeViewFrameIndex);
@@ -2468,7 +2345,9 @@ void DataModel::ProjectModel::buildTreeModel()
 
   // Construct selection model
   m_selectionModel = new QItemSelectionModel(m_treeModel);
-  connect(m_selectionModel, &QItemSelectionModel::currentChanged, this,
+  connect(m_selectionModel,
+          &QItemSelectionModel::currentChanged,
+          this,
           &DataModel::ProjectModel::onCurrentSelectionChanged);
 
   // Update user interface
@@ -2491,8 +2370,7 @@ void DataModel::ProjectModel::buildTreeModel()
 void DataModel::ProjectModel::buildProjectModel()
 {
   // Clear the existing model
-  if (m_projectModel)
-  {
+  if (m_projectModel) {
     disconnect(m_projectModel);
     m_projectModel->deleteLater();
   }
@@ -2505,15 +2383,14 @@ void DataModel::ProjectModel::buildProjectModel()
   //----------------------------------------------------------------------------
 
   // Add section header
-  auto *sectionHdr = new QStandardItem();
+  auto* sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("Project Information"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/project.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/project.svg", ParameterIcon);
   m_projectModel->appendRow(sectionHdr);
 
   // Add project title
-  auto *title = new QStandardItem();
+  auto* title = new QStandardItem();
   title->setEditable(true);
   title->setData(true, Active);
   title->setData(TextField, WidgetType);
@@ -2521,8 +2398,7 @@ void DataModel::ProjectModel::buildProjectModel()
   title->setData(kProjectView_Title, ParameterType);
   title->setData(tr("Project Title"), ParameterName);
   title->setData(tr("Untitled Project"), PlaceholderValue);
-  title->setData(tr("Name or description of the project"),
-                 ParameterDescription);
+  title->setData(tr("Name or description of the project"), ParameterDescription);
   m_projectModel->appendRow(title);
 
   //----------------------------------------------------------------------------
@@ -2533,18 +2409,16 @@ void DataModel::ProjectModel::buildProjectModel()
   sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("Frame Detection"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/frame-detection.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/frame-detection.svg", ParameterIcon);
   m_projectModel->appendRow(sectionHdr);
 
   // Add frame detection method
-  auto *frameDetection = new QStandardItem();
+  auto* frameDetection = new QStandardItem();
   frameDetection->setEditable(true);
   frameDetection->setData(true, Active);
   frameDetection->setData(ComboBox, WidgetType);
   frameDetection->setData(m_frameDetectionMethods, ComboBoxData);
-  frameDetection->setData(
-      m_frameDetectionMethodsValues.indexOf(m_frameDetection), EditableValue);
+  frameDetection->setData(m_frameDetectionMethodsValues.indexOf(m_frameDetection), EditableValue);
   frameDetection->setData(kProjectView_FrameDetection, ParameterType);
   frameDetection->setData(tr("Frame Detection Method"), ParameterName);
   frameDetection->setData(tr("Select how incoming data frames are identified"),
@@ -2552,37 +2426,34 @@ void DataModel::ProjectModel::buildProjectModel()
   m_projectModel->appendRow(frameDetection);
 
   // Add hexadecimal frame sequence
-  auto *sequence = new QStandardItem();
+  auto* sequence = new QStandardItem();
   sequence->setEditable(m_frameDetection != SerialStudio::NoDelimiters);
   sequence->setData(sequence->isEditable(), Active);
   sequence->setData(CheckBox, WidgetType);
   sequence->setData(m_hexadecimalDelimiters, EditableValue);
   sequence->setData(tr("Hexadecimal Delimiters"), ParameterName);
   sequence->setData(kProjectView_HexadecimalSequence, ParameterType);
-  sequence->setData(tr("Use hex values to define frame boundaries"),
-                    ParameterDescription);
+  sequence->setData(tr("Use hex values to define frame boundaries"), ParameterDescription);
   m_projectModel->appendRow(sequence);
 
   // Get frame type data
   auto delimWidget = m_hexadecimalDelimiters ? HexTextField : TextField;
 
   // Add frame start sequence
-  auto *frameStart = new QStandardItem();
+  auto* frameStart = new QStandardItem();
   frameStart->setEditable(m_frameDetection == SerialStudio::StartAndEndDelimiter
-                          || m_frameDetection
-                                 == SerialStudio::StartDelimiterOnly);
+                          || m_frameDetection == SerialStudio::StartDelimiterOnly);
   frameStart->setData(frameStart->isEditable(), Active);
   frameStart->setData(delimWidget, WidgetType);
   frameStart->setData(m_frameStartSequence, EditableValue);
   frameStart->setData(tr("Start Sequence"), ParameterName);
   frameStart->setData(QStringLiteral("/*"), PlaceholderValue);
   frameStart->setData(kProjectView_FrameStartSequence, ParameterType);
-  frameStart->setData(tr("Marks the beginning of each data frame"),
-                      ParameterDescription);
+  frameStart->setData(tr("Marks the beginning of each data frame"), ParameterDescription);
   m_projectModel->appendRow(frameStart);
 
   // Add frame end sequence
-  auto *frameEnd = new QStandardItem();
+  auto* frameEnd = new QStandardItem();
   frameEnd->setEditable(m_frameDetection == SerialStudio::StartAndEndDelimiter
                         || m_frameDetection == SerialStudio::EndDelimiterOnly);
   frameEnd->setData(frameEnd->isEditable(), Active);
@@ -2591,8 +2462,7 @@ void DataModel::ProjectModel::buildProjectModel()
   frameEnd->setData(tr("End Sequence"), ParameterName);
   frameEnd->setData(QStringLiteral("*/"), PlaceholderValue);
   frameEnd->setData(kProjectView_FrameEndSequence, ParameterType);
-  frameEnd->setData(tr("Marks the end of each data frame"),
-                    ParameterDescription);
+  frameEnd->setData(tr("Marks the end of each data frame"), ParameterDescription);
   m_projectModel->appendRow(frameEnd);
 
   //----------------------------------------------------------------------------
@@ -2603,12 +2473,11 @@ void DataModel::ProjectModel::buildProjectModel()
   sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("Payload Processing & Validation"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/data-conversion.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/data-conversion.svg", ParameterIcon);
   m_projectModel->appendRow(sectionHdr);
 
   // Add decoding
-  auto *decoding = new QStandardItem();
+  auto* decoding = new QStandardItem();
   decoding->setEditable(true);
   decoding->setData(true, Active);
   decoding->setData(ComboBox, WidgetType);
@@ -2616,12 +2485,11 @@ void DataModel::ProjectModel::buildProjectModel()
   decoding->setData(m_decoderOptions, ComboBoxData);
   decoding->setData(tr("Data Format"), ParameterName);
   decoding->setData(kProjectView_FrameDecoder, ParameterType);
-  decoding->setData(tr("Format of raw data used for decoding each frame"),
-                    ParameterDescription);
+  decoding->setData(tr("Format of raw data used for decoding each frame"), ParameterDescription);
   m_projectModel->appendRow(decoding);
 
   // Add checksum
-  auto *checksum = new QStandardItem();
+  auto* checksum    = new QStandardItem();
   auto checksumAlgo = IO::availableChecksums().indexOf(m_checksumAlgorithm);
   checksum->setEditable(true);
   checksum->setData(true, Active);
@@ -2630,8 +2498,7 @@ void DataModel::ProjectModel::buildProjectModel()
   checksum->setData(m_checksumMethods, ComboBoxData);
   checksum->setData(tr("Checksum Algorithm"), ParameterName);
   checksum->setData(kProjectView_ChecksumFunction, ParameterType);
-  checksum->setData(tr("Method used to validate frame integrity"),
-                    ParameterDescription);
+  checksum->setData(tr("Method used to validate frame integrity"), ParameterDescription);
   m_projectModel->appendRow(checksum);
 
   //----------------------------------------------------------------------------
@@ -2639,7 +2506,9 @@ void DataModel::ProjectModel::buildProjectModel()
   //----------------------------------------------------------------------------
 
   // Handle edits
-  connect(m_projectModel, &CustomModel::itemChanged, this,
+  connect(m_projectModel,
+          &CustomModel::itemChanged,
+          this,
           &DataModel::ProjectModel::onProjectItemChanged);
 
   // Update user interface
@@ -2660,25 +2529,23 @@ void DataModel::ProjectModel::buildProjectModel()
  *
  * @param group The group for which the model is being built.
  */
-void DataModel::ProjectModel::buildGroupModel(const DataModel::Group &group)
+void DataModel::ProjectModel::buildGroupModel(const DataModel::Group& group)
 {
   // Clear the existing model
-  if (m_groupModel)
-  {
+  if (m_groupModel) {
     disconnect(m_groupModel);
     m_groupModel->deleteLater();
   }
 
   // Create a new model
   m_selectedGroup = group;
-  m_groupModel = new CustomModel(this);
+  m_groupModel    = new CustomModel(this);
 
   // Add section header
-  auto *sectionHdr = new QStandardItem();
+  auto* sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("Group Information"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/group.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/group.svg", ParameterIcon);
   m_groupModel->appendRow(sectionHdr);
 
   // Add group title
@@ -2690,18 +2557,14 @@ void DataModel::ProjectModel::buildGroupModel(const DataModel::Group &group)
   title->setData(kGroupView_Title, ParameterType);
   title->setData(tr("Group Title"), ParameterName);
   title->setData(tr("Untitled Group"), PlaceholderValue);
-  title->setData(tr("Title or description of this dataset group"),
-                 ParameterDescription);
+  title->setData(tr("Title or description of this dataset group"), ParameterDescription);
   m_groupModel->appendRow(title);
 
   // Get appropiate widget index for current group
-  int index = 0;
+  int index  = 0;
   bool found = false;
-  for (auto it = m_groupWidgets.begin(); it != m_groupWidgets.end();
-       ++it, ++index)
-  {
-    if (it.key() == group.widget)
-    {
+  for (auto it = m_groupWidgets.begin(); it != m_groupWidgets.end(); ++it, ++index) {
+    if (it.key() == group.widget) {
       found = true;
       break;
     }
@@ -2720,14 +2583,13 @@ void DataModel::ProjectModel::buildGroupModel(const DataModel::Group &group)
   widget->setData(index, EditableValue);
   widget->setData(kGroupView_Widget, ParameterType);
   widget->setData(tr("Composite Widget"), ParameterName);
-  widget->setData(
-      tr("Select how this group of datasets should be visualized (optional)"),
-      ParameterDescription);
+  widget->setData(tr("Select how this group of datasets should be visualized (optional)"),
+                  ParameterDescription);
   m_groupModel->appendRow(widget);
 
   // Handle edits
-  connect(m_groupModel, &CustomModel::itemChanged, this,
-          &DataModel::ProjectModel::onGroupItemChanged);
+  connect(
+    m_groupModel, &CustomModel::itemChanged, this, &DataModel::ProjectModel::onGroupItemChanged);
 
   // Update user interface
   emit groupModelChanged();
@@ -2752,29 +2614,27 @@ void DataModel::ProjectModel::buildGroupModel(const DataModel::Group &group)
  *
  * @param action The Action object whose data will populate the editing model.
  */
-void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
+void DataModel::ProjectModel::buildActionModel(const DataModel::Action& action)
 {
   // Clear the existing model
-  if (m_actionModel)
-  {
+  if (m_actionModel) {
     disconnect(m_actionModel);
     m_actionModel->deleteLater();
   }
 
   // Create a new model
   m_selectedAction = action;
-  m_actionModel = new CustomModel(this);
+  m_actionModel    = new CustomModel(this);
 
   //----------------------------------------------------------------------------
   // General information section
   //----------------------------------------------------------------------------
 
   // Add section header
-  auto *sectionHdr = new QStandardItem();
+  auto* sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("General Information"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/action.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/action.svg", ParameterIcon);
   m_actionModel->appendRow(sectionHdr);
 
   // Add action title
@@ -2786,8 +2646,7 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
   title->setData(tr("Action Title"), ParameterName);
   title->setData(kActionView_Title, ParameterType);
   title->setData(tr("Untitled Action"), PlaceholderValue);
-  title->setData(tr("Name or description of this action"),
-                 ParameterDescription);
+  title->setData(tr("Name or description of this action"), ParameterDescription);
   m_actionModel->appendRow(title);
 
   // Add action icon
@@ -2799,8 +2658,7 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
   icon->setData(kActionView_Icon, ParameterType);
   icon->setData(tr("Action Icon"), ParameterName);
   icon->setData(tr("Default Icon"), PlaceholderValue);
-  icon->setData(tr("Icon displayed for this action in the dashboard"),
-                ParameterDescription);
+  icon->setData(tr("Icon displayed for this action in the dashboard"), ParameterDescription);
   m_actionModel->appendRow(icon);
 
   //----------------------------------------------------------------------------
@@ -2811,8 +2669,7 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
   sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("Data Payload"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/tx-data.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/tx-data.svg", ParameterIcon);
   m_actionModel->appendRow(sectionHdr);
 
   // Add binary selector checkbox
@@ -2829,8 +2686,7 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
   m_actionModel->appendRow(binaryData);
 
   // Add binary action data
-  if (action.binaryData)
-  {
+  if (action.binaryData) {
     auto data = new QStandardItem();
     data->setEditable(true);
     data->setData(true, Active);
@@ -2839,15 +2695,13 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
     data->setData(kActionView_Data, ParameterType);
     data->setData(tr("Command"), PlaceholderValue);
     data->setData(tr("Transmit Data (Hex)"), ParameterName);
-    data->setData(
-        tr("Hexadecimal payload to send when the action is triggered"),
-        ParameterDescription);
+    data->setData(tr("Hexadecimal payload to send when the action is triggered"),
+                  ParameterDescription);
     m_actionModel->appendRow(data);
   }
 
   // Add action data (non-binary)
-  else
-  {
+  else {
     auto data = new QStandardItem();
     data->setEditable(true);
     data->setData(true, Active);
@@ -2856,19 +2710,15 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
     data->setData(kActionView_Data, ParameterType);
     data->setData(tr("Command"), PlaceholderValue);
     data->setData(tr("Transmit Data"), ParameterName);
-    data->setData(tr("Text payload to send when the action is triggered"),
-                  ParameterDescription);
+    data->setData(tr("Text payload to send when the action is triggered"), ParameterDescription);
     m_actionModel->appendRow(data);
   }
 
   // Get appropiate end of line index for current action
   int eolIndex = 0;
-  bool found = false;
-  for (auto it = m_eolSequences.begin(); it != m_eolSequences.end();
-       ++it, ++eolIndex)
-  {
-    if (it.key() == action.eolSequence)
-    {
+  bool found   = false;
+  for (auto it = m_eolSequences.begin(); it != m_eolSequences.end(); ++it, ++eolIndex) {
+    if (it.key() == action.eolSequence) {
       found = true;
       break;
     }
@@ -2899,8 +2749,7 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
   sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("Execution Behavior"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/action-behavior.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/action-behavior.svg", ParameterIcon);
   m_actionModel->appendRow(sectionHdr);
 
   // Auto-execute on connect
@@ -2912,9 +2761,8 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
   autoExecute->setData(kActionView_AutoExecute, ParameterType);
   autoExecute->setData(action.autoExecuteOnConnect, EditableValue);
   autoExecute->setData(tr("Auto-Execute on Connect"), ParameterName);
-  autoExecute->setData(
-      tr("Automatically trigger this action when the device connects"),
-      ParameterDescription);
+  autoExecute->setData(tr("Automatically trigger this action when the device connects"),
+                       ParameterDescription);
   m_actionModel->appendRow(autoExecute);
 
   //----------------------------------------------------------------------------
@@ -2925,8 +2773,7 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
   sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("Timer Behavior"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/timer.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/timer.svg", ParameterIcon);
   m_actionModel->appendRow(sectionHdr);
 
   // Timer mode
@@ -2938,9 +2785,8 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
   timerMode->setData(tr("Timer Mode"), ParameterName);
   timerMode->setData(kActionView_TimerMode, ParameterType);
   timerMode->setData(static_cast<int>(action.timerMode), EditableValue);
-  timerMode->setData(
-      tr("Choose when and how this action should repeat automatically"),
-      ParameterDescription);
+  timerMode->setData(tr("Choose when and how this action should repeat automatically"),
+                     ParameterDescription);
   m_actionModel->appendRow(timerMode);
 
   // Timer interval
@@ -2952,14 +2798,13 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
   timerInterval->setData(action.timerIntervalMs, EditableValue);
   timerInterval->setData(kActionView_TimerInterval, ParameterType);
   timerInterval->setData(tr("Timer Interval (ms)"), PlaceholderValue);
-  timerInterval->setData(
-      tr("Milliseconds between each repeated trigger of this action"),
-      ParameterDescription);
+  timerInterval->setData(tr("Milliseconds between each repeated trigger of this action"),
+                         ParameterDescription);
   m_actionModel->appendRow(timerInterval);
 
   // Handle edits
-  connect(m_actionModel, &CustomModel::itemChanged, this,
-          &DataModel::ProjectModel::onActionItemChanged);
+  connect(
+    m_actionModel, &CustomModel::itemChanged, this, &DataModel::ProjectModel::onActionItemChanged);
 
   // Update user interface
   emit actionModelChanged();
@@ -2983,19 +2828,17 @@ void DataModel::ProjectModel::buildActionModel(const DataModel::Action &action)
  *
  * @param dataset The dataset for which the model is being built.
  */
-void DataModel::ProjectModel::buildDatasetModel(
-    const DataModel::Dataset &dataset)
+void DataModel::ProjectModel::buildDatasetModel(const DataModel::Dataset& dataset)
 {
   // Clear the existing model
-  if (m_datasetModel)
-  {
+  if (m_datasetModel) {
     disconnect(m_datasetModel);
     m_datasetModel->deleteLater();
   }
 
   // Create a new model
   m_selectedDataset = dataset;
-  m_datasetModel = new CustomModel(this);
+  m_datasetModel    = new CustomModel(this);
 
   // Get which optional parameters should be displayed
   const bool showWidget = currentDatasetIsEditable();
@@ -3005,11 +2848,10 @@ void DataModel::ProjectModel::buildDatasetModel(
   //----------------------------------------------------------------------------
 
   // Add section header
-  auto *sectionHdr = new QStandardItem();
+  auto* sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("General Information"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/dataset.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/dataset.svg", ParameterIcon);
   m_datasetModel->appendRow(sectionHdr);
 
   // Add dataset title
@@ -3021,9 +2863,8 @@ void DataModel::ProjectModel::buildDatasetModel(
   title->setData(kDatasetView_Title, ParameterType);
   title->setData(tr("Untitled Dataset"), PlaceholderValue);
   title->setData(tr("Dataset Title"), ParameterName);
-  title->setData(
-      tr("Name of the dataset, used for labeling and identification"),
-      ParameterDescription);
+  title->setData(tr("Name of the dataset, used for labeling and identification"),
+                 ParameterDescription);
   m_datasetModel->appendRow(title);
 
   // Add dataset index
@@ -3035,8 +2876,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   index->setData(kDatasetView_Index, ParameterType);
   index->setData(nextDatasetIndex(), PlaceholderValue);
   index->setData(tr("Frame Index"), ParameterName);
-  index->setData(tr("Frame position used for aligning datasets in time"),
-                 ParameterDescription);
+  index->setData(tr("Frame position used for aligning datasets in time"), ParameterDescription);
   m_datasetModel->appendRow(index);
 
   // Add units
@@ -3048,8 +2888,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   units->setData(kDatasetView_Units, ParameterType);
   units->setData(tr("Measurement Unit"), ParameterName);
   units->setData(tr("Volts, Amps, etc."), PlaceholderValue);
-  units->setData(tr("Unit of measurement, such as volts or amps (optional)"),
-                 ParameterDescription);
+  units->setData(tr("Unit of measurement, such as volts or amps (optional)"), ParameterDescription);
   m_datasetModel->appendRow(units);
 
   //----------------------------------------------------------------------------
@@ -3060,19 +2899,15 @@ void DataModel::ProjectModel::buildDatasetModel(
   sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("Plot Settings"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/plot.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/plot.svg", ParameterIcon);
   m_datasetModel->appendRow(sectionHdr);
 
   // Get appropiate plotting mode index for current dataset
-  int plotIndex = 0;
-  bool found = false;
+  int plotIndex          = 0;
+  bool found             = false;
   const auto currentPair = qMakePair(dataset.plt, dataset.log);
-  for (auto it = m_plotOptions.begin(); it != m_plotOptions.end();
-       ++it, ++plotIndex)
-  {
-    if (it.key() == currentPair)
-    {
+  for (auto it = m_plotOptions.begin(); it != m_plotOptions.end(); ++it, ++plotIndex) {
+    if (it.key() == currentPair) {
       found = true;
       break;
     }
@@ -3096,13 +2931,10 @@ void DataModel::ProjectModel::buildDatasetModel(
 
   // Ensure X-axis ID is reset to "Samples" when an invalid index is set
   int xAxisIdx = 0;
-  for (const auto &group : std::as_const(m_groups))
-  {
-    for (const auto &d : group.datasets)
-    {
+  for (const auto& group : std::as_const(m_groups)) {
+    for (const auto& d : group.datasets) {
       const auto idx = d.index;
-      if (idx == m_selectedDataset.xAxisId)
-      {
+      if (idx == m_selectedDataset.xAxisId) {
         xAxisIdx = idx;
         break;
       }
@@ -3121,8 +2953,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   xAxis->setData(xDataSources(), ComboBoxData);
   xAxis->setData(kDatasetView_xAxis, ParameterType);
   xAxis->setData(tr("X-Axis Source"), ParameterName);
-  xAxis->setData(tr("Choose which dataset to use for the X-Axis in plots"),
-                 ParameterDescription);
+  xAxis->setData(tr("Choose which dataset to use for the X-Axis in plots"), ParameterDescription);
   m_datasetModel->appendRow(xAxis);
 
   // Add minimum value
@@ -3134,8 +2965,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   pltMin->setData(dataset.pltMin, EditableValue);
   pltMin->setData(kDatasetView_PltMin, ParameterType);
   pltMin->setData(tr("Minimum Plot Value (optional)"), ParameterName);
-  pltMin->setData(tr("Lower bound for plot display range"),
-                  ParameterDescription);
+  pltMin->setData(tr("Lower bound for plot display range"), ParameterDescription);
   m_datasetModel->appendRow(pltMin);
 
   // Add maximum value
@@ -3147,8 +2977,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   pltMax->setData(dataset.pltMax, EditableValue);
   pltMax->setData(kDatasetView_PltMax, ParameterType);
   pltMax->setData(tr("Maximum Plot Value (optional)"), ParameterName);
-  pltMax->setData(tr("Upper bound for plot display range"),
-                  ParameterDescription);
+  pltMax->setData(tr("Upper bound for plot display range"), ParameterDescription);
   m_datasetModel->appendRow(pltMax);
 
   //----------------------------------------------------------------------------
@@ -3159,8 +2988,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("FFT Configuration"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/fft.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/fft.svg", ParameterIcon);
   m_datasetModel->appendRow(sectionHdr);
 
   // Add FFT checkbox
@@ -3172,13 +3000,12 @@ void DataModel::ProjectModel::buildDatasetModel(
   fft->setData(dataset.fft, EditableValue);
   fft->setData(kDatasetView_FFT, ParameterType);
   fft->setData(tr("Enable FFT Analysis"), ParameterName);
-  fft->setData(tr("Perform frequency-domain analysis of the dataset"),
-               ParameterDescription);
+  fft->setData(tr("Perform frequency-domain analysis of the dataset"), ParameterDescription);
   m_datasetModel->appendRow(fft);
 
   // Get FFT window size index
   const auto windowSize = QString::number(dataset.fftSamples);
-  int windowIndex = m_fftSamples.indexOf(windowSize);
+  int windowIndex       = m_fftSamples.indexOf(windowSize);
   if (windowIndex < 0)
     windowIndex = 7;
 
@@ -3191,9 +3018,8 @@ void DataModel::ProjectModel::buildDatasetModel(
   fftWindow->setData(fftWindow->isEditable(), Active);
   fftWindow->setData(kDatasetView_FFT_Samples, ParameterType);
   fftWindow->setData(tr("FFT Window Size"), ParameterName);
-  fftWindow->setData(
-      tr("Number of samples used for each FFT calculation window"),
-      ParameterDescription);
+  fftWindow->setData(tr("Number of samples used for each FFT calculation window"),
+                     ParameterDescription);
   m_datasetModel->appendRow(fftWindow);
 
   // Add FFT sampling rate
@@ -3204,10 +3030,8 @@ void DataModel::ProjectModel::buildDatasetModel(
   fftSamplingRate->setData(fftSamplingRate->isEditable(), Active);
   fftSamplingRate->setData(dataset.fftSamplingRate, EditableValue);
   fftSamplingRate->setData(kDatasetView_FFT_SamplingRate, ParameterType);
-  fftSamplingRate->setData(tr("FFT Sampling Rate (Hz, required)"),
-                           ParameterName);
-  fftSamplingRate->setData(tr("Sampling frequency used for FFT (in Hz)"),
-                           ParameterDescription);
+  fftSamplingRate->setData(tr("FFT Sampling Rate (Hz, required)"), ParameterName);
+  fftSamplingRate->setData(tr("Sampling frequency used for FFT (in Hz)"), ParameterDescription);
   m_datasetModel->appendRow(fftSamplingRate);
 
   // Add minimum value
@@ -3219,8 +3043,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   fftMin->setData(dataset.fftMin, EditableValue);
   fftMin->setData(kDatasetView_FFTMin, ParameterType);
   fftMin->setData(tr("Minimum Value (recommended)"), ParameterName);
-  fftMin->setData(tr("Lower bound for data normalization"),
-                  ParameterDescription);
+  fftMin->setData(tr("Lower bound for data normalization"), ParameterDescription);
   m_datasetModel->appendRow(fftMin);
 
   // Add maximum value
@@ -3232,8 +3055,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   fftMax->setData(dataset.fftMax, EditableValue);
   fftMax->setData(kDatasetView_FFTMax, ParameterType);
   fftMax->setData(tr("Maximum Value (recommended)"), ParameterName);
-  fftMax->setData(tr("Upper bound for data normalization"),
-                  ParameterDescription);
+  fftMax->setData(tr("Upper bound for data normalization"), ParameterDescription);
   m_datasetModel->appendRow(fftMax);
 
   //----------------------------------------------------------------------------
@@ -3244,18 +3066,14 @@ void DataModel::ProjectModel::buildDatasetModel(
   sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("Widget Settings"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/widget.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/widget.svg", ParameterIcon);
   m_datasetModel->appendRow(sectionHdr);
 
   // Get appropiate widget index for current dataset
-  found = false;
+  found           = false;
   int widgetIndex = 0;
-  for (auto it = m_datasetWidgets.begin(); it != m_datasetWidgets.end();
-       ++it, ++widgetIndex)
-  {
-    if (it.key() == dataset.widget)
-    {
+  for (auto it = m_datasetWidgets.begin(); it != m_datasetWidgets.end(); ++it, ++widgetIndex) {
+    if (it.key() == dataset.widget) {
       found = true;
       break;
     }
@@ -3286,14 +3104,12 @@ void DataModel::ProjectModel::buildDatasetModel(
   overview->setData(dataset.overviewDisplay, EditableValue);
   overview->setData(kDatasetView_Overview, ParameterType);
   overview->setData(tr("Show in Overview"), ParameterName);
-  overview->setData(
-      tr("Display this widget in the dashboard overview (if enabled)"),
-      ParameterDescription);
+  overview->setData(tr("Display this widget in the dashboard overview (if enabled)"),
+                    ParameterDescription);
   m_datasetModel->appendRow(overview);
 
   // Check if range widget options should be enabled
-  const bool rangeEnabled
-      = showWidget && (dataset.widget == "bar" || dataset.widget == "gauge");
+  const bool rangeEnabled = showWidget && (dataset.widget == "bar" || dataset.widget == "gauge");
 
   // Add minimum value
   auto wgtMin = new QStandardItem();
@@ -3304,8 +3120,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   wgtMin->setData(dataset.wgtMin, EditableValue);
   wgtMin->setData(kDatasetView_WgtMin, ParameterType);
   wgtMin->setData(tr("Minimum Display Value (required)"), ParameterName);
-  wgtMin->setData(tr("Lower bound of the gauge or bar display range"),
-                  ParameterDescription);
+  wgtMin->setData(tr("Lower bound of the gauge or bar display range"), ParameterDescription);
   m_datasetModel->appendRow(wgtMin);
 
   // Add maximum value
@@ -3317,8 +3132,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   wgtMax->setData(dataset.wgtMax, EditableValue);
   wgtMax->setData(kDatasetView_WgtMax, ParameterType);
   wgtMax->setData(tr("Maximum Display Value (required)"), ParameterName);
-  wgtMax->setData(tr("Upper bound of the gauge or bar display range"),
-                  ParameterDescription);
+  wgtMax->setData(tr("Upper bound of the gauge or bar display range"), ParameterDescription);
   m_datasetModel->appendRow(wgtMax);
 
   //----------------------------------------------------------------------------
@@ -3329,8 +3143,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("Alarm Settings"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/alarm.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/alarm.svg", ParameterIcon);
   m_datasetModel->appendRow(sectionHdr);
 
   // Add low alarm threshold
@@ -3342,9 +3155,8 @@ void DataModel::ProjectModel::buildDatasetModel(
   alarmEnabled->setData(dataset.alarmEnabled, EditableValue);
   alarmEnabled->setData(kDatasetView_AlarmEnabled, ParameterType);
   alarmEnabled->setData(tr("Enable Alarms"), ParameterName);
-  alarmEnabled->setData(
-      tr("Triggers a visual alarm when the value exceeds alarm thresholds"),
-      ParameterDescription);
+  alarmEnabled->setData(tr("Triggers a visual alarm when the value exceeds alarm thresholds"),
+                        ParameterDescription);
   m_datasetModel->appendRow(alarmEnabled);
 
   // Add low alarm threshold
@@ -3356,9 +3168,8 @@ void DataModel::ProjectModel::buildDatasetModel(
   alarmLow->setData(dataset.alarmLow, EditableValue);
   alarmLow->setData(kDatasetView_AlarmLow, ParameterType);
   alarmLow->setData(tr("Low Threshold"), ParameterName);
-  alarmLow->setData(
-      tr("Triggers a visual alarm when the value drops below this threshold"),
-      ParameterDescription);
+  alarmLow->setData(tr("Triggers a visual alarm when the value drops below this threshold"),
+                    ParameterDescription);
   m_datasetModel->appendRow(alarmLow);
 
   // Add high alarm threshold
@@ -3370,9 +3181,8 @@ void DataModel::ProjectModel::buildDatasetModel(
   alarmHigh->setData(dataset.alarmHigh, EditableValue);
   alarmHigh->setData(kDatasetView_AlarmHigh, ParameterType);
   alarmHigh->setData(tr("High Threshold"), ParameterName);
-  alarmHigh->setData(
-      tr("Triggers a visual alarm when the value exceeds this threshold"),
-      ParameterDescription);
+  alarmHigh->setData(tr("Triggers a visual alarm when the value exceeds this threshold"),
+                     ParameterDescription);
   m_datasetModel->appendRow(alarmHigh);
 
   //----------------------------------------------------------------------------
@@ -3383,8 +3193,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   sectionHdr = new QStandardItem();
   sectionHdr->setData(SectionHeader, WidgetType);
   sectionHdr->setData(tr("LED Display Settings"), PlaceholderValue);
-  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/led.svg",
-                      ParameterIcon);
+  sectionHdr->setData("qrc:/rcc/icons/project-editor/model/led.svg", ParameterIcon);
   m_datasetModel->appendRow(sectionHdr);
 
   // Add LED panel checkbox
@@ -3396,8 +3205,7 @@ void DataModel::ProjectModel::buildDatasetModel(
   led->setData(dataset.led, EditableValue);
   led->setData(kDatasetView_LED, ParameterType);
   led->setData(tr("Show in LED Panel"), ParameterName);
-  led->setData(tr("Enable visual status monitoring using an LED display"),
-               ParameterDescription);
+  led->setData(tr("Enable visual status monitoring using an LED display"), ParameterDescription);
   m_datasetModel->appendRow(led);
 
   // Add LED High value
@@ -3409,9 +3217,8 @@ void DataModel::ProjectModel::buildDatasetModel(
   ledHigh->setData(dataset.ledHigh, EditableValue);
   ledHigh->setData(kDatasetView_LED_High, ParameterType);
   ledHigh->setData(tr("LED On Threshold (required)"), ParameterName);
-  ledHigh->setData(
-      tr("LED lights up when value meets or exceeds this threshold"),
-      ParameterDescription);
+  ledHigh->setData(tr("LED lights up when value meets or exceeds this threshold"),
+                   ParameterDescription);
   m_datasetModel->appendRow(ledHigh);
 
   //----------------------------------------------------------------------------
@@ -3419,16 +3226,18 @@ void DataModel::ProjectModel::buildDatasetModel(
   //----------------------------------------------------------------------------
 
   // Handle edits
-  connect(m_datasetModel, &CustomModel::itemChanged, this,
+  connect(m_datasetModel,
+          &CustomModel::itemChanged,
+          this,
           &DataModel::ProjectModel::onDatasetItemChanged);
 
   // Update user interface
   emit datasetModelChanged();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Re-generate project model when user opens another JSON file
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Reloads the project model when a new DataModel file is loaded.
@@ -3442,9 +3251,9 @@ void DataModel::ProjectModel::onJsonLoaded()
   openJsonFile(DataModel::FrameBuilder::instance().jsonMapFilepath());
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Re-generate combobox data sources when the language is changed
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Generates data sources for combo boxes used in the project.
@@ -3490,7 +3299,7 @@ void DataModel::ProjectModel::generateComboBoxModels()
   // Initialize checksum options
   m_checksumMethods.clear();
   m_checksumMethods = IO::availableChecksums();
-  const int index = m_checksumMethods.indexOf(QLatin1String(""));
+  const int index   = m_checksumMethods.indexOf(QLatin1String(""));
   if (index >= 0)
     m_checksumMethods[index] = tr("No Checksum");
 
@@ -3537,9 +3346,9 @@ void DataModel::ProjectModel::generateComboBoxModels()
   // m_plotOptions.insert(qMakePair(true, true), tr("Logarithmic Plot"));
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Document status modification
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the modification status of the project.
@@ -3566,25 +3375,22 @@ void DataModel::ProjectModel::setModified(const bool modified)
  */
 void DataModel::ProjectModel::setCurrentView(const CurrentView currentView)
 {
-  auto *parser = DataModel::FrameBuilder::instance().frameParser();
-  if (parser && m_currentView == FrameParserView
-      && m_currentView != currentView)
-  {
-    if (parser->isModified())
-    {
+  auto* parser = DataModel::FrameBuilder::instance().frameParser();
+  if (parser && m_currentView == FrameParserView && m_currentView != currentView) {
+    if (parser->isModified()) {
       bool changeView = false;
-      const auto ret = Misc::Utilities::showMessageBox(
-          tr("Save changes to frame parser code?"),
-          tr("Select 'Save' to keep your changes, 'Discard' to lose them "
-             "permanently, or 'Cancel' to return."),
-          QMessageBox::Question, tr("Save Changes"),
-          QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+      const auto ret  = Misc::Utilities::showMessageBox(
+        tr("Save changes to frame parser code?"),
+        tr(
+          "Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return."),
+        QMessageBox::Question,
+        tr("Save Changes"),
+        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 
       if (ret == QMessageBox::Save)
         changeView = parser->save(true);
 
-      else if (ret == QMessageBox::Discard)
-      {
+      else if (ret == QMessageBox::Discard) {
         changeView = true;
         parser->readCode();
       }
@@ -3601,9 +3407,9 @@ void DataModel::ProjectModel::setCurrentView(const CurrentView currentView)
   Q_EMIT currentViewChanged();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Model modification functions
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Handles changes made to a group item in the group model.
@@ -3618,7 +3424,7 @@ void DataModel::ProjectModel::setCurrentView(const CurrentView currentView)
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed group property.
  */
-void DataModel::ProjectModel::onGroupItemChanged(QStandardItem *item)
+void DataModel::ProjectModel::onGroupItemChanged(QStandardItem* item)
 {
   // Validate item pointer
   if (!item)
@@ -3631,24 +3437,22 @@ void DataModel::ProjectModel::onGroupItemChanged(QStandardItem *item)
       widgets.append(i.key());
 
   // Obtain which item was modified & its new value
-  const auto id = static_cast<GroupItem>(item->data(ParameterType).toInt());
+  const auto id    = static_cast<GroupItem>(item->data(ParameterType).toInt());
   const auto value = item->data(EditableValue);
 
   // Obtain group ID
-  bool modified = false;
+  bool modified      = false;
   const auto groupId = m_selectedGroup.groupId;
 
   // Change group title
-  if (id == kGroupView_Title)
-  {
-    modified = m_selectedGroup.title != value.toString();
+  if (id == kGroupView_Title) {
+    modified              = m_selectedGroup.title != value.toString();
     m_selectedGroup.title = value.toString();
-    m_groups[groupId] = m_selectedGroup;
+    m_groups[groupId]     = m_selectedGroup;
   }
 
   // Change group widget
-  else if (id == kGroupView_Widget)
-  {
+  else if (id == kGroupView_Widget) {
     // Obtain widget enum from string
     SerialStudio::GroupWidget widget;
     const auto widgetStr = widgets.at(value.toInt());
@@ -3673,17 +3477,13 @@ void DataModel::ProjectModel::onGroupItemChanged(QStandardItem *item)
       m_selectedGroup.widget = widgetStr;
 
     // User canceled the operation, reload model GUI to restore previous value
-    else
-    {
+    else {
       buildTreeModel();
-      for (auto g = m_groupItems.begin(); g != m_groupItems.end(); ++g)
-      {
-        if (g.value().groupId == m_selectedGroup.groupId)
-        {
-          m_selectionModel->setCurrentIndex(
-              g.key()->index(), QItemSelectionModel::ClearAndSelect);
-          break;
-        }
+      for (auto g = m_groupItems.begin(); g != m_groupItems.end(); ++g) {
+        if (g.value().groupId != m_selectedGroup.groupId)
+          continue;
+        m_selectionModel->setCurrentIndex(g.key()->index(), QItemSelectionModel::ClearAndSelect);
+        break;
       }
 
       return;
@@ -3712,7 +3512,7 @@ void DataModel::ProjectModel::onGroupItemChanged(QStandardItem *item)
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed action property.
  */
-void DataModel::ProjectModel::onActionItemChanged(QStandardItem *item)
+void DataModel::ProjectModel::onActionItemChanged(QStandardItem* item)
 {
   // Validate item pointer
   if (!item)
@@ -3725,12 +3525,11 @@ void DataModel::ProjectModel::onActionItemChanged(QStandardItem *item)
       eolSequences.append(i.key());
 
   // Obtain which item was modified & its new value
-  const auto id = item->data(ParameterType);
+  const auto id    = item->data(ParameterType);
   const auto value = item->data(EditableValue);
 
   // Update internal members of the class accordingly
-  switch (static_cast<ActionItem>(id.toInt()))
-  {
+  switch (static_cast<ActionItem>(id.toInt())) {
     case kActionView_Title:
       m_selectedAction.title = value.toString();
       break;
@@ -3752,8 +3551,7 @@ void DataModel::ProjectModel::onActionItemChanged(QStandardItem *item)
       m_selectedAction.autoExecuteOnConnect = value.toBool();
       break;
     case kActionView_TimerMode:
-      m_selectedAction.timerMode
-          = static_cast<DataModel::TimerMode>(value.toInt());
+      m_selectedAction.timerMode = static_cast<DataModel::TimerMode>(value.toInt());
       buildActionModel(m_selectedAction);
       break;
     case kActionView_TimerInterval:
@@ -3784,19 +3582,18 @@ void DataModel::ProjectModel::onActionItemChanged(QStandardItem *item)
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed project property.
  */
-void DataModel::ProjectModel::onProjectItemChanged(QStandardItem *item)
+void DataModel::ProjectModel::onProjectItemChanged(QStandardItem* item)
 {
   // Validate item pointer
   if (!item)
     return;
 
   // Obtain which item was modified & its new value
-  const auto id = item->data(ParameterType);
+  const auto id    = item->data(ParameterType);
   const auto value = item->data(EditableValue);
 
   // Update internal members of the class accordingly
-  switch (static_cast<ProjectItem>(id.toInt()))
-  {
+  switch (static_cast<ProjectItem>(id.toInt())) {
     case kProjectView_Title:
       m_title = value.toString();
       Q_EMIT titleChanged();
@@ -3814,23 +3611,20 @@ void DataModel::ProjectModel::onProjectItemChanged(QStandardItem *item)
       m_checksumAlgorithm = IO::availableChecksums()[value.toInt()];
       break;
     case kProjectView_HexadecimalSequence: {
-      bool changed = m_hexadecimalDelimiters != value.toBool();
+      bool changed            = m_hexadecimalDelimiters != value.toBool();
       m_hexadecimalDelimiters = value.toBool();
-      if (changed && m_hexadecimalDelimiters)
-      {
-        m_frameEndSequence = SerialStudio::stringToHex(m_frameEndSequence);
+      if (changed && m_hexadecimalDelimiters) {
+        m_frameEndSequence   = SerialStudio::stringToHex(m_frameEndSequence);
         m_frameStartSequence = SerialStudio::stringToHex(m_frameStartSequence);
       }
 
-      else if (changed)
-      {
-        m_frameEndSequence = SerialStudio::hexToString(m_frameEndSequence);
+      else if (changed) {
+        m_frameEndSequence   = SerialStudio::hexToString(m_frameEndSequence);
         m_frameStartSequence = SerialStudio::hexToString(m_frameStartSequence);
       }
 
       buildProjectModel();
-    }
-    break;
+    } break;
     case kProjectView_FrameDetection:
       m_frameDetection = m_frameDetectionMethodsValues.at(value.toInt());
       Q_EMIT frameDetectionChanged();
@@ -3857,7 +3651,7 @@ void DataModel::ProjectModel::onProjectItemChanged(QStandardItem *item)
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed dataset property.
  */
-void DataModel::ProjectModel::onDatasetItemChanged(QStandardItem *item)
+void DataModel::ProjectModel::onDatasetItemChanged(QStandardItem* item)
 {
   // Validate item pointer
   if (!item)
@@ -3878,12 +3672,11 @@ void DataModel::ProjectModel::onDatasetItemChanged(QStandardItem *item)
       plotOptions.append(i.key());
 
   // Obtain which item was modified & its new value
-  const auto id = item->data(ParameterType);
+  const auto id    = item->data(ParameterType);
   const auto value = item->data(EditableValue);
 
   // Update dataset parameters accordingly
-  switch (static_cast<DatasetItem>(id.toInt()))
-  {
+  switch (static_cast<DatasetItem>(id.toInt())) {
     case kDatasetView_Title:
       m_selectedDataset.title = value.toString();
       break;
@@ -3895,11 +3688,10 @@ void DataModel::ProjectModel::onDatasetItemChanged(QStandardItem *item)
       break;
     case kDatasetView_Widget:
       m_selectedDataset.widget = widgets.at(value.toInt());
-      if (m_selectedDataset.widget == "compass")
-      {
-        m_selectedDataset.wgtMin = 0;
-        m_selectedDataset.wgtMax = 360;
-        m_selectedDataset.alarmLow = 0;
+      if (m_selectedDataset.widget == "compass") {
+        m_selectedDataset.wgtMin    = 0;
+        m_selectedDataset.wgtMax    = 360;
+        m_selectedDataset.alarmLow  = 0;
         m_selectedDataset.alarmHigh = 0;
       }
 
@@ -3966,8 +3758,8 @@ void DataModel::ProjectModel::onDatasetItemChanged(QStandardItem *item)
   }
 
   // Replace dataset in parent group
-  const auto groupId = m_selectedDataset.groupId;
-  const auto datasetId = m_selectedDataset.datasetId;
+  const auto groupId                    = m_selectedDataset.groupId;
+  const auto datasetId                  = m_selectedDataset.datasetId;
   m_groups[groupId].datasets[datasetId] = m_selectedDataset;
   buildTreeModel();
 
@@ -3979,9 +3771,9 @@ void DataModel::ProjectModel::onDatasetItemChanged(QStandardItem *item)
   Q_EMIT editableOptionsChanged();
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Change view & select group/dataset when user navigates project structure
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Handles changes in the current selection within the project
@@ -3998,8 +3790,8 @@ void DataModel::ProjectModel::onDatasetItemChanged(QStandardItem *item)
  * @param previous The previously selected index in the tree model
  *                 (unused in this function).
  */
-void DataModel::ProjectModel::onCurrentSelectionChanged(
-    const QModelIndex &current, const QModelIndex &previous)
+void DataModel::ProjectModel::onCurrentSelectionChanged(const QModelIndex& current,
+                                                        const QModelIndex& previous)
 {
   // Ignore previous item, we don't need it
   (void)previous;
@@ -4008,47 +3800,42 @@ void DataModel::ProjectModel::onCurrentSelectionChanged(
   auto item = m_treeModel->itemFromIndex(current);
 
   // Check if the user selected a group
-  if (m_groupItems.contains(item))
-  {
+  if (m_groupItems.contains(item)) {
     const auto group = m_groupItems.value(item);
     setCurrentView(GroupView);
     buildGroupModel(group);
   }
 
   // Check if the user selected a dataset
-  else if (m_datasetItems.contains(item))
-  {
+  else if (m_datasetItems.contains(item)) {
     const auto dataset = m_datasetItems.value(item);
     setCurrentView(DatasetView);
     buildDatasetModel(dataset);
   }
 
   // Check if user selected an action
-  else if (m_actionItems.contains(item))
-  {
+  else if (m_actionItems.contains(item)) {
     const auto action = m_actionItems.value(item);
     setCurrentView(ActionView);
     buildActionModel(action);
   }
 
   // Finally, check if the user selected one of the root items
-  else if (m_rootItems.contains(item))
-  {
+  else if (m_rootItems.contains(item)) {
     const auto id = m_rootItems.value(item);
     if (id == kFrameParser)
       setCurrentView(FrameParserView);
 
-    else
-    {
+    else {
       setCurrentView(ProjectView);
       buildProjectModel();
     }
   }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Function to automatically set dataset indexes
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Determines the next available dataset index.
@@ -4062,12 +3849,10 @@ void DataModel::ProjectModel::onCurrentSelectionChanged(
 int DataModel::ProjectModel::nextDatasetIndex()
 {
   int maxIndex = 1;
-  for (size_t i = 0; i < m_groups.size(); ++i)
-  {
-    const auto &group = m_groups[i];
-    for (size_t j = 0; j < group.datasets.size(); ++j)
-    {
-      const auto &dataset = group.datasets[j];
+  for (size_t i = 0; i < m_groups.size(); ++i) {
+    const auto& group = m_groups[i];
+    for (size_t j = 0; j < group.datasets.size(); ++j) {
+      const auto& dataset = group.datasets[j];
       if (dataset.index >= maxIndex)
         maxIndex = dataset.index + 1;
     }
@@ -4100,13 +3885,13 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
 
   // Serialize groups
   QJsonArray groupArray;
-  for (const auto &group : std::as_const(m_groups))
+  for (const auto& group : std::as_const(m_groups))
     groupArray.append(DataModel::serialize(group));
   json.insert("groups", groupArray);
 
   // Serialize actions
   QJsonArray actionsArray;
-  for (const auto &action : std::as_const(m_actions))
+  for (const auto& action : std::as_const(m_actions))
     actionsArray.append(DataModel::serialize(action));
   json.insert("actions", actionsArray);
 
@@ -4119,9 +3904,9 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   return json;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Project writting
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Finalizes the process of saving a Serial Studio project to disk.
@@ -4145,16 +3930,12 @@ bool DataModel::ProjectModel::finalizeProjectSave()
 {
   // Open file for writing
   QFile file(m_filePath);
-  if (!file.open(QFile::WriteOnly))
-  {
-    if (m_suppressMessageBoxes)
-    {
+  if (!file.open(QFile::WriteOnly)) {
+    if (m_suppressMessageBoxes) {
       qWarning() << "[ProjectModel] File open error:" << file.errorString();
-    }
-    else
-    {
-      Misc::Utilities::showMessageBox(tr("File open error"), file.errorString(),
-                                      QMessageBox::Critical);
+    } else {
+      Misc::Utilities::showMessageBox(
+        tr("File open error"), file.errorString(), QMessageBox::Critical);
     }
     return false;
   }
@@ -4171,14 +3952,13 @@ bool DataModel::ProjectModel::finalizeProjectSave()
 
   // Load JSON file to Serial Studio
   openJsonFile(file.fileName());
-  DataModel::FrameBuilder::instance().loadJsonMap(file.fileName(),
-                                                  !m_suppressMessageBoxes);
+  DataModel::FrameBuilder::instance().loadJsonMap(file.fileName(), !m_suppressMessageBoxes);
   return true;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Save & restore expanded items of project structure upon modification
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Recursively saves the expanded state of tree view items.
@@ -4192,9 +3972,9 @@ bool DataModel::ProjectModel::finalizeProjectSave()
  * @param map A reference to a `QHash` that stores the state of each item.
  * @param title The current item's title, used as the key in the hash.
  */
-void DataModel::ProjectModel::saveExpandedStateMap(QStandardItem *item,
-                                                   QHash<QString, bool> &map,
-                                                   const QString &title)
+void DataModel::ProjectModel::saveExpandedStateMap(QStandardItem* item,
+                                                   QHash<QString, bool>& map,
+                                                   const QString& title)
 {
   // Validate item
   if (!item)
@@ -4204,10 +3984,9 @@ void DataModel::ProjectModel::saveExpandedStateMap(QStandardItem *item,
   map[title] = item->data(TreeViewExpanded).toBool();
 
   // Recursively save the expanded state of child items
-  for (auto i = 0; i < item->rowCount(); ++i)
-  {
-    QStandardItem *child = item->child(i);
-    auto childT = title.isEmpty() ? child->text() : title + "/" + child->text();
+  for (auto i = 0; i < item->rowCount(); ++i) {
+    QStandardItem* child = item->child(i);
+    auto childT          = title.isEmpty() ? child->text() : title + "/" + child->text();
     saveExpandedStateMap(child, map, childT);
   }
 }
@@ -4225,9 +4004,9 @@ void DataModel::ProjectModel::saveExpandedStateMap(QStandardItem *item,
  * @param title The current item's title, used to look up its state in the
  * hash.
  */
-void DataModel::ProjectModel::restoreExpandedStateMap(QStandardItem *item,
-                                                      QHash<QString, bool> &map,
-                                                      const QString &title)
+void DataModel::ProjectModel::restoreExpandedStateMap(QStandardItem* item,
+                                                      QHash<QString, bool>& map,
+                                                      const QString& title)
 {
   // Validate item
   if (!item)

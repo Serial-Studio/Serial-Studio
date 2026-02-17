@@ -25,8 +25,7 @@
 
 #include "API/CommandProtocol.h"
 
-namespace API
-{
+namespace API {
 /**
  * @class CommandHandler
  * @brief Main entry point for processing incoming API commands
@@ -40,50 +39,49 @@ namespace API
  * It initializes all command handlers on first access, ensuring commands
  * are registered before any processing occurs.
  */
-class CommandHandler : public QObject
-{
+class CommandHandler : public QObject {
   Q_OBJECT
 
 private:
-  explicit CommandHandler(QObject *parent = nullptr);
-  CommandHandler(CommandHandler &&) = delete;
-  CommandHandler(const CommandHandler &) = delete;
-  CommandHandler &operator=(CommandHandler &&) = delete;
-  CommandHandler &operator=(const CommandHandler &) = delete;
+  explicit CommandHandler(QObject* parent = nullptr);
+  CommandHandler(CommandHandler&&)                 = delete;
+  CommandHandler(const CommandHandler&)            = delete;
+  CommandHandler& operator=(CommandHandler&&)      = delete;
+  CommandHandler& operator=(const CommandHandler&) = delete;
 
 public:
   /**
    * @brief Gets the singleton instance
    */
-  static CommandHandler &instance();
+  static CommandHandler& instance();
 
   /**
    * @brief Check if data appears to be an API message
    * @param data Raw bytes to check
    * @return true if data looks like a JSON API command
    */
-  [[nodiscard]] bool isApiMessage(const QByteArray &data) const;
+  [[nodiscard]] bool isApiMessage(const QByteArray& data) const;
 
   /**
    * @brief Process an incoming message and return the response
    * @param data Raw JSON message bytes
    * @return Response as JSON bytes (ready to send back to client)
    */
-  [[nodiscard]] QByteArray processMessage(const QByteArray &data);
+  [[nodiscard]] QByteArray processMessage(const QByteArray& data);
 
   /**
    * @brief Process a single command request
    * @param request The parsed command request
    * @return CommandResponse with result or error
    */
-  [[nodiscard]] CommandResponse processCommand(const CommandRequest &request);
+  [[nodiscard]] CommandResponse processCommand(const CommandRequest& request);
 
   /**
    * @brief Process a batch of commands in order
    * @param batch The parsed batch request
    * @return BatchResponse containing all individual results
    */
-  [[nodiscard]] BatchResponse processBatch(const BatchRequest &batch);
+  [[nodiscard]] BatchResponse processBatch(const BatchRequest& batch);
 
   /**
    * @brief Get a list of all available commands
@@ -104,4 +102,4 @@ private:
   bool m_initialized;
 };
 
-} // namespace API
+}  // namespace API

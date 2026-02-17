@@ -19,23 +19,21 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include "UI/Widgets/Compass.h"
+
 #include "DSP.h"
 #include "UI/Dashboard.h"
-#include "UI/Widgets/Compass.h"
 
 /**
  * @brief Constructs a Compass widget.
  * @param index The index of the compass in the Dashboard.
  * @param parent The parent QQuickItem (optional).
  */
-Widgets::Compass::Compass(const int index, QQuickItem *parent)
-  : QQuickItem(parent)
-  , m_index(index)
-  , m_value(0)
+Widgets::Compass::Compass(const int index, QQuickItem* parent)
+  : QQuickItem(parent), m_index(index), m_value(0)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index))
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-            &Compass::updateData);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Compass::updateData);
 }
 
 /**
@@ -67,15 +65,13 @@ void Widgets::Compass::updateData()
   if (!isEnabled())
     return;
 
-  if (VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index))
-  {
-    const auto &dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
-    const auto value = dataset.numericValue;
-    if (DSP::notEqual(value, m_value))
-    {
+  if (VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index)) {
+    const auto& dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
+    const auto value    = dataset.numericValue;
+    if (DSP::notEqual(value, m_value)) {
       // Update values
       m_value = qMin(360.0, qMax(0.0, value));
-      m_text = FMT_VAL(m_value, dataset);
+      m_text  = FMT_VAL(m_value, dataset);
 
       // Ensure that angle always has 3 characters to avoid jiggling
       const int deg = qCeil(m_value);
@@ -86,8 +82,7 @@ void Widgets::Compass::updateData()
 
       // Determine the direction based on the angle value
       QString direction;
-      if ((m_value >= 0 && m_value < 22.5)
-          || (m_value >= 337.5 && m_value <= 360))
+      if ((m_value >= 0 && m_value < 22.5) || (m_value >= 337.5 && m_value <= 360))
         direction = tr("N") + " ";
       else if (m_value >= 22.5 && m_value < 67.5)
         direction = tr("NE");

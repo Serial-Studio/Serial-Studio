@@ -23,10 +23,8 @@
 
 #include "API/CommandProtocol.h"
 
-namespace API
-{
-namespace Handlers
-{
+namespace API {
+namespace Handlers {
 /**
  * @class IOManagerHandler
  * @brief Registers API commands for IO::Manager operations
@@ -40,8 +38,7 @@ namespace Handlers
  * - io.manager.getStatus - Query connection status
  * - io.manager.getAvailableBuses - Query available bus types
  */
-class IOManagerHandler
-{
+class IOManagerHandler {
 public:
   /**
    * @brief Register all IO::Manager commands with the CommandRegistry
@@ -50,20 +47,14 @@ public:
 
 private:
   // Command handlers
-  static CommandResponse connect(const QString &id, const QJsonObject &params);
-  static CommandResponse disconnect(const QString &id,
-                                    const QJsonObject &params);
-  static CommandResponse setPaused(const QString &id,
-                                   const QJsonObject &params);
-  static CommandResponse setBusType(const QString &id,
-                                    const QJsonObject &params);
-  static CommandResponse writeData(const QString &id,
-                                   const QJsonObject &params);
-  static CommandResponse getStatus(const QString &id,
-                                   const QJsonObject &params);
-  static CommandResponse getAvailableBuses(const QString &id,
-                                           const QJsonObject &params);
+  static CommandResponse connect(const QString& id, const QJsonObject& params);
+  static CommandResponse disconnect(const QString& id, const QJsonObject& params);
+  static CommandResponse setPaused(const QString& id, const QJsonObject& params);
+  static CommandResponse setBusType(const QString& id, const QJsonObject& params);
+  static CommandResponse writeData(const QString& id, const QJsonObject& params);
+  static CommandResponse getStatus(const QString& id, const QJsonObject& params);
+  static CommandResponse getAvailableBuses(const QString& id, const QJsonObject& params);
 };
 
-} // namespace Handlers
-} // namespace API
+}  // namespace Handlers
+}  // namespace API

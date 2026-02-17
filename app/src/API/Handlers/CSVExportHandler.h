@@ -23,10 +23,8 @@
 
 #include "API/CommandProtocol.h"
 
-namespace API
-{
-namespace Handlers
-{
+namespace API {
+namespace Handlers {
 /**
  * @class CSVExportHandler
  * @brief Registers API commands for CSV::Export operations
@@ -36,8 +34,7 @@ namespace Handlers
  * - csv.export.close - Close current CSV file
  * - csv.export.getStatus - Query export status
  */
-class CSVExportHandler
-{
+class CSVExportHandler {
 public:
   /**
    * @brief Register all CSV Export commands with the CommandRegistry
@@ -46,14 +43,12 @@ public:
 
 private:
   // Mutation commands
-  static CommandResponse setEnabled(const QString &id,
-                                    const QJsonObject &params);
-  static CommandResponse close(const QString &id, const QJsonObject &params);
+  static CommandResponse setEnabled(const QString& id, const QJsonObject& params);
+  static CommandResponse close(const QString& id, const QJsonObject& params);
 
   // Query commands
-  static CommandResponse getStatus(const QString &id,
-                                   const QJsonObject &params);
+  static CommandResponse getStatus(const QString& id, const QJsonObject& params);
 };
 
-} // namespace Handlers
-} // namespace API
+}  // namespace Handlers
+}  // namespace API

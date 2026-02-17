@@ -24,8 +24,7 @@
 #include <QObject>
 #include <QSettings>
 
-namespace Misc
-{
+namespace Misc {
 /**
  * @class Misc::WorkspaceManager
  * @brief Manages the application's workspace directory for user data and
@@ -71,8 +70,7 @@ namespace Misc
  * @note The workspace directory and requested subdirectories are automatically
  *       created if they don't exist.
  */
-class WorkspaceManager : public QObject
-{
+class WorkspaceManager : public QObject {
   Q_OBJECT
   Q_PROPERTY(QString path READ path NOTIFY pathChanged)
   Q_PROPERTY(QString shortPath READ shortPath NOTIFY pathChanged)
@@ -82,18 +80,18 @@ signals:
 
 private:
   explicit WorkspaceManager();
-  WorkspaceManager(WorkspaceManager &&) = delete;
-  WorkspaceManager(const WorkspaceManager &) = delete;
-  WorkspaceManager &operator=(WorkspaceManager &&) = delete;
-  WorkspaceManager &operator=(const WorkspaceManager &) = delete;
+  WorkspaceManager(WorkspaceManager&&)                 = delete;
+  WorkspaceManager(const WorkspaceManager&)            = delete;
+  WorkspaceManager& operator=(WorkspaceManager&&)      = delete;
+  WorkspaceManager& operator=(const WorkspaceManager&) = delete;
 
 public:
-  static WorkspaceManager &instance();
+  static WorkspaceManager& instance();
 
   [[nodiscard]] QString path() const;
   [[nodiscard]] QString shortPath() const;
 
-  [[nodiscard]] QString path(const QString &subdirectory) const;
+  [[nodiscard]] QString path(const QString& subdirectory) const;
 
 public slots:
   void reset();
@@ -103,4 +101,4 @@ private:
   QString m_path;
   QSettings m_settings;
 };
-} // namespace Misc
+}  // namespace Misc

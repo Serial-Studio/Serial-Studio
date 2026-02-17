@@ -23,8 +23,7 @@
 
 #include <QQuickItem>
 
-namespace Widgets
-{
+namespace Widgets {
 /**
  * @class Widgets::Accelerometer
  * @brief Visual widget for displaying 3D acceleration vector data.
@@ -42,8 +41,7 @@ namespace Widgets
  * - **Configurable Range**: User-adjustable max G for polar plot
  * - **Input Unit Toggle**: Supports both m/s^2 and G-force input
  */
-class Accelerometer : public QQuickItem
-{
+class Accelerometer : public QQuickItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(double accelX
@@ -88,7 +86,7 @@ signals:
   void configChanged();
 
 public:
-  explicit Accelerometer(const int index = -1, QQuickItem *parent = nullptr);
+  explicit Accelerometer(const int index = -1, QQuickItem* parent = nullptr);
 
   [[nodiscard]] double accelX() const;
   [[nodiscard]] double accelY() const;
@@ -125,4 +123,4 @@ private:
   bool m_filterInitialized;
 };
 
-} // namespace Widgets
+}  // namespace Widgets

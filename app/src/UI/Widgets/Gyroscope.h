@@ -21,11 +21,10 @@
 
 #pragma once
 
-#include <QQuickItem>
 #include <QElapsedTimer>
+#include <QQuickItem>
 
-namespace Widgets
-{
+namespace Widgets {
 /**
  * @class Widgets::Gyroscope
  * @brief Attitude indicator widget for visualizing 3-axis gyroscope data.
@@ -51,8 +50,7 @@ namespace Widgets
  * @note The widget uses QElapsedTimer for precise time-based integration when
  *       in integration mode.
  */
-class Gyroscope : public QQuickItem
-{
+class Gyroscope : public QQuickItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(double yaw
@@ -75,7 +73,7 @@ signals:
   void integrateValuesChanged();
 
 public:
-  explicit Gyroscope(const int index = -1, QQuickItem *parent = nullptr);
+  explicit Gyroscope(const int index = -1, QQuickItem* parent = nullptr);
 
   [[nodiscard]] double yaw() const;
   [[nodiscard]] double roll() const;
@@ -102,4 +100,4 @@ private:
   bool m_displayFilterInitialized;
 };
 
-} // namespace Widgets
+}  // namespace Widgets

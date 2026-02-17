@@ -13,12 +13,11 @@
 // guarantees). Uses the AE_* prefix for macros (historical reasons), and the
 // "moodycamel" namespace for symbols.
 
-#include <cerrno>
 #include <cassert>
-#include <type_traits>
 #include <cerrno>
 #include <cstdint>
 #include <ctime>
+#include <type_traits>
 
 // Platform detection
 #if defined(__INTEL_COMPILER)
@@ -31,8 +30,7 @@
 
 #if defined(_M_IA64) || defined(__ia64__)
 #  define AE_ARCH_IA64
-#elif defined(_WIN64) || defined(__amd64__) || defined(_M_X64)                 \
-    || defined(__x86_64__)
+#elif defined(_WIN64) || defined(__amd64__) || defined(_M_X64) || defined(__x86_64__)
 #  define AE_ARCH_X64
 #elif defined(_M_IX86) || defined(__i386__)
 #  define AE_ARCH_X86
@@ -58,20 +56,18 @@
 #endif
 
 #ifdef AE_TSAN_IS_ENABLED
-#  if __cplusplus >= 201703L // inline variables require C++17
-namespace moodycamel
-{
+#  if __cplusplus >= 201703L  // inline variables require C++17
+namespace moodycamel {
 inline int ae_tsan_global;
 }
-#    define AE_TSAN_ANNOTATE_RELEASE()                                         \
-      AnnotateHappensBefore(__FILE__, __LINE__,                                \
-                            (void *)(&::moodycamel::ae_tsan_global))
-#    define AE_TSAN_ANNOTATE_ACQUIRE()                                         \
-      AnnotateHappensAfter(__FILE__, __LINE__,                                 \
-                           (void *)(&::moodycamel::ae_tsan_global))
-extern "C" void AnnotateHappensBefore(const char *, int, void *);
-extern "C" void AnnotateHappensAfter(const char *, int, void *);
-#  else // when we can't work with tsan, attempt to disable its warnings
+
+#    define AE_TSAN_ANNOTATE_RELEASE() \
+      AnnotateHappensBefore(__FILE__, __LINE__, (void*)(&::moodycamel::ae_tsan_global))
+#    define AE_TSAN_ANNOTATE_ACQUIRE() \
+      AnnotateHappensAfter(__FILE__, __LINE__, (void*)(&::moodycamel::ae_tsan_global))
+extern "C" void AnnotateHappensBefore(const char*, int, void*);
+extern "C" void AnnotateHappensAfter(const char*, int, void*);
+#  else  // when we can't work with tsan, attempt to disable its warnings
 #    define AE_NO_TSAN __attribute__((no_sanitize("thread")))
 #  endif
 #endif
@@ -107,11 +103,9 @@ extern "C" void AnnotateHappensAfter(const char *, int, void *);
 
 // Portable atomic fences implemented below:
 
-namespace moodycamel
-{
+namespace moodycamel {
 
-enum memory_order
-{
+enum memory_order {
   memory_order_relaxed,
   memory_order_acquire,
   memory_order_release,
@@ -123,10 +117,10 @@ enum memory_order
   memory_order_sync = memory_order_seq_cst
 };
 
-} // end namespace moodycamel
+}  // end namespace moodycamel
 
-#if (defined(AE_VCPP) && (_MSC_VER < 1700 || defined(__cplusplus_cli)))        \
-    || (defined(AE_ICC) && __INTEL_COMPILER < 1600)
+#if (defined(AE_VCPP) && (_MSC_VER < 1700 || defined(__cplusplus_cli))) \
+  || (defined(AE_ICC) && __INTEL_COMPILER < 1600)
 // VS2010 and ICC13 don't support std::atomic_*_fence, implement our own fences
 
 #  include <intrin.h>
@@ -145,21 +139,19 @@ enum memory_order
 
 #  ifdef AE_VCPP
 #    pragma warning(push)
-#    pragma warning(disable : 4365) // Disable erroneous 'conversion from long
-                                    // to unsigned int, signed/unsigned
-                                    // mismatch' error when using `assert`
+#    pragma warning(disable : 4365)  // Disable erroneous 'conversion from long
+                                     // to unsigned int, signed/unsigned
+                                     // mismatch' error when using `assert`
 #    ifdef __cplusplus_cli
 #      pragma managed(push, off)
 #    endif
 #  endif
 
-namespace moodycamel
-{
+namespace moodycamel {
 
 AE_FORCEINLINE void compiler_fence(memory_order order) AE_NO_TSAN
 {
-  switch (order)
-  {
+  switch (order) {
     case memory_order_relaxed:
       break;
     case memory_order_acquire:
@@ -185,8 +177,7 @@ AE_FORCEINLINE void compiler_fence(memory_order order) AE_NO_TSAN
 #  if defined(AE_ARCH_X86) || defined(AE_ARCH_X64)
 AE_FORCEINLINE void fence(memory_order order) AE_NO_TSAN
 {
-  switch (order)
-  {
+  switch (order) {
     case memory_order_relaxed:
       break;
     case memory_order_acquire:
@@ -212,8 +203,7 @@ AE_FORCEINLINE void fence(memory_order order) AE_NO_TSAN
 {
   // Non-specialized arch, use heavier memory barriers everywhere just in case
   // :-(
-  switch (order)
-  {
+  switch (order) {
     case memory_order_relaxed:
       break;
     case memory_order_acquire:
@@ -241,18 +231,16 @@ AE_FORCEINLINE void fence(memory_order order) AE_NO_TSAN
   }
 }
 #  endif
-} // end namespace moodycamel
+}  // end namespace moodycamel
 #else
 // Use standard library of atomics
 #  include <atomic>
 
-namespace moodycamel
-{
+namespace moodycamel {
 
 AE_FORCEINLINE void compiler_fence(memory_order order) AE_NO_TSAN
 {
-  switch (order)
-  {
+  switch (order) {
     case memory_order_relaxed:
       break;
     case memory_order_acquire:
@@ -274,8 +262,7 @@ AE_FORCEINLINE void compiler_fence(memory_order order) AE_NO_TSAN
 
 AE_FORCEINLINE void fence(memory_order order) AE_NO_TSAN
 {
-  switch (order)
-  {
+  switch (order) {
     case memory_order_relaxed:
       break;
     case memory_order_acquire:
@@ -301,7 +288,7 @@ AE_FORCEINLINE void fence(memory_order order) AE_NO_TSAN
   }
 }
 
-} // end namespace moodycamel
+}  // end namespace moodycamel
 
 #endif
 
@@ -319,42 +306,27 @@ AE_FORCEINLINE void fence(memory_order order) AE_NO_TSAN
 // are provided. The guarantee of atomicity is only made for types that already
 // have atomic load and store guarantees at the hardware level -- on most
 // platforms this generally means aligned pointers and integers (only).
-namespace moodycamel
-{
+namespace moodycamel {
 template<typename T>
-class weak_atomic
-{
+class weak_atomic {
 public:
-  AE_NO_TSAN weak_atomic()
-    : value()
-  {
-  }
+  AE_NO_TSAN weak_atomic() : value() {}
 #ifdef AE_VCPP
 #  pragma warning(push)
-#  pragma warning(disable : 4100) // Get rid of (erroneous) 'unreferenced formal
-                                  // parameter' warning
+#  pragma warning(disable : 4100)  // Get rid of (erroneous) 'unreferenced formal
+                                   // parameter' warning
 #endif
   template<typename U>
-  AE_NO_TSAN weak_atomic(U &&x)
-    : value(std::forward<U>(x))
-  {
-  }
+  AE_NO_TSAN weak_atomic(U&& x) : value(std::forward<U>(x))
+  {}
 #ifdef __cplusplus_cli
   // Work around bug with universal reference/nullptr combination that only
   // appears when /clr is on
-  AE_NO_TSAN weak_atomic(nullptr_t)
-    : value(nullptr)
-  {
-  }
+  AE_NO_TSAN weak_atomic(nullptr_t) : value(nullptr) {}
 #endif
-  AE_NO_TSAN weak_atomic(weak_atomic const &other)
-    : value(other.load())
-  {
-  }
-  AE_NO_TSAN weak_atomic(weak_atomic &&other)
-    : value(std::move(other.load()))
-  {
-  }
+  AE_NO_TSAN weak_atomic(weak_atomic const& other) : value(other.load()) {}
+
+  AE_NO_TSAN weak_atomic(weak_atomic&& other) : value(std::move(other.load())) {}
 #ifdef AE_VCPP
 #  pragma warning(pop)
 #endif
@@ -363,13 +335,13 @@ public:
 
 #ifndef AE_USE_STD_ATOMIC_FOR_WEAK_ATOMIC
   template<typename U>
-  AE_FORCEINLINE weak_atomic const &operator=(U &&x) AE_NO_TSAN
+  AE_FORCEINLINE weak_atomic const& operator=(U&& x) AE_NO_TSAN
   {
     value = std::forward<U>(x);
     return *this;
   }
-  AE_FORCEINLINE weak_atomic const &
-  operator=(weak_atomic const &other) AE_NO_TSAN
+
+  AE_FORCEINLINE weak_atomic const& operator=(weak_atomic const& other) AE_NO_TSAN
   {
     value = other.value;
     return *this;
@@ -381,11 +353,10 @@ public:
   {
 #  if defined(AE_ARCH_X64) || defined(AE_ARCH_X86)
     if (sizeof(T) == 4)
-      return _InterlockedExchangeAdd((long volatile *)&value, (long)increment);
+      return _InterlockedExchangeAdd((long volatile*)&value, (long)increment);
 #    if defined(_M_AMD64)
     else if (sizeof(T) == 8)
-      return _InterlockedExchangeAdd64((long long volatile *)&value,
-                                       (long long)increment);
+      return _InterlockedExchangeAdd64((long long volatile*)&value, (long long)increment);
 #    endif
 #  else
 #    error Unsupported platform
@@ -398,11 +369,10 @@ public:
   {
 #  if defined(AE_ARCH_X64) || defined(AE_ARCH_X86)
     if (sizeof(T) == 4)
-      return _InterlockedExchangeAdd((long volatile *)&value, (long)increment);
+      return _InterlockedExchangeAdd((long volatile*)&value, (long)increment);
 #    if defined(_M_AMD64)
     else if (sizeof(T) == 8)
-      return _InterlockedExchangeAdd64((long long volatile *)&value,
-                                       (long long)increment);
+      return _InterlockedExchangeAdd64((long long volatile*)&value, (long long)increment);
 #    endif
 #  else
 #    error Unsupported platform
@@ -412,24 +382,19 @@ public:
   }
 #else
   template<typename U>
-  AE_FORCEINLINE weak_atomic const &operator=(U &&x) AE_NO_TSAN
+  AE_FORCEINLINE weak_atomic const& operator=(U&& x) AE_NO_TSAN
   {
     value.store(std::forward<U>(x), std::memory_order_relaxed);
     return *this;
   }
 
-  AE_FORCEINLINE weak_atomic const &
-  operator=(weak_atomic const &other) AE_NO_TSAN
+  AE_FORCEINLINE weak_atomic const& operator=(weak_atomic const& other) AE_NO_TSAN
   {
-    value.store(other.value.load(std::memory_order_relaxed),
-                std::memory_order_relaxed);
+    value.store(other.value.load(std::memory_order_relaxed), std::memory_order_relaxed);
     return *this;
   }
 
-  AE_FORCEINLINE T load() const AE_NO_TSAN
-  {
-    return value.load(std::memory_order_relaxed);
-  }
+  AE_FORCEINLINE T load() const AE_NO_TSAN { return value.load(std::memory_order_relaxed); }
 
   AE_FORCEINLINE T fetch_add_acquire(T increment) AE_NO_TSAN
   {
@@ -453,7 +418,7 @@ private:
 #endif
 };
 
-} // end namespace moodycamel
+}  // end namespace moodycamel
 
 // Portable single-producer, single-consumer semaphore below:
 
@@ -465,15 +430,16 @@ private:
 // namespace with thousands of generic names or adding a .cpp for nothing.
 extern "C" {
 struct _SECURITY_ATTRIBUTES;
-__declspec(dllimport) void *__stdcall CreateSemaphoreW(
-    _SECURITY_ATTRIBUTES *lpSemaphoreAttributes, long lInitialCount,
-    long lMaximumCount, const wchar_t *lpName);
-__declspec(dllimport) int __stdcall CloseHandle(void *hObject);
-__declspec(dllimport) unsigned long __stdcall WaitForSingleObject(
-    void *hHandle, unsigned long dwMilliseconds);
-__declspec(dllimport) int __stdcall ReleaseSemaphore(void *hSemaphore,
+__declspec(dllimport) void* __stdcall CreateSemaphoreW(_SECURITY_ATTRIBUTES* lpSemaphoreAttributes,
+                                                       long lInitialCount,
+                                                       long lMaximumCount,
+                                                       const wchar_t* lpName);
+__declspec(dllimport) int __stdcall CloseHandle(void* hObject);
+__declspec(dllimport) unsigned long __stdcall WaitForSingleObject(void* hHandle,
+                                                                  unsigned long dwMilliseconds);
+__declspec(dllimport) int __stdcall ReleaseSemaphore(void* hSemaphore,
                                                      long lReleaseCount,
-                                                     long *lpPreviousCount);
+                                                     long* lpPreviousCount);
 }
 #elif defined(__MACH__)
 #  include <mach/mach.h>
@@ -485,8 +451,7 @@ __declspec(dllimport) int __stdcall ReleaseSemaphore(void *hSemaphore,
 #  include <task.h>
 #endif
 
-namespace moodycamel
-{
+namespace moodycamel {
 // Code in the spsc_sema namespace below is an adaptation of Jeff Preshing's
 // portable + lightweight semaphore implementations, originally from
 // https://github.com/preshing/cpp11-on-multicore/blob/master/common/sema.h
@@ -508,24 +473,21 @@ namespace moodycamel
 // 2. Altered source versions must be plainly marked as such, and must not be
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
-namespace spsc_sema
-{
+namespace spsc_sema {
 #if defined(_WIN32)
-class Semaphore
-{
+class Semaphore {
 private:
-  void *m_hSema;
+  void* m_hSema;
 
-  Semaphore(const Semaphore &other);
-  Semaphore &operator=(const Semaphore &other);
+  Semaphore(const Semaphore& other);
+  Semaphore& operator=(const Semaphore& other);
 
 public:
-  AE_NO_TSAN Semaphore(int initialCount = 0)
-    : m_hSema()
+  AE_NO_TSAN Semaphore(int initialCount = 0) : m_hSema()
   {
     assert(initialCount >= 0);
     const long maxLong = 0x7fffffff;
-    m_hSema = CreateSemaphoreW(nullptr, initialCount, maxLong, nullptr);
+    m_hSema            = CreateSemaphoreW(nullptr, initialCount, maxLong, nullptr);
     assert(m_hSema);
   }
 
@@ -556,21 +518,18 @@ public:
 // Can't use POSIX semaphores due to
 // http://lists.apple.com/archives/darwin-kernel/2009/Apr/msg00010.html
 //---------------------------------------------------------
-class Semaphore
-{
+class Semaphore {
 private:
   semaphore_t m_sema;
 
-  Semaphore(const Semaphore &other);
-  Semaphore &operator=(const Semaphore &other);
+  Semaphore(const Semaphore& other);
+  Semaphore& operator=(const Semaphore& other);
 
 public:
-  AE_NO_TSAN Semaphore(int initialCount = 0)
-    : m_sema()
+  AE_NO_TSAN Semaphore(int initialCount = 0) : m_sema()
   {
     assert(initialCount >= 0);
-    kern_return_t rc = semaphore_create(mach_task_self(), &m_sema,
-                                        SYNC_POLICY_FIFO, initialCount);
+    kern_return_t rc = semaphore_create(mach_task_self(), &m_sema, SYNC_POLICY_FIFO, initialCount);
     assert(rc == KERN_SUCCESS);
     AE_UNUSED(rc);
   }
@@ -584,7 +543,7 @@ public:
   bool timed_wait(std::uint64_t timeout_usecs) AE_NO_TSAN
   {
     mach_timespec_t ts;
-    ts.tv_sec = static_cast<unsigned int>(timeout_usecs / 1000000);
+    ts.tv_sec  = static_cast<unsigned int>(timeout_usecs / 1000000);
     ts.tv_nsec = static_cast<int>((timeout_usecs % 1000000) * 1000);
 
     // added in OSX 10.10:
@@ -602,27 +561,23 @@ public:
   void signal(int count) AE_NO_TSAN
   {
     while (count-- > 0)
-    {
       while (semaphore_signal(m_sema) != KERN_SUCCESS)
         ;
-    }
   }
 };
 #elif defined(__unix__)
 //---------------------------------------------------------
 // Semaphore (POSIX, Linux)
 //---------------------------------------------------------
-class Semaphore
-{
+class Semaphore {
 private:
   sem_t m_sema;
 
-  Semaphore(const Semaphore &other);
-  Semaphore &operator=(const Semaphore &other);
+  Semaphore(const Semaphore& other);
+  Semaphore& operator=(const Semaphore& other);
 
 public:
-  AE_NO_TSAN Semaphore(int initialCount = 0)
-    : m_sema()
+  AE_NO_TSAN Semaphore(int initialCount = 0) : m_sema()
   {
     assert(initialCount >= 0);
     int rc = sem_init(&m_sema, 0, static_cast<unsigned int>(initialCount));
@@ -636,8 +591,7 @@ public:
   {
     // http://stackoverflow.com/questions/2013181/gdb-causes-sem-wait-to-fail-with-eintr-error
     int rc;
-    do
-    {
+    do {
       rc = sem_wait(&m_sema);
     } while (rc == -1 && errno == EINTR);
     return rc == 0;
@@ -646,8 +600,7 @@ public:
   bool try_wait() AE_NO_TSAN
   {
     int rc;
-    do
-    {
+    do {
       rc = sem_trywait(&m_sema);
     } while (rc == -1 && errno == EINTR);
     return rc == 0;
@@ -663,15 +616,13 @@ public:
     ts.tv_nsec += static_cast<long>(usecs % usecs_in_1_sec) * 1000;
     // sem_timedwait bombs if you have more than 1e9 in tv_nsec
     // so we have to clean things up before passing it in
-    if (ts.tv_nsec >= nsecs_in_1_sec)
-    {
+    if (ts.tv_nsec >= nsecs_in_1_sec) {
       ts.tv_nsec -= nsecs_in_1_sec;
       ++ts.tv_sec;
     }
 
     int rc;
-    do
-    {
+    do {
       rc = sem_timedwait(&m_sema, &ts);
     } while (rc == -1 && errno == EINTR);
     return rc == 0;
@@ -686,27 +637,23 @@ public:
   void signal(int count) AE_NO_TSAN
   {
     while (count-- > 0)
-    {
       while (sem_post(&m_sema) == -1)
         ;
-    }
   }
 };
 #elif defined(FREERTOS)
 //---------------------------------------------------------
 // Semaphore (FreeRTOS)
 //---------------------------------------------------------
-class Semaphore
-{
+class Semaphore {
 private:
   SemaphoreHandle_t m_sema;
 
-  Semaphore(const Semaphore &other);
-  Semaphore &operator=(const Semaphore &other);
+  Semaphore(const Semaphore& other);
+  Semaphore& operator=(const Semaphore& other);
 
 public:
-  AE_NO_TSAN Semaphore(int initialCount = 0)
-    : m_sema()
+  AE_NO_TSAN Semaphore(int initialCount = 0) : m_sema()
   {
     assert(initialCount >= 0);
     m_sema = xSemaphoreCreateCounting(static_cast<UBaseType_t>(~0ull),
@@ -716,10 +663,7 @@ public:
 
   AE_NO_TSAN ~Semaphore() { vSemaphoreDelete(m_sema); }
 
-  bool wait() AE_NO_TSAN
-  {
-    return xSemaphoreTake(m_sema, portMAX_DELAY) == pdTRUE;
-  }
+  bool wait() AE_NO_TSAN { return xSemaphoreTake(m_sema, portMAX_DELAY) == pdTRUE; }
 
   bool try_wait() AE_NO_TSAN
   {
@@ -733,7 +677,7 @@ public:
   bool timed_wait(std::uint64_t usecs) AE_NO_TSAN
   {
     std::uint64_t msecs = usecs / 1000;
-    TickType_t ticks = static_cast<TickType_t>(msecs / portTICK_PERIOD_MS);
+    TickType_t ticks    = static_cast<TickType_t>(msecs / portTICK_PERIOD_MS);
     if (ticks == 0)
       return try_wait();
     return xSemaphoreTake(m_sema, ticks) == pdTRUE;
@@ -765,8 +709,7 @@ public:
 //---------------------------------------------------------
 // LightweightSemaphore
 //---------------------------------------------------------
-class LightweightSemaphore
-{
+class LightweightSemaphore {
 public:
   typedef std::make_signed<std::size_t>::type ssize_t;
 
@@ -781,37 +724,32 @@ private:
     // If we lower it to 1000, testBenaphore becomes 15x slower on my Core
     // i7-5930K Windows PC, as threads start hitting the kernel semaphore.
     int spin = 1024;
-    while (--spin >= 0)
-    {
-      if (m_count.load() > 0)
-      {
+    while (--spin >= 0) {
+      if (m_count.load() > 0) {
         m_count.fetch_add_acquire(-1);
         return true;
       }
-      compiler_fence(memory_order_acquire); // Prevent the compiler from
-                                            // collapsing the loop.
+      compiler_fence(memory_order_acquire);  // Prevent the compiler from
+                                             // collapsing the loop.
     }
     oldCount = m_count.fetch_add_acquire(-1);
     if (oldCount > 0)
       return true;
-    if (timeout_usecs < 0)
-    {
+    if (timeout_usecs < 0) {
       if (m_sema.wait())
         return true;
     }
-    if (timeout_usecs > 0
-        && m_sema.timed_wait(static_cast<uint64_t>(timeout_usecs)))
+    if (timeout_usecs > 0 && m_sema.timed_wait(static_cast<uint64_t>(timeout_usecs)))
       return true;
     // At this point, we've timed out waiting for the semaphore, but the
     // count is still decremented indicating we may still be waiting on
     // it. So we have to re-adjust the count, but only if the semaphore
     // wasn't signaled enough times for us too since then. If it was, we
     // need to release the semaphore too.
-    while (true)
-    {
+    while (true) {
       oldCount = m_count.fetch_add_release(1);
       if (oldCount < 0)
-        return false; // successfully restored things to the way they were
+        return false;  // successfully restored things to the way they were
       // Oh, the producer thread just signaled the semaphore after all. Try
       // again:
       oldCount = m_count.fetch_add_acquire(-1);
@@ -821,17 +759,14 @@ private:
   }
 
 public:
-  AE_NO_TSAN LightweightSemaphore(ssize_t initialCount = 0)
-    : m_count(initialCount)
-    , m_sema()
+  AE_NO_TSAN LightweightSemaphore(ssize_t initialCount = 0) : m_count(initialCount), m_sema()
   {
     assert(initialCount >= 0);
   }
 
   bool tryWait() AE_NO_TSAN
   {
-    if (m_count.load() > 0)
-    {
+    if (m_count.load() > 0) {
       m_count.fetch_add_acquire(-1);
       return true;
     }
@@ -851,9 +786,7 @@ public:
     ssize_t oldCount = m_count.fetch_add_release(count);
     assert(oldCount >= -1);
     if (oldCount < 0)
-    {
       m_sema.signal(1);
-    }
   }
 
   std::size_t availableApprox() const AE_NO_TSAN
@@ -862,8 +795,8 @@ public:
     return count > 0 ? static_cast<std::size_t>(count) : 0;
   }
 };
-} // end namespace spsc_sema
-} // end namespace moodycamel
+}  // end namespace spsc_sema
+}  // end namespace moodycamel
 
 #if defined(AE_VCPP) && (_MSC_VER < 1700 || defined(__cplusplus_cli))
 #  pragma warning(pop)

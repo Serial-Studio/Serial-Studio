@@ -21,16 +21,15 @@
 
 #pragma once
 
+#include <QMatrix4x4>
 #include <QPainter>
+#include <QQuickPaintedItem>
 #include <QSettings>
 #include <QVector3D>
-#include <QMatrix4x4>
-#include <QQuickPaintedItem>
 
 #include "DSP.h"
 
-namespace Widgets
-{
+namespace Widgets {
 /**
  * @class Plot3D
  * @brief A 3D plotting widget with optional anaglyph (stereo) rendering.
@@ -43,8 +42,7 @@ namespace Widgets
  * - anaglyphEnabled
  * - cameraAngleX, cameraAngleY, cameraAngleZ
  */
-class Plot3D : public QQuickPaintedItem
-{
+class Plot3D : public QQuickPaintedItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool anaglyphEnabled
@@ -110,8 +108,8 @@ signals:
   void interpolationEnabledChanged();
 
 public:
-  explicit Plot3D(const int index = -1, QQuickItem *parent = nullptr);
-  void paint(QPainter *painter) override;
+  explicit Plot3D(const int index = -1, QQuickItem* parent = nullptr);
+  void paint(QPainter* painter) override;
 
   [[nodiscard]] double worldScale() const;
   [[nodiscard]] double cameraAngleX() const;
@@ -131,7 +129,7 @@ public:
   [[nodiscard]] bool orbitNavigation() const;
   [[nodiscard]] bool interpolationEnabled() const;
 
-  [[nodiscard]] const QSize &widgetSize() const;
+  [[nodiscard]] const QSize& widgetSize() const;
 
 public slots:
   void setWorldScale(const double z);
@@ -162,22 +160,25 @@ private:
 
 private:
   double gridStep(const double scale = -1) const;
-  std::vector<QPointF> screenProjection(const DSP::LineSeries3D &points,
-                                        const QMatrix4x4 &matrix);
-  void drawLine3D(QPainter &painter, const QMatrix4x4 &matrix,
-                  const QVector3D &p1, const QVector3D &p2, QColor color,
-                  float lineWidth, Qt::PenStyle style);
+  std::vector<QPointF> screenProjection(const DSP::LineSeries3D& points, const QMatrix4x4& matrix);
+  void drawLine3D(QPainter& painter,
+                  const QMatrix4x4& matrix,
+                  const QVector3D& p1,
+                  const QVector3D& p2,
+                  QColor color,
+                  float lineWidth,
+                  Qt::PenStyle style);
 
-  QImage renderGrid(const QMatrix4x4 &matrix);
-  QImage renderCameraIndicator(const QMatrix4x4 &matrix);
-  QImage renderData(const QMatrix4x4 &matrix, const DSP::LineSeries3D &data);
-  QPair<QMatrix4x4, QMatrix4x4> eyeTransformations(const QMatrix4x4 &matrix);
+  QImage renderGrid(const QMatrix4x4& matrix);
+  QImage renderCameraIndicator(const QMatrix4x4& matrix);
+  QImage renderData(const QMatrix4x4& matrix, const DSP::LineSeries3D& data);
+  QPair<QMatrix4x4, QMatrix4x4> eyeTransformations(const QMatrix4x4& matrix);
 
 protected:
-  void wheelEvent(QWheelEvent *event) override;
-  void mouseMoveEvent(QMouseEvent *event) override;
-  void mousePressEvent(QMouseEvent *event) override;
-  void mouseReleaseEvent(QMouseEvent *event) override;
+  void wheelEvent(QWheelEvent* event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
   int m_index;
@@ -237,4 +238,4 @@ private:
   QSize m_size;
   QSettings m_settings;
 };
-} // namespace Widgets
+}  // namespace Widgets

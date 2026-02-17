@@ -19,69 +19,62 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include <iostream>
-#include <QQmlContext>
+#include "Misc/ModuleManager.h"
+
 #include <QSimpleUpdater.h>
 
-#include "AppInfo.h"
-#include "SerialStudio.h"
-
-#include "CSV/Export.h"
-#include "CSV/Player.h"
-
-#include "MDF4/Player.h"
-#include "MDF4/Export.h"
-
-#include "DataModel/FrameParser.h"
-#include "DataModel/ProjectModel.h"
-#include "DataModel/FrameBuilder.h"
-
-#include "IO/Manager.h"
-#include "Console/Handler.h"
-#include "Console/Export.h"
-#include "IO/FileTransmission.h"
-
-#include "IO/Drivers/UART.h"
-#include "IO/Drivers/Network.h"
-#include "IO/Drivers/BluetoothLE.h"
-
-#include "Misc/Utilities.h"
-#include "Misc/Translator.h"
-#include "Misc/CommonFonts.h"
-#include "Misc/TimerEvents.h"
-#include "Misc/ThemeManager.h"
-#include "Misc/ModuleManager.h"
-#include "Misc/WorkspaceManager.h"
+#include <iostream>
+#include <QQmlContext>
 
 #include "API/Server.h"
-
-#include "UI/Taskbar.h"
+#include "AppInfo.h"
+#include "Console/Export.h"
+#include "Console/Handler.h"
+#include "CSV/Export.h"
+#include "CSV/Player.h"
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/FrameParser.h"
+#include "DataModel/ProjectModel.h"
+#include "IO/Drivers/BluetoothLE.h"
+#include "IO/Drivers/Network.h"
+#include "IO/Drivers/UART.h"
+#include "IO/FileTransmission.h"
+#include "IO/Manager.h"
+#include "MDF4/Export.h"
+#include "MDF4/Player.h"
+#include "Misc/CommonFonts.h"
+#include "Misc/ThemeManager.h"
+#include "Misc/TimerEvents.h"
+#include "Misc/Translator.h"
+#include "Misc/Utilities.h"
+#include "Misc/WorkspaceManager.h"
+#include "SerialStudio.h"
 #include "UI/Dashboard.h"
-#include "UI/WindowManager.h"
 #include "UI/DashboardWidget.h"
-
-#include "UI/Widgets/Bar.h"
-#include "UI/Widgets/GPS.h"
-#include "UI/Widgets/Plot.h"
-#include "UI/Widgets/Gauge.h"
-#include "UI/Widgets/Compass.h"
-#include "UI/Widgets/FFTPlot.h"
-#include "UI/Widgets/DataGrid.h"
-#include "UI/Widgets/LEDPanel.h"
-#include "UI/Widgets/Terminal.h"
-#include "UI/Widgets/Gyroscope.h"
-#include "UI/Widgets/MultiPlot.h"
+#include "UI/Taskbar.h"
 #include "UI/Widgets/Accelerometer.h"
+#include "UI/Widgets/Bar.h"
+#include "UI/Widgets/Compass.h"
+#include "UI/Widgets/DataGrid.h"
+#include "UI/Widgets/FFTPlot.h"
+#include "UI/Widgets/Gauge.h"
+#include "UI/Widgets/GPS.h"
+#include "UI/Widgets/Gyroscope.h"
+#include "UI/Widgets/LEDPanel.h"
+#include "UI/Widgets/MultiPlot.h"
+#include "UI/Widgets/Plot.h"
+#include "UI/Widgets/Terminal.h"
+#include "UI/WindowManager.h"
 
 #ifdef BUILD_COMMERCIAL
-#  include "MQTT/Client.h"
-#  include "Licensing/Trial.h"
+#  include "DataModel/DBCImporter.h"
 #  include "IO/Drivers/Audio.h"
 #  include "IO/Drivers/CANBus.h"
 #  include "IO/Drivers/Modbus.h"
-#  include "UI/Widgets/Plot3D.h"
-#  include "DataModel/DBCImporter.h"
 #  include "Licensing/LemonSqueezy.h"
+#  include "Licensing/Trial.h"
+#  include "MQTT/Client.h"
+#  include "UI/Widgets/Plot3D.h"
 #endif
 
 /**
@@ -100,8 +93,7 @@
  *
  * @note The function appends the formatted message to the console handler.
  */
-static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
-                           const QString &msg)
+static void MessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
   // Skip empty messages
   (void)context;
@@ -117,8 +109,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
 
   // Filter out unfixable Windows warnings...I tried, Qt won
 #ifdef Q_OS_WIN
-  if (type == QtWarningMsg)
-  {
+  if (type == QtWarningMsg) {
     if (message.startsWith("Qt was built without Direct3D 12 support"))
       return;
     if (message.startsWith("setGeometry: Unable to set geometry"))
@@ -128,10 +119,8 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
 
   // Format message with ANSI colors (only if enabled by user)
   const bool useAnsiColors = Console::Handler::instance().ansiColorsEnabled();
-  QString output
-      = Widgets::Terminal::formatDebugMessage(type, message, useAnsiColors);
-  if (!output.isEmpty())
-  {
+  QString output           = Widgets::Terminal::formatDebugMessage(type, message, useAnsiColors);
+  if (!output.isEmpty()) {
     // Add a newline at the end
     std::cout << output.toStdString() << std::endl;
     output.append("\n");
@@ -151,14 +140,13 @@ Misc::ModuleManager::ModuleManager()
   (void)Misc::Translator::instance();
 
   // Stop modules when application is about to quit
-  connect(&m_engine, &QQmlApplicationEngine::quit, this,
-          &Misc::ModuleManager::onQuit);
+  connect(&m_engine, &QQmlApplicationEngine::quit, this, &Misc::ModuleManager::onQuit);
 }
 
 /**
  * Returns a pointer to the QML application engine
  */
-const QQmlApplicationEngine &Misc::ModuleManager::engine() const
+const QQmlApplicationEngine& Misc::ModuleManager::engine() const
 {
   return m_engine;
 }
@@ -227,8 +215,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "TerminalWidget");
   qmlRegisterType<Widgets::MultiPlot>("SerialStudio", 1, 0, "MultiPlotModel");
   qmlRegisterType<Widgets::Gyroscope>("SerialStudio", 1, 0, "GyroscopeModel");
-  qmlRegisterType<Widgets::Accelerometer>("SerialStudio", 1, 0,
-                                          "AccelerometerModel");
+  qmlRegisterType<Widgets::Accelerometer>("SerialStudio", 1, 0, "AccelerometerModel");
 
 #ifdef BUILD_COMMERCIAL
   qmlRegisterType<Widgets::Plot3D>("SerialStudio", 1, 0, "Plot3DWidget");
@@ -236,8 +223,7 @@ void Misc::ModuleManager::registerQmlTypes()
 
   // Register JSON custom items
   qmlRegisterType<DataModel::FrameParser>("SerialStudio", 1, 0, "FrameParser");
-  qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0,
-                                           "ProjectModel");
+  qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
 
   // Register generic dashboard widget
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
@@ -248,10 +234,9 @@ void Misc::ModuleManager::registerQmlTypes()
 
   // Regsiter common Serial Studio enums & values
   qmlRegisterSingletonType<SerialStudio>(
-      "SerialStudio", 1, 0, "SerialStudio",
-      [](QQmlEngine *, QJSEngine *) -> QObject * {
-        return new SerialStudio();
-      });
+    "SerialStudio", 1, 0, "SerialStudio", [](QQmlEngine*, QJSEngine*) -> QObject* {
+      return new SerialStudio();
+    });
 }
 
 /**
@@ -263,42 +248,42 @@ void Misc::ModuleManager::initializeQmlInterface()
   // Initialize licensing module first
 #ifdef BUILD_COMMERCIAL
   auto lemonSqueezy = &Licensing::LemonSqueezy::instance();
-  auto trial = &Licensing::Trial::instance();
+  auto trial        = &Licensing::Trial::instance();
 #endif
 
   // Initialize heavily used modules first
-  auto miscTranslator = &Misc::Translator::instance();
+  auto miscTranslator   = &Misc::Translator::instance();
   auto miscThemeManager = &Misc::ThemeManager::instance();
 
   // Initialize modules
-  auto ioManager = &IO::Manager::instance();
-  auto csvExport = &CSV::Export::instance();
-  auto csvPlayer = &CSV::Player::instance();
-  auto mdf4Export = &MDF4::Export::instance();
-  auto mdf4Player = &MDF4::Player::instance();
-  auto uiDashboard = &UI::Dashboard::instance();
-  auto ioSerial = &IO::Drivers::UART::instance();
-  auto pluginsBridge = &API::Server::instance();
-  auto miscUtilities = &Misc::Utilities::instance();
-  auto consoleExport = &Console::Export::instance();
-  auto ioNetwork = &IO::Drivers::Network::instance();
-  auto frameBuilder = &DataModel::FrameBuilder::instance();
-  auto projectModel = &DataModel::ProjectModel::instance();
-  auto consoleHandler = &Console::Handler::instance();
-  auto miscTimerEvents = &Misc::TimerEvents::instance();
-  auto miscCommonFonts = &Misc::CommonFonts::instance();
-  auto ioBluetoothLE = &IO::Drivers::BluetoothLE::instance();
-  auto ioFileTransmission = &IO::FileTransmission::instance();
+  auto ioManager            = &IO::Manager::instance();
+  auto csvExport            = &CSV::Export::instance();
+  auto csvPlayer            = &CSV::Player::instance();
+  auto mdf4Export           = &MDF4::Export::instance();
+  auto mdf4Player           = &MDF4::Player::instance();
+  auto uiDashboard          = &UI::Dashboard::instance();
+  auto ioSerial             = &IO::Drivers::UART::instance();
+  auto pluginsBridge        = &API::Server::instance();
+  auto miscUtilities        = &Misc::Utilities::instance();
+  auto consoleExport        = &Console::Export::instance();
+  auto ioNetwork            = &IO::Drivers::Network::instance();
+  auto frameBuilder         = &DataModel::FrameBuilder::instance();
+  auto projectModel         = &DataModel::ProjectModel::instance();
+  auto consoleHandler       = &Console::Handler::instance();
+  auto miscTimerEvents      = &Misc::TimerEvents::instance();
+  auto miscCommonFonts      = &Misc::CommonFonts::instance();
+  auto ioBluetoothLE        = &IO::Drivers::BluetoothLE::instance();
+  auto ioFileTransmission   = &IO::FileTransmission::instance();
   auto miscWorkspaceManager = &Misc::WorkspaceManager::instance();
 
   // Initialize commercial modules
 #ifdef BUILD_COMMERCIAL
   const bool qtCommercialAvailable = true;
-  auto mqttClient = &MQTT::Client::instance();
-  auto dbcImporter = &DataModel::DBCImporter::instance();
-  auto audioDriver = &IO::Drivers::Audio::instance();
-  auto canBusDriver = &IO::Drivers::CANBus::instance();
-  auto modbusDriver = &IO::Drivers::Modbus::instance();
+  auto mqttClient                  = &MQTT::Client::instance();
+  auto dbcImporter                 = &DataModel::DBCImporter::instance();
+  auto audioDriver                 = &IO::Drivers::Audio::instance();
+  auto canBusDriver                = &IO::Drivers::CANBus::instance();
+  auto modbusDriver                = &IO::Drivers::Modbus::instance();
 #else
   const bool qtCommercialAvailable = false;
 #endif
@@ -310,7 +295,9 @@ void Misc::ModuleManager::initializeQmlInterface()
   miscTimerEvents->startTimers();
 
   // Retranslate the QML interface automatically
-  connect(miscTranslator, &Misc::Translator::languageChanged, &m_engine,
+  connect(miscTranslator,
+          &Misc::Translator::languageChanged,
+          &m_engine,
           &QQmlApplicationEngine::retranslate);
 
   // Setup singleton module interconnections
@@ -337,17 +324,16 @@ void Misc::ModuleManager::initializeQmlInterface()
 
   // Construct a QML-friendly list of available screens
   QVariantList screenList;
-  for (int i = 0; i < qApp->screens().count(); ++i)
-  {
+  for (int i = 0; i < qApp->screens().count(); ++i) {
     QVariantMap map;
-    map["name"] = qApp->screens()[i]->name();
+    map["name"]     = qApp->screens()[i]->name();
     map["geometry"] = QVariant::fromValue(qApp->screens()[i]->geometry());
     screenList.append(map);
   }
 
   // Get primary screen
   QVariantMap primaryScreen;
-  primaryScreen["name"] = qApp->primaryScreen()->name();
+  primaryScreen["name"]     = qApp->primaryScreen()->name();
   primaryScreen["geometry"] = qApp->primaryScreen()->geometry();
 
   // Register C++ modules with QML

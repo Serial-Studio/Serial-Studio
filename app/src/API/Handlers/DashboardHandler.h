@@ -23,8 +23,7 @@
 
 #include "API/CommandProtocol.h"
 
-namespace API::Handlers
-{
+namespace API::Handlers {
 /**
  * @brief Handler for dashboard configuration commands
  *
@@ -33,25 +32,19 @@ namespace API::Handlers
  * - Visualization refresh rate (FPS)
  * - Data points per plot
  */
-class DashboardHandler
-{
+class DashboardHandler {
 public:
   static void registerCommands();
 
 private:
-  static CommandResponse setOperationMode(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse getOperationMode(const QString &id,
-                                          const QJsonObject &params);
-  static CommandResponse setFPS(const QString &id, const QJsonObject &params);
-  static CommandResponse getFPS(const QString &id, const QJsonObject &params);
-  static CommandResponse setPoints(const QString &id,
-                                   const QJsonObject &params);
-  static CommandResponse getPoints(const QString &id,
-                                   const QJsonObject &params);
-  static CommandResponse getStatus(const QString &id,
-                                   const QJsonObject &params);
-  static CommandResponse getData(const QString &id, const QJsonObject &params);
+  static CommandResponse setOperationMode(const QString& id, const QJsonObject& params);
+  static CommandResponse getOperationMode(const QString& id, const QJsonObject& params);
+  static CommandResponse setFPS(const QString& id, const QJsonObject& params);
+  static CommandResponse getFPS(const QString& id, const QJsonObject& params);
+  static CommandResponse setPoints(const QString& id, const QJsonObject& params);
+  static CommandResponse getPoints(const QString& id, const QJsonObject& params);
+  static CommandResponse getStatus(const QString& id, const QJsonObject& params);
+  static CommandResponse getData(const QString& id, const QJsonObject& params);
 };
 
-} // namespace API::Handlers
+}  // namespace API::Handlers

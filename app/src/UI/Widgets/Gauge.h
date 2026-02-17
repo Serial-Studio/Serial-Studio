@@ -23,8 +23,7 @@
 
 #include "Bar.h"
 
-namespace Widgets
-{
+namespace Widgets {
 /**
  * @class Widgets::Gauge
  * @brief Circular gauge widget for displaying normalized value data.
@@ -45,14 +44,13 @@ namespace Widgets
  *
  * @see Widgets::Bar for detailed functionality documentation
  */
-class Gauge : public Bar
-{
+class Gauge : public Bar {
   Q_OBJECT
 
 public:
-  explicit Gauge(const int index = -1, QQuickItem *parent = nullptr);
+  explicit Gauge(const int index = -1, QQuickItem* parent = nullptr);
 
 private slots:
   void updateData() override;
 };
-} // namespace Widgets
+}  // namespace Widgets
