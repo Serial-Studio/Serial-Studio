@@ -361,11 +361,12 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     m_maxY = std::numeric_limits<double>::lowest();
 
     // Loop through each dataset and find the min and max values
-    auto accumulate = [this](const DSP::LineSeries& curve) {
+    auto accumulate = [this](const QList<QPointF>& curve) {
       for (auto i = 0; i < curve.count(); ++i) {
         const double value = curve[i].y();
         if (!std::isfinite(value))
           continue;
+
         m_minY = qMin(m_minY, value);
         m_maxY = qMax(m_maxY, value);
       }
