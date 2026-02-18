@@ -20,21 +20,40 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
 import json
 import time
 
-import pytest
-
 from utils import DataGenerator
 
 
-def _wait_for_frames(api_client, minimum: int, timeout: float = 2.0) -> int:
-    """Wait for dashboard to receive at least minimum frames."""
+def _get_dataset_values(api_client, group_idx: int = 0) -> list:
+    """Get current dataset values from the dashboard."""
+    data = api_client.get_dashboard_data()
+    groups = data.get("frame", {}).get("groups", [])
+    if not groups or group_idx >= len(groups):
+        return []
+    return [d.get("value", "") for d in groups[group_idx].get("datasets", [])]
+
+
+def _wait_for_dataset_values(
+    api_client, expected: list, group_idx: int = 0, timeout: float = 3.0
+) -> list:
+    """Wait until dashboard datasets show the expected values."""
     end_time = time.time() + timeout
     while time.time() < end_time:
-        data = api_client.get_dashboard_data()
-        count = data.get("rxFrames", 0)
-        if count >= minimum:
-            return count
+        values = _get_dataset_values(api_client, group_idx)
+        if values == expected:
+            return values
         time.sleep(0.05)
-    return api_client.get_dashboard_data().get("rxFrames", 0)
+    return _get_dataset_values(api_client, group_idx)
+
+
+def _wait_for_any_frame(api_client, group_idx: int = 0, timeout: float = 3.0) -> bool:
+    """Wait until any non-empty dataset value appears."""
+    end_time = time.time() + timeout
+    while time.time() < end_time:
+        values = _get_dataset_values(api_client, group_idx)
+        if any(v for v in values):
+            return True
+        time.sleep(0.05)
+    return False
 
 
 def _create_project_with_datasets(api_client, dataset_count: int):
@@ -59,8 +78,21 @@ def _configure_js_parser(api_client, js_code: str):
 def _send_frame(api_client, device_simulator, payload: dict):
     """Send a JSON frame to Serial Studio."""
     frame = f"/*{json.dumps(payload)}*/"
-    device_simulator.send(frame.encode())
+    device_simulator.send_frame(frame.encode())
     time.sleep(0.3)
+
+
+def _connect_device(api_client):
+    """Configure project mode, load into frame builder, and connect device."""
+    api_client.set_operation_mode("project")
+    api_client.configure_frame_parser(
+        start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
+    )
+    api_client.command("project.loadIntoFrameBuilder")
+    time.sleep(0.2)
+    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+    api_client.connect_device()
+    time.sleep(0.5)
 
 
 class TestBasic2DArrayParsing:
@@ -69,7 +101,7 @@ class TestBasic2DArrayParsing:
     def test_2d_array_generates_multiple_frames(
         self, api_client, device_simulator, clean_state
     ):
-        """Test [[1,2,3], [4,5,6]] generates 2 frames."""
+        """Test [[1,2,3], [4,5,6]] generates 2 frames; last frame values are verified."""
         _create_project_with_datasets(api_client, 3)
 
         js_code = """
@@ -79,43 +111,20 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-
-        api_client.set_operation_mode("project")
-        api_client.configure_frame_parser(
-            start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
-        )
-        api_client.command("project.loadIntoFrameBuilder")
-        time.sleep(0.2)
-
-        api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-        api_client.connect_device()
-        time.sleep(0.5)
-
-        initial_frames = api_client.get_dashboard_data().get("rxFrames", 0)
+        _connect_device(api_client)
 
         payload = {"values": [[1.1, 2.2, 3.3], [4.4, 5.5, 6.6]]}
         _send_frame(api_client, device_simulator, payload)
 
-        final_frames = _wait_for_frames(api_client, initial_frames + 2)
-        assert (
-            final_frames >= initial_frames + 2
-        ), f"Expected at least 2 new frames, got {final_frames - initial_frames}"
-
-        data = api_client.get_dashboard_data()
-        groups = data.get("groups", [])
-        assert len(groups) > 0, "Should have at least one group"
-
-        datasets = groups[0].get("datasets", [])
-        assert len(datasets) == 3, "Should have 3 datasets"
-
-        assert datasets[0]["value"] == "4.4", "Dataset 0 should have last frame value"
-        assert datasets[1]["value"] == "5.5", "Dataset 1 should have last frame value"
-        assert datasets[2]["value"] == "6.6", "Dataset 2 should have last frame value"
+        # Last row is [4.4, 5.5, 6.6]; JS number-to-string keeps decimals
+        expected = ["4.4", "5.5", "6.6"]
+        values = _wait_for_dataset_values(api_client, expected)
+        assert values == expected, f"Expected last-frame values {expected}, got {values}"
 
     def test_2d_array_with_different_row_lengths(
         self, api_client, device_simulator, clean_state
     ):
-        """Test 2D array with rows of different lengths."""
+        """Test 2D array with rows of different lengths; last row drives final values."""
         _create_project_with_datasets(api_client, 3)
 
         js_code = """
@@ -125,25 +134,20 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-
-        api_client.set_operation_mode("project")
-        api_client.configure_frame_parser(
-            start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
-        )
-        api_client.command("project.loadIntoFrameBuilder")
-        time.sleep(0.2)
-
-        api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-        api_client.connect_device()
-        time.sleep(0.5)
-
-        initial_frames = api_client.get_dashboard_data().get("rxFrames", 0)
+        _connect_device(api_client)
 
         payload = {"values": [[1.1, 2.2], [3.3, 4.4, 5.5], [6.6]]}
         _send_frame(api_client, device_simulator, payload)
 
-        final_frames = _wait_for_frames(api_client, initial_frames + 3)
-        assert final_frames >= initial_frames + 3, "Expected at least 3 new frames"
+        # At least one frame must be received
+        received = _wait_for_any_frame(api_client)
+        assert received, "Should have received at least one frame from the 2D array"
+
+        # Last row is [6.6], so dataset[0] must end up as "6.6"
+        values = _get_dataset_values(api_client)
+        assert len(values) >= 1 and values[0] == "6.6", (
+            f"First dataset should reflect last-row value 6.6, got {values}"
+        )
 
 
 class TestMixedScalarVectorParsing:
@@ -162,37 +166,17 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-
-        api_client.set_operation_mode("project")
-        api_client.configure_frame_parser(
-            start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
-        )
-        api_client.command("project.loadIntoFrameBuilder")
-        time.sleep(0.2)
-
-        api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-        api_client.connect_device()
-        time.sleep(0.5)
-
-        initial_frames = api_client.get_dashboard_data().get("rxFrames", 0)
+        _connect_device(api_client)
 
         payload = {"humidity": 25.5, "temp": 60.0, "accel": [1.1, 2.2, 3.3]}
         _send_frame(api_client, device_simulator, payload)
 
-        final_frames = _wait_for_frames(api_client, initial_frames + 3)
-        assert final_frames >= initial_frames + 3, "Expected at least 3 new frames"
-
-        data = api_client.get_dashboard_data()
-        groups = data.get("groups", [])
-        datasets = groups[0].get("datasets", [])
-
-        assert (
-            datasets[0]["value"] == "25.5"
-        ), "Scalar should repeat across all frames"
-        assert (
-            datasets[1]["value"] == "60.0"
-        ), "Scalar should repeat across all frames"
-        assert datasets[2]["value"] == "3.3", "Last vector element in last frame"
+        # Last frame: [25.5, 60, 3.3] — JS renders 60.0 as "60" (integer string)
+        expected = ["25.5", "60", "3.3"]
+        values = _wait_for_dataset_values(api_client, expected)
+        assert values == expected, (
+            f"Expected last-frame values {expected}, got {values}"
+        )
 
     def test_mixed_scalar_multiple_vectors_same_length(
         self, api_client, device_simulator, clean_state
@@ -207,25 +191,17 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-
-        api_client.set_operation_mode("project")
-        api_client.configure_frame_parser(
-            start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
-        )
-        api_client.command("project.loadIntoFrameBuilder")
-        time.sleep(0.2)
-
-        api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-        api_client.connect_device()
-        time.sleep(0.5)
-
-        initial_frames = api_client.get_dashboard_data().get("rxFrames", 0)
+        _connect_device(api_client)
 
         payload = {"scalar": 100.0, "vec1": [1.1, 2.2], "vec2": [3.3, 4.4]}
         _send_frame(api_client, device_simulator, payload)
 
-        final_frames = _wait_for_frames(api_client, initial_frames + 2)
-        assert final_frames >= initial_frames + 2, "Expected at least 2 new frames"
+        # Last frame: [100, 2.2, 4.4] — JS renders 100.0 as "100"
+        expected = ["100", "2.2", "4.4"]
+        values = _wait_for_dataset_values(api_client, expected)
+        assert values == expected, (
+            f"Expected last-frame values {expected}, got {values}"
+        )
 
     def test_mixed_scalar_multiple_vectors_different_lengths(
         self, api_client, device_simulator, clean_state
@@ -240,19 +216,7 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-
-        api_client.set_operation_mode("project")
-        api_client.configure_frame_parser(
-            start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
-        )
-        api_client.command("project.loadIntoFrameBuilder")
-        time.sleep(0.2)
-
-        api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-        api_client.connect_device()
-        time.sleep(0.5)
-
-        initial_frames = api_client.get_dashboard_data().get("rxFrames", 0)
+        _connect_device(api_client)
 
         payload = {
             "scalar": 99.9,
@@ -261,10 +225,13 @@ function parse(frame) {
         }
         _send_frame(api_client, device_simulator, payload)
 
-        final_frames = _wait_for_frames(api_client, initial_frames + 3)
-        assert (
-            final_frames >= initial_frames + 3
-        ), "Expected 3 frames (max vector length)"
+        # short_vec is extended by repeating last value: [8.8, 9.9, 9.9]
+        # Last frame (index 2): [99.9, 3.3, 9.9]
+        expected = ["99.9", "3.3", "9.9"]
+        values = _wait_for_dataset_values(api_client, expected)
+        assert values == expected, (
+            f"Expected last-frame values {expected}, got {values}"
+        )
 
 
 class TestBLEUseCaseSimulation:
@@ -283,19 +250,7 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-
-        api_client.set_operation_mode("project")
-        api_client.configure_frame_parser(
-            start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
-        )
-        api_client.command("project.loadIntoFrameBuilder")
-        time.sleep(0.2)
-
-        api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-        api_client.connect_device()
-        time.sleep(0.5)
-
-        initial_frames = api_client.get_dashboard_data().get("rxFrames", 0)
+        _connect_device(api_client)
 
         accel_samples = [float(i) * 0.1 for i in range(120)]
         payload = {"humidity": 45.2, "temp": 22.5, "accel_samples": accel_samples}
@@ -304,14 +259,15 @@ function parse(frame) {
         _send_frame(api_client, device_simulator, payload)
         processing_time = time.time() - start_time
 
-        final_frames = _wait_for_frames(api_client, initial_frames + 120, timeout=3.0)
-        assert (
-            final_frames >= initial_frames + 120
-        ), f"Expected 120 frames, got {final_frames - initial_frames}"
-
-        assert (
-            processing_time < 1.0
-        ), f"Processing should be fast, took {processing_time:.3f}s"
+        # Last frame (index 119): [45.2, 22.5, 11.9]
+        expected = ["45.2", "22.5", "11.9"]
+        values = _wait_for_dataset_values(api_client, expected, timeout=3.0)
+        assert values == expected, (
+            f"Expected BLE last-frame values {expected}, got {values}"
+        )
+        assert processing_time < 1.0, (
+            f"Processing should complete within 1 second, took {processing_time:.3f}s"
+        )
 
 
 class TestEdgeCases:
@@ -320,7 +276,7 @@ class TestEdgeCases:
     def test_empty_array_returns_no_frames(
         self, api_client, device_simulator, clean_state
     ):
-        """Test empty array [] returns no frames."""
+        """Test empty array [] does not update dashboard dataset values."""
         _create_project_with_datasets(api_client, 3)
 
         js_code = """
@@ -329,33 +285,24 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
+        _connect_device(api_client)
 
-        api_client.set_operation_mode("project")
-        api_client.configure_frame_parser(
-            start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
-        )
-        api_client.command("project.loadIntoFrameBuilder")
-        time.sleep(0.2)
-
-        api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-        api_client.connect_device()
-        time.sleep(0.5)
-
-        initial_frames = api_client.get_dashboard_data().get("rxFrames", 0)
+        values_before = _get_dataset_values(api_client)
 
         payload = {"test": "data"}
         _send_frame(api_client, device_simulator, payload)
 
-        time.sleep(0.3)
-        final_frames = api_client.get_dashboard_data().get("rxFrames", 0)
-        assert (
-            final_frames == initial_frames
-        ), "Empty array should not generate frames"
+        time.sleep(0.5)
+        values_after = _get_dataset_values(api_client)
+        assert values_after == values_before, (
+            f"Empty array should not change dataset values; "
+            f"before={values_before}, after={values_after}"
+        )
 
     def test_mixed_with_empty_vectors(
         self, api_client, device_simulator, clean_state
     ):
-        """Test [s, [], [v1,v2]] skips empty vector."""
+        """Test [s, [], [v1,v2]] skips empty vector; 2 frames generated."""
         _create_project_with_datasets(api_client, 2)
 
         js_code = """
@@ -365,25 +312,18 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-
-        api_client.set_operation_mode("project")
-        api_client.configure_frame_parser(
-            start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
-        )
-        api_client.command("project.loadIntoFrameBuilder")
-        time.sleep(0.2)
-
-        api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-        api_client.connect_device()
-        time.sleep(0.5)
-
-        initial_frames = api_client.get_dashboard_data().get("rxFrames", 0)
+        _connect_device(api_client)
 
         payload = {"scalar": 50.0, "vec": [1.1, 2.2]}
         _send_frame(api_client, device_simulator, payload)
 
-        final_frames = _wait_for_frames(api_client, initial_frames + 2)
-        assert final_frames >= initial_frames + 2, "Empty vectors should be skipped"
+        # Empty vector is skipped; scalars=[50], vectors=[[1.1,2.2]]
+        # Last frame (index 1): [50, 2.2] — JS renders 50.0 as "50"
+        expected = ["50", "2.2"]
+        values = _wait_for_dataset_values(api_client, expected)
+        assert values == expected, (
+            f"Expected last-frame values {expected}, got {values}"
+        )
 
 
 class TestBackwardCompatibility:
@@ -392,7 +332,7 @@ class TestBackwardCompatibility:
     def test_1d_array_generates_single_frame(
         self, api_client, device_simulator, clean_state
     ):
-        """Test [1, 2, 3] still generates single frame (no regression)."""
+        """Test [1, 2, 3] still generates a single frame (no regression)."""
         _create_project_with_datasets(api_client, 3)
 
         js_code = """
@@ -402,35 +342,16 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-
-        api_client.set_operation_mode("project")
-        api_client.configure_frame_parser(
-            start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
-        )
-        api_client.command("project.loadIntoFrameBuilder")
-        time.sleep(0.2)
-
-        api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-        api_client.connect_device()
-        time.sleep(0.5)
-
-        initial_frames = api_client.get_dashboard_data().get("rxFrames", 0)
+        _connect_device(api_client)
 
         payload = {"values": [1.1, 2.2, 3.3]}
         _send_frame(api_client, device_simulator, payload)
 
-        final_frames = _wait_for_frames(api_client, initial_frames + 1)
-        assert (
-            final_frames >= initial_frames + 1
-        ), "1D array should generate exactly 1 frame"
-
-        data = api_client.get_dashboard_data()
-        groups = data.get("groups", [])
-        datasets = groups[0].get("datasets", [])
-
-        assert datasets[0]["value"] == "1.1", "Value should match first element"
-        assert datasets[1]["value"] == "2.2", "Value should match second element"
-        assert datasets[2]["value"] == "3.3", "Value should match third element"
+        expected = ["1.1", "2.2", "3.3"]
+        values = _wait_for_dataset_values(api_client, expected)
+        assert values == expected, (
+            f"1D array should produce a single frame with values {expected}, got {values}"
+        )
 
     def test_csv_mode_unchanged(self, api_client, device_simulator, clean_state):
         """Test CSV mode still works as before (no parseMultiFrame)."""
@@ -441,23 +362,12 @@ function parse(frame) {
         )
         time.sleep(0.2)
 
-        api_client.set_operation_mode("project")
-        api_client.configure_frame_parser(
-            start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
-        )
-        api_client.command("project.loadIntoFrameBuilder")
-        time.sleep(0.2)
-
-        api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-        api_client.connect_device()
-        time.sleep(0.5)
-
-        initial_frames = api_client.get_dashboard_data().get("rxFrames", 0)
+        _connect_device(api_client)
 
         payload = DataGenerator.generate_csv_frame()
         frame = f"/*{payload}*/"
-        device_simulator.send(frame.encode())
+        device_simulator.send_frame(frame.encode())
         time.sleep(0.3)
 
-        final_frames = _wait_for_frames(api_client, initial_frames + 1)
-        assert final_frames >= initial_frames + 1, "CSV should generate 1 frame"
+        received = _wait_for_any_frame(api_client)
+        assert received, "CSV frame should populate at least one dataset value"

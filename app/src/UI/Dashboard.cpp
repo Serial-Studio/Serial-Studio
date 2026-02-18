@@ -1580,6 +1580,17 @@ void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
   m_xAxisData[xSource].fill(0);
 }
 
+/**
+ * @brief Configures the line series data structures for all dashboard plots.
+ *
+ * Clears existing plot data and rebuilds the X/Y axis data arrays and line series for each
+ * plottable dataset.
+ *
+ * For datasets with an explicit X-axis source, the corresponding X-axis data is used; otherwise,
+ * a default sample-index-based X-axis is assigned.
+ *
+ * All configured plots are marked as active for real-time updates.
+ */
 void UI::Dashboard::configureLineSeries()
 {
   // Clear memory

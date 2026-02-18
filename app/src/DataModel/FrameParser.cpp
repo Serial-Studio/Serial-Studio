@@ -361,8 +361,6 @@ QStringList DataModel::FrameParser::parse(const QString& frame)
  */
 QStringList DataModel::FrameParser::parse(const QByteArray& frame)
 {
-  // Use cached JS helper to build the byte array in a single JS call,
-  // avoiding N individual C++→JS setProperty() boundary crossings.
   QJSValue jsArray;
   if (m_hexToArray.isCallable()) [[likely]] {
     QJSValueList hexArgs;
@@ -739,14 +737,43 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
     return false;
   }
 
-  // Test execute the parse function with sample data to catch runtime errors
-  QJSValueList args;
-  args << QJSValue("");
-  auto testResult = parseFunction.call(args);
-  if (testResult.isError()) {
-    QString errorMsg = testResult.property("message").toString();
-    int lineNumber   = testResult.property("lineNumber").toInt();
+  // Probe the parse function with three representative input types.
+  //
+  // A single empty-string probe produces false positives for JSON parsers
+  // because JSON.parse("") always throws a SyntaxError. Instead we try:
+  //
+  //   1. "0"  — non-empty string. JSON.parse("0") returns the number 0, so
+  //             simple property accesses like data.values return undefined
+  //             rather than throwing, making this probe pass for most
+  //             JSON parsers.
+  //   2. [0]  — minimal one-byte array. Covers binary frame parsers that
+  //             expect a JS byte array rather than a string.
+  //   3. ""   — empty string. Succeeds for parsers that explicitly guard
+  //             against empty input with if (frame.length > 0).
+  //
+  // A genuine code defect (e.g. calling an undefined function) throws on
+  // every probe, so real bugs are still caught and reported.
+  bool probeOk = false;
+  QJSValue lastError;
+  auto byteProbe = m_engine.newArray(1);
+  byteProbe.setProperty(0, 0);
+  const QJSValue probeInputs[] = {QJSValue("0"), byteProbe, QJSValue("")};
+  for (const auto& input : probeInputs) {
+    QJSValueList probeArgs;
+    probeArgs << input;
+    const auto probeResult = parseFunction.call(probeArgs);
+    if (!probeResult.isError()) {
+      probeOk = true;
+      break;
+    }
 
+    lastError = probeResult;
+  }
+
+  // All validations failed
+  if (!probeOk) {
+    const QString errorMsg = lastError.property("message").toString();
+    const int lineNumber   = lastError.property("lineNumber").toInt();
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
         tr("Parse Function Runtime Error"),
@@ -759,7 +786,6 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
       qWarning() << "[FrameParser] Parse function runtime error at line" << lineNumber << ":"
                  << errorMsg;
     }
-
     return false;
   }
 
@@ -767,12 +793,9 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
   m_parseFunction = parseFunction;
 
   // Install optimized hex-to-byte-array helper for binary frame parsing.
-  // This avoids N individual C++→JS setProperty() calls per frame by doing
-  // the conversion entirely on the JS side in a single function call.
   m_engine.evaluate(QStringLiteral(
     "function __ss_internal_hex_to_array__(h){var n=h.length>>1,a=new Array(n);for(var i=0,j=0;i<h.length;i+=2,j++)a[j]=parseInt(h.substr(i,2),16);return a;}"));
   m_hexToArray = m_engine.globalObject().property("__ss_internal_hex_to_array__");
-
   return true;
 }
 
