@@ -29,9 +29,9 @@ function atob(input) {
 
   for (let i = 0; i < input.length; i++) {
     let value = base64Chars.indexOf(input[i]);
-    if (value === -1) {
+    if (value === -1)
       throw new Error('Invalid character in Base64 string');
-    }
+
     buffer = (buffer << 6) | value;
     bits += 6;
     if (bits >= 8) {
@@ -56,8 +56,7 @@ function atob(input) {
 function parse(frame) {
   try {
     let binaryString = atob(frame);
-    let bytes = Array.from(binaryString).map(char => char.charCodeAt(0));
-    return bytes;
+    return Array.from(binaryString).map(char => char.charCodeAt(0));
   }
   catch (e) {
     console.error("Base64 decode error:", e.message);

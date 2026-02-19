@@ -34,10 +34,14 @@ const numItems = 8;
  * Format: "COMMAND_NAME": [index_for_param1, index_for_param2, ...]
  */
 const commandToIndexMap = {
-  "CSQ": [0, 1],      // Signal quality command: param1->index 0, param2->index 1
-  "CREG": [2, 3],     // Network registration: param1->index 2, param2->index 3
-  "CGATT": [4],       // GPRS attach status: param1->index 4
-  "COPS": [5, 6, 7]   // Operator selection: param1->index 5, param2->index 6, param3->index 7
+  // Signal quality: rssi → index 0, ber → index 1
+  "CSQ": [0, 1],
+  // Network registration: stat → index 2, lac → index 3
+  "CREG": [2, 3],
+  // GPRS attach status: state → index 4
+  "CGATT": [4],
+  // Operator selection: mode → index 5, format → index 6, oper → index 7
+  "COPS": [5, 6, 7]
 };
 
 /**
@@ -70,41 +74,30 @@ const parsedValues = new Array(numItems).fill(0);
  * @returns {array} Array of values mapped according to commandToIndexMap
  */
 function parse(frame) {
-  // Remove any extra spaces at the beginning or end
   frame = frame.trim();
 
-  // Check if this is a command with parameters (contains ':')
-  // Example: "+CSQ: 25,99" contains ':', but "OK" does not
-  if (frame.includes(':')) {
+  // Only process frames that contain a command with parameters
+  if (!frame.includes(':'))
+    return parsedValues;
 
-    // Split the frame into two parts at the ':'
-    // Example: "+CSQ: 25,99" becomes ["+CSQ", " 25,99"]
-    let parts = frame.split(':');
+  // Split at ':' to separate command name from parameters
+  const parts = frame.split(':');
 
-    // Get the command name and remove the '+' prefix and spaces
-    // Example: "+CSQ" becomes "CSQ"
-    let command = parts[0].replace('+', '').trim();
+  // Remove the '+' prefix and whitespace: "+CSQ" → "CSQ"
+  const command = parts[0].replace('+', '').trim();
 
-    // Get the parameters part, split by commas, and convert to numbers if possible
-    // Example: " 25,99" becomes ["25", "99"] then [25, 99]
-    let params = parts[1].trim().split(',').map(p => parseFloat(p.trim()) || p.trim());
+  // Split parameters by comma and convert to numbers where possible
+  const params = parts[1].trim().split(',').map(p => {
+    const n = parseFloat(p.trim());
+    return isNaN(n) ? p.trim() : n;
+  });
 
-    // Check if we have a mapping defined for this command
-    if (commandToIndexMap.hasOwnProperty(command)) {
+  if (!commandToIndexMap.hasOwnProperty(command))
+    return parsedValues;
 
-      // Get the array of indices where parameters should go
-      // Example: for "CSQ", indices = [0, 1]
-      let indices = commandToIndexMap[command];
+  const indices = commandToIndexMap[command];
+  for (let i = 0; i < params.length && i < indices.length; i++)
+    parsedValues[indices[i]] = params[i];
 
-      // Loop through each parameter and place it at its mapped index
-      // Example: params[0]=25 goes to parsedValues[indices[0]]=parsedValues[0]
-      //          params[1]=99 goes to parsedValues[indices[1]]=parsedValues[1]
-      for (let i = 0; i < params.length && i < indices.length; i++) {
-        parsedValues[indices[i]] = params[i];
-      }
-    }
-  }
-
-  // Return the complete array (always the same size)
   return parsedValues;
 }

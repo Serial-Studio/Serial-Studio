@@ -464,5 +464,7 @@
         <file>messages/trial/Welcome_NL.txt</file>
         <file>messages/trial/Welcome_RO.txt</file>
         <file>messages/trial/Welcome_SV.txt</file>
+        <file>scripts/batched_sensor_data.js</file>
+        <file>scripts/time_series_2d.js</file>
     </qresource>
 </RCC>

@@ -1,16 +1,18 @@
 # Tests
 
-Integration, security, and performance tests for Serial Studio's TCP API (port 7777).
+Integration, security, performance, and script-unit tests for Serial Studio.
 
-All tests are written in Python with pytest. They connect to a running Serial Studio
-instance over TCP, simulate devices sending telemetry, and verify that frames are
-parsed, exported, and displayed correctly.
+Most tests connect to a running Serial Studio instance over TCP (port 7777), simulate
+devices sending telemetry, and verify that frames are parsed, exported, and displayed
+correctly.
 
 ## Quick Start
 
-**Requirements:** Python 3.8+, a running Serial Studio instance with the API server enabled.
+**Requirements:** Python 3.8+.
 
-Enable the API server: **Settings → Miscellaneous → Enable API Server** (port 7777).
+- Integration / security / performance tests also need a running Serial Studio instance
+  with the API server enabled: **Settings → Miscellaneous → Enable API Server** (port 7777).
+- Script tests need **Node.js** (`node` on `PATH`); Serial Studio does not need to be running.
 
 ```bash
 # Install dependencies
@@ -22,6 +24,9 @@ pytest tests/integration/ -v
 # Run all security tests
 pytest tests/security/ -v
 
+# Run all frame-parser script tests (Node.js only, no Serial Studio needed)
+pytest tests/scripts/ -v
+
 # Run a single file
 pytest tests/integration/test_frame_parsing.py -v
 
@@ -31,11 +36,12 @@ pytest tests/integration/test_csv_export.py::test_csv_export_basic -v
 
 ## Test Categories
 
-| Category | Directory | Description |
-|----------|-----------|-------------|
-| Integration | `tests/integration/` | Functional tests against a live API |
-| Security | `tests/security/` | Penetration and adversarial tests |
-| Performance | `tests/performance/` | Throughput benchmarks |
+| Category | Directory | Requires Serial Studio | Description |
+|----------|-----------|------------------------|-------------|
+| Integration | `tests/integration/` | Yes | Functional tests against a live API |
+| Security | `tests/security/` | Yes | Penetration and adversarial tests |
+| Performance | `tests/performance/` | Yes | Throughput benchmarks |
+| Scripts | `tests/scripts/` | No (Node.js only) | Unit tests for JS frame-parser scripts |
 
 ## Directory Structure
 
@@ -73,6 +79,10 @@ tests/
 ├── performance/                        # Benchmarks
 │   └── benchmark_frame_rate.py         # Throughput at 10–1000 Hz, checksum overhead
 │
+├── scripts/                            # Unit tests for JS frame-parser scripts
+│   ├── conftest.py                     # run_parser() helper + parse_script fixture
+│   └── test_frame_parsers.py           # One test class per script (27 scripts covered)
+│
 └── utils/                              # Shared test utilities
     ├── api_client.py                   # SerialStudioClient — TCP API wrapper
     ├── device_simulator.py             # Simulates TCP/UDP devices sending telemetry
@@ -81,6 +91,8 @@ tests/
 ```
 
 ## How Tests Work
+
+### Integration / Security / Performance tests
 
 Every integration test follows the same pattern:
 
@@ -93,6 +105,19 @@ Every integration test follows the same pattern:
 
 The `conftest.py` fixtures handle most boilerplate. A typical test only needs
 `api_client`, `device_simulator`, and `clean_state`.
+
+### Script tests
+
+Script tests exercise the JavaScript frame-parser scripts in `app/rcc/scripts/`
+without any Qt or Serial Studio dependency. Each test calls `run_parser()`, which:
+
+1. Reads the `.js` source file from `app/rcc/scripts/`
+2. Appends a one-liner that calls `parse(frame)` and prints the result as JSON
+3. Runs the combined snippet in a **fresh Node.js subprocess** (no shared state)
+4. Deserialises the JSON output and returns it as a Python list
+
+Because each call spawns a new process, parser scripts that maintain a `parsedValues`
+array always start from zeros — tests are fully isolated from one another.
 
 ## Key Fixtures
 
@@ -112,6 +137,12 @@ Security tests have additional fixtures in `security/conftest.py`:
 | `security_client` | API client that does **not** reset state between tests |
 | `vuln_tracker` | Logs discovered vulnerabilities for reporting |
 | `check_server_alive` | Verifies the server did not crash after a test |
+
+Script tests expose a single fixture in `scripts/conftest.py`:
+
+| Fixture | What it does |
+|---------|-------------|
+| `parse_script` | Returns the `run_parser(script_name, frame)` callable |
 
 ## Operation Modes
 
@@ -159,6 +190,12 @@ pytest tests/integration/ -v --tb=short
 
 # All security tests (skip destructive)
 pytest tests/security/ -m "not destructive" -v
+
+# All frame-parser script tests (Node.js required, Serial Studio not needed)
+pytest tests/scripts/ -v
+
+# Run a single parser class
+pytest tests/scripts/test_frame_parsers.py::TestNmea0183 -v
 
 # Parallel execution (4 workers)
 pytest tests/integration/ -n 4
@@ -268,19 +305,6 @@ frame = DataGenerator.wrap_frame("1.0,2.0", mode="project", checksum_type=Checks
 frame = b"1.0,2.0,3.0\n"
 ```
 
-### Checksum algorithm names
-
-| `ChecksumType` enum | API string |
-|---------------------|-----------|
-| `NONE` | `""` |
-| `XOR` | `"XOR-8"` |
-| `SUM` | `"MOD-256"` |
-| `CRC8` | `"CRC-8"` |
-| `CRC16` | `"CRC-16"` |
-| `CRC32` | `"CRC-32"` |
-| `FLETCHER16` | `"Fletcher-16"` |
-| `ADLER32` | `"Adler-32"` |
-
 ## Troubleshooting
 
 **"Connection refused" on port 7777** — Serial Studio is not running or the API
@@ -297,3 +321,6 @@ connection defensively. Increase delays between commands or use the `clean_state
 fixture, which includes automatic reconnection logic.
 
 **Import errors** — Run `pip install -r tests/requirements.txt`.
+
+**Script tests fail with `node: command not found`** — Install Node.js and make sure
+`node` is on your `PATH`. Script tests are the only ones that require it.

@@ -50,29 +50,25 @@
  * @returns {Array<Array>} 2D array where each row is one frame
  */
 function parse(frame) {
-    // STEP 1: Parse incoming data format
-    var data = JSON.parse(frame);
+  // STEP 1: Parse incoming data format
+  var data = JSON.parse(frame);
 
-    // STEP 2: Extract array of records
-    var records = data.records || [];
+  // STEP 2: Extract array of records
+  var records = data.records || [];
 
-    // STEP 3: Convert each record to array of values
-    var result = [];
-    for (var i = 0; i < records.length; i++) {
-        var record = records[i];
+  // STEP 3: Convert each record to array of values
+  var result = [];
+  for (var i = 0; i < records.length; i++) {
+    var record = records[i];
+    result.push([
+      record.timestamp || 0,
+      record.temp      || 0.0,
+      record.humidity  || 0.0
+    ]);
+  }
 
-        // Extract fields in the order they should appear in dashboard
-        var row = [
-            record.timestamp || 0,
-            record.temp || 0.0,
-            record.humidity || 0.0
-        ];
-
-        result.push(row);
-    }
-
-    // STEP 4: Return 2D array
-    return result;
+  // STEP 4: Return 2D array
+  return result;
 }
 
 /**
@@ -84,15 +80,15 @@ function parse(frame) {
 // Input: "1000,25.5,60.0\n2000,25.7,59.8\n3000,25.9,59.5"
 /*
 function parse(frame) {
-    var lines = frame.trim().split('\n');
-    var result = [];
+  var lines  = frame.trim().split('\n');
+  var result = [];
 
-    for (var i = 0; i < lines.length; i++) {
-        var values = lines[i].split(',').map(parseFloat);
-        result.push(values);
-    }
+  for (var i = 0; i < lines.length; i++) {
+    var values = lines[i].split(',').map(parseFloat);
+    result.push(values);
+  }
 
-    return result;
+  return result;
 }
 */
 
@@ -100,21 +96,20 @@ function parse(frame) {
 // Input: Binary data with 3-byte records (1 byte + 2 shorts)
 /*
 function parse(frame) {
-    var result = [];
-    var recordSize = 5; // bytes per record
+  var result     = [];
+  var recordSize = 5;
 
-    // Process each record
-    for (var i = 0; i < frame.length; i += recordSize) {
-        if (i + recordSize > frame.length) break;
+  for (var i = 0; i < frame.length; i += recordSize) {
+    if (i + recordSize > frame.length) break;
 
-        var id = frame[i];
-        var temp = ((frame[i+1] << 8) | frame[i+2]) / 10.0;
-        var humidity = ((frame[i+3] << 8) | frame[i+4]) / 10.0;
+    var id       = frame[i];
+    var temp     = ((frame[i + 1] << 8) | frame[i + 2]) / 10.0;
+    var humidity = ((frame[i + 3] << 8) | frame[i + 4]) / 10.0;
 
-        result.push([id, temp, humidity]);
-    }
+    result.push([id, temp, humidity]);
+  }
 
-    return result;
+  return result;
 }
 */
 
@@ -122,8 +117,8 @@ function parse(frame) {
 // Input: {"data": [[1,2,3], [4,5,6], [7,8,9]]}
 /*
 function parse(frame) {
-    var data = JSON.parse(frame);
-    return data.data || [];
+  var data = JSON.parse(frame);
+  return data.data || [];
 }
 */
 
@@ -131,83 +126,64 @@ function parse(frame) {
 // Input: "1,25.5,60.0;2,25.7,59.8;3,25.9,59.5"
 /*
 function parse(frame) {
-    var rows = frame.split(';');
-    var result = [];
+  var rows   = frame.split(';');
+  var result = [];
 
-    for (var i = 0; i < rows.length; i++) {
-        var values = rows[i].split(',').map(parseFloat);
-        result.push(values);
-    }
+  for (var i = 0; i < rows.length; i++) {
+    var values = rows[i].split(',').map(parseFloat);
+    result.push(values);
+  }
 
-    return result;
+  return result;
 }
 */
 
 // VARIATION 5: Historical data with timestamps
-// Input: Batch of timestamped sensor readings
 /*
 function parse(frame) {
-    var data = JSON.parse(frame);
-    var history = data.history || [];
-    var result = [];
+  var data    = JSON.parse(frame);
+  var history = data.history || [];
+  var result  = [];
 
-    for (var i = 0; i < history.length; i++) {
-        var entry = history[i];
-        result.push([
-            entry.time,
-            entry.sensor1,
-            entry.sensor2,
-            entry.sensor3
-        ]);
-    }
+  for (var i = 0; i < history.length; i++) {
+    var entry = history[i];
+    result.push([entry.time, entry.sensor1, entry.sensor2, entry.sensor3]);
+  }
 
-    return result;
+  return result;
 }
 */
 
 // VARIATION 6: GPS track with multiple position samples
-// Input: Array of GPS fixes from a journey
 /*
 function parse(frame) {
-    var data = JSON.parse(frame);
-    var fixes = data.gps_track || [];
-    var result = [];
+  var data   = JSON.parse(frame);
+  var fixes  = data.gps_track || [];
+  var result = [];
 
-    for (var i = 0; i < fixes.length; i++) {
-        var fix = fixes[i];
-        result.push([
-            fix.timestamp,
-            fix.latitude,
-            fix.longitude,
-            fix.altitude,
-            fix.speed,
-            fix.satellites
-        ]);
-    }
+  for (var i = 0; i < fixes.length; i++) {
+    var fix = fixes[i];
+    result.push([fix.timestamp, fix.latitude, fix.longitude,
+                 fix.altitude, fix.speed, fix.satellites]);
+  }
 
-    return result;
+  return result;
 }
 */
 
 // VARIATION 7: Industrial PLC batch data
-// Input: Multiple sensor readings from production line
 /*
 function parse(frame) {
-    var data = JSON.parse(frame);
-    var readings = data.batch || [];
-    var result = [];
+  var data     = JSON.parse(frame);
+  var readings = data.batch || [];
+  var result   = [];
 
-    for (var i = 0; i < readings.length; i++) {
-        var r = readings[i];
-        result.push([
-            r.sequence_number,
-            r.pressure,
-            r.temperature,
-            r.flow_rate,
-            r.quality_flag
-        ]);
-    }
+  for (var i = 0; i < readings.length; i++) {
+    var r = readings[i];
+    result.push([r.sequence_number, r.pressure, r.temperature,
+                 r.flow_rate, r.quality_flag]);
+  }
 
-    return result;
+  return result;
 }
 */

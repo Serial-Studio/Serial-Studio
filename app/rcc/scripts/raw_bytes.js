@@ -21,12 +21,5 @@
  * @returns {array} Array of byte values (0-255)
  */
 function parse(frame) {
-  let dataArray = [];
-
-  for (let i = 0; i < frame.length; ++i) {
-    let byte = frame[i];
-    dataArray.push(byte);
-  }
-
-  return dataArray;
+  return Array.from(frame);
 }

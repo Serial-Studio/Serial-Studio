@@ -37,11 +37,16 @@ const numItems = 5;
  * Format: tag_number: index_in_output_array
  */
 const tagToIndexMap = {
-  0x01: 0,    // Tag 0x01 -> index 0 (e.g., temperature)
-  0x02: 1,    // Tag 0x02 -> index 1 (e.g., humidity)
-  0x03: 2,    // Tag 0x03 -> index 2 (e.g., pressure)
-  0x04: 3,    // Tag 0x04 -> index 3 (e.g., battery voltage)
-  0x05: 4     // Tag 0x05 -> index 4 (e.g., signal strength)
+  // Tag 0x01 → index 0 (e.g., temperature)
+  0x01: 0,
+  // Tag 0x02 → index 1 (e.g., humidity)
+  0x02: 1,
+  // Tag 0x03 → index 2 (e.g., pressure)
+  0x03: 2,
+  // Tag 0x04 → index 3 (e.g., battery voltage)
+  0x04: 3,
+  // Tag 0x05 → index 4 (e.g., signal strength)
+  0x05: 4
 };
 
 /**
@@ -71,44 +76,23 @@ const parsedValues = new Array(numItems).fill(0);
 function parse(frame) {
   let i = 0;
 
-  // Loop through the frame, parsing each TLV entry
-  while (i < frame.length - 1) {  // Need at least Tag and Length bytes
+  // Need at least Tag and Length bytes to process an entry
+  while (i < frame.length - 1) {
+    let tag = frame[i++];
+    let length = frame[i++];
 
-    // Read the Tag byte (identifies the data type)
-    let tag = frame[i];
-    i++;
+    // Stop if the value bytes would exceed the frame boundary
+    if (i + length > frame.length)
+      break;
 
-    // Read the Length byte (number of bytes in the value)
-    let length = frame[i];
-    i++;
-
-    // Make sure we have enough bytes left for the value
-    if (i + length > frame.length) {
-      break;  // Incomplete TLV entry, stop parsing
-    }
-
-    // Read the Value bytes
-    let valueBytes = [];
-    for (let j = 0; j < length; j++) {
-      valueBytes.push(frame[i]);
-      i++;
-    }
-
-    // Convert value bytes to a number
-    // For single byte: just use the byte value
-    // For multiple bytes: combine them (big-endian)
+    // Read the value bytes and combine big-endian into a number
     let value = 0;
-    for (let j = 0; j < valueBytes.length; j++) {
-      value = (value << 8) | valueBytes[j];
-    }
+    for (let j = 0; j < length; j++)
+      value = (value << 8) | frame[i++];
 
-    // Look up where this tag's value should be stored
-    if (tagToIndexMap.hasOwnProperty(tag)) {
-      let index = tagToIndexMap[tag];
-      parsedValues[index] = value;
-    }
+    if (tagToIndexMap.hasOwnProperty(tag))
+      parsedValues[tagToIndexMap[tag]] = value;
   }
 
-  // Return the complete array
   return parsedValues;
 }

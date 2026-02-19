@@ -23,13 +23,10 @@
  */
 function parse(frame) {
   let dataArray = [];
-
   let hexString = frame.replace(/\s+/g, '');
-  for (let i = 0; i < hexString.length; i += 2) {
-    let hexByte = hexString.substring(i, i + 2);
-    let byteValue = parseInt(hexByte, 16);
-    dataArray.push(byteValue);
-  }
+
+  for (let i = 0; i < hexString.length; i += 2)
+    dataArray.push(parseInt(hexString.substring(i, i + 2), 16));
 
   return dataArray;
 }

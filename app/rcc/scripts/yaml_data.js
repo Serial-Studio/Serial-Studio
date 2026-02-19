@@ -54,50 +54,40 @@ const parsedValues = new Array(numItems).fill(0);
 //------------------------------------------------------------------------------
 
 /**
- * Parses a YAML value string and converts to appropriate type.
- * Handles: numbers, booleans, null, strings
+ * Parses a YAML value string and converts to the appropriate type.
+ * Handles: numbers, booleans, null, and strings.
  */
 function parseYAMLValue(valueStr) {
-  // Trim whitespace
   valueStr = valueStr.trim();
 
-  // Handle empty/null values
-  if (valueStr === '' || valueStr === 'null' || valueStr === '~') {
+  if (valueStr === '' || valueStr === 'null' || valueStr === '~')
     return null;
-  }
 
-  // Handle booleans
-  if (valueStr === 'true' || valueStr === 'yes' || valueStr === 'on') {
+  if (valueStr === 'true' || valueStr === 'yes' || valueStr === 'on')
     return true;
-  }
-  if (valueStr === 'false' || valueStr === 'no' || valueStr === 'off') {
+
+  if (valueStr === 'false' || valueStr === 'no' || valueStr === 'off')
     return false;
-  }
 
-  // Handle quoted strings (remove quotes)
-  if ((valueStr.charAt(0) === '"' && valueStr.charAt(valueStr.length - 1) === '"') ||
-      (valueStr.charAt(0) === "'" && valueStr.charAt(valueStr.length - 1) === "'")) {
+  // Remove surrounding quotes from quoted strings
+  var first = valueStr.charAt(0), last = valueStr.charAt(valueStr.length - 1);
+  if ((first === '"' && last === '"') || (first === "'" && last === "'"))
     return valueStr.substring(1, valueStr.length - 1);
-  }
 
-  // Try to parse as number
   var numValue = parseFloat(valueStr);
-  if (!isNaN(numValue)) {
+  if (!isNaN(numValue))
     return numValue;
-  }
 
-  // Return as string
   return valueStr;
 }
 
 /**
- * Removes YAML comments (everything after '#').
+ * Strips inline YAML comments (everything from '#' onward).
  */
 function removeComment(line) {
   var commentPos = line.indexOf('#');
-  if (commentPos !== -1) {
+  if (commentPos !== -1)
     return line.substring(0, commentPos);
-  }
   return line;
 }
 
@@ -122,86 +112,50 @@ function removeComment(line) {
  *   - Does not support anchors/aliases
  *   - Only parses top-level key-value pairs
  *
- * How it works:
- * 1. Splits the frame into individual lines
- * 2. For each line, removes comments
- * 3. Splits on ':' to get key and value
- * 4. Parses the value (number, boolean, string, etc.)
- * 5. Looks up the key in keyToIndexMap
- * 6. Stores the value at the mapped index
- *
- * Example:
- *   Input:  "temperature: 25.5\nhumidity: 60\nstatus: online"
- *   Output: [25.5, 60, 0, 0, ...]
- *
  * @param {string} frame - The YAML data from the data source
  * @returns {array} Array of values mapped according to keyToIndexMap
  */
 function parse(frame) {
-  // Trim whitespace
   frame = frame.trim();
 
-  // Skip empty frames
-  if (frame.length === 0) {
+  if (frame.length === 0)
     return parsedValues;
-  }
 
-  // Split into lines
   var lines = frame.split('\n');
 
-  // Process each line
   for (var i = 0; i < lines.length; i++) {
-    var line = lines[i];
+    var line = removeComment(lines[i]).trim();
 
-    // Remove comments
-    line = removeComment(line);
-
-    // Trim whitespace
-    line = line.trim();
-
-    // Skip empty lines
-    if (line.length === 0) {
+    if (line.length === 0)
       continue;
-    }
 
-    // Skip YAML document separators
-    if (line === '---' || line === '...') {
+    // Skip YAML document separator markers
+    if (line === '---' || line === '...')
       continue;
-    }
 
-    // Split on ':' to get key and value
     var colonPos = line.indexOf(':');
-    if (colonPos === -1) {
-      continue; // No ':' found, skip this line
-    }
+    if (colonPos === -1)
+      continue;
 
-    // Extract key and value
-    var key = line.substring(0, colonPos).trim();
+    var key      = line.substring(0, colonPos).trim();
     var valueStr = line.substring(colonPos + 1).trim();
 
-    // Skip if key is empty
-    if (key.length === 0) {
+    if (key.length === 0)
       continue;
-    }
 
-    // Remove quotes from key if present
-    if ((key.charAt(0) === '"' && key.charAt(key.length - 1) === '"') ||
-        (key.charAt(0) === "'" && key.charAt(key.length - 1) === "'")) {
+    // Strip surrounding quotes from key
+    var first = key.charAt(0), last = key.charAt(key.length - 1);
+    if ((first === '"' && last === '"') || (first === "'" && last === "'"))
       key = key.substring(1, key.length - 1);
-    }
 
-    // Parse the value
+    if (!keyToIndexMap.hasOwnProperty(key))
+      continue;
+
     var value = parseYAMLValue(valueStr);
 
-    // Look up the key and store the value at the mapped index
-    if (keyToIndexMap.hasOwnProperty(key)) {
-      var index = keyToIndexMap[key];
-
-      // If value is null, keep previous value (or use 0)
-      if (value !== null) {
-        parsedValues[index] = value;
-      }
-    }
+    // Retain the previous value when YAML explicitly sets null
+    if (value !== null)
+      parsedValues[keyToIndexMap[key]] = value;
   }
 
   return parsedValues;

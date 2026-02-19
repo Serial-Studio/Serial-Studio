@@ -42,20 +42,15 @@ const parsedValues = new Array(Object.keys(keyToIndexMap).length).fill(0);
  * @returns {array} Array of values mapped according to keyToIndexMap
  */
 function parse(frame) {
-  // Regular expression to match "key=value" pairs
   const regex = /([\w]+)=([\d.]+)/g;
   let match;
 
-  // Iterate over all matches in the frame
   while ((match = regex.exec(frame)) !== null) {
-    const key = match[1];                    // Extract the key (e.g., "temperature")
-    const value = parseFloat(match[2]);      // Extract the numeric value (e.g., 22.5)
+    const key = match[1];
+    const value = parseFloat(match[2]);
 
-    // Check if the key exists in the map
-    if (keyToIndexMap.hasOwnProperty(key)) {
-      const index = keyToIndexMap[key];      // Get the mapped index
-      parsedValues[index] = value;           // Update the corresponding value
-    }
+    if (keyToIndexMap.hasOwnProperty(key))
+      parsedValues[keyToIndexMap[key]] = value;
   }
 
   return parsedValues;

@@ -48,19 +48,11 @@ const parsedValues = new Array(numItems).fill(0);
  * @returns {array} Array of values mapped according to fieldToIndexMap
  */
 function parse(frame) {
-  if (frame.length === 0) {
-    return parsedValues;
-  }
-
   try {
-    var data = JSON.parse(frame);
-
-    // Update only the fields present in this JSON packet
-    for (var field in fieldToIndexMap) {
-      if (fieldToIndexMap.hasOwnProperty(field) && data.hasOwnProperty(field)) {
-        var index = fieldToIndexMap[field];
-        parsedValues[index] = data[field];
-      }
+    let data = JSON.parse(frame);
+    for (let field in fieldToIndexMap) {
+      if (fieldToIndexMap.hasOwnProperty(field) && data.hasOwnProperty(field))
+        parsedValues[fieldToIndexMap[field]] = data[field];
     }
 
     return parsedValues;

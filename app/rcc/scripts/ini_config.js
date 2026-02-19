@@ -66,44 +66,32 @@ const parsedValues = new Array(numItems).fill(0);
  * @returns {array} Array of values mapped according to keyToIndexMap
  */
 function parse(frame) {
-  // Split frame into individual lines
-  var lines = frame.split('\n');
+  let lines = frame.split('\n');
 
-  // Process each line
-  for (var i = 0; i < lines.length; i++) {
-    var line = lines[i].trim();
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i].trim();
 
-    // Skip empty lines
-    if (line.length === 0) {
+    if (line.length === 0)
       continue;
-    }
 
-    // Skip comment lines (starting with ; or #)
-    if (line.charAt(0) === ';' || line.charAt(0) === '#') {
+    // Skip comment lines starting with ';' or '#'
+    if (line.charAt(0) === ';' || line.charAt(0) === '#')
       continue;
-    }
 
-    // Split on '=' to get key and value
-    var parts = line.split('=');
-    if (parts.length < 2) {
-      continue;  // Invalid line, skip it
-    }
+    let parts = line.split('=');
+    if (parts.length < 2)
+      continue;
 
-    // Extract key and value, trim whitespace
-    var key = parts[0].trim();
-    var valueStr = parts[1].trim();
+    let key = parts[0].trim();
+    let valueStr = parts[1].trim();
 
-    // Try to parse as number, otherwise keep as string
-    var value = parseFloat(valueStr);
-    if (isNaN(value)) {
-      value = valueStr;  // Keep as string if not a number
-    }
+    // Use the numeric value if parseable, otherwise keep as string
+    let value = parseFloat(valueStr);
+    if (isNaN(value))
+      value = valueStr;
 
-    // Look up the key and store the value at the mapped index
-    if (keyToIndexMap.hasOwnProperty(key)) {
-      var index = keyToIndexMap[key];
-      parsedValues[index] = value;
-    }
+    if (keyToIndexMap.hasOwnProperty(key))
+      parsedValues[keyToIndexMap[key]] = value;
   }
 
   return parsedValues;

@@ -53,14 +53,13 @@ const parsedValues = new Array(numItems).fill(0);
 //------------------------------------------------------------------------------
 
 /**
- * Decodes URL-encoded string (percent-encoding).
+ * Decodes a URL-encoded (percent-encoded) string.
  *
  * Converts:
- *   - %XX to the corresponding character (e.g., %20 -> space)
+ *   - %XX to the corresponding character (e.g., %20 → space)
  *   - '+' to space
- *   - Handles UTF-8 multi-byte sequences
  *
- * Example: "Hello%20World" -> "Hello World"
+ * Example: "Hello%20World" → "Hello World"
  */
 function decodeURIComponent(str) {
   var result = "";
@@ -70,25 +69,20 @@ function decodeURIComponent(str) {
     var c = str.charAt(i);
 
     if (c === '%') {
-      // Percent-encoded character
       if (i + 2 < str.length) {
-        var hex = str.substring(i + 1, i + 3);
-        var charCode = parseInt(hex, 16);
-        result += String.fromCharCode(charCode);
+        result += String.fromCharCode(parseInt(str.substring(i + 1, i + 3), 16));
         i += 3;
       } else {
-        // Invalid encoding, just add the %
+        // Truncated percent sequence; emit as-is
         result += c;
         i++;
       }
     }
     else if (c === '+') {
-      // '+' is space in URL encoding
       result += ' ';
       i++;
     }
     else {
-      // Regular character
       result += c;
       i++;
     }
@@ -120,59 +114,36 @@ function decodeURIComponent(str) {
  * 4. Looks up the key in keyToIndexMap
  * 5. Stores the value at the mapped index
  *
- * Example:
- *   Input:  "temp=25.5&humidity=60&status=OK"
- *   Output: [25.5, 60, 0, 0, ...]
- *
  * @param {string} frame - The URL-encoded data from the data source
  * @returns {array} Array of values mapped according to keyToIndexMap
  */
 function parse(frame) {
-  // Trim whitespace
   frame = frame.trim();
 
-  // Skip empty frames
-  if (frame.length === 0) {
+  if (frame.length === 0)
     return parsedValues;
-  }
 
-  // Split into key=value pairs
   var pairs = frame.split('&');
 
-  // Process each pair
   for (var i = 0; i < pairs.length; i++) {
     var pair = pairs[i];
 
-    // Skip empty pairs
-    if (pair.length === 0) {
+    if (pair.length === 0)
       continue;
-    }
 
-    // Split on '=' to get key and value
     var equalPos = pair.indexOf('=');
-    if (equalPos === -1) {
-      continue; // No '=' found, skip this pair
-    }
+    if (equalPos === -1)
+      continue;
 
-    // Extract key and value
-    var key = pair.substring(0, equalPos);
-    var valueStr = pair.substring(equalPos + 1);
+    var key      = decodeURIComponent(pair.substring(0, equalPos));
+    var valueStr = decodeURIComponent(pair.substring(equalPos + 1));
 
-    // Decode URL encoding
-    key = decodeURIComponent(key);
-    valueStr = decodeURIComponent(valueStr);
-
-    // Try to parse as number, otherwise keep as string
     var value = parseFloat(valueStr);
-    if (isNaN(value)) {
-      value = valueStr; // Keep as string if not a number
-    }
+    if (isNaN(value))
+      value = valueStr;
 
-    // Look up the key and store the value at the mapped index
-    if (keyToIndexMap.hasOwnProperty(key)) {
-      var index = keyToIndexMap[key];
-      parsedValues[index] = value;
-    }
+    if (keyToIndexMap.hasOwnProperty(key))
+      parsedValues[keyToIndexMap[key]] = value;
   }
 
   return parsedValues;

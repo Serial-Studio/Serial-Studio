@@ -47,35 +47,34 @@ const mavlinkVersion = 1;
  *   - parser: Function to extract values from the message payload
  */
 const messageIdToIndexMap = {
-  // ATTITUDE message (ID 30): roll, pitch, yaw, rollspeed, pitchspeed, yawspeed
+  // ATTITUDE (ID 30): roll, pitch, yaw angles in radians (4 bytes each, float, little-endian)
   30: {
     indices: [0, 1, 2],
     parser: function(payload) {
-      // Extract roll, pitch, yaw (4 bytes each, float, little-endian)
-      var roll = extractFloat32LE(payload, 4);
+      var roll  = extractFloat32LE(payload, 4);
       var pitch = extractFloat32LE(payload, 8);
-      var yaw = extractFloat32LE(payload, 12);
+      var yaw   = extractFloat32LE(payload, 12);
       return [roll, pitch, yaw];
     }
   },
-  // VFR_HUD message (ID 74): airspeed, groundspeed, heading, throttle, alt, climb
+  // VFR_HUD (ID 74): airspeed, groundspeed, heading, throttle
   74: {
     indices: [3, 4, 5, 6],
     parser: function(payload) {
-      var airspeed = extractFloat32LE(payload, 0);
+      var airspeed    = extractFloat32LE(payload, 0);
       var groundspeed = extractFloat32LE(payload, 4);
-      var heading = extractInt16LE(payload, 8);
-      var throttle = extractUint16LE(payload, 10);
+      var heading     = extractInt16LE(payload, 8);
+      var throttle    = extractUint16LE(payload, 10);
       return [airspeed, groundspeed, heading, throttle];
     }
   },
-  // GLOBAL_POSITION_INT message (ID 33): lat, lon, alt, relative_alt, vx, vy, vz, hdg
+  // GLOBAL_POSITION_INT (ID 33): lat/lon in 1e-7 degrees, alt in mm
   33: {
     indices: [7, 8, 9],
     parser: function(payload) {
-      var lat = extractInt32LE(payload, 4) / 1e7;    // Latitude in degrees
-      var lon = extractInt32LE(payload, 8) / 1e7;    // Longitude in degrees
-      var alt = extractInt32LE(payload, 12) / 1000;  // Altitude in meters
+      var lat = extractInt32LE(payload, 4) / 1e7;
+      var lon = extractInt32LE(payload, 8) / 1e7;
+      var alt = extractInt32LE(payload, 12) / 1000;
       return [lat, lon, alt];
     }
   }
@@ -95,27 +94,20 @@ const parsedValues = new Array(numItems).fill(0);
  * Extracts a 32-bit float from byte array (little-endian).
  */
 function extractFloat32LE(bytes, offset) {
-  var buffer = [];
-  for (var i = 0; i < 4; i++) {
-    buffer.push(bytes[offset + i]);
-  }
+  var b0 = bytes[offset], b1 = bytes[offset + 1];
+  var b2 = bytes[offset + 2], b3 = bytes[offset + 3];
 
-  // Convert bytes to IEEE 754 float (simplified)
-  var value = 0;
-  var sign = (buffer[3] & 0x80) ? -1 : 1;
-  var exponent = ((buffer[3] & 0x7F) << 1) | (buffer[2] >> 7);
-  var mantissa = ((buffer[2] & 0x7F) << 16) | (buffer[1] << 8) | buffer[0];
+  var sign     = (b3 & 0x80) ? -1 : 1;
+  var exponent = ((b3 & 0x7F) << 1) | (b2 >> 7);
+  var mantissa = ((b2 & 0x7F) << 16) | (b1 << 8) | b0;
 
-  if (exponent === 0) {
-    value = sign * mantissa * Math.pow(2, -149);
-  } else if (exponent === 0xFF) {
-    value = mantissa ? NaN : sign * Infinity;
-  } else {
-    mantissa = mantissa | 0x800000;
-    value = sign * mantissa * Math.pow(2, exponent - 150);
-  }
+  if (exponent === 0)
+    return sign * mantissa * Math.pow(2, -149);
 
-  return value;
+  if (exponent === 0xFF)
+    return mantissa ? NaN : sign * Infinity;
+
+  return sign * (mantissa | 0x800000) * Math.pow(2, exponent - 150);
 }
 
 /**
@@ -171,41 +163,28 @@ function extractInt32LE(bytes, offset) {
  * @returns {array} Array of values mapped according to messageIdToIndexMap
  */
 function parse(frame) {
-  // Check minimum frame length
-  if (frame.length < 8) {
+  if (frame.length < 8)
     return parsedValues;
-  }
 
-  // Check start marker
   var expectedMarker = (mavlinkVersion === 2) ? 0xFD : 0xFE;
-  if (frame[0] !== expectedMarker) {
+  if (frame[0] !== expectedMarker)
     return parsedValues;
-  }
 
-  // Extract payload length and message ID
   var payloadLength = frame[1];
-  var messageId = frame[5];  // For MAVLink v1
+  var messageId = frame[5];
 
-  // Extract payload
   var payload = [];
-  var payloadStart = 6;
-  for (var i = 0; i < payloadLength && (payloadStart + i) < frame.length; i++) {
-    payload.push(frame[payloadStart + i]);
-  }
+  for (var i = 0; i < payloadLength && (6 + i) < frame.length; i++)
+    payload.push(frame[6 + i]);
 
-  // Look up parser for this message ID
-  if (messageIdToIndexMap.hasOwnProperty(messageId)) {
-    var config = messageIdToIndexMap[messageId];
+  if (!messageIdToIndexMap.hasOwnProperty(messageId))
+    return parsedValues;
 
-    // Call the custom parser function
-    var values = config.parser(payload);
+  var config = messageIdToIndexMap[messageId];
+  var values = config.parser(payload);
 
-    // Store values at mapped indices
-    for (var i = 0; i < values.length && i < config.indices.length; i++) {
-      var index = config.indices[i];
-      parsedValues[index] = values[i];
-    }
-  }
+  for (var i = 0; i < values.length && i < config.indices.length; i++)
+    parsedValues[config.indices[i]] = values[i];
 
   return parsedValues;
 }

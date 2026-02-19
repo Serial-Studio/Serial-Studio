@@ -20,13 +20,12 @@
 //------------------------------------------------------------------------------
 
 /**
- * SLIP protocol special bytes.
- * These values are defined by RFC 1055.
+ * SLIP protocol special bytes (RFC 1055).
  */
-const SLIP_END = 0xC0;      // Frame delimiter (192 decimal)
-const SLIP_ESC = 0xDB;      // Escape character (219 decimal)
-const SLIP_ESC_END = 0xDC;  // Escaped END (220 decimal)
-const SLIP_ESC_ESC = 0xDD;  // Escaped ESC (221 decimal)
+const SLIP_END     = 0xC0;
+const SLIP_ESC     = 0xDB;
+const SLIP_ESC_END = 0xDC;
+const SLIP_ESC_ESC = 0xDD;
 
 //------------------------------------------------------------------------------
 // Frame Parser Function
@@ -59,51 +58,35 @@ function parse(frame) {
   var decoded = [];
   var i = 0;
 
-  // Process the SLIP-encoded frame
   while (i < frame.length) {
-    var byte = frame[i];
-    i++;
+    var byte = frame[i++];
 
-    // Skip END bytes (frame delimiters that may remain)
-    if (byte === SLIP_END) {
+    // Skip residual END bytes (frame delimiters that may remain)
+    if (byte === SLIP_END)
       continue;
-    }
 
     // Handle escape sequences
     if (byte === SLIP_ESC) {
-      // Read the next byte to determine what was escaped
-      if (i < frame.length) {
-        var nextByte = frame[i];
-        i++;
-
-        // ESC + ESC_END -> original END byte
-        if (nextByte === SLIP_ESC_END) {
-          decoded.push(SLIP_END);
-        }
-
-        // ESC + ESC_ESC -> original ESC byte
-        else if (nextByte === SLIP_ESC_ESC) {
-          decoded.push(SLIP_ESC);
-        }
-
-        // Invalid escape sequence, push both bytes
-        else {
-          decoded.push(SLIP_ESC);
-          decoded.push(nextByte);
-        }
+      if (i >= frame.length) {
+        decoded.push(SLIP_ESC);
+        continue;
       }
 
-      // ESC at end of frame (incomplete escape sequence)
-      // Just push the ESC byte
+      var nextByte = frame[i++];
+
+      if (nextByte === SLIP_ESC_END)
+        decoded.push(SLIP_END);
+      else if (nextByte === SLIP_ESC_ESC)
+        decoded.push(SLIP_ESC);
       else {
         decoded.push(SLIP_ESC);
+        decoded.push(nextByte);
       }
+
+      continue;
     }
 
-    // Regular byte, no escaping needed
-    else {
-      decoded.push(byte);
-    }
+    decoded.push(byte);
   }
 
   return decoded;

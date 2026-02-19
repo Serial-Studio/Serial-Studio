@@ -43,31 +43,21 @@ function parse(frame) {
   let decoded = [];
   let i = 0;
 
-  // Process the COBS-encoded frame
   while (i < frame.length) {
+    // The overhead byte tells us how many non-zero bytes follow before the next zero
+    let code = frame[i++];
 
-    // Read the overhead byte (code byte)
-    // This tells us how many non-zero bytes follow before the next zero
-    let code = frame[i];
-    i++;
-
-    // If code is 0x00, we've reached the end (shouldn't happen if framing is correct)
-    if (code === 0) {
+    // A zero code byte signals the end of the frame (framing error if seen mid-stream)
+    if (code === 0)
       break;
-    }
 
-    // Copy (code - 1) bytes to the output
-    // We subtract 1 because the code byte itself counts as one of the positions
-    for (let j = 1; j < code && i < frame.length; j++) {
-      decoded.push(frame[i]);
-      i++;
-    }
+    // Copy (code - 1) non-zero data bytes; the code itself counts as one position
+    for (let j = 1; j < code && i < frame.length; j++)
+      decoded.push(frame[i++]);
 
-    // If code is less than 0xFF, insert a zero byte
-    // (unless we're at the end of the frame)
-    if (code < 0xFF && i < frame.length) {
+    // Insert a zero unless this block reaches the maximum length (0xFF = no zero follows)
+    if (code < 0xFF && i < frame.length)
       decoded.push(0x00);
-    }
   }
 
   return decoded;
