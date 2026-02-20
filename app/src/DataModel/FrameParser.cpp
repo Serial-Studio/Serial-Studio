@@ -21,6 +21,7 @@
 
 #include "DataModel/FrameParser.h"
 
+#include <QAtomicInt>
 #include <QDesktopServices>
 #include <QFile>
 #include <QFileDialog>
@@ -30,6 +31,7 @@
 #include <QLineNumberArea>
 #include <QRegularExpression>
 #include <QtGui/qshortcut.h>
+#include <QThread>
 
 #include "DataModel/ProjectModel.h"
 #include "Misc/CommonFonts.h"
@@ -620,9 +622,6 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
   // Reset any previously loaded function
   m_parseFunction = QJSValue();
 
-  // Ensure that engine is configured correctly
-  m_engine.installExtensions(QJSEngine::AllExtensions);
-
   // Check for JavaScript syntax errors
   QStringList exceptionStackTrace;
   auto result = m_engine.evaluate(script, "parser.js", 1, &exceptionStackTrace);
@@ -753,21 +752,42 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
   //
   // A genuine code defect (e.g. calling an undefined function) throws on
   // every probe, so real bugs are still caught and reported.
+  //
+  // A watchdog thread interrupts the engine after 500 ms to guard against
+  // infinite loops and heap-exhaustion scripts.
   bool probeOk = false;
   QJSValue lastError;
   auto byteProbe = m_engine.newArray(1);
   byteProbe.setProperty(0, 0);
   const QJSValue probeInputs[] = {QJSValue("0"), byteProbe, QJSValue("")};
-  for (const auto& input : probeInputs) {
-    QJSValueList probeArgs;
-    probeArgs << input;
-    const auto probeResult = parseFunction.call(probeArgs);
-    if (!probeResult.isError()) {
-      probeOk = true;
-      break;
+
+  {
+    QAtomicInt probeDone(0);
+    auto* watchdog = QThread::create([this, &probeDone]() {
+      constexpr int kTimeoutMs = 500;
+      constexpr int kSliceMs   = 20;
+      for (int t = 0; t < kTimeoutMs && !probeDone.loadAcquire(); t += kSliceMs)
+        QThread::msleep(kSliceMs);
+      if (!probeDone.loadAcquire())
+        m_engine.setInterrupted(true);
+    });
+    watchdog->start();
+
+    for (const auto& input : probeInputs) {
+      QJSValueList probeArgs;
+      probeArgs << input;
+      const auto probeResult = parseFunction.call(probeArgs);
+      if (!probeResult.isError()) {
+        probeOk = true;
+        break;
+      }
+      lastError = probeResult;
     }
 
-    lastError = probeResult;
+    probeDone.storeRelease(1);
+    m_engine.setInterrupted(false);
+    watchdog->wait();
+    watchdog->deleteLater();
   }
 
   // All validations failed

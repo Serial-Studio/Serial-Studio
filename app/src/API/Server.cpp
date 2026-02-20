@@ -800,7 +800,7 @@ void API::Server::acceptConnection()
                << socket->peerPort() << "- Current clients:" << m_connections.size()
                << "- Limit:" << kMaxApiClients << "- Rejecting connection";
 
-    socket->close();
+    socket->abort();
     socket->deleteLater();
     return;
   }

@@ -199,16 +199,21 @@ class SerialStudioClient:
             response = self._recv_message(remaining)
 
             if response.get("type") == "response" and response.get("id") == request_id:
-                # Check if batch was rejected (error response)
-                if not response.get("success", True):
-                    # Return error dict for caller to handle
-                    return {
-                        "error": True,
-                        "success": False,
-                        "message": response.get("error", {}).get("message", "Batch rejected"),
-                        "code": response.get("error", {}).get("code", "UNKNOWN")
-                    }
-                return response.get("results", [])
+                # Batch was processed: return individual results even if some failed.
+                # A "results" key means the batch ran and each entry has its own
+                # success/failure status (partial failure is normal).
+                if "results" in response:
+                    return response.get("results", [])
+
+                # No "results" key means the batch was rejected at the protocol
+                # level before any commands were executed (e.g. empty batch, size
+                # limit exceeded).
+                return {
+                    "error": True,
+                    "success": False,
+                    "message": response.get("error", {}).get("message", "Batch rejected"),
+                    "code": response.get("error", {}).get("code", "UNKNOWN")
+                }
 
     def set_bus_type(self, bus_type: str) -> None:
         """

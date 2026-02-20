@@ -104,6 +104,10 @@ void API::Handlers::ProjectHandler::registerCommands()
                            QStringLiteral("Set frame parser code (params: code)"),
                            &parserSetCode);
 
+  registry.registerCommand(QStringLiteral("project.frameParser.setCode"),
+                           QStringLiteral("Set frame parser code (params: code)"),
+                           &parserSetCode);
+
   registry.registerCommand(QStringLiteral("project.parser.getCode"),
                            QStringLiteral("Get frame parser code"),
                            &parserGetCode);
@@ -684,6 +688,8 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const Q
   result[QStringLiteral("endSequence")]       = QString::fromUtf8(manager.finishSequence());
   result[QStringLiteral("checksumAlgorithm")] = manager.checksumAlgorithm();
   result[QStringLiteral("operationMode")]     = static_cast<int>(builder.operationMode());
+  result[QStringLiteral("frameDetection")] =
+    static_cast<int>(DataModel::ProjectModel::instance().frameDetection());
 
   return CommandResponse::makeSuccess(id, result);
 }
@@ -703,7 +709,7 @@ API::CommandResponse API::Handlers::ProjectHandler::exportJson(const QString& id
 
   // Return the project JSON
   QJsonObject result;
-  result[QStringLiteral("project")] = json;
+  result[QStringLiteral("config")] = json;
   return CommandResponse::makeSuccess(id, result);
 }
 

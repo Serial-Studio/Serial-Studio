@@ -261,7 +261,7 @@ Widgets.SmartDialog {
           } SpinBox {
             id: _points
 
-            from: 2
+            from: 1
             to: 1e6
             editable: true
             Layout.fillWidth: true

@@ -206,11 +206,14 @@ def test_error_recovery_workflow(api_client, device_simulator, clean_state):
 
     # Restart device simulator
     device_simulator.start()
-    time.sleep(0.5)
+    time.sleep(1.0)
 
     # Reconnect
     api_client.connect_device()
     assert device_simulator.wait_for_connection(timeout=5.0)
+
+    # Allow connection to fully stabilize before sending data
+    time.sleep(0.5)
 
     device_simulator.send_frames(frames, interval_seconds=0.1)
     time.sleep(1.2)
