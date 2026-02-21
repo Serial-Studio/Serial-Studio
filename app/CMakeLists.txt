@@ -893,7 +893,7 @@ install(SCRIPT ${deploy_script})
 #   CPACK_MONOLITHIC_INSTALL    - Single package (not component-based)
 #   CPACK_PACKAGE_NAME          - "Serial Studio GPLv3" or "Serial Studio Pro"
 #   CPACK_PACKAGE_VENDOR        - "Alex Spataru"
-#   CPACK_PACKAGE_VERSION       - Semantic version (e.g., 3.2.3)
+#   CPACK_PACKAGE_VERSION       - Semantic version (e.g., 3.2.4)
 #   CPACK_PACKAGE_DESCRIPTION   - README.md content
 #   CPACK_RESOURCE_FILE_LICENSE - GPL-3.0-only.txt or Commercial license
 #   CPACK_PACKAGE_HOMEPAGE_URL  - Website for support/downloads
@@ -924,9 +924,9 @@ install(SCRIPT ${deploy_script})
 #
 # To generate installer:
 #   cmake --build build --target package
-#   # Creates: Serial-Studio-GPL3-v3.2.3.msi (Windows)
-#   #          Serial-Studio-GPL3-v3.2.3.dmg (macOS)
-#   #          Serial-Studio-GPL3-v3.2.3.tar.gz (Linux)
+#   # Creates: Serial-Studio-GPL3-v3.2.4.msi (Windows)
+#   #          Serial-Studio-GPL3-v3.2.4.dmg (macOS)
+#   #          Serial-Studio-GPL3-v3.2.4.tar.gz (Linux)
 #
 #---------------------------------------------------------------------------------------------------
 

@@ -56,8 +56,8 @@
 		<color type="primary" scheme_preference="dark">#244263</color>
 	</branding>
 	<releases>
-	  <release version="3.2.3" date="2025-12-27">
-		  <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.2.3</url>
+    <release version="3.2.4" date="2025-12-27">
+      <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.2.4</url>
 		  <description>
 			  <p>Serial Studio is a multi-platform data visualization tool for embedded systems and IoT projects. Connect to your hardware via serial ports, Bluetooth LE, or network protocols to monitor sensor data, debug firmware, and analyze telemetry in real-time.</p>
 			  <p>Features include customizable dashboards, CSV export, JavaScript-based data parsing, and support for multiple data sources.</p>

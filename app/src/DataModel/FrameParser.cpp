@@ -621,6 +621,7 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
 {
   // Reset any previously loaded function
   m_parseFunction = QJSValue();
+  m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
   // Check for JavaScript syntax errors
   QStringList exceptionStackTrace;
@@ -663,8 +664,8 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
         tr("Missing Parse Function"),
-        tr(
-          "The 'parse' function is not defined in the script.\n\nPlease ensure your code includes:\nfunction parse(frame) { ... }"),
+        tr("The 'parse' function is not defined in the script.\n\n"
+           "Please ensure your code includes:\nfunction parse(frame) { ... }"),
         QMessageBox::Critical);
     } else {
       qWarning() << "[FrameParser] Missing parse function in script";
@@ -677,8 +678,8 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
         tr("Invalid Parse Function"),
-        tr(
-          "The 'parse' property exists but is not a callable function.\n\nPlease ensure 'parse' is declared as a function."),
+        tr("The 'parse' property exists but is not a callable function.\n\n"
+           "Please ensure 'parse' is declared as a function."),
         QMessageBox::Critical);
     } else {
       qWarning() << "[FrameParser] Parse property is not a callable function";
@@ -692,11 +693,10 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
   auto match = functionRegex.match(script);
   if (!match.hasMatch()) {
     if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        tr("Invalid Function Declaration"),
-        tr(
-          "No valid 'parse' function declaration found.\n\nExpected format:\nfunction parse(frame) { ... }"),
-        QMessageBox::Critical);
+      Misc::Utilities::showMessageBox(tr("Invalid Function Declaration"),
+                                      tr("No valid 'parse' function declaration found.\n\n"
+                                         "Expected format:\nfunction parse(frame) { ... }"),
+                                      QMessageBox::Critical);
     } else
       qWarning() << "[FrameParser] No valid 'parse' function declaration found";
 
@@ -712,8 +712,8 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
         tr("Invalid Function Parameter"),
-        tr(
-          "The 'parse' function must have at least one parameter.\n\nExpected format:\nfunction parse(frame) { ... }"),
+        tr("The 'parse' function must have at least one parameter.\n\n"
+           "Expected format:\nfunction parse(frame) { ... }"),
         QMessageBox::Critical);
     } else {
       qWarning() << "[FrameParser] Parse function must have at least one parameter";
@@ -726,8 +726,9 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
         tr("Deprecated Function Signature"),
-        tr(
-          "The 'parse' function uses the old two-parameter format: parse(%1, %2)\n\nThis format is no longer supported. Please update to the new single-parameter format:\nfunction parse(%1) { ... }\n\nThe separator parameter is no longer needed.")
+        tr("The 'parse' function uses the old two-parameter format: parse(%1, %2)\n\n"
+           "This format is no longer supported. Please update to the new single-parameter "
+           "format:\nfunction parse(%1) { ... }\n\nThe separator parameter is no longer needed.")
           .arg(firstArg, secondArg),
         QMessageBox::Warning);
     } else {
@@ -760,7 +761,6 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
   auto byteProbe = m_engine.newArray(1);
   byteProbe.setProperty(0, 0);
   const QJSValue probeInputs[] = {QJSValue("0"), byteProbe, QJSValue("")};
-
   {
     QAtomicInt probeDone(0);
     auto* watchdog = QThread::create([this, &probeDone]() {
@@ -768,6 +768,7 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
       constexpr int kSliceMs   = 20;
       for (int t = 0; t < kTimeoutMs && !probeDone.loadAcquire(); t += kSliceMs)
         QThread::msleep(kSliceMs);
+
       if (!probeDone.loadAcquire())
         m_engine.setInterrupted(true);
     });
@@ -781,6 +782,7 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
         probeOk = true;
         break;
       }
+
       lastError = probeResult;
     }
 
@@ -795,13 +797,13 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
     const QString errorMsg = lastError.property("message").toString();
     const int lineNumber   = lastError.property("lineNumber").toInt();
     if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        tr("Parse Function Runtime Error"),
-        tr(
-          "The parse function contains an error at line %1:\n\n%2\n\nPlease fix the error in the function body.")
-          .arg(lineNumber)
-          .arg(errorMsg),
-        QMessageBox::Critical);
+      Misc::Utilities::showMessageBox(tr("Parse Function Runtime Error"),
+                                      tr("The parse function contains an error at line %1:\n\n"
+                                         "%2\n\n"
+                                         "Please fix the error in the function body.")
+                                        .arg(lineNumber)
+                                        .arg(errorMsg),
+                                      QMessageBox::Critical);
     } else {
       qWarning() << "[FrameParser] Parse function runtime error at line" << lineNumber << ":"
                  << errorMsg;
