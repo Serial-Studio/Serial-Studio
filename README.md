@@ -7,11 +7,13 @@
 [![Buy Pro](https://img.shields.io/badge/Buy%20Pro-Lemon%20Squeezy-blue?logo=lemonsqueezy)](https://store.serial-studio.com/buy/ba46c099-0d51-4d98-9154-6be5c35bc1ec)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4b6f3ce14a684704980fea31d8c1632e)](https://app.codacy.com/gh/Serial-Studio/Serial-Studio/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-**Serial Studio** is an open-source tool that helps you see data from **Arduino**, **ESP32**, **Raspberry Pi**, and other devices in real-time. It works with **serial ports (UART)**, **Bluetooth Low Energy (BLE)**, **MQTT**, **Modbus TCP/RTU**, **CAN Bus**, **TCP/UDP networks**, and **audio devices**. You can create dashboards to monitor sensors and debug hardware without writing code.
+**Serial Studio** is an open-source dashboard tool for embedded developers who are tired of staring at scrolling terminals. Describe your data format once in a **project file**, and it builds a live dashboard for you.
 
-Serial Studio runs on **Windows**, **macOS**, and **Linux** (including ARM64 for Raspberry Pi). It's perfect for robotics teams, IoT developers, makers, educators, and researchers who need dashboards and CSV data logging.
+It works with **Arduino**, **ESP32**, **STM32**, **Raspberry Pi**, **Teensy**, and anything that talks over **UART**, **Bluetooth LE**, **TCP/UDP**, or **CAN Bus**. **Modbus TCP/RTU** covers industrial and PLC setups. **Audio** drivers can be used to analyze analog signals. **MQTT** can work either as publisher or subscriber, making it useful for IoT setups where data needs to travel beyond the local network.
 
-**Good for:** Arduino data, ESP32 dashboards, IoT sensors, robot debugging, drone data, environmental sensors, real-time plots, hardware testing, lab experiments, car diagnostics (CAN Bus), industrial equipment (Modbus), and STEM education.
+Once the data is in, Serial Studio can visualize it as **plots**, **gauges**, **bar graphs**, **maps**, **FFT graphs**, **3D plots**, or **gyroscope and G-meter displays**. Export to **CSV** or **MDF4** for further analysis, or load it back later to replay a session in the dashboard. **Actions** let you define buttons that send commands back to the device, with optional timers for polling or periodic control.
+
+Serial Studio runs on **Windows**, **macOS**, and **Linux** (including **ARM64** for Raspberry Pi), making it a practical choice for robotics teams, IoT developers, makers, educators, and researchers who want to spend time on their hardware rather than on the tooling around it.
 
 📚 **New users?** Check out the [FAQ](FAQ.md), [use cases](USE-CASES.md), and [comparison with alternatives](COMPARISON.md).
 
