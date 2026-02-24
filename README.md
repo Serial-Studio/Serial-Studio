@@ -11,7 +11,7 @@
 
 It works with **Arduino**, **ESP32**, **STM32**, **Raspberry Pi**, **Teensy**, and anything that talks over **UART**, **Bluetooth LE**, **TCP/UDP**, or **CAN Bus**. **Modbus TCP/RTU** covers industrial and PLC setups. **Audio** drivers can be used to analyze analog signals. **MQTT** can work either as publisher or subscriber, making it useful for IoT setups where data needs to travel beyond the local network.
 
-Once the data is in, Serial Studio can visualize it as **plots**, **gauges**, **bar graphs**, **maps**, **FFT graphs**, **3D plots**, or **gyroscope and G-meter displays**. Export to **CSV** or **MDF4** for further analysis, or load it back later to replay a session in the dashboard. **Actions** let you define buttons that send commands back to the device, with optional timers for polling or periodic control.
+Once the data is in, Serial Studio can visualize it using several kinds of widgets, including **plots**, **gauges** and **tables**. Export to **CSV** or **MDF4** for further analysis, or load it back later to replay a session in the dashboard. **Actions** let you define buttons that send commands back to the device, with optional timers for polling or periodic control.
 
 Serial Studio runs on **Windows**, **macOS**, and **Linux** (including **ARM64** for Raspberry Pi), making it a practical choice for robotics teams, IoT developers, makers, educators, and researchers who want to spend time on their hardware rather than on the tooling around it.
 
