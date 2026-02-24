@@ -244,7 +244,7 @@ bool IO::Drivers::Modbus::configurationOk() const noexcept
  * @param data The data to write
  * @return Number of bytes successfully written
  */
-quint64 IO::Drivers::Modbus::write(const QByteArray& data)
+qint64 IO::Drivers::Modbus::write(const QByteArray& data)
 {
   if (!isWritable() || data.length() < 4)
     return 0;

@@ -569,18 +569,25 @@ void CSV::Player::updateData()
       ++processed;
 
       if (m_useHighPrecisionTimestamps) {
-        if (m_framePos < m_timestampCache.size()) {
+        if (m_framePos + 1 < m_timestampCache.size()) {
           const double target = m_startTimestampSeconds + (m_elapsedTimer.elapsed() / 1000.0);
-          const double next   = m_timestampCache[m_framePos];
+          const double next   = m_timestampCache[m_framePos + 1];
           msUntilNext         = qMax(0LL, static_cast<qint64>((next - target) * 1000.0));
+        } else {
+          pause();
+          return;
         }
       }
 
       else {
         auto target = m_startTimestamp.addMSecs(m_elapsedTimer.elapsed());
-        auto next   = getDateTime(m_framePos);
+        auto next   = getDateTime(m_framePos + 1);
         if (next.isValid())
           msUntilNext = target.msecsTo(next);
+        else {
+          pause();
+          return;
+        }
       }
     }
 

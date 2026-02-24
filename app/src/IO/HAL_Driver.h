@@ -237,7 +237,7 @@ public:
    * @param data The data to write.
    * @return Number of bytes successfully written.
    */
-  [[nodiscard]] virtual quint64 write(const QByteArray& data) = 0;
+  [[nodiscard]] virtual qint64 write(const QByteArray& data) = 0;
 
   /**
    * @brief Open the device with the given mode.

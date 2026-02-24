@@ -205,7 +205,7 @@ bool IO::Drivers::UART::configurationOk() const noexcept
  * @return The number of bytes written on success, or `-1` if the port is not
  *         writable.
  */
-quint64 IO::Drivers::UART::write(const QByteArray& data)
+qint64 IO::Drivers::UART::write(const QByteArray& data)
 {
   if (isWritable())
     return port()->write(data);

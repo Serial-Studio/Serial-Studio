@@ -570,8 +570,8 @@ void MDF4::Player::updateData()
         if (m_framePos >= frameCount() - 1)
           break;
 
-        double frameTime = m_frameIndex[m_framePos].timestamp;
-        if (frameTime > targetTime)
+        const double nextFrameTime = m_frameIndex[m_framePos + 1].timestamp;
+        if (nextFrameTime > targetTime)
           break;
       }
 

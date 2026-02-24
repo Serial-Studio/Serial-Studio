@@ -303,11 +303,12 @@ QStringList IO::Manager::availableBuses() const
 qint64 IO::Manager::writeData(const QByteArray& data)
 {
   if (isConnected()) {
-    const auto bytes = driver()->write(data);
+    const qint64 bytes = driver()->write(data);
 
     if (bytes > 0) {
-      auto writtenData = data;
-      writtenData.chop(data.length() - bytes);
+      auto writtenData          = data;
+      const qint64 boundedBytes = qMin<qint64>(bytes, writtenData.size());
+      writtenData.chop(writtenData.length() - boundedBytes);
       Console::Handler::instance().displaySentData(writtenData);
     }
 

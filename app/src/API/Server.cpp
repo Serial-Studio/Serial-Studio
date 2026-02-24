@@ -363,8 +363,8 @@ void API::Server::removeConnection()
  */
 void API::Server::setEnabled(const bool enabled)
 {
-  m_enabled = enabled;
-  Q_EMIT enabledChanged();
+  bool effectiveEnabled = enabled;
+  bool closeResources   = false;
 
   // Enable the TCP API server
   if (enabled) {
@@ -374,6 +374,8 @@ void API::Server::setEnabled(const bool enabled)
         Misc::Utilities::showMessageBox(
           tr("Unable to start API TCP server"), m_server.errorString(), QMessageBox::Warning);
         m_server.close();
+        effectiveEnabled = false;
+        closeResources   = true;
       }
     }
   }
@@ -381,10 +383,21 @@ void API::Server::setEnabled(const bool enabled)
   // Disable the TCP API server
   else {
     m_server.close();
-    m_connections.clear();
+    closeResources = true;
+  }
 
+  if (closeResources) {
+    m_connections.clear();
     auto* worker = static_cast<ServerWorker*>(m_worker);
     QMetaObject::invokeMethod(worker, "closeResources", Qt::QueuedConnection);
+  }
+
+  if (m_enabled != effectiveEnabled) {
+    m_enabled = effectiveEnabled;
+    Q_EMIT enabledChanged();
+  } else if (enabled != effectiveEnabled) {
+    // Notify observers that an enable request failed and state remains unchanged.
+    Q_EMIT enabledChanged();
   }
 }
 

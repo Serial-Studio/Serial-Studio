@@ -111,14 +111,8 @@ int DeclarativeWidget::contentHeight() const
 void DeclarativeWidget::redraw(const QRect& rect)
 {
   if (widget() != nullptr) {
-    if (qobject_cast<QTableView*>(widget()) != nullptr) {
-      class PwnedWidget : public QTableView {
-      public:
-        using QTableView::updateGeometries;
-      };
-
-      reinterpret_cast<PwnedWidget*>(m_widget)->updateGeometries();
-    }
+    if (auto* tableView = qobject_cast<QTableView*>(widget()))
+      tableView->doItemsLayout();
 
     if (isVisible() && m_updateRequested) {
       m_updateRequested = false;

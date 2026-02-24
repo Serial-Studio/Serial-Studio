@@ -469,7 +469,7 @@ bool IO::Drivers::Audio::configurationOk() const noexcept
  * @param data A comma-separated list of channel values (1 per channel).
  * @return Number of bytes written, or 0 if invalid.
  */
-quint64 IO::Drivers::Audio::write(const QByteArray& data)
+qint64 IO::Drivers::Audio::write(const QByteArray& data)
 {
   // Check that we can actually write something
   if (!m_isOpen || m_config.playback.channels <= 0) {

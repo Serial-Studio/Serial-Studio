@@ -863,8 +863,7 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
   }
 
   // File already on disk, just write new data to it
-  (void)finalizeProjectSave();
-  return false;
+  return finalizeProjectSave();
 }
 
 //--------------------------------------------------------------------------------------------------

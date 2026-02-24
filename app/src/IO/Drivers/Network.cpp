@@ -181,7 +181,7 @@ bool IO::Drivers::Network::configurationOk() const noexcept
  * @return The number of bytes written on success, or `-1` if the socket is not
  *         writable.
  */
-quint64 IO::Drivers::Network::write(const QByteArray& data)
+qint64 IO::Drivers::Network::write(const QByteArray& data)
 {
   if (isWritable()) {
     if (socketType() == QAbstractSocket::UdpSocket)

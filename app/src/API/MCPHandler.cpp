@@ -668,37 +668,37 @@ QJsonObject API::MCPHandler::commandToToolSchema(const QString& name,
     };
     required.append(QStringLiteral("portIndex"));
   } else if (name == QStringLiteral("io.driver.uart.setDataBits")) {
-    properties[QStringLiteral("dataBits")] = QJsonObject{
-      {       QStringLiteral("type"),             QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Number of data bits")},
-      {       QStringLiteral("enum"),                QJsonArray{5, 6, 7, 8}},
-      {    QStringLiteral("default"),                                     8}
+    properties[QStringLiteral("dataBitsIndex")] = QJsonObject{
+      {       QStringLiteral("type"),                              QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Data bits index (0=5, 1=6, 2=7, 3=8)")},
+      {       QStringLiteral("enum"),                                 QJsonArray{0, 1, 2, 3}},
+      {    QStringLiteral("default"),                                                      3}
     };
-    required.append(QStringLiteral("dataBits"));
+    required.append(QStringLiteral("dataBitsIndex"));
   } else if (name == QStringLiteral("io.driver.uart.setParity")) {
-    properties[QStringLiteral("parity")] = QJsonObject{
-      {       QStringLiteral("type"),                             QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Parity mode (0=None, 2=Even, 3=Odd)")},
-      {       QStringLiteral("enum"),                                   QJsonArray{0, 2, 3}},
-      {    QStringLiteral("default"),                                                     0}
-    };
-    required.append(QStringLiteral("parity"));
-  } else if (name == QStringLiteral("io.driver.uart.setStopBits")) {
-    properties[QStringLiteral("stopBits")] = QJsonObject{
+    properties[QStringLiteral("parityIndex")] = QJsonObject{
       {       QStringLiteral("type"),QStringLiteral("integer")                                     },
       {QStringLiteral("description"),
-       QStringLiteral("Number of stop bits (1=One, 2=OneAndHalf, 3=Two)")},
-      {       QStringLiteral("enum"),                 QJsonArray{1, 2, 3}},
-      {    QStringLiteral("default"),                                   1}
+       QStringLiteral("Parity index (0=None, 1=Even, 2=Odd, 3=Space, 4=Mark)")},
+      {       QStringLiteral("enum"),                QJsonArray{0, 1, 2, 3, 4}},
+      {    QStringLiteral("default"),                                        0}
     };
-    required.append(QStringLiteral("stopBits"));
-  } else if (name == QStringLiteral("io.driver.network.setTcpHost")) {
-    properties[QStringLiteral("host")] = QJsonObject{
-      {       QStringLiteral("type"),                            QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("TCP host address (IP or hostname)")},
-      {    QStringLiteral("default"),                         QStringLiteral("localhost")}
+    required.append(QStringLiteral("parityIndex"));
+  } else if (name == QStringLiteral("io.driver.uart.setStopBits")) {
+    properties[QStringLiteral("stopBitsIndex")] = QJsonObject{
+      {       QStringLiteral("type"),                           QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Stop bits index (0=1, 1=1.5, 2=2)")},
+      {       QStringLiteral("enum"),                                 QJsonArray{0, 1, 2}},
+      {    QStringLiteral("default"),                                                   0}
     };
-    required.append(QStringLiteral("host"));
+    required.append(QStringLiteral("stopBitsIndex"));
+  } else if (name == QStringLiteral("io.driver.network.setRemoteAddress")) {
+    properties[QStringLiteral("address")] = QJsonObject{
+      {       QStringLiteral("type"),                               QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Remote host address (IP or hostname)")},
+      {    QStringLiteral("default"),                            QStringLiteral("localhost")}
+    };
+    required.append(QStringLiteral("address"));
   } else if (name == QStringLiteral("io.driver.network.setTcpPort")
              || name == QStringLiteral("io.driver.network.setUdpLocalPort")
              || name == QStringLiteral("io.driver.network.setUdpRemotePort")) {
@@ -709,21 +709,20 @@ QJsonObject API::MCPHandler::commandToToolSchema(const QString& name,
       {    QStringLiteral("maximum"),                                   65535}
     };
     required.append(QStringLiteral("port"));
-  } else if (name == QStringLiteral("io.driver.network.setUdpMulticastEnabled")) {
+  } else if (name == QStringLiteral("io.driver.network.setUdpMulticast")) {
     properties[QStringLiteral("enabled")] = QJsonObject{
       {       QStringLiteral("type"),                   QStringLiteral("boolean")},
       {QStringLiteral("description"), QStringLiteral("Enable UDP multicast mode")}
     };
     required.append(QStringLiteral("enabled"));
   } else if (name == QStringLiteral("io.driver.network.setSocketType")) {
-    properties[QStringLiteral("socketType")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Socket type (0=TCP Client, 1=TCP Server, 2=UDP)")},
-      {       QStringLiteral("enum"),                QJsonArray{0, 1, 2}},
-      {    QStringLiteral("default"),                                  0}
+    properties[QStringLiteral("socketTypeIndex")] = QJsonObject{
+      {       QStringLiteral("type"),                          QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Socket type index (0=TCP, 1=UDP)")},
+      {       QStringLiteral("enum"),                                   QJsonArray{0, 1}},
+      {    QStringLiteral("default"),                                                  0}
     };
-    required.append(QStringLiteral("socketType"));
+    required.append(QStringLiteral("socketTypeIndex"));
   } else if (name == QStringLiteral("io.manager.setBusType")) {
     properties[QStringLiteral("busType")] = QJsonObject{
       {       QStringLiteral("type"),QStringLiteral("integer")                                     },
@@ -739,7 +738,7 @@ QJsonObject API::MCPHandler::commandToToolSchema(const QString& name,
       {QStringLiteral("description"), QStringLiteral("Data to send to connected device")}
     };
     required.append(QStringLiteral("data"));
-  } else if (name == QStringLiteral("project.openFromFile")) {
+  } else if (name == QStringLiteral("project.file.open")) {
     properties[QStringLiteral("filePath")] = QJsonObject{
       {       QStringLiteral("type"),QStringLiteral("string")                                     },
       {QStringLiteral("description"),
@@ -752,11 +751,12 @@ QJsonObject API::MCPHandler::commandToToolSchema(const QString& name,
       {QStringLiteral("description"), QStringLiteral("Project title")}
     };
     required.append(QStringLiteral("title"));
-  } else if (name == QStringLiteral("csv.export.start")) {
-    properties[QStringLiteral("filePath")] = QJsonObject{
-      {       QStringLiteral("type"),                        QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Optional custom CSV file path")}
+  } else if (name == QStringLiteral("csv.export.setEnabled")) {
+    properties[QStringLiteral("enabled")] = QJsonObject{
+      {       QStringLiteral("type"),                      QStringLiteral("boolean")},
+      {QStringLiteral("description"), QStringLiteral("Enable or disable CSV export")}
     };
+    required.append(QStringLiteral("enabled"));
   } else if (name.contains(QStringLiteral("set")) || name.contains(QStringLiteral("write"))
              || name.contains(QStringLiteral("create")) || name.contains(QStringLiteral("add"))) {
     properties[QStringLiteral("value")] = QJsonObject{

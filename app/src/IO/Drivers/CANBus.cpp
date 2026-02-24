@@ -199,7 +199,7 @@ bool IO::Drivers::CANBus::configurationOk() const noexcept
  * @note DLC values exceeding valid range are automatically clamped
  * @note Emits dataSent signal only on successful transmission
  */
-quint64 IO::Drivers::CANBus::write(const QByteArray& data)
+qint64 IO::Drivers::CANBus::write(const QByteArray& data)
 {
   if (!m_device)
     return 0;

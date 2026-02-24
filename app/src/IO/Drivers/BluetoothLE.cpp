@@ -152,7 +152,7 @@ bool IO::Drivers::BluetoothLE::configurationOk() const noexcept
  * @param data The data to be written to the BLE device.
  * @return The number of bytes written, or -1 if an error occurs.
  */
-quint64 IO::Drivers::BluetoothLE::write(const QByteArray& data)
+qint64 IO::Drivers::BluetoothLE::write(const QByteArray& data)
 {
   if (m_service && m_selectedCharacteristic >= 0) {
     const auto& characteristic = m_characteristics.at(m_selectedCharacteristic);
