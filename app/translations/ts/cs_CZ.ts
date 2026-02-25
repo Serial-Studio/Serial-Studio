@@ -4,17 +4,36 @@
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../src/API/Server.cpp" line="375"/>
+        <location filename="../../src/API/Server.cpp" line="388"/>
         <source>Unable to start API TCP server</source>
         <translation>Nelze spustit API TCP server</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="788"/>
+        <location filename="../../src/API/Server.cpp" line="437"/>
+        <source>Allow External API Connections?</source>
+        <translation>Povolit externí API připojení?</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/Server.cpp" line="438"/>
+        <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
+
+Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
+        <translation>Zpřístupnění API serveru externím hostitelům umožňuje ostatním zařízením v síti připojit se k Serial Studio na portu 7777.
+
+Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou číst živá data nebo posílat příkazy vašemu zařízení.</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/Server.cpp" line="469"/>
+        <source>Unable to restart API TCP server</source>
+        <translation>Nelze restartovat API TCP server</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/Server.cpp" line="874"/>
         <source>API server</source>
         <translation>API server</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="788"/>
+        <location filename="../../src/API/Server.cpp" line="874"/>
         <source>Invalid pending connection</source>
         <translation>Neplatné čekající připojení</translation>
     </message>
@@ -621,63 +640,63 @@
         <translation>Zkontrolujte prosím oprávnění a umístění souboru</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="668"/>
+        <location filename="../../src/CSV/Player.cpp" line="675"/>
         <source>Invalid CSV</source>
         <translation>Neplatný CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="669"/>
+        <location filename="../../src/CSV/Player.cpp" line="676"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV soubor neobsahuje žádná data ani záhlaví.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="680"/>
+        <location filename="../../src/CSV/Player.cpp" line="687"/>
         <source>Select a date/time column</source>
         <translation>Vyberte sloupec s datem/časem</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="680"/>
-        <location filename="../../src/CSV/Player.cpp" line="694"/>
+        <location filename="../../src/CSV/Player.cpp" line="687"/>
+        <location filename="../../src/CSV/Player.cpp" line="701"/>
         <source>Set interval manually</source>
         <translation>Nastavit interval ručně</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="682"/>
+        <location filename="../../src/CSV/Player.cpp" line="689"/>
         <source>CSV Date/Time Selection</source>
         <translation>Výběr Data/času CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="683"/>
+        <location filename="../../src/CSV/Player.cpp" line="690"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Zvolte, jak zpracovat data data/času:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="697"/>
+        <location filename="../../src/CSV/Player.cpp" line="704"/>
         <source>Set Interval</source>
         <translation>Nastavit Interval</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="698"/>
+        <location filename="../../src/CSV/Player.cpp" line="705"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Zadejte prosím interval mezi řádky v milisekundách:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="715"/>
+        <location filename="../../src/CSV/Player.cpp" line="722"/>
         <source>Select Date/Time Column</source>
         <translation>Vyberte Sloupec Data/času</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="716"/>
+        <location filename="../../src/CSV/Player.cpp" line="723"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Vyberte prosím sloupec, který obsahuje data data/času:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="727"/>
+        <location filename="../../src/CSV/Player.cpp" line="734"/>
         <source>Invalid Selection</source>
         <translation>Neplatný Výběr</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="727"/>
+        <location filename="../../src/CSV/Player.cpp" line="734"/>
         <source>The selected column is not valid.</source>
         <translation>Vybraný sloupec není platný.</translation>
     </message>
@@ -731,47 +750,47 @@
 <context>
     <name>Console::Handler</name>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="171"/>
+        <location filename="../../src/Console/Handler.cpp" line="206"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="172"/>
+        <location filename="../../src/Console/Handler.cpp" line="207"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="183"/>
+        <location filename="../../src/Console/Handler.cpp" line="218"/>
         <source>No Line Ending</source>
         <translation>Žádný Konec Řádku</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="184"/>
+        <location filename="../../src/Console/Handler.cpp" line="219"/>
         <source>New Line</source>
         <translation>Nový Řádek</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="185"/>
+        <location filename="../../src/Console/Handler.cpp" line="220"/>
         <source>Carriage Return</source>
         <translation>Návrat Vozíku</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="186"/>
+        <location filename="../../src/Console/Handler.cpp" line="221"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="197"/>
+        <location filename="../../src/Console/Handler.cpp" line="232"/>
         <source>Plain Text</source>
         <translation>Prostý Text</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="198"/>
+        <location filename="../../src/Console/Handler.cpp" line="233"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimální</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="218"/>
+        <location filename="../../src/Console/Handler.cpp" line="253"/>
         <source>No Checksum</source>
         <translation>Bez Kontrolního Součtu</translation>
     </message>
@@ -1569,831 +1588,831 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
         <translation>Soubory Projektů Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="939"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2400"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="938"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2399"/>
         <source>Untitled Project</source>
         <translation>Nepojmenovaný Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1058"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1057"/>
         <source>Select Project File</source>
         <translation>Vyberte Soubor Projektu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1058"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1057"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Soubory Projektů (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1102"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1101"/>
         <source>JSON validation error</source>
         <translation>Chyba ověření JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1194"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1193"/>
         <source>Legacy frame parser function updated</source>
         <translation>Funkce parseru staršího rámce byla aktualizována</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1195"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1194"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Váš projekt používal funkci parseru staršího rámce s argumentem 'separator'. Byl automaticky převeden na nový formát.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1235"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1234"/>
         <source>Switch Serial Studio to Project Mode?</source>
         <translation>Přepnout Serial Studio do režimu projektu?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1236"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1235"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
         <translation>Tento provozní režim je vyžadován pro načítání a zobrazení dashboardů ze souborů projektů.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1269"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1268"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Chcete smazat skupinu "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1270"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1312"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1352"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1269"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1311"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1351"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Tuto akci nelze vrátit zpět. Chcete pokračovat?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1311"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1310"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Chcete smazat akci "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1351"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1350"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Chcete smazat datovou sadu "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1401"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1442"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1474"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1400"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1441"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1473"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Kopie)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1509"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1561"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1508"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1560"/>
         <source>Group</source>
         <translation>Skupina</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1588"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1587"/>
         <source>New Dataset</source>
         <translation>Nová Datová Sada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1591"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1590"/>
         <source>New Plot</source>
         <translation>Nový Graf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1595"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1594"/>
         <source>New FFT Plot</source>
         <translation>Nový FFT Graf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1599"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1598"/>
         <source>New Level Indicator</source>
         <translation>Nový Indikátor Úrovně</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1603"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1602"/>
         <source>New Gauge</source>
         <translation>Nový Měřič</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1607"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1606"/>
         <source>New Compass</source>
         <translation>Nový Kompas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1615"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1614"/>
         <source>New LED Indicator</source>
         <translation>Nový LED Indikátor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1738"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1737"/>
         <source>New Action</source>
         <translation>Nová Akce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1877"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1876"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Opravdu chcete změnit widget na úrovni skupiny?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1878"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1877"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Existující datové sady pro tuto skupinu budou smazány</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1947"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1948"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1949"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1950"/>
         <source>Accelerometer %1</source>
         <translation>Akcelerometr %1</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2004"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2005"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2006"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2007"/>
         <source>Gyro %1</source>
         <translation>Gyroskop %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2059"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2058"/>
         <source>Latitude</source>
         <translation>Zeměpisná šířka</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2060"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2059"/>
         <source>Longitude</source>
         <translation>Zeměpisná délka</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2061"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2060"/>
         <source>Altitude</source>
         <translation>Nadmořská výška</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2108"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2107"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2109"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2108"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2110"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2109"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2252"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2251"/>
         <source>Frame Parser Code</source>
         <translation>Kód Analyzátoru Rámců</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2388"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2387"/>
         <source>Project Information</source>
         <translation>Informace o Projektu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2399"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2398"/>
         <source>Project Title</source>
         <translation>Název Projektu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2401"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2400"/>
         <source>Name or description of the project</source>
         <translation>Název nebo popis projektu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2411"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2410"/>
         <source>Frame Detection</source>
         <translation>Detekce Rámců</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2423"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2422"/>
         <source>Frame Detection Method</source>
         <translation>Metoda Detekce Rámců</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2424"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2423"/>
         <source>Select how incoming data frames are identified</source>
         <translation>Vyberte, jak jsou identifikovány příchozí datové rámce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2434"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2433"/>
         <source>Hexadecimal Delimiters</source>
         <translation>Hexadecimální Oddělovače</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2436"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2435"/>
         <source>Use hex values to define frame boundaries</source>
         <translation>Použijte hexadecimální hodnoty k definování hranic rámce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2449"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2448"/>
         <source>Start Sequence</source>
         <translation>Počáteční Sekvence</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2452"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2451"/>
         <source>Marks the beginning of each data frame</source>
         <translation>Označuje začátek každého datového rámce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2462"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2461"/>
         <source>End Sequence</source>
         <translation>Koncová Sekvence</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2464"/>
         <source>Marks the end of each data frame</source>
         <translation>Označuje konec každého datového rámce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2475"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2474"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>Zpracování a Ověření Datového Obsahu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2486"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2485"/>
         <source>Data Format</source>
         <translation>Formát Dat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2488"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2487"/>
         <source>Format of raw data used for decoding each frame</source>
         <translation>Formát surových dat použitý pro dekódování každého rámce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2499"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2498"/>
         <source>Checksum Algorithm</source>
         <translation>Algoritmus Kontrolního Součtu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2501"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2500"/>
         <source>Method used to validate frame integrity</source>
         <translation>Metoda použitá k ověření integrity rámce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2547"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2546"/>
         <source>Group Information</source>
         <translation>Informace o Skupině</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2558"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2557"/>
         <source>Group Title</source>
         <translation>Název Skupiny</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2559"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2558"/>
         <source>Untitled Group</source>
         <translation>Skupina Bez Názvu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2560"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2559"/>
         <source>Title or description of this dataset group</source>
         <translation>Název nebo popis této skupiny datových sad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2585"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2584"/>
         <source>Composite Widget</source>
         <translation>Složený Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2586"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2585"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>Vyberte, jak by měla být tato skupina datových sad zobrazena (volitelné)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2636"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2853"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2635"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2852"/>
         <source>General Information</source>
         <translation>Obecné Informace</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2646"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2645"/>
         <source>Action Title</source>
         <translation>Název Akce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2648"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2647"/>
         <source>Untitled Action</source>
         <translation>Akce Bez Názvu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2649"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2648"/>
         <source>Name or description of this action</source>
         <translation>Název nebo popis této akce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2659"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2658"/>
         <source>Action Icon</source>
         <translation>Ikona Akce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2660"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2659"/>
         <source>Default Icon</source>
         <translation>Výchozí Ikona</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2661"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2660"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>Ikona zobrazená pro tuto akci na panelu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2671"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2670"/>
         <source>Data Payload</source>
         <translation>Datový Obsah</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2683"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2682"/>
         <source>Send as Binary</source>
         <translation>Odeslat jako binární</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2684"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2683"/>
         <source>Send raw binary data when this action is triggered</source>
         <translation>Odeslat surová binární data při spuštění této akce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2696"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2711"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2695"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2710"/>
         <source>Command</source>
         <translation>Příkaz</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2697"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2696"/>
         <source>Transmit Data (Hex)</source>
         <translation>Přenést Data (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2698"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2697"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>Hexadecimální obsah k odeslání při spuštění akce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2712"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2711"/>
         <source>Transmit Data</source>
         <translation>Přenést Data</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2713"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2712"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>Textový obsah k odeslání při spuštění akce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2739"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2738"/>
         <source>End-of-Line Sequence</source>
         <translation>Konec Řádku</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2740"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2739"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>Znaky konce řádku k přidání ke zprávě (např. </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2751"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2750"/>
         <source>Execution Behavior</source>
         <translation>Chování Při Spuštění</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2763"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2762"/>
         <source>Auto-Execute on Connect</source>
         <translation>Automatické spuštění při připojení</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2764"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2763"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>Automaticky spustit tuto akci při připojení zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2775"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2774"/>
         <source>Timer Behavior</source>
         <translation>Chování Časovače</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2785"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2784"/>
         <source>Timer Mode</source>
         <translation>Režim Časovače</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2788"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2787"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>Vyberte, kdy a jak by se tato akce měla automaticky opakovat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2796"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2795"/>
         <source>Interval (ms)</source>
         <translation>Interval (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2800"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2799"/>
         <source>Timer Interval (ms)</source>
         <translation>Interval Časovače (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2801"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2800"/>
         <source>Milliseconds between each repeated trigger of this action</source>
         <translation>Milisekundy mezi každým opakovaným spuštěním této akce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2864"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2863"/>
         <source>Untitled Dataset</source>
         <translation>Nepojmenovaná Datová Sada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2865"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2864"/>
         <source>Dataset Title</source>
         <translation>Název Datové Sady</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2866"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2865"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Název datové sady, používaný pro označení a identifikaci</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2878"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2877"/>
         <source>Frame Index</source>
         <translation>Index Snímku</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2879"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2878"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Pozice snímku používaná pro časové zarovnání datových sad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2889"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2888"/>
         <source>Measurement Unit</source>
         <translation>Měrná Jednotka</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2890"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2889"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volty, ampéry, atd.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2891"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2890"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Jednotka měření, jako jsou volty nebo ampéry (volitelné)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2901"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2900"/>
         <source>Plot Settings</source>
         <translation>Nastavení Grafu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2927"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2926"/>
         <source>Enable Plot Widget</source>
         <translation>Povolte Widget Grafu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2929"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2928"/>
         <source>Plot data in real-time</source>
         <translation>Zobrazit data v reálném čase</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2955"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2954"/>
         <source>X-Axis Source</source>
         <translation>Zdroj Osy X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2956"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2955"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
         <translation>Vyberte, který datový soubor použít pro osu X v grafech</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2967"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2966"/>
         <source>Minimum Plot Value (optional)</source>
         <translation>Minimální Hodnota Grafu (volitelné)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2968"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2967"/>
         <source>Lower bound for plot display range</source>
         <translation>Dolní hranice rozsahu zobrazení grafu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2979"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2978"/>
         <source>Maximum Plot Value (optional)</source>
         <translation>Maximální Hodnota Grafu (volitelné)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2980"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2979"/>
         <source>Upper bound for plot display range</source>
         <translation>Horní hranice rozsahu zobrazení grafu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2990"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2989"/>
         <source>FFT Configuration</source>
         <translation>Konfigurace FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3002"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3001"/>
         <source>Enable FFT Analysis</source>
         <translation>Povolit Analýzu FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3003"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3002"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Provést analýzu datové sady v frekvenční doméně</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3020"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3019"/>
         <source>FFT Window Size</source>
         <translation>Velikost Okna FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3021"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3020"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Počet vzorků použitých pro každé výpočetní okno FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3033"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3032"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>Vzorkovací frekvence FFT (Hz, požadováno)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3034"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3033"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>Vzorkovací frekvence použitá pro FFT (v Hz)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3045"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3044"/>
         <source>Minimum Value (recommended)</source>
         <translation>Minimální Hodnota (doporučeno)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3046"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3045"/>
         <source>Lower bound for data normalization</source>
         <translation>Dolní hranice pro normalizaci dat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3057"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3056"/>
         <source>Maximum Value (recommended)</source>
         <translation>Maximální Hodnota (doporučeno)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3058"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3057"/>
         <source>Upper bound for data normalization</source>
         <translation>Horní hranice pro normalizaci dat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3068"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3067"/>
         <source>Widget Settings</source>
         <translation>Nastavení Widgetu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3094"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3093"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3095"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3094"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Vyberte vizuální widget použitý k zobrazení této datové sady</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3106"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3105"/>
         <source>Show in Overview</source>
         <translation>Zobrazit v přehledu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3107"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3106"/>
         <source>Display this widget in the dashboard overview (if enabled)</source>
         <translation>Zobrazit tento widget v přehledu dashboardu (pokud je povoleno)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3122"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3121"/>
         <source>Minimum Display Value (required)</source>
         <translation>Minimální Zobrazovaná Hodnota (povinné)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3123"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3122"/>
         <source>Lower bound of the gauge or bar display range</source>
         <translation>Dolní hranice rozsahu zobrazení měřidla nebo pruhu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3134"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3133"/>
         <source>Maximum Display Value (required)</source>
         <translation>Maximální Zobrazovaná Hodnota (povinné)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3135"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3134"/>
         <source>Upper bound of the gauge or bar display range</source>
         <translation>Horní hranice rozsahu zobrazení měřidla nebo pruhu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3145"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3144"/>
         <source>Alarm Settings</source>
         <translation>Nastavení Alarmu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3157"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3156"/>
         <source>Enable Alarms</source>
         <translation>Povolit Alarmy</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3158"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3157"/>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
         <translation>Spustí vizuální alarm, když hodnota překročí prahové hodnoty alarmu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3170"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3169"/>
         <source>Low Threshold</source>
         <translation>Dolní Práh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3171"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3170"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
         <translation>Spustí vizuální alarm, když hodnota klesne pod tento práh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3183"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3182"/>
         <source>High Threshold</source>
         <translation>Horní Práh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3184"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3183"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
         <translation>Spustí vizuální alarm, když hodnota překročí tento práh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3195"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3194"/>
         <source>LED Display Settings</source>
         <translation>Nastavení LED Displeje</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3207"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3206"/>
         <source>Show in LED Panel</source>
         <translation>Zobrazit na LED panelu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3208"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3207"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Povolit vizuální sledování stavu pomocí LED displeje</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3219"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3218"/>
         <source>LED On Threshold (required)</source>
         <translation>Prahová Hodnota pro Zapnutí LED (povinné)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3220"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3219"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>LED se rozsvítí, když hodnota dosáhne nebo překročí tuto prahovou hodnotu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3287"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3286"/>
         <source>Off</source>
         <translation>Vypnuto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3288"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3287"/>
         <source>Auto Start</source>
         <translation>Automatický Start</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3289"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3288"/>
         <source>Start on Trigger</source>
         <translation>Start při spuštění</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3290"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3289"/>
         <source>Toggle on Trigger</source>
         <translation>Přepnout při spuštění</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3294"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3293"/>
         <source>Plain Text (UTF8)</source>
         <translation>Prostý Text (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3295"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3294"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimální</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3296"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3295"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3297"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3296"/>
         <source>Binary (Direct)</source>
         <translation>Binární (Přímé)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3304"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3303"/>
         <source>No Checksum</source>
         <translation>Žádná Kontrolní Suma</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3309"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3308"/>
         <source>End Delimiter Only</source>
         <translation>Pouze Koncový Oddělovač</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3310"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3309"/>
         <source>Start Delimiter Only</source>
         <translation>Pouze Počáteční Oddělovač</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3311"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3310"/>
         <source>Start + End Delimiter</source>
         <translation>Počáteční + Koncový Oddělovač</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3312"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3311"/>
         <source>No Delimiters</source>
         <translation>Žádné Oddělovače</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3320"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3319"/>
         <source>Data Grid</source>
         <translation>Datová Mřížka</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3321"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3320"/>
         <source>GPS Map</source>
         <translation>GPS Mapa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3322"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3321"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3323"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3322"/>
         <source>Multiple Plot</source>
         <translation>Vícenásobný Graf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3324"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3323"/>
         <source>Accelerometer</source>
         <translation>Akcelerometr</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3324"/>
         <source>3D Plot</source>
         <translation>3D Graf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3326"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3330"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3337"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3329"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3336"/>
         <source>None</source>
         <translation>Žádný</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3331"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3330"/>
         <source>Bar</source>
         <translation>Sloupec</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3332"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3331"/>
         <source>Gauge</source>
         <translation>Měřidlo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3333"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3332"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3338"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3337"/>
         <source>New Line (\n)</source>
         <translation>Nový Řádek (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3339"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3338"/>
         <source>Carriage Return (\r)</source>
         <translation>Návrat Vozíku (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3340"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3339"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3344"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3345"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3344"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3383"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3382"/>
         <source>Save changes to frame parser code?</source>
         <translation>Uložit změny do kódu rámcového analyzátoru?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3384"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3383"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
         <translation>Vyberte 'Uložit' pro zachování změn, 'Zahodit' pro jejich trvalou ztrátu, nebo 'Zrušit' pro návrat.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3387"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3386"/>
         <source>Save Changes</source>
         <translation>Uložit Změny</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3938"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3937"/>
         <source>File open error</source>
         <translation>Chyba při otevírání souboru</translation>
     </message>
@@ -2583,6 +2602,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <name>Downloader</name>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <source>Stop</source>
         <translation>Zastavit</translation>
@@ -2590,6 +2610,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="344"/>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Downloading updates</source>
         <translation>Stahování aktualizací</translation>
@@ -2652,6 +2673,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <source>Updater</source>
         <translation>Aktualizátor</translation>
@@ -2735,11 +2757,13 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
         <translation>1 sekunda</translation>
     </message>
     <message>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <source>Time remaining: 0 minutes</source>
         <translation>Zbývající čas: 0 minut</translation>
     </message>
     <message>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <source>Open</source>
         <translation>Otevřít</translation>
@@ -2748,16 +2772,16 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
 <context>
     <name>FFTPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="267"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="267"/>
         <source>Magnitude (dB)</source>
         <translation>Magnituda (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="268"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="268"/>
         <source>Frequency (Hz)</source>
         <translation>Frekvence (Hz)</translation>
     </message>
@@ -3868,12 +3892,12 @@ Podpora CAN bus na macOS je omezená a může vyžadovat ovladače třetích str
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="354"/>
+        <location filename="../../src/IO/Manager.cpp" line="355"/>
         <source>Your trial period has ended.</source>
         <translation>Vaše zkušební období skončilo.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="355"/>
+        <location filename="../../src/IO/Manager.cpp" line="356"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Pro pokračování v používání Serial Studio aktivujte svou licenci.</translation>
     </message>
@@ -6151,23 +6175,23 @@ Poskytněte prosím potřebné údaje.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="90"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="88"/>
         <location filename="../../../build/app/gui/qml/MainWindow/MainWindow.qml" line="90"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="90"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="88"/>
         <source>Device Defined Project</source>
         <translation>Projekt Definovaný Zařízením</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="93"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="91"/>
         <location filename="../../../build/app/gui/qml/MainWindow/MainWindow.qml" line="93"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="93"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <source>Quick Plot Mode</source>
         <translation>Režim Rychlého Vykreslení</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="99"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="97"/>
         <location filename="../../../build/app/gui/qml/MainWindow/MainWindow.qml" line="99"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="99"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="97"/>
         <source>Empty Project</source>
         <translation>Prázdný Projekt</translation>
     </message>
@@ -6594,9 +6618,9 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="306"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="306"/>
         <source>Samples</source>
         <translation>Vzorky</translation>
     </message>
@@ -7205,44 +7229,42 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="35"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="34"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="35"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="35"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="34"/>
         <source>Preferences</source>
         <translation>Nastavení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="60"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="53"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="60"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="60"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="53"/>
         <source>General</source>
         <translation>Obecné</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="133"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="85"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="133"/>
         <source>Language</source>
         <translation>Jazyk</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="149"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="105"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="105"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="149"/>
         <source>Theme</source>
         <translation>Téma</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="182"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="124"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="124"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="182"/>
         <source>Workspace Folder</source>
         <translation>Pracovní Složka</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="167"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="167"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="167"/>
         <source>Miscellaneous</source>
         <translation>Různé</translation>
     </message>
@@ -7255,37 +7277,42 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation type="vanished">Vynutit Softwarové Vykreslování</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="210"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="213"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="210"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="210"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="213"/>
         <source>Automatically Check for Updates</source>
         <translation>Automaticky kontrolovat aktualizace</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="235"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="59"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="235"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="235"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="59"/>
         <source>Dashboard</source>
         <translation>Řídicí panel</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="259"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="347"/>
+        <source>Data Plotting</source>
+        <translation>Vykreslování Dat</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="362"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="259"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="259"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="362"/>
         <source>Point Count</source>
         <translation>Počet Bodů</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="279"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="378"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="279"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="279"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="378"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Obnovovací Frekvence UI (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="513"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="333"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="333"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="513"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Vždy Zobrazovat Tlačítka na Hlavním Panelu</translation>
     </message>
@@ -7298,9 +7325,9 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation type="vanished">Režim s vlákny (lepší pro vysokou rychlost dat)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="498"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="297"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="297"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="498"/>
         <source>Show Actions Panel</source>
         <translation>Zobrazit Panel Akcí</translation>
     </message>
@@ -7313,65 +7340,222 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation type="vanished">Povolit Konzolový Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="192"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="247"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="192"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="192"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="247"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>Povolit API Server (Port 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="315"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="315"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="315"/>
         <source>Auto-Hide Toolbar on Dashboard</source>
         <translation>Automaticky Skrýt Nástrojovou Lištu na Řídicím Panelu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="354"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="354"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="354"/>
         <source>Use Separate Thread for Frame Extraction</source>
         <translation>Použít samostatné vlákno pro extrakci snímků</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="381"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="65"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="381"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="381"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="65"/>
         <source>Console</source>
         <translation>Konzole</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="404"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="118"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="118"/>
+        <source>Appearance</source>
+        <translation>Vzhled</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="167"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="167"/>
+        <source>Files &amp; Updates</source>
+        <translation>Soubory &amp; Aktualizace</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="231"/>
+        <source>Advanced</source>
+        <translation>Pokročilé</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="264"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="264"/>
+        <source>Allow External API Connections</source>
+        <translation>Povolit externí API připojení</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="279"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="279"/>
+        <source>Auto-Hide Toolbar</source>
+        <translation>Automatické skrytí panelu nástrojů</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="297"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="297"/>
+        <source>Threaded Frame Extraction</source>
+        <translation>Vícevláknová extrakce snímků</translation>
+    </message>
+    <message>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
+        <source>Plot</source>
+        <translation>Graf</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="399"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
+        <source>Widget Fonts</source>
+        <translation>Písma Widgetu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
+        <source>Widget Font</source>
+        <translation>Písmo Widgetu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
+        <source>Widget Font Size</source>
+        <translation>Velikost Písma Widgetu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Small</source>
+        <translation>Malý</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Normal</source>
+        <translation>Normální</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Large</source>
+        <translation>Velký</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Extra Large</source>
+        <translation>Extra Velký</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Custom</source>
+        <translation>Vlastní</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="483"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="483"/>
+        <source>Layout</source>
+        <translation>Rozvržení</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="563"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="563"/>
+        <source>Display</source>
+        <translation>Zobrazení</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="578"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="578"/>
+        <source>Display Mode</source>
+        <translation>Režim Zobrazení</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="591"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="404"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="404"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="591"/>
         <source>Font Family</source>
         <translation>Písmo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="424"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="605"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="424"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="424"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="605"/>
         <source>Font Size</source>
         <translation>Velikost Písma</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="461"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="621"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="621"/>
+        <source>Show Timestamps</source>
+        <translation>Zobrazit Časová Razítka</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="640"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="640"/>
+        <source>Data Transmission</source>
+        <translation>Přenos Dat</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="655"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="655"/>
+        <source>Line Ending</source>
+        <translation>Konec Řádku</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="668"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="668"/>
+        <source>Input Mode</source>
+        <translation>Režim Vstupu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="681"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="681"/>
+        <source>Checksum</source>
+        <translation>Kontrolní Součet</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="694"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="694"/>
+        <source>Echo Sent Data</source>
+        <translation>Echo Odeslaných Dat</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="713"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="713"/>
+        <source>Escape Codes</source>
+        <translation>Únikové Kódy</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="728"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="728"/>
+        <source>VT100 Emulation</source>
+        <translation>Emulace VT100</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="743"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="743"/>
+        <source>ANSI Colors</source>
+        <translation>ANSI Barvy</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="776"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="461"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="461"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="776"/>
         <source>Reset</source>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="491"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="815"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="491"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="491"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="815"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="502"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="826"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="502"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="502"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="826"/>
         <source>Apply</source>
         <translation>Použít</translation>
     </message>
@@ -7663,65 +7847,65 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
 <context>
     <name>Terminal</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="127"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="109"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="127"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="127"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="109"/>
         <source>Copy</source>
         <translation>Kopírovat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="134"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="116"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="134"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="134"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="116"/>
         <source>Select all</source>
         <translation>Vybrat vše</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="141"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="123"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="141"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="141"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="123"/>
         <source>Clear</source>
         <translation>Vymazat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="222"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="204"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="222"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="222"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="204"/>
         <source>Send Data to Device</source>
         <translation>Odeslat data do zařízení</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="379"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="361"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="379"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="379"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="361"/>
         <source>Show Timestamp</source>
         <translation>Zobrazit Časové Razítko</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="390"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="372"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="390"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="390"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="372"/>
         <source>Echo</source>
         <translation>Echo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="401"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="383"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="401"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="401"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="383"/>
         <source>Emulate VT-100</source>
         <translation>Emulovat VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="412"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="394"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="412"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="412"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="394"/>
         <source>ANSI Colors</source>
         <translation>ANSI Barvy</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="436"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="418"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="436"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="436"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="418"/>
         <source>Display: %1</source>
         <translation>Zobrazení: %1</translation>
     </message>
@@ -8105,18 +8289,18 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="885"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1210"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="873"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1199"/>
         <source>Console</source>
         <translation>Konzole</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1227"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1216"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Záložní)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1258"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1247"/>
         <source>LED Panel (%1)</source>
         <translation>LED Panel (%1)</translation>
     </message>
@@ -8388,13 +8572,13 @@ Rozumím, že až skončí, budu si muset koupit licenci nebo vytvořit verzi GP
     <name>Widgets::DataGrid</name>
     <message>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="134"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="147"/>
         <source>Title</source>
         <translation>Název</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="134"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="147"/>
         <source>Value</source>
         <translation>Hodnota</translation>
     </message>

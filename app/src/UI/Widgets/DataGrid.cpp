@@ -51,8 +51,10 @@ Widgets::DataGrid::DataGrid(const int index, QQuickItem* parent)
   onFontsChanged();
   connect(
     &UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Widgets::DataGrid::updateData);
-  connect(
-    &Misc::CommonFonts::instance(), &Misc::CommonFonts::fontsChanged, this, &Widgets::DataGrid::onFontsChanged);
+  connect(&Misc::CommonFonts::instance(),
+          &Misc::CommonFonts::fontsChanged,
+          this,
+          &Widgets::DataGrid::onFontsChanged);
 
   updateData();
 }

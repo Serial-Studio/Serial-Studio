@@ -4,17 +4,36 @@
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../src/API/Server.cpp" line="375"/>
+        <location filename="../../src/API/Server.cpp" line="388"/>
         <source>Unable to start API TCP server</source>
         <translation>无法启动 API TCP 服务器</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="788"/>
+        <location filename="../../src/API/Server.cpp" line="437"/>
+        <source>Allow External API Connections?</source>
+        <translation>允许外部 API 连接？</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/Server.cpp" line="438"/>
+        <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
+
+Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
+        <translation>将 API 服务器暴露给外部主机允许网络上的其他设备连接到端口 7777 的 Serial Studio。
+
+仅在受信任的网络上启用此功能。不受信任的客户端可能会读取实时数据或向您的设备发送命令。</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/Server.cpp" line="469"/>
+        <source>Unable to restart API TCP server</source>
+        <translation>无法重启 API TCP 服务器</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/Server.cpp" line="874"/>
         <source>API server</source>
         <translation>API 服务器</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="788"/>
+        <location filename="../../src/API/Server.cpp" line="874"/>
         <source>Invalid pending connection</source>
         <translation>无效的待连接</translation>
     </message>
@@ -621,63 +640,63 @@
         <translation>请检查文件权限和位置</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="668"/>
+        <location filename="../../src/CSV/Player.cpp" line="675"/>
         <source>Invalid CSV</source>
         <translation>无效的 CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="669"/>
+        <location filename="../../src/CSV/Player.cpp" line="676"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV 文件不包含任何数据或标题。</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="680"/>
+        <location filename="../../src/CSV/Player.cpp" line="687"/>
         <source>Select a date/time column</source>
         <translation>选择一个日期/时间列</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="680"/>
-        <location filename="../../src/CSV/Player.cpp" line="694"/>
+        <location filename="../../src/CSV/Player.cpp" line="687"/>
+        <location filename="../../src/CSV/Player.cpp" line="701"/>
         <source>Set interval manually</source>
         <translation>手动设置间隔</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="682"/>
+        <location filename="../../src/CSV/Player.cpp" line="689"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV 日期/时间选择</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="683"/>
+        <location filename="../../src/CSV/Player.cpp" line="690"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>选择如何处理日期/时间数据：</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="697"/>
+        <location filename="../../src/CSV/Player.cpp" line="704"/>
         <source>Set Interval</source>
         <translation>设置间隔</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="698"/>
+        <location filename="../../src/CSV/Player.cpp" line="705"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>请输入行之间的间隔（毫秒）：</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="715"/>
+        <location filename="../../src/CSV/Player.cpp" line="722"/>
         <source>Select Date/Time Column</source>
         <translation>选择日期/时间列</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="716"/>
+        <location filename="../../src/CSV/Player.cpp" line="723"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>请选择包含日期/时间数据的列：</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="727"/>
+        <location filename="../../src/CSV/Player.cpp" line="734"/>
         <source>Invalid Selection</source>
         <translation>无效选择</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="727"/>
+        <location filename="../../src/CSV/Player.cpp" line="734"/>
         <source>The selected column is not valid.</source>
         <translation>所选列无效。</translation>
     </message>
@@ -731,47 +750,47 @@
 <context>
     <name>Console::Handler</name>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="171"/>
+        <location filename="../../src/Console/Handler.cpp" line="206"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="172"/>
+        <location filename="../../src/Console/Handler.cpp" line="207"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="183"/>
+        <location filename="../../src/Console/Handler.cpp" line="218"/>
         <source>No Line Ending</source>
         <translation>无行结尾</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="184"/>
+        <location filename="../../src/Console/Handler.cpp" line="219"/>
         <source>New Line</source>
         <translation>新行</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="185"/>
+        <location filename="../../src/Console/Handler.cpp" line="220"/>
         <source>Carriage Return</source>
         <translation>回车</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="186"/>
+        <location filename="../../src/Console/Handler.cpp" line="221"/>
         <source>CR + NL</source>
         <translation>回车 + 新行</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="197"/>
+        <location filename="../../src/Console/Handler.cpp" line="232"/>
         <source>Plain Text</source>
         <translation>纯文本</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="198"/>
+        <location filename="../../src/Console/Handler.cpp" line="233"/>
         <source>Hexadecimal</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="218"/>
+        <location filename="../../src/Console/Handler.cpp" line="253"/>
         <source>No Checksum</source>
         <translation>无校验和</translation>
     </message>
@@ -1569,831 +1588,831 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation>Serial Studio 项目文件 (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="939"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2400"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="938"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2399"/>
         <source>Untitled Project</source>
         <translation>未命名项目</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1058"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1057"/>
         <source>Select Project File</source>
         <translation>选择项目文件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1058"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1057"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>项目文件 (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1102"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1101"/>
         <source>JSON validation error</source>
         <translation>JSON 验证错误</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1194"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1193"/>
         <source>Legacy frame parser function updated</source>
         <translation>旧版帧解析函数已更新</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1195"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1194"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>您的项目使用了带有“分隔符”参数的旧版帧解析函数，已自动迁移到新格式。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1235"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1234"/>
         <source>Switch Serial Studio to Project Mode?</source>
         <translation>要将 Serial Studio 切换到项目模式吗？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1236"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1235"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
         <translation>此操作模式是加载和显示项目文件中的仪表板所必需的。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1269"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1268"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>您要删除组“%1”吗？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1270"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1312"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1352"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1269"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1311"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1351"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>此操作无法撤销。您确定要继续吗？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1311"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1310"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>您要删除操作“%1”吗？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1351"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1350"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>您要删除数据集“%1”吗？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1401"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1442"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1474"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1400"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1441"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1473"/>
         <source>%1 (Copy)</source>
         <translation>%1 (副本)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1509"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1561"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1508"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1560"/>
         <source>Group</source>
         <translation>组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1588"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1587"/>
         <source>New Dataset</source>
         <translation>新数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1591"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1590"/>
         <source>New Plot</source>
         <translation>新图表</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1595"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1594"/>
         <source>New FFT Plot</source>
         <translation>新FFT图表</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1599"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1598"/>
         <source>New Level Indicator</source>
         <translation>新水平指示器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1603"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1602"/>
         <source>New Gauge</source>
         <translation>新仪表盘</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1607"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1606"/>
         <source>New Compass</source>
         <translation>新指南针</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1615"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1614"/>
         <source>New LED Indicator</source>
         <translation>新LED指示器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1738"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1737"/>
         <source>New Action</source>
         <translation>新动作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1877"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1876"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>您确定要更改组级别小部件吗？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1878"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1877"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>此组的现有数据集将被删除</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1947"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1948"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1949"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1950"/>
         <source>Accelerometer %1</source>
         <translation>加速度计 %1</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2004"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2005"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2006"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2007"/>
         <source>Gyro %1</source>
         <translation>陀螺仪 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2059"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2058"/>
         <source>Latitude</source>
         <translation>纬度</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2060"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2059"/>
         <source>Longitude</source>
         <translation>经度</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2061"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2060"/>
         <source>Altitude</source>
         <translation>海拔</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2108"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2107"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2109"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2108"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2110"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2109"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2252"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2251"/>
         <source>Frame Parser Code</source>
         <translation>帧解析代码</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2388"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2387"/>
         <source>Project Information</source>
         <translation>项目信息</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2399"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2398"/>
         <source>Project Title</source>
         <translation>项目标题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2401"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2400"/>
         <source>Name or description of the project</source>
         <translation>项目名称或描述</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2411"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2410"/>
         <source>Frame Detection</source>
         <translation>帧检测</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2423"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2422"/>
         <source>Frame Detection Method</source>
         <translation>帧检测方法</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2424"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2423"/>
         <source>Select how incoming data frames are identified</source>
         <translation>选择如何识别传入数据帧</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2434"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2433"/>
         <source>Hexadecimal Delimiters</source>
         <translation>十六进制分隔符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2436"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2435"/>
         <source>Use hex values to define frame boundaries</source>
         <translation>使用十六进制值定义帧边界</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2449"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2448"/>
         <source>Start Sequence</source>
         <translation>起始序列</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2452"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2451"/>
         <source>Marks the beginning of each data frame</source>
         <translation>标记每个数据帧的开始</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2462"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2461"/>
         <source>End Sequence</source>
         <translation>结束序列</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2464"/>
         <source>Marks the end of each data frame</source>
         <translation>标记每个数据帧的结束</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2475"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2474"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>负载处理与验证</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2486"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2485"/>
         <source>Data Format</source>
         <translation>数据格式</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2488"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2487"/>
         <source>Format of raw data used for decoding each frame</source>
         <translation>用于解码每个帧的原始数据格式</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2499"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2498"/>
         <source>Checksum Algorithm</source>
         <translation>校验算法</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2501"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2500"/>
         <source>Method used to validate frame integrity</source>
         <translation>用于验证帧完整性的方法</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2547"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2546"/>
         <source>Group Information</source>
         <translation>组信息</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2558"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2557"/>
         <source>Group Title</source>
         <translation>组标题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2559"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2558"/>
         <source>Untitled Group</source>
         <translation>未命名组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2560"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2559"/>
         <source>Title or description of this dataset group</source>
         <translation>此数据集组的标题或描述</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2585"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2584"/>
         <source>Composite Widget</source>
         <translation>复合小部件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2586"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2585"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>选择如何可视化此数据集组（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2636"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2853"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2635"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2852"/>
         <source>General Information</source>
         <translation>常规信息</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2646"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2645"/>
         <source>Action Title</source>
         <translation>操作标题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2648"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2647"/>
         <source>Untitled Action</source>
         <translation>未命名操作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2649"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2648"/>
         <source>Name or description of this action</source>
         <translation>此操作的名称或描述</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2659"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2658"/>
         <source>Action Icon</source>
         <translation>操作图标</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2660"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2659"/>
         <source>Default Icon</source>
         <translation>默认图标</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2661"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2660"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>仪表板中显示此操作的图标</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2671"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2670"/>
         <source>Data Payload</source>
         <translation>数据负载</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2683"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2682"/>
         <source>Send as Binary</source>
         <translation>以二进制发送</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2684"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2683"/>
         <source>Send raw binary data when this action is triggered</source>
         <translation>触发此操作时发送原始二进制数据</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2696"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2711"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2695"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2710"/>
         <source>Command</source>
         <translation>命令</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2697"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2696"/>
         <source>Transmit Data (Hex)</source>
         <translation>传输数据（十六进制）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2698"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2697"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>触发操作时发送的十六进制负载</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2712"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2711"/>
         <source>Transmit Data</source>
         <translation>传输数据</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2713"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2712"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>触发操作时要发送的文本负载</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2739"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2738"/>
         <source>End-of-Line Sequence</source>
         <translation>行尾序列</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2740"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2739"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>要附加到消息的行尾字符（例如 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2751"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2750"/>
         <source>Execution Behavior</source>
         <translation>执行行为</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2763"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2762"/>
         <source>Auto-Execute on Connect</source>
         <translation>连接时自动执行</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2764"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2763"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>设备连接时自动触发此操作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2775"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2774"/>
         <source>Timer Behavior</source>
         <translation>定时器行为</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2785"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2784"/>
         <source>Timer Mode</source>
         <translation>定时器模式</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2788"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2787"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>选择此操作应何时以及如何自动重复</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2796"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2795"/>
         <source>Interval (ms)</source>
         <translation>间隔 (毫秒)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2800"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2799"/>
         <source>Timer Interval (ms)</source>
         <translation>定时器间隔 (毫秒)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2801"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2800"/>
         <source>Milliseconds between each repeated trigger of this action</source>
         <translation>每次重复触发此操作之间的毫秒数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2864"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2863"/>
         <source>Untitled Dataset</source>
         <translation>未命名数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2865"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2864"/>
         <source>Dataset Title</source>
         <translation>数据集标题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2866"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2865"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>数据集名称，用于标记和识别</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2878"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2877"/>
         <source>Frame Index</source>
         <translation>帧索引</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2879"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2878"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>用于在时间上对齐数据集的帧位置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2889"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2888"/>
         <source>Measurement Unit</source>
         <translation>测量单位</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2890"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2889"/>
         <source>Volts, Amps, etc.</source>
         <translation>伏特、电流等。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2891"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2890"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>测量单位，例如伏特或安培（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2901"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2900"/>
         <source>Plot Settings</source>
         <translation>图表设置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2927"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2926"/>
         <source>Enable Plot Widget</source>
         <translation>启用图表小部件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2929"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2928"/>
         <source>Plot data in real-time</source>
         <translation>实时绘制数据</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2955"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2954"/>
         <source>X-Axis Source</source>
         <translation>X轴来源</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2956"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2955"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
         <translation>选择用于图表X轴的数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2967"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2966"/>
         <source>Minimum Plot Value (optional)</source>
         <translation>最小图表值（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2968"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2967"/>
         <source>Lower bound for plot display range</source>
         <translation>图表显示范围的下限</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2979"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2978"/>
         <source>Maximum Plot Value (optional)</source>
         <translation>最大图表值（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2980"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2979"/>
         <source>Upper bound for plot display range</source>
         <translation>图表显示范围的上限</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2990"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2989"/>
         <source>FFT Configuration</source>
         <translation>FFT 配置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3002"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3001"/>
         <source>Enable FFT Analysis</source>
         <translation>启用 FFT 分析</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3003"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3002"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>对数据集进行频域分析</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3020"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3019"/>
         <source>FFT Window Size</source>
         <translation>FFT 窗口大小</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3021"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3020"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>每个 FFT 计算窗口使用的样本数量</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3033"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3032"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>FFT 采样率（Hz，必需）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3034"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3033"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>FFT 使用的采样频率（单位：Hz）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3045"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3044"/>
         <source>Minimum Value (recommended)</source>
         <translation>最小值（推荐）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3046"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3045"/>
         <source>Lower bound for data normalization</source>
         <translation>数据归一化的下限</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3057"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3056"/>
         <source>Maximum Value (recommended)</source>
         <translation>最大值（推荐）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3058"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3057"/>
         <source>Upper bound for data normalization</source>
         <translation>数据归一化的上限</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3068"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3067"/>
         <source>Widget Settings</source>
         <translation>小部件设置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3094"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3093"/>
         <source>Widget</source>
         <translation>小部件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3095"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3094"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>选择用于显示此数据集的视觉小部件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3106"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3105"/>
         <source>Show in Overview</source>
         <translation>在概览中显示</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3107"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3106"/>
         <source>Display this widget in the dashboard overview (if enabled)</source>
         <translation>在仪表板概览中显示此小部件（如果启用）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3122"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3121"/>
         <source>Minimum Display Value (required)</source>
         <translation>最小显示值（必需）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3123"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3122"/>
         <source>Lower bound of the gauge or bar display range</source>
         <translation>仪表或条形显示范围的下限</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3134"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3133"/>
         <source>Maximum Display Value (required)</source>
         <translation>最大显示值（必需）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3135"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3134"/>
         <source>Upper bound of the gauge or bar display range</source>
         <translation>仪表或条形显示范围的上限</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3145"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3144"/>
         <source>Alarm Settings</source>
         <translation>报警设置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3157"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3156"/>
         <source>Enable Alarms</source>
         <translation>启用报警</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3158"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3157"/>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
         <translation>当值超过报警阈值时触发视觉报警</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3170"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3169"/>
         <source>Low Threshold</source>
         <translation>低阈值</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3171"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3170"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
         <translation>当值低于此阈值时触发视觉报警</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3183"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3182"/>
         <source>High Threshold</source>
         <translation>高阈值</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3184"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3183"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
         <translation>当值超过此阈值时触发视觉报警</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3195"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3194"/>
         <source>LED Display Settings</source>
         <translation>LED显示设置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3207"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3206"/>
         <source>Show in LED Panel</source>
         <translation>在LED面板中显示</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3208"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3207"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>使用LED显示启用视觉状态监控</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3219"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3218"/>
         <source>LED On Threshold (required)</source>
         <translation>LED开启阈值（必需）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3220"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3219"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>当值达到或超过此阈值时LED亮起</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3287"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3286"/>
         <source>Off</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3288"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3287"/>
         <source>Auto Start</source>
         <translation>自动启动</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3289"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3288"/>
         <source>Start on Trigger</source>
         <translation>触发时启动</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3290"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3289"/>
         <source>Toggle on Trigger</source>
         <translation>触发时切换</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3294"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3293"/>
         <source>Plain Text (UTF8)</source>
         <translation>纯文本（UTF8）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3295"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3294"/>
         <source>Hexadecimal</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3296"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3295"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3297"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3296"/>
         <source>Binary (Direct)</source>
         <translation>二进制（直接）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3304"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3303"/>
         <source>No Checksum</source>
         <translation>无校验和</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3309"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3308"/>
         <source>End Delimiter Only</source>
         <translation>仅结束定界符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3310"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3309"/>
         <source>Start Delimiter Only</source>
         <translation>仅开始定界符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3311"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3310"/>
         <source>Start + End Delimiter</source>
         <translation>开始 + 结束定界符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3312"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3311"/>
         <source>No Delimiters</source>
         <translation>无定界符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3320"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3319"/>
         <source>Data Grid</source>
         <translation>数据网格</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3321"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3320"/>
         <source>GPS Map</source>
         <translation>GPS地图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3322"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3321"/>
         <source>Gyroscope</source>
         <translation>陀螺仪</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3323"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3322"/>
         <source>Multiple Plot</source>
         <translation>多重绘图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3324"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3323"/>
         <source>Accelerometer</source>
         <translation>加速度计</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3324"/>
         <source>3D Plot</source>
         <translation>3D 绘图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3326"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3330"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3337"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3329"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3336"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3331"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3330"/>
         <source>Bar</source>
         <translation>柱状图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3332"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3331"/>
         <source>Gauge</source>
         <translation>仪表</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3333"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3332"/>
         <source>Compass</source>
         <translation>罗盘</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3338"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3337"/>
         <source>New Line (\n)</source>
         <translation>新行 (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3339"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3338"/>
         <source>Carriage Return (\r)</source>
         <translation>回车 (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3340"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3339"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3344"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3345"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3344"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3383"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3382"/>
         <source>Save changes to frame parser code?</source>
         <translation>保存对帧解析器代码的更改？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3384"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3383"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
         <translation>选择“保存”以保留更改，“放弃”以永久丢失更改，或“取消”以返回。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3387"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3386"/>
         <source>Save Changes</source>
         <translation>保存更改</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3938"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3937"/>
         <source>File open error</source>
         <translation>文件打开错误</translation>
     </message>
@@ -2583,6 +2602,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <name>Downloader</name>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <source>Stop</source>
         <translation>停止</translation>
@@ -2590,6 +2610,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="344"/>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Downloading updates</source>
         <translation>正在下载更新</translation>
@@ -2652,6 +2673,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <source>Updater</source>
         <translation>更新程序</translation>
@@ -2735,11 +2757,13 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation>1 秒</translation>
     </message>
     <message>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <source>Time remaining: 0 minutes</source>
         <translation>剩余时间：0分钟</translation>
     </message>
     <message>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <source>Open</source>
         <translation>打开</translation>
@@ -2748,16 +2772,16 @@ Example (HEX):  48 65 6C 6C 6F</source>
 <context>
     <name>FFTPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="267"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="267"/>
         <source>Magnitude (dB)</source>
         <translation>幅度 (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="268"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="268"/>
         <source>Frequency (Hz)</source>
         <translation>频率 (Hz)</translation>
     </message>
@@ -3868,12 +3892,12 @@ macOS 上的 CAN 总线支持有限，可能需要第三方硬件驱动程序。
         <translation>CAN总线</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="354"/>
+        <location filename="../../src/IO/Manager.cpp" line="355"/>
         <source>Your trial period has ended.</source>
         <translation>您的试用期已结束。</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="355"/>
+        <location filename="../../src/IO/Manager.cpp" line="356"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>要继续使用 Serial Studio，请激活您的许可证。</translation>
     </message>
@@ -6154,23 +6178,23 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="90"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="88"/>
         <location filename="../../../build/app/gui/qml/MainWindow/MainWindow.qml" line="90"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="90"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="88"/>
         <source>Device Defined Project</source>
         <translation>设备定义项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="93"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="91"/>
         <location filename="../../../build/app/gui/qml/MainWindow/MainWindow.qml" line="93"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="93"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <source>Quick Plot Mode</source>
         <translation>快速绘图模式</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="99"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="97"/>
         <location filename="../../../build/app/gui/qml/MainWindow/MainWindow.qml" line="99"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="99"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="97"/>
         <source>Empty Project</source>
         <translation>空项目</translation>
     </message>
@@ -6597,9 +6621,9 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="306"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="306"/>
         <source>Samples</source>
         <translation>样本</translation>
     </message>
@@ -7208,44 +7232,42 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="35"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="34"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="35"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="35"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="34"/>
         <source>Preferences</source>
         <translation>偏好设置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="60"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="53"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="60"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="60"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="53"/>
         <source>General</source>
         <translation>常规</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="133"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="85"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="133"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="149"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="105"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="105"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="149"/>
         <source>Theme</source>
         <translation>主题</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="182"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="124"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="124"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="182"/>
         <source>Workspace Folder</source>
         <translation>工作区文件夹</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="167"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="167"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="167"/>
         <source>Miscellaneous</source>
         <translation>杂项</translation>
     </message>
@@ -7258,37 +7280,42 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">强制软件渲染</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="210"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="213"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="210"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="210"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="213"/>
         <source>Automatically Check for Updates</source>
         <translation>自动检查更新</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="235"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="59"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="235"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="235"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="59"/>
         <source>Dashboard</source>
         <translation>仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="259"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="347"/>
+        <source>Data Plotting</source>
+        <translation>数据绘图</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="362"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="259"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="259"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="362"/>
         <source>Point Count</source>
         <translation>点数</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="279"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="378"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="279"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="279"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="378"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>UI 刷新率 (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="513"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="333"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="333"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="513"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>始终显示任务栏按钮</translation>
     </message>
@@ -7301,9 +7328,9 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">线程模式（更适合高频数据）</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="498"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="297"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="297"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="498"/>
         <source>Show Actions Panel</source>
         <translation>显示操作面板</translation>
     </message>
@@ -7316,65 +7343,222 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">启用控制台小部件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="192"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="247"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="192"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="192"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="247"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>启用 API 服务器 (端口 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="315"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="315"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="315"/>
         <source>Auto-Hide Toolbar on Dashboard</source>
         <translation>仪表板上自动隐藏工具栏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="354"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="354"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="354"/>
         <source>Use Separate Thread for Frame Extraction</source>
         <translation>使用单独线程进行帧提取</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="381"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="65"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="381"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="381"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="65"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="404"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="118"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="118"/>
+        <source>Appearance</source>
+        <translation>外观</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="167"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="167"/>
+        <source>Files &amp; Updates</source>
+        <translation>文件和更新</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="231"/>
+        <source>Advanced</source>
+        <translation>高级</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="264"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="264"/>
+        <source>Allow External API Connections</source>
+        <translation>允许外部 API 连接</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="279"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="279"/>
+        <source>Auto-Hide Toolbar</source>
+        <translation>自动隐藏工具栏</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="297"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="297"/>
+        <source>Threaded Frame Extraction</source>
+        <translation>线程化帧提取</translation>
+    </message>
+    <message>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
+        <source>Plot</source>
+        <translation>绘图</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="399"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
+        <source>Widget Fonts</source>
+        <translation>小部件字体</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
+        <source>Widget Font</source>
+        <translation>小部件字体</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
+        <source>Widget Font Size</source>
+        <translation>小部件字体大小</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Small</source>
+        <translation>小</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Normal</source>
+        <translation>正常</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Large</source>
+        <translation>大</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Extra Large</source>
+        <translation>特大</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Custom</source>
+        <translation>自定义</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="483"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="483"/>
+        <source>Layout</source>
+        <translation>布局</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="563"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="563"/>
+        <source>Display</source>
+        <translation>显示</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="578"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="578"/>
+        <source>Display Mode</source>
+        <translation>显示模式</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="591"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="404"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="404"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="591"/>
         <source>Font Family</source>
         <translation>字体系列</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="424"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="605"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="424"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="424"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="605"/>
         <source>Font Size</source>
         <translation>字体大小</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="461"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="621"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="621"/>
+        <source>Show Timestamps</source>
+        <translation>显示时间戳</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="640"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="640"/>
+        <source>Data Transmission</source>
+        <translation>数据传输</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="655"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="655"/>
+        <source>Line Ending</source>
+        <translation>行结尾</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="668"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="668"/>
+        <source>Input Mode</source>
+        <translation>输入模式</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="681"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="681"/>
+        <source>Checksum</source>
+        <translation>校验和</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="694"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="694"/>
+        <source>Echo Sent Data</source>
+        <translation>回显发送的数据</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="713"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="713"/>
+        <source>Escape Codes</source>
+        <translation>转义代码</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="728"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="728"/>
+        <source>VT100 Emulation</source>
+        <translation>VT100仿真</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="743"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="743"/>
+        <source>ANSI Colors</source>
+        <translation>ANSI颜色</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="776"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="461"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="461"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="776"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="491"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="815"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="491"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="491"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="815"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="502"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="826"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="502"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="502"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="826"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
@@ -7666,65 +7850,65 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Terminal</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="127"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="109"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="127"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="127"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="109"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="134"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="116"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="134"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="134"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="116"/>
         <source>Select all</source>
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="141"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="123"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="141"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="141"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="123"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="222"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="204"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="222"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="222"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="204"/>
         <source>Send Data to Device</source>
         <translation>发送数据到设备</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="379"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="361"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="379"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="379"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="361"/>
         <source>Show Timestamp</source>
         <translation>显示时间戳</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="390"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="372"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="390"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="390"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="372"/>
         <source>Echo</source>
         <translation>回显</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="401"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="383"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="401"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="401"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="383"/>
         <source>Emulate VT-100</source>
         <translation>模拟 VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="412"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="394"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="412"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="412"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="394"/>
         <source>ANSI Colors</source>
         <translation>ANSI 颜色</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="436"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="418"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="436"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="436"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="418"/>
         <source>Display: %1</source>
         <translation>显示：%1</translation>
     </message>
@@ -8108,18 +8292,18 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="885"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1210"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="873"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1199"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1227"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1216"/>
         <source>%1 (Fallback)</source>
         <translation>%1（备用）</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1258"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1247"/>
         <source>LED Panel (%1)</source>
         <translation>LED 面板（%1）</translation>
     </message>
@@ -8391,13 +8575,13 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <name>Widgets::DataGrid</name>
     <message>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="134"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="147"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="134"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="147"/>
         <source>Value</source>
         <translation>值</translation>
     </message>

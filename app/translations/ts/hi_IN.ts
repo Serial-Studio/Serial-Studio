@@ -4,17 +4,36 @@
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../src/API/Server.cpp" line="375"/>
+        <location filename="../../src/API/Server.cpp" line="388"/>
         <source>Unable to start API TCP server</source>
         <translation>एपीआई टीसीपी सर्वर शुरू करने में असमर्थ</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="788"/>
+        <location filename="../../src/API/Server.cpp" line="437"/>
+        <source>Allow External API Connections?</source>
+        <translation>बाहरी API कनेक्शन की अनुमति दें?</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/Server.cpp" line="438"/>
+        <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
+
+Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
+        <translation>API सर्वर को बाहरी होस्ट्स के लिए उजागर करने से आपके नेटवर्क के अन्य उपकरण Serial Studio से पोर्ट 7777 पर कनेक्ट हो सकते हैं।
+
+केवल विश्वसनीय नेटवर्क पर इसे सक्षम करें। अविश्वसनीय क्लाइंट्स लाइव डेटा पढ़ सकते हैं या आपके उपकरण को कमांड भेज सकते हैं।</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/Server.cpp" line="469"/>
+        <source>Unable to restart API TCP server</source>
+        <translation>API TCP सर्वर को पुनरारंभ करने में असमर्थ</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/Server.cpp" line="874"/>
         <source>API server</source>
         <translation>एपीआई सर्वर</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="788"/>
+        <location filename="../../src/API/Server.cpp" line="874"/>
         <source>Invalid pending connection</source>
         <translation>अमान्य लंबित कनेक्शन</translation>
     </message>
@@ -594,63 +613,63 @@
         <translation>कृपया फाइल अनुमतियाँ और स्थान जांचें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="668"/>
+        <location filename="../../src/CSV/Player.cpp" line="675"/>
         <source>Invalid CSV</source>
         <translation>अमान्य CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="669"/>
+        <location filename="../../src/CSV/Player.cpp" line="676"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV फाइल में कोई डेटा या हेडर नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="680"/>
+        <location filename="../../src/CSV/Player.cpp" line="687"/>
         <source>Select a date/time column</source>
         <translation>दिनांक/समय कॉलम चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="680"/>
-        <location filename="../../src/CSV/Player.cpp" line="694"/>
+        <location filename="../../src/CSV/Player.cpp" line="687"/>
+        <location filename="../../src/CSV/Player.cpp" line="701"/>
         <source>Set interval manually</source>
         <translation>अंतराल को मैन्युअल रूप से सेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="682"/>
+        <location filename="../../src/CSV/Player.cpp" line="689"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV दिनांक/समय चयन</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="683"/>
+        <location filename="../../src/CSV/Player.cpp" line="690"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>दिनांक/समय डेटा को कैसे संभालें चुनें:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="697"/>
+        <location filename="../../src/CSV/Player.cpp" line="704"/>
         <source>Set Interval</source>
         <translation>अंतराल सेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="698"/>
+        <location filename="../../src/CSV/Player.cpp" line="705"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>कृपया पंक्तियों के बीच का अंतराल मिलीसेकंड में दर्ज करें:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="715"/>
+        <location filename="../../src/CSV/Player.cpp" line="722"/>
         <source>Select Date/Time Column</source>
         <translation>दिनांक/समय स्तंभ चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="716"/>
+        <location filename="../../src/CSV/Player.cpp" line="723"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>कृपया वह स्तंभ चुनें जिसमें दिनांक/समय डेटा है:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="727"/>
+        <location filename="../../src/CSV/Player.cpp" line="734"/>
         <source>Invalid Selection</source>
         <translation>अमान्य चयन</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="727"/>
+        <location filename="../../src/CSV/Player.cpp" line="734"/>
         <source>The selected column is not valid.</source>
         <translation>चयनित स्तंभ मान्य नहीं है।</translation>
     </message>
@@ -681,47 +700,47 @@
 <context>
     <name>Console::Handler</name>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="171"/>
+        <location filename="../../src/Console/Handler.cpp" line="206"/>
         <source>ASCII</source>
         <translation>एएससीआईआई</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="172"/>
+        <location filename="../../src/Console/Handler.cpp" line="207"/>
         <source>HEX</source>
         <translation>हेक्स</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="183"/>
+        <location filename="../../src/Console/Handler.cpp" line="218"/>
         <source>No Line Ending</source>
         <translation>कोई पंक्ति समाप्ति नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="184"/>
+        <location filename="../../src/Console/Handler.cpp" line="219"/>
         <source>New Line</source>
         <translation>नई पंक्ति</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="185"/>
+        <location filename="../../src/Console/Handler.cpp" line="220"/>
         <source>Carriage Return</source>
         <translation>कैरिज रिटर्न</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="186"/>
+        <location filename="../../src/Console/Handler.cpp" line="221"/>
         <source>CR + NL</source>
         <translation>सीआर + एनएल</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="197"/>
+        <location filename="../../src/Console/Handler.cpp" line="232"/>
         <source>Plain Text</source>
         <translation>सादा पाठ</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="198"/>
+        <location filename="../../src/Console/Handler.cpp" line="233"/>
         <source>Hexadecimal</source>
         <translation>हेक्साडेसिमल</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="218"/>
+        <location filename="../../src/Console/Handler.cpp" line="253"/>
         <source>No Checksum</source>
         <translation>कोई चेकसम नहीं</translation>
     </message>
@@ -1519,831 +1538,831 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation>सीरियल स्टूडियो प्रोजेक्ट फ़ाइलें (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="939"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2400"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="938"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2399"/>
         <source>Untitled Project</source>
         <translation>बिना शीर्षक का प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1058"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1057"/>
         <source>Select Project File</source>
         <translation>प्रोजेक्ट फ़ाइल चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1058"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1057"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>प्रोजेक्ट फ़ाइलें (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1102"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1101"/>
         <source>JSON validation error</source>
         <translation>JSON सत्यापन त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1194"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1193"/>
         <source>Legacy frame parser function updated</source>
         <translation>पुरानी फ्रेम पार्सर फ़ंक्शन अपडेट किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1195"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1194"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>आपके प्रोजेक्ट ने 'सेपरेटर' आर्गुमेंट के साथ एक पुरानी फ्रेम पार्सर फ़ंक्शन का उपयोग किया। इसे स्वचालित रूप से नए प्रारूप में माइग्रेट किया गया है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1235"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1234"/>
         <source>Switch Serial Studio to Project Mode?</source>
         <translation>सीरियल स्टूडियो को प्रोजेक्ट मोड में स्विच करें?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1236"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1235"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
         <translation>यह संचालन मोड प्रोजेक्ट फाइलों से डैशबोर्ड लोड और प्रदर्शित करने के लिए आवश्यक है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1269"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1268"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>क्या आप समूह "%1" को हटाना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1270"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1312"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1352"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1269"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1311"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1351"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>इस क्रिया को पूर्ववत नहीं किया जा सकता। क्या आप आगे बढ़ना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1311"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1310"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>क्या आप क्रिया "%1" को हटाना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1351"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1350"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>क्या आप डेटा सेट "%1" को हटाना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1401"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1442"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1474"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1400"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1441"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1473"/>
         <source>%1 (Copy)</source>
         <translation>%1 (प्रतिलिपि)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1509"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1561"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1508"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1560"/>
         <source>Group</source>
         <translation>समूह</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1588"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1587"/>
         <source>New Dataset</source>
         <translation>नया डेटा सेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1591"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1590"/>
         <source>New Plot</source>
         <translation>नया प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1595"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1594"/>
         <source>New FFT Plot</source>
         <translation>नया FFT प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1599"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1598"/>
         <source>New Level Indicator</source>
         <translation>नया स्तर संकेतक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1603"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1602"/>
         <source>New Gauge</source>
         <translation>नया गेज</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1607"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1606"/>
         <source>New Compass</source>
         <translation>नया कंपास</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1615"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1614"/>
         <source>New LED Indicator</source>
         <translation>नया एलईडी संकेतक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1738"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1737"/>
         <source>New Action</source>
         <translation>नया क्रिया</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1877"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1876"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>क्या आप वाकई समूह-स्तरीय विजेट को बदलना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1878"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1877"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>इस समूह के मौजूदा डेटा सेट हटा दिए जाएंगे</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1947"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1948"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1949"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1950"/>
         <source>Accelerometer %1</source>
         <translation>एक्सेलेरोमीटर %1</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2004"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2005"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2006"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2007"/>
         <source>Gyro %1</source>
         <translation>गाइरो %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2059"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2058"/>
         <source>Latitude</source>
         <translation>अक्षांश</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2060"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2059"/>
         <source>Longitude</source>
         <translation>देशांतर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2061"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2060"/>
         <source>Altitude</source>
         <translation>ऊँचाई</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2108"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2107"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2109"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2108"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2110"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2109"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2252"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2251"/>
         <source>Frame Parser Code</source>
         <translation>फ्रेम पार्सर कोड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2388"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2387"/>
         <source>Project Information</source>
         <translation>परियोजना जानकारी</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2399"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2398"/>
         <source>Project Title</source>
         <translation>परियोजना शीर्षक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2401"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2400"/>
         <source>Name or description of the project</source>
         <translation>परियोजना का नाम या विवरण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2411"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2410"/>
         <source>Frame Detection</source>
         <translation>फ्रेम पहचान</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2423"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2422"/>
         <source>Frame Detection Method</source>
         <translation>फ्रेम डिटेक्शन विधि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2424"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2423"/>
         <source>Select how incoming data frames are identified</source>
         <translation>इनकमिंग डेटा फ्रेम्स की पहचान कैसे की जाती है, चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2434"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2433"/>
         <source>Hexadecimal Delimiters</source>
         <translation>हेक्साडेसिमल डिलिमिटर्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2436"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2435"/>
         <source>Use hex values to define frame boundaries</source>
         <translation>फ्रेम सीमाओं को परिभाषित करने के लिए हेक्स मानों का उपयोग करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2449"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2448"/>
         <source>Start Sequence</source>
         <translation>प्रारंभ अनुक्रम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2452"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2451"/>
         <source>Marks the beginning of each data frame</source>
         <translation>प्रत्येक डेटा फ्रेम की शुरुआत को चिह्नित करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2462"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2461"/>
         <source>End Sequence</source>
         <translation>अंत अनुक्रम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2464"/>
         <source>Marks the end of each data frame</source>
         <translation>प्रत्येक डेटा फ्रेम के अंत को चिह्नित करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2475"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2474"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>पेलोड प्रोसेसिंग और सत्यापन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2486"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2485"/>
         <source>Data Format</source>
         <translation>डेटा प्रारूप</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2488"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2487"/>
         <source>Format of raw data used for decoding each frame</source>
         <translation>प्रत्येक फ्रेम को डिकोड करने के लिए उपयोग किए गए कच्चे डेटा का प्रारूप</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2499"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2498"/>
         <source>Checksum Algorithm</source>
         <translation>चेकसम एल्गोरिदम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2501"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2500"/>
         <source>Method used to validate frame integrity</source>
         <translation>फ्रेम की अखंडता को सत्यापित करने के लिए उपयोग की गई विधि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2547"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2546"/>
         <source>Group Information</source>
         <translation>समूह जानकारी</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2558"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2557"/>
         <source>Group Title</source>
         <translation>समूह शीर्षक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2559"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2558"/>
         <source>Untitled Group</source>
         <translation>बिना शीर्षक का समूह</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2560"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2559"/>
         <source>Title or description of this dataset group</source>
         <translation>इस डेटा सेट समूह का शीर्षक या विवरण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2585"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2584"/>
         <source>Composite Widget</source>
         <translation>समग्र विजेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2586"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2585"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>चुनें कि इस डेटा सेट समूह को कैसे प्रदर्शित किया जाना चाहिए (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2636"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2853"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2635"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2852"/>
         <source>General Information</source>
         <translation>सामान्य जानकारी</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2646"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2645"/>
         <source>Action Title</source>
         <translation>क्रिया शीर्षक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2648"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2647"/>
         <source>Untitled Action</source>
         <translation>बिना शीर्षक की क्रिया</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2649"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2648"/>
         <source>Name or description of this action</source>
         <translation>इस क्रिया का नाम या विवरण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2659"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2658"/>
         <source>Action Icon</source>
         <translation>क्रिया आइकन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2660"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2659"/>
         <source>Default Icon</source>
         <translation>डिफ़ॉल्ट आइकन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2661"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2660"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>डैशबोर्ड में इस क्रिया के लिए प्रदर्शित आइकन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2671"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2670"/>
         <source>Data Payload</source>
         <translation>डेटा पेलोड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2683"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2682"/>
         <source>Send as Binary</source>
         <translation>बाइनरी के रूप में भेजें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2684"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2683"/>
         <source>Send raw binary data when this action is triggered</source>
         <translation>जब यह क्रिया सक्रिय होती है तो कच्चा बाइनरी डेटा भेजें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2696"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2711"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2695"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2710"/>
         <source>Command</source>
         <translation>कमांड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2697"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2696"/>
         <source>Transmit Data (Hex)</source>
         <translation>डेटा प्रसारित करें (हेक्स)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2698"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2697"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>हेक्साडेसिमल पेलोड जो क्रिया ट्रिगर होने पर भेजा जाएगा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2712"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2711"/>
         <source>Transmit Data</source>
         <translation>डेटा प्रसारित करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2713"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2712"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>क्रिया ट्रिगर होने पर भेजने के लिए टेक्स्ट पेलोड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2739"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2738"/>
         <source>End-of-Line Sequence</source>
         <translation>अंत-पंक्ति अनुक्रम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2740"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2739"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>संदेश में जोड़ने के लिए EOL वर्ण (जैसे </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2751"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2750"/>
         <source>Execution Behavior</source>
         <translation>निष्पादन व्यवहार</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2763"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2762"/>
         <source>Auto-Execute on Connect</source>
         <translation>कनेक्ट पर स्वचालित निष्पादन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2764"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2763"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>जब डिवाइस कनेक्ट हो, तो स्वचालित रूप से इस क्रिया को ट्रिगर करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2775"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2774"/>
         <source>Timer Behavior</source>
         <translation>टाइमर व्यवहार</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2785"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2784"/>
         <source>Timer Mode</source>
         <translation>टाइमर मोड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2788"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2787"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>चुनें कि यह क्रिया कब और कैसे स्वचालित रूप से दोहराई जानी चाहिए</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2796"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2795"/>
         <source>Interval (ms)</source>
         <translation>अंतराल (मिलीसेकंड)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2800"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2799"/>
         <source>Timer Interval (ms)</source>
         <translation>टाइमर अंतराल (मिलीसेकंड)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2801"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2800"/>
         <source>Milliseconds between each repeated trigger of this action</source>
         <translation>इस क्रिया के प्रत्येक दोहराव के बीच मिलीसेकंड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2864"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2863"/>
         <source>Untitled Dataset</source>
         <translation>बिना शीर्षक का डेटासेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2865"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2864"/>
         <source>Dataset Title</source>
         <translation>डेटासेट शीर्षक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2866"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2865"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>डेटासेट का नाम, लेबलिंग और पहचान के लिए उपयोग किया जाता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2878"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2877"/>
         <source>Frame Index</source>
         <translation>फ्रेम इंडेक्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2879"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2878"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>समय में डेटासेट्स को संरेखित करने के लिए उपयोग की गई फ्रेम स्थिति</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2889"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2888"/>
         <source>Measurement Unit</source>
         <translation>माप की इकाई</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2890"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2889"/>
         <source>Volts, Amps, etc.</source>
         <translation>वोल्ट, एम्प्स, आदि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2891"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2890"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>माप की इकाई, जैसे वोल्ट या एम्प्स (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2901"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2900"/>
         <source>Plot Settings</source>
         <translation>प्लॉट सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2927"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2926"/>
         <source>Enable Plot Widget</source>
         <translation>प्लॉट विजेट सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2929"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2928"/>
         <source>Plot data in real-time</source>
         <translation>वास्तविक समय में डेटा प्लॉट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2955"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2954"/>
         <source>X-Axis Source</source>
         <translation>X-अक्ष स्रोत</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2956"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2955"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
         <translation>X-अक्ष के लिए उपयोग करने के लिए डेटा सेट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2967"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2966"/>
         <source>Minimum Plot Value (optional)</source>
         <translation>न्यूनतम प्लॉट मान (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2968"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2967"/>
         <source>Lower bound for plot display range</source>
         <translation>प्लॉट प्रदर्शन सीमा के लिए निचली सीमा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2979"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2978"/>
         <source>Maximum Plot Value (optional)</source>
         <translation>अधिकतम प्लॉट मान (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2980"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2979"/>
         <source>Upper bound for plot display range</source>
         <translation>प्लॉट प्रदर्शन सीमा के लिए ऊपरी सीमा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2990"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2989"/>
         <source>FFT Configuration</source>
         <translation>एफएफटी विन्यास</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3002"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3001"/>
         <source>Enable FFT Analysis</source>
         <translation>एफएफटी विश्लेषण सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3003"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3002"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>डेटा सेट का आवृत्ति-डोमेन विश्लेषण करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3020"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3019"/>
         <source>FFT Window Size</source>
         <translation>एफएफटी विंडो आकार</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3021"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3020"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>प्रत्येक एफएफटी गणना विंडो के लिए उपयोग किए गए नमूनों की संख्या</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3033"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3032"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>एफएफटी सैंपलिंग दर (Hz, आवश्यक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3034"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3033"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>एफएफटी के लिए उपयोग की गई सैंपलिंग आवृत्ति (Hz में)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3045"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3044"/>
         <source>Minimum Value (recommended)</source>
         <translation>न्यूनतम मान (अनुशंसित)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3046"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3045"/>
         <source>Lower bound for data normalization</source>
         <translation>डेटा सामान्यीकरण के लिए निचली सीमा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3057"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3056"/>
         <source>Maximum Value (recommended)</source>
         <translation>अधिकतम मान (अनुशंसित)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3058"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3057"/>
         <source>Upper bound for data normalization</source>
         <translation>डेटा सामान्यीकरण के लिए ऊपरी सीमा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3068"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3067"/>
         <source>Widget Settings</source>
         <translation>विजेट सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3094"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3093"/>
         <source>Widget</source>
         <translation>विजेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3095"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3094"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>इस डेटा सेट को प्रदर्शित करने के लिए दृश्य विजेट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3106"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3105"/>
         <source>Show in Overview</source>
         <translation>अवलोकन में दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3107"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3106"/>
         <source>Display this widget in the dashboard overview (if enabled)</source>
         <translation>डैशबोर्ड अवलोकन में इस विजेट को प्रदर्शित करें (यदि सक्षम है)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3122"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3121"/>
         <source>Minimum Display Value (required)</source>
         <translation>न्यूनतम प्रदर्शन मान (आवश्यक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3123"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3122"/>
         <source>Lower bound of the gauge or bar display range</source>
         <translation>गेज या बार प्रदर्शन सीमा की निचली सीमा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3134"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3133"/>
         <source>Maximum Display Value (required)</source>
         <translation>अधिकतम प्रदर्शन मान (आवश्यक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3135"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3134"/>
         <source>Upper bound of the gauge or bar display range</source>
         <translation>गेज या बार प्रदर्शन सीमा की ऊपरी सीमा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3145"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3144"/>
         <source>Alarm Settings</source>
         <translation>अलार्म सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3157"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3156"/>
         <source>Enable Alarms</source>
         <translation>अलार्म सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3158"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3157"/>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
         <translation>मान अलार्म सीमा से अधिक होने पर दृश्य अलार्म ट्रिगर करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3170"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3169"/>
         <source>Low Threshold</source>
         <translation>निम्न सीमा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3171"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3170"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
         <translation>मान इस सीमा से नीचे गिरने पर दृश्य अलार्म ट्रिगर करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3183"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3182"/>
         <source>High Threshold</source>
         <translation>उच्च सीमा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3184"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3183"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
         <translation>मान इस सीमा से अधिक होने पर दृश्य अलार्म ट्रिगर करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3195"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3194"/>
         <source>LED Display Settings</source>
         <translation>एलईडी प्रदर्शन सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3207"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3206"/>
         <source>Show in LED Panel</source>
         <translation>LED पैनल में दिखाएँ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3208"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3207"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>LED डिस्प्ले का उपयोग करके दृश्य स्थिति निगरानी सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3219"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3218"/>
         <source>LED On Threshold (required)</source>
         <translation>LED ऑन थ्रेशोल्ड (आवश्यक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3220"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3219"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>जब मान इस थ्रेशोल्ड को पूरा करता है या उससे अधिक होता है तो LED जलती है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3287"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3286"/>
         <source>Off</source>
         <translation>बंद</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3288"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3287"/>
         <source>Auto Start</source>
         <translation>ऑटो स्टार्ट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3289"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3288"/>
         <source>Start on Trigger</source>
         <translation>ट्रिगर पर शुरू करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3290"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3289"/>
         <source>Toggle on Trigger</source>
         <translation>ट्रिगर पर टॉगल करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3294"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3293"/>
         <source>Plain Text (UTF8)</source>
         <translation>सादा पाठ (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3295"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3294"/>
         <source>Hexadecimal</source>
         <translation>हेक्साडेसिमल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3296"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3295"/>
         <source>Base64</source>
         <translation>बेस64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3297"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3296"/>
         <source>Binary (Direct)</source>
         <translation>बाइनरी (डायरेक्ट)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3304"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3303"/>
         <source>No Checksum</source>
         <translation>कोई चेकसम नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3309"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3308"/>
         <source>End Delimiter Only</source>
         <translation>केवल अंत सीमांकक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3310"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3309"/>
         <source>Start Delimiter Only</source>
         <translation>केवल प्रारंभ सीमांकक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3311"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3310"/>
         <source>Start + End Delimiter</source>
         <translation>प्रारंभ + अंत सीमांकक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3312"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3311"/>
         <source>No Delimiters</source>
         <translation>कोई सीमांकक नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3320"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3319"/>
         <source>Data Grid</source>
         <translation>डेटा ग्रिड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3321"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3320"/>
         <source>GPS Map</source>
         <translation>जीपीएस मानचित्र</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3322"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3321"/>
         <source>Gyroscope</source>
         <translation>गाइरोस्कोप</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3323"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3322"/>
         <source>Multiple Plot</source>
         <translation>मल्टीपल प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3324"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3323"/>
         <source>Accelerometer</source>
         <translation>एक्सेलेरोमीटर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3324"/>
         <source>3D Plot</source>
         <translation>3डी प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3326"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3330"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3337"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3329"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3336"/>
         <source>None</source>
         <translation>कोई नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3331"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3330"/>
         <source>Bar</source>
         <translation>बार</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3332"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3331"/>
         <source>Gauge</source>
         <translation>गेज</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3333"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3332"/>
         <source>Compass</source>
         <translation>कम्पास</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3338"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3337"/>
         <source>New Line (\n)</source>
         <translation>नई पंक्ति (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3339"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3338"/>
         <source>Carriage Return (\r)</source>
         <translation>कैरिज रिटर्न (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3340"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3339"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3344"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
         <source>No</source>
         <translation>नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3345"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3344"/>
         <source>Yes</source>
         <translation>हाँ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3383"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3382"/>
         <source>Save changes to frame parser code?</source>
         <translation>फ्रेम पार्सर कोड में परिवर्तन सहेजें?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3384"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3383"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
         <translation>अपने परिवर्तनों को रखने के लिए 'सहेजें' चुनें, स्थायी रूप से खोने के लिए 'अस्वीकार करें', या वापस लौटने के लिए 'रद्द करें'।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3387"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3386"/>
         <source>Save Changes</source>
         <translation>परिवर्तन सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3938"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3937"/>
         <source>File open error</source>
         <translation>फ़ाइल खोलने में त्रुटि</translation>
     </message>
@@ -2533,6 +2552,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <name>Downloader</name>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <source>Stop</source>
         <translation>रोकें</translation>
@@ -2540,6 +2560,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="344"/>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Downloading updates</source>
         <translation>अपडेट डाउनलोड हो रहे हैं</translation>
@@ -2602,6 +2623,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <source>Updater</source>
         <translation>अपडेटर</translation>
@@ -2685,11 +2707,13 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation>1 सेकंड</translation>
     </message>
     <message>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <source>Time remaining: 0 minutes</source>
         <translation>शेष समय: 0 मिनट</translation>
     </message>
     <message>
+        <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <source>Open</source>
         <translation>खोलें</translation>
@@ -2698,16 +2722,16 @@ Example (HEX):  48 65 6C 6C 6F</source>
 <context>
     <name>FFTPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="267"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="253"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="267"/>
         <source>Magnitude (dB)</source>
         <translation>परिमाण (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="268"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="254"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="268"/>
         <source>Frequency (Hz)</source>
         <translation>आवृत्ति (Hz)</translation>
     </message>
@@ -3748,12 +3772,12 @@ macOS पर CAN बस समर्थन सीमित है और इस�
         <translation>सीएएन बस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="354"/>
+        <location filename="../../src/IO/Manager.cpp" line="355"/>
         <source>Your trial period has ended.</source>
         <translation>आपकी परीक्षण अवधि समाप्त हो गई है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="355"/>
+        <location filename="../../src/IO/Manager.cpp" line="356"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>सीरियल स्टूडियो का उपयोग जारी रखने के लिए, कृपया अपनी लाइसेंस सक्रिय करें।</translation>
     </message>
@@ -4628,23 +4652,23 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="90"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="88"/>
         <location filename="../../../build/app/gui/qml/MainWindow/MainWindow.qml" line="90"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="90"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="88"/>
         <source>Device Defined Project</source>
         <translation>उपकरण परिभाषित परियोजना</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="93"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="91"/>
         <location filename="../../../build/app/gui/qml/MainWindow/MainWindow.qml" line="93"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="93"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <source>Quick Plot Mode</source>
         <translation>त्वरित प्लॉट मोड</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="99"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="97"/>
         <location filename="../../../build/app/gui/qml/MainWindow/MainWindow.qml" line="99"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="99"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="97"/>
         <source>Empty Project</source>
         <translation>खाली परियोजना</translation>
     </message>
@@ -5036,9 +5060,9 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="306"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="287"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="306"/>
         <source>Samples</source>
         <translation>नमूने</translation>
     </message>
@@ -5635,44 +5659,42 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="35"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="34"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="35"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="35"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="34"/>
         <source>Preferences</source>
         <translation>प्राथमिकताएँ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="60"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="53"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="60"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="60"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="53"/>
         <source>General</source>
         <translation>सामान्य</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="85"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="133"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="85"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="85"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="133"/>
         <source>Language</source>
         <translation>भाषा</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="149"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="105"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="105"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="149"/>
         <source>Theme</source>
         <translation>थीम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="182"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="124"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="124"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="182"/>
         <source>Workspace Folder</source>
         <translation>कार्यक्षेत्र फ़ोल्डर</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="167"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="167"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="167"/>
         <source>Miscellaneous</source>
         <translation>विविध</translation>
     </message>
@@ -5681,107 +5703,269 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">TCP प्लगइन्स सक्षम करें (पोर्ट 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="192"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="247"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="192"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="192"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="247"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>एपीआई सर्वर सक्षम करें (पोर्ट 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="210"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="213"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="210"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="210"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="213"/>
         <source>Automatically Check for Updates</source>
         <translation>स्वचालित रूप से अपडेट की जाँच करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="235"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="59"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="235"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="235"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="59"/>
         <source>Dashboard</source>
         <translation>डैशबोर्ड</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="259"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="347"/>
+        <source>Data Plotting</source>
+        <translation>डेटा प्लॉटिंग</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="362"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="259"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="259"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="362"/>
         <source>Point Count</source>
         <translation>बिंदु गणना</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="279"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="378"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="279"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="279"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="378"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>UI ताज़गी दर (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="498"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="297"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="297"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="498"/>
         <source>Show Actions Panel</source>
         <translation>कार्य पैनल दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="315"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="315"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="315"/>
         <source>Auto-Hide Toolbar on Dashboard</source>
         <translation>डैशबोर्ड पर टूलबार को स्वचालित रूप से छुपाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="513"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="333"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="333"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="513"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>हमेशा टास्कबार बटन दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="354"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="354"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="354"/>
         <source>Use Separate Thread for Frame Extraction</source>
         <translation>फ्रेम निष्कर्षण के लिए अलग थ्रेड का उपयोग करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="381"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="65"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="381"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="381"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="65"/>
         <source>Console</source>
         <translation>कंसोल</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="404"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="118"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="118"/>
+        <source>Appearance</source>
+        <translation>उपस्थिति</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="167"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="167"/>
+        <source>Files &amp; Updates</source>
+        <translation>फाइल्स और अपडेट्स</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="231"/>
+        <source>Advanced</source>
+        <translation>उन्नत</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="264"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="264"/>
+        <source>Allow External API Connections</source>
+        <translation>बाहरी API कनेक्शन की अनुमति दें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="279"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="279"/>
+        <source>Auto-Hide Toolbar</source>
+        <translation>टूलबार को स्वचालित रूप से छुपाएं</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="297"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="297"/>
+        <source>Threaded Frame Extraction</source>
+        <translation>थ्रेडेड फ्रेम एक्सट्रैक्शन</translation>
+    </message>
+    <message>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
+        <source>Plot</source>
+        <translation>प्लॉट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="399"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
+        <source>Widget Fonts</source>
+        <translation>विजेट फोंट्स</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
+        <source>Widget Font</source>
+        <translation>विजेट फोंट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
+        <source>Widget Font Size</source>
+        <translation>विजेट फोंट आकार</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Small</source>
+        <translation>छोटा</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Normal</source>
+        <translation>सामान्य</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Large</source>
+        <translation>बड़ा</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Extra Large</source>
+        <translation>अतिरिक्त बड़ा</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <source>Custom</source>
+        <translation>कस्टम</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="483"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="483"/>
+        <source>Layout</source>
+        <translation>लेआउट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="563"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="563"/>
+        <source>Display</source>
+        <translation>डिस्प्ले</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="578"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="578"/>
+        <source>Display Mode</source>
+        <translation>प्रदर्शन मोड</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="591"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="404"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="404"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="591"/>
         <source>Font Family</source>
         <translation>फ़ॉन्ट परिवार</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="424"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="605"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="424"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="424"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="605"/>
         <source>Font Size</source>
         <translation>फ़ॉन्ट आकार</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="461"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="621"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="621"/>
+        <source>Show Timestamps</source>
+        <translation>समय चिह्न दिखाएं</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="640"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="640"/>
+        <source>Data Transmission</source>
+        <translation>डेटा ट्रांसमिशन</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="655"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="655"/>
+        <source>Line Ending</source>
+        <translation>लाइन समाप्ति</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="668"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="668"/>
+        <source>Input Mode</source>
+        <translation>इनपुट मोड</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="681"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="681"/>
+        <source>Checksum</source>
+        <translation>चेकसम</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="694"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="694"/>
+        <source>Echo Sent Data</source>
+        <translation>भेजा गया डेटा प्रतिध्वनित करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="713"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="713"/>
+        <source>Escape Codes</source>
+        <translation>एस्केप कोड्स</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="728"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="728"/>
+        <source>VT100 Emulation</source>
+        <translation>VT100 अनुकरण</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="743"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="743"/>
+        <source>ANSI Colors</source>
+        <translation>ANSI रंग</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="776"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="461"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="461"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="776"/>
         <source>Reset</source>
         <translation>रीसेट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="491"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="815"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="491"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="491"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="815"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="502"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="826"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="502"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="502"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="826"/>
         <source>Apply</source>
         <translation>लागू करें</translation>
     </message>
@@ -6073,65 +6257,65 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Terminal</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="127"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="109"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="127"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="127"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="109"/>
         <source>Copy</source>
         <translation>कॉपी</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="134"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="116"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="134"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="134"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="116"/>
         <source>Select all</source>
         <translation>सभी चुनें</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="141"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="123"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="141"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="141"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="123"/>
         <source>Clear</source>
         <translation>साफ करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="222"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="204"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="222"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="222"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="204"/>
         <source>Send Data to Device</source>
         <translation>डिवाइस को डेटा भेजें</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="379"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="361"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="379"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="379"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="361"/>
         <source>Show Timestamp</source>
         <translation>समय-मुद्रा दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="390"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="372"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="390"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="390"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="372"/>
         <source>Echo</source>
         <translation>इको</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="401"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="383"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="401"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="401"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="383"/>
         <source>Emulate VT-100</source>
         <translation>VT-100 अनुकरण करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="412"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="394"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="412"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="412"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="394"/>
         <source>ANSI Colors</source>
         <translation>ANSI रंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="436"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="418"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="436"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="436"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="418"/>
         <source>Display: %1</source>
         <translation>प्रदर्शन: %1</translation>
     </message>
@@ -6475,18 +6659,18 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="885"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1210"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="873"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1199"/>
         <source>Console</source>
         <translation>कंसोल</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1227"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1216"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (फॉलबैक)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1258"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1247"/>
         <source>LED Panel (%1)</source>
         <translation>एलईडी पैनल (%1)</translation>
     </message>
@@ -6758,13 +6942,13 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <name>Widgets::DataGrid</name>
     <message>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="134"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="147"/>
         <source>Title</source>
         <translation>शीर्षक</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="45"/>
-        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="134"/>
+        <location filename="../../src/UI/Widgets/DataGrid.cpp" line="147"/>
         <source>Value</source>
         <translation>मान</translation>
     </message>

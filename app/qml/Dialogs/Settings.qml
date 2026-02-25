@@ -342,9 +342,9 @@ Widgets.SmartDialog {
             implicitHeight: 2
             Layout.columnSpan: 2
           } Label {
-            Layout.columnSpan: 2
             Layout.topMargin: 2
-            text: qsTr("Plot")
+            Layout.columnSpan: 2
+            text: qsTr("Data Plotting")
             font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
             color: Cpp_ThemeManager.colors["pane_section_label"]
             Component.onCompleted: font.capitalization = Font.AllUppercase
