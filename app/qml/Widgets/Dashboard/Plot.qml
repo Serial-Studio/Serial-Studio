@@ -53,6 +53,12 @@ Item {
   property bool showAreaUnderPlot: false
 
   //
+  // User-controlled visibility preferences (persisted, ANDed with size thresholds)
+  //
+  property bool userShowXLabel: true
+  property bool userShowYLabel: true
+
+  //
   // Set downsample size based on widget size & zoom factor
   //
   function setDownsampleFactor()
@@ -75,16 +81,18 @@ Item {
     category: "Plot"
     property alias displayArea: root.showAreaUnderPlot
     property alias interpolateEnabled: root.interpolate
+    property alias userShowXLabel: root.userShowXLabel
+    property alias userShowYLabel: root.userShowYLabel
   }
 
   //
-  // Enable/disable features depending on window size
+  // Enable/disable features depending on window size, ANDed with user preferences
   //
   onWidthChanged: updateWidgetOptions()
   onHeightChanged: updateWidgetOptions()
   function updateWidgetOptions() {
-    plot.yLabelVisible = (root.width >= 196)
-    plot.xLabelVisible = (root.height >= (196 * 2/3))
+    plot.yLabelVisible = root.userShowYLabel && (root.width >= 196)
+    plot.xLabelVisible = root.userShowXLabel && (root.height >= (196 * 2/3))
     root.hasToolbar = (root.width >= toolbar.implicitWidth) && (root.height >= 220)
   }
 
@@ -178,8 +186,11 @@ Item {
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
-      checked: plot.xLabelVisible
-      onClicked: plot.xLabelVisible = !plot.xLabelVisible
+      checked: root.userShowXLabel
+      onClicked: {
+        root.userShowXLabel = !root.userShowXLabel
+        root.updateWidgetOptions()
+      }
       icon.source: "qrc:/rcc/icons/dashboard-buttons/x.svg"
     }
 
@@ -189,8 +200,11 @@ Item {
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
-      checked: plot.yLabelVisible
-      onClicked: plot.yLabelVisible = !plot.yLabelVisible
+      checked: root.userShowYLabel
+      onClicked: {
+        root.userShowYLabel = !root.userShowYLabel
+        root.updateWidgetOptions()
+      }
       icon.source: "qrc:/rcc/icons/dashboard-buttons/y.svg"
     }
 

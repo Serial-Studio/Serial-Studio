@@ -48,7 +48,6 @@ Widgets.SmartWindow {
   property int appLaunchCount: 0
   property string documentTitle: ""
   property bool firstValidFrame: false
-  property bool automaticUpdates: false
   property alias toolbarVisible: toolbar.toolbarEnabled
 
   //
@@ -66,7 +65,6 @@ Widgets.SmartWindow {
   //
   Settings {
     property alias launchCount: root.appLaunchCount
-    property alias automaticUpdater: root.automaticUpdates
   }
 
   //
@@ -119,16 +117,16 @@ Widgets.SmartWindow {
       // Ask user if he/she wants to enable automatic updates
       if (root.appLaunchCount == 2 && Cpp_UpdaterEnabled) {
         if (Cpp_Misc_Utilities.askAutomaticUpdates()) {
-          root.automaticUpdates = true
+          Cpp_Misc_ModuleManager.automaticUpdates = true
           Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
         }
 
         else
-          root.automaticUpdates = false
+          Cpp_Misc_ModuleManager.automaticUpdates = false
       }
 
       // Check for updates (if we are allowed)
-      else if (root.automaticUpdates && Cpp_UpdaterEnabled)
+      else if (Cpp_Misc_ModuleManager.automaticUpdates && Cpp_UpdaterEnabled)
         Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
     })
   }

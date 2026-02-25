@@ -23,7 +23,6 @@
 
 #include <QApplication>
 #include <QFontDatabase>
-#include <QSettings>
 
 /**
  * @brief Constructs the CommonFonts object, registering common fonts and
@@ -74,9 +73,8 @@ Misc::CommonFonts::CommonFonts()
     m_monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
 
   // Load widget font settings (default family is the monospace font on first run)
-  QSettings s;
-  m_widgetFontFamily = s.value("Widgets/FontFamily", m_monoFont.family()).toString();
-  m_widgetFontScale  = s.value("Widgets/FontScale", kScaleNormal).toDouble();
+  m_widgetFontFamily = m_settings.value("Widgets/FontFamily", m_monoFont.family()).toString();
+  m_widgetFontScale  = m_settings.value("Widgets/FontScale", kScaleNormal).toDouble();
   m_widgetFontScale  = qBound(0.5, m_widgetFontScale, 3.0);
   m_widgetFontIndex  = availableFonts().indexOf(m_widgetFontFamily);
 }
@@ -243,8 +241,7 @@ void Misc::CommonFonts::setWidgetFontScale(const double scale)
 
   m_widgetFontScale = clamped;
   ++m_widgetFontRevision;
-  QSettings s;
-  s.setValue("Widgets/FontScale", m_widgetFontScale);
+  m_settings.setValue("Widgets/FontScale", m_widgetFontScale);
   Q_EMIT fontsChanged();
 }
 
@@ -260,7 +257,6 @@ void Misc::CommonFonts::setWidgetFontFamily(const QString& family)
   m_widgetFontFamily = family;
   m_widgetFontIndex  = availableFonts().indexOf(m_widgetFontFamily);
   ++m_widgetFontRevision;
-  QSettings s;
-  s.setValue("Widgets/FontFamily", m_widgetFontFamily);
+  m_settings.setValue("Widgets/FontFamily", m_widgetFontFamily);
   Q_EMIT fontsChanged();
 }

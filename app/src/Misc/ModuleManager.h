@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QQmlApplicationEngine>
+#include <QSettings>
 
 #include "Platform/NativeWindow.h"
 
@@ -36,10 +37,16 @@ namespace Misc {
 class ModuleManager : public QObject {
   Q_OBJECT
   Q_PROPERTY(bool autoUpdaterEnabled READ autoUpdaterEnabled CONSTANT)
+  Q_PROPERTY(bool automaticUpdates READ automaticUpdates WRITE setAutomaticUpdates NOTIFY
+               automaticUpdatesChanged)
+
+signals:
+  void automaticUpdatesChanged();
 
 public:
   ModuleManager();
   [[nodiscard]] bool autoUpdaterEnabled() const;
+  [[nodiscard]] bool automaticUpdates() const;
   [[nodiscard]] const QQmlApplicationEngine& engine() const;
 
 public slots:
@@ -47,8 +54,11 @@ public slots:
   void configureUpdater();
   void registerQmlTypes();
   void initializeQmlInterface();
+  void setAutomaticUpdates(const bool enabled);
 
 private:
+  QSettings m_settings;
+  bool m_automaticUpdates;
   NativeWindow m_nativeWindow;
   QQmlApplicationEngine m_engine;
 };

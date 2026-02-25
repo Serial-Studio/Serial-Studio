@@ -19,7 +19,6 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-import QtCore
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -35,23 +34,12 @@ Widgets.SmartDialog {
   title: qsTr("Preferences")
 
   //
-  // Settings persistence
-  //
-  Settings {
-    category: "Preferences"
-    property alias plugins: _apiServer.checked
-    property alias dashboardPoints: _points.value
-    property alias dashboardActionPanel: _actionsPanel.checked
-    property alias alwaysShowTaskbarBt: _taskbarButtons.checked
-    property alias dashboardAutoHideToolbar: _autoHideToolbar.checked
-  }
-
-  //
   // Window controls
   //
   contentItem: ColumnLayout {
     id: layout
     spacing: 12
+    anchors.centerIn: parent
 
     //
     // Tab bar
@@ -152,9 +140,8 @@ Widgets.SmartDialog {
             enabled: !Cpp_IO_Manager.isConnected
             currentIndex: Cpp_Misc_Translator.language
             model: Cpp_Misc_Translator.availableLanguages
-            onCurrentIndexChanged: {
-              if (currentIndex !== Cpp_Misc_Translator.language)
-                Cpp_Misc_Translator.setLanguage(currentIndex)
+            onActivated: {
+              Cpp_Misc_Translator.language = currentIndex
             }
           }
 
@@ -166,9 +153,8 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             currentIndex: Cpp_ThemeManager.theme
             model: Cpp_ThemeManager.availableThemes
-            onCurrentIndexChanged: {
-              if (currentIndex !== Cpp_ThemeManager.theme)
-                Cpp_ThemeManager.setTheme(currentIndex)
+            onActivated: {
+              Cpp_ThemeManager.theme = currentIndex
             }
           }
 
@@ -228,11 +214,11 @@ Widgets.SmartDialog {
           } Switch {
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
-            checked: mainWindow.automaticUpdates
+            checked: Cpp_Misc_ModuleManager.automaticUpdates
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
             onCheckedChanged: {
-              if (checked !== mainWindow.automaticUpdates)
-                mainWindow.automaticUpdates = checked
+              if (checked !== Cpp_Misc_ModuleManager.automaticUpdates)
+                Cpp_Misc_ModuleManager.automaticUpdates = checked
             }
           }
 
@@ -268,6 +254,24 @@ Widgets.SmartDialog {
             onCheckedChanged: {
               if (checked !== Cpp_API_Server.enabled)
                 Cpp_API_Server.enabled = checked
+            }
+          }
+
+          Label {
+            opacity: enabled ? 1 : 0.5
+            enabled: _apiServer.checked
+            color: Cpp_ThemeManager.colors["text"]
+            text: qsTr("Allow External API Connections")
+          } Switch {
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            opacity: enabled ? 1 : 0.5
+            enabled: _apiServer.checked
+            checked: Cpp_API_Server.externalConnections
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_API_Server.externalConnections)
+                Cpp_API_Server.externalConnections = checked
             }
           }
 
@@ -386,6 +390,22 @@ Widgets.SmartDialog {
             }
           }
 
+          Label {
+            text: qsTr("Decimal Precision")
+            color: Cpp_ThemeManager.colors["text"]
+          } SpinBox {
+            id: _precision
+            from: 0
+            to: 6
+            editable: true
+            Layout.fillWidth: true
+            value: Cpp_UI_Dashboard.precision
+            onValueChanged: {
+              if (value !== Cpp_UI_Dashboard.precision)
+                Cpp_UI_Dashboard.precision = value
+            }
+          }
+
           Item {
             implicitHeight: 2
             Layout.columnSpan: 2
@@ -416,7 +436,7 @@ Widgets.SmartDialog {
             currentIndex: Cpp_Misc_CommonFonts.widgetFontIndex
 
             onActivated: {
-              Cpp_Misc_CommonFonts.setWidgetFontFamily(currentText)
+              Cpp_Misc_CommonFonts.widgetFontFamily = currentText
             }
           }
 
@@ -449,7 +469,7 @@ Widgets.SmartDialog {
               onActivated: (index) => {
                              const scales = [0.85, 1.00, 1.25, 1.50]
                              if (index < 4)
-                             Cpp_Misc_CommonFonts.setWidgetFontScale(scales[index])
+                               Cpp_Misc_CommonFonts.widgetFontScale = scales[index]
                            }
             }
 
@@ -465,7 +485,7 @@ Widgets.SmartDialog {
               valueFromText: (text) => parseInt(text)
 
               onValueModified: {
-                Cpp_Misc_CommonFonts.setWidgetFontScale(value / 100.0)
+                Cpp_Misc_CommonFonts.widgetFontScale = value / 100.0
               }
             }
           }
@@ -590,14 +610,10 @@ Widgets.SmartDialog {
             id: _consoleFontFamily
             Layout.fillWidth: true
             model: Cpp_Console_Handler.availableFonts
+            currentIndex: Cpp_Console_Handler.fontFamilyIndex
 
-            Component.onCompleted: {
-              currentIndex = find(Cpp_Console_Handler.fontFamily)
-            }
-
-            onCurrentTextChanged: {
-              if (currentText !== Cpp_Console_Handler.fontFamily)
-                Cpp_Console_Handler.fontFamily = currentText
+            onActivated: {
+              Cpp_Console_Handler.fontFamily = currentText
             }
           }
 
@@ -612,9 +628,8 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             value: Cpp_Console_Handler.fontSize
 
-            onValueChanged: {
-              if (value !== Cpp_Console_Handler.fontSize)
-                Cpp_Console_Handler.fontSize = value
+            onValueModified: {
+              Cpp_Console_Handler.fontSize = value
             }
           }
 
@@ -736,7 +751,7 @@ Widgets.SmartDialog {
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
             onCheckedChanged: {
               if (checked !== Cpp_Console_Handler.vt100Emulation)
-                Cpp_Console_Handler.setVt100Emulation(checked)
+                Cpp_Console_Handler.vt100Emulation = checked
             }
           }
 
@@ -754,7 +769,7 @@ Widgets.SmartDialog {
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
             onCheckedChanged: {
               if (checked !== Cpp_Console_Handler.ansiColors)
-                Cpp_Console_Handler.setAnsiColors(checked)
+                Cpp_Console_Handler.ansiColors = checked
             }
           }
 
@@ -786,23 +801,24 @@ Widgets.SmartDialog {
           Cpp_Misc_TimerEvents.fps = 60
           Cpp_UI_Dashboard.precision = 2
           Cpp_API_Server.enabled = false
-          mainWindow.automaticUpdates = true
+          Cpp_API_Server.externalConnections = false
+          Cpp_Misc_ModuleManager.automaticUpdates = true
           Cpp_UI_Dashboard.terminalEnabled = false
           Cpp_IO_Manager.threadedFrameExtraction = false
           Cpp_UI_Dashboard.autoHideToolbar = false
           Cpp_UI_Dashboard.showTaskbarButtons = false
-          Cpp_Console_Handler.setFontFamily(Cpp_Misc_CommonFonts.monoFont.family)
-          Cpp_Console_Handler.setFontSize(Cpp_Misc_CommonFonts.monoFont.pointSize)
+          Cpp_Console_Handler.fontFamily = Cpp_Misc_CommonFonts.monoFont.family
+          Cpp_Console_Handler.fontSize = Cpp_Misc_CommonFonts.monoFont.pointSize
           Cpp_Console_Handler.echo = false
           Cpp_Console_Handler.showTimestamp = false
-          Cpp_Console_Handler.setVt100Emulation(true)
-          Cpp_Console_Handler.setAnsiColors(true)
+          Cpp_Console_Handler.vt100Emulation = true
+          Cpp_Console_Handler.ansiColors = true
           Cpp_Console_Handler.dataMode = 0
           Cpp_Console_Handler.displayMode = 0
           Cpp_Console_Handler.lineEnding = 1
           Cpp_Console_Handler.checksumMethod = 0
-          Cpp_Misc_CommonFonts.setWidgetFontScale(1.0)
-          Cpp_Misc_CommonFonts.setWidgetFontFamily(Cpp_Misc_CommonFonts.monoFont.family)
+          Cpp_Misc_CommonFonts.widgetFontScale = 1.0
+          Cpp_Misc_CommonFonts.widgetFontFamily = Cpp_Misc_CommonFonts.monoFont.family
         }
       }
 

@@ -385,7 +385,7 @@ Item {
         checked: Cpp_Console_Handler.vt100Emulation
         onCheckedChanged: {
           if (Cpp_Console_Handler.vt100Emulation !== checked)
-            Cpp_Console_Handler.setVt100Emulation(checked)
+            Cpp_Console_Handler.vt100Emulation = checked
         }
       }
 
@@ -398,7 +398,7 @@ Item {
         checked: Cpp_Console_Handler.vt100Emulation && Cpp_Console_Handler.ansiColors
         onCheckedChanged: {
           if (enabled && Cpp_Console_Handler.ansiColors !== checked)
-            Cpp_Console_Handler.setAnsiColors(checked)
+            Cpp_Console_Handler.ansiColors = checked
         }
       }
 

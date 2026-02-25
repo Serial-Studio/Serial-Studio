@@ -104,6 +104,9 @@ class Handler : public QObject {
              READ fontSize
              WRITE setFontSize
              NOTIFY fontSizeChanged)
+  Q_PROPERTY(int fontFamilyIndex
+             READ fontFamilyIndex
+             NOTIFY fontFamilyChanged)
   Q_PROPERTY(QStringList availableFonts
              READ availableFonts
              CONSTANT)
@@ -184,6 +187,7 @@ public:
   [[nodiscard]] QFont font() const;
   [[nodiscard]] int fontSize() const;
   [[nodiscard]] QString fontFamily() const;
+  [[nodiscard]] int fontFamilyIndex() const;
   [[nodiscard]] QStringList availableFonts() const;
 
   [[nodiscard]] int defaultCharWidth() const;
@@ -243,6 +247,7 @@ private:
 
   QFont m_font;
   int m_fontSize;
+  int m_fontFamilyIndex;
   QString m_fontFamily;
   QSettings m_settings;
 

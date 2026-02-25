@@ -66,6 +66,7 @@ public slots:
 
 private slots:
   void updateData();
+  void onFontsChanged();
 
 private:
   QStringList getRow(const DataModel::Dataset& dataset);

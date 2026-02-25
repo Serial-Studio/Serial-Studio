@@ -26,6 +26,7 @@
 #include <QHash>
 #include <QHostAddress>
 #include <QObject>
+#include <QSettings>
 #include <QTcpServer>
 #include <QTcpSocket>
 
@@ -115,10 +116,13 @@ class Server : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr> {
   Q_OBJECT
   Q_PROPERTY(int clientCount READ clientCount NOTIFY clientCountChanged)
   Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
+  Q_PROPERTY(bool externalConnections READ externalConnections WRITE setExternalConnections NOTIFY
+               externalConnectionsChanged)
 
 signals:
   void enabledChanged();
   void clientCountChanged();
+  void externalConnectionsChanged();
 
 private:
   explicit Server();
@@ -132,11 +136,13 @@ private:
 public:
   static Server& instance();
   [[nodiscard]] bool enabled() const;
+  [[nodiscard]] bool externalConnections() const;
   [[nodiscard]] int clientCount() const;
 
 public slots:
   void removeConnection();
   void setEnabled(const bool enabled);
+  void setExternalConnections(const bool enabled);
   void hotpathTxData(const IO::ByteArrayPtr& data);
   void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
 
@@ -161,8 +167,10 @@ private:
     int byteCount    = 0;
   };
 
+  QSettings m_settings;
   int m_clientCount;
   bool m_enabled;
+  bool m_externalConnections;
   QTcpServer m_server;
   QHash<QTcpSocket*, ConnectionState> m_connections;
 };

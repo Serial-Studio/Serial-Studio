@@ -264,7 +264,10 @@ API::Server::Server()
       {.queueCapacity = 2048, .flushThreshold = 512, .timerIntervalMs = 1000})
   , m_clientCount(0)
   , m_enabled(false)
+  , m_externalConnections(false)
 {
+  m_externalConnections = m_settings.value("API/ExternalConnections", false).toBool();
+
   initializeWorker();
 
   auto* worker = static_cast<ServerWorker*>(m_worker);
@@ -327,6 +330,15 @@ bool API::Server::enabled() const
 }
 
 /**
+ * @brief Returns whether the server accepts connections from external hosts.
+ * @return true if listening on all interfaces; false if localhost only.
+ */
+bool API::Server::externalConnections() const
+{
+  return m_externalConnections;
+}
+
+/**
  * @brief Gets the number of currently connected API clients.
  *
  * @return The count of active client connections.
@@ -370,7 +382,8 @@ void API::Server::setEnabled(const bool enabled)
   if (enabled) {
     if (!m_server.isListening()) {
       m_server.setMaxPendingConnections(kMaxApiClients);
-      if (!m_server.listen(QHostAddress::LocalHost, API_TCP_PORT)) {
+      const auto address = m_externalConnections ? QHostAddress::Any : QHostAddress::LocalHost;
+      if (!m_server.listen(address, API_TCP_PORT)) {
         Misc::Utilities::showMessageBox(
           tr("Unable to start API TCP server"), m_server.errorString(), QMessageBox::Warning);
         m_server.close();
@@ -384,6 +397,12 @@ void API::Server::setEnabled(const bool enabled)
   else {
     m_server.close();
     closeResources = true;
+
+    if (m_externalConnections) {
+      m_externalConnections = false;
+      m_settings.setValue("API/ExternalConnections", false);
+      Q_EMIT externalConnectionsChanged();
+    }
   }
 
   if (closeResources) {
@@ -395,9 +414,63 @@ void API::Server::setEnabled(const bool enabled)
   if (m_enabled != effectiveEnabled) {
     m_enabled = effectiveEnabled;
     Q_EMIT enabledChanged();
-  } else if (enabled != effectiveEnabled) {
-    // Notify observers that an enable request failed and state remains unchanged.
+  } else if (enabled != effectiveEnabled)
     Q_EMIT enabledChanged();
+}
+
+/**
+ * @brief Sets whether the server accepts connections from external hosts.
+ *
+ * When enabled, the server listens on all network interfaces (QHostAddress::Any).
+ * When disabled, it binds to localhost only. If the server is currently running,
+ * it is restarted to apply the change immediately.
+ *
+ * @param enabled If true, accept external connections; if false, localhost only.
+ */
+void API::Server::setExternalConnections(const bool enabled)
+{
+  if (m_externalConnections == enabled)
+    return;
+
+  if (enabled) {
+    const int result = Misc::Utilities::showMessageBox(
+      tr("Allow External API Connections?"),
+      tr("Exposing the API server to external hosts allows other devices on your "
+         "network to connect to Serial Studio on port 7777.\n\n"
+         "Only enable this on trusted networks. "
+         "Untrusted clients may read live data or send commands to your device."),
+      QMessageBox::Warning,
+      QString(),
+      QMessageBox::Yes | QMessageBox::No,
+      QMessageBox::No);
+
+    if (result == QMessageBox::No) {
+      m_externalConnections = false;
+      m_settings.setValue("API/ExternalConnections", false);
+      Q_EMIT externalConnectionsChanged();
+      return;
+    }
+  }
+
+  m_externalConnections = enabled;
+  m_settings.setValue("API/ExternalConnections", m_externalConnections);
+  Q_EMIT externalConnectionsChanged();
+
+  if (m_enabled) {
+    m_server.close();
+    m_connections.clear();
+    auto* worker = static_cast<ServerWorker*>(m_worker);
+    QMetaObject::invokeMethod(worker, "closeResources", Qt::QueuedConnection);
+
+    const auto address = m_externalConnections ? QHostAddress::Any : QHostAddress::LocalHost;
+    m_server.setMaxPendingConnections(kMaxApiClients);
+    if (!m_server.listen(address, API_TCP_PORT)) {
+      Misc::Utilities::showMessageBox(
+        tr("Unable to restart API TCP server"), m_server.errorString(), QMessageBox::Warning);
+      m_server.close();
+      m_enabled = false;
+      Q_EMIT enabledChanged();
+    }
   }
 }
 

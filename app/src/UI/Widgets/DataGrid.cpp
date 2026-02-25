@@ -48,10 +48,11 @@ Widgets::DataGrid::DataGrid(const int index, QQuickItem* parent)
     rows.append(getRow(dataset));
 
   setData(rows);
-  setFont(Misc::CommonFonts::instance().monoFont());
-  setHeaderFont(Misc::CommonFonts::instance().boldUiFont());
+  onFontsChanged();
   connect(
     &UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Widgets::DataGrid::updateData);
+  connect(
+    &Misc::CommonFonts::instance(), &Misc::CommonFonts::fontsChanged, this, &Widgets::DataGrid::onFontsChanged);
 
   updateData();
 }
@@ -86,6 +87,16 @@ void Widgets::DataGrid::setPaused(const bool paused)
 
     Q_EMIT pausedChanged();
   }
+}
+
+/**
+ * @brief Refreshes the table fonts when the global widget font settings change.
+ */
+void Widgets::DataGrid::onFontsChanged()
+{
+  auto& fonts = Misc::CommonFonts::instance();
+  setFont(fonts.widgetFont());
+  setHeaderFont(fonts.widgetFont(1, true));
 }
 
 /**

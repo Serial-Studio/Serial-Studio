@@ -53,6 +53,7 @@ constexpr int kDefaultPlotPoints = 100;
  */
 UI::Dashboard::Dashboard()
   : m_points(kDefaultPlotPoints)
+  , m_precision(2)
   , m_widgetCount(0)
   , m_updateRequired(false)
   , m_showActionPanel(true)
@@ -101,6 +102,13 @@ UI::Dashboard::Dashboard()
 
   // Update action items when frame format changes
   connect(this, &UI::Dashboard::widgetCountChanged, this, &UI::Dashboard::actionStatusChanged);
+
+  // Load persisted settings
+  m_precision          = qBound(0, m_settings.value("Dashboard/Precision", 2).toInt(), 6);
+  m_points             = qMax(1, m_settings.value("Dashboard/Points", kDefaultPlotPoints).toInt());
+  m_autoHideToolbar    = m_settings.value("Dashboard/AutoHideToolbar", false).toBool();
+  m_showActionPanel    = m_settings.value("Dashboard/ShowActionPanel", true).toBool();
+  m_showTaskbarButtons = m_settings.value("Dashboard/ShowTaskbarButtons", false).toBool();
 }
 
 /**
@@ -250,6 +258,15 @@ bool UI::Dashboard::containsCommercialFeatures() const
 int UI::Dashboard::points() const
 {
   return m_points;
+}
+
+/**
+ * @brief Gets the decimal precision used for displayed values.
+ * @return Current decimal digits setting (0–6).
+ */
+int UI::Dashboard::precision() const
+{
+  return m_precision;
 }
 
 /**
@@ -674,15 +691,25 @@ bool UI::Dashboard::multiplotRunning(const int index)
 void UI::Dashboard::setPoints(const int points)
 {
   if (m_points != points) {
-    // Update number of points
     m_points = points;
-
-    // Update plot data structures
+    m_settings.setValue("Dashboard/Points", m_points);
     configureLineSeries();
     configureMultiLineSeries();
-
-    // Update the UI
     Q_EMIT pointsChanged();
+  }
+}
+
+/**
+ * @brief Sets the decimal precision for displayed values and persists it.
+ * @param precision Decimal digits, clamped to [0, 6].
+ */
+void UI::Dashboard::setPrecision(const int precision)
+{
+  const int clamped = qBound(0, precision, 6);
+  if (m_precision != clamped) {
+    m_precision = clamped;
+    m_settings.setValue("Dashboard/Precision", m_precision);
+    Q_EMIT precisionChanged();
   }
 }
 
@@ -810,6 +837,7 @@ void UI::Dashboard::setShowActionPanel(const bool enabled)
 {
   if (m_showActionPanel != enabled) {
     m_showActionPanel = enabled;
+    m_settings.setValue("Dashboard/ShowActionPanel", m_showActionPanel);
     Q_EMIT showActionPanelChanged();
   }
 }
@@ -821,6 +849,7 @@ void UI::Dashboard::setAutoHideToolbar(const bool enabled)
 {
   if (m_autoHideToolbar != enabled) {
     m_autoHideToolbar = enabled;
+    m_settings.setValue("Dashboard/AutoHideToolbar", m_autoHideToolbar);
     Q_EMIT autoHideToolbarChanged();
   }
 }
@@ -913,6 +942,7 @@ void UI::Dashboard::setShowTaskbarButtons(const bool enabled)
 {
   if (m_showTaskbarButtons != enabled) {
     m_showTaskbarButtons = enabled;
+    m_settings.setValue("Dashboard/ShowTaskbarButtons", m_showTaskbarButtons);
     Q_EMIT showTaskbarButtonsChanged();
   }
 }

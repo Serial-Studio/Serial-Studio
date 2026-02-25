@@ -50,6 +50,7 @@ Console::Handler::Handler()
   , m_ansiColors(true)
   , m_isStartingLine(true)
   , m_lastCharWasCR(false)
+  , m_fontFamilyIndex(0)
   , m_textBuffer(10 * 1024)
 {
   clear();
@@ -76,6 +77,7 @@ Console::Handler::Handler()
     m_checksumMethod = 0;
 
   m_ansiColorsEnabled = m_vt100Emulation && m_ansiColors;
+  m_fontFamilyIndex   = availableFonts().indexOf(m_fontFamily);
 
   updateFont();
 }
@@ -276,6 +278,14 @@ int Console::Handler::fontSize() const
 QString Console::Handler::fontFamily() const
 {
   return m_fontFamily;
+}
+
+/**
+ * Returns the index of the current font family in the availableFonts() list
+ */
+int Console::Handler::fontFamilyIndex() const
+{
+  return m_fontFamilyIndex;
 }
 
 /**
@@ -587,7 +597,8 @@ void Console::Handler::setFontFamily(const QString& family)
     if (!fontInfo.fixedPitch())
       return;
 
-    m_fontFamily = family;
+    m_fontFamily      = family;
+    m_fontFamilyIndex = availableFonts().indexOf(m_fontFamily);
     m_settings.setValue("Console/FontFamily", m_fontFamily);
     updateFont();
     Q_EMIT fontFamilyChanged();
@@ -747,6 +758,7 @@ void Console::Handler::updateFont()
   if (!fontInfo.fixedPitch()) {
     const auto defaultFont = Misc::CommonFonts::instance().monoFont();
     m_fontFamily           = defaultFont.family();
+    m_fontFamilyIndex      = availableFonts().indexOf(m_fontFamily);
     m_fontSize             = defaultFont.pointSize();
     m_settings.setValue("Console/FontFamily", m_fontFamily);
     m_settings.setValue("Console/FontSize", m_fontSize);

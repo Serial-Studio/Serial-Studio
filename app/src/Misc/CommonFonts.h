@@ -23,6 +23,7 @@
 
 #include <QFont>
 #include <QObject>
+#include <QSettings>
 #include <QStringList>
 
 namespace Misc {
@@ -76,9 +77,11 @@ class CommonFonts : public QObject {
              NOTIFY fontsChanged)
   Q_PROPERTY(double widgetFontScale
              READ widgetFontScale
+             WRITE setWidgetFontScale
              NOTIFY fontsChanged)
   Q_PROPERTY(QString widgetFontFamily
              READ widgetFontFamily
+             WRITE setWidgetFontFamily
              NOTIFY fontsChanged)
   Q_PROPERTY(QStringList availableFonts
              READ availableFonts
@@ -123,10 +126,11 @@ public:
   Q_INVOKABLE QFont customMonoFont(double fraction = 1, bool bold = false);
   Q_INVOKABLE QFont widgetFont(double fraction = 1, bool bold = false) const;
 
-  Q_INVOKABLE void setWidgetFontScale(double scale);
-  Q_INVOKABLE void setWidgetFontFamily(const QString& family);
+  void setWidgetFontScale(double scale);
+  void setWidgetFontFamily(const QString& family);
 
 private:
+  QSettings m_settings;
   QFont m_uiFont;
   QFont m_monoFont;
   QFont m_boldUiFont;
