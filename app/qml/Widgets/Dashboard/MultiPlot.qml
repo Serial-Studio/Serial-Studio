@@ -370,7 +370,7 @@ Item {
                 Layout.alignment: Qt.AlignVCenter
                 checked: root.model.visibleCurves[index]
                 palette.highlight: root.model.colors[index]
-                font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+                font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
                 palette.text: Cpp_ThemeManager.colors["widget_text"]
                 onCheckedChanged: {
                   if (checked !== root.model.visibleCurves[index])

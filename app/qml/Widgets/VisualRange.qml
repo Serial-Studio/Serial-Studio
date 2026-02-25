@@ -95,7 +95,7 @@ ColumnLayout {
     elide: Qt.ElideRight
     visible: root.rangeVisible
     Layout.alignment: Qt.AlignHCenter
-    font: Cpp_Misc_CommonFonts.monoFont
+    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
     Layout.maximumWidth: root.maximumWidth
     horizontalAlignment: Text.AlignHCenter
     color: Cpp_ThemeManager.colors["widget_text"]
@@ -137,8 +137,8 @@ ColumnLayout {
     elide: Qt.ElideRight
     Layout.alignment: Qt.AlignHCenter
     horizontalAlignment: Text.AlignHCenter
-    font: root.rangeVisible ? Cpp_Misc_CommonFonts.customMonoFont(1.16) :
-                              Cpp_Misc_CommonFonts.customMonoFont(1)
+    font: root.rangeVisible ? (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(1.16)) :
+                              (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(1))
     color: Cpp_ThemeManager.colors["widget_text"]
 
     // Calculate max text width
@@ -202,7 +202,7 @@ ColumnLayout {
     elide: Qt.ElideRight
     visible: root.rangeVisible
     Layout.alignment: Qt.AlignHCenter
-    font: Cpp_Misc_CommonFonts.monoFont
+    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
     Layout.maximumWidth: root.maximumWidth
     horizontalAlignment: Text.AlignHCenter
     color: Cpp_ThemeManager.colors["widget_text"]

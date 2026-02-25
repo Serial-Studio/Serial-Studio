@@ -35,21 +35,6 @@ Widgets.Pane {
   Layout.minimumHeight: terminal.implicitHeight
 
   //
-  // Custom properties
-  //
-  property alias ansiColors: terminal.ansiColors
-  property alias vt100emulation: terminal.vt100emulation
-
-  //
-  // Bind terminal ANSI colors to console handler
-  //
-  Binding {
-    target: Cpp_Console_Handler
-    property: "ansiColorsEnabled"
-    value: terminal.ansiColors && terminal.vt100emulation
-  }
-
-  //
   // Utility functions between terminal widget & main window
   //
   function sendData() {

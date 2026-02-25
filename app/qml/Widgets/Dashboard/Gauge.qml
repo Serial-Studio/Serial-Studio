@@ -56,6 +56,7 @@ Item {
   readonly property real startAngleDeg: -135
   readonly property real angleRangeDeg: endAngleDeg - startAngleDeg
   readonly property real fontSize: Math.max(8, Math.min(11, Math.min(width, height) / 28))
+                                   * Cpp_Misc_CommonFonts.widgetFontScale
   readonly property int tickCount: {
     const size = Math.min(width, height) * 0.75
     const radius = size / 2
@@ -173,7 +174,7 @@ Item {
                 y: gaugeFace.height / 2 + Math.sin(parent.angleRad) * parent.labelRadius - height / 2
                 text: formatValue(parent.tickValue)
                 font.pixelSize: fontSize
-                font.family: Cpp_Misc_CommonFonts.monoFont.family
+                font.family: Cpp_Misc_CommonFonts.widgetFontFamily
                 color: Cpp_ThemeManager.colors["widget_text"]
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -256,7 +257,7 @@ Item {
             anchors.bottomMargin: parent.border.width + 8
             text: model.units
             font.pixelSize: fontSize
-            font.family: Cpp_Misc_CommonFonts.monoFont.family
+            font.family: Cpp_Misc_CommonFonts.widgetFontFamily
             color: fillColor
             style: Text.Raised
             styleColor: Qt.rgba(0, 0, 0, 0.3)
@@ -441,7 +442,7 @@ Item {
             anchors.centerIn: parent
             text: formatValue(cursorTracker.cursorValue) + " " + model.units
             color: Cpp_ThemeManager.colors["tooltip_text"]
-            font: Cpp_Misc_CommonFonts.customMonoFont(0.7)
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
             elide: Text.ElideRight
           }
         }

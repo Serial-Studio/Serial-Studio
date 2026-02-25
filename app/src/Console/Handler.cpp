@@ -46,6 +46,8 @@ Console::Handler::Handler()
   , m_echo(true)
   , m_showTimestamp(false)
   , m_ansiColorsEnabled(false)
+  , m_vt100Emulation(true)
+  , m_ansiColors(true)
   , m_isStartingLine(true)
   , m_lastCharWasCR(false)
   , m_textBuffer(10 * 1024)
@@ -55,11 +57,25 @@ Console::Handler::Handler()
   const auto defaultFont = Misc::CommonFonts::instance().monoFont();
   m_fontFamily           = m_settings.value("Console/FontFamily", defaultFont.family()).toString();
   m_fontSize             = m_settings.value("Console/FontSize", defaultFont.pointSize()).toInt();
+  m_echo                 = m_settings.value("Console/Echo", true).toBool();
+  m_showTimestamp        = m_settings.value("Console/ShowTimestamp", false).toBool();
+  m_vt100Emulation       = m_settings.value("Console/VT100Emulation", true).toBool();
+  m_ansiColors           = m_settings.value("Console/AnsiColors", true).toBool();
+  m_checksumMethod       = m_settings.value("Console/ChecksumMethod", 0).toInt();
+  m_dataMode             = static_cast<DataMode>(m_settings.value("Console/DataMode", 0).toInt());
+  m_lineEnding  = static_cast<LineEnding>(m_settings.value("Console/LineEnding", 0).toInt());
+  m_displayMode = static_cast<DisplayMode>(m_settings.value("Console/DisplayMode", 0).toInt());
 
   if (m_fontSize < 6)
     m_fontSize = 6;
   else if (m_fontSize > 72)
     m_fontSize = 72;
+
+  const int checksumCount = IO::availableChecksums().count();
+  if (m_checksumMethod < 0 || m_checksumMethod >= checksumCount)
+    m_checksumMethod = 0;
+
+  m_ansiColorsEnabled = m_vt100Emulation && m_ansiColors;
 
   updateFont();
 }
@@ -96,6 +112,23 @@ bool Console::Handler::showTimestamp() const
 bool Console::Handler::ansiColorsEnabled() const
 {
   return m_ansiColorsEnabled;
+}
+
+/**
+ * Returns @c true if VT-100 terminal emulation is enabled.
+ */
+bool Console::Handler::vt100Emulation() const
+{
+  return m_vt100Emulation;
+}
+
+/**
+ * Returns @c true if ANSI color rendering is enabled.
+ * Only meaningful when VT-100 emulation is also enabled.
+ */
+bool Console::Handler::ansiColors() const
+{
+  return m_ansiColors;
 }
 
 /**
@@ -455,6 +488,7 @@ void Console::Handler::setShowTimestamp(const bool enabled)
 {
   if (showTimestamp() != enabled) {
     m_showTimestamp = enabled;
+    m_settings.setValue("Console/ShowTimestamp", m_showTimestamp);
     Q_EMIT showTimestampChanged();
   }
 }
@@ -471,12 +505,42 @@ void Console::Handler::setAnsiColorsEnabled(const bool enabled)
 }
 
 /**
+ * Enables/disables VT-100 terminal emulation and persists the setting.
+ */
+void Console::Handler::setVt100Emulation(const bool enabled)
+{
+  if (m_vt100Emulation != enabled) {
+    m_vt100Emulation = enabled;
+    m_settings.setValue("Console/VT100Emulation", m_vt100Emulation);
+    Q_EMIT vt100EmulationChanged();
+    if (!enabled)
+      setAnsiColors(false);
+    else
+      setAnsiColorsEnabled(m_ansiColors);
+  }
+}
+
+/**
+ * Enables/disables ANSI color rendering and persists the setting.
+ */
+void Console::Handler::setAnsiColors(const bool enabled)
+{
+  if (m_ansiColors != enabled) {
+    m_ansiColors = enabled;
+    m_settings.setValue("Console/AnsiColors", m_ansiColors);
+    Q_EMIT ansiColorsChanged();
+    setAnsiColorsEnabled(m_vt100Emulation && m_ansiColors);
+  }
+}
+
+/**
  * Enables/disables showing the sent data on the console
  */
 void Console::Handler::setEcho(const bool enabled)
 {
   if (echo() != enabled) {
     m_echo = enabled;
+    m_settings.setValue("Console/Echo", m_echo);
     Q_EMIT echoChanged();
   }
 }
@@ -507,6 +571,7 @@ void Console::Handler::setChecksumMethod(const int method)
 {
   if (checksumMethod() != method && method >= 0 && method < IO::availableChecksums().count()) {
     m_checksumMethod = method;
+    m_settings.setValue("Console/ChecksumMethod", m_checksumMethod);
     Q_EMIT checksumMethodChanged();
   }
 }
@@ -535,8 +600,11 @@ void Console::Handler::setFontFamily(const QString& family)
  */
 void Console::Handler::setDataMode(const Console::Handler::DataMode& mode)
 {
-  m_dataMode = mode;
-  Q_EMIT dataModeChanged();
+  if (m_dataMode != mode) {
+    m_dataMode = mode;
+    m_settings.setValue("Console/DataMode", static_cast<int>(m_dataMode));
+    Q_EMIT dataModeChanged();
+  }
 }
 
 /**
@@ -545,8 +613,11 @@ void Console::Handler::setDataMode(const Console::Handler::DataMode& mode)
  */
 void Console::Handler::setLineEnding(const Console::Handler::LineEnding& mode)
 {
-  m_lineEnding = mode;
-  Q_EMIT lineEndingChanged();
+  if (m_lineEnding != mode) {
+    m_lineEnding = mode;
+    m_settings.setValue("Console/LineEnding", static_cast<int>(m_lineEnding));
+    Q_EMIT lineEndingChanged();
+  }
 }
 
 /**
@@ -555,8 +626,11 @@ void Console::Handler::setLineEnding(const Console::Handler::LineEnding& mode)
  */
 void Console::Handler::setDisplayMode(const Console::Handler::DisplayMode& mode)
 {
-  m_displayMode = mode;
-  Q_EMIT displayModeChanged();
+  if (m_displayMode != mode) {
+    m_displayMode = mode;
+    m_settings.setValue("Console/DisplayMode", static_cast<int>(m_displayMode));
+    Q_EMIT displayModeChanged();
+  }
 }
 
 /**

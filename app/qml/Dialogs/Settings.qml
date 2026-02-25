@@ -51,36 +51,96 @@ Widgets.SmartDialog {
   //
   contentItem: ColumnLayout {
     id: layout
-    spacing: 4
+    spacing: 12
 
-      //
-      // General settings
-      //
-      Label {
+    //
+    // Tab bar
+    //
+    TabBar {
+      id: _tab
+      implicitHeight: 24
+      Layout.fillWidth: true
+
+      TabButton {
         text: qsTr("General")
-        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
-        color: Cpp_ThemeManager.colors["pane_section_label"]
-        Component.onCompleted: font.capitalization = Font.AllUppercase
-      } GroupBox {
-        Layout.fillWidth: true
-        Layout.minimumWidth: 356
+        height: _tab.height + 3
+        width: implicitWidth + 2 * 8
+      }
 
-        background: Rectangle {
+      TabButton {
+        text: qsTr("Dashboard")
+        height: _tab.height + 3
+        width: implicitWidth + 2 * 8
+      }
+
+      TabButton {
+        text: qsTr("Console")
+        height: _tab.height + 3
+        width: implicitWidth + 2 * 8
+      }
+    }
+
+    //
+    // Tab contents
+    //
+    StackLayout {
+      id: stack
+      clip: true
+      Layout.fillWidth: true
+      Layout.minimumWidth: 480
+      currentIndex: _tab.currentIndex
+      Layout.topMargin: -parent.spacing - 1
+      implicitHeight: Math.max(
+                        generalTab.implicitHeight,
+                        dashboardTab.implicitHeight,
+                        consoleTab.implicitHeight
+                        )
+
+      //
+      // General tab
+      //
+      Item {
+        id: generalTab
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        implicitHeight: generalLayout.implicitHeight + 16
+
+        Rectangle {
           radius: 2
           border.width: 1
+          anchors.fill: parent
           color: Cpp_ThemeManager.colors["groupbox_background"]
           border.color: Cpp_ThemeManager.colors["groupbox_border"]
         }
 
         GridLayout {
+          id: generalLayout
           columns: 2
           rowSpacing: 4
           columnSpacing: 8
           anchors.fill: parent
+          anchors.margins: 8
 
-          //
-          // Language selector
-          //
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 2
+            text: qsTr("Appearance")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
           Label {
             text: qsTr("Language")
             opacity: enabled ? 1 : 0.5
@@ -98,17 +158,12 @@ Widgets.SmartDialog {
             }
           }
 
-          //
-          // Theme selector
-          //
           Label {
             text: qsTr("Theme")
-            opacity: enabled ? 1 : 0.5
             color: Cpp_ThemeManager.colors["text"]
           } ComboBox {
             id: _themeCombo
             Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
             currentIndex: Cpp_ThemeManager.theme
             model: Cpp_ThemeManager.availableThemes
             onCurrentIndexChanged: {
@@ -117,9 +172,26 @@ Widgets.SmartDialog {
             }
           }
 
-          //
-          // Workspace
-          //
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 6
+            text: qsTr("Files & Updates")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
           Label {
             text: qsTr("Workspace Folder")
             opacity: enabled ? 1 : 0.5
@@ -133,7 +205,6 @@ Widgets.SmartDialog {
             TextField {
               readOnly: true
               Layout.fillWidth: true
-              Layout.minimumWidth: 256
               Layout.alignment: Qt.AlignVCenter
               text: Cpp_Misc_WorkspaceManager.shortPath
             }
@@ -150,43 +221,41 @@ Widgets.SmartDialog {
               icon.color: Cpp_ThemeManager.colors["button_text"]
             }
           }
-        }
-      }
 
-      //
-      // Spacer
-      //
-      Item {
-        implicitHeight: 4
-      }
+          Label {
+            color: Cpp_ThemeManager.colors["text"]
+            text: qsTr("Automatically Check for Updates")
+          } Switch {
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: mainWindow.automaticUpdates
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== mainWindow.automaticUpdates)
+                mainWindow.automaticUpdates = checked
+            }
+          }
 
-      //
-      // Miscellaneous settings
-      //
-      Label {
-        text: qsTr("Miscellaneous")
-        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
-        color: Cpp_ThemeManager.colors["pane_section_label"]
-        Component.onCompleted: font.capitalization = Font.AllUppercase
-      } GroupBox {
-        Layout.fillWidth: true
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 6
+            text: qsTr("Advanced")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
 
-        background: Rectangle {
-          radius: 2
-          border.width: 1
-          color: Cpp_ThemeManager.colors["groupbox_background"]
-          border.color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        GridLayout {
-          columns: 2
-          rowSpacing: 4
-          columnSpacing: 8
-          anchors.fill: parent
-
-          //
-          // API Server enabled
-          //
           Label {
             color: Cpp_ThemeManager.colors["text"]
             text: qsTr("Enable API Server (Port 7777)")
@@ -202,65 +271,94 @@ Widgets.SmartDialog {
             }
           }
 
-          //
-          // Auto-updater
-          //
           Label {
+            text: qsTr("Auto-Hide Toolbar")
             color: Cpp_ThemeManager.colors["text"]
-            text: qsTr("Automatically Check for Updates")
           } Switch {
+            id: _autoHideToolbar
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
-            checked: mainWindow.automaticUpdates
+            checked: Cpp_UI_Dashboard.autoHideToolbar
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
             onCheckedChanged: {
-              if (checked !== mainWindow.automaticUpdates)
-                mainWindow.automaticUpdates = checked
+              if (checked !== Cpp_UI_Dashboard.autoHideToolbar)
+                Cpp_UI_Dashboard.autoHideToolbar = checked
             }
           }
+
+          Label {
+            opacity: enabled ? 1 : 0.5
+            enabled: !Cpp_IO_Manager.isConnected
+            color: Cpp_ThemeManager.colors["text"]
+            text: qsTr("Threaded Frame Extraction")
+          } Switch {
+            Layout.rightMargin: -8
+            opacity: enabled ? 1 : 0.5
+            Layout.alignment: Qt.AlignRight
+            enabled: !Cpp_IO_Manager.isConnected
+            checked: Cpp_IO_Manager.threadedFrameExtraction
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_IO_Manager.threadedFrameExtraction)
+                Cpp_IO_Manager.threadedFrameExtraction = checked
+            }
+          }
+
+          Item { Layout.fillHeight: true }
+          Item { Layout.fillHeight: true }
         }
       }
 
       //
-      // Spacer
+      // Dashboard tab
       //
       Item {
-        implicitHeight: 4
-      }
-
-      //
-      // Dashboard settings
-      //
-      Label {
-        text: qsTr("Dashboard")
-        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
-        color: Cpp_ThemeManager.colors["pane_section_label"]
-        Component.onCompleted: font.capitalization = Font.AllUppercase
-      } GroupBox {
+        id: dashboardTab
         Layout.fillWidth: true
+        Layout.fillHeight: true
+        implicitHeight: dashboardLayout.implicitHeight + 16
 
-        background: Rectangle {
+        Rectangle {
           radius: 2
           border.width: 1
+          anchors.fill: parent
           color: Cpp_ThemeManager.colors["groupbox_background"]
           border.color: Cpp_ThemeManager.colors["groupbox_border"]
         }
 
         GridLayout {
+          id: dashboardLayout
           columns: 2
           rowSpacing: 4
           columnSpacing: 8
           anchors.fill: parent
+          anchors.margins: 8
 
-          //
-          // Points
-          //
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 2
+            text: qsTr("Plot")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
           Label {
             text: qsTr("Point Count")
             color: Cpp_ThemeManager.colors["text"]
           } SpinBox {
             id: _points
-
             from: 1
             to: 1e6
             editable: true
@@ -272,11 +370,9 @@ Widgets.SmartDialog {
             }
           }
 
-          //
-          // Refresh rate
-          //
           Label {
             text: qsTr("UI Refresh Rate (Hz)")
+            color: Cpp_ThemeManager.colors["text"]
           } SpinBox {
             id: _refreshRate
             from: 1
@@ -290,9 +386,110 @@ Widgets.SmartDialog {
             }
           }
 
-          //
-          // Console
-          //
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 6
+            text: qsTr("Widget Fonts")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
+          Label {
+            text: qsTr("Widget Font")
+            color: Cpp_ThemeManager.colors["text"]
+          } ComboBox {
+            id: _widgetFontFamily
+            Layout.fillWidth: true
+            model: Cpp_Misc_CommonFonts.availableFonts
+            currentIndex: Cpp_Misc_CommonFonts.widgetFontIndex
+
+            onActivated: {
+              Cpp_Misc_CommonFonts.setWidgetFontFamily(currentText)
+            }
+          }
+
+          Label {
+            text: qsTr("Widget Font Size")
+            color: Cpp_ThemeManager.colors["text"]
+          } RowLayout {
+            Layout.fillWidth: true
+            spacing: 4
+
+            ComboBox {
+              id: _widgetSizePreset
+              Layout.fillWidth: true
+              model: [qsTr("Small"), qsTr("Normal"), qsTr("Large"), qsTr("Extra Large"), qsTr("Custom")]
+
+              Component.onCompleted: {
+                const scale = Cpp_Misc_CommonFonts.widgetFontScale
+                if (Math.abs(scale - 0.85) < 0.01)
+                  currentIndex = 0
+                else if (Math.abs(scale - 1.00) < 0.01)
+                  currentIndex = 1
+                else if (Math.abs(scale - 1.25) < 0.01)
+                  currentIndex = 2
+                else if (Math.abs(scale - 1.50) < 0.01)
+                  currentIndex = 3
+                else
+                  currentIndex = 4
+              }
+
+              onActivated: (index) => {
+                             const scales = [0.85, 1.00, 1.25, 1.50]
+                             if (index < 4)
+                             Cpp_Misc_CommonFonts.setWidgetFontScale(scales[index])
+                           }
+            }
+
+            SpinBox {
+              id: _widgetFontCustom
+              from: 50
+              to: 300
+              editable: true
+              visible: _widgetSizePreset.currentIndex === 4
+              value: Math.round(Cpp_Misc_CommonFonts.widgetFontScale * 100)
+
+              textFromValue: (val) => val + "%"
+              valueFromText: (text) => parseInt(text)
+
+              onValueModified: {
+                Cpp_Misc_CommonFonts.setWidgetFontScale(value / 100.0)
+              }
+            }
+          }
+
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 6
+            text: qsTr("Layout")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
           Label {
             text: qsTr("Show Actions Panel")
             color: Cpp_ThemeManager.colors["text"]
@@ -308,27 +505,6 @@ Widgets.SmartDialog {
             }
           }
 
-          //
-          // Auto-hide toolbar
-          //
-          Label {
-            text: qsTr("Auto-Hide Toolbar on Dashboard")
-            color: Cpp_ThemeManager.colors["text"]
-          } Switch {
-            id: _autoHideToolbar
-            Layout.rightMargin: -8
-            Layout.alignment: Qt.AlignRight
-            checked: Cpp_UI_Dashboard.autoHideToolbar
-            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
-            onCheckedChanged: {
-              if (checked !== Cpp_UI_Dashboard.autoHideToolbar)
-                Cpp_UI_Dashboard.autoHideToolbar = checked
-            }
-          }
-
-          //
-          // Taskbar buttons
-          //
           Label {
             text: qsTr("Always Show Taskbar Buttons")
             color: Cpp_ThemeManager.colors["text"]
@@ -344,68 +520,73 @@ Widgets.SmartDialog {
             }
           }
 
-          //
-          // Frame extraction
-          //
-          Label {
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_IO_Manager.isConnected
-            color: Cpp_ThemeManager.colors["text"]
-            text: qsTr("Use Separate Thread for Frame Extraction")
-          } Switch {
-            Layout.rightMargin: -8
-            opacity: enabled ? 1 : 0.5
-            Layout.alignment: Qt.AlignRight
-            enabled: !Cpp_IO_Manager.isConnected
-            checked: Cpp_IO_Manager.threadedFrameExtraction
-            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
-            onCheckedChanged: {
-              if (checked !== Cpp_IO_Manager.threadedFrameExtraction)
-                Cpp_IO_Manager.threadedFrameExtraction = checked
-            }
-          }
+          Item { Layout.fillHeight: true }
+          Item { Layout.fillHeight: true }
         }
       }
 
       //
-      // Spacer
+      // Console tab
       //
       Item {
-        implicitHeight: 4
-      }
-
-      //
-      // Console settings
-      //
-      Label {
-        text: qsTr("Console")
-        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
-        color: Cpp_ThemeManager.colors["pane_section_label"]
-        Component.onCompleted: font.capitalization = Font.AllUppercase
-      }
-
-      GroupBox {
+        id: consoleTab
         Layout.fillWidth: true
+        Layout.fillHeight: true
+        implicitHeight: consoleLayout.implicitHeight + 16
 
-        background: Rectangle {
+        Rectangle {
           radius: 2
           border.width: 1
+          anchors.fill: parent
           color: Cpp_ThemeManager.colors["groupbox_background"]
           border.color: Cpp_ThemeManager.colors["groupbox_border"]
         }
 
         GridLayout {
+          id: consoleLayout
           columns: 2
           rowSpacing: 4
           columnSpacing: 8
           anchors.fill: parent
+          anchors.margins: 8
+
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 2
+            text: qsTr("Display")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
+          Label {
+            text: qsTr("Display Mode")
+            color: Cpp_ThemeManager.colors["text"]
+          } ComboBox {
+            Layout.fillWidth: true
+            model: Cpp_Console_Handler.displayModes
+            currentIndex: Cpp_Console_Handler.displayMode
+            onCurrentIndexChanged: {
+              if (currentIndex !== Cpp_Console_Handler.displayMode)
+                Cpp_Console_Handler.displayMode = currentIndex
+            }
+          }
 
           Label {
             text: qsTr("Font Family")
             color: Cpp_ThemeManager.colors["text"]
-          }
-
-          ComboBox {
+          } ComboBox {
             id: _consoleFontFamily
             Layout.fillWidth: true
             model: Cpp_Console_Handler.availableFonts
@@ -423,9 +604,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Font Size")
             color: Cpp_ThemeManager.colors["text"]
-          }
-
-          SpinBox {
+          } SpinBox {
             id: _consoleFontSize
             from: 6
             to: 72
@@ -438,74 +617,220 @@ Widgets.SmartDialog {
                 Cpp_Console_Handler.fontSize = value
             }
           }
-        }
-      }
 
-      //
-      // Spacer
-      //
-      Item {
-        implicitHeight: 4
-      }
-
-      //
-      // Buttons
-      //
-      RowLayout {
-        spacing: 4
-        Layout.fillWidth: true
-
-        Button {
-          icon.width: 18
-          icon.height: 18
-          text: qsTr("Reset")
-          horizontalPadding: 8
-          opacity: enabled ? 1 : 0.5
-          Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
-          icon.color: Cpp_ThemeManager.colors["button_text"]
-          onClicked: {
-            Cpp_ThemeManager.theme = 0
-            Cpp_UI_Dashboard.points = 100
-            Cpp_Misc_TimerEvents.fps = 60
-            Cpp_UI_Dashboard.precision = 2
-            Cpp_API_Server.enabled = false
-            mainWindow.automaticUpdates  = true
-            Cpp_UI_Dashboard.terminalEnabled = false
-            Cpp_IO_Manager.threadedFrameExtraction = false
-            Cpp_UI_Dashboard.autoHideToolbar = false
-            Cpp_UI_Dashboard.showTaskbarButtons = false
-            Cpp_Console_Handler.setFontFamily(Cpp_Misc_CommonFonts.monoFont.family)
-            Cpp_Console_Handler.setFontSize(Cpp_Misc_CommonFonts.monoFont.pointSize)
+          Label {
+            text: qsTr("Show Timestamps")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_Console_Handler.showTimestamp
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_Console_Handler.showTimestamp)
+                Cpp_Console_Handler.showTimestamp = checked
+            }
           }
-        }
 
-        Item {
-          implicitWidth: 96
-          Layout.fillWidth: true
-        }
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 6
+            text: qsTr("Data Transmission")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
-          text: qsTr("Close")
-          horizontalPadding: 8
-          onClicked: root.hide()
-          Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
-          icon.color: Cpp_ThemeManager.colors["button_text"]
-        }
+          Label {
+            text: qsTr("Line Ending")
+            color: Cpp_ThemeManager.colors["text"]
+          } ComboBox {
+            Layout.fillWidth: true
+            model: Cpp_Console_Handler.lineEndings
+            currentIndex: Cpp_Console_Handler.lineEnding
+            onCurrentIndexChanged: {
+              if (currentIndex !== Cpp_Console_Handler.lineEnding)
+                Cpp_Console_Handler.lineEnding = currentIndex
+            }
+          }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
-          text: qsTr("Apply")
-          horizontalPadding: 8
-          onClicked: root.hide()
-          Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
-          icon.color: Cpp_ThemeManager.colors["button_text"]
+          Label {
+            text: qsTr("Input Mode")
+            color: Cpp_ThemeManager.colors["text"]
+          } ComboBox {
+            Layout.fillWidth: true
+            model: Cpp_Console_Handler.dataModes
+            currentIndex: Cpp_Console_Handler.dataMode
+            onCurrentIndexChanged: {
+              if (currentIndex !== Cpp_Console_Handler.dataMode)
+                Cpp_Console_Handler.dataMode = currentIndex
+            }
+          }
+
+          Label {
+            text: qsTr("Checksum")
+            color: Cpp_ThemeManager.colors["text"]
+          } ComboBox {
+            Layout.fillWidth: true
+            model: Cpp_Console_Handler.checksumMethods
+            currentIndex: Cpp_Console_Handler.checksumMethod
+            onCurrentIndexChanged: {
+              if (currentIndex !== Cpp_Console_Handler.checksumMethod)
+                Cpp_Console_Handler.checksumMethod = currentIndex
+            }
+          }
+
+          Label {
+            text: qsTr("Echo Sent Data")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_Console_Handler.echo
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_Console_Handler.echo)
+                Cpp_Console_Handler.echo = checked
+            }
+          }
+
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 2
+            text: qsTr("Escape Codes")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
+          Label {
+            text: qsTr("VT100 Emulation")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            id: _vt100Emulation
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_Console_Handler.vt100Emulation
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_Console_Handler.vt100Emulation)
+                Cpp_Console_Handler.setVt100Emulation(checked)
+            }
+          }
+
+          Label {
+            text: qsTr("ANSI Colors")
+            opacity: enabled ? 1 : 0.5
+            enabled: _vt100Emulation.checked
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            opacity: enabled ? 1 : 0.5
+            enabled: _vt100Emulation.checked
+            checked: Cpp_Console_Handler.ansiColors
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_Console_Handler.ansiColors)
+                Cpp_Console_Handler.setAnsiColors(checked)
+            }
+          }
+
+          Item { Layout.fillHeight: true }
+          Item { Layout.fillHeight: true }
         }
       }
     }
+
+    //
+    // Buttons
+    //
+    RowLayout {
+      spacing: 4
+      Layout.fillWidth: true
+
+      Button {
+        icon.width: 18
+        icon.height: 18
+        text: qsTr("Reset")
+        horizontalPadding: 8
+        opacity: enabled ? 1 : 0.5
+        Layout.alignment: Qt.AlignVCenter
+        icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
+        onClicked: {
+          Cpp_ThemeManager.theme = 0
+          Cpp_UI_Dashboard.points = 100
+          Cpp_Misc_TimerEvents.fps = 60
+          Cpp_UI_Dashboard.precision = 2
+          Cpp_API_Server.enabled = false
+          mainWindow.automaticUpdates = true
+          Cpp_UI_Dashboard.terminalEnabled = false
+          Cpp_IO_Manager.threadedFrameExtraction = false
+          Cpp_UI_Dashboard.autoHideToolbar = false
+          Cpp_UI_Dashboard.showTaskbarButtons = false
+          Cpp_Console_Handler.setFontFamily(Cpp_Misc_CommonFonts.monoFont.family)
+          Cpp_Console_Handler.setFontSize(Cpp_Misc_CommonFonts.monoFont.pointSize)
+          Cpp_Console_Handler.echo = false
+          Cpp_Console_Handler.showTimestamp = false
+          Cpp_Console_Handler.setVt100Emulation(true)
+          Cpp_Console_Handler.setAnsiColors(true)
+          Cpp_Console_Handler.dataMode = 0
+          Cpp_Console_Handler.displayMode = 0
+          Cpp_Console_Handler.lineEnding = 1
+          Cpp_Console_Handler.checksumMethod = 0
+          Cpp_Misc_CommonFonts.setWidgetFontScale(1.0)
+          Cpp_Misc_CommonFonts.setWidgetFontFamily(Cpp_Misc_CommonFonts.monoFont.family)
+        }
+      }
+
+      Item {
+        Layout.fillWidth: true
+      }
+
+      Button {
+        icon.width: 18
+        icon.height: 18
+        text: qsTr("Close")
+        horizontalPadding: 8
+        onClicked: root.hide()
+        Layout.alignment: Qt.AlignVCenter
+        icon.source: "qrc:/rcc/icons/buttons/close.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
+      }
+
+      Button {
+        icon.width: 18
+        icon.height: 18
+        text: qsTr("Apply")
+        horizontalPadding: 8
+        onClicked: root.hide()
+        Layout.alignment: Qt.AlignVCenter
+        icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
+      }
+    }
+  }
 }

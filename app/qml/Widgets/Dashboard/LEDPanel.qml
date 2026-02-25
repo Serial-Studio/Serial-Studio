@@ -107,7 +107,7 @@ Item {
               Layout.fillWidth: true
               text: root.model.titles[index]
               Layout.alignment: Qt.AlignVCenter
-              font: Cpp_Misc_CommonFonts.monoFont
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
               horizontalAlignment: Label.AlignLeft
               Layout.maximumWidth: layout.width - 12 - 24
               color: Cpp_ThemeManager.colors["widget_text"]

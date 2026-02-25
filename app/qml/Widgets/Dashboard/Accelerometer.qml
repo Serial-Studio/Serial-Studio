@@ -219,14 +219,14 @@ Item {
             opacity: 0.6
             text: qsTr("G-FORCE")
             color: Cpp_ThemeManager.colors["widget_text"]
-            font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
             horizontalAlignment: Text.AlignHCenter
           }
 
           Label {
             width: parent.width
             color: Cpp_ThemeManager.colors["widget_text"]
-            font: Cpp_Misc_CommonFonts.monoFont
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
             horizontalAlignment: Text.AlignHCenter
             elide: Text.ElideRight
             text: (root.currentG.toFixed(2) + "").padStart(5, ' ') + " @ " +
@@ -252,13 +252,13 @@ Item {
             opacity: 0.6
             text: qsTr("PITCH ↕")
             color: Cpp_ThemeManager.colors["widget_text"]
-            font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
             horizontalAlignment: Text.AlignHCenter
           }
 
           Label {
             width: parent.width
-            font: Cpp_Misc_CommonFonts.monoFont
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
             text: (root.currentPitch.toFixed(2) + "").padStart(7, ' ') + "°"
             color: Cpp_ThemeManager.colors["widget_text"]
             horizontalAlignment: Text.AlignHCenter
@@ -284,13 +284,13 @@ Item {
             opacity: 0.6
             text: qsTr("ROLL ↔")
             color: Cpp_ThemeManager.colors["widget_text"]
-            font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
             horizontalAlignment: Text.AlignHCenter
           }
 
           Label {
             width: parent.width
-            font: Cpp_Misc_CommonFonts.monoFont
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
             text: (root.currentRoll.toFixed(2) + "").padStart(7, ' ') + "°"
             color: Cpp_ThemeManager.colors["widget_text"]
             horizontalAlignment: Text.AlignHCenter
@@ -462,7 +462,7 @@ Item {
             text: angle + "°"
             color: Cpp_ThemeManager.colors["polar_foreground"]
             opacity: 0.5
-            font: Cpp_Misc_CommonFonts.customMonoFont(0.6)
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.6))
           }
         }
       }
@@ -587,7 +587,7 @@ Item {
             text: cursorTracker.cursorMagnitude.toFixed(2) + "G @ " +
                   cursorTracker.cursorAngle.toFixed(0) + "°"
             color: Cpp_ThemeManager.colors["tooltip_text"]
-            font: Cpp_Misc_CommonFonts.customMonoFont(0.7)
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
             elide: Text.ElideRight
           }
         }

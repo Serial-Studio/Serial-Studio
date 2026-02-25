@@ -19,7 +19,6 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-import QtCore
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -30,9 +29,6 @@ Item {
   id: root
   implicitWidth: layout.implicitWidth + 32
   implicitHeight: layout.implicitHeight + 32
-
-  property alias ansiColors: terminal.ansiColors
-  property alias vt100emulation: terminal.vt100emulation
 
   //
   // Widget data inputs (unused)
@@ -57,20 +53,6 @@ Item {
   property int minimumColumns: 80
   property int minimumHeight: Cpp_Console_Handler.defaultCharHeight * root.minimumRows
   property int minimumWidth: Cpp_Console_Handler.defaultCharWidth * root.minimumColumns
-
-  //
-  // Save settings
-  //
-  Settings {
-    property alias echo: echoCheck.checked
-    property alias hex: hexCheckbox.checked
-    property alias timestamp: timestampCheck.checked
-    property alias checksum: checkumCombo.currentIndex
-    property alias vt100Enabled: terminal.vt100emulation
-    property alias ansiColorsEnabled: terminal.ansiColors
-    property alias lineEnding: lineEndingCombo.currentIndex
-    property alias displayMode: displayModeCombo.currentIndex
-  }
 
   //
   // Function to send through serial port data
@@ -158,8 +140,8 @@ Item {
     //
     TerminalWidget {
       id: terminal
-      ansiColors: true
-      vt100emulation: true
+      ansiColors: Cpp_Console_Handler.ansiColors
+      vt100emulation: Cpp_Console_Handler.vt100Emulation
       Layout.fillWidth: true
       Layout.fillHeight: true
       Layout.minimumHeight: root.minimal ? 0 : Cpp_Console_Handler.defaultCharHeight * root.minimumRows
@@ -400,10 +382,10 @@ Item {
         id: vt100Check
         text: qsTr("Emulate VT-100")
         Layout.alignment: Qt.AlignVCenter
-        checked: terminal.vt100emulation
+        checked: Cpp_Console_Handler.vt100Emulation
         onCheckedChanged: {
-          if (terminal.vt100emulation !== checked)
-            terminal.vt100emulation = checked
+          if (Cpp_Console_Handler.vt100Emulation !== checked)
+            Cpp_Console_Handler.setVt100Emulation(checked)
         }
       }
 
@@ -411,12 +393,12 @@ Item {
         id: ansiColorsCheck
         text: qsTr("ANSI Colors")
         opacity: enabled ? 1 : 0.5
-        enabled: terminal.vt100emulation
+        enabled: Cpp_Console_Handler.vt100Emulation
         Layout.alignment: Qt.AlignVCenter
-        checked: terminal.vt100emulation && terminal.ansiColors
+        checked: Cpp_Console_Handler.vt100Emulation && Cpp_Console_Handler.ansiColors
         onCheckedChanged: {
-          if (enabled && terminal.ansiColors !== checked)
-            terminal.ansiColors = checked
+          if (enabled && Cpp_Console_Handler.ansiColors !== checked)
+            Cpp_Console_Handler.setAnsiColors(checked)
         }
       }
 

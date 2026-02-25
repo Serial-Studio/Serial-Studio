@@ -54,6 +54,14 @@ class Handler : public QObject {
              READ ansiColorsEnabled
              WRITE setAnsiColorsEnabled
              NOTIFY ansiColorsEnabledChanged)
+  Q_PROPERTY(bool vt100Emulation
+             READ vt100Emulation
+             WRITE setVt100Emulation
+             NOTIFY vt100EmulationChanged)
+  Q_PROPERTY(bool ansiColors
+             READ ansiColors
+             WRITE setAnsiColors
+             NOTIFY ansiColorsChanged)
   Q_PROPERTY(Console::Handler::DataMode dataMode
              READ dataMode
              WRITE setDataMode
@@ -120,6 +128,8 @@ signals:
   void textDocumentChanged();
   void showTimestampChanged();
   void ansiColorsEnabledChanged();
+  void vt100EmulationChanged();
+  void ansiColorsChanged();
   void checksumMethodChanged();
   void displayString(const QString& text);
   void cleared();
@@ -157,6 +167,8 @@ public:
   [[nodiscard]] bool echo() const;
   [[nodiscard]] bool showTimestamp() const;
   [[nodiscard]] bool ansiColorsEnabled() const;
+  [[nodiscard]] bool vt100Emulation() const;
+  [[nodiscard]] bool ansiColors() const;
   [[nodiscard]] int checksumMethod() const;
 
   [[nodiscard]] DataMode dataMode() const;
@@ -193,6 +205,8 @@ public slots:
   void setFontFamily(const QString& family);
   void setShowTimestamp(const bool enabled);
   void setAnsiColorsEnabled(const bool enabled);
+  void setVt100Emulation(const bool enabled);
+  void setAnsiColors(const bool enabled);
   void setDataMode(const Console::Handler::DataMode& mode);
   void setLineEnding(const Console::Handler::LineEnding& mode);
   void setDisplayMode(const Console::Handler::DisplayMode& mode);
@@ -222,6 +236,8 @@ private:
   bool m_echo;
   bool m_showTimestamp;
   bool m_ansiColorsEnabled;
+  bool m_vt100Emulation;
+  bool m_ansiColors;
   bool m_isStartingLine;
   bool m_lastCharWasCR;
 

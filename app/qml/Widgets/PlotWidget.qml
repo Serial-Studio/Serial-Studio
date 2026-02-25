@@ -49,13 +49,13 @@ Item {
   TextMetrics {
     id: _xLabelMetrics
     text: "-8888.88"
-    font: Cpp_Misc_CommonFonts.customMonoFont(0.83)
+    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.83))
   }
 
   TextMetrics {
     id: _yLabelMetrics
     text: "-8888.88"
-    font: Cpp_Misc_CommonFonts.customMonoFont(0.83)
+    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.83))
   }
 
   //
@@ -437,8 +437,8 @@ Item {
 
       // Axis label fonts and colors
       labelTextColor: Cpp_ThemeManager.colors["widget_text"]
-      axisXLabelFont: Cpp_Misc_CommonFonts.customMonoFont(0.83)
-      axisYLabelFont: Cpp_Misc_CommonFonts.customMonoFont(0.83)
+      axisXLabelFont: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.83))
+      axisYLabelFont: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.83))
 
       // Grid settings
       grid.subWidth: 1
@@ -758,7 +758,7 @@ Item {
         visible: root.cursorAInView
         text: "A"
         color: root.cursorATextColor
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.9, true)
+        font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.9, true))
         padding: 4
         background: Rectangle {
           color: root.cursorAColor
@@ -858,7 +858,7 @@ Item {
         visible: root.cursorBInView
         text: "B"
         color: root.cursorBTextColor
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.9, true)
+        font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.9, true))
         padding: 4
         background: Rectangle {
           color: root.cursorBColor
@@ -891,7 +891,7 @@ Item {
       id: _cursorAXPosLabel
       text: root.cursorAX.toFixed(root.xPrecision)
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
       color: root.cursorATextColor
       visible: root.cursorMode && root.cursorAVisible && root.cursorAXInRange
 
@@ -915,7 +915,7 @@ Item {
       id: _cursorAYPosLabel
       text: root.cursorAY.toFixed(root.yPrecision)
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
       color: root.cursorATextColor
       visible: root.cursorMode && root.cursorAVisible && root.cursorAYInRange
 
@@ -939,7 +939,7 @@ Item {
       id: _cursorBXPosLabel
       text: root.cursorBX.toFixed(root.xPrecision)
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
       color: root.cursorBTextColor
       visible: root.cursorMode && root.cursorBVisible && root.cursorBXInRange
 
@@ -963,7 +963,7 @@ Item {
       id: _cursorBYPosLabel
       text: root.cursorBY.toFixed(root.yPrecision)
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
       color: root.cursorBTextColor
       visible: root.cursorMode && root.cursorBVisible && root.cursorBYInRange
 
@@ -987,7 +987,7 @@ Item {
       id: _xPosLabel
       visible: false
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
       color: Cpp_ThemeManager.colors["widget_base"]
     }
 
@@ -998,7 +998,7 @@ Item {
       id: _yPosLabel
       visible: false
       padding: 4
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
       color: Cpp_ThemeManager.colors["widget_base"]
     }
   }
@@ -1025,7 +1025,7 @@ Item {
       anchors.centerIn: parent
       horizontalAlignment: Qt.AlignHCenter
       color: Cpp_ThemeManager.colors["widget_text"]
-      font: Cpp_Misc_CommonFonts.customMonoFont(0.91, true)
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.91, true))
       anchors.verticalCenterOffset: root.xLabelVisible && _yLabel.implicitWidth <= _graph.height ?
                                       -1 * Math.abs(_graph.marginBottom - _graph.marginTop) : 0
     }
@@ -1059,7 +1059,7 @@ Item {
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
         color: Cpp_ThemeManager.colors["widget_text"]
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.91, true)
+        font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.91, true))
       }
 
       Item {
@@ -1074,7 +1074,7 @@ Item {
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
         color: Cpp_ThemeManager.colors["widget_text"]
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.85, false)
+        font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85, false))
         visible: root.cursorMode
         text: {
           if (root.cursorAVisible && root.cursorBVisible)

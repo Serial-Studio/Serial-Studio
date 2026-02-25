@@ -23,6 +23,7 @@
 
 #include <QFont>
 #include <QObject>
+#include <QStringList>
 
 namespace Misc {
 /**
@@ -73,7 +74,28 @@ class CommonFonts : public QObject {
   Q_PROPERTY(const QFont& boldUiFont
              READ boldUiFont
              NOTIFY fontsChanged)
+  Q_PROPERTY(double widgetFontScale
+             READ widgetFontScale
+             NOTIFY fontsChanged)
+  Q_PROPERTY(QString widgetFontFamily
+             READ widgetFontFamily
+             NOTIFY fontsChanged)
+  Q_PROPERTY(QStringList availableFonts
+             READ availableFonts
+             CONSTANT)
+  Q_PROPERTY(int widgetFontRevision
+             READ widgetFontRevision
+             NOTIFY fontsChanged)
+  Q_PROPERTY(int widgetFontIndex
+             READ widgetFontIndex
+             NOTIFY fontsChanged)
   // clang-format on
+
+public:
+  static constexpr double kScaleSmall      = 0.85;
+  static constexpr double kScaleNormal     = 1.00;
+  static constexpr double kScaleLarge      = 1.25;
+  static constexpr double kScaleExtraLarge = 1.50;
 
 signals:
   void fontsChanged();
@@ -91,13 +113,26 @@ public:
   [[nodiscard]] const QFont& uiFont() const;
   [[nodiscard]] const QFont& monoFont() const;
   [[nodiscard]] const QFont& boldUiFont() const;
+  [[nodiscard]] double widgetFontScale() const;
+  [[nodiscard]] QString widgetFontFamily() const;
+  [[nodiscard]] QStringList availableFonts() const;
+  [[nodiscard]] int widgetFontRevision() const;
+  [[nodiscard]] int widgetFontIndex() const;
 
   Q_INVOKABLE QFont customUiFont(double fraction = 1, bool bold = false);
   Q_INVOKABLE QFont customMonoFont(double fraction = 1, bool bold = false);
+  Q_INVOKABLE QFont widgetFont(double fraction = 1, bool bold = false) const;
+
+  Q_INVOKABLE void setWidgetFontScale(double scale);
+  Q_INVOKABLE void setWidgetFontFamily(const QString& family);
 
 private:
   QFont m_uiFont;
   QFont m_monoFont;
   QFont m_boldUiFont;
+  QString m_widgetFontFamily;
+  double m_widgetFontScale;
+  int m_widgetFontIndex    = 0;
+  int m_widgetFontRevision = 0;
 };
 }  // namespace Misc

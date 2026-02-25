@@ -247,8 +247,8 @@ Item {
                 color: "#e8e8e8"
                 visible: !mark.horizonMark && mark.majorMark
                          && root.height >= 140
-                font.pixelSize: Math.max(9, instrument.dialSize / 22)
-                font.family: Cpp_Misc_CommonFonts.monoFont.family
+                font.pixelSize: Math.max(9, instrument.dialSize / 22) * Cpp_Misc_CommonFonts.widgetFontScale
+                font.family: Cpp_Misc_CommonFonts.widgetFontFamily
                 anchors.verticalCenter: pitchLine.verticalCenter
                 anchors.right: pitchLine.left
                 anchors.rightMargin: 6
@@ -259,8 +259,8 @@ Item {
                 color: "#e8e8e8"
                 visible: !mark.horizonMark && mark.majorMark
                          && root.height >= 140
-                font.pixelSize: Math.max(9, instrument.dialSize / 22)
-                font.family: Cpp_Misc_CommonFonts.monoFont.family
+                font.pixelSize: Math.max(9, instrument.dialSize / 22) * Cpp_Misc_CommonFonts.widgetFontScale
+                font.family: Cpp_Misc_CommonFonts.widgetFontFamily
                 anchors.verticalCenter: pitchLine.verticalCenter
                 anchors.left: pitchLine.right
                 anchors.leftMargin: 6
@@ -415,13 +415,13 @@ Item {
               opacity: 0.6
               color: "#ffffff"
               text: qsTr("ROLL ↔")
-              font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
               anchors.horizontalCenter: parent.horizontalCenter
             }
 
             Text {
               color: "#ffffff"
-              font: Cpp_Misc_CommonFonts.monoFont
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
               anchors.horizontalCenter: parent.horizontalCenter
               text: (root.normalize180(root.rollAngle).toFixed(2) + "").padStart(7, ' ') + "\u00B0"
             }
@@ -443,13 +443,13 @@ Item {
               opacity: 0.6
               color: "#ffffff"
               text: qsTr("YAW ↻")
-              font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
               anchors.horizontalCenter: parent.horizontalCenter
             }
 
             Text {
               color: "#ffffff"
-              font: Cpp_Misc_CommonFonts.monoFont
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
               anchors.horizontalCenter: parent.horizontalCenter
               text: (root.normalize180(root.yawAngle).toFixed(2) + "").padStart(7, ' ') + "\u00B0"
             }
@@ -471,13 +471,13 @@ Item {
               opacity: 0.6
               color: "#ffffff"
               text: qsTr("PITCH ↕")
-              font: Cpp_Misc_CommonFonts.customMonoFont(0.66)
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
               anchors.horizontalCenter: parent.horizontalCenter
             }
 
             Text {
               color: "#ffffff"
-              font: Cpp_Misc_CommonFonts.monoFont
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
               anchors.horizontalCenter: parent.horizontalCenter
               text: (root.normalize180(root.pitchAngle).toFixed(2) + "").padStart(7, ' ') + "\u00B0"
             }

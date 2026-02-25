@@ -23,6 +23,7 @@
 
 #include <QApplication>
 #include <QFontDatabase>
+#include <QSettings>
 
 /**
  * @brief Constructs the CommonFonts object, registering common fonts and
@@ -71,6 +72,13 @@ Misc::CommonFonts::CommonFonts()
   // Verify that the font was loaded correctly
   if (m_monoFont.family() != monoFont)
     m_monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+
+  // Load widget font settings (default family is the monospace font on first run)
+  QSettings s;
+  m_widgetFontFamily = s.value("Widgets/FontFamily", m_monoFont.family()).toString();
+  m_widgetFontScale  = s.value("Widgets/FontScale", kScaleNormal).toDouble();
+  m_widgetFontScale  = qBound(0.5, m_widgetFontScale, 3.0);
+  m_widgetFontIndex  = availableFonts().indexOf(m_widgetFontFamily);
 }
 
 /**
@@ -137,4 +145,122 @@ QFont Misc::CommonFonts::customMonoFont(const double fraction, const bool bold)
     font.setWeight(QFont::Medium);
 
   return font;
+}
+
+/**
+ * @brief Returns the current widget font scale factor.
+ */
+double Misc::CommonFonts::widgetFontScale() const
+{
+  return m_widgetFontScale;
+}
+
+/**
+ * @brief Returns the current widget font family name.
+ */
+QString Misc::CommonFonts::widgetFontFamily() const
+{
+  return m_widgetFontFamily;
+}
+
+/**
+ * @brief Returns a monotonically incrementing counter that changes whenever
+ *        the widget font scale or family is updated. QML bindings that call
+ *        widgetFont() should read this property so the binding engine re-evaluates
+ *        them on each font change:
+ *        @code
+ *        font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.83))
+ *        @endcode
+ */
+int Misc::CommonFonts::widgetFontRevision() const
+{
+  return m_widgetFontRevision;
+}
+
+/**
+ * @brief Returns the index of the current widget font family in availableFonts().
+ */
+int Misc::CommonFonts::widgetFontIndex() const
+{
+  return m_widgetFontIndex;
+}
+
+/**
+ * @brief Returns all available font families, sorted alphabetically.
+ *
+ * Private/alias families (e.g. ".AppleSystemUIFont" on macOS) are excluded.
+ * Qt 6 marks these via QFontDatabase::isPrivateFamily(); as a second guard,
+ * any family whose name starts with '.' is also filtered out.
+ */
+QStringList Misc::CommonFonts::availableFonts() const
+{
+  QStringList families;
+  for (const QString& family : QFontDatabase::families()) {
+    if (family.startsWith(QLatin1Char('.')))
+      continue;
+
+    if (QFontDatabase::isPrivateFamily(family))
+      continue;
+
+    families.append(family);
+  }
+
+  families.sort(Qt::CaseInsensitive);
+
+  // Pin the default widget font (monoFont) to the top of the list
+  const QString mono = m_monoFont.family();
+  families.removeAll(mono);
+  families.prepend(mono);
+
+  return families;
+}
+
+/**
+ * @brief Builds a widget font scaled by fraction and the global widget scale.
+ * @param fraction Additional fraction multiplier (relative to UI font size)
+ * @param bold     If true, applies medium weight
+ * @return A QFont with the widget family and scaled point size
+ */
+QFont Misc::CommonFonts::widgetFont(const double fraction, const bool bold) const
+{
+  QFont font(m_widgetFontFamily);
+  font.setPointSizeF(m_uiFont.pointSizeF() * qMax(0.1, fraction) * m_widgetFontScale);
+  if (bold)
+    font.setWeight(QFont::Medium);
+
+  return font;
+}
+
+/**
+ * @brief Sets the global widget font scale and persists it to QSettings.
+ * @param scale Scale factor, clamped to [0.5, 3.0]
+ */
+void Misc::CommonFonts::setWidgetFontScale(const double scale)
+{
+  const double clamped = qBound(0.5, scale, 3.0);
+  if (qFuzzyCompare(m_widgetFontScale, clamped))
+    return;
+
+  m_widgetFontScale = clamped;
+  ++m_widgetFontRevision;
+  QSettings s;
+  s.setValue("Widgets/FontScale", m_widgetFontScale);
+  Q_EMIT fontsChanged();
+}
+
+/**
+ * @brief Sets the global widget font family and persists it to QSettings.
+ * @param family Font family name
+ */
+void Misc::CommonFonts::setWidgetFontFamily(const QString& family)
+{
+  if (m_widgetFontFamily == family)
+    return;
+
+  m_widgetFontFamily = family;
+  m_widgetFontIndex  = availableFonts().indexOf(m_widgetFontFamily);
+  ++m_widgetFontRevision;
+  QSettings s;
+  s.setValue("Widgets/FontFamily", m_widgetFontFamily);
+  Q_EMIT fontsChanged();
 }

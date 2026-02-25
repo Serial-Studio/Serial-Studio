@@ -56,6 +56,7 @@ Item {
   readonly property bool isHorizontal: root.width > 1.5 * root.height
   readonly property color fillColor: model.alarmTriggered ? Cpp_ThemeManager.colors["alarm"] : root.color
   readonly property real fontSize: Math.max(8, Math.min(11, Math.min(root.width, root.height) / 30))
+                                   * Cpp_Misc_CommonFonts.widgetFontScale
   readonly property int tickCount: {
     if (isHorizontal) {
       const availableWidth = root.width - 100
@@ -75,7 +76,7 @@ Item {
   TextMetrics {
     id: labelMetrics
     font.pixelSize: fontSize
-    font.family: Cpp_Misc_CommonFonts.monoFont.family
+    font.family: Cpp_Misc_CommonFonts.widgetFontFamily
     text: {
       const a = formatValue(model.minValue)
       const b = formatValue(model.maxValue)
@@ -190,7 +191,7 @@ Item {
               y: isHorizontal ? progressBar.height + 10 : ((1 - frac) * progressBar.height - height / 2)
               text: formatValue(parent.tickValue)
               font.pixelSize: fontSize
-              font.family: Cpp_Misc_CommonFonts.monoFont.family
+              font.family: Cpp_Misc_CommonFonts.widgetFontFamily
               color: Cpp_ThemeManager.colors["widget_text"]
             }
           }
@@ -342,7 +343,7 @@ Item {
             anchors.centerIn: parent
             text: formatValue(cursorTracker.cursorValue) + " " + model.units
             color: Cpp_ThemeManager.colors["tooltip_text"]
-            font: Cpp_Misc_CommonFonts.customMonoFont(0.7)
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
             elide: Text.ElideRight
           }
         }
