@@ -5725,6 +5725,7 @@ Lägg till grupper ovan för att fråga flera registertyper.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="347"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
         <source>Data Plotting</source>
         <translation>Dataplottning</translation>
     </message>
@@ -5810,27 +5811,20 @@ Lägg till grupper ovan för att fråga flera registertyper.</translation>
         <translation>Trådad Ramextraktion</translation>
     </message>
     <message>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
         <source>Plot</source>
-        <translation>Diagram</translation>
+        <translation type="vanished">Diagram</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="399"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
         <source>Widget Fonts</source>
-        <translation>Widgetteckensnitt</translation>
+        <translation type="vanished">Widgetteckensnitt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
         <source>Widget Font</source>
-        <translation>Widgetteckensnitt</translation>
+        <translation type="vanished">Widgetteckensnitt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
         <source>Widget Font Size</source>
-        <translation>Widgetteckensnittsstorlek</translation>
+        <translation type="vanished">Widgetteckensnittsstorlek</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
@@ -5881,15 +5875,25 @@ Lägg till grupper ovan för att fråga flera registertyper.</translation>
         <translation>Visningsläge</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="591"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="404"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="591"/>
         <source>Font Family</source>
         <translation>Teckensnittsfamilj</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="399"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
+        <source>Dashboard Font</source>
+        <translation>Instrumentpanelens Typsnitt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="605"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="424"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="605"/>
         <source>Font Size</source>
         <translation>Teckenstorlek</translation>

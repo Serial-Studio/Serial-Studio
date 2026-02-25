@@ -5725,6 +5725,7 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="347"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
         <source>Data Plotting</source>
         <translation>Gegevensplotten</translation>
     </message>
@@ -5810,27 +5811,20 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
         <translation>Gelaagde Frame-extractie</translation>
     </message>
     <message>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
         <source>Plot</source>
-        <translation>Grafiek</translation>
+        <translation type="vanished">Grafiek</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="399"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
         <source>Widget Fonts</source>
-        <translation>Widget Lettertypen</translation>
+        <translation type="vanished">Widget Lettertypen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
         <source>Widget Font</source>
-        <translation>Widget Lettertype</translation>
+        <translation type="vanished">Widget Lettertype</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
         <source>Widget Font Size</source>
-        <translation>Widget Lettergrootte</translation>
+        <translation type="vanished">Widget Lettergrootte</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
@@ -5881,15 +5875,25 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
         <translation>Weergavemodus</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="591"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="404"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="591"/>
         <source>Font Family</source>
         <translation>Lettertypefamilie</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="399"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
+        <source>Dashboard Font</source>
+        <translation>Dashboard-lettertype</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="605"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="424"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="605"/>
         <source>Font Size</source>
         <translation>Lettergrootte</translation>

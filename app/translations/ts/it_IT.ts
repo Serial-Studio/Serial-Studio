@@ -7292,6 +7292,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="347"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
         <source>Data Plotting</source>
         <translation>Tracciamento Dati</translation>
     </message>
@@ -7400,27 +7401,20 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <translation>Estrazione di Frame Multithread</translation>
     </message>
     <message>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
         <source>Plot</source>
-        <translation>Grafico</translation>
+        <translation type="vanished">Grafico</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="399"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
         <source>Widget Fonts</source>
-        <translation>Font Widget</translation>
+        <translation type="vanished">Font Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
         <source>Widget Font</source>
-        <translation>Font del Widget</translation>
+        <translation type="vanished">Font del Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
         <source>Widget Font Size</source>
-        <translation>Dimensione Font del Widget</translation>
+        <translation type="vanished">Dimensione Font del Widget</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
@@ -7471,15 +7465,25 @@ Aggiungi gruppi sopra per interrogare più tipi di registri.</translation>
         <translation>Modalità di Visualizzazione</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="591"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="404"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="591"/>
         <source>Font Family</source>
         <translation>Famiglia di Caratteri</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="399"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
+        <source>Dashboard Font</source>
+        <translation>Carattere Dashboard</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="605"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="424"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="605"/>
         <source>Font Size</source>
         <translation>Dimensione del Carattere</translation>

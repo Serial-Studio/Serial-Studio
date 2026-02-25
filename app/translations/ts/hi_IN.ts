@@ -5725,6 +5725,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="347"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
         <source>Data Plotting</source>
         <translation>डेटा प्लॉटिंग</translation>
     </message>
@@ -5810,27 +5811,20 @@ Add groups above to poll multiple register types.</source>
         <translation>थ्रेडेड फ्रेम एक्सट्रैक्शन</translation>
     </message>
     <message>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
         <source>Plot</source>
-        <translation>प्लॉट</translation>
+        <translation type="vanished">प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="399"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
         <source>Widget Fonts</source>
-        <translation>विजेट फोंट्स</translation>
+        <translation type="vanished">विजेट फोंट्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
         <source>Widget Font</source>
-        <translation>विजेट फोंट</translation>
+        <translation type="vanished">विजेट फोंट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
-        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
         <source>Widget Font Size</source>
-        <translation>विजेट फोंट आकार</translation>
+        <translation type="vanished">विजेट फोंट आकार</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
@@ -5881,15 +5875,25 @@ Add groups above to poll multiple register types.</source>
         <translation>प्रदर्शन मोड</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="414"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="591"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="404"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="591"/>
         <source>Font Family</source>
         <translation>फ़ॉन्ट परिवार</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="399"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
+        <source>Dashboard Font</source>
+        <translation>डैशबोर्ड फ़ॉन्ट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="605"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="424"/>
+        <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="605"/>
         <source>Font Size</source>
         <translation>फ़ॉन्ट आकार</translation>

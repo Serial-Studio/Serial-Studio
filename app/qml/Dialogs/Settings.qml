@@ -396,7 +396,7 @@ Widgets.SmartDialog {
           } Label {
             Layout.columnSpan: 2
             Layout.topMargin: 6
-            text: qsTr("Widget Fonts")
+            text: qsTr("Dashboard Font")
             font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
             color: Cpp_ThemeManager.colors["pane_section_label"]
             Component.onCompleted: font.capitalization = Font.AllUppercase
@@ -411,7 +411,7 @@ Widgets.SmartDialog {
           }
 
           Label {
-            text: qsTr("Widget Font")
+            text: qsTr("Font Family")
             color: Cpp_ThemeManager.colors["text"]
           } ComboBox {
             id: _widgetFontFamily
@@ -425,7 +425,7 @@ Widgets.SmartDialog {
           }
 
           Label {
-            text: qsTr("Widget Font Size")
+            text: qsTr("Font Size")
             color: Cpp_ThemeManager.colors["text"]
           } RowLayout {
             Layout.fillWidth: true
