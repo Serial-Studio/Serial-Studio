@@ -53,7 +53,6 @@ constexpr int kDefaultPlotPoints = 100;
  */
 UI::Dashboard::Dashboard()
   : m_points(kDefaultPlotPoints)
-  , m_precision(2)
   , m_widgetCount(0)
   , m_updateRequired(false)
   , m_showActionPanel(true)
@@ -104,7 +103,6 @@ UI::Dashboard::Dashboard()
   connect(this, &UI::Dashboard::widgetCountChanged, this, &UI::Dashboard::actionStatusChanged);
 
   // Load persisted settings
-  m_precision          = qBound(0, m_settings.value("Dashboard/Precision", 2).toInt(), 6);
   m_points             = qMax(1, m_settings.value("Dashboard/Points", kDefaultPlotPoints).toInt());
   m_autoHideToolbar    = m_settings.value("Dashboard/AutoHideToolbar", false).toBool();
   m_showActionPanel    = m_settings.value("Dashboard/ShowActionPanel", true).toBool();
@@ -223,22 +221,6 @@ bool UI::Dashboard::pointsWidgetVisible() const
 }
 
 /**
- * @brief Determines if the decimal-point precision selector widget should be
- *        visible based on the presence of specific widget groups or datasets.
- *
- * @return True if precision widget visibility is enabled; false otherwise.
- */
-bool UI::Dashboard::precisionWidgetVisible() const
-{
-  return m_widgetGroups.contains(SerialStudio::DashboardAccelerometer)
-      || m_widgetGroups.contains(SerialStudio::DashboardGyroscope)
-      || m_widgetGroups.contains(SerialStudio::DashboardDataGrid)
-      || m_widgetDatasets.contains(SerialStudio::DashboardBar)
-      || m_widgetDatasets.contains(SerialStudio::DashboardGauge)
-      || m_widgetDatasets.contains(SerialStudio::DashboardCompass);
-}
-
-/**
  * Returns @c true if the frame contains features that should only be enabled
  * for commercial users with a valid license, such as the 3D plot widget.
  */
@@ -258,15 +240,6 @@ bool UI::Dashboard::containsCommercialFeatures() const
 int UI::Dashboard::points() const
 {
   return m_points;
-}
-
-/**
- * @brief Gets the decimal precision used for displayed values.
- * @return Current decimal digits setting (0–6).
- */
-int UI::Dashboard::precision() const
-{
-  return m_precision;
 }
 
 /**
@@ -696,20 +669,6 @@ void UI::Dashboard::setPoints(const int points)
     configureLineSeries();
     configureMultiLineSeries();
     Q_EMIT pointsChanged();
-  }
-}
-
-/**
- * @brief Sets the decimal precision for displayed values and persists it.
- * @param precision Decimal digits, clamped to [0, 6].
- */
-void UI::Dashboard::setPrecision(const int precision)
-{
-  const int clamped = qBound(0, precision, 6);
-  if (m_precision != clamped) {
-    m_precision = clamped;
-    m_settings.setValue("Dashboard/Precision", m_precision);
-    Q_EMIT precisionChanged();
   }
 }
 

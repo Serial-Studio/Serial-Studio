@@ -390,22 +390,6 @@ Widgets.SmartDialog {
             }
           }
 
-          Label {
-            text: qsTr("Decimal Precision")
-            color: Cpp_ThemeManager.colors["text"]
-          } SpinBox {
-            id: _precision
-            from: 0
-            to: 6
-            editable: true
-            Layout.fillWidth: true
-            value: Cpp_UI_Dashboard.precision
-            onValueChanged: {
-              if (value !== Cpp_UI_Dashboard.precision)
-                Cpp_UI_Dashboard.precision = value
-            }
-          }
-
           Item {
             implicitHeight: 2
             Layout.columnSpan: 2
@@ -799,7 +783,6 @@ Widgets.SmartDialog {
           Cpp_ThemeManager.theme = 0
           Cpp_UI_Dashboard.points = 100
           Cpp_Misc_TimerEvents.fps = 60
-          Cpp_UI_Dashboard.precision = 2
           Cpp_API_Server.enabled = false
           Cpp_API_Server.externalConnections = false
           Cpp_Misc_ModuleManager.automaticUpdates = true

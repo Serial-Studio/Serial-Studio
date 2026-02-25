@@ -99,7 +99,7 @@ ColumnLayout {
     Layout.maximumWidth: root.maximumWidth
     horizontalAlignment: Text.AlignHCenter
     color: Cpp_ThemeManager.colors["widget_text"]
-    text: root.maxValue.toFixed(Cpp_UI_Dashboard.precision) + " " + root.units
+    text: Cpp_UI_Dashboard.formatValue(root.maxValue, root.minValue, root.maxValue) + " " + root.units
   }
 
   //
@@ -206,6 +206,6 @@ ColumnLayout {
     Layout.maximumWidth: root.maximumWidth
     horizontalAlignment: Text.AlignHCenter
     color: Cpp_ThemeManager.colors["widget_text"]
-    text: root.minValue.toFixed(Cpp_UI_Dashboard.precision) + " " + root.units
+    text: Cpp_UI_Dashboard.formatValue(root.minValue, root.minValue, root.maxValue) + " " + root.units
   }
 }

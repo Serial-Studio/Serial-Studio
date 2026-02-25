@@ -55,11 +55,9 @@ class Dashboard : public QObject {
   Q_PROPERTY(bool available READ available NOTIFY widgetCountChanged)
   Q_PROPERTY(int actionCount READ actionCount NOTIFY widgetCountChanged)
   Q_PROPERTY(int points READ points WRITE setPoints NOTIFY pointsChanged)
-  Q_PROPERTY(int precision READ precision WRITE setPrecision NOTIFY precisionChanged)
   Q_PROPERTY(QVariantList actions READ actions NOTIFY actionStatusChanged)
   Q_PROPERTY(int totalWidgetCount READ totalWidgetCount NOTIFY widgetCountChanged)
   Q_PROPERTY(bool pointsWidgetVisible READ pointsWidgetVisible NOTIFY widgetCountChanged)
-  Q_PROPERTY(bool precisionWidgetVisible READ precisionWidgetVisible NOTIFY widgetCountChanged)
   Q_PROPERTY(bool showActionPanel READ showActionPanel WRITE setShowActionPanel NOTIFY showActionPanelChanged)
   Q_PROPERTY(bool terminalEnabled READ terminalEnabled WRITE setTerminalEnabled NOTIFY terminalEnabledChanged)
   Q_PROPERTY(bool containsCommercialFeatures READ containsCommercialFeatures NOTIFY containsCommercialFeaturesChanged)
@@ -71,7 +69,6 @@ signals:
   void updated();
   void dataReset();
   void pointsChanged();
-  void precisionChanged();
   void widgetCountChanged();
   void actionStatusChanged();
   void showActionPanelChanged();
@@ -97,11 +94,9 @@ public:
   [[nodiscard]] bool autoHideToolbar() const;
   [[nodiscard]] bool showTaskbarButtons() const;
   [[nodiscard]] bool pointsWidgetVisible() const;
-  [[nodiscard]] bool precisionWidgetVisible() const;
   [[nodiscard]] bool containsCommercialFeatures() const;
 
   [[nodiscard]] int points() const;
-  [[nodiscard]] int precision() const;
   [[nodiscard]] int actionCount() const;
   [[nodiscard]] int totalWidgetCount() const;
 
@@ -138,7 +133,6 @@ public:
 
 public slots:
   void setPoints(const int points);
-  void setPrecision(const int precision);
   void resetData(const bool notify = true);
   void clearPlotData();
   void setShowActionPanel(const bool enabled);
@@ -172,7 +166,6 @@ private:
 private:
   QSettings m_settings;
   int m_points;
-  int m_precision;
   int m_widgetCount;
   bool m_updateRequired;
   bool m_showActionPanel;
