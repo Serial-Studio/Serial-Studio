@@ -132,5 +132,18 @@ Rectangle {
           root.buses.push(item)
       }
     }
+
+    Loader {
+      asynchronous: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      active: Cpp_CommercialBuild
+      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml"
+
+      onLoaded: {
+        if (item)
+          root.buses.push(item)
+      }
+    }
   }
 }

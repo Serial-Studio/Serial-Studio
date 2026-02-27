@@ -407,6 +407,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/Audio.h
     src/IO/Drivers/CANBus.h
     src/IO/Drivers/Modbus.h
+    src/IO/Drivers/USB.h
     src/UI/Widgets/Plot3D.h
     src/DataModel/DBCImporter.h
     src/Licensing/Trial.h
@@ -427,6 +428,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/Audio.cpp
     src/IO/Drivers/CANBus.cpp
     src/IO/Drivers/Modbus.cpp
+    src/IO/Drivers/USB.cpp
     src/UI/Widgets/Plot3D.cpp
     src/DataModel/DBCImporter.cpp
     src/Licensing/Trial.cpp
@@ -442,6 +444,7 @@ if(BUILD_COMMERCIAL)
     qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml
     qml/Widgets/Dashboard/Plot3D.qml
@@ -610,6 +613,10 @@ target_link_openssl(
   ${PROJECT_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/../lib/OpenSSL
 )
+
+if(BUILD_COMMERCIAL)
+  target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC usb-1.0)
+endif()
 
 #---------------------------------------------------------------------------------------------------
 # Executable-specific hardening flags (Linux)

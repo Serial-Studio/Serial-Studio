@@ -143,6 +143,7 @@ public:
     Audio,  /**< Audio input device */
     ModBus, /**< MODBUS communication */
     CanBus, /**< CANBUS communication */
+    RawUsb, /**< Raw USB bulk/control transfers */
 #endif
   };
   Q_ENUM(BusType)

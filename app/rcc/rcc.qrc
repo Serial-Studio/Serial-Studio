@@ -344,8 +344,6 @@
         <file>icons/toolbar/open-project.svg</file>
         <file>icons/toolbar/project-setup.svg</file>
         <file>icons/toolbar/settings.svg</file>
-        <file>images/banner.png</file>
-        <file>images/banner@2x.png</file>
         <file>images/buy-qr.svg</file>
         <file>images/code.svg</file>
         <file>images/dialog-banner.svg</file>
@@ -466,5 +464,9 @@
         <file>messages/trial/Welcome_SV.txt</file>
         <file>scripts/batched_sensor_data.js</file>
         <file>scripts/time_series_2d.js</file>
+        <file>images/no-usb.svg</file>
+        <file>images/usb.svg</file>
+        <file>icons/panes/important.svg</file>
+        <file>icons/panes/info.svg</file>
     </qresource>
 </RCC>

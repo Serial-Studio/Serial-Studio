@@ -367,6 +367,48 @@ add_subdirectory(QSimpleUpdater)
 add_subdirectory(mdflib)
 
 #---------------------------------------------------------------------------------------------------
+# libusb (Pro edition only)
+#---------------------------------------------------------------------------------------------------
+#
+# libusb provides cross-platform access to USB devices via bulk/control transfers.
+# It is only included in BUILD_COMMERCIAL builds — the GPL binary contains no USB code.
+#
+# Acquisition: FetchContent downloads libusb 1.0.27 from GitHub at configure time.
+# libusb ships no CMakeLists.txt, so a minimal static target is assembled manually.
+#
+# Platform source sets:
+#   Windows : windows_winusb.c + WinUSB / SetupAPI system libraries
+#   macOS   : darwin_usb.c + IOKit / CoreFoundation frameworks
+#   Linux   : linux_usbfs.c + linux_netlink.c (udev-less netlink hotplug)
+#
+#---------------------------------------------------------------------------------------------------
+
+if(BUILD_COMMERCIAL)
+  message(STATUS "Fetching libusb-cmake (libusb 1.0.27) from GitHub...")
+
+  # libusb-cmake is a CMake wrapper around libusb that ships a proper
+  # CMakeLists.txt, enabling clean FetchContent_MakeAvailable usage without
+  # the deprecated FetchContent_Populate API or manual C-source assembly.
+  set(LIBUSB_BUILD_SHARED_LIBS        OFF CACHE BOOL "" FORCE)
+  set(LIBUSB_BUILD_TESTING            OFF CACHE BOOL "" FORCE)
+  set(LIBUSB_BUILD_EXAMPLES           OFF CACHE BOOL "" FORCE)
+  set(LIBUSB_INSTALL_TARGETS          OFF CACHE BOOL "" FORCE)
+  set(LIBUSB_EXPORT_INSTALL_TARGETS   OFF CACHE BOOL "" FORCE)
+
+  FetchContent_Declare(
+    libusb_cmake
+    GIT_REPOSITORY https://github.com/libusb/libusb-cmake.git
+    GIT_TAG        main
+    GIT_SHALLOW    TRUE
+    GIT_PROGRESS   FALSE
+  )
+
+  FetchContent_MakeAvailable(libusb_cmake)
+
+  message(STATUS "libusb-cmake configured")
+endif()
+
+#---------------------------------------------------------------------------------------------------
 # Apply third-party library flags
 #---------------------------------------------------------------------------------------------------
 #
@@ -428,6 +470,7 @@ configure_third_party_lib(kissfft)
 configure_third_party_lib(QCodeEditor)
 configure_third_party_lib(QSimpleUpdater)
 configure_third_party_lib(mdf)
+configure_third_party_lib(usb-1.0)
 
 #---------------------------------------------------------------------------------------------------
 # Restore global link flags

@@ -35,6 +35,7 @@
 #  include "IO/Drivers/Audio.h"
 #  include "IO/Drivers/CANBus.h"
 #  include "IO/Drivers/Modbus.h"
+#  include "IO/Drivers/USB.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
 #  include "Misc/Utilities.h"
@@ -282,6 +283,7 @@ QStringList IO::Manager::availableBuses() const
   list.append(tr("Audio"));
   list.append(tr("Modbus"));
   list.append(tr("CAN Bus"));
+  list.append(tr("Raw USB"));
 #endif
   return list;
 }
@@ -668,6 +670,10 @@ void IO::Manager::setBusType(const SerialStudio::BusType driver)
   // Try to open a CAN Bus connection
   else if (busType() == SerialStudio::BusType::CanBus)
     setDriver(static_cast<HAL_Driver*>(&(Drivers::CANBus::instance())));
+
+  // Try to open a Raw USB connection
+  else if (busType() == SerialStudio::BusType::RawUsb)
+    setDriver(static_cast<HAL_Driver*>(&(Drivers::USB::instance())));
 #endif
 
   // Invalid driver
