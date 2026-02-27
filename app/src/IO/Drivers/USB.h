@@ -23,6 +23,11 @@
 #pragma once
 #ifdef BUILD_COMMERCIAL
 
+// Prevent windows.h (pulled in by libusb) from defining min/max macros
+#  if defined(_WIN32) && !defined(NOMINMAX)
+#    define NOMINMAX
+#  endif
+
 #  include <libusb.h>
 
 #  include <atomic>
